@@ -57,14 +57,14 @@ WallyJourney_ChampionDefense_Wallace::
 	end
 
 WallyJourney_ChampionDefense_Intro:
-	.string "WALLACE: CHAMPION!\\n"
+	.string "WALLACE: CHAMPION!\n"
 	.string "I challenge you for the title!$"
 
 WallyJourney_ChampionDefense_DefeatedText:
 	.string "Your title is well deserved!$"
 
 WallyJourney_ChampionDefense_Victory:
-	.string "WALLACE: Your title stands.\\n"
+	.string "WALLACE: Your title stands.\n"
 	.string "Return whenever you seek a test!$"
 
 EverGrandeCity_ChampionsRoom_EventScript_Defeated::
