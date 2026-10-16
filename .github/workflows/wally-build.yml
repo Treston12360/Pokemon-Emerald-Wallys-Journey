@@ -1,0 +1,66 @@
+name: Wally Journey GBA build
+
+on:
+  push:
+    branches: [wally-journey-development]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  emerald-rom:
+    name: Compile Pokemon Emerald (.gba)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Check out game source
+        uses: actions/checkout@v4
+
+      - name: Install GBA compilation dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential binutils-arm-none-eabi gcc-arm-none-eabi \
+            libnewlib-arm-none-eabi libpng-dev python3
+
+      - name: Build Emerald ROM
+        shell: bash
+        run: |
+          set -o pipefail
+          make -j4 2>&1 | tee wally-build.log
+
+      - name: Verify GBA ROM
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          rom = Path('pokeemerald.gba')
+          assert rom.is_file(), 'No pokeemerald.gba generated'
+          size = rom.stat().st_size
+          assert 0xC0 < size <= 32 * 1024 * 1024, f'Unexpected GBA ROM size: {size}'
+          data = rom.read_bytes()
+          assert data[0xAC:0xB0] == b'BPEE', f'Unexpected game code: {data[0xAC:0xB0]!r}'
+          print(f'GBA ROM produced: {size:,} bytes, sha256={hashlib.sha256(data).hexdigest()}')
+          PY
+
+      - name: Upload playable ROM build
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wally-journey-gba-test-build
+          path: pokeemerald.gba
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload build log, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wally-gba-build-log
+          path: wally-build.log
+          if-no-files-found: warn
+          retention-days: 14
