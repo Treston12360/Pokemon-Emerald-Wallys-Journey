@@ -1,5 +1,6 @@
 #include "global.h"
 #include "overworld.h"
+#include "wally_journey.h"
 #include "battle_pyramid.h"
 #include "battle_setup.h"
 #include "battle_util.h"
@@ -620,6 +621,7 @@ void ApplyCurrentWarp(void)
 {
     gLastUsedWarp = gSaveBlock1Ptr->location;
     gSaveBlock1Ptr->location = sWarpDestination;
+    WallyJourney_OnMapEntered(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
     sFixedDiveWarp = sDummyWarpData;
     sFixedHoleWarp = sDummyWarpData;
 }

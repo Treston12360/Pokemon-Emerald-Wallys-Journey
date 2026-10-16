@@ -9,6 +9,7 @@
 #include "battle_hold_effects.h"
 #include "battle_interface.h"
 #include "battle_main.h"
+#include "wally_journey.h"
 #include "battle_message.h"
 #include "battle_pyramid.h"
 #include "battle_scripts.h"
@@ -5057,8 +5058,45 @@ static void RunTurnActionsFunctions(void)
         gBattleMainFunc = sEndTurnFuncsTable[gBattleOutcome & 0x7F];
 }
 
+static bool32 WallyJourney_IsCurrentBattle(void)
+{
+    if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+     || (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED | BATTLE_TYPE_RECORDED_LINK
+                            | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)))
+        return FALSE;
+    switch (TRAINER_BATTLE_PARAM.opponentA)
+    {
+    case TRAINER_WALLY_MAUVILLE:
+    case TRAINER_WALLY_VR_1:
+    case TRAINER_WALLY_VR_2:
+    case TRAINER_WALLY_VR_3:
+    case TRAINER_WALLY_VR_4:
+    case TRAINER_WALLY_VR_5:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+// Never read boxed or un-sent-out party members.
+static void WallyJourney_RememberVisiblePlayerPokemon(void)
+{
+    struct Pokemon *party = GetTrainerParty(B_TRAINER_PLAYER);
+    for (u8 slot = 0; slot < PARTY_SIZE; slot++)
+    {
+        if (gBattleStruct->partyState[B_TRAINER_PLAYER][slot].sentOut)
+        {
+            enum Species species = GetMonData(&party[slot], MON_DATA_SPECIES);
+            if (species != SPECIES_NONE) WallyJourney_RecordObservedSpecies((u16)species);
+        }
+    }
+}
 static void HandleEndTurn_BattleWon(void)
 {
+    if (WallyJourney_IsCurrentBattle())
+    {
+        WallyJourney_RememberVisiblePlayerPokemon();
+        WallyJourney_RecordRivalBattle(TRUE);
+    }
     gCurrentActionFuncId = 0;
 
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
@@ -5117,6 +5155,11 @@ static void HandleEndTurn_BattleWon(void)
 
 static void HandleEndTurn_BattleLost(void)
 {
+    if (WallyJourney_IsCurrentBattle())
+    {
+        WallyJourney_RememberVisiblePlayerPokemon();
+        WallyJourney_RecordRivalBattle(FALSE);
+    }
     gCurrentActionFuncId = 0;
 
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))

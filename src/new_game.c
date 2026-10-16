@@ -1,6 +1,7 @@
 #include "global.h"
 #include "clock.h"
 #include "new_game.h"
+#include "wally_journey.h"
 #include "random.h"
 #include "clock.h"
 #include "pokemon.h"
@@ -234,6 +235,7 @@ void NewGameInitData(void)
     ResetItemFlags();
     ResetDexNav();
     ClearFollowerNPCData();
+    WallyJourney_Reset();
 }
 
 static void ResetMiniGamesRecords(void)
