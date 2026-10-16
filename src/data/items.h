@@ -2960,12 +2960,14 @@ const struct ItemInfo gItemsInfo[] =
         .price = 100,
         .description = COMPOUND_STRING(
             "A lovely scale.\n"
-            "It is coveted by\n"
-            "collectors."),
+            "Evolves Feebas.\n"
+            "Also used by the\n"
+            "Move Reminder."),
         .pocket = POCKET_ITEMS,
-        .sortType = ITEM_TYPE_SELLABLE,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .sortType = ITEM_TYPE_EVOLUTION_ITEM,
+        .type = EVO_HELD_ITEM_TYPE,
+        .fieldUseFunc = EVO_HELD_ITEM_FIELD_FUNC,
+        .effect = gItemEffect_EvoItem,
         .flingPower = 30,
         .iconPic = gItemIcon_HeartScale,
         .iconPalette = gItemIconPalette_HeartScale,

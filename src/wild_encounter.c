@@ -947,15 +947,19 @@ void FishingWildEncounter(u8 rod)
 {
     enum Species species;
     u32 headerId;
-    s16 x, y;
     enum TimeOfDay timeOfDay;
 
     gIsFishingEncounter = TRUE;
-    GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
-    if (CheckFeebasAtCoords(x, y) == TRUE)
+
+    // Wally's Journey: every fishable Route 119 tile has identical odds.
+    // Exactly one in ten successful Good Rod encounters is Feebas;
+    // no hidden lucky tiles or clock-dependent music/frame tricks.
+    if (rod == GOOD_ROD
+     && gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ROUTE119)
+     && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE119)
+     && (Random() % 10) == 0)
     {
         u8 level = ChooseWildMonLevel(&gWildFeebas, 0, WILD_AREA_FISHING);
-
         species = gWildFeebas.species;
         CreateWildMon(species, level);
     }
