@@ -2970,6 +2970,18 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
         }
     }
 
+    // Licensed HMs are available as field actions without consuming move slots.
+    // Reserve up to three slots for SWITCH/ITEM/CANCEL (actions[] has 8 entries).
+    for (j = FIELD_MOVE_CUT; j <= FIELD_MOVE_WATERFALL; j++)
+    {
+        if (sPartyMenuInternal->numActions >= ARRAY_COUNT(sPartyMenuInternal->actions) - 3)
+            break;
+        if (!WallyCanUseHmWithoutTeaching(&mons[slotId], j)
+         || MonKnowsMove(&mons[slotId], FieldMove_GetMoveId(j)))
+            continue;
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
+    }
+
     if (!InBattlePike())
     {
         if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE)

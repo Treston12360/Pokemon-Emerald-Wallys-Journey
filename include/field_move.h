@@ -29,6 +29,9 @@ struct FieldMoveInfo
     u32 padding:3;
 };
 
+struct Pokemon;
+bool32 WallyCanUseHmWithoutTeaching(struct Pokemon *mon, enum FieldMove fieldMove);
+bool32 WallyPartyCanUseHmWithoutTeaching(enum FieldMove fieldMove);
 extern const struct FieldMoveInfo gFieldMoveInfo[];
 extern const struct FieldMoveUnlock gFieldMoveUnlocks[];
 

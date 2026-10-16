@@ -9,6 +9,7 @@
 #include "field_effect_helpers.h"
 #include "field_screen_effect.h"
 #include "field_player_avatar.h"
+#include "field_move.h"
 #include "fieldmap.h"
 #include "follower_npc.h"
 #include "menu.h"
@@ -1627,6 +1628,8 @@ bool8 PartyHasMonWithSurf(void)
                 return TRUE;
         }
     }
+    if (WallyPartyCanUseHmWithoutTeaching(FIELD_MOVE_SURF))
+        return TRUE;
     return FALSE;
 }
 

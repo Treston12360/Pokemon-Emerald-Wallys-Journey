@@ -1,6 +1,9 @@
 #include "global.h"
 #include "event_data.h"
 #include "field_move.h"
+#include "item.h"
+#include "pokemon.h"
+#include "constants/items.h"
 #include "fldeff.h"
 #include "fldeff_misc.h"
 #include "party_menu.h"
@@ -8,6 +11,44 @@
 #include "constants/field_move.h"
 #include "constants/moves.h"
 #include "constants/party_menu.h"
+
+// Wally's Journey: HMs are travel licenses, not mandatory battle moves.
+// Preserve badges and HM item ownership. Require a compatible, non-egg
+// party Pokemon just like a real HM user would.
+static enum Item WallyGetHmItem(enum FieldMove fieldMove)
+{
+    switch (fieldMove)
+    {
+    case FIELD_MOVE_CUT:        return ITEM_HM01;
+    case FIELD_MOVE_FLY:        return ITEM_HM02;
+    case FIELD_MOVE_SURF:       return ITEM_HM03;
+    case FIELD_MOVE_STRENGTH:   return ITEM_HM04;
+    case FIELD_MOVE_FLASH:      return ITEM_HM05;
+    case FIELD_MOVE_ROCK_SMASH: return ITEM_HM06;
+    case FIELD_MOVE_WATERFALL:  return ITEM_HM07;
+    case FIELD_MOVE_DIVE:       return ITEM_HM08;
+    default:                    return ITEM_NONE;
+    }
+}
+bool32 WallyCanUseHmWithoutTeaching(struct Pokemon *mon, enum FieldMove fieldMove)
+{
+    enum Item item = WallyGetHmItem(fieldMove);
+    enum Species species;
+    if (mon == NULL || item == ITEM_NONE || !IsFieldMoveUnlocked(fieldMove)
+     || !CheckBagHasItem(item, 1) || GetMonData(mon, MON_DATA_IS_EGG))
+        return FALSE;
+    species = GetMonData(mon, MON_DATA_SPECIES);
+    if (species == SPECIES_NONE)
+        return FALSE;
+    return CanLearnTeachableMove(species, FieldMove_GetMoveId(fieldMove));
+}
+bool32 WallyPartyCanUseHmWithoutTeaching(enum FieldMove fieldMove)
+{
+    for (u8 i = 0; i < PARTY_SIZE; i++)
+        if (WallyCanUseHmWithoutTeaching(&gPlayerParty[i], fieldMove))
+            return TRUE;
+    return FALSE;
+}
 
 static bool32 IsAlwaysFalse(enum FieldMove fieldMove)
 {
