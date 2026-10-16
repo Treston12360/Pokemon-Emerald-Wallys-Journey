@@ -38,11 +38,34 @@ EverGrandeCity_ChampionsRoom_Movement_PlayerApproachWallace:
 	step_end
 
 EverGrandeCity_ChampionsRoom_EventScript_Wallace::
+	goto_if_set FLAG_SYS_GAME_CLEAR, WallyJourney_ChampionDefense_Wallace
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
 	msgbox EverGrandeCity_ChampionsRoom_Text_IntroSpeech, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_WALLACE, EverGrandeCity_ChampionsRoom_Text_Defeat
 	goto EverGrandeCity_ChampionsRoom_EventScript_Defeated
 	end
+
+WallyJourney_ChampionDefense_Wallace::
+	@ Returning as Champion turns the final battle into a repeatable title defense.
+	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
+	msgbox WallyJourney_ChampionDefense_Intro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_WALLACE, WallyJourney_ChampionDefense_DefeatedText
+	msgbox WallyJourney_ChampionDefense_Victory, MSGBOX_DEFAULT
+	warp MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F, 9, 8
+	waitstate
+	releaseall
+	end
+
+WallyJourney_ChampionDefense_Intro:
+	.string "WALLACE: CHAMPION!\\n"
+	.string "I challenge you for the title!$"
+
+WallyJourney_ChampionDefense_DefeatedText:
+	.string "Your title is well deserved!$"
+
+WallyJourney_ChampionDefense_Victory:
+	.string "WALLACE: Your title stands.\\n"
+	.string "Return whenever you seek a test!$"
 
 EverGrandeCity_ChampionsRoom_EventScript_Defeated::
 	playse SE_DOOR
