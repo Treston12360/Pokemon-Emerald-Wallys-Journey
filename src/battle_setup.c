@@ -6,6 +6,9 @@
 #include "battle_pike.h"
 #include "battle_pyramid.h"
 #include "battle_setup.h"
+#include "wally_journey.h"
+#include "pokemon.h"
+#include "constants/opponents.h"
 #include "battle_special.h"
 #include "battle_partner.h"
 #include "battle_tower.h"
@@ -487,9 +490,40 @@ static void DoBattlePikeWildBattle(void)
     TryUpdateGymLeaderRematchFromWild();
 }
 
+// Use only the species Wally observed in a previous rival battle.
+// A current opponent's hidden party is never consulted by Wally's lead choice.
+static void WallyJourney_AdaptLeadFromObservedSpecies(struct Pokemon *party, u16 trainerId)
+{
+    u16 species;
+    struct Pokemon temp;
+    switch (trainerId)
+    {
+    case TRAINER_WALLY_VR_1:
+    case TRAINER_WALLY_VR_2:
+    case TRAINER_WALLY_VR_3:
+    case TRAINER_WALLY_VR_4:
+    case TRAINER_WALLY_VR_5:
+        break;
+    default:
+        return;
+    }
+    species = WallyJourney_GetLastObservedSpecies();
+    if (species == SPECIES_NONE || species >= NUM_SPECIES)
+        return;
+    if (!WallyJourney_ShouldLeadWithMagneton(
+            GetSpeciesType(species, 0), GetSpeciesType(species, 1)))
+        return;
+    if (GetMonData(&party[3], MON_DATA_SPECIES) != SPECIES_MAGNETON)
+        return;
+    temp = party[0];
+    party[0] = party[3];
+    party[3] = temp;
+}
+
 static void DoTrainerBattle(void)
 {
     CreateNPCTrainerParty(&gParties[B_TRAINER_OPPONENT_A][0], TRAINER_BATTLE_PARAM.opponentA);
+    WallyJourney_AdaptLeadFromObservedSpecies(&gParties[B_TRAINER_OPPONENT_A][0], TRAINER_BATTLE_PARAM.opponentA);
     if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS && !BATTLE_TWO_VS_ONE_OPPONENT)
         CreateNPCTrainerParty(&gParties[B_TRAINER_OPPONENT_B][0], TRAINER_BATTLE_PARAM.opponentB);
     CreateBattleStartTask(GetTrainerBattleTransition(), 0);

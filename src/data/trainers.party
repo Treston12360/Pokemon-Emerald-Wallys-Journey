@@ -9462,15 +9462,15 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer
+AI: Check Bad Move / Try To Faint
 
-Altaria
+Vibrava
 Level: 44
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Aerial Ace
-- Safeguard
 - Dragon Breath
-- Dragon Dance
+- Dig
+- Crunch
+- Sand Tomb
 
 Delcatty
 Level: 43
@@ -12056,15 +12056,15 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer
+AI: Check Bad Move / Try To Faint
 
-Altaria
+Flygon
 Level: 47
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Aerial Ace
-- Safeguard
 - Dragon Breath
-- Dragon Dance
+- Dig
+- Crunch
+- Rock Slide
 
 Delcatty
 Level: 46
@@ -12106,15 +12106,15 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer
+AI: Check Bad Move / Try To Faint
 
-Altaria
+Flygon
 Level: 50
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Aerial Ace
-- Safeguard
-- Dragon Breath
-- Dragon Dance
+- Dragon Claw
+- Earthquake
+- Crunch
+- Rock Slide
 
 Delcatty
 Level: 49
@@ -12156,15 +12156,15 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer
+AI: Check Bad Move / Try To Faint
 
-Altaria
+Flygon
 Level: 53
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Aerial Ace
-- Safeguard
-- Dragon Breath
-- Dragon Dance
+- Dragon Claw
+- Earthquake
+- Crunch
+- U-turn
 
 Delcatty
 Level: 52
@@ -12206,15 +12206,15 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer
+AI: Check Bad Move / Try To Faint
 
-Altaria
+Flygon
 Level: 56
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Aerial Ace
-- Safeguard
-- Dragon Breath
-- Dragon Dance
+- Dragon Claw
+- Earthquake
+- Stone Edge
+- U-turn
 
 Delcatty
 Level: 55

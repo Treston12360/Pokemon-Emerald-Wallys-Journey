@@ -72,6 +72,10 @@ static const struct GMaxMove sGMaxMoveTable[] =
 // Returns whether a battler can Dynamax.
 bool32 CanDynamax(enum BattlerId battler)
 {
+    // Disabled for player and NPC alike in Wally's Journey; leave engine
+    // test scenarios alone, and do not alter Mega Evolution or Z-Moves.
+    if (!TESTING)
+        return FALSE;
     enum Species species = GetBattlerVisualSpecies(battler);
     enum HoldEffect holdEffect = GetBattlerHoldEffectIgnoreNegation(battler);
 
