@@ -77,7 +77,10 @@ EverGrandeCity_GlaciasRoom_Text_Defeat:
 	.string "failed to harm you.$"
 
 EverGrandeCity_GlaciasRoom_Text_PostBattleSpeech:
-	.string "Advance to the next room.\p"
-	.string "And there, confirm the truly fearsome\n"
+	.string "I came to HOENN looking for TRAINERS\n"
+	.string "worth freezing.\p"
+	.string "I found two this year. The boy who\n"
+	.string "took the crown, and you.\p"
+	.string "Advance. Confirm the truly fearsome\n"
 	.string "side of the POKéMON LEAGUE.$"
 

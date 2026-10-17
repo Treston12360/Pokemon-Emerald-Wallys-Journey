@@ -119,23 +119,31 @@ VictoryRoad_1F_EventScript_Katelynn::
 	end
 
 VictoryRoad_1F_Text_WallyNotGoingToLoseAnymore:
-	.string "WALLY: Hey, {PLAYER}.\p"
-	.string "The CHAMPION doesn't usually hang\n"
-	.string "around caves. I made an exception.\p"
-	.string "LEAGUE rules say I can't refuse your\n"
-	.string "challenge. They don't say I can't\l"
-	.string "test you on the way up.\p"
-	.string "If you can't beat me here, you\n"
-	.string "won't beat me up there.$"
+	.string "WALLY: Took you long enough.\p"
+	.string "Yes, I'm the CHAMPION. And yes, I\n"
+	.string "came down here myself.\p"
+	.string "Every year, TRAINERS walk into the\n"
+	.string "ELITE FOUR and get taken apart.\p"
+	.string "I'm not letting that happen to you.\n"
+	.string "So consider this a test.\p"
+	.string "Four POKéMON. No MEGA EVOLUTION.\n"
+	.string "I'm holding back.\p"
+	.string "If you can't get past me like this,\n"
+	.string "you're not ready. Show me.$"
 
 VictoryRoad_1F_Text_WallyEntranceDefeat:
-	.string "Okay. You passed.\n"
-	.string "Barely.$"
+	.string "…Yeah.\n"
+	.string "You're ready.$"
 
 VictoryRoad_1F_Text_WallyPostEntranceBattle:
-	.string "WALLY: That was a warm-up team.\p"
-	.string "I'll be in the CHAMPION's room.\n"
-	.string "Next time, I'm using everything.$"
+	.string "WALLY: That was me at half strength,\n"
+	.string "and you still had to fight for it.\l"
+	.string "Good.\p"
+	.string "The ELITE FOUR won't hold back.\n"
+	.string "Neither will I.\p"
+	.string "Make it all the way to the top,\n"
+	.string "{PLAYER}. I want a real fight.\p"
+	.string "I'll be waiting.$"
 
 VictoryRoad_1F_Text_WallyIntro:
 	.string "WALLY: Hey, CHAMPION.\p"

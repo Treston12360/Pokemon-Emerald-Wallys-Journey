@@ -79,14 +79,12 @@ EverGrandeCity_DrakesRoom_Text_Defeat:
 
 EverGrandeCity_DrakesRoom_Text_PostBattleSpeech:
 	.string "You deserve every credit for coming\n"
-	.string "this far as a TRAINER of POKéMON.\p"
-	.string "You do seem to know what is needed.\p"
-	.string "Yes, what a TRAINER needs is a\n"
-	.string "virtuous heart.\p"
-	.string "POKéMON touch the good hearts of\n"
-	.string "TRAINERS and learn good from wrong.\p"
-	.string "They touch the good hearts of\n"
-	.string "TRAINERS and grow strong.\p"
-	.string "Go! Go onwards!\n"
-	.string "The CHAMPION is waiting!$"
+	.string "this far.\p"
+	.string "I asked you what a TRAINER needs.\n"
+	.string "Most answer with power.\p"
+	.string "The answer is a heart that keeps\n"
+	.string "its course when the sea turns\l"
+	.string "against it. You have one.\p"
+	.string "So did the boy who sits on that\n"
+	.string "throne. Go. The CHAMPION is waiting!$"
 

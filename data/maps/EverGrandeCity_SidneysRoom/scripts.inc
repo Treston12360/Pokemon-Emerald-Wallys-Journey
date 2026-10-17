@@ -79,9 +79,11 @@ EverGrandeCity_SidneysRoom_Text_Defeat:
 	.string "Eh, it was fun, so it doesn't matter.$"
 
 EverGrandeCity_SidneysRoom_Text_PostBattleSpeech:
-	.string "Well, listen to what this loser has\n"
-	.string "to say.\p"
-	.string "You've got what it takes to go far.\n"
-	.string "Now, go on to the next room and enjoy\l"
-	.string "your next battle!$"
+	.string "Listen up, because this loser has\n"
+	.string "something worth saying.\p"
+	.string "Couple months back, a skinny kid\n"
+	.string "named WALLY walked in here and\l"
+	.string "flattened me. Smiling the whole time.\p"
+	.string "You've got that same look.\n"
+	.string "Go on. Next room.$"
 
