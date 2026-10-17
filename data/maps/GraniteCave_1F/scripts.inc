@@ -4,11 +4,7 @@ GraniteCave_1F_MapScripts::
 GraniteCave_1F_EventScript_Hiker::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_HM_FLASH, GraniteCave_1F_EventScript_ReceivedFlash
-	msgbox GraniteCave_1F_Text_GetsDarkAheadHereYouGo, MSGBOX_DEFAULT
-	giveitem ITEM_HM_FLASH
-	setflag FLAG_RECEIVED_HM_FLASH
-	msgbox GraniteCave_1F_Text_ExplainFlash, MSGBOX_DEFAULT
+	msgbox GraniteCave_1F_Text_NewFlashDialogue, MSGBOX_DEFAULT
 	release
 	end
 
@@ -37,3 +33,9 @@ GraniteCave_1F_Text_ExplainFlash:
 	.string "But, to use it, you need the GYM BADGE\n"
 	.string "from DEWFORD's POKéMON GYM.$"
 
+
+GraniteCave_1F_Text_NewFlashDialogue:
+	.string "This cave gets dark farther in.\\p"
+	.string "The KNUCKLE BADGE lets your\\n"
+	.string "POKéMON light the way with FLASH.\\p"
+	.string "Watch your step in there!$"
