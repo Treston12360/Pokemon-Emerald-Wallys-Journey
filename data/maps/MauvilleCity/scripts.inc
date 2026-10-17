@@ -493,9 +493,13 @@ MauvilleCity_Text_UncleYourePushingIt:
 	.string "to suddenly challenge a GYM?$"
 
 MauvilleCity_Text_WallyWeCanBeatAnyone:
-	.string "WALLY: I'm not pushing it.\p"
-	.string "If I combine forces with RALTS,\n"
-	.string "we can beat anyone!$"
+	.string "WALLY: I know I can do this.\p"
+	.string "RALTS and I have trained\n"
+	.string "every day in VERDANTURF.\p"
+	.string "UNCLE still sees the boy\n"
+	.string "who couldn't leave home.\p"
+	.string "I need to show him\n"
+	.string "I'm not that boy anymore.$"
 
 MauvilleCity_Text_WallyWillYouBattleMe:
 	.string "WALLY: Oh! Hi, {PLAYER}!\p"
@@ -532,8 +536,11 @@ MauvilleCity_Text_WallyDefeat:
 	.string "I lost…$"
 
 MauvilleCity_Text_WallyIllGoBackToVerdanturf:
-	.string "WALLY: UNCLE…\n"
-	.string "I'll go back to VERDANTURF…$"
+	.string "WALLY: …I lost again.\p"
+	.string "UNCLE, I'll come back\n"
+	.string "to VERDANTURF with you.\p"
+	.string "But I won't stay there.\n"
+	.string "I'm going to get stronger.$"
 
 MauvilleCity_Text_ThankYouNotEnoughToBattle:
 	.string "{PLAYER}, thank you.\n"
