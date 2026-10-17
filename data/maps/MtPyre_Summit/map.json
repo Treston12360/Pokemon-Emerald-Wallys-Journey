@@ -125,6 +125,20 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "0x0",
       "flag": "FLAG_HIDE_MT_PYRE_SUMMIT_MAXIE"
+    },
+    {
+      "local_id": "LOCALID_MT_PYRE_SUMMIT_WALLY",
+      "graphics_id": "OBJ_EVENT_GFX_WALLY",
+      "x": 23,
+      "y": 24,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "0x0",
+      "flag": "FLAG_HIDE_MT_PYRE_SUMMIT_WALLY"
     }
   ],
   "warp_events": [
@@ -204,6 +218,51 @@
       "var": "VAR_MT_PYRE_STATE",
       "var_value": "2",
       "script": "MtPyre_Summit_EventScript_ArchieMaxieTrigger2"
+    },
+    {
+      "type": "trigger",
+      "x": 21,
+      "y": 22,
+      "elevation": 3,
+      "var": "VAR_WALLY_PYRE_TEAMUP",
+      "var_value": "0",
+      "script": "WallyJourney_EventScript_PyreTeamUp"
+    },
+    {
+      "type": "trigger",
+      "x": 22,
+      "y": 22,
+      "elevation": 3,
+      "var": "VAR_WALLY_PYRE_TEAMUP",
+      "var_value": "0",
+      "script": "WallyJourney_EventScript_PyreTeamUp"
+    },
+    {
+      "type": "trigger",
+      "x": 23,
+      "y": 22,
+      "elevation": 3,
+      "var": "VAR_WALLY_PYRE_TEAMUP",
+      "var_value": "0",
+      "script": "WallyJourney_EventScript_PyreTeamUp"
+    },
+    {
+      "type": "trigger",
+      "x": 24,
+      "y": 22,
+      "elevation": 3,
+      "var": "VAR_WALLY_PYRE_TEAMUP",
+      "var_value": "0",
+      "script": "WallyJourney_EventScript_PyreTeamUp"
+    },
+    {
+      "type": "trigger",
+      "x": 25,
+      "y": 22,
+      "elevation": 3,
+      "var": "VAR_WALLY_PYRE_TEAMUP",
+      "var_value": "0",
+      "script": "WallyJourney_EventScript_PyreTeamUp"
     }
   ],
   "bg_events": [

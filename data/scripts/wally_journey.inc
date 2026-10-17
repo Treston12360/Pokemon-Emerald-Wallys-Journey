@@ -778,3 +778,71 @@ WallyJourney_Text_CollectorNoBP:
 WallyJourney_Text_CollectorHaveAll:
 	.string "Whoa. You already have every one\n"
 	.string "I could find. Impressive!$"
+
+@ Wally's Journey: Wally team-up at Mt. Pyre (the League asked him to watch it).
+@ Only fires while Team Aqua holds the summit and before they take the Orbs.
+WallyJourney_EventScript_PyreTeamUp::
+	goto_if_set FLAG_HIDE_MT_PYRE_SUMMIT_TEAM_AQUA, WallyJourney_EventScript_PyreTeamUpNotYet
+	goto_if_ne VAR_MT_PYRE_STATE, 0, WallyJourney_EventScript_PyreTeamUpNotYet
+	lockall
+	clearflag FLAG_HIDE_MT_PYRE_SUMMIT_WALLY
+	addobject LOCALID_MT_PYRE_SUMMIT_WALLY
+	playse SE_PIN
+	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
+	waitmovement 0
+	msgbox WallyJourney_Text_PyreWallyArrives, MSGBOX_DEFAULT
+	closemessage
+	special SavePlayerParty
+	fadescreen FADE_TO_BLACK
+	special ChooseHalfPartyForBattle
+	goto_if_eq VAR_RESULT, 0, WallyJourney_EventScript_PyreTeamUpCancel
+	multi_2_vs_2 TRAINER_GRUNT_MT_PYRE_1, MtPyre_Summit_Text_Grunt1Defeat, TRAINER_GRUNT_MT_PYRE_2, MtPyre_Summit_Text_Grunt2Defeat, PARTNER_WALLY
+	switch VAR_RESULT
+	case 1, WallyJourney_EventScript_PyreTeamUpWon
+	fadescreen FADE_TO_BLACK
+	special SetCB2WhiteOut
+	waitstate
+
+WallyJourney_EventScript_PyreTeamUpWon::
+	setvar VAR_WALLY_PYRE_TEAMUP, 1
+	settrainerflag TRAINER_GRUNT_MT_PYRE_1
+	settrainerflag TRAINER_GRUNT_MT_PYRE_2
+	msgbox WallyJourney_Text_PyreWallyAfter, MSGBOX_DEFAULT
+	closemessage
+	fadescreenswapbuffers FADE_TO_BLACK
+	removeobject LOCALID_MT_PYRE_SUMMIT_WALLY
+	setflag FLAG_HIDE_MT_PYRE_SUMMIT_WALLY
+	fadescreenswapbuffers FADE_FROM_BLACK
+	releaseall
+	end
+
+WallyJourney_EventScript_PyreTeamUpCancel::
+	special LoadPlayerParty
+	fadescreen FADE_FROM_BLACK
+	removeobject LOCALID_MT_PYRE_SUMMIT_WALLY
+	setflag FLAG_HIDE_MT_PYRE_SUMMIT_WALLY
+	msgbox WallyJourney_Text_PyreWallyLater, MSGBOX_DEFAULT
+	applymovement LOCALID_PLAYER, Common_Movement_WalkDown
+	waitmovement 0
+	releaseall
+	end
+
+WallyJourney_EventScript_PyreTeamUpNotYet::
+	end
+
+WallyJourney_Text_PyreWallyArrives:
+	.string "WALLY: {PLAYER}! Wait up!\p"
+	.string "The LEAGUE asked me to keep an eye\n"
+	.string "on MT. PYRE. TEAM AQUA is all over\l"
+	.string "the summit.\p"
+	.string "Two of them up ahead. We take them\n"
+	.string "together. Pick your best three!$"
+
+WallyJourney_Text_PyreWallyAfter:
+	.string "WALLY: Nice! We make a good team.\p"
+	.string "Go on ahead. I'll make sure nobody\n"
+	.string "follows you up.$"
+
+WallyJourney_Text_PyreWallyLater:
+	.string "WALLY: Not ready? That's fine.\n"
+	.string "Get your team together. I'll wait.$"
