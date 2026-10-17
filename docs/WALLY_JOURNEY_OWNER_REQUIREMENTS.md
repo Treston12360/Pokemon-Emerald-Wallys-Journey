@@ -407,3 +407,11 @@ These are **wishlist items, not claims of implementation**. Adapt the design pri
 - Do **not** adopt Steven-as-Champion or Wallace-as-Gym-Leader story structure: Wally beats Wallace shortly before the eighth Gym and is the final League Champion opponent, per the latest owner decision.
 - Do not wholesale copy Legacy trainers, script text, music, art, or balance tables. Implement original work consistent with this project's distinct direction.
 - Before marking any item done, verify the actual code, compile, and playtest the affected mechanics on a GBA emulator.
+
+## Wally personality arc — FINAL dialogue-only owner direction (2026-10-17)
+
+- Start Wally shy, insecure, grateful, and determined. As he wins, confidence gradually becomes arrogance and dismissiveness; he overcompensates for years of feeling weak.
+- By Champion status, he sometimes condescends to the player and other trainers. Do not turn him into a villain or make him cartoonishly cruel; portray believable insecurity underneath his behavior.
+- After losing the Champion battle, Wally sees how his attitude hurt others, apologizes sincerely, and remains confident and competitive without looking down on people.
+- **Strict implementation constraint: communicate this arc ONLY by rewriting dialogue in ALREADY EXISTING SCENES. Do not introduce any new scenes, cutscenes, NPCs, triggers, battles, or altered event progression to support this character arc.** Existing scripted Wally moments and their current game flow must remain intact.
+- Audit and update existing Petalburg, Mauville, Lilycove, Mossdeep, Sootopolis broadcast, Victory Road, League, and postgame dialogue for the gradual progression. The dialogue-only core arc has been started; the intermediate scenes and continuity still require verification and refinement.
