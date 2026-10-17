@@ -952,18 +952,22 @@ LittlerootTown_ProfessorBirchsLab_Text_DontHaveAnyRoomForPokemon:
 	.string "this POKéMON.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_MayWhatNextImStayingHere:
-	.string "MAY: {PLAYER}{KUN}, after this…\n"
-	.string "What are you going to do?\p"
-	.string "Are you going to keep battling\n"
-	.string "and sharpening your skills?\p"
-	.string "Or are you going to try filling\n"
-	.string "the NATIONAL POKéDEX?\p"
-	.string "I'm staying here to help the PROF.$"
+	.string "MAY: So you beat WALLY.\n"
+	.string "I had a feeling you could.\p"
+	.string "Dad's records are finally\n"
+	.string "making sense again.\p"
+	.string "I want to find out where\n"
+	.string "all those displaced POKéMON\n"
+	.string "settled after the storms.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_BrendanPreferCollectingSlowly:
-	.string "BRENDAN: Rather than collecting\n"
-	.string "POKéMON, I prefer slowly and \l"
-	.string "steadily raising the one I chose.$"
+	.string "BRENDAN: You're CHAMPION now.\n"
+	.string "Guess that settles our rivalry!\p"
+	.string "Kidding. I still want\n"
+	.string "a rematch someday.\p"
+	.string "For now, Dad needs help\n"
+	.string "tracking the migrations.\n"
+	.string "Someone has to do it.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_MayHaveYouGoneToBattleFrontier:
 	.string "MAY: Oh, hi, {PLAYER}{KUN}!\n"
