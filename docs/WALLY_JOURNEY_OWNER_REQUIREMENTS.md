@@ -197,6 +197,8 @@ The owner explicitly approved **all previously suggested Wally narrative, explor
 
 **Status (2026-10-17): OWNER-APPROVED WISHLIST. All new features in this section require implementation and gameplay verification; do not mark complete because related older tint/weather code exists.**
 
+**Progress (2026-10-17):** Stage 1 clock switched — `WallyJourney_GetSeason` now uses 48 real hours per season from the RTC (spring → summer → autumn → winter, 8-day cycle; keeps counting while the game is off; broken/missing clock falls back to summer). The existing season tint, per-day seasonal weather and Deerling/Sawsbuck forms follow the new cycle automatically. build-passed, not emulator-verified. Everything else in this section (foliage/snow tile art, weather fronts and transitions, window/street lights, NPC routines, wildlife, ambience, forecasts, season-change notice) is not started.
+
 ## Standard Poké Ball only — confirmed owner requirement (2026-10-16)
 
 - **Only the standard Poké Ball may be used or obtained.** Remove all other player-facing capture ball varieties (Great, Ultra, Master, Premier, Luxury, Dive, Net, Timer, Quick, Dusk, Repeat, Safari and other special balls) from shops, gifts, pickups, held-item pools, rewards, crafting, PC/item menus and capture-item availability. Keep relevant internal engine definitions if required for stability; do not recklessly delete constants or break save compatibility.

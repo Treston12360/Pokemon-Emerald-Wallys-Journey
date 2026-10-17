@@ -22,8 +22,7 @@ u16 WallyJourney_ConvertForbiddenBall(u16 itemId);
 bool32 WallyJourney_IsExpAllMode(void);
 bool32 WallyJourney_ZMovesEnabled(void);
 void WallyJourney_GiveWildRayquazaDragonAscent(void);
-// Seasons (real-time clock month): spring Mar-May, summer Jun-Aug,
-// autumn Sep-Nov, winter Dec-Feb. Never gates story progress.
+// Seasons: 48 real hours each, spring -> summer -> autumn -> winter (RTC).
 enum WallySeason { WALLY_SEASON_SPRING, WALLY_SEASON_SUMMER, WALLY_SEASON_AUTUMN, WALLY_SEASON_WINTER };
 enum WallySeason WallyJourney_GetSeason(void);
 struct BlendSettings WallyJourney_GetSeasonDayBlend(void);

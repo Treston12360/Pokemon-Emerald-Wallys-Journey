@@ -144,14 +144,21 @@ void WallyJourney_GiveWildRayquazaDragonAscent(void)
 }
 
 // ---------------------------------------------------------------- seasons
+// Owner design (2026-10-17): each season lasts 48 real hours, cycling
+// spring -> summer -> autumn -> winter every 8 days. Driven by the real-time
+// clock, so time keeps passing while the game is off and the season is the
+// same on every map and after every reload.
+#define WALLY_HOURS_PER_SEASON 48
 enum WallySeason WallyJourney_GetSeason(void)
 {
-    u32 month = GetMonth();
-    if (month >= MONTH_MAR && month <= MONTH_MAY) return WALLY_SEASON_SPRING;
-    if (month >= MONTH_JUN && month <= MONTH_AUG) return WALLY_SEASON_SUMMER;
-    if (month >= MONTH_SEP && month <= MONTH_NOV) return WALLY_SEASON_AUTUMN;
-    if (month == MONTH_DEC || month == MONTH_JAN || month == MONTH_FEB) return WALLY_SEASON_WINTER;
-    return WALLY_SEASON_SUMMER; // no or broken clock: plain Hoenn summer, no tint surprises
+    s32 hours;
+    if (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK)
+        return WALLY_SEASON_SUMMER; // no or broken clock: plain Hoenn summer, no tint surprises
+    RtcCalcLocalTime();
+    hours = gLocalTime.days * 24 + gLocalTime.hours;
+    if (hours < 0)
+        hours = 0;
+    return (hours / WALLY_HOURS_PER_SEASON) % 4;
 }
 
 // Daytime tint per season, layered into the engine's day/night blend.
