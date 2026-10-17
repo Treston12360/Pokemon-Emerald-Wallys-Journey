@@ -2303,6 +2303,31 @@ bool8 ScrCmd_checkfieldmove(struct ScriptContext *ctx)
     if (doUnlockedCheck && !IsFieldMoveUnlocked(fieldMove))
         return FALSE;
 
+    // In Emerald, a badge plus its HM permits field use even if no
+    // party Pokémon knows the move or has it in its learnset.
+    // Still supply a valid, non-egg party slot for legacy field effects.
+    if (WallyHasFieldMoveLicense(fieldMove))
+    {
+        for (u32 i = 0; i < PARTY_SIZE; i++)
+        {
+            enum Species species = GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES);
+            if (species == SPECIES_NONE)
+                break;
+            if (!GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_IS_EGG))
+            {
+                gSpecialVar_Result = i;
+                gSpecialVar_0x8004 = species;
+                return FALSE;
+            }
+        }
+        return FALSE;
+    }
+
+    // Before the license is earned in Emerald, HMs must not bypass the
+    // badge/item gate just because a Pokémon knows the move.
+    if (!IS_FRLG && fieldMove <= FIELD_MOVE_WATERFALL)
+        return FALSE;
+
     move = FieldMove_GetMoveId(fieldMove);
     for (u32 i = 0; i < PARTY_SIZE; i++)
     {
