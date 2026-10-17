@@ -44,10 +44,10 @@ LavaridgeTown_HerbShop_Text_WelcomeToHerbShop:
 	.string "effective and inexpensive medicine!$"
 
 LavaridgeTown_HerbShop_Text_YouveComeToLookAtHerbalMedicine:
-	.string "You've come to look at herbal medicine\n"
-	.string "in LAVARIDGE?\p"
-	.string "That's rather commendable.\p"
-	.string "I like you! Take this!$"
+	.string "You came to LAVARIDGE for herbal\n"
+	.string "medicine? Commendable!\p"
+	.string "The old ways still work. Here, take\n"
+	.string "this.$"
 
 LavaridgeTown_HerbShop_Text_ExplainCharcoal:
 	.string "That CHARCOAL I gave you, it's used\n"
@@ -58,7 +58,8 @@ LavaridgeTown_HerbShop_Text_ExplainCharcoal:
 	.string "moves.$"
 
 LavaridgeTown_HerbShop_Text_HerbalMedicineWorksButMonWillDislike:
-	.string "Herbal medicine works impressively well.\n"
-	.string "But your POKéMON will dislike you for it.\l"
-	.string "It must be horribly bitter!$"
+	.string "Herbal medicine works wonders.\p"
+	.string "It tastes horrible, though. Your\n"
+	.string "POKéMON will sulk. Healing isn't\l"
+	.string "always pleasant.$"
 

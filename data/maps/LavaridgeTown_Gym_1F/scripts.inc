@@ -201,8 +201,7 @@ LavaridgeTown_Gym_1F_Text_GymGuidePostVictory:
 	.string "the same review as anyone else.$"
 
 LavaridgeTown_Gym_1F_Text_ColeIntro:
-	.string "Owowowowow!\n"
-	.string "Yikes, it's hot!$"
+	.string "Owowow! Yikes, it's hot!$"
 
 LavaridgeTown_Gym_1F_Text_ColeDefeat:
 	.string "I'm blinded by sweat in my eyes…$"
@@ -214,95 +213,85 @@ LavaridgeTown_Gym_1F_Text_ColePostBattle:
 	.string "your joints.$"
 
 LavaridgeTown_Gym_1F_Text_AxleIntro:
-	.string "I'm trying to relieve my stress.\n"
-	.string "Don't come along and stress me out!$"
+	.string "I'm relieving stress. Don't stress me\n"
+	.string "out!$"
 
 LavaridgeTown_Gym_1F_Text_AxleDefeat:
 	.string "I hope FLANNERY flames you good!$"
 
 LavaridgeTown_Gym_1F_Text_AxlePostBattle:
-	.string "Haaah… Whew…\p"
-	.string "If you spend too much time buried in\n"
-	.string "hot sand, it tuckers you out…$"
+	.string "Too much time in hot sand tires you\n"
+	.string "out…$"
 
 LavaridgeTown_Gym_B1F_Text_KeeganIntro:
-	.string "You must be getting tired by now.\n"
-	.string "You'd like to rest in the hot sand,\l"
-	.string "wouldn't you?\p"
-	.string "But you should know that maintaining\n"
-	.string "your willpower is an important ability\l"
-	.string "for all TRAINERS.$"
+	.string "Tired? Want to rest in the hot sand?\n"
+	.string "Too bad!$"
 
 LavaridgeTown_Gym_B1F_Text_KeeganDefeat:
 	.string "Play with fire, and be burned…$"
 
 LavaridgeTown_Gym_B1F_Text_KeeganPostBattle:
-	.string "Your skill is real…\n"
-	.string "But our LEADER FLANNERY is strong.\p"
-	.string "If you don't watch yourself, you'll be\n"
-	.string "burned seriously.$"
+	.string "Your skill is real. But FLANNERY is\n"
+	.string "strong. Watch yourself.$"
 
 LavaridgeTown_Gym_1F_Text_GeraldIntro:
-	.string "Can your POKéMON withstand\n"
-	.string "392-degree heat?$"
+	.string "Can your POKéMON stand 392 degrees?$"
 
 LavaridgeTown_Gym_1F_Text_GeraldDefeat:
 	.string "It didn't burn hotly enough…$"
 
 LavaridgeTown_Gym_1F_Text_GeraldPostBattle:
-	.string "The temperature of magma is\n"
-	.string "392 degrees.\p"
-	.string "Your POKéMON beat me, so they should\n"
-	.string "easily survive in magma.$"
+	.string "Magma is 392 degrees, give or take.\p"
+	.string "TEAM MAGMA wants to play with that.\n"
+	.string "Madness.$"
 
 LavaridgeTown_Gym_1F_Text_DanielleIntro:
-	.string "Um…\n"
-	.string "Okay, I'll battle with you.$"
+	.string "Um… Okay. I'll battle.$"
 
 LavaridgeTown_Gym_1F_Text_DanielleDefeat:
 	.string "Oh, but you're too strong.$"
 
 LavaridgeTown_Gym_1F_Text_DaniellePostBattle:
 	.string "I'm going to be a pretty and strong\n"
-	.string "TRAINER just like FLANNERY.$"
+	.string "TRAINER, just like FLANNERY.\p"
+	.string "She was scared her first week too.\n"
+	.string "She told me.$"
 
 LavaridgeTown_Gym_B1F_Text_JaceIntro:
-	.string "Come on, get with it!\n"
-	.string "Let's go before my feelings cool!$"
+	.string "Come on! Before my fire cools!$"
 
 LavaridgeTown_Gym_B1F_Text_JaceDefeat:
 	.string "It's so hot, and yet my heart is\n"
 	.string "clutched by ice…$"
 
 LavaridgeTown_Gym_B1F_Text_JacePostBattle:
-	.string "The way the battling spirit burns\n"
-	.string "within you, you may stand a chance\l"
-	.string "against our LEADER.$"
+	.string "That fighting spirit burning in you…\n"
+	.string "You might beat our LEADER.$"
 
 LavaridgeTown_Gym_B1F_Text_JeffIntro:
-	.string "See how the flames blaze wildly?\n"
-	.string "They flare in anticipation of my win!$"
+	.string "See the flames? They blaze for my\n"
+	.string "win!$"
 
 LavaridgeTown_Gym_B1F_Text_JeffDefeat:
 	.string "Something didn't go right.$"
 
 LavaridgeTown_Gym_B1F_Text_JeffPostBattle:
-	.string "Well, so what? I say so what?\n"
-	.string "I can walk on hot coals barefoot!\p"
-	.string "…Don't even think about trying it!$"
+	.string "So what? I can walk on hot coals!\p"
+	.string "…Don't try that.$"
 
 LavaridgeTown_Gym_B1F_Text_EliIntro:
-	.string "As much as I love mountains,\n"
-	.string "I especially love volcanoes.$"
+	.string "I love mountains. Volcanoes most of\n"
+	.string "all.$"
 
 LavaridgeTown_Gym_B1F_Text_EliDefeat:
 	.string "Well, it seems to me I lost without\n"
 	.string "ever being in control.$"
 
 LavaridgeTown_Gym_B1F_Text_EliPostBattle:
-	.string "I stay here because I became a fan\n"
-	.string "of FLANNERY's power.\p"
-	.string "Hehehehe.$"
+	.string "I stay because I'm a fan of\n"
+	.string "FLANNERY's power.\p"
+	.string "And because she stood up to TEAM\n"
+	.string "MAGMA's survey crews. Alone.$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryIntro:
 	.string "Welcome… No, wait.\p"

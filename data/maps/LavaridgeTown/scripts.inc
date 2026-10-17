@@ -357,9 +357,8 @@ LavaridgeTown_Text_AsYouWishThen:
 	.string "hatching this EGG, I will be here.$"
 
 LavaridgeTown_Text_EverySoOftenEggFoundAtDayCare:
-	.string "Every so often, an EGG will be found at\n"
-	.string "the POKéMON DAY CARE.\p"
-	.string "Or at least that's how the rumor goes.$"
+	.string "Every so often an EGG turns up at the\n"
+	.string "DAY CARE. Nobody ever sees how.$"
 
 LavaridgeTown_Text_HotSpringsNeverRunDry:
 	.string "The springs never run dry. Magma\n"
@@ -377,9 +376,9 @@ LavaridgeTown_Text_PokemonNippedBackside:
 	.string "A POKéMON nipped my backside!$"
 
 LavaridgeTown_Text_OhYouLikeHotSprings:
-	.string "Oh, you like hot springs, do you?\p"
-	.string "That's surprising for one as young\n"
-	.string "as you.$"
+	.string "You like hot springs? At your age?\p"
+	.string "Good. Life's hard. Learn to rest\n"
+	.string "early.$"
 
 LavaridgeTown_Text_BatheInHotSpringsEveryDay:
 	.string "I bathe in the hot springs every day.\p"
@@ -389,10 +388,9 @@ LavaridgeTown_Text_BatheInHotSpringsEveryDay:
 	.string "what makes a GYM LEADER.$"
 
 LavaridgeTown_Text_IfPokemonInHotSprings:
-	.string "If people put POKéMON in hot springs,\n"
-	.string "it might be seriously strange.\p"
-	.string "Why, it might be an electric bath, or\n"
-	.string "a bubble bath, or even a lava bath…$"
+	.string "POKéMON in hot springs? An electric\n"
+	.string "bath, a bubble bath, a lava bath…\p"
+	.string "Actually, sounds nice.$"
 
 LavaridgeTown_Text_HotSpringsClaims:
 	.string "They claim these springs cure\n"

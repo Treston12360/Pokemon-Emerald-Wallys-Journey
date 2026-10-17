@@ -35,14 +35,14 @@ LavaridgeTown_PokemonCenter_1F_Text_TrainersPokemonSpendTimeTogether:
 	.string "Sitting. Walking. Eating together.$"
 
 LavaridgeTown_PokemonCenter_1F_Text_HotSpringCanInvigorate:
-	.string "It's sort of magical how just sitting\n"
-	.string "in a hot-spring pool can invigorate.\p"
-	.string "I wish I could let my POKéMON\n"
-	.string "soak, too.$"
+	.string "Just sitting in the springs brings\n"
+	.string "you back to life.\p"
+	.string "I wish my POKéMON could soak too.$"
 
 LavaridgeTown_PokemonCenter_1F_Text_TrainersShouldRestToo:
-	.string "Hohoho! Hey, kid, you can reach\n"
-	.string "the hot springs from here.\p"
-	.string "If POKéMON are getting rest, so too\n"
-	.string "should their TRAINERS.$"
+	.string "Hohoho! The hot springs are right\n"
+	.string "outside.\p"
+	.string "If POKéMON rest, TRAINERS should\n"
+	.string "too. You're no good to them\l"
+	.string "exhausted.$"
 
