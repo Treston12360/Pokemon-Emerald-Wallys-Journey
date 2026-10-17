@@ -1,0 +1,180 @@
+# Wally's Journey — Story Continuity Bible
+
+**Purpose.** The single reference for *what happens, when, who knows what, and which flag gates it*, required by the owner before bulk script rewrites (Requirements §14). Every rewritten scene must be checked against this file, and this file must be updated in the same commit as the scene.
+
+**Authority order:** `WALLY_JOURNEY_OWNER_REQUIREMENTS.md` (owner's words) > this bible > code comments. If they disagree, fix this bible.
+
+**Status words used below:** **done** = in the ROM and compiling · **partial** = some of the scene is done · **planned** = designed here, not built · **keep** = original Emerald scene stays as-is.
+
+---
+
+## 1. Central theme
+
+**Ambition, responsibility, and the unintended costs of good intentions.** Each lead embodies a version of it:
+
+| Character | Ambition | Good intention | Cost / lesson |
+|---|---|---|---|
+| Norman | Become a Gym Leader, earn enough | Give his family a better life | Missed his child growing up; must choose to be present |
+| Maxie | Make Hoenn livable for people priced out of it | Homes, farms, jobs | Gambles other people's safety on a model he refuses to doubt |
+| Archie | Protect the sea and its Pokémon | Stop industrial and coastal destruction | Same hubris, mirrored: decides for everyone what the world should be |
+| Steven | Understand the stones, the region and his father's company | Responsible stewardship | Torn between loyalty to Devon and honesty about its costs |
+| Wally | Become strong and independent | Prove he's more than "the sick kid" | Leaves people who love him worrying; learns strength means protecting others |
+| Player | Become a great Trainer | Help wherever trouble starts | Learns their father's lesson from the other side |
+
+Tone rules: hopeful, warm, funny in places. Subtext over monologue. Flawed but sympathetic adults. No grimdark, no cartoon villains.
+
+---
+
+## 2. Continuity rules (lore bible)
+
+### 2.1 Family and origins
+- The player's family moved **from Kanto to Hoenn** (owner-approved continuity change). Any line implying a Johto origin must be changed. **Audit 2026-10-16:** no dialogue string names Johto as the family's home (only the postgame Johto-starter event variable uses the word). Re-check whenever Mom or Norman lines are rewritten.
+- In Kanto money was tight: Mom worked double shifts, Norman trained at night. Norman moved first to earn Gym Leader accreditation in Petalburg; the family followed once he could afford a house in Littleroot.
+- **The truck:** the family took the ferry from Kanto. They couldn't afford another ticket for the overland leg, so the movers let the player ride **in the cab**. After the truck parked in Littleroot, the player climbed into the back to check the boxes. That's where the game opens. **Done** (no driving shot; Mom explains).
+
+### 2.2 The Pokémon League (Hoenn)
+- The **League accredits Gym Leaders**. A Gym Leader awards a badge when a challenger beats them. Eight badges let a Trainer through the Victory Road gate.
+- Each badge also works as a **field license**: it lets the holder's Pokémon use the matching field move. The Gym Leader hands over the HM as the physical license; no Pokémon has to learn the move. **Done.**
+- A Trainer who beats all four Elite Four members **in one run** may challenge the Champion. Beating the Champion transfers the title immediately; the League records it.
+- A **title defense** is the Champion accepting a challenge from a recognized contender. After the player wins, Wally is the standing contender. **Done (basic)**: a repeat match in the Champion's room after the game is clear.
+- **Wallace** was Champion at the start of the game (and Sootopolis' Gym was handed to Juan years ago, as in Emerald). Wally beats Wallace **after** the player beats Wally on Victory Road and **before** the player reaches the Champion's room.
+
+### 2.3 Legendary myth (Groudon, Kyogre, Rayquaza, the Orbs)
+- Ancient Hoenn people recorded Groudon raising land and Kyogre raising the sea, and a sky dragon that ended their battle. The **Red and Blue Orbs** were kept at **Mt. Pyre** as offerings to *calm* the two, not control them.
+- **The records are incomplete and mistranslated.** One old inscription reads like "the orb commands the titan"; the older text reads "the orb soothes the titan." Maxie and Archie each read the version that suits them. This is why they believe they can control what they can't.
+- **Sky Pillar** is where Rayquaza rests. Sootopolis' elders (and Wallace, as a Sootopolis native) know the full version. Foreshadow: Mt. Pyre's old couple and a Sootopolis elder each mention "the one above the sky." **Planned.**
+- Waking Rayquaza is the **informed best option**: Steven and Wallace know the legend, and the Orbs have already failed. Not a last-second miracle.
+- Kyogre and Groudon later return to Marine Cave / Terra Cave. Their capture battles are enormous: level 75, holding their Orb, so they go **Primal** in battle. **Done.**
+
+### 2.4 The meteorite plan (Mt. Chimney)
+- Magma's geologists model the meteorite as a catalyst to **trigger a controlled flank eruption** that builds new land on the volcano's south side, toward the ash-starved farms.
+- Weather Institute and Fallarbor researchers warn that eruptions are **nonlinear**: a small push can uncork the whole chamber. Maxie keeps the models that agree with him and dismisses the rest.
+- Professor Cozmo is tricked into guiding Magma to Meteor Falls because they pose as a **land-reclamation research group**, which is their public front.
+
+### 2.5 Public fronts
+- **Team Magma's front:** "Hoenn Land Initiative" — a housing and reclamation advocacy group that runs volunteer building days. Many grunts joined through it.
+- **Team Aqua's front:** "Hoenn Sea Trust" — beach cleanups, Wingull rescue, protests against coastal development. Many grunts joined through it.
+- **Why the authorities don't just arrest them:** both groups are legal organizations most of the time. Thefts are carried out in uniforms that aren't tied to the fronts. Police evidence lags behind events, and each team times its moves for when officers are needed elsewhere (the Slateport contest crowd, the Lilycove festival, the Mossdeep launch). Steven and the League help but have no arrest power.
+
+### 2.6 Devon Corporation
+- Devon employs half of Rustboro and makes Poké Balls, the PokéNav, the Devon Scope and the submarine parts. Rustboro is prosperous because of it.
+- It is also criticized for quarry expansion near Rusturf, energy use, and coastal shipping. Steven agrees with some of that criticism and has told his father so.
+- Devon is **not secretly evil**. Different NPCs hold different views about it.
+
+---
+
+## 3. Chronological beat sheet
+
+Each row: what happens, where, the gate (flag/var), what changes in Wally's Journey, and status. Flags are real names from `include/constants/flags.h` / `vars.h`.
+
+| # | Beat | Map(s) | Gate | Wally's Journey change | Status |
+|---|---|---|---|---|---|
+| 1 | Arrival in Littleroot | InsideOfTruck → LittlerootTown | `VAR_LITTLEROOT_INTRO_STATE` | Truck already parked; Mom explains the cab ride and money | **done** |
+| 2 | Mom, clock, meet rival's family | Littleroot houses | intro vars | Mom mentions Norman will visit "when the Gym lets him"; Kanto references fixed | planned |
+| 3 | Birch attacked; starter | Route101 | `FLAG_RESCUED_BIRCH` | Birch's later dialogue gives a reason he trusts the player: Norman's reputation plus how calmly the player acted | planned |
+| 4 | Rival battle, Pokédex | Route103, Birch's lab | `FLAG_SYS_POKEDEX_GET` | Birch's Pokédex task becomes real research: odd migrations and weather he wants logged | planned |
+| 5 | Norman's Gym; Wally catches Ralts | PetalburgCity_Gym, Route102 | `VAR_PETALBURG_GYM_STATE` | Norman is warm but clearly busy; Wally shy and sickly | keep (light edits planned) |
+| 6 | Aqua in Petalburg Woods | PetalburgWoods | — | Grunt is a Sea Trust member who thinks Devon is dumping waste | planned |
+| 7 | Badge 1 Roxanne; Cut HM | RustboroCity_Gym | `FLAG_BADGE01_GET` | Roxanne gives HM01 | **done** |
+| 8 | Devon Goods stolen / recovered; letter to Steven | Rusturf, Devon | `FLAG_RECOVERED_DEVON_GOODS` | President Stone shows pride and blind spots about Devon | planned |
+| 9 | Granite Cave: meet Steven | GraniteCave_StevensRoom | `FLAG_DELIVERED_STEVEN_LETTER` | Steven asks the player what *they* think of Devon | planned |
+| 10 | Badge 2 Brawly; Flash HM | DewfordTown_Gym | `FLAG_BADGE02_GET` | Brawly gives HM05 | **done** |
+| 11 | Slateport: goods to Stern; Aqua at museum | Slateport | `FLAG_DELIVERED_DEVON_GOODS` | Archie argues habitat loss credibly | planned |
+| 12 | Rival battle Route 110 | Route110 | rival trainer flags | May/Brendan: confident, likes research more than they admit | planned |
+| 13 | **Wally battle #1** (shy) | MauvilleCity | `FLAG_DEFEATED_WALLY_MAUVILLE` | Kept (Ralts lv16) | keep |
+| 14 | Badge 3 Wattson; Rock Smash HM | MauvilleCity_Gym | `FLAG_BADGE03_GET` | Wattson gives HM06 | **done** |
+| 15 | Rusturf Tunnel opens | RusturfTunnel | `FLAG_RUSTURF_TUNNEL_OPENED` | Mentions Devon quarry criticism | planned |
+| 16 | **Wally battle #2** | VerdanturfTown | `FLAG_HIDE_WALLY_RIVAL_VERDANTURF` cleared at badge 3 | New | **done** |
+| 17 | Meteor Falls: Magma takes meteorite | MeteorFalls_1F_1R | `FLAG_MET_ARCHIE_METEOR_FALLS` | Cozmo tricked by "Land Initiative" front | planned |
+| 18 | Mt. Chimney: Maxie | MtChimney | `FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY` | Maxie's housing/farm argument; grunts' real reasons | **done (first pass)** |
+| 19 | Mt. Chimney: researchers' warning | MtChimney / JaggedPass | — | Add a scientist NPC warning about nonlinear eruptions | planned |
+| 20 | Badge 4 Flannery; Strength HM | LavaridgeTown_Gym_1F | `FLAG_BADGE04_GET` | Flannery gives HM04 | **done** |
+| 21 | **Wally battle #3** | LavaridgeTown | cleared at badge 4 | New | **done** |
+| 22 | Badge 5 Norman; Surf HM | PetalburgCity_Gym | `FLAG_BADGE05_GET` | Norman's confession and commitment; gives HM03 | **done** |
+| 23 | Steven in Wally's house | PetalburgCity_WallysHouse | `FLAG_HIDE_WALLYS_HOUSE_STEVEN` cleared at badge 5; `FLAG_RECEIVED_MEGA_BRACELET` | Mega Bracelet + starter stone; speech about growth and travels | **done** |
+| 24 | Petalburg reacts | PetalburgCity NPCs | `FLAG_BADGE05_GET` | Townsfolk talk about the father–child Gym match | planned |
+| 25 | **Wally battle #4** | FortreeCity | cleared at badge 5 | New | **done** |
+| 26 | Weather Institute (Aqua); Castform | Route119_WeatherInstitute | `FLAG_RECEIVED_CASTFORM` | Researchers mention odd pressure readings (foreshadow Kyogre) | planned |
+| 27 | Rival Route 119 (was Fly HM) | Route119 | — | No HM now; rival talks about wanting to do research full-time | partial (HM removed earlier) |
+| 28 | Badge 6 Winona; Fly HM; Z-Power Ring | FortreeCity_Gym | `FLAG_BADGE06_GET` | Winona gives HM02 and the Z-Power Ring | **done** |
+| 29 | **Wally battle #5** | LilycoveCity | cleared at badge 6 | New | **done** |
+| 30 | Rival battle Lilycove | LilycoveCity | rival flags | Satisfying mid-game rival peak; not their last appearance | planned |
+| 31 | Mt. Pyre: Orbs stolen | MtPyre_Summit | `VAR_MT_PYRE_STATE` | Old couple explain "soothe, not command"; mistranslation clue | planned |
+| 32 | Aqua Hideout: submarine stolen | AquaHideout_*, LilycoveCity_Harbor | — | Inside job via a Slateport shipyard worker; Stern and police investigate afterward | planned |
+| 33 | Badge 7 Tate & Liza; Dive HM | MossdeepCity_Gym | `FLAG_BADGE07_GET` | Tate & Liza give HM08 | **done** |
+| 34 | Space Center: Magma, Steven partner | MossdeepCity_SpaceCenter_2F | `FLAG_DEFEATED_MAGMA_SPACE_CENTER` | Maxie's reflection ("the problem is real; my answer was not") | **done (first pass)** |
+| 35 | **Wally battle #6** | MossdeepCity | cleared at badge 7 | New | **done** |
+| 36 | Seafloor Cavern: Kyogre awakens | SeafloorCavern_Room9 | `FLAG_KYOGRE_ESCAPED_SEAFLOOR_CAVERN` | Archie realizes the Orb didn't control anything | planned |
+| 37 | Sootopolis crisis; Sky Pillar; Rayquaza | SootopolisCity, SkyPillar_* | `FLAG_LEGENDARIES_IN_SOOTOPOLIS`, `VAR_SOOTOPOLIS_CITY_STATE` | Wally visibly helps evacuate residents; Steven and Wallace explain why Rayquaza is the answer | planned |
+| 38 | Badge 8 Juan; Waterfall HM | SootopolisCity_Gym_1F | `FLAG_BADGE08_GET` | Juan gives HM07 | **done** |
+| 39 | **Wally battle #7** | SootopolisCity | cleared at badge 8 | New; references Wally helping during the crisis | **done** |
+| 40 | Aftermath across Hoenn | many | after `VAR_SOOTOPOLIS_CITY_STATE` resolves | Repairs, aid, angry residents, ex-members | planned |
+| 41 | **Wally battle #8** | VictoryRoad_1F | `FLAG_DEFEATED_WALLY_VICTORY_ROAD` | Confident, dangerous team with Mega Gardevoir | **done** |
+| 42 | Wally beats Wallace (off-screen, reported) | — | after #41 | PokéNav call from Wally; Elite Four drop hints | partial (PokéNav call done) |
+| 43 | Elite Four | EverGrandeCity_* | — | Drake's post-battle line hints the Champion changed "days ago" | planned |
+| 44 | **Champion Wally** | EverGrandeCity_ChampionsRoom | `TRAINER_WALLY_CHAMPION` | Striking entrance and lines; approved six | **done (lines)**; entrance planned |
+| 45 | Hall of Fame | HallOfFame | `FLAG_SYS_GAME_CLEAR` | Keep | keep |
+| 46 | Postgame unlocks | Lilycove Harbor, Fallarbor, caves | `FLAG_SYS_GAME_CLEAR` | Islands open without tickets; Jirachi via Cozmo; Kyogre/Groudon Primal | **done** |
+| 47 | Title defense | EverGrandeCity_ChampionsRoom | `FLAG_SYS_GAME_CLEAR` | Wally as contender | **done (basic)** |
+| 48 | Rival final battle and closure | Littleroot / Birch's lab | `FLAG_SYS_GAME_CLEAR` | May/Brendan's last battle and their research decision | planned |
+| 49 | Magma/Aqua accountability | Lilycove, Slateport, Mossdeep | postgame | Cleanup crews, Maxie and Archie meet people they hurt | planned |
+
+---
+
+## 4. Who knows what, when
+
+| Character | Knows at start | Learns | Never knows |
+|---|---|---|---|
+| Player | Moved from Kanto; dad is a Gym Leader | Everything they witness | — |
+| Norman | Family finances, his own absence | Player's growth (badge 5); Wally's rise (news) | Details of the Sootopolis crisis until after |
+| Mom | Same as Norman | Player's adventures through calls | — |
+| Birch | Norman's reputation | Migration data the player logs ties to Magma/Aqua (after #31) | — |
+| May/Brendan | Their dad's research | The crisis first-hand from #31 onward | — |
+| Wally | His illness; the player as role model | Gains independence; sees the crisis in Sootopolis | — |
+| Steven | Stones, Devon, the legend in part | Full legend after Mt. Pyre (#31) | — |
+| Wallace | Full Sootopolis legend | That Wally is ready (they battle after #41) | — |
+| Maxie | His models; misread inscription | His model was wrong (#34) | That Rayquaza exists, until #37 |
+| Archie | Habitat data; misread inscription | The Orb can't control Kyogre (#36) | — |
+
+---
+
+## 5. Gates, items and softlock checklist
+
+Check every rewritten scene against this list before committing.
+
+- [x] **HMs.** Each Gym Leader gives their badge's HM and re-checks every time you talk to them, so a full bag can't lose one. Old givers (Cutter, Granite Cave, Rock Smash Dude, Rusturf, Wally's dad, Route 119 rival, Steven's house, Sootopolis) now only give advice.
+- [x] **Surf** needs Badge 5 + HM03 from Norman + a party Pokémon that could learn Surf. Wally's house scene still sets `FLAG_RECEIVED_HM_SURF` for story checks.
+- [ ] **Dive / Waterfall** gates still work after the HM-giver removals: needs an emulator run to Seafloor Cavern.
+- [x] **Mega Bracelet** only after badge 5 (`FLAG_RECEIVED_MEGA_BRACELET`).
+- [x] **Z-Power Ring** only after badge 6.
+- [ ] **Submarine** rework (#32) must keep `VAR_SLATEPORT_HARBOR_STATE` / Lilycove harbor flow intact.
+- [ ] **Wally rival objects** stand outside Pokémon Centers. Confirm in the emulator that none block a door or a required path.
+- [ ] **Hidden Mega Stones and Z-Crystals** were placed automatically. Confirm in the emulator that each tile can be reached. Ledger: `docs/WALLY_MEGA_STONE_AND_Z_CRYSTAL_LEDGER.md`.
+- [ ] **Different player gender / rival** paths: every new script must work for both Brendan and May.
+- [ ] **Event islands** open after the first Elite Four win without tickets. Confirm the Lilycove ferry shows all four.
+- [ ] **No calendar locks.** Seasons and day/night (when added) must never block story progress.
+
+---
+
+## 6. Open questions (need the owner)
+
+1. **Who witnesses Wally beating Wallace?** Recommended: nobody on-screen. Wally's PokéNav call (#42) and the Elite Four's hints let the player work it out, so the Champion room still lands as a reveal.
+2. **May/Brendan's final battle location.** Recommended: outside Birch's lab after the Hall of Fame, ending with them deciding to work in research.
+3. **Submarine inside job.** Recommended: a stressed Slateport shipyard worker who joined the Sea Trust front, later cooperates with the police.
+
+---
+
+## 7. Scene change record
+
+Every new or rewritten scene gets a row here.
+
+| Date | Scene | Map | Trigger | Replaced | Intent | Progression effect |
+|---|---|---|---|---|---|---|
+| 2026-10-16 | Gym Leader HM award | all 8 Gyms | badge win / leader talk | old HM-giver NPCs | Badge is the license; HM is proof | Restores field-move progression |
+| 2026-10-16 | Steven Mega Bracelet | PetalburgCity_WallysHouse | badge 5 | always-visible Steven | Growth + travels speech | Gives Mega Bracelet + starter stone |
+| 2026-10-16 | Wally battles #2–#7 | Verdanturf … Sootopolis | badges 3–8 | — | Shy → confident arc | None (optional fights) |
+| 2026-10-16 | Wally VR / Champion / defense lines | VictoryRoad_1F, ChampionsRoom | existing | Wallace / humble Wally | Confident, dangerous Wally | None |
+| 2026-10-16 | Norman confession | PetalburgCity_Gym | badge 5 | "happy and sad" line | Accountability + commitment | None |
+| 2026-10-16 | Parked-truck opening | InsideOfTruck, LittlerootTown | new game | driving/braking shot | Safe travel, money premise | None |
+| 2026-10-16 | Maxie / Magma first pass | MtChimney, MagmaHideout, SpaceCenter | existing | cartoonish land speeches | Credible case, then hubris | None |
+| 2026-10-16 | Jirachi quest | FallarborTown_CozmosHouse, MeteorFalls_B1F_2R | game clear | — | Postgame mythical | New encounter |
