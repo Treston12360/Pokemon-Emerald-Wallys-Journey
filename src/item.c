@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "item.h"
 #include "berry.h"
 #include "pokeball.h"
@@ -249,6 +250,7 @@ bool32 HasAtLeastOnePokeBall(void)
 
 bool32 CheckBagHasSpace(enum Item itemId, u16 count)
 {
+    itemId = WallyJourney_ConvertForbiddenBall(itemId);
     if (GetItemPocket(itemId) >= POCKETS_COUNT)
         return FALSE;
 
@@ -276,6 +278,7 @@ static u32 NONNULL BagPocket_GetFreeSpaceForItem(struct BagPocket *pocket, enum 
 
 u32 GetFreeSpaceForItemInBag(enum Item itemId)
 {
+    itemId = WallyJourney_ConvertForbiddenBall(itemId);
     if (GetItemPocket(itemId) >= POCKETS_COUNT)
         return 0;
 
@@ -349,7 +352,7 @@ static bool32 NONNULL BagPocket_AddItem(struct BagPocket *pocket, enum Item item
 
 bool32 AddBagItem(enum Item itemId, u16 count)
 {
-    itemId = SanitizeBagItemId(itemId);
+    itemId = SanitizeBagItemId(WallyJourney_ConvertForbiddenBall(itemId));
     if (itemId == ITEM_NONE)
         return FALSE;
 
@@ -463,6 +466,7 @@ bool32 CheckPCHasItem(enum Item itemId, u16 count)
 
 bool32 AddPCItem(enum Item itemId, u16 count)
 {
+    itemId = WallyJourney_ConvertForbiddenBall(itemId);
     struct BagPocket dummyPocket = DUMMY_PC_BAG_POCKET;
     return BagPocket_AddItem(&dummyPocket, itemId, count);
 }

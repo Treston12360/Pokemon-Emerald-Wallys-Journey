@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "battle.h"
 #include "battle_hold_effects.h"
 #include "battle_message.h"
@@ -2213,7 +2214,39 @@ static void Cmd_getexp(void)
             if (GetConfig(B_TRAINER_EXP_MULTIPLIER) <= GEN_7 && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
                 calculatedExp = (calculatedExp * 150) / 100;
 
-            if (GetConfig(B_SPLIT_EXP) < GEN_6)
+            if (WallyJourney_IsExpAllMode())
+            {
+                // Wally's Journey EXP ALL: hand out exactly the total a normal EXP SHARE
+                // player would earn (participants plus one EXP SHARE holder), split evenly
+                // across every eligible party member. Spreads EXP; never adds more.
+                u32 pool, eligible = 0;
+                if (GetConfig(B_SPLIT_EXP) < GEN_6)
+                    pool = calculatedExp;
+                else
+                    pool = calculatedExp * viaSentIn + calculatedExp / 2;
+                expShareBits = 0;
+                orderId = 0;
+                for (i = 0; i < PARTY_SIZE; i++)
+                {
+                    if (!IsValidForBattle(&gParties[B_TRAINER_PLAYER][i]))
+                        continue;
+                    expShareBits |= 1u << i;
+                    eligible++;
+                }
+                for (i = 0; i < PARTY_SIZE; i++)
+                    if ((1u << i) & sentInBits)
+                        gBattleStruct->expGettersOrder[orderId++] = i;
+                for (i = 0; i < PARTY_SIZE; i++)
+                    if (!((1u << i) & sentInBits) && (1u << i) & expShareBits)
+                        gBattleStruct->expGettersOrder[orderId++] = i;
+                if (orderId < PARTY_SIZE)
+                    gBattleStruct->expGettersOrder[orderId] = PARTY_SIZE;
+                *exp = SAFE_DIV(pool, eligible);
+                if (*exp == 0)
+                    *exp = 1;
+                gBattleStruct->expShareExpValue = *exp;
+            }
+            else if (GetConfig(B_SPLIT_EXP) < GEN_6)
             {
                 if (viaExpShare) // at least one mon is getting exp via exp share
                 {
@@ -2253,7 +2286,8 @@ static void Cmd_getexp(void)
             bool32 wasSentOut = (gBattleStruct->expSentInMons & (1u << *expMonId)) != 0;
             holdEffect = GetMonHoldEffect(&gParties[B_TRAINER_PLAYER][*expMonId]);
 
-            if ((holdEffect != HOLD_EFFECT_EXP_SHARE && !wasSentOut && !IsGen6ExpShareEnabled())
+            bool32 expAll = WallyJourney_IsExpAllMode();
+            if ((!expAll && holdEffect != HOLD_EFFECT_EXP_SHARE && !wasSentOut && !IsGen6ExpShareEnabled())
              || GetMonData(&gParties[B_TRAINER_PLAYER][*expMonId], MON_DATA_SPECIES_OR_EGG) == SPECIES_EGG)
             {
                 gBattleScripting.getexpState = 5;
@@ -2282,12 +2316,12 @@ static void Cmd_getexp(void)
 
                 if (IsValidForBattle(&gParties[B_TRAINER_PLAYER][*expMonId]))
                 {
-                    if (wasSentOut)
+                    if (wasSentOut || expAll)
                         gBattleStruct->battlerExpReward = GetSoftLevelCapExpValue(gParties[B_TRAINER_PLAYER][*expMonId].level, gBattleStruct->expValue);
                     else
                         gBattleStruct->battlerExpReward = 0;
 
-                    if ((holdEffect == HOLD_EFFECT_EXP_SHARE || IsGen6ExpShareEnabled())
+                    if (!expAll && (holdEffect == HOLD_EFFECT_EXP_SHARE || IsGen6ExpShareEnabled())
                         && (B_SPLIT_EXP < GEN_6 || gBattleStruct->battlerExpReward == 0)) // only give exp share bonus in later gens if the mon wasn't sent out
                     {
                         gBattleStruct->battlerExpReward += GetSoftLevelCapExpValue(gParties[B_TRAINER_PLAYER][*expMonId].level, gBattleStruct->expShareExpValue);
@@ -2321,9 +2355,14 @@ static void Cmd_getexp(void)
                     PREPARE_STRING_BUFFER(gBattleTextBuff2, i);
                     PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff3, 6, gBattleStruct->battlerExpReward);
 
-                    if (wasSentOut || holdEffect == HOLD_EFFECT_EXP_SHARE)
+                    if (wasSentOut || (!expAll && holdEffect == HOLD_EFFECT_EXP_SHARE))
                     {
                         PrepareStringBattle(STRINGID_PKMNGAINEDEXP, 0);
+                    }
+                    else if (expAll && !gBattleStruct->teamGotExpMsgPrinted)
+                    {
+                        PrepareStringBattle(STRINGID_WALLY_TEAMGAINEDEXPALL, 0);
+                        gBattleStruct->teamGotExpMsgPrinted = TRUE;
                     }
                     else if (IsGen6ExpShareEnabled() && !gBattleStruct->teamGotExpMsgPrinted) // Print 'the rest of your team got exp' message once, when all of the sent-in mons were given experience
                     {

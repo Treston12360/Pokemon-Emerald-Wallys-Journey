@@ -5614,7 +5614,7 @@ static const u16 sResortGorgeousDeluxeRewards[] = {
 static u16 SampleResortGorgeousReward(void)
 {
     if ((Random() % 100) >= 30)
-        return ITEM_LUXURY_BALL;
+        return ITEM_POKE_BALL;
     else
         return sResortGorgeousDeluxeRewards[Random() % NELEMS(sResortGorgeousDeluxeRewards)];
 }

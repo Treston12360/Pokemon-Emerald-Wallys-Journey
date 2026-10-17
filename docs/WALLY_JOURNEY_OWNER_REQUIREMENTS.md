@@ -178,3 +178,27 @@ The owner explicitly rejects rebalancing captures to be easier to compensate for
 - Define the full event species/item acquisition matrix: species, event item if relevant, where/how it is received after the first Elite Four clear, encounter map and script, prerequisite flags, rematch/retry behavior, and verification evidence. Some mythical Pokémon originally had no event item; create an appropriate equivalent quest/unlock rather than inventing historical distribution items.
 - **Unlock timing:** The first Elite Four victory is the gate; do not require additional Champion title defenses or unrelated postgame completion unless part of a justified individual quest. Account for Wally replacing Wallace as Champion when triggering this postgame flag.
 - **Status:** Confirmed owner requirement; event unlocks, distribution, custom quests, difficulty tuning, and emulator verification remain to be implemented/audited.
+
+## Implementation status ledger (2026-10-16)
+
+Status words: **code-in** = written and compiles; **build-passed** = full ROM builds; **emulator-verified** = played in mGBA. Nothing below is emulator-verified yet.
+
+| Requirement | Status | How it's done |
+|---|---|---|
+| Both bikes from Rydel | code-in (earlier) | `MauvilleCity_BikeShop` script gives Mach + Acro |
+| Reusable TMs | code-in (earlier) | engine switch `I_REUSABLE_TMS TRUE` |
+| HM field use without teaching | code-in (earlier) | `WallyCanUseHmWithoutTeaching` in `field_move.c` + party menu; needs badge + HM item + compatible mon |
+| Move relearning (Legends-style) | code-in (earlier) | engine summary-screen relearner, TM and pre-evo moves |
+| Following Pokémon, always on, shiny | code-in (earlier) | engine `OW_FOLLOWERS_ENABLED TRUE`, no disable flag (`B_FLAG_FOLLOWERS_DISABLED 0`) |
+| 1/4096 shinies | code-in (earlier) | `SHINY_ODDS 16` |
+| Physical/special split | code-in (engine default) | `B_PHYSICAL_SPECIAL_SPLIT GEN_LATEST` |
+| Effectiveness labels for seen species | code-in (engine default) | `B_SHOW_EFFECTIVENESS SHOW_EFFECTIVENESS_SEEN` |
+| No Dynamax/Gigantamax | code-in (earlier) | `CanDynamax` returns FALSE outside tests |
+| Steven Mega Ring + starter stone in Wally's house | code-in (earlier), partial | Steven NPC gated on Balance Badge; gives Mega Ring + Sceptilite/Blazikenite/Swampertite. Still needs a proper scripted scene after Norman |
+| **Poké Ball only** | code-in (this batch) | All Emerald marts, item balls, hidden items and NPC gifts changed; every general mart now sells Poké Balls; Trainer Hill, Lottery (Master Ball jackpot → PP Max), Lilycove ladies, Battle Tent, Resort Gorgeous and the 10-ball bonus give Poké Balls; `AddBagItem`/`AddPCItem` convert any other ball to a Poké Ball as a safety net. Catch rates unchanged. Safari Balls untouched (Safari Zone uses its own counter). FRLG-only maps not edited |
+| **Mega Evolution only for eligible trainers** | code-in (this batch) | `CanMegaEvolve`: opponents may Mega Evolve only in Gym maps, Frontier/link battles, or if class is Leader / Elite Four / Champion / Rival (Wally, Brendan/May, Steven). No trainers currently hold Mega Stones; team upgrades still to do |
+| **EXP Share vs EXP All** | code-in (this batch) | Options → EXP. MODE. SHARE = normal held item. ALL = the total a normal player would get (participants + one EXP Share holder) split evenly over all eligible party members, so no extra total EXP. Saved in `FLAG_WALLY_EXP_ALL_MODE` |
+| **Z-Moves On/Off** | code-in (this batch) | Options → Z-MOVES; default ON; OFF disables Z-Moves for everyone in battle. Saved in `FLAG_WALLY_Z_MOVES_OFF`. Z-Crystal placement still to do |
+| Options menu scrolling | code-in (this batch) | Options list scrolls (7 rows visible) to fit the two new rows. Built in-house; the "New Options Plus" community patch targets vanilla pokeemerald and would need porting |
+
+Still to build: Wally story/rival battles/Champion arc, gym leader HM scenes, upgraded rematches with Megas, Champion title defenses, Kyogre/Groudon upgrades, post-E4 event Pokémon, seasons, Contest/Secret Base/Frontier expansions, game speed-up, smarter trainer AI review, catch-rate audit, full Gen 1–9 obtainability and item ledgers.

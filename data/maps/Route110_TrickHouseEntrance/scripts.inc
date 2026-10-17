@@ -344,7 +344,7 @@ Route110_TrickHouseEntrance_EventScript_GivePuzzle1Reward::
 	end
 
 Route110_TrickHouseEntrance_EventScript_GivePuzzle2Reward::
-	giveitem ITEM_TIMER_BALL
+	giveitem ITEM_POKE_BALL, 5
 	goto_if_eq VAR_RESULT, TRUE, Route110_TrickHouseEntrance_EventScript_GotReward
 	call_if_eq VAR_RESULT, FALSE, Common_EventScript_BagIsFull
 	msgbox Route110_TrickHouseEntrance_Text_DidYouNotComeToClaimReward, MSGBOX_DEFAULT

@@ -1198,7 +1198,7 @@ static void Task_ReturnToItemListAfterItemPurchase(u8 taskId)
          && ((I_PREMIER_BALL_BONUS <= GEN_7 && tItemId == ITEM_POKE_BALL)
           || (I_PREMIER_BALL_BONUS >= GEN_8 && (GetItemPocket(tItemId) == POCKET_POKE_BALLS))))
         {
-            u32 spaceAvailable = GetFreeSpaceForItemInBag(ITEM_PREMIER_BALL);
+            u32 spaceAvailable = GetFreeSpaceForItemInBag(ITEM_POKE_BALL);
             if (spaceAvailable < premierBallsToAdd)
                 premierBallsToAdd = spaceAvailable;
         }
@@ -1208,7 +1208,7 @@ static void Task_ReturnToItemListAfterItemPurchase(u8 taskId)
         }
 
         PlaySE(SE_SELECT);
-        AddBagItem(ITEM_PREMIER_BALL, premierBallsToAdd);
+        AddBagItem(ITEM_POKE_BALL, premierBallsToAdd);
         if (premierBallsToAdd > 0)
         {
             ConvertIntToDecimalStringN(gStringVar1, premierBallsToAdd, STR_CONV_MODE_LEFT_ALIGN, MAX_ITEM_DIGITS);

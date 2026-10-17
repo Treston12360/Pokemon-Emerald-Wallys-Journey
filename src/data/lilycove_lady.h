@@ -293,13 +293,13 @@ static const struct LilycoveQuizLadyQuestions sQuizLadyQuestions[] =
     {.question = sQuizLadyQuestion7,  .answer = EC_WORD_ROCK,       .prize = ITEM_WATMEL_BERRY},
     {.question = sQuizLadyQuestion8,  .answer = EC_WORD_SHADOW_TAG, .prize = ITEM_BELUE_BERRY},
     {.question = sQuizLadyQuestion9,  .answer = EC_WORD_IMMUNITY,   .prize = ITEM_DURIN_BERRY},
-    {.question = sQuizLadyQuestion10, .answer = EC_WORD_POKEMON,    .prize = ITEM_LUXURY_BALL},
+    {.question = sQuizLadyQuestion10, .answer = EC_WORD_POKEMON,    .prize = ITEM_POKE_BALL},
     {.question = sQuizLadyQuestion11, .answer = EC_WORD_PC,         .prize = ITEM_TM_HYPER_BEAM},
     {.question = sQuizLadyQuestion12, .answer = EC_WORD_TELEVISION, .prize = ITEM_BIG_PEARL},
     {.question = sQuizLadyQuestion13, .answer = EC_WORD_PLUSH_DOLL, .prize = ITEM_STAR_PIECE},
     {.question = sQuizLadyQuestion14, .answer = EC_WORD_ICE,        .prize = ITEM_RARE_CANDY},
     {.question = sQuizLadyQuestion15, .answer = EC_WORD_FIGHTING,   .prize = ITEM_RARE_CANDY},
-    {.question = sQuizLadyQuestion16, .answer = EC_WORD_DARK,       .prize = ITEM_PREMIER_BALL},
+    {.question = sQuizLadyQuestion16, .answer = EC_WORD_DARK,       .prize = ITEM_POKE_BALL},
 };
 
 // Favor Lady data
@@ -417,7 +417,7 @@ static const enum Item sFavorLadyAcceptedItems_Pointy[] =
 
 static const struct LilycoveFavorLady sFavorLady[] =
 {
-    {.request = COMPOUND_STRING("slippery"), .acceptedItems = sFavorLadyAcceptedItems_Slippery, .prize = ITEM_LUXURY_BALL},
+    {.request = COMPOUND_STRING("slippery"), .acceptedItems = sFavorLadyAcceptedItems_Slippery, .prize = ITEM_POKE_BALL},
     {.request = COMPOUND_STRING("roundish"), .acceptedItems = sFavorLadyAcceptedItems_Roundish, .prize = ITEM_NUGGET},
     {.request = COMPOUND_STRING("wham-ish"), .acceptedItems = sFavorLadyAcceptedItems_Whamish,  .prize = ITEM_PROTEIN},
     {.request = COMPOUND_STRING("shiny"),    .acceptedItems = sFavorLadyAcceptedItems_Shiny,    .prize = ITEM_HEART_SCALE},

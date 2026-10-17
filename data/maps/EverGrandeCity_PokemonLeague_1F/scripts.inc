@@ -41,7 +41,7 @@ WallyJourney_PokemonLeague_MegaShop::
 
 	.align 2
 WallyJourney_PokemonLeague_PostgameMart:
-	.2byte ITEM_ULTRA_BALL
+	.2byte ITEM_POKE_BALL
 	.2byte ITEM_MAX_POTION
 	.2byte ITEM_FULL_RESTORE
 	.2byte ITEM_REVIVE
@@ -60,7 +60,7 @@ WallyJourney_PokemonLeague_PostgameMart:
 
 	.align 2
 EverGrandeCity_PokemonLeague_1F_Pokemart:
-	.2byte ITEM_ULTRA_BALL
+	.2byte ITEM_POKE_BALL
 	.2byte ITEM_HYPER_POTION
 	.2byte ITEM_MAX_POTION
 	.2byte ITEM_FULL_RESTORE

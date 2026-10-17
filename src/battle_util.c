@@ -52,6 +52,8 @@
 #include "constants/songs.h"
 #include "constants/species.h"
 #include "constants/trainers.h"
+#include "constants/maps.h"
+#include "data.h"
 #include "constants/weather.h"
 #include "constants/pokemon.h"
 #include "test/battle.h"
@@ -8553,6 +8555,57 @@ bool32 DoesSpeciesUseHoldItemToChangeForm(enum Species species, enum Item heldIt
     return FALSE;
 }
 
+// Wally's Journey: only gym battles, the Elite Four, Champions, rivals
+// (Wally, Brendan/May, Steven) and Battle Frontier opponents may Mega Evolve.
+// Ordinary route and world trainers, and wild Pokemon, never do.
+static bool32 WallyJourney_InGymMap(void)
+{
+    u16 map = (gSaveBlock1Ptr->location.mapNum) | (gSaveBlock1Ptr->location.mapGroup << 8);
+    switch (map)
+    {
+    case MAP_RUSTBORO_CITY_GYM:
+    case MAP_DEWFORD_TOWN_GYM:
+    case MAP_MAUVILLE_CITY_GYM:
+    case MAP_LAVARIDGE_TOWN_GYM_1F:
+    case MAP_LAVARIDGE_TOWN_GYM_B1F:
+    case MAP_PETALBURG_CITY_GYM:
+    case MAP_FORTREE_CITY_GYM:
+    case MAP_MOSSDEEP_CITY_GYM:
+    case MAP_SOOTOPOLIS_CITY_GYM_1F:
+    case MAP_SOOTOPOLIS_CITY_GYM_B1F:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+static bool32 WallyJourney_OpponentMayMegaEvolve(enum BattlerId battler)
+{
+    u16 trainerId;
+    if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+        return FALSE;
+    if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+        return TRUE;
+    if (WallyJourney_InGymMap())
+        return TRUE;
+    if (GetBattlerPosition(battler) == B_POSITION_OPPONENT_RIGHT && (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS))
+        trainerId = TRAINER_BATTLE_PARAM.opponentB;
+    else
+        trainerId = TRAINER_BATTLE_PARAM.opponentA;
+    if (trainerId >= TRAINERS_COUNT)
+        return FALSE;
+    switch (GetTrainerClassFromId(trainerId))
+    {
+    case TRAINER_CLASS_LEADER:
+    case TRAINER_CLASS_ELITE_FOUR:
+    case TRAINER_CLASS_CHAMPION:
+    case TRAINER_CLASS_RIVAL:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 bool32 CanMegaEvolve(enum BattlerId battler)
 {
     enum HoldEffect holdEffect = GetBattlerHoldEffectIgnoreNegation(battler);
@@ -8562,6 +8615,9 @@ bool32 CanMegaEvolve(enum BattlerId battler)
     if (!TESTING
         && (position == B_POSITION_PLAYER_LEFT || (!(gBattleTypeFlags & BATTLE_TYPE_MULTI) && position == B_POSITION_PLAYER_RIGHT))
         && !CheckBagHasItem(ITEM_MEGA_RING, 1))
+        return FALSE;
+
+    if (!TESTING && !IsOnPlayerSide(battler) && !WallyJourney_OpponentMayMegaEvolve(battler))
         return FALSE;
 
     // Check if Trainer has already Mega Evolved.

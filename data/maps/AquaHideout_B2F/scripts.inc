@@ -141,7 +141,7 @@ AquaHideout_B2F_Text_Grunt6Defeat:
 
 AquaHideout_B2F_Text_Grunt6PostBattle:
 	.string "That reminds me… I can't remember\n"
-	.string "where I put the MASTER BALL.\p"
+	.string "where I put our spare POKé BALLS.\p"
 	.string "If I fail to guard it, our BOSS will\n"
 	.string "chew me out…$"
 

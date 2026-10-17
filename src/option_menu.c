@@ -14,6 +14,7 @@
 #include "text_window.h"
 #include "window.h"
 #include "gba/m4a_internal.h"
+#include "event_data.h"
 #include "constants/rgb.h"
 
 #define tMenuSelection data[0]
@@ -23,6 +24,8 @@
 #define tSound data[4]
 #define tButtonMode data[5]
 #define tWindowFrameType data[6]
+#define tExpAll data[7]
+#define tZMovesOff data[8]
 
 enum
 {
@@ -32,6 +35,8 @@ enum
     MENUITEM_SOUND,
     MENUITEM_BUTTONMODE,
     MENUITEM_FRAMETYPE,
+    MENUITEM_EXPMODE,
+    MENUITEM_ZMOVES,
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
 };
@@ -42,12 +47,18 @@ enum
     WIN_OPTIONS
 };
 
-#define YPOS_TEXTSPEED    (MENUITEM_TEXTSPEED * 16)
-#define YPOS_BATTLESCENE  (MENUITEM_BATTLESCENE * 16)
-#define YPOS_BATTLESTYLE  (MENUITEM_BATTLESTYLE * 16)
-#define YPOS_SOUND        (MENUITEM_SOUND * 16)
-#define YPOS_BUTTONMODE   (MENUITEM_BUTTONMODE * 16)
-#define YPOS_FRAMETYPE    (MENUITEM_FRAMETYPE * 16)
+// Wally's Journey: the list now has more rows than fit on screen, so it scrolls.
+#define VISIBLE_ITEMS     7
+#define ITEM_Y(item)      (((item) - sTopItem) * 16)
+#define ITEM_VISIBLE(item) ((item) >= sTopItem && (item) < sTopItem + VISIBLE_ITEMS)
+#define YPOS_TEXTSPEED    ITEM_Y(MENUITEM_TEXTSPEED)
+#define YPOS_BATTLESCENE  ITEM_Y(MENUITEM_BATTLESCENE)
+#define YPOS_BATTLESTYLE  ITEM_Y(MENUITEM_BATTLESTYLE)
+#define YPOS_SOUND        ITEM_Y(MENUITEM_SOUND)
+#define YPOS_BUTTONMODE   ITEM_Y(MENUITEM_BUTTONMODE)
+#define YPOS_FRAMETYPE    ITEM_Y(MENUITEM_FRAMETYPE)
+#define YPOS_EXPMODE      ITEM_Y(MENUITEM_EXPMODE)
+#define YPOS_ZMOVES       ITEM_Y(MENUITEM_ZMOVES)
 
 static void Task_OptionMenuFadeIn(u8 taskId);
 static void Task_OptionMenuProcessInput(u8 taskId);
@@ -69,8 +80,13 @@ static void ButtonMode_DrawChoices(u8 selection);
 static void DrawHeaderText(void);
 static void DrawOptionMenuTexts(void);
 static void DrawBgWindowFrames(void);
+static u8 Toggle_ProcessInput(u8 selection);
+static void ExpMode_DrawChoices(u8 selection);
+static void ZMoves_DrawChoices(u8 selection);
+static void RedrawVisibleOptions(u8 taskId);
 
 EWRAM_DATA static bool8 sArrowPressed = FALSE;
+EWRAM_DATA static u8 sTopItem = 0;
 
 static const u8 gText_Option[]             = _("OPTION");
 static const u8 gText_TextSpeedSlow[]      = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SLOW");
@@ -87,6 +103,8 @@ static const u8 gText_FrameTypeNumber[]    = _("{COLOR GREEN}{SHADOW LIGHT_GREEN
 static const u8 gText_ButtonTypeNormal[]   = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}NORMAL");
 static const u8 gText_ButtonTypeLR[]       = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}LR");
 static const u8 gText_ButtonTypeLEqualsA[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}L=A");
+static const u8 gText_ExpModeShare[]       = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SHARE");
+static const u8 gText_ExpModeAll[]         = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}ALL");
 
 static const u16 sOptionMenuText_Pal[] = INCGFX_U16("graphics/interface/option_menu_text.pal", ".gbapal");
 // note: this is only used in the Japanese release
@@ -100,6 +118,8 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_SOUND]       = COMPOUND_STRING("SOUND"),
     [MENUITEM_BUTTONMODE]  = COMPOUND_STRING("BUTTON MODE"),
     [MENUITEM_FRAMETYPE]   = COMPOUND_STRING("FRAME"),
+    [MENUITEM_EXPMODE]     = COMPOUND_STRING("EXP. MODE"),
+    [MENUITEM_ZMOVES]      = COMPOUND_STRING("Z-MOVES"),
     [MENUITEM_CANCEL]      = COMPOUND_STRING("CANCEL"),
 };
 
@@ -244,6 +264,9 @@ void CB2_InitOptionMenu(void)
         u8 taskId = CreateTask(Task_OptionMenuFadeIn, 0);
 
         gTasks[taskId].tMenuSelection = 0;
+        sTopItem = 0;
+        gTasks[taskId].tExpAll = FlagGet(FLAG_WALLY_EXP_ALL_MODE);
+        gTasks[taskId].tZMovesOff = FlagGet(FLAG_WALLY_Z_MOVES_OFF);
         gTasks[taskId].tTextSpeed = gSaveBlock2Ptr->optionsTextSpeed;
         gTasks[taskId].tBattleSceneOff = gSaveBlock2Ptr->optionsBattleSceneOff;
         gTasks[taskId].tBattleStyle = gSaveBlock2Ptr->optionsBattleStyle;
@@ -251,15 +274,7 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].tButtonMode = gSaveBlock2Ptr->optionsButtonMode;
         gTasks[taskId].tWindowFrameType = gSaveBlock2Ptr->optionsWindowFrameType;
 
-        TextSpeed_DrawChoices(gTasks[taskId].tTextSpeed);
-        BattleScene_DrawChoices(gTasks[taskId].tBattleSceneOff);
-        BattleStyle_DrawChoices(gTasks[taskId].tBattleStyle);
-        Sound_DrawChoices(gTasks[taskId].tSound);
-        ButtonMode_DrawChoices(gTasks[taskId].tButtonMode);
-        FrameType_DrawChoices(gTasks[taskId].tWindowFrameType);
-        HighlightOptionMenuItem(gTasks[taskId].tMenuSelection);
-
-        CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
+        RedrawVisibleOptions(taskId);
         gMain.state++;
         break;
     }
@@ -294,7 +309,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             gTasks[taskId].tMenuSelection--;
         else
             gTasks[taskId].tMenuSelection = MENUITEM_CANCEL;
-        HighlightOptionMenuItem(gTasks[taskId].tMenuSelection);
+        RedrawVisibleOptions(taskId);
     }
     else if (JOY_NEW(DPAD_DOWN))
     {
@@ -302,7 +317,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             gTasks[taskId].tMenuSelection++;
         else
             gTasks[taskId].tMenuSelection = 0;
-        HighlightOptionMenuItem(gTasks[taskId].tMenuSelection);
+        RedrawVisibleOptions(taskId);
     }
     else
     {
@@ -352,6 +367,18 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             if (previousOption != gTasks[taskId].tWindowFrameType)
                 FrameType_DrawChoices(gTasks[taskId].tWindowFrameType);
             break;
+        case MENUITEM_EXPMODE:
+            previousOption = gTasks[taskId].tExpAll;
+            gTasks[taskId].tExpAll = Toggle_ProcessInput(gTasks[taskId].tExpAll);
+            if (previousOption != gTasks[taskId].tExpAll)
+                ExpMode_DrawChoices(gTasks[taskId].tExpAll);
+            break;
+        case MENUITEM_ZMOVES:
+            previousOption = gTasks[taskId].tZMovesOff;
+            gTasks[taskId].tZMovesOff = Toggle_ProcessInput(gTasks[taskId].tZMovesOff);
+            if (previousOption != gTasks[taskId].tZMovesOff)
+                ZMoves_DrawChoices(gTasks[taskId].tZMovesOff);
+            break;
         default:
             return;
         }
@@ -372,6 +399,14 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsSound = gTasks[taskId].tSound;
     gSaveBlock2Ptr->optionsButtonMode = gTasks[taskId].tButtonMode;
     gSaveBlock2Ptr->optionsWindowFrameType = gTasks[taskId].tWindowFrameType;
+    if (gTasks[taskId].tExpAll)
+        FlagSet(FLAG_WALLY_EXP_ALL_MODE);
+    else
+        FlagClear(FLAG_WALLY_EXP_ALL_MODE);
+    if (gTasks[taskId].tZMovesOff)
+        FlagSet(FLAG_WALLY_Z_MOVES_OFF);
+    else
+        FlagClear(FLAG_WALLY_Z_MOVES_OFF);
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
     gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -390,6 +425,7 @@ static void Task_OptionMenuFadeOut(u8 taskId)
 static void HighlightOptionMenuItem(u8 index)
 {
     SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE(16, DISPLAY_WIDTH - 16));
+    index -= sTopItem;
     SetGpuReg(REG_OFFSET_WIN0V, WIN_RANGE(index * 16 + 40, index * 16 + 56));
 }
 
@@ -643,8 +679,8 @@ static void DrawOptionMenuTexts(void)
     u8 i;
 
     FillWindowPixelBuffer(WIN_OPTIONS, PIXEL_FILL(1));
-    for (i = 0; i < MENUITEM_COUNT; i++)
-        AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, sOptionMenuItemsNames[i], 8, (i * 16) + 1, TEXT_SKIP_DRAW, NULL);
+    for (i = sTopItem; i < MENUITEM_COUNT && i < sTopItem + VISIBLE_ITEMS; i++)
+        AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, sOptionMenuItemsNames[i], 8, ITEM_Y(i) + 1, TEXT_SKIP_DRAW, NULL);
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }
 
@@ -681,4 +717,54 @@ static void DrawBgWindowFrames(void)
     FillBgTilemapBufferRect(1, TILE_BOT_CORNER_R, 28, 19,  1,  1,  7);
 
     CopyBgTilemapBufferToVram(1);
+}
+
+// Two-choice rows: left/right flips between the two settings.
+static u8 Toggle_ProcessInput(u8 selection)
+{
+    if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
+    {
+        selection ^= 1;
+        sArrowPressed = TRUE;
+    }
+    return selection;
+}
+
+// EXP. MODE: SHARE = the normal held EXP. SHARE item; ALL = the same total EXP
+// split across the whole party (see Cmd_getexp).
+static void ExpMode_DrawChoices(u8 selection)
+{
+    DrawOptionMenuChoice(gText_ExpModeShare, 104, YPOS_EXPMODE, selection == 0);
+    DrawOptionMenuChoice(gText_ExpModeAll, GetStringRightAlignXOffset(FONT_NORMAL, gText_ExpModeAll, 198), YPOS_EXPMODE, selection == 1);
+}
+
+// Z-MOVES: stored as "off" so a new game starts with them ON.
+static void ZMoves_DrawChoices(u8 selection)
+{
+    DrawOptionMenuChoice(gText_BattleSceneOn, 104, YPOS_ZMOVES, selection == 0);
+    DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleSceneOff, 198), YPOS_ZMOVES, selection == 1);
+}
+
+// Scroll so the cursor row is on screen, then redraw every visible row.
+static void RedrawVisibleOptions(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+    u8 sel = tMenuSelection;
+
+    if (sel < sTopItem)
+        sTopItem = sel;
+    else if (sel >= sTopItem + VISIBLE_ITEMS)
+        sTopItem = sel - VISIBLE_ITEMS + 1;
+
+    DrawOptionMenuTexts();
+    if (ITEM_VISIBLE(MENUITEM_TEXTSPEED))   TextSpeed_DrawChoices(tTextSpeed);
+    if (ITEM_VISIBLE(MENUITEM_BATTLESCENE)) BattleScene_DrawChoices(tBattleSceneOff);
+    if (ITEM_VISIBLE(MENUITEM_BATTLESTYLE)) BattleStyle_DrawChoices(tBattleStyle);
+    if (ITEM_VISIBLE(MENUITEM_SOUND))       Sound_DrawChoices(tSound);
+    if (ITEM_VISIBLE(MENUITEM_BUTTONMODE))  ButtonMode_DrawChoices(tButtonMode);
+    if (ITEM_VISIBLE(MENUITEM_FRAMETYPE))   FrameType_DrawChoices(tWindowFrameType);
+    if (ITEM_VISIBLE(MENUITEM_EXPMODE))     ExpMode_DrawChoices(tExpAll);
+    if (ITEM_VISIBLE(MENUITEM_ZMOVES))      ZMoves_DrawChoices(tZMovesOff);
+    HighlightOptionMenuItem(sel);
+    CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }

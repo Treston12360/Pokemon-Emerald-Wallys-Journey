@@ -14,4 +14,10 @@ void WallyJourney_RecordObservedSpecies(u16 species);
 u16 WallyJourney_GetLastObservedSpecies(void);
 u16 WallyJourney_GetPreviousObservedSpecies(void);
 bool8 WallyJourney_ShouldLeadWithMagneton(u16 primaryType,u16 secondaryType);
+// Poké Ball-only rule: any other capture ball the player would receive becomes a Poké Ball.
+bool32 WallyJourney_IsForbiddenBall(u16 itemId);
+u16 WallyJourney_ConvertForbiddenBall(u16 itemId);
+// Options-menu toggles (saved as event flags, so they persist through save/load).
+bool32 WallyJourney_IsExpAllMode(void);
+bool32 WallyJourney_ZMovesEnabled(void);
 #endif

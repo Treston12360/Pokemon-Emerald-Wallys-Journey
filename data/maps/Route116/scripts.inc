@@ -53,7 +53,7 @@ Route116_EventScript_DevonEmployee::
 
 Route116_EventScript_GiveRepeatBall::
 	setflag FLAG_MET_DEVON_EMPLOYEE
-	giveitem ITEM_REPEAT_BALL
+	giveitem ITEM_POKE_BALL, 3
 	goto_if_eq VAR_RESULT, FALSE, Route116_EventScript_NoRoomForRepeatBall
 	msgbox Route116_Text_NewBallAvailableAtMart, MSGBOX_DEFAULT
 	closemessage
@@ -406,7 +406,7 @@ Route116_Text_NewBallAvailableAtMart:
 
 Route116_Text_BagIsJamPacked:
 	.string "Your BAG is jam-packed.\n"
-	.string "I can't give you this REPEAT BALL.$"
+	.string "I can't give you these POKé BALLS.$"
 
 Route116_Text_TokenOfAppreciation:
 	.string "As a token of our appreciation for\n"

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "malloc.h"
 #include "battle.h"
 #include "pokemon.h"
@@ -115,6 +116,11 @@ bool32 CanUseZMove(enum BattlerId battler)
     enum HoldEffect holdEffect = GetBattlerHoldEffectIgnoreNegation(battler);
     enum BattlerPosition position = GetBattlerPosition(battler);
 
+    // Wally's Journey: the Options menu Z-MOVES OFF setting turns Z-Moves off
+    // for everyone in the battle, so the player never faces one they can't use.
+    if (!TESTING && !WallyJourney_ZMovesEnabled())
+        return FALSE;
+
     // Check if Player has Z-Power Ring.
     if (!TESTING && (position == B_POSITION_PLAYER_LEFT
         || (!(gBattleTypeFlags & BATTLE_TYPE_MULTI) && position == B_POSITION_PLAYER_RIGHT))
@@ -169,6 +175,9 @@ bool32 IsViableZMove(enum BattlerId battler, enum Move move)
     enum Item item;
     enum HoldEffect holdEffect = GetBattlerHoldEffectIgnoreNegation(battler);
     int moveSlotIndex;
+
+    if (!TESTING && !WallyJourney_ZMovesEnabled())
+        return FALSE;
 
     item = gBattleMons[battler].item;
 

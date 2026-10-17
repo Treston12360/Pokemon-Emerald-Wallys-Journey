@@ -51,8 +51,8 @@
 
 #else
 
-#define FLAG_UNUSED_0x020    0x20 // Unused Flag
-#define FLAG_UNUSED_0x021    0x21 // Unused Flag
+#define FLAG_WALLY_EXP_ALL_MODE   0x20 // Wally's Journey: Options menu EXP ALL (set) vs EXP SHARE (clear)
+#define FLAG_WALLY_Z_MOVES_OFF    0x21 // Wally's Journey: Options menu Z-MOVES OFF (set) vs ON (clear)
 #define FLAG_UNUSED_0x022    0x22 // Unused Flag
 #define FLAG_UNUSED_0x023    0x23 // Unused Flag
 #define FLAG_UNUSED_0x024    0x24 // Unused Flag

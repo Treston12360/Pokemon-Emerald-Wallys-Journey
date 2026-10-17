@@ -14,7 +14,6 @@ SlateportCity_Mart_EventScript_Clerk::
 	.align 2
 SlateportCity_Mart_Pokemart:
 	.2byte ITEM_POKE_BALL
-	.2byte ITEM_GREAT_BALL
 	.2byte ITEM_POTION
 	.2byte ITEM_SUPER_POTION
 	.2byte ITEM_ANTIDOTE
@@ -42,8 +41,8 @@ SlateportCity_Mart_Text_SomeItemsOnlyAtMart:
 	.string "get at a POKéMON MART.$"
 
 SlateportCity_Mart_Text_GreatBallIsBetter:
-	.string "A GREAT BALL is better than a POKé BALL\n"
-	.string "at catching POKéMON.\p"
+	.string "Weaken a POKéMON first, then throw\n"
+	.string "your POKé BALL. That's the trick.\p"
 	.string "With this, I should be able to get that\n"
 	.string "elusive POKéMON…$"
 

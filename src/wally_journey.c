@@ -3,6 +3,7 @@
 #include "global.h"
 #include "event_data.h"
 #include "wally_journey.h"
+#include "constants/items.h"
 
 #define WALLY_VAR_PEAK_BADGES   VAR_UNUSED_0x40F7
 #define WALLY_VAR_BIOME_MASK    VAR_UNUSED_0x40F8
@@ -101,3 +102,18 @@ bool8 WallyJourney_ShouldLeadWithMagneton(u16 primary,u16 secondary) {
     return primary == TYPE_WATER || secondary == TYPE_WATER
         || primary == TYPE_FLYING || secondary == TYPE_FLYING;
 }
+
+// Every capture ball except the standard Poké Ball. Safari Balls are left
+// alone: the Safari Zone uses its own ball counter, not Bag items.
+bool32 WallyJourney_IsForbiddenBall(u16 itemId)
+{
+    return itemId >= ITEM_GREAT_BALL && itemId <= ITEM_CHERISH_BALL
+        && itemId != ITEM_SAFARI_BALL;
+}
+u16 WallyJourney_ConvertForbiddenBall(u16 itemId)
+{
+    return WallyJourney_IsForbiddenBall(itemId) ? ITEM_POKE_BALL : itemId;
+}
+
+bool32 WallyJourney_IsExpAllMode(void) { return FlagGet(FLAG_WALLY_EXP_ALL_MODE); }
+bool32 WallyJourney_ZMovesEnabled(void) { return !FlagGet(FLAG_WALLY_Z_MOVES_OFF); }
