@@ -74,8 +74,8 @@ The owner specifically rejected ordinary route trainers using Mega Evolution. El
 
 These points were recovered from earlier Wally's Journey discussions and compared with this file. An **idea discussed** is not the same as a final owner-approved specification.
 
-- **Experience sharing / EXP All:** Prior discussions included an EXP All or party-wide experience feature. The exact distribution mechanics and whether it is always-on/toggleable are **not reconfirmed**; preserve as a requested feature to specify and validate.
-- **Z-Moves:** Prior project scope included **optional Z-Moves**. Details of unlock timing, Z-Crystal acquisition and which opposing trainers use them remain **unresolved**. Do not implement arbitrary access or announce completion.
+- **Experience sharing / EXP All — CONFIRMED:** Support ordinary EXP Share and an EXP All mode. **EXP All must redistribute/scale experience rather than grant substantially more total progression.** A player who uses normal EXP Share should not end up underleveled relative to an equivalent player using EXP All, assuming comparable battles/participation. Define precisely how participation, party size, switching, fainted Pokémon, level curves and bonuses interact; benchmark matched playthroughs and tune around comparable overall team progression. Do not promise all six individual Pokémon always have identical levels across modes, or artificially inflate total EXP. If the player can select EXP All, document the mode control and verify it works.
+- **Z-Moves — CONFIRMED OPTIONAL FEATURE:** Z-Moves must have an explicit **On/Off toggle in the in-game Options menu** so players who dislike them can play without them while players who enjoy them can enable them. Default setting and whether the toggle also disables opposing trainers' Z-Moves must be designed and tested consistently; do not silently make Z-Moves mandatory. Unlock timing, Z-Crystal acquisition and which opposing trainers use them remain unresolved. The setting must persist through save/load.
 - **Feebas:** Prior discussions identified **special Feebas encounter/evolution changes**. Current Route 119 Good Rod hook is an existing implementation detail; preserve it until the precise owner-approved rarity/access mechanics are reconciled with original conversation decisions. Don't assume the 10% Good Rod conditional mechanic fulfills the exceptionally elusive target.
 - **Wally rival frequency:** Earlier planning mentioned **12 or more Wally battles** and a developing rival relationship/character memory. Treat 12+ as a prior planning target, **not a finalized exact battle count**; confirm story pacing and record all final battle triggers.
 - **Starter Mega Stone specificity:** The post-Norman Steven sequence should grant or enable access to **Sceptilite, Blazikenite, or Swampertite as appropriate for the player's chosen starter**. A prior discussion proposed Steven granting the matching stone in the same scene. Align the final script with the owner's confirmed starter-stone requirement, not a generic stone.
@@ -83,3 +83,10 @@ These points were recovered from earlier Wally's Journey discussions and compare
 - **Emulator testing:** Earlier development explicitly targeted testing in **mGBA** on a GBA-compatible ROM; a PC/Python port is not a substitute.
 
 The above historical details must be checked against newer explicit owner instructions before implementation; newer decisions always supersede older brainstorms.
+
+## Owner clarification: optional Z-Moves and EXP parity (2026-10-16)
+
+- Z-Moves are requested as a game feature, **toggleable in the Options menu**. This must work for different players' preferences; it is not merely a debug switch.
+- EXP All should spread/scale the experience awarded rather than create a progression advantage over normal EXP Share. **Matched game progression should result in comparable overall team strength/levels**. Compare total earned team EXP, level distribution and party-size effects with repeatable battle fixtures and playthrough checkpoints.
+- Do not confuse equivalent overall progression with identical level for every party slot at every moment; avoid making EXP All users inherently stronger or penalizing ordinary EXP Share players.
+- Both are **confirmed requirements, not implemented/tested features** at the time of this update.
