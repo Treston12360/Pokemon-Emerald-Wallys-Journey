@@ -1251,68 +1251,68 @@
 #define FLAG_UNUSED_0x4AD                                           0x4AD // Unused Flag
 #define FLAG_UNUSED_0x4AE                                           0x4AE // Unused Flag
 #define FLAG_UNUSED_0x4AF                                           0x4AF // Unused Flag
-#define FLAG_UNUSED_0x4B0                                           0x4B0 // Unused Flag
-#define FLAG_UNUSED_0x4B1                                           0x4B1 // Unused Flag
-#define FLAG_UNUSED_0x4B2                                           0x4B2 // Unused Flag
-#define FLAG_UNUSED_0x4B3                                           0x4B3 // Unused Flag
-#define FLAG_UNUSED_0x4B4                                           0x4B4 // Unused Flag
-#define FLAG_UNUSED_0x4B5                                           0x4B5 // Unused Flag
-#define FLAG_UNUSED_0x4B6                                           0x4B6 // Unused Flag
-#define FLAG_UNUSED_0x4B7                                           0x4B7 // Unused Flag
-#define FLAG_UNUSED_0x4B8                                           0x4B8 // Unused Flag
-#define FLAG_UNUSED_0x4B9                                           0x4B9 // Unused Flag
-#define FLAG_UNUSED_0x4BA                                           0x4BA // Unused Flag
-#define FLAG_UNUSED_0x4BB                                           0x4BB // Unused Flag
-#define FLAG_UNUSED_0x4BC                                           0x4BC // Unused Flag
-#define FLAG_UNUSED_0x4BD                                           0x4BD // Unused Flag
-#define FLAG_UNUSED_0x4BE                                           0x4BE // Unused Flag
-#define FLAG_UNUSED_0x4BF                                           0x4BF // Unused Flag
-#define FLAG_UNUSED_0x4C0                                           0x4C0 // Unused Flag
-#define FLAG_UNUSED_0x4C1                                           0x4C1 // Unused Flag
-#define FLAG_UNUSED_0x4C2                                           0x4C2 // Unused Flag
-#define FLAG_UNUSED_0x4C3                                           0x4C3 // Unused Flag
-#define FLAG_UNUSED_0x4C4                                           0x4C4 // Unused Flag
-#define FLAG_UNUSED_0x4C5                                           0x4C5 // Unused Flag
-#define FLAG_UNUSED_0x4C6                                           0x4C6 // Unused Flag
-#define FLAG_UNUSED_0x4C7                                           0x4C7 // Unused Flag
-#define FLAG_UNUSED_0x4C8                                           0x4C8 // Unused Flag
-#define FLAG_UNUSED_0x4C9                                           0x4C9 // Unused Flag
-#define FLAG_UNUSED_0x4CA                                           0x4CA // Unused Flag
-#define FLAG_UNUSED_0x4CB                                           0x4CB // Unused Flag
-#define FLAG_UNUSED_0x4CC                                           0x4CC // Unused Flag
-#define FLAG_UNUSED_0x4CD                                           0x4CD // Unused Flag
-#define FLAG_UNUSED_0x4CE                                           0x4CE // Unused Flag
-#define FLAG_UNUSED_0x4CF                                           0x4CF // Unused Flag
-#define FLAG_UNUSED_0x4D0                                           0x4D0 // Unused Flag
-#define FLAG_UNUSED_0x4D1                                           0x4D1 // Unused Flag
-#define FLAG_UNUSED_0x4D2                                           0x4D2 // Unused Flag
-#define FLAG_UNUSED_0x4D3                                           0x4D3 // Unused Flag
-#define FLAG_UNUSED_0x4D4                                           0x4D4 // Unused Flag
-#define FLAG_UNUSED_0x4D5                                           0x4D5 // Unused Flag
-#define FLAG_UNUSED_0x4D6                                           0x4D6 // Unused Flag
-#define FLAG_UNUSED_0x4D7                                           0x4D7 // Unused Flag
-#define FLAG_UNUSED_0x4D8                                           0x4D8 // Unused Flag
-#define FLAG_UNUSED_0x4D9                                           0x4D9 // Unused Flag
-#define FLAG_UNUSED_0x4DA                                           0x4DA // Unused Flag
-#define FLAG_UNUSED_0x4DB                                           0x4DB // Unused Flag
-#define FLAG_UNUSED_0x4DC                                           0x4DC // Unused Flag
-#define FLAG_UNUSED_0x4DD                                           0x4DD // Unused Flag
-#define FLAG_UNUSED_0x4DE                                           0x4DE // Unused Flag
-#define FLAG_UNUSED_0x4DF                                           0x4DF // Unused Flag
-#define FLAG_UNUSED_0x4E0                                           0x4E0 // Unused Flag
-#define FLAG_UNUSED_0x4E1                                           0x4E1 // Unused Flag
-#define FLAG_UNUSED_0x4E2                                           0x4E2 // Unused Flag
-#define FLAG_UNUSED_0x4E3                                           0x4E3 // Unused Flag
-#define FLAG_UNUSED_0x4E4                                           0x4E4 // Unused Flag
-#define FLAG_UNUSED_0x4E5                                           0x4E5 // Unused Flag
-#define FLAG_UNUSED_0x4E6                                           0x4E6 // Unused Flag
-#define FLAG_UNUSED_0x4E7                                           0x4E7 // Unused Flag
-#define FLAG_UNUSED_0x4E8                                           0x4E8 // Unused Flag
-#define FLAG_UNUSED_0x4E9                                           0x4E9 // Unused Flag
-#define FLAG_UNUSED_0x4EA                                           0x4EA // Unused Flag
-#define FLAG_UNUSED_0x4EB                                           0x4EB // Unused Flag
-#define FLAG_UNUSED_0x4EC                                           0x4EC // Unused Flag
-#define FLAG_UNUSED_0x4ED                                           0x4ED // Unused Flag
+#define FLAG_UNUSED_0x4B0                           0x4B0 // Unused Flag
+#define FLAG_UNUSED_0x4B1                           0x4B1 // Unused Flag
+#define FLAG_UNUSED_0x4B2                           0x4B2 // Unused Flag
+#define FLAG_UNUSED_0x4B3                           0x4B3 // Unused Flag
+#define FLAG_UNUSED_0x4B4                           0x4B4 // Unused Flag
+#define FLAG_UNUSED_0x4B5                           0x4B5 // Unused Flag
+#define FLAG_UNUSED_0x4B6                           0x4B6 // Unused Flag
+#define FLAG_WALLY_CLEARED_07                 0x4B7 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_08                 0x4B8 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_09                 0x4B9 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_10                 0x4BA // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_11                 0x4BB // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_12                 0x4BC // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_13                 0x4BD // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_14                 0x4BE // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_UNUSED_0x4BF                           0x4BF // Unused Flag
+#define FLAG_UNUSED_0x4C0                           0x4C0 // Unused Flag
+#define FLAG_WALLY_CLEARED_17                 0x4C1 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_UNUSED_0x4C2                           0x4C2 // Unused Flag
+#define FLAG_UNUSED_0x4C3                           0x4C3 // Unused Flag
+#define FLAG_UNUSED_0x4C4                           0x4C4 // Unused Flag
+#define FLAG_UNUSED_0x4C5                           0x4C5 // Unused Flag
+#define FLAG_UNUSED_0x4C6                           0x4C6 // Unused Flag
+#define FLAG_WALLY_CLEARED_23                 0x4C7 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_24                 0x4C8 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_25                 0x4C9 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_26                 0x4CA // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_27                 0x4CB // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_28                 0x4CC // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_29                 0x4CD // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_30                 0x4CE // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_31                 0x4CF // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_32                 0x4D0 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_33                 0x4D1 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_34                 0x4D2 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_35                 0x4D3 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_36                 0x4D4 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_37                 0x4D5 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_38                 0x4D6 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_39                 0x4D7 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_UNUSED_0x4D8                           0x4D8 // Unused Flag
+#define FLAG_UNUSED_0x4D9                           0x4D9 // Unused Flag
+#define FLAG_UNUSED_0x4DA                           0x4DA // Unused Flag
+#define FLAG_UNUSED_0x4DB                           0x4DB // Unused Flag
+#define FLAG_UNUSED_0x4DC                           0x4DC // Unused Flag
+#define FLAG_UNUSED_0x4DD                           0x4DD // Unused Flag
+#define FLAG_UNUSED_0x4DE                           0x4DE // Unused Flag
+#define FLAG_UNUSED_0x4DF                           0x4DF // Unused Flag
+#define FLAG_UNUSED_0x4E0                           0x4E0 // Unused Flag
+#define FLAG_UNUSED_0x4E1                           0x4E1 // Unused Flag
+#define FLAG_UNUSED_0x4E2                           0x4E2 // Unused Flag
+#define FLAG_WALLY_CLEARED_51                 0x4E3 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_52                 0x4E4 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_53                 0x4E5 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_54                 0x4E6 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_WALLY_CLEARED_55                 0x4E7 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
+#define FLAG_UNUSED_0x4E8                           0x4E8 // Unused Flag
+#define FLAG_UNUSED_0x4E9                           0x4E9 // Unused Flag
+#define FLAG_UNUSED_0x4EA                           0x4EA // Unused Flag
+#define FLAG_UNUSED_0x4EB                           0x4EB // Unused Flag
+#define FLAG_UNUSED_0x4EC                           0x4EC // Unused Flag
+#define FLAG_UNUSED_0x4ED                           0x4ED // Unused Flag
 #define FLAG_UNUSED_0x4EE                                           0x4EE // Unused Flag
 #define FLAG_UNUSED_0x4EF                                           0x4EF // Unused Flag
 
@@ -1571,16 +1571,16 @@
 // These flags are cleared once per day
 // The start and end are byte-aligned because the flags are cleared in byte increments
 #define DAILY_FLAGS_START                           (FLAG_UNUSED_0x91F + (8 - FLAG_UNUSED_0x91F % 8))
-#define FLAG_UNUSED_0x920                           (DAILY_FLAGS_START + 0x0)  // Unused Flag
+#define FLAG_WALLY_ROCK_DAILY_00                    (DAILY_FLAGS_START + 0x0)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
 #define FLAG_DAILY_CONTEST_LOBBY_RECEIVED_BERRY     (DAILY_FLAGS_START + 0x1)
 #define FLAG_DAILY_SECRET_BASE                      (DAILY_FLAGS_START + 0x2)
-#define FLAG_UNUSED_0x923                           (DAILY_FLAGS_START + 0x3)  // Unused Flag
-#define FLAG_UNUSED_0x924                           (DAILY_FLAGS_START + 0x4)  // Unused Flag
-#define FLAG_UNUSED_0x925                           (DAILY_FLAGS_START + 0x5)  // Unused Flag
-#define FLAG_UNUSED_0x926                           (DAILY_FLAGS_START + 0x6)  // Unused Flag
-#define FLAG_UNUSED_0x927                           (DAILY_FLAGS_START + 0x7)  // Unused Flag
-#define FLAG_UNUSED_0x928                           (DAILY_FLAGS_START + 0x8)  // Unused Flag
-#define FLAG_UNUSED_0x929                           (DAILY_FLAGS_START + 0x9)  // Unused Flag
+#define FLAG_WALLY_ROCK_DAILY_01                    (DAILY_FLAGS_START + 0x3)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_02                    (DAILY_FLAGS_START + 0x4)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_03                    (DAILY_FLAGS_START + 0x5)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_04                    (DAILY_FLAGS_START + 0x6)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_05                    (DAILY_FLAGS_START + 0x7)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_06                    (DAILY_FLAGS_START + 0x8)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_07                    (DAILY_FLAGS_START + 0x9)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
 #define FLAG_DAILY_PICKED_LOTO_TICKET               (DAILY_FLAGS_START + 0xA)
 #define FLAG_DAILY_ROUTE_114_RECEIVED_BERRY         (DAILY_FLAGS_START + 0xB)
 #define FLAG_DAILY_ROUTE_111_RECEIVED_BERRY         (DAILY_FLAGS_START + 0xC)
@@ -1590,31 +1590,31 @@
 #define FLAG_DAILY_FLOWER_SHOP_RECEIVED_BERRY       (DAILY_FLAGS_START + 0x10)
 #define FLAG_DAILY_BERRY_MASTERS_WIFE               (DAILY_FLAGS_START + 0x11)
 #define FLAG_DAILY_SOOTOPOLIS_RECEIVED_BERRY        (DAILY_FLAGS_START + 0x12)
-#define FLAG_UNUSED_0x933                           (DAILY_FLAGS_START + 0x13) // Unused Flag
+#define FLAG_WALLY_ROCK_DAILY_08                    (DAILY_FLAGS_START + 0x13)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
 #define FLAG_DAILY_APPRENTICE_LEAVES                (DAILY_FLAGS_START + 0x14)
 
-#define FLAG_UNUSED_0x935                           (DAILY_FLAGS_START + 0x15) // Unused Flag
-#define FLAG_UNUSED_0x936                           (DAILY_FLAGS_START + 0x16) // Unused Flag
-#define FLAG_UNUSED_0x937                           (DAILY_FLAGS_START + 0x17) // Unused Flag
-#define FLAG_UNUSED_0x938                           (DAILY_FLAGS_START + 0x18) // Unused Flag
-#define FLAG_UNUSED_0x939                           (DAILY_FLAGS_START + 0x19) // Unused Flag
-#define FLAG_UNUSED_0x93A                           (DAILY_FLAGS_START + 0x1A) // Unused Flag
-#define FLAG_UNUSED_0x93B                           (DAILY_FLAGS_START + 0x1B) // Unused Flag
-#define FLAG_UNUSED_0x93C                           (DAILY_FLAGS_START + 0x1C) // Unused Flag
-#define FLAG_UNUSED_0x93D                           (DAILY_FLAGS_START + 0x1D) // Unused Flag
-#define FLAG_UNUSED_0x93E                           (DAILY_FLAGS_START + 0x1E) // Unused Flag
-#define FLAG_UNUSED_0x93F                           (DAILY_FLAGS_START + 0x1F) // Unused Flag
-#define FLAG_UNUSED_0x940                           (DAILY_FLAGS_START + 0x20) // Unused Flag
-#define FLAG_UNUSED_0x941                           (DAILY_FLAGS_START + 0x21) // Unused Flag
-#define FLAG_UNUSED_0x942                           (DAILY_FLAGS_START + 0x22) // Unused Flag
-#define FLAG_UNUSED_0x943                           (DAILY_FLAGS_START + 0x23) // Unused Flag
-#define FLAG_UNUSED_0x944                           (DAILY_FLAGS_START + 0x24) // Unused Flag
-#define FLAG_UNUSED_0x945                           (DAILY_FLAGS_START + 0x25) // Unused Flag
-#define FLAG_UNUSED_0x946                           (DAILY_FLAGS_START + 0x26) // Unused Flag
-#define FLAG_UNUSED_0x947                           (DAILY_FLAGS_START + 0x27) // Unused Flag
-#define FLAG_UNUSED_0x948                           (DAILY_FLAGS_START + 0x28) // Unused Flag
-#define FLAG_UNUSED_0x949                           (DAILY_FLAGS_START + 0x29) // Unused Flag
-#define FLAG_UNUSED_0x94A                           (DAILY_FLAGS_START + 0x2A) // Unused Flag
+#define FLAG_WALLY_ROCK_DAILY_09                    (DAILY_FLAGS_START + 0x15)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_10                    (DAILY_FLAGS_START + 0x16)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_11                    (DAILY_FLAGS_START + 0x17)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_12                    (DAILY_FLAGS_START + 0x18)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_13                    (DAILY_FLAGS_START + 0x19)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_14                    (DAILY_FLAGS_START + 0x1A)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_15                    (DAILY_FLAGS_START + 0x1B)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_16                    (DAILY_FLAGS_START + 0x1C)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_17                    (DAILY_FLAGS_START + 0x1D)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_18                    (DAILY_FLAGS_START + 0x1E)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_19                    (DAILY_FLAGS_START + 0x1F)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_20                    (DAILY_FLAGS_START + 0x20)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_21                    (DAILY_FLAGS_START + 0x21)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_22                    (DAILY_FLAGS_START + 0x22)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_23                    (DAILY_FLAGS_START + 0x23)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_24                    (DAILY_FLAGS_START + 0x24)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_25                    (DAILY_FLAGS_START + 0x25)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_26                    (DAILY_FLAGS_START + 0x26)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_27                    (DAILY_FLAGS_START + 0x27)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_28                    (DAILY_FLAGS_START + 0x28)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_29                    (DAILY_FLAGS_START + 0x29)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
+#define FLAG_WALLY_ROCK_DAILY_30                    (DAILY_FLAGS_START + 0x2A)  // Wally's Journey: Rock Smash rock on a rock-hunting map, comes back each day
 #define FLAG_UNUSED_0x94B                           (DAILY_FLAGS_START + 0x2B) // Unused Flag
 #define FLAG_UNUSED_0x94C                           (DAILY_FLAGS_START + 0x2C) // Unused Flag
 #define FLAG_UNUSED_0x94D                           (DAILY_FLAGS_START + 0x2D) // Unused Flag
