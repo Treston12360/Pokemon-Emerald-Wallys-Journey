@@ -1682,7 +1682,10 @@ static void DoCB1_Overworld(u16 newKeys, u16 heldKeys)
 void CB1_Overworld(void)
 {
     if (gMain.callback2 == CB2_Overworld)
+    {
+        WallyJourney_TrySeasonNotice();
         DoCB1_Overworld(gMain.newKeys, gMain.heldKeys);
+    }
 }
 
 #define TINT_NIGHT Q_8_8(0.456) | Q_8_8(0.456) << 8 | Q_8_8(0.615) << 16

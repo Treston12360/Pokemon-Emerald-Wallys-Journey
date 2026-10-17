@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "constants/weather.h"
 #include "coord_event_weather.h"
 #include "field_weather.h"
@@ -108,6 +109,8 @@ static void CoordEventWeather_Route123Cycle(void)
 void DoCoordEventWeather(u8 coordEventWeather)
 {
     u8 i;
+    if (WallyJourney_TryRegionalCoordWeather(coordEventWeather))
+        return;
     for (i = 0; i < ARRAY_COUNT(sCoordEventWeatherFuncs); i++)
     {
         if (sCoordEventWeatherFuncs[i].coordEventWeather == coordEventWeather)

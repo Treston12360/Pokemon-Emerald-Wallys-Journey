@@ -20,6 +20,7 @@
 #include "constants/region_map_sections.h"
 #include "field_weather.h"
 #include "overworld.h"
+#include "string_util.h"
 
 #define WALLY_VAR_PEAK_BADGES   VAR_UNUSED_0x40F7
 #define WALLY_VAR_BIOME_MASK    VAR_UNUSED_0x40F8
@@ -195,7 +196,7 @@ enum WallyRegion
     WREGION_WEST_COAST,  // Petalburg, Rustboro, Dewford, Slateport, Routes 104-109
     WREGION_INLAND,      // Littleroot to Mauville, Verdanturf, Routes 101-103, 110, 116-118
     WREGION_DESERT,      // Route 111
-    WREGION_HIGHLAND,    // Fallarbor, Routes 112, 114, 115, Mt. Pyre
+    WREGION_HIGHLAND,    // Fallarbor, Routes 112, 114, 115
     WREGION_RAINFOREST,  // Fortree, Routes 119-120
     WREGION_EAST_COAST,  // Lilycove, Mossdeep, Routes 121-125
     WREGION_OCEAN,       // Sootopolis, Pacifidlog, Ever Grande, Routes 126-134
@@ -224,7 +225,6 @@ static enum WallyRegion GetRegionForMapSec(u32 mapSec)
     case MAPSEC_ROUTE_111:
         return WREGION_DESERT;
     case MAPSEC_FALLARBOR_TOWN: case MAPSEC_ROUTE_112: case MAPSEC_ROUTE_114: case MAPSEC_ROUTE_115:
-    case MAPSEC_MT_PYRE:
         return WREGION_HIGHLAND;
     case MAPSEC_FORTREE_CITY: case MAPSEC_ROUTE_119: case MAPSEC_ROUTE_120:
         return WREGION_RAINFOREST;
@@ -371,30 +371,58 @@ static s32 CurrentRealHour(void)
     return gLocalTime.days * 24 + gLocalTime.hours;
 }
 
-// Called when a map's weather is loaded from its header.
-u32 WallyJourney_SeasonalWeather(u32 weather)
+// The weather this system wants on the current map right now, or FALSE when
+// the map keeps its own weather (indoors, ash, story weather, broken clock...).
+static bool32 GetRegionalWeatherForCurrentMap(u32 *out)
 {
     u32 header = gMapHeader.weather;
     enum MapType type = gMapHeader.mapType;
     enum WallyRegion region = GetRegionForMapSec(gMapHeader.regionMapSectionId);
-    u32 fair, w;
 
-    sAutoWeatherPlus1 = 0;
     if (header != WEATHER_SUNNY && header != WEATHER_SUNNY_CLOUDS
      && header != WEATHER_ROUTE119_CYCLE && header != WEATHER_ROUTE123_CYCLE)
-        return weather;
+        return FALSE;
     if (FlagGet(FLAG_SYS_WEATHER_CTRL))
-        return weather;
+        return FALSE;
     if (type != MAP_TYPE_ROUTE && type != MAP_TYPE_TOWN && type != MAP_TYPE_CITY && type != MAP_TYPE_OCEAN_ROUTE)
-        return weather;
+        return FALSE;
     if (region == WREGION_NONE || (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK))
-        return weather;
+        return FALSE;
+    sAutoFairWeather = (header == WEATHER_SUNNY_CLOUDS) ? WEATHER_SUNNY_CLOUDS : WEATHER_SUNNY;
+    *out = RegionWeatherAt(region, CurrentRealHour(), sAutoFairWeather, IsSnowCountry());
+    return TRUE;
+}
 
-    fair = (header == WEATHER_SUNNY_CLOUDS) ? WEATHER_SUNNY_CLOUDS : WEATHER_SUNNY;
-    sAutoFairWeather = fair;
-    w = RegionWeatherAt(region, CurrentRealHour(), fair, IsSnowCountry());
+// Called when a map's weather is loaded from its header.
+static EWRAM_DATA bool8 sSeasonCheckPending = FALSE;
+
+u32 WallyJourney_SeasonalWeather(u32 weather)
+{
+    u32 w;
+    sSeasonCheckPending = TRUE;
+    sAutoWeatherPlus1 = 0;
+    if (!GetRegionalWeatherForCurrentMap(&w))
+        return weather;
     sAutoWeatherPlus1 = w + 1;
     return w;
+}
+
+// Coord-event weather tiles (Routes 111, 119, 120, 123) that only switch
+// between ordinary sunny/cloudy/rain/cycle weather defer to the regional
+// weather. Desert sandstorm, ash, fog and shade tiles keep working.
+bool32 WallyJourney_TryRegionalCoordWeather(u32 coordWeather)
+{
+    u32 w;
+    if (coordWeather != COORD_EVENT_WEATHER_SUNNY && coordWeather != COORD_EVENT_WEATHER_SUNNY_CLOUDS
+     && coordWeather != COORD_EVENT_WEATHER_RAIN && coordWeather != COORD_EVENT_WEATHER_ROUTE119_CYCLE
+     && coordWeather != COORD_EVENT_WEATHER_ROUTE123_CYCLE)
+        return FALSE;
+    if (!GetRegionalWeatherForCurrentMap(&w))
+        return FALSE;
+    sAutoWeatherPlus1 = w + 1;
+    SetSavedWeather(w);
+    SetNextWeather(w);
+    return TRUE;
 }
 
 // Called about once a minute in the overworld: lets weather change while the
@@ -402,6 +430,7 @@ u32 WallyJourney_SeasonalWeather(u32 weather)
 void WallyJourney_UpdateLiveWeather(void)
 {
     u32 w;
+    sSeasonCheckPending = TRUE;
     if (sAutoWeatherPlus1 == 0 || gMain.callback2 != CB2_Overworld)
         return;
     if (ArePlayerFieldControlsLocked() || ScriptContext_IsEnabled())
@@ -417,6 +446,107 @@ void WallyJourney_UpdateLiveWeather(void)
     sAutoWeatherPlus1 = w + 1;
     SetSavedWeather(w);
     SetNextWeather(w);
+}
+
+// "Autumn has arrived in HOENN." Shown once per season change, the first
+// time the player is outdoors and free to move. A brand-new save starts
+// quietly.
+extern const u8 WallyJourney_EventScript_SeasonSpring[];
+extern const u8 WallyJourney_EventScript_SeasonSummer[];
+extern const u8 WallyJourney_EventScript_SeasonAutumn[];
+extern const u8 WallyJourney_EventScript_SeasonWinter[];
+
+void WallyJourney_TrySeasonNotice(void)
+{
+    static const u8 *const sScripts[] =
+    {
+        WallyJourney_EventScript_SeasonSpring, WallyJourney_EventScript_SeasonSummer,
+        WallyJourney_EventScript_SeasonAutumn, WallyJourney_EventScript_SeasonWinter,
+    };
+    u32 season, seen;
+    if (!sSeasonCheckPending)
+        return;
+    if (gMain.callback2 != CB2_Overworld || gPaletteFade.active
+     || ArePlayerFieldControlsLocked() || ScriptContext_IsEnabled())
+        return;
+    sSeasonCheckPending = FALSE;
+    if (!MapHasNaturalLight(gMapHeader.mapType) || (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK))
+        return;
+    season = WallyJourney_GetSeason();
+    seen = VarGet(VAR_WALLY_SEASON_SEEN);
+    if (seen == season + 1)
+        return;
+    VarSet(VAR_WALLY_SEASON_SEEN, season + 1);
+    if (seen == 0 || FlagGet(FLAG_SYS_WEATHER_CTRL))
+        return;
+    ScriptContext_SetupScript(sScripts[season]);
+}
+
+// PokéNav forecast: the same schedule the routes use.
+static const u8 sWeatherName_Sunny[] = _("Sunny");
+static const u8 sWeatherName_Cloudy[] = _("Cloudy");
+static const u8 sWeatherName_Overcast[] = _("Overcast");
+static const u8 sWeatherName_Rain[] = _("Rain");
+static const u8 sWeatherName_Storm[] = _("Storm");
+static const u8 sWeatherName_Snow[] = _("Snow");
+static const u8 sWeatherName_Mist[] = _("Mist");
+
+static const u8 *ForecastWeatherName(u32 weather)
+{
+    switch (weather)
+    {
+    case WEATHER_SUNNY_CLOUDS:      return sWeatherName_Cloudy;
+    case WEATHER_SHADE:             return sWeatherName_Overcast;
+    case WEATHER_RAIN:              return sWeatherName_Rain;
+    case WEATHER_RAIN_THUNDERSTORM: return sWeatherName_Storm;
+    case WEATHER_SNOW:              return sWeatherName_Snow;
+    case WEATHER_FOG_HORIZONTAL:    return sWeatherName_Mist;
+    default:                        return sWeatherName_Sunny;
+    }
+}
+
+static bool32 IsWetWeather(u32 weather)
+{
+    return weather == WEATHER_RAIN || weather == WEATHER_RAIN_THUNDERSTORM || weather == WEATHER_SNOW;
+}
+
+static const u8 sForecastNow[] = _("Now: ");
+static const u8 sForecastIn[] = _(" in ");
+static const u8 sForecastHours[] = _("h");
+static const u8 sForecastClearing[] = _("Clearing");
+static const u8 sForecastSteady[] = _("No change soon");
+
+// Two short lines for the PokéNav map, e.g. "Now: Rain" / "Clearing in 3h".
+// FALSE for places that keep their own weather.
+bool32 WallyJourney_GetForecast(u32 mapSec, u8 *now, u8 *later)
+{
+    enum WallyRegion region = GetRegionForMapSec(mapSec);
+    bool32 snow = (mapSec == MAPSEC_ROUTE_112 || mapSec == MAPSEC_ROUTE_114 || mapSec == MAPSEC_ROUTE_115);
+    s32 hour, h;
+    u32 cur, next = 0;
+
+    if (region == WREGION_NONE || FlagGet(FLAG_SYS_WEATHER_CTRL) || (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK))
+        return FALSE;
+    hour = CurrentRealHour();
+    cur = RegionWeatherAt(region, hour, WEATHER_SUNNY, snow);
+    for (h = 1; h <= 12; h++)
+    {
+        next = RegionWeatherAt(region, hour + h, WEATHER_SUNNY, snow);
+        if (IsWetWeather(next) != IsWetWeather(cur) || (IsWetWeather(cur) && next != cur))
+            break;
+    }
+    now = StringCopy(now, sForecastNow);
+    StringCopy(now, ForecastWeatherName(cur));
+    if (h > 12)
+    {
+        StringCopy(later, sForecastSteady);
+        return TRUE;
+    }
+    later = StringCopy(later, IsWetWeather(next) ? ForecastWeatherName(next) : sForecastClearing);
+    later = StringCopy(later, sForecastIn);
+    later = ConvertIntToDecimalStringN(later, h, STR_CONV_MODE_LEFT_ALIGN, 2);
+    StringCopy(later, sForecastHours);
+    return TRUE;
 }
 
 // ------------------------------------------------- side activity specials

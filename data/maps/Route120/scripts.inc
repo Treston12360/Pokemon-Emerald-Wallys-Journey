@@ -58,7 +58,14 @@ Route120_OnTransition:
 	call Route120_EventScript_SetWeather
 	end
 
+@ Wally's Journey: Route 120 is part of the Fortree rainforest weather region
+@ (src/wally_journey.c), so the old fixed sunny/rain/cloud strips only apply
+@ when the regional weather system is off for this map (story weather etc.).
 Route120_EventScript_SetWeather::
+	goto_if_set FLAG_SYS_WEATHER_CTRL, Route120_EventScript_SetWeatherVanilla
+	return
+
+Route120_EventScript_SetWeatherVanilla::
 	getplayerxy VAR_TEMP_0, VAR_TEMP_1
 	goto_if_le VAR_TEMP_1, 14, Route120_EventScript_SetSunnyWeather
 	goto_if_le VAR_TEMP_1, 60, Route120_EventScript_TrySetRainyWeather

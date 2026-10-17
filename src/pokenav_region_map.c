@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "bg.h"
 #include "decompress.h"
 #include "landmark.h"
@@ -67,7 +68,8 @@ static void ChangeBgYForZoom(bool32);
 static bool32 IsChangeBgYForZoomActive(void);
 static void CreateCityZoomTextSprites(void);
 static void DrawCityMap(struct Pokenav_RegionMapGfx *, mapsec_s32_t, int);
-static void PrintLandmarkNames(struct Pokenav_RegionMapGfx *, mapsec_s32_t, int);
+static int PrintLandmarkNames(struct Pokenav_RegionMapGfx *, mapsec_s32_t, int);
+static void PrintForecast(struct Pokenav_RegionMapGfx *, mapsec_s32_t, int, bool32);
 static void SetCityZoomTextInvisibility(bool32);
 static void Task_ChangeBgYForZoom(u8 taskId);
 static void UpdateCityZoomTextPosition(void);
@@ -566,15 +568,27 @@ static void UpdateMapSecInfoWindow(struct Pokenav_RegionMapGfx *state)
         FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(1));
         PutWindowRectTilemap(state->infoWindowId, 0, 0, 12, 2);
         AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, regionMap->mapSecName, 0, 1, TEXT_SKIP_DRAW, NULL);
+        PrintForecast(state, regionMap->mapSecId, 0, TRUE);
         DrawCityMap(state, regionMap->mapSecId, regionMap->posWithinMapSec);
         CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
         SetCityZoomTextInvisibility(FALSE);
         break;
     case MAPSECTYPE_CITY_CANTFLY:
         FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(1));
-        PutWindowRectTilemap(state->infoWindowId, 0, 0, 12, 2);
         AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, regionMap->mapSecName, 0, 1, TEXT_SKIP_DRAW, NULL);
-        FillBgTilemapBufferRect(1, 0x1041, 17, 6, 12, 11, 17);
+        {
+            u8 probe[24];
+            if (WallyJourney_GetForecast(regionMap->mapSecId, gStringVar2, probe))
+            {
+                PutWindowTilemap(state->infoWindowId);
+                PrintForecast(state, regionMap->mapSecId, 17, FALSE);
+            }
+            else
+            {
+                PutWindowRectTilemap(state->infoWindowId, 0, 0, 12, 2);
+                FillBgTilemapBufferRect(1, 0x1041, 17, 6, 12, 11, 17);
+            }
+        }
         CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
         SetCityZoomTextInvisibility(TRUE);
         break;
@@ -583,7 +597,8 @@ static void UpdateMapSecInfoWindow(struct Pokenav_RegionMapGfx *state)
         FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(1));
         PutWindowTilemap(state->infoWindowId);
         AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, regionMap->mapSecName, 0, 1, TEXT_SKIP_DRAW, NULL);
-        PrintLandmarkNames(state, regionMap->mapSecId, regionMap->posWithinMapSec);
+        if (PrintLandmarkNames(state, regionMap->mapSecId, regionMap->posWithinMapSec) <= 3)
+            PrintForecast(state, regionMap->mapSecId, 73, FALSE);
         CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
         SetCityZoomTextInvisibility(TRUE);
         break;
@@ -674,7 +689,7 @@ static void DrawCityMap(struct Pokenav_RegionMapGfx *state, mapsec_s32_t mapSecI
     CopyToBgTilemapBufferRect(1, state->cityZoomPics[i], 18, 6, 10, 10);
 }
 
-static void PrintLandmarkNames(struct Pokenav_RegionMapGfx *state, mapsec_s32_t mapSecId, int pos)
+static int PrintLandmarkNames(struct Pokenav_RegionMapGfx *state, mapsec_s32_t mapSecId, int pos)
 {
     int i = 0;
     while (1)
@@ -687,6 +702,28 @@ static void PrintLandmarkNames(struct Pokenav_RegionMapGfx *state, mapsec_s32_t 
         AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, gStringVar1, 0, i * 16 + 17, TEXT_SKIP_DRAW, NULL);
         i++;
     }
+    return i;
+}
+
+// Wally's Journey: local weather forecast from the living-weather schedule.
+static void PrintForecast(struct Pokenav_RegionMapGfx *state, mapsec_s32_t mapSecId, int y, bool32 nameRowOnly)
+{
+    u8 later[24];
+    if (!WallyJourney_GetForecast(mapSecId, gStringVar2, later))
+        return;
+    if (nameRowOnly)
+    {
+        // Fly-able cities: the city map fills the window, so put the current
+        // weather at the right end of the name row when it fits.
+        struct RegionMap *regionMap = GetSubstructPtr(POKENAV_SUBSTRUCT_REGION_MAP);
+        const u8 *word = gStringVar2 + 5; // skip "Now: "
+        s32 wordWidth = GetStringWidth(FONT_NARROW, word, 0);
+        if (GetStringWidth(FONT_NARROW, regionMap->mapSecName, 0) + 6 + wordWidth <= 96)
+            AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, word, 96 - wordWidth, 1, TEXT_SKIP_DRAW, NULL);
+        return;
+    }
+    AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, gStringVar2, 0, y, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, later, 0, y + 16, TEXT_SKIP_DRAW, NULL);
 }
 
 static void CreateCityZoomTextSprites(void)

@@ -1425,3 +1425,45 @@ WallyJourney_EventScript_RivalMeet7Go::
 	fadedefaultbgm
 	releaseall
 	end
+
+@ Season change notice (src/wally_journey.c, WallyJourney_TrySeasonNotice).
+WallyJourney_EventScript_SeasonSpring::
+	lockall
+	msgbox WallyJourney_Text_SeasonSpring, MSGBOX_DEFAULT
+	releaseall
+	end
+
+WallyJourney_EventScript_SeasonSummer::
+	lockall
+	msgbox WallyJourney_Text_SeasonSummer, MSGBOX_DEFAULT
+	releaseall
+	end
+
+WallyJourney_EventScript_SeasonAutumn::
+	lockall
+	msgbox WallyJourney_Text_SeasonAutumn, MSGBOX_DEFAULT
+	releaseall
+	end
+
+WallyJourney_EventScript_SeasonWinter::
+	lockall
+	msgbox WallyJourney_Text_SeasonWinter, MSGBOX_DEFAULT
+	releaseall
+	end
+
+WallyJourney_Text_SeasonSpring:
+	.string "Spring has arrived in HOENN.\n"
+	.string "Expect warm showers on the routes.$"
+
+WallyJourney_Text_SeasonSummer:
+	.string "Summer has arrived in HOENN.\n"
+	.string "Long, hot days and sudden storms.$"
+
+WallyJourney_Text_SeasonAutumn:
+	.string "Autumn has arrived in HOENN.\n"
+	.string "The air has turned cool and grey.$"
+
+WallyJourney_Text_SeasonWinter:
+	.string "Winter has arrived in HOENN.\n"
+	.string "Snow is falling in the mountains.$"
+
