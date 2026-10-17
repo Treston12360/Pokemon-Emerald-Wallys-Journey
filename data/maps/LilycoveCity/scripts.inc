@@ -550,13 +550,14 @@ LilycoveCity_Text_MovedLootIntoHideoutToday:
 	.string "I was just talking to myself!$"
 
 LilycoveCity_Text_ChanceToDoBigThings:
-	.string "I'm just a GRUNT, so I don't know\n"
-	.string "what the BOSS is thinking…\p"
-	.string "I joined to clean beaches. Now we're\n"
-	.string "hiding stolen stuff in a cave.\p"
-	.string "When did that become the plan?\p"
-	.string "Wh-who are you?!\n"
-	.string "I was just talking to myself!$"
+	.string "I joined to clean the beaches.\n"
+	.string "My little brother swims here.\p"
+	.string "Now we're keeping watch over\n"
+	.string "things we stole from people.\p"
+	.string "I keep telling myself there's\n"
+	.string "a good reason for all this.\p"
+	.string "...Who are you?!\n"
+	.string "I was talking to myself!$"
 
 LilycoveCity_Text_DontGoNearCaveInCove:
 	.string "Hey, you!\p"
@@ -591,12 +592,13 @@ LilycoveCity_Text_ContestHallInTown:
 	.string "moves a crowd. It's not easy.$"
 
 LilycoveCity_Text_StrangeCaveInCove:
-	.string "Have you seen that strange cave in\n"
-	.string "the cove at the edge of town?\p"
-	.string "The police looked into it. Some\n"
-	.string "“SEA TRUST” has a research permit\l"
-	.string "for it. All the paperwork is clean.\p"
-	.string "Funny how that works, isn't it?$"
+	.string "There's a cave down by the cove.\n"
+	.string "The police checked it once.\p"
+	.string "A group called SEA TRUST had\n"
+	.string "papers saying they studied\n"
+	.string "coastal POKéMON there.\p"
+	.string "A permit doesn't mean people\n"
+	.string "are doing what they promised.$"
 
 LilycoveCity_Text_GoingToMoveDeleterForHMs:
 	.string "I'm going to teach my POKéMON some new\n"
@@ -605,12 +607,13 @@ LilycoveCity_Text_GoingToMoveDeleterForHMs:
 	.string "and make it forget HM moves.$"
 
 LilycoveCity_Text_ImFromKanto:
-	.string "I came from KANTO.\p"
-	.string "The HOENN region is beautiful with\n"
-	.string "all its water and verdant nature.\p"
-	.string "Hunh? Wait a second…\p"
-	.string "Could there be rare POKéMON that live\n"
-	.string "only in this area?$"
+	.string "I moved here from KANTO.\n"
+	.string "The journey cost us almost all\n"
+	.string "we'd saved.\p"
+	.string "HOENN offered me a fresh start.\n"
+	.string "Not everyone gets that chance.\p"
+	.string "I hope the people arguing over\n"
+	.string "this land remember who lives on it.$"
 
 LilycoveCity_Text_TeamAquaBeenTrainingWailmer:
 	.string "TEAM AQUA's been training their\n"
@@ -629,11 +632,13 @@ LilycoveCity_Text_SomeonePuntedTeamAquaOut:
 	.string "so we can get our boats out again.$"
 
 LilycoveCity_Text_SomeoneStoleMyPokemon:
-	.string "I was taking a relaxing snooze at the\n"
-	.string "seaside inn to the sound of waves…\p"
-	.string "When someone stole my POKéMON!\p"
-	.string "Who's the abductor?\n"
-	.string "TEAM AQUA? Is it TEAM AQUA?$"
+	.string "I fell asleep at the seaside inn.\n"
+	.string "When I woke, my POKéMON was gone!\p"
+	.string "Everyone says TEAM AQUA did it.\n"
+	.string "Maybe they did.\p"
+	.string "But I wish people would look\n"
+	.string "for my friend before arguing\n"
+	.string "about who to blame.$"
 
 LilycoveCity_Text_MissingPokemonCameBack:
 	.string "My missing POKéMON…\n"
@@ -654,10 +659,12 @@ LilycoveCity_Text_SeaRemainsForeverYoung:
 	.string "Fwohoho fwohohohoho…$"
 
 LilycoveCity_Text_SixtyYearsAgoHusbandProposed:
-	.string "It was sixty years ago that my husband\n"
-	.string "proposed to me here.\l"
-	.string "The sea remains as beautiful as ever.\p"
-	.string "Mufufufu mufufufufufu…$"
+	.string "My husband proposed right here\n"
+	.string "sixty years ago.\p"
+	.string "The sea has changed since then.\n"
+	.string "So have we.\p"
+	.string "But he still brings me flowers\n"
+	.string "every year. Imagine that!$"
 
 LilycoveCity_Text_TeamAquaRenovatedCavern:
 	.string "Hm, you know of the peculiar cavern\n"
