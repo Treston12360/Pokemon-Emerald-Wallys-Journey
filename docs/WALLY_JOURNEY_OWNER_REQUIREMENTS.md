@@ -330,6 +330,9 @@ Still to build: Wally story/rival battles/Champion arc, gym leader HM scenes, up
 - Use subtext rather than excessive monologues; preserve sympathetic but flawed adults, humor, warmth, Pokémon companionship and hopeful resolution.
 - Prepare a **story continuity bible** with a chronological beat sheet, per-character knowledge/motivation tables, map and dialogue changes, lore rules, badge/item/quest gates, and a contradiction/softlock checklist before bulk script rewrites.
 
+### Owner direction 2026-10-17: dialogue-first story delivery
+- The remaining story beats (authorities' limits, team dissent, rival crisis work, aftermath, League rules, Wally's reputation and relationships, postgame research framing, NPC reactions, Norman being present) do **not** need new screens, maps or cutscenes. Deliver them by rewriting existing NPC dialogue where it fits, with only small flag checks where a line must change after a story event.
+
 ### Acceptance criteria / implementation tracking
 - Every new/rewritten scene should record original scene replaced, location, trigger, mandatory flags, characters present, dialogue intent, progression consequence and relevant save/reload tests.
 - Audit the complete original Emerald event order against planned changes, including Birch's starter event; Petalburg Gym and Steven's Wally-house scene; Devon goods; Mt. Chimney; Mt. Pyre; Slateport submarine; Seafloor Cavern; Sootopolis; Sky Pillar; Victory Road; Wallace-to-Wally succession; Elite Four; Hall of Fame and event unlocks.

@@ -195,7 +195,10 @@ LavaridgeTown_Gym_1F_Text_GymGuideAdvice:
 	.string "go for it!$"
 
 LavaridgeTown_Gym_1F_Text_GymGuidePostVictory:
-	.string "Yow! That was a scorching-hot battle!$"
+	.string "Yow! That was a scorching-hot battle!\p"
+	.string "FLANNERY only took over this GYM\n"
+	.string "recently. The LEAGUE made her pass\l"
+	.string "the same review as anyone else.$"
 
 LavaridgeTown_Gym_1F_Text_ColeIntro:
 	.string "Owowowowow!\n"
@@ -357,7 +360,12 @@ LavaridgeTown_Gym_1F_Text_RegisteredFlannery:
 LavaridgeTown_Gym_1F_Text_FlanneryPostBattle:
 	.string "Your power reminds me of someone…\p"
 	.string "Oh! I know! You battle like NORMAN,\n"
-	.string "the GYM LEADER of PETALBURG.$"
+	.string "the GYM LEADER of PETALBURG.\p"
+	.string "You know WALLY, right? He lost to me\n"
+	.string "twice. He came back a third time\l"
+	.string "with a plan, and burned me out.\p"
+	.string "I've never seen anyone learn from\n"
+	.string "a loss that fast.$"
 
 LavaridgeTown_Gym_1F_Text_GymStatue:
 	.string "LAVARIDGE TOWN POKéMON GYM$"

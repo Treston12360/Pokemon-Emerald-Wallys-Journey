@@ -195,8 +195,11 @@ SootopolisCity_Gym_1F_Text_GymGuidePostVictory:
 	.string "Yow! You've beaten even JUAN, who\n"
 	.string "was supposedly the best in all HOENN!\p"
 	.string "Okay! Check out your TRAINER CARD.\p"
-	.string "If you've gotten all the BADGES, you're\n"
-	.string "set for the POKéMON LEAGUE challenge!$"
+	.string "With all eight BADGES, the LEAGUE\n"
+	.string "will let you through VICTORY ROAD.\p"
+	.string "And the CHAMPION has to accept any\n"
+	.string "challenger who clears the ELITE\l"
+	.string "FOUR. Even WALLY. Especially WALLY!$"
 
 SootopolisCity_Gym_1F_Text_JuanIntro:
 	.string "Let me ask you.\n"
@@ -268,8 +271,11 @@ SootopolisCity_Gym_1F_Text_JuanPostBattle:
 	.string "The POKéMON LEAGUE.\p"
 	.string "Travel to the easternmost reaches\n"
 	.string "of HOENN, to the island EVER GRANDE.\p"
-	.string "There, you shall find the POKéMON\n"
-	.string "LEAGUE.$"
+	.string "There, under LEAGUE rules, any\n"
+	.string "TRAINER who clears the ELITE FOUR\l"
+	.string "may challenge the CHAMPION.\p"
+	.string "That is how WALLY took the title.\n"
+	.string "It is how you may challenge him.$"
 
 SootopolisCity_Gym_1F_Text_GoGetFortreeBadge:
 	.string "There remains but one BADGE to\n"

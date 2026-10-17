@@ -388,13 +388,13 @@ PlayersHouse_1F_Text_RunningShoesManual:
 PlayersHouse_1F_Text_TicketFromBrineyCameForYou:
 	.string "DAD: Hm?\p"
 	.string "Hey, it's {PLAYER}!\p"
-	.string "It's been a while since I saw you,\n"
-	.string "but you look…stronger, somehow.\p"
-	.string "That's the impression I get.\n"
+	.string "I took the whole weekend off this\n"
+	.string "time. The GYM can survive two days.\p"
+	.string "You look…stronger, somehow.\n"
 	.string "But your old man hasn't given up yet!\p"
 	.string "Oh, yes, I have something for you.\n"
-	.string "This came to you from someone named\l"
-	.string "MR. BRINEY.$"
+	.string "This came for you from someone\l"
+	.string "named MR. BRINEY.$"
 
 PlayersHouse_1F_Text_PortsInSlateportLilycove:
 	.string "DAD: Hm, a TICKET for a ferry?\p"
@@ -402,15 +402,17 @@ PlayersHouse_1F_Text_PortsInSlateportLilycove:
 	.string "SLATEPORT and LILYCOVE.$"
 
 PlayersHouse_1F_Text_BetterGetBackToGym:
-	.string "I'd better get back to PETALBURG GYM.\p"
-	.string "MOM, thanks for looking after the house\n"
-	.string "while I'm away.$"
+	.string "I'll head back to PETALBURG tonight.\p"
+	.string "MOM, I'll be home next Sunday.\n"
+	.string "It's written on the calendar.$"
 
 PlayersHouse_1F_Text_DadShouldStayLonger:
 	.string "MOM: That DAD of yours…\p"
-	.string "He comes home for the first time in a\n"
-	.string "while, but all he talks about is POKéMON.\p"
-	.string "He should relax and stay a little longer.$"
+	.string "He's kept his word. Every Sunday,\n"
+	.string "he's walked through that door.\p"
+	.string "He still talks about nothing but\n"
+	.string "POKéMON. But he's here, honey.\l"
+	.string "That's a real start.$"
 
 PlayersHouse_1F_Text_IsThatABreakingStory:
 	.string "MOM: Is that a breaking news story?$"

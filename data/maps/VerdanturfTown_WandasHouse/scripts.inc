@@ -18,6 +18,7 @@ VerdanturfTown_WandasHouse_EventScript_WallyShortSpeech::
 VerdanturfTown_WandasHouse_EventScript_WallysUncle::
 	lock
 	faceplayer
+	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, VerdanturfTown_WandasHouse_EventScript_WallysUncleEverGrande
 	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, VerdanturfTown_WandasHouse_EventScript_WallysUncleEverGrande
 	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, VerdanturfTown_WandasHouse_EventScript_WallysUncleSlippedOff
 	msgbox VerdanturfTown_WandasHouse_Text_WallysNextDoor, MSGBOX_DEFAULT
@@ -60,6 +61,7 @@ VerdanturfTown_WandasHouse_EventScript_WandaDontWorry::
 VerdanturfTown_WandasHouse_EventScript_WallysAunt::
 	lock
 	faceplayer
+	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, VerdanturfTown_WandasHouse_EventScript_WallysAuntEverGrande
 	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, VerdanturfTown_WandasHouse_EventScript_WallysAuntEverGrande
 	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, VerdanturfTown_WandasHouse_EventScript_WallysAuntAnythingHappened
 	goto_if_set FLAG_RUSTURF_TUNNEL_OPENED, VerdanturfTown_WandasHouse_EventScript_WallysAuntTunnelOpen
@@ -116,11 +118,13 @@ VerdanturfTown_WandasHouse_Text_WallySlippedOff:
 	.string "He slipped off on his own…$"
 
 VerdanturfTown_WandasHouse_Text_WallyGoneThatFar:
-	.string "UNCLE: Is that right?\n"
-	.string "WALLY's gone away that far all by\l"
-	.string "himself…\p"
-	.string "Well, I have to give him credit--he is\n"
-	.string "my little brother's son.$"
+	.string "UNCLE: You saw the broadcast too?\n"
+	.string "CHAMPION! Our WALLY!\p"
+	.string "I told him he was pushing it, back\n"
+	.string "in MAUVILLE. Guess he heard me and\l"
+	.string "decided to push harder.\p"
+	.string "He is my little brother's son,\n"
+	.string "after all.$"
 
 VerdanturfTown_WandasHouse_Text_MeetWanda:
 	.string "WANDA: You are?\n"
@@ -159,10 +163,14 @@ VerdanturfTown_WandasHouse_Text_DaughtersBoyfriendWasDigging:
 VerdanturfTown_WandasHouse_Text_IfAnythingHappenedToWally:
 	.string "If anything were to happen to WALLY,\n"
 	.string "I would never be able to look his\l"
-	.string "parents in PETALBURG in the eye…$"
+	.string "parents in PETALBURG in the eye…\p"
+	.string "He left a note. “Don't worry. I've\n"
+	.string "got my team.” That's all he wrote!$"
 
 VerdanturfTown_WandasHouse_Text_WallyWasInEverGrande:
-	.string "WALLY was in EVER GRANDE?\p"
-	.string "His parents in PETALBURG would be\n"
-	.string "astonished to hear that!$"
+	.string "WALLY in EVER GRANDE? Of course he\n"
+	.string "was. He's the CHAMPION!\p"
+	.string "We all crammed around the TV for\n"
+	.string "the broadcast. My husband cried.\p"
+	.string "…Don't tell him I told you.$"
 

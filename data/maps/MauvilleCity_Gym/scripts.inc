@@ -273,7 +273,10 @@ MauvilleCity_Gym_Text_GymGuideAdvice:
 
 MauvilleCity_Gym_Text_GymGuidePostVictory:
 	.string "Whoa, you're electrifying!\n"
-	.string "You've powered the door open!$"
+	.string "You've powered the door open!\p"
+	.string "A BADGE is a LEAGUE license, too.\n"
+	.string "It lets your POKéMON use HM moves\l"
+	.string "outside of battle, legally.$"
 
 MauvilleCity_Gym_Text_KirkIntro:
 	.string "My electric soul, it'll shatter your\n"
@@ -378,8 +381,11 @@ MauvilleCity_Gym_Text_RegisteredWattson:
 	.string "in the POKéNAV.$"
 
 MauvilleCity_Gym_Text_WattsonPostBattle:
-	.string "I swell with optimism, seeing a promising\n"
-	.string "young TRAINER like you!$"
+	.string "I swell with optimism, seeing a\n"
+	.string "promising young TRAINER like you!\p"
+	.string "Wahahaha! That WALLY boy came by\n"
+	.string "too, after his uncle stopped\l"
+	.string "nagging. Gave me a real jolt!$"
 
 MauvilleCity_Gym_Text_WattsonGoForthAndEndeavor:
 	.string "Wahahahah!\n"

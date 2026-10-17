@@ -151,7 +151,10 @@ FortreeCity_Gym_Text_GymGuideAdvice:
 
 FortreeCity_Gym_Text_GymGuidePostVictory:
 	.string "You did it!\n"
-	.string "You've achieved liftoff!$"
+	.string "You've achieved liftoff!\p"
+	.string "Heads up: the LEAGUE counts BADGES,\n"
+	.string "not who you beat. Eight BADGES is\l"
+	.string "the only ticket to VICTORY ROAD.$"
 
 FortreeCity_Gym_Text_JaredIntro:
 	.string "Behold the elegant battle style of\n"
@@ -278,7 +281,11 @@ FortreeCity_Gym_Text_RegisteredWinona:
 
 FortreeCity_Gym_Text_WinonaPostBattle:
 	.string "Though I fell to you, I will remain\n"
-	.string "devoted to BIRD POKéMON.$"
+	.string "devoted to BIRD POKéMON.\p"
+	.string "A boy named WALLY came through a\n"
+	.string "week ago. He read my whole strategy\l"
+	.string "by the second turn.\p"
+	.string "Kind boy. Terrifying TRAINER.$"
 
 FortreeCity_Gym_Text_GymStatue:
 	.string "FORTREE CITY POKéMON GYM$"

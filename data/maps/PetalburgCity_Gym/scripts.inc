@@ -1335,18 +1335,25 @@ PetalburgCity_Gym_Text_LetMeBorrowPlayer:
 	.string "a minute or two.$"
 
 PetalburgCity_Gym_Text_DadGoingToKeepTraining:
-	.string "DAD: {PLAYER}, you should go visit\n"
-	.string "your mother every so often.\p"
-	.string "I'm going to stay here and redouble\n"
-	.string "my training.\p"
-	.string "It would bother me as a TRAINER to\n"
-	.string "not avenge my loss to you, {PLAYER}!$"
+	.string "DAD: {PLAYER}, I meant what I said.\n"
+	.string "The GYM closes early on Sundays now.\p"
+	.string "I'll be home this weekend. Tell your\n"
+	.string "mother I'm bringing dinner.\p"
+	.string "And don't think I'm going easy after\n"
+	.string "this. It would bother me as a\l"
+	.string "TRAINER not to win one back!$"
 
 PetalburgCity_Gym_Text_DadNoAmountOfTrainingIsEnough:
-	.string "DAD: {PLAYER}, how are things going?\p"
-	.string "The world of POKéMON is deep.\p"
-	.string "I honestly think that no amount of\n"
-	.string "training would ever be enough.$"
+	.string "DAD: {PLAYER}! How are things going?\p"
+	.string "WALLY stopped by last week. Asked if\n"
+	.string "I'd spar with him before a defense.\p"
+	.string "That boy borrowed my ZIGZAGOON to\n"
+	.string "catch his first POKéMON. Now he's\l"
+	.string "the CHAMPION. Hah!\p"
+	.string "I wasn't around to watch you grow up.\n"
+	.string "I'm not missing any more of it.\p"
+	.string "The world of POKéMON is deep. Let's\n"
+	.string "keep exploring it together.$"
 
 PetalburgCity_Gym_Text_GymGuideAdvice:
 	.string "Hey, how's it going, CHAMPION-\n"
@@ -1597,9 +1604,11 @@ PetalburgCity_Gym_Text_NormanRematchDefeat:
 PetalburgCity_Gym_Text_NormanPostRematch:
 	.string "DAD: {PLAYER}…\n"
 	.string "What is your dream?\p"
-	.string "My dream…\n"
-	.string "Hahaha…\l"
-	.string "It has already come true, actually.$"
+	.string "Mine used to be this GYM.\p"
+	.string "Now it's simpler. Sunday dinners,\n"
+	.string "a battle like this one, and your\l"
+	.string "mother laughing at us both.\p"
+	.string "That dream, I'm finally keeping.$"
 
 PetalburgCity_Gym_Text_NormanRematchNeedTwoMons:
 	.string "DAD: {PLAYER}…\n"

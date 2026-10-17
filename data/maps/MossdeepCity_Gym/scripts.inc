@@ -389,7 +389,10 @@ MossdeepCity_Gym_Text_GymGuideAdvice:
 
 MossdeepCity_Gym_Text_GymGuidePostVictory:
 	.string "Wow, you're astounding!\n"
-	.string "You're one great TRAINER!$"
+	.string "You're one great TRAINER!\p"
+	.string "One BADGE left. After that, the\n"
+	.string "guards at VICTORY ROAD will check\l"
+	.string "your TRAINER CARD. No exceptions!$"
 
 MossdeepCity_Gym_Text_PrestonIntro:
 	.string "Battles hinge on the strength of your\n"
@@ -603,7 +606,11 @@ MossdeepCity_Gym_Text_TateAndLizaPostBattle:
 	.string "and your POKéMON is far stronger than\l"
 	.string "the bond that we share as twins.\p"
 	.string "LIZA: You will become even stronger!\n"
-	.string "We've battled you, so we know.$"
+	.string "We've battled you, so we know.\p"
+	.string "TATE: WALLY was here before you.\n"
+	.string "LIZA: We saw his moves coming…\p"
+	.string "TATE: …and he still won.\n"
+	.string "LIZA: We're still mad about it!$"
 
 MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons:
 	.string "TATE: Hehehe… Were you surprised?\p"

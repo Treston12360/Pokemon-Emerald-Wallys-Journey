@@ -28,6 +28,7 @@ PetalburgCity_WallysHouse_EventScript_GiveHMSurf::
 PetalburgCity_WallysHouse_EventScript_WallysDad::
 	lock
 	faceplayer
+	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad
 	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad
 	goto_if_set FLAG_RECEIVED_HM_SURF, PetalburgCity_WallysHouse_EventScript_ReceievedHMSurf
 	goto_if_set FLAG_THANKED_FOR_PLAYING_WITH_WALLY, PetalburgCity_WallysHouse_EventScript_PlayedWithWally
@@ -54,8 +55,14 @@ PetalburgCity_WallysHouse_EventScript_PlayedWithWally::
 PetalburgCity_WallysHouse_EventScript_WallysMom::
 	lock
 	faceplayer
+	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_WallysHouse_EventScript_MomSawBroadcast
 	goto_if_set FLAG_RECEIVED_HM_SURF, PetalburgCity_WallysHouse_EventScript_ReceivedHMSurf
 	msgbox PetalburgCity_WallysHouse_Text_WallyWasReallyHappy, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_WallysHouse_EventScript_MomSawBroadcast::
+	msgbox PetalburgCity_WallysHouse_Text_MomSawBroadcast, MSGBOX_DEFAULT
 	release
 	end
 
@@ -105,16 +112,23 @@ PetalburgCity_WallysHouse_Text_SurfGoAllSortsOfPlaces:
 	.string "able to go to all sorts of places.$"
 
 PetalburgCity_WallysHouse_Text_WallyIsComingHomeSoon:
-	.string "WALLY's coming home soon.\n"
-	.string "I'm looking forward to that.$"
+	.string "WALLY calls from the road now.\p"
+	.string "He told me he's been challenging\n"
+	.string "GYMS. He wouldn't say how many he's\l"
+	.string "won. That's how I know it's a lot.\p"
+	.string "I'm looking forward to having him\n"
+	.string "home again.$"
 
 PetalburgCity_WallysHouse_Text_YouMetWallyInEverGrandeCity:
-	.string "Oh? You met WALLY in\n"
-	.string "EVER GRANDE CITY?\p"
-	.string "Oh, {PLAYER}{KUN}, don't be silly.\p"
-	.string "He may have gotten healthy, but he\n"
-	.string "can't go somewhere far away like\l"
-	.string "that all by himself.$"
+	.string "We watched it on TV, {PLAYER}{KUN}.\n"
+	.string "Our WALLY, beating WALLACE.\p"
+	.string "The boy who couldn't run to the end\n"
+	.string "of the street without coughing…\p"
+	.string "He's the CHAMPION now. I still can't\n"
+	.string "say it without my voice shaking.\p"
+	.string "He calls before every title defense.\n"
+	.string "He says you're the one he's waiting\l"
+	.string "for.$"
 
 PetalburgCity_WallysHouse_Text_WallyWasReallyHappy:
 	.string "WALLY was really happy when he told\n"
@@ -127,10 +141,10 @@ PetalburgCity_WallysHouse_Text_WallyLeftWithoutTelling:
 	.string "from my husband…\p"
 	.string "But our WALLY left VERDANTURF TOWN\n"
 	.string "without telling anyone.\p"
-	.string "You know, WALLY is frail, but\n"
-	.string "he's surprisingly strong-willed.\p"
-	.string "I'm sure that he'll come back safe\n"
-	.string "and sound one day!$"
+	.string "He sent a letter. It said, “I need\n"
+	.string "to find out what I can do on my own.”\p"
+	.string "WALLY is frail, but he's stubborn.\n"
+	.string "I'm scared for him. And proud.$"
 
 
 PetalburgCity_WallysHouse_Text_NoHmSurf:
@@ -219,3 +233,11 @@ WallyJourney_StevenMega_End:
 WallyJourney_StevenMega_AfterText:
 	.string "STEVEN: Your bond with your\n"
 	.string "POKéMON is your greatest strength!$"
+
+PetalburgCity_WallysHouse_Text_MomSawBroadcast:
+	.string "We saw the broadcast. All of\n"
+	.string "PETALBURG did.\p"
+	.string "I used to worry he'd never leave\n"
+	.string "his room. Now he's the CHAMPION.\p"
+	.string "He still writes home every week.\n"
+	.string "He always asks how you're doing.$"

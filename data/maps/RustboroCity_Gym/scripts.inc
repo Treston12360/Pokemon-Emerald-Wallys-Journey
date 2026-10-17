@@ -130,14 +130,13 @@ RustboroCity_Gym_Text_GymGuideAdvice:
 RustboroCity_Gym_Text_GymGuidePostVictory:
 	.string "Whoa! What a breathtaking victory!\n"
 	.string "My cheering must've worked!\p"
-	.string "Great!\n"
-	.string "Check your TRAINER CARD.\p"
-	.string "The STONE BADGE you got should be\n"
-	.string "properly recorded on it.\p"
-	.string "In other words…\p"
+	.string "Check your TRAINER CARD. The POKéMON\n"
+	.string "LEAGUE records every BADGE there.\p"
+	.string "GYM LEADERS are tested and licensed\n"
+	.string "by the LEAGUE. Their BADGES count\l"
+	.string "anywhere in HOENN.\p"
 	.string "You've climbed the first step on\n"
-	.string "the stairs to the CHAMPIONSHIP!\p"
-	.string "That's got to feel awesome!$"
+	.string "the stairs to the CHAMPIONSHIP!$"
 
 RustboroCity_Gym_Text_JoshIntro:
 	.string "Don't take us GYM TRAINERS lightly!\n"

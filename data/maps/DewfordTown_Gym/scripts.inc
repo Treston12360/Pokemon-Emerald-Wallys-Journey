@@ -302,7 +302,10 @@ DewfordTown_Gym_Text_GymGuideAdvice:
 	.string "Hey, okay, go for it!$"
 
 DewfordTown_Gym_Text_GymGuidePostVictory:
-	.string "Whoah! It's turned too bright in here!\p"
+	.string "Whoah! It's gotten so bright in here!\p"
+	.string "Here's a tip: the LEAGUE reviews\n"
+	.string "every GYM each year. BRAWLY keeps\l"
+	.string "the lights off and still passes!\p"
 	.string "Your future is bright, too!$"
 
 DewfordTown_Gym_Text_TakaoIntro:
