@@ -208,3 +208,12 @@ Still to build: Wally story/rival battles/Champion arc, gym leader HM scenes, up
 | **Gym rematches with Megas** | code-in | Every leader rematch tier now has a Mega Pokémon (filled gaps for Roxanne, Brawly, Flannery, Norman, Tate & Liza, Juan). Tate & Liza tier 5 Mega Metagross swapped for Mega Gallade so they don't copy Steven's ace |
 | **Postgame Jirachi** | code-in | After the first Elite Four win, Prof. Cozmo in Fallarbor tells the player about a star-shaped POKéMON past the underground lake in Meteor Falls (B1F 2R). Lv 70, canon catch rate. If knocked out or fled, it returns on the next visit. Other event Pokémon: earlier work opened Southern Island, Birth Island, Faraway Island and Navel Rock after the first Elite Four win |
 | Engine test suite | ran 2026-10-16 | 5,398 passed. 19 failures were all tests that give the player special balls; the Poké Ball rule is now skipped in the test build only. Needs a re-run |
+
+## Wally's late-game personality — definitive owner direction (2026-10-16)
+
+- **Wally must grow into someone unmistakably confident, charismatic, stylish, formidable, and genuinely cool.** He can remain kind, empathetic, and respectful, but **do not** portray late-game/Champion Wally as perpetually timid, hesitant, fragile, apologetic, or merely a sweet underdog. He should feel like an accomplished rival and imposing Champion who *knows* he is exceptionally good.
+- Show the transformation gradually through decisive actions, sharper and more self-assured dialogue, compelling entrances, visible leadership in crises, increasingly commanding battle presence, strategic team decisions, and a striking Champion reveal. His confidence is earned, not sudden or unsupported.
+- Avoid turning him into a cruel bully, arrogant caricature, or an imitation of another rival. He can be relaxed, witty, competitive, composed under pressure, and occasionally playful while still caring about people and Pokémon.
+- Preserve the beginning of his arc as shy and uncertain, and ensure interactions with the player, Norman, family, May/Brendan, Steven, and Wallace reflect his growth. The final Champion confrontation should make the player think **'Wally is cool as hell and genuinely dangerous to battle.'**
+- This explicit personality target overrides any previous narrative suggestion that treats kindness or perpetual modesty as more important than visible confidence and coolness.
+- **Status:** Confirmed creative requirement; specific dialogue, sprites, cutscenes, trainer scripting and implementation are not yet verified.
