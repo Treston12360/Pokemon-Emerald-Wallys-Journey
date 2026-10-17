@@ -609,10 +609,10 @@ Route119_Text_TrainerTipsDecoration:
 	.string "way you want.$"
 
 Route119_Text_NoHmFly:
-	.string "That was a great battle!\\p"
+	.string "That was a great battle!\p"
 	.string "You're getting stronger every day!$"
 
 Route119_Text_NoHmFlyAdvice:
-	.string "With the FEATHER BADGE, FLY\\n"
-	.string "will carry you across HOENN.\\p"
+	.string "With the FEATHER BADGE, FLY\n"
+	.string "will carry you across HOENN.\p"
 	.string "See you around!$"
