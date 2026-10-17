@@ -551,45 +551,38 @@ MtChimney_Text_MeteoriteWillActivateVolcano:
 	.string "Fufufu…$"
 
 MtChimney_Text_MaxieIntro:
-	.string "MAXIE: Hm?\n"
-	.string "Who are you?\p"
-	.string "… … … … … …\n"
-	.string "… … … … … …\p"
-	.string "I'd heard ARCHIE bemoaning a child\n"
-	.string "who's been meddling in TEAM AQUA's\l"
-	.string "affairs.\p"
-	.string "It must be you he meant.\p"
-	.string "Humph! So you're thinking of\n"
-	.string "interfering with us, TEAM MAGMA?\p"
-	.string "Now you listen.\n"
-	.string "Long ago, living things used the\l"
-	.string "land to live and grow.\p"
-	.string "That is why land is all important!\n"
-	.string "It is the cradle of all!\p"
-	.string "That is why TEAM MAGMA is dedicated\n"
-	.string "to the expansion of the land mass.\p"
-	.string "It is for further advancement of\n"
-	.string "humankind and POKéMON!\p"
-	.string "And for that, we need the power of\n"
-	.string "what sleeps within this mountain…\p"
-	.string "Oh! There was no need for you to\n"
-	.string "learn that much.\p"
-	.string "But, no matter!\n"
-	.string "I'll teach you the consequences of\l"
-	.string "meddling in our grand design!$"
+	.string "MAXIE: Hm? Who are you?\p"
+	.string "Ah. ARCHIE's little problem.\n"
+	.string "Let me guess. You think we're\l"
+	.string "villains.\p"
+	.string "Then answer me this. Have you seen\n"
+	.string "what a house costs in SLATEPORT?\p"
+	.string "Families sleep in shifts. Farmers\n"
+	.string "in FALLARBOR fight the ash for every\l"
+	.string "field. Young people leave HOENN\l"
+	.string "because there's no room to start.\p"
+	.string "Hoenn is mostly ocean, child. We are\n"
+	.string "running out of ground to live on.\p"
+	.string "New land means homes, farms, roads,\n"
+	.string "work. A future for people who have\l"
+	.string "been told to wait their whole lives.\p"
+	.string "The power sleeping in this mountain\n"
+	.string "can give them that. Today.\p"
+	.string "…I see I won't convince you with\n"
+	.string "words. Very well. Let's see if your\l"
+	.string "conviction is stronger than mine!$"
 
 MtChimney_Text_MaxieDefeat:
 	.string "What?!\p"
 	.string "I, MAXIE, was caught off guard?!$"
 
 MtChimney_Text_MaxieYouHaventSeenLastOfMagma:
-	.string "MAXIE: But, enough.\n"
-	.string "I will back off this time.\p"
-	.string "But don't think that this is the last\n"
-	.string "you've seen of TEAM MAGMA.\p"
-	.string "Fufufu…\p"
-	.string "Even without the METEORITE, if we\n"
-	.string "obtain that ORB… Fufufu…$"
+	.string "MAXIE: Enough. I will withdraw.\p"
+	.string "But the families waiting for a home\n"
+	.string "won't disappear because you won a\l"
+	.string "battle.\p"
+	.string "If not the METEORITE, then the ORB.\n"
+	.string "Someone has to act.$"
 
 MtChimney_Text_TabithaIntro:
 	.string "Hehehe!\p"
@@ -609,11 +602,12 @@ MtChimney_Text_TabithaPostBattle:
 	.string "Hehehe…$"
 
 MtChimney_Text_Grunt2Intro:
-	.string "We of TEAM MAGMA are working hard for\n"
-	.string "everyone's sake.\p"
-	.string "Like, if that thing's power made more\n"
-	.string "land, there'd be more places to live.\p"
-	.string "Everyone'd be happy!$"
+	.string "My folks run a farm on ROUTE 113.\n"
+	.string "The ash ruins half the crop.\p"
+	.string "More good land means they wouldn't\n"
+	.string "have to choose between the farm and\l"
+	.string "feeding my little brothers.\p"
+	.string "So yeah. I'm here. Move!$"
 
 MtChimney_Text_Grunt2Defeat:
 	.string "Hunh?\n"
@@ -626,9 +620,11 @@ MtChimney_Text_Grunt2PostBattle:
 	.string "in our way?$"
 
 MtChimney_Text_Grunt1Intro:
-	.string "If there were more land, I'd be able\n"
-	.string "to get a big house of my own!\p"
-	.string "I'm going to build it on hardened lava!$"
+	.string "Do you know how long the waitlist is\n"
+	.string "for an apartment in LILYCOVE?\p"
+	.string "Four years! I'm done waiting.\n"
+	.string "I'll build a house on hardened lava\l"
+	.string "if I have to!$"
 
 MtChimney_Text_Grunt1Defeat:
 	.string "My dream of a big house…$"
@@ -660,7 +656,9 @@ MtChimney_Text_DouseThemInFire:
 	.string "Douse them in fire!$"
 
 MtChimney_Text_KeepMakingMoreLand:
-	.string "We're going to keep making more land!$"
+	.string "…Is the mountain supposed to shake\n"
+	.string "like that? Nobody said it would\l"
+	.string "shake like that.$"
 
 MtChimney_Text_Bufoh:
 	.string "Bufoh!$"

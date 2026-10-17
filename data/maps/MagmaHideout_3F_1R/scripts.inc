@@ -24,20 +24,19 @@ MagmaHideout_3F_1R_Text_Grunt9PostBattle:
 	.string "hoods in this magma-filled volcano?$"
 
 MagmaHideout_3F_1R_Text_Grunt16Intro:
-	.string "We joined so we can help our leader\n"
-	.string "achieve his fantastic vision.\p"
-	.string "I don't care if you're with TEAM AQUA\n"
-	.string "or if you're just some kid passing by.\p"
-	.string "No one interferes with us and gets\n"
-	.string "away with it!$"
+	.string "I joined after the floods took our\n"
+	.string "house on ROUTE 103.\p"
+	.string "MAXIE was the only one who showed\n"
+	.string "up with a plan instead of a speech.\p"
+	.string "I'm not letting you ruin it!$"
 
 MagmaHideout_3F_1R_Text_Grunt16Defeat:
 	.string "Oh, no!\n"
 	.string "You're not to be trusted at all!$"
 
 MagmaHideout_3F_1R_Text_Grunt16PostBattle:
-	.string "Listen to me.\n"
-	.string "TEAM MAGMA is right!\p"
-	.string "Don't listen to TEAM AQUA.\n"
-	.string "Don't believe their lies!$"
+	.string "TEAM AQUA talks about saving the\n"
+	.string "sea. Fine.\p"
+	.string "But who's saving the people who\n"
+	.string "live on the shore?$"
 

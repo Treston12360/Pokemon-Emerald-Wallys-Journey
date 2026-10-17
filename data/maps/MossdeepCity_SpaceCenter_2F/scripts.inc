@@ -452,26 +452,25 @@ MossdeepCity_SpaceCenter_2F_Text_StevenHurryGetReadyQuickly:
 	.string "Get ready quickly!$"
 
 MossdeepCity_SpaceCenter_2F_Text_JustWantToExpandLand:
-	.string "All I want…\n"
-	.string "I just want to expand the land mass…$"
+	.string "I just wanted my kids to grow up\n"
+	.string "somewhere with room to run…$"
 
 MossdeepCity_SpaceCenter_Text_TabithaDefeat:
 	.string "I'm with our leader…$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieWeFailedIsAquaAlsoMisguided:
 	.string "MAXIE: We failed to make the volcano\n"
-	.string "erupt…\p"
-	.string "We failed to control GROUDON after\n"
-	.string "we had awoken it…\p"
-	.string "Is our goal to expand the land\n"
-	.string "misguided?\p"
-	.string "… … … … … …\n"
-	.string "… … … … … …\p"
-	.string "If…\n"
-	.string "If we, TEAM MAGMA, are wrong…\l"
-	.string "… … … … … …\p"
-	.string "Then might TEAM AQUA's goal to expand\n"
-	.string "the sea also be equally misguided?$"
+	.string "erupt. We failed to control GROUDON.\p"
+	.string "I told my people I could give them\n"
+	.string "land. Homes. A future.\p"
+	.string "And I nearly burned the ground out\n"
+	.string "from under them instead.\p"
+	.string "… … … … … … … … … … … …\p"
+	.string "The problem is real. My answer\n"
+	.string "was not.\p"
+	.string "And if I was wrong to reshape the\n"
+	.string "world by force… then ARCHIE is\l"
+	.string "just as wrong.$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieWeWillGiveUp:
 	.string "MAXIE: All right…\n"

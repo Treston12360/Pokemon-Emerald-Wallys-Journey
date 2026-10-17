@@ -22,17 +22,19 @@ MagmaHideout_2F_2R_EventScript_Grunt8::
 	end
 
 MagmaHideout_2F_2R_Text_Grunt15Intro:
-	.string "I don't have a bone to pick with you.\n"
-	.string "I'm just following orders!$"
+	.string "I'm a surveyor. I mapped every valley\n"
+	.string "in HOENN for MAXIE's housing plans.\p"
+	.string "The numbers work. They really do.\n"
+	.string "So why do I feel sick about this?$"
 
 MagmaHideout_2F_2R_Text_Grunt15Defeat:
 	.string "I may have lost, but…$"
 
 MagmaHideout_2F_2R_Text_Grunt15PostBattle:
-	.string "We dug up something beyond belief!\n"
-	.string "And, we got the BLUE ORB!\p"
-	.string "All that's left is for our leader to…\n"
-	.string "Fufufu… Fwahahaha!$"
+	.string "We have the BLUE ORB now. MAXIE\n"
+	.string "says GROUDON will listen to it.\p"
+	.string "…He's never been wrong before.\n"
+	.string "I hope he isn't wrong now.$"
 
 MagmaHideout_2F_2R_Text_Grunt6Intro:
 	.string "I can't stand heat. Maybe I should've\n"
