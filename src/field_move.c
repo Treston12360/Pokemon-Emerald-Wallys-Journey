@@ -45,7 +45,7 @@ bool32 WallyCanUseHmWithoutTeaching(struct Pokemon *mon, enum FieldMove fieldMov
 bool32 WallyPartyCanUseHmWithoutTeaching(enum FieldMove fieldMove)
 {
     for (u8 i = 0; i < PARTY_SIZE; i++)
-        if (WallyCanUseHmWithoutTeaching(&gPlayerParty[i], fieldMove))
+        if (WallyCanUseHmWithoutTeaching(&gParties[B_TRAINER_PLAYER][i], fieldMove))
             return TRUE;
     return FALSE;
 }
