@@ -39,8 +39,19 @@ VictoryRoad_1F_EventScript_WallyEntranceBattle::
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterDown
 	waitmovement 0
 	msgbox VictoryRoad_1F_Text_WallyNotGoingToLoseAnymore, MSGBOX_DEFAULT
+	setflag FLAG_WALLY_NO_WHITEOUT
 	trainerbattle_no_intro TRAINER_WALLY_VR_1, VictoryRoad_1F_Text_WallyEntranceDefeat
+	specialvar VAR_RESULT, GetBattleOutcome
+	special HealPlayerParty
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, VictoryRoad_1F_EventScript_PlayerBeatWally
+	msgbox VictoryRoad_1F_Text_WallyWinsEntranceBattle, MSGBOX_DEFAULT
+	goto VictoryRoad_1F_EventScript_FinishEntranceBattle
+
+VictoryRoad_1F_EventScript_PlayerBeatWally::
 	msgbox VictoryRoad_1F_Text_WallyPostEntranceBattle, MSGBOX_DEFAULT
+
+VictoryRoad_1F_EventScript_FinishEntranceBattle::
+	clearflag FLAG_WALLY_NO_WHITEOUT
 	clearflag FLAG_HIDE_VICTORY_ROAD_ENTRANCE_WALLY
 	copyobjectxytoperm LOCALID_VICTORY_ROAD_ENTRANCE_WALLY
 	setflag FLAG_DEFEATED_WALLY_VICTORY_ROAD
@@ -233,3 +244,12 @@ VictoryRoad_1F_Text_KatelynnPostBattle:
 	.string "it doesn't.\p"
 	.string "But I made it here.\n"
 	.string "That still means something.$"
+
+VictoryRoad_1F_Text_WallyWinsEntranceBattle:
+	.string "WALLY: That's what I expected.\p"
+	.string "You aren't ready to face\n"
+	.string "the ELITE FOUR yet.\p"
+	.string "But go on, {PLAYER}.\n"
+	.string "You might surprise me.\p"
+	.string "I'll be waiting at the top.\n"
+	.string "If you can make it there.$"
