@@ -79,18 +79,21 @@ EverGrandeCity_PokemonCenter_1F_Movement_ScottExit:
 	step_end
 
 EverGrandeCity_PokemonCenter_1F_Text_LeagueAfterVictoryRoad:
-	.string "The POKéMON LEAGUE is just past\n"
-	.string "VICTORY ROAD.\p"
-	.string "Everyone who makes it here has\n"
-	.string "given something up to get here.\p"
-	.string "Make sure it was worth it.$"
+	.string "The POKéMON LEAGUE lies\n"
+	.string "beyond VICTORY ROAD.\p"
+	.string "The path isn't there to\n"
+	.string "punish challengers.\p"
+	.string "It's there to ask whether\n"
+	.string "you and your team are ready\n"
+	.string "for what comes next.$"
 
 EverGrandeCity_PokemonCenter_1F_Text_BelieveInYourPokemon:
-	.string "The long and harrowing VICTORY ROAD…\p"
-	.string "It's like reliving the path one has\n"
-	.string "traveled in life…\p"
-	.string "Believe in your POKéMON and give it\n"
-	.string "your very best!$"
+	.string "VICTORY ROAD brings out\n"
+	.string "what a TRAINER has learned.\p"
+	.string "Some rush ahead. Others\n"
+	.string "stop to help a stranger.\p"
+	.string "Neither a BADGE nor a win\n"
+	.string "can tell the whole story.$"
 
 EverGrandeCity_PokemonCenter_1F_Text_ScottHappyForYou:
 	.string "SCOTT: {PLAYER}{KUN}, you've clawed your\n"
