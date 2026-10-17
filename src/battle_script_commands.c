@@ -10365,10 +10365,15 @@ void BS_JumpIfNoWhiteOut(void)
 {
     NATIVE_ARGS(const u8 *jumpInstr);
 
+#if IS_FRLG
+    // The scripted Wally no-whiteout battle is exclusive to Emerald.
+    gBattlescriptCurrInstr = cmd->nextInstr;
+#else
     if (FlagGet(B_FLAG_NO_WHITEOUT))
         gBattlescriptCurrInstr = cmd->jumpInstr;
     else
         gBattlescriptCurrInstr = cmd->nextInstr;
+#endif
 }
 
 void BS_TryBoosterEnergy(void)
