@@ -29,8 +29,8 @@ PetalburgCity_WallysHouse_EventScript_WallysDad::
 	lock
 	faceplayer
 	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_WallysHouse_EventScript_DadAfterPlayerChampion
-	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad
-	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad
+	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_WallysHouse_EventScript_WallyWonChampionship
+	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, PetalburgCity_WallysHouse_EventScript_WallyWonChampionship
 	goto_if_set FLAG_RECEIVED_HM_SURF, PetalburgCity_WallysHouse_EventScript_ReceievedHMSurf
 	goto_if_set FLAG_THANKED_FOR_PLAYING_WITH_WALLY, PetalburgCity_WallysHouse_EventScript_PlayedWithWally
 	msgbox PetalburgCity_WallysHouse_Text_ThanksForPlayingWithWally, MSGBOX_DEFAULT
@@ -53,8 +53,8 @@ PetalburgCity_WallysHouse_EventScript_ReceievedHMSurf::
 	release
 	end
 
-PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad::
-	msgbox PetalburgCity_WallysHouse_Text_YouMetWallyInEverGrandeCity, MSGBOX_DEFAULT
+PetalburgCity_WallysHouse_EventScript_WallyWonChampionship::
+	msgbox PetalburgCity_WallysHouse_Text_WallyWonChampionship, MSGBOX_DEFAULT
 	release
 	end
 
@@ -131,7 +131,7 @@ PetalburgCity_WallysHouse_Text_WallyIsComingHomeSoon:
 	.string "I'm looking forward to having him\n"
 	.string "home again.$"
 
-PetalburgCity_WallysHouse_Text_YouMetWallyInEverGrandeCity:
+PetalburgCity_WallysHouse_Text_WallyWonChampionship:
 	.string "We watched it on TV, {PLAYER}{KUN}.\n"
 	.string "Our WALLY, beating WALLACE.\p"
 	.string "The boy who couldn't run to the end\n"
