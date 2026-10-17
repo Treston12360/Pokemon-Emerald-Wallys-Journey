@@ -1296,7 +1296,7 @@
               {
                 "min_level": 15,
                 "max_level": 20,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_ANORITH"
               }
             ]
           },
@@ -2522,7 +2522,7 @@
               {
                 "min_level": 15,
                 "max_level": 20,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_LILEEP"
               }
             ]
           }
@@ -6034,7 +6034,7 @@
               {
                 "min_level": 33,
                 "max_level": 33,
-                "species": "SPECIES_GOLBAT"
+                "species": "SPECIES_KABUTO"
               },
               {
                 "min_level": 36,
@@ -6103,7 +6103,7 @@
               {
                 "min_level": 33,
                 "max_level": 33,
-                "species": "SPECIES_GOLBAT"
+                "species": "SPECIES_ARCTOZOLT"
               },
               {
                 "min_level": 36,
@@ -6193,7 +6193,7 @@
               {
                 "min_level": 40,
                 "max_level": 45,
-                "species": "SPECIES_WAILMER"
+                "species": "SPECIES_DRACOVISH"
               }
             ]
           }
@@ -6347,7 +6347,7 @@
               {
                 "min_level": 40,
                 "max_level": 45,
-                "species": "SPECIES_WAILMER"
+                "species": "SPECIES_ARCTOVISH"
               }
             ]
           }
@@ -6416,7 +6416,7 @@
               {
                 "min_level": 36,
                 "max_level": 36,
-                "species": "SPECIES_GOLBAT"
+                "species": "SPECIES_OMANYTE"
               }
             ]
           }
@@ -7425,7 +7425,7 @@
               {
                 "min_level": 35,
                 "max_level": 40,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_AERODACTYL"
               }
             ]
           }
@@ -10314,7 +10314,7 @@
               {
                 "min_level": 33,
                 "max_level": 33,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_DRACOZOLT"
               }
             ]
           }
