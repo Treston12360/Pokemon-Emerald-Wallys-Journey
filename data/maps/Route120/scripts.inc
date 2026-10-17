@@ -377,8 +377,11 @@ Route120_Text_StevenIllWaitHere:
 	.string "I'll wait here, so you can get ready.$"
 
 Route120_Text_StevenReadyForBattle:
-	.string "STEVEN: {PLAYER}{KUN}, are your POKéMON\n"
-	.string "ready for battle?$"
+	.string "STEVEN: Are you ready?\p"
+	.string "The DEVON SCOPE shows what our\n"
+	.string "eyes can't see. It can't tell us\n"
+	.string "whether a POKéMON is hostile.\p"
+	.string "That's something we must learn.$"
 
 Route120_Text_StevenShowMeYourPower:
 	.string "STEVEN: {PLAYER}{KUN}, show me your true\n"
@@ -401,11 +404,13 @@ Route120_Text_StevenGiveDevonScope:
 	.string "concealed POKéMON.$"
 
 Route120_Text_StevenGoodbye:
-	.string "STEVEN: {PLAYER}{KUN}.\p"
-	.string "I enjoy seeing POKéMON and TRAINERS\n"
-	.string "who strive together.\p"
-	.string "I think you're doing great.\p"
-	.string "Well, let's meet again somewhere.$"
+	.string "STEVEN: You handled that well.\p"
+	.string "My father's company built the\n"
+	.string "DEVON SCOPE to solve a problem.\p"
+	.string "But any invention can be misused.\n"
+	.string "What matters is our judgment.\p"
+	.string "Keep asking questions, {PLAYER}.\n"
+	.string "That's how we grow stronger.$"
 
 Kecleon_Text_SomethingUnseeable:
 	.string "Something unseeable is in the way.$"
