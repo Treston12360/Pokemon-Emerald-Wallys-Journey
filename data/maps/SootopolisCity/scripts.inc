@@ -1281,10 +1281,9 @@ SootopolisCity_EventScript_Wallace::
 	end
 
 SootopolisCity_EventScript_GiveWaterfall::
-	msgbox SootopolisCity_Text_ThankYouForHelpAcceptThis, MSGBOX_DEFAULT
-	giveitem ITEM_HM_WATERFALL
+	msgbox SootopolisCity_Text_NoHmWaterfall, MSGBOX_DEFAULT
 	setflag FLAG_RECEIVED_HM_WATERFALL
-	msgbox SootopolisCity_Text_ExplainWaterfallGoToGym, MSGBOX_DEFAULT
+	msgbox SootopolisCity_Text_NoHmWaterfallAdvice, MSGBOX_DEFAULT
 	closemessage
 	call_if_eq VAR_FACING, DIR_NORTH, SootopolisCity_EventScript_WallaceMoveFromGym
 	call_if_eq VAR_FACING, DIR_EAST, SootopolisCity_EventScript_WallaceMoveFromGym
@@ -1698,3 +1697,11 @@ SootopolisCity_Text_DazzledByMentor:
 	.string "WALLACE: I'm sure that you will be\n"
 	.string "dazzled by my mentor's breathtakingly\l"
 	.string "elegant battle style.$"
+
+SootopolisCity_Text_NoHmWaterfall:
+	.string "Thank you for saving our city.\\p"
+	.string "HOENN owes you a great deal!$"
+
+SootopolisCity_Text_NoHmWaterfallAdvice:
+	.string "The RAIN BADGE will let you\\n"
+	.string "climb waterfalls. Visit the GYM!$"
