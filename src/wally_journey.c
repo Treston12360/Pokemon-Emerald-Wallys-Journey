@@ -554,7 +554,7 @@ bool32 WallyJourney_GetForecast(u32 mapSec, u8 *now, u8 *later)
 
 // ------------------------------------------------------ seasonal foliage
 // Tileset palettes of outdoor maps are recoloured per season when they load:
-// fresh yellow-green spring, untouched summer, red/orange/gold autumn (each
+// fresh yellow-green spring with pink blossoms on some tree types, untouched summer, red/orange/gold autumn (each
 // palette gets its own colour so trees don't all turn the same), dull winter
 // green on the coast and frosted pale foliage and snow-covered ground on the
 // snowy highland routes.
@@ -610,9 +610,19 @@ static u16 SeasonalColor(u16 color, u32 mode, u32 slot)
         switch (mode)
         {
         case FOLIAGE_SPRING:
-            h -= 14;
-            s = min(255, s * 120 / 100);
-            v = min(31, v + 2);
+            if (slot % 4 == 1)
+            {
+                // Blossom trees: some tree types flower pink in spring.
+                h = 335 + (h - 110) / 8;
+                s = s * 55 / 100;
+                v = min(31, v + 3);
+            }
+            else
+            {
+                h -= 14;
+                s = min(255, s * 120 / 100);
+                v = min(31, v + 2);
+            }
             break;
         case FOLIAGE_AUTUMN:
             h = sAutumnHues[slot % ARRAY_COUNT(sAutumnHues)] + (v - 16) / 2 + (h - 110) / 8;
