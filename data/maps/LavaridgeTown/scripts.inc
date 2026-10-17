@@ -228,7 +228,12 @@ LavaridgeTown_Text_BatheInHotSpringsEveryDay_W0_Script:
 	end
 
 LavaridgeTown_EventScript_HotSpringsOldWoman1::
+	goto_if_set FLAG_SYS_GAME_CLEAR, LavaridgeTown_EventScript_SpringsAfterChampion
 	msgbox LavaridgeTown_Text_IfPokemonInHotSprings, MSGBOX_NPC
+	end
+
+LavaridgeTown_EventScript_SpringsAfterChampion::
+	msgbox LavaridgeTown_Text_SpringsAfterChampion, MSGBOX_NPC
 	end
 
 LavaridgeTown_EventScript_HotSpringsOldWoman2::
@@ -236,7 +241,12 @@ LavaridgeTown_EventScript_HotSpringsOldWoman2::
 	end
 
 LavaridgeTown_EventScript_ExpertF::
+	goto_if_set FLAG_SYS_GAME_CLEAR, LavaridgeTown_EventScript_ExpertAfterChampion
 	msgbox LavaridgeTown_Text_OhYouLikeHotSprings, MSGBOX_NPC
+	end
+
+LavaridgeTown_EventScript_ExpertAfterChampion::
+	msgbox LavaridgeTown_Text_FlanneryReliefAfterChampion, MSGBOX_NPC
 	end
 
 LavaridgeTown_EventScript_EggWoman::
@@ -425,3 +435,19 @@ LavaridgeTown_Text_HotSpringsNeverRunDry_W0:
 	.string "The springs bubbled strange that\n"
 	.string "day. I don't want to know how close\l"
 	.string "it was.$"
+
+LavaridgeTown_Text_SpringsAfterChampion:
+	.string "The hot springs were closed\n"
+	.string "when the mountain shook.\p"
+	.string "Now they're open again.\n"
+	.string "We test the water each week.\p"
+	.string "Even a place for resting\n"
+	.string "needs someone to look after it.$"
+
+LavaridgeTown_Text_FlanneryReliefAfterChampion:
+	.string "FLANNERY helped bring food\n"
+	.string "to families after the storm.\p"
+	.string "She still worries whether\n"
+	.string "she's ready to lead.\p"
+	.string "But leadership isn't never\n"
+	.string "being afraid, is it?$"
