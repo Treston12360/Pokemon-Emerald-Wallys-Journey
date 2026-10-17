@@ -2645,7 +2645,7 @@
               {
                 "min_level": 38,
                 "max_level": 38,
-                "species": "SPECIES_ZWEILOUS"
+                "species": "SPECIES_SOLROCK"
               },
               {
                 "min_level": 40,
@@ -5970,7 +5970,7 @@
               {
                 "min_level": 36,
                 "max_level": 36,
-                "species": "SPECIES_HYDREIGON"
+                "species": "SPECIES_GOLBAT"
               }
             ]
           }
@@ -7936,7 +7936,7 @@
               {
                 "min_level": 39,
                 "max_level": 39,
-                "species": "SPECIES_GARCHOMP"
+                "species": "SPECIES_GABITE"
               },
               {
                 "min_level": 38,
@@ -9267,7 +9267,7 @@
               {
                 "min_level": 37,
                 "max_level": 37,
-                "species": "SPECIES_DRAGONITE"
+                "species": "SPECIES_DRAGONAIR"
               },
               {
                 "min_level": 38,
@@ -10644,7 +10644,7 @@
               {
                 "min_level": 38,
                 "max_level": 38,
-                "species": "SPECIES_TYRANITAR"
+                "species": "SPECIES_PUPITAR"
               },
               {
                 "min_level": 43,
