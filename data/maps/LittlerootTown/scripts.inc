@@ -908,7 +908,7 @@ LittlerootTown_Text_OurNewHomeLetsGoInside:
 	.string "MOM: {PLAYER}, we're here, honey!\p"
 	.string "Thank you for riding up front with\n"
 	.string "the movers all the way from the port.\p"
-	.string "After the ferry from KANTO, we just\n"
+	.string "After the ferry from JOHTO, we just\n"
 	.string "couldn't stretch the money for one\l"
 	.string "more ticket. I know it was a long day.\p"
 	.string "And thanks for checking the boxes\n"

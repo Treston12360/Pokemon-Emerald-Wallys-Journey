@@ -1304,7 +1304,7 @@ PetalburgCity_Gym_Text_DadHappyAndSad:
 	.string "But as your father… Hm.\n"
 	.string "There's something I should have\l"
 	.string "said a long time ago.\p"
-	.string "Back in KANTO, we were barely\n"
+	.string "Back in JOHTO, we were barely\n"
 	.string "getting by. Your mother worked\l"
 	.string "double shifts. I trained at night.\p"
 	.string "I came to HOENN to become strong\n"

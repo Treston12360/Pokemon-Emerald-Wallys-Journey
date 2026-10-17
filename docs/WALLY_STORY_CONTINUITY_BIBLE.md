@@ -28,9 +28,9 @@ Tone rules: hopeful, warm, funny in places. Subtext over monologue. Flawed but s
 ## 2. Continuity rules (lore bible)
 
 ### 2.1 Family and origins
-- The player's family moved **from Kanto to Hoenn** (owner-approved continuity change). Any line implying a Johto origin must be changed. **Audit 2026-10-16:** no dialogue string names Johto as the family's home (only the postgame Johto-starter event variable uses the word). Re-check whenever Mom or Norman lines are rewritten.
-- In Kanto money was tight: Mom worked double shifts, Norman trained at night. Norman moved first to earn Gym Leader accreditation in Petalburg; the family followed once he could afford a house in Littleroot.
-- **The truck:** the family took the ferry from Kanto. They couldn't afford another ticket for the overland leg, so the movers let the player ride **in the cab**. After the truck parked in Littleroot, the player climbed into the back to check the boxes. That's where the game opens. **Done** (no driving shot; Mom explains).
+- The player's family moved **from Johto to Hoenn** (owner correction 2026-10-17; matches original Emerald). **Audit 2026-10-17:** Mom's arrival line and Norman's Gym talk say Johto; no line gives the family a Kanto origin. The Lilycove "I came from KANTO" NPC is a stranger, not family, and stays.
+- In Johto money was tight: Mom worked double shifts, Norman trained at night. Norman moved first to earn Gym Leader accreditation in Petalburg; the family followed once he could afford a house in Littleroot.
+- **The truck:** the family took the ferry from Johto. They couldn't afford another ticket for the overland leg, so the movers let the player ride **in the cab**. After the truck parked in Littleroot, the player climbed into the back to check the boxes. That's where the game opens. **Done** (no driving shot; Mom explains).
 
 ### 2.2 The Pokémon League (Hoenn)
 - The **League accredits Gym Leaders**. A Gym Leader awards a badge when a challenger beats them. Eight badges let a Trainer through the Victory Road gate.
@@ -70,7 +70,7 @@ Each row: what happens, where, the gate (flag/var), what changes in Wally's Jour
 | # | Beat | Map(s) | Gate | Wally's Journey change | Status |
 |---|---|---|---|---|---|
 | 1 | Arrival in Littleroot | InsideOfTruck → LittlerootTown | `VAR_LITTLEROOT_INTRO_STATE` | Truck already parked; Mom explains the cab ride and money | **done** |
-| 2 | Mom, clock, meet rival's family | Littleroot houses | intro vars | Mom mentions Norman will visit "when the Gym lets him"; Kanto references fixed | planned |
+| 2 | Mom, clock, meet rival's family | Littleroot houses | intro vars | Mom mentions Norman will visit "when the Gym lets him"; origin lines say Johto | planned |
 | 3 | Birch attacked; starter | Route101 | `FLAG_RESCUED_BIRCH` | Birch's later dialogue gives a reason he trusts the player: Norman's reputation plus how calmly the player acted | **done** |
 | 4 | Rival battle, Pokédex | Route103, Birch's lab | `FLAG_SYS_POKEDEX_GET` | Birch's Pokédex task becomes real research: odd migrations and weather he wants logged | **done** |
 | 5 | Norman's Gym; Wally catches Ralts | PetalburgCity_Gym, Route102 | `VAR_PETALBURG_GYM_STATE` | Norman is warm but clearly busy; Wally shy and sickly | keep (light edits planned) |
@@ -125,7 +125,7 @@ Each row: what happens, where, the gate (flag/var), what changes in Wally's Jour
 
 | Character | Knows at start | Learns | Never knows |
 |---|---|---|---|
-| Player | Moved from Kanto; dad is a Gym Leader | Everything they witness | — |
+| Player | Moved from Johto; dad is a Gym Leader | Everything they witness | — |
 | Norman | Family finances, his own absence | Player's growth (badge 5); Wally's rise (news) | Details of the Sootopolis crisis until after |
 | Mom | Same as Norman | Player's adventures through calls | — |
 | Birch | Norman's reputation | Migration data the player logs ties to Magma/Aqua (after #31) | — |
