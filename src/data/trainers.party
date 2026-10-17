@@ -4597,45 +4597,45 @@ Double Battle: No
 AI: Basic Trainer / Force Setup First Turn
 Mugshot: Purple
 
-Mightyena
-Level: 46
+SPECIES_MIGHTYENA @ ITEM_QUICK_CLAW
+Level: 51
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Roar
-- Double Edge
-- Sand Attack
-- Crunch
+- MOVE_CRUNCH
+- MOVE_SUPER_FANG
+- MOVE_YAWN
+- MOVE_SCARY_FACE
 
-Shiftry
-Level: 48
+SPECIES_MURKROW
+Level: 51
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Torment
-- Double Team
-- Swagger
-- Extrasensory
+- MOVE_SKY_ATTACK
+- MOVE_PURSUIT
+- MOVE_STEEL_WING
+- MOVE_HAZE
 
-Cacturne
-Level: 46
+SPECIES_SHIFTRY
+Level: 52
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Leech Seed
-- Feint Attack
-- Needle Arm
-- Cotton Spore
+- MOVE_LEAF_BLADE
+- MOVE_FAINT_ATTACK
+- MOVE_AERIAL_ACE
+- MOVE_EXTRASENSORY
 
-Crawdaunt
-Level: 48
+SPECIES_CRAWDAUNT @ ITEM_SCOPE_LENS
+Level: 52
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Surf
-- Swords Dance
-- Strength
-- Facade
+- MOVE_CRABHAMMER
+- MOVE_SWORDS_DANCE
+- MOVE_CRUNCH
+- MOVE_SLUDGE_BOMB
 
-Absol @ Sitrus Berry
-Level: 49
+SPECIES_ABSOL @ ITEM_FIGY_BERRY
+Level: 53
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Aerial Ace
-- Rock Slide
-- Swords Dance
-- Slash
+- MOVE_CRUNCH
+- MOVE_IRON_TAIL
+- MOVE_ROCK_SLIDE
+- MOVE_AERIAL_ACE
 
 === TRAINER_PHOEBE ===
 Name: PHOEBE
@@ -4648,45 +4648,45 @@ Double Battle: No
 AI: Basic Trainer
 Mugshot: Green
 
-Dusclops
-Level: 48
+SPECIES_SABLEYE @ ITEM_SITRUS_BERRY
+Level: 52
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Shadow Punch
-- Confuse Ray
-- Curse
-- Protect
+- MOVE_MOONLIGHT
+- MOVE_CRUNCH
+- MOVE_SHADOW_BALL
+- MOVE_CONFUSE_RAY
 
-Banette
-Level: 49
+SPECIES_BANETTE
+Level: 53
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Shadow Ball
-- Grudge
-- Will O Wisp
-- Feint Attack
+- MOVE_SHADOW_BALL
+- MOVE_THUNDERBOLT
+- MOVE_REVENGE
+- MOVE_DESTINY_BOND
 
-Sableye
-Level: 50
+SPECIES_NINETALES @ ITEM_WHITE_HERB
+Level: 52
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Shadow Ball
-- Double Team
-- Night Shade
-- Feint Attack
+- MOVE_OVERHEAT
+- MOVE_WILL_O_WISP
+- MOVE_SHADOW_BALL
+- MOVE_CONFUSE_RAY
 
-Banette
-Level: 49
+SPECIES_MEDICHAM @ ITEM_SALAC_BERRY
+Level: 52
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Shadow Ball
-- Psychic
-- Thunderbolt
-- Facade
+- MOVE_PSYCHIC
+- MOVE_HI_JUMP_KICK
+- MOVE_ENDURE
+- MOVE_REVERSAL
 
-Dusclops @ Sitrus Berry
-Level: 51
+SPECIES_DUSCLOPS @ ITEM_LEFTOVERS
+Level: 54
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Shadow Ball
-- Ice Beam
-- Rock Slide
-- Earthquake
+- MOVE_SHADOW_BALL
+- MOVE_ICE_BEAM
+- MOVE_ROCK_SLIDE
+- MOVE_EARTHQUAKE
 
 === TRAINER_GLACIA ===
 Name: GLACIA
@@ -4699,45 +4699,45 @@ Double Battle: No
 AI: Basic Trainer
 Mugshot: Pink
 
-Sealeo
-Level: 50
+SPECIES_GLALIE
+Level: 54
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Encore
-- Body Slam
-- Hail
-- Ice Ball
+- MOVE_BLIZZARD
+- MOVE_WATER_PULSE
+- MOVE_SHADOW_BALL
+- MOVE_HAIL
 
-Glalie
-Level: 50
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Light Screen
-- Crunch
-- Icy Wind
-- Ice Beam
-
-Sealeo
-Level: 52
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Attract
-- Double Edge
-- Hail
-- Blizzard
-
-Glalie
-Level: 52
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Shadow Ball
-- Explosion
-- Hail
-- Ice Beam
-
-Walrein @ Sitrus Berry
+SPECIES_SNEASEL @ ITEM_SCOPE_LENS
 Level: 53
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- MOVE_FAINT_ATTACK
+- MOVE_BLIZZARD
+- MOVE_SWORDS_DANCE
+- MOVE_SLASH
+
+SPECIES_CASTFORM
+Level: 53
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- MOVE_WEATHER_BALL
+- MOVE_HYDRO_PUMP
+- MOVE_HAIL
+- MOVE_THUNDERBOLT
+
+SPECIES_PILOSWINE @ ITEM_CHESTO_BERRY
+Level: 54
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- MOVE_EARTHQUAKE
+- MOVE_BLIZZARD
+- MOVE_ROCK_SLIDE
+- MOVE_REST
+
+SPECIES_WALREIN @ ITEM_LEFTOVERS
+Level: 55
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Surf
-- Body Slam
-- Ice Beam
-- Sheer Cold
+- MOVE_SURF
+- MOVE_BLIZZARD
+- MOVE_HAIL
+- MOVE_SHEER_COLD
 
 === TRAINER_DRAKE ===
 Name: DRAKE
@@ -4750,45 +4750,45 @@ Double Battle: No
 AI: Basic Trainer
 Mugshot: Blue
 
-Shelgon
-Level: 52
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Rock Tomb
-- Dragon Claw
-- Protect
-- Double Edge
-
-Altaria
+SPECIES_FLYGON @ ITEM_QUICK_CLAW
 Level: 54
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Double Edge
-- Dragon Breath
-- Dragon Dance
-- Aerial Ace
+- MOVE_EARTHQUAKE
+- MOVE_FLAMETHROWER
+- MOVE_SIGNAL_BEAM
+- MOVE_CRUNCH
 
-Kingdra
-Level: 53
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Smokescreen
-- Dragon Dance
-- Surf
-- Body Slam
-
-Flygon
-Level: 53
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Flamethrower
-- Crunch
-- Dragon Breath
-- Earthquake
-
-Salamence @ Sitrus Berry
+SPECIES_ALTARIA @ ITEM_SHARP_BEAK
 Level: 55
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- MOVE_SKY_ATTACK
+- MOVE_EARTHQUAKE
+- MOVE_DRAGON_DANCE
+- MOVE_DOUBLE_EDGE
+
+SPECIES_HUNTAIL @ ITEM_PETAYA_BERRY
+Level: 53
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- MOVE_BODY_SLAM
+- MOVE_CRUNCH
+- MOVE_HYDRO_PUMP
+- MOVE_CONFUSE_RAY
+
+SPECIES_KINGDRA
+Level: 55
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_SURF
+- MOVE_DRAGON_BREATH
+
+SPECIES_SALAMENCE @ ITEM_LEFTOVERS
+Level: 56
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Flamethrower
-- Dragon Claw
-- Rock Slide
-- Crunch
+- MOVE_FLAMETHROWER
+- MOVE_DRAGON_CLAW
+- MOVE_ROCK_SLIDE
+- MOVE_CRUNCH
 
 === TRAINER_ROXANNE_1 ===
 Name: ROXANNE
@@ -11008,13 +11008,19 @@ Music: Female
 Double Battle: No
 AI: Check Bad Move / Try To Faint / Force Setup First Turn
 
-Wingull
+SPECIES_SPOINK
 Level: 13
 IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+- MOVE_TACKLE
+- MOVE_CONFUSION
+- MOVE_ODOR_SLEUTH
 
-Treecko
+SPECIES_TREECKO
 Level: 15
 IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+- MOVE_LEER
+- MOVE_ABSORB
+- MOVE_QUICK_ATTACK
 
 === TRAINER_MAXIE_MAGMA_HIDEOUT ===
 Name: MAXIE
@@ -12345,21 +12351,45 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Tropius
-Level: 31
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_KECLEON
+Level: 36
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYCHIC
 
-Slugma
-Level: 32
+SPECIES_GRUMPIG
+Level: 37
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYCHIC
 
-Pelipper
-Level: 32
+SPECIES_HERACROSS
+Level: 36
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_BRICK_BREAK
+- MOVE_COUNTER
+- MOVE_TWINEEDLE
+- MOVE_TAKE_DOWN
 
-Grovyle
-Level: 34
+SPECIES_TORKOAL
+Level: 36
+IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_CURSE
+- MOVE_BODY_SLAM
+- MOVE_FLAMETHROWER
+- MOVE_AMNESIA
+
+SPECIES_SCEPTILE
+Level: 38
 IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+- MOVE_GROWTH
+- MOVE_SLASH
+- MOVE_ROCK_TOMB
+- MOVE_LEAF_BLADE
 
 === TRAINER_MAY_LILYCOVE_TREECKO ===
 Name: MAY
@@ -12370,21 +12400,45 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Tropius
-Level: 31
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_KECLEON
+Level: 36
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYCHIC
 
-Pelipper
-Level: 32
+SPECIES_GRUMPIG
+Level: 37
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYCHIC
 
-Ludicolo
-Level: 32
+SPECIES_DONPHAN
+Level: 36
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_EARTHQUAKE
+- MOVE_FLAIL
+- MOVE_TAKE_DOWN
+- MOVE_ROLLOUT
 
-Combusken
-Level: 34
+SPECIES_WAILORD
+Level: 36
+IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_SURF
+- MOVE_ICE_BEAM
+- MOVE_ASTONISH
+- MOVE_AMNESIA
+
+SPECIES_BLAZIKEN
+Level: 38
 IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+- MOVE_BLAZE_KICK
+- MOVE_ROLLING_KICK
+- MOVE_BULK_UP
+- MOVE_MACH_PUNCH
 
 === TRAINER_MAY_LILYCOVE_TORCHIC ===
 Name: MAY
@@ -12395,21 +12449,45 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Tropius
-Level: 31
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_KECLEON
+Level: 36
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYCHIC
 
-Ludicolo
-Level: 32
+SPECIES_GRUMPIG
+Level: 37
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYCHIC
 
-Slugma
-Level: 32
+SPECIES_PINSIR
+Level: 36
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_SEISMIC_TOSS
+- MOVE_REVENGE
+- MOVE_TWINEEDLE
+- MOVE_BRICK_BREAK
 
-Marshtomp
-Level: 34
+SPECIES_BRELOOM
+Level: 36
+IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_GIGA_DRAIN
+- MOVE_HEADBUTT
+- MOVE_COUNTER
+- MOVE_BRICK_BREAK
+
+SPECIES_SWAMPERT
+Level: 38
 IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+- MOVE_MUD_SHOT
+- MOVE_ROCK_TOMB
+- MOVE_TAKE_DOWN
+- MOVE_MUDDY_WATER
 
 === TRAINER_JONAH ===
 Name: JONAH
@@ -14145,13 +14223,20 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Lotad
+SPECIES_SPOINK
 Level: 13
 IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+- MOVE_TACKLE
+- MOVE_CONFUSION
+- MOVE_ODOR_SLEUTH
 
-Torchic
+SPECIES_TORCHIC
 Level: 15
 IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+- MOVE_GROWL
+- MOVE_PECK
+- MOVE_EMBER
+- MOVE_SAND_ATTACK
 
 === TRAINER_MAY_RUSTBORO_TORCHIC ===
 Name: MAY
@@ -14162,13 +14247,20 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Torkoal
+SPECIES_SPOINK
 Level: 13
 IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+- MOVE_TACKLE
+- MOVE_CONFUSION
+- MOVE_ODOR_SLEUTH
 
-Mudkip
+SPECIES_MUDKIP
 Level: 15
 IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+- MOVE_TACKLE
+- MOVE_GROWL
+- MOVE_MUD_SLAP
+- MOVE_WATER_GUN
 
 === TRAINER_ROXANNE_2 ===
 Name: ROXANNE
@@ -15880,53 +15972,53 @@ Items: Full Restore / Full Restore / Full Restore / Full Restore
 Double Battle: No
 AI: Basic Trainer
 
-Skarmory
-Level: 77
+SPECIES_SKARMORY @ ITEM_LIECHI_BERRY
+Level: 57
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Toxic
-- Aerial Ace
-- Spikes
-- Steel Wing
+- MOVE_TOXIC
+- MOVE_SKY_ATTACK
+- MOVE_STEEL_WING
+- MOVE_WHIRLWIND
 
-Claydol
-Level: 75
+SPECIES_CLAYDOL @ ITEM_QUICK_CLAW
+Level: 56
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Reflect
-- Light Screen
-- Ancient Power
-- Earthquake
+- MOVE_PSYCHIC
+- MOVE_EARTHQUAKE
+- MOVE_LIGHT_SCREEN
+- MOVE_EXPLOSION
 
-Aggron
-Level: 76
+SPECIES_AGGRON @ ITEM_SALAC_BERRY
+Level: 56
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Thunder
-- Earthquake
-- Solar Beam
-- Dragon Claw
+- MOVE_THUNDER_WAVE
+- MOVE_EARTHQUAKE
+- MOVE_ROCK_SLIDE
+- MOVE_IRON_TAIL
 
-Cradily
-Level: 76
+SPECIES_CRADILY @ ITEM_LEFTOVERS
+Level: 57
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Giga Drain
-- Ancient Power
-- Ingrain
-- Confuse Ray
+- MOVE_ANCIENT_POWER
+- MOVE_LEECH_SEED
+- MOVE_RECOVER
+- MOVE_CURSE
 
-Armaldo
-Level: 76
+SPECIES_ARMALDO @ ITEM_CHOICE_BAND
+Level: 57
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Water Pulse
-- Ancient Power
-- Aerial Ace
-- Slash
+- MOVE_ROCK_BLAST
+- MOVE_TWINEEDLE
+- MOVE_IRON_TAIL
+- MOVE_FACADE
 
-Metagross @ Sitrus Berry
-Level: 78
+SPECIES_METAGROSS @ ITEM_LUM_BERRY
+Level: 58
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Earthquake
-- Psychic
-- Meteor Mash
-- Shadow Ball
+- MOVE_EARTHQUAKE
+- MOVE_PSYCHIC
+- MOVE_METEOR_MASH
+- MOVE_AGILITY
 
 === TRAINER_ANABEL ===
 Name: ANABEL
