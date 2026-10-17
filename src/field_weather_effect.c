@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "battle_anim.h"
 #include "event_object_movement.h"
 #include "fieldmap.h"
@@ -2527,7 +2528,7 @@ u8 GetSavedWeather(void)
 void SetSavedWeatherFromCurrMapHeader(void)
 {
     enum OverworldWeather oldWeather = gSaveBlock1Ptr->weather;
-    gSaveBlock1Ptr->weather = TranslateWeatherNum(gMapHeader.weather);
+    gSaveBlock1Ptr->weather = WallyJourney_SeasonalWeather(TranslateWeatherNum(gMapHeader.weather));
     UpdateRainCounter(gSaveBlock1Ptr->weather, oldWeather);
 }
 

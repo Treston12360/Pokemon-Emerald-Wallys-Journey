@@ -6,6 +6,11 @@
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "pokemon.h"
+#include "rtc.h"
+#include "battle.h"
+#include "constants/weather.h"
+#include "constants/map_types.h"
+#include "constants/maps.h"
 
 #define WALLY_VAR_PEAK_BADGES   VAR_UNUSED_0x40F7
 #define WALLY_VAR_BIOME_MASK    VAR_UNUSED_0x40F8
@@ -127,7 +132,74 @@ bool32 WallyJourney_ZMovesEnabled(void) { return !FlagGet(FLAG_WALLY_Z_MOVES_OFF
 // Ascent, which is what lets Rayquaza Mega Evolve without a Mega Stone.
 void WallyJourney_GiveWildRayquazaDragonAscent(void)
 {
-    struct Pokemon *mon = &gEnemyParty[0];
+    struct Pokemon *mon = &gParties[B_TRAINER_OPPONENT_A][0];
     if (GetMonData(mon, MON_DATA_SPECIES) == SPECIES_RAYQUAZA)
         SetMonMoveSlot(mon, MOVE_DRAGON_ASCENT, 0);
+}
+
+// ---------------------------------------------------------------- seasons
+enum WallySeason WallyJourney_GetSeason(void)
+{
+    u32 month = GetMonth();
+    if (month >= MONTH_MAR && month <= MONTH_MAY) return WALLY_SEASON_SPRING;
+    if (month >= MONTH_JUN && month <= MONTH_AUG) return WALLY_SEASON_SUMMER;
+    if (month >= MONTH_SEP && month <= MONTH_NOV) return WALLY_SEASON_AUTUMN;
+    if (month == MONTH_DEC || month == MONTH_JAN || month == MONTH_FEB) return WALLY_SEASON_WINTER;
+    return WALLY_SEASON_SUMMER; // no or broken clock: plain Hoenn summer, no tint surprises
+}
+
+// Daytime tint per season, layered into the engine's day/night blend.
+// Colors are per-channel multipliers (R low byte), 255 = unchanged.
+#define TINT(r, g, b) ((r) | ((g) << 8) | ((b) << 16))
+struct BlendSettings WallyJourney_GetSeasonDayBlend(void)
+{
+    struct BlendSettings blend = {.coeff = 0, .blendColor = 0, .isTint = FALSE};
+    switch (WallyJourney_GetSeason())
+    {
+    case WALLY_SEASON_SPRING: blend.isTint = TRUE; blend.blendColor = TINT(250, 238, 246); break; // soft blossom pink
+    case WALLY_SEASON_SUMMER: break;                                                              // classic bright Hoenn
+    case WALLY_SEASON_AUTUMN: blend.isTint = TRUE; blend.blendColor = TINT(255, 214, 168); break; // amber leaves
+    case WALLY_SEASON_WINTER: blend.isTint = TRUE; blend.blendColor = TINT(214, 226, 255); break; // cool, pale light
+    }
+    return blend;
+}
+#undef TINT
+
+// Hoenn is tropical: snow only falls on high ground in winter.
+static bool32 IsSnowCountry(void)
+{
+    u16 map = gSaveBlock1Ptr->location.mapNum | (gSaveBlock1Ptr->location.mapGroup << 8);
+    return map == MAP_MT_PYRE_EXTERIOR || map == MAP_MT_PYRE_SUMMIT
+        || map == MAP_ROUTE114 || map == MAP_ROUTE115;
+}
+
+// Seasonal weather on outdoor maps whose normal weather is clear or cloudy.
+// Stable for a whole day per map. Story weather (Groudon/Kyogre crisis,
+// scripted maps) is never touched.
+u32 WallyJourney_SeasonalWeather(u32 weather)
+{
+    u32 roll;
+    enum MapType type = gMapHeader.mapType;
+    if (weather != WEATHER_SUNNY && weather != WEATHER_SUNNY_CLOUDS)
+        return weather;
+    if (FlagGet(FLAG_SYS_WEATHER_CTRL))
+        return weather;
+    if (type != MAP_TYPE_ROUTE && type != MAP_TYPE_TOWN && type != MAP_TYPE_CITY)
+        return weather;
+    RtcCalcLocalTime();
+    roll = ((u32)gLocalTime.days * 31u + gSaveBlock1Ptr->location.mapNum * 7u + gSaveBlock1Ptr->location.mapGroup * 13u) % 100;
+    switch (WallyJourney_GetSeason())
+    {
+    case WALLY_SEASON_SPRING:
+        return roll < 25 ? WEATHER_RAIN : weather;                       // spring showers
+    case WALLY_SEASON_SUMMER:
+        return roll < 10 ? WEATHER_RAIN_THUNDERSTORM : weather;          // summer storms
+    case WALLY_SEASON_AUTUMN:
+        return roll < 30 ? WEATHER_SUNNY_CLOUDS : weather;               // grey autumn days
+    case WALLY_SEASON_WINTER:
+        if (IsSnowCountry())
+            return roll < 60 ? WEATHER_SNOW : weather;                   // mountain snow
+        return roll < 15 ? WEATHER_RAIN : weather;                       // cold coastal rain
+    }
+    return weather;
 }
