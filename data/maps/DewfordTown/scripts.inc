@@ -54,8 +54,13 @@ DewfordTown_EventScript_SailBackToPetalburg::
 	end
 
 DewfordTown_EventScript_Woman::
+	goto_if_set FLAG_SYS_GAME_CLEAR, DewfordTown_EventScript_WomanAfterChampion
 	goto_if_set FLAG_DEFEATED_SOOTOPOLIS_GYM, DewfordTown_Text_TinyIslandCommunityAftermath_Script
 	msgbox DewfordTown_Text_TinyIslandCommunity, MSGBOX_NPC
+	end
+
+DewfordTown_EventScript_WomanAfterChampion:
+	msgbox DewfordTown_Text_IslandAfterChampion, MSGBOX_NPC
 	end
 
 DewfordTown_Text_TinyIslandCommunityAftermath_Script:
@@ -803,3 +808,12 @@ DewfordTown_Text_TinyIslandCommunityAftermath:
 	.string "everyone picks up on it right away.\p"
 	.string "The trend right now? Storm kits.\n"
 	.string "Every house has one by the door.$"
+
+DewfordTown_Text_IslandAfterChampion:
+	.string "After the storms, BRAWLY helped\n"
+	.string "bring supplies over from shore.\p"
+	.string "People came from other islands\n"
+	.string "to help mend our boats.\p"
+	.string "Then we heard you were CHAMPION!\n"
+	.string "PEEKO's owner nearly fell off\n"
+	.string "his chair cheering.$"
