@@ -8107,6 +8107,9 @@ static u32 ComputeCaptureOdds(u32 wildMonBattler, u32 playerBattler)
     else
         catchRate = GetBattleMonCatchRate(battleMon);
 
+    if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI))
+        catchRate = WallyJourney_AdjustCatchRate(battleMon->species, catchRate);
+
     catchRate += ball.flatBonus;
     if (catchRate <= 0)
         catchRate = catchRate + ball.flatBonus;

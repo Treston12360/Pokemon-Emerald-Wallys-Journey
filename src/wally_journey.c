@@ -336,3 +336,22 @@ void WallyJourney_PickFrontierGimmickItem(void)
             missing[count++] = sPool[i];
     gSpecialVar_0x8005 = count ? missing[Random() % count] : ITEM_NONE;
 }
+
+// Catch-rate realism (owner requirement): ordinary species keep their canon
+// rates. Legendary and mythical Pokemon are capped at the hardest canon rate (3),
+// so Mew, Celebi, Shaymin etc. are as hard as Deoxys or Jirachi. Kyogre and
+// Groudon already sit at 3; with only Poke Balls (no Ultra/Timer/Dusk/Master),
+// level 75 and Primal Reversion they are far harder than in vanilla Emerald.
+// Going below 3 would make them near-impossible because the capture math
+// truncates to whole numbers (rate 3 at 1 HP asleep is about 2% per ball).
+s32 WallyJourney_AdjustCatchRate(u32 species, s32 catchRate)
+{
+#if TESTING
+    return catchRate;
+#else
+    const struct SpeciesInfo *info = &gSpeciesInfo[species];
+    if ((info->isRestrictedLegendary || info->isSubLegendary || info->isMythical) && catchRate > 3)
+        return 3;
+    return catchRate;
+#endif
+}
