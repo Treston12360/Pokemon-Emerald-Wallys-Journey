@@ -139,3 +139,11 @@ The above historical details must be checked against newer explicit owner instru
 ## Owner approval of previously suggested features (2026-10-16)
 
 The owner explicitly approved **all previously suggested Wally narrative, exploration, Secret Base, Contest, and Battle Frontier expansions** and reiterated the choice between normal EXP Share and balanced EXP All. **Exception: following Pokémon must always be enabled by default and cannot be disabled through any in-game toggle.** Correct shiny follower appearances remain mandatory. No Dynamax/Gigantamax remains in effect; optional Z-Moves with an Options toggle remain in effect. These decisions supersede older 'suggested' labels and any proposed follower toggle. Features remain requested, not certified implemented.
+
+## Modern move-effectiveness hints — confirmed owner requirement (2026-10-16)
+
+- During move selection, show the modern Pokémon-style effectiveness label for each attacking move against the current opposing Pokémon, **but only after the player has previously encountered that Pokémon species** (seen/registered in Pokédex as appropriate to the game's intended seen-state rules).
+- Labels should communicate **super effective**, **not very effective**, and **no effect** (immunity), with neutral moves shown consistently according to the chosen UI style. Do not reveal type matchup hints for truly unseen species.
+- Calculate hints with current battle typing and relevant known mechanics rather than hardcoded species guesses. Handle dual types, transformations/forms, and temporary type changes where feasible. Distinguish nominal type-chart effectiveness from abilities or other hidden modifiers so the UI does not unfairly reveal unrevealed abilities or claim certainty it cannot support.
+- Integrate neatly into the GBA move-selection UI without interfering with move names, PP, targeting, animations or menu performance. Inspect existing pokeemerald-expansion support and compatible implementations before writing a new system. Test seen vs unseen species, immunity, dual types, and state persistence in emulator.
+- **Status:** Confirmed owner request; implementation and verification have not been established.
