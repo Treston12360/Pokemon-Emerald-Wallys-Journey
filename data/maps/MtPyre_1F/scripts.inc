@@ -37,11 +37,19 @@ MtPyre_1F_Text_ExplainCleanseTag:
 	.string "It will help ward off wild POKéMON.$"
 
 MtPyre_1F_Text_ComeToPayRespects:
-	.string "Did you come to pay your respect\n"
-	.string "to the spirits of departed POKéMON?\p"
-	.string "You must care for your POKéMON a lot.$"
+	.string "Did you come to remember\n"
+	.string "a POKéMON you loved?\p"
+	.string "People travel here from all\n"
+	.string "over HOENN to do that.\p"
+	.string "Some come to grieve. Others\n"
+	.string "come to say thank you.\n"
+	.string "Both are welcome.$"
 
 MtPyre_1F_Text_RestingPlaceOfZigzagoon:
-	.string "This is the final resting place of my\n"
-	.string "ZIGZAGOON. I cherished it…$"
+	.string "My ZIGZAGOON used to bring me\n"
+	.string "anything it found on the road.\p"
+	.string "A pebble. A twig. Once, half\n"
+	.string "a sandwich.\p"
+	.string "I kept the pebble.\n"
+	.string "I don't know why I chose that one.$"
 
