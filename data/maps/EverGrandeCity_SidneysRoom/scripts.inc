@@ -77,15 +77,19 @@ EverGrandeCity_SidneysRoom_Text_IntroSpeech:
 	.string "Come on! Let's have fun!$"
 
 EverGrandeCity_SidneysRoom_Text_Defeat:
-	.string "Well, how do you like that? I lost!\n"
-	.string "Eh, it was fun, so it doesn't matter.$"
+	.string "Hah! You got me!\p"
+	.string "I tried to bait you into\n"
+	.string "a mistake. You didn't bite.\p"
+	.string "That's a good battle!$"
 
 EverGrandeCity_SidneysRoom_Text_PostBattleSpeech:
-	.string "Listen up, because this loser has\n"
-	.string "something worth saying.\p"
-	.string "Couple months back, a skinny kid\n"
-	.string "named WALLY walked in here and\l"
-	.string "flattened me. Smiling the whole time.\p"
-	.string "You've got that same look.\n"
-	.string "Go on. Next room.$"
+	.string "SIDNEY: Know what I like\n"
+	.string "about battling?\p"
+	.string "Someone can surprise you\n"
+	.string "even when you think you've\n"
+	.string "figured them out.\p"
+	.string "WALLY did that when he came\n"
+	.string "through here. Now you have.\p"
+	.string "Don't let anyone tell you\n"
+	.string "your story's already written.$"
 
