@@ -9691,7 +9691,7 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Treecko
+SPECIES_TREECKO
 Level: 5
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
@@ -9704,17 +9704,29 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Wingull
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Slugma
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Grovyle
+SPECIES_SPOINK
 Level: 20
+IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+- MOVE_CONFUSION
+- MOVE_TACKLE
+- MOVE_CONFUSE_RAY
+- MOVE_PSYCH_UP
+
+SPECIES_TORKOAL
+Level: 18
+IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+- MOVE_SMOG
+- MOVE_EMBER
+- MOVE_SMOKESCREEN
+- MOVE_FIRE_SPIN
+
+SPECIES_GROVYLE
+Level: 22
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_ABSORB
+- MOVE_QUICK_ATTACK
+- MOVE_FALSE_SWIPE
+- MOVE_RAZOR_LEAF
 
 === TRAINER_MAY_ROUTE_119_MUDKIP ===
 Name: MAY
@@ -9725,17 +9737,37 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Slugma
-Level: 29
+SPECIES_GRUMPIG
+Level: 34
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYBEAM
 
-Lombre
-Level: 29
+SPECIES_KECLEON
+Level: 33
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYBEAM
 
-Grovyle
-Level: 31
+SPECIES_TORKOAL
+Level: 33
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_CURSE
+- MOVE_BODY_SLAM
+- MOVE_FLAMETHROWER
+- MOVE_SUNNY_DAY
+
+SPECIES_GROVYLE
+Level: 35
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_ROCK_TOMB
+- MOVE_RAZOR_LEAF
+- MOVE_GROWTH
+- MOVE_SLASH
 
 === TRAINER_MAY_ROUTE_103_TREECKO ===
 Name: MAY
@@ -9746,7 +9778,7 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Torchic
+SPECIES_TORCHIC
 Level: 5
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
@@ -9759,17 +9791,29 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Wingull
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Lombre
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Combusken
+SPECIES_SPOINK
 Level: 20
+IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+- MOVE_CONFUSION
+- MOVE_TACKLE
+- MOVE_CONFUSE_RAY
+- MOVE_PSYCH_UP
+
+SPECIES_WAILMER
+Level: 18
+IVs: 1 HP / 1 Atk / 1 Def / 1 SpA / 1 SpD / 1 Spe
+- MOVE_GROWL
+- MOVE_WATER_GUN
+- MOVE_WHIRLPOOL
+- MOVE_ASTONISH
+
+SPECIES_COMBUSKEN
+Level: 22
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_PECK
+- MOVE_FOCUS_ENERGY
+- MOVE_EMBER
+- MOVE_DOUBLE_KICK
 
 === TRAINER_MAY_ROUTE_119_TREECKO ===
 Name: MAY
@@ -9780,17 +9824,37 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Pelipper
-Level: 29
+SPECIES_GRUMPIG
+Level: 34
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYBEAM
 
-Lombre
-Level: 29
+SPECIES_KECLEON
+Level: 33
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYBEAM
 
-Combusken
-Level: 31
+SPECIES_WAILMER
+Level: 33
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_WATER_PULSE
+- MOVE_ICE_BEAM
+- MOVE_GROWL
+- MOVE_ASTONISH
+
+SPECIES_COMBUSKEN
+Level: 35
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_FIRE_PUNCH
+- MOVE_ROLLING_KICK
+- MOVE_BULK_UP
+- MOVE_SUNNY_DAY
 
 === TRAINER_MAY_ROUTE_103_TORCHIC ===
 Name: MAY
@@ -9801,7 +9865,7 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Mudkip
+SPECIES_MUDKIP
 Level: 5
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
@@ -9814,17 +9878,29 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Lombre
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Slugma
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Marshtomp
+SPECIES_SPOINK
 Level: 20
+IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+- MOVE_CONFUSION
+- MOVE_TACKLE
+- MOVE_CONFUSE_RAY
+- MOVE_PSYCH_UP
+
+SPECIES_SHROOMISH
+Level: 18
+IVs: 27 HP / 27 Atk / 27 Def / 27 SpA / 27 SpD / 27 Spe
+- MOVE_TACKLE
+- MOVE_STUN_SPORE
+- MOVE_LEECH_SEED
+- MOVE_MEGA_DRAIN
+
+SPECIES_MARSHTOMP
+Level: 22
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_MUD_SHOT
+- MOVE_ROCK_TOMB
+- MOVE_WATER_GUN
+- MOVE_TACKLE
 
 === TRAINER_MAY_ROUTE_119_TORCHIC ===
 Name: MAY
@@ -9835,17 +9911,37 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer
 
-Lombre
-Level: 29
+SPECIES_GRUMPIG
+Level: 34
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYBEAM
 
-Slugma
-Level: 29
+SPECIES_KECLEON
+Level: 33
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYBEAM
 
-Marshtomp
-Level: 31
+SPECIES_BRELOOM
+Level: 33
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_MEGA_DRAIN
+- MOVE_HEADBUTT
+- MOVE_MACH_PUNCH
+- MOVE_LEECH_SEED
+
+SPECIES_MARSHTOMP
+Level: 35
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+- MOVE_MUD_SHOT
+- MOVE_ROCK_TOMB
+- MOVE_TAKE_DOWN
+- MOVE_BUBBLE_BEAM
 
 === TRAINER_ISAAC_1 ===
 Name: ISAAC
