@@ -4,97 +4,42 @@ MauvilleCity_BikeShop_MapScripts::
 MauvilleCity_BikeShop_EventScript_Rydel::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_BIKE, MauvilleCity_BikeShop_EventScript_AskSwitchBikes
-	goto_if_set FLAG_DECLINED_BIKE, MauvilleCity_BikeShop_EventScript_SkipGreeting
-	msgbox MauvilleCity_BikeShop_Text_RydelGreeting, MSGBOX_DEFAULT
-	msgbox MauvilleCity_BikeShop_Text_DidYouComeFromFarAway, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, MauvilleCity_BikeShop_EventScript_YesFar
-	goto_if_eq VAR_RESULT, NO, MauvilleCity_BikeShop_EventScript_NotFar
+	goto_if_set FLAG_RECEIVED_BIKE, MauvilleCity_BikeShop_EventScript_EnsureBothBikes
+	msgbox MauvilleCity_BikeShop_Text_BothBikesIntroduction, MSGBOX_DEFAULT
+	goto MauvilleCity_BikeShop_EventScript_EnsureBothBikes
 	end
 
-MauvilleCity_BikeShop_EventScript_SkipGreeting::
-	msgbox MauvilleCity_BikeShop_Text_DidYouComeFromFarAway, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, MauvilleCity_BikeShop_EventScript_YesFar
-	goto_if_eq VAR_RESULT, NO, MauvilleCity_BikeShop_EventScript_NotFar
-	end
-
-MauvilleCity_BikeShop_EventScript_ChooseBike::
-	message MauvilleCity_BikeShop_Text_ExplainBikesChooseWhichOne
-	waitmessage
-	multichoice 21, 8, MULTI_BIKE, TRUE
-	switch VAR_RESULT
-	case 0, MauvilleCity_BikeShop_EventScript_GetMachBike
-	case 1, MauvilleCity_BikeShop_EventScript_GetAcroBike
-	end
-
-MauvilleCity_BikeShop_EventScript_NotFar::
-	setflag FLAG_DECLINED_BIKE
-	msgbox MauvilleCity_BikeShop_Text_GuessYouDontNeedBike, MSGBOX_DEFAULT
-	release
-	end
-
-MauvilleCity_BikeShop_EventScript_YesFar::
-	setflag FLAG_RECEIVED_BIKE
-	goto MauvilleCity_BikeShop_EventScript_ChooseBike
-	end
-
-MauvilleCity_BikeShop_EventScript_GetMachBike::
-	msgbox MauvilleCity_BikeShop_Text_ChoseMachBike, MSGBOX_DEFAULT
-	giveitem ITEM_MACH_BIKE
-	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
-	goto MauvilleCity_BikeShop_EventScript_ComeBackToSwitchBikes
-	end
-
-MauvilleCity_BikeShop_EventScript_GetAcroBike::
-	msgbox MauvilleCity_BikeShop_Text_ChoseAcroBike, MSGBOX_DEFAULT
-	giveitem ITEM_ACRO_BIKE
-	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
-	goto MauvilleCity_BikeShop_EventScript_ComeBackToSwitchBikes
-	end
-
-MauvilleCity_BikeShop_EventScript_ComeBackToSwitchBikes::
-	msgbox MauvilleCity_BikeShop_Text_ComeBackToSwitchBikes, MSGBOX_DEFAULT
-	special SwapRegisteredBike
-	release
-	end
-
-MauvilleCity_BikeShop_EventScript_AskSwitchBikes::
-	msgbox MauvilleCity_BikeShop_Text_WantToSwitchBikes, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, MauvilleCity_BikeShop_EventScript_SwitchBikes
-	goto_if_eq VAR_RESULT, NO, MauvilleCity_BikeShop_EventScript_KeepBike
-	end
-
-@ If the player does not have a bike on them Rydel assumes its stored in the PC
-MauvilleCity_BikeShop_EventScript_SwitchBikes::
-	msgbox MauvilleCity_BikeShop_Text_IllSwitchBikes, MSGBOX_DEFAULT
-	checkitem ITEM_ACRO_BIKE
-	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_BikeShop_EventScript_SwitchAcroForMach
+@ Check each bike independently. Existing saves that own one bike receive the other.
+@ If the Bag is full, the player can return without losing either bicycle.
+MauvilleCity_BikeShop_EventScript_EnsureBothBikes::
 	checkitem ITEM_MACH_BIKE
-	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_BikeShop_EventScript_SwitchMachForAcro
-	msgbox MauvilleCity_BikeShop_Text_OhYourBikeIsInPC, MSGBOX_DEFAULT
-	release
-	end
-
-MauvilleCity_BikeShop_EventScript_KeepBike::
-	msgbox MauvilleCity_BikeShop_Text_HappyYouLikeIt, MSGBOX_DEFAULT
-	release
-	end
-
-MauvilleCity_BikeShop_EventScript_SwitchAcroForMach::
-	incrementgamestat GAME_STAT_TRADED_BIKES
-	msgbox MauvilleCity_BikeShop_Text_ExchangedAcroForMach, MSGBOX_DEFAULT
-	removeitem ITEM_ACRO_BIKE
+	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_BikeShop_EventScript_CheckAcroBike
 	giveitem ITEM_MACH_BIKE
-	goto MauvilleCity_BikeShop_EventScript_ComeBackToSwitchBikes
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+
+MauvilleCity_BikeShop_EventScript_CheckAcroBike::
+	checkitem ITEM_ACRO_BIKE
+	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_BikeShop_EventScript_BothBikesOwned
+	giveitem ITEM_ACRO_BIKE
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+
+MauvilleCity_BikeShop_EventScript_BothBikesOwned::
+	setflag FLAG_RECEIVED_BIKE
+	msgbox MauvilleCity_BikeShop_Text_BothBikesOwned, MSGBOX_DEFAULT
+	release
 	end
 
-MauvilleCity_BikeShop_EventScript_SwitchMachForAcro::
-	incrementgamestat GAME_STAT_TRADED_BIKES
-	msgbox MauvilleCity_BikeShop_Text_ExchangedMachForAcro, MSGBOX_DEFAULT
-	removeitem ITEM_MACH_BIKE
-	giveitem ITEM_ACRO_BIKE
-	goto MauvilleCity_BikeShop_EventScript_ComeBackToSwitchBikes
-	end
+MauvilleCity_BikeShop_Text_BothBikesIntroduction:
+	.string "RYDEL: Every journey needs the\n"
+	.string "right set of wheels!\p"
+	.string "Why choose? Take BOTH of my\n"
+	.string "bicycles for your adventure!$"
+
+MauvilleCity_BikeShop_Text_BothBikesOwned:
+	.string "RYDEL: Both bikes are yours!\p"
+	.string "Use the MACH BIKE for speed,\n"
+	.string "or the ACRO BIKE for tricks.\p"
+	.string "Switch from your BAG anytime!$"
 
 MauvilleCity_BikeShop_EventScript_Assistant::
 	msgbox MauvilleCity_BikeShop_Text_HandbooksAreInBack, MSGBOX_NPC
