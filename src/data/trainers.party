@@ -17265,7 +17265,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Check Bad Move / Try To Faint / Force Setup First Turn
+AI: Basic Trainer / Smart Switching / Ace Pokemon / Try To 2HKO / HP Aware / Powerful Status / PP Stall Prevention
 
 Armaldo @ ITEM_FOCUS_SASH
 Level: 61
@@ -17341,7 +17341,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Check Bad Move / Try To Faint / Force Setup First Turn
+AI: Basic Trainer / Smart Switching / Ace Pokemon / Try To 2HKO / HP Aware / Powerful Status / PP Stall Prevention
 
 Armaldo @ ITEM_FOCUS_SASH
 Level: 80
