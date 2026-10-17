@@ -148,9 +148,10 @@ WallyJourney_Text_HMIntro_WATERFALL:
 	.string "that you've earned the right.$"
 
 WallyJourney_Text_HMNoTeachingNeeded:
-	.string "You don't have to teach the move to\n"
-	.string "a POKéMON. Any partner that could\l"
-	.string "learn it can use it for you.$"
+	.string "The BADGE and HM are all you\n"
+	.string "need to use this field move.\p"
+	.string "No POKéMON needs to learn it\n"
+	.string "or even be able to learn it.$"
 
 WallyJourney_Text_HMBagFull:
 	.string "Your BAG is full. Make some room and\n"

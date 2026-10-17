@@ -142,8 +142,8 @@ Each row: what happens, where, the gate (flag/var), what changes in Wally's Jour
 
 Check every rewritten scene against this list before committing.
 
-- [x] **HMs.** Each Gym Leader gives their badge's HM and re-checks every time you talk to them, so a full bag can't lose one. Old givers (Cutter, Granite Cave, Rock Smash Dude, Rusturf, Wally's dad, Route 119 rival, Steven's house, Sootopolis) now only give advice.
-- [x] **Surf** needs Badge 5 + HM03 from Norman + a party Pokémon that could learn Surf. Wally's house scene still sets `FLAG_RECEIVED_HM_SURF` for story checks.
+- [ ] **HMs.** Each Gym Leader gives the HM for the badge, with recovery on repeat visits. **All eight field HMs are licensed by badge+HM, with no need for a party member to know or even be capable of learning the move.** Cut tree / Rock Smash rock / Strength boulder activate through normal A-button interaction. Existing original HM-giver characters only give advice; re-test all eight on an emulator.
+- [ ] **Surf** must use Badge 5 + HM03 from Norman with **no species compatibility or learned-move requirement**; actual field entry and surfboard visuals still require emulator testing. Wally's house scene retains `FLAG_RECEIVED_HM_SURF` for story checks.
 - [ ] **Dive / Waterfall** gates still work after the HM-giver removals: needs an emulator run to Seafloor Cavern.
 - [x] **Mega Bracelet** only after badge 5 (`FLAG_RECEIVED_MEGA_BRACELET`).
 - [x] **Z-Power Ring** only after badge 6.

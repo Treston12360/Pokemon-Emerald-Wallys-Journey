@@ -250,6 +250,9 @@ jobs:
       - name: Inventory story dialogue for chronology review
         run: python3 tools/wally_dialogue_inventory.py
 
+      - name: Verify Wally's Journey field HM and reusable TM contracts
+        run: python3 tools/check_wally_field_hm_contract.py
+
   allcontributors:
     if: github.actor == 'allcontributors[bot]'
     runs-on: ubuntu-latest

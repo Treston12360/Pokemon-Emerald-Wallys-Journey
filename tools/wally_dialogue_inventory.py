@@ -54,6 +54,12 @@ def main():
         print(f"TITLE: {path} :: {label} :: {clean(msg)[:280]}")
     if len(title) > 200:
         print(f"TITLE: {len(title) - 200} additional candidates not displayed")
+    obsolete_tm = [(path, label, msg) for path, label, msg in blocks
+                   if re.search(r"\\bTMs?\\b", msg, re.IGNORECASE)
+                   and re.search(r"(only once|one[- ]time use|single use|disappear|used up|breaks after)", clean(msg), re.IGNORECASE)]
+    print(f"REUSABLE-TM CONTRADICTION CANDIDATES: {len(obsolete_tm)}")
+    for path, label, msg in obsolete_tm[:100]:
+        print(f"TM: {path} :: {label} :: {clean(msg)[:260]}")
     print(f"HM-GIFT WORDING CANDIDATES: {len(gifts)}")
     for path, label, msg in gifts[:75]:
         print(f"HM: {path} :: {label} :: {clean(msg)[:250]}")

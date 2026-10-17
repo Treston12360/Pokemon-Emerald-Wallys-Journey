@@ -30,14 +30,11 @@ RustboroCity_CuttersHouse_Text_YouCanPutThisHMToGoodUse:
 	.string "Go on, take it!$"
 
 RustboroCity_CuttersHouse_Text_ExplainCut:
-.string "CUT can clear thin trees outside\n"
-	.string "battle.\p"
-	.string "Once you've earned the STONE\n"
-	.string "BADGE and have HM01, any of your\l"
-	.string "POKéMON that could learn CUT can\l"
-	.string "clear the way.\p"
-	.string "You don't need to teach it CUT.\n"
-	.string "The HM is your field license.$"
+	.string "CUT clears small trees when you\n"
+	.string "have the STONE BADGE and HM01.\p"
+	.string "Just press A facing a tree.\n"
+	.string "You don't need a POKéMON that\l"
+	.string "knows CUT or can learn it.$"
 
 RustboroCity_CuttersHouse_Text_DadHelpedClearLandOfTrees:
 	.string "When they were expanding the city of\n"
@@ -47,8 +44,9 @@ RustboroCity_CuttersHouse_Text_DadHelpedClearLandOfTrees:
 
 
 RustboroCity_CuttersHouse_Text_NewCutDialogue:
-.string "Those little trees grow fast!\p"
-	.string "With the STONE BADGE and HM01,\n"
-	.string "a compatible POKéMON can clear\l"
-	.string "them without learning CUT.\p"
-	.string "Good luck out there!$"
+	.string "Those little trees grow fast!\p"
+	.string "Once you've earned the STONE\n"
+	.string "BADGE and received HM01,\l"
+	.string "face a tree and press A.\p"
+	.string "You won't need to teach CUT\n"
+	.string "to any of your POKéMON.$"

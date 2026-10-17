@@ -20,7 +20,7 @@
 
 - Both **Mach Bike and Acro Bike** can be owned and used without returning to Rydel's shop to exchange them.
 - **TMs are reusable/infinite**, not consumed when taught.
-- **Field HM effects** still require the relevant Gym Badge/permission, but the player **does not have to teach the HM move to a party Pokémon** to use the field action.
+- **Field HM effects** require the relevant Gym Badge and HM item, but **never require any party Pokémon to know, be able to learn, or be compatible with the HM move**. Press A on a Cut tree, smashable rock, Strength boulder, etc., to activate the field move via the normal interaction; Surf/Dive/Waterfall must work at their map prompts too. Party-member selection is an internal visual effect only. Fly and Flash remain accessible via field actions without teaching the moves. Preserve this rule for all eight HMs.
 - **HM acquisition/story dialogue overhaul:** Existing moments where other characters simply hand out HMs should use fitting normal dialogue instead where necessary; Gym Leaders will explain that unlocking an HM's field use through the badge means the player need not teach the move to any Pokémon, and the Gym Leader also awards the corresponding HM. Audit each HM, badge, map event and story dependency so the game never loses a required HM or locks progression.
 - Pokémon can **relearn eligible moves conveniently**, in the spirit of Pokémon Legends: Arceus, without permanent lockout of previously learned moves. Final UI/implementation details need verification.
 - An optional **game speed-up** should not pitch-shift, accelerate, or distort music; design for actual GBA emulator/hardware constraints and test rather than promising arbitrary speedups.
