@@ -5891,7 +5891,7 @@
               {
                 "min_level": 35,
                 "max_level": 35,
-                "species": "SPECIES_DRAKLOAK"
+                "species": "SPECIES_GOLBAT"
               },
               {
                 "min_level": 33,
@@ -9183,7 +9183,7 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_BAXCALIBUR"
+                "species": "SPECIES_SPHEAL"
               },
               {
                 "min_level": 26,
@@ -9430,7 +9430,7 @@
               {
                 "min_level": 38,
                 "max_level": 38,
-                "species": "SPECIES_DRAGAPULT"
+                "species": "SPECIES_CLAYDOL"
               },
               {
                 "min_level": 37,
