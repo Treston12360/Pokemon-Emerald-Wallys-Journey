@@ -32,12 +32,35 @@ const struct SpriteFrameImage gFieldEffectObjectPicTable_BallLight[] = {
     obj_frame_tiles(gFieldEffectObjectPic_BallLight),
 };
 
+// Letter-only neon, traced from the original Emerald General tileset's
+// two sign metatiles (0x062 POKEMON CENTER and 0x042 MART).
+// Their upper-right tiles (0x147 and 0x149) draw the distinctive red letters
+// with palette indices 11 and 13. Only those letter pixels are reproduced:
+// never cover the sign's face, border, or neighboring building tiles.
+// Packed 4bpp OBJ data, four 8x8 tiles per 16x16 sign. 0=transparent,
+// 1=bright letter, 2=restrained colored rim. No extra image asset is needed.
+static const u32 sWallyCenterLetterGlow[32] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0x00211120, 0x00110110, 0x00110110, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+static const u32 sWallyMartLetterGlow[32] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0x21201010, 0x10101110, 0x10101010, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+};
+
 const struct SpriteFrameImage gFieldEffectObjectPicTable_PokeCenterLight[] = {
-    obj_frame_tiles(gFieldEffectObjectPic_PokeCenterLight),
+    obj_frame_tiles(sWallyCenterLetterGlow),
 };
 
 const struct SpriteFrameImage gFieldEffectObjectPicTable_MartLight[] = {
-    obj_frame_tiles(gFieldEffectObjectPic_MartLight),
+    obj_frame_tiles(sWallyMartLetterGlow),
 };
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_BallLight = {
@@ -60,7 +83,7 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_PokeCenterLight = {
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_MartLight = {
     .tileTag = TAG_NONE,
-    .paletteTag = OBJ_EVENT_PAL_TAG_NEON_LIGHT,
+    .paletteTag = OBJ_EVENT_PAL_TAG_NEON_MART,
     .oam = &gObjectEventBaseOam_16x16,
     .anims = sAnimTable_Inanimate,
     .images = gFieldEffectObjectPicTable_MartLight,
