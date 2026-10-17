@@ -2886,50 +2886,10 @@ static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lig
 // next to their doors, and every other door gets a warm porch glow. Built
 // from the map's own warps and metatiles, so no map needs editing.
 
-// Window metatiles (found by checking every Hoenn building front next to a
-// door). IDs below 0x200 are in the shared General tileset.
-static const u16 sWindowMetatiles_General[]   = {0x013, 0x1C2, 0x1C3};
-static const u16 sWindowMetatiles_Petalburg[] = {0x27D, 0x28F, 0x232};
-static const u16 sWindowMetatiles_Rustboro[]  = {0x23A, 0x242, 0x25C, 0x25D};
-static const u16 sWindowMetatiles_Dewford[]   = {0x235, 0x226};
-static const u16 sWindowMetatiles_Slateport[] = {0x251, 0x253};
-static const u16 sWindowMetatiles_Mauville[]  = {0x2AB, 0x2A6, 0x393};
-static const u16 sWindowMetatiles_Lavaridge[] = {0x239};
-static const u16 sWindowMetatiles_Fallarbor[] = {0x29E, 0x2A6};
-static const u16 sWindowMetatiles_Fortree[]   = {0x2C8, 0x2C9};
-static const u16 sWindowMetatiles_Lilycove[]  = {0x255, 0x335, 0x336, 0x34B, 0x34E, 0x2D6, 0x2D7};
-static const u16 sWindowMetatiles_Mossdeep[]  = {0x2A3, 0x2EC, 0x2EE};
-
-static bool32 MetatileInList(u32 metatile, const u16 *list, u32 count)
-{
-    u32 i;
-    for (i = 0; i < count; i++)
-    {
-        if (list[i] == metatile)
-            return TRUE;
-    }
-    return FALSE;
-}
-
-#define IN_LIST(list) MetatileInList(metatile, list, ARRAY_COUNT(list))
-static bool32 IsWindowMetatile(u32 metatile)
-{
-    const struct Tileset *secondary = gMapHeader.mapLayout->secondaryTileset;
-    if (metatile < NUM_METATILES_IN_PRIMARY)
-        return gMapHeader.mapLayout->primaryTileset == &gTileset_General && IN_LIST(sWindowMetatiles_General);
-    if (secondary == &gTileset_Petalburg) return IN_LIST(sWindowMetatiles_Petalburg);
-    if (secondary == &gTileset_Rustboro)  return IN_LIST(sWindowMetatiles_Rustboro);
-    if (secondary == &gTileset_Dewford)   return IN_LIST(sWindowMetatiles_Dewford);
-    if (secondary == &gTileset_Slateport) return IN_LIST(sWindowMetatiles_Slateport);
-    if (secondary == &gTileset_Mauville)  return IN_LIST(sWindowMetatiles_Mauville);
-    if (secondary == &gTileset_Lavaridge) return IN_LIST(sWindowMetatiles_Lavaridge);
-    if (secondary == &gTileset_Fallarbor) return IN_LIST(sWindowMetatiles_Fallarbor);
-    if (secondary == &gTileset_Fortree)   return IN_LIST(sWindowMetatiles_Fortree);
-    if (secondary == &gTileset_Lilycove)  return IN_LIST(sWindowMetatiles_Lilycove);
-    if (secondary == &gTileset_Mossdeep)  return IN_LIST(sWindowMetatiles_Mossdeep);
-    return FALSE;
-}
-#undef IN_LIST
+// Window light must be painted into window tiles/palettes using the
+// pokeemerald-expansion DNS light-blend system, not a large 32x32 object
+// sprite pasted over each facade. Until those palette variants are authored,
+// leave windows in their original nighttime state. No automatic overlays.
 
 // Rustboro's street lamps: the lamp head is the top half of a two-tile post.
 #define METATILE_Rustboro_StreetLampTop 0x212
@@ -2969,28 +2929,7 @@ static void SpawnWarpLights(s16 left, s16 right, s16 top, s16 bottom, s16 camX, 
             SpawnLightSprite(x + 1, y, camX, camY, LIGHT_TYPE_PKMN_CENTER_SIGN);
         else if (metatile == METATILE_General_Mart_Door && MapGridGetMetatileIdAt(x + 1, y) == METATILE_General_Mart_Sign)
             SpawnLightSprite(x + 1, y, camX, camY, LIGHT_TYPE_POKE_MART_SIGN);
-        else if (MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(x, y)))
-        {
-            s32 wx, wy;
-            // (No glow on the door itself: owner feedback 2026-10-17, it read as a
-            // glowing door. The house's windows carry its light instead.)
-            // Windows on the same building front as the door.
-            for (wy = y - 1; wy <= y; wy++)
-            {
-                for (wx = x - 3; wx <= x + 3; wx++)
-                {
-                    struct Sprite *light;
-                    if ((wx == x && wy == y) || !IsWindowMetatile(MapGridGetMetatileIdAt(wx, wy)))
-                        continue;
-                    light = SpawnLightSprite(wx, wy, camX, camY, LIGHT_TYPE_WINDOW);
-                    if (light != NULL)
-                    {
-                        light->data[3] = x; // sLightDoorX: windows share their door's schedule
-                        light->data[4] = y;
-                    }
-                }
-            }
-        }
+
     }
     SpawnStreetLamps(left, right, top, bottom, camX, camY);
 }
