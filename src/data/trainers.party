@@ -17256,44 +17256,70 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Check Bad Move / Try To Faint
+AI: Check Bad Move / Try To Faint / Force Setup First Turn
 
-Flygon
-Level: 56
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Dragon Claw
-- Earthquake
-- Stone Edge
-- U-turn
+Armaldo @ ITEM_FOCUS_SASH
+Level: 61
+Ability: Battle Armor
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Spe
+- MOVE_STEALTH_ROCK
+- MOVE_STONE_EDGE
+- MOVE_X_SCISSOR
+- MOVE_RAPID_SPIN
 
-Delcatty
-Level: 55
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Sing
-- Assist
-- Charm
-- Feint Attack
+Mawile @ ITEM_ROCKY_HELMET
+Level: 62
+Ability: Intimidate
+Nature: Impish
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Atk / 252 Def
+- MOVE_PLAY_ROUGH
+- MOVE_IRON_HEAD
+- MOVE_SUCKER_PUNCH
+- MOVE_THUNDER_WAVE
 
-Roselia
-Level: 56
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Magical Leaf
-- Leech Seed
-- Giga Drain
-- Toxic
+Ludicolo @ ITEM_DAMP_ROCK
+Level: 62
+Ability: Swift Swim
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
+- MOVE_RAIN_DANCE
+- MOVE_HYDRO_PUMP
+- MOVE_GIGA_DRAIN
+- MOVE_ICE_BEAM
 
-Magneton
-Level: 53
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Supersonic
-- Thunderbolt
-- Tri Attack
-- Screech
+Crawdaunt @ ITEM_LIFE_ORB
+Level: 63
+Ability: Adaptability
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_CRABHAMMER
+- MOVE_KNOCK_OFF
+- MOVE_AQUA_JET
+- MOVE_SWORDS_DANCE
+
+Flygon @ ITEM_CHOICE_SCARF
+Level: 63
+Ability: Levitate
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_EARTHQUAKE
+- MOVE_DRAGON_CLAW
+- MOVE_U_TURN
+- MOVE_STONE_EDGE
 
 Gardevoir @ ITEM_GARDEVOIRITE
-Level: 57
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Double Team
-- Calm Mind
-- Psychic
-- Future Sight
+Level: 65
+Ability: Trace
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
+- MOVE_HYPER_VOICE
+- MOVE_PSYSHOCK
+- MOVE_FOCUS_BLAST
+- MOVE_CALM_MIND
