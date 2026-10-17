@@ -235,14 +235,16 @@ WallyJourney_EventScript_RivalFORTREEWon::
 	end
 
 WallyJourney_Text_RivalFORTREEIntro:
-	.string "WALLY: {PLAYER}.\p"
-	.string "I went home to PETALBURG for a day.\n"
-	.string "Mom told me you beat your dad.\l"
-	.string "Respect.\p"
-	.string "Me? Sixth BADGE. WINONA tried to\n"
-	.string "out-think me. Didn't work.\p"
-	.string "Don't go easy on me because we're\n"
-	.string "friends. I'll know.$"
+	.string "WALLY: {PLAYER}. There you are.\p"
+	.string "Mom said you beat NORMAN.\n"
+	.string "Not bad. Really.\p"
+	.string "I beat WINONA, too.\n"
+	.string "She was clever, but I saw\n"
+	.string "through her strategy.\p"
+	.string "Don't treat me like that\n"
+	.string "kid from PETALBURG.\p"
+	.string "I'm not sure you've noticed\n"
+	.string "how strong I've become.$"
 
 
 WallyJourney_Text_RivalFORTREEDefeat:
@@ -251,11 +253,13 @@ WallyJourney_Text_RivalFORTREEDefeat:
 
 
 WallyJourney_Text_RivalFORTREEPost:
-	.string "WALLY: A year ago I couldn't walk\n"
-	.string "this far without stopping.\p"
-	.string "Now I'm chasing the strongest\n"
-	.string "TRAINER I know. Enjoy the lead\l"
-	.string "while it lasts.$"
+	.string "WALLY: You won again.\p"
+	.string "I used to be grateful just\n"
+	.string "to stand beside you.\p"
+	.string "Now I want to stand above\n"
+	.string "you on the rankings.\p"
+	.string "Enjoy being ahead.\n"
+	.string "It won't last.$"
 
 
 WallyJourney_EventScript_RivalLILYCOVE::
@@ -270,11 +274,14 @@ WallyJourney_EventScript_RivalLILYCOVEWon::
 	end
 
 WallyJourney_Text_RivalLILYCOVEIntro:
-	.string "WALLY: {PLAYER}. I've been waiting.\p"
-	.string "Six POKéMON. Each one chosen for a\n"
-	.string "reason. Each one trusts me.\p"
-	.string "I'm not the kid you met on ROUTE\n"
-	.string "102 anymore. Let me show you.$"
+	.string "WALLY: You're finally here.\p"
+	.string "I've built this team to win.\n"
+	.string "Every move has a purpose.\p"
+	.string "You helped me once, sure.\n"
+	.string "But that doesn't make you\n"
+	.string "my teacher forever.\p"
+	.string "Let's see whether you've\n"
+	.string "managed to keep up.$"
 
 
 WallyJourney_Text_RivalLILYCOVEDefeat:
@@ -283,12 +290,14 @@ WallyJourney_Text_RivalLILYCOVEDefeat:
 
 
 WallyJourney_Text_RivalLILYCOVEPost:
-	.string "WALLY: Guess who watched my last\n"
-	.string "battle from the crowd? WALLACE.\p"
-	.string "The CHAMPION. He said I fight like\n"
-	.string "someone with nothing left to prove.\p"
-	.string "Then he asked if I believed that.\p"
-	.string "…I'm still thinking about it.$"
+	.string "WALLY: WALLACE watched me\n"
+	.string "battle the other day.\p"
+	.string "He asked what I still\n"
+	.string "needed to prove.\p"
+	.string "I almost laughed.\n"
+	.string "Isn't winning the answer?\p"
+	.string "Anyway, I'll see you\n"
+	.string "at the LEAGUE.$"
 
 
 WallyJourney_EventScript_RivalMOSSDEEP::
@@ -303,13 +312,15 @@ WallyJourney_EventScript_RivalMOSSDEEPWon::
 	end
 
 WallyJourney_Text_RivalMOSSDEEPIntro:
-	.string "WALLY: Took you long enough.\p"
-	.string "Eight BADGES, {PLAYER}. I got the\n"
-	.string "last one this morning.\p"
-	.string "The ELITE FOUR is next. But the sky\n"
-	.string "over the ocean looks wrong lately.\p"
-	.string "One battle with you first. Then I'm\n"
-	.string "going to find out why.$"
+	.string "WALLY: Eight BADGES. Already.\p"
+	.string "I'm heading for the\n"
+	.string "ELITE FOUR next.\p"
+	.string "You've made progress too.\n"
+	.string "Just not quite as fast.\p"
+	.string "The weather is turning.\n"
+	.string "I'll help where I can.\p"
+	.string "Then we battle. Let's see\n"
+	.string "if you can surprise me.$"
 
 
 WallyJourney_Text_RivalMOSSDEEPDefeat:
@@ -318,12 +329,13 @@ WallyJourney_Text_RivalMOSSDEEPDefeat:
 
 
 WallyJourney_Text_RivalMOSSDEEPPost:
-	.string "WALLY: WALLACE keeps showing up\n"
-	.string "wherever I train. Never tells me what\l"
-	.string "to do. Just asks the right question.\p"
-	.string "Kind of like STEVEN with you,\n"
-	.string "right?\p"
-	.string "See you at the top, {PLAYER}.$"
+	.string "WALLY: WALLACE keeps asking\n"
+	.string "why I want to be CHAMPION.\p"
+	.string "To be the strongest.\n"
+	.string "What else would it mean?\p"
+	.string "He's a good mentor, but\n"
+	.string "he worries too much.\p"
+	.string "I'll prove I'm ready.$"
 
 
 @ Wally's Journey (owner design): right before the 8th Gym, Wally stops the player at
@@ -634,12 +646,16 @@ WallyJourney_Text_BroadcastWallace:
 	.string "HOENN is in good hands.$"
 
 WallyJourney_Text_BroadcastWally:
-	.string "WALLY: Thank you, WALLACE. For\n"
-	.string "everything.\p"
-	.string "But I'm not finished.\p"
-	.string "There's one TRAINER I still want to\n"
-	.string "face in this room. {PLAYER}…\p"
-	.string "I'll be waiting.$"
+	.string "WALLY: Thank you, WALLACE.\n"
+	.string "You gave me a real battle.\p"
+	.string "I used to watch champions\n"
+	.string "and wonder how they did it.\p"
+	.string "Now I know. You just have\n"
+	.string "to be stronger than everyone.\p"
+	.string "There's still one TRAINER\n"
+	.string "who thinks they know me.\p"
+	.string "{PLAYER}, I'll be waiting.\n"
+	.string "Try not to disappoint me.$"
 
 WallyJourney_Text_JuanAfterBroadcast:
 	.string "JUAN: …So WALLACE has been dethroned.\p"
