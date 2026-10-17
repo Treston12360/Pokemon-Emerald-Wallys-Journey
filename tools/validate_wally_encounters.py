@@ -27,9 +27,11 @@ for group in encounters["wild_encounter_groups"]:
     formats = {field["type"]: field["encounter_rates"] for field in group["fields"]}
     for entry in group["encounters"]:
         location = entry["map"]
-        if location in maps:
-            errors.append(f"Duplicate map table: {location}")
-        maps.add(location)
+        # A map can deliberately have several tables for alternate encounter sets.
+        key = (location, entry["base_label"])
+        if key in maps:
+            errors.append(f"Duplicate encounter table for {location}")
+        maps.add(key)
         for field, rates in formats.items():
             data = entry.get(field)
             if data is None:
@@ -48,7 +50,7 @@ for group in encounters["wild_encounter_groups"]:
                 slots += 1
                 methods[field] += 1
 
-print(f"Wild encounter audit: {len(maps)} maps, {slots} slots, {len(species)} unique species")
+print(f"Wild encounter audit: {len(maps)} tables, {slots} slots, {len(species)} unique species")
 for method, count in sorted(methods.items()):
     print(f"  {method}: {count} slots")
 if errors:
