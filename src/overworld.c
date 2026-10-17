@@ -1689,6 +1689,7 @@ void CB1_Overworld(void)
     if (gMain.callback2 == CB2_Overworld)
     {
         WallyJourney_TrySeasonNotice();
+        WallyJourney_UpdateFallingLeaves();
         DoCB1_Overworld(gMain.newKeys, gMain.heldKeys);
     }
 }

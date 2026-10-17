@@ -30,6 +30,7 @@ u32 WallyJourney_SeasonalWeather(u32 weather);
 void WallyJourney_UpdateLiveWeather(void);
 bool32 WallyJourney_TryRegionalCoordWeather(u32 coordWeather);
 void WallyJourney_TrySeasonNotice(void);
+void WallyJourney_UpdateFallingLeaves(void);
 void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFaded, bool32 isPrimary);
 bool32 WallyJourney_PrimaryFoliageStale(void);
 bool32 WallyJourney_IsLightOn(u32 lightType, s32 x, s32 y);

@@ -21,6 +21,9 @@
 #include "field_weather.h"
 #include "overworld.h"
 #include "string_util.h"
+#include "decompress.h"
+#include "trig.h"
+#include "sprite.h"
 #include "fieldmap.h"
 #include "constants/event_objects.h"
 #include "constants/rgb.h"
@@ -689,6 +692,162 @@ bool32 WallyJourney_PrimaryFoliageStale(void)
 {
     return sPrimaryFoliagePlus1 != CurrentFoliageMode() + 1;
 }
+
+// ------------------------------------------------- falling leaves / petals
+// Autumn leaves and spring blossom petals drift across the screen on outdoor
+// maps in fair weather (not on the open sea or in the desert). A handful of
+// small sprites, recreated automatically after battles and map changes.
+#define FALLING_LEAF_COUNT   6
+#define TAG_WALLY_FALLING_LEAF 0x5A11
+
+static const u32 sFallingLeafGfx[] = INCGFX_U32("graphics/wally/falling_leaf.png", ".4bpp");
+static const u16 sFallingLeafPal_Autumn[16] =
+{
+    RGB(0, 0, 0), RGB(15, 5, 2), RGB(26, 11, 3), RGB(31, 21, 6),
+};
+static const u16 sFallingLeafPal_Spring[16] =
+{
+    RGB(0, 0, 0), RGB(24, 12, 17), RGB(30, 19, 24), RGB(31, 27, 29),
+};
+
+static const struct OamData sFallingLeafOam =
+{
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(8x8),
+    .size = SPRITE_SIZE(8x8),
+    .priority = 1,
+};
+static const struct SpriteFrameImage sFallingLeafImages[] =
+{
+    {(const u8 *)sFallingLeafGfx, 0x20},
+    {(const u8 *)sFallingLeafGfx + 0x20, 0x20},
+};
+static const union AnimCmd sFallingLeafAnim[] =
+{
+    ANIMCMD_FRAME(0, 14),
+    ANIMCMD_FRAME(1, 10),
+    ANIMCMD_FRAME(0, 14, .hFlip = TRUE),
+    ANIMCMD_FRAME(1, 10, .vFlip = TRUE),
+    ANIMCMD_JUMP(0),
+};
+static const union AnimCmd *const sFallingLeafAnims[] = {sFallingLeafAnim};
+
+static void UpdateFallingLeaf(struct Sprite *sprite);
+static const struct SpriteTemplate sFallingLeafTemplate =
+{
+    .tileTag = TAG_NONE,
+    .paletteTag = TAG_WALLY_FALLING_LEAF,
+    .oam = &sFallingLeafOam,
+    .anims = sFallingLeafAnims,
+    .images = sFallingLeafImages,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = UpdateFallingLeaf,
+};
+
+#define tLeafPosY   data[0]
+#define tLeafSpeedY data[1]
+#define tLeafWave   data[2]
+#define tLeafDrift  data[3]
+
+static void ResetFallingLeaf(struct Sprite *sprite, bool32 anywhere)
+{
+    u32 r = Random();
+    sprite->x = (r % 240) - (gSpriteCoordOffsetX + sprite->centerToCornerVecX);
+    sprite->y = (anywhere ? (r >> 8) % 160 : 0) - 8 - (gSpriteCoordOffsetY + sprite->centerToCornerVecY);
+    sprite->tLeafPosY = sprite->y * 128;
+    sprite->tLeafSpeedY = 40 + (r >> 16) % 40;
+    sprite->tLeafWave = (r >> 20) & 0xFF;
+    sprite->tLeafDrift = 1 + ((r >> 28) & 1);
+}
+
+static void UpdateFallingLeaf(struct Sprite *sprite)
+{
+    s16 x, y;
+    sprite->tLeafPosY += sprite->tLeafSpeedY;
+    sprite->y = sprite->tLeafPosY >> 7;
+    sprite->tLeafWave = (sprite->tLeafWave + sprite->tLeafDrift) & 0xFF;
+    sprite->x2 = gSineTable[sprite->tLeafWave] / 32;
+    if ((gMain.vblankCounter1 & 3) == 0)
+        sprite->x--; // the breeze carries them westward
+    x = (sprite->x + sprite->centerToCornerVecX + gSpriteCoordOffsetX) & 0x1FF;
+    if (x & 0x100)
+        x |= -0x100;
+    y = (sprite->y + sprite->centerToCornerVecY + gSpriteCoordOffsetY) & 0xFF;
+    if (x < -12)
+        sprite->x = 248 - (gSpriteCoordOffsetX + sprite->centerToCornerVecX);
+    if (y > 168 && y < 240)
+        ResetFallingLeaf(sprite, FALSE);
+}
+
+static bool32 FallingLeavesWanted(void)
+{
+    enum WallySeason season;
+    enum WallyRegion region;
+    u32 weather;
+    if (gMain.callback2 != CB2_Overworld || !MapHasNaturalLight(gMapHeader.mapType)
+     || (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK) || FlagGet(FLAG_SYS_WEATHER_CTRL))
+        return FALSE;
+    season = WallyJourney_GetSeason();
+    if (season != WALLY_SEASON_AUTUMN && season != WALLY_SEASON_SPRING)
+        return FALSE;
+    region = GetRegionForMapSec(gMapHeader.regionMapSectionId);
+    if (region == WREGION_NONE || region == WREGION_OCEAN || region == WREGION_DESERT)
+        return FALSE;
+    weather = gWeatherPtr->currWeather;
+    return weather == WEATHER_SUNNY || weather == WEATHER_SUNNY_CLOUDS || weather == WEATHER_SHADE;
+}
+
+// Called every frame from the overworld.
+void WallyJourney_UpdateFallingLeaves(void)
+{
+    u32 i, count = 0;
+    bool32 wanted;
+    if ((gMain.vblankCounter1 & 15) != 0)
+        return;
+    wanted = FallingLeavesWanted();
+    for (i = 0; i < MAX_SPRITES; i++)
+    {
+        if (gSprites[i].inUse && gSprites[i].callback == UpdateFallingLeaf)
+        {
+            if (!wanted)
+                DestroySprite(&gSprites[i]);
+            else
+                count++;
+        }
+    }
+    if (!wanted)
+    {
+        if (IndexOfSpritePaletteTag(TAG_WALLY_FALLING_LEAF) != 0xFF)
+            FreeSpritePaletteByTag(TAG_WALLY_FALLING_LEAF);
+        return;
+    }
+    if (count < FALLING_LEAF_COUNT)
+    {
+        u8 spriteId;
+        if (IndexOfSpritePaletteTag(TAG_WALLY_FALLING_LEAF) == 0xFF)
+        {
+            struct SpritePalette pal = {
+                WallyJourney_GetSeason() == WALLY_SEASON_SPRING ? sFallingLeafPal_Spring : sFallingLeafPal_Autumn,
+                TAG_WALLY_FALLING_LEAF
+            };
+            if (LoadSpritePalette(&pal) == 0xFF)
+                return; // no free palette: skip the effect rather than borrow one
+        }
+        spriteId = CreateSpriteAtEnd(&sFallingLeafTemplate, 0, 0, 77);
+        if (spriteId != MAX_SPRITES)
+        {
+            gSprites[spriteId].coordOffsetEnabled = TRUE;
+            ResetFallingLeaf(&gSprites[spriteId], TRUE);
+        }
+    }
+}
+
+#undef tLeafPosY
+#undef tLeafSpeedY
+#undef tLeafWave
+#undef tLeafDrift
 
 // ------------------------------------------------------------ town lights
 // Neon signs and porch lights (spawned in event_object_movement.c). Lights
