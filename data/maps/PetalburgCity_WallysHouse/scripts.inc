@@ -28,12 +28,23 @@ PetalburgCity_WallysHouse_EventScript_GiveHMSurf::
 PetalburgCity_WallysHouse_EventScript_WallysDad::
 	lock
 	faceplayer
+	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_WallysHouse_EventScript_DadAfterPlayerChampion
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad
 	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad
 	goto_if_set FLAG_RECEIVED_HM_SURF, PetalburgCity_WallysHouse_EventScript_ReceievedHMSurf
 	goto_if_set FLAG_THANKED_FOR_PLAYING_WITH_WALLY, PetalburgCity_WallysHouse_EventScript_PlayedWithWally
 	msgbox PetalburgCity_WallysHouse_Text_ThanksForPlayingWithWally, MSGBOX_DEFAULT
 	setflag FLAG_THANKED_FOR_PLAYING_WITH_WALLY
+	release
+	end
+
+PetalburgCity_WallysHouse_EventScript_DadAfterPlayerChampion::
+	msgbox PetalburgCity_WallysHouse_Text_DadAfterPlayerChampion, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_WallysHouse_EventScript_MomAfterPlayerChampion::
+	msgbox PetalburgCity_WallysHouse_Text_MomAfterPlayerChampion, MSGBOX_DEFAULT
 	release
 	end
 
@@ -55,6 +66,7 @@ PetalburgCity_WallysHouse_EventScript_PlayedWithWally::
 PetalburgCity_WallysHouse_EventScript_WallysMom::
 	lock
 	faceplayer
+	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_WallysHouse_EventScript_MomAfterPlayerChampion
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_WallysHouse_EventScript_MomSawBroadcast
 	goto_if_set FLAG_RECEIVED_HM_SURF, PetalburgCity_WallysHouse_EventScript_ReceivedHMSurf
 	msgbox PetalburgCity_WallysHouse_Text_WallyWasReallyHappy, MSGBOX_DEFAULT
@@ -126,9 +138,11 @@ PetalburgCity_WallysHouse_Text_YouMetWallyInEverGrandeCity:
 	.string "of the street without coughing…\p"
 	.string "He's the CHAMPION now. I still can't\n"
 	.string "say it without my voice shaking.\p"
-	.string "He calls before every title defense.\n"
-	.string "He says you're the one he's waiting\l"
-	.string "for.$"
+	.string "He sent word after the match.\n"
+	.string "He asked whether you'd reached\l"
+	.string "the LEAGUE yet.\p"
+	.string "I hope he remembers that winning\n"
+	.string "isn't all that matters.$"
 
 PetalburgCity_WallysHouse_Text_WallyWasReallyHappy:
 	.string "WALLY was really happy when he told\n"
@@ -233,6 +247,23 @@ WallyJourney_StevenMega_End:
 WallyJourney_StevenMega_AfterText:
 	.string "STEVEN: Your bond with your\n"
 	.string "POKéMON is your greatest strength!$"
+
+
+PetalburgCity_WallysHouse_Text_DadAfterPlayerChampion:
+	.string "WALLY called after your battle.\p"
+	.string "He told us he'd lost the title,\n"
+	.string "and how he'd spoken to you.\p"
+	.string "He sounded ashamed. Then he asked\n"
+	.string "how we were doing.\p"
+	.string "I think he's finding his way back.$"
+
+PetalburgCity_WallysHouse_Text_MomAfterPlayerChampion:
+	.string "WALLY told us you won, {PLAYER}.\p"
+	.string "He was quiet for a long time.\n"
+	.string "Then he started talking about\l"
+	.string "the people who helped him grow.\p"
+	.string "He's still our determined boy.\n"
+	.string "I'm glad he's listening again.$"
 
 PetalburgCity_WallysHouse_Text_MomSawBroadcast:
 	.string "We saw the broadcast. All of\n"
