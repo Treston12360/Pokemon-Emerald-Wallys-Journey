@@ -773,11 +773,11 @@ PetalburgCity_Text_ImLookingForTalentedTrainers:
 	.string "how he's doing.$"
 
 PetalburgCity_Text_WallyMomAfterBroadcast:
-	.string "I saw WALLY on the television.\\p"
-	.string "They called him CHAMPION!\\p"
-	.string "He used to be afraid to walk to\\n"
-	.string "the next town by himself.\\p"
-	.string "I'm proud of him. I'm frightened,\\n"
+	.string "I saw WALLY on the television.\p"
+	.string "They called him CHAMPION!\p"
+	.string "He used to be afraid to walk to\n"
+	.string "the next town by himself.\p"
+	.string "I'm proud of him. I'm frightened,\n"
 	.string "too. That never quite goes away.$"
 
 PetalburgCity_Text_WallyMomAfterChampion:
