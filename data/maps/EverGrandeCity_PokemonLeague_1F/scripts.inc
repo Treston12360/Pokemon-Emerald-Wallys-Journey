@@ -157,6 +157,10 @@ EverGrandeCity_PokemonLeague_1F_Text_HaventObtainedAllBadges:
 	.string "LEAGUE, you must return with them.$"
 
 EverGrandeCity_PokemonLeague_1F_Text_GoForth:
-	.string "TRAINER! Believe in yourself and your\n"
-	.string "POKéMON, and go forth!$"
+	.string "The ELITE FOUR have each\n"
+	.string "tested countless TRAINERS.\p"
+	.string "You earned your place here.\n"
+	.string "Now show them the bond\n"
+	.string "you've built with your team.\p"
+	.string "The CHAMPION is waiting.$"
 
