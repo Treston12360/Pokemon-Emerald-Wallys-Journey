@@ -18,10 +18,21 @@ VerdanturfTown_WandasHouse_EventScript_WallyShortSpeech::
 VerdanturfTown_WandasHouse_EventScript_WallysUncle::
 	lock
 	faceplayer
+	goto_if_set FLAG_SYS_GAME_CLEAR, VerdanturfTown_WandasHouse_EventScript_UncleAfterPlayerChampion
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, VerdanturfTown_WandasHouse_EventScript_WallysUncleEverGrande
 	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, VerdanturfTown_WandasHouse_EventScript_WallysUncleEverGrande
 	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, VerdanturfTown_WandasHouse_EventScript_WallysUncleSlippedOff
 	msgbox VerdanturfTown_WandasHouse_Text_WallysNextDoor, MSGBOX_DEFAULT
+	release
+	end
+
+VerdanturfTown_WandasHouse_EventScript_UncleAfterPlayerChampion::
+	msgbox VerdanturfTown_WandasHouse_Text_UncleAfterPlayerChampion, MSGBOX_DEFAULT
+	release
+	end
+
+VerdanturfTown_WandasHouse_EventScript_AuntAfterPlayerChampion::
+	msgbox VerdanturfTown_WandasHouse_Text_AuntAfterPlayerChampion, MSGBOX_DEFAULT
 	release
 	end
 
@@ -61,6 +72,7 @@ VerdanturfTown_WandasHouse_EventScript_WandaDontWorry::
 VerdanturfTown_WandasHouse_EventScript_WallysAunt::
 	lock
 	faceplayer
+	goto_if_set FLAG_SYS_GAME_CLEAR, VerdanturfTown_WandasHouse_EventScript_AuntAfterPlayerChampion
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, VerdanturfTown_WandasHouse_EventScript_WallysAuntEverGrande
 	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, VerdanturfTown_WandasHouse_EventScript_WallysAuntEverGrande
 	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, VerdanturfTown_WandasHouse_EventScript_WallysAuntAnythingHappened
@@ -83,6 +95,22 @@ VerdanturfTown_WandasHouse_EventScript_WallysAuntEverGrande::
 	msgbox VerdanturfTown_WandasHouse_Text_WallyWasInEverGrande, MSGBOX_DEFAULT
 	release
 	end
+
+VerdanturfTown_WandasHouse_Text_UncleAfterPlayerChampion:
+	.string "WALLY came by VERDANTURF after\n"
+	.string "your LEAGUE battle, {PLAYER}.\p"
+	.string "I thought he'd be angry.\n"
+	.string "Instead he asked me to walk\l"
+	.string "the hill trail with him.\p"
+	.string "He didn't race ahead this time.$"
+
+VerdanturfTown_WandasHouse_Text_AuntAfterPlayerChampion:
+	.string "His loss was hard to watch.\n"
+	.string "We know what he put into it.\p"
+	.string "But WALLY called afterward.\n"
+	.string "He talked about the people who\l"
+	.string "helped him get this far.\p"
+	.string "I think he'll be all right.$"
 
 VerdanturfTown_WandasHouse_Text_StrongerSpeech:
 	.string "WALLY: I lost to you, {PLAYER}, but I'm\n"
