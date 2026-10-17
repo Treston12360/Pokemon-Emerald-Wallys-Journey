@@ -27,6 +27,15 @@ EVO = re.compile(r"\{\s*(EVO_[A-Z0-9_]+)\s*,\s*([^,{}]+?)\s*,\s*(SPECIES_[A-Z0-9
 ENTRY = re.compile(r"\[\s*(SPECIES_[A-Z0-9_]+)\s*\]\s*=\s*\n?\s*\{")
 EXCLUDE_FLAGS = ("isLegendary", "isMythical", "isSubLegendary", "isRestrictedLegendary",
                  "isUltraBeast", "isParadox")
+# In-battle forms: reached automatically from the base form during battle.
+BATTLE_ONLY = {"SPECIES_AEGISLASH_BLADE", "SPECIES_CASTFORM_RAINY", "SPECIES_CASTFORM_SNOWY",
+               "SPECIES_CASTFORM_SUNNY", "SPECIES_CHERRIM_SUNSHINE", "SPECIES_CRAMORANT_GORGING",
+               "SPECIES_CRAMORANT_GULPING", "SPECIES_DARMANITAN_ZEN", "SPECIES_DARMANITAN_GALAR_ZEN",
+               "SPECIES_EISCUE_NOICE", "SPECIES_GRENINJA_ASH", "SPECIES_MIMIKYU_BUSTED",
+               "SPECIES_MORPEKO_HANGRY", "SPECIES_PALAFIN_HERO", "SPECIES_WISHIWASHI_SCHOOL"}
+# Seasonal coats: src/wild_encounter.c WallyJourney_SeasonalForm swaps these by real-world season.
+SEASONAL = [["SPECIES_DEERLING_SPRING", "SPECIES_DEERLING_SUMMER", "SPECIES_DEERLING_AUTUMN", "SPECIES_DEERLING_WINTER"],
+            ["SPECIES_SAWSBUCK_SPRING", "SPECIES_SAWSBUCK_SUMMER", "SPECIES_SAWSBUCK_AUTUMN", "SPECIES_SAWSBUCK_WINTER"]]
 FORM_FLAGS = ("isMegaEvolution", "isPrimalReversion", "isGigantamax", "isTeraForm",
               "isUltraBurst", "isTotem", "isAlolanTotem", "cannotBeTraded")
 
@@ -121,6 +130,21 @@ def script_species():
     return out
 
 
+def item_form_links():
+    """Form-change tables driven by an item the player can obtain (sold or placed on a map)."""
+    text = (ROOT / "src/data/pokemon/form_change_tables.h").read_text(encoding="utf-8")
+    world = " ".join(p.read_text(encoding="utf-8") for p in (ROOT / "data/maps").glob("*/*")
+                     if p.suffix in (".inc", ".json") and "_Frlg" not in p.parent.name)
+    world += (ROOT / "data/scripts/wally_journey.inc").read_text(encoding="utf-8")
+    groups = []
+    for m in re.finditer(r"static const struct FormChange \w+\[\] =\s*\{(.*?)\};", text, re.S):
+        body = m.group(1)
+        rows = re.findall(r"\{FORM_CHANGE_ITEM_USE(?:_MULTICHOICE)?,\s*(SPECIES_\w+),\s*(ITEM_\w+)", body)
+        if rows and all(re.search(rf"\b{it}\b", world) for _, it in rows):
+            groups.append([sp for sp, _ in rows])
+    return groups
+
+
 def run():
     info = parse_species()
     maps = emerald_maps()
@@ -140,9 +164,15 @@ def run():
 
     visitors = visitor_species()
     have = set(wild) | gifts | visitors
+    links = item_form_links() + SEASONAL
     changed = True
     while changed:
         changed = False
+        for grp in links:
+            if any(s in have for s in grp):
+                for s in grp:
+                    if s not in have:
+                        have.add(s); changed = True
         for sp in list(have):
             d = info.get(sp)
             if not d:
@@ -176,7 +206,7 @@ def run():
                     nat[sp] = cand
                     break
     target = sorted(sp for sp, d in info.items()
-                    if not d["battle_form"] and not info.get(root(sp), d)["excluded"] and not d["excluded"]
+                    if not d["battle_form"] and sp not in BATTLE_ONLY and not info.get(root(sp), d)["excluded"] and not d["excluded"]
                     and sp != "SPECIES_NONE" and not sp.startswith("SPECIES_EGG"))
     missing = [sp for sp in target if sp not in have]
     # Pokedex view: a dex number counts once any of its forms is obtainable.

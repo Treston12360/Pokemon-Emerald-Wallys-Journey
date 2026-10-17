@@ -80,6 +80,12 @@ LilycoveCity_DepartmentStore_2F_Pokemart2:
 	.2byte ITEM_METAL_ALLOY
 	.2byte ITEM_PEAT_BLOCK
 	.2byte ITEM_BLACK_AUGURITE
+	@ Form-change goods
+	.2byte ITEM_ROTOM_CATALOG
+	.2byte ITEM_RED_NECTAR
+	.2byte ITEM_YELLOW_NECTAR
+	.2byte ITEM_PINK_NECTAR
+	.2byte ITEM_PURPLE_NECTAR
 	pokemartlistend
 
 LilycoveCity_DepartmentStore_2F_Text_LearnToUseItemsProperly:

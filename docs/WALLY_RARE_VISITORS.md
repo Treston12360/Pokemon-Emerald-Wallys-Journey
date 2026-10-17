@@ -24,3 +24,17 @@ Normal tables can't go below a 1% slot. A rare visitor gets its own exact chance
 | Scyther | Safari Zone Northeast | Land | 2% |
 
 Status: code-in and builds; real odds need an emulator sample to confirm.
+
+## Alternate forms (added 2026-10-17)
+
+55 more visitor rows, all listed in `src/data/wally_rare_visitors.h` with their exact chance:
+- Alolan Rattata, Sandshrew, Vulpix, Diglett, Meowth, Geodude, Grimer; Galarian Ponyta, Slowpoke, Darumaka, Stunfisk; Hisuian Growlithe, Voltorb, Zorua; Paldean Tauros (Combat, Blaze, Aqua) in the Safari Zone.
+- Blue-Striped Basculin (Route 119 water), East Sea Shellos (Route 124 water), Sandy/Trash Burmy, four more Flabébé colors, Pumpkaboo Small/Large/Super, Squawkabilly Blue/Yellow/White, Tatsugiri Droopy/Stretchy, Antique Sinistea and Artisan Poltchageist (0.2% each), female Indeedee, Chest-form Gimmighoul.
+- All 20 Vivillon patterns, 0.5% each, spread across Hoenn by climate.
+
+Other routes to forms:
+- Deerling/Sawsbuck wear the coat of the real-world season (`WallyJourney_SeasonalForm` in `src/wild_encounter.c`).
+- Lilycove Department Store 2F sells the Rotom Catalog and the four Oricorio nectars.
+- Postgame Fan Club collector in Slateport gives one per talk: 8 cap Pikachu, 6 costume Pikachu, Spiky-eared Pichu, Battle Bond Greninja, Own Tempo Rockruff, Eternal Flower Floette (`VAR_WALLY_FAN_CLUB_GIFTS`).
+- In-battle forms (Aegislash Blade, Castform weather forms, Zen Darmanitan, Busted Mimikyu, Hangry Morpeko, Hero Palafin, School Wishiwashi, etc.) come from owning the base form and are excluded from the audit.
+

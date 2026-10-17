@@ -852,3 +852,144 @@ WallyJourney_Text_TitanRetreats:
 	.string "the dark…\p"
 	.string "It isn't gone. It's waiting.\n"
 	.string "Rest up and come back.$"
+
+@ Wally's Journey: postgame Fan Club collector. Hands out one famous-form Pokémon per talk,
+@ in order, so special forms (Pikachu caps and costumes, Spiky-eared Pichu, Battle Bond Greninja,
+@ Own Tempo Rockruff, Eternal Flower Floette) are obtainable without events.
+WallyJourney_EventScript_FanClubCollector::
+	lock
+	faceplayer
+	goto_if_unset FLAG_SYS_GAME_CLEAR, WallyJourney_EventScript_FanClubCollectorNotYet
+	goto_if_ge VAR_WALLY_FAN_CLUB_GIFTS, 18, WallyJourney_EventScript_FanClubCollectorDone
+	msgbox WallyJourney_Text_FanClubCollectorOffer, MSGBOX_DEFAULT
+	switch VAR_WALLY_FAN_CLUB_GIFTS
+	case 0, WallyJourney_EventScript_FanClubGift0
+	case 1, WallyJourney_EventScript_FanClubGift1
+	case 2, WallyJourney_EventScript_FanClubGift2
+	case 3, WallyJourney_EventScript_FanClubGift3
+	case 4, WallyJourney_EventScript_FanClubGift4
+	case 5, WallyJourney_EventScript_FanClubGift5
+	case 6, WallyJourney_EventScript_FanClubGift6
+	case 7, WallyJourney_EventScript_FanClubGift7
+	case 8, WallyJourney_EventScript_FanClubGift8
+	case 9, WallyJourney_EventScript_FanClubGift9
+	case 10, WallyJourney_EventScript_FanClubGift10
+	case 11, WallyJourney_EventScript_FanClubGift11
+	case 12, WallyJourney_EventScript_FanClubGift12
+	case 13, WallyJourney_EventScript_FanClubGift13
+	case 14, WallyJourney_EventScript_FanClubGift14
+	case 15, WallyJourney_EventScript_FanClubGift15
+	case 16, WallyJourney_EventScript_FanClubGift16
+	case 17, WallyJourney_EventScript_FanClubGift17
+	releaseall
+	end
+
+WallyJourney_EventScript_FanClubGift0::
+	givemon SPECIES_PIKACHU_ORIGINAL, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift1::
+	givemon SPECIES_PIKACHU_HOENN, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift2::
+	givemon SPECIES_PIKACHU_SINNOH, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift3::
+	givemon SPECIES_PIKACHU_UNOVA, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift4::
+	givemon SPECIES_PIKACHU_KALOS, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift5::
+	givemon SPECIES_PIKACHU_ALOLA, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift6::
+	givemon SPECIES_PIKACHU_PARTNER, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift7::
+	givemon SPECIES_PIKACHU_WORLD, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift8::
+	givemon SPECIES_PIKACHU_COSPLAY, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift9::
+	givemon SPECIES_PIKACHU_ROCK_STAR, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift10::
+	givemon SPECIES_PIKACHU_BELLE, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift11::
+	givemon SPECIES_PIKACHU_POP_STAR, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift12::
+	givemon SPECIES_PIKACHU_PHD, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift13::
+	givemon SPECIES_PIKACHU_LIBRE, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift14::
+	givemon SPECIES_PICHU_SPIKY_EARED, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift15::
+	givemon SPECIES_GRENINJA_BATTLE_BOND, 36
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift16::
+	givemon SPECIES_ROCKRUFF_OWN_TEMPO, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGift17::
+	givemon SPECIES_FLOETTE_ETERNAL, 25
+	goto WallyJourney_EventScript_FanClubGiftResult
+
+WallyJourney_EventScript_FanClubGiftResult::
+	goto_if_eq VAR_RESULT, MON_CANT_GIVE, Common_EventScript_NoMoreRoomForPokemon
+	addvar VAR_WALLY_FAN_CLUB_GIFTS, 1
+	playfanfare MUS_OBTAIN_ITEM
+	waitfanfare
+	msgbox WallyJourney_Text_FanClubCollectorGave, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_FanClubCollectorNotYet::
+	msgbox WallyJourney_Text_FanClubCollectorNotYet, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_FanClubCollectorDone::
+	msgbox WallyJourney_Text_FanClubCollectorDone, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_Text_FanClubCollectorNotYet:
+	.string "I collect famous POKéMON from every\n"
+	.string "region. Caps, costumes, legends…\p"
+	.string "I only trade stories with CHAMPIONS,\n"
+	.string "though. Come back when you've earned\l"
+	.string "the title!$"
+WallyJourney_Text_FanClubCollectorOffer:
+	.string "The CHAMPION! I've been saving these\n"
+	.string "for someone like you.\p"
+	.string "They need a TRAINER who'll take\n"
+	.string "them on adventures. Here's the\l"
+	.string "next one in my collection!$"
+WallyJourney_Text_FanClubCollectorGave:
+	.string "Take good care of it!\n"
+	.string "Talk to me again for the next one.$"
+WallyJourney_Text_FanClubCollectorDone:
+	.string "That was my whole collection!\n"
+	.string "Thank you for giving them a home.$"

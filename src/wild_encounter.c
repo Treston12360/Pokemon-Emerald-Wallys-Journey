@@ -29,6 +29,7 @@
 #include "constants/game_stat.h"
 #include "constants/item.h"
 #include "constants/items.h"
+#include "wally_journey.h"
 #include "data/wally_rare_visitors.h"
 #include "constants/layouts.h"
 #include "constants/weather.h"
@@ -525,10 +526,27 @@ void CreateWildMon(enum Species species, u8 level)
 #define TRY_GET_ABILITY_INFLUENCED_WILD_MON_INDEX(wildPokemon, type, ability, ptr, count) TryGetAbilityInfluencedWildMonIndex(wildPokemon, type, ability, ptr)
 #endif
 
+// Wally's Journey: Deerling and Sawsbuck wear the coat of the real-world season.
+static enum Species WallyJourney_SeasonalForm(enum Species species)
+{
+    static const u16 sDeerling[] = {SPECIES_DEERLING_SPRING, SPECIES_DEERLING_SUMMER, SPECIES_DEERLING_AUTUMN, SPECIES_DEERLING_WINTER};
+    static const u16 sSawsbuck[] = {SPECIES_SAWSBUCK_SPRING, SPECIES_SAWSBUCK_SUMMER, SPECIES_SAWSBUCK_AUTUMN, SPECIES_SAWSBUCK_WINTER};
+    u32 i;
+    for (i = 0; i < 4; i++)
+    {
+        if (species == sDeerling[i])
+            return sDeerling[WallyJourney_GetSeason()];
+        if (species == sSawsbuck[i])
+            return sSawsbuck[WallyJourney_GetSeason()];
+    }
+    return species;
+}
+
 // Wally's Journey: each rare visitor on this map/area gets its own exact roll.
 static enum Species WallyJourney_RollRareVisitor(enum WildPokemonArea area, enum Species species)
 {
     u32 i;
+    species = WallyJourney_SeasonalForm(species);
     for (i = 0; i < ARRAY_COUNT(sWallyRareVisitors); i++)
     {
         const struct WallyRareVisitor *v = &sWallyRareVisitors[i];
