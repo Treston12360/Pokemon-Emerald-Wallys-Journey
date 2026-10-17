@@ -330,30 +330,30 @@ RivalsHouse_1F_Text_OhYoureTheNewNeighbor:
 
 RivalsHouse_1F_Text_LikeChildLikeFather:
 	.string "Like child, like father.\p"
-	.string "My husband is as wild about POKéMON\n"
-	.string "as our child.\p"
-	.string "If he's not at his LAB, he's likely\n"
-	.string "scrabbling about in grassy places.$"
+	.string "My husband would live in the tall\n"
+	.string "grass if I let him. He calls it\l"
+	.string "“listening to HOENN.”\p"
+	.string "He's been worried lately. Says the\n"
+	.string "POKéMON are moving like something's\l"
+	.string "coming.$"
 
 RivalsHouse_1F_Text_TooBusyToNoticeVisit:
-	.string "That {RIVAL}!\p"
-	.string "I guess our child is too busy with\n"
-	.string "POKéMON to notice that you came\l"
-	.string "to visit, {PLAYER}{KUN}.$"
+	.string "That {RIVAL}! Too busy with POKéMON\n"
+	.string "to notice you came by.\p"
+	.string "Just like their father. I've made\n"
+	.string "my peace with it.$"
 
 RivalsHouse_1F_Text_WentOutToRoute103:
-	.string "Oh, {RIVAL} went out to ROUTE 103\n"
-	.string "just a little while ago.\p"
-	.string "Like father, like child.\n"
-	.string "{RIVAL} can't stay quietly at home.$"
+	.string "{RIVAL} went out to ROUTE 103 a\n"
+	.string "little while ago.\p"
+	.string "Counting POKéMON for the research.\n"
+	.string "Same as every day.$"
 
 RivalsHouse_1F_Text_ShouldGoHomeEverySoOften:
-	.string "I think it's wonderful for people to\n"
-	.string "travel with POKéMON.\p"
-	.string "But you should go home every so often\n"
-	.string "to let your mother know you're okay.\p"
-	.string "She might not say it, but I'm sure she\n"
-	.string "worries about you, {PLAYER}{KUN}.$"
+	.string "Traveling with POKéMON is wonderful.\p"
+	.string "But go home every so often. Your\n"
+	.string "mother won't say it, but she counts\l"
+	.string "the days.$"
 
 RivalsHouse_1F_Text_MayWhoAreYou:
 	.string "Huh?\n"

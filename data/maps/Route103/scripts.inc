@@ -339,13 +339,14 @@ Route103_Text_BrendanTimeToHeadBack:
 	.string "We should head back to the LAB.$"
 
 Route103_Text_ShouldHaveBroughtPotion:
-	.string "My POKéMON is staggeringly tired…\n"
-	.string "I should have brought a POTION…$"
+	.string "My POKéMON is exhausted…\p"
+	.string "I pushed it too hard. That's on me,\n"
+	.string "not on it.$"
 
 Route103_Text_ShortcutToOldale:
-	.string "If you cross the sea from here,\n"
-	.string "it'll be a shortcut to OLDALE TOWN.\p"
-	.string "Fufufu, that's useful, isn't it?$"
+	.string "Cross the water from here and you'll\n"
+	.string "reach OLDALE fast.\p"
+	.string "If you can SURF, anyway. Someday.$"
 
 Route103_Text_RouteSign:
 	.string "ROUTE 103\n"

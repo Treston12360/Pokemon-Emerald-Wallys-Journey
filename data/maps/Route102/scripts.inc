@@ -90,15 +90,16 @@ Route102_Text_LetsGoBack:
 	.string "Let's go back to the GYM!$"
 
 Route102_Text_ImNotVeryTall:
-	.string "I'm…not very tall, so I sink right\n"
-	.string "into tall grass.\p"
-	.string "The grass goes up my nose and…\n"
-	.string "Fwafwafwafwafwa…\p"
+	.string "I'm not very tall, so I sink right\n"
+	.string "into the grass…\p"
+	.string "It tickles my nose! Fwa… fwa…\n"
 	.string "Fwatchoo!$"
 
 Route102_Text_CatchWholeBunchOfPokemon:
 	.string "I'm going to catch a whole bunch of\n"
-	.string "POKéMON!$"
+	.string "POKéMON!\p"
+	.string "Then I'll let most of them go. I\n"
+	.string "just want to meet them.$"
 
 Route102_Text_RouteSignOldale:
 	.string "ROUTE 102\n"

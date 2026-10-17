@@ -352,9 +352,10 @@ OldaleTown_Text_SavingMyProgress:
 	.string "from any GYM.$"
 
 OldaleTown_Text_IWorkAtPokemonMart:
-	.string "Hi!\n"
-	.string "I work at a POKéMON MART.\p"
-	.string "Can I get you to come with me?$"
+	.string "Hi! I work at the POKéMON MART.\p"
+	.string "Can I borrow you for a second? I\n"
+	.string "promise this isn't a sales pitch.\l"
+	.string "Mostly.$"
 
 OldaleTown_Text_ThisIsAPokemonMart:
 	.string "This is a POKéMON MART.\n"
@@ -365,29 +366,26 @@ OldaleTown_Text_ThisIsAPokemonMart:
 	.string "a promotional item.$"
 
 OldaleTown_Text_PotionExplanation:
-	.string "A POTION can be used anytime, so it's\n"
-	.string "even more useful than a POKéMON CENTER\l"
-	.string "in certain situations.$"
+	.string "A POTION works anywhere, anytime.\p"
+	.string "Out on a route, far from a POKéMON\n"
+	.string "CENTER, that can mean everything.$"
 
 OldaleTown_Text_WaitDontComeInHere:
-	.string "Aaaaah! Wait!\n"
-	.string "Please don't come in here.\p"
-	.string "I just discovered the footprints of\n"
-	.string "a rare POKéMON!\p"
-	.string "Wait until I finish sketching\n"
-	.string "them, okay?$"
+	.string "Aaaah! Wait! Don't step there!\p"
+	.string "I just found footprints of a rare\n"
+	.string "POKéMON! Let me finish sketching\l"
+	.string "them first.$"
 
 OldaleTown_Text_DiscoveredFootprints:
-	.string "I just discovered the footprints of\n"
-	.string "a rare POKéMON!\p"
-	.string "Wait until I finish sketching\n"
-	.string "them, okay?$"
+	.string "I just found the footprints of a\n"
+	.string "rare POKéMON!\p"
+	.string "Let me finish sketching. PROF. BIRCH\n"
+	.string "pays for good field notes.$"
 
 OldaleTown_Text_FinishedSketchingFootprints:
-	.string "I finished sketching the footprints of\n"
-	.string "a rare POKéMON.\p"
-	.string "But it turns out they were only my\n"
-	.string "own footprints…$"
+	.string "I finished sketching the footprints.\p"
+	.string "…They were mine. All of them.\p"
+	.string "Don't tell PROF. BIRCH.$"
 
 OldaleTown_Text_MayLetsGoBack:
 	.string "MAY: {PLAYER}{KUN}!\n"

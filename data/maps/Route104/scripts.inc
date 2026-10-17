@@ -995,10 +995,10 @@ Route104_EventScript_Darian::
 	end
 
 Route104_Text_BrineyLivesInSeasideCottage:
-	.string "That seaside cottage is where\n"
-	.string "MR. BRINEY lives.\p"
-	.string "He was once a mighty sailor who never\n"
-	.string "feared the sea, however stormy.$"
+	.string "That cottage belongs to MR. BRINEY.\p"
+	.string "He was the best sailor in HOENN once.\n"
+	.string "Then he lost his ship, and his crew.\p"
+	.string "Now it's just him and PEEKO.$"
 
 Route104_Text_WhatsItLikeAtBottomOfSea:
 	.string "The sea, huh?\p"
@@ -1006,23 +1006,22 @@ Route104_Text_WhatsItLikeAtBottomOfSea:
 	.string "of the sea?$"
 
 Route104_Text_ThrowBallAtWeakenedPokemon:
-	.string "If you're going to throw a POKé BALL,\n"
-	.string "weaken the wild POKéMON first.\p"
-	.string "It will be easier to catch if it's been\n"
-	.string "poisoned, burned, or lulled to sleep.$"
+	.string "With only plain POKé BALLS allowed,\n"
+	.string "you have to earn every catch.\p"
+	.string "Weaken it first. Poison, burn,\n"
+	.string "sleep. Then throw.$"
 
 Route104_Text_OnlyThrowBallAtWildPokemon:
-	.string "You're a thief if you try to steal\n"
-	.string "someone else's POKéMON.\p"
-	.string "You should throw POKé BALLS only at\n"
-	.string "wild POKéMON.$"
+	.string "Throwing a POKé BALL at someone\n"
+	.string "else's POKéMON is theft.\p"
+	.string "TEAM AQUA does it. Don't be like\n"
+	.string "TEAM AQUA.$"
 
 Route104_Text_ImNotATrainer:
-	.string "Oh, no, I'm not a TRAINER.\p"
-	.string "But that's right, if TRAINERS lock eyes,\n"
-	.string "it's a challenge to battle.\p"
-	.string "If you don't want to battle, stay out\n"
-	.string "of their sight.$"
+	.string "I'm not a TRAINER.\p"
+	.string "But if TRAINERS lock eyes, it's a\n"
+	.string "battle. Stay out of sight if you're\l"
+	.string "tired.$"
 
 Route104_Text_LikeFillingMouthWithSeedsTakeThis:
 	.string "I like filling my mouth with seeds,\n"
@@ -1032,11 +1031,10 @@ Route104_Text_LikeFillingMouthWithSeedsTakeThis:
 	.string "a move for firing seeds rapidly.$"
 
 Route104_Text_TMsAreOneTimeUse:
-	.string "A word of advice!\p"
-	.string "A TM, TECHNICAL MACHINE, is good only\n"
-	.string "for one-time use.\p"
-	.string "Once you use it, it's gone.\n"
-	.string "Think twice before using it!$"
+	.string "A word of advice: a TM only works\n"
+	.string "once.\p"
+	.string "Choose who learns it carefully.\n"
+	.string "Like most things that matter.$"
 
 Route104_Text_DontNeedThisTakeIt:
 	.string "This FLOWER SHOP started selling\n"

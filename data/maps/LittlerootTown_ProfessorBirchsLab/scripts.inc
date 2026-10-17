@@ -663,28 +663,24 @@ LittlerootTown_ProfessorBirchsLab_EventScript_ScottAboardSSTidalCall::
 
 LittlerootTown_ProfessorBirchsLab_Text_BirchAwayOnFieldwork:
 	.string "Hunh? PROF. BIRCH?\p"
-	.string "The PROF's away on fieldwork.\n"
-	.string "Ergo, he isn't here.\p"
-	.string "Oh, let me explain what fieldwork is.\p"
-	.string "It is to study things in the natural\n"
-	.string "environment, like fields and mountains,\l"
-	.string "instead of a laboratory.\p"
-	.string "The PROF isn't one for doing desk work.\n"
-	.string "He's the type of person who would\l"
-	.string "rather go outside and experience\l"
-	.string "things than read about them here.$"
+	.string "The PROF's away on fieldwork. Again.\p"
+	.string "Fieldwork means studying POKéMON\n"
+	.string "where they actually live, not in\l"
+	.string "books.\p"
+	.string "Lately he's been tracking strange\n"
+	.string "migrations. He's out more than ever.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_BirchIsntOneForDeskWork:
-	.string "The PROF isn't one for doing desk work.\n"
-	.string "He's the type of person who would\l"
-	.string "rather go outside and experience\l"
-	.string "things than read about them here.$"
+	.string "The PROF isn't one for desk work.\p"
+	.string "He says HOENN is changing, and you\n"
+	.string "can't see change from behind a desk.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_BirchEnjoysRivalsHelpToo:
-	.string "PROF. BIRCH is studying the habitats\n"
-	.string "and distribution of POKéMON.\p"
-	.string "The PROF enjoys {RIVAL}'s help, too.\n"
-	.string "There's a lot of love there.$"
+	.string "PROF. BIRCH studies where POKéMON\n"
+	.string "live and why they move.\p"
+	.string "{RIVAL} helps with the data. Between\n"
+	.string "you and me, the kid's better at it\l"
+	.string "than half our grad students.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_LikeYouToHavePokemon:
 	.string "PROF. BIRCH: So, {PLAYER}{KUN}.\p"
@@ -725,12 +721,10 @@ LittlerootTown_ProfessorBirchsLab_Text_DontBeThatWay:
 	.string "You should go meet my kid.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_BirchRivalGoneHome:
-	.string "PROF. BIRCH: {RIVAL}?\n"
-	.string "Gone home, I think.\p"
-	.string "Or maybe that kid's scrabbling around\n"
-	.string "in tall grass again somewhere…\p"
+	.string "PROF. BIRCH: {RIVAL}? Gone home, I\n"
+	.string "think. Or out in the grass again.\p"
 	.string "If you or your POKéMON get tired,\n"
-	.string "you should get some rest at home.$"
+	.string "rest up. HOENN will still be here.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_HeardYouBeatRivalTakePokedex:
 	.string "PROF. BIRCH: Oh, hi, {PLAYER}{KUN}!\p"
@@ -758,10 +752,11 @@ LittlerootTown_ProfessorBirchsLab_Text_ExplainPokedex:
 	.string "seems strange out there.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_CountlessPokemonAwait:
-	.string "PROF. BIRCH: Countless POKéMON\n"
-	.string "await you!\p"
-	.string "Argh, I'm getting the itch to get out\n"
-	.string "and do fieldwork again!$"
+	.string "PROF. BIRCH: Countless POKéMON await\n"
+	.string "you out there.\p"
+	.string "And keep your eyes open. If you see\n"
+	.string "POKéMON somewhere they shouldn't be,\l"
+	.string "tell me. It matters.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_MayGotPokedexTooTakeThese:
 	.string "MAY: Oh, wow, {PLAYER}{KUN}!\n"

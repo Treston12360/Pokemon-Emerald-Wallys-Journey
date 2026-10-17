@@ -979,29 +979,33 @@ LittlerootTown_Text_BirchSpendsDaysInLab:
 
 LittlerootTown_Text_IfYouGoInGrassPokemonWillJumpOut:
 	.string "Um, um, um!\p"
-	.string "If you go outside and go in the grass,\n"
-	.string "wild POKéMON will jump out!$"
+	.string "If you go into the tall grass, wild\n"
+	.string "POKéMON jump out. My mom says that's\l"
+	.string "their home, and we're the guests.$"
 
 LittlerootTown_Text_DangerousIfYouDontHavePokemon:
-	.string "It's dangerous if you don't have\n"
-	.string "your own POKéMON.$"
+	.string "It's dangerous out there without\n"
+	.string "your own POKéMON. Even the grown-ups\l"
+	.string "say so.$"
 
 LittlerootTown_Text_CanYouGoSeeWhatsHappening:
 	.string "Um, hi!\p"
-	.string "There are scary POKéMON outside!\n"
-	.string "I can hear their cries!\p"
-	.string "I want to go see what's going on,\n"
-	.string "but I don't have any POKéMON…\p"
-	.string "Can you go see what's happening\n"
-	.string "for me?$"
+	.string "There are scary POKéMON noises\n"
+	.string "outside! PROF. BIRCH went out there\l"
+	.string "alone again!\p"
+	.string "I don't have any POKéMON… Can you\n"
+	.string "go see what's happening?$"
 
 LittlerootTown_Text_YouSavedBirch:
-	.string "You saved PROF. BIRCH!\n"
-	.string "I'm so glad!$"
+	.string "You saved PROF. BIRCH!\p"
+	.string "My mom says nobody ever goes with\n"
+	.string "him. He says he doesn't want to put\l"
+	.string "anyone in danger.$"
 
 LittlerootTown_Text_GoodLuckCatchingPokemon:
-	.string "Are you going to catch POKéMON?\n"
-	.string "Good luck!$"
+	.string "Are you going to catch POKéMON?\p"
+	.string "Don't just catch them. Get to know\n"
+	.string "them. That's what the PROF says.$"
 
 LittlerootTown_Text_TownSign:
 	.string "LITTLEROOT TOWN\n"
