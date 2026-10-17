@@ -62,17 +62,17 @@ EverGrandeCity_DrakesRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_DrakesRoom_Text_IntroSpeech:
-	.string "I am the last of the POKéMON LEAGUE\n"
-	.string "ELITE FOUR, DRAKE the DRAGON master!\p"
-	.string "In their natural state, POKéMON are\n"
-	.string "wild living things. They are free.\p"
-	.string "At times, they hinder us.\n"
-	.string "At times, they help us.\p"
-	.string "For us to battle with POKéMON as\n"
-	.string "partners, do you know what it takes?\p"
-	.string "Do you know what is needed?\p"
-	.string "If you don't, then you will never\n"
-	.string "prevail over me!$"
+	.string "DRAKE: I am DRAKE, the\n"
+	.string "last of the ELITE FOUR.\p"
+	.string "I've sailed through storms\n"
+	.string "that swallowed whole ships.\p"
+	.string "During the crisis, I saw\n"
+	.string "TRAINERS brave the waves\n"
+	.string "for people they never met.\p"
+	.string "Courage alone isn't enough.\n"
+	.string "You must know when to act\n"
+	.string "and whom you're protecting.\p"
+	.string "Show me what you've learned.$"
 
 EverGrandeCity_DrakesRoom_Text_Defeat:
 	.string "Superb, it should be said.$"
