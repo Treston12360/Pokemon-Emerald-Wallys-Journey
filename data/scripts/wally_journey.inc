@@ -324,38 +324,87 @@ WallyJourney_Text_RivalMOSSDEEPPost:
 	.string "See you at the top, {PLAYER}.$"
 
 
-WallyJourney_EventScript_RivalSOOTOPOLIS::
-	trainerbattle_single TRAINER_WALLY_SOOTOPOLIS, WallyJourney_Text_RivalSOOTOPOLISIntro, WallyJourney_Text_RivalSOOTOPOLISDefeat, WallyJourney_EventScript_RivalSOOTOPOLISWon
-	msgbox WallyJourney_Text_RivalSOOTOPOLISPost, MSGBOX_AUTOCLOSE
-	end
+@ Wally's Journey (owner design): right before the 8th Gym, Wally stops the player at
+@ the Gym door and beats them, then flies to Ever Grande for his title match. Losing
+@ doesn't white out (FLAG_WALLY_NO_WHITEOUT); winning is possible and gets its own lines.
+WallyJourney_EventScript_SootopolisWallyBattle::
+	msgbox WallyJourney_Text_SootopolisWallyCalls, MSGBOX_DEFAULT
+	closemessage
+	setobjectxyperm LOCALID_SOOTOPOLIS_RIVAL_WALLY, 31, 36
+	clearflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS
+	addobject LOCALID_SOOTOPOLIS_RIVAL_WALLY
+	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
+	applymovement LOCALID_SOOTOPOLIS_RIVAL_WALLY, WallyJourney_Movement_WallyWalkUp2
+	waitmovement 0
+	playbgm MUS_ENCOUNTER_MAY, FALSE
+	msgbox WallyJourney_Text_RivalSOOTOPOLISIntro, MSGBOX_DEFAULT
+	closemessage
+	setflag FLAG_WALLY_NO_WHITEOUT
+	trainerbattle_no_intro TRAINER_WALLY_SOOTOPOLIS, WallyJourney_Text_RivalSOOTOPOLISDefeat
+	specialvar VAR_RESULT, GetBattleOutcome
+	special HealPlayerParty
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_SootopolisPlayerWon
+	msgbox WallyJourney_Text_SootopolisWallyWon, MSGBOX_DEFAULT
+	goto WallyJourney_EventScript_SootopolisWallyLeaves
 
-WallyJourney_EventScript_RivalSOOTOPOLISWon::
+WallyJourney_EventScript_SootopolisPlayerWon::
 	msgbox WallyJourney_Text_RivalSOOTOPOLISPost, MSGBOX_DEFAULT
+WallyJourney_EventScript_SootopolisWallyLeaves::
+	closemessage
+	applymovement LOCALID_SOOTOPOLIS_RIVAL_WALLY, WallyJourney_Movement_WallyWalkDown2
+	waitmovement 0
+	removeobject LOCALID_SOOTOPOLIS_RIVAL_WALLY
 	setflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS
-	release
-	end
+	fadedefaultbgm
+	applymovement LOCALID_PLAYER, Common_Movement_FaceUp
+	waitmovement 0
+	return
+
+WallyJourney_Movement_WallyWalkUp2:
+	walk_up
+	walk_up
+	step_end
+
+WallyJourney_Movement_WallyWalkDown2:
+	walk_down
+	walk_down
+	step_end
+
+WallyJourney_Text_SootopolisWallyCalls:
+	.string "WALLY: {PLAYER}! Hold up.$"
+
+WallyJourney_Text_SootopolisWallyWon:
+	.string "WALLY: …\p"
+	.string "That's the first time I've ever\n"
+	.string "beaten you.\p"
+	.string "Don't look at me like that. You're\n"
+	.string "going to get stronger. I know you.\p"
+	.string "But tonight, I'm ready.\p"
+	.string "Get your last BADGE, {PLAYER}.\n"
+	.string "Then come find me.$"
 
 WallyJourney_Text_RivalSOOTOPOLISIntro:
 	.string "WALLY: It's over. The rain's\n"
 	.string "stopping.\p"
 	.string "Everyone I got into the shelters\n"
 	.string "walked out on their own. All of them.\p"
-	.string "I'm flying to EVER GRANDE tonight.\n"
-	.string "WALLACE says I'm ready.\p"
-	.string "I need to hear it from you, though.\n"
-	.string "Everything I've got, {PLAYER}.$"
+	.string "WALLACE just left for EVER GRANDE.\n"
+	.string "Our title match is tonight.\p"
+	.string "Before I go, one battle. No warm-up\n"
+	.string "team. Everything I've got.\p"
+	.string "I need to know I'm ready.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISDefeat:
-	.string "…Yeah. That's what I needed.$"
+	.string "…Still you.\n"
+	.string "Good. Now I know the bar.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISPost:
-	.string "WALLY: Win or lose up there, I'm\n"
-	.string "done being the kid people worry\l"
-	.string "about.\p"
-	.string "Get your last BADGE.\n"
-	.string "I'll see you at EVER GRANDE.$"
+	.string "WALLY: Huh. Still you.\p"
+	.string "Good. If I can't beat you, I'd\n"
+	.string "better beat WALLACE.\p"
+	.string "Watch tonight, {PLAYER}.$"
 
 
 
@@ -463,7 +512,7 @@ WallyJourney_Text_ZRingExplain:
 @ Unskippable: the trigger sits on the only tile in front of the Gym door.
 WallyJourney_EventScript_StevenStopsAtGym::
 	lockall
-	setflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS @ by now Wally has left for Ever Grande
+	call WallyJourney_EventScript_SootopolisWallyBattle
 	applymovement LOCALID_SOOTOPOLIS_STEVEN, Common_Movement_FacePlayer
 	waitmovement 0
 	playse SE_PIN
