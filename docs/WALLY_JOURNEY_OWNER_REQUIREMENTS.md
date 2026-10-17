@@ -104,3 +104,11 @@ The above historical details must be checked against newer explicit owner instru
 - **Kyogre and Groudon should feel grander and more legendary:** Make their respective story encounters more dramatic and meaningfully difficult to capture. Investigate improved or more imposing **movesets**, sensible battle levels and potentially **enhanced base stats**, with the exact values decided through balancing. Their upgrades should convey exceptional power without making story progression unreasonably difficult, breaking competitive/battle balance, or creating impossible captures. Evaluate presentation, cinematic story scripting, battle AI and encounter behavior as well as raw stats.
 - **Important:** Treat proposals to change canonical base stats as a design decision requiring explicit review and testing; consider story-specific enhancements before changing species base stats globally (which could affect caught Pokémon and opponents everywhere).
 - **Status:** Requested and documented; no claims that catch rates, legendary stats, scripted encounters, or movesets have been modified or emulator-tested.
+
+## Sub-1% encounters — confirmed owner clarification (2026-10-16)
+
+- Some exceptionally elusive non-legendary Pokémon should have **effective wild encounter probabilities below 1%** when their established scarcity, historical games, and habitat ecology justify it. **1% is a ceiling for many rare species, not a universal floor or fixed target.**
+- Choose rarity case-by-case using cross-game encounter precedent, Pokédex ecology, availability elsewhere, location restrictions, encounter method, and capture difficulty. Avoid making every starter or pseudo-legendary equally rare by default.
+- Existing ordinary encounter tables have 1% as their smallest slot. A claimed 0.1%, 0.5%, etc. requires a **real implemented/tested extra encounter-selection mechanic or other mathematically correct method**; do not fake sub-1% rates in the JSON table.
+- Test effective per-method and per-location rates, and confirm rarity remains fair: extremely rare Pokémon must still be legitimately obtainable, without misleading UI odds or inaccessible conditions.
+- **Status:** Confirmed design requirement; sub-1% runtime encounter implementation and empirical verification have **not** been certified.
