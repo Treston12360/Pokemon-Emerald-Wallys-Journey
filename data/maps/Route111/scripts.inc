@@ -102,6 +102,7 @@ Route111_EventScript_HidePlayerForMirageTower::
 
 Route111_OnFrame:
 	map_script_2 VAR_MIRAGE_TOWER_STATE, 1, Route111_EventScript_MirageTowerDisappear
+	map_script_2 VAR_WALLY_RIVAL_PENDING, 3, WallyJourney_EventScript_RivalMeet3
 	.2byte 0
 
 Route111_EventScript_MirageTowerDisappear::

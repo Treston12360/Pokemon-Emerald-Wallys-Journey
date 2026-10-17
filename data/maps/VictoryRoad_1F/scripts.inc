@@ -126,8 +126,10 @@ VictoryRoad_1F_Text_WallyNotGoingToLoseAnymore:
 	.string "ELITE FOUR and get taken apart.\p"
 	.string "I'm not letting that happen to you.\n"
 	.string "So consider this a test.\p"
-	.string "Four POKéMON. No MEGA EVOLUTION.\n"
-	.string "I'm holding back.\p"
+	.string "Four POKéMON. And I won't touch my\n"
+	.string "trump card. No MEGA EVOLUTION.\p"
+	.string "You can use yours, though. You'll\n"
+	.string "need it.\p"
 	.string "If you can't get past me like this,\n"
 	.string "you're not ready. Show me.$"
 

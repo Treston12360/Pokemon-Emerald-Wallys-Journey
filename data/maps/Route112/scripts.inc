@@ -1,4 +1,5 @@
 Route112_MapScripts::
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, Route112_OnFrame
 	map_script MAP_SCRIPT_ON_TRANSITION, Route112_OnTransition
 	.byte 0
 
@@ -140,3 +141,6 @@ Route112_Text_RouteSignLavaridge:
 	.string "ROUTE 112\n"
 	.string "{LEFT_ARROW} LAVARIDGE TOWN$"
 
+Route112_OnFrame:
+	map_script_2 VAR_WALLY_RIVAL_PENDING, 4, WallyJourney_EventScript_RivalMeet4
+	.2byte 0

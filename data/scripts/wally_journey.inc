@@ -172,10 +172,10 @@ WallyJourney_EventScript_RivalVERDANTURFWon::
 
 WallyJourney_Text_RivalVERDANTURFIntro:
 	.string "WALLY: {PLAYER}! Um… hi!\p"
-	.string "I've been training every day since\n"
-	.string "our battle in MAUVILLE.\p"
-	.string "My uncle says the air here is good\n"
-	.string "for me. I feel stronger already!\p"
+	.string "I heard you beat WATTSON. I've been\n"
+	.string "training out here, in the wind.\p"
+	.string "The sand gets everywhere, but my\n"
+	.string "lungs can handle it now!\p"
 	.string "W-would you battle me again?\n"
 	.string "I want to see how far I've come.$"
 
@@ -235,8 +235,10 @@ WallyJourney_EventScript_RivalFORTREEWon::
 	end
 
 WallyJourney_Text_RivalFORTREEIntro:
-	.string "WALLY: I heard you beat your dad,\n"
-	.string "{PLAYER}. Respect.\p"
+	.string "WALLY: {PLAYER}.\p"
+	.string "I went home to PETALBURG for a day.\n"
+	.string "Mom told me you beat your dad.\l"
+	.string "Respect.\p"
 	.string "Me? Sixth BADGE. WINONA tried to\n"
 	.string "out-think me. Didn't work.\p"
 	.string "Don't go easy on me because we're\n"
@@ -250,7 +252,7 @@ WallyJourney_Text_RivalFORTREEDefeat:
 
 WallyJourney_Text_RivalFORTREEPost:
 	.string "WALLY: A year ago I couldn't walk\n"
-	.string "up this hill without stopping.\p"
+	.string "this far without stopping.\p"
 	.string "Now I'm chasing the strongest\n"
 	.string "TRAINER I know. Enjoy the lead\l"
 	.string "while it lasts.$"
@@ -380,7 +382,7 @@ WallyJourney_Text_SootopolisWallyWon:
 	.string "Don't look at me like that. You're\n"
 	.string "going to get stronger. I know you.\p"
 	.string "But tonight, I'm ready.\p"
-	.string "Get your last BADGE, {PLAYER}.\n"
+	.string "Go get your last BADGE, {PLAYER}.\n"
 	.string "Then come find me.$"
 
 WallyJourney_Text_RivalSOOTOPOLISIntro:
@@ -390,8 +392,9 @@ WallyJourney_Text_RivalSOOTOPOLISIntro:
 	.string "walked out on their own. All of them.\p"
 	.string "WALLACE just left for EVER GRANDE.\n"
 	.string "Our title match is tonight.\p"
-	.string "Before I go, one battle. No warm-up\n"
-	.string "team. Everything I've got.\p"
+	.string "Before I go, one battle. No warm-up.\n"
+	.string "No MEGA EVOLUTION, either. I'm saving\l"
+	.string "that for WALLACE.\p"
 	.string "I need to know I'm ready.$"
 
 
@@ -506,13 +509,22 @@ WallyJourney_Text_ZRingExplain:
 	.string "off in the OPTIONS if you prefer.$"
 
 
-@ Wally's Journey (owner design): before the 8th Gym, Steven stops the player
-@ at the Gym door and takes them to JUAN's house, where they watch Wally beat
-@ Wallace live. Juan taught Wallace; Wallace guided Wally; Steven guided you.
-@ Unskippable: the trigger sits on the only tile in front of the Gym door.
-WallyJourney_EventScript_StevenStopsAtGym::
+@ Wally's Journey (owner design): Wally battles the player the first time they try to
+@ enter the 8th Gym. After the 8th badge, Steven stops the player outside the Gym and
+@ takes them to JUAN's house, where they watch Wally beat Wallace live. Juan taught Wallace; Wallace guided Wally; Steven guided you.
+@ Unskippable: the Wally trigger sits on the only tile in front of the Gym door; the
+@ broadcast starts from SootopolisCity_OnFrame when leaving the Gym with the badge.
+WallyJourney_EventScript_SootopolisGymDoor::
+	goto_if_set FLAG_WALLY_SOOTOPOLIS_DOOR_DONE, Common_EventScript_NopReturn
 	lockall
 	call WallyJourney_EventScript_SootopolisWallyBattle
+	setflag FLAG_WALLY_SOOTOPOLIS_DOOR_DONE
+	releaseall
+	end
+
+WallyJourney_EventScript_StevenStopsAtGym::
+	lockall
+	setvar VAR_WALLY_RIVAL_PENDING, 0
 	applymovement LOCALID_SOOTOPOLIS_STEVEN, Common_Movement_FacePlayer
 	waitmovement 0
 	playse SE_PIN
@@ -579,10 +591,11 @@ WallyJourney_Text_WallaceMustReturn:
 	.string "…Perhaps you'll guess who.$"
 
 WallyJourney_Text_StevenFollowMe:
-	.string "STEVEN: {PLAYER}! Wait!\n"
-	.string "I've been looking for you.\p"
-	.string "Before you go in there, you're\n"
-	.string "going to want to see this.\p"
+	.string "STEVEN: {PLAYER}! Congratulations\n"
+	.string "on the RAIN BADGE.\p"
+	.string "I've been looking for you. JUAN\n"
+	.string "headed home the moment you won.\p"
+	.string "You're going to want to see this.\n"
 	.string "Follow me. Quickly!$"
 
 WallyJourney_Text_StevenWeLetOurselvesIn:
@@ -590,10 +603,9 @@ WallyJourney_Text_StevenWeLetOurselvesIn:
 	.string "Has it started?$"
 
 WallyJourney_Text_JuanComeQuickly:
-	.string "JUAN: Ah. The challenger who has been\n"
-	.string "keeping my city's crisis at bay.\p"
+	.string "JUAN: Ah, my newest BADGE holder.\p"
 	.string "Come, quickly. My former student is\n"
-	.string "about to defend his title.\p"
+	.string "defending his title.\p"
 	.string "It is the final POKéMON for both.$"
 
 WallyJourney_Text_BroadcastAnnouncer:
@@ -602,7 +614,9 @@ WallyJourney_Text_BroadcastAnnouncer:
 	.string "It's down to the last POKéMON!\n"
 	.string "CHAMPION WALLACE sends out MILOTIC!\p"
 	.string "The challenger, WALLY, answers with\n"
-	.string "GARDEVOIR… and it's MEGA EVOLVING!\p"
+	.string "GARDEVOIR. No MEGA EVOLUTION!\p"
+	.string "He's holding his trump card back,\n"
+	.string "even now!\p"
 	.string "MILOTIC lands a SCALD! GARDEVOIR\n"
 	.string "is hanging on!\p"
 	.string "MOONBLAST! MILOTIC is down!\p"
@@ -643,10 +657,9 @@ WallyJourney_Text_StevenAfterBroadcast:
 	.string "waiting for you.$"
 
 WallyJourney_Text_JuanSeeYouAtGym:
-	.string "JUAN: Then you have one more BADGE\n"
-	.string "to earn.\p"
-	.string "I shall be waiting at my GYM.\n"
-	.string "Show me what you have.$"
+	.string "JUAN: You hold every BADGE in HOENN.\p"
+	.string "VICTORY ROAD lies to the east of\n"
+	.string "EVER GRANDE. Go, and climb it.$"
 
 
 
@@ -1223,3 +1236,174 @@ WallyJourney_Text_DexResearchNextGoal:
 WallyJourney_Text_DexResearchAllDone:
 	.string "You've claimed every research\n"
 	.string "reward. The PROFESSOR is thrilled!$"
+
+@ Wally's Journey (owner direction): every Wally rival battle is mandatory and happens
+@ somewhere organic, never right after a Gym fight: on the next route the story forces you
+@ through (111 after badge 3, 112 after badge 4, 118 after badge 5), arriving in Lilycove
+@ after badge 6, and anywhere in Mossdeep except the Gym exit after badge 7 (usually
+@ stepping out of the Pokemon Center). He appears two tiles ahead of the player and walks up.
+@ Losing whites out as normal; the battle happens again next time.
+WallyJourney_EventScript_WallyWalksUp::
+	special StorePlayerCoordsInVars
+	specialvar VAR_RESULT, GetPlayerFacingDirection
+	copyvar VAR_0x8006, VAR_0x8004
+	copyvar VAR_0x8007, VAR_0x8005
+	call_if_eq VAR_RESULT, DIR_SOUTH, WallyJourney_EventScript_WallyAheadSouth
+	call_if_eq VAR_RESULT, DIR_NORTH, WallyJourney_EventScript_WallyAheadNorth
+	call_if_eq VAR_RESULT, DIR_WEST, WallyJourney_EventScript_WallyAheadWest
+	call_if_eq VAR_RESULT, DIR_EAST, WallyJourney_EventScript_WallyAheadEast
+	setobjectxyperm VAR_0x8009, VAR_0x8006, VAR_0x8007
+	addobject VAR_0x8009
+	playse SE_PIN
+	call_if_eq VAR_RESULT, DIR_SOUTH, WallyJourney_EventScript_WallyStepNorth
+	call_if_eq VAR_RESULT, DIR_NORTH, WallyJourney_EventScript_WallyStepSouth
+	call_if_eq VAR_RESULT, DIR_WEST, WallyJourney_EventScript_WallyStepEast
+	call_if_eq VAR_RESULT, DIR_EAST, WallyJourney_EventScript_WallyStepWest
+	waitmovement 0
+	return
+
+WallyJourney_EventScript_WallyAheadSouth::
+	addvar VAR_0x8007, 2
+	return
+WallyJourney_EventScript_WallyAheadNorth::
+	subvar VAR_0x8007, 2
+	return
+WallyJourney_EventScript_WallyAheadWest::
+	subvar VAR_0x8006, 2
+	return
+WallyJourney_EventScript_WallyAheadEast::
+	addvar VAR_0x8006, 2
+	return
+WallyJourney_EventScript_WallyStepNorth::
+	applymovement VAR_0x8009, Common_Movement_WalkUp
+	return
+WallyJourney_EventScript_WallyStepSouth::
+	applymovement VAR_0x8009, Common_Movement_WalkDown
+	return
+WallyJourney_EventScript_WallyStepEast::
+	applymovement VAR_0x8009, WallyJourney_Movement_StepRight
+	return
+WallyJourney_EventScript_WallyStepWest::
+	applymovement VAR_0x8009, WallyJourney_Movement_StepLeft
+	return
+
+WallyJourney_Movement_StepRight:
+	walk_right
+	step_end
+
+WallyJourney_Movement_StepLeft:
+	walk_left
+	step_end
+
+WallyJourney_EventScript_WallyWalksAway::
+	applymovement VAR_0x8009, WallyJourney_Movement_WallyLeave
+	waitmovement 0
+	removeobject VAR_0x8009
+	return
+
+WallyJourney_Movement_WallyLeave:
+	face_away_player
+	walk_fast_down
+	walk_fast_down
+	step_end
+
+WallyJourney_EventScript_RivalMeet3::
+	lockall
+	setvar VAR_0x8009, LOCALID_ROUTE111_RIVAL_WALLY
+	clearflag FLAG_HIDE_WALLY_RIVAL_VERDANTURF
+	call WallyJourney_EventScript_WallyWalksUp
+	playbgm MUS_ENCOUNTER_MAY, FALSE
+	msgbox WallyJourney_Text_RivalVERDANTURFIntro, MSGBOX_DEFAULT
+	closemessage
+	trainerbattle_no_intro TRAINER_WALLY_VERDANTURF, WallyJourney_Text_RivalVERDANTURFDefeat
+	msgbox WallyJourney_Text_RivalVERDANTURFPost, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_0x8009, LOCALID_ROUTE111_RIVAL_WALLY
+	call WallyJourney_EventScript_WallyWalksAway
+	setflag FLAG_HIDE_WALLY_RIVAL_VERDANTURF
+	setvar VAR_WALLY_RIVAL_PENDING, 0
+	fadedefaultbgm
+	releaseall
+	end
+
+WallyJourney_EventScript_RivalMeet4::
+	lockall
+	setvar VAR_0x8009, LOCALID_ROUTE112_RIVAL_WALLY
+	clearflag FLAG_HIDE_WALLY_RIVAL_LAVARIDGE
+	call WallyJourney_EventScript_WallyWalksUp
+	playbgm MUS_ENCOUNTER_MAY, FALSE
+	msgbox WallyJourney_Text_RivalLAVARIDGEIntro, MSGBOX_DEFAULT
+	closemessage
+	trainerbattle_no_intro TRAINER_WALLY_LAVARIDGE, WallyJourney_Text_RivalLAVARIDGEDefeat
+	msgbox WallyJourney_Text_RivalLAVARIDGEPost, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_0x8009, LOCALID_ROUTE112_RIVAL_WALLY
+	call WallyJourney_EventScript_WallyWalksAway
+	setflag FLAG_HIDE_WALLY_RIVAL_LAVARIDGE
+	setvar VAR_WALLY_RIVAL_PENDING, 0
+	fadedefaultbgm
+	releaseall
+	end
+
+WallyJourney_EventScript_RivalMeet5::
+	lockall
+	setvar VAR_0x8009, LOCALID_ROUTE118_RIVAL_WALLY
+	clearflag FLAG_HIDE_WALLY_RIVAL_FORTREE
+	call WallyJourney_EventScript_WallyWalksUp
+	playbgm MUS_ENCOUNTER_MAY, FALSE
+	msgbox WallyJourney_Text_RivalFORTREEIntro, MSGBOX_DEFAULT
+	closemessage
+	trainerbattle_no_intro TRAINER_WALLY_FORTREE, WallyJourney_Text_RivalFORTREEDefeat
+	msgbox WallyJourney_Text_RivalFORTREEPost, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_0x8009, LOCALID_ROUTE118_RIVAL_WALLY
+	call WallyJourney_EventScript_WallyWalksAway
+	setflag FLAG_HIDE_WALLY_RIVAL_FORTREE
+	setvar VAR_WALLY_RIVAL_PENDING, 0
+	fadedefaultbgm
+	releaseall
+	end
+
+WallyJourney_EventScript_RivalMeet6::
+	lockall
+	setvar VAR_0x8009, LOCALID_LILYCOVE_RIVAL_WALLY
+	clearflag FLAG_HIDE_WALLY_RIVAL_LILYCOVE
+	call WallyJourney_EventScript_WallyWalksUp
+	playbgm MUS_ENCOUNTER_MAY, FALSE
+	msgbox WallyJourney_Text_RivalLILYCOVEIntro, MSGBOX_DEFAULT
+	closemessage
+	trainerbattle_no_intro TRAINER_WALLY_LILYCOVE, WallyJourney_Text_RivalLILYCOVEDefeat
+	msgbox WallyJourney_Text_RivalLILYCOVEPost, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_0x8009, LOCALID_LILYCOVE_RIVAL_WALLY
+	call WallyJourney_EventScript_WallyWalksAway
+	setflag FLAG_HIDE_WALLY_RIVAL_LILYCOVE
+	setvar VAR_WALLY_RIVAL_PENDING, 0
+	fadedefaultbgm
+	releaseall
+	end
+
+WallyJourney_EventScript_RivalMeet7::
+	lockall
+	special StorePlayerCoordsInVars
+	goto_if_ne VAR_0x8004, 38, WallyJourney_EventScript_RivalMeet7Go
+	goto_if_ne VAR_0x8005, 10, WallyJourney_EventScript_RivalMeet7Go
+	releaseall
+	end
+WallyJourney_EventScript_RivalMeet7Go::
+	setvar VAR_0x8009, LOCALID_MOSSDEEP_RIVAL_WALLY
+	clearflag FLAG_HIDE_WALLY_RIVAL_MOSSDEEP
+	call WallyJourney_EventScript_WallyWalksUp
+	playbgm MUS_ENCOUNTER_MAY, FALSE
+	msgbox WallyJourney_Text_RivalMOSSDEEPIntro, MSGBOX_DEFAULT
+	closemessage
+	trainerbattle_no_intro TRAINER_WALLY_MOSSDEEP, WallyJourney_Text_RivalMOSSDEEPDefeat
+	msgbox WallyJourney_Text_RivalMOSSDEEPPost, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_0x8009, LOCALID_MOSSDEEP_RIVAL_WALLY
+	call WallyJourney_EventScript_WallyWalksAway
+	setflag FLAG_HIDE_WALLY_RIVAL_MOSSDEEP
+	setvar VAR_WALLY_RIVAL_PENDING, 0
+	fadedefaultbgm
+	releaseall
+	end

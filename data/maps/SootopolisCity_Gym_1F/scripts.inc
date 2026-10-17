@@ -98,7 +98,7 @@ SootopolisCity_Gym_1F_EventScript_JuanDefeated::
 	setflag FLAG_DEFEATED_SOOTOPOLIS_GYM
 	setflag FLAG_BADGE08_GET
 	setflag FLAG_HIDE_SOOTOPOLIS_CITY_RESIDENTS
-	setflag FLAG_HIDE_SOOTOPOLIS_CITY_STEVEN
+	setvar VAR_WALLY_RIVAL_PENDING, 8
 	setflag FLAG_HIDE_SOOTOPOLIS_CITY_WALLACE
 	setvar VAR_SOOTOPOLIS_CITY_STATE, 6
 	clearflag FLAG_HIDE_SOOTOPOLIS_CITY_MAN_1
@@ -196,9 +196,9 @@ SootopolisCity_Gym_1F_Text_GymGuidePostVictory:
 	.string "Okay! Check out your TRAINER CARD.\p"
 	.string "With all eight BADGES, the LEAGUE\n"
 	.string "will let you through VICTORY ROAD.\p"
-	.string "And the CHAMPION has to accept any\n"
-	.string "challenger who clears the ELITE\l"
-	.string "FOUR. Even WALLY. Especially WALLY!$"
+	.string "And whoever wins tonight's title\n"
+	.string "match has to accept any challenger\l"
+	.string "who clears the ELITE FOUR!$"
 
 SootopolisCity_Gym_1F_Text_JuanIntro:
 	.string "Let me ask you.\n"
@@ -208,8 +208,8 @@ SootopolisCity_Gym_1F_Text_JuanIntro:
 	.string "is to know about POKéMON.\p"
 	.string "When he became CHAMPION, I came back\n"
 	.string "to lead this GYM in his place.\p"
-	.string "And now my student has lost his crown\n"
-	.string "to the boy he guided. You saw it.\p"
+	.string "Tonight he defends that title against\n"
+	.string "the boy he guided. You've met him.\p"
 	.string "Teachers and students, one after\n"
 	.string "another. Where do you fit, I wonder?\p"
 	.string "Ah, but enough chatter.\n"
@@ -267,14 +267,13 @@ SootopolisCity_Gym_1F_Text_JuanPostBattle:
 	.string "The TRAINERS who have gathered all\n"
 	.string "the GYM BADGES of HOENN should make\l"
 	.string "way to the ultimate destination.\p"
-	.string "The POKéMON LEAGUE.\p"
-	.string "Travel to the easternmost reaches\n"
-	.string "of HOENN, to the island EVER GRANDE.\p"
+	.string "The POKéMON LEAGUE, on the island\n"
+	.string "of EVER GRANDE.\p"
 	.string "There, under LEAGUE rules, any\n"
 	.string "TRAINER who clears the ELITE FOUR\l"
 	.string "may challenge the CHAMPION.\p"
-	.string "That is how WALLY took the title.\n"
-	.string "It is how you may challenge him.$"
+	.string "Whoever holds the title after\n"
+	.string "tonight, that is your path.$"
 
 SootopolisCity_Gym_1F_Text_GoGetFortreeBadge:
 	.string "There remains but one BADGE to\n"

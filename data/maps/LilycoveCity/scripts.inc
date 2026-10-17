@@ -1,4 +1,5 @@
 LilycoveCity_MapScripts::
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, LilycoveCity_OnFrame
 	map_script MAP_SCRIPT_ON_TRANSITION, LilycoveCity_OnTransition
 	map_script MAP_SCRIPT_ON_LOAD, LilycoveCity_OnLoad
 	.byte 0
@@ -765,3 +766,6 @@ LilycoveCity_Text_HoneymoonVowToSeeRarePokemon:
 	.string "POKéMON as soon as we arrived.\p"
 	.string "I mean, we are totally happy!$"
 
+LilycoveCity_OnFrame:
+	map_script_2 VAR_WALLY_RIVAL_PENDING, 6, WallyJourney_EventScript_RivalMeet6
+	.2byte 0

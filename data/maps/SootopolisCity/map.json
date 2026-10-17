@@ -395,7 +395,7 @@
       "elevation": 3,
       "var": "VAR_WALLY_BROADCAST_STATE",
       "var_value": "1",
-      "script": "WallyJourney_EventScript_StevenStopsAtGym"
+      "script": "WallyJourney_EventScript_SootopolisGymDoor"
     }
   ],
   "bg_events": [

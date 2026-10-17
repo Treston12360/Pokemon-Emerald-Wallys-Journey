@@ -379,7 +379,7 @@ PetalburgCity_Gym_EventScript_NormanBattle::
 	setflag FLAG_DEFEATED_PETALBURG_GYM
 	setvar VAR_PETALBURG_GYM_STATE, 7
 	setflag FLAG_BADGE05_GET
-	clearflag FLAG_HIDE_WALLY_RIVAL_FORTREE
+	setvar VAR_WALLY_RIVAL_PENDING, 5
 	clearflag FLAG_HIDE_WALLYS_HOUSE_STEVEN @ Wally's Journey: Steven now waits in Wally's house
 	special ResetHealLocationFromDewford
 	call EventScript_HideMrBriney

@@ -176,7 +176,7 @@
 #define VAR_RUSTURF_TUNNEL_STATE                         0x409A
 #define VAR_WALLY_GAME_SPEED                             0x409B // Wally's Journey: bits 0-3 overworld speed index, bits 4-7 battle speed index
 #define VAR_ELITE_4_STATE                                0x409C
-#define VAR_UNUSED_0x409D                                0x409D // Unused Var
+#define VAR_WALLY_RIVAL_PENDING                          0x409D // Wally's Journey: next mandatory Wally scene (3-7 rival battle after that badge, 8 = Juan's house broadcast)
 #define VAR_MOSSDEEP_SPACE_CENTER_STAIR_GUARD_STATE      0x409E
 #define VAR_MOSSDEEP_SPACE_CENTER_STATE                  0x409F
 #define VAR_SLATEPORT_HARBOR_STATE                       0x40A0

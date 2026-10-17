@@ -1,4 +1,5 @@
 MossdeepCity_MapScripts::
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, MossdeepCity_OnFrame
 	map_script MAP_SCRIPT_ON_TRANSITION, MossdeepCity_OnTransition
 	.byte 0
 
@@ -426,3 +427,6 @@ MossdeepCity_Text_SootopolisNewGymLeader:
 	.string "People tell me the new LEADER once\n"
 	.string "mentored WALLACE.$"
 
+MossdeepCity_OnFrame:
+	map_script_2 VAR_WALLY_RIVAL_PENDING, 7, WallyJourney_EventScript_RivalMeet7
+	.2byte 0
