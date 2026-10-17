@@ -2587,43 +2587,41 @@ MatchCall_Text_Brendan15::
 	.string "envious!$"
 
 MatchCall_Text_Wally1::
-	.string "WALLY: Oh, {PLAYER}!\p"
-	.string "I've been getting healthier and\n"
-	.string "more physically fit.\p"
-	.string "I hope I can become a TRAINER like\n"
-	.string "you soon, {PLAYER}!$"
+	.string "WALLY: Oh, {PLAYER}! Um, hi!\p"
+	.string "I walked all the way around\n"
+	.string "VERDANTURF today without stopping.\p"
+	.string "That's… a big deal for me.\n"
+	.string "I'll be ready for our next battle!$"
 
 MatchCall_Text_Wally2::
-	.string "WALLY: {PLAYER}, hello!\p"
-	.string "After RUSTURF TUNNEL went\n"
-	.string "through, WANDA's been very happy!$"
+	.string "WALLY: {PLAYER}! RUSTURF TUNNEL's\n"
+	.string "open, and WANDA can't stop smiling.\p"
+	.string "I've been training in the tunnel.\n"
+	.string "My team's getting really good.$"
 
 MatchCall_Text_Wally3::
-	.string "WALLY: Oh, {PLAYER}!\p"
-	.string "I… I left my uncle's place in\n"
-	.string "VERDANTURF without telling anyone.\p"
-	.string "I wonder if he's furious with me…\p"
-	.string "{PLAYER}, you understand how\n"
-	.string "I feel, don't you?$"
+	.string "WALLY: Hey, {PLAYER}.\p"
+	.string "I left my uncle's place to travel\n"
+	.string "on my own. I left a note this time.\p"
+	.string "He'll worry. But I can't get stronger\n"
+	.string "by staying somewhere safe forever.$"
 
 MatchCall_Text_Wally4::
-	.string "WALLY: {PLAYER}?\n"
-	.string "It's me, WALLY!\p"
-	.string "The world of TRAINERS is amazing!\p"
-	.string "When I have my POKéMON with me,\n"
-	.string "all sorts of people say hi!\p"
-	.string "It's as if everyone's getting\n"
-	.string "connected through POKéMON!$"
+	.string "WALLY: {PLAYER}! Guess what.\p"
+	.string "A kid in FORTREE asked me for\n"
+	.string "battle tips. ME.\p"
+	.string "I told her to trust her POKéMON\n"
+	.string "and never back down. Sounded cool,\l"
+	.string "right? I meant it, too.$"
 
 MatchCall_Text_Wally5::
-	.string "WALLY: {PLAYER}? It's awesome!\n"
-	.string "That RALTS we caught together?\l"
-	.string "It evolved, {PLAYER}!\p"
-	.string "Maybe I'm talented…\p"
-	.string "Oh, but I shouldn't get a big head\n"
-	.string "like that!\p"
-	.string "After all, it's the POKéMON that\n"
-	.string "should be praised!$"
+	.string "WALLY: Did you feel that heat wave?\p"
+	.string "I helped some families in LILYCOVE\n"
+	.string "get indoors. Somebody had to keep\l"
+	.string "everyone calm.\p"
+	.string "Whoever woke that thing up…\n"
+	.string "you're going after them, right?\p"
+	.string "Good. Give them one for me.$"
 
 MatchCall_Text_Wally6::
 	.string "… … … … … …\n"
@@ -2632,13 +2630,13 @@ MatchCall_Text_Wally6::
 	.string "the POKéNAV's service area…$"
 
 MatchCall_Text_Wally7::
-	.string "WALLY: Oh, {PLAYER}!\p"
-	.string "Before I met you, I hardly ever\n"
-	.string "left my house…\p"
-	.string "But now, I'm on an adventure with\n"
-	.string "my very own POKéMON…\p"
-	.string "{PLAYER}…\n"
-	.string "Thank you…$"
+	.string "WALLY: {PLAYER}. I'm at the LEAGUE.\p"
+	.string "The ELITE FOUR were tough. WALLACE\n"
+	.string "was tougher.\p"
+	.string "…I won.\p"
+	.string "So when you get here, you're not\n"
+	.string "challenging WALLACE. You're\l"
+	.string "challenging me. See you soon.$"
 
 MatchCall_Text_Scott1::
 	.string "SCOTT: Howdy, {PLAYER}{KUN}!\p"
