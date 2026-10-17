@@ -638,6 +638,7 @@ gSpecials::
 	def_special UpdateTrainerCardPhotoIcons
 	def_special StickerManGetBragFlags
 	def_special CheckAddCoins
+	def_special WallyJourney_SetupTitanBattle
 	def_special WallyJourney_GiveWildRayquazaDragonAscent
 	def_special WallyJourney_PickContestPrize
 	def_special WallyJourney_PickFrontierGimmickItem

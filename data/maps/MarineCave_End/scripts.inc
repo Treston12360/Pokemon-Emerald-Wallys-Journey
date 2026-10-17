@@ -33,8 +33,16 @@ MarineCave_End_EventScript_Kyogre::
 	delay 40
 	waitmoncry
 	setvar VAR_LAST_TALKED, LOCALID_MARINE_CAVE_KYOGRE
+	setvar VAR_0x8004, 2
+	setvar VAR_0x8005, 3
+	setvar VAR_0x8006, 12
+	setvar VAR_0x8007, 3
+	special ShakeCamera
+	waitstate
 	msgbox WallyJourney_Text_KyogreAwakens, MSGBOX_DEFAULT
 	setwildbattle SPECIES_KYOGRE, 75, ITEM_BLUE_ORB @ Wally's Journey: holds its orb, so it undergoes Primal Reversion in battle
+	special WallyJourney_SetupTitanBattle
+	settotemboost B_POSITION_OPPONENT_LEFT, spatk=1, spdef=1
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special BattleSetup_StartLegendaryBattle
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
@@ -49,9 +57,13 @@ MarineCave_End_EventScript_Kyogre::
 	end
 
 MarineCave_End_EventScript_DefeatedKyogre::
-	setvar VAR_SHOULD_END_ABNORMAL_WEATHER, 1
-	setflag FLAG_DEFEATED_KYOGRE
-	goto Common_EventScript_RemoveStaticPokemon
+	@ Wally's Journey: knocking it out isn't the end. It retreats and waits here again.
+	setvar VAR_0x8004, SPECIES_KYOGRE
+	fadescreenswapbuffers FADE_TO_BLACK
+	removeobject VAR_LAST_TALKED
+	fadescreenswapbuffers FADE_FROM_BLACK
+	msgbox WallyJourney_Text_TitanRetreats, MSGBOX_DEFAULT
+	releaseall
 	end
 
 MarineCave_End_EventScript_RanFromKyogre::

@@ -31,4 +31,5 @@ u32 WallyJourney_SeasonalWeather(u32 weather);
 void WallyJourney_PickContestPrize(void);
 void WallyJourney_PickFrontierGimmickItem(void);
 s32 WallyJourney_AdjustCatchRate(u32 species, s32 catchRate);
+void WallyJourney_SetupTitanBattle(void);
 #endif

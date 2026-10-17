@@ -49,6 +49,7 @@ SkyPillar_Top_EventScript_Rayquaza::
 	msgbox WallyJourney_Text_RayquazaMeteorPower, MSGBOX_DEFAULT
 	setwildbattle SPECIES_RAYQUAZA, 75 @ Wally's Journey: Mega Rayquaza (see WallyJourney_GiveWildRayquazaDragonAscent)
 	special WallyJourney_GiveWildRayquazaDragonAscent
+	setflag FLAG_WALLY_SMART_WILD_AI
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special BattleSetup_StartLegendaryBattle
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
@@ -61,8 +62,14 @@ SkyPillar_Top_EventScript_Rayquaza::
 	end
 
 SkyPillar_Top_EventScript_DefeatedRayquaza::
-	setflag FLAG_DEFEATED_RAYQUAZA
-	goto SkyPillar_Top_EventScript_DefeatedRayquaza2
+	@ Wally's Journey: a knocked-out Rayquaza returns to the summit later.
+	setvar VAR_0x8004, SPECIES_RAYQUAZA
+	fadescreenswapbuffers FADE_TO_BLACK
+	removeobject VAR_LAST_TALKED
+	fadescreenswapbuffers FADE_FROM_BLACK
+	msgbox WallyJourney_Text_TitanRetreats, MSGBOX_DEFAULT
+	releaseall
+	end
 	end
 
 SkyPillar_Top_EventScript_RanFromRayquaza::

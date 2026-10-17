@@ -846,3 +846,9 @@ WallyJourney_Text_PyreWallyAfter:
 WallyJourney_Text_PyreWallyLater:
 	.string "WALLY: Not ready? That's fine.\n"
 	.string "Get your team together. I'll wait.$"
+
+WallyJourney_Text_TitanRetreats:
+	.string "The wounded giant sank back into\n"
+	.string "the dark…\p"
+	.string "It isn't gone. It's waiting.\n"
+	.string "Rest up and come back.$"

@@ -355,3 +355,27 @@ s32 WallyJourney_AdjustCatchRate(u32 species, s32 catchRate)
     return catchRate;
 #endif
 }
+
+// Postgame titans: Kyogre and Groudon fight with signature movesets and full AI.
+void WallyJourney_SetupTitanBattle(void)
+{
+    struct Pokemon *mon = &gParties[B_TRAINER_OPPONENT_A][0];
+    switch (GetMonData(mon, MON_DATA_SPECIES))
+    {
+    case SPECIES_KYOGRE:
+        SetMonMoveSlot(mon, MOVE_ORIGIN_PULSE, 0);
+        SetMonMoveSlot(mon, MOVE_ICE_BEAM, 1);
+        SetMonMoveSlot(mon, MOVE_THUNDER, 2);
+        SetMonMoveSlot(mon, MOVE_CALM_MIND, 3);
+        break;
+    case SPECIES_GROUDON:
+        SetMonMoveSlot(mon, MOVE_PRECIPICE_BLADES, 0);
+        SetMonMoveSlot(mon, MOVE_FIRE_PUNCH, 1);
+        SetMonMoveSlot(mon, MOVE_STONE_EDGE, 2);
+        SetMonMoveSlot(mon, MOVE_BULK_UP, 3);
+        break;
+    default:
+        break;
+    }
+    FlagSet(FLAG_WALLY_SMART_WILD_AI);
+}

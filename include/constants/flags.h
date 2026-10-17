@@ -69,7 +69,7 @@
 #define FLAG_WALLY_RIVAL_FINAL_DONE  0x2F // Wally's Journey: postgame final battle with May/Brendan
 #define FLAG_HIDE_SOOTOPOLIS_CRISIS_WALLY 0x30 // Wally's Journey: Wally helping residents during the crisis
 #define FLAG_HIDE_MT_PYRE_SUMMIT_WALLY 0x31 // Wally's Journey: Wally for the Mt. Pyre team-up
-#define FLAG_UNUSED_0x032    0x32 // Unused Flag
+#define FLAG_WALLY_SMART_WILD_AI    0x32 // Wally's Journey: legendary battles use full AI (cleared after every battle)
 #define FLAG_UNUSED_0x033    0x33 // Unused Flag
 #define FLAG_UNUSED_0x034    0x34 // Unused Flag
 #define FLAG_UNUSED_0x035    0x35 // Unused Flag
