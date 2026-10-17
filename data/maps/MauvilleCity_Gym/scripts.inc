@@ -136,8 +136,30 @@ MauvilleCity_Gym_EventScript_CompletedNewMauville::
 	end
 
 MauvilleCity_Gym_EventScript_WattsonRematch::
+	setvar VAR_0x8004, TRAINER_WATTSON_1
+	special WallyJourney_GetRematchTier
+	goto_if_eq VAR_RESULT, 3, MauvilleCity_Gym_EventScript_WattsonRematchTier3
+	goto_if_eq VAR_RESULT, 4, MauvilleCity_Gym_EventScript_WattsonRematchTier4
+	goto_if_ge VAR_RESULT, 5, MauvilleCity_Gym_EventScript_WattsonRematchTier5
 	trainerbattle_rematch_double TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonPreRematch, MauvilleCity_Gym_Text_WattsonRematchDefeat, MauvilleCity_Gym_Text_WattsonRematchNeedTwoMons
 	msgbox MauvilleCity_Gym_Text_WattsonPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+@ Wally's Journey: every rematch tier has its own opening line; the top two
+@ tiers share a tougher defeat and post-battle line.
+MauvilleCity_Gym_EventScript_WattsonRematchTier3::
+	trainerbattle_rematch_double TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonPreRematch3, MauvilleCity_Gym_Text_WattsonRematchDefeat, MauvilleCity_Gym_Text_WattsonRematchNeedTwoMons
+	msgbox MauvilleCity_Gym_Text_WattsonPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+MauvilleCity_Gym_EventScript_WattsonRematchTier4::
+	trainerbattle_rematch_double TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonPreRematch4, MauvilleCity_Gym_Text_WattsonRematchDefeatElite, MauvilleCity_Gym_Text_WattsonRematchNeedTwoMons
+	msgbox MauvilleCity_Gym_Text_WattsonPostRematchElite, MSGBOX_AUTOCLOSE
+	end
+
+MauvilleCity_Gym_EventScript_WattsonRematchTier5::
+	trainerbattle_rematch_double TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonPreRematch5, MauvilleCity_Gym_Text_WattsonRematchDefeatElite, MauvilleCity_Gym_Text_WattsonRematchNeedTwoMons
+	msgbox MauvilleCity_Gym_Text_WattsonPostRematchElite, MSGBOX_AUTOCLOSE
 	end
 
 MauvilleCity_Gym_EventScript_Switch1::
@@ -428,3 +450,32 @@ MauvilleCity_Gym_Text_WattsonRematchNeedTwoMons:
 	.string "Come see me with two or more\n"
 	.string "POKéMON, all right?$"
 
+MauvilleCity_Gym_Text_WattsonPreRematch3:
+	.string "WATTSON: Wahahaha! I rewired the\n"
+	.string "whole GYM last week!\p"
+	.string "Blew every fuse in MAUVILLE doing it.\n"
+	.string "Worth it! Can you take the voltage?$"
+
+MauvilleCity_Gym_Text_WattsonPreRematch4:
+	.string "WATTSON: The storms knocked out half\n"
+	.string "of HOENN's power.\p"
+	.string "My POKéMON kept the hospitals lit for\n"
+	.string "three nights straight.\p"
+	.string "They've never been tougher.\n"
+	.string "Brace yourself!$"
+
+MauvilleCity_Gym_Text_WattsonPreRematch5:
+	.string "WATTSON: At my age, a man thinks\n"
+	.string "about what he'll leave behind.\p"
+	.string "A city. A GYM. And this team, at full\n"
+	.string "charge! Wahahaha!\p"
+	.string "Let's light up the sky one more time!$"
+
+MauvilleCity_Gym_Text_WattsonRematchDefeatElite:
+	.string "Wahaha… Total blackout!$"
+
+MauvilleCity_Gym_Text_WattsonPostRematchElite:
+	.string "WATTSON: NEW MAUVILLE was the\n"
+	.string "biggest mistake of my life.\p"
+	.string "Losing to you isn't. Best thing to\n"
+	.string "happen to this GYM in years!$"

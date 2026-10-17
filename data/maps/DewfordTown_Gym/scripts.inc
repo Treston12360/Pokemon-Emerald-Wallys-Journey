@@ -186,8 +186,30 @@ DewfordTown_Gym_EventScript_GiveBulkUp2:
 	end
 
 DewfordTown_Gym_EventScript_BrawlyRematch::
+	setvar VAR_0x8004, TRAINER_BRAWLY_1
+	special WallyJourney_GetRematchTier
+	goto_if_eq VAR_RESULT, 3, DewfordTown_Gym_EventScript_BrawlyRematchTier3
+	goto_if_eq VAR_RESULT, 4, DewfordTown_Gym_EventScript_BrawlyRematchTier4
+	goto_if_ge VAR_RESULT, 5, DewfordTown_Gym_EventScript_BrawlyRematchTier5
 	trainerbattle_rematch_double TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyPreRematch, DewfordTown_Gym_Text_BrawlyRematchDefeat, DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons
 	msgbox DewfordTown_Gym_Text_BrawlyPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+@ Wally's Journey: every rematch tier has its own opening line; the top two
+@ tiers share a tougher defeat and post-battle line.
+DewfordTown_Gym_EventScript_BrawlyRematchTier3::
+	trainerbattle_rematch_double TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyPreRematch3, DewfordTown_Gym_Text_BrawlyRematchDefeat, DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons
+	msgbox DewfordTown_Gym_Text_BrawlyPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+DewfordTown_Gym_EventScript_BrawlyRematchTier4::
+	trainerbattle_rematch_double TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyPreRematch4, DewfordTown_Gym_Text_BrawlyRematchDefeatElite, DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons
+	msgbox DewfordTown_Gym_Text_BrawlyPostRematchElite, MSGBOX_AUTOCLOSE
+	end
+
+DewfordTown_Gym_EventScript_BrawlyRematchTier5::
+	trainerbattle_rematch_double TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyPreRematch5, DewfordTown_Gym_Text_BrawlyRematchDefeatElite, DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons
+	msgbox DewfordTown_Gym_Text_BrawlyPostRematchElite, MSGBOX_AUTOCLOSE
 	end
 
 DewfordTown_Gym_EventScript_Takao::
@@ -460,3 +482,31 @@ DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons:
 	.string "that can battle.\p"
 	.string "I'm sorry, but I'd like you to come back\n"
 	.string "with at least two POKéMON.$"
+
+DewfordTown_Gym_Text_BrawlyPreRematch3:
+	.string "BRAWLY: I spent all season hauling\n"
+	.string "relief crates between the islands.\p"
+	.string "Best training I ever did.\n"
+	.string "Let's see if it shows!$"
+
+DewfordTown_Gym_Text_BrawlyPreRematch4:
+	.string "BRAWLY: The swells have been huge\n"
+	.string "since the storms.\p"
+	.string "I learned to ride them instead of\n"
+	.string "fighting them. Let's go!$"
+
+DewfordTown_Gym_Text_BrawlyPreRematch5:
+	.string "BRAWLY: No more hiding in the dark.\n"
+	.string "I turned the lights on for this one.\p"
+	.string "I want to see every move coming.\n"
+	.string "Bring the storm, CHAMPION!$"
+
+DewfordTown_Gym_Text_BrawlyRematchDefeatElite:
+	.string "Wiped out! What a ride!$"
+
+DewfordTown_Gym_Text_BrawlyPostRematchElite:
+	.string "BRAWLY: CHAMPION or not, you still\n"
+	.string "fight like someone protecting\l"
+	.string "something.\p"
+	.string "Never lose that. That's what makes\n"
+	.string "the wave.$"

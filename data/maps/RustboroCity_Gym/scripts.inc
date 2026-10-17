@@ -36,8 +36,30 @@ RustboroCity_Gym_EventScript_GiveRockTomb::
 	end
 
 RustboroCity_Gym_EventScript_RoxanneRematch::
+	setvar VAR_0x8004, TRAINER_ROXANNE_1
+	special WallyJourney_GetRematchTier
+	goto_if_eq VAR_RESULT, 3, RustboroCity_Gym_EventScript_RoxanneRematchTier3
+	goto_if_eq VAR_RESULT, 4, RustboroCity_Gym_EventScript_RoxanneRematchTier4
+	goto_if_ge VAR_RESULT, 5, RustboroCity_Gym_EventScript_RoxanneRematchTier5
 	trainerbattle_rematch_double TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxannePreRematch, RustboroCity_Gym_Text_RoxanneRematchDefeat, RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons
 	msgbox RustboroCity_Gym_Text_RoxannePostRematch, MSGBOX_AUTOCLOSE
+	end
+
+@ Wally's Journey: every rematch tier has its own opening line; the top two
+@ tiers share a tougher defeat and post-battle line.
+RustboroCity_Gym_EventScript_RoxanneRematchTier3::
+	trainerbattle_rematch_double TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxannePreRematch3, RustboroCity_Gym_Text_RoxanneRematchDefeat, RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons
+	msgbox RustboroCity_Gym_Text_RoxannePostRematch, MSGBOX_AUTOCLOSE
+	end
+
+RustboroCity_Gym_EventScript_RoxanneRematchTier4::
+	trainerbattle_rematch_double TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxannePreRematch4, RustboroCity_Gym_Text_RoxanneRematchDefeatElite, RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons
+	msgbox RustboroCity_Gym_Text_RoxannePostRematchElite, MSGBOX_AUTOCLOSE
+	end
+
+RustboroCity_Gym_EventScript_RoxanneRematchTier5::
+	trainerbattle_rematch_double TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxannePreRematch5, RustboroCity_Gym_Text_RoxanneRematchDefeatElite, RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons
+	msgbox RustboroCity_Gym_Text_RoxannePostRematchElite, MSGBOX_AUTOCLOSE
 	end
 
 RustboroCity_Gym_EventScript_Josh::
@@ -279,3 +301,32 @@ RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons:
 	.string "You only have one POKéMON with you?\p"
 	.string "Please return with at least one more\n"
 	.string "POKéMON.$"
+
+RustboroCity_Gym_Text_RoxannePreRematch3:
+	.string "ROXANNE: I rebuilt my team from the\n"
+	.string "textbook up.\p"
+	.string "Then I threw the textbook away.\p"
+	.string "Let's see which version of me wins.$"
+
+RustboroCity_Gym_Text_RoxannePreRematch4:
+	.string "ROXANNE: The LEAGUE asked me to join\n"
+	.string "its GYM review board.\p"
+	.string "I said yes, on one condition: I keep\n"
+	.string "battling you until I stop losing.\p"
+	.string "Show me where I'm still wrong.$"
+
+RustboroCity_Gym_Text_RoxannePreRematch5:
+	.string "ROXANNE: This is the strongest team\n"
+	.string "I can build. No theory left. Only\l"
+	.string "what's true.\p"
+	.string "Teach me one more lesson, CHAMPION.$"
+
+RustboroCity_Gym_Text_RoxanneRematchDefeatElite:
+	.string "…Fascinating. I'll need to write\n"
+	.string "a new chapter.$"
+
+RustboroCity_Gym_Text_RoxannePostRematchElite:
+	.string "ROXANNE: WALLY came by asking to\n"
+	.string "read my notes on you.\p"
+	.string "I said no. Some lessons have to be\n"
+	.string "earned in battle.$"

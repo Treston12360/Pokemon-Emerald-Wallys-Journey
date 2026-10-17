@@ -69,8 +69,30 @@ FortreeCity_Gym_EventScript_GiveAerialAce::
 	return
 
 FortreeCity_Gym_EventScript_WinonaRematch::
+	setvar VAR_0x8004, TRAINER_WINONA_1
+	special WallyJourney_GetRematchTier
+	goto_if_eq VAR_RESULT, 3, FortreeCity_Gym_EventScript_WinonaRematchTier3
+	goto_if_eq VAR_RESULT, 4, FortreeCity_Gym_EventScript_WinonaRematchTier4
+	goto_if_ge VAR_RESULT, 5, FortreeCity_Gym_EventScript_WinonaRematchTier5
 	trainerbattle_rematch_double TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaPreRematch, FortreeCity_Gym_Text_WinonaRematchDefeat, FortreeCity_Gym_Text_WinonaRematchNeedTwoMons
 	msgbox FortreeCity_Gym_Text_WinonaPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+@ Wally's Journey: every rematch tier has its own opening line; the top two
+@ tiers share a tougher defeat and post-battle line.
+FortreeCity_Gym_EventScript_WinonaRematchTier3::
+	trainerbattle_rematch_double TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaPreRematch3, FortreeCity_Gym_Text_WinonaRematchDefeat, FortreeCity_Gym_Text_WinonaRematchNeedTwoMons
+	msgbox FortreeCity_Gym_Text_WinonaPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+FortreeCity_Gym_EventScript_WinonaRematchTier4::
+	trainerbattle_rematch_double TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaPreRematch4, FortreeCity_Gym_Text_WinonaRematchDefeatElite, FortreeCity_Gym_Text_WinonaRematchNeedTwoMons
+	msgbox FortreeCity_Gym_Text_WinonaPostRematchElite, MSGBOX_AUTOCLOSE
+	end
+
+FortreeCity_Gym_EventScript_WinonaRematchTier5::
+	trainerbattle_rematch_double TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaPreRematch5, FortreeCity_Gym_Text_WinonaRematchDefeatElite, FortreeCity_Gym_Text_WinonaRematchNeedTwoMons
+	msgbox FortreeCity_Gym_Text_WinonaPostRematchElite, MSGBOX_AUTOCLOSE
 	end
 
 FortreeCity_Gym_EventScript_Jared::
@@ -320,3 +342,34 @@ FortreeCity_Gym_Text_WinonaRematchNeedTwoMons:
 	.string "POKéMON with you?\p"
 	.string "Please return with two POKéMON\n"
 	.string "at the very least.$"
+
+FortreeCity_Gym_Text_WinonaPreRematch3:
+	.string "WINONA: Since the storms, my BIRD\n"
+	.string "POKéMON have flown rescue patrols\l"
+	.string "every dawn.\p"
+	.string "Their wings have never been stronger.\n"
+	.string "Shall we see?$"
+
+FortreeCity_Gym_Text_WinonaPreRematch4:
+	.string "WINONA: The sky over FORTREE has\n"
+	.string "changed. Wetter. Wilder.\p"
+	.string "We've learned to fly through it\n"
+	.string "instead of waiting for it to pass.\p"
+	.string "Let us soar, CHAMPION.$"
+
+FortreeCity_Gym_Text_WinonaPreRematch5:
+	.string "WINONA: In every flight there is a\n"
+	.string "moment when you stop fighting the\l"
+	.string "wind and become part of it.\p"
+	.string "That is the team you face now.\n"
+	.string "Show me your wings!$"
+
+FortreeCity_Gym_Text_WinonaRematchDefeatElite:
+	.string "Grounded… but never broken.$"
+
+FortreeCity_Gym_Text_WinonaPostRematchElite:
+	.string "WINONA: WALLY read my strategy by the\n"
+	.string "second turn. You read it before I'd\l"
+	.string "even made it.\p"
+	.string "Two different kinds of genius.\n"
+	.string "I'm glad HOENN has both.$"

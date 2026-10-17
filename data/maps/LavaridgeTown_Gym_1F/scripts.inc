@@ -98,8 +98,30 @@ LavaridgeTown_Gym_1F_EventScript_GiveOverheat::
 	return
 
 LavaridgeTown_Gym_1F_EventScript_FlanneryRematch::
+	setvar VAR_0x8004, TRAINER_FLANNERY_1
+	special WallyJourney_GetRematchTier
+	goto_if_eq VAR_RESULT, 3, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchTier3
+	goto_if_eq VAR_RESULT, 4, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchTier4
+	goto_if_ge VAR_RESULT, 5, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchTier5
 	trainerbattle_rematch_double TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryPreRematch, LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeat, LavaridgeTown_Gym_1F_Text_FlanneryRematchNeedTwoMons
 	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+@ Wally's Journey: every rematch tier has its own opening line; the top two
+@ tiers share a tougher defeat and post-battle line.
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchTier3::
+	trainerbattle_rematch_double TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryPreRematch3, LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeat, LavaridgeTown_Gym_1F_Text_FlanneryRematchNeedTwoMons
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchTier4::
+	trainerbattle_rematch_double TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryPreRematch4, LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeatElite, LavaridgeTown_Gym_1F_Text_FlanneryRematchNeedTwoMons
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostRematchElite, MSGBOX_AUTOCLOSE
+	end
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchTier5::
+	trainerbattle_rematch_double TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryPreRematch5, LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeatElite, LavaridgeTown_Gym_1F_Text_FlanneryRematchNeedTwoMons
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostRematchElite, MSGBOX_AUTOCLOSE
 	end
 
 LavaridgeTown_Gym_1F_EventScript_Cole::
@@ -397,3 +419,34 @@ LavaridgeTown_Gym_1F_Text_FlanneryRematchNeedTwoMons:
 	.string "that can battle?\p"
 	.string "I hate to say this, but when you come\n"
 	.string "see me, bring at least two POKéMON.$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryPreRematch3:
+	.string "FLANNERY: I stopped trying to battle\n"
+	.string "like my grandfather.\p"
+	.string "Now I battle like me.\n"
+	.string "And I'm way hotter. Let's go!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryPreRematch4:
+	.string "FLANNERY: That volcano nearly blew\n"
+	.string "because people thought they could\l"
+	.string "control it.\p"
+	.string "My fire's different. I know exactly\n"
+	.string "how hot it burns. Here it comes!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryPreRematch5:
+	.string "FLANNERY: This is everything I've\n"
+	.string "got. No nerves. No holding back.\p"
+	.string "If you win, I'll treat the whole\n"
+	.string "GYM to the hot springs.\p"
+	.string "If I win… actually, same deal!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeatElite:
+	.string "Burned out… and I loved every second!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryPostRematchElite:
+	.string "FLANNERY: Grandpa called after our\n"
+	.string "last match.\p"
+	.string "He said I finally look like a LEADER.\n"
+	.string "I told him I learned it from losing\l"
+	.string "to you.\p"
+	.string "He laughed for ages.$"

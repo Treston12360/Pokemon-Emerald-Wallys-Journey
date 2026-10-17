@@ -139,8 +139,30 @@ SootopolisCity_Gym_1F_EventScript_GoGetFortreeBadge::
 	end
 
 SootopolisCity_Gym_1F_EventScript_JuanRematch::
+	setvar VAR_0x8004, TRAINER_JUAN_1
+	special WallyJourney_GetRematchTier
+	goto_if_eq VAR_RESULT, 3, SootopolisCity_Gym_1F_EventScript_JuanRematchTier3
+	goto_if_eq VAR_RESULT, 4, SootopolisCity_Gym_1F_EventScript_JuanRematchTier4
+	goto_if_ge VAR_RESULT, 5, SootopolisCity_Gym_1F_EventScript_JuanRematchTier5
 	trainerbattle_rematch_double TRAINER_JUAN_1, SootopolisCity_Gym_1F_Text_JuanPreRematch, SootopolisCity_Gym_1F_Text_JuanRematchDefeat, SootopolisCity_Gym_1F_Text_JuanRematchNeedTwoMons
 	msgbox SootopolisCity_Gym_1F_Text_JuanPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+@ Wally's Journey: every rematch tier has its own opening line; the top two
+@ tiers share a tougher defeat and post-battle line.
+SootopolisCity_Gym_1F_EventScript_JuanRematchTier3::
+	trainerbattle_rematch_double TRAINER_JUAN_1, SootopolisCity_Gym_1F_Text_JuanPreRematch3, SootopolisCity_Gym_1F_Text_JuanRematchDefeat, SootopolisCity_Gym_1F_Text_JuanRematchNeedTwoMons
+	msgbox SootopolisCity_Gym_1F_Text_JuanPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+SootopolisCity_Gym_1F_EventScript_JuanRematchTier4::
+	trainerbattle_rematch_double TRAINER_JUAN_1, SootopolisCity_Gym_1F_Text_JuanPreRematch4, SootopolisCity_Gym_1F_Text_JuanRematchDefeatElite, SootopolisCity_Gym_1F_Text_JuanRematchNeedTwoMons
+	msgbox SootopolisCity_Gym_1F_Text_JuanPostRematchElite, MSGBOX_AUTOCLOSE
+	end
+
+SootopolisCity_Gym_1F_EventScript_JuanRematchTier5::
+	trainerbattle_rematch_double TRAINER_JUAN_1, SootopolisCity_Gym_1F_Text_JuanPreRematch5, SootopolisCity_Gym_1F_Text_JuanRematchDefeatElite, SootopolisCity_Gym_1F_Text_JuanRematchNeedTwoMons
+	msgbox SootopolisCity_Gym_1F_Text_JuanPostRematchElite, MSGBOX_AUTOCLOSE
 	end
 
 SootopolisCity_Gym_1F_EventScript_GymGuide::
@@ -325,3 +347,33 @@ SootopolisCity_Gym_1F_Text_JuanRematchNeedTwoMons:
 	.string "I wish that you would return with\n"
 	.string "two, perhaps more, POKéMON, please.$"
 
+SootopolisCity_Gym_1F_Text_JuanPreRematch3:
+	.string "JUAN: WALLACE has come home to\n"
+	.string "train under me once more.\p"
+	.string "Teacher and student, side by side\n"
+	.string "again. He has made me sharper.\p"
+	.string "Let us see whether it is enough!$"
+
+SootopolisCity_Gym_1F_Text_JuanPreRematch4:
+	.string "JUAN: SOOTOPOLIS has nearly healed\n"
+	.string "from the storm.\p"
+	.string "The water in the crater runs clear\n"
+	.string "again. It reminds me why we guard it.\p"
+	.string "Come. Let us make it ripple!$"
+
+SootopolisCity_Gym_1F_Text_JuanPreRematch5:
+	.string "JUAN: In my long life I have taught\n"
+	.string "one CHAMPION and lost to two more.\p"
+	.string "This is my final masterpiece.\n"
+	.string "Every wave perfected.\p"
+	.string "Shall we dance, CHAMPION?$"
+
+SootopolisCity_Gym_1F_Text_JuanRematchDefeatElite:
+	.string "Magnificent. The student surpasses\n"
+	.string "everyone.$"
+
+SootopolisCity_Gym_1F_Text_JuanPostRematchElite:
+	.string "JUAN: I once said you lacked\n"
+	.string "elegance.\p"
+	.string "I was wrong. Yours is simply quieter\n"
+	.string "than mine.$"

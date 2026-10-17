@@ -342,8 +342,30 @@ PetalburgCity_Gym_EventScript_GiveFacade2::
 	end
 
 PetalburgCity_Gym_EventScript_NormanRematch::
+	setvar VAR_0x8004, TRAINER_NORMAN_1
+	special WallyJourney_GetRematchTier
+	goto_if_eq VAR_RESULT, 3, PetalburgCity_Gym_EventScript_NormanRematchTier3
+	goto_if_eq VAR_RESULT, 4, PetalburgCity_Gym_EventScript_NormanRematchTier4
+	goto_if_ge VAR_RESULT, 5, PetalburgCity_Gym_EventScript_NormanRematchTier5
 	trainerbattle_rematch_double TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanPreRematch, PetalburgCity_Gym_Text_NormanRematchDefeat, PetalburgCity_Gym_Text_NormanRematchNeedTwoMons
 	msgbox PetalburgCity_Gym_Text_NormanPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+@ Wally's Journey: every rematch tier has its own opening line; the top two
+@ tiers share a tougher defeat and post-battle line.
+PetalburgCity_Gym_EventScript_NormanRematchTier3::
+	trainerbattle_rematch_double TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanPreRematch3, PetalburgCity_Gym_Text_NormanRematchDefeat, PetalburgCity_Gym_Text_NormanRematchNeedTwoMons
+	msgbox PetalburgCity_Gym_Text_NormanPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+PetalburgCity_Gym_EventScript_NormanRematchTier4::
+	trainerbattle_rematch_double TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanPreRematch4, PetalburgCity_Gym_Text_NormanRematchDefeatElite, PetalburgCity_Gym_Text_NormanRematchNeedTwoMons
+	msgbox PetalburgCity_Gym_Text_NormanPostRematchElite, MSGBOX_AUTOCLOSE
+	end
+
+PetalburgCity_Gym_EventScript_NormanRematchTier5::
+	trainerbattle_rematch_double TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanPreRematch5, PetalburgCity_Gym_Text_NormanRematchDefeatElite, PetalburgCity_Gym_Text_NormanRematchNeedTwoMons
+	msgbox PetalburgCity_Gym_Text_NormanPostRematchElite, MSGBOX_AUTOCLOSE
 	end
 
 PetalburgCity_Gym_EventScript_ShouldGiveEnigmaBerry::
@@ -1593,3 +1615,30 @@ PetalburgCity_Gym_Text_NormanRematchNeedTwoMons:
 	.string "Sorry, but you'll have to come back\n"
 	.string "with at least two POKéMON.$"
 
+PetalburgCity_Gym_Text_NormanPreRematch3:
+	.string "DAD: {PLAYER}. Your mother made me\n"
+	.string "promise not to go easy on you.\p"
+	.string "As if I could. Let's go!$"
+
+PetalburgCity_Gym_Text_NormanPreRematch4:
+	.string "DAD: I used to train at night so I'd\n"
+	.string "be strong enough to provide for us.\p"
+	.string "Now I train just to keep up with my\n"
+	.string "own kid. Funny how that works.\p"
+	.string "Show me everything, {PLAYER}!$"
+
+PetalburgCity_Gym_Text_NormanPreRematch5:
+	.string "DAD: This is the team I'd have taken\n"
+	.string "to the LEAGUE, if I'd ever gone.\p"
+	.string "I never did. There was always a GYM\n"
+	.string "to run and a family to feed.\p"
+	.string "Today I'm not fighting for either.\n"
+	.string "Just for the joy of it. Come on!$"
+
+PetalburgCity_Gym_Text_NormanRematchDefeatElite:
+	.string "…Hah. That's my kid.$"
+
+PetalburgCity_Gym_Text_NormanPostRematchElite:
+	.string "DAD: WALLY asked me how to beat you.\p"
+	.string "I told him I'd let him know the\n"
+	.string "moment I figure it out myself.$"

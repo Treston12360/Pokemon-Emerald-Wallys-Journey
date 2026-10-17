@@ -2141,6 +2141,28 @@ u16 GetLastBeatenRematchTrainerId(u16 trainerId)
     return GetLastBeatenRematchTrainerIdFromTable(gRematchTable, trainerId);
 }
 
+// Wally's Journey special: VAR_RESULT = the rematch stage (2-5) of the next
+// rematch with the leader whose first battle is VAR_0x8004, so each stage
+// can open with its own dialogue.
+void WallyJourney_GetRematchTier(void)
+{
+    s32 i, tableId = FirstBattleTrainerIdToRematchTableId(gRematchTable, gSpecialVar_0x8004);
+    u16 next;
+
+    gSpecialVar_Result = 2;
+    if (tableId == -1)
+        return;
+    next = GetRematchTrainerIdFromTable(gRematchTable, gSpecialVar_0x8004);
+    for (i = 1; i < REMATCHES_COUNT; i++)
+    {
+        if (gRematchTable[tableId].trainerIds[i] == next)
+        {
+            gSpecialVar_Result = i + 1;
+            return;
+        }
+    }
+}
+
 bool8 ShouldTryRematchBattle(void)
 {
     return ShouldTryRematchBattleForTrainerId(TRAINER_BATTLE_PARAM.opponentA);

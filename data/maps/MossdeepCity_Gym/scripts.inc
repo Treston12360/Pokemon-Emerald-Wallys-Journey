@@ -114,8 +114,30 @@ MossdeepCity_Gym_EventScript_GiveCalmMind::
 	return
 
 MossdeepCity_Gym_EventScript_TateAndLizaRematch::
+	setvar VAR_0x8004, TRAINER_TATE_AND_LIZA_1
+	special WallyJourney_GetRematchTier
+	goto_if_eq VAR_RESULT, 3, MossdeepCity_Gym_EventScript_TateAndLizaRematchTier3
+	goto_if_eq VAR_RESULT, 4, MossdeepCity_Gym_EventScript_TateAndLizaRematchTier4
+	goto_if_ge VAR_RESULT, 5, MossdeepCity_Gym_EventScript_TateAndLizaRematchTier5
 	trainerbattle_rematch_double TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaPreRematch, MossdeepCity_Gym_Text_TateAndLizaRematchDefeat, MossdeepCity_Gym_Text_TateAndLizaRematchNeedTwoMons
 	msgbox MossdeepCity_Gym_Text_TateAndLizaPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+@ Wally's Journey: every rematch tier has its own opening line; the top two
+@ tiers share a tougher defeat and post-battle line.
+MossdeepCity_Gym_EventScript_TateAndLizaRematchTier3::
+	trainerbattle_rematch_double TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaPreRematch3, MossdeepCity_Gym_Text_TateAndLizaRematchDefeat, MossdeepCity_Gym_Text_TateAndLizaRematchNeedTwoMons
+	msgbox MossdeepCity_Gym_Text_TateAndLizaPostRematch, MSGBOX_AUTOCLOSE
+	end
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematchTier4::
+	trainerbattle_rematch_double TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaPreRematch4, MossdeepCity_Gym_Text_TateAndLizaRematchDefeatElite, MossdeepCity_Gym_Text_TateAndLizaRematchNeedTwoMons
+	msgbox MossdeepCity_Gym_Text_TateAndLizaPostRematchElite, MSGBOX_AUTOCLOSE
+	end
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematchTier5::
+	trainerbattle_rematch_double TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaPreRematch5, MossdeepCity_Gym_Text_TateAndLizaRematchDefeatElite, MossdeepCity_Gym_Text_TateAndLizaRematchNeedTwoMons
+	msgbox MossdeepCity_Gym_Text_TateAndLizaPostRematchElite, MSGBOX_AUTOCLOSE
 	end
 
 @ All the below switch scripts are leftover from RS and are functionally unused
@@ -662,3 +684,37 @@ MossdeepCity_Gym_Text_TateAndLizaRematchNeedTwoMons:
 	.string "LIZA: You brought just one POKéMON!\p"
 	.string "TATE: We need you to bring at least…\n"
 	.string "LIZA: Two POKéMON when you come back.$"
+
+MossdeepCity_Gym_Text_TateAndLizaPreRematch3:
+	.string "TATE: We used to read your moves…\n"
+	.string "LIZA: …after you made them.\p"
+	.string "TATE: Now we're faster.\n"
+	.string "LIZA: Much faster. Let's battle!$"
+
+MossdeepCity_Gym_Text_TateAndLizaPreRematch4:
+	.string "TATE: The SPACE CENTER asked us…\n"
+	.string "LIZA: …to track meteor pieces.\p"
+	.string "TATE: We saw the stars up close.\n"
+	.string "LIZA: We felt so small.\p"
+	.string "TATE: But not in battle!\n"
+	.string "LIZA: Never in battle!$"
+
+MossdeepCity_Gym_Text_TateAndLizaPreRematch5:
+	.string "TATE: This is it.\n"
+	.string "LIZA: Our best.\p"
+	.string "TATE: Our minds are completely\n"
+	.string "in sync.\p"
+	.string "LIZA: Can you keep up…\n"
+	.string "TATE: …with both of us?$"
+
+MossdeepCity_Gym_Text_TateAndLizaRematchDefeatElite:
+	.string "TATE: …We lost again.\n"
+	.string "LIZA: …but together.$"
+
+MossdeepCity_Gym_Text_TateAndLizaPostRematchElite:
+	.string "TATE: WALLY reads people really well.\n"
+	.string "LIZA: He reads them like a book.\p"
+	.string "TATE: You don't read people…\n"
+	.string "LIZA: …you trust them.\p"
+	.string "TATE: That's harder to beat.\n"
+	.string "LIZA: Much harder.$"
