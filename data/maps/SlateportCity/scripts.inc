@@ -1395,8 +1395,8 @@ SlateportCity_Text_SinkOldBoatsAfterChampion:
 	.string "through the storms.\p"
 	.string "Divers found small POKéMON\n"
 	.string "sheltering in the wrecks.\p"
-	.string "Stern says we must check\n"
-	.string "what's safe before sinking\n"
+	.string "CAPT. STERN says we must check\n"
+	.string "what's safe before sinking\l"
 	.string "anything else out there.$"
 
 SlateportCity_Text_BattleTentAfterChampion:

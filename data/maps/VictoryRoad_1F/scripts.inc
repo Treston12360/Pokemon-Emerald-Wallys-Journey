@@ -143,9 +143,9 @@ VictoryRoad_1F_Text_WallyNotGoingToLoseAnymore:
 	.string "Now show me what you can do.$"
 
 VictoryRoad_1F_Text_WallyEntranceDefeat:
-	.string "WALLY: Hmph. You won.\p"
-	.string "I'd be surprised if you\n"
-	.string "lost with me holding back.$"
+	.string "WALLY: Hmph. You passed.\p"
+	.string "Don't let it go to your head.\n"
+	.string "I was holding back.$"
 
 VictoryRoad_1F_Text_WallyPostEntranceBattle:
 	.string "WALLY: That was only about\n"
@@ -240,7 +240,7 @@ VictoryRoad_1F_Text_KatelynnPostBattle:
 	.string "I trained for months to\n"
 	.string "reach this place.\p"
 	.string "Losing to you hurts.\n"
-	.string "I'm not going to pretend\n"
+	.string "I'm not going to pretend\l"
 	.string "it doesn't.\p"
 	.string "But I made it here.\n"
 	.string "That still means something.$"

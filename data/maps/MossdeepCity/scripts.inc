@@ -364,7 +364,7 @@ MossdeepCity_Text_SpaceCenterLaunchingRockets:
 	.string "The SPACE CENTER keeps sending\n"
 	.string "rockets into the sky.\p"
 	.string "My daughter asks why we study\n"
-	.string "the stars while the sea\n"
+	.string "the stars while the sea\l"
 	.string "still holds so many secrets.\p"
 	.string "I told her we have to be\n"
 	.string "curious about both.$"
@@ -385,7 +385,7 @@ MossdeepCity_Text_FeelReliefOnLand:
 	.string "When I'm on land, I miss\n"
 	.string "the sound of the waves.\p"
 	.string "Anyone who thinks we can\n"
-	.string "do without either has\n"
+	.string "do without either has\l"
 	.string "never lived between them.$"
 
 MossdeepCity_Text_NiceIfWorldCoveredByFlowers:

@@ -595,7 +595,7 @@ LilycoveCity_Text_StrangeCaveInCove:
 	.string "There's a cave down by the cove.\n"
 	.string "The police checked it once.\p"
 	.string "A group called SEA TRUST had\n"
-	.string "papers saying they studied\n"
+	.string "papers saying they studied\l"
 	.string "coastal POKéMON there.\p"
 	.string "A permit doesn't mean people\n"
 	.string "are doing what they promised.$"
@@ -608,7 +608,7 @@ LilycoveCity_Text_GoingToMoveDeleterForHMs:
 
 LilycoveCity_Text_ImFromKanto:
 	.string "I moved here from KANTO.\n"
-	.string "The journey cost us almost all\n"
+	.string "The journey cost us almost all\l"
 	.string "we'd saved.\p"
 	.string "HOENN offered me a fresh start.\n"
 	.string "Not everyone gets that chance.\p"
@@ -637,7 +637,7 @@ LilycoveCity_Text_SomeoneStoleMyPokemon:
 	.string "Everyone says TEAM AQUA did it.\n"
 	.string "Maybe they did.\p"
 	.string "But I wish people would look\n"
-	.string "for my friend before arguing\n"
+	.string "for my friend before arguing\l"
 	.string "about who to blame.$"
 
 LilycoveCity_Text_MissingPokemonCameBack:

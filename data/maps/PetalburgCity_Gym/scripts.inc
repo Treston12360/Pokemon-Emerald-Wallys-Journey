@@ -1271,12 +1271,11 @@ PetalburgCity_Gym_Text_ReceivedBalanceBadge:
 	.string "from DAD!$"
 
 PetalburgCity_Gym_Text_ExplainBalanceBadgeTakeThis:
-	.string "DAD: With that BADGE, the DEFENSE\n"
-	.string "of all your POKéMON will increase.\p"
-	.string "POKéMON that know the HM move SURF\n"
-	.string "will be able to travel over water.\p"
-	.string "This is my gift to you. {PLAYER}, I'm\n"
-	.string "sure you can use it correctly.$"
+	.string "DAD: With that BADGE, your POKéMON\n"
+	.string "can SURF across water. No need to\l"
+	.string "teach them the move.\p"
+	.string "And this is my gift to you. {PLAYER},\n"
+	.string "I'm sure you'll use it well.$"
 
 PetalburgCity_Gym_Text_ExplainFacade:
 	.string "DAD: TM42 contains FACADE.\p"
@@ -1334,14 +1333,15 @@ PetalburgCity_Gym_Text_DadGoingToKeepTraining:
 PetalburgCity_Gym_Text_DadNoAmountOfTrainingIsEnough:
 	.string "DAD: {PLAYER}! How are things going?\p"
 	.string "WALLY stopped by last week. Asked if\n"
-	.string "I'd spar with him before a defense.\p"
+	.string "I'd spar with him before he\l"
+	.string "challenges you again.\p"
 	.string "That boy borrowed my ZIGZAGOON to\n"
 	.string "catch his first POKéMON. Now he's\l"
-	.string "the CHAMPION. Hah!\p"
+	.string "chasing my kid's title. Hah!\p"
 	.string "I wasn't around to watch you grow up.\n"
 	.string "I'm not missing any more of it.\p"
-	.string "The world of POKéMON is deep. Let's\n"
-	.string "keep exploring it together.$"
+	.string "The world of POKéMON is deep.\n"
+	.string "Let's keep exploring it together.$"
 
 PetalburgCity_Gym_Text_GymGuideAdvice:
 	.string "Hey, how's it going, CHAMPION-\n"

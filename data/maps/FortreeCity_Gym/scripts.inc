@@ -273,10 +273,11 @@ FortreeCity_Gym_Text_RegisteredWinona:
 FortreeCity_Gym_Text_WinonaPostBattle:
 	.string "Though I fell to you, I will remain\n"
 	.string "devoted to BIRD POKéMON.\p"
-	.string "A boy named WALLY came through a\n"
-	.string "week ago. He read my whole strategy\l"
-	.string "by the second turn.\p"
-	.string "Kind boy. Terrifying TRAINER.$"
+	.string "A boy named WALLY came through a week\n"
+	.string "ago. He read my whole strategy by the\l"
+	.string "second turn.\p"
+	.string "Polite boy. A little too sure of\n"
+	.string "himself. Terrifying TRAINER.$"
 
 FortreeCity_Gym_Text_GymStatue:
 	.string "FORTREE CITY POKéMON GYM$"

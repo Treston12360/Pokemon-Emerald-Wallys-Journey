@@ -299,7 +299,7 @@ MossdeepCity_SpaceCenter_1F_Text_RocketLaunchDemandsPerfection:
 	.string "A small error in the wrong\n"
 	.string "place could cost lives.\p"
 	.string "That caution isn't fear.\n"
-	.string "It's respect for the people\n"
+	.string "It's respect for the people\l"
 	.string "who trust our work.$"
 
 MossdeepCity_SpaceCenter_1F_Text_MagmaHaveSightsOnSpaceCenter:

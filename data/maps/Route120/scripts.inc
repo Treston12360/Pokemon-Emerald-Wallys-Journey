@@ -379,7 +379,7 @@ Route120_Text_StevenIllWaitHere:
 Route120_Text_StevenReadyForBattle:
 	.string "STEVEN: Are you ready?\p"
 	.string "The DEVON SCOPE shows what our\n"
-	.string "eyes can't see. It can't tell us\n"
+	.string "eyes can't see. It can't tell us\l"
 	.string "whether a POKéMON is hostile.\p"
 	.string "That's something we must learn.$"
 

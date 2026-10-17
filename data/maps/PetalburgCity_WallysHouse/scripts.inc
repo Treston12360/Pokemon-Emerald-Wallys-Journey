@@ -28,6 +28,7 @@ PetalburgCity_WallysHouse_EventScript_GiveHMSurf::
 PetalburgCity_WallysHouse_EventScript_WallysDad::
 	lock
 	faceplayer
+	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_WallysHouse_EventScript_DadAfterTitle
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad
 	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad
 	goto_if_set FLAG_RECEIVED_HM_SURF, PetalburgCity_WallysHouse_EventScript_ReceievedHMSurf
@@ -55,6 +56,7 @@ PetalburgCity_WallysHouse_EventScript_PlayedWithWally::
 PetalburgCity_WallysHouse_EventScript_WallysMom::
 	lock
 	faceplayer
+	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_WallysHouse_EventScript_MomAfterTitle
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_WallysHouse_EventScript_MomSawBroadcast
 	goto_if_set FLAG_RECEIVED_HM_SURF, PetalburgCity_WallysHouse_EventScript_ReceivedHMSurf
 	msgbox PetalburgCity_WallysHouse_Text_WallyWasReallyHappy, MSGBOX_DEFAULT
@@ -241,3 +243,31 @@ PetalburgCity_WallysHouse_Text_MomSawBroadcast:
 	.string "his room. Now he's the CHAMPION.\p"
 	.string "He still writes home every week.\n"
 	.string "He always asks how you're doing.$"
+
+PetalburgCity_WallysHouse_EventScript_DadAfterTitle::
+	msgbox PetalburgCity_WallysHouse_Text_DadAfterTitle, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_WallysHouse_EventScript_MomAfterTitle::
+	msgbox PetalburgCity_WallysHouse_Text_MomAfterTitle, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_WallysHouse_Text_DadAfterTitle:
+	.string "We watched your battle, {PLAYER}{KUN}.\p"
+	.string "When WALLY lost, I was afraid he'd\n"
+	.string "shut himself in his room again.\p"
+	.string "Instead he called and talked for an\n"
+	.string "hour. About you, mostly.\p"
+	.string "He said he'd been unkind to people\n"
+	.string "on his way up. He sounded ashamed.\l"
+	.string "And then, for once, he sounded calm.$"
+
+PetalburgCity_WallysHouse_Text_MomAfterTitle:
+	.string "WALLY isn't the CHAMPION anymore.\p"
+	.string "I thought I'd be sad. But he came\n"
+	.string "home for dinner and laughed again.\p"
+	.string "He trains at the BATTLE FRONTIER now.\n"
+	.string "He says he's coming back for your\l"
+	.string "title. The right way, this time.$"

@@ -48,6 +48,6 @@ PacifidlogTown_PokemonCenter_1F_Text_AncestorsLivedOnBoats:
 	.string "Some people ask why we don't\n"
 	.string "move to solid ground.\p"
 	.string "We know these currents.\n"
-	.string "And here, we look after\n"
+	.string "And here, we look after\l"
 	.string "one another.$"
 

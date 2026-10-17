@@ -1316,10 +1316,10 @@ RustboroCity_Text_WowYouHavePokemon_W0:
 	.string "I mean it.$"
 
 RustboroCity_Text_SchoolChampionLesson:
-	.string "Our teacher showed us the\\n"
-	.string "new CHAMPION's picture.\\p"
-	.string "She said you started out\\n"
-	.string "learning, just like us.\\p"
-	.string "I used to want rare POKéMON.\\n"
-	.string "Now I want to be a TRAINER\\n"
+	.string "Our teacher showed us the\n"
+	.string "new CHAMPION's picture.\p"
+	.string "She said you started out\n"
+	.string "learning, just like us.\p"
+	.string "I used to want rare POKéMON.\n"
+	.string "Now I want to be a TRAINER\l"
 	.string "my partner can count on.$"

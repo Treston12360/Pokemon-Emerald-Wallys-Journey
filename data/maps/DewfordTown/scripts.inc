@@ -815,5 +815,5 @@ DewfordTown_Text_IslandAfterChampion:
 	.string "People came from other islands\n"
 	.string "to help mend our boats.\p"
 	.string "Then we heard you were CHAMPION!\n"
-	.string "PEEKO's owner nearly fell off\n"
+	.string "PEEKO's owner nearly fell off\l"
 	.string "his chair cheering.$"

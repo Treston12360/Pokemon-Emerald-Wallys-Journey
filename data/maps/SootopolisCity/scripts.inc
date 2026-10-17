@@ -1501,12 +1501,12 @@ SootopolisCity_Text_SootopolisWillBeWrecked:
 	.string "The water is rising.\n"
 	.string "My family is still inside!\p"
 	.string "JUAN told us to reach\n"
-	.string "higher ground, but I can't\n"
+	.string "higher ground, but I can't\l"
 	.string "leave without them!$"
 
 SootopolisCity_Text_SootopolisDidntGetWrecked:
 	.string "We're still here.\n"
-	.string "I didn't dare believe\n"
+	.string "I didn't dare believe\l"
 	.string "we would be.\p"
 	.string "My family made it out.\n"
 	.string "I keep counting us anyway.$"
@@ -1522,7 +1522,7 @@ SootopolisCity_Text_CityRegainedCalm:
 	.string "The fighting stopped.\n"
 	.string "The streets are quiet again.\p"
 	.string "Some homes still need work.\n"
-	.string "The neighbors have already\n"
+	.string "The neighbors have already\l"
 	.string "started helping each other.$"
 
 SootopolisCity_Text_CaveOfOriginPleaseLeave:

@@ -284,7 +284,7 @@ Route101_Text_TakeTiredPokemonToPokeCenter:
 	.string "If POKéMON get tired, take them to a\n"
 	.string "POKéMON CENTER. There's one in\l"
 	.string "OLDALE TOWN.\p"
-	.string "The League pays for them. Healing is\n"
+	.string "The LEAGUE pays for them. Healing is\n"
 	.string "free for every TRAINER, rich or poor.$"
 
 Route101_Text_WildPokemonInTallGrass:

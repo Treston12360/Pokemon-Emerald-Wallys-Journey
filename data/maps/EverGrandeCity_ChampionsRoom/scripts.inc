@@ -381,7 +381,7 @@ EverGrandeCity_ChampionsRoom_Text_IntroSpeech:
 	.string "I know your strategies.\n"
 	.string "I know what you rely on.\p"
 	.string "You were ahead of me once.\n"
-	.string "That doesn't mean you\n"
+	.string "That doesn't mean you\l"
 	.string "still belong beside me.\p"
 	.string "Come on, {PLAYER}.\n"
 	.string "Show me what you've got.$"
@@ -399,7 +399,7 @@ EverGrandeCity_ChampionsRoom_Text_PostBattleSpeech:
 	.string "You never made me feel\n"
 	.string "small for needing help.\p"
 	.string "I was so afraid of being\n"
-	.string "weak that I began looking\n"
+	.string "weak that I began looking\l"
 	.string "down on other people.\p"
 	.string "Even you. Especially you.\p"
 	.string "I thought winning made\n"
@@ -410,7 +410,7 @@ EverGrandeCity_ChampionsRoom_Text_PostBattleSpeech:
 	.string "I'm still coming back\n"
 	.string "to challenge you someday.\p"
 	.string "Next time, I'll fight to\n"
-	.string "show how far I've grown.\n"
+	.string "show how far I've grown.\l"
 	.string "Not to make you feel small.$"
 
 EverGrandeCity_ChampionsRoom_Text_MayAdvice:

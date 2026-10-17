@@ -16,6 +16,7 @@ PetalburgCity_House2_Text_NormanBecameGymLeader_W1_Script:
 	end
 
 PetalburgCity_House2_EventScript_SchoolKid::
+	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_House2_EventScript_SchoolKidAfterTitle
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_House2_Text_BattledNormanOnce_W0_Script
 	msgbox PetalburgCity_House2_Text_BattledNormanOnce, MSGBOX_NPC
 	end
@@ -55,4 +56,14 @@ PetalburgCity_House2_Text_BattledNormanOnce_W0:
 	.string "down. NORMAN lent him a ZIGZAGOON\l"
 	.string "to catch his first POKéMON.\p"
 	.string "Now he's the CHAMPION.\n"
+	.string "This town, huh?$"
+
+PetalburgCity_House2_EventScript_SchoolKidAfterTitle::
+	msgbox PetalburgCity_House2_Text_SchoolKidAfterTitle, MSGBOX_NPC
+	end
+
+PetalburgCity_House2_Text_SchoolKidAfterTitle:
+	.string "That WALLY kid lived three doors down.\n"
+	.string "He was CHAMPION for a while.\p"
+	.string "Then NORMAN's kid beat him!\n"
 	.string "This town, huh?$"

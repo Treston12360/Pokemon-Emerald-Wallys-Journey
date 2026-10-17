@@ -32,7 +32,7 @@ MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable:
 	.string "TATE and LIZA finish each\n"
 	.string "other's sentences.\p"
 	.string "It looks like mind reading.\n"
-	.string "But they've trained together\n"
+	.string "But they've trained together\l"
 	.string "since they were little.\p"
 	.string "I guess knowing someone\n"
 	.string "that well is its own power.$"
@@ -47,8 +47,8 @@ MossdeepCity_PokemonCenter_1F_Text_AbilitiesMightChangeMoves:
 
 MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable_W0:
 	.string "You beat TATE and LIZA?\n"
-	.string "They've been studying the\n"
+	.string "They've been studying the\l"
 	.string "battle together ever since.\p"
 	.string "They don't blame each other.\n"
-	.string "They want to know what\n"
+	.string "They want to know what\l"
 	.string "you saw that they missed.$"

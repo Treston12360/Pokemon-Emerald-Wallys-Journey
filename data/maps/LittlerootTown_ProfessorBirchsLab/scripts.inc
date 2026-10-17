@@ -957,7 +957,7 @@ LittlerootTown_ProfessorBirchsLab_Text_MayWhatNextImStayingHere:
 	.string "Dad's records are finally\n"
 	.string "making sense again.\p"
 	.string "I want to find out where\n"
-	.string "all those displaced POKéMON\n"
+	.string "all those displaced POKéMON\l"
 	.string "settled after the storms.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_BrendanPreferCollectingSlowly:
@@ -966,7 +966,7 @@ LittlerootTown_ProfessorBirchsLab_Text_BrendanPreferCollectingSlowly:
 	.string "Kidding. I still want\n"
 	.string "a rematch someday.\p"
 	.string "For now, Dad needs help\n"
-	.string "tracking the migrations.\n"
+	.string "tracking the migrations.\l"
 	.string "Someone has to do it.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_MayHaveYouGoneToBattleFrontier:

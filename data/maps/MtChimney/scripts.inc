@@ -564,7 +564,7 @@ MtChimney_Text_MaxieIntro:
 	.string "in FALLARBOR fight the ash for every\l"
 	.string "field. Young people leave HOENN\l"
 	.string "because there's no room to start.\p"
-	.string "Hoenn is mostly ocean, child. We are\n"
+	.string "HOENN is mostly ocean, child. We are\n"
 	.string "running out of ground to live on.\p"
 	.string "New land means homes, farms, roads,\n"
 	.string "work. A future for people who have\l"

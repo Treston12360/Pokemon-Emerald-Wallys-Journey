@@ -67,10 +67,10 @@ EverGrandeCity_DrakesRoom_Text_IntroSpeech:
 	.string "I've sailed through storms\n"
 	.string "that swallowed whole ships.\p"
 	.string "During the crisis, I saw\n"
-	.string "TRAINERS brave the waves\n"
+	.string "TRAINERS brave the waves\l"
 	.string "for people they never met.\p"
 	.string "Courage alone isn't enough.\n"
-	.string "You must know when to act\n"
+	.string "You must know when to act\l"
 	.string "and whom you're protecting.\p"
 	.string "Show me what you've learned.$"
 

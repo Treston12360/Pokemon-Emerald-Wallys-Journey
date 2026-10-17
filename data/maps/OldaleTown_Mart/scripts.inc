@@ -55,7 +55,7 @@ OldaleTown_Mart_EventScript_Boy::
 OldaleTown_Mart_Text_PokeBallsAreSoldOut:
 	.string "The clerk says the POKé BALLS are\n"
 	.string "sold out.\p"
-	.string "Everyone's buying since the League\n"
+	.string "Everyone's buying since the LEAGUE\n"
 	.string "banned the fancy ones. Only plain\l"
 	.string "POKé BALLS now.$"
 

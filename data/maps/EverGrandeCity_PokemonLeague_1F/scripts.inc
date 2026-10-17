@@ -160,7 +160,7 @@ EverGrandeCity_PokemonLeague_1F_Text_GoForth:
 	.string "The ELITE FOUR have each\n"
 	.string "tested countless TRAINERS.\p"
 	.string "You earned your place here.\n"
-	.string "Now show them the bond\n"
+	.string "Now show them the bond\l"
 	.string "you've built with your team.\p"
 	.string "The CHAMPION is waiting.$"
 

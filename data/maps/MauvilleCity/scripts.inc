@@ -536,10 +536,10 @@ MauvilleCity_Text_WallyDefeat:
 	.string "I lost…$"
 
 MauvilleCity_Text_WallyIllGoBackToVerdanturf:
-	.string "WALLY: …I lost again.\p"
-	.string "UNCLE, I'll come back\n"
-	.string "to VERDANTURF with you.\p"
-	.string "But I won't stay there.\n"
+	.string "WALLY: …I lost.\p"
+	.string "UNCLE, I'll come back to\n"
+	.string "VERDANTURF with you.\p"
+	.string "But I won't stay there forever.\n"
 	.string "I'm going to get stronger.$"
 
 MauvilleCity_Text_ThankYouNotEnoughToBattle:
@@ -703,16 +703,16 @@ MauvilleCity_Text_AllSortsOfPeopleComeThroughAftermath:
 	.string "MAGMA red. They don't talk about it.$"
 
 MauvilleCity_Text_NurseHurtMonBackToHealthChampion:
-	.string "I saw your CHAMPION battle on TV.\\p"
-	.string "My WINGULL's healed now. We\\n"
-	.string "watched it together.\\p"
-	.string "I cheered when you won. It gave\\n"
+	.string "I saw your CHAMPION battle on TV.\p"
+	.string "My WINGULL's healed now. We\n"
+	.string "watched it together.\p"
+	.string "I cheered when you won. It gave\n"
 	.string "me the courage to try again.$"
 
 MauvilleCity_Text_RydelVeryGenerousChampion:
-	.string "RYDEL says you used one of his\\n"
-	.string "BIKES on the road to CHAMPION.\\p"
-	.string "He's told that story to every\\n"
-	.string "customer this week!\\p"
-	.string "He won't admit he's proud.\\n"
+	.string "RYDEL says you used one of his\n"
+	.string "BIKES on the road to CHAMPION.\p"
+	.string "He's told that story to every\n"
+	.string "customer this week!\p"
+	.string "He won't admit he's proud.\n"
 	.string "It's written all over his face.$"

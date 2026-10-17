@@ -238,9 +238,9 @@ Route119_WeatherInstitute_2F_Text_Grunt5Defeat:
 
 Route119_WeatherInstitute_2F_Text_Grunt5PostBattle:
 	.string "They told us this would help\n"
-	.string "restore the ocean.\p\n"
+	.string "restore the ocean.\p"
 	.string "So why were we ordered to\n"
-	.string "threaten a room full of staff?\p\n"
+	.string "threaten a room full of staff?\p"
 	.string "I don't have a good answer.$"
 Route119_WeatherInstitute_2F_Text_ShellyIntro:
 	.string "Ahahahaha!\p"
@@ -294,9 +294,9 @@ Route119_WeatherInstitute_2F_Text_PokemonChangesWithWeather:
 
 Route119_WeatherInstitute_2F_Text_ChangingWeatherRidiculous:
 	.string "The records tell us weather can\n"
-	.string "shift without warning.\p\n"
+	.string "shift without warning.\p"
 	.string "But these changes have a pattern\n"
-	.string "we don't understand yet.\p\n"
+	.string "we don't understand yet.\p"
 	.string "Science means admitting what\n"
 	.string "you don't know, then looking.$"
 Route119_WeatherInstitute_2F_Text_GroudonWeather:

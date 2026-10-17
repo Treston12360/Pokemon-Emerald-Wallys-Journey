@@ -66,7 +66,7 @@ EverGrandeCity_GlaciasRoom_Text_IntroSpeech:
 	.string "Panic made every choice\n"
 	.string "more dangerous.\p"
 	.string "You have come this far.\n"
-	.string "Let us see if your judgment\n"
+	.string "Let us see if your judgment\l"
 	.string "is as steady as your team.$"
 
 EverGrandeCity_GlaciasRoom_Text_Defeat:

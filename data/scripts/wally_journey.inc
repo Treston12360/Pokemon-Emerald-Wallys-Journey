@@ -239,7 +239,7 @@ WallyJourney_Text_RivalFORTREEIntro:
 	.string "Mom said you beat NORMAN.\n"
 	.string "Not bad. Really.\p"
 	.string "I beat WINONA, too.\n"
-	.string "She was clever, but I saw\n"
+	.string "She was clever, but I saw\l"
 	.string "through her strategy.\p"
 	.string "Don't treat me like that\n"
 	.string "kid from PETALBURG.\p"
@@ -248,8 +248,8 @@ WallyJourney_Text_RivalFORTREEIntro:
 
 
 WallyJourney_Text_RivalFORTREEDefeat:
-	.string "Wow… still not enough.\n"
-	.string "But that was close!$"
+	.string "Tch… Still not enough.\n"
+	.string "That was close, though.$"
 
 
 WallyJourney_Text_RivalFORTREEPost:
@@ -278,7 +278,7 @@ WallyJourney_Text_RivalLILYCOVEIntro:
 	.string "I've built this team to win.\n"
 	.string "Every move has a purpose.\p"
 	.string "You helped me once, sure.\n"
-	.string "But that doesn't make you\n"
+	.string "But that doesn't make you\l"
 	.string "my teacher forever.\p"
 	.string "Let's see whether you've\n"
 	.string "managed to keep up.$"
@@ -390,44 +390,39 @@ WallyJourney_Text_SootopolisWallyCalls:
 	.string "WALLY: {PLAYER}! Hold up.$"
 
 WallyJourney_Text_SootopolisWallyWon:
-	.string "WALLY: So that's the gap\n"
-	.string "between us now.\p"
-	.string "I told you I'd get stronger.\n"
-	.string "You should have listened.\p"
-	.string "I'm going to VICTORY ROAD.\n"
-	.string "Then the ELITE FOUR.\p"
-	.string "When I beat WALLACE, you'll\n"
-	.string "know exactly where we stand.$"
+	.string "WALLY: So that's the gap between\n"
+	.string "us now.\p"
+	.string "I told you I'd catch up. I didn't\n"
+	.string "think I'd pass you this fast.\p"
+	.string "Watch the broadcast tonight.\n"
+	.string "When I beat WALLACE, you'll know\l"
+	.string "exactly where we stand.$"
 
 WallyJourney_Text_RivalSOOTOPOLISIntro:
-	.string "WALLY: The storm is over.\n"
-	.string "Everyone's safe.\p"
-	.string "My eight BADGES are ready.\n"
-	.string "WALLACE is waiting for me\n"
-	.string "at EVER GRANDE.\p"
-	.string "Before I go, battle me.\n"
-	.string "I want a real test.\p"
-	.string "I'm saving MEGA EVOLUTION\n"
-	.string "for the CHAMPION.\p"
-	.string "Don't expect me to hold back\n"
-	.string "just because you helped me\n"
-	.string "catch my first POKéMON.$"
+	.string "WALLY: The storm's over.\n"
+	.string "Everyone I got into the shelters\l"
+	.string "walked out on their own.\p"
+	.string "I cleared the ELITE FOUR last week.\n"
+	.string "Then the sky went black, and I came\l"
+	.string "back to help.\p"
+	.string "WALLACE just left for EVER GRANDE.\n"
+	.string "Our title match is tonight.\p"
+	.string "One battle before I go. I'm saving\n"
+	.string "MEGA EVOLUTION for him.\p"
+	.string "And don't expect me to go easy just\n"
+	.string "because you watched me catch RALTS.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISDefeat:
-	.string "WALLY: …You still managed\n"
-	.string "to beat me.\p"
-	.string "Fine. I needed a real test.$"
+	.string "WALLY: …You still beat me.\n"
+	.string "Fine. Better you than WALLACE.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISPost:
-	.string "WALLY: Enjoy your victory.\p"
-	.string "Next time I'll have my\n"
-	.string "full strength ready.\p"
-	.string "The ELITE FOUR comes first.\n"
-	.string "Then WALLACE.\p"
-	.string "You'll see what I'm capable\n"
-	.string "of when I take that title.$"
+	.string "WALLY: Enjoy it. Tonight I fight\n"
+	.string "at full strength.\p"
+	.string "When I take that title, you'll be\n"
+	.string "the one chasing me.$"
 
 
 
@@ -675,10 +670,9 @@ WallyJourney_Text_JuanAfterBroadcast:
 	.string "The very thing I once saw in him.$"
 
 WallyJourney_Text_StevenAfterBroadcast:
-	.string "STEVEN: …Like I saw in you,\n"
-	.string "{PLAYER}.\p"
-	.string "Wally's already at the top. He's\n"
-	.string "waiting for you.$"
+	.string "STEVEN: …Like I saw in you, {PLAYER}.\p"
+	.string "WALLY's already at the top.\n"
+	.string "He's waiting for you.$"
 
 WallyJourney_Text_JuanSeeYouAtGym:
 	.string "JUAN: You hold every BADGE in HOENN.\p"
@@ -929,7 +923,7 @@ WallyJourney_Text_PyreWallyArrives:
 	.string "together. Pick your best three!$"
 
 WallyJourney_Text_PyreWallyAfter:
-	.string "WALLY: Nice! We make a good team.\p"
+	.string "WALLY: Not bad. You kept up.\p"
 	.string "Go on ahead. I'll make sure nobody\n"
 	.string "follows you up.$"
 

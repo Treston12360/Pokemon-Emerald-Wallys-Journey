@@ -10,11 +10,11 @@ VerdanturfTown_House_EventScript_Woman2::
 	end
 
 VerdanturfTown_House_Text_TrainersGatherAtPokemonLeague:
-	.string "The POKéMON LEAGUE is in EVER\n"
-	.string "GRANDE CITY.\p"
-	.string "They say the CHAMPION only takes the\n"
-	.string "title seriously if the challenger\l"
-	.string "does. WALLACE was like that.$"
+	.string "The POKéMON LEAGUE is in\n"
+	.string "EVER GRANDE CITY.\p"
+	.string "They say a real CHAMPION only takes\n"
+	.string "the title seriously if the\l"
+	.string "challenger does.$"
 
 VerdanturfTown_House_Text_DefeatEliteFourInARow:
 	.string "At the POKéMON LEAGUE, you face the\n"

@@ -84,7 +84,7 @@ EverGrandeCity_PokemonCenter_1F_Text_LeagueAfterVictoryRoad:
 	.string "The path isn't there to\n"
 	.string "punish challengers.\p"
 	.string "It's there to ask whether\n"
-	.string "you and your team are ready\n"
+	.string "you and your team are ready\l"
 	.string "for what comes next.$"
 
 EverGrandeCity_PokemonCenter_1F_Text_BelieveInYourPokemon:

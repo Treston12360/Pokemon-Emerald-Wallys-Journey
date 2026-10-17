@@ -61,10 +61,10 @@ LilycoveCity_PokemonCenter_1F_Text_HowManyKindsOfPokemon:
 
 LilycoveCity_PokemonCenter_1F_Text_HeardAboutRottenScoundrels:
 	.string "A traveler told me people\n"
-	.string "were stealing research\n"
+	.string "were stealing research\l"
 	.string "equipment and POKéMON.\p"
 	.string "I used to think these teams\n"
-	.string "were just arguing about\n"
+	.string "were just arguing about\l"
 	.string "how to protect HOENN.\p"
 	.string "Now I'm not so sure.$"
 

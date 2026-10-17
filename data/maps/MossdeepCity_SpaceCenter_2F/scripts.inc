@@ -371,7 +371,7 @@ MossdeepCity_SpaceCenter_2F_Text_MagmaCantGetAwayWithThis:
 
 MossdeepCity_SpaceCenter_2F_Text_WishOrdinaryPeopleCouldGoIntoSpace:
 	.string "I hope one day ordinary\n"
-	.string "people can see the stars\n"
+	.string "people can see the stars\l"
 	.string "from above the clouds.\p"
 	.string "But first we have to make\n"
 	.string "that journey safe for them.$"
@@ -380,7 +380,7 @@ MossdeepCity_SpaceCenter_2F_Text_DoesMagmaWantToGoToSpace:
 	.string "TEAM MAGMA says it wants\n"
 	.string "more room for people.\p"
 	.string "Space is vast, but stealing\n"
-	.string "fuel won't make HOENN's\n"
+	.string "fuel won't make HOENN's\l"
 	.string "families safer today.$"
 
 MossdeepCity_SpaceCenter_2F_Text_YoureOutnumberedTakeUsOn:
@@ -447,15 +447,15 @@ MossdeepCity_SpaceCenter_2F_Text_StevenWhyStealRocketFuel:
 	.string "fuel?$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieUseFuelToEruptVolcano:
-	.string "MAXIE: Fufufu… Since you're so\n"
-	.string "curious, you deserve an explanation.\p"
-	.string "We're going to jettison the entire\n"
-	.string "load into MT. CHIMNEY!\p"
-	.string "With GROUDON gone, we have no need\n"
-	.string "for that slag heap of a mountain!\p"
-	.string "So we'll use the fuel's power to make\n"
-	.string "the volcano erupt!\p"
-	.string "It will be savage!$"
+	.string "MAXIE: Since you're so curious,\n"
+	.string "you deserve an explanation.\p"
+	.string "We're going to fire the entire load\n"
+	.string "into MT. CHIMNEY.\p"
+	.string "GROUDON won't answer us. Very well.\n"
+	.string "The mountain will.\p"
+	.string "A forced eruption. New ground for\n"
+	.string "every family that's been told to\l"
+	.string "wait.$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenAreYouReadyToBattle:
 	.string "STEVEN: {PLAYER}{KUN}!\n"

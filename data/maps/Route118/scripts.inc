@@ -246,15 +246,15 @@ Route118_EventScript_Deandre::
 
 Route118_Text_StevenQuestions:
 	.string "STEVEN: {PLAYER}! It's good to see\n"
-	.string "you again. How is your journey?\p\n"
+	.string "you again. How is your journey?\p"
 	.string "The WEATHER INSTITUTE has reported\n"
-	.string "rain patterns that don't add up.\p\n"
+	.string "rain patterns that don't add up.\p"
 	.string "DEVON's instruments can measure\n"
-	.string "the change, not explain it.\p\n"
+	.string "the change, not explain it.\p"
 	.string "I've asked researchers to share\n"
-	.string "their findings, not bury them.\p\n"
+	.string "their findings, not bury them.\p"
 	.string "Keep an eye on the skies ahead.\n"
-	.string "And keep thinking for yourself.\p\n"
+	.string "And keep thinking for yourself.\p"
 	.string "People with convincing answers\n"
 	.string "aren't always people who are right.$"
 Route118_Text_YouAgreeGoodRodIsGood:

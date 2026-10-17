@@ -187,7 +187,7 @@ Route123_Text_CheckTreesWithMyGrassMon:
 	.string "Some leaves turn early when\n"
 	.string "the water or soil changes.\p"
 	.string "The WEATHER INSTITUTE studies\n"
-	.string "the sky. I watch the roots.\n"
+	.string "the sky. I watch the roots.\l"
 	.string "We need both answers.$"
 
 Route123_Text_RouteSign:

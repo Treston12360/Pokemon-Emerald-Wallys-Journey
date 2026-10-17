@@ -42,7 +42,7 @@ MtPyre_1F_Text_ComeToPayRespects:
 	.string "People travel here from all\n"
 	.string "over HOENN to do that.\p"
 	.string "Some come to grieve. Others\n"
-	.string "come to say thank you.\n"
+	.string "come to say thank you.\l"
 	.string "Both are welcome.$"
 
 MtPyre_1F_Text_RestingPlaceOfZigzagoon:

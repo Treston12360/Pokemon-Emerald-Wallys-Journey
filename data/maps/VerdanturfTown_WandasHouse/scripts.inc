@@ -18,6 +18,7 @@ VerdanturfTown_WandasHouse_EventScript_WallyShortSpeech::
 VerdanturfTown_WandasHouse_EventScript_WallysUncle::
 	lock
 	faceplayer
+	goto_if_set FLAG_SYS_GAME_CLEAR, VerdanturfTown_WandasHouse_EventScript_UncleAfterTitle
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, VerdanturfTown_WandasHouse_EventScript_WallysUncleEverGrande
 	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, VerdanturfTown_WandasHouse_EventScript_WallysUncleEverGrande
 	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, VerdanturfTown_WandasHouse_EventScript_WallysUncleSlippedOff
@@ -61,6 +62,7 @@ VerdanturfTown_WandasHouse_EventScript_WandaDontWorry::
 VerdanturfTown_WandasHouse_EventScript_WallysAunt::
 	lock
 	faceplayer
+	goto_if_set FLAG_SYS_GAME_CLEAR, VerdanturfTown_WandasHouse_EventScript_AuntAfterTitle
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, VerdanturfTown_WandasHouse_EventScript_WallysAuntEverGrande
 	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, VerdanturfTown_WandasHouse_EventScript_WallysAuntEverGrande
 	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, VerdanturfTown_WandasHouse_EventScript_WallysAuntAnythingHappened
@@ -174,3 +176,27 @@ VerdanturfTown_WandasHouse_Text_WallyWasInEverGrande:
 	.string "the broadcast. My husband cried.\p"
 	.string "…Don't tell him I told you.$"
 
+VerdanturfTown_WandasHouse_EventScript_UncleAfterTitle::
+	msgbox VerdanturfTown_WandasHouse_Text_UncleAfterTitle, MSGBOX_DEFAULT
+	release
+	end
+
+VerdanturfTown_WandasHouse_EventScript_AuntAfterTitle::
+	msgbox VerdanturfTown_WandasHouse_Text_AuntAfterTitle, MSGBOX_DEFAULT
+	release
+	end
+
+VerdanturfTown_WandasHouse_Text_UncleAfterTitle:
+	.string "UNCLE: So you're the one who took\n"
+	.string "the title from our WALLY.\p"
+	.string "Don't apologize. The boy needed\n"
+	.string "someone to knock him back down to\l"
+	.string "earth. Better a friend than a fall.$"
+
+VerdanturfTown_WandasHouse_Text_AuntAfterTitle:
+	.string "WALLY stayed with us a few days\n"
+	.string "after he lost the title.\p"
+	.string "He helped the kids with their\n"
+	.string "breathing exercises. Patiently.\p"
+	.string "He used to be one of them.\n"
+	.string "I think he finally remembered.$"

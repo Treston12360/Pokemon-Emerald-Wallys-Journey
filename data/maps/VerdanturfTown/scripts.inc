@@ -134,9 +134,9 @@ VerdanturfTown_Text_AirCleanHere_W0:
 	.string "The whole town cried.$"
 
 VerdanturfTown_Text_AirCleanHereAfterChampion:
-	.string "We all cheered when WALLY became\\n"
-	.string "CHAMPION. Then you beat him!\\p"
-	.string "He came back here yesterday.\\n"
-	.string "Sat on his old bench awhile.\\p"
-	.string "This time, he watched the other\\n"
+	.string "We all cheered when WALLY became\n"
+	.string "CHAMPION. Then you beat him!\p"
+	.string "He came back here yesterday.\n"
+	.string "Sat on his old bench awhile.\p"
+	.string "This time, he watched the other\n"
 	.string "kids run with a big smile.$"
