@@ -212,9 +212,9 @@ MossdeepCity_StevensHouse_Text_CollectionOfRareRocks:
 
 
 MossdeepCity_StevensHouse_Text_NoHmDive:
-	.string "You've done tremendous work.\\p"
+	.string "You've done tremendous work.\p"
 	.string "I know you'll see this through!$"
 
 MossdeepCity_StevensHouse_Text_NoHmDiveAdvice:
-	.string "The MIND BADGE lets you DIVE\\n"
+	.string "The MIND BADGE lets you DIVE\n"
 	.string "into the deep ocean. Good luck!$"
