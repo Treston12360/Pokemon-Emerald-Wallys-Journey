@@ -5,11 +5,10 @@ MauvilleCity_House1_EventScript_RockSmashDude::
 	lock
 	faceplayer
 	goto_if_set FLAG_RECEIVED_HM_ROCK_SMASH, MauvilleCity_House1_EventScript_ReceivedRockSmash
-	msgbox MauvilleCity_House1_Text_ImRockSmashDudeTakeThis, MSGBOX_DEFAULT
-	giveitem ITEM_HM_ROCK_SMASH
+	msgbox MauvilleCity_House1_Text_NoHMChat, MSGBOX_DEFAULT
 	setflag FLAG_RECEIVED_HM_ROCK_SMASH
 	setflag FLAG_HIDE_ROUTE_111_ROCK_SMASH_TIP_GUY
-	msgbox MauvilleCity_House1_Text_ExplainRockSmash, MSGBOX_DEFAULT
+	msgbox MauvilleCity_House1_Text_NoHMAdvice, MSGBOX_DEFAULT
 	release
 	end
 
@@ -44,3 +43,12 @@ MauvilleCity_House1_Text_MonCanFlyOutOfSmashedRock:
 	.string "could come flying out of hiding.\p"
 	.string "Woohoo!$"
 
+
+MauvilleCity_House1_Text_NoHMChat:
+	.string "Woohoo! I'm the ROCK SMASH DUDE!\p"
+	.string "Your team looks strong enough to\n"
+	.string "smash any challenge!$"
+
+MauvilleCity_House1_Text_NoHMAdvice:
+	.string "The DYNAMO BADGE lets you smash\n"
+	.string "cracked rocks along the road!$"
