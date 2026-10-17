@@ -121,14 +121,13 @@ Route119_EventScript_BattleBrendanMudkip::
 	end
 
 Route119_EventScript_DefeatedBrendan::
-	msgbox Route119_Text_BrendanIllGiveYouThis, MSGBOX_DEFAULT
+	msgbox Route119_Text_NoHmFly, MSGBOX_DEFAULT
 	call Route119_EventScript_GiveFlyHM
-	msgbox Route119_Text_BrendanExplainFly, MSGBOX_DEFAULT
+	msgbox Route119_Text_NoHmFlyAdvice, MSGBOX_DEFAULT
 	goto Route119_EventScript_RivalExitScottArrive
 	end
 
 Route119_EventScript_GiveFlyHM::
-	giveitem ITEM_HM_FLY
 	setflag FLAG_RECEIVED_HM_FLY
 	return
 
@@ -608,3 +607,12 @@ Route119_Text_TrainerTipsDecoration:
 	.string "Pick your favorite items and create\n"
 	.string "your very own SECRET BASE exactly the\l"
 	.string "way you want.$"
+
+Route119_Text_NoHmFly:
+	.string "That was a great battle!\\p"
+	.string "You're getting stronger every day!$"
+
+Route119_Text_NoHmFlyAdvice:
+	.string "With the FEATHER BADGE, FLY\\n"
+	.string "will carry you across HOENN.\\p"
+	.string "See you around!$"
