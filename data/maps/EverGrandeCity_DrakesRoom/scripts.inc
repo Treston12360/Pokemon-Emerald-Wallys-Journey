@@ -86,7 +86,11 @@ EverGrandeCity_DrakesRoom_Text_PostBattleSpeech:
 	.string "I wanted of them.\p"
 	.string "A good captain listens.\n"
 	.string "A good TRAINER does, too.\p"
-	.string "WALLY learned that lesson.\n"
-	.string "So have you.\p"
+	.string "WALLY fought hard when he\n"
+	.string "came through here.\p"
+	.string "But I told him what I'm\n"
+	.string "telling you now:\p"
+	.string "Strength without listening\n"
+	.string "can take you only so far.\p"
 	.string "Go on. The CHAMPION awaits.$"
 

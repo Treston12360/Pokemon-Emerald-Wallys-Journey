@@ -16,8 +16,13 @@ PetalburgCity_House2_Text_NormanBecameGymLeader_W1_Script:
 	end
 
 PetalburgCity_House2_EventScript_SchoolKid::
+	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_House2_EventScript_ChildAfterPlayerChampion
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_House2_Text_BattledNormanOnce_W0_Script
 	msgbox PetalburgCity_House2_Text_BattledNormanOnce, MSGBOX_NPC
+	end
+
+PetalburgCity_House2_EventScript_ChildAfterPlayerChampion:
+	msgbox PetalburgCity_House2_Text_BattledNormanOnce_AfterPlayerChampion, MSGBOX_NPC
 	end
 
 PetalburgCity_House2_Text_BattledNormanOnce_W0_Script:
@@ -56,3 +61,13 @@ PetalburgCity_House2_Text_BattledNormanOnce_W0:
 	.string "to catch his first POKéMON.\p"
 	.string "Now he's the CHAMPION.\n"
 	.string "This town, huh?$"
+
+PetalburgCity_House2_Text_BattledNormanOnce_AfterPlayerChampion:
+	.string "That WALLY kid used to live\n"
+	.string "three doors down.\p"
+	.string "NORMAN lent him the POKéMON\n"
+	.string "that helped him catch RALTS.\p"
+	.string "Now WALLY and you have both\n"
+	.string "held the CHAMPION title.\p"
+	.string "PETALBURG will be talking\n"
+	.string "about that for years.$"
