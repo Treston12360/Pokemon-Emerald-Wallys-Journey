@@ -279,54 +279,53 @@ MauvilleCity_Gym_Text_GymGuidePostVictory:
 	.string "outside of battle, legally.$"
 
 MauvilleCity_Gym_Text_KirkIntro:
-	.string "My electric soul, it'll shatter your\n"
-	.string "dreams whole, whoa-yeahah!$"
+	.string "My electric soul will shatter your\n"
+	.string "dreams, whoa-yeah!$"
 
 MauvilleCity_Gym_Text_KirkDefeat:
 	.string "That was plugged in, amped up,\n"
 	.string "over-driven electric, man!$"
 
 MauvilleCity_Gym_Text_KirkPostBattle:
-	.string "POKéMON and rock, it's all about heart,\n"
-	.string "whoa-yeah!$"
+	.string "POKéMON and rock, it's all about\n"
+	.string "heart, whoa-yeah!$"
 
 MauvilleCity_Gym_Text_ShawnIntro:
-	.string "I trained under WATTSON!\n"
-	.string "There ain't no way I'll lose easily!$"
+	.string "I trained under WATTSON! I won't go\n"
+	.string "down easy!$"
 
 MauvilleCity_Gym_Text_ShawnDefeat:
 	.string "Unplugged and turned off…$"
 
 MauvilleCity_Gym_Text_ShawnPostBattle:
-	.string "WATTSON, our GYM LEADER, has been\n"
-	.string "around for a long, long time.\p"
-	.string "He was battling even before your\n"
-	.string "daddy was born, that tough coot.$"
+	.string "WATTSON's been battling since before\n"
+	.string "your daddy was born.\p"
+	.string "He built half of MAUVILLE's power\n"
+	.string "grid himself. The man is a legend.$"
 
 MauvilleCity_Gym_Text_BenIntro:
-	.string "This GYM's got puzzles!\n"
-	.string "Isn't it fun?$"
+	.string "This GYM's got puzzles! Fun, right?$"
 
 MauvilleCity_Gym_Text_BenDefeat:
 	.string "It's no fun to lose…$"
 
 MauvilleCity_Gym_Text_BenPostBattle:
-	.string "WATTSON says he likes setting up\n"
-	.string "little traps with switches.$"
+	.string "WATTSON loves his switch traps. Says\n"
+	.string "a TRAINER who can't think under\l"
+	.string "pressure won't last.$"
 
 MauvilleCity_Gym_Text_VivianIntro:
-	.string "With my charm and my POKéMON's moves,\n"
-	.string "you'll be shocked!$"
+	.string "My charm and my POKéMON will shock\n"
+	.string "you!$"
 
 MauvilleCity_Gym_Text_VivianDefeat:
 	.string "I'm shocked by your power!$"
 
 MauvilleCity_Gym_Text_VivianPostBattle:
-	.string "I've heard that MAUVILLE was founded\n"
-	.string "by WATTSON.\p"
-	.string "He was a TRAINER long before we\n"
-	.string "became TRAINERS.\l"
-	.string "He must know all sorts of things!$"
+	.string "WATTSON founded this city.\p"
+	.string "He wanted to roof the whole thing\n"
+	.string "and run it on one generator. NEW\l"
+	.string "MAUVILLE. It… didn't go well.$"
 
 MauvilleCity_Gym_Text_AngeloIntro:
 	.string "I love shiny things!$"
@@ -336,8 +335,8 @@ MauvilleCity_Gym_Text_AngeloDefeat:
 	.string "My eyes are frazzled…$"
 
 MauvilleCity_Gym_Text_AngeloPostBattle:
-	.string "MAUVILLE GYM's WATTSON has a shiny\n"
-	.string "forehead. It makes me happy!$"
+	.string "WATTSON's forehead is so shiny. It\n"
+	.string "makes me happy.$"
 
 MauvilleCity_Gym_Text_WattsonIntro:
 	.string "I've given up on my plans to convert\n"
@@ -388,8 +387,8 @@ MauvilleCity_Gym_Text_WattsonPostBattle:
 	.string "nagging. Gave me a real jolt!$"
 
 MauvilleCity_Gym_Text_WattsonGoForthAndEndeavor:
-	.string "Wahahahah!\n"
-	.string "Go forth and endeavor, youngster!$"
+	.string "Wahahahah! Go forth and endeavor,\n"
+	.string "youngster!$"
 
 MauvilleCity_Gym_Text_GymStatue:
 	.string "MAUVILLE CITY POKéMON GYM$"

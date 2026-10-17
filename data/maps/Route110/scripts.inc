@@ -739,20 +739,28 @@ Route110_Movement_BirchExit4:
 	step_end
 
 Route110_Text_WeCantTalkAboutAquaActivities:
-	.string "TEAM AQUA's activities…\n"
-	.string "We can't talk about them yet.$"
+	.string "TEAM AQUA's activities? We can't talk\n"
+	.string "about them. Not yet.\p"
+	.string "When it's done, everyone will know.\n"
+	.string "And they'll thank us.$"
 
 Route110_Text_KickUpARuckus:
-	.string "I want to get going to SLATEPORT and\n"
-	.string "kick up a ruckus!$"
+	.string "I want to get to SLATEPORT and kick\n"
+	.string "up a ruckus!\p"
+	.string "…That's what the new guys say. The\n"
+	.string "old guys just look tired.$"
 
 Route110_Text_MyFirstJobInAqua:
-	.string "This is my first job after joining\n"
-	.string "TEAM AQUA. It's a little scary.$"
+	.string "This is my first job with TEAM AQUA.\p"
+	.string "It's a little scary. I thought we'd\n"
+	.string "be cleaning beaches. Nobody said\l"
+	.string "anything about stealing.$"
 
 Route110_Text_AquaActionsBringSmiles:
 	.string "TEAM AQUA's actions should bring\n"
-	.string "smiles to people's faces!$"
+	.string "smiles to people's faces!\p"
+	.string "…So why does everyone frown when they\n"
+	.string "see our uniform?$"
 
 Route110_Text_MayLetsBattle:
 	.string "MAY: Hi, {PLAYER}{KUN}, long time no see!\p"
@@ -807,13 +815,16 @@ Route110_Text_BrendanExplainItemfinder:
 	.string "POKéMON.$"
 
 Route110_Text_RideBikeAtFullSpeed:
-	.string "Wouldn't it be great to ride a BIKE\n"
-	.string "at full speed on CYCLING ROAD?$"
+	.string "Wouldn't it be great to ride full\n"
+	.string "speed down CYCLING ROAD?\p"
+	.string "DEVON paid for it. Built it over the\n"
+	.string "marsh so the WINGULL could keep\l"
+	.string "nesting underneath.$"
 
 Route110_Text_HairStreamsBehindMe:
-	.string "How do you like the way my raven-\n"
-	.string "colored hair streams behind me?\p"
-	.string "I grew my hair out just for that.$"
+	.string "How do you like my hair streaming\n"
+	.string "behind me? I grew it out just for\l"
+	.string "CYCLING ROAD.$"
 
 Route110_Text_YouGotBikeFromRydel:
 	.string "Oh, hey, you got that BIKE from RYDEL!\p"
@@ -833,13 +844,15 @@ Route110_Text_YouGotBikeFromRydel:
 	.string "the place--it's good advertising!$"
 
 Route110_Text_TwoRoads:
-	.string "The two roads, one above, one below…\p"
-	.string "A road each for people and POKéMON.\n"
-	.string "Perhaps that is right and fair.$"
+	.string "Two roads, one above, one below.\p"
+	.string "One for people, one for POKéMON.\n"
+	.string "Maybe that's right and fair. Or\l"
+	.string "maybe it's just a nice excuse.$"
 
 Route110_Text_WalkOnTheLowRoad:
-	.string "I don't have a BIKE, so I'll take\n"
-	.string "a leisurely walk on the low road.$"
+	.string "No BIKE for me. I'll take the low\n"
+	.string "road and see who's living in the\l"
+	.string "grass.$"
 
 Route110_Text_BikeTechniques:
 	.string "Learning techniques will make BIKE\n"
@@ -849,9 +862,9 @@ Route110_Text_BikeTechniques:
 
 Route110_Text_WhichShouldIChoose:
 	.string "Which should I choose?\p"
-	.string "Make a beeline for MAUVILLE on\n"
-	.string "CYCLING ROAD, or take the low road\l"
-	.string "and look for POKéMON?$"
+	.string "Race to MAUVILLE on CYCLING ROAD, or\n"
+	.string "walk the low road and look for\l"
+	.string "POKéMON? Speed or discovery…$"
 
 Route110_Text_CyclingChallengeResultSummary:
 	.string "Number of collisions:\n"

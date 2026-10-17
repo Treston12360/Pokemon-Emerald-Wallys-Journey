@@ -67,20 +67,16 @@ VerdanturfTown_EventScript_RusturfTunnelSign::
 	end
 
 VerdanturfTown_Text_ManTryingToDigTunnel:
-	.string "My papa told me.\p"
-	.string "He says this tunnel is full of\n"
+	.string "My papa says this tunnel is full of\n"
 	.string "timid POKéMON.\p"
-	.string "They get all scared of loud noise and\n"
-	.string "make a big uproar.\p"
-	.string "So they had to stop the big tunnel\n"
-	.string "project.\p"
-	.string "But there's one man. He's trying to dig\n"
-	.string "the tunnel by himself!$"
+	.string "Loud noises scare them. That's why\n"
+	.string "people protested the digging.$"
 
 VerdanturfTown_Text_ManDugTunnelForLove:
-	.string "There was a man who dug a tunnel for\n"
-	.string "a lady he loved.\p"
-	.string "I don't really get it, but hey!$"
+	.string "A man dug a tunnel for the lady he\n"
+	.string "loved.\p"
+	.string "I don't really get it. But I kind of\n"
+	.string "do.$"
 
 VerdanturfTown_Text_AirCleanHere:
 	.string "The winds keep MT. CHIMNEY's ash\n"
@@ -97,19 +93,16 @@ VerdanturfTown_Text_MakeBattleTentDebut:
 	.string "anyone take notes like that.$"
 
 VerdanturfTown_Text_GuyTryingToBustThroughCave:
-	.string "Did you see the cave next to the\n"
-	.string "POKéMON MART?\p"
-	.string "There's a guy in there who's trying to\n"
-	.string "bust up boulders so he can bust out\l"
-	.string "through to the other side.\p"
-	.string "It'd be great if we could go through…\n"
-	.string "It'll make it easy to visit RUSTBORO.$"
+	.string "See the cave by the POKéMON MART?\p"
+	.string "A guy in there is breaking boulders\n"
+	.string "by hand. Wouldn't use machines.\l"
+	.string "Didn't want to scare the WHISMUR.$"
 
 VerdanturfTown_Text_EasyToGetToRustboroNow:
-	.string "That cave next to the POKéMON MART\n"
-	.string "is now a tunnel to the other side.\p"
-	.string "It's great--it's easy to go shop for\n"
-	.string "new DEVON products in RUSTBORO now.$"
+	.string "The cave's a tunnel now! Easy trips\n"
+	.string "to RUSTBORO.\p"
+	.string "And they did it without bulldozers.\n"
+	.string "The WHISMUR are still in there.$"
 
 VerdanturfTown_Text_TownSign:
 	.string "VERDANTURF TOWN\p"

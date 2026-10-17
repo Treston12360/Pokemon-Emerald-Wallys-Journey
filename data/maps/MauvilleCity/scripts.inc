@@ -674,7 +674,9 @@ MauvilleCity_Text_ExplainTV:
 	.string "out TVs whenever you can.$"
 
 MauvilleCity_Text_BeenCheckingOutTV:
-	.string "Hi, have you been checking out TVs?$"
+	.string "Hi! Have you been watching TV?\p"
+	.string "Everything's DEVON ads and weather\n"
+	.string "warnings lately.$"
 
 MauvilleCity_Text_AllSortsOfPeopleComeThroughAftermath:
 	.string "Since the storm, supply trucks roll\n"

@@ -17,10 +17,9 @@ VerdanturfTown_House_Text_TrainersGatherAtPokemonLeague:
 	.string "does. WALLACE was like that.$"
 
 VerdanturfTown_House_Text_DefeatEliteFourInARow:
-	.string "In the POKéMON LEAGUE, I think the\n"
-	.string "rules say that you have to battle the\l"
-	.string "ELITE FOUR all in a row.\p"
-	.string "If you lose to any of them, you have\n"
-	.string "to begin your challenge again from the\l"
-	.string "first one.$"
+	.string "At the POKéMON LEAGUE, you face the\n"
+	.string "ELITE FOUR back to back.\p"
+	.string "Lose to any of them and you start\n"
+	.string "over. That's how they find out who's\l"
+	.string "real.$"
 
