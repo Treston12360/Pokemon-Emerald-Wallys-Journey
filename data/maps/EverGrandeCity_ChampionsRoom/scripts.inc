@@ -385,9 +385,11 @@ EverGrandeCity_ChampionsRoom_Text_IntroSpeech:
 	.string "Don't hold back. I won't.$"
 
 EverGrandeCity_ChampionsRoom_Text_Defeat:
-	.string "WALLY: …Heh.\p"
-	.string "That's the only battle I've ever\n"
-	.string "lost and enjoyed every second of.$"
+	.string "WALLY: …Heh. You got me.\p"
+	.string "I hated losing in MAUVILLE.\n"
+	.string "I thought it meant I was weak.\p"
+	.string "This time? I gave you everything.\n"
+	.string "And I loved every second.$"
 
 EverGrandeCity_ChampionsRoom_Text_PostBattleSpeech:
 	.string "WALLY: The first time we met, I\n"
