@@ -53,12 +53,12 @@ DewfordTown_House2_Text_ExplainSilkScarf:
 	.string "with almost all POKéMON!$"
 
 DewfordTown_House2_Text_BrawlySoCool:
-	.string "Wow, you bothered to cross the sea\n"
-	.string "to visit DEWFORD?\p"
-	.string "Did you maybe come here because you\n"
-	.string "heard about BRAWLY?\p"
-	.string "He's so cool…\n"
-	.string "Everyone idolizes him.$"
+	.string "You crossed the sea to visit DEWFORD?\p"
+	.string "Let me guess. BRAWLY.\p"
+	.string "He trained in the dark of GRANITE\n"
+	.string "CAVE for years. Came out tougher\l"
+	.string "than the waves. Everyone here\l"
+	.string "idolizes him.$"
 
 DewfordTown_House2_Text_BrawlySoCool_W0:
 	.string "You beat BRAWLY? He's been out\n"

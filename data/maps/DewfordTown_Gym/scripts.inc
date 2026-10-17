@@ -309,81 +309,77 @@ DewfordTown_Gym_Text_GymGuidePostVictory:
 	.string "Your future is bright, too!$"
 
 DewfordTown_Gym_Text_TakaoIntro:
-	.string "Might is right!\n"
-	.string "Come on!$"
+	.string "Might is right! Come on!$"
 
 DewfordTown_Gym_Text_TakaoDefeat:
 	.string "Not enough power…$"
 
 DewfordTown_Gym_Text_TakaoPostBattle:
-	.string "Your skill overcame my strength!\n"
-	.string "Your technique is commendable!$"
+	.string "Your technique beat my power.\p"
+	.string "I trained my body. I forgot to train\n"
+	.string "my head. Lesson learned.$"
 
 DewfordTown_Gym_Text_JocelynIntro:
-	.string "There's no need for BRAWLY to be\n"
-	.string "involved!\p"
-	.string "I'll crush you!$"
+	.string "No need for BRAWLY to get involved!\n"
+	.string "I'll crush you myself!$"
 
 DewfordTown_Gym_Text_JocelynDefeat:
 	.string "But… How?\n"
 	.string "How could I lose so easily?$"
 
 DewfordTown_Gym_Text_JocelynPostBattle:
-	.string "I'm not going to waste this loss.\n"
-	.string "I'll use it to motivate me to train!\p"
-	.string "One day I'll become a GYM LEADER…\p"
-	.string "No, I'll become the POKéMON LEAGUE\n"
-	.string "CHAMPION!$"
+	.string "I won't waste this loss.\p"
+	.string "One day I'll lead a GYM. No, I'll be\n"
+	.string "CHAMPION! …People will laugh. Let\l"
+	.string "them.$"
 
 DewfordTown_Gym_Text_LauraIntro:
-	.string "Don't you dare brush me off!\n"
-	.string "It's not my fault if you cry!$"
+	.string "Don't you dare brush me off!$"
 
 DewfordTown_Gym_Text_LauraDefeat:
 	.string "Waaaaaaah!\n"
 	.string "I lost!$"
 
 DewfordTown_Gym_Text_LauraPostBattle:
-	.string "I battle in the dark to make my heart\n"
-	.string "stronger.\p"
-	.string "But because it's so dark, I can never\n"
-	.string "see BRAWLY's face…$"
+	.string "I battle in the dark to make my\n"
+	.string "heart stronger.\p"
+	.string "But it's so dark I've never actually\n"
+	.string "seen BRAWLY's face.$"
 
 DewfordTown_Gym_Text_LilithIntro:
-	.string "Ufufu…\n"
-	.string "Are you stumbling around in the dark?$"
+	.string "Ufufu… Stumbling around in the dark?$"
 
 DewfordTown_Gym_Text_LilithDefeat:
 	.string "Oh, you…\n"
 	.string "I don't want to know you!$"
 
 DewfordTown_Gym_Text_LilithPostBattle:
-	.string "You deserve to stay lost and end up\n"
-	.string "back at the entrance again!$"
+	.string "You should stay lost and end up back\n"
+	.string "at the entrance!\p"
+	.string "…Fine. Go. He's waiting.$"
 
 DewfordTown_Gym_Text_BrendenIntro:
-	.string "I'll show you the gumption of\n"
-	.string "a sailing man!$"
+	.string "I'll show you the grit of a sailing\n"
+	.string "man!$"
 
 DewfordTown_Gym_Text_BrendenDefeat:
 	.string "How'd this happen?\n"
 	.string "It's not like me to lose this way!$"
 
 DewfordTown_Gym_Text_BrendenPostBattle:
-	.string "Oh, aye! You're worthy of seeing\n"
-	.string "our GYM LEADER.$"
+	.string "Aye. You're worthy of BRAWLY.\p"
+	.string "He'll battle you like a wave. Don't\n"
+	.string "fight it. Ride it.$"
 
 DewfordTown_Gym_Text_CristianIntro:
-	.string "If you mean to pass, it has to be\n"
-	.string "through me!$"
+	.string "If you mean to pass, it's through me!$"
 
 DewfordTown_Gym_Text_CristianDefeat:
 	.string "Grrrrr!\n"
 	.string "Vastly overpowered!$"
 
 DewfordTown_Gym_Text_CristianPostBattle:
-	.string "You win!\n"
-	.string "Go after that BADGE!$"
+	.string "You win. Go after that BADGE.$"
 
 DewfordTown_Gym_Text_BrawlyIntro:
 	.string "I'm BRAWLY!\n"
@@ -425,9 +421,10 @@ DewfordTown_Gym_Text_RegisteredBrawly:
 	.string "in the POKéNAV.$"
 
 DewfordTown_Gym_Text_BrawlyPostBattle:
-	.string "I can see your talent becoming a giant\n"
-	.string "wave to cause a storm of astonishment\l"
-	.string "among TRAINERS one day!$"
+	.string "You caught the wave and rode it all\n"
+	.string "the way in.\p"
+	.string "Keep that up, and one day you'll\n"
+	.string "cause a storm across HOENN!$"
 
 DewfordTown_Gym_Text_GymStatue:
 	.string "DEWFORD TOWN POKéMON GYM$"

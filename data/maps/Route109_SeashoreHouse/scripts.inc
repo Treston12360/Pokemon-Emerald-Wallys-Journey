@@ -112,8 +112,8 @@ Route109_SeashoreHouse_Text_SeashoreHouseIntro:
 
 Route109_SeashoreHouse_Text_ShowMeSomeHotMatches:
 	.string "Show me some hot matches!\p"
-	.string "I run this SEASHORE HOUSE just for\n"
-	.string "that reason alone!$"
+	.string "I run this SEASHORE HOUSE just to\n"
+	.string "watch TRAINERS give it everything.$"
 
 Route109_SeashoreHouse_Text_TakeTheseSodaPopBottles:
 	.string "You're scorching hot!\n"
@@ -144,39 +144,37 @@ Route109_SeashoreHouse_Text_ThatsTooBad:
 	.string "That's too bad.$"
 
 Route109_SeashoreHouse_Text_DwayneIntro:
-	.string "If you're looking for a battle in the\n"
-	.string "SEASHORE HOUSE, you'll find no\l"
-	.string "hotter TRAINER than me, matey!$"
+	.string "Looking for a battle? No TRAINER in\n"
+	.string "this house is hotter than me!$"
 
 Route109_SeashoreHouse_Text_DwayneDefeated:
 	.string "That was a hot battle!\n"
 	.string "I can accept that loss, matey!$"
 
 Route109_SeashoreHouse_Text_DwaynePostBattle:
-	.string "Whenever I'm in SLATEPORT, I enjoy\n"
-	.string "hot battles and ice-cold SODA POP!$"
+	.string "Hot battles and ice-cold SODA POP.\n"
+	.string "That's SLATEPORT living.$"
 
 Route109_SeashoreHouse_Text_JohannaIntro:
-	.string "Boring battles aren't worth the effort.\p"
-	.string "Fiery hot battles are what toughen up\n"
-	.string "TRAINERS and POKéMON!$"
+	.string "Boring battles aren't worth the\n"
+	.string "effort. Show me fire!$"
 
 Route109_SeashoreHouse_Text_JohannaDefeated:
 	.string "That's hot!$"
 
 Route109_SeashoreHouse_Text_JohannaPostBattle:
-	.string "Whew, I'm all thirsty.\n"
-	.string "Maybe I'll have a SODA POP.$"
+	.string "Whew, I'm thirsty. SODA POP time.$"
 
 Route109_SeashoreHouse_Text_SimonIntro:
-	.string "I'm going to show you how great\n"
-	.string "my POKéMON are, but don't cry!$"
+	.string "I'll show you how great my POKéMON\n"
+	.string "are, but don't cry!$"
 
 Route109_SeashoreHouse_Text_SimonDefeated:
 	.string "…I lost, but I won't cry…$"
 
 Route109_SeashoreHouse_Text_SimonPostBattle:
-	.string "If one of my POKéMON knew the move\n"
-	.string "for carrying me across water on its\l"
-	.string "back, I could get rid of this inner tube.$"
+	.string "If my POKéMON could SURF, I could\n"
+	.string "ditch this inner tube.\p"
+	.string "Need the BALANCE BADGE first. Your\n"
+	.string "dad's BADGE, right?$"
 
