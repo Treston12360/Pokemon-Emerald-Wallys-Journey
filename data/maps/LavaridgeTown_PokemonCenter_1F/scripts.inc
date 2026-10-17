@@ -29,10 +29,10 @@ LavaridgeTown_PokemonCenter_1F_EventScript_Gentleman::
 	end
 
 LavaridgeTown_PokemonCenter_1F_Text_TrainersPokemonSpendTimeTogether:
-	.string "I think POKéMON get closer to their\n"
-	.string "TRAINERS if they spend time together.\p"
-	.string "The longer the better.\n"
-	.string "That's what I think.$"
+	.string "POKéMON get closer to TRAINERS who\n"
+	.string "spend time with them.\p"
+	.string "Not training time. Just time.\n"
+	.string "Sitting. Walking. Eating together.$"
 
 LavaridgeTown_PokemonCenter_1F_Text_HotSpringCanInvigorate:
 	.string "It's sort of magical how just sitting\n"

@@ -21,7 +21,12 @@ FallarborTown_PokemonCenter_1F_EventScript_Girl::
 	end
 
 FallarborTown_PokemonCenter_1F_EventScript_ExpertM::
+	goto_if_set FLAG_DEFEATED_SOOTOPOLIS_GYM, FallarborTown_PokemonCenter_1F_Text_PlantHardyTrees_W0_Script
 	msgbox FallarborTown_PokemonCenter_1F_Text_PlantHardyTrees, MSGBOX_NPC
+	end
+
+FallarborTown_PokemonCenter_1F_Text_PlantHardyTrees_W0_Script:
+	msgbox FallarborTown_PokemonCenter_1F_Text_PlantHardyTrees_W0, MSGBOX_NPC
 	end
 
 FallarborTown_PokemonCenter_1F_EventScript_Lanette::
@@ -109,3 +114,8 @@ FallarborTown_PokemonCenter_1F_Text_PlantHardyTrees:
 	.string "seedlings of hardy trees that thrive\l"
 	.string "even in volcanic ash.$"
 
+FallarborTown_PokemonCenter_1F_Text_PlantHardyTrees_W0:
+	.string "We're planting hardy trees again\n"
+	.string "after the storm.\p"
+	.string "Ex-MAGMA volunteers showed up to\n"
+	.string "help. Nobody turned them away.$"

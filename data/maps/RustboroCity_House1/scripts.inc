@@ -55,8 +55,8 @@ RustboroCity_House1_Text_AnyPokemonCanBeCute:
 	.string "it with care and kindness.$"
 
 RustboroCity_House1_Text_AllSortsOfPlaces:
-	.string "In all sorts of places, there are all\n"
-	.string "sorts of POKéMON and people.\p"
-	.string "I find that fascinating, so I go to all\n"
-	.string "sorts of places.$"
+	.string "I travel all over HOENN.\p"
+	.string "Every town thinks it's the center\n"
+	.string "of the world. Every town is a little\l"
+	.string "bit right.$"
 

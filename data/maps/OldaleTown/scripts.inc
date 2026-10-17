@@ -30,7 +30,12 @@ OldaleTown_EventScript_TownSign::
 	end
 
 OldaleTown_EventScript_Girl::
+	goto_if_set FLAG_SYS_GAME_CLEAR, OldaleTown_Text_SavingMyProgress_W0_Script
 	msgbox OldaleTown_Text_SavingMyProgress, MSGBOX_NPC
+	end
+
+OldaleTown_Text_SavingMyProgress_W0_Script:
+	msgbox OldaleTown_Text_SavingMyProgress_W0, MSGBOX_NPC
 	end
 
 OldaleTown_EventScript_MartEmployee::
@@ -398,3 +403,8 @@ OldaleTown_Text_TownSign:
 	.string "OLDALE TOWN\n"
 	.string "“Where things start off scarce.”$"
 
+OldaleTown_Text_SavingMyProgress_W0:
+	.string "You're the kid from LITTLEROOT?\n"
+	.string "The CHAMPION?\p"
+	.string "I'm saving my progress right now so\n"
+	.string "I never forget meeting you.$"

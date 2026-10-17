@@ -26,7 +26,12 @@ EverGrandeCity_PokemonCenter_1F_EventScript_Woman::
 	end
 
 EverGrandeCity_PokemonCenter_1F_EventScript_ExpertM::
+	goto_if_set FLAG_SYS_GAME_CLEAR, EverGrandeCity_PokemonCenter_1F_Text_BelieveInYourPokemon_W0_Script
 	msgbox EverGrandeCity_PokemonCenter_1F_Text_BelieveInYourPokemon, MSGBOX_NPC
+	end
+
+EverGrandeCity_PokemonCenter_1F_Text_BelieveInYourPokemon_W0_Script:
+	msgbox EverGrandeCity_PokemonCenter_1F_Text_BelieveInYourPokemon_W0, MSGBOX_NPC
 	end
 
 EverGrandeCity_PokemonCenter_1F_EventScript_Scott::
@@ -74,10 +79,11 @@ EverGrandeCity_PokemonCenter_1F_Movement_ScottExit:
 	step_end
 
 EverGrandeCity_PokemonCenter_1F_Text_LeagueAfterVictoryRoad:
-	.string "The POKéMON LEAGUE is only a short\n"
-	.string "distance after the VICTORY ROAD.\p"
-	.string "If you've come this far, what choice\n"
-	.string "do you have but to keep going?$"
+	.string "The POKéMON LEAGUE is just past\n"
+	.string "VICTORY ROAD.\p"
+	.string "Everyone who makes it here has\n"
+	.string "given something up to get here.\p"
+	.string "Make sure it was worth it.$"
 
 EverGrandeCity_PokemonCenter_1F_Text_BelieveInYourPokemon:
 	.string "The long and harrowing VICTORY ROAD…\p"
@@ -97,3 +103,8 @@ EverGrandeCity_PokemonCenter_1F_Text_ScottHappyForYou:
 	.string "Okay, {PLAYER}{KUN}.\n"
 	.string "Go for greatness!$"
 
+EverGrandeCity_PokemonCenter_1F_Text_BelieveInYourPokemon_W0:
+	.string "The new CHAMPION, in person!\p"
+	.string "WALLY trains in VICTORY ROAD now.\n"
+	.string "He says he's coming for the title.\p"
+	.string "Better not get comfortable.$"

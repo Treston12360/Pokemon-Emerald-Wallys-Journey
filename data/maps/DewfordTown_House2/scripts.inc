@@ -23,7 +23,12 @@ DewfordTown_House2_EventScript_ExplainSilkScarf::
 	end
 
 DewfordTown_House2_EventScript_Boy::
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, DewfordTown_House2_Text_BrawlySoCool_W0_Script
 	msgbox DewfordTown_House2_Text_BrawlySoCool, MSGBOX_NPC
+	end
+
+DewfordTown_House2_Text_BrawlySoCool_W0_Script:
+	msgbox DewfordTown_House2_Text_BrawlySoCool_W0, MSGBOX_NPC
 	end
 
 DewfordTown_House2_Text_WantYouToHaveSilkScarf:
@@ -55,3 +60,8 @@ DewfordTown_House2_Text_BrawlySoCool:
 	.string "He's so cool…\n"
 	.string "Everyone idolizes him.$"
 
+DewfordTown_House2_Text_BrawlySoCool_W0:
+	.string "You beat BRAWLY? He's been out\n"
+	.string "surfing all afternoon to cool off.\p"
+	.string "He says he likes you. That's how he\n"
+	.string "says it, anyway.$"

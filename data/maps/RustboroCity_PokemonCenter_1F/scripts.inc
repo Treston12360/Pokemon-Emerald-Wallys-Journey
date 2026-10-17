@@ -41,7 +41,8 @@ RustboroCity_PokemonCenter_1F_Text_MaleAndFemalePokemon:
 	.string "they're different.$"
 
 RustboroCity_PokemonCenter_1F_Text_HMCutNextDoor:
-	.string "The man next door gave me an HM!\p"
-	.string "I used it to teach my POKéMON how to\n"
-	.string "CUT down skinny trees.$"
+	.string "ROXANNE gave me HM CUT along with\n"
+	.string "my STONE BADGE.\p"
+	.string "She said the BADGE is the license.\n"
+	.string "The HM is just proof you earned it.$"
 

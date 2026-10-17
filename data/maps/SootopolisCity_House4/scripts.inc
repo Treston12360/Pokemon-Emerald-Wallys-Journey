@@ -20,12 +20,11 @@ SootopolisCity_House4_EventScript_Azumarill::
 	end
 
 SootopolisCity_House4_Text_AncientTreasuresWaitingInSea:
-	.string "Listen up, and I'll tell you something\n"
-	.string "good.\p"
-	.string "There's supposed to be an ancient\n"
-	.string "ruin in the sea around here.\p"
-	.string "There could be treasures just waiting\n"
-	.string "to be discovered down there.$"
+	.string "Listen up. There's supposed to be an\n"
+	.string "ancient ruin in the sea near here.\p"
+	.string "Divers go looking every year.\n"
+	.string "Nobody finds it.\p"
+	.string "Maybe it doesn't want to be found.$"
 
 SootopolisCity_House4_Text_StrollUnderwaterWithPokemon:
 	.string "Ancient treasures…\p"

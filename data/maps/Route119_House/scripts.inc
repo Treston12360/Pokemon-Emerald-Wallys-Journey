@@ -16,11 +16,12 @@ Route119_House_EventScript_Wingull::
 	end
 
 Route119_House_Text_RumorAboutCaveOfOrigin:
-	.string "I heard about a cave called the CAVE\n"
-	.string "OF ORIGIN.\p"
-	.string "People rumor that the spirits of\n"
-	.string "POKéMON are revived there. Could\l"
-	.string "something like that really happen?$"
+	.string "They say there's a CAVE OF ORIGIN\n"
+	.string "under SOOTOPOLIS.\p"
+	.string "Old stories call it the place where\n"
+	.string "the land and sea were first born.\p"
+	.string "And where they'd fight again, if\n"
+	.string "anyone woke them.$"
 
 Route119_House_Text_Wingull:
 	.string "WINGULL: Pihyoh!$"

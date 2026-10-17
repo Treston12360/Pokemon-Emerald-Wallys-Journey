@@ -178,7 +178,12 @@ RustboroCity_EventScript_Boy2BrineyLeftTunnel::
 	end
 
 RustboroCity_EventScript_Twin::
+	goto_if_set FLAG_DELIVERED_DEVON_GOODS, RustboroCity_Text_WowYouHavePokemon_W0_Script
 	msgbox RustboroCity_Text_WowYouHavePokemon, MSGBOX_NPC
+	end
+
+RustboroCity_Text_WowYouHavePokemon_W0_Script:
+	msgbox RustboroCity_Text_WowYouHavePokemon_W0, MSGBOX_NPC
 	end
 
 RustboroCity_EventScript_NinjaBoy::
@@ -1290,3 +1295,9 @@ RustboroCity_Text_YouCanHave2On2Battle:
 	.string "they'll both challenge you.\p"
 	.string "Don't you think it'd be cool if you\n"
 	.string "could beat two TRAINERS by yourself?$"
+
+RustboroCity_Text_WowYouHavePokemon_W0:
+	.string "My dad says you got DEVON's parts\n"
+	.string "back from TEAM AQUA.\p"
+	.string "He would've lost his job. Thank you.\n"
+	.string "I mean it.$"

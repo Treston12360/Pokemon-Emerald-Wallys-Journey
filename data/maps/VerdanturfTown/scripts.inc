@@ -25,7 +25,12 @@ VerdanturfTown_EventScript_TwinTunnelOpen::
 	end
 
 VerdanturfTown_EventScript_Man::
+	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, VerdanturfTown_Text_AirCleanHere_W0_Script
 	msgbox VerdanturfTown_Text_AirCleanHere, MSGBOX_NPC
+	end
+
+VerdanturfTown_Text_AirCleanHere_W0_Script:
+	msgbox VerdanturfTown_Text_AirCleanHere_W0, MSGBOX_NPC
 	end
 
 VerdanturfTown_EventScript_Camper::
@@ -124,3 +129,8 @@ VerdanturfTown_Text_RusturfTunnelSign:
 	.string "“The tunnel project has been\n"
 	.string "canceled.”$"
 
+VerdanturfTown_Text_AirCleanHere_W0:
+	.string "WALLY's the CHAMPION. Our WALLY.\p"
+	.string "He used to sit on that bench and\n"
+	.string "watch the other kids run.\p"
+	.string "The whole town cried.$"

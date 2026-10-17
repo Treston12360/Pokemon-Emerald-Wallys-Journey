@@ -57,11 +57,11 @@ MossdeepCity_House2_Text_SisterMailsBoyfriendInFortree:
 	.string "I don't envy her one bit at all.$"
 
 MossdeepCity_House2_Text_PokemonCarriesMailBackAndForth:
-	.string "Even though I can't see my friend in\n"
-	.string "FORTREE, my POKéMON carries MAIL\l"
-	.string "back and forth for us.\p"
-	.string "I'm not lonesome, even though we're\n"
-	.string "apart.$"
+	.string "My friend lives in FORTREE. My\n"
+	.string "POKéMON carries MAIL between us.\p"
+	.string "Two towns with nothing in common.\n"
+	.string "And somehow we never run out of\l"
+	.string "things to say.$"
 
 MossdeepCity_House2_Text_Wingull:
 	.string "WINGULL: Pihyoh!$"

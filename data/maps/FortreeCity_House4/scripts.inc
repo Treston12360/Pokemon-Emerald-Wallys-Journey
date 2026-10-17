@@ -63,10 +63,11 @@ FortreeCity_House4_EventScript_Wingull::
 	end
 
 FortreeCity_House4_Text_BringsWorldCloserTogether:
-	.string "By being together with POKéMON,\n"
-	.string "people make more and more friends.\p"
-	.string "And that brings the world closer\n"
-	.string "together. I think it's wonderful!$"
+	.string "POKéMON bring people together.\p"
+	.string "Even TEAM MAGMA and TEAM AQUA. They\n"
+	.string "both say they're doing it for\l"
+	.string "POKéMON.\p"
+	.string "That's what scares me.$"
 
 FortreeCity_House4_Text_GoBirdPokemon:
 	.string "There!\n"

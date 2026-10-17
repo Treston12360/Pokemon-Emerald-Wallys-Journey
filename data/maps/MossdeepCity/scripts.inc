@@ -38,7 +38,12 @@ MossdeepCity_EventScript_SailorMagmaGone::
 	end
 
 MossdeepCity_EventScript_NinjaBoy::
+	goto_if_set FLAG_DEFEATED_MAGMA_SPACE_CENTER, MossdeepCity_Text_WailmerWatching_W0_Script
 	msgbox MossdeepCity_Text_WailmerWatching, MSGBOX_NPC
+	end
+
+MossdeepCity_Text_WailmerWatching_W0_Script:
+	msgbox MossdeepCity_Text_WailmerWatching_W0, MSGBOX_NPC
 	end
 
 MossdeepCity_EventScript_ExpertM::
@@ -46,7 +51,17 @@ MossdeepCity_EventScript_ExpertM::
 	end
 
 MossdeepCity_EventScript_Girl::
+	goto_if_set FLAG_DEFEATED_SOOTOPOLIS_GYM, MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W0_Script
+	goto_if_set FLAG_KYOGRE_ESCAPED_SEAFLOOR_CAVERN, MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W1_Script
 	msgbox MossdeepCity_Text_NiceIfWorldCoveredByFlowers, MSGBOX_NPC
+	end
+
+MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W0_Script:
+	msgbox MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W0, MSGBOX_NPC
+	end
+
+MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W1_Script:
+	msgbox MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W1, MSGBOX_NPC
 	end
 
 MossdeepCity_EventScript_Woman::
@@ -425,3 +440,20 @@ MossdeepCity_Text_SootopolisNewGymLeader:
 MossdeepCity_OnFrame:
 	map_script_2 VAR_WALLY_RIVAL_PENDING, 7, WallyJourney_EventScript_RivalMeet7
 	.2byte 0
+
+MossdeepCity_Text_WailmerWatching_W0:
+	.string "TEAM MAGMA tried to steal the rocket\n"
+	.string "fuel! STEVEN and some kid stopped\l"
+	.string "them.\p"
+	.string "…Wait. You're that kid, aren't you?\n"
+	.string "MOSSDEEP owes you one.$"
+
+MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W0:
+	.string "The flowers are coming back after\n"
+	.string "the storm.\p"
+	.string "Slowly. Like the rest of us.$"
+
+MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W1:
+	.string "The rain hasn't stopped in days.\n"
+	.string "The flowers are drowning.\p"
+	.string "I just want to see the sun.$"

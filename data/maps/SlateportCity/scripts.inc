@@ -340,7 +340,12 @@ SlateportCity_EventScript_Sailor2::
 	end
 
 SlateportCity_EventScript_PokefanF::
+	goto_if_set FLAG_TEAM_AQUA_ESCAPED_IN_SUBMARINE, SlateportCity_Text_BuyTooMuch_W0_Script
 	msgbox SlateportCity_Text_BuyTooMuch, MSGBOX_NPC
+	end
+
+SlateportCity_Text_BuyTooMuch_W0_Script:
+	msgbox SlateportCity_Text_BuyTooMuch_W0, MSGBOX_NPC
 	end
 
 SlateportCity_EventScript_Man2::
@@ -1371,3 +1376,9 @@ SlateportCity_Text_SeaIsSoWetAftermath:
 	.string "divers cleaned it up together.\p"
 	.string "I'm still angry at them. But the\n"
 	.string "beach is clean. Both are true.$"
+
+SlateportCity_Text_BuyTooMuch_W0:
+	.string "They stole a submarine right out of\n"
+	.string "the harbor.\p"
+	.string "The market's been half empty since.\n"
+	.string "Nobody wants to ship anything.$"

@@ -10,9 +10,11 @@ LilycoveCity_House4_EventScript_Man2::
 	end
 
 LilycoveCity_House4_Text_MysteriesAtBottomOfSea:
-	.string "This planet's biggest mysteries are\n"
-	.string "at the bottom of the sea.\p"
-	.string "Somebody said that, but I don't know…$"
+	.string "The biggest mysteries in the world\n"
+	.string "are at the bottom of the sea.\p"
+	.string "My dad crewed for CAPT. STERN. He\n"
+	.string "said they found a cavern down there\l"
+	.string "that hummed. Like it was breathing.$"
 
 LilycoveCity_House4_Text_UnderwaterTrenchMossdeepSootopolis:
 	.string "There's a deep underwater trench\n"

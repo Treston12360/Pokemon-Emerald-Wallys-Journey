@@ -6,7 +6,12 @@ FortreeCity_House5_EventScript_PokefanF::
 	end
 
 FortreeCity_House5_EventScript_Man::
+	goto_if_set FLAG_KYOGRE_ESCAPED_SEAFLOOR_CAVERN, FortreeCity_House5_Text_AdaptedToNature_W0_Script
 	msgbox FortreeCity_House5_Text_AdaptedToNature, MSGBOX_NPC
+	end
+
+FortreeCity_House5_Text_AdaptedToNature_W0_Script:
+	msgbox FortreeCity_House5_Text_AdaptedToNature_W0, MSGBOX_NPC
 	end
 
 FortreeCity_House5_EventScript_Zigzagoon::
@@ -20,16 +25,25 @@ FortreeCity_House5_EventScript_Zigzagoon::
 	end
 
 FortreeCity_House5_Text_TreeHousesAreGreat:
-	.string "The tree houses of FORTREE are great!\p"
-	.string "I think it's the number one town for\n"
-	.string "living together with POKéMON.$"
+	.string "FORTREE's tree houses are the best\n"
+	.string "place to live with POKéMON.\p"
+	.string "We built around the trees instead\n"
+	.string "of cutting them down. Took longer.\l"
+	.string "Worth it.$"
 
 FortreeCity_House5_Text_AdaptedToNature:
-	.string "POKéMON and people have adapted to\n"
-	.string "nature for survival.\p"
-	.string "There's no need to make nature\n"
-	.string "conform to the way we want to live.$"
+	.string "People and POKéMON adapted to nature\n"
+	.string "to survive.\p"
+	.string "TEAM MAGMA wants nature to adapt to\n"
+	.string "us. TEAM AQUA wants us to disappear.\p"
+	.string "There's a middle. Nobody wants to\n"
+	.string "live there.$"
 
 FortreeCity_House5_Text_Zigzagoon:
 	.string "ZIGZAGOON: Bufuu!$"
 
+FortreeCity_House5_Text_AdaptedToNature_W0:
+	.string "This rain isn't natural. The trees\n"
+	.string "know it.\p"
+	.string "Listen. Not one BIRD POKéMON is\n"
+	.string "singing.$"

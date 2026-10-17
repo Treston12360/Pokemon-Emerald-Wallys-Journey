@@ -32,7 +32,12 @@ LilycoveCity_PokemonCenter_1F_EventScript_Nurse::
 	end
 
 LilycoveCity_PokemonCenter_1F_EventScript_Boy::
+	goto_if_set FLAG_TEAM_AQUA_ESCAPED_IN_SUBMARINE, LilycoveCity_PokemonCenter_1F_Text_HowManyKindsOfPokemon_W0_Script
 	msgbox LilycoveCity_PokemonCenter_1F_Text_HowManyKindsOfPokemon, MSGBOX_NPC
+	end
+
+LilycoveCity_PokemonCenter_1F_Text_HowManyKindsOfPokemon_W0_Script:
+	msgbox LilycoveCity_PokemonCenter_1F_Text_HowManyKindsOfPokemon_W0, MSGBOX_NPC
 	end
 
 LilycoveCity_PokemonCenter_1F_EventScript_Maniac::
@@ -64,3 +69,8 @@ LilycoveCity_PokemonCenter_1F_Text_HaventSeenRottenScoundrels:
 	.string "POKéMON and rip off METEORITES…\p"
 	.string "I haven't seen them around recently.$"
 
+LilycoveCity_PokemonCenter_1F_Text_HowManyKindsOfPokemon_W0:
+	.string "The cave in the cove was TEAM AQUA's\n"
+	.string "base the whole time.\p"
+	.string "Right under our noses. Makes you\n"
+	.string "wonder what else we didn't see.$"

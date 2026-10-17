@@ -16,7 +16,12 @@ SootopolisCity_House3_EventScript_HaveFans::
 	end
 
 SootopolisCity_House3_EventScript_Girl::
+	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, SootopolisCity_House3_Text_TrainerFanClubWasWild_W0_Script
 	msgbox SootopolisCity_House3_Text_TrainerFanClubWasWild, MSGBOX_NPC
+	end
+
+SootopolisCity_House3_Text_TrainerFanClubWasWild_W0_Script:
+	msgbox SootopolisCity_House3_Text_TrainerFanClubWasWild_W0, MSGBOX_NPC
 	end
 
 SootopolisCity_House3_Text_JuanHasManyFansDoYou:
@@ -40,3 +45,7 @@ SootopolisCity_House3_Text_TrainerFanClubWasWild:
 	.string "It was really wild when I went to the\n"
 	.string "TRAINER FAN CLUB in LILYCOVE.$"
 
+SootopolisCity_House3_Text_TrainerFanClubWasWild_W0:
+	.string "The FAN CLUB in LILYCOVE has a whole\n"
+	.string "wall for WALLY now.\p"
+	.string "A month ago nobody knew his name.$"

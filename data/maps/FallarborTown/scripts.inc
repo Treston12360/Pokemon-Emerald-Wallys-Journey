@@ -22,7 +22,12 @@ FallarborTown_EventScript_ExpertMNormal::
 	end
 
 FallarborTown_EventScript_Girl::
+	goto_if_set FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY, FallarborTown_Text_MyPreciousAzurill_W0_Script
 	msgbox FallarborTown_Text_MyPreciousAzurill, MSGBOX_NPC
+	end
+
+FallarborTown_Text_MyPreciousAzurill_W0_Script:
+	msgbox FallarborTown_Text_MyPreciousAzurill_W0, MSGBOX_NPC
 	end
 
 FallarborTown_EventScript_Gentleman::
@@ -94,3 +99,9 @@ FallarborTown_Text_MoveTutorSign:
 	.string "MOVE TUTOR'S HOUSE\n"
 	.string "“New moves taught to POKéMON.”$"
 
+FallarborTown_Text_MyPreciousAzurill_W0:
+	.string "TEAM MAGMA ran off the mountain.\p"
+	.string "My neighbor's son was one of them.\n"
+	.string "He came home ashamed.\p"
+	.string "His mom made him dinner anyway.\n"
+	.string "That's FALLARBOR.$"

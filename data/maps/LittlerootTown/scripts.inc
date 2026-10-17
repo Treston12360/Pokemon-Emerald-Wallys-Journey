@@ -246,7 +246,12 @@ LittlerootTown_EventScript_FatMan::
 	end
 
 LittlerootTown_EventScript_Boy::
+	goto_if_set FLAG_SYS_GAME_CLEAR, LittlerootTown_Text_BirchSpendsDaysInLab_W0_Script
 	msgbox LittlerootTown_Text_BirchSpendsDaysInLab, MSGBOX_NPC
+	end
+
+LittlerootTown_Text_BirchSpendsDaysInLab_W0_Script:
+	msgbox LittlerootTown_Text_BirchSpendsDaysInLab_W0, MSGBOX_NPC
 	end
 
 LittlerootTown_EventScript_Twin::
@@ -1022,3 +1027,8 @@ LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 	.string "I have something to show you.\n"
 	.string "Let's go to my LAB.$"
 
+LittlerootTown_Text_BirchSpendsDaysInLab_W0:
+	.string "Your mom put your CHAMPION photo on\n"
+	.string "the fridge.\p"
+	.string "Right next to your dad's first GYM\n"
+	.string "badge. She's very proud.$"

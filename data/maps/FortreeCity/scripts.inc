@@ -38,7 +38,12 @@ FortreeCity_Text_TreesGrowByDrinkingRainwaterAftermath_Script:
 	end
 
 FortreeCity_EventScript_OldMan::
+	goto_if_set FLAG_DEFEATED_FORTREE_GYM, FortreeCity_Text_EveryoneHealthyAndLively_W0_Script
 	msgbox FortreeCity_Text_EveryoneHealthyAndLively, MSGBOX_NPC
+	end
+
+FortreeCity_Text_EveryoneHealthyAndLively_W0_Script:
+	msgbox FortreeCity_Text_EveryoneHealthyAndLively_W0, MSGBOX_NPC
 	end
 
 FortreeCity_EventScript_Boy::
@@ -168,3 +173,9 @@ FortreeCity_Text_TreesGrowByDrinkingRainwaterAftermath:
 	.string "The WEATHER INSTITUTE says it'll take\n"
 	.string "years for the forest to recover.\p"
 	.string "We're planting new ones anyway.$"
+
+FortreeCity_Text_EveryoneHealthyAndLively_W0:
+	.string "WINONA came down from the GYM after\n"
+	.string "your battle.\p"
+	.string "She never does that. You impressed\n"
+	.string "her.$"

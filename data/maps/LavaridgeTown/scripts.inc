@@ -206,7 +206,12 @@ LavaridgeTown_EventScript_EnteredHotSprings::
 	end
 
 LavaridgeTown_EventScript_ExpertM::
+	goto_if_set FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY, LavaridgeTown_Text_HotSpringsNeverRunDry_W0_Script
 	msgbox LavaridgeTown_Text_HotSpringsNeverRunDry, MSGBOX_NPC
+	end
+
+LavaridgeTown_Text_HotSpringsNeverRunDry_W0_Script:
+	msgbox LavaridgeTown_Text_HotSpringsNeverRunDry_W0, MSGBOX_NPC
 	end
 
 LavaridgeTown_EventScript_OldMan::
@@ -214,7 +219,12 @@ LavaridgeTown_EventScript_OldMan::
 	end
 
 LavaridgeTown_EventScript_Twin::
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, LavaridgeTown_Text_BatheInHotSpringsEveryDay_W0_Script
 	msgbox LavaridgeTown_Text_BatheInHotSpringsEveryDay, MSGBOX_NPC
+	end
+
+LavaridgeTown_Text_BatheInHotSpringsEveryDay_W0_Script:
+	msgbox LavaridgeTown_Text_BatheInHotSpringsEveryDay_W0, MSGBOX_NPC
 	end
 
 LavaridgeTown_EventScript_HotSpringsOldWoman1::
@@ -405,3 +415,15 @@ LavaridgeTown_Text_HerbShopSign:
 	.string "POKéMON HERB SHOP\n"
 	.string "“Bitter taste--better cure!”$"
 
+LavaridgeTown_Text_BatheInHotSpringsEveryDay_W0:
+	.string "FLANNERY lost to you and laughed for\n"
+	.string "a whole minute after.\p"
+	.string "That's how you know she respected\n"
+	.string "the battle. She doesn't fake it.$"
+
+LavaridgeTown_Text_HotSpringsNeverRunDry_W0:
+	.string "They say a kid stopped TEAM MAGMA on\n"
+	.string "the summit.\p"
+	.string "The springs bubbled strange that\n"
+	.string "day. I don't want to know how close\l"
+	.string "it was.$"

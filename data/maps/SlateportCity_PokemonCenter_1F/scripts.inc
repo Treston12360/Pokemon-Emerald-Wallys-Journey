@@ -21,7 +21,12 @@ SlateportCity_PokemonCenter_1F_EventScript_Sailor::
 	end
 
 SlateportCity_PokemonCenter_1F_EventScript_Woman::
+	goto_if_set FLAG_MET_TEAM_AQUA_HARBOR, SlateportCity_PokemonCenter_1F_Text_TradedMonWithFriend_W0_Script
 	msgbox SlateportCity_PokemonCenter_1F_Text_TradedMonWithFriend, MSGBOX_NPC
+	end
+
+SlateportCity_PokemonCenter_1F_Text_TradedMonWithFriend_W0_Script:
+	msgbox SlateportCity_PokemonCenter_1F_Text_TradedMonWithFriend_W0, MSGBOX_NPC
 	end
 
 SlateportCity_PokemonCenter_1F_Text_RaiseDifferentTypesOfPokemon:
@@ -38,3 +43,8 @@ SlateportCity_PokemonCenter_1F_Text_TradedMonWithFriend:
 	.string "If a traded POKéMON is holding an\n"
 	.string "item, it makes me twice as happy!$"
 
+SlateportCity_PokemonCenter_1F_Text_TradedMonWithFriend_W0:
+	.string "TEAM AQUA marched right into the\n"
+	.string "harbor like they owned it.\p"
+	.string "The police showed up after. Always\n"
+	.string "after.$"

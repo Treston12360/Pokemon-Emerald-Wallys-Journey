@@ -16,7 +16,12 @@ MossdeepCity_PokemonCenter_1F_EventScript_Nurse::
 	end
 
 MossdeepCity_PokemonCenter_1F_EventScript_Woman::
+	goto_if_set FLAG_DEFEATED_MOSSDEEP_GYM, MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable_W0_Script
 	msgbox MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable, MSGBOX_NPC
+	end
+
+MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable_W0_Script:
+	msgbox MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable_W0, MSGBOX_NPC
 	end
 
 MossdeepCity_PokemonCenter_1F_EventScript_Girl::
@@ -34,3 +39,8 @@ MossdeepCity_PokemonCenter_1F_Text_AbilitiesMightChangeMoves:
 	.string "POKéMON, some moves might change\l"
 	.string "or not work at all.$"
 
+MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable_W0:
+	.string "You beat TATE and LIZA? They're\n"
+	.string "arguing about whose fault it was.\p"
+	.string "They never argue. You got in their\n"
+	.string "heads.$"

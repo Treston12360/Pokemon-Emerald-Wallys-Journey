@@ -12,7 +12,12 @@ PacifidlogTown_OnResume:
 	end
 
 PacifidlogTown_EventScript_NinjaBoy::
+	goto_if_set FLAG_KYOGRE_ESCAPED_SEAFLOOR_CAVERN, PacifidlogTown_Text_NeatHousesOnWater_W0_Script
 	msgbox PacifidlogTown_Text_NeatHousesOnWater, MSGBOX_NPC
+	end
+
+PacifidlogTown_Text_NeatHousesOnWater_W0_Script:
+	msgbox PacifidlogTown_Text_NeatHousesOnWater_W0, MSGBOX_NPC
 	end
 
 PacifidlogTown_EventScript_Girl::
@@ -65,3 +70,9 @@ PacifidlogTown_Text_FastRunningCurrentAftermath:
 	.string "Volunteers in AQUA blue helped us\n"
 	.string "tie new ones. Grandpa still won't\l"
 	.string "let them in the house.$"
+
+PacifidlogTown_Text_NeatHousesOnWater_W0:
+	.string "The sea's rising! The whole town's\n"
+	.string "floating higher every day.\p"
+	.string "Grandpa says hold on to something\n"
+	.string "and don't look down.$"

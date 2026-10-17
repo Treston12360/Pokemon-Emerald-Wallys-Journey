@@ -32,10 +32,11 @@ PacifidlogTown_PokemonCenter_1F_Text_WhatColorTrainerCard:
 	.string "Mine's copper!$"
 
 PacifidlogTown_PokemonCenter_1F_Text_OnColonyOfCorsola:
-	.string "PACIFIDLOG TOWN floats on top of\n"
-	.string "a colony of CORSOLA.\p"
-	.string "If I told you that, would you believe\n"
-	.string "me?$"
+	.string "PACIFIDLOG floats on a colony of\n"
+	.string "CORSOLA.\p"
+	.string "They hold us up, we keep the water\n"
+	.string "clean for them. That's the deal.\l"
+	.string "Nobody had to sign anything.$"
 
 PacifidlogTown_PokemonCenter_1F_Text_AncestorsLivedOnBoats:
 	.string "The ancestors of the people in\n"

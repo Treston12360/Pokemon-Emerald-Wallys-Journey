@@ -69,9 +69,11 @@ FortreeCity_House1_Text_GoingToMakeVolbeatStrong:
 	.string "I hope you do the same with PLUSLE!$"
 
 FortreeCity_House1_Text_TradingMemoriesWithOthers:
-	.string "Trading POKéMON with others…\p"
-	.string "It's as if you're trading your own\n"
-	.string "memories with other people.$"
+	.string "Trading POKéMON is like trading\n"
+	.string "memories.\p"
+	.string "My grandson traded his first\n"
+	.string "POKéMON to a friend who moved away.\l"
+	.string "They still write every week.$"
 
 FortreeCity_House1_Text_Zigzagoon:
 	.string "ZIGZAGOON: Gumomoh?$"

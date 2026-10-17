@@ -22,7 +22,12 @@ MauvilleCity_PokemonCenter_1F_EventScript_Nurse::
 	end
 
 MauvilleCity_PokemonCenter_1F_EventScript_Woman1::
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_PokemonCenter_1F_Text_ManOverThereSaysWeirdThings_W0_Script
 	msgbox MauvilleCity_PokemonCenter_1F_Text_ManOverThereSaysWeirdThings, MSGBOX_NPC
+	end
+
+MauvilleCity_PokemonCenter_1F_Text_ManOverThereSaysWeirdThings_W0_Script:
+	msgbox MauvilleCity_PokemonCenter_1F_Text_ManOverThereSaysWeirdThings_W0, MSGBOX_NPC
 	end
 
 MauvilleCity_PokemonCenter_1F_EventScript_Woman2::
@@ -52,3 +57,7 @@ MauvilleCity_PokemonCenter_1F_Text_RecordCornerSoundsFun:
 	.string "I don't know what it's about, but it\n"
 	.string "sounds fun. I'll go check it out!$"
 
+MauvilleCity_PokemonCenter_1F_Text_ManOverThereSaysWeirdThings_W0:
+	.string "WATTSON lost to a kid and laughed so\n"
+	.string "hard the lights flickered.\p"
+	.string "That was you? Wahahaha!$"
