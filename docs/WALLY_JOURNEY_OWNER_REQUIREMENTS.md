@@ -37,7 +37,7 @@
 - Maintain a **species-by-species evidence ledger** listing cross-generation Pokédex observations, documented game encounter locations, habitat justification, proposed Hoenn map/method, conditional effective encounter rate, minimum wild level, evolutionary line availability and remaining proof.
 - Use `src/data/wild_encounters.json` and actual species/evolution definitions as source of truth. Existing scripts under `tools/` provide **partial static checks**; they are not proof of complete obtainable Pokédex.
 - Check encounter slot structure, map/method rates, rod subgroups, starters and pseudo family rarity, effective repeated-slot rate, habitat fit, underleveled evolutions, species line reachability, and no unintended legendary/mythical ambient encounters.
-- The earlier audit found **261 underleveled wild slots among 1,362 checked slots**, across Hoenn plus bundled non-Hoenn maps. This is **an audit finding, not an implemented fix**, and must be verified/reworked without harming gameplay.
+- The initial audit identified **261 underleveled wild slots among 1,362 checked slots**, across Hoenn plus bundled non-Hoenn maps. **22 Hoenn slots were subsequently changed to catchable earlier stages** (commit `a04f4310`), with family-aware validator updates. Those source changes are committed but require fresh full-audit execution, ROM compilation, and emulator testing; never present 261 as the current post-change count without rerunning the audit.
 - Build the GBA ROM and run real emulator checks for encounters, evolutions, story, HM badge gates, TMs, bike switching, move relearning, Mega Evolution and save/load stability. Never claim the ROM or a feature is fully complete until verified.
 
 ## Status and decision hygiene
@@ -47,3 +47,11 @@
 - Prioritize the encounter/ecology/obtainability work when asked to 'continue' in this workstream, rather than diverting into unrelated trade-evolution changes.
 - Related technical evidence: `docs/WALLY_WILD_ENCOUNTER_ECOLOGY.md`, `docs/wally-wild-evolution-level-audit.md`, `docs/WALLY_SOLO_EVOLUTION_ITEM_CHECKLIST.md` (legacy item checklist may contain outdated Linking Cord assumptions; this file takes precedence).
 - Record future owner decisions and corrections here promptly and update conflicting docs/tests. When unresolved, state what's undecided rather than fabricate specifics.
+
+## Current active work and resumable checklist (2026-10-16)
+
+- **Active:** audit and correct remaining underleveled encounters without introducing implausible levels or habitats. Keep the earlier stage available; an evolved stage needs no wild placement when evolution is reachable.
+- **Next:** run full static validators again, review their exceptions, and check complete evolution-chain reachability, including alternate forms, items, breeding, and event sources.
+- **Then:** research Pokédex ecology and actual historical game locations for every Gen 1–9 family; maintain sourced per-species placement and rarity ledger and rebalance wild tables accordingly.
+- **Later verification:** compile a playable GBA ROM, run tests and emulator playthroughs for wild encounters, evolutions, key story/QoL mechanics, and saving.
+- **Not complete:** all-species obtainable proof, comprehensive historical habitat research, global rare-spawn balancing, full underlevel correction, and ROM/emulator certification.
