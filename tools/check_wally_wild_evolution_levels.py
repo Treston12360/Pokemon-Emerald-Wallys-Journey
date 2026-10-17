@@ -28,6 +28,10 @@ MIN_EVOLUTION_LEVEL = {
     "SPECIES_DRAGONITE": 55,
     "SPECIES_TYRANITAR": 55,
     "SPECIES_PUPITAR": 30,
+    "SPECIES_DRAKLOAK": 50,
+    "SPECIES_DRAGAPULT": 60,
+    "SPECIES_ARCTIBAX": 35,
+    "SPECIES_BAXCALIBUR": 54,
 }
 
 data = json.loads((ROOT / "src/data/wild_encounters.json").read_text(encoding="utf-8"))
