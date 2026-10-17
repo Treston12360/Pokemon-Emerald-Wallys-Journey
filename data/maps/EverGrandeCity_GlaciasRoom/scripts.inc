@@ -59,15 +59,15 @@ EverGrandeCity_GlaciasRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_GlaciasRoom_Text_IntroSpeech:
-	.string "Welcome, my name is GLACIA\n"
-	.string "of the ELITE FOUR.\p"
-	.string "I've traveled from afar to HOENN\n"
-	.string "so that I may hone my ice skills.\p"
-	.string "But all I have seen are challenges by\n"
-	.string "weak TRAINERS and their POKéMON.\p"
-	.string "What about you?\p"
-	.string "It would please me to no end if I could\n"
-	.string "go all out against you!$"
+	.string "GLACIA: I am GLACIA.\n"
+	.string "You may begin when ready.\p"
+	.string "During the storms, we moved\n"
+	.string "families to safer ground.\p"
+	.string "Panic made every choice\n"
+	.string "more dangerous.\p"
+	.string "You have come this far.\n"
+	.string "Let us see if your judgment\n"
+	.string "is as steady as your team.$"
 
 EverGrandeCity_GlaciasRoom_Text_Defeat:
 	.string "You and your POKéMON…\n"
