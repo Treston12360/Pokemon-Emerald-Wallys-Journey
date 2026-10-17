@@ -241,50 +241,56 @@ SlateportCity_OceanicMuseum_1F_Text_CatchUpWithYourGroup:
 	.string "You'd better go catch up to them!$"
 
 SlateportCity_OceanicMuseum_1F_Text_AquaExistForGoodOfAll:
-	.string "We, TEAM AQUA, exist for the good\n"
-	.string "of all!$"
+	.string "We, TEAM AQUA, exist for the good of\n"
+	.string "all!\p"
+	.string "Even the people who hate us. Someday\n"
+	.string "they'll get it.$"
 
 SlateportCity_OceanicMuseum_1F_Text_OurBossIsntHere:
-	.string "We were told to assemble here,\n"
-	.string "so we did, but…\p"
-	.string "Our BOSS, the linchpin, isn't here.$"
+	.string "We were told to assemble here.\p"
+	.string "But the BOSS isn't here. Without him,\n"
+	.string "nobody knows what we're doing.$"
 
 SlateportCity_OceanicMuseum_1F_Text_WouldStuffHereMakeMeRich:
-	.string "If I ripped off the stuff here,\n"
-	.string "would it make me rich?$"
+	.string "If I took the stuff here, would it\n"
+	.string "make me rich?\p"
+	.string "…Don't tell the BOSS I said that.\n"
+	.string "He's strict about “the cause.”$"
 
 SlateportCity_OceanicMuseum_1F_Text_CanLearnForNefariousDeeds:
 	.string "What I learn here, I can put to use on\n"
 	.string "nefarious deeds…$"
 
 SlateportCity_OceanicMuseum_1F_Text_RustboroBungled:
-	.string "If our goons didn't bungle things\n"
-	.string "in RUSTBORO, we wouldn't be here!$"
+	.string "If our people hadn't bungled it in\n"
+	.string "RUSTBORO, we wouldn't be here!$"
 
 SlateportCity_OceanicMuseum_1F_Text_DidntHaveMoney:
-	.string "I didn't have ¥50, so it took a long\n"
-	.string "time getting by the receptionist.$"
+	.string "I didn't have ¥50. Took forever to\n"
+	.string "sneak past the receptionist.$"
 
 SlateportCity_OceanicMuseum_1F_Text_LearnAboutSeaForBattling:
 	.string "I want to learn about the sea and\n"
-	.string "use that knowledge for battling.$"
+	.string "use it in battle.\p"
+	.string "WATER POKéMON fight better when you\n"
+	.string "understand where they come from.$"
 
 SlateportCity_OceanicMuseum_1F_Text_SternIsRoleModel:
-	.string "I get all giddy and gooey when\n"
-	.string "I see the sea!\p"
-	.string "For me, CAPT. STERN is the number\n"
-	.string "one role model!$"
+	.string "I get all giddy when I see the sea!\p"
+	.string "CAPT. STERN is my role model. He\n"
+	.string "explores, but he never takes more\l"
+	.string "than he needs.$"
 
 SlateportCity_OceanicMuseum_1F_Text_MustBePokemonWeDontKnow:
-	.string "The sea is vast without end, and\n"
-	.string "infinitely deep…\p"
-	.string "There must be many POKéMON that\n"
-	.string "we don't know about.$"
+	.string "The sea is deep beyond measure.\p"
+	.string "There must be POKéMON nobody's ever\n"
+	.string "seen. Maybe even ones as old as\l"
+	.string "HOENN itself.$"
 
 SlateportCity_OceanicMuseum_1F_Text_WantSeaPokemon:
 	.string "I want a sea POKéMON.\p"
-	.string "I think it would feel cool and nice\n"
-	.string "to hug.$"
+	.string "It'd be cool and nice to hug. Like\n"
+	.string "hugging the ocean.$"
 
 SlateportCity_OceanicMuseum_1F_Text_RememberMeTakeThis:
 	.string "Aiyeeeh!\n"

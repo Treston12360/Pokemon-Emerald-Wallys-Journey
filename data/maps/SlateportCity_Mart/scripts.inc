@@ -35,10 +35,9 @@ SlateportCity_Mart_EventScript_Man::
 	end
 
 SlateportCity_Mart_Text_SomeItemsOnlyAtMart:
-	.string "The MARKET does have some interesting\n"
-	.string "merchandise.\p"
-	.string "But there are some items you can only\n"
-	.string "get at a POKéMON MART.$"
+	.string "The MARKET has interesting stuff.\p"
+	.string "But some things only a POKéMON MART\n"
+	.string "sells. The LEAGUE regulates those.$"
 
 SlateportCity_Mart_Text_GreatBallIsBetter:
 	.string "Weaken a POKéMON first, then throw\n"

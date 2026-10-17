@@ -351,17 +351,18 @@ SlateportCity_OceanicMuseum_2F_Text_SternIveGotToGo:
 	.string "out our facilities, though.$"
 
 SlateportCity_OceanicMuseum_2F_Text_RemindsMeOfAbandonedShip:
-	.string "I saw a model of a ship here.\p"
-	.string "It reminded me of the ABANDONED SHIP\n"
-	.string "near DEWFORD TOWN…$"
+	.string "That ship model reminds me of the\n"
+	.string "ABANDONED SHIP near DEWFORD.\p"
+	.string "They say its captain went down with\n"
+	.string "it. Some say he's still aboard.$"
 
 SlateportCity_OceanicMuseum_2F_Text_DontRunInMuseum:
-	.string "Don't you dare run around inside\n"
-	.string "the MUSEUM!$"
+	.string "Don't you dare run inside the\n"
+	.string "MUSEUM!$"
 
 SlateportCity_OceanicMuseum_2F_Text_WantToRideSubmarine:
-	.string "Wow, the submarine's awesome!\n"
-	.string "I want to go for a ride!$"
+	.string "The submarine's awesome! I want a\n"
+	.string "ride!$"
 
 SlateportCity_OceanicMuseum_2F_Text_WaterQualitySample1:
 	.string "“WATER QUALITY SAMPLE 1,” the\n"

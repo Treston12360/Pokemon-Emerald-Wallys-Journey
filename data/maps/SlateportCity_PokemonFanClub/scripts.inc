@@ -370,24 +370,24 @@ SlateportCity_PokemonFanClub_Text_PokemonAdoresYou:
 	.string "TRAINER, a gift from the FAN CLUB!$"
 
 SlateportCity_PokemonFanClub_Text_TreatPokemonWithLove:
-	.string "POKéMON are very sensitive to\n"
-	.string "the feelings of their TRAINERS.\p"
-	.string "If you treat your POKéMON with love\n"
-	.string "and care, they'll love you back.$"
+	.string "POKéMON feel what their TRAINERS\n"
+	.string "feel.\p"
+	.string "Treat them with love and they'll\n"
+	.string "love you back. Treat them like tools\l"
+	.string "and they'll know.$"
 
 SlateportCity_PokemonFanClub_Text_PokemonDontLikeFainting:
-	.string "If you keep letting a POKéMON faint\n"
-	.string "in battle, it'll come to resent it.\p"
-	.string "Soon, it will become less trusting\n"
-	.string "of the TRAINER.\p"
-	.string "In other words, it certainly won't\n"
-	.string "like you very much.$"
+	.string "If you let a POKéMON faint again and\n"
+	.string "again, it starts to resent it.\p"
+	.string "Trust goes both ways. Don't spend it\n"
+	.string "carelessly.$"
 
 SlateportCity_PokemonFanClub_Text_MonEnjoyedProtein:
-	.string "Do POKéMON enjoy having items used\n"
-	.string "on them?\p"
-	.string "Mine acted really happy when I gave\n"
-	.string "it some PROTEIN.$"
+	.string "Do POKéMON like having items used on\n"
+	.string "them?\p"
+	.string "Mine perked right up after some\n"
+	.string "PROTEIN. Or maybe it just liked the\l"
+	.string "attention.$"
 
 SlateportCity_PokemonFanClub_Text_Skitty:
 	.string "SKITTY: Fffnyaaaah…$"

@@ -418,10 +418,9 @@ SlateportCity_Harbor_Text_WhereWouldYouLikeToGo:
 	.string "Then, where would you like to go?$"
 
 SlateportCity_Harbor_Text_LoveToGoDeepUnderwaterSomeday:
-	.string "A journey to the bottom of the sea…\n"
-	.string "I wonder what it'd be like?\p"
-	.string "I'd love to go deep underwater like\n"
-	.string "that someday.$"
+	.string "A journey to the bottom of the sea…\p"
+	.string "I'd love to go that deep someday.\n"
+	.string "Before the sea changes too much.$"
 
 SlateportCity_Harbor_Text_AbnormalWeather:
 	.string "For a ship to sail safely, we need to\n"
@@ -434,11 +433,10 @@ SlateportCity_Harbor_Text_AbnormalWeather:
 	.string "and ask around!$"
 
 SlateportCity_Harbor_Text_SubTooSmallForMe:
-	.string "I wanted to go with CAPT. STERN on\n"
-	.string "the ocean floor exploration.\p"
-	.string "But the sub's too small for me.\p"
-	.string "If I squeezed in, there wouldn't be\n"
-	.string "any room for the CAPTAIN…$"
+	.string "I wanted to go on the expedition.\p"
+	.string "But the sub's too small for me. If\n"
+	.string "I squeezed in, there'd be no room\l"
+	.string "for air!$"
 
 SlateportCity_Harbor_Text_SameThugsTriedToRobAtMuseum:
 	.string "CAPT. STERN: Those thugs…\p"
