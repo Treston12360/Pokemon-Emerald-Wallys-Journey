@@ -30,7 +30,23 @@ PacifidlogTown_Text_FastRunningCurrentAftermath_Script:
 	end
 
 PacifidlogTown_EventScript_Fisherman::
+	special WallyJourney_GetSeasonForScript
+	goto_if_eq VAR_RESULT, 0, PacifidlogTown_EventScript_Fisherman_Spring
+	goto_if_eq VAR_RESULT, 2, PacifidlogTown_EventScript_Fisherman_Autumn
+	goto_if_eq VAR_RESULT, 3, PacifidlogTown_EventScript_Fisherman_Winter
 	msgbox PacifidlogTown_Text_SkyPillarTooScary, MSGBOX_NPC
+	end
+
+PacifidlogTown_EventScript_Fisherman_Spring::
+	msgbox PacifidlogTown_Text_SkyPillarTooScary_Spring, MSGBOX_NPC
+	end
+
+PacifidlogTown_EventScript_Fisherman_Autumn::
+	msgbox PacifidlogTown_Text_SkyPillarTooScary_Autumn, MSGBOX_NPC
+	end
+
+PacifidlogTown_EventScript_Fisherman_Winter::
+	msgbox PacifidlogTown_Text_SkyPillarTooScary_Winter, MSGBOX_NPC
 	end
 
 PacifidlogTown_EventScript_TownSign::
@@ -76,3 +92,21 @@ PacifidlogTown_Text_NeatHousesOnWater_W0:
 	.string "floating higher every day.\p"
 	.string "Grandpa says hold on to something\n"
 	.string "and don't look down.$"
+
+PacifidlogTown_Text_SkyPillarTooScary_Spring:
+	.string "Spring tides lift the whole town a\n"
+	.string "little higher.\p"
+	.string "The CORSOLA love it. So do I.$"
+
+PacifidlogTown_Text_SkyPillarTooScary_Autumn:
+	.string "Autumn currents run fast past\n"
+	.string "PACIFIDLOG.\p"
+	.string "Grandma says that's when the green\n"
+	.string "light was last seen over the\l"
+	.string "SKY PILLAR.$"
+
+PacifidlogTown_Text_SkyPillarTooScary_Winter:
+	.string "Winter here isn't cold. Just wet.\n"
+	.string "Endless warm rain.\p"
+	.string "We tie the rafts tighter and wait for\n"
+	.string "spring.$"

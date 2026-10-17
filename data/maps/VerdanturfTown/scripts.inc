@@ -39,7 +39,23 @@ VerdanturfTown_Text_AirCleanHere_W0_Script:
 	end
 
 VerdanturfTown_EventScript_Camper::
+	special WallyJourney_GetSeasonForScript
+	goto_if_eq VAR_RESULT, 0, VerdanturfTown_EventScript_Camper_Spring
+	goto_if_eq VAR_RESULT, 2, VerdanturfTown_EventScript_Camper_Autumn
+	goto_if_eq VAR_RESULT, 3, VerdanturfTown_EventScript_Camper_Winter
 	msgbox VerdanturfTown_Text_MakeBattleTentDebut, MSGBOX_NPC
+	end
+
+VerdanturfTown_EventScript_Camper_Spring::
+	msgbox VerdanturfTown_Text_MakeBattleTentDebut_Spring, MSGBOX_NPC
+	end
+
+VerdanturfTown_EventScript_Camper_Autumn::
+	msgbox VerdanturfTown_Text_MakeBattleTentDebut_Autumn, MSGBOX_NPC
+	end
+
+VerdanturfTown_EventScript_Camper_Winter::
+	msgbox VerdanturfTown_Text_MakeBattleTentDebut_Winter, MSGBOX_NPC
 	end
 
 VerdanturfTown_EventScript_Boy::
@@ -140,3 +156,23 @@ VerdanturfTown_Text_AirCleanHereAfterChampion:
 	.string "Sat on his old bench awhile.\p"
 	.string "This time, he watched the other\n"
 	.string "kids run with a big smile.$"
+
+VerdanturfTown_Text_MakeBattleTentDebut_Spring:
+	.string "Spring air in VERDANTURF is the best\n"
+	.string "in HOENN.\p"
+	.string "I'm entering the BATTLE TENT this\n"
+	.string "season. My winning streak needs a\l"
+	.string "stage.$"
+
+VerdanturfTown_Text_MakeBattleTentDebut_Autumn:
+	.string "The leaves along ROUTE 117 are\n"
+	.string "turning.\p"
+	.string "Feels like the end of something. Or\n"
+	.string "the start. The BATTLE TENT will tell\l"
+	.string "me which.$"
+
+VerdanturfTown_Text_MakeBattleTentDebut_Winter:
+	.string "Even in winter, the wind keeps the\n"
+	.string "ash away from here.\p"
+	.string "Perfect training weather. Cold air,\n"
+	.string "clear head.$"

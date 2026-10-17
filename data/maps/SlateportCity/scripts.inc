@@ -720,7 +720,23 @@ SlateportCity_EventScript_Gabby::
 	end
 
 SlateportCity_EventScript_Man3::
+	special WallyJourney_GetSeasonForScript
+	goto_if_eq VAR_RESULT, 0, SlateportCity_EventScript_Man3_Spring
+	goto_if_eq VAR_RESULT, 2, SlateportCity_EventScript_Man3_Autumn
+	goto_if_eq VAR_RESULT, 3, SlateportCity_EventScript_Man3_Winter
 	msgbox SlateportCity_Text_WonderIfLighthouseStartlesPokemon, MSGBOX_NPC
+	end
+
+SlateportCity_EventScript_Man3_Spring::
+	msgbox SlateportCity_Text_WonderIfLighthouseStartlesPokemon_Spring, MSGBOX_NPC
+	end
+
+SlateportCity_EventScript_Man3_Autumn::
+	msgbox SlateportCity_Text_WonderIfLighthouseStartlesPokemon_Autumn, MSGBOX_NPC
+	end
+
+SlateportCity_EventScript_Man3_Winter::
+	msgbox SlateportCity_Text_WonderIfLighthouseStartlesPokemon_Winter, MSGBOX_NPC
 	end
 
 SlateportCity_EventScript_BerryPowderClerk::
@@ -1408,3 +1424,20 @@ SlateportCity_Text_BattleTentAfterChampion:
 	.string "with a WINGULL yesterday.\p"
 	.string "Doesn't have to win yet.\n"
 	.string "Just has to begin.$"
+
+SlateportCity_Text_WonderIfLighthouseStartlesPokemon_Spring:
+	.string "Spring fog rolls in off the sea most\n"
+	.string "mornings.\p"
+	.string "That's when the lighthouse earns\n"
+	.string "its keep.$"
+
+SlateportCity_Text_WonderIfLighthouseStartlesPokemon_Autumn:
+	.string "The autumn storms are when the\n"
+	.string "lighthouse matters most.\p"
+	.string "My father kept it lit through a\n"
+	.string "typhoon once. Never slept a wink.$"
+
+SlateportCity_Text_WonderIfLighthouseStartlesPokemon_Winter:
+	.string "Winter nights are long out here.\p"
+	.string "The lighthouse keeps turning anyway.\n"
+	.string "I find that comforting.$"

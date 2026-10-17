@@ -237,7 +237,23 @@ LavaridgeTown_EventScript_SpringsAfterChampion::
 	end
 
 LavaridgeTown_EventScript_HotSpringsOldWoman2::
+	special WallyJourney_GetSeasonForScript
+	goto_if_eq VAR_RESULT, 0, LavaridgeTown_EventScript_HotSpringsOldWoman2_Spring
+	goto_if_eq VAR_RESULT, 2, LavaridgeTown_EventScript_HotSpringsOldWoman2_Autumn
+	goto_if_eq VAR_RESULT, 3, LavaridgeTown_EventScript_HotSpringsOldWoman2_Winter
 	msgbox LavaridgeTown_Text_HotSpringsClaims, MSGBOX_NPC
+	end
+
+LavaridgeTown_EventScript_HotSpringsOldWoman2_Spring::
+	msgbox LavaridgeTown_Text_HotSpringsClaims_Spring, MSGBOX_NPC
+	end
+
+LavaridgeTown_EventScript_HotSpringsOldWoman2_Autumn::
+	msgbox LavaridgeTown_Text_HotSpringsClaims_Autumn, MSGBOX_NPC
+	end
+
+LavaridgeTown_EventScript_HotSpringsOldWoman2_Winter::
+	msgbox LavaridgeTown_Text_HotSpringsClaims_Winter, MSGBOX_NPC
 	end
 
 LavaridgeTown_EventScript_ExpertF::
@@ -451,3 +467,21 @@ LavaridgeTown_Text_FlanneryReliefAfterChampion:
 	.string "she's ready to lead.\p"
 	.string "But leadership isn't never\n"
 	.string "being afraid, is it?$"
+
+LavaridgeTown_Text_HotSpringsClaims_Spring:
+	.string "In spring they claim the springs cure\n"
+	.string "hay fever, too.\p"
+	.string "I've had hay fever for forty years.\n"
+	.string "I keep coming anyway.$"
+
+LavaridgeTown_Text_HotSpringsClaims_Autumn:
+	.string "Autumn is the best season for the\n"
+	.string "springs.\p"
+	.string "Cool air, hot water. Even my old\n"
+	.string "bones agree.$"
+
+LavaridgeTown_Text_HotSpringsClaims_Winter:
+	.string "In winter, people come from all over\n"
+	.string "just to sit in the steam.\p"
+	.string "The springs don't cure anything. But\n"
+	.string "they make the cold bearable.$"

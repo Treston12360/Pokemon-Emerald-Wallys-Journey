@@ -24,7 +24,7 @@ STORY_GFX = re.compile(r"WALLY|STEVEN|BRENDAN|MAY|BIRCH|NORMAN|MOM|ARCHIE|MAXIE|
                        r"KECLEON|SUDOWOODO|VOLTORB|KYOGRE|GROUDON|RAYQUAZA|REGI|LATI|DEOXYS|MEW|HO_OH|LUGIA|"
                        r"SPECIES|VAR_|FOSSIL|BALL|STATUE|SIGN|DOLL|CUSHION|BOAT|CABLE|MANIAC|SAILOR_.*BOAT|TWIN|"
                        r"ANABEL|GABBY|TY\b|PICNICKER_STATIC|PSYCHIC_M_STATIC|LINK|ARTIST|REPORTER|NURSE|CLERK")
-SIMPLE_LINE = re.compile(r"^\s*(msgbox \w+, MSGBOX_NPC|goto_if_(set|unset) FLAG_\w+, \w+|goto_if_(ge|eq|le|lt|gt|ne) VAR_\w+, \w+, \w+|end)\s*$")
+SIMPLE_LINE = re.compile(r"^\s*(special WallyJourney_GetSeasonForScript|msgbox \w+, MSGBOX_NPC|goto_if_(set|unset) FLAG_\w+, \w+|goto_if_(ge|eq|le|lt|gt|ne) VAR_\w+, \w+, \w+|end)\s*$")
 
 
 def labels(text):

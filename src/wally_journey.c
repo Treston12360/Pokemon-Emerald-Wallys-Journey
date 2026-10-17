@@ -188,6 +188,17 @@ struct BlendSettings WallyJourney_GetSeasonDayBlend(void)
 }
 #undef TINT
 
+// Script special: VAR_RESULT = current season (0 spring, 1 summer, 2 autumn,
+// 3 winter); summer when the clock is broken, so NPCs fall back to their
+// normal line.
+void WallyJourney_GetSeasonForScript(void)
+{
+    if (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK)
+        gSpecialVar_Result = WALLY_SEASON_SUMMER;
+    else
+        gSpecialVar_Result = WallyJourney_GetSeason();
+}
+
 // ------------------------------------------------------ living weather
 // Owner design (2026-10-17): each part of Hoenn has its own weather, set by
 // region, season and hour. Weather fronts roll across Hoenn from west to east,

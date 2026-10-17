@@ -47,7 +47,23 @@ FortreeCity_Text_EveryoneHealthyAndLively_W0_Script:
 	end
 
 FortreeCity_EventScript_Boy::
+	special WallyJourney_GetSeasonForScript
+	goto_if_eq VAR_RESULT, 0, FortreeCity_EventScript_Boy_Spring
+	goto_if_eq VAR_RESULT, 2, FortreeCity_EventScript_Boy_Autumn
+	goto_if_eq VAR_RESULT, 3, FortreeCity_EventScript_Boy_Winter
 	msgbox FortreeCity_Text_BugPokemonComeThroughWindow, MSGBOX_NPC
+	end
+
+FortreeCity_EventScript_Boy_Spring::
+	msgbox FortreeCity_Text_BugPokemonComeThroughWindow_Spring, MSGBOX_NPC
+	end
+
+FortreeCity_EventScript_Boy_Autumn::
+	msgbox FortreeCity_Text_BugPokemonComeThroughWindow_Autumn, MSGBOX_NPC
+	end
+
+FortreeCity_EventScript_Boy_Winter::
+	msgbox FortreeCity_Text_BugPokemonComeThroughWindow_Winter, MSGBOX_NPC
 	end
 
 FortreeCity_EventScript_GameboyKid::
@@ -179,3 +195,22 @@ FortreeCity_Text_EveryoneHealthyAndLively_W0:
 	.string "your battle.\p"
 	.string "She never does that. You impressed\n"
 	.string "her.$"
+
+FortreeCity_Text_BugPokemonComeThroughWindow_Spring:
+	.string "New leaves everywhere. FORTREE looks\n"
+	.string "brand new every spring.\p"
+	.string "But the town still can't grow\n"
+	.string "outward. Someday my kids will have\l"
+	.string "to move away.$"
+
+FortreeCity_Text_BugPokemonComeThroughWindow_Autumn:
+	.string "The whole canopy turns red in autumn.\n"
+	.string "The tourists love it.\p"
+	.string "They don't see how hard it is to find\n"
+	.string "a home up here.$"
+
+FortreeCity_Text_BugPokemonComeThroughWindow_Winter:
+	.string "Winter winds make the bridges sway.\p"
+	.string "We check every rope each morning.\n"
+	.string "Living in the trees isn't just\l"
+	.string "pretty. It's work.$"

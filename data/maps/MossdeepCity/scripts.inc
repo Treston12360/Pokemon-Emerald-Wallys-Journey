@@ -47,7 +47,23 @@ MossdeepCity_Text_WailmerWatching_W0_Script:
 	end
 
 MossdeepCity_EventScript_ExpertM::
+	special WallyJourney_GetSeasonForScript
+	goto_if_eq VAR_RESULT, 0, MossdeepCity_EventScript_ExpertM_Spring
+	goto_if_eq VAR_RESULT, 2, MossdeepCity_EventScript_ExpertM_Autumn
+	goto_if_eq VAR_RESULT, 3, MossdeepCity_EventScript_ExpertM_Winter
 	msgbox MossdeepCity_Text_LifeNeedsSeaToLive, MSGBOX_NPC
+	end
+
+MossdeepCity_EventScript_ExpertM_Spring::
+	msgbox MossdeepCity_Text_LifeNeedsSeaToLive_Spring, MSGBOX_NPC
+	end
+
+MossdeepCity_EventScript_ExpertM_Autumn::
+	msgbox MossdeepCity_Text_LifeNeedsSeaToLive_Autumn, MSGBOX_NPC
+	end
+
+MossdeepCity_EventScript_ExpertM_Winter::
+	msgbox MossdeepCity_Text_LifeNeedsSeaToLive_Winter, MSGBOX_NPC
 	end
 
 MossdeepCity_EventScript_Girl::
@@ -65,7 +81,23 @@ MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W1_Script:
 	end
 
 MossdeepCity_EventScript_Woman::
+	special WallyJourney_GetSeasonForScript
+	goto_if_eq VAR_RESULT, 0, MossdeepCity_EventScript_Woman_Spring
+	goto_if_eq VAR_RESULT, 2, MossdeepCity_EventScript_Woman_Autumn
+	goto_if_eq VAR_RESULT, 3, MossdeepCity_EventScript_Woman_Winter
 	msgbox MossdeepCity_Text_SpecialSpaceCenterRock, MSGBOX_NPC
+	end
+
+MossdeepCity_EventScript_Woman_Spring::
+	msgbox MossdeepCity_Text_SpecialSpaceCenterRock_Spring, MSGBOX_NPC
+	end
+
+MossdeepCity_EventScript_Woman_Autumn::
+	msgbox MossdeepCity_Text_SpecialSpaceCenterRock_Autumn, MSGBOX_NPC
+	end
+
+MossdeepCity_EventScript_Woman_Winter::
+	msgbox MossdeepCity_Text_SpecialSpaceCenterRock_Winter, MSGBOX_NPC
 	end
 
 MossdeepCity_EventScript_WhiteRock::
@@ -474,3 +506,40 @@ MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W1:
 	.string "The rain hasn't stopped in days.\n"
 	.string "The flowers are drowning.\p"
 	.string "I just want to see the sun.$"
+
+MossdeepCity_Text_SpecialSpaceCenterRock_Spring:
+	.string "Spring is launch season at the\n"
+	.string "SPACE CENTER.\p"
+	.string "The staff touch the lucky rock before\n"
+	.string "every launch. I counted twelve this\l"
+	.string "week.$"
+
+MossdeepCity_Text_SpecialSpaceCenterRock_Autumn:
+	.string "Autumn nights here are perfect for\n"
+	.string "stargazing.\p"
+	.string "The SPACE CENTER opens its telescope\n"
+	.string "to the public. You should go.$"
+
+MossdeepCity_Text_SpecialSpaceCenterRock_Winter:
+	.string "In winter the stars over MOSSDEEP are\n"
+	.string "so clear it almost hurts.\p"
+	.string "The SPACE CENTER says it's the best\n"
+	.string "season for meteor showers.$"
+
+MossdeepCity_Text_LifeNeedsSeaToLive_Spring:
+	.string "In spring, the WAILMER come back to\n"
+	.string "MOSSDEEP.\p"
+	.string "The sea remembers its seasons. People\n"
+	.string "forget theirs.$"
+
+MossdeepCity_Text_LifeNeedsSeaToLive_Autumn:
+	.string "Autumn storms stir up the deep water.\n"
+	.string "The fishing is best now.\p"
+	.string "The sea gives, and the sea takes.\n"
+	.string "Both are true.$"
+
+MossdeepCity_Text_LifeNeedsSeaToLive_Winter:
+	.string "The sea turns grey and cold in\n"
+	.string "winter.\p"
+	.string "It still feeds us. Land and sea,\n"
+	.string "every season. Don't forget that.$"

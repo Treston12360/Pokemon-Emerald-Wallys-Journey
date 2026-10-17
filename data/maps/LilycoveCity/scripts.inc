@@ -50,7 +50,23 @@ LilycoveCity_EventScript_ReceivedBerry::
 	end
 
 LilycoveCity_EventScript_Man3::
+	special WallyJourney_GetSeasonForScript
+	goto_if_eq VAR_RESULT, 0, LilycoveCity_EventScript_Man3_Spring
+	goto_if_eq VAR_RESULT, 2, LilycoveCity_EventScript_Man3_Autumn
+	goto_if_eq VAR_RESULT, 3, LilycoveCity_EventScript_Man3_Winter
 	msgbox LilycoveCity_Text_ContestHallInTown, MSGBOX_NPC
+	end
+
+LilycoveCity_EventScript_Man3_Spring::
+	msgbox LilycoveCity_Text_ContestHallInTown_Spring, MSGBOX_NPC
+	end
+
+LilycoveCity_EventScript_Man3_Autumn::
+	msgbox LilycoveCity_Text_ContestHallInTown_Autumn, MSGBOX_NPC
+	end
+
+LilycoveCity_EventScript_Man3_Winter::
+	msgbox LilycoveCity_Text_ContestHallInTown_Winter, MSGBOX_NPC
 	end
 
 LilycoveCity_EventScript_Girl::
@@ -122,7 +138,23 @@ LilycoveCity_EventScript_ExpertM2AquaGone::
 	end
 
 LilycoveCity_EventScript_Sailor1::
+	special WallyJourney_GetSeasonForScript
+	goto_if_eq VAR_RESULT, 0, LilycoveCity_EventScript_Sailor1_Spring
+	goto_if_eq VAR_RESULT, 2, LilycoveCity_EventScript_Sailor1_Autumn
+	goto_if_eq VAR_RESULT, 3, LilycoveCity_EventScript_Sailor1_Winter
 	msgbox LilycoveCity_Text_HeardTowerCalledSkyPillar, MSGBOX_NPC
+	end
+
+LilycoveCity_EventScript_Sailor1_Spring::
+	msgbox LilycoveCity_Text_HeardTowerCalledSkyPillar_Spring, MSGBOX_NPC
+	end
+
+LilycoveCity_EventScript_Sailor1_Autumn::
+	msgbox LilycoveCity_Text_HeardTowerCalledSkyPillar_Autumn, MSGBOX_NPC
+	end
+
+LilycoveCity_EventScript_Sailor1_Winter::
+	msgbox LilycoveCity_Text_HeardTowerCalledSkyPillar_Winter, MSGBOX_NPC
 	end
 
 LilycoveCity_EventScript_FatMan::
@@ -786,3 +818,37 @@ LilycoveCity_Text_HoneymoonVowToSeeRarePokemon:
 LilycoveCity_OnFrame:
 	map_script_2 VAR_WALLY_RIVAL_PENDING, 6, WallyJourney_EventScript_RivalMeet6
 	.2byte 0
+
+LilycoveCity_Text_ContestHallInTown_Spring:
+	.string "Spring is CONTEST season.\p"
+	.string "TRAINERS come from all over to show\n"
+	.string "off. The hall is packed every night.$"
+
+LilycoveCity_Text_ContestHallInTown_Autumn:
+	.string "The autumn CONTESTS are the toughest.\n"
+	.string "Everyone's had all summer to train.\p"
+	.string "Beauty takes more work than people\n"
+	.string "think.$"
+
+LilycoveCity_Text_ContestHallInTown_Winter:
+	.string "Winter is quiet at the CONTEST HALL.\p"
+	.string "That's when the real performers\n"
+	.string "practice. When nobody is watching.$"
+
+LilycoveCity_Text_HeardTowerCalledSkyPillar_Spring:
+	.string "Spring currents push the fishing\n"
+	.string "boats toward the SKY PILLAR.\p"
+	.string "My grandmother said nobody built it.\n"
+	.string "Some days I believe her.$"
+
+LilycoveCity_Text_HeardTowerCalledSkyPillar_Autumn:
+	.string "Autumn sunsets turn the sea gold\n"
+	.string "around the SKY PILLAR.\p"
+	.string "Even the old sailors stop talking\n"
+	.string "when they see it.$"
+
+LilycoveCity_Text_HeardTowerCalledSkyPillar_Winter:
+	.string "Winter storms hide the SKY PILLAR for\n"
+	.string "weeks at a time.\p"
+	.string "When the clouds part, it's always\n"
+	.string "still there. Watching.$"

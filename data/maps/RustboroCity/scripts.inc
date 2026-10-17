@@ -148,7 +148,23 @@ RustboroCity_EventScript_DevonEmployee2::
 	end
 
 RustboroCity_EventScript_Woman::
+	special WallyJourney_GetSeasonForScript
+	goto_if_eq VAR_RESULT, 0, RustboroCity_EventScript_Woman_Spring
+	goto_if_eq VAR_RESULT, 2, RustboroCity_EventScript_Woman_Autumn
+	goto_if_eq VAR_RESULT, 3, RustboroCity_EventScript_Woman_Winter
 	msgbox RustboroCity_Text_GymLeaderIsntEasyWithFire, MSGBOX_NPC
+	end
+
+RustboroCity_EventScript_Woman_Spring::
+	msgbox RustboroCity_Text_GymLeaderIsntEasyWithFire_Spring, MSGBOX_NPC
+	end
+
+RustboroCity_EventScript_Woman_Autumn::
+	msgbox RustboroCity_Text_GymLeaderIsntEasyWithFire_Autumn, MSGBOX_NPC
+	end
+
+RustboroCity_EventScript_Woman_Winter::
+	msgbox RustboroCity_Text_GymLeaderIsntEasyWithFire_Winter, MSGBOX_NPC
 	end
 
 RustboroCity_EventScript_Man1::
@@ -1323,3 +1339,22 @@ RustboroCity_Text_SchoolChampionLesson:
 	.string "I used to want rare POKéMON.\n"
 	.string "Now I want to be a TRAINER\l"
 	.string "my partner can count on.$"
+
+RustboroCity_Text_GymLeaderIsntEasyWithFire_Spring:
+	.string "Spring rain keeps washing the quarry\n"
+	.string "dust off the streets.\p"
+	.string "ROXANNE says I should train in the\n"
+	.string "rain. FIRE POKéMON hate it. That's\l"
+	.string "the point, she says.$"
+
+RustboroCity_Text_GymLeaderIsntEasyWithFire_Autumn:
+	.string "Autumn in RUSTBORO means DEVON's\n"
+	.string "yearly report.\p"
+	.string "Half the city is nervous about jobs.\n"
+	.string "The other half is cramming for\l"
+	.string "ROXANNE's exams.$"
+
+RustboroCity_Text_GymLeaderIsntEasyWithFire_Winter:
+	.string "It's cold enough that my FIRE POKéMON\n"
+	.string "are suddenly very popular.\p"
+	.string "Everyone wants to stand next to them.$"
