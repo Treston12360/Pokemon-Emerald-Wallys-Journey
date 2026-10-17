@@ -181,10 +181,10 @@ FortreeCity_Gym_Text_EdwardoDefeat:
 	.string "to bear…$"
 
 FortreeCity_Gym_Text_EdwardoPostBattle:
-	.string "The world is huge, and there are\n"
-	.string "countless tough TRAINERS.\p"
-	.string "I'm going to keep training and make\n"
-	.string "myself even stronger.$"
+	.string "I used to think a GYM was just\n"
+	.string "a place to prove you're strong.\p"
+	.string "Now I help maintain the bridges.\n"
+	.string "People rely on us every day.$"
 
 FortreeCity_Gym_Text_FlintIntro:
 	.string "There's no need for WINONA, our GYM\n"
@@ -196,9 +196,11 @@ FortreeCity_Gym_Text_FlintDefeat:
 	.string "I lost!$"
 
 FortreeCity_Gym_Text_FlintPostBattle:
-	.string "WINONA is cute and she's strong.\n"
-	.string "She's the ultimate LEADER!\p"
-	.string "Blush…$"
+	.string "I joined this GYM because WINONA\n"
+	.string "made flying look effortless.\p"
+	.string "Then I saw her carry supplies\n"
+	.string "through a storm all night.\p"
+	.string "That's what strength looks like.$"
 
 FortreeCity_Gym_Text_AshleyIntro:
 	.string "WINONA taught me personally!\n"
@@ -208,8 +210,10 @@ FortreeCity_Gym_Text_AshleyDefeat:
 	.string "I was beaten…$"
 
 FortreeCity_Gym_Text_AshleyPostBattle:
-	.string "Thanks to WINONA, the people of\n"
-	.string "FORTREE can live without fear.$"
+	.string "When the bridges sway in high wind,\n"
+	.string "WINONA checks every home.\p"
+	.string "She remembers who needs medicine\n"
+	.string "and whose roof still leaks.$"
 
 FortreeCity_Gym_Text_HumbertoIntro:
 	.string "When WINONA takes to battle, her face\n"
@@ -222,9 +226,10 @@ FortreeCity_Gym_Text_HumbertoDefeat:
 	.string "I couldn't stop you.$"
 
 FortreeCity_Gym_Text_HumbertoPostBattle:
-	.string "You'd better watch it!\n"
-	.string "Don't get distracted staring at WINONA\l"
-	.string "or you'll go crashing down in a heap!$"
+	.string "Our LEADER taught us that a\n"
+	.string "beautiful flight takes preparation.\p"
+	.string "She's mapping safer routes now.\n"
+	.string "The storms are changing.$"
 
 FortreeCity_Gym_Text_DariusIntro:
 	.string "You'd better know that there are all\n"
@@ -235,9 +240,10 @@ FortreeCity_Gym_Text_DariusDefeat:
 	.string "You seem to know your stuff!$"
 
 FortreeCity_Gym_Text_DariusPostBattle:
-	.string "Sure, you beat me all right.\n"
-	.string "But you'd better watch it! Our LEADER\l"
-	.string "WINONA's POKéMON are all business.$"
+	.string "You handled my team's surprises.\n"
+	.string "WINONA won't be so predictable.\p"
+	.string "She watches the wind and adapts.\n"
+	.string "A strong TRAINER must do both.$"
 
 FortreeCity_Gym_Text_WinonaIntro:
 	.string "I am WINONA. I am the LEADER of\n"
