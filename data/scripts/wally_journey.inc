@@ -173,9 +173,9 @@ WallyJourney_EventScript_RivalVERDANTURFWon::
 WallyJourney_Text_RivalVERDANTURFIntro:
 	.string "WALLY: {PLAYER}! Um… hi!\p"
 	.string "I heard you beat WATTSON. I've been\n"
-	.string "training out here, in the wind.\p"
-	.string "The sand gets everywhere, but my\n"
-	.string "lungs can handle it now!\p"
+	.string "training on the hills near town.\p"
+	.string "The climb still catches my breath.\n"
+	.string "But I can keep going now!\p"
 	.string "W-would you battle me again?\n"
 	.string "I want to see how far I've come.$"
 
@@ -400,8 +400,8 @@ WallyJourney_Text_SootopolisWallyWon:
 	.string "know exactly where we stand.$"
 
 WallyJourney_Text_RivalSOOTOPOLISIntro:
-	.string "WALLY: The storm is over.\n"
-	.string "Everyone's safe.\p"
+	.string "WALLY: The worst of the storm\n"
+	.string "has passed. People still need help.\p"
 	.string "My eight BADGES are ready.\n"
 	.string "WALLACE is waiting for me\n"
 	.string "at EVER GRANDE.\p"
