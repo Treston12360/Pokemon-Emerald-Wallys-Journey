@@ -241,7 +241,11 @@ Route119_WeatherInstitute_2F_Text_Grunt5Defeat:
 	.string "Oh, will you look at my POKéMON?$"
 
 Route119_WeatherInstitute_2F_Text_Grunt5PostBattle:
-	.string "What we really want isn't here.\n"
+	.string "They told us this would help\n"
+	.string "restore the ocean.\\p\n"
+	.string "So why were we ordered to\n"
+	.string "threaten a room full of staff?\\p\n"
+	.string "I don't have a good answer.$"
 	.string "This is just the warm-up.\p"
 	.string "…I hope ARCHIE knows when to stop.$"
 
@@ -280,7 +284,11 @@ Route119_WeatherInstitute_2F_Text_WeHaveToHurryToMtPyre:
 	.string "TEAM MAGMA, just you wait!$"
 
 Route119_WeatherInstitute_2F_Text_ThanksPleaseTakePokemon:
-	.string "Thanks!\n"
+	.string "You protected our people and\n"
+	.string "our research. Thank you.\\p\n"
+	.string "Please take this CASTFORM.\n"
+	.string "It deserves a TRAINER who\n"
+	.string "treats it as a partner.$"
 	.string "Thanks to you, we're safe!\p"
 	.string "It might be an odd way of thanking you,\n"
 	.string "but take this POKéMON.$"
@@ -294,13 +302,22 @@ Route119_WeatherInstitute_2F_Text_PlayerReceivedCastform:
 	.string "{PLAYER} received CASTFORM!$"
 
 Route119_WeatherInstitute_2F_Text_PokemonChangesWithWeather:
-	.string "That POKéMON changes shape according\n"
+	.string "CASTFORM reacts to changes\n"
+	.string "in the atmosphere.\\p\n"
+	.string "Care for it. We designed this\n"
+	.string "research to understand weather,\n"
+	.string "not turn it into a weapon.$"
 	.string "to the weather conditions.\p"
 	.string "There're plenty of them in the\n"
 	.string "INSTITUTE--go ahead and take it.$"
 
 Route119_WeatherInstitute_2F_Text_ChangingWeatherRidiculous:
-	.string "I've studied rain for many years.\p"
+	.string "The records tell us weather can\n"
+	.string "shift without warning.\\p\n"
+	.string "But these changes have a pattern\n"
+	.string "we don't understand yet.\\p\n"
+	.string "Science means admitting what\n"
+	.string "you don't know, then looking.$"
 	.string "Volcanoes and oceans don't respond\n"
 	.string "in straight lines. Push them a little\l"
 	.string "and nothing happens. Push a little\l"
