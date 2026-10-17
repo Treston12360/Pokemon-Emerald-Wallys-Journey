@@ -247,6 +247,9 @@ jobs:
           print("No double-escaped dialogue control codes found.")
           PY
 
+      - name: Inventory story dialogue for chronology review
+        run: python3 tools/wally_dialogue_inventory.py
+
   allcontributors:
     if: github.actor == 'allcontributors[bot]'
     runs-on: ubuntu-latest
