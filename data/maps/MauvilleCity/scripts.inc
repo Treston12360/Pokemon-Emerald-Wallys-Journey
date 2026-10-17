@@ -19,7 +19,12 @@ MauvilleCity_EventScript_MoveWattsonBackToGym::
 	return
 
 MauvilleCity_EventScript_Boy::
+	goto_if_set FLAG_SYS_GAME_CLEAR, MauvilleCity_EventScript_BoyChampion
 	msgbox MauvilleCity_Text_NurseHurtMonBackToHealth, MSGBOX_NPC
+	end
+
+MauvilleCity_EventScript_BoyChampion:
+	msgbox MauvilleCity_Text_NurseHurtMonBackToHealthChampion, MSGBOX_NPC
 	end
 
 MauvilleCity_EventScript_Maniac::
@@ -32,7 +37,12 @@ MauvilleCity_Text_AllSortsOfPeopleComeThroughAftermath_Script:
 	end
 
 MauvilleCity_EventScript_Woman::
+	goto_if_set FLAG_SYS_GAME_CLEAR, MauvilleCity_EventScript_WomanChampion
 	msgbox MauvilleCity_Text_RydelVeryGenerous, MSGBOX_NPC
+	end
+
+MauvilleCity_EventScript_WomanChampion:
+	msgbox MauvilleCity_Text_RydelVeryGenerousChampion, MSGBOX_NPC
 	end
 
 MauvilleCity_EventScript_RichBoy::
@@ -684,3 +694,18 @@ MauvilleCity_Text_AllSortsOfPeopleComeThroughAftermath:
 	.string "heading for the coast.\p"
 	.string "Some of the drivers used to wear\n"
 	.string "MAGMA red. They don't talk about it.$"
+
+MauvilleCity_Text_NurseHurtMonBackToHealthChampion:
+	.string "I saw your CHAMPION battle on TV.\\p"
+	.string "My WINGULL's healed now. We\\n"
+	.string "watched it together.\\p"
+	.string "I cheered when you won. It gave\\n"
+	.string "me the courage to try again.$"
+
+MauvilleCity_Text_RydelVeryGenerousChampion:
+	.string "RYDEL says you used one of his\\n"
+	.string "BIKES on the road to CHAMPION.\\p"
+	.string "He's told that story to every\\n"
+	.string "customer this week!\\p"
+	.string "He won't admit he's proud.\\n"
+	.string "It's written all over his face.$"
