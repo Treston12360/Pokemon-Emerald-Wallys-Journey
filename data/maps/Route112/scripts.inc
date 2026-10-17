@@ -108,25 +108,30 @@ Route112_EventScript_Shayla::
 	end
 
 Route112_Text_LeaderGoingToAwakenThing:
-	.string "Hey, man, is our leader really going\n"
-	.string "to awaken that thing?$"
+	.string "Is the BOSS really going to push the\n"
+	.string "volcano?\p"
+	.string "The scientists said the model was\n"
+	.string "fine. Mostly.$"
 
 Route112_Text_YeahWeNeedMeteorite:
-	.string "Sounds like it, yeah. But I heard\n"
-	.string "we need a METEORITE to do it.$"
+	.string "We need a METEORITE to do it.\p"
+	.string "The energy inside it can shift the\n"
+	.string "magma chamber. Make new land rise.\l"
+	.string "That's the theory.$"
 
 Route112_Text_OhThatsWhyCrewWentToFallarbor:
-	.string "Oh, I get it now. That's why the rest\n"
-	.string "of the crew went out to FALLARBOR.$"
+	.string "So that's why the crew went to\n"
+	.string "FALLARBOR. PROF. COZMO has one.$"
 
 Route112_Text_CantLetAnyonePassUntilTheyreBack:
-	.string "You got it. And until they come back,\n"
-	.string "we're not to let anyone pass, right.$"
+	.string "Until they're back, nobody passes.\p"
+	.string "…Sorry. It's for everyone's good.\n"
+	.string "Really.$"
 
 Route112_Text_NotEasyToGetBackToLavaridge:
-	.string "Eh, I'd like to get to MAUVILLE, but if\n"
-	.string "I went down these ledges, it'd be no\l"
-	.string "easy matter to get back to LAVARIDGE.$"
+	.string "I want to get to MAUVILLE, but if I\n"
+	.string "jump these ledges, getting back to\l"
+	.string "LAVARIDGE is a pain.$"
 
 Route112_Text_MtChimneyCableCarSign:
 	.string "MT. CHIMNEY CABLE CAR\n"

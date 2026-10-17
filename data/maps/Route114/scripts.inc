@@ -174,10 +174,9 @@ Route114_EventScript_Kai::
 	end
 
 Route114_Text_AllMyMonDoesIsRoarTakeThis:
-	.string "All my POKéMON does is ROAR…\n"
-	.string "No one dares to come near me…\p"
-	.string "Sigh… If you would, please take\n"
-	.string "this TM away…$"
+	.string "All my POKéMON does is ROAR. Nobody\n"
+	.string "comes near me…\p"
+	.string "Please, take this TM away.$"
 
 Route114_Text_ExplainRoar:
 	.string "TM05 contains ROAR.\n"

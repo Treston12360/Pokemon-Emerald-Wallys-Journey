@@ -300,28 +300,21 @@ FallarborTown_BattleTentLobby_EventScript_ExitRules::
 	end
 
 FallarborTown_BattleTentLobby_Text_MakeThinkImJustKid:
-	.string "Fufufufufu.\p"
-	.string "I'm going to make everyone think\n"
-	.string "I'm just a kid and let them play down.\p"
-	.string "Then, I'll shock them and grab\n"
-	.string "the title!$"
+	.string "Fufufu. I let everyone think I'm just\n"
+	.string "a kid.\p"
+	.string "Then I shock them. Works every time.$"
 
 FallarborTown_BattleTentLobby_Text_FallarborTentMyFavorite:
-	.string "You know how BATTLE TENTS offer\n"
-	.string "different events in different towns?\p"
-	.string "My favorite is definitely the BATTLE\n"
-	.string "TENT in FALLARBOR TOWN.\p"
-	.string "I think it's fantastic how TRAINERS\n"
-	.string "try to win with all their faith in\l"
-	.string "their POKéMON.$"
+	.string "Every BATTLE TENT has different\n"
+	.string "rules.\p"
+	.string "This one's my favorite. It's about\n"
+	.string "smarts, not raw strength.$"
 
 FallarborTown_BattleTentLobby_Text_CameToCampOut:
-	.string "I heard something about some tent,\n"
-	.string "so I came to camp out.\p"
-	.string "I didn't know that tents these days\n"
-	.string "are so luxurious!\p"
-	.string "Since I'm here, I may as well try\n"
-	.string "my hand at battling!$"
+	.string "I heard about a tent and came to camp\n"
+	.string "out.\p"
+	.string "Tents are luxurious these days! I'll\n"
+	.string "stay a while.$"
 
 FallarborTown_BattleTentLobby_Text_ScottLookingForSomeone:
 	.string "SCOTT: Hi, {PLAYER}{KUN}!\n"

@@ -134,16 +134,17 @@ Route113_EventScript_Wyatt::
 	end
 
 Route113_Text_AshCanBeFashionedIntoGlass:
-	.string "Wahahaha! Today's technology is a\n"
-	.string "wondrous thing!\p"
-	.string "Take this volcanic ash here.\n"
-	.string "It can be fashioned into glass.$"
+	.string "Wahahaha! Technology is wondrous!\p"
+	.string "This ash can become glass. Even the\n"
+	.string "volcano's leftovers are useful.\p"
+	.string "TEAM MAGMA thinks the same way. Just\n"
+	.string "bigger. Much bigger.$"
 
 Route113_Text_FunWalkingThroughAsh:
-	.string "It's fun walking through the volcano's\n"
-	.string "ashes on the ground and grass.\p"
-	.string "You can see where you walked--it's\n"
-	.string "really neat!$"
+	.string "Walking through the ash is fun! You\n"
+	.string "can see your footprints!\p"
+	.string "…Mom says breathing it isn't fun,\n"
+	.string "though.$"
 
 Route113_Text_RouteSign111:
 	.string "ROUTE 113\n"

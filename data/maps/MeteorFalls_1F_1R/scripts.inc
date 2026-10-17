@@ -232,20 +232,19 @@ MeteorFalls_1F_1R_EventScript_MetCozmo::
 	end
 
 MeteorFalls_1F_1R_Text_WithThisMeteorite:
-	.string "Hehehe!\p"
-	.string "With this METEORITE, that thing in\n"
-	.string "MT. CHIMNEY will…$"
+	.string "Hehehe! With this METEORITE, the\n"
+	.string "model works. MT. CHIMNEY will…$"
 
 MeteorFalls_1F_1R_Text_DontExpectMercyFromMagma:
-	.string "Heh?\p"
-	.string "I don't know who you are, but if you get\n"
-	.string "in the way of TEAM MAGMA, don't\l"
-	.string "expect any mercy!$"
+	.string "Heh? Get in TEAM MAGMA's way and you\n"
+	.string "get no mercy!\p"
+	.string "This is about housing. About land.\n"
+	.string "About people!$"
 
 MeteorFalls_1F_1R_Text_HoldItRightThereMagma:
-	.string "Hold it right there, TEAM MAGMA!\p"
-	.string "You're badly mistaken if you think you\n"
-	.string "can have your way with the world!$"
+	.string "Hold it, TEAM MAGMA!\p"
+	.string "You think you can reshape the world\n"
+	.string "because you've got a theory?$"
 
 MeteorFalls_1F_1R_Text_BeSeeingYouTeamAqua:
 	.string "Hehehe!\n"
@@ -274,8 +273,7 @@ MeteorFalls_1F_1R_Text_ArchieSeenYouBefore:
 	.string "the sea-loving TEAM AQUA!$"
 
 MeteorFalls_1F_1R_Text_BossWeShouldChaseMagma:
-	.string "BOSS, we should give chase to\n"
-	.string "TEAM MAGMA…$"
+	.string "BOSS, we should chase TEAM MAGMA!$"
 
 MeteorFalls_1F_1R_Text_ArchieYesNoTellingWhatMagmaWillDo:
 	.string "ARCHIE: Yes, yes, we must!\n"
@@ -284,9 +282,10 @@ MeteorFalls_1F_1R_Text_ArchieYesNoTellingWhatMagmaWillDo:
 	.string "will do at MT. CHIMNEY!$"
 
 MeteorFalls_1F_1R_Text_ArchieFarewell:
-	.string "ARCHIE: {PLAYER}, you should keep\n"
-	.string "an eye out for TEAM MAGMA, too.\p"
-	.string "Farewell!$"
+	.string "ARCHIE: Keep an eye on TEAM MAGMA,\n"
+	.string "{PLAYER}.\p"
+	.string "They think they can fix the land.\n"
+	.string "I know better. Farewell.$"
 
 MeteorFalls_1F_1R_Text_MeetProfCozmo:
 	.string "I… I'm COZMO… a PROFESSOR…\p"
@@ -302,6 +301,7 @@ MeteorFalls_1F_1R_Text_MeetProfCozmo:
 	.string "METEORITE at MT. CHIMNEY?$"
 
 MeteorFalls_1F_1R_Text_WhatsTeamMagmaDoingAtMtChimney:
-	.string "PROF. COZMO: But that TEAM MAGMA…\p"
-	.string "What are they going to do with that\n"
-	.string "METEORITE at MT. CHIMNEY?$"
+	.string "PROF. COZMO: That TEAM MAGMA…\p"
+	.string "They said they were building homes.\n"
+	.string "What do they want with a METEORITE\l"
+	.string "at MT. CHIMNEY?$"

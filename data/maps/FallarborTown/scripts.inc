@@ -57,16 +57,17 @@ FallarborTown_EventScript_MoveTutorSign::
 	end
 
 FallarborTown_Text_ShadyCharactersCozmosHome:
-	.string "Something's happening,\n"
-	.string "and I don't like it!\p"
-	.string "I've seen shady characters wandering\n"
-	.string "in and out of PROF. COZMO's home…$"
+	.string "Something's wrong.\p"
+	.string "Shady people in red have been going\n"
+	.string "in and out of PROF. COZMO's house.\l"
+	.string "They said they were from a housing\l"
+	.string "charity.$"
 
 FallarborTown_Text_RegionKnownForMeteors:
-	.string "This region's been known for meteors\n"
-	.string "since the olden days.\p"
-	.string "They say METEOR FALLS was gouged out\n"
-	.string "by a falling meteorite long ago.$"
+	.string "This region's known for meteors.\p"
+	.string "METEOR FALLS was carved by one, they\n"
+	.string "say. Fire from the sky made this\l"
+	.string "whole valley.$"
 
 FallarborTown_Text_MyPreciousAzurill:
 	.string "This is my AZURILL!\p"
