@@ -297,7 +297,7 @@ EverGrandeCity_ChampionsRoom_Text_BirchArriveRatePokedex:
 	.string "… … … … … … … …\n"
 	.string "{PLAYER}{KUN}, you've finally done it.\p"
 	.string "When I heard that you defeated your\n"
-	.string "NORMAN at the PETALBURG GYM,\l"
+	.string "your own father at PETALBURG GYM,\l"
 	.string "I thought perhaps you had a chance…\p"
 	.string "But to think you've actually become\n"
 	.string "the CHAMPION!\p"
