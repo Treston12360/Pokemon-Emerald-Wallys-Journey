@@ -26,6 +26,9 @@ jobs:
             build-essential binutils-arm-none-eabi gcc-arm-none-eabi \
             libnewlib-arm-none-eabi libpng-dev python3
 
+      - name: Validate wild encounter data
+        run: python3 tools/validate_wally_encounters.py
+
       - name: Build Emerald ROM
         shell: bash
         run: |
