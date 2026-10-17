@@ -385,3 +385,25 @@ Still to build: Wally story/rival battles/Champion arc, gym leader HM scenes, up
 - **Mentor chain:** Juan taught Wallace; Wallace guided (not trained) Wally; Steven guided the player. Juan: Wallace must have seen something special in Wally, the thing Juan once saw in Wallace. Steven: "…like I saw in you." Juan then returns to his Gym to wait for the player.
 - **Wally timeline:** Lilycove (badge 6) and Mossdeep (badge 7, he has 8 and heads for the Elite Four) stay challenger fights; Wallace has been showing up at his battles. Sootopolis (badge 8), Victory Road, PokéNav and the Champion room all speak as Champion Wally.
 - **Status:** code-in and builds; not yet emulator-verified.
+
+## Emerald Legacy-inspired polish wishlist — owner-approved (2026-10-17)
+
+These are **wishlist items, not claims of implementation**. Adapt the design principles to Wally's Journey's Gen 1–9 roster, current mechanics, and narrative; inspect existing systems first to avoid duplicate work.
+
+### Highest priority
+- Expand PokéNav trainer rematches, add optional specialist/type-master trainer challenges across Hoenn, and provide escalating Gym Leader rematch tiers with thoughtfully balanced teams and distinct dialogue. Preserve the existing Wally Champion arc.
+- Allow Acro Bike bunny-hop movement up normal one-way ledges where safe, while retaining existing ledge/puzzle progression. Both Mach and Acro Bike remain owned and available simultaneously as previously requested.
+- Improve berry cultivation: streamline planting interactions, make renewable crops convenient, review yield/timing and permanent depletion, and reduce Pokéblock/Contest friction without trivializing contests.
+- Make useful postgame items, including evolution items, sustainably renewable through balanced challenges. Improve Battle Frontier and sidequest rewards; avoid unbounded free items and preserve progression.
+- Improve small quality-of-life systems: optional milestone-gated fast travel, repeated medicine usage without reopening Bag, convenient overflow item storage where safe, IV/EV and nature display, Hidden Power type in summary, skippable PokéNav introduction, faster fishing, and selectively permanent clearance of non-puzzle obstacles.
+- Consider additional move-tutor/egg-move accessibility where not already covered by the existing Legends: Arceus-style relearning plan; ensure no redundant feature implementation.
+
+### Optional / requires narrative review
+- Consider a postgame Zinnia appearance or Sky Pillar challenge **only** if it meaningfully fits the reworked lore, Wally's continuing role, and the player's agency. No automatic inclusion or copying of Legacy's event or dialogue.
+- Compare Legacy's opponent AI, smart switching, rematch pacing and balance **for applicable concepts**, not direct team copying.
+
+### Boundaries
+- Do **not** import Legacy's old type-based physical/special mechanics: keep the planned modern physical/special split.
+- Do **not** adopt Steven-as-Champion or Wallace-as-Gym-Leader story structure: Wally beats Wallace shortly before the eighth Gym and is the final League Champion opponent, per the latest owner decision.
+- Do not wholesale copy Legacy trainers, script text, music, art, or balance tables. Implement original work consistent with this project's distinct direction.
+- Before marking any item done, verify the actual code, compile, and playtest the affected mechanics on a GBA emulator.
