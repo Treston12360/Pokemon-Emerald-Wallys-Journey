@@ -1440,9 +1440,12 @@ SootopolisCity_Text_FlyingMonStoppedRampage:
 	.string "POKéMON…$"
 
 SootopolisCity_Text_WonderWhatWorldIsLike:
-	.string "I… I've never been out of this city.\p"
-	.string "I wonder what the world is like on\n"
-	.string "the other side of this round sky?$"
+	.string "I've lived my whole life\n"
+	.string "inside these crater walls.\p"
+	.string "I used to wonder what lay\n"
+	.string "beyond them.\p"
+	.string "Now I'm wondering what\n"
+	.string "I could do out there.$"
 
 SootopolisCity_Text_ThisIsWicked:
 	.string "Wow!\n"
@@ -1495,11 +1498,18 @@ SootopolisCity_Text_PrettyMonCameFromSky:
 	.string "the sky…$"
 
 SootopolisCity_Text_SootopolisWillBeWrecked:
-	.string "Oh, no!\n"
-	.string "SOOTOPOLIS CITY will get wrecked!$"
+	.string "The water is rising.\n"
+	.string "My family is still inside!\p"
+	.string "JUAN told us to reach\n"
+	.string "higher ground, but I can't\n"
+	.string "leave without them!$"
 
 SootopolisCity_Text_SootopolisDidntGetWrecked:
-	.string "SOOTOPOLIS CITY didn't get wrecked!$"
+	.string "We're still here.\n"
+	.string "I didn't dare believe\n"
+	.string "we would be.\p"
+	.string "My family made it out.\n"
+	.string "I keep counting us anyway.$"
 
 SootopolisCity_Text_NoOrdinaryTourist:
 	.string "Hm!\n"
@@ -1509,7 +1519,11 @@ SootopolisCity_Text_NoOrdinaryTourist:
 	.string "an extraordinary tourist, either.$"
 
 SootopolisCity_Text_CityRegainedCalm:
-	.string "The city has regained its calm…$"
+	.string "The fighting stopped.\n"
+	.string "The streets are quiet again.\p"
+	.string "Some homes still need work.\n"
+	.string "The neighbors have already\n"
+	.string "started helping each other.$"
 
 SootopolisCity_Text_CaveOfOriginPleaseLeave:
 	.string "Who might you be?\p"
