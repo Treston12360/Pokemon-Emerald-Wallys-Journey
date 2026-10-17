@@ -69,7 +69,7 @@ for starter in STARTER_SPECIES:
 
 # Catch accidental rollback of the expanded Gen 1-9 habitat tables.\n# This is the latest verified species floor after the evolved-wild habitat pass.
 # Feebas uses the special 10% Route 119 Good Rod hook, not a JSON slot.
-MIN_WILD_SPECIES = 503
+MIN_WILD_SPECIES = 518
 if len(species) < MIN_WILD_SPECIES:
     errors.append(f"Wild roster fell from at least {MIN_WILD_SPECIES} species to {len(species)}")
 
@@ -125,6 +125,30 @@ EXPANSION_SPECIES = (
 for mon in EXPANSION_SPECIES:
     if mon not in species:
         errors.append(f"Expanded species is no longer available wild: {mon}")
+
+# Protect the evolved-species habitat pass, not just the numeric roster total.
+EVOLVED_RARE_SPECIES = (
+    "SPECIES_TREVENANT", "SPECIES_GOURGEIST", "SPECIES_POLTEAGEIST",
+    "SPECIES_DOUBLADE", "SPECIES_AEGISLASH", "SPECIES_ZOROARK",
+    "SPECIES_GALLADE", "SPECIES_MANDIBUZZ", "SPECIES_TOGETIC",
+    "SPECIES_RUFFLET", "SPECIES_TOXTRICITY", "SPECIES_MAGNEZONE",
+    "SPECIES_MAGMORTAR", "SPECIES_CENTISKORCH", "SPECIES_VOLCARONA",
+    "SPECIES_PUPITAR", "SPECIES_GOLURK", "SPECIES_SANDACONDA",
+    "SPECIES_FRAXURE", "SPECIES_HAXORUS", "SPECIES_SHELGON",
+    "SPECIES_GABITE", "SPECIES_ZWEILOUS", "SPECIES_METANG",
+    "SPECIES_CROBAT", "SPECIES_FROSLASS", "SPECIES_SLOWKING",
+    "SPECIES_ABOMASNOW", "SPECIES_NOIVERN", "SPECIES_BRAVIARY",
+    "SPECIES_TOGEKISS", "SPECIES_PALOSSAND", "SPECIES_KINGAMBIT",
+    "SPECIES_DRAKLOAK", "SPECIES_DUDUNSPARCE", "SPECIES_LILLIPUP",
+    "SPECIES_HERDIER", "SPECIES_AMPHAROS", "SPECIES_ELECTIVIRE",
+    "SPECIES_EXCADRILL", "SPECIES_KOMMO_O", "SPECIES_GARCHOMP",
+    "SPECIES_SALAMENCE", "SPECIES_METAGROSS", "SPECIES_DRAGONITE",
+    "SPECIES_DRAGAPULT", "SPECIES_BAXCALIBUR", "SPECIES_TYRANITAR",
+    "SPECIES_FERROTHORN", "SPECIES_HYDREIGON",
+)
+for mon in EVOLVED_RARE_SPECIES:
+    if mon not in species:
+        errors.append(f"Missing new rare habitat species: {mon}")
 
 # Story-only encounters must not accidentally enter normal grass/surf/fishing.
 STORY_ONLY_SPECIES = (
