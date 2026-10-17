@@ -207,7 +207,13 @@ Stage 4 town lights (build-passed, not emulator-verified): built on the engine's
 
 Stage 5 townspeople (build-passed, not emulator-verified): 118 outdoor flavour NPCs (generated list, `tools/gen_wally_ambient_npcs.py` → `src/data/wally_ambient_npcs.h`) go home at night (about 65%), some leave early in the evening (20%) and some shelter during rain or snow (45%), a different mix each day. Only NPCs whose script is plain text are listed; trainers, story characters, item givers, flagged NPCs and any NPC a script refers to are excluded, so nothing can block progress. Hidden NPCs never move to new spots, so doorways can't be blocked.
 
-Still to do in this section: hand-drawn seasonal art (blossoms, fallen leaves, snow cover), lit house windows, NPCs walking between spots, visible wildlife (the engine has an overworld wild encounter system to evaluate), follower reactions, ambient audio.
+Winter snow cover (build-passed; checked with offline renders of Routes 112, 114, 115): on the snowy highland routes in winter, light earth, paths and sand also turn snow-white while dark cliff faces keep their colour, alongside the frosted trees.
+
+Follower reactions (build-passed): new follower lines for snow (Ice types love it, others catch snowflakes or huddle close), thunder, mist, Lavaridge hot springs, spring air, summer by the sea, autumn leaves and winter cold (new `MSG_COND_SEASON` follower condition).
+
+Visible wildlife (build-passed, NOT emulator-verified — highest-risk item): the engine's overworld wild encounter system is switched on (`WE_OW_ENCOUNTERS`). Up to 4 wild Pokémon at a time appear and move in grass and water from the same encounter tables (rare visitors and seasonal forms included); walking into one starts the battle. Hidden random encounters still happen as before. They despawn when entering towns and never spawn in the Battle Pike/Pyramid. Options menu **SEE WILD MONS ON/OFF** (`FLAG_WALLY_OWE_OFF` 0x35; new games start ON) turns them off if they cause problems. Upstream recommends uncompressed overworld graphics for this feature to avoid VRAM issues; we kept compression on (ROM space), so watch for sprite glitches.
+
+Still to do in this section: hand-drawn seasonal art (blossoms, fallen leaves), lit house windows, NPCs walking between spots, ambient audio.
 
 ## Standard Poké Ball only — confirmed owner requirement (2026-10-16)
 

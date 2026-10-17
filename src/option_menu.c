@@ -29,6 +29,7 @@
 #define tZMovesOff data[8]
 #define tGameSpeed data[9]
 #define tBattleSpeed data[10]
+#define tWildMonsOff data[11]
 
 enum
 {
@@ -42,6 +43,7 @@ enum
     MENUITEM_ZMOVES,
     MENUITEM_GAMESPEED,
     MENUITEM_BATTLESPEED,
+    MENUITEM_WILDMONS,
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
 };
@@ -66,6 +68,7 @@ enum
 #define YPOS_ZMOVES       ITEM_Y(MENUITEM_ZMOVES)
 #define YPOS_GAMESPEED    ITEM_Y(MENUITEM_GAMESPEED)
 #define YPOS_BATTLESPEED  ITEM_Y(MENUITEM_BATTLESPEED)
+#define YPOS_WILDMONS     ITEM_Y(MENUITEM_WILDMONS)
 
 static void Task_OptionMenuFadeIn(u8 taskId);
 static void Task_OptionMenuProcessInput(u8 taskId);
@@ -90,6 +93,7 @@ static void DrawBgWindowFrames(void);
 static u8 Toggle_ProcessInput(u8 selection);
 static void ExpMode_DrawChoices(u8 selection);
 static void ZMoves_DrawChoices(u8 selection);
+static void WildMons_DrawChoices(u8 selection);
 static void RedrawVisibleOptions(u8 taskId);
 static u8 Cycle_ProcessInput(u8 selection, u8 count);
 static void Speed_DrawChoices(u8 selection, u8 y, bool32 battle);
@@ -138,6 +142,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_ZMOVES]      = COMPOUND_STRING("Z-MOVES"),
     [MENUITEM_GAMESPEED]   = COMPOUND_STRING("GAME SPEED"),
     [MENUITEM_BATTLESPEED] = COMPOUND_STRING("BATTLE SPEED"),
+    [MENUITEM_WILDMONS]    = COMPOUND_STRING("SEE WILD MONS"),
     [MENUITEM_CANCEL]      = COMPOUND_STRING("CANCEL"),
 };
 
@@ -285,6 +290,7 @@ void CB2_InitOptionMenu(void)
         sTopItem = 0;
         gTasks[taskId].tExpAll = FlagGet(FLAG_WALLY_EXP_ALL_MODE);
         gTasks[taskId].tZMovesOff = FlagGet(FLAG_WALLY_Z_MOVES_OFF);
+        gTasks[taskId].tWildMonsOff = FlagGet(FLAG_WALLY_OWE_OFF);
         gTasks[taskId].tGameSpeed = WallyJourney_GetOverworldSpeed() % WALLY_OW_SPEED_COUNT;
         gTasks[taskId].tBattleSpeed = WallyJourney_GetBattleSpeed() % WALLY_BATTLE_SPEED_COUNT;
         gTasks[taskId].tTextSpeed = gSaveBlock2Ptr->optionsTextSpeed;
@@ -399,6 +405,12 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             if (previousOption != gTasks[taskId].tZMovesOff)
                 ZMoves_DrawChoices(gTasks[taskId].tZMovesOff);
             break;
+        case MENUITEM_WILDMONS:
+            previousOption = gTasks[taskId].tWildMonsOff;
+            gTasks[taskId].tWildMonsOff = Toggle_ProcessInput(gTasks[taskId].tWildMonsOff);
+            if (previousOption != gTasks[taskId].tWildMonsOff)
+                WildMons_DrawChoices(gTasks[taskId].tWildMonsOff);
+            break;
         case MENUITEM_GAMESPEED:
             previousOption = gTasks[taskId].tGameSpeed;
             gTasks[taskId].tGameSpeed = Cycle_ProcessInput(gTasks[taskId].tGameSpeed, WALLY_OW_SPEED_COUNT);
@@ -439,6 +451,10 @@ static void Task_OptionMenuSave(u8 taskId)
         FlagSet(FLAG_WALLY_Z_MOVES_OFF);
     else
         FlagClear(FLAG_WALLY_Z_MOVES_OFF);
+    if (gTasks[taskId].tWildMonsOff)
+        FlagSet(FLAG_WALLY_OWE_OFF);
+    else
+        FlagClear(FLAG_WALLY_OWE_OFF);
     WallyJourney_SetSpeeds(gTasks[taskId].tGameSpeed, gTasks[taskId].tBattleSpeed);
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
@@ -761,6 +777,14 @@ static void ZMoves_DrawChoices(u8 selection)
     DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleSceneOff, 198), YPOS_ZMOVES, selection == 1);
 }
 
+// SEE WILD MONS: visible wild Pokémon in the overworld. Stored as "off" so a
+// new game starts with them ON.
+static void WildMons_DrawChoices(u8 selection)
+{
+    DrawOptionMenuChoice(gText_BattleSceneOn, 104, YPOS_WILDMONS, selection == 0);
+    DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleSceneOff, 198), YPOS_WILDMONS, selection == 1);
+}
+
 // Scroll so the cursor row is on screen, then redraw every visible row.
 static void RedrawVisibleOptions(u8 taskId)
 {
@@ -783,6 +807,7 @@ static void RedrawVisibleOptions(u8 taskId)
     if (ITEM_VISIBLE(MENUITEM_ZMOVES))      ZMoves_DrawChoices(tZMovesOff);
     if (ITEM_VISIBLE(MENUITEM_GAMESPEED))   Speed_DrawChoices(tGameSpeed, YPOS_GAMESPEED, FALSE);
     if (ITEM_VISIBLE(MENUITEM_BATTLESPEED)) Speed_DrawChoices(tBattleSpeed, YPOS_BATTLESPEED, TRUE);
+    if (ITEM_VISIBLE(MENUITEM_WILDMONS))    WildMons_DrawChoices(tWildMonsOff);
     HighlightOptionMenuItem(sel);
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }

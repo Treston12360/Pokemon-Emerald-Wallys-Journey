@@ -17,12 +17,12 @@
 #define WE_FLAG_NO_RUNNING           0     // If this flag is set, the ability to escape from wild battles is disabled. Also makes Roar/Whirlwind and Teleport (under Gen8) fail.
 
 // Overworld Wild Encounters (OWEs)
-#define WE_OW_ENCOUNTERS                        FALSE   // If TRUE, OW Pokémon can spawn as Overworld Wild Encounters on the current map. Requires OW_POKEMON_OBJECT_EVENTS.
+#define WE_OW_ENCOUNTERS                        TRUE    // If TRUE, OW Pokémon can spawn as Overworld Wild Encounters on the current map. Requires OW_POKEMON_OBJECT_EVENTS.
                                                         // If WE_OW_ENCOUNTERS is TRUE, it is recommended that OW_GFX_COMPRESS be set to FALSE to prevent VRAM issues.
-#define WE_OWE_FLAG_DISABLED                    0       // Replace 0 with a flag to use it to enable/disable generated OWEs.
+#define WE_OWE_FLAG_DISABLED                    FLAG_WALLY_OWE_OFF // Replace 0 with a flag to use it to enable/disable generated OWEs.
 #define WE_OWE_SPECIAL_ONLY                     FALSE   // If TRUE, generated OWEs can only be special spawns.
-#define WE_OWE_BATTLE_PIKE                      TRUE    // If TRUE, OWEs can spawn in the Battle Pike, if FALSE random encounters will be enabled instead. Requires WE_OW_ENCOUNTERS to be TRUE.
-#define WE_OWE_BATTLE_PYRAMID                   TRUE    // If TRUE, OWEs can spawn in the Battle Pyramid, if FALSE random encounters will be enabled instead. Requires WE_OW_ENCOUNTERS to be TRUE.
+#define WE_OWE_BATTLE_PIKE                      FALSE   // If TRUE, OWEs can spawn in the Battle Pike, if FALSE random encounters will be enabled instead. Requires WE_OW_ENCOUNTERS to be TRUE.
+#define WE_OWE_BATTLE_PYRAMID                   FALSE   // If TRUE, OWEs can spawn in the Battle Pyramid, if FALSE random encounters will be enabled instead. Requires WE_OW_ENCOUNTERS to be TRUE.
 #define WE_OWE_RESTRICT_METATILE                TRUE    // If TRUE, OWEs will stay within tiles with the same encounter metatile behavior as the one it is currently on, if any.
 #define WE_OWE_RESTRICT_MAP                     TRUE    // If TRUE, OWEs will stay within their current map bounds.
 #define WE_OWE_UNRESTRICT_SIGHT                 FALSE   // If TRUE, OWEs with movement behaviors that respond to the player, will ignore all movement restrictions when they can see the player.
