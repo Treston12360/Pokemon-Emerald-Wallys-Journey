@@ -4216,7 +4216,7 @@
               {
                 "min_level": 22,
                 "max_level": 22,
-                "species": "SPECIES_POLTEAGEIST"
+                "species": "SPECIES_PHANTUMP"
               },
               {
                 "min_level": 29,
@@ -4236,7 +4236,7 @@
               {
                 "min_level": 24,
                 "max_level": 24,
-                "species": "SPECIES_PHANTUMP"
+                "species": "SPECIES_POLTEAGEIST"
               }
             ]
           }
