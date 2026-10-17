@@ -133,7 +133,8 @@ SkyPillar_Top_EventScript_AwakenRayquaza::
 	waitmovement 0
 	special RemoveCameraObject
 	setvar VAR_SOOTOPOLIS_CITY_STATE, 5
-	setflag FLAG_HIDE_SOOTOPOLIS_CRISIS_WALLY @ Wally's Journey: crisis over, Wally heads to the League
+	setflag FLAG_HIDE_SOOTOPOLIS_CRISIS_WALLY @ Wally's Journey: crisis over
+	clearflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS @ Wally waits outside the Pokemon Center for one last battle before the League
 	setvar VAR_SKY_PILLAR_STATE, 1
 	setvar VAR_SKY_PILLAR_RAYQUAZA_CRY_DONE, 1
 	releaseall

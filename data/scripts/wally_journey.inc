@@ -236,11 +236,11 @@ WallyJourney_EventScript_RivalFORTREEWon::
 
 WallyJourney_Text_RivalFORTREEIntro:
 	.string "WALLY: I heard you beat your dad,\n"
-	.string "{PLAYER}. That's incredible!\p"
-	.string "Me? I just got my sixth BADGE.\n"
-	.string "I've been busy.\p"
-	.string "Let's battle! I won't go easy on you\n"
-	.string "just because we're friends!$"
+	.string "{PLAYER}. Respect.\p"
+	.string "Me? Sixth BADGE. WINONA tried to\n"
+	.string "out-think me. Didn't work.\p"
+	.string "Don't go easy on me because we're\n"
+	.string "friends. I'll know.$"
 
 
 WallyJourney_Text_RivalFORTREEDefeat:
@@ -249,10 +249,11 @@ WallyJourney_Text_RivalFORTREEDefeat:
 
 
 WallyJourney_Text_RivalFORTREEPost:
-	.string "WALLY: A year ago I couldn't even\n"
-	.string "walk this far.\p"
+	.string "WALLY: A year ago I couldn't walk\n"
+	.string "up this hill without stopping.\p"
 	.string "Now I'm chasing the strongest\n"
-	.string "TRAINER I know. That's you!$"
+	.string "TRAINER I know. Enjoy the lead\l"
+	.string "while it lasts.$"
 
 
 WallyJourney_EventScript_RivalLILYCOVE::
@@ -267,12 +268,11 @@ WallyJourney_EventScript_RivalLILYCOVEWon::
 	end
 
 WallyJourney_Text_RivalLILYCOVEIntro:
-	.string "WALLY: {PLAYER}! I've been waiting\n"
-	.string "for you.\p"
-	.string "My team is complete now. Six\n"
-	.string "POKéMON who believe in me.\p"
-	.string "I'm not the kid you met on\n"
-	.string "ROUTE 102 anymore. Let's go!$"
+	.string "WALLY: {PLAYER}. I've been waiting.\p"
+	.string "Six POKéMON. Each one chosen for a\n"
+	.string "reason. Each one trusts me.\p"
+	.string "I'm not the kid you met on ROUTE\n"
+	.string "102 anymore. Let me show you.$"
 
 
 WallyJourney_Text_RivalLILYCOVEDefeat:
@@ -304,8 +304,10 @@ WallyJourney_Text_RivalMOSSDEEPIntro:
 	.string "WALLY: Took you long enough.\p"
 	.string "Eight BADGES, {PLAYER}. I got the\n"
 	.string "last one this morning.\p"
-	.string "Next stop is the ELITE FOUR.\n"
-	.string "One battle with you first. For luck.$"
+	.string "The ELITE FOUR is next. But the sky\n"
+	.string "over the ocean looks wrong lately.\p"
+	.string "One battle with you first. Then I'm\n"
+	.string "going to find out why.$"
 
 
 WallyJourney_Text_RivalMOSSDEEPDefeat:
@@ -334,25 +336,26 @@ WallyJourney_EventScript_RivalSOOTOPOLISWon::
 	end
 
 WallyJourney_Text_RivalSOOTOPOLISIntro:
-	.string "WALLY: Eight BADGES. You did it.\p"
-	.string "During the storm I stayed here and\n"
-	.string "got people to shelter. You went\l"
-	.string "straight for it.\p"
-	.string "Then I flew to EVER GRANDE and…\n"
-	.string "well. You saw.\p"
-	.string "CHAMPION WALLY. Let's see if you're\n"
-	.string "ready for me.$"
+	.string "WALLY: It's over. The rain's\n"
+	.string "stopping.\p"
+	.string "Everyone I got into the shelters\n"
+	.string "walked out on their own. All of them.\p"
+	.string "I'm flying to EVER GRANDE tonight.\n"
+	.string "WALLACE says I'm ready.\p"
+	.string "I need to hear it from you, though.\n"
+	.string "Everything I've got, {PLAYER}.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISDefeat:
-	.string "There it is. That's the {PLAYER}\n"
-	.string "I want to beat.$"
+	.string "…Yeah. That's what I needed.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISPost:
-	.string "WALLY: VICTORY ROAD is next.\p"
-	.string "Get through it, beat the ELITE FOUR,\n"
-	.string "and you'll find me at the top.$"
+	.string "WALLY: Win or lose up there, I'm\n"
+	.string "done being the kid people worry\l"
+	.string "about.\p"
+	.string "Get your last BADGE.\n"
+	.string "I'll see you at EVER GRANDE.$"
 
 
 
@@ -460,6 +463,7 @@ WallyJourney_Text_ZRingExplain:
 @ Unskippable: the trigger sits on the only tile in front of the Gym door.
 WallyJourney_EventScript_StevenStopsAtGym::
 	lockall
+	setflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS @ by now Wally has left for Ever Grande
 	applymovement LOCALID_SOOTOPOLIS_STEVEN, Common_Movement_FacePlayer
 	waitmovement 0
 	playse SE_PIN
