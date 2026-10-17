@@ -14431,7 +14431,7 @@
               {
                 "min_level": 15,
                 "max_level": 25,
-                "species": "SPECIES_DRATINI"
+                "species": "SPECIES_GOLDEEN"
               },
               {
                 "min_level": 15,
@@ -14441,7 +14441,7 @@
               {
                 "min_level": 25,
                 "max_level": 35,
-                "species": "SPECIES_DRAGONAIR"
+                "species": "SPECIES_DRATINI"
               }
             ]
           }
@@ -14585,7 +14585,7 @@
               {
                 "min_level": 15,
                 "max_level": 25,
-                "species": "SPECIES_DRATINI"
+                "species": "SPECIES_GOLDEEN"
               },
               {
                 "min_level": 15,
@@ -14595,7 +14595,7 @@
               {
                 "min_level": 25,
                 "max_level": 35,
-                "species": "SPECIES_DRAGONAIR"
+                "species": "SPECIES_DRATINI"
               }
             ]
           }
@@ -27521,7 +27521,7 @@
               {
                 "min_level": 15,
                 "max_level": 15,
-                "species": "SPECIES_LARVITAR"
+                "species": "SPECIES_GEODUDE"
               },
               {
                 "min_level": 49,
@@ -27620,7 +27620,7 @@
               {
                 "min_level": 15,
                 "max_level": 15,
-                "species": "SPECIES_LARVITAR"
+                "species": "SPECIES_GEODUDE"
               },
               {
                 "min_level": 49,
