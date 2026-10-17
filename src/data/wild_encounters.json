@@ -2615,7 +2615,7 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_BAGON"
+                "species": "SPECIES_GOLBAT"
               },
               {
                 "min_level": 35,
@@ -2625,7 +2625,7 @@
               {
                 "min_level": 35,
                 "max_level": 35,
-                "species": "SPECIES_BAGON"
+                "species": "SPECIES_SOLROCK"
               },
               {
                 "min_level": 37,
@@ -2635,12 +2635,12 @@
               {
                 "min_level": 25,
                 "max_level": 25,
-                "species": "SPECIES_BAGON"
+                "species": "SPECIES_ORTHWORM"
               },
               {
                 "min_level": 39,
                 "max_level": 39,
-                "species": "SPECIES_SALAMENCE"
+                "species": "SPECIES_SOLROCK"
               },
               {
                 "min_level": 38,
@@ -2655,7 +2655,7 @@
               {
                 "min_level": 38,
                 "max_level": 38,
-                "species": "SPECIES_BELDUM"
+                "species": "SPECIES_BAGON"
               },
               {
                 "min_level": 40,
@@ -4650,7 +4650,7 @@
               {
                 "min_level": 8,
                 "max_level": 8,
-                "species": "SPECIES_ORTHWORM"
+                "species": "SPECIES_BELDUM"
               }
             ]
           }
