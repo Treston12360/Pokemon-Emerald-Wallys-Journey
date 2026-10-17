@@ -321,10 +321,13 @@ static u32 RegionWeatherAt(enum WallyRegion region, s32 hour, u32 fairWeather, b
         phase = local - start;
         if (phase < 0 || phase >= (s32)length)
             continue;
+        // No WEATHER_SUNNY_CLOUDS here: its cloud sprites show through any
+        // see-through tile (ledges, not just water) on most maps (owner
+        // playtest 2026-10-17). Overcast skies use SHADE instead.
         if (phase == 0 || phase == (s32)length - 1)
-            w = WEATHER_SUNNY_CLOUDS;                       // clouds gather / skies clear
+            w = (strength == FRONT_SHOWERS) ? fairWeather : WEATHER_SHADE; // skies darken / start to clear
         else if (phase == 1 && strength != FRONT_SHOWERS)
-            w = WEATHER_SHADE;                              // skies darken
+            w = WEATHER_SHADE;                              // overcast
         else if (strength == FRONT_STORM && phase >= 3 && phase <= (s32)length - 3)
             w = WEATHER_RAIN_THUNDERSTORM;                  // the peak of the storm
         else
@@ -362,11 +365,11 @@ static u32 RegionWeatherAt(enum WallyRegion region, s32 hour, u32 fairWeather, b
             break;
         }
         if (w == fairWeather && season == WALLY_SEASON_AUTUMN && (daily >> 16) % 100 < 25)
-            w = WEATHER_SUNNY_CLOUDS;                       // grey autumn day
+            w = WEATHER_SHADE;                              // grey autumn day
     }
 
     if (region == WREGION_DESERT && w != fairWeather)
-        w = WEATHER_SUNNY_CLOUDS;                           // fronts pass over the desert dry
+        w = fairWeather;                                    // fronts pass over the desert dry
     if (season == WALLY_SEASON_WINTER)
     {
         if (snowCountry && (w == WEATHER_RAIN || w == WEATHER_RAIN_THUNDERSTORM || w == WEATHER_FOG_HORIZONTAL))
@@ -869,7 +872,7 @@ bool32 WallyJourney_IsLightOn(u32 lightType, s32 x, s32 y)
 {
     u32 hour = gLocalTime.hours;
     u32 weather = gWeatherPtr->currWeather;
-    bool32 stormy = (weather == WEATHER_RAIN_THUNDERSTORM || weather == WEATHER_DOWNPOUR || weather == WEATHER_SHADE);
+    bool32 stormy = (weather == WEATHER_RAIN_THUNDERSTORM || weather == WEATHER_DOWNPOUR);
     bool32 dark = (gTimeOfDay == TIME_NIGHT || gTimeOfDay == TIME_EVENING);
     bool32 lateNight = (hour < 5);
     u32 h;
