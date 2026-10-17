@@ -449,12 +449,16 @@ void Overworld_ResetBattleFlagsAndVars(void)
 
     FlagClear(B_FLAG_INVERSE_BATTLE);
     FlagClear(WE_FLAG_FORCE_DOUBLE_WILD);
+#if !IS_FRLG
     FlagClear(WE_SMART_WILD_AI_FLAG);
+#endif
     FlagClear(WE_FLAG_NO_CATCHING);
     FlagClear(WE_FLAG_NO_RUNNING);
     FlagClear(B_FLAG_DYNAMAX_BATTLE);
     FlagClear(B_FLAG_SKY_BATTLE);
+#if !IS_FRLG
     FlagClear(B_FLAG_NO_WHITEOUT);
+#endif
 }
 #endif
 
