@@ -182,8 +182,13 @@ Route123_Text_YouLikeGrassMonsTooHaveThis:
 	.string "It's a token of our friendship.$"
 
 Route123_Text_CheckTreesWithMyGrassMon:
-	.string "I check trees with my GRASS-type\n"
-	.string "POKéMON. I'm like a tree doctor.$"
+	.string "My GRASS-type POKéMON helps me\n"
+	.string "check the trees for disease.\p"
+	.string "Some leaves turn early when\n"
+	.string "the water or soil changes.\p"
+	.string "The WEATHER INSTITUTE studies\n"
+	.string "the sky. I watch the roots.\n"
+	.string "We need both answers.$"
 
 Route123_Text_RouteSign:
 	.string "{RIGHT_ARROW} ROUTE 123\n"
