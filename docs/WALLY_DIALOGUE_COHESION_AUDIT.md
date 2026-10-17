@@ -25,7 +25,10 @@
 3. **Wally's Verdanturf speech:** removed a misleading reference to sand in this grassy, clean-air town.
 4. **Wally's Sootopolis speech:** no longer declares every resident safe immediately after the crisis; recognizes recovery work.
 5. **Champion room:** softened tonal whiplash after Wally's apology; revised May/Brendan's surprise and congratulations, Birch's transition into his existing Pokédex review, and Wally's final Hall of Fame instructions. No new scene, character, battle, reward or event progression.
-6. **Story bible and Juan's house comment:** corrected obsolete pre-Gym title broadcast timing and outdated optional-battle language. Older design history remains marked as superseded.
+6. **Verdanturf family:** gave Wally's existing aunt and uncle conversations post-player-Champion branches; they no longer call Wally the current Champion after his defeat.
+7. **Sootopolis crisis:** revised existing Maxie, Archie, and Steven dialogue so their motives, responsibility, Primal danger and Wallace's legend connect more credibly.
+8. **Drake:** removed the premature assertion that Wally has already learned humility before the player's Champion battle; his advice now foreshadows that growth.
+9. **Story bible and Juan's house comment:** corrected obsolete pre-Gym title broadcast timing and outdated optional-battle language. Older design history remains marked as superseded.
 
 ## Consistency checks completed at source level
 
@@ -34,12 +37,14 @@
 - Wally does not claim to be Champion at Mossdeep.
 - May/Brendan dialogues remain split correctly by player gender in the existing Champion-room event.
 - In Route 119 no Fly HM item is awarded by May/Brendan; Winona's Gym is the intended source.
-- Both parental game-clear checks run before the TV-broadcast dialogue in their existing NPC events.
+- Both parental game-clear checks run before the TV-broadcast dialogue in their existing NPC events; the same precedence was added to Wally's aunt and uncle in Verdanturf.
+- Drake's battle-closing lesson, Archie and Maxie's apologies, and the Champion-room ending now support the same story theme without assuming Wally has already changed before he loses.
 - Both Sootopolis and Victory Road battles have distinct win/loss dialogue references; this is **static script inspection, not gameplay proof**.
 
 ## Outstanding certification and wider audit
 
 - Build and test the audit PR's Emerald target, then playtest the entire story with fresh saves: both genders, each Sootopolis and Victory Road battle outcome, before/after Badge 8, Champion win and return visits to Wally's parents.
+- Consult the reusable candidate inventory script `tools/wally_dialogue_inventory.py` for all Champion/Wallace/Wally and HM-gift dialogue across map scripts. Candidate results require context; obsolete but unreferenced original dialogue may be harmless.
 - Visit every existing NPC across milestone saves (before and after badges 3, 5, 7, 8; after Wally's broadcast; after the player's Hall of Fame) to identify obsolete original Emerald lines, particularly ones referring to Wallace as current Champion.
 - Verify offscreen timing, object positions, dialogue page display, and script flags in mGBA. A source scan cannot establish these.
 - Revisit Magma/Aqua arguments and each Gym/League character in a complete emulator narrative run; broad story-bible coverage does **not** certify that every script branch was observed.
