@@ -10,7 +10,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SHOP = ROOT / "data/maps/SlateportCity_Mart/scripts.inc"
 REQUIRED = {
-    "ITEM_LINKING_CORD",
     "ITEM_METAL_COAT",
     "ITEM_DRAGON_SCALE",
     "ITEM_KINGS_ROCK",
