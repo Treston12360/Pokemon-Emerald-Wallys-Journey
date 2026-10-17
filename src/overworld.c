@@ -1888,9 +1888,18 @@ void CB2_OverworldBasic(void)
 void CB2_Overworld(void)
 {
     bool32 fading = (gPaletteFade.active != 0);
+    u32 loops, extra;
     if (fading)
         SetVBlankCallback(NULL);
     OverworldBasic();
+    // Wally's Journey: overworld speed-up (hold R for normal speed).
+    extra = WallyJourney_OverworldExtraIterations();
+    for (loops = 0; loops < extra; loops++)
+    {
+        AnimateSprites();
+        CameraUpdate();
+        UpdateCameraPanning();
+    }
     if (fading)
     {
         SetFieldVBlankCallback();

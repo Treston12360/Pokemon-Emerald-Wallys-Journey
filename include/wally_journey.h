@@ -32,4 +32,11 @@ void WallyJourney_PickContestPrize(void);
 void WallyJourney_PickFrontierGimmickItem(void);
 s32 WallyJourney_AdjustCatchRate(u32 species, s32 catchRate);
 void WallyJourney_SetupTitanBattle(void);
+#define WALLY_OW_SPEED_COUNT 3      // 1x, 2x, 4x
+#define WALLY_BATTLE_SPEED_COUNT 4  // 1x, 2x, 3x, 4x
+u32 WallyJourney_GetOverworldSpeed(void);
+u32 WallyJourney_GetBattleSpeed(void);
+void WallyJourney_SetSpeeds(u32 overworld, u32 battle);
+u32 WallyJourney_OverworldExtraIterations(void);
+u32 WallyJourney_BattleExtraIterations(void);
 #endif

@@ -1,6 +1,7 @@
 // Wally's Journey: persistent progression and observed-only rival memory.
 // Uses saved Emerald variable IDs; does not inspect the player's hidden party.
 #include "global.h"
+#include "main.h"
 #include "event_data.h"
 #include "wally_journey.h"
 #include "constants/items.h"
@@ -378,4 +379,37 @@ void WallyJourney_SetupTitanBattle(void)
         break;
     }
     FlagSet(FLAG_WALLY_SMART_WILD_AI);
+}
+
+// Game speed options (Options menu). Music is unaffected because it is mixed
+// once per hardware frame in the VBlank interrupt; we only run extra logic and
+// animation passes inside the frame. Overworld approach after HashtagMarky's
+// "Overworld Speedup" tutorial (Team Aqua's Asset Repo wiki); battle uses the
+// same idea on the battle callbacks.
+static const u8 sOverworldExtra[WALLY_OW_SPEED_COUNT] = {0, 1, 3};
+static const u8 sBattleExtra[WALLY_BATTLE_SPEED_COUNT] = {0, 1, 2, 3};
+
+u32 WallyJourney_GetOverworldSpeed(void) { return VarGet(VAR_WALLY_GAME_SPEED) & 0xF; }
+u32 WallyJourney_GetBattleSpeed(void) { return (VarGet(VAR_WALLY_GAME_SPEED) >> 4) & 0xF; }
+
+void WallyJourney_SetSpeeds(u32 overworld, u32 battle)
+{
+    VarSet(VAR_WALLY_GAME_SPEED, (overworld & 0xF) | ((battle & 0xF) << 4));
+}
+
+u32 WallyJourney_OverworldExtraIterations(void)
+{
+    u32 speed = WallyJourney_GetOverworldSpeed();
+    if (speed >= WALLY_OW_SPEED_COUNT || JOY_HELD(R_BUTTON))
+        return 0;
+    return sOverworldExtra[speed];
+}
+
+u32 WallyJourney_BattleExtraIterations(void)
+{
+    u32 speed = WallyJourney_GetBattleSpeed();
+    if (speed >= WALLY_BATTLE_SPEED_COUNT
+     || (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED | BATTLE_TYPE_RECORDED_LINK)))
+        return 0;
+    return sBattleExtra[speed];
 }

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "option_menu.h"
 #include "bg.h"
 #include "gpu_regs.h"
@@ -26,6 +27,8 @@
 #define tWindowFrameType data[6]
 #define tExpAll data[7]
 #define tZMovesOff data[8]
+#define tGameSpeed data[9]
+#define tBattleSpeed data[10]
 
 enum
 {
@@ -37,6 +40,8 @@ enum
     MENUITEM_FRAMETYPE,
     MENUITEM_EXPMODE,
     MENUITEM_ZMOVES,
+    MENUITEM_GAMESPEED,
+    MENUITEM_BATTLESPEED,
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
 };
@@ -59,6 +64,8 @@ enum
 #define YPOS_FRAMETYPE    ITEM_Y(MENUITEM_FRAMETYPE)
 #define YPOS_EXPMODE      ITEM_Y(MENUITEM_EXPMODE)
 #define YPOS_ZMOVES       ITEM_Y(MENUITEM_ZMOVES)
+#define YPOS_GAMESPEED    ITEM_Y(MENUITEM_GAMESPEED)
+#define YPOS_BATTLESPEED  ITEM_Y(MENUITEM_BATTLESPEED)
 
 static void Task_OptionMenuFadeIn(u8 taskId);
 static void Task_OptionMenuProcessInput(u8 taskId);
@@ -84,6 +91,8 @@ static u8 Toggle_ProcessInput(u8 selection);
 static void ExpMode_DrawChoices(u8 selection);
 static void ZMoves_DrawChoices(u8 selection);
 static void RedrawVisibleOptions(u8 taskId);
+static u8 Cycle_ProcessInput(u8 selection, u8 count);
+static void Speed_DrawChoices(u8 selection, u8 y, bool32 battle);
 
 EWRAM_DATA static bool8 sArrowPressed = FALSE;
 EWRAM_DATA static u8 sTopItem = 0;
@@ -108,6 +117,10 @@ static const u8 gText_ButtonTypeLR[]       = _("{COLOR GREEN}{SHADOW LIGHT_GREEN
 static const u8 gText_ButtonTypeLEqualsA[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}L=A");
 static const u8 gText_ExpModeShare[]       = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SHARE");
 static const u8 gText_ExpModeAll[]         = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}ALL");
+static const u8 gText_Speed1x[]            = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}1x");
+static const u8 gText_Speed2x[]            = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}2x");
+static const u8 gText_Speed3x[]            = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}3x");
+static const u8 gText_Speed4x[]            = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}4x");
 
 static const u16 sOptionMenuText_Pal[] = INCGFX_U16("graphics/interface/option_menu_text.pal", ".gbapal");
 // note: this is only used in the Japanese release
@@ -123,6 +136,8 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_FRAMETYPE]   = COMPOUND_STRING("FRAME"),
     [MENUITEM_EXPMODE]     = COMPOUND_STRING("EXP. MODE"),
     [MENUITEM_ZMOVES]      = COMPOUND_STRING("Z-MOVES"),
+    [MENUITEM_GAMESPEED]   = COMPOUND_STRING("GAME SPEED"),
+    [MENUITEM_BATTLESPEED] = COMPOUND_STRING("BATTLE SPEED"),
     [MENUITEM_CANCEL]      = COMPOUND_STRING("CANCEL"),
 };
 
@@ -270,6 +285,8 @@ void CB2_InitOptionMenu(void)
         sTopItem = 0;
         gTasks[taskId].tExpAll = FlagGet(FLAG_WALLY_EXP_ALL_MODE);
         gTasks[taskId].tZMovesOff = FlagGet(FLAG_WALLY_Z_MOVES_OFF);
+        gTasks[taskId].tGameSpeed = WallyJourney_GetOverworldSpeed() % WALLY_OW_SPEED_COUNT;
+        gTasks[taskId].tBattleSpeed = WallyJourney_GetBattleSpeed() % WALLY_BATTLE_SPEED_COUNT;
         gTasks[taskId].tTextSpeed = gSaveBlock2Ptr->optionsTextSpeed;
         gTasks[taskId].tBattleSceneOff = gSaveBlock2Ptr->optionsBattleSceneOff;
         gTasks[taskId].tBattleStyle = gSaveBlock2Ptr->optionsBattleStyle;
@@ -382,6 +399,18 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             if (previousOption != gTasks[taskId].tZMovesOff)
                 ZMoves_DrawChoices(gTasks[taskId].tZMovesOff);
             break;
+        case MENUITEM_GAMESPEED:
+            previousOption = gTasks[taskId].tGameSpeed;
+            gTasks[taskId].tGameSpeed = Cycle_ProcessInput(gTasks[taskId].tGameSpeed, WALLY_OW_SPEED_COUNT);
+            if (previousOption != gTasks[taskId].tGameSpeed)
+                Speed_DrawChoices(gTasks[taskId].tGameSpeed, YPOS_GAMESPEED, FALSE);
+            break;
+        case MENUITEM_BATTLESPEED:
+            previousOption = gTasks[taskId].tBattleSpeed;
+            gTasks[taskId].tBattleSpeed = Cycle_ProcessInput(gTasks[taskId].tBattleSpeed, WALLY_BATTLE_SPEED_COUNT);
+            if (previousOption != gTasks[taskId].tBattleSpeed)
+                Speed_DrawChoices(gTasks[taskId].tBattleSpeed, YPOS_BATTLESPEED, TRUE);
+            break;
         default:
             return;
         }
@@ -410,6 +439,7 @@ static void Task_OptionMenuSave(u8 taskId)
         FlagSet(FLAG_WALLY_Z_MOVES_OFF);
     else
         FlagClear(FLAG_WALLY_Z_MOVES_OFF);
+    WallyJourney_SetSpeeds(gTasks[taskId].tGameSpeed, gTasks[taskId].tBattleSpeed);
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
     gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -751,6 +781,38 @@ static void RedrawVisibleOptions(u8 taskId)
     if (ITEM_VISIBLE(MENUITEM_FRAMETYPE))   FrameType_DrawChoices(tWindowFrameType);
     if (ITEM_VISIBLE(MENUITEM_EXPMODE))     ExpMode_DrawChoices(tExpAll);
     if (ITEM_VISIBLE(MENUITEM_ZMOVES))      ZMoves_DrawChoices(tZMovesOff);
+    if (ITEM_VISIBLE(MENUITEM_GAMESPEED))   Speed_DrawChoices(tGameSpeed, YPOS_GAMESPEED, FALSE);
+    if (ITEM_VISIBLE(MENUITEM_BATTLESPEED)) Speed_DrawChoices(tBattleSpeed, YPOS_BATTLESPEED, TRUE);
     HighlightOptionMenuItem(sel);
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }
+
+// Left/right steps through `count` settings, wrapping around.
+static u8 Cycle_ProcessInput(u8 selection, u8 count)
+{
+    if (JOY_NEW(DPAD_RIGHT))
+    {
+        selection = (selection + 1) % count;
+        sArrowPressed = TRUE;
+    }
+    if (JOY_NEW(DPAD_LEFT))
+    {
+        selection = (selection + count - 1) % count;
+        sArrowPressed = TRUE;
+    }
+    return selection;
+}
+
+// GAME SPEED: 1x / 2x / 4x (overworld walking and animations; hold R for 1x).
+// BATTLE SPEED: 1x / 2x / 3x / 4x. Neither changes music speed.
+static void Speed_DrawChoices(u8 selection, u8 y, bool32 battle)
+{
+    static const u8 *const sOverworld[] = {gText_Speed1x, gText_Speed2x, gText_Speed4x};
+    static const u8 *const sBattle[] = {gText_Speed1x, gText_Speed2x, gText_Speed3x, gText_Speed4x};
+    const u8 *name = battle ? sBattle[selection % WALLY_BATTLE_SPEED_COUNT] : sOverworld[selection % WALLY_OW_SPEED_COUNT];
+    FillWindowPixelRect(WIN_OPTIONS, PIXEL_FILL(1), 104, y, 96, 16);
+    DrawOptionMenuChoice(gText_ArrowLeft, 104, y, 0);
+    DrawOptionMenuChoice(name, 140, y, 1);
+    DrawOptionMenuChoice(gText_ArrowRight, 190, y, 0);
+}
+

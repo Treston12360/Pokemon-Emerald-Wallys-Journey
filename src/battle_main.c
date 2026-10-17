@@ -1730,11 +1730,33 @@ static void CB2_HandleStartMultiBattle(void)
 
 void BattleMainCB2(void)
 {
+    u32 extra, i;
     AnimateSprites();
     BuildOamBuffer();
     RunTextPrinters();
     UpdatePaletteFade();
     RunTasks();
+
+    // Wally's Journey: battle speed-up. Extra logic passes inside one frame;
+    // button presses only count once so menus never double-select.
+    extra = WallyJourney_BattleExtraIterations();
+    if (extra != 0)
+    {
+        u16 newKeys = gMain.newKeys, newAndRepeated = gMain.newAndRepeatedKeys;
+        gMain.newKeys = 0;
+        gMain.newAndRepeatedKeys = 0;
+        for (i = 0; i < extra && gMain.callback2 == BattleMainCB2; i++)
+        {
+            if (gMain.callback1 == BattleMainCB1)
+                BattleMainCB1();
+            AnimateSprites();
+            RunTextPrinters();
+            UpdatePaletteFade();
+            RunTasks();
+        }
+        gMain.newKeys = newKeys;
+        gMain.newAndRepeatedKeys = newAndRepeated;
+    }
 
     if (JOY_HELD(B_BUTTON) && gBattleTypeFlags & BATTLE_TYPE_RECORDED && RecordedBattle_CanStopPlayback())
     {
