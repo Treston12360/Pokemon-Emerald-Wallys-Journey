@@ -71,15 +71,19 @@ EverGrandeCity_PhoebesRoom_Text_IntroSpeech:
 	.string "Now show me yours!$"
 
 EverGrandeCity_PhoebesRoom_Text_Defeat:
-	.string "Oh, darn.\n"
-	.string "I've gone and lost.$"
+	.string "PHOEBE: Oh! You found a\n"
+	.string "way through my team!\p"
+	.string "I wasn't expecting that.\n"
+	.string "Heehee! Well done!$"
 
 EverGrandeCity_PhoebesRoom_Text_PostBattleSpeech:
-	.string "There's a real bond between you and\n"
-	.string "your POKéMON. I can feel it.\p"
-	.string "On MT. PYRE they say the dead watch\n"
-	.string "over the living. During the storm,\l"
-	.string "I believed it.\p"
-	.string "Whoever's waiting at the top…\n"
-	.string "make them earn it. Go on.$"
+	.string "On MT. PYRE, people leave\n"
+	.string "flowers for old partners.\p"
+	.string "But the best way to honor\n"
+	.string "a bond is to care for the\n"
+	.string "ones still beside you.\p"
+	.string "Your team trusts you.\n"
+	.string "I could feel it in battle.\p"
+	.string "Keep that trust as you\n"
+	.string "climb toward the CHAMPION.$"
 
