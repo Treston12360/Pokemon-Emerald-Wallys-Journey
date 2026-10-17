@@ -282,6 +282,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_AideAlreadyMet::
 	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_AideReceivedStarter::
+	goto_if_set FLAG_SYS_POKEDEX_GET, WallyJourney_EventScript_DexResearchRewards
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_BirchEnjoysRivalsHelpToo, MSGBOX_DEFAULT
 	release
 	end

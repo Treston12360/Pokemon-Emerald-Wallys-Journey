@@ -993,3 +993,180 @@ WallyJourney_Text_FanClubCollectorGave:
 WallyJourney_Text_FanClubCollectorDone:
 	.string "That was my whole collection!\n"
 	.string "Thank you for giving them a home.$"
+
+@ Wally's Journey: Battle Frontier training goods (money). Mints, Ability Capsule, Bottle Cap.
+WallyJourney_EventScript_FrontierTrainingGoods::
+	lock
+	faceplayer
+	msgbox WallyJourney_Text_FrontierTrainingGoods, MSGBOX_DEFAULT
+	waitmessage
+	pokemart WallyJourney_Pokemart_FrontierTrainingGoods
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+	.align 2
+WallyJourney_Pokemart_FrontierTrainingGoods:
+	.2byte ITEM_LONELY_MINT
+	.2byte ITEM_ADAMANT_MINT
+	.2byte ITEM_NAUGHTY_MINT
+	.2byte ITEM_BRAVE_MINT
+	.2byte ITEM_BOLD_MINT
+	.2byte ITEM_IMPISH_MINT
+	.2byte ITEM_LAX_MINT
+	.2byte ITEM_RELAXED_MINT
+	.2byte ITEM_MODEST_MINT
+	.2byte ITEM_MILD_MINT
+	.2byte ITEM_RASH_MINT
+	.2byte ITEM_QUIET_MINT
+	.2byte ITEM_CALM_MINT
+	.2byte ITEM_GENTLE_MINT
+	.2byte ITEM_CAREFUL_MINT
+	.2byte ITEM_SASSY_MINT
+	.2byte ITEM_TIMID_MINT
+	.2byte ITEM_HASTY_MINT
+	.2byte ITEM_JOLLY_MINT
+	.2byte ITEM_NAIVE_MINT
+	.2byte ITEM_SERIOUS_MINT
+	.2byte ITEM_ABILITY_CAPSULE
+	.2byte ITEM_BOTTLE_CAP
+	pokemartlistend
+
+@ Wally's Journey: Birch's aide rewards Pokédex research (caught count) in tiers.
+WallyJourney_EventScript_DexResearchRewards::
+	setvar VAR_0x8004, 0
+	specialvar VAR_RESULT, IsNationalPokedexEnabled
+	copyvar VAR_0x8004, VAR_RESULT
+	special ScriptGetPokedexInfo
+	buffernumberstring STR_VAR_2, VAR_0x8006
+	msgbox WallyJourney_Text_DexResearchCount, MSGBOX_DEFAULT
+WallyJourney_EventScript_DexResearchLoop::
+	goto_if_ge VAR_WALLY_DEX_REWARD_TIER, 8, WallyJourney_EventScript_DexResearchAllDone
+	switch VAR_WALLY_DEX_REWARD_TIER
+	case 0, WallyJourney_EventScript_DexResearchTier0
+	case 1, WallyJourney_EventScript_DexResearchTier1
+	case 2, WallyJourney_EventScript_DexResearchTier2
+	case 3, WallyJourney_EventScript_DexResearchTier3
+	case 4, WallyJourney_EventScript_DexResearchTier4
+	case 5, WallyJourney_EventScript_DexResearchTier5
+	case 6, WallyJourney_EventScript_DexResearchTier6
+	case 7, WallyJourney_EventScript_DexResearchTier7
+	end
+
+WallyJourney_EventScript_DexResearchTier0::
+	goto_if_lt VAR_0x8006, 25, WallyJourney_EventScript_DexResearchNext0
+	giveitem ITEM_EXP_CANDY_M, 3
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	addvar VAR_WALLY_DEX_REWARD_TIER, 1
+	goto WallyJourney_EventScript_DexResearchLoop
+WallyJourney_EventScript_DexResearchNext0::
+	buffernumberstring STR_VAR_1, 25
+	msgbox WallyJourney_Text_DexResearchNextGoal, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_DexResearchTier1::
+	goto_if_lt VAR_0x8006, 50, WallyJourney_EventScript_DexResearchNext1
+	giveitem ITEM_ABILITY_CAPSULE, 1
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	addvar VAR_WALLY_DEX_REWARD_TIER, 1
+	goto WallyJourney_EventScript_DexResearchLoop
+WallyJourney_EventScript_DexResearchNext1::
+	buffernumberstring STR_VAR_1, 50
+	msgbox WallyJourney_Text_DexResearchNextGoal, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_DexResearchTier2::
+	goto_if_lt VAR_0x8006, 100, WallyJourney_EventScript_DexResearchNext2
+	giveitem ITEM_BOTTLE_CAP, 2
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	addvar VAR_WALLY_DEX_REWARD_TIER, 1
+	goto WallyJourney_EventScript_DexResearchLoop
+WallyJourney_EventScript_DexResearchNext2::
+	buffernumberstring STR_VAR_1, 100
+	msgbox WallyJourney_Text_DexResearchNextGoal, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_DexResearchTier3::
+	goto_if_lt VAR_0x8006, 200, WallyJourney_EventScript_DexResearchNext3
+	giveitem ITEM_ABILITY_PATCH, 1
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	addvar VAR_WALLY_DEX_REWARD_TIER, 1
+	goto WallyJourney_EventScript_DexResearchLoop
+WallyJourney_EventScript_DexResearchNext3::
+	buffernumberstring STR_VAR_1, 200
+	msgbox WallyJourney_Text_DexResearchNextGoal, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_DexResearchTier4::
+	goto_if_lt VAR_0x8006, 300, WallyJourney_EventScript_DexResearchNext4
+	giveitem ITEM_EXP_CHARM, 1
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	addvar VAR_WALLY_DEX_REWARD_TIER, 1
+	goto WallyJourney_EventScript_DexResearchLoop
+WallyJourney_EventScript_DexResearchNext4::
+	buffernumberstring STR_VAR_1, 300
+	msgbox WallyJourney_Text_DexResearchNextGoal, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_DexResearchTier5::
+	goto_if_lt VAR_0x8006, 400, WallyJourney_EventScript_DexResearchNext5
+	giveitem ITEM_OVAL_CHARM, 1
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	addvar VAR_WALLY_DEX_REWARD_TIER, 1
+	goto WallyJourney_EventScript_DexResearchLoop
+WallyJourney_EventScript_DexResearchNext5::
+	buffernumberstring STR_VAR_1, 400
+	msgbox WallyJourney_Text_DexResearchNextGoal, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_DexResearchTier6::
+	goto_if_lt VAR_0x8006, 600, WallyJourney_EventScript_DexResearchNext6
+	giveitem ITEM_GOLD_BOTTLE_CAP, 1
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	addvar VAR_WALLY_DEX_REWARD_TIER, 1
+	goto WallyJourney_EventScript_DexResearchLoop
+WallyJourney_EventScript_DexResearchNext6::
+	buffernumberstring STR_VAR_1, 600
+	msgbox WallyJourney_Text_DexResearchNextGoal, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_DexResearchTier7::
+	goto_if_lt VAR_0x8006, 850, WallyJourney_EventScript_DexResearchNext7
+	giveitem ITEM_SHINY_CHARM, 1
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	addvar VAR_WALLY_DEX_REWARD_TIER, 1
+	goto WallyJourney_EventScript_DexResearchLoop
+WallyJourney_EventScript_DexResearchNext7::
+	buffernumberstring STR_VAR_1, 850
+	msgbox WallyJourney_Text_DexResearchNextGoal, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_DexResearchAllDone::
+	msgbox WallyJourney_Text_DexResearchAllDone, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_Text_FrontierTrainingGoods:
+	.string "Serious TRAINERS fine-tune their\n"
+	.string "POKéMON. Mints, capsules, caps…\l"
+	.string "Take a look!$"
+WallyJourney_Text_DexResearchCount:
+	.string "Let's see your POKéDEX data…\n"
+	.string "Caught so far: {STR_VAR_2} kinds!\p"
+	.string "PROF. BIRCH set aside rewards for\n"
+	.string "every research milestone.$"
+WallyJourney_Text_DexResearchNextGoal:
+	.string "Catch {STR_VAR_1} kinds in all,\n"
+	.string "then come see me again.\p"
+	.string "I'll have the next reward ready!$"
+WallyJourney_Text_DexResearchAllDone:
+	.string "You've claimed every research\n"
+	.string "reward. The PROFESSOR is thrilled!$"
