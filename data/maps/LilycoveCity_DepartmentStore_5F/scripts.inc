@@ -20,10 +20,52 @@ LilycoveCity_DepartmentStore_5F_EventScript_ClerkFarLeft::
 	faceplayer
 	message gText_HowMayIServeYou
 	waitmessage
+	goto_if_set FLAG_SYS_GAME_CLEAR, WallyJourney_EventScript_ChampionDolls
 	pokemartdecoration2 LilycoveCity_DepartmentStore_5F_Pokemart_Dolls
 	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
+
+@ Wally's Journey: after the Hall of Fame the doll counter stocks the full
+@ "Champion's collection", including dolls that were Frontier/event-only.
+WallyJourney_EventScript_ChampionDolls::
+	pokemartdecoration2 WallyJourney_Pokemart_ChampionDolls
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+	.align 2
+WallyJourney_Pokemart_ChampionDolls:
+	.2byte DECOR_PICHU_DOLL
+	.2byte DECOR_PIKACHU_DOLL
+	.2byte DECOR_MARILL_DOLL
+	.2byte DECOR_JIGGLYPUFF_DOLL
+	.2byte DECOR_DUSKULL_DOLL
+	.2byte DECOR_WYNAUT_DOLL
+	.2byte DECOR_BALTOY_DOLL
+	.2byte DECOR_KECLEON_DOLL
+	.2byte DECOR_AZURILL_DOLL
+	.2byte DECOR_SKITTY_DOLL
+	.2byte DECOR_SWABLU_DOLL
+	.2byte DECOR_GULPIN_DOLL
+	.2byte DECOR_SEEDOT_DOLL
+	.2byte DECOR_SMOOCHUM_DOLL
+	.2byte DECOR_TOGEPI_DOLL
+	.2byte DECOR_MEOWTH_DOLL
+	.2byte DECOR_CLEFAIRY_DOLL
+	.2byte DECOR_DITTO_DOLL
+	.2byte DECOR_CYNDAQUIL_DOLL
+	.2byte DECOR_CHIKORITA_DOLL
+	.2byte DECOR_TOTODILE_DOLL
+	.2byte DECOR_LAPRAS_DOLL
+	.2byte DECOR_SNORLAX_DOLL
+	.2byte DECOR_VENUSAUR_DOLL
+	.2byte DECOR_CHARIZARD_DOLL
+	.2byte DECOR_BLASTOISE_DOLL
+	.2byte DECOR_REGIROCK_DOLL
+	.2byte DECOR_REGICE_DOLL
+	.2byte DECOR_REGISTEEL_DOLL
+	pokemartlistend
 
 	.align 2
 LilycoveCity_DepartmentStore_5F_Pokemart_Dolls:

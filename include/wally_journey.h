@@ -28,4 +28,6 @@ enum WallySeason { WALLY_SEASON_SPRING, WALLY_SEASON_SUMMER, WALLY_SEASON_AUTUMN
 enum WallySeason WallyJourney_GetSeason(void);
 struct BlendSettings WallyJourney_GetSeasonDayBlend(void);
 u32 WallyJourney_SeasonalWeather(u32 weather);
+void WallyJourney_PickContestPrize(void);
+void WallyJourney_PickFrontierGimmickItem(void);
 #endif

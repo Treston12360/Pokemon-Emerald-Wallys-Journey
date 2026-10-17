@@ -8,6 +8,9 @@
 #include "pokemon.h"
 #include "rtc.h"
 #include "battle.h"
+#include "item.h"
+#include "random.h"
+#include "constants/contest.h"
 #include "constants/weather.h"
 #include "constants/map_types.h"
 #include "constants/maps.h"
@@ -202,4 +205,134 @@ u32 WallyJourney_SeasonalWeather(u32 weather)
         return roll < 15 ? WEATHER_RAIN : weather;                       // cold coastal rain
     }
     return weather;
+}
+
+// ------------------------------------------------- side activity specials
+// Contest repeat wins: a rank-appropriate random prize (VAR_0x8004 item, VAR_0x8005 qty).
+void WallyJourney_PickContestPrize(void)
+{
+    static const u16 sNormal[] = {ITEM_POKE_BALL, ITEM_SUPER_POTION, ITEM_REPEL};
+    static const u16 sSuper[]  = {ITEM_HEART_SCALE, ITEM_PP_UP, ITEM_NUGGET};
+    static const u16 sHyper[]  = {ITEM_RARE_CANDY, ITEM_PP_UP, ITEM_BIG_NUGGET, ITEM_HEART_SCALE};
+    static const u16 sMaster[] = {ITEM_PP_MAX, ITEM_RARE_CANDY, ITEM_ABILITY_CAPSULE, ITEM_BOTTLE_CAP, ITEM_STAR_PIECE};
+    const u16 *pool; u32 n;
+    switch (VarGet(VAR_CONTEST_RANK))
+    {
+    case CONTEST_RANK_SUPER:  pool = sSuper;  n = ARRAY_COUNT(sSuper);  break;
+    case CONTEST_RANK_HYPER:  pool = sHyper;  n = ARRAY_COUNT(sHyper);  break;
+    case CONTEST_RANK_MASTER: pool = sMaster; n = ARRAY_COUNT(sMaster); break;
+    default:                  pool = sNormal; n = ARRAY_COUNT(sNormal); break;
+    }
+    gSpecialVar_0x8004 = pool[Random() % n];
+    gSpecialVar_0x8005 = (gSpecialVar_0x8004 == ITEM_POKE_BALL) ? 5 : 1;
+}
+
+// Battle Frontier "Gimmick Collector": a random Mega Stone or Z-Crystal the
+// player doesn't own yet (VAR_0x8005), or ITEM_NONE if they own them all.
+// Only stones/crystals that are also hidden in Hoenn, so nothing is shop-only.
+void WallyJourney_PickFrontierGimmickItem(void)
+{
+    static const u16 sPool[] = {
+        ITEM_VENUSAURITE,
+        ITEM_CHARIZARDITE_X,
+        ITEM_CHARIZARDITE_Y,
+        ITEM_BLASTOISINITE,
+        ITEM_BEEDRILLITE,
+        ITEM_PIDGEOTITE,
+        ITEM_ALAKAZITE,
+        ITEM_SLOWBRONITE,
+        ITEM_GENGARITE,
+        ITEM_KANGASKHANITE,
+        ITEM_PINSIRITE,
+        ITEM_GYARADOSITE,
+        ITEM_AERODACTYLITE,
+        ITEM_AMPHAROSITE,
+        ITEM_STEELIXITE,
+        ITEM_SCIZORITE,
+        ITEM_HERACRONITE,
+        ITEM_HOUNDOOMINITE,
+        ITEM_TYRANITARITE,
+        ITEM_SABLENITE,
+        ITEM_MAWILITE,
+        ITEM_AGGRONITE,
+        ITEM_MEDICHAMITE,
+        ITEM_MANECTITE,
+        ITEM_SHARPEDONITE,
+        ITEM_CAMERUPTITE,
+        ITEM_ALTARIANITE,
+        ITEM_BANETTITE,
+        ITEM_ABSOLITE,
+        ITEM_GLALITITE,
+        ITEM_SALAMENCITE,
+        ITEM_METAGROSSITE,
+        ITEM_LOPUNNITE,
+        ITEM_GARCHOMPITE,
+        ITEM_LUCARIONITE,
+        ITEM_ABOMASITE,
+        ITEM_GALLADITE,
+        ITEM_AUDINITE,
+        ITEM_CLEFABLITE,
+        ITEM_VICTREEBELITE,
+        ITEM_STARMINITE,
+        ITEM_DRAGONINITE,
+        ITEM_MEGANIUMITE,
+        ITEM_FERALIGITE,
+        ITEM_SKARMORITE,
+        ITEM_FROSLASSITE,
+        ITEM_EMBOARITE,
+        ITEM_EXCADRITE,
+        ITEM_SCOLIPITE,
+        ITEM_SCRAFTINITE,
+        ITEM_EELEKTROSSITE,
+        ITEM_CHANDELURITE,
+        ITEM_CHESNAUGHTITE,
+        ITEM_DELPHOXITE,
+        ITEM_GRENINJITE,
+        ITEM_PYROARITE,
+        ITEM_FLOETTITE,
+        ITEM_MALAMARITE,
+        ITEM_BARBARACITE,
+        ITEM_DRAGALGITE,
+        ITEM_HAWLUCHANITE,
+        ITEM_DRAMPANITE,
+        ITEM_FALINKSITE,
+        ITEM_RAICHUNITE_X,
+        ITEM_RAICHUNITE_Y,
+        ITEM_CHIMECHITE,
+        ITEM_STARAPTITE,
+        ITEM_GOLURKITE,
+        ITEM_MEOWSTICITE,
+        ITEM_CRABOMINITE,
+        ITEM_GOLISOPITE,
+        ITEM_SCOVILLAINITE,
+        ITEM_BAXCALIBRITE,
+        ITEM_TATSUGIRINITE,
+        ITEM_GLIMMORANITE,
+        ITEM_LATIASITE,
+        ITEM_LATIOSITE,
+        ITEM_NORMALIUM_Z,
+        ITEM_FIRIUM_Z,
+        ITEM_WATERIUM_Z,
+        ITEM_ELECTRIUM_Z,
+        ITEM_GRASSIUM_Z,
+        ITEM_ICIUM_Z,
+        ITEM_FIGHTINIUM_Z,
+        ITEM_POISONIUM_Z,
+        ITEM_GROUNDIUM_Z,
+        ITEM_FLYINIUM_Z,
+        ITEM_PSYCHIUM_Z,
+        ITEM_BUGINIUM_Z,
+        ITEM_ROCKIUM_Z,
+        ITEM_GHOSTIUM_Z,
+        ITEM_DRAGONIUM_Z,
+        ITEM_DARKINIUM_Z,
+        ITEM_STEELIUM_Z,
+        ITEM_FAIRIUM_Z,
+    };
+    u16 missing[ARRAY_COUNT(sPool)];
+    u32 i, count = 0;
+    for (i = 0; i < ARRAY_COUNT(sPool); i++)
+        if (!CheckBagHasItem(sPool[i], 1) && !CheckPCHasItem(sPool[i], 1))
+            missing[count++] = sPool[i];
+    gSpecialVar_0x8005 = count ? missing[Random() % count] : ITEM_NONE;
 }

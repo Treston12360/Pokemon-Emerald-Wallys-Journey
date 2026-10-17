@@ -720,3 +720,61 @@ WallyJourney_Text_SootopolisCrisisWally:
 	.string "CENTER, it's the strongest building.\p"
 	.string "Go! Whatever's out there, you're\n"
 	.string "the one who can reach it!$"
+
+@ Wally's Journey: Battle Frontier "Gimmick Collector". For 48 BP, a random
+@ Mega Stone or Z-Crystal the player doesn't own yet. A repeatable way to fill
+@ gaps; every item here is also hidden somewhere in Hoenn.
+WallyJourney_EventScript_GimmickCollector::
+	lock
+	faceplayer
+	msgbox WallyJourney_Text_CollectorOffer, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, WallyJourney_EventScript_CollectorBye
+	specialvar VAR_TEMP_1, GetFrontierBattlePoints
+	goto_if_lt VAR_TEMP_1, 48, WallyJourney_EventScript_CollectorNoBP
+	special WallyJourney_PickFrontierGimmickItem
+	goto_if_eq VAR_0x8005, ITEM_NONE, WallyJourney_EventScript_CollectorHaveAll
+	checkitemspace VAR_0x8005
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	setvar VAR_0x8004, 48
+	special TakeFrontierBattlePoints
+	giveitem VAR_0x8005
+	msgbox WallyJourney_Text_CollectorThanks, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_CollectorBye::
+	msgbox WallyJourney_Text_CollectorBye, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_CollectorNoBP::
+	msgbox WallyJourney_Text_CollectorNoBP, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_CollectorHaveAll::
+	msgbox WallyJourney_Text_CollectorHaveAll, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_Text_CollectorOffer:
+	.string "I dig up MEGA STONES and Z-CRYSTALS\n"
+	.string "all over HOENN.\p"
+	.string "For 48 BATTLE POINTS, I'll trade you\n"
+	.string "one you don't have yet. Deal?$"
+
+WallyJourney_Text_CollectorThanks:
+	.string "Pleasure doing business. Come back\n"
+	.string "when you've earned more BP!$"
+
+WallyJourney_Text_CollectorBye:
+	.string "Suit yourself. They're out there in\n"
+	.string "the caves if you'd rather dig.$"
+
+WallyJourney_Text_CollectorNoBP:
+	.string "You'll need 48 BATTLE POINTS.\n"
+	.string "Win a few more rounds first.$"
+
+WallyJourney_Text_CollectorHaveAll:
+	.string "Whoa. You already have every one\n"
+	.string "I could find. Impressive!$"
