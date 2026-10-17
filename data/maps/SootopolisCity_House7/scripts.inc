@@ -3,7 +3,7 @@ SootopolisCity_House7_MapScripts::
 	.byte 0
 
 @ Wally's Journey: this is JUAN's house. Steven brings the player here to
-@ watch Wally's title match before the 8th Gym (VAR_WALLY_BROADCAST_STATE 2).
+@ watch Wally's title match after the 8th Gym (VAR_WALLY_BROADCAST_STATE 2).
 SootopolisCity_House7_OnFrame:
 	map_script_2 VAR_WALLY_BROADCAST_STATE, 2, WallyJourney_EventScript_JuansHouseBroadcast
 	.2byte 0
