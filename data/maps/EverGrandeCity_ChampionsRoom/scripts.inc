@@ -28,7 +28,7 @@ EverGrandeCity_ChampionsRoom_EventScript_EnterRoom::
 	applymovement LOCALID_PLAYER, EverGrandeCity_ChampionsRoom_Movement_PlayerApproachWallace
 	waitmovement 0
 	setvar VAR_TEMP_1, 1
-	goto EverGrandeCity_ChampionsRoom_EventScript_Wallace
+	goto EverGrandeCity_ChampionsRoom_EventScript_Wally
 	releaseall
 	end
 
@@ -38,7 +38,7 @@ EverGrandeCity_ChampionsRoom_Movement_PlayerApproachWallace:
 	step_end
 
 EverGrandeCity_ChampionsRoom_EventScript_Wallace::
-	goto_if_set FLAG_SYS_GAME_CLEAR, WallyJourney_ChampionDefense_Wallace
+	goto_if_set FLAG_SYS_GAME_CLEAR, WallyJourney_ChampionDefense_Wally
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
 	msgbox EverGrandeCity_ChampionsRoom_Text_IntroSpeech, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_WALLY_CHAMPION, EverGrandeCity_ChampionsRoom_Text_Defeat
@@ -46,10 +46,10 @@ EverGrandeCity_ChampionsRoom_EventScript_Wallace::
 	end
 
 WallyJourney_ChampionDefense_Wallace::
-	@ Returning as Champion turns the final battle into a repeatable title defense.
+	@ After the Hall of Fame Wally returns with a stronger Mega team to challenge your title.
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
 	msgbox WallyJourney_ChampionDefense_Intro, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_WALLY_CHAMPION, WallyJourney_ChampionDefense_DefeatedText
+	trainerbattle_no_intro TRAINER_WALLY_CHAMPION_REMATCH, WallyJourney_ChampionDefense_DefeatedText
 	addvar VAR_UNUSED_0x40FD, 1
 	msgbox WallyJourney_ChampionDefense_Victory, MSGBOX_DEFAULT
 	warp MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F, 9, 8
