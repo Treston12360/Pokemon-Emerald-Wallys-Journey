@@ -156,3 +156,12 @@ The owner explicitly approved **all previously suggested Wally narrative, explor
 - **Reuse existing compatible ROM-hack implementations instead of writing visual/engine systems from scratch where prudent.** Start with the current pokeemerald-expansion DNS engine (this repo already sets `OW_ENABLE_DNS TRUE`, `OW_TIMES_OF_DAY GEN_LATEST`, `OW_USE_FAKE_RTC FALSE`), then evaluate existing tileset palettes, weather effects, and compatible seasonal tile/palette projects. Do not assume season swapping is implemented just because DNS is enabled.
 - Compare external implementations on compatibility with the current branch, licensing, performance/VRAM/palette constraints, testing and ongoing maintenance. Keep fallbacks for environments without a working real-time clock and test mGBA/hardware save persistence.
 - **Status:** Day/night support appears enabled in current config, but full visual behavior and seasonal changes are **not gameplay-verified**. Seasonal implementation remains to be selected/integrated.
+
+## Standard Poké Ball only — confirmed owner requirement (2026-10-16)
+
+- **Only the standard Poké Ball may be used or obtained.** Remove all other player-facing capture ball varieties (Great, Ultra, Master, Premier, Luxury, Dive, Net, Timer, Quick, Dusk, Repeat, Safari and other special balls) from shops, gifts, pickups, held-item pools, rewards, crafting, PC/item menus and capture-item availability. Keep relevant internal engine definitions if required for stability; do not recklessly delete constants or break save compatibility.
+- Ensure new-game starting inventories and all trainer/event rewards and scripts no longer hand out forbidden ball types. Update NPC dialogue and item descriptions as needed.
+- Audit any required Safari Zone, story, tutorial, scripted captures and other ball-specific game mechanics. Convert or adapt them so **standard Poké Balls** work correctly without progression locks.
+- **Crucial balance consequence:** Earlier catch-rate balancing and grander/harder Kyogre and Groudon battles must be revisited assuming the player has access only to regular Poké Balls. Make them challenging and grand without imposing impractical or effectively impossible captures; test capture odds statistically with realistic HP/status and balls available.
+- Verify there is an affordable, repeatable, accessible supply of regular Poké Balls and that normal and special encounters remain completable on a single save.
+- **Status:** Confirmed request and recorded in wishlist. Not yet implemented or tested.
