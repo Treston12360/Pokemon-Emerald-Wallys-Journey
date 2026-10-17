@@ -8,17 +8,25 @@
 
 - Emerald's core Hoenn adventure remains recognizable, but the story is rewritten/enhanced around **Wally's Journey**.
 - **Norman remains the player character's father.** This is an explicit owner correction and must not be lost.
+- Wally has **more rival battles** throughout the journey. His personality arc begins shy and unsure, then gradually becomes noticeably more confident, capable, and cool as the story progresses. Wally ultimately becomes **Hoenn Champion instead of Wallace**. Wallace is referred to as the **previous Hoenn Champion**.
 - Wally is a prominent rival with an **extremely challenging, competitively cohesive team of six Hoenn Pokémon**. Optimize synergy, coverage, abilities, moves, held items, AI, and difficulty. Avoid copying another important character's signature ace. The precise final roster is **not confirmed here**; do not invent or freeze one without consulting the owner/record.
-- May remains important as a rival/character. Gym Leaders, Elite Four, May, Wally and other major trainers should be considered for Mega Evolution, with sensible story progression.
-- Introduce the player's **Mega Bracelet around the fifth gym or later**, through a story-appropriate encounter (May or Steven were discussed, but the giver is **not finalized**). The relevant starter's Mega Stone should be available. Exact timing and distribution require implementation validation; don't claim these are already in the ROM.
+- May remains important as a rival/character.
+- **Mega Evolution is restricted to Gym Leaders/gym trainers, the Elite Four, Champions, rivals, Steven Stone, and Battle Frontier opponents.** Ordinary route/world trainers must **not** Mega Evolve. Determine eligible gym-trainer battles deliberately; do not extend Mega Evolution to ordinary trainers.
+- **Steven Stone gives the player the Mega Bracelet inside Wally's house after the player defeats Norman.** Steven acknowledges how much the player has grown, explains he found the bracelet while traveling in another region, and says he believes it can help the player reach new heights. This is the authoritative scene and timing; supersedes all earlier May/Steven and fifth-gym speculation.
+- The relevant starter's Mega Stone should be available. Exact availability and Mega battle distribution still need implementation validation; do not claim they already work in the ROM.
+- Gym Leader rematches should upgrade teams and grant/use a Mega Evolution where a leader did not have one previously.
 
 ## Quality-of-life mechanics
 
 - Both **Mach Bike and Acro Bike** can be owned and used without returning to Rydel's shop to exchange them.
 - **TMs are reusable/infinite**, not consumed when taught.
 - **Field HM effects** still require the relevant Gym Badge/permission, but the player **does not have to teach the HM move to a party Pokémon** to use the field action.
+- **HM acquisition/story dialogue overhaul:** Existing moments where other characters simply hand out HMs should use fitting normal dialogue instead where necessary; Gym Leaders will explain that unlocking an HM's field use through the badge means the player need not teach the move to any Pokémon, and the Gym Leader also awards the corresponding HM. Audit each HM, badge, map event and story dependency so the game never loses a required HM or locks progression.
 - Pokémon can **relearn eligible moves conveniently**, in the spirit of Pokémon Legends: Arceus, without permanent lockout of previously learned moves. Final UI/implementation details need verification.
 - An optional **game speed-up** should not pitch-shift, accelerate, or distort music; design for actual GBA emulator/hardware constraints and test rather than promising arbitrary speedups.
+- **Following Pokémon:** party Pokémon can visibly follow the player in the overworld, with appropriate sprites/behavior and **correct shiny variants** for shiny Pokémon.
+- **Shiny odds: 1 in 4,096** for ordinary shiny generation; audit applicable encounter, gift, breeding, and static-generation paths and document deliberate exceptions.
+- **Champion title defenses:** after becoming Champion, the player should be able to defend the championship in repeatable challenges; design proper triggers, teams, and progression.
 
 ## Gen 1–9 ecology and complete Pokédex obtainability — HIGH PRIORITY
 
@@ -55,3 +63,9 @@
 - **Then:** research Pokédex ecology and actual historical game locations for every Gen 1–9 family; maintain sourced per-species placement and rarity ledger and rebalance wild tables accordingly.
 - **Later verification:** compile a playable GBA ROM, run tests and emulator playthroughs for wild encounters, evolutions, key story/QoL mechanics, and saving.
 - **Not complete:** all-species obtainable proof, comprehensive historical habitat research, global rare-spawn balancing, full underlevel correction, and ROM/emulator certification.
+
+## Explicit owner decisions added 2026-10-16
+
+The owner specifically rejected ordinary route trainers using Mega Evolution. Eligible categories only: gym trainers and Gym Leaders, Elite Four, Champions, rivals, Steven Stone, and Battle Frontier trainers. Steven gives the Mega Bracelet at **Wally's house after Norman is defeated**, with a speech celebrating growth and describing its discovery on a journey in another region. Wally develops from shy to confident through more rival battles and **replaces Wallace as Champion**; Wallace is identified as the previous Champion. Add following Pokémon with shinies, 1/4096 shiny odds, Champion title defenses, tougher Gym Leader rematches with Megas, and Gym Leader HM explanations and awards rather than relying on former HM-giver scenes.
+
+**Implementation status:** These are confirmed owner requirements, NOT claims that scripts, assets, logic, trainers, or emulator tests are complete.
