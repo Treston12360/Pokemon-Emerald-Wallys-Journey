@@ -27,10 +27,28 @@ EverGrandeCity_PokemonLeague_1F_EventScript_Clerk::
 	faceplayer
 	message gText_HowMayIServeYou
 	waitmessage
+	goto_if_set FLAG_SYS_GAME_CLEAR, WallyJourney_PokemonLeague_MegaShop
 	pokemart EverGrandeCity_PokemonLeague_1F_Pokemart
 	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
+
+WallyJourney_PokemonLeague_MegaShop::
+	pokemart WallyJourney_PokemonLeague_PostgameMart
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+	.align 2
+WallyJourney_PokemonLeague_PostgameMart:
+	.2byte ITEM_ULTRA_BALL
+	.2byte ITEM_MAX_POTION
+	.2byte ITEM_FULL_RESTORE
+	.2byte ITEM_REVIVE
+	.2byte ITEM_LINKING_CORD
+	.2byte ITEM_GALLADITE
+	.2byte ITEM_GARDEVOIRITE
+	pokemartlistend
 
 	.align 2
 EverGrandeCity_PokemonLeague_1F_Pokemart:
