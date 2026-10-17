@@ -29,18 +29,26 @@ MossdeepCity_PokemonCenter_1F_EventScript_Girl::
 	end
 
 MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable:
-	.string "The GYM LEADERS in this town are\n"
-	.string "a formidable duo.\p"
-	.string "Their combination attacks are, like,\n"
-	.string "excellent and wow!$"
+	.string "TATE and LIZA finish each\n"
+	.string "other's sentences.\p"
+	.string "It looks like mind reading.\n"
+	.string "But they've trained together\n"
+	.string "since they were little.\p"
+	.string "I guess knowing someone\n"
+	.string "that well is its own power.$"
 
 MossdeepCity_PokemonCenter_1F_Text_AbilitiesMightChangeMoves:
-	.string "Depending on the special abilities of\n"
-	.string "POKéMON, some moves might change\l"
-	.string "or not work at all.$"
+	.string "A move can be strong against\n"
+	.string "a POKéMON's type and still fail.\p"
+	.string "An ABILITY can change what\n"
+	.string "happens in battle.\p"
+	.string "Knowing your opponent is\n"
+	.string "more than memorizing a chart.$"
 
 MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable_W0:
-	.string "You beat TATE and LIZA? They're\n"
-	.string "arguing about whose fault it was.\p"
-	.string "They never argue. You got in their\n"
-	.string "heads.$"
+	.string "You beat TATE and LIZA?\n"
+	.string "They've been studying the\n"
+	.string "battle together ever since.\p"
+	.string "They don't blame each other.\n"
+	.string "They want to know what\n"
+	.string "you saw that they missed.$"
