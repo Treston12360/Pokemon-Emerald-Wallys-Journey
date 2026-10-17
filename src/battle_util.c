@@ -8583,7 +8583,12 @@ static bool32 WallyJourney_OpponentMayMegaEvolve(enum BattlerId battler)
 {
     u16 trainerId;
     if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
-        return FALSE;
+    {
+        // Only exception for wild Pokemon: the postgame Sky Pillar Rayquaza, which
+        // keeps the meteor power it used to Mega Evolve during the Sootopolis crisis.
+        return (gBattleTypeFlags & BATTLE_TYPE_LEGENDARY)
+            && gBattleMons[battler].species == SPECIES_RAYQUAZA;
+    }
     if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
         return TRUE;
     if (WallyJourney_InGymMap())

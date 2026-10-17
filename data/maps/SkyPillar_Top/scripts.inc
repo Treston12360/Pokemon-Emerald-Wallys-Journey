@@ -46,7 +46,9 @@ SkyPillar_Top_EventScript_Rayquaza::
 	playmoncry SPECIES_RAYQUAZA, CRY_MODE_ENCOUNTER
 	delay 40
 	waitmoncry
-	setwildbattle SPECIES_RAYQUAZA, 70
+	msgbox WallyJourney_Text_RayquazaMeteorPower, MSGBOX_DEFAULT
+	setwildbattle SPECIES_RAYQUAZA, 75 @ Wally's Journey: Mega Rayquaza (see WallyJourney_GiveWildRayquazaDragonAscent)
+	special WallyJourney_GiveWildRayquazaDragonAscent
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special BattleSetup_StartLegendaryBattle
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
@@ -180,3 +182,9 @@ SkyPillar_Top_Movement_CameraPanDown:
 SkyPillar_Top_Text_RayquazaFlewOff:
 	.string "The awakened RAYQUAZA flew off…$"
 
+
+WallyJourney_Text_RayquazaMeteorPower:
+	.string "RAYQUAZA's scales shimmer with the\n"
+	.string "light of a falling star…\p"
+	.string "The same power it used to calm\n"
+	.string "SOOTOPOLIS still burns inside it!$"

@@ -250,7 +250,11 @@ SeafloorCavern_Room9_Text_ArchieWithThisRedOrb:
 
 SeafloorCavern_Room9_Text_RedOrbShinesByItself:
 	.string "The RED ORB suddenly began shining\n"
-	.string "by itself!$"
+	.string "by itself!\p"
+	.string "KYOGRE's markings blazed with light.\n"
+	.string "Its whole body changed…\p"
+	.string "It returned to its PRIMAL form, the\n"
+	.string "shape it took in the age of myth!$"
 
 SeafloorCavern_Room9_Text_ArchieWhereDidKyogreGo:
 	.string "ARCHIE: What?!\p"
@@ -280,11 +284,12 @@ SeafloorCavern_Room9_Text_ArchieWhatRainingTooHard:
 
 SeafloorCavern_Room9_Text_ArchieWhyDidKyogreDisappear:
 	.string "ARCHIE: There's something wrong…\p"
-	.string "The RED ORB is supposed to awaken\n"
-	.string "and control KYOGRE…\p"
-	.string "But… Why?\n"
-	.string "Why did KYOGRE disappear?\p"
-	.string "Why?!$"
+	.string "The ORB was supposed to control\n"
+	.string "KYOGRE. Instead it… it unlocked\l"
+	.string "something.\p"
+	.string "That wasn't the KYOGRE in the old\n"
+	.string "texts. That was its PRIMAL self.\p"
+	.string "What have I done?$"
 
 SeafloorCavern_Room9_Text_MaxieWhatHaveYouWrought:
 	.string "MAXIE: What have you wrought?\p"

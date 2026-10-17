@@ -1584,14 +1584,12 @@ SootopolisCity_Text_GroudonPleaseStop:
 	.string "SOOTOPOLIS, will be utterly ruined!$"
 
 SootopolisCity_Text_AfterAllOurScheming:
-	.string "MAXIE: So the super-ancient POKéMON\n"
-	.string "weren't only GROUDON and KYOGRE…\p"
-	.string "After all our fruitless scheming and\n"
-	.string "frantic efforts, that one POKéMON's\l"
-	.string "simple action puts everything right\l"
-	.string "again as if nothing had happened…\p"
-	.string "Fu…\n"
-	.string "Fuhahaha…$"
+	.string "MAXIE: So there was a third…\p"
+	.string "We thought the ORBS were a leash.\n"
+	.string "They were a key, and we unlocked\l"
+	.string "something no one could hold.\p"
+	.string "And RAYQUAZA fixed it in an instant.\n"
+	.string "Fu… Fuhahaha…$"
 
 SootopolisCity_Text_KyogreCalmDown:
 	.string "ARCHIE: KYOGRE! What's wrong?!\n"
@@ -1614,19 +1612,17 @@ SootopolisCity_Text_TryingMeaninglessToPokemon:
 	.string "to POKéMON…$"
 
 SootopolisCity_Text_InvolvedWithCrisisComeWithMe:
-	.string "STEVEN: Those POKéMON fighting…\n"
-	.string "GROUDON… And KYOGRE…\p"
-	.string "The two super-ancient POKéMON\n"
-	.string "were awakened from a long sleep…\p"
-	.string "And now they are smashing each other\n"
-	.string "with their uncontrollable energy…\p"
+	.string "STEVEN: GROUDON… and KYOGRE…\p"
+	.string "They're in their PRIMAL forms, the\n"
+	.string "shapes from the age of myth.\p"
+	.string "The ORBS never controlled them.\n"
+	.string "They unlocked them.\p"
 	.string "…{PLAYER}{KUN}.\p"
 	.string "You being here now I'll take to mean\n"
 	.string "that you're prepared to become\l"
 	.string "involved in this crisis.\p"
-	.string "Well, then, there's someone that\n"
-	.string "I'd like you to meet.\p"
-	.string "Come with me, please.$"
+	.string "There's someone that I'd like you to\n"
+	.string "meet. Come with me, please.$"
 
 SootopolisCity_Text_DoesThisMakeYourFearPokemon:
 	.string "STEVEN: Listen, {PLAYER}{KUN}.\p"
@@ -1655,8 +1651,12 @@ SootopolisCity_Text_NeverBeenToSkyPillar:
 
 SootopolisCity_Text_SoThatsRayquaza:
 	.string "STEVEN: So that's RAYQUAZA…\p"
-	.string "It's incredible how the two rampaging\n"
-	.string "POKéMON would flee from it in fear…$"
+	.string "Did you see? It MEGA EVOLVED. On\n"
+	.string "its own, with no stone at all.\p"
+	.string "The old records say it draws on the\n"
+	.string "power of falling stars.\p"
+	.string "Even PRIMAL GROUDON and KYOGRE fled\n"
+	.string "from it.$"
 
 SootopolisCity_Text_MaxieArchieLeft:
 	.string "STEVEN: It looks like both MAXIE and\n"

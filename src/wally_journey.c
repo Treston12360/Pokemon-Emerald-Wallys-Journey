@@ -4,6 +4,8 @@
 #include "event_data.h"
 #include "wally_journey.h"
 #include "constants/items.h"
+#include "constants/moves.h"
+#include "pokemon.h"
 
 #define WALLY_VAR_PEAK_BADGES   VAR_UNUSED_0x40F7
 #define WALLY_VAR_BIOME_MASK    VAR_UNUSED_0x40F8
@@ -120,3 +122,12 @@ u16 WallyJourney_ConvertForbiddenBall(u16 itemId)
 
 bool32 WallyJourney_IsExpAllMode(void) { return FlagGet(FLAG_WALLY_EXP_ALL_MODE); }
 bool32 WallyJourney_ZMovesEnabled(void) { return !FlagGet(FLAG_WALLY_Z_MOVES_OFF); }
+
+// Script special (after setwildbattle): the Sky Pillar Rayquaza knows Dragon
+// Ascent, which is what lets Rayquaza Mega Evolve without a Mega Stone.
+void WallyJourney_GiveWildRayquazaDragonAscent(void)
+{
+    struct Pokemon *mon = &gEnemyParty[0];
+    if (GetMonData(mon, MON_DATA_SPECIES) == SPECIES_RAYQUAZA)
+        SetMonMoveSlot(mon, MOVE_DRAGON_ASCENT, 0);
+}
