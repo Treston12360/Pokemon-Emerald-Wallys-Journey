@@ -35,9 +35,9 @@ Tone rules: hopeful, warm, funny in places. Subtext over monologue. Flawed but s
 ### 2.2 The Pokémon League (Hoenn)
 - The **League accredits Gym Leaders**. A Gym Leader awards a badge when a challenger beats them. Eight badges let a Trainer through the Victory Road gate.
 - Each badge also works as a **field license**: it lets the holder's Pokémon use the matching field move. The Gym Leader hands over the HM as the physical license; no Pokémon has to learn the move. **Done.**
-- A Trainer who beats all four Elite Four members **in one run** may challenge the Champion. Wally does this right after the Sootopolis crisis, before the player's 8th badge. Beating the Champion transfers the title immediately; the League records it.
+- A Trainer who beats all four Elite Four members **in one run** may challenge the Champion. Wally does this after the Sootopolis crisis, during the player's eighth-badge milestone. The player sees the title transfer on TV after receiving Badge 8. Beating the Champion transfers the title immediately; the League records it.
 - A **title defense** is the Champion accepting a challenge from a recognized contender. After the player wins, Wally is the standing contender. **Done (basic)**: a repeat match in the Champion's room after the game is clear.
-- **Wallace** was Champion at the start of the game (and Sootopolis' Gym was handed to Juan years ago, as in Emerald). Wally beats Wallace **after the Sootopolis crisis and before the player's 8th Gym**, live on a League broadcast the player watches at Juan's house (owner decision).
+- **Wallace** was Champion at the start of the game (and Sootopolis' Gym was handed to Juan years ago, as in Emerald). Wally beats Wallace **after the Sootopolis crisis and after the player earns Badge 8**, live on a League broadcast the player watches at Juan's house (final owner decision, superseding the pre-Gym draft).
 
 ### 2.3 Legendary myth (Groudon, Kyogre, Rayquaza, the Orbs)
 - Ancient Hoenn people recorded Groudon raising land and Kyogre raising the sea, and a sky dragon that ended their battle. The **Red and Blue Orbs** were kept at **Mt. Pyre** as offerings to *calm* the two, not control them.
@@ -106,12 +106,12 @@ Each row: what happens, where, the gate (flag/var), what changes in Wally's Jour
 | 35 | **Wally battle #6** | MossdeepCity | cleared at badge 7 | New | **done** |
 | 36 | Seafloor Cavern: Kyogre awakens | SeafloorCavern_Room9 | `FLAG_KYOGRE_ESCAPED_SEAFLOOR_CAVERN` | Archie realizes the Orb didn't control anything | **done** |
 | 37 | Sootopolis crisis; Sky Pillar; Rayquaza | SootopolisCity, SkyPillar_* | `FLAG_LEGENDARIES_IN_SOOTOPOLIS`, `VAR_SOOTOPOLIS_CITY_STATE` | Wally visibly helps evacuate residents; Steven and Wallace explain why Rayquaza is the answer | **done** |
-| 37b | **Champion broadcast at Juan's house** | SootopolisCity (Gym door tile 31,33), SootopolisCity_House7 | `VAR_WALLY_BROADCAST_STATE` 1→2→3 | Wallace leaves for his title match; Steven stops the player at the Gym door; they watch Wally beat Wallace on Juan's TV; mentor-chain dialogue | **done** |
+| 37b | **Wally's Sootopolis battle** | SootopolisCity, Gym door tile (31,33) | `FLAG_WALLY_SOOTOPOLIS_DOOR_DONE` | After the crisis, Wally tests the player before Badge 8; either outcome continues, with no ordinary whiteout | **done; emulator outcome checks pending** |
 | 38 | Badge 8 Juan; Waterfall HM | SootopolisCity_Gym_1F | `FLAG_BADGE08_GET` | Juan gives HM07 | **done** |
-| 39 | **Wally battle #7** | SootopolisCity | cleared at badge 8 | New; references Wally helping during the crisis | **done** |
+| 38b | **Champion broadcast at Juan's house** | SootopolisCity, SootopolisCity_House7 | `VAR_WALLY_BROADCAST_STATE` 1→2→3 | After the player leaves the eighth Gym, Steven brings them to watch Wally defeat Wallace on Juan's TV; mentor-chain dialogue | **done; emulator trigger check pending** |
 | 40 | Aftermath across Hoenn | many | after `VAR_SOOTOPOLIS_CITY_STATE` resolves | Repairs, aid, angry residents, ex-members | partial |
 | 41 | **Wally battle #8** | VictoryRoad_1F | `FLAG_DEFEATED_WALLY_VICTORY_ROAD` | Confident, dangerous team with Mega Gardevoir | **done** |
-| 43 | Elite Four | EverGrandeCity_* | — | Drake's post-battle line hints the Champion changed "days ago" | planned |
+| 43 | Elite Four | EverGrandeCity_* | — | The player already witnessed Wally's live title win after Badge 8; any Elite Four dialogue must acknowledge that the Champion has changed, without suggesting a hidden reveal | review required |
 | 44 | **Champion Wally** | EverGrandeCity_ChampionsRoom | `TRAINER_WALLY_CHAMPION` | Striking entrance and lines; approved six | **done** |
 | 45 | Hall of Fame | HallOfFame | `FLAG_SYS_GAME_CLEAR` | Keep | keep |
 | 46 | Postgame unlocks | Lilycove Harbor, Fallarbor, caves | `FLAG_SYS_GAME_CLEAR` | Islands open without tickets; Jirachi via Cozmo; Kyogre/Groudon Primal | **done** |
@@ -132,7 +132,7 @@ Each row: what happens, where, the gate (flag/var), what changes in Wally's Jour
 | May/Brendan | Their dad's research | The crisis first-hand from #31 onward | — |
 | Wally | His illness; the player as role model | Gains independence; sees the crisis in Sootopolis | — |
 | Steven | Stones, Devon, the legend in part | Full legend after Mt. Pyre (#31) | — |
-| Wallace | Full Sootopolis legend | That Wally is ready (they battle after #41) | — |
+| Wallace | Full Sootopolis legend | Wally's growth across their meetings; he faces Wally for the title after milestone #38 (before Victory Road) | — |
 | Maxie | His models; misread inscription | His model was wrong (#34) | That Rayquaza exists, until #37 |
 | Archie | Habitat data; misread inscription | The Orb can't control Kyogre (#36) | — |
 
@@ -158,7 +158,7 @@ Check every rewritten scene against this list before committing.
 
 ## 6. Open questions (need the owner)
 
-*Resolved 2026-10-16:* Wally's title win is a live broadcast at Juan's house before the 8th Gym (#37b). May/Brendan's final battle is at Birch's lab postgame (#48). The submarine inside job is a stressed Slateport shipyard worker from the Sea Trust front who later cooperates with police (#32).
+*Resolved 2026-10-17 (supersedes prior 2026-10-16 timing):* Wally tests the player at the Gym door before Badge 8 (#37b), then Wally's title win airs at Juan's house after Badge 8 (#38b). May/Brendan's final battle is at Birch's lab postgame (#48). The submarine inside job is a stressed Slateport shipyard worker from the Sea Trust front who later cooperates with police (#32).
 
 ---
 
@@ -170,13 +170,13 @@ Every new or rewritten scene gets a row here.
 |---|---|---|---|---|---|---|
 | 2026-10-16 | Gym Leader HM award | all 8 Gyms | badge win / leader talk | old HM-giver NPCs | Badge is the license; HM is proof | Restores field-move progression |
 | 2026-10-16 | Steven Mega Bracelet | PetalburgCity_WallysHouse | badge 5 | always-visible Steven | Growth + travels speech | Gives Mega Bracelet + starter stone |
-| 2026-10-16 | Wally battles #2–#7 | Verdanturf … Sootopolis | badges 3–8 | — | Shy → confident arc | None (optional fights) |
+| 2026-10-16 | Wally battles #2–#7 (originally optional, superseded) | Verdanturf … Sootopolis | current: mandatory at story gates; Sootopolis before Badge 8 | — | Shy → confident → arrogant arc | Each battle participates in story progression; loss handling differs by encounter |
 | 2026-10-16 | Wally VR / Champion / defense lines | VictoryRoad_1F, ChampionsRoom | existing | Wallace / humble Wally | Confident, dangerous Wally | None |
 | 2026-10-16 | Norman confession | PetalburgCity_Gym | badge 5 | "happy and sad" line | Accountability + commitment | None |
 | 2026-10-16 | Parked-truck opening | InsideOfTruck, LittlerootTown | new game | driving/braking shot | Safe travel, money premise | None |
 | 2026-10-16 | Maxie / Magma first pass | MtChimney, MagmaHideout, SpaceCenter | existing | cartoonish land speeches | Credible case, then hubris | None |
 | 2026-10-16 | Jirachi quest | FallarborTown_CozmosHouse, MeteorFalls_B1F_2R | game clear | — | Postgame mythical | New encounter |
-| 2026-10-16 | Champion broadcast | SootopolisCity, SootopolisCity_House7 (Juan's house) | after Wallace's post-crisis talk; Gym-door tile | Wallace waiting at Gym; Pokéfan NPC | Show how far ahead Wally is; mentor chain | Sets `VAR_WALLY_BROADCAST_STATE` 3; hides Wallace and Steven in Sootopolis |
+| 2026-10-16 | Champion broadcast (initial schedule, superseded 2026-10-17) | SootopolisCity, SootopolisCity_House7 (Juan's house) | now after Badge 8, not before | Wallace waiting at Gym; Pokéfan NPC | Show how far ahead Wally is; mentor chain | Sets `VAR_WALLY_BROADCAST_STATE` 3; hides Wallace and Steven in Sootopolis |
 | 2026-10-17 | Birch's trust and research stakes | LittlerootTown_ProfessorBirchsLab | Pokédex gift | generic lines | Norman's reputation + player's calm; migration/weather mystery | None |
 | 2026-10-17 | Devon and Steven | RustboroCity_DevonCorp_3F, GraniteCave_StevensRoom | existing | generic lines | Devon's jobs vs. its costs; father–son tension | None |
 | 2026-10-17 | Archie's case, Mt. Pyre mistranslation, meteorite model | SlateportCity_OceanicMuseum_2F, MtPyre_Summit, MtChimney, Weather Institute 2F | existing | cartoon lines | Credible motives; orbs "soothe" vs "command"; nonlinear eruption warning | None |
@@ -189,3 +189,5 @@ Every new or rewritten scene gets a row here.
 | 2026-10-17 | Mandatory Wally battles | Route111, Route112, Route118, LilycoveCity, MossdeepCity | `VAR_WALLY_RIVAL_PENDING` 3–7 set by Gyms 3–7; map ON_FRAME | optional Wally outside Pokémon Centers | Organic meetings, never right after a Gym | Battle repeats after a loss |
 | 2026-10-17 | Broadcast after badge 8 | SootopolisCity → House7 | leaving the Gym with the RAIN BADGE (`VAR_WALLY_RIVAL_PENDING` 8) | Steven at the Gym door before the 8th Gym | Watch Wally take the title right after earning your last badge | `VAR_WALLY_BROADCAST_STATE` 2→3 |
 - Mt. Pyre summit: Wally (sent by the League to watch Mt. Pyre) teams up with the player against the two Aqua grunts in a multi battle before Archie takes the orb. Optional if the player declines the half-party pick. Keeps Wally visibly ahead of the player while still on their side.
+
+| 2026-10-17 | Dialogue continuity pass: Wally's family, training habitat, crisis aftermath | PetalburgCity_WallysHouse, data/scripts/wally_journey.inc, SootopolisCity_House7 | game clear vs. broadcast; existing rival stages | stale post-broadcast family lines and outdated location/timeline references | Parents acknowledge the player's championship and Wally's change; early training fits Verdanturf; crisis still has recovery work | Text and existing dialogue flag checks only; no new NPC, battle, item, or scene |
