@@ -27,6 +27,7 @@ enum WallySeason { WALLY_SEASON_SPRING, WALLY_SEASON_SUMMER, WALLY_SEASON_AUTUMN
 enum WallySeason WallyJourney_GetSeason(void);
 struct BlendSettings WallyJourney_GetSeasonDayBlend(void);
 u32 WallyJourney_SeasonalWeather(u32 weather);
+void WallyJourney_UpdateLiveWeather(void);
 void WallyJourney_PickContestPrize(void);
 void WallyJourney_PickFrontierGimmickItem(void);
 s32 WallyJourney_AdjustCatchRate(u32 species, s32 catchRate);

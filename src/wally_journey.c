@@ -17,6 +17,9 @@
 #include "constants/weather.h"
 #include "constants/map_types.h"
 #include "constants/maps.h"
+#include "constants/region_map_sections.h"
+#include "field_weather.h"
+#include "overworld.h"
 
 #define WALLY_VAR_PEAK_BADGES   VAR_UNUSED_0x40F7
 #define WALLY_VAR_BIOME_MASK    VAR_UNUSED_0x40F8
@@ -178,43 +181,242 @@ struct BlendSettings WallyJourney_GetSeasonDayBlend(void)
 }
 #undef TINT
 
+// ------------------------------------------------------ living weather
+// Owner design (2026-10-17): each part of Hoenn has its own weather, set by
+// region, season and hour. Weather fronts roll across Hoenn from west to east,
+// so neighbouring areas see the same front a few hours apart, and every front
+// builds up (clouds, overcast), peaks (rain or storm) and clears again.
+// Everything is computed from the real-time clock, so weather is the same on
+// every reload and never needs saving. Story weather is never touched.
+
+enum WallyRegion
+{
+    WREGION_NONE,
+    WREGION_WEST_COAST,  // Petalburg, Rustboro, Dewford, Slateport, Routes 104-109
+    WREGION_INLAND,      // Littleroot to Mauville, Verdanturf, Routes 101-103, 110, 116-118
+    WREGION_DESERT,      // Route 111
+    WREGION_HIGHLAND,    // Fallarbor, Routes 112, 114, 115, Mt. Pyre
+    WREGION_RAINFOREST,  // Fortree, Routes 119-120
+    WREGION_EAST_COAST,  // Lilycove, Mossdeep, Routes 121-125
+    WREGION_OCEAN,       // Sootopolis, Pacifidlog, Ever Grande, Routes 126-134
+};
+
+// Hours a front takes to reach each region after leaving the west coast.
+static const u8 sRegionFrontDelay[] =
+{
+    [WREGION_WEST_COAST] = 0, [WREGION_INLAND] = 2, [WREGION_DESERT] = 3, [WREGION_HIGHLAND] = 3,
+    [WREGION_RAINFOREST] = 5, [WREGION_EAST_COAST] = 6, [WREGION_OCEAN] = 8,
+};
+
+static enum WallyRegion GetRegionForMapSec(u32 mapSec)
+{
+    switch (mapSec)
+    {
+    case MAPSEC_PETALBURG_CITY: case MAPSEC_RUSTBORO_CITY: case MAPSEC_DEWFORD_TOWN: case MAPSEC_SLATEPORT_CITY:
+    case MAPSEC_ROUTE_104: case MAPSEC_ROUTE_105: case MAPSEC_ROUTE_106: case MAPSEC_ROUTE_107:
+    case MAPSEC_ROUTE_108: case MAPSEC_ROUTE_109:
+        return WREGION_WEST_COAST;
+    case MAPSEC_LITTLEROOT_TOWN: case MAPSEC_OLDALE_TOWN: case MAPSEC_VERDANTURF_TOWN: case MAPSEC_MAUVILLE_CITY:
+    case MAPSEC_LAVARIDGE_TOWN:
+    case MAPSEC_ROUTE_101: case MAPSEC_ROUTE_102: case MAPSEC_ROUTE_103: case MAPSEC_ROUTE_110:
+    case MAPSEC_ROUTE_116: case MAPSEC_ROUTE_117: case MAPSEC_ROUTE_118:
+        return WREGION_INLAND;
+    case MAPSEC_ROUTE_111:
+        return WREGION_DESERT;
+    case MAPSEC_FALLARBOR_TOWN: case MAPSEC_ROUTE_112: case MAPSEC_ROUTE_114: case MAPSEC_ROUTE_115:
+    case MAPSEC_MT_PYRE:
+        return WREGION_HIGHLAND;
+    case MAPSEC_FORTREE_CITY: case MAPSEC_ROUTE_119: case MAPSEC_ROUTE_120:
+        return WREGION_RAINFOREST;
+    case MAPSEC_LILYCOVE_CITY: case MAPSEC_MOSSDEEP_CITY: case MAPSEC_ROUTE_121: case MAPSEC_ROUTE_122:
+    case MAPSEC_ROUTE_123: case MAPSEC_ROUTE_124: case MAPSEC_ROUTE_125:
+        return WREGION_EAST_COAST;
+    case MAPSEC_SOOTOPOLIS_CITY: case MAPSEC_PACIFIDLOG_TOWN: case MAPSEC_EVER_GRANDE_CITY:
+    case MAPSEC_ROUTE_126: case MAPSEC_ROUTE_127: case MAPSEC_ROUTE_128: case MAPSEC_ROUTE_129:
+    case MAPSEC_ROUTE_130: case MAPSEC_ROUTE_131: case MAPSEC_ROUTE_132: case MAPSEC_ROUTE_133:
+    case MAPSEC_ROUTE_134:
+        return WREGION_OCEAN;
+    }
+    return WREGION_NONE;
+}
+
 // Hoenn is tropical: snow only falls on high ground in winter.
 static bool32 IsSnowCountry(void)
 {
     u16 map = gSaveBlock1Ptr->location.mapNum | (gSaveBlock1Ptr->location.mapGroup << 8);
     return map == MAP_MT_PYRE_EXTERIOR || map == MAP_MT_PYRE_SUMMIT
-        || map == MAP_ROUTE114 || map == MAP_ROUTE115;
+        || map == MAP_ROUTE112 || map == MAP_ROUTE114 || map == MAP_ROUTE115;
 }
 
-// Seasonal weather on outdoor maps whose normal weather is clear or cloudy.
-// Stable for a whole day per map. Story weather (Groudon/Kyogre crisis,
-// scripted maps) is never touched.
+static u32 WeatherHash(u32 a)
+{
+    a ^= a >> 16; a *= 0x7FEB352Du;
+    a ^= a >> 15; a *= 0x846CA68Bu;
+    a ^= a >> 16;
+    return a;
+}
+
+static enum WallySeason SeasonAtHour(s32 hour)
+{
+    if (hour < 0)
+        hour = 0;
+    return (hour / WALLY_HOURS_PER_SEASON) % 4;
+}
+
+enum { FRONT_SHOWERS, FRONT_RAIN, FRONT_STORM };
+
+// At most one front leaves the west coast per real day.
+static bool32 GetFront(s32 day, s32 *start, u32 *length, u32 *strength)
+{
+    static const u8 sFrontChance[4] = {55, 45, 55, 40}; // spring, summer, autumn, winter
+    u32 h = WeatherHash((u32)day * 2654435761u ^ 0x5EA50017u);
+    enum WallySeason season = SeasonAtHour(day * 24);
+    u32 roll = (h >> 20) % 100;
+    if (h % 100 >= sFrontChance[season])
+        return FALSE;
+    *start = day * 24 + (h >> 8) % 24;
+    switch (season)
+    {
+    case WALLY_SEASON_SPRING: *length = 6 + (h >> 13) % 6;  *strength = roll < 40 ? FRONT_SHOWERS : roll < 90 ? FRONT_RAIN : FRONT_STORM; break;
+    case WALLY_SEASON_SUMMER: *length = 4 + (h >> 13) % 4;  *strength = roll < 50 ? FRONT_STORM : FRONT_SHOWERS; break;
+    case WALLY_SEASON_AUTUMN: *length = 8 + (h >> 13) % 8;  *strength = roll < 10 ? FRONT_SHOWERS : roll < 90 ? FRONT_RAIN : FRONT_STORM; break;
+    default:                  *length = 8 + (h >> 13) % 6;  *strength = roll < 10 ? FRONT_SHOWERS : FRONT_RAIN; break;
+    }
+    return TRUE;
+}
+
+// Weather of a region at an absolute real hour, before map-specific rules.
+static u32 RegionWeatherAt(enum WallyRegion region, s32 hour, u32 fairWeather, bool32 snowCountry)
+{
+    s32 local = hour - sRegionFrontDelay[region];
+    s32 day = local >= 0 ? local / 24 : -1;
+    s32 d, start;
+    u32 length, strength, w = fairWeather;
+    enum WallySeason season = SeasonAtHour(hour);
+    u32 hourOfDay = (u32)hour % 24;
+    u32 daily = WeatherHash((u32)(hour / 24) * 40503u + region * 977u);
+
+    for (d = day - 1; d <= day; d++)
+    {
+        s32 phase;
+        if (d < 0 || !GetFront(d, &start, &length, &strength))
+            continue;
+        phase = local - start;
+        if (phase < 0 || phase >= (s32)length)
+            continue;
+        if (phase == 0 || phase == (s32)length - 1)
+            w = WEATHER_SUNNY_CLOUDS;                       // clouds gather / skies clear
+        else if (phase == 1 && strength != FRONT_SHOWERS)
+            w = WEATHER_SHADE;                              // skies darken
+        else if (strength == FRONT_STORM && phase >= 3 && phase <= (s32)length - 3)
+            w = WEATHER_RAIN_THUNDERSTORM;                  // the peak of the storm
+        else
+            w = WEATHER_RAIN;
+        break;
+    }
+
+    if (w == fairWeather)
+    {
+        // No front: local character.
+        switch (region)
+        {
+        case WREGION_RAINFOREST:
+            if (hourOfDay >= 14 && hourOfDay <= 17 && daily % 100 < 40)
+                w = WEATHER_RAIN;                           // daily rainforest downpour
+            else if (hourOfDay >= 5 && hourOfDay <= 8 && (daily >> 8) % 100 < 35)
+                w = WEATHER_FOG_HORIZONTAL;                 // morning mist in the canopy
+            break;
+        case WREGION_OCEAN:
+            if (season == WALLY_SEASON_SUMMER && hourOfDay >= 13 && hourOfDay <= 15 && daily % 100 < 30)
+                w = WEATHER_RAIN;                           // tropical afternoon shower
+            else if (hourOfDay >= 5 && hourOfDay <= 7 && (daily >> 8) % 100 < 20)
+                w = WEATHER_FOG_HORIZONTAL;                 // sea mist at dawn
+            break;
+        case WREGION_HIGHLAND:
+            if (hourOfDay >= 5 && hourOfDay <= 8 && (daily >> 8) % 100 < 25)
+                w = WEATHER_FOG_HORIZONTAL;                 // mountain mist
+            break;
+        case WREGION_WEST_COAST:
+        case WREGION_EAST_COAST:
+            if (hourOfDay >= 5 && hourOfDay <= 6 && (daily >> 8) % 100 < 12)
+                w = WEATHER_FOG_HORIZONTAL;                 // coastal fog
+            break;
+        default:
+            break;
+        }
+        if (w == fairWeather && season == WALLY_SEASON_AUTUMN && (daily >> 16) % 100 < 25)
+            w = WEATHER_SUNNY_CLOUDS;                       // grey autumn day
+    }
+
+    if (region == WREGION_DESERT && w != fairWeather)
+        w = WEATHER_SUNNY_CLOUDS;                           // fronts pass over the desert dry
+    if (season == WALLY_SEASON_WINTER)
+    {
+        if (snowCountry && (w == WEATHER_RAIN || w == WEATHER_RAIN_THUNDERSTORM || w == WEATHER_FOG_HORIZONTAL))
+            w = WEATHER_SNOW;                               // mountain snow
+        else if (w == WEATHER_RAIN_THUNDERSTORM)
+            w = WEATHER_RAIN;                               // cold rain, no thunder
+    }
+    return w;
+}
+
+// Weather this code chose for the current map, stored +1 so 0 (the EWRAM
+// default) means the map's weather is not ours.
+static EWRAM_DATA u8 sAutoWeatherPlus1 = 0;
+static EWRAM_DATA u8 sAutoFairWeather = 0;
+
+static s32 CurrentRealHour(void)
+{
+    RtcCalcLocalTime();
+    return gLocalTime.days * 24 + gLocalTime.hours;
+}
+
+// Called when a map's weather is loaded from its header.
 u32 WallyJourney_SeasonalWeather(u32 weather)
 {
-    u32 roll;
+    u32 header = gMapHeader.weather;
     enum MapType type = gMapHeader.mapType;
-    if (weather != WEATHER_SUNNY && weather != WEATHER_SUNNY_CLOUDS)
+    enum WallyRegion region = GetRegionForMapSec(gMapHeader.regionMapSectionId);
+    u32 fair, w;
+
+    sAutoWeatherPlus1 = 0;
+    if (header != WEATHER_SUNNY && header != WEATHER_SUNNY_CLOUDS
+     && header != WEATHER_ROUTE119_CYCLE && header != WEATHER_ROUTE123_CYCLE)
         return weather;
     if (FlagGet(FLAG_SYS_WEATHER_CTRL))
         return weather;
-    if (type != MAP_TYPE_ROUTE && type != MAP_TYPE_TOWN && type != MAP_TYPE_CITY)
+    if (type != MAP_TYPE_ROUTE && type != MAP_TYPE_TOWN && type != MAP_TYPE_CITY && type != MAP_TYPE_OCEAN_ROUTE)
         return weather;
-    RtcCalcLocalTime();
-    roll = ((u32)gLocalTime.days * 31u + gSaveBlock1Ptr->location.mapNum * 7u + gSaveBlock1Ptr->location.mapGroup * 13u) % 100;
-    switch (WallyJourney_GetSeason())
+    if (region == WREGION_NONE || (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK))
+        return weather;
+
+    fair = (header == WEATHER_SUNNY_CLOUDS) ? WEATHER_SUNNY_CLOUDS : WEATHER_SUNNY;
+    sAutoFairWeather = fair;
+    w = RegionWeatherAt(region, CurrentRealHour(), fair, IsSnowCountry());
+    sAutoWeatherPlus1 = w + 1;
+    return w;
+}
+
+// Called about once a minute in the overworld: lets weather change while the
+// player stands on a map, fading in and out through the normal weather engine.
+void WallyJourney_UpdateLiveWeather(void)
+{
+    u32 w;
+    if (sAutoWeatherPlus1 == 0 || gMain.callback2 != CB2_Overworld)
+        return;
+    if (ArePlayerFieldControlsLocked() || ScriptContext_IsEnabled())
+        return;
+    if (GetSavedWeather() != sAutoWeatherPlus1 - 1 || FlagGet(FLAG_SYS_WEATHER_CTRL))
     {
-    case WALLY_SEASON_SPRING:
-        return roll < 25 ? WEATHER_RAIN : weather;                       // spring showers
-    case WALLY_SEASON_SUMMER:
-        return roll < 10 ? WEATHER_RAIN_THUNDERSTORM : weather;          // summer storms
-    case WALLY_SEASON_AUTUMN:
-        return roll < 30 ? WEATHER_SUNNY_CLOUDS : weather;               // grey autumn days
-    case WALLY_SEASON_WINTER:
-        if (IsSnowCountry())
-            return roll < 60 ? WEATHER_SNOW : weather;                   // mountain snow
-        return roll < 15 ? WEATHER_RAIN : weather;                       // cold coastal rain
+        sAutoWeatherPlus1 = 0; // a script or coord event took over this map's weather
+        return;
     }
-    return weather;
+    w = RegionWeatherAt(GetRegionForMapSec(gMapHeader.regionMapSectionId), CurrentRealHour(), sAutoFairWeather, IsSnowCountry());
+    if (w == sAutoWeatherPlus1 - 1u)
+        return;
+    sAutoWeatherPlus1 = w + 1;
+    SetSavedWeather(w);
+    SetNextWeather(w);
 }
 
 // ------------------------------------------------- side activity specials
