@@ -25,7 +25,6 @@ SlateportCity_Mart_Pokemart:
 	.2byte ITEM_METAL_COAT
 	.2byte ITEM_DRAGON_SCALE
 	.2byte ITEM_KINGS_ROCK
-	.2byte ITEM_LINKING_CORD
 	pokemartlistend
 
 SlateportCity_Mart_EventScript_BlackBelt::
