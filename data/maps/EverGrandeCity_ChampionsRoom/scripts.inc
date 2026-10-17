@@ -41,7 +41,7 @@ EverGrandeCity_ChampionsRoom_EventScript_Wallace::
 	goto_if_set FLAG_SYS_GAME_CLEAR, WallyJourney_ChampionDefense_Wallace
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
 	msgbox EverGrandeCity_ChampionsRoom_Text_IntroSpeech, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_WALLACE, EverGrandeCity_ChampionsRoom_Text_Defeat
+	trainerbattle_no_intro TRAINER_WALLY_CHAMPION, EverGrandeCity_ChampionsRoom_Text_Defeat
 	goto EverGrandeCity_ChampionsRoom_EventScript_Defeated
 	end
 
@@ -49,7 +49,7 @@ WallyJourney_ChampionDefense_Wallace::
 	@ Returning as Champion turns the final battle into a repeatable title defense.
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
 	msgbox WallyJourney_ChampionDefense_Intro, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_WALLACE_REMATCH, WallyJourney_ChampionDefense_DefeatedText
+	trainerbattle_no_intro TRAINER_WALLY_CHAMPION, WallyJourney_ChampionDefense_DefeatedText
 	addvar VAR_UNUSED_0x40FD, 1
 	msgbox WallyJourney_ChampionDefense_Victory, MSGBOX_DEFAULT
 	warp MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F, 9, 8
@@ -58,14 +58,14 @@ WallyJourney_ChampionDefense_Wallace::
 	end
 
 WallyJourney_ChampionDefense_Intro:
-	.string "WALLACE: CHAMPION!\n"
+	.string "WALLY: Welcome back!\n"
 	.string "I challenge you for the title!$"
 
 WallyJourney_ChampionDefense_DefeatedText:
 	.string "Your title is well deserved!$"
 
 WallyJourney_ChampionDefense_Victory:
-	.string "WALLACE: Your title stands.\n"
+	.string "WALLY: Your title stands.\n"
 	.string "Return whenever you seek a test!$"
 
 EverGrandeCity_ChampionsRoom_EventScript_Defeated::
@@ -244,7 +244,7 @@ EverGrandeCity_ChampionsRoom_Movement_BirchArrives:
 	step_end
 
 EverGrandeCity_ChampionsRoom_Text_IntroSpeech:
-	.string "WALLACE: Welcome, {PLAYER}{KUN}.\p"
+	.string "WALLY: Welcome, {PLAYER}{KUN}.\p"
 	.string "That incident in SOOTOPOLIS CITY…\n"
 	.string "That was superb work, putting an end\l"
 	.string "to that crisis all by yourself.\p"
@@ -267,7 +267,7 @@ EverGrandeCity_ChampionsRoom_Text_IntroSpeech:
 	.string "Show me right here and now!$"
 
 EverGrandeCity_ChampionsRoom_Text_Defeat:
-	.string "I, the CHAMPION, fall in defeat…\p"
+	.string "I gave everything I had, but you won!\p"
 	.string "That was wonderful work.\n"
 	.string "You were elegant, infuriatingly so.\l"
 	.string "And yet it was utterly glorious!\p"
@@ -276,7 +276,7 @@ EverGrandeCity_ChampionsRoom_Text_Defeat:
 	.string "TRAINER!$"
 
 EverGrandeCity_ChampionsRoom_Text_PostBattleSpeech:
-	.string "WALLACE: The POKéMON you sent into\n"
+	.string "WALLY: The POKéMON you sent into\n"
 	.string "battle…\p"
 	.string "At times they danced like a spring\n"
 	.string "breeze, and at times they struck\l"
@@ -334,13 +334,13 @@ EverGrandeCity_ChampionsRoom_Text_BirchCongratulations:
 	.string "Now, go proudly into the final room!$"
 
 EverGrandeCity_ChampionsRoom_Text_WallaceComeWithMe:
-	.string "WALLACE: {PLAYER}{KUN}…\p"
+	.string "WALLY: {PLAYER}{KUN}…\p"
 	.string "No, let me rephrase that properly.\p"
 	.string "The new CHAMPION!\p"
 	.string "Come with me.$"
 
 EverGrandeCity_ChampionsRoom_Text_WallaceWaitOutside:
-	.string "WALLACE: I'm sorry, but…\p"
+	.string "WALLY: I'm sorry, but…\p"
 	.string "From here on, only those TRAINERS who\n"
 	.string "have become CHAMPIONS may enter.\p"
 	.string "You'll have to wait outside with\n"
