@@ -63,7 +63,10 @@ MtPyre_6F_Text_CedricDefeat:
 	.string "Weren't you lost?$"
 
 MtPyre_6F_Text_CedricPostBattle:
-	.string "I had this feeling that a lost TRAINER\n"
-	.string "would be panicked and easy to beat.\p"
-	.string "It's dirty and I won't try it again…$"
+	.string "I thought a lost TRAINER\n"
+	.string "would be easy to defeat.\p"
+	.string "But I saw how frightened\n"
+	.string "people look up here.\p"
+	.string "Next time I'll offer to\n"
+	.string "show them the way instead.$"
 
