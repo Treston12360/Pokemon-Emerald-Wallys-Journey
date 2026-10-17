@@ -187,7 +187,12 @@ RustboroCity_Text_WowYouHavePokemon_W0_Script:
 	end
 
 RustboroCity_EventScript_NinjaBoy::
+	goto_if_set FLAG_SYS_GAME_CLEAR, RustboroCity_EventScript_NinjaBoyChampion
 	msgbox RustboroCity_Text_CatchRarePokemonIfIGoToSchool, MSGBOX_SIGN
+	end
+
+RustboroCity_EventScript_NinjaBoyChampion:
+	msgbox RustboroCity_Text_SchoolChampionLesson, MSGBOX_SIGN
 	end
 
 RustboroCity_EventScript_TunnelSign::
@@ -1309,3 +1314,12 @@ RustboroCity_Text_WowYouHavePokemon_W0:
 	.string "back from TEAM AQUA.\p"
 	.string "He would've lost his job. Thank you.\n"
 	.string "I mean it.$"
+
+RustboroCity_Text_SchoolChampionLesson:
+	.string "Our teacher showed us the\\n"
+	.string "new CHAMPION's picture.\\p"
+	.string "She said you started out\\n"
+	.string "learning, just like us.\\p"
+	.string "I used to want rare POKéMON.\\n"
+	.string "Now I want to be a TRAINER\\n"
+	.string "my partner can count on.$"
