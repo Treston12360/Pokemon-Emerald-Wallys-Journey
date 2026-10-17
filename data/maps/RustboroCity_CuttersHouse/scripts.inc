@@ -48,7 +48,7 @@ RustboroCity_CuttersHouse_Text_DadHelpedClearLandOfTrees:
 
 
 RustboroCity_CuttersHouse_Text_NewCutDialogue:
-	.string "Those little trees grow fast!\\p"
-	.string "A trainer with the STONE BADGE\\n"
-	.string "can clear them with CUT.\\p"
+	.string "Those little trees grow fast!\p"
+	.string "A trainer with the STONE BADGE\n"
+	.string "can clear them with CUT.\p"
 	.string "Good luck on your adventure!$"
