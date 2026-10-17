@@ -140,20 +140,22 @@ VictoryRoad_1F_Text_WallyPostEntranceBattle:
 	.string "catch up to you!$"
 
 VictoryRoad_1F_Text_WallyIntro:
-	.string "WALLY: Hi! {PLAYER}!\p"
-	.string "I've gotten stronger since that last\n"
-	.string "time! I wanted to show you, {PLAYER}!\p"
-	.string "Okay… Here I come!$"
+	.string "WALLY: {PLAYER}. I was hoping I'd\n"
+	.string "run into you here.\p"
+	.string "This is the last road before the\n"
+	.string "LEAGUE. Only one of us is walking\l"
+	.string "out of it first.\p"
+	.string "Let's find out who.$"
 
 VictoryRoad_1F_Text_WallyDefeat:
-	.string "Wow!\n"
-	.string "{PLAYER}, you are strong, after all!$"
+	.string "Okay. That one's on me.\n"
+	.string "Won't happen twice.$"
 
 VictoryRoad_1F_Text_WallyPostBattle:
-	.string "WALLY: I couldn't beat you this time,\n"
-	.string "too… But one of these days, {PLAYER},\l"
-	.string "I'm going to catch up to you…\p"
-	.string "And challenge the POKéMON LEAGUE!$"
+	.string "WALLY: Don't look so relieved.\p"
+	.string "I'm heading up to the LEAGUE now.\n"
+	.string "When you get there, you'll be\l"
+	.string "battling me.$"
 
 VictoryRoad_1F_Text_EdgarIntro:
 	.string "I've made it this far a couple times,\n"

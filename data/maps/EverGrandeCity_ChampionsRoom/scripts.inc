@@ -58,15 +58,19 @@ WallyJourney_ChampionDefense_Wally::
 	end
 
 WallyJourney_ChampionDefense_Intro:
-	.string "WALLY: Welcome back!\n"
-	.string "I challenge you for the title!$"
+	.string "WALLY: Comfortable up here?\p"
+	.string "Good. I've been training at the\n"
+	.string "BATTLE FRONTIER while you sat on\l"
+	.string "my old throne.\p"
+	.string "Defend your title, CHAMPION.$"
 
 WallyJourney_ChampionDefense_DefeatedText:
-	.string "Your title is well deserved!$"
+	.string "Still yours. For now.$"
 
 WallyJourney_ChampionDefense_Victory:
-	.string "WALLY: Your title stands.\n"
-	.string "Return whenever you seek a test!$"
+	.string "WALLY: You're even better than last\n"
+	.string "time. That's annoying.\p"
+	.string "I'll be back. Keep the seat warm.$"
 
 EverGrandeCity_ChampionsRoom_EventScript_Defeated::
 	playse SE_DOOR
@@ -244,28 +248,34 @@ EverGrandeCity_ChampionsRoom_Movement_BirchArrives:
 	step_end
 
 EverGrandeCity_ChampionsRoom_Text_IntroSpeech:
-	.string "WALLY: You made it, {PLAYER}!\p"
-	.string "I still remember when I was too\n"
-	.string "weak to travel on my own.\p"
-	.string "WALLACE, the former CHAMPION,\n"
-	.string "showed me what dedication means.\p"
-	.string "Now I carry HOENN's title.\n"
-	.string "I won't hold anything back!\p"
-	.string "Let's give this our very best!$"
+	.string "WALLY: There you are.\p"
+	.string "I told you I'd get here first.\n"
+	.string "Turns out I meant it.\p"
+	.string "WALLACE stepped down after our\n"
+	.string "battle. He said HOENN needed a\l"
+	.string "CHAMPION who was still climbing.\p"
+	.string "So here's the thing, {PLAYER}.\p"
+	.string "I know every POKéMON you've shown\n"
+	.string "me. I know how you think.\p"
+	.string "And I've wanted this since MAUVILLE.\n"
+	.string "To beat you at your best.\p"
+	.string "Don't hold back. I won't.$"
 
 EverGrandeCity_ChampionsRoom_Text_Defeat:
-	.string "WALLY: You really did it!\p"
-	.string "I trained so hard to reach this\n"
-	.string "place, and you surpassed me.\p"
-	.string "That was an amazing battle!$"
+	.string "WALLY: …Heh.\p"
+	.string "That's the only battle I've ever\n"
+	.string "lost and enjoyed every second of.$"
 
 EverGrandeCity_ChampionsRoom_Text_PostBattleSpeech:
-	.string "WALLY: I never imagined how far\n"
-	.string "we could both come.\p"
-	.string "WALLACE trusted me to follow in\n"
-	.string "his footsteps as CHAMPION.\p"
-	.string "Today, you earned that title.\n"
-	.string "Congratulations, {PLAYER}!$"
+	.string "WALLY: The first time we met, I\n"
+	.string "couldn't even throw a POKé BALL\l"
+	.string "without help.\p"
+	.string "You, NORMAN, my family… everyone\n"
+	.string "kept telling me I was stronger\l"
+	.string "than I looked. I finally believe it.\p"
+	.string "The title's yours now, {PLAYER}.\p"
+	.string "Enjoy it while it lasts.\n"
+	.string "I'm coming to take it back.$"
 
 EverGrandeCity_ChampionsRoom_Text_MayAdvice:
 	.string "MAY: {PLAYER}{KUN}!\p"

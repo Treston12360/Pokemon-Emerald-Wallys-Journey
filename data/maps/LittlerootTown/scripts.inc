@@ -906,8 +906,13 @@ LittlerootTown_EventScript_GiveRunningShoes::
 
 LittlerootTown_Text_OurNewHomeLetsGoInside:
 	.string "MOM: {PLAYER}, we're here, honey!\p"
-	.string "It must be tiring riding with our things\n"
-	.string "in the moving truck.\p"
+	.string "Thank you for riding up front with\n"
+	.string "the movers all the way from the port.\p"
+	.string "After the ferry from KANTO, we just\n"
+	.string "couldn't stretch the money for one\l"
+	.string "more ticket. I know it was a long day.\p"
+	.string "And thanks for checking the boxes\n"
+	.string "in the back once we'd parked.\p"
 	.string "Well, this is LITTLEROOT TOWN.\p"
 	.string "How do you like it?\n"
 	.string "This is our new home!\p"

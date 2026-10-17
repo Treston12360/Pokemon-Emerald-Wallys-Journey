@@ -300,23 +300,23 @@ WallyJourney_EventScript_RivalMOSSDEEPWon::
 	end
 
 WallyJourney_Text_RivalMOSSDEEPIntro:
-	.string "WALLY: The sea air is great,\n"
-	.string "isn't it?\p"
-	.string "I've battled TRAINERS all across\n"
-	.string "HOENN to get ready for the LEAGUE.\p"
-	.string "This time, I'm the one who's going\n"
-	.string "to win, {PLAYER}!$"
+	.string "WALLY: Took you long enough.\p"
+	.string "I've beaten every TRAINER on this\n"
+	.string "island while I was waiting.\p"
+	.string "Don't worry. I saved the best\n"
+	.string "battle for last.$"
 
 
 WallyJourney_Text_RivalMOSSDEEPDefeat:
-	.string "Hah… that was a great battle.\n"
-	.string "I'm almost there.$"
+	.string "Close. Really close.\n"
+	.string "Next time it won't be.$"
 
 
 WallyJourney_Text_RivalMOSSDEEPPost:
-	.string "WALLY: Don't keep me waiting at\n"
-	.string "the LEAGUE, {PLAYER}.\p"
-	.string "I'm going to be there first.$"
+	.string "WALLY: Everyone in HOENN knows my\n"
+	.string "name now. Weird, right?\p"
+	.string "See you at the LEAGUE, {PLAYER}.\n"
+	.string "Try to keep up.$"
 
 
 WallyJourney_EventScript_RivalSOOTOPOLIS::
@@ -331,23 +331,23 @@ WallyJourney_EventScript_RivalSOOTOPOLISWon::
 	end
 
 WallyJourney_Text_RivalSOOTOPOLISIntro:
-	.string "WALLY: So you earned all eight\n"
-	.string "BADGES. Me too.\p"
-	.string "That crisis here… I saw you face it\n"
-	.string "head-on. I won't forget that.\p"
-	.string "One more battle before VICTORY\n"
-	.string "ROAD. Show me everything!$"
+	.string "WALLY: Eight BADGES. Same as me.\p"
+	.string "When the sky went dark, I stayed and\n"
+	.string "got people to shelter. You went\l"
+	.string "straight for the trouble.\p"
+	.string "That's why I want this battle.\n"
+	.string "Show me everything you've got!$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISDefeat:
-	.string "That's the {PLAYER} I know!\n"
-	.string "I'll be waiting at the top.$"
+	.string "There it is. That's the {PLAYER}\n"
+	.string "I want to beat.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISPost:
-	.string "WALLY: The next time we battle, it\n"
+	.string "WALLY: Next time we battle, it\n"
 	.string "won't be practice.\p"
-	.string "I'll see you at the POKéMON LEAGUE.$"
+	.string "I'll be waiting at the top.$"
 
 
 

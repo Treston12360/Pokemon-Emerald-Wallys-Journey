@@ -86,7 +86,7 @@ static s16 GetTruckBoxYMovement(int time)
 
 #define tTimer data[0]
 
-static void Task_Truck1(u8 taskId)
+static void UNUSED Task_Truck1(u8 taskId) // Wally's Journey: driving shot no longer played
 {
     s16 *data = gTasks[taskId].data;
     s16 cameraXpan = 0, cameraYpan = 0;
@@ -196,11 +196,21 @@ static void Task_HandleTruckSequence(u8 taskId)
         tTimer++;
         if (tTimer == 90)
         {
-            SetCameraPanningCallback(NULL);
+            // Wally's Journey: the player rode in the cab and only climbed into the
+            // back after the truck parked, so skip the driving and braking shots
+            // and open on a parked truck (see LittlerootTown Mom dialogue).
+            FadeInFromBlack();
             tTimer = 0;
-            tTaskId1 = CreateTask(Task_Truck1, 0xA);
-            tState = 1;
-            PlaySE(SE_TRUCK_MOVE);
+            tState = 6;
+        }
+        break;
+    case 6:
+        tTimer++;
+        if (!gPaletteFade.active && tTimer > 30)
+        {
+            InstallCameraPanAheadCallback();
+            tTimer = 0;
+            tState = 4;
         }
         break;
     case 1:
