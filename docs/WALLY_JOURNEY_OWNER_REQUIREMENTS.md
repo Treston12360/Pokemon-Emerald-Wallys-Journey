@@ -148,14 +148,54 @@ The owner explicitly approved **all previously suggested Wally narrative, explor
 - Integrate neatly into the GBA move-selection UI without interfering with move names, PP, targeting, animations or menu performance. Inspect existing pokeemerald-expansion support and compatible implementations before writing a new system. Test seen vs unseen species, immunity, dual types, and state persistence in emulator.
 - **Status:** Confirmed owner request; implementation and verification have not been established.
 
-## Dynamic day/night and seasonal overworld — confirmed owner request (2026-10-16)
+## Living Hoenn — seasons, weather, lights, routines and wildlife (owner-approved wishlist, 2026-10-17)
 
-- Implement a visually evident **day/night cycle**, with distinct **dawn, morning, daytime, dusk/evening, and nighttime** lighting in the actual overworld; not merely a clock readout or time-of-day encounter flag. Changes must transition sensibly and preserve legibility, interiors, lights and follower sprites.
-- Implement **spring, summer, autumn/fall, and winter** presentation and appropriate dynamic weather, including **snow and rain** where geographically and seasonally credible. The world should visually change (e.g., autumn foliage, snowy scenery, summery conditions) rather than only displaying a seasonal label. Avoid snow in implausibly tropical/desert contexts unless justified by elevation or unusual weather; preserve Hoenn's route identities.
-- Consider season/time-specific events, weather, Pokémon behaviors or encounter tables only after balancing the universal single-save Pokédex obtainability rules. Never create inaccessible calendar-exclusive species or break progression; document any scheduling exceptions.
-- **Reuse existing compatible ROM-hack implementations instead of writing visual/engine systems from scratch where prudent.** Start with the current pokeemerald-expansion DNS engine (this repo already sets `OW_ENABLE_DNS TRUE`, `OW_TIMES_OF_DAY GEN_LATEST`, `OW_USE_FAKE_RTC FALSE`), then evaluate existing tileset palettes, weather effects, and compatible seasonal tile/palette projects. Do not assume season swapping is implemented just because DNS is enabled.
-- Compare external implementations on compatibility with the current branch, licensing, performance/VRAM/palette constraints, testing and ongoing maintenance. Keep fallbacks for environments without a working real-time clock and test mGBA/hardware save persistence.
-- **Status:** Day/night support appears enabled in current config, but full visual behavior and seasonal changes are **not gameplay-verified**. Seasonal implementation remains to be selected/integrated.
+**Goal:** A living, beautiful Hoenn. This section records the owner's complete brainstormed wishes, **not implemented/verified features**. Preserve GBA performance, legibility, seamless story progression and existing region identities.
+
+### Four real seasons, each lasting 48 hours IRL
+
+- Use **48 real-world hours per season**: **spring → summer → autumn → winter → spring**, one full cycle every **8 real-world days**. This **replaces the earlier month-based seasonal schedule**. Count elapsed wall-clock time, even while the game is closed, not playtime. Use a stable clock anchor to avoid reset on reload/map change; handle invalid RTC, clock rollback and emulator compatibility without corrupting saves. Do not force a season-selection option that the owner has not requested.
+- Seasons must show real **map artwork/palette/tileset changes**, not only colored daylight filters:
+  - **Spring:** new green growth, blooming flowers, blossoming trees, soft refreshing colors, intermittent spring rain.
+  - **Summer:** lush leafy trees, green grass, warm sunlight, brighter clear weather, occasional afternoon storms.
+  - **Autumn:** visible trees with varied **red, orange, gold/yellow and brown leaves**, fallen-leaf touches, changing grass and bushes, cooler light, overcast/rainy days. Different trees can change differently rather than all using one palette.
+  - **Winter:** actual falling snow and snow/frost on trees/ground **where appropriate to geography**, including elevated/cooler places; chilly daylight, winter rain in lower coastal and tropical places, not snow everywhere.
+- **No Black/White-style season-only paths:** no snow pile ladders, changed collision, seasonal obstacles, blocked roads or mandatory items hidden behind the clock. Map layout, warp access, Cut obstacles, scripted story sequences and available services remain the same every season. Seasonal visuals are aesthetic, not a progression mechanic.
+- Small unobtrusive **“Spring/Summer/Autumn/Winter has arrived in Hoenn”** notice the first time the player goes outside after a change; only once per change and never during important cutscenes.
+
+### Realistic local weather that changes naturally
+
+- Each route/city has its own weather determined by **biome, elevation, season, terrain, coastline and neighboring weather fronts**, instead of the same weather throughout Hoenn or pure unrelated map RNG. A route may just happen to be rainy on a particular day; weather can differ between routes and towns while being consistent at borders.
+- **Gradual weather transitions:** clouds gather, skies darken, wind begins, drizzle grows into steady rain or a storm, occasional distant thunder, then clearing skies. Avoid abrupt weather popping when crossing maps or saving and loading. Use deterministic/stable state as appropriate; do not require actual weather-service/internet access.
+- **Fortree/Route 119** humid and regularly rainy, mist, occasional thunderstorms; **Route 113/Mt. Chimney** retain volcanic ash and wind; **Route 111 desert** mostly hot/dry, occasional sandstorms; **Routes 114–115/Meteor Falls/highlands** cool mist/rain and plausible winter frost/snow; **Slateport/Lilycove** coastal breezes and passing showers; **Pacifidlog/open-ocean routes** tropical wind, sun, showers, sea mist. Other locations similarly tailored, with reasonable adjacent-route continuity.
+- Preserve special weather for **Groudon/Kyogre/Rayquaza story events**, map-specific hazards and underwater maps; never override required weather or make critical NPCs, routes, species or events inaccessible. Weather-specific wild encounters may change *rates* but must not make Pokédex completion require months of waiting.
+- **PokéNav local weather forecasts** for towns/routes, using the same underlying weather schedule rather than invented unrelated predictions.
+
+### Atmospheric day/night and automatic town lights
+
+- Distinct visually convincing **dawn, morning, daytime, dusk, evening and night**, smoothly transitioning and maintaining readable map/character colors, consistent interiors and follower sprites.
+- **Streetlights automatically illuminate at night**; glowing **house windows, porch lamps, street/shop lights** switch on where those fixtures/windows exist. Homes have varied schedules, some go dark late; shops may shut their lights, while Pokémon Centers stay lit overnight. Do not illuminate every building identically.
+- Lights may turn on **earlier during overcast storms**; where feasible, light pools and subtle wet pavement/puddle reflections enhance rainy nights. In snowy evenings, warm windows contrast with cold outdoor scenery. Keep reflections/lightning tasteful, readable and performant, never strobing.
+- Preserve the original game's environmental tone, with appropriate city-to-city differences.
+
+### Responsive people, Pokémon and ambience
+
+- **NPC schedules/routines:** people travel between sensible existing spots during day, evening and night; go home, visit shops, shelter from rain, use umbrellas, seek shade on hot days, or visit beaches on pleasant days. Dialogue reacts to season, weather and time and respects milestones. **Never** make Gym Leaders, HM/story NPCs, critical services or quests unavailable due to NPC schedules; avoid blocking doorways/paths.
+- **Visible wildlife:** small appropriate Pokémon in grass/trees/sky/coastal water, flying overhead, moving through underbrush or briefly surfacing, plus occasional realistic weather/season reactions; not swarms that overwhelm the GBA or battles.
+- **Follower reactions:** a following Pokémon can respond to rain, snow, sunny beaches, hot springs, landmarks and weather, where feasible without disrupting gameplay.
+- Seasonal/time/weather encounter variations must **preserve every required species/form as obtainable on a single save** without real-month waits; rare pseudo-legendaries stay appropriately rare. Preserve established lore/ecology placement, and Deerling/Sawsbuck seasonal forms should match the newly agreed **48-hour cycle**.
+- **Ambient audio:** forest wind/leaves, rain against rooftops, insects/crickets at night, distant thunder, birds, water and waves; mix subtly under original music and do not alter music speed or pitch.
+- Tasteful extras: falling/blowing leaves, seasonal blossoms, small environmental discoveries, optional weather-reactive NPC conversations/rewards, and **visible recovery after the legendary weather crisis** (repair work, cleaned-up environments, public reactions using appropriate existing locations).
+- Locations should feel distinct across conditions: e.g., Fortree at autumn dusk with red/orange/gold trees, rain, warm windows and people seeking shelter.
+
+### Implementation and certification notes
+
+- **Existing baseline (observed in code, not end-to-end gameplay certified):** pokeemerald-expansion day/night is enabled (`OW_ENABLE_DNS TRUE`, `OW_TIMES_OF_DAY GEN_LATEST`, `OW_USE_FAKE_RTC FALSE`); Wally's Journey currently has **real-calendar-month season selection**, season-dependent daylight tint, deterministic per-day map weather on eligible sunny/cloudy maps, and Deerling/Sawsbuck seasonal wild forms. These are **not** the newly requested 48-hour seasons or full foliage/snow/window-light/NPC/weather-front systems.
+- Build in stages: (1) RTC correctness and stable 48-hour cycle; (2) seasonal foliage/snow/tile/palette art; (3) geography-aware weather and smooth transitions; (4) night exterior/window/street lighting; (5) schedules, reactions, ambient audio and optional PokéNav forecasts; (6) emulator and physical hardware performance/collision/save tests.
+- Reuse compatible upstream day/night, seasonal tile, weather and palette techniques when licenses and performance permit. Avoid heavy new engine requirements where simpler, tested methods suffice. Check VRAM, tile and palette limits, loading times, maps, story flags, weather clashes and frame rate; prioritize original GBA and mGBA compatibility.
+- **Acceptance tests:** all four seasons on the same map; tree recolors visually obvious; snowy and rainy routes where appropriate; changing between routes without unnatural weather snapping; day/night window and streetlights; NPCs behave sensibly; same path access in every season; full Pokédex remains achievable; time advances predictably after 48 hours offline; no wrong dialogue/cutscene/screen glitches, corrupted saves, or unacceptable performance loss.
+
+**Status (2026-10-17): OWNER-APPROVED WISHLIST. All new features in this section require implementation and gameplay verification; do not mark complete because related older tint/weather code exists.**
 
 ## Standard Poké Ball only — confirmed owner requirement (2026-10-16)
 
