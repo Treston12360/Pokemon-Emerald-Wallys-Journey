@@ -146,27 +146,33 @@ WallyJourney_EventScript_StevenMegaGift::
 	faceplayer
 	goto_if_unset FLAG_BADGE05_GET, WallyJourney_StevenMega_NotYet
 	checkitem ITEM_MEGA_RING
-	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_AfterGift
+	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_CheckStarter
 	msgbox WallyJourney_StevenMega_Intro, MSGBOX_DEFAULT
 	giveitem ITEM_MEGA_RING
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
-	compare VAR_STARTER_MON, 0
-	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_Treecko
-	compare VAR_STARTER_MON, 1
-	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_Torchic
+
+WallyJourney_StevenMega_CheckStarter::
+	goto_if_eq VAR_STARTER_MON, 0, WallyJourney_StevenMega_Treecko
+	goto_if_eq VAR_STARTER_MON, 1, WallyJourney_StevenMega_Torchic
 	goto WallyJourney_StevenMega_Mudkip
 
 WallyJourney_StevenMega_Treecko::
+	checkitem ITEM_SCEPTILITE
+	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_AfterGift
 	giveitem ITEM_SCEPTILITE
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	goto WallyJourney_StevenMega_Finish
 
 WallyJourney_StevenMega_Torchic::
+	checkitem ITEM_BLAZIKENITE
+	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_AfterGift
 	giveitem ITEM_BLAZIKENITE
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	goto WallyJourney_StevenMega_Finish
 
 WallyJourney_StevenMega_Mudkip::
+	checkitem ITEM_SWAMPERTITE
+	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_AfterGift
 	giveitem ITEM_SWAMPERTITE
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 WallyJourney_StevenMega_Finish::
