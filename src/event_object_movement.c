@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "malloc.h"
 #include "battle_anim.h"
 #include "battle_pyramid.h"
@@ -1893,6 +1894,9 @@ u8 TrySpawnObjectEventTemplate(const struct ObjectEventTemplate *objectEventTemp
     const struct ObjectEventTemplate objectEventTemplateLocal = TryGetObjectEventTemplateForOWE(objectEventTemplate);
     u16 graphicsId = objectEventTemplateLocal.graphicsId;
 
+    if (WallyJourney_IsNpcAway(objectEventTemplate))
+        return OBJECT_EVENTS_COUNT; // Wally's Journey: gone home / sheltering
+
     graphicsInfo = GetObjectEventGraphicsInfo(graphicsId);
     CopyObjectGraphicsInfoToSpriteTemplate_WithMovementType(graphicsId, objectEventTemplateLocal.movementType, &spriteTemplate, &subspriteTables);
     spriteFrameImage.size = graphicsInfo->size;
@@ -2759,13 +2763,13 @@ void UpdateLightSprite(struct Sprite *sprite)
         return;
     }
 
-    if (gTimeOfDay != TIME_NIGHT)
+    if (!WallyJourney_IsLightOn(sprite->sLightType, x, y))
     {
         sprite->invisible = TRUE;
         return;
     }
 
-    if (sprite->sLightType == LIGHT_TYPE_BALL)
+    if (sprite->sLightType == LIGHT_TYPE_BALL || sprite->sLightType == LIGHT_TYPE_PORCH)
     {
         if (gPaletteFade.active) // if palette fade is active, don't flicker since the timer won't be updated
         {
@@ -2806,7 +2810,7 @@ static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
     template = gFieldEffectLightTemplates[lightType];
     LoadSpriteSheetByTemplate(template, 0, 0);
     sprite = &gSprites[CreateSprite(template, 0, 0, 0)];
-    if (lightType == 0 && (i = IndexOfSpritePaletteTag(template->paletteTag + 1)) < 16)
+    if ((lightType == LIGHT_TYPE_BALL || lightType == LIGHT_TYPE_PORCH) && (i = IndexOfSpritePaletteTag(template->paletteTag + 1)) < 16)
         sprite->oam.paletteNum = i;
     else
         UpdateSpritePaletteByTemplate(template, sprite);
@@ -2821,6 +2825,7 @@ static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
     {
     default:
     case LIGHT_TYPE_BALL:
+    case LIGHT_TYPE_PORCH:
         sprite->centerToCornerVecX = -(32 >> 1);
         sprite->centerToCornerVecY = -(32 >> 1);
         sprite->oam.priority = 1;
@@ -2843,6 +2848,35 @@ static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
 #undef sLightType
 #undef sLightXPos
 #undef sLightYPos
+
+// Wally's Journey: automatic town lights. Pokémon Center and Mart signs glow
+// next to their doors, and every other door gets a warm porch glow. Built
+// from the map's own warps and metatiles, so no map needs editing.
+#define METATILE_General_PokeCenter_Door  0x061
+#define METATILE_General_PokeCenter_Sign  0x062
+#define METATILE_General_Mart_Door        0x041
+#define METATILE_General_Mart_Sign        0x042
+static void SpawnWarpLights(s16 left, s16 right, s16 top, s16 bottom, s16 camX, s16 camY)
+{
+    u32 i;
+    if (gMapHeader.events == NULL || !MapHasNaturalLight(gMapHeader.mapType))
+        return;
+    for (i = 0; i < gMapHeader.events->warpCount; i++)
+    {
+        s16 x = gMapHeader.events->warps[i].x + MAP_OFFSET;
+        s16 y = gMapHeader.events->warps[i].y + MAP_OFFSET;
+        u32 metatile;
+        if (y < top || y > bottom || x < left || x > right)
+            continue;
+        metatile = MapGridGetMetatileIdAt(x, y);
+        if (metatile == METATILE_General_PokeCenter_Door && MapGridGetMetatileIdAt(x + 1, y) == METATILE_General_PokeCenter_Sign)
+            SpawnLightSprite(x + 1, y, camX, camY, LIGHT_TYPE_PKMN_CENTER_SIGN);
+        else if (metatile == METATILE_General_Mart_Door && MapGridGetMetatileIdAt(x + 1, y) == METATILE_General_Mart_Sign)
+            SpawnLightSprite(x + 1, y, camX, camY, LIGHT_TYPE_POKE_MART_SIGN);
+        else if (MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(x, y)))
+            SpawnLightSprite(x, y, camX, camY, LIGHT_TYPE_PORCH);
+    }
+}
 
 void TrySpawnLightSprites(s16 camX, s16 camY)
 {
@@ -2873,6 +2907,7 @@ void TrySpawnLightSprites(s16 camX, s16 camY)
          && template->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE)  // event is light sprite instead
             SpawnLightSprite(npcX, npcY, camX, camY, template->trainerRange_berryTreeId);
     }
+    SpawnWarpLights(left, right, top, bottom, camX, camY);
 }
 
 void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
@@ -2908,6 +2943,7 @@ void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
                     TrySpawnObjectEventTemplate(template, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, cameraX, cameraY);
             }
         }
+        SpawnWarpLights(left, right, top, bottom, cameraX, cameraY);
     }
 }
 

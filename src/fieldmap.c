@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "battle_pyramid.h"
 #include "bg.h"
 #include "fieldmap.h"
@@ -1025,11 +1026,21 @@ void CopySecondaryTilesetToVramUsingHeap(struct MapLayout const *mapLayout)
 static void LoadPrimaryTilesetPalette(struct MapLayout const *mapLayout)
 {
     LoadTilesetPalette(mapLayout->primaryTileset, 0, GetNumPalsInPrimary(mapLayout) * PLTT_SIZE_4BPP, FALSE, GetNumPalsInPrimary(mapLayout));
+    WallyJourney_ApplySeasonalFoliage(0, GetNumPalsInPrimary(mapLayout), TRUE, TRUE);
+}
+
+// Wally's Journey: re-colour the primary palette when a map connection leads
+// somewhere with different seasonal foliage (e.g. into the frosted highlands).
+void ReloadPrimaryTilesetPaletteUnfaded(struct MapLayout const *mapLayout)
+{
+    LoadTilesetPalette(mapLayout->primaryTileset, 0, GetNumPalsInPrimary(mapLayout) * PLTT_SIZE_4BPP, TRUE, GetNumPalsInPrimary(mapLayout));
+    WallyJourney_ApplySeasonalFoliage(0, GetNumPalsInPrimary(mapLayout), FALSE, TRUE);
 }
 
 void LoadSecondaryTilesetPalette(struct MapLayout const *mapLayout, bool8 skipFaded)
 {
     LoadTilesetPalette(mapLayout->secondaryTileset, GetNumPalsInPrimary(mapLayout) * 16, (NUM_PALS_TOTAL - GetNumPalsInPrimary(mapLayout)) * PLTT_SIZE_4BPP, skipFaded, GetNumPalsInPrimary(mapLayout));
+    WallyJourney_ApplySeasonalFoliage(GetNumPalsInPrimary(mapLayout), NUM_PALS_TOTAL - GetNumPalsInPrimary(mapLayout), !skipFaded, FALSE);
 }
 
 void CopyMapTilesetsToVram(struct MapLayout const *mapLayout)

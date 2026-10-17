@@ -71,6 +71,7 @@ const struct SpriteTemplate *const gFieldEffectLightTemplates[] = {
     &gFieldEffectObjectTemplate_BallLight,
     &gFieldEffectObjectTemplate_PokeCenterLight,
     &gFieldEffectObjectTemplate_MartLight,
+    &gFieldEffectObjectTemplate_BallLight, // LIGHT_TYPE_PORCH
 };
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowSmall = {

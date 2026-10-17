@@ -21,6 +21,9 @@
 #include "field_weather.h"
 #include "overworld.h"
 #include "string_util.h"
+#include "fieldmap.h"
+#include "constants/event_objects.h"
+#include "constants/rgb.h"
 
 #define WALLY_VAR_PEAK_BADGES   VAR_UNUSED_0x40F7
 #define WALLY_VAR_BIOME_MASK    VAR_UNUSED_0x40F8
@@ -175,7 +178,7 @@ struct BlendSettings WallyJourney_GetSeasonDayBlend(void)
     {
     case WALLY_SEASON_SPRING: blend.isTint = TRUE; blend.blendColor = TINT(250, 238, 246); break; // soft blossom pink
     case WALLY_SEASON_SUMMER: break;                                                              // classic bright Hoenn
-    case WALLY_SEASON_AUTUMN: blend.isTint = TRUE; blend.blendColor = TINT(255, 214, 168); break; // amber leaves
+    case WALLY_SEASON_AUTUMN: blend.isTint = TRUE; blend.blendColor = TINT(255, 236, 212); break; // soft amber light (the leaves carry the colour)
     case WALLY_SEASON_WINTER: blend.isTint = TRUE; blend.blendColor = TINT(214, 226, 255); break; // cool, pale light
     }
     return blend;
@@ -547,6 +550,188 @@ bool32 WallyJourney_GetForecast(u32 mapSec, u8 *now, u8 *later)
     later = ConvertIntToDecimalStringN(later, h, STR_CONV_MODE_LEFT_ALIGN, 2);
     StringCopy(later, sForecastHours);
     return TRUE;
+}
+
+// ------------------------------------------------------ seasonal foliage
+// Tileset palettes of outdoor maps are recoloured per season when they load:
+// fresh yellow-green spring, untouched summer, red/orange/gold autumn (each
+// palette gets its own colour so trees don't all turn the same), dull winter
+// green on the coast and frosted pale foliage on the snowy highland routes.
+// Only greens are touched: water, sand, roofs in other colours, people and
+// Pokémon stay as they are. Layout, collision and access never change.
+enum { FOLIAGE_NONE, FOLIAGE_SPRING, FOLIAGE_AUTUMN, FOLIAGE_WINTER, FOLIAGE_FROST };
+
+static EWRAM_DATA u8 sPrimaryFoliagePlus1 = 0;
+
+static u32 CurrentFoliageMode(void)
+{
+    if (!MapHasNaturalLight(gMapHeader.mapType) || (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK))
+        return FOLIAGE_NONE;
+    switch (WallyJourney_GetSeason())
+    {
+    case WALLY_SEASON_SPRING: return FOLIAGE_SPRING;
+    case WALLY_SEASON_AUTUMN: return FOLIAGE_AUTUMN;
+    case WALLY_SEASON_WINTER: return IsSnowCountry() ? FOLIAGE_FROST : FOLIAGE_WINTER;
+    default:                  return FOLIAGE_NONE;
+    }
+}
+
+static u16 SeasonalColor(u16 color, u32 mode, u32 slot)
+{
+    static const s16 sAutumnHues[] = {40, 14, 26, 34}; // gold, red, orange, amber
+    s32 r = color & 31, g = (color >> 5) & 31, b = (color >> 10) & 31;
+    s32 max = max(r, max(g, b)), min = min(r, min(g, b)), d = max - min;
+    s32 h, s, v, i, f, p, q, tt;
+
+    if (max == 0 || d * 100 / max < 18)
+        return color; // greys, black, white: leave alone
+    if (max == r)      h = 60 * (g - b) / d;
+    else if (max == g) h = 60 * (b - r) / d + 120;
+    else               h = 60 * (r - g) / d + 240;
+    if (h < 0)
+        h += 360;
+    if (h < 65 || h > 170)
+        return color; // not foliage
+    s = d * 255 / max;
+    v = max;
+
+    switch (mode)
+    {
+    case FOLIAGE_SPRING:
+        h -= 14;
+        s = min(255, s * 120 / 100);
+        v = min(31, v + 2);
+        break;
+    case FOLIAGE_AUTUMN:
+        h = sAutumnHues[slot % ARRAY_COUNT(sAutumnHues)] + (v - 16) / 2 + (h - 110) / 8;
+        s = min(255, s * 115 / 100);
+        break;
+    case FOLIAGE_WINTER:
+        s = s * 60 / 100;
+        v = v * 92 / 100;
+        break;
+    case FOLIAGE_FROST:
+        h += (200 - h) / 2;
+        s = s * 20 / 100;
+        v += (31 - v) * 60 / 100;
+        break;
+    default:
+        return color;
+    }
+    if (h < 0)
+        h += 360;
+    h %= 360;
+
+    i = h / 60;
+    f = (h % 60) * 255 / 60;
+    p = v * (255 - s) / 255;
+    q = v * (255 - s * f / 255) / 255;
+    tt = v * (255 - s * (255 - f) / 255) / 255;
+    switch (i)
+    {
+    case 0:  r = v;  g = tt; b = p;  break;
+    case 1:  r = q;  g = v;  b = p;  break;
+    case 2:  r = p;  g = v;  b = tt; break;
+    case 3:  r = p;  g = q;  b = v;  break;
+    case 4:  r = tt; g = p;  b = v;  break;
+    default: r = v;  g = p;  b = q;  break;
+    }
+    return RGB(r, g, b);
+}
+
+// Recolour BG palettes [palStart, palStart + palCount) just loaded from a tileset.
+void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFaded, bool32 isPrimary)
+{
+    u32 mode = CurrentFoliageMode();
+    u32 slot, c;
+    if (isPrimary)
+        sPrimaryFoliagePlus1 = mode + 1;
+    if (mode == FOLIAGE_NONE)
+        return;
+    for (slot = palStart; slot < palStart + palCount; slot++)
+    {
+        for (c = 1; c < 16; c++)
+        {
+            u16 *col = &gPlttBufferUnfaded[slot * 16 + c];
+            *col = SeasonalColor(*col, mode, slot);
+            if (alsoFaded)
+                gPlttBufferFaded[slot * 16 + c] = *col;
+        }
+    }
+}
+
+// TRUE when the primary tileset palette was coloured for a different
+// season/place than the map just entered through a connection.
+bool32 WallyJourney_PrimaryFoliageStale(void)
+{
+    return sPrimaryFoliagePlus1 != CurrentFoliageMode() + 1;
+}
+
+// ------------------------------------------------------------ town lights
+// Neon signs and porch lights (spawned in event_object_movement.c). Lights
+// come on in the evening, at night and under storm skies. Pokémon Centers stay
+// lit all night; Marts switch off at 22:00; each house goes dark at its own
+// hour between 22:00 and 02:00, and a few stay dark.
+bool32 WallyJourney_IsLightOn(u32 lightType, s32 x, s32 y)
+{
+    u32 hour = gLocalTime.hours;
+    u32 weather = gWeatherPtr->currWeather;
+    bool32 stormy = (weather == WEATHER_RAIN_THUNDERSTORM || weather == WEATHER_DOWNPOUR || weather == WEATHER_SHADE);
+    bool32 dark = (gTimeOfDay == TIME_NIGHT || gTimeOfDay == TIME_EVENING);
+    bool32 lateNight = (hour < 5);
+    u32 h;
+
+    if (!dark && !stormy)
+        return FALSE;
+    switch (lightType)
+    {
+    case LIGHT_TYPE_PORCH:
+        h = WeatherHash((u32)x * 73856093u ^ (u32)y * 19349663u ^ gSaveBlock1Ptr->location.mapNum * 83492791u);
+        if (h % 100 < 15)
+            return FALSE;                               // nobody home tonight
+        {
+            u32 lightsOut = 22 + (h >> 8) % 5;          // 22, 23, 24(=0), 25(=1), 26(=2)
+            u32 now = lateNight ? hour + 24 : hour;
+            return now < lightsOut;
+        }
+    case LIGHT_TYPE_POKE_MART_SIGN:
+        return !lateNight && hour < 22;
+    default:
+        return TRUE;                                    // Pokémon Center and placed lamps
+    }
+}
+
+// ------------------------------------------------------ townspeople routines
+// Outdoor flavour NPCs (see tools/gen_wally_ambient_npcs.py) go home at
+// night and shelter from rain, a different mix each day. Story characters,
+// trainers, item givers and anyone a script refers to are never on this list,
+// so paths, quests and services are never affected.
+#include "data/wally_ambient_npcs.h"
+
+bool32 WallyJourney_IsNpcAway(const struct ObjectEventTemplate *template)
+{
+    u32 i, h, weather, timeOfDay;
+    const u8 *script = template->script;
+    if (script == NULL || !MapHasNaturalLight(gMapHeader.mapType) || (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK))
+        return FALSE;
+    for (i = 0; i < ARRAY_COUNT(sWallyAmbientNpcScripts); i++)
+    {
+        if (sWallyAmbientNpcScripts[i] == script)
+            break;
+    }
+    if (i == ARRAY_COUNT(sWallyAmbientNpcScripts))
+        return FALSE;
+    timeOfDay = GetTimeOfDay(); // also refreshes gLocalTime
+    h = WeatherHash((u32)script ^ ((u32)gLocalTime.days * 2246822519u));
+    if (timeOfDay == TIME_NIGHT && h % 100 < 65)
+        return TRUE;                                    // gone home for the night
+    if (timeOfDay == TIME_EVENING && h % 100 < 20)
+        return TRUE;                                    // headed home early
+    weather = GetSavedWeather();
+    if ((weather == WEATHER_RAIN || weather == WEATHER_RAIN_THUNDERSTORM || weather == WEATHER_DOWNPOUR || weather == WEATHER_SNOW)
+     && (h >> 8) % 100 < 45)
+        return TRUE;                                    // sheltering from the weather
+    return FALSE;
 }
 
 // ------------------------------------------------- side activity specials

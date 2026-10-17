@@ -906,6 +906,11 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
     LoadSecondaryTilesetPalette(gMapHeader.mapLayout, TRUE); // skip copying to Faded, gamma shift will take care of it
 
     ApplyWeatherColorMapToPals(GetNumPalsInPrimary(gMapHeader.mapLayout), NUM_PALS_TOTAL - GetNumPalsInPrimary(gMapHeader.mapLayout)); // palettes [6,12]
+    if (WallyJourney_PrimaryFoliageStale())
+    {
+        ReloadPrimaryTilesetPaletteUnfaded(gMapHeader.mapLayout);
+        ApplyWeatherColorMapToPals(0, GetNumPalsInPrimary(gMapHeader.mapLayout));
+    }
 
     InitSecondaryTilesetAnimation();
     UpdateLocationHistoryForRoamer();
