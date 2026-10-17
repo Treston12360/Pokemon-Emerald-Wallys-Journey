@@ -67,9 +67,9 @@ for starter in STARTER_SPECIES:
     if starter not in species:
         errors.append(f"Starter species has no Hoenn wild encounter: {starter}")
 
-# Catch accidental rollback of the expanded Gen 1-9 habitat tables.
+# Catch accidental rollback of the expanded Gen 1-9 habitat tables.\n# This is the latest verified species floor after the evolved-wild habitat pass.
 # Feebas uses the special 10% Route 119 Good Rod hook, not a JSON slot.
-MIN_WILD_SPECIES = 468
+MIN_WILD_SPECIES = 503
 if len(species) < MIN_WILD_SPECIES:
     errors.append(f"Wild roster fell from at least {MIN_WILD_SPECIES} species to {len(species)}")
 
