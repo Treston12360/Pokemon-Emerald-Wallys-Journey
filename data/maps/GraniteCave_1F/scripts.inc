@@ -35,7 +35,7 @@ GraniteCave_1F_Text_ExplainFlash:
 
 
 GraniteCave_1F_Text_NewFlashDialogue:
-	.string "This cave gets dark farther in.\\p"
-	.string "The KNUCKLE BADGE lets your\\n"
-	.string "POKéMON light the way with FLASH.\\p"
+	.string "This cave gets dark farther in.\p"
+	.string "The KNUCKLE BADGE lets your\n"
+	.string "POKéMON light the way with FLASH.\p"
 	.string "Watch your step in there!$"
