@@ -246,33 +246,17 @@ Route118_EventScript_Deandre::
 
 Route118_Text_StevenQuestions:
 	.string "STEVEN: {PLAYER}! It's good to see\n"
-	.string "you again. How is your journey?\\p\n"
+	.string "you again. How is your journey?\p\n"
 	.string "The WEATHER INSTITUTE has reported\n"
-	.string "rain patterns that don't add up.\\p\n"
+	.string "rain patterns that don't add up.\p\n"
 	.string "DEVON's instruments can measure\n"
-	.string "the change, not explain it.\\p\n"
+	.string "the change, not explain it.\p\n"
 	.string "I've asked researchers to share\n"
-	.string "their findings, not bury them.\\p\n"
+	.string "their findings, not bury them.\p\n"
 	.string "Keep an eye on the skies ahead.\n"
-	.string "And keep thinking for yourself.\\p\n"
+	.string "And keep thinking for yourself.\p\n"
 	.string "People with convincing answers\n"
 	.string "aren't always people who are right.$"
-	.string "It's me, STEVEN!\n"
-	.string "We met in the cave near DEWFORD.\p"
-	.string "Have you met many kinds of POKéMON\n"
-	.string "since I last saw you?\p"
-	.string "There are many, many kinds of POKéMON\n"
-	.string "in this wide world of ours.\p"
-	.string "If you wanted to raise only your\n"
-	.string "favorites, that's fine.\p"
-	.string "Perhaps you find it more fun to raise\n"
-	.string "all sorts of POKéMON.\p"
-	.string "As a TRAINER of POKéMON,\n"
-	.string "what do you think?\p"
-	.string "Of course, it's not any of my business.\p"
-	.string "It would be nice if we were to meet\n"
-	.string "again somewhere.$"
-
 Route118_Text_YouAgreeGoodRodIsGood:
 	.string "Hmm!\n"
 	.string "A GOOD ROD is really good!\p"
@@ -286,11 +270,9 @@ Route118_Text_IdenticalMindsTakeThis:
 
 Route118_Text_TryYourLuckFishing:
 	.string "Some families here fish to eat.\n"
-	.string "Others fish to make a living.\\p\n"
+	.string "Others fish to make a living.\p\n"
 	.string "Either way, never take the river\n"
 	.string "for granted.$"
-	.string "at fishing.$"
-
 Route118_Text_DontYouLikeToFish:
 	.string "Don't you like to fish?$"
 
@@ -300,16 +282,11 @@ Route118_Text_TryCatchingMonWithGoodRod:
 
 Route118_Text_CanCrossRiversWithSurf:
 	.string "The current is stronger than it\n"
-	.string "looks. A boatman taught me that.\\p\n"
+	.string "looks. A boatman taught me that.\p\n"
 	.string "With the right BADGE, your team\n"
-	.string "can help you SURF safely.\\p\n"
+	.string "can help you SURF safely.\p\n"
 	.string "You don't need to teach the move.\n"
 	.string "That doesn't mean ignore the sea.$"
-	.string "cross rivers and the sea if you have\l"
-	.string "a POKéMON that knows SURF.\p"
-	.string "POKéMON can be counted on to do so\n"
-	.string "much!$"
-
 Route118_Text_RouteSignMauville:
 	.string "ROUTE 118\n"
 	.string "{LEFT_ARROW} MAUVILLE CITY$"
