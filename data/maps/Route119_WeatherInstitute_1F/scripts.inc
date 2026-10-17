@@ -79,9 +79,10 @@ Route119_WeatherInstitute_1F_Text_Grunt1Defeat:
 	.string "Blasted by a kid…$"
 
 Route119_WeatherInstitute_1F_Text_Grunt1PostBattle:
-	.string "Our BOSS knows everything.\p"
-	.string "But I'm just a GRUNT. What would I know\n"
-	.string "about what he's thinking?$"
+	.string "I'm just a GRUNT. I'm not supposed\n"
+	.string "to ask what the weather research\l"
+	.string "is for.\p"
+	.string "…I ask anyway. Nobody answers.$"
 
 Route119_WeatherInstitute_1F_Text_Grunt4Intro:
 	.string "Huh?\n"

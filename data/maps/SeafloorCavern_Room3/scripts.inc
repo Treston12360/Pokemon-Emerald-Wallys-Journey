@@ -28,13 +28,11 @@ SeafloorCavern_Room3_Text_ShellyDefeat:
 	.string "Ouch!$"
 
 SeafloorCavern_Room3_Text_ShellyPostBattle:
-	.string "Ahahahaha!\n"
-	.string "You're so darn strong.\p"
-	.string "It's terribly disappointing that you're\n"
-	.string "not a TEAM AQUA member.\p"
-	.string "You could have enjoyed the fabulous\n"
-	.string "world our BOSS has promised as\l"
-	.string "one of us…$"
+	.string "You're strong. Annoyingly strong.\p"
+	.string "But listen to me. If this goes\n"
+	.string "wrong, it won't be MAGMA's fault or\l"
+	.string "yours. It'll be ours.\p"
+	.string "…Forget I said that. Move.$"
 
 SeafloorCavern_Room3_Text_Grunt5Intro:
 	.string "For our dream to become real, we need\n"
@@ -49,10 +47,10 @@ SeafloorCavern_Room3_Text_Grunt5Defeat:
 	.string "Gwah!$"
 
 SeafloorCavern_Room3_Text_Grunt5PostBattle:
-	.string "You know, we don't dare question\n"
-	.string "the motives of our leader.\p"
-	.string "But here you are, just some punk,\n"
-	.string "going up against our BOSS.\p"
-	.string "Maybe…\n"
-	.string "You must be something…$"
+	.string "We don't question the BOSS.\n"
+	.string "That's the rule.\p"
+	.string "But here you are, one kid, walking\n"
+	.string "straight at him.\p"
+	.string "Maybe someone should have\n"
+	.string "questioned him a long time ago.$"
 

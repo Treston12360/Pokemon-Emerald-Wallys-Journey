@@ -19,8 +19,10 @@ SeafloorCavern_Room1_Text_Grunt1Defeat:
 	.string "I want to go home…$"
 
 SeafloorCavern_Room1_Text_Grunt1PostBattle:
-	.string "I want to get a promotion so I can\n"
-	.string "boss around the GRUNTS…$"
+	.string "Half the crew didn't come back\n"
+	.string "after LILYCOVE.\p"
+	.string "The ones who stayed are the ones\n"
+	.string "who didn't have anywhere else.$"
 
 SeafloorCavern_Room1_Text_Grunt2Intro:
 	.string "That submarine… It's tiny inside.\n"

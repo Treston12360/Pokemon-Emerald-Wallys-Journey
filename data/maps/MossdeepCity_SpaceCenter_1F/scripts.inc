@@ -402,10 +402,10 @@ MossdeepCity_SpaceCenter_1F_Text_Grunt4Defeat:
 	.string "Even a chintzy cup will do!$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt4PostBattle:
-	.string "What are we going to do with\n"
-	.string "the rocket fuel?\p"
-	.string "How would I know?\n"
-	.string "Ask our leader upstairs!$"
+	.string "Rocket fuel. To force the eruption\n"
+	.string "everyone said was impossible.\p"
+	.string "I signed up to build towns. Not\n"
+	.string "to set a mountain on fire.$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt2Intro:
 	.string "Our leader said no one, but no one,\n"

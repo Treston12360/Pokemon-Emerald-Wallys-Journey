@@ -447,8 +447,10 @@ MtPyre_Summit_Text_Grunt2Defeat:
 	.string "TEAM MAGMA first…$"
 
 MtPyre_Summit_Text_Grunt2PostBattle:
-	.string "You don't know anything!\n"
-	.string "So why are you messing with us?$"
+	.string "The legends say the ORBS calm the\n"
+	.string "titans. We're borrowing them, that's\l"
+	.string "all.\p"
+	.string "…That's what we were told, anyway.$"
 
 MtPyre_Summit_Text_Grunt3Intro:
 	.string "You…\n"
@@ -478,8 +480,10 @@ MtPyre_Summit_Text_Grunt4Defeat:
 	.string "badly, we can consider it…$"
 
 MtPyre_Summit_Text_Grunt4PostBattle:
-	.string "We have a great combination going\n"
-	.string "with us members and our leader.$"
+	.string "The old couple begged us to stop.\n"
+	.string "The BOSS didn't even look at them.\p"
+	.string "I'm starting to wonder what else\n"
+	.string "he doesn't look at.$"
 
 MtPyre_Summit_Text_ArchieWeGotTheOrbLetsGo:
 	.string "ARCHIE: TEAM MAGMA's MAXIE got ahead\n"

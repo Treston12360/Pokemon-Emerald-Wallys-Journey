@@ -411,8 +411,10 @@ MossdeepCity_SpaceCenter_2F_Text_Grunt7PostBattle:
 	.string "We look worse than usual by triple!$"
 
 MossdeepCity_SpaceCenter_2F_Text_Grunt5PostBattle:
-	.string "Are we being useful to our leader\n"
-	.string "at all?$"
+	.string "Are we even helping the people we\n"
+	.string "said we'd help?\p"
+	.string "Because from here, it doesn't\n"
+	.string "look like it.$"
 
 MossdeepCity_SpaceCenter_2F_Text_WellTakeCareOfYou:
 	.string "Hehehe!\p"

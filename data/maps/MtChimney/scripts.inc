@@ -600,9 +600,10 @@ MtChimney_Text_TabithaDefeat:
 	.string "awakens that thing…$"
 
 MtChimney_Text_TabithaPostBattle:
-	.string "BOSS, hurry!\n"
-	.string "Give it the METEORITE's energy!\p"
-	.string "Hehehe…$"
+	.string "You think you stopped something?\p"
+	.string "The model holds. One push from the\n"
+	.string "METEORITE and the land rises.\p"
+	.string "BOSS, now! Before the kid ruins it!$"
 
 MtChimney_Text_Grunt2Intro:
 	.string "My folks run a farm on ROUTE 113.\n"
@@ -617,10 +618,10 @@ MtChimney_Text_Grunt2Defeat:
 	.string "What do you mean I lost?$"
 
 MtChimney_Text_Grunt2PostBattle:
-	.string "Our BOSS says, “It will make everyone\n"
-	.string "happy.”\p"
-	.string "But why does everyone keep getting\n"
-	.string "in our way?$"
+	.string "Our BOSS says it'll make everyone's\n"
+	.string "life better.\p"
+	.string "So why does everyone who lives here\n"
+	.string "keep trying to stop us?$"
 
 MtChimney_Text_Grunt1Intro:
 	.string "Do you know how long the waitlist is\n"
@@ -633,8 +634,10 @@ MtChimney_Text_Grunt1Defeat:
 	.string "My dream of a big house…$"
 
 MtChimney_Text_Grunt1PostBattle:
-	.string "A kid like you, you ought to be\n"
-	.string "splashing about in the waves!$"
+	.string "You know what's at the bottom of\n"
+	.string "this volcano? Nothing.\p"
+	.string "You know what could be? Farmland.\n"
+	.string "Homes. That's the whole point.$"
 
 MtChimney_Text_TeamAquaAlwaysMessingWithPlans:
 	.string "That annoying TEAM AQUA…\n"

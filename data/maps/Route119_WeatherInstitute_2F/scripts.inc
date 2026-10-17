@@ -212,9 +212,10 @@ Route119_WeatherInstitute_2F_Text_Grunt2Defeat:
 	.string "Our plan's being spoiled by a kid?$"
 
 Route119_WeatherInstitute_2F_Text_Grunt2PostBattle:
-	.string "If the POKéMON they made here can\n"
-	.string "control the weather freely, then we of\l"
-	.string "TEAM AQUA definitely need it!$"
+	.string "A POKéMON that shifts the weather?\n"
+	.string "With that, we could hold the rain\l"
+	.string "off the coral reefs.\p"
+	.string "…Or that's what they told us.$"
 
 Route119_WeatherInstitute_2F_Text_Grunt3Intro:
 	.string "We're TEAM AQUA!\n"
@@ -225,9 +226,10 @@ Route119_WeatherInstitute_2F_Text_Grunt3Defeat:
 	.string "You got me!$"
 
 Route119_WeatherInstitute_2F_Text_Grunt3PostBattle:
-	.string "You don't have any idea what we of\n"
-	.string "TEAM AQUA are working towards!\l"
-	.string "You stay out of our way!$"
+	.string "You don't know what the sea looked\n"
+	.string "like before the factories.\p"
+	.string "My grandfather did. That's why I'm\n"
+	.string "here.$"
 
 Route119_WeatherInstitute_2F_Text_Grunt5Intro:
 	.string "Don't tell me you're looking for that\n"
@@ -239,10 +241,9 @@ Route119_WeatherInstitute_2F_Text_Grunt5Defeat:
 	.string "Oh, will you look at my POKéMON?$"
 
 Route119_WeatherInstitute_2F_Text_Grunt5PostBattle:
-	.string "Humph, so what?\n"
-	.string "What we want…\p"
-	.string "What we really want isn't here…\n"
-	.string "Ihihihihi…$"
+	.string "What we really want isn't here.\n"
+	.string "This is just the warm-up.\p"
+	.string "…I hope ARCHIE knows when to stop.$"
 
 Route119_WeatherInstitute_2F_Text_ShellyIntro:
 	.string "Ahahahaha!\p"
@@ -258,10 +259,11 @@ Route119_WeatherInstitute_2F_Text_ShellyDefeat:
 	.string "You're disgustingly strong!$"
 
 Route119_WeatherInstitute_2F_Text_ShellyPostBattle:
-	.string "It's bad enough to have TEAM MAGMA\n"
-	.string "blunder about, but now there's you!\p"
-	.string "What makes you want to sniff around\n"
-	.string "in our business, anyway?$"
+	.string "MAGMA blundering about is bad\n"
+	.string "enough. Now there's you.\p"
+	.string "Ask yourself who's actually\n"
+	.string "protecting the sea, kid.\p"
+	.string "Then ask why it isn't you.$"
 
 Route119_WeatherInstitute_2F_Text_TeamMagmaJustPassedBy:
 	.string "We have a situation here!\p"
