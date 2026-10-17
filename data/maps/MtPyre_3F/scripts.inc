@@ -42,8 +42,12 @@ MtPyre_3F_Text_WilliamDefeat:
 	.string "I drown in self-pity…$"
 
 MtPyre_3F_Text_WilliamPostBattle:
-	.string "My psychic powers have surely\n"
-	.string "grown several times, but…$"
+	.string "I thought this mountain would\n"
+	.string "make my powers greater.\p"
+	.string "But all I've done is talk\n"
+	.string "about myself.\p"
+	.string "Perhaps listening matters\n"
+	.string "more than being heard.$"
 
 MtPyre_3F_Text_KaylaIntro:
 	.string "Ahahahaha!\p"
@@ -68,12 +72,12 @@ MtPyre_3F_Text_GabrielleDefeat:
 	.string "You're a very special TRAINER.$"
 
 MtPyre_3F_Text_GabriellePostBattle:
-	.string "POKéMON no longer of this world.\n"
-	.string "POKéMON that are with you now.\p"
-	.string "And the POKéMON that you will meet\n"
-	.string "in the future…\p"
-	.string "They are all to be equally cherished.\n"
-	.string "Please remember that.$"
+	.string "The partners we've lost taught\n"
+	.string "us things no victory could.\p"
+	.string "The ones beside us still\n"
+	.string "have more to teach.\p"
+	.string "And the ones we'll meet?\n"
+	.string "They deserve an open heart.$"
 
 MtPyre_3F_Text_GabrielleRegister:
 	.string "I would like to see your POKéMON\n"
