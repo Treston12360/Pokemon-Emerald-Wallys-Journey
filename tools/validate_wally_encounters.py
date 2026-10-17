@@ -124,9 +124,13 @@ EXPANSION_SPECIES = (
     "SPECIES_DRAMPA",
     "SPECIES_SILICOBRA",
 )
+EXPANSION_PRE_EVOLUTION = {
+    "SPECIES_SWANNA": "SPECIES_DUCKLETT",
+    "SPECIES_BARRASKEWDA": "SPECIES_ARROKUDA",
+}
 for mon in EXPANSION_SPECIES:
-    if mon not in species:
-        errors.append(f"Expanded species is no longer available wild: {mon}")
+    if mon not in species and EXPANSION_PRE_EVOLUTION.get(mon) not in species:
+        errors.append(f"Expanded species family is no longer available wild: {mon}")
 
 # Protect evolutionary FAMILY availability, not mandatory wild evolved forms.
 # A species may be absent from wild tables if a catchable prior stage can
@@ -153,6 +157,23 @@ EVOLVED_RARE_SPECIES = (
 # Explicitly permitted wild-to-pre-evolution replacements from the level audit.
 # This only validates family presence; evolution reachability is a separate audit.
 WILD_PRE_EVOLUTION = {
+    "SPECIES_DOUBLADE": "SPECIES_HONEDGE",
+    "SPECIES_AEGISLASH": "SPECIES_HONEDGE",
+    "SPECIES_TOXTRICITY": "SPECIES_TOXEL",
+    "SPECIES_HAXORUS": "SPECIES_AXEW",
+    "SPECIES_ZWEILOUS": "SPECIES_DEINO",
+    "SPECIES_DRAKLOAK": "SPECIES_DREEPY",
+    "SPECIES_HERDIER": "SPECIES_LILLIPUP",
+    "SPECIES_AMPHAROS": "SPECIES_MAREEP",
+    "SPECIES_KOMMO_O": "SPECIES_JANGMO_O",
+    "SPECIES_GARCHOMP": "SPECIES_GIBLE",
+    "SPECIES_SALAMENCE": "SPECIES_BAGON",
+    "SPECIES_METAGROSS": "SPECIES_BELDUM",
+    "SPECIES_DRAGONITE": "SPECIES_DRATINI",
+    "SPECIES_DRAGAPULT": "SPECIES_DREEPY",
+    "SPECIES_BAXCALIBUR": "SPECIES_FRIGIBAX",
+    "SPECIES_TYRANITAR": "SPECIES_LARVITAR",
+    "SPECIES_HYDREIGON": "SPECIES_DEINO",
     "SPECIES_ZOROARK": "SPECIES_ZORUA",
     "SPECIES_MANDIBUZZ": "SPECIES_VULLABY",
     "SPECIES_PALOSSAND": "SPECIES_SANDYGAST",
