@@ -237,9 +237,8 @@ WallyJourney_EventScript_RivalFORTREEWon::
 WallyJourney_Text_RivalFORTREEIntro:
 	.string "WALLY: I heard you beat your dad,\n"
 	.string "{PLAYER}. That's incredible!\p"
-	.string "I've been traveling on my own now.\n"
-	.string "Nobody has to look after me\l"
-	.string "anymore.\p"
+	.string "Me? I just got my sixth BADGE.\n"
+	.string "I've been busy.\p"
 	.string "Let's battle! I won't go easy on you\n"
 	.string "just because we're friends!$"
 
@@ -282,10 +281,12 @@ WallyJourney_Text_RivalLILYCOVEDefeat:
 
 
 WallyJourney_Text_RivalLILYCOVEPost:
-	.string "WALLY: I've decided something.\p"
-	.string "I'm going to challenge the\n"
-	.string "POKéMON LEAGUE.\p"
-	.string "And I'm going to win.$"
+	.string "WALLY: Guess who watched my last\n"
+	.string "battle from the crowd? WALLACE.\p"
+	.string "The CHAMPION. He said I fight like\n"
+	.string "someone with nothing left to prove.\p"
+	.string "Then he asked if I believed that.\p"
+	.string "…I'm still thinking about it.$"
 
 
 WallyJourney_EventScript_RivalMOSSDEEP::
@@ -301,10 +302,10 @@ WallyJourney_EventScript_RivalMOSSDEEPWon::
 
 WallyJourney_Text_RivalMOSSDEEPIntro:
 	.string "WALLY: Took you long enough.\p"
-	.string "I've beaten every TRAINER on this\n"
-	.string "island while I was waiting.\p"
-	.string "Don't worry. I saved the best\n"
-	.string "battle for last.$"
+	.string "Eight BADGES, {PLAYER}. I got the\n"
+	.string "last one this morning.\p"
+	.string "Next stop is the ELITE FOUR.\n"
+	.string "One battle with you first. For luck.$"
 
 
 WallyJourney_Text_RivalMOSSDEEPDefeat:
@@ -313,10 +314,12 @@ WallyJourney_Text_RivalMOSSDEEPDefeat:
 
 
 WallyJourney_Text_RivalMOSSDEEPPost:
-	.string "WALLY: Everyone in HOENN knows my\n"
-	.string "name now. Weird, right?\p"
-	.string "See you at the LEAGUE, {PLAYER}.\n"
-	.string "Try to keep up.$"
+	.string "WALLY: WALLACE keeps showing up\n"
+	.string "wherever I train. Never tells me what\l"
+	.string "to do. Just asks the right question.\p"
+	.string "Kind of like STEVEN with you,\n"
+	.string "right?\p"
+	.string "See you at the top, {PLAYER}.$"
 
 
 WallyJourney_EventScript_RivalSOOTOPOLIS::
@@ -331,12 +334,14 @@ WallyJourney_EventScript_RivalSOOTOPOLISWon::
 	end
 
 WallyJourney_Text_RivalSOOTOPOLISIntro:
-	.string "WALLY: Eight BADGES. Same as me.\p"
-	.string "When the sky went dark, I stayed and\n"
+	.string "WALLY: Eight BADGES. You did it.\p"
+	.string "During the storm I stayed here and\n"
 	.string "got people to shelter. You went\l"
-	.string "straight for the trouble.\p"
-	.string "That's why I want this battle.\n"
-	.string "Show me everything you've got!$"
+	.string "straight for it.\p"
+	.string "Then I flew to EVER GRANDE and…\n"
+	.string "well. You saw.\p"
+	.string "CHAMPION WALLY. Let's see if you're\n"
+	.string "ready for me.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISDefeat:
@@ -345,9 +350,9 @@ WallyJourney_Text_RivalSOOTOPOLISDefeat:
 
 
 WallyJourney_Text_RivalSOOTOPOLISPost:
-	.string "WALLY: Next time we battle, it\n"
-	.string "won't be practice.\p"
-	.string "I'll be waiting at the top.$"
+	.string "WALLY: VICTORY ROAD is next.\p"
+	.string "Get through it, beat the ELITE FOUR,\n"
+	.string "and you'll find me at the top.$"
 
 
 
@@ -447,3 +452,158 @@ WallyJourney_Text_ZRingExplain:
 	.string "Z-CRYSTALS are said to be hidden all\n"
 	.string "over HOENN. You can switch Z-MOVES\l"
 	.string "off in the OPTIONS if you prefer.$"
+
+
+@ Wally's Journey (owner design): before the 8th Gym, Steven stops the player
+@ at the Gym door and takes them to JUAN's house, where they watch Wally beat
+@ Wallace live. Juan taught Wallace; Wallace guided Wally; Steven guided you.
+@ Unskippable: the trigger sits on the only tile in front of the Gym door.
+WallyJourney_EventScript_StevenStopsAtGym::
+	lockall
+	applymovement LOCALID_SOOTOPOLIS_STEVEN, Common_Movement_FacePlayer
+	waitmovement 0
+	playse SE_PIN
+	applymovement LOCALID_SOOTOPOLIS_STEVEN, Common_Movement_ExclamationMark
+	waitmovement 0
+	applymovement LOCALID_PLAYER, Common_Movement_FaceLeft
+	waitmovement 0
+	msgbox WallyJourney_Text_StevenFollowMe, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_WALLY_BROADCAST_STATE, 2
+	clearflag FLAG_HIDE_JUANS_HOUSE_JUAN
+	clearflag FLAG_HIDE_JUANS_HOUSE_STEVEN
+	warp MAP_SOOTOPOLIS_CITY_HOUSE7, 3, 5
+	waitstate
+	releaseall
+	end
+
+WallyJourney_EventScript_JuansHouseBroadcast::
+	lockall
+	setvar VAR_WALLY_BROADCAST_STATE, 3
+	msgbox WallyJourney_Text_StevenWeLetOurselvesIn, MSGBOX_DEFAULT
+	applymovement LOCALID_JUANS_HOUSE_JUAN, Common_Movement_FaceDown
+	waitmovement 0
+	msgbox WallyJourney_Text_JuanComeQuickly, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_PLAYER, WallyJourney_Movement_PlayerToJuansTV
+	waitmovement 0
+	applymovement LOCALID_JUANS_HOUSE_JUAN, Common_Movement_FaceUp
+	waitmovement 0
+	fadescreen FADE_TO_BLACK
+	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
+	msgbox WallyJourney_Text_BroadcastAnnouncer, MSGBOX_DEFAULT
+	msgbox WallyJourney_Text_BroadcastWallace, MSGBOX_DEFAULT
+	msgbox WallyJourney_Text_BroadcastWally, MSGBOX_DEFAULT
+	closemessage
+	fadedefaultbgm
+	fadescreen FADE_FROM_BLACK
+	applymovement LOCALID_JUANS_HOUSE_JUAN, Common_Movement_FaceRight
+	waitmovement 0
+	applymovement LOCALID_PLAYER, Common_Movement_FaceLeft
+	waitmovement 0
+	msgbox WallyJourney_Text_JuanAfterBroadcast, MSGBOX_DEFAULT
+	msgbox WallyJourney_Text_StevenAfterBroadcast, MSGBOX_DEFAULT
+	msgbox WallyJourney_Text_JuanSeeYouAtGym, MSGBOX_DEFAULT
+	closemessage
+	fadescreenswapbuffers FADE_TO_BLACK
+	removeobject LOCALID_JUANS_HOUSE_JUAN
+	removeobject LOCALID_JUANS_HOUSE_STEVEN
+	setflag FLAG_HIDE_JUANS_HOUSE_JUAN
+	setflag FLAG_HIDE_JUANS_HOUSE_STEVEN
+	setflag FLAG_HIDE_SOOTOPOLIS_CITY_STEVEN
+	fadescreenswapbuffers FADE_FROM_BLACK
+	releaseall
+	end
+
+@ From the doorway (3,5) to stand beside Juan in front of the TV (7,2).
+WallyJourney_Movement_PlayerToJuansTV:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	walk_up
+	face_up
+	step_end
+
+WallyJourney_Text_WallaceMustReturn:
+	.string "WALLACE: Now, forgive me, but I must\n"
+	.string "fly back to EVER GRANDE at once.\p"
+	.string "A challenger has made it through the\n"
+	.string "ELITE FOUR. My title is on the line\l"
+	.string "tonight.\p"
+	.string "Someone I've been keeping an eye on\n"
+	.string "for quite a while.\p"
+	.string "…Perhaps you'll guess who.$"
+
+WallyJourney_Text_StevenFollowMe:
+	.string "STEVEN: {PLAYER}! Wait!\n"
+	.string "I've been looking for you.\p"
+	.string "Before you go in there, you're\n"
+	.string "going to want to see this.\p"
+	.string "Follow me. Quickly!$"
+
+WallyJourney_Text_StevenWeLetOurselvesIn:
+	.string "STEVEN: JUAN, I brought {PLAYER}.\n"
+	.string "Has it started?$"
+
+WallyJourney_Text_JuanComeQuickly:
+	.string "JUAN: Ah. The challenger who has been\n"
+	.string "keeping my city's crisis at bay.\p"
+	.string "Come, quickly. My former student is\n"
+	.string "about to defend his title.\p"
+	.string "It is the final POKéMON for both.$"
+
+WallyJourney_Text_BroadcastAnnouncer:
+	.string "ANNOUNCER: …live from the\n"
+	.string "CHAMPION's room at EVER GRANDE!\p"
+	.string "It's down to the last POKéMON!\n"
+	.string "CHAMPION WALLACE sends out MILOTIC!\p"
+	.string "The challenger, WALLY, answers with\n"
+	.string "GARDEVOIR… and it's MEGA EVOLVING!\p"
+	.string "MILOTIC lands a SCALD! GARDEVOIR\n"
+	.string "is hanging on!\p"
+	.string "MOONBLAST! MILOTIC is down!\p"
+	.string "Ladies and gentlemen, HOENN has\n"
+	.string "a new CHAMPION!\p"
+	.string "WALLY, of PETALBURG and VERDANTURF!$"
+
+WallyJourney_Text_BroadcastWallace:
+	.string "WALLACE: Magnificent.\p"
+	.string "When we first met, you asked me how\n"
+	.string "to stop being afraid.\p"
+	.string "I never answered. You found it on\n"
+	.string "your own. All I did was walk beside\l"
+	.string "you for a while.\p"
+	.string "HOENN is in good hands.$"
+
+WallyJourney_Text_BroadcastWally:
+	.string "WALLY: Thank you, WALLACE. For\n"
+	.string "everything.\p"
+	.string "But I'm not finished.\p"
+	.string "There's one TRAINER I still want to\n"
+	.string "face in this room. {PLAYER}…\p"
+	.string "I'll be waiting.$"
+
+WallyJourney_Text_JuanAfterBroadcast:
+	.string "JUAN: …So WALLACE has been dethroned.\p"
+	.string "It was I who taught WALLACE, long\n"
+	.string "ago. He was proud, and impatient,\l"
+	.string "and brilliant.\p"
+	.string "WALLACE really must have seen\n"
+	.string "something special in that boy.\p"
+	.string "The very thing I once saw in him.$"
+
+WallyJourney_Text_StevenAfterBroadcast:
+	.string "STEVEN: …Like I saw in you,\n"
+	.string "{PLAYER}.\p"
+	.string "Wally's already at the top. He's\n"
+	.string "waiting for you.$"
+
+WallyJourney_Text_JuanSeeYouAtGym:
+	.string "JUAN: Then you have one more BADGE\n"
+	.string "to earn.\p"
+	.string "I shall be waiting at my GYM.\n"
+	.string "Show me what you have.$"
+

@@ -140,22 +140,23 @@ VictoryRoad_1F_Text_WallyPostEntranceBattle:
 	.string "catch up to you!$"
 
 VictoryRoad_1F_Text_WallyIntro:
-	.string "WALLY: {PLAYER}. I was hoping I'd\n"
-	.string "run into you here.\p"
-	.string "This is the last road before the\n"
-	.string "LEAGUE. Only one of us is walking\l"
-	.string "out of it first.\p"
-	.string "Let's find out who.$"
+	.string "WALLY: The CHAMPION doesn't usually\n"
+	.string "hang around caves.\p"
+	.string "I made an exception for you,\n"
+	.string "{PLAYER}.\p"
+	.string "Last test before the LEAGUE. If you\n"
+	.string "can't beat me here, you won't beat\l"
+	.string "me up there.$"
 
 VictoryRoad_1F_Text_WallyDefeat:
-	.string "Okay. That one's on me.\n"
-	.string "Won't happen twice.$"
+	.string "Okay. You passed.\n"
+	.string "Barely.$"
 
 VictoryRoad_1F_Text_WallyPostBattle:
-	.string "WALLY: Don't look so relieved.\p"
-	.string "I'm heading up to the LEAGUE now.\n"
-	.string "When you get there, you'll be\l"
-	.string "battling me.$"
+	.string "WALLY: I'm heading back to the\n"
+	.string "CHAMPION's room.\p"
+	.string "Rest up. Next time, I'm using\n"
+	.string "everything.$"
 
 VictoryRoad_1F_Text_EdgarIntro:
 	.string "I've made it this far a couple times,\n"

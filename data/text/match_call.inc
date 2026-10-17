@@ -2630,13 +2630,11 @@ MatchCall_Text_Wally6::
 	.string "the POKéNAV's service area…$"
 
 MatchCall_Text_Wally7::
-	.string "WALLY: {PLAYER}. I'm at the LEAGUE.\p"
-	.string "The ELITE FOUR were tough. WALLACE\n"
-	.string "was tougher.\p"
-	.string "…I won.\p"
-	.string "So when you get here, you're not\n"
-	.string "challenging WALLACE. You're\l"
-	.string "challenging me. See you soon.$"
+	.string "WALLY: {PLAYER}. You got past me on\n"
+	.string "VICTORY ROAD.\p"
+	.string "I'm back in the CHAMPION's room\n"
+	.string "now. Waiting.\p"
+	.string "Don't keep me waiting too long.$"
 
 MatchCall_Text_Scott1::
 	.string "SCOTT: Howdy, {PLAYER}{KUN}!\p"

@@ -373,7 +373,17 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+    {
+      "type": "trigger",
+      "x": 31,
+      "y": 33,
+      "elevation": 3,
+      "var": "VAR_WALLY_BROADCAST_STATE",
+      "var_value": "1",
+      "script": "WallyJourney_EventScript_StevenStopsAtGym"
+    }
+  ],
   "bg_events": [
     {
       "type": "sign",

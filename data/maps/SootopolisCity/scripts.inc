@@ -1288,6 +1288,14 @@ SootopolisCity_EventScript_GiveWaterfall::
 	call_if_eq VAR_FACING, DIR_NORTH, SootopolisCity_EventScript_WallaceMoveFromGym
 	call_if_eq VAR_FACING, DIR_EAST, SootopolisCity_EventScript_WallaceMoveFromGym
 	call_if_eq VAR_FACING, DIR_WEST, SootopolisCity_EventScript_WallaceMoveFromGymWest
+	@ Wally's Journey: Wallace flies home for his title match against Wally.
+	msgbox WallyJourney_Text_WallaceMustReturn, MSGBOX_DEFAULT
+	closemessage
+	fadescreenswapbuffers FADE_TO_BLACK
+	removeobject LOCALID_SOOTOPOLIS_WALLACE
+	setflag FLAG_HIDE_SOOTOPOLIS_CITY_WALLACE
+	fadescreenswapbuffers FADE_FROM_BLACK
+	setvar VAR_WALLY_BROADCAST_STATE, 1
 	release
 	end
 

@@ -35,9 +35,9 @@ Tone rules: hopeful, warm, funny in places. Subtext over monologue. Flawed but s
 ### 2.2 The Pokémon League (Hoenn)
 - The **League accredits Gym Leaders**. A Gym Leader awards a badge when a challenger beats them. Eight badges let a Trainer through the Victory Road gate.
 - Each badge also works as a **field license**: it lets the holder's Pokémon use the matching field move. The Gym Leader hands over the HM as the physical license; no Pokémon has to learn the move. **Done.**
-- A Trainer who beats all four Elite Four members **in one run** may challenge the Champion. Beating the Champion transfers the title immediately; the League records it.
+- A Trainer who beats all four Elite Four members **in one run** may challenge the Champion. Wally does this right after the Sootopolis crisis, before the player's 8th badge. Beating the Champion transfers the title immediately; the League records it.
 - A **title defense** is the Champion accepting a challenge from a recognized contender. After the player wins, Wally is the standing contender. **Done (basic)**: a repeat match in the Champion's room after the game is clear.
-- **Wallace** was Champion at the start of the game (and Sootopolis' Gym was handed to Juan years ago, as in Emerald). Wally beats Wallace **after** the player beats Wally on Victory Road and **before** the player reaches the Champion's room.
+- **Wallace** was Champion at the start of the game (and Sootopolis' Gym was handed to Juan years ago, as in Emerald). Wally beats Wallace **after the Sootopolis crisis and before the player's 8th Gym**, live on a League broadcast the player watches at Juan's house (owner decision).
 
 ### 2.3 Legendary myth (Groudon, Kyogre, Rayquaza, the Orbs)
 - Ancient Hoenn people recorded Groudon raising land and Kyogre raising the sea, and a sky dragon that ended their battle. The **Red and Blue Orbs** were kept at **Mt. Pyre** as offerings to *calm* the two, not control them.
@@ -106,11 +106,11 @@ Each row: what happens, where, the gate (flag/var), what changes in Wally's Jour
 | 35 | **Wally battle #6** | MossdeepCity | cleared at badge 7 | New | **done** |
 | 36 | Seafloor Cavern: Kyogre awakens | SeafloorCavern_Room9 | `FLAG_KYOGRE_ESCAPED_SEAFLOOR_CAVERN` | Archie realizes the Orb didn't control anything | planned |
 | 37 | Sootopolis crisis; Sky Pillar; Rayquaza | SootopolisCity, SkyPillar_* | `FLAG_LEGENDARIES_IN_SOOTOPOLIS`, `VAR_SOOTOPOLIS_CITY_STATE` | Wally visibly helps evacuate residents; Steven and Wallace explain why Rayquaza is the answer | planned |
+| 37b | **Champion broadcast at Juan's house** | SootopolisCity (Gym door tile 31,33), SootopolisCity_House7 | `VAR_WALLY_BROADCAST_STATE` 1→2→3 | Wallace leaves for his title match; Steven stops the player at the Gym door; they watch Wally beat Wallace on Juan's TV; mentor-chain dialogue | **done** |
 | 38 | Badge 8 Juan; Waterfall HM | SootopolisCity_Gym_1F | `FLAG_BADGE08_GET` | Juan gives HM07 | **done** |
 | 39 | **Wally battle #7** | SootopolisCity | cleared at badge 8 | New; references Wally helping during the crisis | **done** |
 | 40 | Aftermath across Hoenn | many | after `VAR_SOOTOPOLIS_CITY_STATE` resolves | Repairs, aid, angry residents, ex-members | planned |
 | 41 | **Wally battle #8** | VictoryRoad_1F | `FLAG_DEFEATED_WALLY_VICTORY_ROAD` | Confident, dangerous team with Mega Gardevoir | **done** |
-| 42 | Wally beats Wallace (off-screen, reported) | — | after #41 | PokéNav call from Wally; Elite Four drop hints | partial (PokéNav call done) |
 | 43 | Elite Four | EverGrandeCity_* | — | Drake's post-battle line hints the Champion changed "days ago" | planned |
 | 44 | **Champion Wally** | EverGrandeCity_ChampionsRoom | `TRAINER_WALLY_CHAMPION` | Striking entrance and lines; approved six | **done (lines)**; entrance planned |
 | 45 | Hall of Fame | HallOfFame | `FLAG_SYS_GAME_CLEAR` | Keep | keep |
@@ -158,9 +158,7 @@ Check every rewritten scene against this list before committing.
 
 ## 6. Open questions (need the owner)
 
-1. **Who witnesses Wally beating Wallace?** Recommended: nobody on-screen. Wally's PokéNav call (#42) and the Elite Four's hints let the player work it out, so the Champion room still lands as a reveal.
-2. **May/Brendan's final battle location.** Recommended: outside Birch's lab after the Hall of Fame, ending with them deciding to work in research.
-3. **Submarine inside job.** Recommended: a stressed Slateport shipyard worker who joined the Sea Trust front, later cooperates with the police.
+*Resolved 2026-10-16:* Wally's title win is a live broadcast at Juan's house before the 8th Gym (#37b). May/Brendan's final battle is at Birch's lab postgame (#48). The submarine inside job is a stressed Slateport shipyard worker from the Sea Trust front who later cooperates with police (#32).
 
 ---
 
@@ -178,3 +176,4 @@ Every new or rewritten scene gets a row here.
 | 2026-10-16 | Parked-truck opening | InsideOfTruck, LittlerootTown | new game | driving/braking shot | Safe travel, money premise | None |
 | 2026-10-16 | Maxie / Magma first pass | MtChimney, MagmaHideout, SpaceCenter | existing | cartoonish land speeches | Credible case, then hubris | None |
 | 2026-10-16 | Jirachi quest | FallarborTown_CozmosHouse, MeteorFalls_B1F_2R | game clear | — | Postgame mythical | New encounter |
+| 2026-10-16 | Champion broadcast | SootopolisCity, SootopolisCity_House7 (Juan's house) | after Wallace's post-crisis talk; Gym-door tile | Wallace waiting at Gym; Pokéfan NPC | Show how far ahead Wally is; mentor chain | Sets `VAR_WALLY_BROADCAST_STATE` 3; hides Wallace and Steven in Sootopolis |

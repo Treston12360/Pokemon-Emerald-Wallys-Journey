@@ -113,6 +113,8 @@ EventScript_ResetAllBerries::
 	return
 
 EventScript_ResetAllMapFlags::
+	setflag FLAG_HIDE_JUANS_HOUSE_JUAN
+	setflag FLAG_HIDE_JUANS_HOUSE_STEVEN
 	setflag FLAG_HIDE_METEOR_FALLS_JIRACHI
 	setflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS
 	setflag FLAG_HIDE_WALLY_RIVAL_MOSSDEEP

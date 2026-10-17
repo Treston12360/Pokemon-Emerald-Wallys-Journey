@@ -249,15 +249,15 @@ EverGrandeCity_ChampionsRoom_Movement_BirchArrives:
 
 EverGrandeCity_ChampionsRoom_Text_IntroSpeech:
 	.string "WALLY: There you are.\p"
-	.string "I told you I'd get here first.\n"
-	.string "Turns out I meant it.\p"
-	.string "WALLACE stepped down after our\n"
-	.string "battle. He said HOENN needed a\l"
-	.string "CHAMPION who was still climbing.\p"
+	.string "You saw the broadcast. JUAN told me\n"
+	.string "you watched it at his place.\p"
+	.string "After our battle, WALLACE said HOENN\n"
+	.string "needed a CHAMPION who was still\l"
+	.string "climbing.\p"
 	.string "So here's the thing, {PLAYER}.\p"
 	.string "I know every POKéMON you've shown\n"
 	.string "me. I know how you think.\p"
-	.string "And I've wanted this since MAUVILLE.\n"
+	.string "I've wanted this since MAUVILLE.\n"
 	.string "To beat you at your best.\p"
 	.string "Don't hold back. I won't.$"
 
