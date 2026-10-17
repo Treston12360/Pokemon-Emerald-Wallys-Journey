@@ -2,6 +2,8 @@
 // Uses saved Emerald variable IDs; does not inspect the player's hidden party.
 #include "global.h"
 #include "main.h"
+#include "palette.h"
+#include "script.h"
 #include "event_data.h"
 #include "wally_journey.h"
 #include "constants/items.h"
@@ -400,7 +402,10 @@ void WallyJourney_SetSpeeds(u32 overworld, u32 battle)
 u32 WallyJourney_OverworldExtraIterations(void)
 {
     u32 speed = WallyJourney_GetOverworldSpeed();
-    if (speed >= WALLY_OW_SPEED_COUNT || JOY_HELD(R_BUTTON))
+    // Like Pokemon Emerald Rogue: normal speed during cutscenes/scripts, while
+    // field controls are locked, or during a screen fade.
+    if (speed >= WALLY_OW_SPEED_COUNT || JOY_HELD(R_BUTTON)
+     || ScriptContext_IsEnabled() || ArePlayerFieldControlsLocked() || gPaletteFade.active)
         return 0;
     return sOverworldExtra[speed];
 }

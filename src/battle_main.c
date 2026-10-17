@@ -1739,19 +1739,25 @@ void BattleMainCB2(void)
 
     // Wally's Journey: battle speed-up. Extra logic passes inside one frame;
     // button presses only count once so menus never double-select.
+    // Guards adapted from Pokemon Emerald Rogue (Pokabbie): run at 1x while the
+    // player is choosing an action (menus, Bag, party) and whenever a palette
+    // fade is running, because fades and menu transitions misbehave otherwise.
     extra = WallyJourney_BattleExtraIterations();
+    if (gPaletteFade.active || gBattleMainFunc == HandleTurnActionSelectionState)
+        extra = 0;
     if (extra != 0)
     {
         u16 newKeys = gMain.newKeys, newAndRepeated = gMain.newAndRepeatedKeys;
         gMain.newKeys = 0;
         gMain.newAndRepeatedKeys = 0;
-        for (i = 0; i < extra && gMain.callback2 == BattleMainCB2; i++)
+        for (i = 0; i < extra; i++)
         {
-            if (gMain.callback1 == BattleMainCB1)
-                BattleMainCB1();
+            if (gMain.callback2 != BattleMainCB2 || gMain.callback1 != BattleMainCB1
+             || gPaletteFade.active || gBattleMainFunc == HandleTurnActionSelectionState)
+                break;
+            BattleMainCB1();
             AnimateSprites();
             RunTextPrinters();
-            UpdatePaletteFade();
             RunTasks();
         }
         gMain.newKeys = newKeys;
