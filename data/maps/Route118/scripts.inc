@@ -245,7 +245,18 @@ Route118_EventScript_Deandre::
 	end
 
 Route118_Text_StevenQuestions:
-	.string "STEVEN: Hi, {PLAYER}{KUN}!\p"
+	.string "STEVEN: {PLAYER}! It's good to see\n"
+	.string "you again. How is your journey?\\p\n"
+	.string "The WEATHER INSTITUTE has reported\n"
+	.string "rain patterns that don't add up.\\p\n"
+	.string "DEVON's instruments can measure\n"
+	.string "the change, not explain it.\\p\n"
+	.string "I've asked researchers to share\n"
+	.string "their findings, not bury them.\\p\n"
+	.string "Keep an eye on the skies ahead.\n"
+	.string "And keep thinking for yourself.\\p\n"
+	.string "People with convincing answers\n"
+	.string "aren't always people who are right.$"
 	.string "It's me, STEVEN!\n"
 	.string "We met in the cave near DEWFORD.\p"
 	.string "Have you met many kinds of POKéMON\n"
@@ -274,7 +285,10 @@ Route118_Text_IdenticalMindsTakeThis:
 	.string "Take this GOOD ROD!$"
 
 Route118_Text_TryYourLuckFishing:
-	.string "Wherever there's water, try your luck\n"
+	.string "Some families here fish to eat.\n"
+	.string "Others fish to make a living.\\p\n"
+	.string "Either way, never take the river\n"
+	.string "for granted.$"
 	.string "at fishing.$"
 
 Route118_Text_DontYouLikeToFish:
@@ -285,7 +299,12 @@ Route118_Text_TryCatchingMonWithGoodRod:
 	.string "with your GOOD ROD.$"
 
 Route118_Text_CanCrossRiversWithSurf:
-	.string "Even if there isn't a boat, you can\n"
+	.string "The current is stronger than it\n"
+	.string "looks. A boatman taught me that.\\p\n"
+	.string "With the right BADGE, your team\n"
+	.string "can help you SURF safely.\\p\n"
+	.string "You don't need to teach the move.\n"
+	.string "That doesn't mean ignore the sea.$"
 	.string "cross rivers and the sea if you have\l"
 	.string "a POKéMON that knows SURF.\p"
 	.string "POKéMON can be counted on to do so\n"
