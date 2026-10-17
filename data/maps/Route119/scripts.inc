@@ -91,7 +91,7 @@ Route119_EventScript_BattleMayMudkip::
 	end
 
 Route119_EventScript_DefeatedMay::
-	msgbox Route119_Text_MayPresentForYou, MSGBOX_DEFAULT
+	msgbox Route119_Text_MayResearchAfterBattle, MSGBOX_DEFAULT
 	call Route119_EventScript_GiveFlyHM
 	msgbox Route119_Text_MayExplainFly, MSGBOX_DEFAULT
 	goto Route119_EventScript_RivalExitScottArrive
@@ -488,7 +488,7 @@ Route119_Text_MayDefeat:
 	.string "I was worried that you might be\n"
 	.string "struggling with your training.$"
 
-Route119_Text_MayPresentForYou:
+Route119_Text_MayResearchAfterBattle:
 	.string "MAY: You keep surprising me,\p"
 	.string "and you're not the only one.\p"
 	.string "Dad's migration notes don't match\n"
