@@ -242,13 +242,10 @@ Route119_WeatherInstitute_2F_Text_Grunt5Defeat:
 
 Route119_WeatherInstitute_2F_Text_Grunt5PostBattle:
 	.string "They told us this would help\n"
-	.string "restore the ocean.\\p\n"
+	.string "restore the ocean.\p\n"
 	.string "So why were we ordered to\n"
-	.string "threaten a room full of staff?\\p\n"
+	.string "threaten a room full of staff?\p\n"
 	.string "I don't have a good answer.$"
-	.string "This is just the warm-up.\p"
-	.string "…I hope ARCHIE knows when to stop.$"
-
 Route119_WeatherInstitute_2F_Text_ShellyIntro:
 	.string "Ahahahaha!\p"
 	.string "You're going to meddle in TEAM AQUA's\n"
@@ -285,15 +282,10 @@ Route119_WeatherInstitute_2F_Text_WeHaveToHurryToMtPyre:
 
 Route119_WeatherInstitute_2F_Text_ThanksPleaseTakePokemon:
 	.string "You protected our people and\n"
-	.string "our research. Thank you.\\p\n"
+	.string "our research. Thank you.\p\n"
 	.string "Please take this CASTFORM.\n"
 	.string "It deserves a TRAINER who\n"
 	.string "treats it as a partner.$"
-	.string "Thanks to you, we're safe!\p"
-	.string "It might be an odd way of thanking you,\n"
-	.string "but take this POKéMON.$"
-
-@ Unused
 Route119_WeatherInstitute_2F_Text_NoRoomForPokemon:
 	.string "Hm? You don't seem to have any room\n"
 	.string "for this POKéMON.$"
@@ -303,28 +295,17 @@ Route119_WeatherInstitute_2F_Text_PlayerReceivedCastform:
 
 Route119_WeatherInstitute_2F_Text_PokemonChangesWithWeather:
 	.string "CASTFORM reacts to changes\n"
-	.string "in the atmosphere.\\p\n"
+	.string "in the atmosphere.\p\n"
 	.string "Care for it. We designed this\n"
 	.string "research to understand weather,\n"
 	.string "not turn it into a weapon.$"
-	.string "to the weather conditions.\p"
-	.string "There're plenty of them in the\n"
-	.string "INSTITUTE--go ahead and take it.$"
-
 Route119_WeatherInstitute_2F_Text_ChangingWeatherRidiculous:
 	.string "The records tell us weather can\n"
-	.string "shift without warning.\\p\n"
+	.string "shift without warning.\p\n"
 	.string "But these changes have a pattern\n"
-	.string "we don't understand yet.\\p\n"
+	.string "we don't understand yet.\p\n"
 	.string "Science means admitting what\n"
 	.string "you don't know, then looking.$"
-	.string "Volcanoes and oceans don't respond\n"
-	.string "in straight lines. Push them a little\l"
-	.string "and nothing happens. Push a little\l"
-	.string "more and everything happens.\p"
-	.string "I sent MAXIE our eruption models.\n"
-	.string "He sent back a thank-you card.$"
-
 Route119_WeatherInstitute_2F_Text_GroudonWeather:
 	.string "I track weather patterns over\n"
 	.string "the HOENN region.\p"
