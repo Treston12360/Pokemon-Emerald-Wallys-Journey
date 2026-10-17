@@ -141,8 +141,23 @@ u16 WallyJourney_ConvertForbiddenBall(u16 itemId)
     return WallyJourney_IsForbiddenBall(itemId) ? ITEM_POKE_BALL : itemId;
 }
 
-bool32 WallyJourney_IsExpAllMode(void) { return FlagGet(FLAG_WALLY_EXP_ALL_MODE); }
-bool32 WallyJourney_ZMovesEnabled(void) { return !FlagGet(FLAG_WALLY_Z_MOVES_OFF); }
+bool32 WallyJourney_IsExpAllMode(void)
+{
+#if IS_FRLG
+    return FALSE;
+#else
+    return FlagGet(FLAG_WALLY_EXP_ALL_MODE);
+#endif
+}
+
+bool32 WallyJourney_ZMovesEnabled(void)
+{
+#if IS_FRLG
+    return TRUE;
+#else
+    return !FlagGet(FLAG_WALLY_Z_MOVES_OFF);
+#endif
+}
 
 // Script special (after setwildbattle): the Sky Pillar Rayquaza knows Dragon
 // Ascent, which is what lets Rayquaza Mega Evolve without a Mega Stone.
@@ -1101,7 +1116,9 @@ void WallyJourney_SetupTitanBattle(void)
     default:
         break;
     }
+#if !IS_FRLG
     FlagSet(FLAG_WALLY_SMART_WILD_AI);
+#endif
 }
 
 // Game speed options (Options menu). Music is unaffected because it is mixed
