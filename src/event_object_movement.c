@@ -2842,6 +2842,8 @@ static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lig
         sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
         sprite->x += 8;
         sprite->y += 22 + sprite->centerToCornerVecY;
+        if (lightType == LIGHT_TYPE_WINDOW)
+            sprite->y += 8; // centre the glow on the window pane, not above it
         break;
     case LIGHT_TYPE_PKMN_CENTER_SIGN:
     case LIGHT_TYPE_POKE_MART_SIGN:
@@ -2949,7 +2951,8 @@ static void SpawnWarpLights(s16 left, s16 right, s16 top, s16 bottom, s16 camX, 
         else if (MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(x, y)))
         {
             s32 wx, wy;
-            SpawnLightSprite(x, y, camX, camY, LIGHT_TYPE_PORCH);
+            // (No glow on the door itself: owner feedback 2026-10-17, it read as a
+            // glowing door. The house's windows carry its light instead.)
             // Windows on the same building front as the door.
             for (wy = y - 1; wy <= y; wy++)
             {
