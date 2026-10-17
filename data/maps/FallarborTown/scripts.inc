@@ -17,7 +17,13 @@ FallarborTown_EventScript_ExpertM::
 	end
 
 FallarborTown_EventScript_ExpertMNormal::
+	goto_if_set FLAG_SYS_GAME_CLEAR, FallarborTown_EventScript_ExpertMChampion
 	msgbox FallarborTown_Text_RegionKnownForMeteors, MSGBOX_DEFAULT
+	release
+	end
+
+FallarborTown_EventScript_ExpertMChampion::
+	msgbox FallarborTown_Text_MeteorResearchAfterChampion, MSGBOX_DEFAULT
 	release
 	end
 
@@ -31,7 +37,12 @@ FallarborTown_Text_MyPreciousAzurill_W0_Script:
 	end
 
 FallarborTown_EventScript_Gentleman::
+	goto_if_set FLAG_SYS_GAME_CLEAR, FallarborTown_EventScript_GentlemanChampion
 	msgbox FallarborTown_Text_HaveYouChallengedFlannery, MSGBOX_NPC
+	end
+
+FallarborTown_EventScript_GentlemanChampion::
+	msgbox FallarborTown_Text_FlanneryAfterChampion, MSGBOX_NPC
 	end
 
 FallarborTown_EventScript_Azurill::
@@ -106,3 +117,23 @@ FallarborTown_Text_MyPreciousAzurill_W0:
 	.string "He came home ashamed.\p"
 	.string "His mom made him dinner anyway.\n"
 	.string "That's FALLARBOR.$"
+
+FallarborTown_Text_MeteorResearchAfterChampion:
+	.string "PROF. COZMO is back at work.\n"
+	.string "This time he shares his notes\n"
+	.string "with ROXANNE in RUSTBORO.\p"
+	.string "He says the meteorite wasn't\n"
+	.string "dangerous because it fell.\p"
+	.string "It became dangerous when\n"
+	.string "people thought they knew\n"
+	.string "exactly what it could do.$"
+
+FallarborTown_Text_FlanneryAfterChampion:
+	.string "FLANNERY came through town\n"
+	.string "with supplies after the storm.\p"
+	.string "Someone called her the next\n"
+	.string "great LEADER in her family.\p"
+	.string "She laughed. 'I'm already\n"
+	.string "the first one who's me.'\p"
+	.string "Her grandfather would've\n"
+	.string "liked that answer.$"
