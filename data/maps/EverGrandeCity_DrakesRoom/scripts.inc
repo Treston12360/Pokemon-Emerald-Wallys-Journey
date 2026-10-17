@@ -75,16 +75,18 @@ EverGrandeCity_DrakesRoom_Text_IntroSpeech:
 	.string "Show me what you've learned.$"
 
 EverGrandeCity_DrakesRoom_Text_Defeat:
-	.string "Superb, it should be said.$"
+	.string "DRAKE: Ha! Well fought!\p"
+	.string "You've the judgment of\n"
+	.string "a seasoned captain.$"
 
 EverGrandeCity_DrakesRoom_Text_PostBattleSpeech:
-	.string "You deserve every credit for coming\n"
-	.string "this far.\p"
-	.string "I asked you what a TRAINER needs.\n"
-	.string "Most answer with power.\p"
-	.string "The answer is a heart that keeps\n"
-	.string "its course when the sea turns\l"
-	.string "against it. You have one.\p"
-	.string "So did the boy who sits on that\n"
-	.string "throne. Go. The CHAMPION is waiting!$"
+	.string "I've spent my life reading\n"
+	.string "the wind and the waves.\p"
+	.string "Neither ever cared what\n"
+	.string "I wanted of them.\p"
+	.string "A good captain listens.\n"
+	.string "A good TRAINER does, too.\p"
+	.string "WALLY learned that lesson.\n"
+	.string "So have you.\p"
+	.string "Go on. The CHAMPION awaits.$"
 
