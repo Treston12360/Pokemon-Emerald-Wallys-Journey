@@ -119,44 +119,39 @@ VictoryRoad_1F_EventScript_Katelynn::
 	end
 
 VictoryRoad_1F_Text_WallyNotGoingToLoseAnymore:
-	.string "WALLY: Hi! {PLAYER}!\p"
-	.string "I bet you're surprised to see me here!\p"
-	.string "I made it all the way here, and it's\n"
-	.string "all thanks to you!\p"
-	.string "{PLAYER}, losing to you that time\n"
-	.string "made me stronger!\p"
-	.string "But I'm not going to lose anymore!\p"
-	.string "I'm going to win! For the POKéMON who\n"
-	.string "gave me courage and strength!\p"
-	.string "Okay… Here I come!$"
+	.string "WALLY: Hey, {PLAYER}.\p"
+	.string "The CHAMPION doesn't usually hang\n"
+	.string "around caves. I made an exception.\p"
+	.string "LEAGUE rules say I can't refuse your\n"
+	.string "challenge. They don't say I can't\l"
+	.string "test you on the way up.\p"
+	.string "If you can't beat me here, you\n"
+	.string "won't beat me up there.$"
 
 VictoryRoad_1F_Text_WallyEntranceDefeat:
-	.string "Wow!\n"
-	.string "{PLAYER}, you are strong, after all!$"
-
-VictoryRoad_1F_Text_WallyPostEntranceBattle:
-	.string "WALLY: I couldn't beat you today,\n"
-	.string "{PLAYER}, but one of these days, I'll\l"
-	.string "catch up to you!$"
-
-VictoryRoad_1F_Text_WallyIntro:
-	.string "WALLY: The CHAMPION doesn't usually\n"
-	.string "hang around caves.\p"
-	.string "I made an exception for you,\n"
-	.string "{PLAYER}.\p"
-	.string "Last test before the LEAGUE. If you\n"
-	.string "can't beat me here, you won't beat\l"
-	.string "me up there.$"
-
-VictoryRoad_1F_Text_WallyDefeat:
 	.string "Okay. You passed.\n"
 	.string "Barely.$"
 
+VictoryRoad_1F_Text_WallyPostEntranceBattle:
+	.string "WALLY: That was a warm-up team.\p"
+	.string "I'll be in the CHAMPION's room.\n"
+	.string "Next time, I'm using everything.$"
+
+VictoryRoad_1F_Text_WallyIntro:
+	.string "WALLY: Hey, CHAMPION.\p"
+	.string "I train down here between title\n"
+	.string "challenges. Nobody bothers me.\p"
+	.string "Want to see what I've been working\n"
+	.string "on? Don't go easy.$"
+
+VictoryRoad_1F_Text_WallyDefeat:
+	.string "Still not enough. Good.\n"
+	.string "That just means I keep going.$"
+
 VictoryRoad_1F_Text_WallyPostBattle:
-	.string "WALLY: I'm heading back to the\n"
-	.string "CHAMPION's room.\p"
-	.string "Rest up. Next time, I'm using\n"
-	.string "everything.$"
+	.string "WALLY: When I'm ready, I'll come up\n"
+	.string "those stairs and take the title back.\p"
+	.string "Don't get comfortable.$"
 
 VictoryRoad_1F_Text_EdgarIntro:
 	.string "I've made it this far a couple times,\n"

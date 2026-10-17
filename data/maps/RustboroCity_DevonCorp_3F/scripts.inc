@@ -206,6 +206,9 @@ RustboroCity_DevonCorp_3F_Text_MrStoneIHaveFavor:
 	.string "and our ships. My son is one of them.\p"
 	.string "Speaking of my son… I have a favor\n"
 	.string "to ask.\p"
+	.string "TEAM AQUA is watching our couriers.\n"
+	.string "But nobody looks twice at a young\l"
+	.string "TRAINER on a journey.\p"
 	.string "On your way to SLATEPORT's SHIPYARD,\n"
 	.string "could you stop off in DEWFORD TOWN\l"
 	.string "and deliver a LETTER to STEVEN?$"
@@ -296,9 +299,11 @@ RustboroCity_DevonCorp_3F_Text_VisitCaptSternShipyard:
 	.string "you should go see CAPT. STERN.$"
 
 RustboroCity_DevonCorp_3F_Text_RepeatAndTimerHugelyPopular:
-	.string "DEVON's new products, the REPEAT BALL\n"
-	.string "and TIMER BALL, have become hugely\l"
-	.string "popular among TRAINERS.$"
+	.string "DEVON's POKé BALLS are the only ones\n"
+	.string "licensed in HOENN.\p"
+	.string "The rule keeps wild POKéMON from\n"
+	.string "being overcaught. Every TRAINER gets\l"
+	.string "the same ball. Fair is fair.$"
 
 RustboroCity_DevonCorp_3F_Text_RareRocksDisplay:
 	.string "It's a collection of rare rocks and\n"

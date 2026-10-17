@@ -276,18 +276,21 @@ RustboroCity_DevonCorp_2F_Text_DeviceForTalkingToPokemon:
 RustboroCity_DevonCorp_2F_Text_DevelopingNewBalls:
 	.string "I'm developing new kinds of\n"
 	.string "POKé BALLS…\p"
-	.string "But I haven't made much headway…$"
+	.string "But HOENN's conservation law only\n"
+	.string "licenses the standard POKé BALL.\p"
+	.string "Stronger balls made catching too\n"
+	.string "easy, and wild populations crashed.\l"
+	.string "So… back to the drawing board.$"
 
 RustboroCity_DevonCorp_2F_Text_WeFinallyMadeNewBalls:
 	.string "We finally made new kinds of\n"
-	.string "POKé BALLS!\p"
-	.string "The REPEAT BALL makes it easier to\n"
-	.string "catch POKéMON you've caught before.\p"
-	.string "The TIMER BALL gets better at catching\n"
-	.string "POKéMON the longer a battle runs.\p"
-	.string "Both are proudly developed by\n"
-	.string "the DEVON CORPORATION.\p"
-	.string "Please give them a try!$"
+	.string "POKé BALLS! A REPEAT BALL and a\l"
+	.string "TIMER BALL!\p"
+	.string "…And the LEAGUE rejected both.\p"
+	.string "Only the standard POKé BALL is legal\n"
+	.string "in HOENN. It keeps wild POKéMON safe\l"
+	.string "from overcatching.\p"
+	.string "Honestly? I think they're right.$"
 
 RustboroCity_DevonCorp_2F_Text_IMadePokenav:
 	.string "I made the POKéNAV!\p"

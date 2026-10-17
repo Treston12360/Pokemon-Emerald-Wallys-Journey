@@ -2226,11 +2226,10 @@ MatchCall_Text_TateLiza_PostRematch::
 MatchCall_Text_Juan_Preparing::
 	.string "JUAN: Hmm…\n"
 	.string "{PLAYER}{KUN}… Was it?\p"
-	.string "Our battle together--it brought\n"
-	.string "to me memories of when I first\l"
-	.string "encountered WALLACE.\p"
-	.string "Perhaps you are a genius who may\n"
-	.string "yet surpass WALLACE!$"
+	.string "Our battle brought back memories of\n"
+	.string "when I first met WALLACE.\p"
+	.string "He surpassed me. Then WALLY surpassed\n"
+	.string "him. Perhaps you are next in line.$"
 
 MatchCall_Text_Juan_PreparingPostGame::
 	.string "JUAN: Fufu… {PLAYER}{KUN}…\n"
