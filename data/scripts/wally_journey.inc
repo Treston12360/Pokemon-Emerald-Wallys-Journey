@@ -472,7 +472,7 @@ WallyJourney_EventScript_StevenStopsAtGym::
 	setvar VAR_WALLY_BROADCAST_STATE, 2
 	clearflag FLAG_HIDE_JUANS_HOUSE_JUAN
 	clearflag FLAG_HIDE_JUANS_HOUSE_STEVEN
-	warp MAP_SOOTOPOLIS_CITY_HOUSE7, 3, 5
+	warp MAP_SOOTOPOLIS_CITY_HOUSE7, 7, 3
 	waitstate
 	releaseall
 	end
@@ -485,7 +485,7 @@ WallyJourney_EventScript_JuansHouseBroadcast::
 	waitmovement 0
 	msgbox WallyJourney_Text_JuanComeQuickly, MSGBOX_DEFAULT
 	closemessage
-	applymovement LOCALID_PLAYER, WallyJourney_Movement_PlayerToJuansTV
+	applymovement LOCALID_PLAYER, Common_Movement_FaceUp
 	waitmovement 0
 	applymovement LOCALID_JUANS_HOUSE_JUAN, Common_Movement_FaceUp
 	waitmovement 0
@@ -514,18 +514,6 @@ WallyJourney_EventScript_JuansHouseBroadcast::
 	fadescreenswapbuffers FADE_FROM_BLACK
 	releaseall
 	end
-
-@ From the doorway (3,5) to stand beside Juan in front of the TV (7,2).
-WallyJourney_Movement_PlayerToJuansTV:
-	walk_right
-	walk_right
-	walk_right
-	walk_right
-	walk_up
-	walk_up
-	walk_up
-	face_up
-	step_end
 
 WallyJourney_Text_WallaceMustReturn:
 	.string "WALLACE: Now, forgive me, but I must\n"

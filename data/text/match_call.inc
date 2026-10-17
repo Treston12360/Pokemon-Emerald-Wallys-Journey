@@ -2630,11 +2630,13 @@ MatchCall_Text_Wally6::
 	.string "the POKéNAV's service area…$"
 
 MatchCall_Text_Wally7::
-	.string "WALLY: {PLAYER}. You got past me on\n"
-	.string "VICTORY ROAD.\p"
-	.string "I'm back in the CHAMPION's room\n"
-	.string "now. Waiting.\p"
-	.string "Don't keep me waiting too long.$"
+	.string "…… …… ……\p"
+	.string "“You've reached the office of HOENN\n"
+	.string "CHAMPION WALLY.\p"
+	.string "The CHAMPION is unavailable. Due to\n"
+	.string "high demand, he cannot return\l"
+	.string "personal calls.”\p"
+	.string "…… …… ……$"
 
 MatchCall_Text_Scott1::
 	.string "SCOTT: Howdy, {PLAYER}{KUN}!\p"
