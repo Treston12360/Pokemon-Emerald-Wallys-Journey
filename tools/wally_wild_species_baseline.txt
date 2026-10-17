@@ -1,15 +1,13 @@
-# Baseline of distinct normal wild species, captured after commit 098d6f1.
-# Any removal requires deliberate approval and a new baseline.
+# Baseline of distinct normal wild species, reviewed after commit 614f749.
+# Four overpowered evolved forms were intentionally removed from direct wild access:\n# Ampharos (via Mareep), Toxtricity (via Toxel), Doublade and Aegislash (via Honedge).\n# Evolution obtainability still requires ROM verification.\n# Any further removal requires deliberate approval and a new baseline.
 SPECIES_ABOMASNOW
 SPECIES_ABRA
 SPECIES_ABSOL
-SPECIES_AEGISLASH
 SPECIES_AERODACTYL
 SPECIES_AIPOM
 SPECIES_ALOMOMOLA
 SPECIES_ALTARIA
 SPECIES_AMAURA
-SPECIES_AMPHAROS
 SPECIES_ANORITH
 SPECIES_APPLIN
 SPECIES_ARAQUANID
@@ -102,7 +100,6 @@ SPECIES_DITTO
 SPECIES_DODRIO
 SPECIES_DODUO
 SPECIES_DONDOZO
-SPECIES_DOUBLADE
 SPECIES_DRACOVISH
 SPECIES_DRACOZOLT
 SPECIES_DRAGALGE
@@ -465,7 +462,6 @@ SPECIES_TORKOAL
 SPECIES_TOTODILE
 SPECIES_TOXAPEX
 SPECIES_TOXEL
-SPECIES_TOXTRICITY
 SPECIES_TRAPINCH
 SPECIES_TREECKO
 SPECIES_TREVENANT
