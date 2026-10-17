@@ -122,3 +122,16 @@ The above historical details must be checked against newer explicit owner instru
 - **Progression and balance:** Keep early overpowered Mega Stones appropriately gated. The player's Mega Bracelet is received from Steven in Wally's house after Norman, and stone placement should respect that moment. Ensure all intended Mega Stones are actually obtainable and that hidden pickups, event flags, item balls and wild held-item tables work in the compiled ROM.
 - **Item-access audit:** Maintain a per-item ledger with source type, map/species, acquisition conditions, minimum story progression, repeatability, quantity needed, and test evidence. A mention of an item in code is not proof it can be acquired.
 - **Status:** Confirmed owner wishlist, not yet fully placed, verified, compiled or emulator-tested.
+
+## Additional recovered ideas and constraints (historical cross-check)
+
+**These were discussed earlier but are not all confirmed final specifications. Preserve them for design review; never silently implement an unapproved idea.**
+
+- **Following Pokémon toggle — earlier requested/suggested detail:** In addition to working followers and correct shiny follower sprites, a **toggle to enable/disable following** was mentioned. Treat the On/Off control as a candidate implementation detail needing final UI behavior review; followers themselves are already a confirmed requirement.
+- **EXP All toggle — clarified historical intent:** An in-game choice between standard EXP Share and EXP All was discussed. Honor matched progression parity and verify save persistence, not just balancing.
+- **No Dynamax or Gigantamax:** The owner earlier explicitly excluded them. Z-Moves were initially excluded as well, but the **newer explicit instruction supersedes that**: Z-Moves are allowed with an Options toggle. Do not accidentally add Dynamax/Gigantamax.
+- **Wally-side narrative ideas not yet finalized:** PokéNav calls or messages, occasional Wally team-up/double battles, Wally visibly traveling across Hoenn, and recurring rival dialogue that reflects his growing confidence and journey. The approximate 12+ rival-battle target remains unfinalized.
+- **Optional world/activity expansions (suggestions, not authorized finished scope):** Enhanced Secret Base activities, expanded Pokémon Contests, expanded Battle Frontier content, and deeper discovery/exploration interactions. The already-confirmed Champion title defenses, Gym Leader rematches, and Battle Frontier Mega eligibility remain binding.
+- **HM script conflict reminder:** Earlier brainstorming entertained removing some handed-out HM items entirely; the **latest owner instruction wins**: Gym Leaders grant the relevant HMs and explain field use without teaching a move, while former HM-giving NPC scenes receive normal replacement dialogue. Verify that all HM gates remain functional.
+
+**Status:** This is a historical checklist and conflict resolution, not evidence of implemented features. The owner may prioritize or approve the suggested side activities before development.
