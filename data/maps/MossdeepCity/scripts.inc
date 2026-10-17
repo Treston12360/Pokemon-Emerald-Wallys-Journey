@@ -332,11 +332,20 @@ MossdeepCity_Text_YouCanKeepIt:
 	.string "from STEVEN.$"
 
 MossdeepCity_Text_StevensHouseOverThere:
-	.string "STEVEN's house is right over there!$"
+	.string "STEVEN's house is over there.\n"
+	.string "He's away more than he's home.\p"
+	.string "He says the stones he collects\n"
+	.string "tell stories about the earth.\p"
+	.string "Lately, he listens to people\n"
+	.string "just as carefully.$"
 
 MossdeepCity_Text_WhatToDoWithWeirdRock:
-	.string "Yeah, you think so, too! What are you\n"
-	.string "supposed to do with some weird rock?$"
+	.string "STEVEN gave me a strange rock.\n"
+	.string "I thought it was worthless.\p"
+	.string "Then he explained how long\n"
+	.string "it took nature to make it.\p"
+	.string "I still don't know its use.\n"
+	.string "But I understand the gift.$"
 
 MossdeepCity_Text_WailmerWatching:
 	.string "Around MOSSDEEP you can see wild\n"
@@ -352,8 +361,13 @@ MossdeepCity_Text_SpaceCenterReceivedLetter:
 	.string "over a letter they received recently.$"
 
 MossdeepCity_Text_SpaceCenterLaunchingRockets:
-	.string "The island's SPACE CENTER has been\n"
-	.string "launching huge rockets.$"
+	.string "The SPACE CENTER keeps sending\n"
+	.string "rockets into the sky.\p"
+	.string "My daughter asks why we study\n"
+	.string "the stars while the sea\n"
+	.string "still holds so many secrets.\p"
+	.string "I told her we have to be\n"
+	.string "curious about both.$"
 
 MossdeepCity_Text_MossdeepTargetedByMagma:
 	.string "I heard from a SAILOR buddy that\n"
@@ -366,10 +380,13 @@ MossdeepCity_Text_MossdeepTargetedByMagma:
 	.string "go visit the SPACE CENTER.$"
 
 MossdeepCity_Text_FeelReliefOnLand:
-	.string "I'm a SAILOR, so the sea's obviously\n"
-	.string "more important to me.\p"
-	.string "But you know? When I get back on land\n"
-	.string "after a long voyage, I do feel relief!$"
+	.string "When I'm at sea, I miss the\n"
+	.string "solid ground beneath my feet.\p"
+	.string "When I'm on land, I miss\n"
+	.string "the sound of the waves.\p"
+	.string "Anyone who thinks we can\n"
+	.string "do without either has\n"
+	.string "never lived between them.$"
 
 MossdeepCity_Text_NiceIfWorldCoveredByFlowers:
 	.string "Wouldn't it be nice if the whole\n"
