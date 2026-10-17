@@ -79,43 +79,49 @@ RustboroCity_DevonCorp_1F_EventScript_ProductsDisplay::
 	end
 
 RustboroCity_DevonCorp_1F_Text_WelcomeToDevonCorp:
-	.string "Hello and welcome to the DEVON\n"
-	.string "CORPORATION.\p"
-	.string "We're proud producers of items and\n"
-	.string "medicine that enhance your life.$"
+	.string "Welcome to the DEVON CORPORATION.\p"
+	.string "We make the items and medicine that\n"
+	.string "keep HOENN moving.$"
 
 RustboroCity_DevonCorp_1F_Text_StaffGotRobbed:
-	.string "One of our research staff stupidly\n"
-	.string "got robbed of an important parcel.$"
+	.string "One of our researchers got robbed of\n"
+	.string "an important parcel.\p"
+	.string "The PRESIDENT is furious. And\n"
+	.string "worried. Mostly worried.$"
 
 RustboroCity_DevonCorp_1F_Text_ThoseShoesAreOurProduct:
-	.string "Hey, those RUNNING SHOES!\n"
-	.string "They're one of our products!\p"
-	.string "It makes me happy when I see someone\n"
-	.string "using something we made.$"
+	.string "Those RUNNING SHOES are ours!\p"
+	.string "It's nice seeing our work out in the\n"
+	.string "world. Makes the long hours feel\l"
+	.string "worth it.$"
 
 RustboroCity_DevonCorp_1F_Text_RobberWasntVeryBright:
 	.string "That stolen parcel…\p"
-	.string "Well, sure it's important, but it's not\n"
-	.string "anything that anyone can use.\p"
-	.string "In my estimation, that robber must not\n"
-	.string "have been very bright.$"
+	.string "It's a dredger component. Useless to\n"
+	.string "anyone but us.\p"
+	.string "Unless your goal was to stop us\n"
+	.string "dredging. Then it's very useful.$"
 
 RustboroCity_DevonCorp_1F_Text_SoundsLikeStolenGoodsRecovered:
-	.string "It sounds like they've recovered\n"
-	.string "the ripped-off DEVON GOODS.$"
+	.string "They recovered the stolen GOODS.\p"
+	.string "Good. The dredger project goes on.\n"
+	.string "I'm… mostly relieved.$"
 
 RustboroCity_DevonCorp_1F_Text_OnlyAuthorizedPeopleEnter:
-	.string "I'm sorry, only authorized people\n"
-	.string "are allowed to enter here.$"
+	.string "Sorry. Only authorized people beyond\n"
+	.string "this point.\p"
+	.string "Corporate security got very strict\n"
+	.string "this week.$"
 
 RustboroCity_DevonCorp_1F_Text_HowCouldWeGetRobbed:
-	.string "It's beyond stupid.\n"
-	.string "How could we get robbed?$"
+	.string "How could we get robbed?\p"
+	.string "We have guards, cameras, procedures.\n"
+	.string "Somebody on the inside talked.$"
 
 RustboroCity_DevonCorp_1F_Text_YoureAlwaysWelcomeHere:
-	.string "Hi, there!\n"
-	.string "You're always welcome here!$"
+	.string "Hi there! You're always welcome at\n"
+	.string "DEVON.\p"
+	.string "The PRESIDENT made that very clear.$"
 
 RustboroCity_DevonCorp_1F_Text_RocksMetalDisplay:
 	.string "Samples of rocks and metal are\n"

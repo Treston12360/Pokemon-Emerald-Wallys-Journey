@@ -357,8 +357,7 @@ Route116_Text_ScoundrelMadeOffWithPeeko:
 	.string "Wrrrooooooaaaar! PEEKO!$"
 
 Route116_Text_WantToDigTunnel:
-	.string "Nnn… Roar!\p"
-	.string "I want to dig that tunnel!$"
+	.string "Nnn… Roar! I want to dig that tunnel!$"
 
 Route116_Text_DiggingTunnelWhenGoonOrderedMeOut:
 	.string "Nnn… Roar!\n"
@@ -375,9 +374,8 @@ Route116_Text_DiggingTunnelWhenGoonOrderedMeOut:
 	.string "POKéMON into an uproar.$"
 
 Route116_Text_GoonHightailedItOutOfTunnel:
-	.string "Nnn… Roar!\p"
-	.string "That goofy goon hightailed it out of\n"
-	.string "the tunnel! I can go back to digging!$"
+	.string "Nnn… Roar! That goon ran off! Back to\n"
+	.string "digging!$"
 
 Route116_Text_ThankYouTokenOfAppreciation:
 	.string "Oh! It's you!\p"

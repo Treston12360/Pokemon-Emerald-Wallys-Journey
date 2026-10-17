@@ -721,16 +721,15 @@ PetalburgCity_Text_ThisIsGymSign:
 
 PetalburgCity_Text_WaterReflection:
 	.string "My face is reflected in the water.\p"
-	.string "It's a shining grin full of hope…\p"
-	.string "Or it could be a look of somber silence\n"
-	.string "struggling with fear…\p"
-	.string "What do you see reflected in your face?$"
+	.string "A grin full of hope… or a kid\n"
+	.string "trying not to look scared.\p"
+	.string "What do you see in yours?$"
 
 PetalburgCity_Text_FullPartyExplanation:
-	.string "Let's say you have six POKéMON.\n"
-	.string "If you catch another one…\p"
-	.string "It is automatically sent to a STORAGE\n"
-	.string "BOX over a PC connection.$"
+	.string "You can carry six POKéMON. Catch a\n"
+	.string "seventh and it goes to a PC BOX.\p"
+	.string "DEVON built that system. Like it or\n"
+	.string "not, half of HOENN runs on DEVON.$"
 
 PetalburgCity_Text_GymSign:
 	.string "PETALBURG CITY POKéMON GYM\n"
@@ -746,17 +745,19 @@ PetalburgCity_Text_WallyHouseSign:
 
 PetalburgCity_Text_AreYouATrainer:
 	.string "Excuse me!\p"
-	.string "Let me guess, from the way you're\n"
-	.string "dressed, are you a POKéMON TRAINER?$"
+	.string "From the way you're dressed… are\n"
+	.string "you a POKéMON TRAINER?$"
 
 PetalburgCity_Text_WellMaybeNot:
 	.string "… … … … … …\p"
-	.string "Well, maybe not.\n"
-	.string "Your clothes aren't all that dirty.\p"
-	.string "You're either a rookie TRAINER,\n"
-	.string "or maybe you're just an ordinary kid.$"
+	.string "Your clothes aren't dirty enough.\n"
+	.string "Rookie, or just a kid passing\l"
+	.string "through.\p"
+	.string "Don't worry. The road fixes that.$"
 
 PetalburgCity_Text_ImLookingForTalentedTrainers:
-	.string "I'm roaming the land in search of\n"
-	.string "talented TRAINERS.\p"
-	.string "I'm sorry to have taken your time.$"
+	.string "I travel HOENN looking for talented\n"
+	.string "TRAINERS.\p"
+	.string "Last one I found was a frail boy who\n"
+	.string "couldn't stop coughing. Hm. Wonder\l"
+	.string "how he's doing.$"

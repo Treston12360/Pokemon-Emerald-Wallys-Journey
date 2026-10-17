@@ -418,8 +418,8 @@ RusturfTunnel_EventScript_Mike::
 	end
 
 RusturfTunnel_Text_ComeAndGetSome:
-	.string "What, are you coming?\n"
-	.string "Come and get some, then!$"
+	.string "What, you're coming? Then come and\n"
+	.string "get some!$"
 
 RusturfTunnel_Text_Peeko:
 	.string "PEEKO: Pii pihyoh!$"
@@ -446,8 +446,7 @@ RusturfTunnel_Text_GruntTakePackage:
 	.string "stand up to them!$"
 
 RusturfTunnel_Text_PeekoGladToSeeYouSafe:
-	.string "PEEKO!\n"
-	.string "Am I glad to see you're safe!$"
+	.string "PEEKO! Thank goodness you're safe!$"
 
 RusturfTunnel_Text_ThankYouLetsGoHomePeeko:
 	.string "PEEKO owes her life to you!\p"
@@ -478,9 +477,11 @@ RusturfTunnel_Text_WhyCantTheyKeepDigging:
 	.string "that waits.$"
 
 RusturfTunnel_Text_ToGetToVerdanturf:
-	.string "To get from RUSTBORO to VERDANTURF,\n"
-	.string "you need to go to DEWFORD, then pass\l"
-	.string "through SLATEPORT and MAUVILLE…$"
+	.string "From RUSTBORO to VERDANTURF, you have\n"
+	.string "to go through DEWFORD, SLATEPORT and\l"
+	.string "MAUVILLE.\p"
+	.string "A whole day's trip. That's why the\n"
+	.string "tunnel matters.$"
 
 RusturfTunnel_Text_YouShatteredBoulderTakeHM:
 	.string "Wow! You shattered that boulder\n"
@@ -501,27 +502,25 @@ RusturfTunnel_Text_WandaReunion:
 	.string "Please, take some rest at my home.$"
 
 RusturfTunnel_Text_BoyfriendOnOtherSideOfRock:
-	.string "On the other side of this rock…\n"
-	.string "My boyfriend is there.\p"
-	.string "He… He's not just digging the tunnel\n"
-	.string "to come see me.\p"
-	.string "He works his hands raw and rough\n"
-	.string "for the benefit of everyone.$"
+	.string "My boyfriend is on the other side\n"
+	.string "of this rock.\p"
+	.string "He's not just digging to see me.\n"
+	.string "He's digging so the whole town can\l"
+	.string "reach RUSTBORO without a boat.$"
 
 RusturfTunnel_Text_MikeIntro:
-	.string "What do you call a wild man up in the\n"
-	.string "mountains? A mountain man, right?\p"
-	.string "So why don't they call a POKéMON in\n"
-	.string "the mountains a mountain POKéMON?$"
+	.string "What do you call a wild man in the\n"
+	.string "mountains? A mountain man, right?$"
 
 RusturfTunnel_Text_MikeDefeat:
 	.string "My POKéMON…\n"
 	.string "Ran out of power…$"
 
 RusturfTunnel_Text_MikePostBattle:
-	.string "They halted development here to\n"
-	.string "protect POKéMON, right?\l"
-	.string "There's a feel-good story!$"
+	.string "They stopped the tunnel to protect\n"
+	.string "the POKéMON in here.\p"
+	.string "Good story. Shame about everyone\n"
+	.string "stuck taking the long way round.$"
 
 
 RusturfTunnel_Text_NoHmThanks:

@@ -269,9 +269,11 @@ RustboroCity_DevonCorp_2F_EventScript_WorkOnNext::
 	end
 
 RustboroCity_DevonCorp_2F_Text_DeviceForTalkingToPokemon:
-	.string "We're developing a device for talking\n"
+	.string "We're building a device to talk\n"
 	.string "with POKéMON.\p"
-	.string "But we haven't had much success…$"
+	.string "The PRESIDENT's dream. He says if we\n"
+	.string "could ask them, we'd stop making so\l"
+	.string "many mistakes.$"
 
 RustboroCity_DevonCorp_2F_Text_DevelopingNewBalls:
 	.string "I'm developing new kinds of\n"
@@ -293,9 +295,10 @@ RustboroCity_DevonCorp_2F_Text_WeFinallyMadeNewBalls:
 	.string "Honestly? I think they're right.$"
 
 RustboroCity_DevonCorp_2F_Text_IMadePokenav:
-	.string "I made the POKéNAV!\p"
-	.string "As an engineer, I feel blessed to have\n"
-	.string "made something so great!$"
+	.string "I designed the POKéNAV!\p"
+	.string "STEVEN tested the prototype. He\n"
+	.string "broke it in a cave in a week.\l"
+	.string "Best feedback I ever got.$"
 
 RustboroCity_DevonCorp_2F_Text_WowThatsAPokenav:
 	.string "Oh, wow!\n"
@@ -309,10 +312,10 @@ RustboroCity_DevonCorp_2F_Text_WowThatsAPokenav:
 	.string "trying the POKéNAV out.$"
 
 RustboroCity_DevonCorp_2F_Text_DeviceToVisualizePokemonDreams:
-	.string "I'm trying to develop a device that\n"
-	.string "visually reproduces the dreams of\l"
-	.string "POKéMON…\p"
-	.string "But it's not going well.$"
+	.string "I'm trying to build a device that\n"
+	.string "shows POKéMON dreams.\p"
+	.string "Lately the test subjects all dream\n"
+	.string "of water. Endless water. Strange.$"
 
 RustboroCity_DevonCorp_2F_Text_DevelopDeviceToResurrectFossils:
 	.string "I've been trying to develop a device\n"
@@ -371,15 +374,14 @@ RustboroCity_DevonCorp_2F_Text_TooManyPokemon:
 	.string "You have no room for this one.$"
 
 RustboroCity_DevonCorp_2F_Text_DevelopNewPokenavFeature:
-	.string "I'm trying to develop a new feature\n"
-	.string "for the POKéNAV…\p"
-	.string "But it's not going well.$"
+	.string "I'm working on a new POKéNAV\n"
+	.string "feature. It's not going well.\p"
+	.string "Deadlines don't care about\n"
+	.string "inspiration.$"
 
 RustboroCity_DevonCorp_2F_Text_WhatToWorkOnNext:
-	.string "Well, now what shall I work on\n"
-	.string "developing next?\p"
-	.string "Our company allows us to make our\n"
-	.string "inspirations into reality.\p"
-	.string "One couldn't ask for a better\n"
-	.string "environment as an engineer.$"
+	.string "What should I build next?\p"
+	.string "DEVON lets us chase our ideas. The\n"
+	.string "price is that the PRESIDENT decides\l"
+	.string "what they're for.$"
 

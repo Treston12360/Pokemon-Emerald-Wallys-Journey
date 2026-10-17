@@ -316,18 +316,18 @@ PetalburgWoods_EventScript_JamesRematch::
 	end
 
 PetalburgWoods_Text_NotAOneToBeFound:
-	.string "Hmmm…\n"
-	.string "Not a one to be found…$"
+	.string "Hmmm… Not a single SHROOMISH where\n"
+	.string "there used to be dozens…$"
 
 PetalburgWoods_Text_HaveYouSeenShroomish:
-	.string "Hello, have you seen any POKéMON\n"
-	.string "called SHROOMISH around here?\p"
-	.string "I really love that POKéMON.$"
+	.string "Have you seen any SHROOMISH?\p"
+	.string "The DEVON runoff killed half the\n"
+	.string "mushrooms by the river. I'm counting\l"
+	.string "what's left.$"
 
 PetalburgWoods_Text_IWasGoingToAmbushYou:
 	.string "I was going to ambush you, but you\n"
-	.string "had to dawdle in PETALBURG WOODS\l"
-	.string "forever, didn't you?\p"
+	.string "took forever in the woods!\p"
 	.string "I got sick of waiting, so here I am!$"
 
 PetalburgWoods_Text_HandOverThosePapers:
@@ -338,15 +338,14 @@ PetalburgWoods_Text_HandOverThosePapers:
 
 PetalburgWoods_Text_YouHaveToHelpMe:
 	.string "Aiyeeeh!\p"
-	.string "You're a POKéMON TRAINER, aren't you?\n"
-	.string "You've got to help me, please!$"
+	.string "You're a TRAINER, aren't you? Please,\n"
+	.string "you've got to help me!$"
 
 PetalburgWoods_Text_NoOneCrossesTeamAqua:
-	.string "Hunh? What do you think you're doing?\n"
-	.string "What, you're going to protect him?\p"
-	.string "No one who crosses TEAM AQUA\n"
-	.string "gets any mercy, not even a kid!\p"
-	.string "Come on and battle me!$"
+	.string "Hunh? You're protecting him?\p"
+	.string "He's carrying proof DEVON poisons\n"
+	.string "the river, and you're on HIS side?\p"
+	.string "Fine! Battle me, kid!$"
 
 PetalburgWoods_Text_YoureKiddingMe:
 	.string "You're kidding me! You're tough!$"
@@ -362,21 +361,21 @@ PetalburgWoods_Text_YouveGotSomeNerve:
 	.string "I'll let you go today!$"
 
 PetalburgWoods_Text_ThatWasAwfullyClose:
-	.string "Whew…\n"
-	.string "That was awfully close!\p"
-	.string "Thanks to you, he didn't rob me of\n"
-	.string "these important papers.\p"
-	.string "I know, I'll give you some POKé BALLS\n"
-	.string "as my thanks!$"
+	.string "Whew… That was close!\p"
+	.string "Those papers are internal water\n"
+	.string "reports. DEVON fixes its own\l"
+	.string "problems. Quietly.\p"
+	.string "…You didn't hear that last part.\n"
+	.string "Here, take these POKé BALLS.$"
 
 PetalburgWoods_Text_TeamAquaAfterSomethingInRustboro:
-	.string "Didn't that TEAM AQUA thug say\n"
-	.string "they were after something in\l"
-	.string "RUSTBORO, too?$"
+	.string "That TEAM AQUA thug said they were\n"
+	.string "after something in RUSTBORO too.\p"
+	.string "DEVON's headquarters is in RUSTBORO.$"
 
 PetalburgWoods_Text_ICantBeWastingTime:
-	.string "Uh-oh! It's a crisis!\n"
-	.string "I can't be wasting time!$"
+	.string "Uh-oh! It's a crisis! I can't be\n"
+	.string "wasting time!$"
 
 PetalburgWoods_Text_YoureLoadedWithItems:
 	.string "You're loaded with items.\n"
@@ -429,17 +428,16 @@ PetalburgWoods_Text_IveBeenTrainingHard:
 	.string "So, I've been training hard.$"
 
 PetalburgWoods_Text_StayOutOfTallGrass:
-	.string "Yo, there!\n"
-	.string "Your POKéMON doing okay?\p"
-	.string "If your POKéMON are weak and you want\n"
-	.string "to avoid battles, you should stay out\l"
-	.string "of tall grass.$"
+	.string "Yo! Your POKéMON doing okay?\p"
+	.string "If they're hurt, stay out of the\n"
+	.string "tall grass. The woods don't care how\l"
+	.string "tired you are.$"
 
 PetalburgWoods_Text_HiddenItemsExplanation:
-	.string "Sometimes, there are things on the\n"
-	.string "ground even if you can't see them.\p"
-	.string "That's why I always check where I'm\n"
-	.string "walking.$"
+	.string "Things get left on the ground out\n"
+	.string "here. Sometimes valuable things.\p"
+	.string "Check where you walk. The woods\n"
+	.string "reward people who pay attention.$"
 
 PetalburgWoods_Text_TryUsingThisItem:
 	.string "Oh, neat!\n"
@@ -448,12 +446,11 @@ PetalburgWoods_Text_TryUsingThisItem:
 	.string "You should try using this item.$"
 
 PetalburgWoods_Text_MiracleSeedExplanation:
-	.string "It's a MIRACLE SEED.\n"
-	.string "If a POKéMON holds that item, its\l"
-	.string "GRASS-type moves become stronger.\p"
-	.string "Besides MIRACLE SEED, I think there are\n"
-	.string "other convenient items for POKéMON\l"
-	.string "to hold.$"
+	.string "That's a MIRACLE SEED. A POKéMON\n"
+	.string "holding it hits harder with\l"
+	.string "GRASS-type moves.\p"
+	.string "Held items matter. Ask any GYM\n"
+	.string "LEADER.$"
 
 PetalburgWoods_Text_TrainerTipsExperience:
 	.string "TRAINER TIPS\p"

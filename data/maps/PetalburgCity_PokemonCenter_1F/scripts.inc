@@ -53,21 +53,22 @@ PetalburgCity_PokemonCenter_1F_EventScript_SayMudkipType::
 	return
 
 PetalburgCity_PokemonCenter_1F_Text_PCStorageSystem:
-	.string "That PC-based POKéMON Storage\n"
-	.string "System…\p"
-	.string "Whoever made it must be some kind\n"
-	.string "of a scientific wizard!$"
+	.string "The POKéMON Storage System…\p"
+	.string "My uncle at DEVON helped build it.\n"
+	.string "He's proud of it. He also hasn't\l"
+	.string "been home in two years.$"
 
 PetalburgCity_PokemonCenter_1F_Text_OranBerryRegainedHP:
-	.string "When my POKéMON ate an\n"
-	.string "ORAN BERRY, it regained HP!$"
+	.string "My POKéMON ate an ORAN BERRY and\n"
+	.string "perked right up!\p"
+	.string "Nature's first-aid kit. No DEVON\n"
+	.string "logo required.$"
 
 PetalburgCity_PokemonCenter_1F_Text_ManyTypesOfPokemon:
-	.string "There are many types of POKéMON.\p"
-	.string "All types have their strengths and\n"
-	.string "weaknesses against other types.\p"
-	.string "Depending on the types of POKéMON,\n"
-	.string "a battle could be easy or hard.$"
+	.string "Every POKéMON type has strengths and\n"
+	.string "weaknesses.\p"
+	.string "NORMAN says a good TRAINER knows\n"
+	.string "them. A great one plans around them.$"
 
 PetalburgCity_PokemonCenter_1F_Text_TreeckoIsGrassType:
 	.string "For example, your TREECKO\n"

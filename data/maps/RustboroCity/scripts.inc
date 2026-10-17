@@ -1018,33 +1018,35 @@ RustboroCity_EventScript_Boy1::
 	end
 
 RustboroCity_Text_WeShortenItToDevon:
-	.string "The DEVON CORPORATION…\n"
-	.string "We all just shorten it to DEVON.\p"
-	.string "That company makes all sorts of\n"
-	.string "convenient products.$"
+	.string "The DEVON CORPORATION. We just say\n"
+	.string "DEVON.\p"
+	.string "Half the jobs in this city are\n"
+	.string "DEVON jobs. My whole street works\l"
+	.string "there.$"
 
 RustboroCity_Text_SneakyLookingManWentAroundCorner:
-	.string "Hm? A sneaky-looking man?\p"
-	.string "Come to think of it, yes, a shady-\n"
-	.string "looking guy went around the corner.$"
+	.string "A sneaky-looking man? Yes, someone in\n"
+	.string "a bandana went around the corner.\p"
+	.string "You don't see bandanas in RUSTBORO.\n"
+	.string "People here wear DEVON badges.$"
 
 RustboroCity_Text_HaveYouChallengedGym:
-	.string "Have you taken the POKéMON GYM\n"
-	.string "challenge?\p"
-	.string "When you get that shiny GYM BADGE\n"
-	.string "in hand, I guess TRAINERS begin to\l"
-	.string "realize what is required of them.$"
+	.string "Have you taken the GYM challenge?\p"
+	.string "ROXANNE says a BADGE doesn't prove\n"
+	.string "you're strong. It proves you\l"
+	.string "learned something.$"
 
 RustboroCity_Text_HeyThatsRustborosGymBadge:
-	.string "Hey, that's RUSTBORO's GYM BADGE!\p"
-	.string "Out of all the POKéMON GYM BADGES,\n"
-	.string "RUSTBORO's is the coolest, I'd say.$"
+	.string "That's RUSTBORO's BADGE!\p"
+	.string "ROXANNE only took over a year ago.\n"
+	.string "People said she was too young.\l"
+	.string "Nobody says that anymore.$"
 
 RustboroCity_Text_YoureNewAroundHere:
-	.string "Oh? Who might you be?\n"
-	.string "You're a new face around these parts.\p"
-	.string "Have you just transferred into the\n"
-	.string "POKéMON TRAINER'S SCHOOL?$"
+	.string "You're a new face. Transferring into\n"
+	.string "the TRAINER'S SCHOOL?\p"
+	.string "ROXANNE teaches there. Strict, but\n"
+	.string "she'll make you think.$"
 
 RustboroCity_Text_GymLeaderIsntEasyWithFire:
 	.string "I lost to ROXANNE. Twice.\p"
@@ -1053,18 +1055,18 @@ RustboroCity_Text_GymLeaderIsntEasyWithFire:
 	.string "Stings worse than losing.$"
 
 RustboroCity_Text_MrBrineyWalksInTheTunnel:
-	.string "The old sailor MR. BRINEY lives in\n"
-	.string "a cottage by the sea.\p"
-	.string "He goes for walks in the tunnel every\n"
-	.string "so often.$"
+	.string "MR. BRINEY lives in a cottage by the\n"
+	.string "sea.\p"
+	.string "He walks the half-dug tunnel\n"
+	.string "sometimes. Says it's the only quiet\l"
+	.string "place left near RUSTBORO.$"
 
 RustboroCity_Text_MrBrineyLovesPeeko:
-	.string "The old sailor MR. BRINEY lives in\n"
-	.string "a cottage by the sea.\p"
-	.string "He said he was going shopping in\n"
-	.string "SLATEPORT for his pet, PEEKO.\p"
-	.string "That old sea dog, he must really love\n"
-	.string "that PEEKO.$"
+	.string "MR. BRINEY went to SLATEPORT to buy\n"
+	.string "food for PEEKO.\p"
+	.string "PEEKO's all he has left from his\n"
+	.string "sailing days. That bird is his\l"
+	.string "family.$"
 
 RustboroCity_Text_WowYouHavePokemon:
 	.string "My dad works at DEVON. He builds\n"
@@ -1080,40 +1082,45 @@ RustboroCity_Text_CatchRarePokemonIfIGoToSchool:
 	.string "to catch rare POKéMON easily?$"
 
 RustboroCity_Text_PokemonCanChangeLookFromExp:
-	.string "If a POKéMON gains experience in\n"
-	.string "battles, it can sometimes change in\l"
-	.string "the way it looks.$"
+	.string "POKéMON can change form as they gain\n"
+	.string "experience.\p"
+	.string "Evolution. Growing into who you\n"
+	.string "were meant to be. People do it too,\l"
+	.string "just slower.$"
 
 RustboroCity_Text_PokemonChangeShape:
-	.string "A POKéMON changes shape?\n"
-	.string "If one did that, I would be shocked!$"
+	.string "A POKéMON changes shape?\p"
+	.string "I'd be shocked! …Then again, my\n"
+	.string "brother came back from his journey\l"
+	.string "a completely different person.$"
 
 RustboroCity_Text_TradePokemonGrowFast:
-	.string "A POKéMON you get in a trade from\n"
-	.string "someone grows fast.\p"
-	.string "But if you don't have certain GYM\n"
-	.string "BADGES, it may not obey you…$"
+	.string "Traded POKéMON grow fast.\p"
+	.string "But without enough GYM BADGES, they\n"
+	.string "won't listen. Respect has to be\l"
+	.string "earned. Even from POKéMON.$"
 
 RustboroCity_Text_OutOfTheWay:
-	.string "Get out!\n"
-	.string "Out of the way!$"
+	.string "Get out of my way!$"
 
 RustboroCity_Text_WaitDontTakeMyGoods:
-	.string "Wait! Pleeeaaase!\p"
-	.string "Don't take my GOODS!$"
+	.string "Wait! Please!\p"
+	.string "Don't take the GOODS! My whole\n"
+	.string "team's work is in there!$"
 
 RustboroCity_Text_HelpMeIWasRobbed:
-	.string "Oh, it's you!\p"
-	.string "You're that fantastic TRAINER who\n"
-	.string "helped me in PETALBURG WOODS!\p"
-	.string "Help me! I was robbed by TEAM AQUA!\n"
-	.string "I have to get the DEVON GOODS back!\p"
-	.string "If I don't…\n"
-	.string "I'm going to be in serious trouble.$"
+	.string "It's you! The TRAINER from PETALBURG\n"
+	.string "WOODS!\p"
+	.string "TEAM AQUA robbed me! They took the\n"
+	.string "DEVON GOODS!\p"
+	.string "If I don't get them back… I'm not\n"
+	.string "just fired. Half my team is.$"
 
 RustboroCity_Text_ShadyCharacterTookOffTowardsTunnel:
-	.string "That shady character, I think he took\n"
-	.string "off towards the tunnel over there.$"
+	.string "That shady character ran toward the\n"
+	.string "unfinished tunnel.\p"
+	.string "Dead end. Either he's desperate or\n"
+	.string "he's got friends waiting.$"
 
 RustboroCity_Text_YouGotItThankYou:
 	.string "Oh! How did it go?\n"
@@ -1129,8 +1136,9 @@ RustboroCity_Text_YoureLoadedWithItems:
 	.string "I can't give you these POKé BALLS.$"
 
 RustboroCity_Text_PleaseComeWithMe:
-	.string "Excuse me, please!\n"
-	.string "Please come with me!$"
+	.string "Excuse me! Please come with me!\p"
+	.string "The PRESIDENT wants to thank you\n"
+	.string "himself.$"
 
 RustboroCity_Text_MayHiLetsRegister:
 	.string "MAY: Oh, hi, {PLAYER}{KUN}!\p"
