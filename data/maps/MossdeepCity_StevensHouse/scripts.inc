@@ -211,8 +211,12 @@ MossdeepCity_StevensHouse_Text_LetterFromSteven:
 	.string "STEVEN STONE$"
 
 MossdeepCity_StevensHouse_Text_CollectionOfRareRocks:
-	.string "It's a collection of rare rocks and\n"
-	.string "stones assembled by STEVEN.$"
+	.string "Rare stones from places\n"
+	.string "STEVEN has explored.\p"
+	.string "Each has a small note\n"
+	.string "about where he found it.\p"
+	.string "One says: 'A stone matters\n"
+	.string "less than what it can teach.'$"
 
 
 MossdeepCity_StevensHouse_Text_NoHmDive:
