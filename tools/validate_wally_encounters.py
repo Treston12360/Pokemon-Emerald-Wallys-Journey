@@ -50,6 +50,23 @@ for group in encounters["wild_encounter_groups"]:
                 slots += 1
                 methods[field] += 1
 
+# Starter Pokémon from all nine generations must be catchable without trading.
+# Keep them uncommon in habitat-appropriate tables; all 27 species are required.
+STARTER_SPECIES = (
+    "SPECIES_BULBASAUR", "SPECIES_CHARMANDER", "SPECIES_SQUIRTLE",
+    "SPECIES_CHIKORITA", "SPECIES_CYNDAQUIL", "SPECIES_TOTODILE",
+    "SPECIES_TREECKO", "SPECIES_TORCHIC", "SPECIES_MUDKIP",
+    "SPECIES_TURTWIG", "SPECIES_CHIMCHAR", "SPECIES_PIPLUP",
+    "SPECIES_SNIVY", "SPECIES_TEPIG", "SPECIES_OSHAWOTT",
+    "SPECIES_CHESPIN", "SPECIES_FENNEKIN", "SPECIES_FROAKIE",
+    "SPECIES_ROWLET", "SPECIES_LITTEN", "SPECIES_POPPLIO",
+    "SPECIES_GROOKEY", "SPECIES_SCORBUNNY", "SPECIES_SOBBLE",
+    "SPECIES_SPRIGATITO", "SPECIES_FUECOCO", "SPECIES_QUAXLY",
+)
+for starter in STARTER_SPECIES:
+    if starter not in species:
+        errors.append(f"Starter species has no Hoenn wild encounter: {starter}")
+
 print(f"Wild encounter audit: {len(maps)} tables, {slots} slots, {len(species)} unique species")
 for method, count in sorted(methods.items()):
     print(f"  {method}: {count} slots")
