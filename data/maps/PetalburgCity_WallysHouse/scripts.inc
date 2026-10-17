@@ -19,9 +19,8 @@ PetalburgCity_WallysHouse_OnFrame:
 PetalburgCity_WallysHouse_EventScript_GiveHMSurf::
 	lockall
 	msgbox PetalburgCity_WallysHouse_Text_PleaseExcuseUs, MSGBOX_DEFAULT
-	giveitem ITEM_HM_SURF
 	setflag FLAG_RECEIVED_HM_SURF
-	msgbox PetalburgCity_WallysHouse_Text_SurfGoAllSortsOfPlaces, MSGBOX_DEFAULT
+	msgbox PetalburgCity_WallysHouse_Text_NoHmSurf, MSGBOX_DEFAULT
 	setvar VAR_PETALBURG_CITY_STATE, 5
 	releaseall
 	end
@@ -133,3 +132,8 @@ PetalburgCity_WallysHouse_Text_WallyLeftWithoutTelling:
 	.string "I'm sure that he'll come back safe\n"
 	.string "and sound one day!$"
 
+
+PetalburgCity_WallysHouse_Text_NoHmSurf:
+	.string "You've grown into a fine TRAINER!\\p"
+	.string "The BALANCE BADGE lets you SURF\\n"
+	.string "across water. Best of luck!$"
