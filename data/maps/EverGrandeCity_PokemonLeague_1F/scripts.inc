@@ -47,6 +47,15 @@ WallyJourney_PokemonLeague_PostgameMart:
 	.2byte ITEM_REVIVE
 	.2byte ITEM_GALLADITE
 	.2byte ITEM_GARDEVOIRITE
+	.2byte ITEM_METAL_COAT
+	.2byte ITEM_DRAGON_SCALE
+	.2byte ITEM_KINGS_ROCK
+	.2byte ITEM_UPGRADE
+	.2byte ITEM_DUBIOUS_DISC
+	.2byte ITEM_ELECTIRIZER
+	.2byte ITEM_MAGMARIZER
+	.2byte ITEM_PROTECTOR
+	.2byte ITEM_REAPER_CLOTH
 	pokemartlistend
 
 	.align 2
