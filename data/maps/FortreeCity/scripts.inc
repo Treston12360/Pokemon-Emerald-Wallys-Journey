@@ -29,7 +29,12 @@ FortreeCity_EventScript_WomanGymAccessible::
 	end
 
 FortreeCity_EventScript_Girl::
+	goto_if_set FLAG_DEFEATED_SOOTOPOLIS_GYM, FortreeCity_Text_TreesGrowByDrinkingRainwaterAftermath_Script
 	msgbox FortreeCity_Text_TreesGrowByDrinkingRainwater, MSGBOX_NPC
+	end
+
+FortreeCity_Text_TreesGrowByDrinkingRainwaterAftermath_Script:
+	msgbox FortreeCity_Text_TreesGrowByDrinkingRainwaterAftermath, MSGBOX_NPC
 	end
 
 FortreeCity_EventScript_OldMan::
@@ -154,3 +159,9 @@ FortreeCity_Text_GymSign:
 	.string "“The bird user taking flight into\n"
 	.string "the world.”$"
 
+FortreeCity_Text_TreesGrowByDrinkingRainwaterAftermath:
+	.string "All that rain during the crisis\n"
+	.string "drowned the roots of the old trees.\p"
+	.string "The WEATHER INSTITUTE says it'll take\n"
+	.string "years for the forest to recover.\p"
+	.string "We're planting new ones anyway.$"

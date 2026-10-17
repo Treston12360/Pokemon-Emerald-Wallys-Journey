@@ -329,13 +329,21 @@ MossdeepCity_SpaceCenter_1F_Text_CantStrollOnBeachWithMagma:
 
 MossdeepCity_SpaceCenter_1F_Text_DidPokemonComeFromSpace:
 	.string "Some people claim that POKéMON came\n"
-	.string "from space. Could it be true?$"
+	.string "from space. Could it be true?\p"
+	.string "Our telescope tracked a meteorite\n"
+	.string "splashing down near a tiny island,\l"
+	.string "far to the south.\p"
+	.string "Something on that island is still\n"
+	.string "glowing on our scans.$"
 
 MossdeepCity_SpaceCenter_1F_Text_AquaShouldBeatMagma:
-	.string "TEAM AQUA should take care of\n"
-	.string "TEAM MAGMA!\p"
-	.string "But if they did that, TEAM AQUA will\n"
-	.string "become bold and brazen, won't they?$"
+	.string "Why doesn't the LEAGUE just arrest\n"
+	.string "TEAM MAGMA?\p"
+	.string "STEVEN told us the police need a\n"
+	.string "crime first. Posting a threat to\l"
+	.string "a door is creepy, not illegal.\p"
+	.string "So they're waiting outside. And we\n"
+	.string "hold our breath.$"
 
 MossdeepCity_SpaceCenter_1F_Text_RocketsBoggleMyMind:
 	.string "A giant chunk of metal bursts through\n"

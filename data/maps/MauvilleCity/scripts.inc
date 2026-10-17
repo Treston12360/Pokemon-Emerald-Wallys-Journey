@@ -23,7 +23,12 @@ MauvilleCity_EventScript_Boy::
 	end
 
 MauvilleCity_EventScript_Maniac::
+	goto_if_set FLAG_DEFEATED_SOOTOPOLIS_GYM, MauvilleCity_Text_AllSortsOfPeopleComeThroughAftermath_Script
 	msgbox MauvilleCity_Text_AllSortsOfPeopleComeThrough, MSGBOX_NPC
+	end
+
+MauvilleCity_Text_AllSortsOfPeopleComeThroughAftermath_Script:
+	msgbox MauvilleCity_Text_AllSortsOfPeopleComeThroughAftermath, MSGBOX_NPC
 	end
 
 MauvilleCity_EventScript_Woman::
@@ -662,3 +667,10 @@ MauvilleCity_Text_ExplainTV:
 
 MauvilleCity_Text_BeenCheckingOutTV:
 	.string "Hi, have you been checking out TVs?$"
+
+MauvilleCity_Text_AllSortsOfPeopleComeThroughAftermath:
+	.string "Since the storm, supply trucks roll\n"
+	.string "through here day and night, all\l"
+	.string "heading for the coast.\p"
+	.string "Some of the drivers used to wear\n"
+	.string "MAGMA red. They don't talk about it.$"

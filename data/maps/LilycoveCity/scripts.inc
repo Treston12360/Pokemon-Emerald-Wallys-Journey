@@ -549,10 +549,11 @@ LilycoveCity_Text_MovedLootIntoHideoutToday:
 	.string "I was just talking to myself!$"
 
 LilycoveCity_Text_ChanceToDoBigThings:
-	.string "I'm just a GRUNT, so I don't know what\n"
-	.string "the BOSS is thinking…\p"
-	.string "But being on TEAM AQUA, I know I'll get\n"
-	.string "the chance to do big things!\p"
+	.string "I'm just a GRUNT, so I don't know\n"
+	.string "what the BOSS is thinking…\p"
+	.string "I joined to clean beaches. Now we're\n"
+	.string "hiding stolen stuff in a cave.\p"
+	.string "When did that become the plan?\p"
 	.string "Wh-who are you?!\n"
 	.string "I was just talking to myself!$"
 
@@ -585,7 +586,11 @@ LilycoveCity_Text_ContestHallInTown:
 
 LilycoveCity_Text_StrangeCaveInCove:
 	.string "Have you seen that strange cave in\n"
-	.string "the cove at the edge of town?$"
+	.string "the cove at the edge of town?\p"
+	.string "The police looked into it. Some\n"
+	.string "“SEA TRUST” has a research permit\l"
+	.string "for it. All the paperwork is clean.\p"
+	.string "Funny how that works, isn't it?$"
 
 LilycoveCity_Text_GoingToMoveDeleterForHMs:
 	.string "I'm going to teach my POKéMON some new\n"
@@ -605,7 +610,10 @@ LilycoveCity_Text_TeamAquaBeenTrainingWailmer:
 	.string "TEAM AQUA's been training their\n"
 	.string "WAILMER in the cove.\p"
 	.string "We SAILORS can't get our boats out\n"
-	.string "to sea with them in the way!$"
+	.string "to sea with them in the way!\p"
+	.string "The harbor police came. They said\n"
+	.string "training POKéMON in a public cove\l"
+	.string "isn't a crime. Not without proof.$"
 
 LilycoveCity_Text_SomeonePuntedTeamAquaOut:
 	.string "Ahoy, did you know?\p"

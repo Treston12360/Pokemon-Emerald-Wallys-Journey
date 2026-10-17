@@ -144,7 +144,9 @@ AquaHideout_B1F_Text_Grunt5Defeat:
 
 AquaHideout_B1F_Text_Grunt5PostBattle:
 	.string "If you scurry too much, other TEAM\n"
-	.string "AQUA members might get you.$"
+	.string "AQUA members might get you.\p"
+	.string "…Honestly? Half of us are thinking\n"
+	.string "about quitting after this.$"
 
 AquaHideout_B1F_Text_Grunt7Intro:
 	.string "Hey!\n"

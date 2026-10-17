@@ -29,8 +29,10 @@ MagmaHideout_1F_Text_Grunt1Defeat:
 	.string "I hate to say it, but I'm wimpy…$"
 
 MagmaHideout_1F_Text_Grunt1PostBattle:
-	.string "Okay, I'll try to put a little more\n"
-	.string "effort into things from now on…$"
+	.string "My folks farm on ROUTE 113. The ash\n"
+	.string "ruins half the crop every year.\p"
+	.string "More land, safe land. That's all I\n"
+	.string "wanted. That's why I'm here.$"
 
 MagmaHideout_1F_Text_Grunt2Intro:
 	.string "Our leader told us to dig into\n"

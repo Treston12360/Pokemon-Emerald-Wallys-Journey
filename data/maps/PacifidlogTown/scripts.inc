@@ -16,7 +16,12 @@ PacifidlogTown_EventScript_NinjaBoy::
 	end
 
 PacifidlogTown_EventScript_Girl::
+	goto_if_set FLAG_DEFEATED_SOOTOPOLIS_GYM, PacifidlogTown_Text_FastRunningCurrentAftermath_Script
 	msgbox PacifidlogTown_Text_FastRunningCurrent, MSGBOX_NPC
+	end
+
+PacifidlogTown_Text_FastRunningCurrentAftermath_Script:
+	msgbox PacifidlogTown_Text_FastRunningCurrentAftermath, MSGBOX_NPC
 	end
 
 PacifidlogTown_EventScript_Fisherman::
@@ -52,3 +57,9 @@ PacifidlogTown_Text_TownSign:
 	.string "“Where the morning sun smiles upon\n"
 	.string "the waters.”$"
 
+PacifidlogTown_Text_FastRunningCurrentAftermath:
+	.string "The storm tore two of our rafts\n"
+	.string "loose and sent them out to sea.\p"
+	.string "Volunteers in AQUA blue helped us\n"
+	.string "tie new ones. Grandpa still won't\l"
+	.string "let them in the house.$"

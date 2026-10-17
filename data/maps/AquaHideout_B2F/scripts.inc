@@ -125,7 +125,9 @@ AquaHideout_B2F_Text_Grunt4Defeat:
 
 AquaHideout_B2F_Text_Grunt4PostBattle:
 	.string "BOSS…\n"
-	.string "Is this good enough?$"
+	.string "Is this good enough?\p"
+	.string "…I signed up to save the sea.\n"
+	.string "Stealing a submarine isn't that.$"
 
 AquaHideout_B2F_Text_Grunt6Intro:
 	.string "Warp panels, the HIDEOUT's pride\n"
@@ -155,5 +157,6 @@ AquaHideout_B2F_Text_Grunt8Defeat:
 	.string "the warp panels…$"
 
 AquaHideout_B2F_Text_Grunt8PostBattle:
-	.string "I'll have to learn about how I can\n"
-	.string "battle more effectively…$"
+	.string "Some of us told ARCHIE the old\n"
+	.string "texts don't say “control.”\p"
+	.string "He didn't want to hear it.$"

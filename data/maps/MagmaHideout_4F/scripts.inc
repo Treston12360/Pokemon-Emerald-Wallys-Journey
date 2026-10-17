@@ -159,7 +159,10 @@ MagmaHideout_4F_Text_Grunt13Defeat:
 	.string "Was I that easy to knock down?$"
 
 MagmaHideout_4F_Text_Grunt13PostBattle:
-	.string "C-come on, one more match…$"
+	.string "C-come on, one more match…\p"
+	.string "…No. Forget it. If GROUDON really\n"
+	.string "wakes up, my family's town is the\l"
+	.string "first thing under the lava.$"
 
 MagmaHideout_4F_Text_TabithaIntro:
 	.string "Hehehe! You made it this far!\p"

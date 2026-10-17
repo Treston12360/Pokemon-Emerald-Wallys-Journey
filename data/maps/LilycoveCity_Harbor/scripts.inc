@@ -546,7 +546,9 @@ LilycoveCity_Harbor_Text_FerryUnavailable:
 	.string "available at present…$"
 
 LilycoveCity_Harbor_Text_MayISeeYourTicket:
-	.string "Hello, are you here for the ferry?\n"
+	.string "Hello, are you here for the ferry?\p"
+	.string "STEVEN and PROF. BIRCH cleared you\n"
+	.string "for the survey islands as well.\p"
 	.string "May I see your TICKET?$"
 
 LilycoveCity_Harbor_Text_NoTicket:

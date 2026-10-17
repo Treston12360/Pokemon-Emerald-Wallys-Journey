@@ -327,7 +327,12 @@ SlateportCity_EventScript_Woman2::
 	end
 
 SlateportCity_EventScript_Sailor1::
+	goto_if_set FLAG_DEFEATED_SOOTOPOLIS_GYM, SlateportCity_Text_SeaIsSoWetAftermath_Script
 	msgbox SlateportCity_Text_SeaIsSoWet, MSGBOX_NPC
+	end
+
+SlateportCity_Text_SeaIsSoWetAftermath_Script:
+	msgbox SlateportCity_Text_SeaIsSoWetAftermath, MSGBOX_NPC
 	end
 
 SlateportCity_EventScript_Sailor2::
@@ -1350,3 +1355,11 @@ SlateportCity_Text_TakingBattleTentChallenge:
 	.string "After all, a tough TRAINER is\n"
 	.string "the perfect fit for the BATTLE TENT!\p"
 	.string "Give it your best effort!$"
+
+SlateportCity_Text_SeaIsSoWetAftermath:
+	.string "After the storm, the beach was\n"
+	.string "buried in wreckage.\p"
+	.string "The MUSEUM staff and some ex-AQUA\n"
+	.string "divers cleaned it up together.\p"
+	.string "I'm still angry at them. But the\n"
+	.string "beach is clean. Both are true.$"

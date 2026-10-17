@@ -48,8 +48,11 @@ MagmaHideout_2F_1R_Text_Grunt3Defeat:
 	.string "I concede!$"
 
 MagmaHideout_2F_1R_Text_Grunt3PostBattle:
-	.string "Maybe it would've been better if I did\n"
-	.string "just let you go unchallenged…$"
+	.string "The scientists said the eruption\n"
+	.string "model was wrong. MAXIE called them\l"
+	.string "cowards.\p"
+	.string "I didn't say anything. Maybe I'm\n"
+	.string "the coward.$"
 
 MagmaHideout_2F_1R_Text_Grunt4Intro:
 	.string "Ahah!\n"
@@ -71,5 +74,8 @@ MagmaHideout_2F_1R_Text_Grunt5Defeat:
 	.string "Mutter…$"
 
 MagmaHideout_2F_1R_Text_Grunt5PostBattle:
-	.string "Actually, I'm no expert at battling…$"
+	.string "Actually, I'm no expert at battling…\p"
+	.string "I'm a surveyor. I joined to help\n"
+	.string "plan new towns. Not to wake up a\l"
+	.string "volcano god.$"
 

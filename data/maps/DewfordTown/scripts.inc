@@ -54,7 +54,12 @@ DewfordTown_EventScript_SailBackToPetalburg::
 	end
 
 DewfordTown_EventScript_Woman::
+	goto_if_set FLAG_DEFEATED_SOOTOPOLIS_GYM, DewfordTown_Text_TinyIslandCommunityAftermath_Script
 	msgbox DewfordTown_Text_TinyIslandCommunity, MSGBOX_NPC
+	end
+
+DewfordTown_Text_TinyIslandCommunityAftermath_Script:
+	msgbox DewfordTown_Text_TinyIslandCommunityAftermath, MSGBOX_NPC
 	end
 
 DewfordTown_EventScript_TownSign::
@@ -789,3 +794,10 @@ DewfordTown_Text_YeahDefinitionOfInRightNow:
 	.string "Yeah, absolutely right!\p"
 	.string "“{STR_VAR_1}” is the\n"
 	.string "definition of “in” right now.$"
+
+DewfordTown_Text_TinyIslandCommunityAftermath:
+	.string "DEWFORD is a tiny island community.\n"
+	.string "If something gets trendy here,\l"
+	.string "everyone picks up on it right away.\p"
+	.string "The trend right now? Storm kits.\n"
+	.string "Every house has one by the door.$"
