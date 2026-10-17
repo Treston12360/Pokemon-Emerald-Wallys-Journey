@@ -43,8 +43,12 @@ MtPyre_2F_EventScript_Zander::
 	end
 
 MtPyre_2F_Text_MemoriesOfSkitty:
-	.string "Memories of my darling SKITTY…\n"
-	.string "My eyes overflow thinking about it.$"
+	.string "My SKITTY used to sleep in\n"
+	.string "the warmest patch of sunlight.\p"
+	.string "I still leave the curtains open\n"
+	.string "at home, out of habit.\p"
+	.string "It's strange what love teaches\n"
+	.string "us to remember.$"
 
 MtPyre_2F_Text_TumbledFromFloorAbove:
 	.string "Ooch, ouch… There are holes in the\n"
@@ -61,8 +65,12 @@ MtPyre_2F_Text_MarkDefeat:
 	.string "I'm sorry, forgive me, please!$"
 
 MtPyre_2F_Text_MarkPostBattle:
-	.string "People don't come here often, so\n"
-	.string "I thought there'd be rare POKéMON.$"
+	.string "I came hoping to find a rare\n"
+	.string "POKéMON among the graves.\p"
+	.string "It sounded harmless when I\n"
+	.string "said it to my friends.\p"
+	.string "Now I'm thinking about why\n"
+	.string "people come here at all.$"
 
 MtPyre_2F_Text_LukeIntro:
 	.string "LUKE: We're here on a dare.\p"
@@ -115,10 +123,12 @@ MtPyre_2F_Text_LeahDefeat:
 	.string "You're durable.$"
 
 MtPyre_2F_Text_LeahPostBattle:
-	.string "Our family has been TRAINERS here\n"
-	.string "since my great-grandmother's time…\p"
-	.string "It is my duty to protect this\n"
-	.string "mountain…$"
+	.string "My family has watched over\n"
+	.string "MT. PYRE for generations.\p"
+	.string "A shrine is not a treasure\n"
+	.string "chest for anyone to empty.\p"
+	.string "If people come here seeking\n"
+	.string "power, I will stand in the way.$"
 
 MtPyre_2F_Text_ZanderIntro:
 	.string "Kiyaaaaah!\n"
