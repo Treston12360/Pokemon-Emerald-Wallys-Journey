@@ -119,30 +119,31 @@ VictoryRoad_1F_EventScript_Katelynn::
 	end
 
 VictoryRoad_1F_Text_WallyNotGoingToLoseAnymore:
-	.string "WALLY: Took you long enough.\p"
-	.string "Yes, I'm the CHAMPION.\n"
-	.string "Try not to look so surprised.\p"
-	.string "I remember MAUVILLE.\n"
-	.string "You were stronger back then.\p"
-	.string "Now look where we are.\p"
-	.string "Four POKéMON. No MEGA.\n"
-	.string "I'll make this fair.\p"
-	.string "Consider it a lesson.\n"
-	.string "You'll need one before\n"
-	.string "you face the ELITE FOUR.$"
+	.string "WALLY: So you made it here.\n"
+	.string "Took you long enough.\p"
+	.string "As CHAMPION, I should make\n"
+	.string "sure you're ready.\p"
+	.string "I'll use just four POKéMON.\n"
+	.string "About half my strength.\p"
+	.string "And I won't even use my\n"
+	.string "trump card: MEGA EVOLUTION.\p"
+	.string "Try not to take it badly.\n"
+	.string "This is for your own good.\p"
+	.string "Now show me what you can do.$"
 
 VictoryRoad_1F_Text_WallyEntranceDefeat:
-	.string "…Yeah.\n"
-	.string "You're ready.$"
+	.string "WALLY: Hmph. You won.\p"
+	.string "I'd be surprised if you\n"
+	.string "lost with me holding back.$"
 
 VictoryRoad_1F_Text_WallyPostEntranceBattle:
-	.string "WALLY: Hmph. Not bad.\p"
-	.string "Don't look so pleased.\n"
-	.string "I wasn't using my best team.\p"
-	.string "The ELITE FOUR won't\n"
-	.string "make things easy for you.\p"
-	.string "Make it to the top, {PLAYER}.\n"
-	.string "Then we'll see who's better.$"
+	.string "WALLY: That was only about\n"
+	.string "fifty percent of my power.\p"
+	.string "The ELITE FOUR won't give\n"
+	.string "you that kind of chance.\p"
+	.string "I'll be waiting at the top.\n"
+	.string "If you make it there.\p"
+	.string "I'm not convinced you will.$"
 
 VictoryRoad_1F_Text_WallyIntro:
 	.string "WALLY: Hey, CHAMPION.\p"
