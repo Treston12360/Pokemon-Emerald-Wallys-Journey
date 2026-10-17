@@ -556,7 +556,8 @@ bool32 WallyJourney_GetForecast(u32 mapSec, u8 *now, u8 *later)
 // Tileset palettes of outdoor maps are recoloured per season when they load:
 // fresh yellow-green spring, untouched summer, red/orange/gold autumn (each
 // palette gets its own colour so trees don't all turn the same), dull winter
-// green on the coast and frosted pale foliage on the snowy highland routes.
+// green on the coast and frosted pale foliage and snow-covered ground on the
+// snowy highland routes.
 // Only greens are touched: water, sand, roofs in other colours, people and
 // Pokémon stay as they are. Layout, collision and access never change.
 enum { FOLIAGE_NONE, FOLIAGE_SPRING, FOLIAGE_AUTUMN, FOLIAGE_WINTER, FOLIAGE_FROST };
@@ -590,33 +591,45 @@ static u16 SeasonalColor(u16 color, u32 mode, u32 slot)
     else               h = 60 * (r - g) / d + 240;
     if (h < 0)
         h += 360;
-    if (h < 65 || h > 170)
-        return color; // not foliage
     s = d * 255 / max;
     v = max;
-
-    switch (mode)
+    if (mode == FOLIAGE_FROST && h >= 10 && h < 65 && v >= 20)
     {
-    case FOLIAGE_SPRING:
-        h -= 14;
-        s = min(255, s * 120 / 100);
-        v = min(31, v + 2);
-        break;
-    case FOLIAGE_AUTUMN:
-        h = sAutumnHues[slot % ARRAY_COUNT(sAutumnHues)] + (v - 16) / 2 + (h - 110) / 8;
-        s = min(255, s * 115 / 100);
-        break;
-    case FOLIAGE_WINTER:
-        s = s * 60 / 100;
-        v = v * 92 / 100;
-        break;
-    case FOLIAGE_FROST:
-        h += (200 - h) / 2;
-        s = s * 20 / 100;
-        v += (31 - v) * 60 / 100;
-        break;
-    default:
-        return color;
+        // Snow cover: light earth, paths and sand turn white on the snowy
+        // highland routes. Dark cliff faces keep their colour.
+        h = 210;
+        s = s * 15 / 100;
+        v += (31 - v) * 70 / 100;
+    }
+    else if (h < 65 || h > 170)
+    {
+        return color; // not foliage
+    }
+    else
+    {
+        switch (mode)
+        {
+        case FOLIAGE_SPRING:
+            h -= 14;
+            s = min(255, s * 120 / 100);
+            v = min(31, v + 2);
+            break;
+        case FOLIAGE_AUTUMN:
+            h = sAutumnHues[slot % ARRAY_COUNT(sAutumnHues)] + (v - 16) / 2 + (h - 110) / 8;
+            s = min(255, s * 115 / 100);
+            break;
+        case FOLIAGE_WINTER:
+            s = s * 60 / 100;
+            v = v * 92 / 100;
+            break;
+        case FOLIAGE_FROST:
+            h += (200 - h) / 2;
+            s = s * 20 / 100;
+            v += (31 - v) * 60 / 100;
+            break;
+        default:
+            return color;
+        }
     }
     if (h < 0)
         h += 360;
