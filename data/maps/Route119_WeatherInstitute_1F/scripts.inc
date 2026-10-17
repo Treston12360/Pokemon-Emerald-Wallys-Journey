@@ -99,59 +99,38 @@ Route119_WeatherInstitute_1F_Text_Grunt4PostBattle:
 
 Route119_WeatherInstitute_1F_Text_EveryoneWentUpstairs:
 	.string "They made everyone go upstairs.\n"
-	.string "I hid here when they came in.\\p\n"
+	.string "I hid here when they came in.\p\n"
 	.string "I don't know why they need our\n"
 	.string "weather records so badly.$"
-	.string "upstairs!$"
-
 Route119_WeatherInstitute_1F_Text_WowYoureStrong:
-	.string "You got them to leave!\\p\n"
+	.string "You got them to leave!\p\n"
 	.string "I was scared the whole time.\n"
-	.string "But I watched you stand up.\\p\n"
+	.string "But I watched you stand up.\p\n"
 	.string "Maybe being brave means doing\n"
 	.string "something even when you're scared.$"
-	.string "I wish I could be a POKéMON TRAINER\n"
-	.string "like you!$"
-
 Route119_WeatherInstitute_1F_Text_ProfStudyingRain:
 	.string "A little rain feeds the forest.\n"
-	.string "Too much can ruin a harvest.\\p\n"
+	.string "Too much can ruin a harvest.\p\n"
 	.string "We study where it falls, how\n"
-	.string "long it lasts, and who it affects.\\p\n"
+	.string "long it lasts, and who it affects.\p\n"
 	.string "The charts don't show the people\n"
 	.string "whose homes are in its path.$"
-	.string "That's a fact.\p"
-	.string "But if it keeps raining, people will be in\n"
-	.string "trouble. That's another fact.\p"
-	.string "And thus, the PROFESSOR is studying\n"
-	.string "if the rain can be put to good use.$"
-
 Route119_WeatherInstitute_1F_Text_NoticingAbnormalWeather:
 	.string "These readings are alarming.\n"
 	.string "Dry air over one route, storms\n"
-	.string "building over the next.\\p\n"
+	.string "building over the next.\p\n"
 	.string "There's no seasonal pattern\n"
-	.string "that accounts for both.\\p\n"
+	.string "that accounts for both.\p\n"
 	.string "I sent our report to FORTREE.\n"
 	.string "Someone has to prepare.$"
-	.string "we study the weather patterns over\l"
-	.string "the HOENN region.\p"
-	.string "We've been noticing temporary and\n"
-	.string "isolated cases of droughts and\l"
-	.string "heavy rain lately…$"
-
 Route119_WeatherInstitute_1F_Text_WhatWereAquasUpTo:
 	.string "TEAM AQUA wanted our forecasts.\n"
-	.string "They said the sea was suffering.\\p\n"
+	.string "They said the sea was suffering.\p\n"
 	.string "That's a concern we share.\n"
 	.string "But they threatened our staff\n"
-	.string "to get the research.\\p\n"
+	.string "to get the research.\p\n"
 	.string "Whatever their goal, that was\n"
 	.string "no way to pursue it.$"
-	.string "We've been saved by your actions!\p"
-	.string "What I don't understand is what on\n"
-	.string "earth the AQUAS were up to.$"
-
 Route119_WeatherInstitute_1F_Text_TakeRestInBed:
 	.string "There's a bed…\n"
 	.string "Let's take a rest.$"
