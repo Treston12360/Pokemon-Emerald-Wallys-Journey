@@ -699,16 +699,18 @@ PetalburgCity_EventScript_GymBoy::
 
 PetalburgCity_Text_WhereIsWally:
 	.string "Where has our WALLY gone?\p"
-	.string "We have to leave for VERDANTURF TOWN\n"
-	.string "very soon…$"
+	.string "The doctor says the air in\n"
+	.string "VERDANTURF could change his life.\p"
+	.string "He's so small. I just want him to\n"
+	.string "have the chance.$"
 
 PetalburgCity_Text_AreYouRookieTrainer:
-	.string "Hiya! Are you maybe…\n"
-	.string "A rookie TRAINER?\p"
-	.string "Do you know what POKéMON TRAINERS\n"
-	.string "do when they reach a new town?\p"
-	.string "They first check what kind of GYM\n"
-	.string "is in the town.$"
+	.string "Hiya! Rookie TRAINER?\p"
+	.string "Here's what nobody tells you. When\n"
+	.string "you reach a new town, check the GYM.\p"
+	.string "Then check the people. The GYM\n"
+	.string "tells you how strong a town is.\l"
+	.string "The people tell you why.$"
 
 PetalburgCity_Text_ThisIsPetalburgGym:
 	.string "See? This is PETALBURG CITY's GYM.$"

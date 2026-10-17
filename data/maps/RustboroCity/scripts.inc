@@ -1042,11 +1042,10 @@ RustboroCity_Text_YoureNewAroundHere:
 	.string "POKéMON TRAINER'S SCHOOL?$"
 
 RustboroCity_Text_GymLeaderIsntEasyWithFire:
-	.string "I challenged the GYM LEADER, but…\p"
-	.string "It's not going to be easy winning with\n"
-	.string "my FIRE-type POKéMON…\p"
-	.string "FIRE-type POKéMON don't match up\n"
-	.string "well against ROCK-type POKéMON…$"
+	.string "I lost to ROXANNE. Twice.\p"
+	.string "She told me my FIRE POKéMON weren't\n"
+	.string "the problem. My plan was.\p"
+	.string "Stings worse than losing.$"
 
 RustboroCity_Text_MrBrineyWalksInTheTunnel:
 	.string "The old sailor MR. BRINEY lives in\n"
@@ -1063,9 +1062,12 @@ RustboroCity_Text_MrBrineyLovesPeeko:
 	.string "that PEEKO.$"
 
 RustboroCity_Text_WowYouHavePokemon:
-	.string "Wow, you have POKéMON with you, too.\p"
-	.string "When I get bigger, I'm going to go\n"
-	.string "places with POKéMON, too.$"
+	.string "My dad works at DEVON. He builds\n"
+	.string "the parts that go in POKéNAVS.\p"
+	.string "He says when I'm older I can choose:\n"
+	.string "work for DEVON, or travel with\l"
+	.string "POKéMON.\p"
+	.string "…Why not both?$"
 
 RustboroCity_Text_CatchRarePokemonIfIGoToSchool:
 	.string "POKéMON TRAINER'S SCHOOL!\p"

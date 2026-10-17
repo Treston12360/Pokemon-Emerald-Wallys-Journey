@@ -340,8 +340,11 @@ OldaleTown_Movement_ReturnToOriginalPosition:
 	step_end
 
 OldaleTown_Text_SavingMyProgress:
-	.string "I want to take a rest, so I'm saving my\n"
-	.string "progress.$"
+	.string "I'm saving my progress. Always do\n"
+	.string "before a long route.\p"
+	.string "My brother didn't once. Lost a whole\n"
+	.string "day. Learned more from that than\l"
+	.string "from any GYM.$"
 
 OldaleTown_Text_IWorkAtPokemonMart:
 	.string "Hi!\n"

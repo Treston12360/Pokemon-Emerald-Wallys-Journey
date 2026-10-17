@@ -615,10 +615,12 @@ MauvilleCity_Text_WattsonYoungTakeCharge:
 	.string "the young step up and take charge!$"
 
 MauvilleCity_Text_NurseHurtMonBackToHealth:
-	.string "You know, it's cool to have POKéMON\n"
-	.string "battles and stuff…\p"
-	.string "But if your POKéMON gets hurt,\n"
-	.string "you have to nurse it back to health.$"
+	.string "Battles are fun and all.\p"
+	.string "But my WINGULL got hurt bad once,\n"
+	.string "and I sat with it all night at the\l"
+	.string "POKéMON CENTER.\p"
+	.string "That night taught me more than any\n"
+	.string "win.$"
 
 MauvilleCity_Text_AllSortsOfPeopleComeThrough:
 	.string "The roads of this town stretch north\n"
@@ -627,13 +629,19 @@ MauvilleCity_Text_AllSortsOfPeopleComeThrough:
 	.string "people coming through.$"
 
 MauvilleCity_Text_RydelVeryGenerous:
-	.string "Have you been to RYDEL'S CYCLES yet?\p"
-	.string "RYDEL, the owner, is a very generous\n"
-	.string "man.$"
+	.string "RYDEL gives BIKES to TRAINERS for\n"
+	.string "free.\p"
+	.string "He told me, “A kid on a BIKE sees\n"
+	.string "the whole region. That's how you\l"
+	.string "grow up right.”\p"
+	.string "Wish more adults thought like that.$"
 
 MauvilleCity_Text_PokemonCanJumpYouOnBike:
-	.string "Even if you're riding a BIKE,\n"
-	.string "wild POKéMON could jump you.$"
+	.string "Even on a BIKE, wild POKéMON can\n"
+	.string "jump you.\p"
+	.string "They're not being mean. We built\n"
+	.string "roads through their homes. They're\l"
+	.string "just reminding us.$"
 
 MauvilleCity_Text_CitySign:
 	.string "MAUVILLE CITY\n"

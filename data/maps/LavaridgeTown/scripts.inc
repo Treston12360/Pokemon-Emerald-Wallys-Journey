@@ -352,13 +352,12 @@ LavaridgeTown_Text_EverySoOftenEggFoundAtDayCare:
 	.string "Or at least that's how the rumor goes.$"
 
 LavaridgeTown_Text_HotSpringsNeverRunDry:
-	.string "We draw as much hot water as we need,\n"
-	.string "and yet the hot springs never run dry.\p"
-	.string "Isn't it magical?\p"
-	.string "These hot springs appear near active\n"
-	.string "volcanoes. Veins of water under the\l"
-	.string "ground are heated by magma to well up\l"
-	.string "as hot springs.$"
+	.string "The springs never run dry. Magma\n"
+	.string "heats the water underground.\p"
+	.string "The scientists warned us: mess with\n"
+	.string "the volcano, and the springs go too.\p"
+	.string "TEAM MAGMA wants to “improve” it.\n"
+	.string "We want to keep our town.$"
 
 LavaridgeTown_Text_PokemonNippedBackside:
 	.string "Being buried in this hot sand is…\n"
@@ -374,8 +373,10 @@ LavaridgeTown_Text_OhYouLikeHotSprings:
 
 LavaridgeTown_Text_BatheInHotSpringsEveryDay:
 	.string "I bathe in the hot springs every day.\p"
-	.string "I want to become a beautiful and strong\n"
-	.string "GYM LEADER like FLANNERY.$"
+	.string "FLANNERY's nervous, you know. You can\n"
+	.string "tell when she talks too fast.\p"
+	.string "But she never backs down. That's\n"
+	.string "what makes a GYM LEADER.$"
 
 LavaridgeTown_Text_IfPokemonInHotSprings:
 	.string "If people put POKéMON in hot springs,\n"
@@ -384,11 +385,11 @@ LavaridgeTown_Text_IfPokemonInHotSprings:
 	.string "a bubble bath, or even a lava bath…$"
 
 LavaridgeTown_Text_HotSpringsClaims:
-	.string "They're claiming that these hot springs\n"
-	.string "are good for calming nervous tension,\l"
-	.string "relieving aching muscles, solving\l"
-	.string "romantic problems, and attracting\l"
-	.string "money…$"
+	.string "They claim these springs cure\n"
+	.string "nerves, aching muscles, heartbreak,\l"
+	.string "and money problems…\p"
+	.string "The only thing they cure for sure\n"
+	.string "is a bad day.$"
 
 LavaridgeTown_Text_TownSign:
 	.string "LAVARIDGE TOWN\p"

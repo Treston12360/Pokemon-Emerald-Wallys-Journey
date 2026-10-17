@@ -78,17 +78,18 @@ VerdanturfTown_Text_ManDugTunnelForLove:
 	.string "I don't really get it, but hey!$"
 
 VerdanturfTown_Text_AirCleanHere:
-	.string "The way the winds blow, volcanic ash\n"
-	.string "is never blown in this direction.\p"
-	.string "The air is clean and delicious here.\n"
-	.string "Living here should do wonders for even\l"
-	.string "frail and sickly people.$"
+	.string "The winds keep MT. CHIMNEY's ash\n"
+	.string "away from VERDANTURF.\p"
+	.string "Sick kids from all over HOENN come\n"
+	.string "here to breathe. WALLY was one.\p"
+	.string "Look at him now.$"
 
 VerdanturfTown_Text_MakeBattleTentDebut:
-	.string "My POKéMON and I, we've been riding\n"
-	.string "a hot winning streak.\p"
-	.string "So I decided to make my BATTLE TENT\n"
-	.string "debut in this town.$"
+	.string "I'm on a winning streak, so I'm\n"
+	.string "making my BATTLE TENT debut.\p"
+	.string "Saw a kid named WALLY train out\n"
+	.string "here before he left. Never seen\l"
+	.string "anyone take notes like that.$"
 
 VerdanturfTown_Text_GuyTryingToBustThroughCave:
 	.string "Did you see the cave next to the\n"

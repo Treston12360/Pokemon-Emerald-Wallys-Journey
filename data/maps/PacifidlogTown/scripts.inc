@@ -39,18 +39,20 @@ PacifidlogTown_Text_FastRunningCurrent:
 	.string "up swept away somewhere else.$"
 
 PacifidlogTown_Text_NeatHousesOnWater:
-	.string "See, isn't it neat?\n"
-	.string "These houses are on water!\p"
-	.string "I was born here!$"
+	.string "Our houses float on the water!\n"
+	.string "I was born here.\p"
+	.string "When the sea rose during the crisis,\n"
+	.string "our whole town just… rose with it.\p"
+	.string "Turns out floating is a good plan.$"
 
 PacifidlogTown_Text_SkyPillarTooScary:
-	.string "The SKY PILLAR?\p"
-	.string "…Oh, you must mean that tall, tall\n"
-	.string "tower a little further out.\p"
-	.string "If you asked me, I wouldn't climb it.\n"
-	.string "It's too scary to get up that high.\p"
-	.string "Life at sea level in PACIFIDLOG,\n"
-	.string "that suits me fine.$"
+	.string "The SKY PILLAR? That tall tower out\n"
+	.string "past the currents?\p"
+	.string "Grandma says when land and sea go to\n"
+	.string "war, a green light comes down from\l"
+	.string "the top and ends it.\p"
+	.string "We don't climb it. We just hope we\n"
+	.string "never see that light.$"
 
 PacifidlogTown_Text_TownSign:
 	.string "PACIFIDLOG TOWN\p"

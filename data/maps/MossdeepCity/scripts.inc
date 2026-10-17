@@ -324,12 +324,11 @@ MossdeepCity_Text_WhatToDoWithWeirdRock:
 	.string "supposed to do with some weird rock?$"
 
 MossdeepCity_Text_WailmerWatching:
-	.string "Around MOSSDEEP, you can see wild\n"
-	.string "WAILMER.\p"
-	.string "It's called, uh…\n"
-	.string "What was it now…\p"
-	.string "WAI, WAI, WAI…\p"
-	.string "WAILMER watching!$"
+	.string "Around MOSSDEEP you can see wild\n"
+	.string "WAILMER! WAILMER watching!\p"
+	.string "There were more when I was little.\n"
+	.string "The TEAM AQUA folks aren't wrong\l"
+	.string "about everything.$"
 
 MossdeepCity_Text_SpaceCenterReceivedLetter:
 	.string "The island's SPACE CENTER has been\n"
@@ -358,18 +357,19 @@ MossdeepCity_Text_FeelReliefOnLand:
 	.string "after a long voyage, I do feel relief!$"
 
 MossdeepCity_Text_NiceIfWorldCoveredByFlowers:
-	.string "Wouldn't it be nice?\p"
-	.string "If the whole world was covered in\n"
-	.string "plants and flowers like this island?$"
+	.string "Wouldn't it be nice if the whole\n"
+	.string "world were flowers, like this island?\p"
+	.string "…Then again, someone has to live\n"
+	.string "somewhere. I suppose that's the\l"
+	.string "whole argument, isn't it?$"
 
 MossdeepCity_Text_LifeNeedsSeaToLive:
-	.string "All life needs the sea to live, even\n"
-	.string "though it makes its home on the land.\p"
-	.string "Life, having run its course, becomes\n"
-	.string "soil and returns to the land.\p"
-	.string "And the sea is always connected to\n"
-	.string "the land.\p"
-	.string "Yes, like the very shoreline here.$"
+	.string "All life needs the sea, even life\n"
+	.string "that lives on land.\p"
+	.string "TEAM MAGMA forgot that. TEAM AQUA\n"
+	.string "forgot the other half.\p"
+	.string "The shoreline is where both are\n"
+	.string "true at once.$"
 
 MossdeepCity_Text_SurfExhilarating:
 	.string "A voyage on a ship is fine.\p"
@@ -379,14 +379,12 @@ MossdeepCity_Text_SurfExhilarating:
 	.string "Wouldn't you agree, youngster?$"
 
 MossdeepCity_Text_SpecialSpaceCenterRock:
-	.string "This rock has a special meaning to\n"
-	.string "the people at the SPACE CENTER.\p"
-	.string "They put it here as their wish for\n"
-	.string "their rockets to fly safely.\p"
-	.string "When you make a wish, what do you use?\n"
-	.string "Do you wish upon a star?\p"
-	.string "I use a wish tag to make it happen.\n"
-	.string "That's what I do.$"
+	.string "The SPACE CENTER staff left this\n"
+	.string "rock here for good luck.\p"
+	.string "Nobody admits it, but they all touch\n"
+	.string "it before a launch.\p"
+	.string "Science people are superstitious\n"
+	.string "too. It's nice.$"
 
 MossdeepCity_Text_ItsAWhiteRock:
 	.string "It's a white rock.$"
@@ -418,14 +416,11 @@ MossdeepCity_Text_ScottSomethingWrongWithTown:
 	.string "way, though.$"
 
 MossdeepCity_Text_SootopolisNewGymLeader:
-	.string "Ahh… It feels great letting the waves\n"
-	.string "wash over my feet…\p"
-	.string "Speaking of the waves, you know that\n"
-	.string "island city SOOTOPOLIS?\p"
-	.string "I think the GYM there had a new\n"
-	.string "LEADER come in.\p"
-	.string "People tell me the new LEADER once\n"
-	.string "mentored WALLACE.$"
+	.string "The waves feel great on my feet.\p"
+	.string "You know SOOTOPOLIS? JUAN runs the\n"
+	.string "GYM again. He taught WALLACE.\p"
+	.string "And now WALLACE has his own student.\n"
+	.string "Some skinny kid from PETALBURG.$"
 
 MossdeepCity_OnFrame:
 	map_script_2 VAR_WALLY_RIVAL_PENDING, 7, WallyJourney_EventScript_RivalMeet7

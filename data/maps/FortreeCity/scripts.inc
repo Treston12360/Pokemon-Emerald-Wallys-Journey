@@ -118,22 +118,25 @@ FortreeCity_Text_TreesGrowByDrinkingRainwater:
 	.string "there's both water and soil.$"
 
 FortreeCity_Text_EveryoneHealthyAndLively:
-	.string "The CITY consists of homes built on\n"
-	.string "trees.\p"
-	.string "Perhaps because of that lifestyle,\n"
-	.string "everyone is healthy and lively.\p"
-	.string "Why, even myself--I feel as if I've\n"
-	.string "grown thirty years younger.$"
+	.string "We live up in the trees, and we\n"
+	.string "live long.\p"
+	.string "WINONA says it's the wind. I say\n"
+	.string "it's that nobody here is ever in\l"
+	.string "a hurry.$"
 
 FortreeCity_Text_BugPokemonComeThroughWindow:
-	.string "Living on top of trees is okay.\p"
-	.string "But sometimes BUG POKéMON come in\n"
-	.string "through windows.\l"
-	.string "It can be really startling.$"
+	.string "Living in the trees is lovely.\p"
+	.string "But FORTREE can't grow outward. No\n"
+	.string "room. My kids will have to move\l"
+	.string "away to find homes.\p"
+	.string "I understand what TEAM MAGMA wants.\n"
+	.string "I just don't trust how.$"
 
 FortreeCity_Text_PokemonThatEvolveWhenTraded:
-	.string "There are POKéMON that evolve when\n"
-	.string "you trade them! That's what I heard.$"
+	.string "Some POKéMON only evolve when traded.\p"
+	.string "Strange, isn't it? Sometimes you\n"
+	.string "grow by trusting someone else with\l"
+	.string "what matters to you.$"
 
 FortreeCity_Text_SomethingUnseeable:
 	.string "Something unseeable is in the way.$"

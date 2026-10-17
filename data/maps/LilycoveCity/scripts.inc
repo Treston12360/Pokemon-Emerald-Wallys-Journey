@@ -560,14 +560,19 @@ LilycoveCity_Text_ChanceToDoBigThings:
 
 LilycoveCity_Text_DontGoNearCaveInCove:
 	.string "Hey, you!\p"
-	.string "Don't go near the cave in the cove!\p"
-	.string "Why? You don't need a reason why!\n"
-	.string "I'm an adult, so you just listen to me!$"
+	.string "Stay away from the cave in the cove.\n"
+	.string "That's TEAM AQUA business.\p"
+	.string "…Look, I'm doing you a favor. The\n"
+	.string "people in there are getting\l"
+	.string "desperate.$"
 
 LilycoveCity_Text_IfWorldBecomesOurs:
-	.string "If this whole wide world becomes ours,\n"
-	.string "TEAM AQUA's, it will be a happier\l"
-	.string "place for POKéMON, too.$"
+	.string "If TEAM AQUA wins, the sea gets its\n"
+	.string "space back.\p"
+	.string "Fewer cities. Fewer factories.\n"
+	.string "More POKéMON.\p"
+	.string "…The BOSS says sacrifices have to be\n"
+	.string "made. I hope he means his.$"
 
 LilycoveCity_Text_WailmerLeapOutOfWater:
 	.string "There! WAILMER!\n"
@@ -579,11 +584,11 @@ LilycoveCity_Text_GetLostMessingUpTraining:
 	.string "so can you, like, get lost?$"
 
 LilycoveCity_Text_ContestHallInTown:
-	.string "There's a POKéMON CONTEST HALL\n"
-	.string "right in this here town. \p"
-	.string "That means well-raised POKéMON will\n"
-	.string "come from all over the country.\p"
-	.string "My heart swells with excitement!$"
+	.string "The CONTEST HALL brings TRAINERS from\n"
+	.string "all over.\p"
+	.string "People say contests are just for\n"
+	.string "show. Try raising a POKéMON that\l"
+	.string "moves a crowd. It's not easy.$"
 
 LilycoveCity_Text_StrangeCaveInCove:
 	.string "Have you seen that strange cave in\n"
@@ -636,10 +641,11 @@ LilycoveCity_Text_MissingPokemonCameBack:
 
 LilycoveCity_Text_ImArtDealer:
 	.string "I'm an ART DEALER.\p"
-	.string "I am a buyer and seller of fine art,\n"
-	.string "especially paintings.\p"
-	.string "I've heard that the MUSEUM here has\n"
-	.string "magnificent works on exhibit…$"
+	.string "Half my buyers want paintings of the\n"
+	.string "open sea. The other half want new\l"
+	.string "cities on green hills.\p"
+	.string "Same region. Two dreams. Business\n"
+	.string "is good either way.$"
 
 LilycoveCity_Text_SeaRemainsForeverYoung:
 	.string "Even as we grow old and wrinkled,\n"
@@ -742,29 +748,33 @@ LilycoveCity_Text_ExplainBerryBlender:
 	.string "its condition will improve by a lot.$"
 
 LilycoveCity_Text_HeardTowerCalledSkyPillar:
-	.string "I heard there's a tower somewhere out\n"
-	.string "on the sea routes.\p"
-	.string "It's called the SKY PILLAR, I hear.$"
+	.string "There's a tower out on the sea\n"
+	.string "routes. The SKY PILLAR.\p"
+	.string "My grandmother said nobody built it.\n"
+	.string "It was there when the first people\l"
+	.string "came to HOENN.$"
 
 LilycoveCity_Text_SawTallTowerOnRoute131:
-	.string "I saw this tall tower somewhere\n"
-	.string "around ROUTE 131.\p"
-	.string "Could that possibly be…?$"
+	.string "I saw a tall tower near ROUTE 131.\p"
+	.string "The fishermen there won't go near it.\n"
+	.string "They say the clouds above it never\l"
+	.string "move.$"
 
 LilycoveCity_Text_JustArrivedAndSawRarePokemon:
-	.string "We just arrived here on our\n"
-	.string "honeymoon vacation.\p"
-	.string "We happened to see a DRAGON-type\n"
-	.string "POKéMON flying way up in the sky.\p"
-	.string "Do cool POKéMON like that live in\n"
-	.string "the HOENN region?$"
+	.string "We saw a DRAGON-type flying high\n"
+	.string "over the sea.\p"
+	.string "A local said the legends speak of a\n"
+	.string "guardian in the sky that wakes when\l"
+	.string "land and sea go to war.\p"
+	.string "Probably just a story. Right?$"
 
 LilycoveCity_Text_HoneymoonVowToSeeRarePokemon:
-	.string "On our honeymoon, we vowed to see as\n"
-	.string "many rare POKéMON as we can.\p"
-	.string "So we were delighted to see a rare\n"
-	.string "POKéMON as soon as we arrived.\p"
-	.string "I mean, we are totally happy!$"
+	.string "On our honeymoon we vowed to see\n"
+	.string "rare POKéMON.\p"
+	.string "The locals say HOENN's changing.\n"
+	.string "Strange weather, strange migrations.\p"
+	.string "We're glad we came now. Before it\n"
+	.string "all looks different.$"
 
 LilycoveCity_OnFrame:
 	map_script_2 VAR_WALLY_RIVAL_PENDING, 6, WallyJourney_EventScript_RivalMeet6

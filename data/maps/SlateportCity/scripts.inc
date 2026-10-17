@@ -952,10 +952,12 @@ SlateportCity_Text_EffortRibbonLooksGoodOnIt:
 	.string "RIBBON looks good on it!$"
 
 SlateportCity_Text_WonderIfLighthouseStartlesPokemon:
-	.string "The light of the lighthouse reaches\n"
-	.string "dozens of miles away.\p"
-	.string "I wonder if it doesn't startle POKéMON\n"
-	.string "in the sea.$"
+	.string "The lighthouse reaches for miles.\p"
+	.string "In a bad storm it's the only light\n"
+	.string "on the coast. People steer home by\l"
+	.string "it.\p"
+	.string "Some things you only appreciate\n"
+	.string "when everything else goes dark.$"
 
 SlateportCity_Text_SeaweedFullOfLife:
 	.string "Ooh, look at this!\p"
@@ -990,11 +992,13 @@ SlateportCity_Text_GoingToCompeteInBattleTent:
 	.string "some POKéMON!$"
 
 SlateportCity_Text_BushedHikingFromMauville:
-	.string "Whew… I'm just bushed…\p"
-	.string "I hiked over from MAUVILLE CITY.\n"
-	.string "But, boy, this city's huge.\p"
-	.string "If I'd known this, I would've ridden\n"
-	.string "my BIKE here.$"
+	.string "Whew… I hiked over from MAUVILLE.\p"
+	.string "Half the people on that road were\n"
+	.string "looking for work. The shipyard's\l"
+	.string "hiring, at least.\p"
+	.string "DEVON money keeps this port alive.\n"
+	.string "Whether that's good is another\l"
+	.string "question.$"
 
 SlateportCity_Text_EveryoneCallsHimCaptStern:
 	.string "STERN, the fellow who built the\n"
@@ -1081,14 +1085,18 @@ SlateportCity_Text_SeaIsSoWet:
 	.string "the tears shed by POKéMON?$"
 
 SlateportCity_Text_SinkOldBoats:
-	.string "Do you know what they do with old\n"
-	.string "ships that become too creaky to sail?\p"
-	.string "They sink them in the sea so they\n"
-	.string "become habitats for POKéMON.$"
+	.string "Old ships get sunk on purpose out\n"
+	.string "there. They turn into reefs.\p"
+	.string "The CAPTAIN calls it giving back.\n"
+	.string "TEAM AQUA calls it dumping.\p"
+	.string "Funny. Same ship, two stories.$"
 
 SlateportCity_Text_BuyTooMuch:
-	.string "Whenever I visit here, I get carried\n"
-	.string "away and buy too much.$"
+	.string "Whenever I visit the market, I buy\n"
+	.string "too much.\p"
+	.string "The vendors say business is down.\n"
+	.string "Fewer ships since TEAM AQUA started\l"
+	.string "patrolling the harbor.$"
 
 SlateportCity_Text_GetNameRaterToHelpYou:
 	.string "If you want to change your POKéMON's\n"
