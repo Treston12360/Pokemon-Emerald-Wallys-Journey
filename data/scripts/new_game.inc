@@ -113,6 +113,7 @@ EventScript_ResetAllBerries::
 	return
 
 EventScript_ResetAllMapFlags::
+	setflag FLAG_HIDE_METEOR_FALLS_JIRACHI
 	setflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS
 	setflag FLAG_HIDE_WALLY_RIVAL_MOSSDEEP
 	setflag FLAG_HIDE_WALLY_RIVAL_LILYCOVE

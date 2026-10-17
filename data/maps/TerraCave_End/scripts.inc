@@ -33,7 +33,8 @@ TerraCave_End_EventScript_Groudon::
 	delay 40
 	waitmoncry
 	setvar VAR_LAST_TALKED, LOCALID_TERRA_CAVE_GROUDON
-	setwildbattle SPECIES_GROUDON, 70
+	msgbox WallyJourney_Text_GroudonAwakens, MSGBOX_DEFAULT
+	setwildbattle SPECIES_GROUDON, 75, ITEM_RED_ORB @ Wally's Journey: holds its orb, so it undergoes Primal Reversion in battle
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special BattleSetup_StartLegendaryBattle
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
@@ -69,3 +70,8 @@ TerraCave_End_Movement_GroudonApproach:
 	walk_down_affine
 	step_end
 
+
+WallyJourney_Text_GroudonAwakens:
+	.string "The ground cracks and the heat\n"
+	.string "becomes unbearable…\p"
+	.string "An ancient power is awakening!$"

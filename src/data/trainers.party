@@ -14493,13 +14493,13 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 - MOVE_CUT
 - MOVE_ROCK_SMASH
 
-SPECIES_CORSOLA
+Aerodactyl @ Aerodactylite
 Level: 24
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- MOVE_ROCK_TOMB
-- MOVE_BUBBLE_BEAM
-- MOVE_RECOVER
-- MOVE_AMNESIA
+- Rock Slide
+- Bite
+- Wing Attack
+- Taunt
 
 SPECIES_NOSEPASS @ ITEM_ORAN_BERRY
 Level: 26
@@ -14519,13 +14519,13 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_RELICANTH @ ITEM_HARD_STONE
+Aerodactyl @ Aerodactylite
 Level: 55
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- MOVE_ROCK_SLIDE
-- MOVE_SANDSTORM
-- MOVE_DOUBLE_EDGE
-- MOVE_SURF
+- Stone Edge
+- Crunch
+- Aerial Ace
+- Earthquake
 
 SPECIES_ARMALDO @ ITEM_KINGS_ROCK
 Level: 55
@@ -14685,13 +14685,13 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_MEDITITE @ ITEM_SALAC_BERRY
+Medicham @ Medichamite
 Level: 31
 IVs: 22 HP / 22 Atk / 22 Def / 22 SpA / 22 SpD / 22 Spe
-- MOVE_EXTRASENSORY
-- MOVE_THUNDER_PUNCH
-- MOVE_LIGHT_SCREEN
-- MOVE_REFLECT
+- High Jump Kick
+- Zen Headbutt
+- Bullet Punch
+- Ice Punch
 
 SPECIES_MACHOKE
 Level: 30
@@ -14727,13 +14727,13 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_HITMONCHAN @ ITEM_BLACK_BELT
+Medicham @ Medichamite
 Level: 55
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- MOVE_DYNAMIC_PUNCH
-- MOVE_ROCK_SLIDE
-- MOVE_AGILITY
-- MOVE_BULK_UP
+- High Jump Kick
+- Zen Headbutt
+- Bullet Punch
+- Thunder Punch
 
 SPECIES_BRELOOM @ ITEM_QUICK_CLAW
 Level: 55
@@ -15117,13 +15117,13 @@ IVs: 29 HP / 29 Atk / 29 Def / 29 SpA / 29 SpD / 29 Spe
 - MOVE_WILL_O_WISP
 - MOVE_SUNNY_DAY
 
-SPECIES_CASTFORM
+Camerupt @ Cameruptite
 Level: 38
 IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
-- MOVE_WEATHER_BALL
-- MOVE_SUNNY_DAY
-- MOVE_HEADBUTT
-- MOVE_ICE_BEAM
+- Lava Plume
+- Earth Power
+- Rock Slide
+- Yawn
 
 SPECIES_MAGCARGO
 Level: 39
@@ -15357,13 +15357,13 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - MOVE_CUT
 - MOVE_BRICK_BREAK
 
-SPECIES_LINOONE @ ITEM_SITRUS_BERRY
+Kangaskhan @ Kangaskhanite
 Level: 50
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- MOVE_HEADBUTT
-- MOVE_BELLY_DRUM
-- MOVE_FACADE
-- MOVE_IRON_TAIL
+- Return
+- Sucker Punch
+- Earthquake
+- Fake Out
 
 SPECIES_GIRAFARIG
 Level: 50
@@ -15391,13 +15391,13 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_AIPOM @ ITEM_WIKI_BERRY
+Kangaskhan @ Kangaskhanite
 Level: 55
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- MOVE_AGILITY
-- MOVE_BATON_PASS
-- MOVE_BEAT_UP
-- MOVE_SUBSTITUTE
+- Return
+- Sucker Punch
+- Earthquake
+- Fake Out
 
 SPECIES_STANTLER @ ITEM_SILK_SCARF
 Level: 55
@@ -15457,13 +15457,13 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - MOVE_IRON_TAIL
 - MOVE_EARTHQUAKE
 
-SPECIES_GRANBULL @ ITEM_QUICK_CLAW
+Kangaskhan @ Kangaskhanite
 Level: 60
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- MOVE_HEAL_BELL
-- MOVE_PROTECT
-- MOVE_CRUNCH
-- MOVE_BODY_SLAM
+- Double-Edge
+- Sucker Punch
+- Earthquake
+- Fake Out
 
 SPECIES_URSARING @ ITEM_SALAC_BERRY
 Level: 60
@@ -15816,13 +15816,13 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - MOVE_FLAMETHROWER
 - MOVE_SUNNY_DAY
 
-SPECIES_WOBBUFFET
+Medicham @ Medichamite
 Level: 50
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- MOVE_ENCORE
-- MOVE_COUNTER
-- MOVE_MIRROR_COAT
-- MOVE_DESTINY_BOND
+- High Jump Kick
+- Zen Headbutt
+- Bullet Punch
+- Ice Punch
 
 SPECIES_STARMIE
 Level: 50
@@ -16014,13 +16014,13 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - MOVE_CALM_MIND
 - MOVE_BATON_PASS
 
-SPECIES_METAGROSS @ ITEM_METAGROSSITE
+Gallade @ Galladite
 Level: 65
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- MOVE_PSYCHIC
-- MOVE_METEOR_MASH
-- MOVE_ICE_PUNCH
-- MOVE_ROCK_SLIDE
+- Close Combat
+- Psycho Cut
+- Leaf Blade
+- Swords Dance
 
 === TRAINER_JUAN_2 ===
 Name: JUAN
@@ -16040,13 +16040,13 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Protect
 - Hydro Pump
 
-Whiscash
+Gyarados @ Gyaradosite
 Level: 46
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Rain Dance
-- Water Pulse
-- Double Team
-- Fissure
+- Waterfall
+- Crunch
+- Ice Fang
+- Dragon Dance
 
 Walrein
 Level: 48
@@ -16090,13 +16090,13 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Protect
 - Hydro Pump
 
-Whiscash
+Gyarados @ Gyaradosite
 Level: 51
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Rain Dance
-- Water Pulse
-- Double Team
-- Fissure
+- Waterfall
+- Crunch
+- Ice Fang
+- Dragon Dance
 
 Walrein
 Level: 53
@@ -16140,13 +16140,13 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Ice Beam
 - Confuse Ray
 
-Whiscash
+Gyarados @ Gyaradosite
 Level: 58
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Rain Dance
-- Water Pulse
-- Double Team
-- Fissure
+- Waterfall
+- Crunch
+- Earthquake
+- Dragon Dance
 
 Poliwhirl
 Level: 56
@@ -16198,13 +16198,13 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Ice Beam
 - Confuse Ray
 
-Whiscash
+Gyarados @ Gyaradosite
 Level: 63
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Rain Dance
-- Water Pulse
-- Double Team
-- Fissure
+- Waterfall
+- Crunch
+- Earthquake
+- Dragon Dance
 
 Politoed
 Level: 61

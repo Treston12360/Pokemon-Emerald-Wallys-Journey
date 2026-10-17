@@ -112,6 +112,9 @@ bool32 WallyJourney_IsForbiddenBall(u16 itemId)
 }
 u16 WallyJourney_ConvertForbiddenBall(u16 itemId)
 {
+    // Engine battle tests give special balls on purpose; only the real game enforces the rule.
+    if (TESTING)
+        return itemId;
     return WallyJourney_IsForbiddenBall(itemId) ? ITEM_POKE_BALL : itemId;
 }
 

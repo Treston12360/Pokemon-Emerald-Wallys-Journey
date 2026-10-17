@@ -33,7 +33,8 @@ MarineCave_End_EventScript_Kyogre::
 	delay 40
 	waitmoncry
 	setvar VAR_LAST_TALKED, LOCALID_MARINE_CAVE_KYOGRE
-	setwildbattle SPECIES_KYOGRE, 70
+	msgbox WallyJourney_Text_KyogreAwakens, MSGBOX_DEFAULT
+	setwildbattle SPECIES_KYOGRE, 75, ITEM_BLUE_ORB @ Wally's Journey: holds its orb, so it undergoes Primal Reversion in battle
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special BattleSetup_StartLegendaryBattle
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
@@ -69,3 +70,8 @@ MarineCave_End_Movement_KyogreApproach:
 	walk_down_affine
 	step_end
 
+
+WallyJourney_Text_KyogreAwakens:
+	.string "The water churns and the cavern\n"
+	.string "trembles…\p"
+	.string "An ancient power is awakening!$"

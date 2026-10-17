@@ -348,3 +348,76 @@ WallyJourney_Text_RivalSOOTOPOLISPost:
 	.string "won't be practice.\p"
 	.string "I'll see you at the POKéMON LEAGUE.$"
 
+
+
+@ Wally's Journey: postgame Jirachi. After the first Elite Four win, Prof. Cozmo
+@ tells the player about a star-shaped POKéMON sleeping deep in METEOR FALLS.
+@ If the player knocks it out or runs, it returns the next time they visit.
+WallyJourney_EventScript_CozmoJirachiQuest::
+	goto_if_set FLAG_CAUGHT_JIRACHI_WALLY, Common_EventScript_NopReturn
+	goto_if_set FLAG_JIRACHI_QUEST_STARTED, WallyJourney_EventScript_CozmoJirachiReminder
+	msgbox WallyJourney_Text_CozmoJirachiStory, MSGBOX_DEFAULT
+	setflag FLAG_JIRACHI_QUEST_STARTED
+	clearflag FLAG_HIDE_METEOR_FALLS_JIRACHI
+	release
+	end
+
+WallyJourney_EventScript_CozmoJirachiReminder::
+	msgbox WallyJourney_Text_CozmoJirachiReminder, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_Jirachi::
+	lock
+	faceplayer
+	msgbox WallyJourney_Text_JirachiAsleep, MSGBOX_DEFAULT
+	waitse
+	playmoncry SPECIES_JIRACHI, CRY_MODE_ENCOUNTER
+	delay 40
+	waitmoncry
+	setwildbattle SPECIES_JIRACHI, 70
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
+	special BattleSetup_StartLegendaryBattle
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, WallyJourney_EventScript_JirachiCaught
+	@ Knocked out or escaped: it vanishes for now, but returns on the next visit.
+	fadescreenswapbuffers FADE_TO_BLACK
+	removeobject VAR_LAST_TALKED
+	fadescreenswapbuffers FADE_FROM_BLACK
+	msgbox WallyJourney_Text_JirachiVanished, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_JirachiCaught::
+	setflag FLAG_CAUGHT_JIRACHI_WALLY
+	setflag FLAG_HIDE_METEOR_FALLS_JIRACHI
+	release
+	end
+
+WallyJourney_Text_CozmoJirachiStory:
+	.string "PROF. COZMO: Oh, the new CHAMPION!\p"
+	.string "I've been studying the METEORITE\n"
+	.string "again. It's been glowing lately.\p"
+	.string "Old legends say a star-shaped\n"
+	.string "POKéMON sleeps for a thousand\l"
+	.string "years and grants wishes.\p"
+	.string "Hikers swear they saw a soft light\n"
+	.string "deep inside METEOR FALLS, past the\l"
+	.string "underground lake.\p"
+	.string "If anyone can find it, it's you!$"
+
+WallyJourney_Text_CozmoJirachiReminder:
+	.string "PROF. COZMO: Any luck in METEOR\n"
+	.string "FALLS? The light was seen past\l"
+	.string "the underground lake.$"
+
+WallyJourney_Text_JirachiAsleep:
+	.string "A small POKéMON is dozing here,\n"
+	.string "glowing softly…\p"
+	.string "It opened its eyes!$"
+
+WallyJourney_Text_JirachiVanished:
+	.string "JIRACHI drifted away in a shimmer\n"
+	.string "of light…\p"
+	.string "It might come back here again.$"

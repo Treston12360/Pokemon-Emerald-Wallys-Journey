@@ -61,9 +61,9 @@
 #define FLAG_HIDE_WALLY_RIVAL_LILYCOVE 0x27 // Wally's Journey: rival battle after badge 6
 #define FLAG_HIDE_WALLY_RIVAL_MOSSDEEP 0x28 // Wally's Journey: rival battle after badge 7
 #define FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS 0x29 // Wally's Journey: rival battle after badge 8
-#define FLAG_UNUSED_0x02A    0x2A // Unused Flag
-#define FLAG_UNUSED_0x02B    0x2B // Unused Flag
-#define FLAG_UNUSED_0x02C    0x2C // Unused Flag
+#define FLAG_HIDE_METEOR_FALLS_JIRACHI 0x2A // Wally's Journey: postgame Jirachi quest
+#define FLAG_CAUGHT_JIRACHI_WALLY     0x2B // Wally's Journey: Jirachi caught (stops respawning)
+#define FLAG_JIRACHI_QUEST_STARTED    0x2C // Wally's Journey: Cozmo told the player about Jirachi
 #define FLAG_UNUSED_0x02D    0x2D // Unused Flag
 #define FLAG_UNUSED_0x02E    0x2E // Unused Flag
 #define FLAG_UNUSED_0x02F    0x2F // Unused Flag
