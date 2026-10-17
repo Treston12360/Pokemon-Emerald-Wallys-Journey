@@ -4392,7 +4392,7 @@ const struct ItemInfo gItemsInfo[] =
     [ITEM_DRAGON_SCALE] =
     {
         .name = ITEM_NAME("Dragon Scale"),
-        .price = (I_PRICE >= GEN_7) ? 2000 * TREASURE_FACTOR : 2100,
+        .price = 8000,
         .holdEffectParam = 10,
         .description = COMPOUND_STRING(
             "A strange scale\n"
@@ -4411,7 +4411,7 @@ const struct ItemInfo gItemsInfo[] =
     [ITEM_UPGRADE] =
     {
         .name = ITEM_NAME("Upgrade"),
-        .price = (I_PRICE >= GEN_7) ? 2000 * TREASURE_FACTOR : 2100,
+        .price = 8000,
         .description = COMPOUND_STRING(
             "A peculiar box made\n"
             "by Silph Co."),
@@ -4428,7 +4428,7 @@ const struct ItemInfo gItemsInfo[] =
     [ITEM_PROTECTOR] =
     {
         .name = ITEM_NAME("Protector"),
-        .price = (I_PRICE >= GEN_7) ? 2000 * TREASURE_FACTOR : 2100,
+        .price = 8000,
         .description = COMPOUND_STRING(
             "A protective item.\n"
             "It is loved by\n"
@@ -4446,7 +4446,7 @@ const struct ItemInfo gItemsInfo[] =
     [ITEM_ELECTIRIZER] =
     {
         .name = ITEM_NAME("Electirizer"),
-        .price = (I_PRICE >= GEN_7) ? 2000 * TREASURE_FACTOR : 2100,
+        .price = 8000,
         .description = COMPOUND_STRING(
             "A box of electric\n"
             "energy loved by\n"
@@ -4464,7 +4464,7 @@ const struct ItemInfo gItemsInfo[] =
     [ITEM_MAGMARIZER] =
     {
         .name = ITEM_NAME("Magmarizer"),
-        .price = (I_PRICE >= GEN_7) ? 2000 * TREASURE_FACTOR : 2100,
+        .price = 8000,
         .description = COMPOUND_STRING(
             "A box of magma\n"
             "energy loved by\n"
@@ -4482,7 +4482,7 @@ const struct ItemInfo gItemsInfo[] =
     [ITEM_DUBIOUS_DISC] =
     {
         .name = ITEM_NAME("Dubious Disc"),
-        .price = (I_PRICE >= GEN_7) ? 2000 * TREASURE_FACTOR : 2100,
+        .price = 8000,
         .description = COMPOUND_STRING(
             "A transparent\n"
             "device overflowing\n"
@@ -4500,7 +4500,7 @@ const struct ItemInfo gItemsInfo[] =
     [ITEM_REAPER_CLOTH] =
     {
         .name = ITEM_NAME("Reaper Cloth"),
-        .price = (I_PRICE >= GEN_7) ? 2000 * TREASURE_FACTOR : 2100,
+        .price = 8000,
         .description = COMPOUND_STRING(
             "A cloth imbued with\n"
             "energy loved by\n"
