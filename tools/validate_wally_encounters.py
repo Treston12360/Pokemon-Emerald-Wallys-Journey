@@ -67,9 +67,11 @@ for starter in STARTER_SPECIES:
     if starter not in species:
         errors.append(f"Starter species has no Hoenn wild encounter: {starter}")
 
-# Catch accidental rollback of the expanded Gen 1-9 habitat tables.\n# This is the latest verified species floor after the evolved-wild habitat pass.
+# Catch accidental rollback of the expanded Gen 1-9 habitat tables.\n# 490 is the floor after replacing 22 sole wild evolved placements with
+# earlier catchable stages (2026-10-16); species-count changes must be
+# reviewed together with the evolution-family accessibility audit.
 # Feebas uses the special 10% Route 119 Good Rod hook, not a JSON slot.
-MIN_WILD_SPECIES = 518
+MIN_WILD_SPECIES = 490
 if len(species) < MIN_WILD_SPECIES:
     errors.append(f"Wild roster fell from at least {MIN_WILD_SPECIES} species to {len(species)}")
 
@@ -126,7 +128,9 @@ for mon in EXPANSION_SPECIES:
     if mon not in species:
         errors.append(f"Expanded species is no longer available wild: {mon}")
 
-# Protect the evolved-species habitat pass, not just the numeric roster total.
+# Protect evolutionary FAMILY availability, not mandatory wild evolved forms.
+# A species may be absent from wild tables if a catchable prior stage can
+# evolve into it. Full evolution/item accessibility still needs separate proof.
 EVOLVED_RARE_SPECIES = (
     "SPECIES_TREVENANT", "SPECIES_GOURGEIST", "SPECIES_POLTEAGEIST",
     "SPECIES_DOUBLADE", "SPECIES_AEGISLASH", "SPECIES_ZOROARK",
@@ -146,9 +150,23 @@ EVOLVED_RARE_SPECIES = (
     "SPECIES_DRAGAPULT", "SPECIES_BAXCALIBUR", "SPECIES_TYRANITAR",
     "SPECIES_FERROTHORN", "SPECIES_HYDREIGON",
 )
+# Explicitly permitted wild-to-pre-evolution replacements from the level audit.
+# This only validates family presence; evolution reachability is a separate audit.
+WILD_PRE_EVOLUTION = {
+    "SPECIES_ZOROARK": "SPECIES_ZORUA",
+    "SPECIES_MANDIBUZZ": "SPECIES_VULLABY",
+    "SPECIES_PALOSSAND": "SPECIES_SANDYGAST",
+    "SPECIES_ABOMASNOW": "SPECIES_SNOVER",
+    "SPECIES_NOIVERN": "SPECIES_NOIBAT",
+    "SPECIES_BRAVIARY": "SPECIES_RUFFLET",
+    "SPECIES_VOLCARONA": "SPECIES_LARVESTA",
+    "SPECIES_FERROTHORN": "SPECIES_FERROSEED",
+    "SPECIES_GOLURK": "SPECIES_GOLETT",
+    "SPECIES_SANDACONDA": "SPECIES_SILICOBRA",
+}
 for mon in EVOLVED_RARE_SPECIES:
-    if mon not in species:
-        errors.append(f"Missing new rare habitat species: {mon}")
+    if mon not in species and WILD_PRE_EVOLUTION.get(mon) not in species:
+        errors.append(f"Missing rare evolution family from wild habitats: {mon}")
 
 # Story-only encounters must not accidentally enter normal grass/surf/fishing.
 STORY_ONLY_SPECIES = (
