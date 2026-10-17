@@ -336,7 +336,12 @@ SlateportCity_Text_SeaIsSoWetAftermath_Script:
 	end
 
 SlateportCity_EventScript_Sailor2::
+	goto_if_set FLAG_SYS_GAME_CLEAR, SlateportCity_EventScript_Sailor2AfterChampion
 	msgbox SlateportCity_Text_SinkOldBoats, MSGBOX_NPC
+	end
+
+SlateportCity_EventScript_Sailor2AfterChampion::
+	msgbox SlateportCity_Text_SinkOldBoatsAfterChampion, MSGBOX_NPC
 	end
 
 SlateportCity_EventScript_PokefanF::
@@ -349,7 +354,12 @@ SlateportCity_Text_BuyTooMuch_W0_Script:
 	end
 
 SlateportCity_EventScript_Man2::
+	goto_if_set FLAG_SYS_GAME_CLEAR, SlateportCity_EventScript_Man2AfterChampion
 	msgbox SlateportCity_Text_BattleTentBuiltRecently, MSGBOX_NPC
+	end
+
+SlateportCity_EventScript_Man2AfterChampion::
+	msgbox SlateportCity_Text_BattleTentAfterChampion, MSGBOX_NPC
 	end
 
 SlateportCity_EventScript_AquaGrunt1::
@@ -1379,3 +1389,22 @@ SlateportCity_Text_BuyTooMuch_W0:
 	.string "the harbor.\p"
 	.string "The market's been half empty since.\n"
 	.string "Nobody wants to ship anything.$"
+
+SlateportCity_Text_SinkOldBoatsAfterChampion:
+	.string "The old ship reefs made it\n"
+	.string "through the storms.\p"
+	.string "Divers found small POKéMON\n"
+	.string "sheltering in the wrecks.\p"
+	.string "Stern says we must check\n"
+	.string "what's safe before sinking\n"
+	.string "anything else out there.$"
+
+SlateportCity_Text_BattleTentAfterChampion:
+	.string "A CHAMPION came through\n"
+	.string "our little BATTLE TENT!\p"
+	.string "That's what the kids say\n"
+	.string "when they recognize you.\p"
+	.string "One of them started training\n"
+	.string "with a WINGULL yesterday.\p"
+	.string "Doesn't have to win yet.\n"
+	.string "Just has to begin.$"
