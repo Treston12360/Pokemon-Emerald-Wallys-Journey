@@ -17256,7 +17256,7 @@ IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
 === TRAINER_WALLY_CHAMPION ===
 Name: WALLY
-Class: Rival
+Class: Champion
 Pic: Wally
 Gender: Male
 Music: Male
@@ -17329,3 +17329,4 @@ EVs: 4 HP / 252 SpA / 252 Spe
 - MOVE_PSYSHOCK
 - MOVE_FOCUS_BLAST
 - MOVE_CALM_MIND
+
