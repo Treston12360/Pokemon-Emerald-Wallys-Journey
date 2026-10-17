@@ -6266,6 +6266,57 @@ Double Battle: No
 AI: Basic Trainer
 Mugshot: Yellow
 
+SPECIES_TENTACRUEL @ ITEM_PETAYA_BERRY
+Level: 49
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- MOVE_RAIN_DANCE
+- MOVE_WATER_PULSE
+- MOVE_GIGA_DRAIN
+- MOVE_ICE_BEAM
+
+SPECIES_MASQUERAIN @ ITEM_SILVER_POWDER
+Level: 48
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- MOVE_HYDRO_PUMP
+- MOVE_SIGNAL_BEAM
+- MOVE_STUN_SPORE
+- MOVE_BLIZZARD
+
+SPECIES_WHISCASH @ ITEM_QUICK_CLAW
+Level: 49
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- MOVE_EARTHQUAKE
+- MOVE_SURF
+- MOVE_RAIN_DANCE
+- MOVE_YAWN
+
+SPECIES_LUDICOLO @ ITEM_MYSTIC_WATER
+Level: 50
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- MOVE_GIGA_DRAIN
+- MOVE_WATER_PULSE
+- MOVE_LEECH_SEED
+- MOVE_DOUBLE_TEAM
+
+SPECIES_MILOTIC @ ITEM_LEFTOVERS
+Level: 51
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- MOVE_RECOVER
+- MOVE_DIVE
+- MOVE_ICE_BEAM
+- MOVE_TOXIC
+
+=== TRAINER_WALLACE_REMATCH ===
+Name: WALLACE
+Class: Champion
+Pic: Champion Wallace
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Basic Trainer
+Mugshot: Yellow
+
 SPECIES_WAILORD @ ITEM_QUICK_CLAW
 Level: 77
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
