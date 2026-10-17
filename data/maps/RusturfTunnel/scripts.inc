@@ -439,12 +439,11 @@ RusturfTunnel_Text_GruntDefeat:
 
 RusturfTunnel_Text_GruntTakePackage:
 	.string "This is plain not right…\p"
-	.string "The BOSS told me this would be a\n"
-	.string "slick-and-easy job to pull.\p"
-	.string "All I had to do was steal some package\n"
-	.string "from DEVON.\p"
-	.string "Tch!\n"
-	.string "You want it back that badly, take it!$"
+	.string "They told me this part was going to\n"
+	.string "shut down DEVON's new dredger.\l"
+	.string "Save the reef, they said.\p"
+	.string "Tch! Take it! But somebody has to\n"
+	.string "stand up to them!$"
 
 RusturfTunnel_Text_PeekoGladToSeeYouSafe:
 	.string "PEEKO!\n"
@@ -468,15 +467,15 @@ RusturfTunnel_Text_ThankYouLetsGoHomePeeko:
 
 RusturfTunnel_Text_WhyCantTheyKeepDigging:
 	.string "… …\p"
-	.string "Why can't they keep digging?\n"
-	.string "Is the bedrock too hard?\p"
-	.string "My beloved awaits me in VERDANTURF\n"
-	.string "TOWN just beyond here…\p"
-	.string "If RUSTBORO and VERDANTURF were\n"
-	.string "joined by this tunnel, I could visit\l"
-	.string "her every day…\p"
-	.string "But this…\n"
-	.string "What am I to do?$"
+	.string "They stopped digging. Folks in\n"
+	.string "VERDANTURF protested DEVON's quarry\l"
+	.string "work, said it was scaring the\l"
+	.string "WHISMUR away.\p"
+	.string "My beloved waits in VERDANTURF just\n"
+	.string "beyond this rock…\p"
+	.string "I understand both sides. I just\n"
+	.string "wish it didn't have to be my side\l"
+	.string "that waits.$"
 
 RusturfTunnel_Text_ToGetToVerdanturf:
 	.string "To get from RUSTBORO to VERDANTURF,\n"

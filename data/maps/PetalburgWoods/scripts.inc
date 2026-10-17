@@ -332,7 +332,9 @@ PetalburgWoods_Text_IWasGoingToAmbushYou:
 
 PetalburgWoods_Text_HandOverThosePapers:
 	.string "You! DEVON RESEARCHER!\p"
-	.string "Hand over those papers!$"
+	.string "Those papers prove DEVON's been\n"
+	.string "dumping quarry runoff into the river.\l"
+	.string "Hand them over!$"
 
 PetalburgWoods_Text_YouHaveToHelpMe:
 	.string "Aiyeeeh!\p"

@@ -39,7 +39,14 @@ EverGrandeCity_ChampionsRoom_Movement_PlayerApproachWallace:
 
 EverGrandeCity_ChampionsRoom_EventScript_Wally::
 	goto_if_set FLAG_SYS_GAME_CLEAR, WallyJourney_ChampionDefense_Wally
+	@ Wally's Journey: Wally waits with his back to the door, then turns.
+	delay 30
+	msgbox WallyJourney_Text_ChampionWallyBack, MSGBOX_DEFAULT
+	closemessage
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
+	applymovement LOCALID_CHAMPIONS_ROOM_WALLACE, Common_Movement_FaceDown
+	waitmovement 0
+	delay 20
 	msgbox EverGrandeCity_ChampionsRoom_Text_IntroSpeech, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_WALLY_CHAMPION, EverGrandeCity_ChampionsRoom_Text_Defeat
 	goto EverGrandeCity_ChampionsRoom_EventScript_Defeated
@@ -48,6 +55,8 @@ EverGrandeCity_ChampionsRoom_EventScript_Wally::
 WallyJourney_ChampionDefense_Wally::
 	@ After the Hall of Fame Wally returns with a stronger Mega team to challenge your title.
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
+	applymovement LOCALID_CHAMPIONS_ROOM_WALLACE, Common_Movement_FaceDown
+	waitmovement 0
 	msgbox WallyJourney_ChampionDefense_Intro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_WALLY_CHAMPION_REMATCH, WallyJourney_ChampionDefense_DefeatedText
 	addvar VAR_UNUSED_0x40FD, 1
@@ -349,3 +358,7 @@ EverGrandeCity_ChampionsRoom_Text_BrendanCongratulations:
 	.string "{PLAYER}, way to go!\n"
 	.string "Congratulations!$"
 
+
+WallyJourney_Text_ChampionWallyBack:
+	.string "WALLY: …I heard your footsteps all\n"
+	.string "the way up the stairs.$"

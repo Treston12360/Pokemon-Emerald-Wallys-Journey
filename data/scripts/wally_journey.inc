@@ -703,3 +703,20 @@ WallyJourney_Text_RivalFinalBrendanAfter:
 	.string "Someone has to keep you sharp.\p"
 	.string "See you around, {PLAYER}.$"
 
+
+@ Wally's Journey: during the Sootopolis crisis Wally is outside the Pokémon
+@ Center getting residents to shelter (continuity bible #37).
+WallyJourney_EventScript_SootopolisCrisisWally::
+	lock
+	faceplayer
+	msgbox WallyJourney_Text_SootopolisCrisisWally, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_Text_SootopolisCrisisWally:
+	.string "WALLY: {PLAYER}! Keep moving, I've\n"
+	.string "got this side of town.\p"
+	.string "Everyone's going into the POKéMON\n"
+	.string "CENTER, it's the strongest building.\p"
+	.string "Go! Whatever's out there, you're\n"
+	.string "the one who can reach it!$"

@@ -74,7 +74,7 @@ Each row: what happens, where, the gate (flag/var), what changes in Wally's Jour
 | 3 | Birch attacked; starter | Route101 | `FLAG_RESCUED_BIRCH` | Birch's later dialogue gives a reason he trusts the player: Norman's reputation plus how calmly the player acted | **done** |
 | 4 | Rival battle, Pokédex | Route103, Birch's lab | `FLAG_SYS_POKEDEX_GET` | Birch's Pokédex task becomes real research: odd migrations and weather he wants logged | **done** |
 | 5 | Norman's Gym; Wally catches Ralts | PetalburgCity_Gym, Route102 | `VAR_PETALBURG_GYM_STATE` | Norman is warm but clearly busy; Wally shy and sickly | keep (light edits planned) |
-| 6 | Aqua in Petalburg Woods | PetalburgWoods | — | Grunt is a Sea Trust member who thinks Devon is dumping waste | planned |
+| 6 | Aqua in Petalburg Woods | PetalburgWoods | — | Grunt is a Sea Trust member who thinks Devon is dumping waste | **done** |
 | 7 | Badge 1 Roxanne; Cut HM | RustboroCity_Gym | `FLAG_BADGE01_GET` | Roxanne gives HM01 | **done** |
 | 8 | Devon Goods stolen / recovered; letter to Steven | Rusturf, Devon | `FLAG_RECOVERED_DEVON_GOODS` | President Stone shows pride and blind spots about Devon | **done** |
 | 9 | Granite Cave: meet Steven | GraniteCave_StevensRoom | `FLAG_DELIVERED_STEVEN_LETTER` | Steven asks the player what *they* think of Devon | **done** |
@@ -83,9 +83,9 @@ Each row: what happens, where, the gate (flag/var), what changes in Wally's Jour
 | 12 | Rival battle Route 110 | Route110 | rival trainer flags | May/Brendan: confident, likes research more than they admit | partial |
 | 13 | **Wally battle #1** (shy) | MauvilleCity | `FLAG_DEFEATED_WALLY_MAUVILLE` | Kept (Ralts lv16) | keep |
 | 14 | Badge 3 Wattson; Rock Smash HM | MauvilleCity_Gym | `FLAG_BADGE03_GET` | Wattson gives HM06 | **done** |
-| 15 | Rusturf Tunnel opens | RusturfTunnel | `FLAG_RUSTURF_TUNNEL_OPENED` | Mentions Devon quarry criticism | planned |
+| 15 | Rusturf Tunnel opens | RusturfTunnel | `FLAG_RUSTURF_TUNNEL_OPENED` | Mentions Devon quarry criticism | **done** |
 | 16 | **Wally battle #2** | VerdanturfTown | `FLAG_HIDE_WALLY_RIVAL_VERDANTURF` cleared at badge 3 | New | **done** |
-| 17 | Meteor Falls: Magma takes meteorite | MeteorFalls_1F_1R | `FLAG_MET_ARCHIE_METEOR_FALLS` | Cozmo tricked by "Land Initiative" front | planned |
+| 17 | Meteor Falls: Magma takes meteorite | MeteorFalls_1F_1R | `FLAG_MET_ARCHIE_METEOR_FALLS` | Cozmo tricked by "Land Initiative" front | **done** |
 | 18 | Mt. Chimney: Maxie | MtChimney | `FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY` | Maxie's housing/farm argument; grunts' real reasons | **done (first pass)** |
 | 19 | Mt. Chimney: researchers' warning | MtChimney / JaggedPass | — | Add a scientist NPC warning about nonlinear eruptions | **done** |
 | 20 | Badge 4 Flannery; Strength HM | LavaridgeTown_Gym_1F | `FLAG_BADGE04_GET` | Flannery gives HM04 | **done** |
@@ -105,14 +105,14 @@ Each row: what happens, where, the gate (flag/var), what changes in Wally's Jour
 | 34 | Space Center: Magma, Steven partner | MossdeepCity_SpaceCenter_2F | `FLAG_DEFEATED_MAGMA_SPACE_CENTER` | Maxie's reflection ("the problem is real; my answer was not") | **done (first pass)** |
 | 35 | **Wally battle #6** | MossdeepCity | cleared at badge 7 | New | **done** |
 | 36 | Seafloor Cavern: Kyogre awakens | SeafloorCavern_Room9 | `FLAG_KYOGRE_ESCAPED_SEAFLOOR_CAVERN` | Archie realizes the Orb didn't control anything | **done** |
-| 37 | Sootopolis crisis; Sky Pillar; Rayquaza | SootopolisCity, SkyPillar_* | `FLAG_LEGENDARIES_IN_SOOTOPOLIS`, `VAR_SOOTOPOLIS_CITY_STATE` | Wally visibly helps evacuate residents; Steven and Wallace explain why Rayquaza is the answer | partial |
+| 37 | Sootopolis crisis; Sky Pillar; Rayquaza | SootopolisCity, SkyPillar_* | `FLAG_LEGENDARIES_IN_SOOTOPOLIS`, `VAR_SOOTOPOLIS_CITY_STATE` | Wally visibly helps evacuate residents; Steven and Wallace explain why Rayquaza is the answer | **done** |
 | 37b | **Champion broadcast at Juan's house** | SootopolisCity (Gym door tile 31,33), SootopolisCity_House7 | `VAR_WALLY_BROADCAST_STATE` 1→2→3 | Wallace leaves for his title match; Steven stops the player at the Gym door; they watch Wally beat Wallace on Juan's TV; mentor-chain dialogue | **done** |
 | 38 | Badge 8 Juan; Waterfall HM | SootopolisCity_Gym_1F | `FLAG_BADGE08_GET` | Juan gives HM07 | **done** |
 | 39 | **Wally battle #7** | SootopolisCity | cleared at badge 8 | New; references Wally helping during the crisis | **done** |
 | 40 | Aftermath across Hoenn | many | after `VAR_SOOTOPOLIS_CITY_STATE` resolves | Repairs, aid, angry residents, ex-members | partial |
 | 41 | **Wally battle #8** | VictoryRoad_1F | `FLAG_DEFEATED_WALLY_VICTORY_ROAD` | Confident, dangerous team with Mega Gardevoir | **done** |
 | 43 | Elite Four | EverGrandeCity_* | — | Drake's post-battle line hints the Champion changed "days ago" | planned |
-| 44 | **Champion Wally** | EverGrandeCity_ChampionsRoom | `TRAINER_WALLY_CHAMPION` | Striking entrance and lines; approved six | **done (lines)**; entrance planned |
+| 44 | **Champion Wally** | EverGrandeCity_ChampionsRoom | `TRAINER_WALLY_CHAMPION` | Striking entrance and lines; approved six | **done** |
 | 45 | Hall of Fame | HallOfFame | `FLAG_SYS_GAME_CLEAR` | Keep | keep |
 | 46 | Postgame unlocks | Lilycove Harbor, Fallarbor, caves | `FLAG_SYS_GAME_CLEAR` | Islands open without tickets; Jirachi via Cozmo; Kyogre/Groudon Primal | **done** |
 | 47 | Title defense | EverGrandeCity_ChampionsRoom | `FLAG_SYS_GAME_CLEAR` | Wally as contender | **done (basic)** |
@@ -183,3 +183,4 @@ Every new or rewritten scene gets a row here.
 | 2026-10-17 | Submarine inside job | SlateportCity_Harbor | existing | Stern's lines | Missing shipyard hand Dale from the Sea Trust front; police and Steven investigate | None |
 | 2026-10-17 | Rival arc + final battle | Route119, LilycoveCity, LittlerootTown_ProfessorBirchsLab | postgame talk | — | Research identity; final battle (6 teams by gender/starter) then closure | Sets `FLAG_WALLY_RIVAL_FINAL_DONE` |
 | 2026-10-17 | Aftermath lines | MtPyre_Summit, PetalburgCity_Gym, SootopolisCity, LilycoveCity | existing | generic lines | Accountability, repairs, mixed feelings, town reacts to Norman match | None |
+| 2026-10-17 | Wally during the crisis; Champion entrance; fronts | SootopolisCity, EverGrandeCity_ChampionsRoom, PetalburgWoods, RusturfTunnel, MeteorFalls_1F_1R | crisis state 1–4; Champion room | — / generic | Wally visibly protecting people; Wally waits back-turned and turns; Sea Trust vs Devon runoff; quarry protest; Land Initiative front | `FLAG_HIDE_SOOTOPOLIS_CRISIS_WALLY` cleared at Kyogre's escape, set at Rayquaza |
