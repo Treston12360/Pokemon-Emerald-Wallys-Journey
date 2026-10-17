@@ -25,8 +25,13 @@ VerdanturfTown_EventScript_TwinTunnelOpen::
 	end
 
 VerdanturfTown_EventScript_Man::
+	goto_if_set FLAG_SYS_GAME_CLEAR, VerdanturfTown_EventScript_ManAfterPlayerChampion
 	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, VerdanturfTown_Text_AirCleanHere_W0_Script
 	msgbox VerdanturfTown_Text_AirCleanHere, MSGBOX_NPC
+	end
+
+VerdanturfTown_EventScript_ManAfterPlayerChampion::
+	msgbox VerdanturfTown_Text_AirCleanHereAfterChampion, MSGBOX_NPC
 	end
 
 VerdanturfTown_Text_AirCleanHere_W0_Script:
@@ -127,3 +132,11 @@ VerdanturfTown_Text_AirCleanHere_W0:
 	.string "He used to sit on that bench and\n"
 	.string "watch the other kids run.\p"
 	.string "The whole town cried.$"
+
+VerdanturfTown_Text_AirCleanHereAfterChampion:
+	.string "We all cheered when WALLY became\\n"
+	.string "CHAMPION. Then you beat him!\\p"
+	.string "He came back here yesterday.\\n"
+	.string "Sat on his old bench awhile.\\p"
+	.string "This time, he watched the other\\n"
+	.string "kids run with a big smile.$"
