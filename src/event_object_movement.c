@@ -2842,6 +2842,13 @@ static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lig
         sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
         sprite->x += 8;
         sprite->y += 22 + sprite->centerToCornerVecY;
+        if (lightType == LIGHT_TYPE_WINDOW || lightType == LIGHT_TYPE_STREETLAMP)
+        {
+            // Wally's Journey: building lights sit on the wall, behind the
+            // player and NPCs walking past (owner playtest 2026-10-17).
+            sprite->oam.priority = 2;
+            sprite->subpriority = 0xFF;
+        }
         if (lightType == LIGHT_TYPE_WINDOW)
             sprite->y += 8; // centre the glow on the window pane, not above it
         break;
