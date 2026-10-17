@@ -1699,9 +1699,9 @@ SootopolisCity_Text_DazzledByMentor:
 	.string "elegant battle style.$"
 
 SootopolisCity_Text_NoHmWaterfall:
-	.string "Thank you for saving our city.\\p"
+	.string "Thank you for saving our city.\p"
 	.string "HOENN owes you a great deal!$"
 
 SootopolisCity_Text_NoHmWaterfallAdvice:
-	.string "The RAIN BADGE will let you\\n"
+	.string "The RAIN BADGE will let you\n"
 	.string "climb waterfalls. Visit the GYM!$"
