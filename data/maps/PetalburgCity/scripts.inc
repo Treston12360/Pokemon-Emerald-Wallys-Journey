@@ -781,9 +781,9 @@ PetalburgCity_Text_WallyMomAfterBroadcast:
 	.string "too. That never quite goes away.$"
 
 PetalburgCity_Text_WallyMomAfterChampion:
-	.string "WALLY called after your battle.\\p"
-	.string "He said he lost the title, then\\n"
-	.string "laughed like I'd never heard.\\p"
-	.string "He sounded happy, {PLAYER}.\\n"
-	.string "And so sure of himself.\\p"
+	.string "WALLY called after your battle.\p"
+	.string "He said he lost the title, then\n"
+	.string "laughed like I'd never heard.\p"
+	.string "He sounded happy, {PLAYER}.\n"
+	.string "And so sure of himself.\p"
 	.string "You both made it so far.$"
