@@ -30,15 +30,14 @@ RustboroCity_CuttersHouse_Text_YouCanPutThisHMToGoodUse:
 	.string "Go on, take it!$"
 
 RustboroCity_CuttersHouse_Text_ExplainCut:
-	.string "That HIDDEN MACHINE, or HM for\n"
-	.string "short, is CUT.\p"
-	.string "An HM move is one that can be used\n"
-	.string "by POKéMON outside of battle.\p"
-	.string "Any POKéMON that's learned CUT can\n"
-	.string "chop down thin trees if the TRAINER\l"
-	.string "has earned the STONE BADGE.\p"
-	.string "And, unlike a TM, an HM can be used\n"
-	.string "more than once.$"
+.string "CUT can clear thin trees outside\n"
+	.string "battle.\p"
+	.string "Once you've earned the STONE\n"
+	.string "BADGE and have HM01, any of your\l"
+	.string "POKéMON that could learn CUT can\l"
+	.string "clear the way.\p"
+	.string "You don't need to teach it CUT.\n"
+	.string "The HM is your field license.$"
 
 RustboroCity_CuttersHouse_Text_DadHelpedClearLandOfTrees:
 	.string "When they were expanding the city of\n"
@@ -48,7 +47,8 @@ RustboroCity_CuttersHouse_Text_DadHelpedClearLandOfTrees:
 
 
 RustboroCity_CuttersHouse_Text_NewCutDialogue:
-	.string "Those little trees grow fast!\p"
-	.string "A trainer with the STONE BADGE\n"
-	.string "can clear them with CUT.\p"
-	.string "Good luck on your adventure!$"
+.string "Those little trees grow fast!\p"
+	.string "With the STONE BADGE and HM01,\n"
+	.string "a compatible POKéMON can clear\l"
+	.string "them without learning CUT.\p"
+	.string "Good luck out there!$"
