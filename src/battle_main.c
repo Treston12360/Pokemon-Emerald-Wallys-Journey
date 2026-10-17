@@ -5067,11 +5067,16 @@ static bool32 WallyJourney_IsCurrentBattle(void)
     switch (TRAINER_BATTLE_PARAM.opponentA)
     {
     case TRAINER_WALLY_MAUVILLE:
+    case TRAINER_WALLY_VERDANTURF:
+    case TRAINER_WALLY_LAVARIDGE:
+    case TRAINER_WALLY_FORTREE:
+    case TRAINER_WALLY_LILYCOVE:
+    case TRAINER_WALLY_MOSSDEEP:
+    case TRAINER_WALLY_SOOTOPOLIS:
     case TRAINER_WALLY_VR_1:
     case TRAINER_WALLY_VR_2:
-    case TRAINER_WALLY_VR_3:
-    case TRAINER_WALLY_VR_4:
-    case TRAINER_WALLY_VR_5:
+    case TRAINER_WALLY_CHAMPION:
+    case TRAINER_WALLY_CHAMPION_REMATCH:
         return TRUE;
     default:
         return FALSE;

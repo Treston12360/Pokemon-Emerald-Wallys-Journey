@@ -55,12 +55,12 @@
 #define FLAG_WALLY_Z_MOVES_OFF    0x21 // Wally's Journey: Options menu Z-MOVES OFF (set) vs ON (clear)
 #define FLAG_HIDE_WALLYS_HOUSE_STEVEN 0x22 // Wally's Journey: Steven waits in Wally's house after Norman
 #define FLAG_RECEIVED_MEGA_BRACELET   0x23 // Wally's Journey: Steven gave the Mega Bracelet
-#define FLAG_UNUSED_0x024    0x24 // Unused Flag
-#define FLAG_UNUSED_0x025    0x25 // Unused Flag
-#define FLAG_UNUSED_0x026    0x26 // Unused Flag
-#define FLAG_UNUSED_0x027    0x27 // Unused Flag
-#define FLAG_UNUSED_0x028    0x28 // Unused Flag
-#define FLAG_UNUSED_0x029    0x29 // Unused Flag
+#define FLAG_HIDE_WALLY_RIVAL_VERDANTURF 0x24 // Wally's Journey: rival battle after badge 3
+#define FLAG_HIDE_WALLY_RIVAL_LAVARIDGE 0x25 // Wally's Journey: rival battle after badge 4
+#define FLAG_HIDE_WALLY_RIVAL_FORTREE 0x26 // Wally's Journey: rival battle after badge 5
+#define FLAG_HIDE_WALLY_RIVAL_LILYCOVE 0x27 // Wally's Journey: rival battle after badge 6
+#define FLAG_HIDE_WALLY_RIVAL_MOSSDEEP 0x28 // Wally's Journey: rival battle after badge 7
+#define FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS 0x29 // Wally's Journey: rival battle after badge 8
 #define FLAG_UNUSED_0x02A    0x2A // Unused Flag
 #define FLAG_UNUSED_0x02B    0x2B // Unused Flag
 #define FLAG_UNUSED_0x02C    0x2C // Unused Flag

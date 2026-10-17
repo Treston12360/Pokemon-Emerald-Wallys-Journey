@@ -154,3 +154,197 @@ WallyJourney_Text_HMNoTeachingNeeded:
 WallyJourney_Text_HMBagFull:
 	.string "Your BAG is full. Make some room and\n"
 	.string "come back for your HM.$"
+
+@ Wally's Journey: Wally's rival battles across HOENN.
+@ Each Wally is hidden until the listed badge is won, battles once,
+@ then leaves for good. His dialogue grows more confident each time.
+WallyJourney_EventScript_RivalVERDANTURF::
+	trainerbattle_single TRAINER_WALLY_VERDANTURF, WallyJourney_Text_RivalVERDANTURFIntro, WallyJourney_Text_RivalVERDANTURFDefeat, WallyJourney_EventScript_RivalVERDANTURFWon
+	msgbox WallyJourney_Text_RivalVERDANTURFPost, MSGBOX_AUTOCLOSE
+	end
+
+WallyJourney_EventScript_RivalVERDANTURFWon::
+	msgbox WallyJourney_Text_RivalVERDANTURFPost, MSGBOX_DEFAULT
+	setflag FLAG_HIDE_WALLY_RIVAL_VERDANTURF
+	release
+	end
+
+WallyJourney_Text_RivalVERDANTURFIntro:
+	.string "WALLY: {PLAYER}! Um… hi!\p"
+	.string "I've been training every day since\n"
+	.string "our battle in MAUVILLE.\p"
+	.string "My uncle says the air here is good\n"
+	.string "for me. I feel stronger already!\p"
+	.string "W-would you battle me again?\n"
+	.string "I want to see how far I've come.$"
+
+
+WallyJourney_Text_RivalVERDANTURFDefeat:
+	.string "I lost… but I didn't freeze up\n"
+	.string "this time!$"
+
+
+WallyJourney_Text_RivalVERDANTURFPost:
+	.string "WALLY: Every battle teaches me\n"
+	.string "something new.\p"
+	.string "I'm going to keep going. Not just\n"
+	.string "around VERDANTURF, either!$"
+
+
+WallyJourney_EventScript_RivalLAVARIDGE::
+	trainerbattle_single TRAINER_WALLY_LAVARIDGE, WallyJourney_Text_RivalLAVARIDGEIntro, WallyJourney_Text_RivalLAVARIDGEDefeat, WallyJourney_EventScript_RivalLAVARIDGEWon
+	msgbox WallyJourney_Text_RivalLAVARIDGEPost, MSGBOX_AUTOCLOSE
+	end
+
+WallyJourney_EventScript_RivalLAVARIDGEWon::
+	msgbox WallyJourney_Text_RivalLAVARIDGEPost, MSGBOX_DEFAULT
+	setflag FLAG_HIDE_WALLY_RIVAL_LAVARIDGE
+	release
+	end
+
+WallyJourney_Text_RivalLAVARIDGEIntro:
+	.string "WALLY: {PLAYER}! I climbed all the\n"
+	.string "way up here by myself!\p"
+	.string "The hot springs helped me catch\n"
+	.string "my breath. Now I want to test\l"
+	.string "my team on you!$"
+
+
+WallyJourney_Text_RivalLAVARIDGEDefeat:
+	.string "You're amazing, {PLAYER}!\n"
+	.string "But I'm catching up!$"
+
+
+WallyJourney_Text_RivalLAVARIDGEPost:
+	.string "WALLY: My POKéMON and I are\n"
+	.string "learning to trust each other.\p"
+	.string "Next time, I'll be ready for\n"
+	.string "anything you throw at me!$"
+
+
+WallyJourney_EventScript_RivalFORTREE::
+	trainerbattle_single TRAINER_WALLY_FORTREE, WallyJourney_Text_RivalFORTREEIntro, WallyJourney_Text_RivalFORTREEDefeat, WallyJourney_EventScript_RivalFORTREEWon
+	msgbox WallyJourney_Text_RivalFORTREEPost, MSGBOX_AUTOCLOSE
+	end
+
+WallyJourney_EventScript_RivalFORTREEWon::
+	msgbox WallyJourney_Text_RivalFORTREEPost, MSGBOX_DEFAULT
+	setflag FLAG_HIDE_WALLY_RIVAL_FORTREE
+	release
+	end
+
+WallyJourney_Text_RivalFORTREEIntro:
+	.string "WALLY: I heard you beat your dad,\n"
+	.string "{PLAYER}. That's incredible!\p"
+	.string "I've been traveling on my own now.\n"
+	.string "Nobody has to look after me\l"
+	.string "anymore.\p"
+	.string "Let's battle! I won't go easy on you\n"
+	.string "just because we're friends!$"
+
+
+WallyJourney_Text_RivalFORTREEDefeat:
+	.string "Wow… still not enough.\n"
+	.string "But that was close!$"
+
+
+WallyJourney_Text_RivalFORTREEPost:
+	.string "WALLY: A year ago I couldn't even\n"
+	.string "walk this far.\p"
+	.string "Now I'm chasing the strongest\n"
+	.string "TRAINER I know. That's you!$"
+
+
+WallyJourney_EventScript_RivalLILYCOVE::
+	trainerbattle_single TRAINER_WALLY_LILYCOVE, WallyJourney_Text_RivalLILYCOVEIntro, WallyJourney_Text_RivalLILYCOVEDefeat, WallyJourney_EventScript_RivalLILYCOVEWon
+	msgbox WallyJourney_Text_RivalLILYCOVEPost, MSGBOX_AUTOCLOSE
+	end
+
+WallyJourney_EventScript_RivalLILYCOVEWon::
+	msgbox WallyJourney_Text_RivalLILYCOVEPost, MSGBOX_DEFAULT
+	setflag FLAG_HIDE_WALLY_RIVAL_LILYCOVE
+	release
+	end
+
+WallyJourney_Text_RivalLILYCOVEIntro:
+	.string "WALLY: {PLAYER}! I've been waiting\n"
+	.string "for you.\p"
+	.string "My team is complete now. Six\n"
+	.string "POKéMON who believe in me.\p"
+	.string "I'm not the kid you met on\n"
+	.string "ROUTE 102 anymore. Let's go!$"
+
+
+WallyJourney_Text_RivalLILYCOVEDefeat:
+	.string "You're still ahead of me…\n"
+	.string "but not by much!$"
+
+
+WallyJourney_Text_RivalLILYCOVEPost:
+	.string "WALLY: I've decided something.\p"
+	.string "I'm going to challenge the\n"
+	.string "POKéMON LEAGUE.\p"
+	.string "And I'm going to win.$"
+
+
+WallyJourney_EventScript_RivalMOSSDEEP::
+	trainerbattle_single TRAINER_WALLY_MOSSDEEP, WallyJourney_Text_RivalMOSSDEEPIntro, WallyJourney_Text_RivalMOSSDEEPDefeat, WallyJourney_EventScript_RivalMOSSDEEPWon
+	msgbox WallyJourney_Text_RivalMOSSDEEPPost, MSGBOX_AUTOCLOSE
+	end
+
+WallyJourney_EventScript_RivalMOSSDEEPWon::
+	msgbox WallyJourney_Text_RivalMOSSDEEPPost, MSGBOX_DEFAULT
+	setflag FLAG_HIDE_WALLY_RIVAL_MOSSDEEP
+	release
+	end
+
+WallyJourney_Text_RivalMOSSDEEPIntro:
+	.string "WALLY: The sea air is great,\n"
+	.string "isn't it?\p"
+	.string "I've battled TRAINERS all across\n"
+	.string "HOENN to get ready for the LEAGUE.\p"
+	.string "This time, I'm the one who's going\n"
+	.string "to win, {PLAYER}!$"
+
+
+WallyJourney_Text_RivalMOSSDEEPDefeat:
+	.string "Hah… that was a great battle.\n"
+	.string "I'm almost there.$"
+
+
+WallyJourney_Text_RivalMOSSDEEPPost:
+	.string "WALLY: Don't keep me waiting at\n"
+	.string "the LEAGUE, {PLAYER}.\p"
+	.string "I'm going to be there first.$"
+
+
+WallyJourney_EventScript_RivalSOOTOPOLIS::
+	trainerbattle_single TRAINER_WALLY_SOOTOPOLIS, WallyJourney_Text_RivalSOOTOPOLISIntro, WallyJourney_Text_RivalSOOTOPOLISDefeat, WallyJourney_EventScript_RivalSOOTOPOLISWon
+	msgbox WallyJourney_Text_RivalSOOTOPOLISPost, MSGBOX_AUTOCLOSE
+	end
+
+WallyJourney_EventScript_RivalSOOTOPOLISWon::
+	msgbox WallyJourney_Text_RivalSOOTOPOLISPost, MSGBOX_DEFAULT
+	setflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS
+	release
+	end
+
+WallyJourney_Text_RivalSOOTOPOLISIntro:
+	.string "WALLY: So you earned all eight\n"
+	.string "BADGES. Me too.\p"
+	.string "That crisis here… I saw you face it\n"
+	.string "head-on. I won't forget that.\p"
+	.string "One more battle before VICTORY\n"
+	.string "ROAD. Show me everything!$"
+
+
+WallyJourney_Text_RivalSOOTOPOLISDefeat:
+	.string "That's the {PLAYER} I know!\n"
+	.string "I'll be waiting at the top.$"
+
+
+WallyJourney_Text_RivalSOOTOPOLISPost:
+	.string "WALLY: The next time we battle, it\n"
+	.string "won't be practice.\p"
+	.string "I'll see you at the POKéMON LEAGUE.$"
+

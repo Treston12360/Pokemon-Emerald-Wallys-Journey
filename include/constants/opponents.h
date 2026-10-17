@@ -662,7 +662,7 @@
 #define TRAINER_ASHLEY                      655
 #define TRAINER_WALLY_MAUVILLE              656
 #define TRAINER_WALLY_VR_2                  657
-#define TRAINER_WALLY_VR_3                  658
+#define TRAINER_WALLY_SOOTOPOLIS            658 // Wally's Journey: was TRAINER_WALLY_VR_3 (VR rematches retired)
 #define TRAINER_WALLY_VR_4                  659
 #define TRAINER_WALLY_VR_5                  660
 #define TRAINER_BRENDAN_LILYCOVE_MUDKIP     661
@@ -862,12 +862,17 @@
 #define TRAINER_WALLACE_REMATCH             855
 #define TRAINER_WALLY_CHAMPION              856
 #define TRAINER_WALLY_CHAMPION_REMATCH      857
+#define TRAINER_WALLY_VERDANTURF            858
+#define TRAINER_WALLY_LAVARIDGE             859
+#define TRAINER_WALLY_FORTREE               860
+#define TRAINER_WALLY_LILYCOVE              861
+#define TRAINER_WALLY_MOSSDEEP              862
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
 
-#define TRAINERS_COUNT_EMERALD     858
+#define TRAINERS_COUNT_EMERALD     863
 #define MAX_TRAINERS_COUNT_EMERALD 864
 
 #if IS_FRLG

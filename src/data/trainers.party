@@ -12234,51 +12234,76 @@ Class: Rival
 Pic: Wally
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore
+Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Check Bad Move / Try To Faint
+AI: Basic Trainer / Smart Switching / Ace Pokemon / Try To 2HKO / HP Aware
 
-Flygon
-Level: 47
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Dragon Breath
-- Dig
-- Crunch
-- Rock Slide
+Armaldo @ Focus Sash
+Level: 52
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Spe
+- Stone Edge
+- X-Scissor
+- Aqua Jet
+- Stealth Rock
 
-Delcatty
-Level: 46
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Sing
-- Assist
-- Charm
-- Feint Attack
+Mawile @ Rocky Helmet
+Level: 52
+Ability: Intimidate
+Nature: Impish
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Atk / 252 Def
+- Iron Head
+- Play Rough
+- Sucker Punch
+- Thunder Wave
 
-Roselia
-Level: 47
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Magical Leaf
-- Leech Seed
+Ludicolo @ Damp Rock
+Level: 53
+Ability: Swift Swim
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
+- Rain Dance
+- Hydro Pump
 - Giga Drain
-- Toxic
+- Ice Beam
 
-Magneton
-Level: 44
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Supersonic
-- Thunderbolt
-- Tri Attack
-- Screech
+Crawdaunt @ Life Orb
+Level: 53
+Ability: Adaptability
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- Crabhammer
+- Knock Off
+- Aqua Jet
+- Swords Dance
 
-Gardevoir
-Level: 48
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Double Team
+Flygon @ Choice Scarf
+Level: 54
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- Earthquake
+- Dragon Claw
+- U-turn
+- Stone Edge
+
+Gardevoir @ Gardevoirite
+Level: 55
+Ability: Trace
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
+- Hyper Voice
+- Psyshock
+- Focus Blast
 - Calm Mind
-- Psychic
-- Future Sight
 
-=== TRAINER_WALLY_VR_3 ===
+
+=== TRAINER_WALLY_SOOTOPOLIS ===
 Name: WALLY
 Class: Rival
 Pic: Wally
@@ -12286,47 +12311,66 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore
 Double Battle: No
-AI: Check Bad Move / Try To Faint
+AI: Check Bad Move / Try To Faint / Check Viability / Smart Switching / HP Aware
 
-Flygon
-Level: 50
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Dragon Claw
-- Earthquake
-- Crunch
-- Rock Slide
+Armaldo @ Focus Sash
+Level: 48
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Stone Edge
+- X-Scissor
+- Aqua Jet
+- Stealth Rock
 
-Delcatty
+Mawile @ Rocky Helmet
+Level: 48
+Ability: Intimidate
+Nature: Impish
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Iron Head
+- Play Rough
+- Sucker Punch
+- Thunder Wave
+
+Ludicolo @ Damp Rock
 Level: 49
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Sing
-- Assist
-- Charm
-- Feint Attack
-
-Roselia
-Level: 50
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Magical Leaf
-- Leech Seed
+Ability: Swift Swim
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Rain Dance
+- Hydro Pump
 - Giga Drain
-- Toxic
+- Ice Beam
 
-Magneton
-Level: 47
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Supersonic
-- Thunderbolt
-- Tri Attack
-- Screech
+Crawdaunt @ Life Orb
+Level: 49
+Ability: Adaptability
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Crabhammer
+- Knock Off
+- Aqua Jet
+- Swords Dance
 
-Gardevoir
+Flygon @ Choice Scarf
+Level: 50
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Earthquake
+- Dragon Claw
+- U-turn
+- Stone Edge
+
+Gardevoir @ Leftovers
 Level: 51
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Double Team
-- Calm Mind
+Ability: Trace
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Psychic
-- Future Sight
+- Moonblast
+- Calm Mind
+- Focus Blast
+
 
 === TRAINER_WALLY_VR_4 ===
 Name: WALLY
@@ -17408,3 +17452,266 @@ EVs: 4 HP / 252 SpA / 252 Spe
 - MOVE_PSYSHOCK
 - MOVE_FOCUS_BLAST
 - MOVE_CALM_MIND
+
+=== TRAINER_WALLY_VERDANTURF ===
+Name: WALLY
+Class: Rival
+Pic: Wally
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move / Try To Faint / Check Viability
+
+Kirlia
+Level: 24
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- Confusion
+- Magical Leaf
+- Double Team
+- Disarming Voice
+
+Lombre
+Level: 23
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- Bubble Beam
+- Mega Drain
+- Fake Out
+- Nature Power
+
+Trapinch
+Level: 24
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- Bulldoze
+- Bite
+- Rock Slide
+- Sand Attack
+
+
+=== TRAINER_WALLY_LAVARIDGE ===
+Name: WALLY
+Class: Rival
+Pic: Wally
+Gender: Male
+Music: Male
+Items: Super Potion
+Double Battle: No
+AI: Check Bad Move / Try To Faint / Check Viability
+
+Mawile
+Level: 28
+Ability: Intimidate
+IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
+- Iron Head
+- Bite
+- Fake Tears
+- Stockpile
+
+Lombre
+Level: 28
+IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
+- Bubble Beam
+- Giga Drain
+- Fake Out
+- Zen Headbutt
+
+Trapinch
+Level: 29
+IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
+- Dig
+- Crunch
+- Rock Slide
+- Feint Attack
+
+Kirlia @ Sitrus Berry
+Level: 31
+IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
+- Psybeam
+- Draining Kiss
+- Calm Mind
+- Magical Leaf
+
+
+=== TRAINER_WALLY_FORTREE ===
+Name: WALLY
+Class: Rival
+Pic: Wally
+Gender: Male
+Music: Male
+Items: Hyper Potion
+Double Battle: No
+AI: Check Bad Move / Try To Faint / Check Viability / Smart Switching / HP Aware
+
+Crawdaunt
+Level: 32
+IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
+- Crabhammer
+- Knock Off
+- Protect
+- Swords Dance
+
+Mawile
+Level: 32
+Ability: Intimidate
+IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
+- Iron Head
+- Play Rough
+- Sucker Punch
+- Thunder Wave
+
+Lombre
+Level: 32
+IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
+- Surf
+- Giga Drain
+- Fake Out
+- Ice Beam
+
+Vibrava
+Level: 35
+IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
+- Dig
+- Dragon Breath
+- Rock Slide
+- Bug Bite
+
+Gardevoir @ Sitrus Berry
+Level: 35
+IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
+- Psychic
+- Dazzling Gleam
+- Calm Mind
+- Thunderbolt
+
+
+=== TRAINER_WALLY_LILYCOVE ===
+Name: WALLY
+Class: Rival
+Pic: Wally
+Gender: Male
+Music: Male
+Items: Hyper Potion / Hyper Potion
+Double Battle: No
+AI: Check Bad Move / Try To Faint / Check Viability / Smart Switching / HP Aware
+
+Anorith
+Level: 37
+IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+- Rock Slide
+- X-Scissor
+- Aqua Jet
+- Rapid Spin
+
+Mawile @ Rocky Helmet
+Level: 38
+Ability: Intimidate
+IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+- Iron Head
+- Play Rough
+- Sucker Punch
+- Thunder Wave
+
+Ludicolo
+Level: 38
+Ability: Swift Swim
+IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+- Surf
+- Giga Drain
+- Fake Out
+- Ice Beam
+
+Crawdaunt
+Level: 38
+Ability: Adaptability
+IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+- Crabhammer
+- Knock Off
+- Aqua Jet
+- Swords Dance
+
+Vibrava
+Level: 39
+IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+- Earthquake
+- Dragon Breath
+- Rock Slide
+- U-turn
+
+Gardevoir @ Sitrus Berry
+Level: 41
+Ability: Trace
+IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+- Psychic
+- Moonblast
+- Calm Mind
+- Thunderbolt
+
+
+=== TRAINER_WALLY_MOSSDEEP ===
+Name: WALLY
+Class: Rival
+Pic: Wally
+Gender: Male
+Music: Male
+Items: Hyper Potion / Hyper Potion
+Double Battle: No
+AI: Check Bad Move / Try To Faint / Check Viability / Smart Switching / HP Aware
+
+Armaldo @ Focus Sash
+Level: 44
+Nature: Adamant
+IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+- Stone Edge
+- X-Scissor
+- Aqua Jet
+- Rapid Spin
+
+Mawile @ Rocky Helmet
+Level: 44
+Ability: Intimidate
+Nature: Impish
+IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+- Iron Head
+- Play Rough
+- Sucker Punch
+- Thunder Wave
+
+Ludicolo @ Damp Rock
+Level: 45
+Ability: Swift Swim
+Nature: Modest
+IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+- Rain Dance
+- Hydro Pump
+- Giga Drain
+- Ice Beam
+
+Crawdaunt @ Life Orb
+Level: 45
+Ability: Adaptability
+Nature: Adamant
+IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+- Crabhammer
+- Knock Off
+- Aqua Jet
+- Swords Dance
+
+Flygon @ Soft Sand
+Level: 46
+Nature: Jolly
+IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+- Earthquake
+- Dragon Claw
+- U-turn
+- Rock Slide
+
+Gardevoir @ Sitrus Berry
+Level: 47
+Ability: Trace
+Nature: Timid
+IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+- Psychic
+- Moonblast
+- Calm Mind
+- Focus Blast
+
+
