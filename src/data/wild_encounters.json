@@ -4285,7 +4285,7 @@
               {
                 "min_level": 22,
                 "max_level": 22,
-                "species": "SPECIES_DOUBLADE"
+                "species": "SPECIES_SHUPPET"
               },
               {
                 "min_level": 27,
@@ -4354,7 +4354,7 @@
               {
                 "min_level": 22,
                 "max_level": 22,
-                "species": "SPECIES_AEGISLASH"
+                "species": "SPECIES_SHUPPET"
               },
               {
                 "min_level": 27,
@@ -6899,12 +6899,12 @@
               {
                 "min_level": 26,
                 "max_level": 26,
-                "species": "SPECIES_AMPHAROS"
+                "species": "SPECIES_MAGNEMITE"
               },
               {
                 "min_level": 22,
                 "max_level": 22,
-                "species": "SPECIES_TOXTRICITY"
+                "species": "SPECIES_VOLTORB"
               },
               {
                 "min_level": 22,
