@@ -22,6 +22,9 @@ SlateportCity_Mart_Pokemart:
 	.2byte ITEM_ESCAPE_ROPE
 	.2byte ITEM_REPEL
 	.2byte ITEM_HARBOR_MAIL
+	.2byte ITEM_METAL_COAT
+	.2byte ITEM_DRAGON_SCALE
+	.2byte ITEM_KINGS_ROCK
 	pokemartlistend
 
 SlateportCity_Mart_EventScript_BlackBelt::
