@@ -900,6 +900,37 @@ static void AcroBikeTransition_WheelieHoppingStanding(enum Direction direction)
     PlayerStandingHoppingWheelie(direction);
 }
 
+// Wally's Journey (Emerald Legacy-style QoL): while bunny hopping on the Acro
+// Bike the player can hop back UP an ordinary one-way ledge. Only when the
+// ledge tile faces straight at the player and the tile beyond it is free.
+static bool32 CanBunnyHopUpLedge(enum Direction direction)
+{
+    struct ObjectEvent *playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    s16 x = playerObjEvent->currentCoords.x;
+    s16 y = playerObjEvent->currentCoords.y;
+    u8 ledge, landing;
+    bool32 facesPlayer;
+
+    MoveCoords(direction, &x, &y);
+    ledge = MapGridGetMetatileBehaviorAt(x, y);
+    switch (direction)
+    {
+    case DIR_NORTH: facesPlayer = MetatileBehavior_IsJumpSouth(ledge); break;
+    case DIR_SOUTH: facesPlayer = MetatileBehavior_IsJumpNorth(ledge); break;
+    case DIR_EAST:  facesPlayer = MetatileBehavior_IsJumpWest(ledge);  break;
+    case DIR_WEST:  facesPlayer = MetatileBehavior_IsJumpEast(ledge);  break;
+    default:        facesPlayer = FALSE; break;
+    }
+    if (!facesPlayer)
+        return FALSE;
+    MoveCoords(direction, &x, &y);
+    landing = MapGridGetMetatileBehaviorAt(x, y);
+    if (MetatileBehavior_IsJumpNorth(landing) || MetatileBehavior_IsJumpSouth(landing)
+     || MetatileBehavior_IsJumpEast(landing) || MetatileBehavior_IsJumpWest(landing))
+        return FALSE;
+    return GetBikeCollisionAt(playerObjEvent, x, y, direction, landing) == COLLISION_NONE;
+}
+
 static void AcroBikeTransition_WheelieHoppingMoving(enum Direction direction)
 {
     enum Collision collision;
@@ -913,7 +944,7 @@ static void AcroBikeTransition_WheelieHoppingMoving(enum Direction direction)
     collision = GetBikeCollision(direction);
     if (collision && collision != COLLISION_WHEELIE_HOP)
     {
-        if (collision == COLLISION_LEDGE_JUMP)
+        if (collision == COLLISION_LEDGE_JUMP || CanBunnyHopUpLedge(direction))
         {
             PlayerLedgeHoppingWheelie(direction);
             return;
