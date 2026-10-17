@@ -294,18 +294,21 @@ MossdeepCity_SpaceCenter_1F_Text_HaywireButSuccessfulLaunchNumber:
 	.string "That's successful launch no. {STR_VAR_1}!$"
 
 MossdeepCity_SpaceCenter_1F_Text_RocketLaunchDemandsPerfection:
-	.string "A rocket launch demands perfection.\n"
-	.string "Not even a 1% margin of error is allowed.\p"
-	.string "Even if it's 99% okay, the whole thing\n"
-	.string "is useless if 1% happens to be no good.\p"
-	.string "Despite that, we never stop trying.\n"
-	.string "Why? It's a dream that never ends.$"
+	.string "We check each rocket system\n"
+	.string "again and again before launch.\p"
+	.string "A small error in the wrong\n"
+	.string "place could cost lives.\p"
+	.string "That caution isn't fear.\n"
+	.string "It's respect for the people\n"
+	.string "who trust our work.$"
 
 MossdeepCity_SpaceCenter_1F_Text_MagmaHaveSightsOnSpaceCenter:
-	.string "Those MAGMA thugs have their sights\n"
-	.string "set on our SPACE CENTER.\p"
-	.string "But we can't allow anything that minor\n"
-	.string "to interfere with our rocket launch!$"
+	.string "TEAM MAGMA sent a warning\n"
+	.string "to the SPACE CENTER.\p"
+	.string "We're securing the fuel\n"
+	.string "and moving staff to safety.\p"
+	.string "A launch can wait.\n"
+	.string "People can't be replaced.$"
 
 MossdeepCity_SpaceCenter_1F_Text_FoundThisYouCanHaveIt:
 	.string "I was taking a stroll down the beach\n"
@@ -324,8 +327,12 @@ MossdeepCity_SpaceCenter_1F_Text_MagmaCantStealFuelTakeThis:
 	.string "I found on the beach.$"
 
 MossdeepCity_SpaceCenter_1F_Text_CantStrollOnBeachWithMagma:
-	.string "With TEAM MAGMA around, I guess\n"
-	.string "strolls on the beach aren't safe.$"
+	.string "I used to walk the beach\n"
+	.string "after every late shift.\p"
+	.string "Now there are patrols and\n"
+	.string "worried families everywhere.\p"
+	.string "I hope we get our quiet\n"
+	.string "evenings back soon.$"
 
 MossdeepCity_SpaceCenter_1F_Text_DidPokemonComeFromSpace:
 	.string "Some people claim that POKéMON came\n"
@@ -346,9 +353,12 @@ MossdeepCity_SpaceCenter_1F_Text_AquaShouldBeatMagma:
 	.string "hold our breath.$"
 
 MossdeepCity_SpaceCenter_1F_Text_RocketsBoggleMyMind:
-	.string "A giant chunk of metal bursts through\n"
-	.string "the skies and flies into space…\p"
-	.string "It boggles my mind!$"
+	.string "A rocket carries years of\n"
+	.string "work into the unknown.\p"
+	.string "I used to see only a big\n"
+	.string "machine making noise.\p"
+	.string "Now I think about all the\n"
+	.string "people who built it.$"
 
 MossdeepCity_SpaceCenter_1F_Text_MagmaWantsToSpoilMyDream:
 	.string "A giant chunk of metal bursts through\n"
