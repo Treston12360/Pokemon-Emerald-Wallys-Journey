@@ -219,6 +219,26 @@ jobs:
       - name: Check that SUMMARY.md includes markdown doc files
         run: .github/docs_validate/inclusive_summary.py
 
+      - name: Reject double-escaped dialogue control codes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          invalid = re.compile(r'\\\\[npl]')
+          count = 0
+          for path in sorted(Path("data/maps").rglob("scripts.inc")):
+              for line_no, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                  if '.string ' in line and invalid.search(line):
+                      print(f"{path}:{line_no}: double-escaped text control code: {line.strip()}")
+                      count += 1
+          if count:
+              print(f"Found {count} invalid dialogue lines.")
+              sys.exit(1)
+          print("No double-escaped dialogue control codes found.")
+          PY
+
   allcontributors:
     if: github.actor == 'allcontributors[bot]'
     runs-on: ubuntu-latest
