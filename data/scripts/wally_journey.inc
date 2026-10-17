@@ -595,3 +595,111 @@ WallyJourney_Text_JuanSeeYouAtGym:
 	.string "I shall be waiting at my GYM.\n"
 	.string "Show me what you have.$"
 
+
+
+@ Wally's Journey: after the Hall of Fame, May/Brendan asks for one last real
+@ battle in Birch's lab, then explains they've chosen research as well as battling.
+WallyJourney_EventScript_RivalFinal::
+	checkplayergender
+	goto_if_eq VAR_RESULT, FEMALE, WallyJourney_EventScript_RivalFinalBrendan
+	msgbox WallyJourney_Text_RivalFinalMayIntro, MSGBOX_DEFAULT
+	closemessage
+	goto_if_eq VAR_STARTER_MON, 0, WallyJourney_EventScript_RivalFinal_MAY_TREECKO
+	goto_if_eq VAR_STARTER_MON, 1, WallyJourney_EventScript_RivalFinal_MAY_TORCHIC
+	goto WallyJourney_EventScript_RivalFinal_MAY_MUDKIP
+	end
+
+WallyJourney_EventScript_RivalFinalBrendan::
+	msgbox WallyJourney_Text_RivalFinalBrendanIntro, MSGBOX_DEFAULT
+	closemessage
+	goto_if_eq VAR_STARTER_MON, 0, WallyJourney_EventScript_RivalFinal_BRENDAN_TREECKO
+	goto_if_eq VAR_STARTER_MON, 1, WallyJourney_EventScript_RivalFinal_BRENDAN_TORCHIC
+	goto WallyJourney_EventScript_RivalFinal_BRENDAN_MUDKIP
+	end
+
+WallyJourney_EventScript_RivalFinalAfter::
+	setflag FLAG_WALLY_RIVAL_FINAL_DONE
+	checkplayergender
+	goto_if_eq VAR_RESULT, FEMALE, WallyJourney_EventScript_RivalFinalAfterBrendan
+	msgbox WallyJourney_Text_RivalFinalMayAfter, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_RivalFinalAfterBrendan::
+	msgbox WallyJourney_Text_RivalFinalBrendanAfter, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_RivalFinal_MAY_TREECKO::
+	trainerbattle_no_intro TRAINER_MAY_FINAL_TREECKO, WallyJourney_Text_RivalFinalMayDefeat
+	goto WallyJourney_EventScript_RivalFinalAfter
+	end
+
+WallyJourney_EventScript_RivalFinal_MAY_TORCHIC::
+	trainerbattle_no_intro TRAINER_MAY_FINAL_TORCHIC, WallyJourney_Text_RivalFinalMayDefeat
+	goto WallyJourney_EventScript_RivalFinalAfter
+	end
+
+WallyJourney_EventScript_RivalFinal_MAY_MUDKIP::
+	trainerbattle_no_intro TRAINER_MAY_FINAL_MUDKIP, WallyJourney_Text_RivalFinalMayDefeat
+	goto WallyJourney_EventScript_RivalFinalAfter
+	end
+
+WallyJourney_EventScript_RivalFinal_BRENDAN_TREECKO::
+	trainerbattle_no_intro TRAINER_BRENDAN_FINAL_TREECKO, WallyJourney_Text_RivalFinalBrendanDefeat
+	goto WallyJourney_EventScript_RivalFinalAfter
+	end
+
+WallyJourney_EventScript_RivalFinal_BRENDAN_TORCHIC::
+	trainerbattle_no_intro TRAINER_BRENDAN_FINAL_TORCHIC, WallyJourney_Text_RivalFinalBrendanDefeat
+	goto WallyJourney_EventScript_RivalFinalAfter
+	end
+
+WallyJourney_EventScript_RivalFinal_BRENDAN_MUDKIP::
+	trainerbattle_no_intro TRAINER_BRENDAN_FINAL_MUDKIP, WallyJourney_Text_RivalFinalBrendanDefeat
+	goto WallyJourney_EventScript_RivalFinalAfter
+	end
+
+WallyJourney_Text_RivalFinalMayIntro:
+	.string "MAY: {PLAYER}{KUN}! The CHAMPION, in\n"
+	.string "my dad's lab!\p"
+	.string "I've been thinking about what I want\n"
+	.string "to do next. Before I decide…\p"
+	.string "One more battle. A real one.\n"
+	.string "No holding back!$"
+
+WallyJourney_Text_RivalFinalMayDefeat:
+	.string "…Yeah. That's what I thought.\n"
+	.string "You're the real deal.$"
+
+WallyJourney_Text_RivalFinalMayAfter:
+	.string "MAY: I've decided. I'm staying on as\n"
+	.string "Dad's field partner.\p"
+	.string "The data we logged during the crisis\n"
+	.string "is helping the coast recover. That\l"
+	.string "felt bigger than any BADGE.\p"
+	.string "I'll still battle! I'm just going to\n"
+	.string "do it everywhere, for science.\p"
+	.string "Thanks, {PLAYER}{KUN}. For being the\n"
+	.string "rival I needed.$"
+
+WallyJourney_Text_RivalFinalBrendanIntro:
+	.string "BRENDAN: Hey, CHAMPION.\p"
+	.string "I've been doing a lot of thinking\n"
+	.string "since SOOTOPOLIS.\p"
+	.string "Before I tell you what I decided,\n"
+	.string "battle me. Full strength.$"
+
+WallyJourney_Text_RivalFinalBrendanDefeat:
+	.string "Heh. Of course.\n"
+	.string "Good. I needed to see that.$"
+
+WallyJourney_Text_RivalFinalBrendanAfter:
+	.string "BRENDAN: I'm going to work with my\n"
+	.string "dad. Officially.\p"
+	.string "Tracking migrations, helping the\n"
+	.string "habitats heal. It matters.\p"
+	.string "Doesn't mean I'll stop battling.\n"
+	.string "Someone has to keep you sharp.\p"
+	.string "See you around, {PLAYER}.$"
+

@@ -81,10 +81,15 @@ GraniteCave_StevensRoom_Movement_StevenExitSouth:
 
 GraniteCave_StevensRoom_Text_ImStevenLetterForMe:
 	.string "My name is STEVEN.\p"
-	.string "I'm interested in rare stones,\n"
-	.string "so I travel here and there.\p"
-	.string "Oh?\n"
-	.string "A LETTER for me?$"
+	.string "I'm interested in rare stones, so I\n"
+	.string "travel here and there.\p"
+	.string "…A LETTER? From my father.\p"
+	.string "He probably wants me home to run the\n"
+	.string "company. Tell me, what do you think\l"
+	.string "of DEVON?\p"
+	.string "Never mind. Most people only see the\n"
+	.string "POKé BALLS and the jobs. I see the\l"
+	.string "quarries too.$"
 
 GraniteCave_StevensRoom_Text_ThankYouTakeThis:
 	.string "STEVEN: Okay, thank you.\p"

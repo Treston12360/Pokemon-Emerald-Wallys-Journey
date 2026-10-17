@@ -442,11 +442,12 @@ LilycoveCity_Text_MayDefeat:
 	.string "strong, {PLAYER}{KUN}, didn't it?$"
 
 LilycoveCity_Text_MayGoingBackToLittleroot:
-	.string "MAY: I'm thinking of going back to\n"
-	.string "LITTLEROOT soon.\p"
-	.string "I've caught a decent group of POKéMON,\n"
-	.string "and my POKéDEX is coming along, so\l"
-	.string "I'm going home to show my dad.$"
+	.string "MAY: I'm heading back to LITTLEROOT.\p"
+	.string "Dad's migration data is all over the\n"
+	.string "place. I want to help him figure out\l"
+	.string "what's going on.\p"
+	.string "Funny. I used to think research was\n"
+	.string "the boring part.$"
 
 LilycoveCity_Text_MayYouGoingToCollectBadges:
 	.string "{PLAYER}{KUN}, what are you going to do?\p"
@@ -504,11 +505,11 @@ LilycoveCity_Text_BrendanDefeat:
 	.string "on you as a TRAINER…$"
 
 LilycoveCity_Text_BrendanGoingBackToLittleroot:
-	.string "BRENDAN: I…\n"
-	.string "I plan on going home to LITTLEROOT.\p"
-	.string "You know I'm helping out my dad on his\n"
-	.string "POKéDEX. It's coming together pretty\l"
-	.string "decently, so I should go show him.$"
+	.string "BRENDAN: I'm going home to LITTLEROOT.\p"
+	.string "Dad's readings are weird lately.\n"
+	.string "POKéMON moving where they shouldn't.\p"
+	.string "…I want to know why. Don't tell him\n"
+	.string "I actually like the research part.$"
 
 LilycoveCity_Text_BrendanYouGoingToCollectBadges:
 	.string "{PLAYER}, what are you going to do?\p"
@@ -655,11 +656,13 @@ LilycoveCity_Text_TeamAquaRenovatedCavern:
 	.string "don't match at all!$"
 
 LilycoveCity_Text_TeamAquaLotGoneForGood:
-	.string "That cave in the cove…\p"
-	.string "I didn't notice it right away,\n"
-	.string "but it's completely empty now.\p"
-	.string "That TEAM AQUA lot, they must\n"
-	.string "have gone away for good.$"
+	.string "That cave in the cove is empty now.\p"
+	.string "Some of those TEAM AQUA kids are out\n"
+	.string "on the beach every morning, cleaning\l"
+	.string "up. My husband still won't speak to\l"
+	.string "them.\p"
+	.string "I don't know. Maybe both of us are\n"
+	.string "right.$"
 
 LilycoveCity_Text_CitySign:
 	.string "LILYCOVE CITY\p"

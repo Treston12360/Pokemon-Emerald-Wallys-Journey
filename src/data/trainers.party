@@ -10686,22 +10686,73 @@ Golbat
 Level: 35
 IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
 
-=== TRAINER_GRUNT_UNUSED ===
-Name: GRUNT
-Class: Team Magma
-Pic: Aqua Grunt F
+=== TRAINER_MAY_FINAL_MUDKIP ===
+Name: MAY
+Class: Rival
+Pic: May
 Gender: Female
-Music: Aqua
+Music: Female
+Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Wailmer
-Level: 31
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Heracross @ Choice Band
+Level: 68
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- Close Combat
+- Megahorn
+- Stone Edge
+- Knock Off
 
-Zubat
-Level: 31
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Grumpig @ Leftovers
+Level: 68
+Ability: Thick Fat
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Psychic
+- Shadow Ball
+- Focus Blast
+- Calm Mind
+
+Altaria @ Life Orb
+Level: 68
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Draco Meteor
+- Flamethrower
+- Roost
+- Ice Beam
+
+Kecleon @ Sitrus Berry
+Level: 67
+Ability: Protean
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Shadow Sneak
+- Sucker Punch
+- Drain Punch
+- Knock Off
+
+Torkoal @ Heat Rock
+Level: 68
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Lava Plume
+- Earth Power
+- Yawn
+- Stealth Rock
+
+Sceptile @ Sceptilite
+Level: 72
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- Leaf Blade
+- Dragon Claw
+- Earthquake
+- Swords Dance
 
 === TRAINER_GRUNT_MT_PYRE_4 ===
 Name: GRUNT
@@ -12381,105 +12432,139 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Focus Blast
 
 
-=== TRAINER_WALLY_VR_4 ===
-Name: WALLY
+=== TRAINER_BRENDAN_FINAL_TORCHIC ===
+Name: BRENDAN
 Class: Rival
-Pic: Wally
+Pic: Brendan
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore
+Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Flygon
-Level: 53
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Dragon Claw
-- Earthquake
-- Crunch
-- U-turn
-
-Delcatty
-Level: 52
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Sing
-- Assist
-- Charm
-- Feint Attack
-
-Roselia
-Level: 53
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Magical Leaf
-- Leech Seed
+Tropius @ Leftovers
+Level: 68
+Nature: Calm
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Air Slash
 - Giga Drain
-- Toxic
+- Roost
+- Leech Seed
 
-Magneton
-Level: 50
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Supersonic
-- Thunderbolt
-- Tri Attack
-- Screech
+Magcargo @ White Herb
+Level: 68
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Lava Plume
+- Earth Power
+- Shell Smash
+- Power Gem
 
-Gardevoir
-Level: 54
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Double Team
-- Calm Mind
+Pelipper @ Damp Rock
+Level: 68
+Ability: Drizzle
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Hurricane
+- Scald
+- U-turn
+- Roost
+
+Swellow @ Flame Orb
+Level: 67
+Ability: Guts
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Facade
+- Brave Bird
+- U-turn
+- Protect
+
+Claydol @ Light Clay
+Level: 68
+Nature: Bold
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Earth Power
 - Psychic
-- Future Sight
+- Rapid Spin
+- Stealth Rock
 
-=== TRAINER_WALLY_VR_5 ===
-Name: WALLY
+Swampert @ Swampertite
+Level: 72
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Spe
+- Waterfall
+- Earthquake
+- Ice Punch
+- Rain Dance
+
+=== TRAINER_BRENDAN_FINAL_MUDKIP ===
+Name: BRENDAN
 Class: Rival
-Pic: Wally
+Pic: Brendan
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore
+Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Flygon
-Level: 56
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Tropius @ Leftovers
+Level: 68
+Nature: Calm
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Air Slash
+- Giga Drain
+- Roost
+- Leech Seed
+
+Magcargo @ White Herb
+Level: 68
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Lava Plume
+- Earth Power
+- Shell Smash
+- Power Gem
+
+Pelipper @ Damp Rock
+Level: 68
+Ability: Drizzle
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Hurricane
+- Scald
+- U-turn
+- Roost
+
+Swellow @ Flame Orb
+Level: 67
+Ability: Guts
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Facade
+- Brave Bird
+- U-turn
+- Protect
+
+Claydol @ Light Clay
+Level: 68
+Nature: Bold
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Earth Power
+- Psychic
+- Rapid Spin
+- Stealth Rock
+
+Sceptile @ Sceptilite
+Level: 72
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- Leaf Blade
 - Dragon Claw
 - Earthquake
-- Stone Edge
-- U-turn
-
-Delcatty
-Level: 55
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Sing
-- Assist
-- Charm
-- Feint Attack
-
-Roselia
-Level: 56
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Magical Leaf
-- Leech Seed
-- Giga Drain
-- Toxic
-
-Magneton
-Level: 53
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Supersonic
-- Thunderbolt
-- Tri Attack
-- Screech
-
-Gardevoir
-Level: 57
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Double Team
-- Calm Mind
-- Psychic
-- Future Sight
+- Swords Dance
 
 === TRAINER_BRENDAN_LILYCOVE_MUDKIP ===
 Name: BRENDAN
@@ -17291,31 +17376,140 @@ Bulbasaur
 Level: 5
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
-=== TRAINER_BRENDAN_PLACEHOLDER ===
+=== TRAINER_BRENDAN_FINAL_TREECKO ===
 Name: BRENDAN
-Class: RS Protag
-Pic: RS Brendan
+Class: Rival
+Pic: Brendan
 Gender: Male
 Music: Male
+Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Groudon
-Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Tropius @ Leftovers
+Level: 68
+Nature: Calm
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Air Slash
+- Giga Drain
+- Roost
+- Leech Seed
 
-=== TRAINER_MAY_PLACEHOLDER ===
+Magcargo @ White Herb
+Level: 68
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Lava Plume
+- Earth Power
+- Shell Smash
+- Power Gem
+
+Pelipper @ Damp Rock
+Level: 68
+Ability: Drizzle
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Hurricane
+- Scald
+- U-turn
+- Roost
+
+Swellow @ Flame Orb
+Level: 67
+Ability: Guts
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Facade
+- Brave Bird
+- U-turn
+- Protect
+
+Claydol @ Light Clay
+Level: 68
+Nature: Bold
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Earth Power
+- Psychic
+- Rapid Spin
+- Stealth Rock
+
+Blaziken @ Blazikenite
+Level: 72
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- Flare Blitz
+- Close Combat
+- Thunder Punch
+- Swords Dance
+
+=== TRAINER_MAY_FINAL_TREECKO ===
 Name: MAY
-Class: RS Protag
-Pic: RS May
+Class: Rival
+Pic: May
 Gender: Female
-Music: Male
+Music: Female
+Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Kyogre
-Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Heracross @ Choice Band
+Level: 68
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- Close Combat
+- Megahorn
+- Stone Edge
+- Knock Off
+
+Grumpig @ Leftovers
+Level: 68
+Ability: Thick Fat
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Psychic
+- Shadow Ball
+- Focus Blast
+- Calm Mind
+
+Altaria @ Life Orb
+Level: 68
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Draco Meteor
+- Flamethrower
+- Roost
+- Ice Beam
+
+Kecleon @ Sitrus Berry
+Level: 67
+Ability: Protean
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Shadow Sneak
+- Sucker Punch
+- Drain Punch
+- Knock Off
+
+Wailord @ Choice Specs
+Level: 68
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Water Spout
+- Ice Beam
+- Hydro Pump
+- Rest
+
+Blaziken @ Blazikenite
+Level: 72
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- Flare Blitz
+- Close Combat
+- Thunder Punch
+- Swords Dance
 
 === TRAINER_WALLY_CHAMPION ===
 Name: WALLY
@@ -17730,4 +17924,71 @@ IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
 - Calm Mind
 - Focus Blast
 
+=== TRAINER_MAY_FINAL_TORCHIC ===
+Name: MAY
+Class: Rival
+Pic: May
+Gender: Female
+Music: Female
+Items: Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
+
+Heracross @ Choice Band
+Level: 68
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- Close Combat
+- Megahorn
+- Stone Edge
+- Knock Off
+
+Grumpig @ Leftovers
+Level: 68
+Ability: Thick Fat
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Psychic
+- Shadow Ball
+- Focus Blast
+- Calm Mind
+
+Altaria @ Life Orb
+Level: 68
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Draco Meteor
+- Flamethrower
+- Roost
+- Ice Beam
+
+Kecleon @ Sitrus Berry
+Level: 67
+Ability: Protean
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Shadow Sneak
+- Sucker Punch
+- Drain Punch
+- Knock Off
+
+Torkoal @ Heat Rock
+Level: 68
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Lava Plume
+- Earth Power
+- Yawn
+- Stealth Rock
+
+Swampert @ Swampertite
+Level: 72
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Spe
+- Waterfall
+- Earthquake
+- Ice Punch
+- Rain Dance
 

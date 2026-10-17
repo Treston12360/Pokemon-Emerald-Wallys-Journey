@@ -1419,10 +1419,13 @@ SootopolisCity_Text_WhatIsThatGreenPokemon:
 	.string "What is that green POKéMON?!$"
 
 SootopolisCity_Text_WhereDidLegendariesGo:
-	.string "GROUDON and KYOGRE…\n"
-	.string "Where did they go?\p"
-	.string "Will they cause droughts or downpours\n"
-	.string "somewhere else?$"
+	.string "GROUDON and KYOGRE… Where did\n"
+	.string "they go?\p"
+	.string "Half the houses on the east side are\n"
+	.string "still drying out. The volunteers\l"
+	.string "have been working every day.\p"
+	.string "I hope those two stay asleep for\n"
+	.string "another thousand years.$"
 
 SootopolisCity_Text_TwoPokemonArentAngry:
 	.string "I just get this sense somehow that\n"

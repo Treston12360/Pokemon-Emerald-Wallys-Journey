@@ -572,7 +572,7 @@
 #define TRAINER_CATHERINE_5                 565
 #define TRAINER_JULIO                       566
 #define TRAINER_GRUNT_SEAFLOOR_CAVERN_5     567
-#define TRAINER_GRUNT_UNUSED                568
+#define TRAINER_MAY_FINAL_MUDKIP            568 // Wally's Journey: was TRAINER_GRUNT_UNUSED
 #define TRAINER_GRUNT_MT_PYRE_4             569
 #define TRAINER_GRUNT_JAGGED_PASS           570
 #define TRAINER_MARC                        571
@@ -663,8 +663,8 @@
 #define TRAINER_WALLY_MAUVILLE              656
 #define TRAINER_WALLY_VR_2                  657
 #define TRAINER_WALLY_SOOTOPOLIS            658 // Wally's Journey: was TRAINER_WALLY_VR_3 (VR rematches retired)
-#define TRAINER_WALLY_VR_4                  659
-#define TRAINER_WALLY_VR_5                  660
+#define TRAINER_BRENDAN_FINAL_TORCHIC       659 // Wally's Journey: was TRAINER_WALLY_VR_4
+#define TRAINER_BRENDAN_FINAL_MUDKIP        660 // Wally's Journey: was TRAINER_WALLY_VR_5
 #define TRAINER_BRENDAN_LILYCOVE_MUDKIP     661
 #define TRAINER_BRENDAN_LILYCOVE_TREECKO    662
 #define TRAINER_BRENDAN_LILYCOVE_TORCHIC    663
@@ -857,8 +857,8 @@
 #define TRAINER_EVERETT                     850
 #define TRAINER_RED                         851
 #define TRAINER_LEAF                        852
-#define TRAINER_BRENDAN_PLACEHOLDER         853
-#define TRAINER_MAY_PLACEHOLDER             854
+#define TRAINER_BRENDAN_FINAL_TREECKO       853 // Wally's Journey: was TRAINER_BRENDAN_PLACEHOLDER
+#define TRAINER_MAY_FINAL_TREECKO           854 // Wally's Journey: was TRAINER_MAY_PLACEHOLDER
 #define TRAINER_WALLACE_REMATCH             855
 #define TRAINER_WALLY_CHAMPION              856
 #define TRAINER_WALLY_CHAMPION_REMATCH      857
@@ -867,12 +867,13 @@
 #define TRAINER_WALLY_FORTREE               860
 #define TRAINER_WALLY_LILYCOVE              861
 #define TRAINER_WALLY_MOSSDEEP              862
+#define TRAINER_MAY_FINAL_TORCHIC           863
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
 
-#define TRAINERS_COUNT_EMERALD     863
+#define TRAINERS_COUNT_EMERALD     864
 #define MAX_TRAINERS_COUNT_EMERALD 864
 
 #if IS_FRLG

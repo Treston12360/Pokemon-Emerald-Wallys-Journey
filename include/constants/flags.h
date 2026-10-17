@@ -66,7 +66,7 @@
 #define FLAG_JIRACHI_QUEST_STARTED    0x2C // Wally's Journey: Cozmo told the player about Jirachi
 #define FLAG_HIDE_JUANS_HOUSE_JUAN    0x2D // Wally's Journey: Juan at home for the Champion broadcast
 #define FLAG_HIDE_JUANS_HOUSE_STEVEN  0x2E // Wally's Journey: Steven at Juan's house for the broadcast
-#define FLAG_UNUSED_0x02F    0x2F // Unused Flag
+#define FLAG_WALLY_RIVAL_FINAL_DONE  0x2F // Wally's Journey: postgame final battle with May/Brendan
 #define FLAG_UNUSED_0x030    0x30 // Unused Flag
 #define FLAG_UNUSED_0x031    0x31 // Unused Flag
 #define FLAG_UNUSED_0x032    0x32 // Unused Flag

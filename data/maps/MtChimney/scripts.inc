@@ -542,13 +542,16 @@ MtChimney_EventScript_SawyerRematch::
 	end
 
 MtChimney_Text_MeteoriteWillActivateVolcano:
-	.string "The power contained in the METEORITE…\p"
-	.string "By amplifying its power with this\n"
-	.string "machine, MT. CHIMNEY's volcanic\l"
-	.string "activity will instantly intensify…\p"
-	.string "Its energy will grow deep inside\n"
-	.string "the crater and…\l"
-	.string "Fufufu…$"
+	.string "MAXIE: The METEORITE's energy,\n"
+	.string "amplified by this machine, will open\l"
+	.string "a vent on the southern flank.\p"
+	.string "A slow, controlled flow. New ground\n"
+	.string "for the farms below, in months\l"
+	.string "instead of centuries.\p"
+	.string "The Institute's models say the\n"
+	.string "chamber could fail all at once.\p"
+	.string "…Their models are too cautious.\n"
+	.string "Mine are correct.$"
 
 MtChimney_Text_MaxieIntro:
 	.string "MAXIE: Hm? Who are you?\p"
@@ -638,7 +641,9 @@ MtChimney_Text_TeamAquaAlwaysMessingWithPlans:
 	.string "They always mess with our plans!$"
 
 MtChimney_Text_MeteoritesPackAmazingPower:
-	.string "METEORITES pack amazing power!$"
+	.string "Our geologists ran the numbers a\n"
+	.string "hundred times. It'll work!\p"
+	.string "…Probably.$"
 
 MtChimney_Text_YouBetterNotMessWithUs:
 	.string "You'd better not mess with us!\p"

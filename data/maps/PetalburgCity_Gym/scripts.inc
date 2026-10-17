@@ -1367,10 +1367,12 @@ PetalburgCity_Gym_Text_GymGuideAdvice:
 	.string "Well, hey, go for it!$"
 
 PetalburgCity_Gym_Text_GymGuidePostVictory:
-	.string "{PLAYER}! Whoa! You've overcome even\n"
-	.string "your own father!\p"
-	.string "Like, whoa!\n"
-	.string "What a stunning turn of events!$"
+	.string "{PLAYER}! You beat your own father!\p"
+	.string "The whole town's talking about it.\n"
+	.string "Half of them are cheering for you,\l"
+	.string "the other half for NORMAN.\p"
+	.string "And you know what? I saw him smile\n"
+	.string "when you won. He never smiles!$"
 
 PetalburgCity_Gym_Text_RandallIntro:
 	.string "The ability to attack before the\n"

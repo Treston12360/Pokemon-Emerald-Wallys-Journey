@@ -610,7 +610,10 @@ Route119_Text_TrainerTipsDecoration:
 
 Route119_Text_NoHmFly:
 	.string "That was a great battle!\p"
-	.string "You're getting stronger every day!$"
+	.string "I've been logging every POKéMON on\n"
+	.string "this route for Dad. There's way\l"
+	.string "more rain than there should be.\p"
+	.string "Something big is going on.$"
 
 Route119_Text_NoHmFlyAdvice:
 	.string "With the FEATHER BADGE, FLY\n"

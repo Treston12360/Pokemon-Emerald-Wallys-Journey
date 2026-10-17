@@ -298,9 +298,13 @@ Route119_WeatherInstitute_2F_Text_PokemonChangesWithWeather:
 	.string "INSTITUTE--go ahead and take it.$"
 
 Route119_WeatherInstitute_2F_Text_ChangingWeatherRidiculous:
-	.string "I've been researching rain for many\n"
-	.string "years, but it's ridiculous to think that\l"
-	.string "humans can freely change the weather.$"
+	.string "I've studied rain for many years.\p"
+	.string "Volcanoes and oceans don't respond\n"
+	.string "in straight lines. Push them a little\l"
+	.string "and nothing happens. Push a little\l"
+	.string "more and everything happens.\p"
+	.string "I sent MAXIE our eruption models.\n"
+	.string "He sent back a thank-you card.$"
 
 Route119_WeatherInstitute_2F_Text_GroudonWeather:
 	.string "I track weather patterns over\n"

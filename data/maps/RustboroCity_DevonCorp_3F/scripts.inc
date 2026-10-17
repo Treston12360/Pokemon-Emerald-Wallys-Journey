@@ -196,19 +196,19 @@ RustboroCity_DevonCorp_3F_EventScript_RareRocksDisplay::
 	end
 
 RustboroCity_DevonCorp_3F_Text_MrStoneIHaveFavor:
-	.string "I'm MR. STONE, the PRESIDENT of\n"
-	.string "the DEVON CORPORATION.\p"
-	.string "I'd just got word about you!\p"
+	.string "I'm MR. STONE, the PRESIDENT of the\n"
+	.string "DEVON CORPORATION.\p"
 	.string "You saved our staff not just once,\n"
-	.string "but twice!\p"
-	.string "I have a favor to ask of an amazing\n"
-	.string "person like you.\p"
-	.string "I understand that you're delivering\n"
-	.string "a package to SLATEPORT's SHIPYARD.\p"
-	.string "Well, on the way, could you stop off in\n"
-	.string "DEWFORD TOWN?\p"
-	.string "I was hoping that you'd deliver a\n"
-	.string "LETTER to STEVEN in DEWFORD.$"
+	.string "but twice! Half of RUSTBORO works for\l"
+	.string "DEVON, you know. You helped a lot of\l"
+	.string "families today.\p"
+	.string "Some folks grumble about our quarry\n"
+	.string "and our ships. My son is one of them.\p"
+	.string "Speaking of my son… I have a favor\n"
+	.string "to ask.\p"
+	.string "On your way to SLATEPORT's SHIPYARD,\n"
+	.string "could you stop off in DEWFORD TOWN\l"
+	.string "and deliver a LETTER to STEVEN?$"
 
 RustboroCity_DevonCorp_3F_Text_MrStoneWantYouToHaveThis:
 	.string "MR. STONE: Now, you should know that\n"
@@ -258,12 +258,12 @@ RustboroCity_DevonCorp_3F_Text_ExplainExpShare:
 	.string "for raising weak POKéMON.$"
 
 RustboroCity_DevonCorp_3F_Text_NotFamiliarWithTrends:
-	.string "MR. STONE: Since my youth, I've immersed\n"
-	.string "myself in work.\p"
-	.string "Consequently, I'm not familiar with\n"
-	.string "trends and that sort of thing.\p"
-	.string "But do young people all want to be\n"
-	.string "TRAINERS in the POKéMON LEAGUE?$"
+	.string "MR. STONE: Since my youth, I've\n"
+	.string "immersed myself in work.\p"
+	.string "STEVEN says I measure everything in\n"
+	.string "profits and forget what it costs\l"
+	.string "the land. Perhaps he's right.\p"
+	.string "…Don't tell him I said that.$"
 
 RustboroCity_DevonCorp_3F_Text_ThisIs3rdFloorWaitHere:
 	.string "This is the DEVON CORPORATION's\n"

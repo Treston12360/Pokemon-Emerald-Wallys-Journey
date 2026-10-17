@@ -574,6 +574,10 @@ LittlerootTown_ProfessorBirchsLab_EventScript_Machine::
 LittlerootTown_ProfessorBirchsLab_EventScript_Rival::
 	lock
 	faceplayer
+	@ Wally's Journey: postgame final rival battle and closure (continuity bible #48)
+	goto_if_unset FLAG_SYS_GAME_CLEAR, LittlerootTown_ProfessorBirchsLab_EventScript_RivalNoFinal
+	goto_if_unset FLAG_WALLY_RIVAL_FINAL_DONE, WallyJourney_EventScript_RivalFinal
+LittlerootTown_ProfessorBirchsLab_EventScript_RivalNoFinal:
 	goto_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 5, LittlerootTown_ProfessorBirchsLab_EventScript_RivalFuturePlans
 	goto_if_ge VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 6, LittlerootTown_ProfessorBirchsLab_EventScript_RivalHaveYouGoneToBattleFrontier
 	goto_if_ge VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 2, LittlerootTown_ProfessorBirchsLab_EventScript_RivalTakeBreakFromFieldwork
@@ -729,29 +733,28 @@ LittlerootTown_ProfessorBirchsLab_Text_BirchRivalGoneHome:
 
 LittlerootTown_ProfessorBirchsLab_Text_HeardYouBeatRivalTakePokedex:
 	.string "PROF. BIRCH: Oh, hi, {PLAYER}{KUN}!\p"
-	.string "I heard you beat {RIVAL} on\n"
-	.string "your first try. That's excellent!\p"
-	.string "{RIVAL}'s been helping with my research\n"
-	.string "for a long time.\p"
-	.string "{RIVAL} has an extensive history as\n"
-	.string "a TRAINER already.\p"
-	.string "Here, {PLAYER}{KUN}, I ordered this for my\n"
-	.string "research, but I think you should have\l"
-	.string "this POKéDEX.$"
+	.string "I heard you beat {RIVAL} on your\n"
+	.string "first try. That's excellent!\p"
+	.string "And back on ROUTE 101, you kept your\n"
+	.string "head while that ZIGZAGOON had me up\l"
+	.string "a tree. NORMAN's kid, all right.\p"
+	.string "Here. I ordered this for my research,\n"
+	.string "but I think you should have this\l"
+	.string "POKéDEX.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_ReceivedPokedex:
 	.string "{PLAYER} received the POKéDEX!$"
 
 LittlerootTown_ProfessorBirchsLab_Text_ExplainPokedex:
-	.string "PROF. BIRCH: The POKéDEX is a high-tech\n"
-	.string "tool that automatically makes a record\l"
-	.string "of any POKéMON you meet or catch.\p"
-	.string "My kid, {RIVAL}, goes everywhere\n"
-	.string "with it.\p"
-	.string "Whenever my kid catches a rare POKéMON\n"
-	.string "and records its data in the POKéDEX,\l"
-	.string "why, {RIVAL} looks for me while I'm out\l"
-	.string "doing fieldwork, and shows me.$"
+	.string "PROF. BIRCH: The POKéDEX records any\n"
+	.string "POKéMON you meet or catch.\p"
+	.string "Lately, something odd is going on.\n"
+	.string "POKéMON are showing up in the wrong\l"
+	.string "places, and the weather readings\l"
+	.string "don't add up.\p"
+	.string "Every POKéMON you record helps me\n"
+	.string "figure out why. Call me if anything\l"
+	.string "seems strange out there.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_CountlessPokemonAwait:
 	.string "PROF. BIRCH: Countless POKéMON\n"
