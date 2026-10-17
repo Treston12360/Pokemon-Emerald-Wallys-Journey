@@ -36,11 +36,10 @@ MossdeepCity_StevensHouse_EventScript_StevenGivesDive::
 	waitmovement 0
 	applymovement LOCALID_STEVENS_HOUSE_STEVEN, MossdeepCity_StevensHouse_Movement_StevenApproachPlayer
 	waitmovement 0
-	msgbox MossdeepCity_StevensHouse_Text_YouveEarnedHMDive, MSGBOX_DEFAULT
-	giveitem ITEM_HM_DIVE
+	msgbox MossdeepCity_StevensHouse_Text_NoHmDive, MSGBOX_DEFAULT
 	setflag FLAG_RECEIVED_HM_DIVE
 	setflag FLAG_OMIT_DIVE_FROM_STEVEN_LETTER
-	msgbox MossdeepCity_StevensHouse_Text_ExplainDive, MSGBOX_DEFAULT
+	msgbox MossdeepCity_StevensHouse_Text_NoHmDiveAdvice, MSGBOX_DEFAULT
 	closemessage
 	delay 20
 	applymovement LOCALID_STEVENS_HOUSE_STEVEN, MossdeepCity_StevensHouse_Movement_StevenReturn
@@ -143,7 +142,6 @@ MossdeepCity_StevensHouse_EventScript_Letter::
 
 @ Unused, leftover from RS
 MossdeepCity_StevensHouse_EventScript_DiveItemBall::
-	finditem ITEM_HM_DIVE
 	setflag FLAG_RECEIVED_HM_DIVE
 	end
 
@@ -212,3 +210,11 @@ MossdeepCity_StevensHouse_Text_CollectionOfRareRocks:
 	.string "It's a collection of rare rocks and\n"
 	.string "stones assembled by STEVEN.$"
 
+
+MossdeepCity_StevensHouse_Text_NoHmDive:
+	.string "You've done tremendous work.\\p"
+	.string "I know you'll see this through!$"
+
+MossdeepCity_StevensHouse_Text_NoHmDiveAdvice:
+	.string "The MIND BADGE lets you DIVE\\n"
+	.string "into the deep ocean. Good luck!$"
