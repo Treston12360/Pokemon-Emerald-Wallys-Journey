@@ -60,14 +60,21 @@ LilycoveCity_PokemonCenter_1F_Text_HowManyKindsOfPokemon:
 	.string "trade POKéMON with people far away.$"
 
 LilycoveCity_PokemonCenter_1F_Text_HeardAboutRottenScoundrels:
-	.string "I've been hearing about some rotten\n"
-	.string "scoundrels who steal POKéMON and rip\l"
-	.string "off METEORITES.$"
+	.string "A traveler told me people\n"
+	.string "were stealing research\n"
+	.string "equipment and POKéMON.\p"
+	.string "I used to think these teams\n"
+	.string "were just arguing about\n"
+	.string "how to protect HOENN.\p"
+	.string "Now I'm not so sure.$"
 
 LilycoveCity_PokemonCenter_1F_Text_HaventSeenRottenScoundrels:
-	.string "Those rotten scoundrels who steal\n"
-	.string "POKéMON and rip off METEORITES…\p"
-	.string "I haven't seen them around recently.$"
+	.string "The people stealing equipment\n"
+	.string "haven't been seen lately.\p"
+	.string "That doesn't mean the problem\n"
+	.string "went away.\p"
+	.string "I hope whoever was hurt gets\n"
+	.string "their POKéMON back.$"
 
 LilycoveCity_PokemonCenter_1F_Text_HowManyKindsOfPokemon_W0:
 	.string "The cave in the cove was TEAM AQUA's\n"
