@@ -288,9 +288,16 @@ void CB2_InitOptionMenu(void)
 
         gTasks[taskId].tMenuSelection = 0;
         sTopItem = 0;
+#if IS_FRLG
+        // These options store their flags only in Emerald's save flag table.
+        gTasks[taskId].tExpAll = 0;
+        gTasks[taskId].tZMovesOff = 0;
+        gTasks[taskId].tWildMonsOff = 0;
+#else
         gTasks[taskId].tExpAll = FlagGet(FLAG_WALLY_EXP_ALL_MODE);
         gTasks[taskId].tZMovesOff = FlagGet(FLAG_WALLY_Z_MOVES_OFF);
         gTasks[taskId].tWildMonsOff = FlagGet(FLAG_WALLY_OWE_OFF);
+#endif
         gTasks[taskId].tGameSpeed = WallyJourney_GetOverworldSpeed() % WALLY_OW_SPEED_COUNT;
         gTasks[taskId].tBattleSpeed = WallyJourney_GetBattleSpeed() % WALLY_BATTLE_SPEED_COUNT;
         gTasks[taskId].tTextSpeed = gSaveBlock2Ptr->optionsTextSpeed;
@@ -443,6 +450,7 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsSound = gTasks[taskId].tSound;
     gSaveBlock2Ptr->optionsButtonMode = gTasks[taskId].tButtonMode;
     gSaveBlock2Ptr->optionsWindowFrameType = gTasks[taskId].tWindowFrameType;
+#if !IS_FRLG
     if (gTasks[taskId].tExpAll)
         FlagSet(FLAG_WALLY_EXP_ALL_MODE);
     else
@@ -455,6 +463,7 @@ static void Task_OptionMenuSave(u8 taskId)
         FlagSet(FLAG_WALLY_OWE_OFF);
     else
         FlagClear(FLAG_WALLY_OWE_OFF);
+#endif
     WallyJourney_SetSpeeds(gTasks[taskId].tGameSpeed, gTasks[taskId].tBattleSpeed);
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
