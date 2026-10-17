@@ -6272,113 +6272,145 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / Ace Pokemon / HP Aware / PP Stall Prevention
 Mugshot: Yellow
 
-SPECIES_TENTACRUEL @ ITEM_PETAYA_BERRY
-Level: 49
+Wailord @ ITEM_LEFTOVERS
+Level: 74
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- MOVE_RAIN_DANCE
-- MOVE_WATER_PULSE
-- MOVE_GIGA_DRAIN
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_WATER_SPOUT
 - MOVE_ICE_BEAM
+- MOVE_RAIN_DANCE
+- MOVE_AMNESIA
 
-SPECIES_MASQUERAIN @ ITEM_SILVER_POWDER
-Level: 48
+Tentacruel @ ITEM_BLACK_SLUDGE
+Level: 75
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- MOVE_HYDRO_PUMP
-- MOVE_SIGNAL_BEAM
-- MOVE_STUN_SPORE
-- MOVE_BLIZZARD
+EVs: 252 HP / 4 SpA / 252 Spe
+- MOVE_TOXIC_SPIKES
+- MOVE_SCALD
+- MOVE_SLUDGE_BOMB
+- MOVE_RAPID_SPIN
 
-SPECIES_WHISCASH @ ITEM_QUICK_CLAW
-Level: 49
+Whiscash @ ITEM_SITRUS_BERRY
+Level: 75
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_DRAGON_DANCE
+- MOVE_WATERFALL
 - MOVE_EARTHQUAKE
-- MOVE_SURF
+- MOVE_STONE_EDGE
+
+Swampert @ ITEM_SWAMPERTITE
+Level: 76
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_WATERFALL
+- MOVE_EARTHQUAKE
+- MOVE_ICE_PUNCH
 - MOVE_RAIN_DANCE
-- MOVE_YAWN
 
-SPECIES_LUDICOLO @ ITEM_MYSTIC_WATER
-Level: 50
+Gyarados @ ITEM_LUM_BERRY
+Level: 77
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- MOVE_GIGA_DRAIN
-- MOVE_WATER_PULSE
-- MOVE_LEECH_SEED
-- MOVE_DOUBLE_TEAM
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_DRAGON_DANCE
+- MOVE_WATERFALL
+- MOVE_CRUNCH
+- MOVE_EARTHQUAKE
 
-SPECIES_MILOTIC @ ITEM_LEFTOVERS
-Level: 51
+Milotic @ ITEM_LEFTOVERS
+Level: 79
+Ability: Marvel Scale
+Nature: Bold
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- MOVE_RECOVER
-- MOVE_DIVE
+EVs: 252 HP / 252 Def / 4 SpA
+- MOVE_SCALD
 - MOVE_ICE_BEAM
-- MOVE_TOXIC
+- MOVE_RECOVER
+- MOVE_HAZE
 
-=== TRAINER_WALLACE_REMATCH ===
-Name: WALLACE
+=== TRAINER_WALLY_CHAMPION_FINAL ===
+Name: WALLY
 Class: Champion
-Pic: Champion Wallace
+Pic: Wally
 Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
-Mugshot: Yellow
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / Ace Pokemon / Try To 2HKO / HP Aware / Powerful Status / PP Stall Prevention
 
-SPECIES_WAILORD @ ITEM_QUICK_CLAW
-Level: 77
+Armaldo @ ITEM_FOCUS_SASH
+Level: 82
+Ability: Battle Armor
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 0 Atk / 0 Def / 0 Spe / 252 SpA / 0 SpD
-- MOVE_RAIN_DANCE
-- MOVE_WATER_SPOUT
-- MOVE_DOUBLE_EDGE
-- MOVE_BLIZZARD
+EVs: 252 HP / 252 Atk / 4 Spe
+- MOVE_STEALTH_ROCK
+- MOVE_STONE_EDGE
+- MOVE_X_SCISSOR
+- MOVE_RAPID_SPIN
 
-SPECIES_TENTACRUEL @ ITEM_SALAC_BERRY
-Level: 75
+Mawile @ ITEM_ROCKY_HELMET
+Level: 83
+Ability: Intimidate
+Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 0 HP / 0 Atk / 0 Def / 252 Spe / 252 SpA / 0 SpD
+EVs: 252 HP / 4 Atk / 252 Def
+- MOVE_PLAY_ROUGH
+- MOVE_IRON_HEAD
+- MOVE_SUCKER_PUNCH
+- MOVE_THUNDER_WAVE
+
+Ludicolo @ ITEM_DAMP_ROCK
+Level: 84
+Ability: Swift Swim
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
 - MOVE_RAIN_DANCE
 - MOVE_HYDRO_PUMP
-- MOVE_TOXIC
-- MOVE_ICE_BEAM
-
-SPECIES_LUDICOLO @ ITEM_MIRACLE_SEED
-Level: 76
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 0 HP / 0 Atk / 0 Def / 252 Spe / 252 SpA / 0 SpD
 - MOVE_GIGA_DRAIN
-- MOVE_SURF
 - MOVE_ICE_BEAM
-- MOVE_RAIN_DANCE
 
-SPECIES_WHISCASH @ ITEM_FOCUS_BAND
-Level: 76
+Crawdaunt @ ITEM_LIFE_ORB
+Level: 85
+Ability: Adaptability
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 0 Def / 0 Spe / 0 SpA / 0 SpD
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_CRABHAMMER
+- MOVE_KNOCK_OFF
+- MOVE_AQUA_JET
+- MOVE_SWORDS_DANCE
+
+Flygon @ ITEM_CHOICE_SCARF
+Level: 86
+Ability: Levitate
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
 - MOVE_EARTHQUAKE
-- MOVE_SURF
-- MOVE_YAWN
-- MOVE_ICY_WIND
+- MOVE_DRAGON_CLAW
+- MOVE_U_TURN
+- MOVE_STONE_EDGE
 
-SPECIES_GYARADOS @ ITEM_CHOICE_BAND
-Level: 76
+Gardevoir @ ITEM_GARDEVOIRITE
+Level: 88
+Ability: Trace
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 0 HP / 252 Atk / 0 Def / 0 Spe / 0 SpA / 252 SpD
-- MOVE_BOUNCE
-- MOVE_EARTHQUAKE
-- MOVE_DOUBLE_EDGE
-- MOVE_SURF
-
-SPECIES_MILOTIC @ ITEM_LEFTOVERS
-Level: 78
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 0 Atk / 0 Def / 0 Spe / 0 SpA / 252 SpD
-- MOVE_DIVE
-- MOVE_RECOVER
-- MOVE_LIGHT_SCREEN
-- MOVE_TOXIC
+EVs: 4 HP / 252 SpA / 252 Spe
+- MOVE_HYPER_VOICE
+- MOVE_PSYSHOCK
+- MOVE_FOCUS_BLAST
+- MOVE_CALM_MIND
 
 === TRAINER_ANDREW ===
 Name: ANDREW
@@ -17598,7 +17630,7 @@ Double Battle: No
 AI: Basic Trainer / Smart Switching / Ace Pokemon / Try To 2HKO / HP Aware / Powerful Status / PP Stall Prevention
 
 Armaldo @ ITEM_FOCUS_SASH
-Level: 80
+Level: 70
 Ability: Battle Armor
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -17609,7 +17641,7 @@ EVs: 252 HP / 252 Atk / 4 Spe
 - MOVE_RAPID_SPIN
 
 Mawile @ ITEM_ROCKY_HELMET
-Level: 81
+Level: 71
 Ability: Intimidate
 Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -17620,7 +17652,7 @@ EVs: 252 HP / 4 Atk / 252 Def
 - MOVE_THUNDER_WAVE
 
 Ludicolo @ ITEM_DAMP_ROCK
-Level: 82
+Level: 72
 Ability: Swift Swim
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -17631,7 +17663,7 @@ EVs: 4 HP / 252 SpA / 252 Spe
 - MOVE_ICE_BEAM
 
 Crawdaunt @ ITEM_LIFE_ORB
-Level: 83
+Level: 73
 Ability: Adaptability
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -17642,7 +17674,7 @@ EVs: 4 HP / 252 Atk / 252 Spe
 - MOVE_SWORDS_DANCE
 
 Flygon @ ITEM_CHOICE_SCARF
-Level: 84
+Level: 74
 Ability: Levitate
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -17653,7 +17685,7 @@ EVs: 4 HP / 252 Atk / 252 Spe
 - MOVE_STONE_EDGE
 
 Gardevoir @ ITEM_GARDEVOIRITE
-Level: 86
+Level: 76
 Ability: Trace
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe

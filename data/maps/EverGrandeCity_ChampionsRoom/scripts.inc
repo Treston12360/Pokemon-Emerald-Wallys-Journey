@@ -6,7 +6,25 @@ EverGrandeCity_ChampionsRoom_MapScripts::
 
 EverGrandeCity_ChampionsRoom_OnTransition:
 	call Common_EventScript_SetupRivalGfxId
+	call WallyJourney_ChampionDefense_SetChallengerGfx
 	end
+
+@ Wally's Journey: title-defense ladder. VAR_UNUSED_0x40FD counts defenses won.
+@ 0: Wally (lv 70-75)  1: Wallace (74-79)  2: Steven (Meteor Falls team)  3+: Wally final (82-88)
+WallyJourney_ChampionDefense_SetChallengerGfx::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_WALLY
+	goto_if_unset FLAG_SYS_GAME_CLEAR, Common_EventScript_NopReturn
+	call_if_eq VAR_UNUSED_0x40FD, 1, WallyJourney_ChampionDefense_GfxWallace
+	call_if_eq VAR_UNUSED_0x40FD, 2, WallyJourney_ChampionDefense_GfxSteven
+	return
+
+WallyJourney_ChampionDefense_GfxWallace::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_WALLACE
+	return
+
+WallyJourney_ChampionDefense_GfxSteven::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_STEVEN
+	return
 
 EverGrandeCity_ChampionsRoom_OnWarp:
 	map_script_2 VAR_TEMP_1, 0, EverGrandeCity_ChampionsRoom_EventScript_PlayerTurnNorth
@@ -53,14 +71,50 @@ EverGrandeCity_ChampionsRoom_EventScript_Wally::
 	end
 
 WallyJourney_ChampionDefense_Wally::
-	@ After the Hall of Fame Wally returns with a stronger Mega team to challenge your title.
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
 	applymovement LOCALID_CHAMPIONS_ROOM_WALLACE, Common_Movement_FaceDown
 	waitmovement 0
+	switch VAR_UNUSED_0x40FD
+	case 0, WallyJourney_ChampionDefense_First
+	case 1, WallyJourney_ChampionDefense_Wallace
+	case 2, WallyJourney_ChampionDefense_Steven
+	goto_if_eq VAR_UNUSED_0x40FD, 3, WallyJourney_ChampionDefense_FinalFirst
+	msgbox WallyJourney_ChampionDefense_FinalIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_WALLY_CHAMPION_FINAL, WallyJourney_ChampionDefense_FinalDefeat
+	msgbox WallyJourney_ChampionDefense_FinalVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionDefense_First::
 	msgbox WallyJourney_ChampionDefense_Intro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_WALLY_CHAMPION_REMATCH, WallyJourney_ChampionDefense_DefeatedText
-	addvar VAR_UNUSED_0x40FD, 1
 	msgbox WallyJourney_ChampionDefense_Victory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionDefense_Wallace::
+	msgbox WallyJourney_ChampionDefense_WallaceIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_WALLACE, WallyJourney_ChampionDefense_WallaceDefeat
+	msgbox WallyJourney_ChampionDefense_WallaceVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionDefense_Steven::
+	msgbox WallyJourney_ChampionDefense_StevenIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_STEVEN, WallyJourney_ChampionDefense_StevenDefeat
+	@ Keep Steven's optional Meteor Falls battle available.
+	cleartrainerflag TRAINER_STEVEN
+	msgbox WallyJourney_ChampionDefense_StevenVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionDefense_FinalFirst::
+	msgbox WallyJourney_ChampionDefense_FinalFirstIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_WALLY_CHAMPION_FINAL, WallyJourney_ChampionDefense_FinalDefeat
+	msgbox WallyJourney_ChampionDefense_FinalVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionDefense_Won::
+	closemessage
+	goto_if_ge VAR_UNUSED_0x40FD, 3, WallyJourney_ChampionDefense_NoCount
+	addvar VAR_UNUSED_0x40FD, 1
+WallyJourney_ChampionDefense_NoCount::
 	warp MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F, 9, 8
 	waitstate
 	releaseall
@@ -71,15 +125,75 @@ WallyJourney_ChampionDefense_Intro:
 	.string "Good. I've been training at the\n"
 	.string "BATTLE FRONTIER while you sat on\l"
 	.string "my old throne.\p"
-	.string "Defend your title, CHAMPION.$"
-
+	.string "LEAGUE rules. Anyone who clears the\n"
+	.string "ELITE FOUR gets a shot. Including\l"
+	.string "me. Defend your title, CHAMPION.$"
 WallyJourney_ChampionDefense_DefeatedText:
 	.string "Still yours. For now.$"
-
 WallyJourney_ChampionDefense_Victory:
 	.string "WALLY: You're even better than last\n"
 	.string "time. That's annoying.\p"
+	.string "Word's going to get out that you\n"
+	.string "won. You won't only be facing me\l"
+	.string "from now on.\p"
 	.string "I'll be back. Keep the seat warm.$"
+WallyJourney_ChampionDefense_WallaceIntro:
+	.string "WALLACE: Ah, {PLAYER}. Surprised?\p"
+	.string "I lost this room to a boy I once\n"
+	.string "guided. Then he lost it to you.\p"
+	.string "JUAN says I've grown soft. I'd like\n"
+	.string "to prove him wrong.\p"
+	.string "Show me the elegance that took the\n"
+	.string "crown. I won't hold back!$"
+WallyJourney_ChampionDefense_WallaceDefeat:
+	.string "Magnificent. Truly.$"
+WallyJourney_ChampionDefense_WallaceVictory:
+	.string "WALLACE: I see why WALLY speaks of\n"
+	.string "you the way he does.\p"
+	.string "I'll return to SOOTOPOLIS and train\n"
+	.string "with my old mentor.\p"
+	.string "Someone else is on his way, though.\n"
+	.string "Someone who has watched you from\l"
+	.string "the very start.$"
+WallyJourney_ChampionDefense_StevenIntro:
+	.string "STEVEN: Hello, {PLAYER}{KUN}.\p"
+	.string "I told you once that I'd like to\n"
+	.string "see how far you'd go.\p"
+	.string "You went further than I imagined.\n"
+	.string "So I'd like to stand in your way,\l"
+	.string "just once, with everything I have.$"
+WallyJourney_ChampionDefense_StevenDefeat:
+	.string "That's the answer I was hoping for.$"
+WallyJourney_ChampionDefense_StevenVictory:
+	.string "STEVEN: Thank you. Truly.\p"
+	.string "I'll be honest. WALLY asked me to\n"
+	.string "go first. He wanted you at your\l"
+	.string "sharpest.\p"
+	.string "Next time, it's him. And he's been\n"
+	.string "training like I've never seen.$"
+WallyJourney_ChampionDefense_FinalFirstIntro:
+	.string "WALLY: WALLACE. STEVEN. You beat\n"
+	.string "both of them.\p"
+	.string "I asked them to go first. I wanted\n"
+	.string "you at your absolute best.\p"
+	.string "No more warmups, {PLAYER}. This is\n"
+	.string "the team I'd have used to defend\l"
+	.string "the title against you.\p"
+	.string "Let's find out who's really the\n"
+	.string "best in HOENN.$"
+WallyJourney_ChampionDefense_FinalIntro:
+	.string "WALLY: Back again. So am I.\p"
+	.string "Every time I lose to you, I go home\n"
+	.string "and figure out exactly why.\p"
+	.string "That's what makes me dangerous,\n"
+	.string "{PLAYER}. Let's go!$"
+WallyJourney_ChampionDefense_FinalDefeat:
+	.string "…Yeah. You earned that.$"
+WallyJourney_ChampionDefense_FinalVictory:
+	.string "WALLY: I'm not done. I don't think\n"
+	.string "I'll ever be done.\p"
+	.string "That's a good thing, by the way.\n"
+	.string "See you next time, CHAMPION.$"
 
 EverGrandeCity_ChampionsRoom_EventScript_Defeated::
 	playse SE_DOOR

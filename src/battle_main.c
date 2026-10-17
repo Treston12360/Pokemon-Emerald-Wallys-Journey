@@ -5077,6 +5077,7 @@ static bool32 WallyJourney_IsCurrentBattle(void)
     case TRAINER_WALLY_VR_2:
     case TRAINER_WALLY_CHAMPION:
     case TRAINER_WALLY_CHAMPION_REMATCH:
+    case TRAINER_WALLY_CHAMPION_FINAL:
         return TRUE;
     default:
         return FALSE;

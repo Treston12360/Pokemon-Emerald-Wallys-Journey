@@ -859,7 +859,7 @@
 #define TRAINER_LEAF                        852
 #define TRAINER_BRENDAN_FINAL_TREECKO       853 // Wally's Journey: was TRAINER_BRENDAN_PLACEHOLDER
 #define TRAINER_MAY_FINAL_TREECKO           854 // Wally's Journey: was TRAINER_MAY_PLACEHOLDER
-#define TRAINER_WALLACE_REMATCH             855
+#define TRAINER_WALLY_CHAMPION_FINAL        855 // Wally's Journey: was TRAINER_WALLACE_REMATCH (Wallace is no longer Champion)
 #define TRAINER_WALLY_CHAMPION              856
 #define TRAINER_WALLY_CHAMPION_REMATCH      857
 #define TRAINER_WALLY_VERDANTURF            858
