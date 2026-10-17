@@ -52,6 +52,16 @@ jobs:
           GAME_VERSION: EMERALD
         run: make -j$(nproc) -O all
 
+      - name: Upload playable Emerald ROM
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wallys-Journey-Emerald
+          path: |
+            *.gba
+            **/*.gba
+          if-no-files-found: error
+          retention-days: 14
+
   release:
     if: github.actor != 'allcontributors[bot]'
     runs-on: ubuntu-latest
