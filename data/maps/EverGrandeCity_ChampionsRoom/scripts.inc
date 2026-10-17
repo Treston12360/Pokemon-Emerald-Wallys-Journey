@@ -49,7 +49,7 @@ WallyJourney_ChampionDefense_Wallace::
 	@ Returning as Champion turns the final battle into a repeatable title defense.
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
 	msgbox WallyJourney_ChampionDefense_Intro, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_WALLACE, WallyJourney_ChampionDefense_DefeatedText
+	trainerbattle_no_intro TRAINER_WALLACE_REMATCH, WallyJourney_ChampionDefense_DefeatedText
 	addvar VAR_UNUSED_0x40FD, 1
 	msgbox WallyJourney_ChampionDefense_Victory, MSGBOX_DEFAULT
 	warp MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F, 9, 8
