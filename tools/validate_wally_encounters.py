@@ -67,6 +67,61 @@ for starter in STARTER_SPECIES:
     if starter not in species:
         errors.append(f"Starter species has no Hoenn wild encounter: {starter}")
 
+# Catch accidental rollback of the expanded Gen 1-9 habitat tables.
+# Feebas uses the special 10% Route 119 Good Rod hook, not a JSON slot.
+MIN_WILD_SPECIES = 439
+if len(species) < MIN_WILD_SPECIES:
+    errors.append(f"Wild roster fell from at least {MIN_WILD_SPECIES} species to {len(species)}")
+
+EXPANSION_SPECIES = (
+    "SPECIES_BIDOOF", "SPECIES_TAROUNTULA", "SPECIES_NYMBLE",
+    "SPECIES_FLETCHLING", "SPECIES_PIKIPEK", "SPECIES_JOLTIK",
+    "SPECIES_KLAWF", "SPECIES_CYCLIZAR", "SPECIES_MAGBY",
+    "SPECIES_GLAMEOW", "SPECIES_KRICKETOT", "SPECIES_MINCCINO",
+    "SPECIES_TANDEMAUS", "SPECIES_FIDOUGH", "SPECIES_BLIPBUG",
+    "SPECIES_COMBEE", "SPECIES_BURMY", "SPECIES_KLINK",
+    "SPECIES_BRONZOR", "SPECIES_CUFANT", "SPECIES_ORTHWORM",
+    "SPECIES_TURTONATOR", "SPECIES_TOEDSCOOL", "SPECIES_GIMMIGHOUL",
+    "SPECIES_ARCHEN", "SPECIES_TIRTOUGA", "SPECIES_LUCARIO",
+    "SPECIES_ORANGURU", "SPECIES_PASSIMIAN", "SPECIES_WOOLOO",
+    "SPECIES_SMOOCHUM", "SPECIES_VANILLITE", "SPECIES_FALINKS",
+    "SPECIES_FINNEON", "SPECIES_SHELLOS", "SPECIES_BUIZEL",
+    "SPECIES_ALOMOMOLA", "SPECIES_HUNTAIL", "SPECIES_GOREBYSS",
+    "SPECIES_SEALEO", "SPECIES_MILOTIC", "SPECIES_DREDNAW",
+    "SPECIES_CARRACOSTA", "SPECIES_WUGTRIO", "SPECIES_PALAFIN",
+    "SPECIES_SWANNA", "SPECIES_GRAPPLOCT", "SPECIES_BARRASKEWDA",
+    "SPECIES_STARMIE",
+)
+for mon in EXPANSION_SPECIES:
+    if mon not in species:
+        errors.append(f"Expanded species is no longer available wild: {mon}")
+
+# Story-only encounters must not accidentally enter normal grass/surf/fishing.
+STORY_ONLY_SPECIES = (
+    "SPECIES_MEW", "SPECIES_MEWTWO", "SPECIES_CELEBI",
+    "SPECIES_GROUDON", "SPECIES_KYOGRE", "SPECIES_RAYQUAZA",
+    "SPECIES_JIRACHI", "SPECIES_DEOXYS", "SPECIES_ARCEUS",
+    "SPECIES_DIALGA", "SPECIES_PALKIA", "SPECIES_GIRATINA",
+    "SPECIES_RESHIRAM", "SPECIES_ZEKROM", "SPECIES_KYUREM",
+    "SPECIES_XERNEAS", "SPECIES_YVELTAL", "SPECIES_ZYGARDE",
+    "SPECIES_SOLGALEO", "SPECIES_LUNALA", "SPECIES_NECROZMA",
+    "SPECIES_ZACIAN", "SPECIES_ZAMAZENTA", "SPECIES_ETERNATUS",
+    "SPECIES_KORAIDON", "SPECIES_MIRAIDON", "SPECIES_TERAPAGOS",
+)
+for mon in STORY_ONLY_SPECIES:
+    if mon in species:
+        errors.append(f"Story-only legendary/mythical in ordinary wild table: {mon}")
+
+# The original route-specific Feebas hook is deliberately outside the JSON data.
+encounter_code = (ROOT / "src/wild_encounter.c").read_text()
+if not (
+    "gWildFeebas" in encounter_code
+    and "rod == GOOD_ROD" in encounter_code
+    and "Random() % 10" in encounter_code
+    and "MAP_ROUTE119" in encounter_code
+):
+    errors.append("Route 119's special 10% Good Rod Feebas encounter was removed")
+
 print(f"Wild encounter audit: {len(maps)} tables, {slots} slots, {len(species)} unique species")
 for method, count in sorted(methods.items()):
     print(f"  {method}: {count} slots")
