@@ -69,3 +69,17 @@
 The owner specifically rejected ordinary route trainers using Mega Evolution. Eligible categories only: gym trainers and Gym Leaders, Elite Four, Champions, rivals, Steven Stone, and Battle Frontier trainers. Steven gives the Mega Bracelet at **Wally's house after Norman is defeated**, with a speech celebrating growth and describing its discovery on a journey in another region. Wally develops from shy to confident through more rival battles and **replaces Wallace as Champion**; Wallace is identified as the previous Champion. Add following Pokémon with shinies, 1/4096 shiny odds, Champion title defenses, tougher Gym Leader rematches with Megas, and Gym Leader HM explanations and awards rather than relying on former HM-giver scenes.
 
 **Implementation status:** These are confirmed owner requirements, NOT claims that scripts, assets, logic, trainers, or emulator tests are complete.
+
+## Recovered earlier-conversation requests requiring tracking (2026-10-16 retrospective)
+
+These points were recovered from earlier Wally's Journey discussions and compared with this file. An **idea discussed** is not the same as a final owner-approved specification.
+
+- **Experience sharing / EXP All:** Prior discussions included an EXP All or party-wide experience feature. The exact distribution mechanics and whether it is always-on/toggleable are **not reconfirmed**; preserve as a requested feature to specify and validate.
+- **Z-Moves:** Prior project scope included **optional Z-Moves**. Details of unlock timing, Z-Crystal acquisition and which opposing trainers use them remain **unresolved**. Do not implement arbitrary access or announce completion.
+- **Feebas:** Prior discussions identified **special Feebas encounter/evolution changes**. Current Route 119 Good Rod hook is an existing implementation detail; preserve it until the precise owner-approved rarity/access mechanics are reconciled with original conversation decisions. Don't assume the 10% Good Rod conditional mechanic fulfills the exceptionally elusive target.
+- **Wally rival frequency:** Earlier planning mentioned **12 or more Wally battles** and a developing rival relationship/character memory. Treat 12+ as a prior planning target, **not a finalized exact battle count**; confirm story pacing and record all final battle triggers.
+- **Starter Mega Stone specificity:** The post-Norman Steven sequence should grant or enable access to **Sceptilite, Blazikenite, or Swampertite as appropriate for the player's chosen starter**. A prior discussion proposed Steven granting the matching stone in the same scene. Align the final script with the owner's confirmed starter-stone requirement, not a generic stone.
+- **Wally battle-team proposal (NOT FINALIZED):** A previous assistant brainstorm listed Armaldo, Mawile, Breloom, Flygon, Crawdaunt and Mega Gardevoir for Wally. This was a proposal, not confirmed owner approval. The binding criteria remain a very difficult, statistically synergistic team of six Hoenn Pokémon without copying other important trainers' aces.
+- **Emulator testing:** Earlier development explicitly targeted testing in **mGBA** on a GBA-compatible ROM; a PC/Python port is not a substitute.
+
+The above historical details must be checked against newer explicit owner instructions before implementation; newer decisions always supersede older brainstorms.
