@@ -579,14 +579,17 @@ LilycoveCity_Harbor_Text_WhereWouldYouLikeToGo:
 	.string "Then, where would you like to go?$"
 
 LilycoveCity_Harbor_Text_SailorFerryUnavailable:
-	.string "Until they finish making the ferry,\n"
-	.string "we sailors have nothing to do…\p"
-	.string "I wish they'd get a move on, the folks\n"
-	.string "at the SHIPYARD in SLATEPORT.$"
+	.string "The S.S. TIDAL isn't ready.\n"
+	.string "We've been without work.\p"
+	.string "People depend on the ferry\n"
+	.string "for jobs and family visits.\p"
+	.string "I hope the SLATEPORT crew\n"
+	.string "can finish safely.$"
 
 LilycoveCity_Harbor_Text_SailorFerryAvailable:
-	.string "The ferry S.S. TIDAL is finally in\n"
-	.string "operation.\p"
-	.string "The folks at the SHIPYARD in SLATEPORT\n"
-	.string "must've worked extra hard.\p"
-	.string "Well, it's my turn to get busy now!$"
+	.string "The S.S. TIDAL is sailing!\n"
+	.string "The SLATEPORT crew did it.\p"
+	.string "Now I can bring people\n"
+	.string "home to their families.\p"
+	.string "It's good to have work\n"
+	.string "that means something.$"
