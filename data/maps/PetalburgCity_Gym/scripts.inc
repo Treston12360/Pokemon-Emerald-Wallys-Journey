@@ -1271,11 +1271,12 @@ PetalburgCity_Gym_Text_ReceivedBalanceBadge:
 	.string "from DAD!$"
 
 PetalburgCity_Gym_Text_ExplainBalanceBadgeTakeThis:
-.string "DAD: The BALANCE BADGE is yours.\p"
-	.string "It lets a POKéMON use SURF in\n"
-	.string "the field if it could learn it.\p"
-	.string "You don't have to teach it SURF.\n"
-	.string "The HM is your travel license.\p"
+	.string "DAD: The BALANCE BADGE is yours.\p"
+	.string "It lets you use SURF in the\n"
+	.string "field once you have HM03.\p"
+	.string "You won't need to teach SURF\n"
+	.string "or keep a certain POKéMON\l"
+	.string "on your team.\p"
 	.string "I've got a TM for you, too.\n"
 	.string "Use it well, {PLAYER}.$"
 
