@@ -2882,9 +2882,10 @@ static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lig
 #undef sLightXPos
 #undef sLightYPos
 
-// Wally's Journey: automatic town lights. Pokémon Center and Mart signs glow
-// next to their doors, and every other door gets a warm porch glow. Built
-// from the map's own warps and metatiles, so no map needs editing.
+// Wally's Journey: night lighting for Center/Mart signs is attached to
+// their map doors but only the original tiny letters are illuminated.
+// Do not generate glow squares over doors or windows: their future glow
+// belongs in dedicated DNS tileset palettes, not alpha-blended sprites.
 
 // Window light must be painted into window tiles/palettes using the
 // pokeemerald-expansion DNS light-blend system, not a large 32x32 object
