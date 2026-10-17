@@ -331,11 +331,12 @@ WallyJourney_Text_RivalMOSSDEEPDefeat:
 WallyJourney_Text_RivalMOSSDEEPPost:
 	.string "WALLY: WALLACE keeps asking\n"
 	.string "why I want to be CHAMPION.\p"
-	.string "To be the strongest.\n"
-	.string "What else would it mean?\p"
-	.string "He's a good mentor, but\n"
-	.string "he worries too much.\p"
-	.string "I'll prove I'm ready.$"
+	.string "Because I know I can win.\n"
+	.string "I haven't proved it yet.\p"
+	.string "He says strength is more\n"
+	.string "than collecting victories.\p"
+	.string "I'll show him what I can do\n"
+	.string "when I reach the LEAGUE.$"
 
 
 @ Wally's Journey (owner design): right before the 8th Gym, Wally stops the player at
@@ -369,6 +370,7 @@ WallyJourney_EventScript_SootopolisWallyLeaves::
 	waitmovement 0
 	removeobject LOCALID_SOOTOPOLIS_RIVAL_WALLY
 	setflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS
+	clearflag FLAG_WALLY_NO_WHITEOUT
 	fadedefaultbgm
 	applymovement LOCALID_PLAYER, Common_Movement_FaceUp
 	waitmovement 0
@@ -388,38 +390,44 @@ WallyJourney_Text_SootopolisWallyCalls:
 	.string "WALLY: {PLAYER}! Hold up.$"
 
 WallyJourney_Text_SootopolisWallyWon:
-	.string "WALLY: …\p"
-	.string "That's the first time I've ever\n"
-	.string "beaten you.\p"
-	.string "Don't look at me like that. You're\n"
-	.string "going to get stronger. I know you.\p"
-	.string "But tonight, I'm ready.\p"
-	.string "Go get your last BADGE, {PLAYER}.\n"
-	.string "Then come find me.$"
+	.string "WALLY: So that's the gap\n"
+	.string "between us now.\p"
+	.string "I told you I'd get stronger.\n"
+	.string "You should have listened.\p"
+	.string "I'm going to VICTORY ROAD.\n"
+	.string "Then the ELITE FOUR.\p"
+	.string "When I beat WALLACE, you'll\n"
+	.string "know exactly where we stand.$"
 
 WallyJourney_Text_RivalSOOTOPOLISIntro:
-	.string "WALLY: It's over. The rain's\n"
-	.string "stopping.\p"
-	.string "Everyone I got into the shelters\n"
-	.string "walked out on their own. All of them.\p"
-	.string "WALLACE just left for EVER GRANDE.\n"
-	.string "Our title match is tonight.\p"
-	.string "Before I go, one battle. No warm-up.\n"
-	.string "No MEGA EVOLUTION, either. I'm saving\l"
-	.string "that for WALLACE.\p"
-	.string "I need to know I'm ready.$"
+	.string "WALLY: The storm is over.\n"
+	.string "Everyone's safe.\p"
+	.string "My eight BADGES are ready.\n"
+	.string "WALLACE is waiting for me\n"
+	.string "at EVER GRANDE.\p"
+	.string "Before I go, battle me.\n"
+	.string "I want a real test.\p"
+	.string "I'm saving MEGA EVOLUTION\n"
+	.string "for the CHAMPION.\p"
+	.string "Don't expect me to hold back\n"
+	.string "just because you helped me\n"
+	.string "catch my first POKéMON.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISDefeat:
-	.string "…Still you.\n"
-	.string "Good. Now I know the bar.$"
+	.string "WALLY: …You still managed\n"
+	.string "to beat me.\p"
+	.string "Fine. I needed a real test.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISPost:
-	.string "WALLY: Huh. Still you.\p"
-	.string "Good. If I can't beat you, I'd\n"
-	.string "better beat WALLACE.\p"
-	.string "Watch tonight, {PLAYER}.$"
+	.string "WALLY: Enjoy your victory.\p"
+	.string "Next time I'll have my\n"
+	.string "full strength ready.\p"
+	.string "The ELITE FOUR comes first.\n"
+	.string "Then WALLACE.\p"
+	.string "You'll see what I'm capable\n"
+	.string "of when I take that title.$"
 
 
 
