@@ -28,8 +28,12 @@ PacifidlogTown_PokemonCenter_1F_EventScript_OldMan::
 	end
 
 PacifidlogTown_PokemonCenter_1F_Text_WhatColorTrainerCard:
-	.string "What color is your TRAINER CARD?\n"
-	.string "Mine's copper!$"
+	.string "My TRAINER CARD is copper!\n"
+	.string "I used to wish it were gold.\p"
+	.string "Then I met someone who'd\n"
+	.string "crossed HOENN to help a friend.\p"
+	.string "Maybe a card can't tell you\n"
+	.string "what kind of TRAINER you are.$"
 
 PacifidlogTown_PokemonCenter_1F_Text_OnColonyOfCorsola:
 	.string "PACIFIDLOG floats on a colony of\n"
@@ -39,11 +43,11 @@ PacifidlogTown_PokemonCenter_1F_Text_OnColonyOfCorsola:
 	.string "Nobody had to sign anything.$"
 
 PacifidlogTown_PokemonCenter_1F_Text_AncestorsLivedOnBoats:
-	.string "The ancestors of the people in\n"
-	.string "PACIFIDLOG were said to have been\l"
-	.string "born on boats and then lived and died \l"
-	.string "aboard them.\p"
-	.string "I understand that they lived that way\n"
-	.string "because they were searching for\l"
-	.string "something.$"
+	.string "Our grandparents lived on\n"
+	.string "boats before this town grew.\p"
+	.string "Some people ask why we don't\n"
+	.string "move to solid ground.\p"
+	.string "We know these currents.\n"
+	.string "And here, we look after\n"
+	.string "one another.$"
 
