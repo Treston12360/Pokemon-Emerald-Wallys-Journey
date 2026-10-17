@@ -497,6 +497,16 @@ const u8 gInitialMovementTypeFacingDirections[NUM_MOVEMENT_TYPES] = {
 #include "data/object_events/object_event_graphics_info.h"
 #include "data/object_events/object_event_graphics_info_followers.h"
 
+static const u16 sWallyCenterLetterPalette[16] =
+{
+    RGB2GBA(0, 0, 0), RGB2GBA(255, 239, 206), RGB2GBA(244, 142, 101),
+};
+
+static const u16 sWallyMartLetterPalette[16] =
+{
+    RGB2GBA(0, 0, 0), RGB2GBA(235, 249, 255), RGB2GBA(104, 189, 241),
+};
+
 static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc1,                  OBJ_EVENT_PAL_TAG_NPC_1},
     {gObjectEventPal_Npc2,                  OBJ_EVENT_PAL_TAG_NPC_2},
@@ -584,7 +594,11 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPaletteLight,              OBJ_EVENT_PAL_TAG_LIGHT},
     {gObjectEventPaletteLight2,             OBJ_EVENT_PAL_TAG_LIGHT_2},
     {gObjectEventPaletteEmotes,             OBJ_EVENT_PAL_TAG_EMOTES},
-    {gObjectEventPaletteNeonLight,          OBJ_EVENT_PAL_TAG_NEON_LIGHT},
+    // Dedicated neon colors for just the letter pixels of the two signs.
+    // Blend immune palette tags keep them luminous when the town darkens;
+    // the letters are already drawn on the tiles underneath during the day.
+    {sWallyCenterLetterPalette,             OBJ_EVENT_PAL_TAG_NEON_LIGHT},
+    {sWallyMartLetterPalette,               OBJ_EVENT_PAL_TAG_NEON_MART},
 #ifdef BUGFIX
     {NULL,                                  OBJ_EVENT_PAL_TAG_NONE},
 #else
@@ -2858,7 +2872,7 @@ static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lig
         sprite->centerToCornerVecY = -(16 >> 1);
         sprite->oam.priority = 2;
         sprite->subpriority = 0xFF;
-        sprite->oam.objMode = ST_OAM_OBJ_BLEND;
+        sprite->oam.objMode = ST_OAM_OBJ_NORMAL;
         break;
     }
     return sprite;
