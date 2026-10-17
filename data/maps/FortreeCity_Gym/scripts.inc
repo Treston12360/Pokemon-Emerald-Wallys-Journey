@@ -157,93 +157,78 @@ FortreeCity_Gym_Text_GymGuidePostVictory:
 	.string "the only ticket to VICTORY ROAD.$"
 
 FortreeCity_Gym_Text_JaredIntro:
-	.string "Behold the elegant battle style of\n"
-	.string "BIRD POKéMON!$"
+	.string "Behold the elegance of BIRD POKéMON!$"
 
 FortreeCity_Gym_Text_JaredDefeat:
 	.string "You…\n"
 	.string "You're strong…$"
 
 FortreeCity_Gym_Text_JaredPostBattle:
-	.string "A TRAINER has to be smart to keep\n"
-	.string "up with unexpected turns of events.\p"
-	.string "Do you have the smarts to get to\n"
-	.string "our LEADER?$"
+	.string "A TRAINER must be smart to handle\n"
+	.string "surprises.\p"
+	.string "Do you have the smarts for our\n"
+	.string "LEADER?$"
 
 FortreeCity_Gym_Text_EdwardoIntro:
-	.string "The lovers of BIRD POKéMON aspire\n"
-	.string "to join this GYM.\p"
-	.string "As a member of the FORTREE GYM,\n"
-	.string "I'm not allowed to lose!$"
+	.string "Everyone who loves BIRD POKéMON wants\n"
+	.string "to join this GYM. I can't lose!$"
 
 FortreeCity_Gym_Text_EdwardoDefeat:
 	.string "It was too much of a load for me\n"
 	.string "to bear…$"
 
 FortreeCity_Gym_Text_EdwardoPostBattle:
-	.string "I used to think a GYM was just\n"
-	.string "a place to prove you're strong.\p"
-	.string "Now I help maintain the bridges.\n"
-	.string "People rely on us every day.$"
+	.string "The world is huge, full of tough\n"
+	.string "TRAINERS. I'll keep training.$"
 
 FortreeCity_Gym_Text_FlintIntro:
-	.string "There's no need for WINONA, our GYM\n"
-	.string "LEADER, to deal with you!\p"
-	.string "I'm plenty good enough for you!$"
+	.string "WINONA doesn't need to deal with you!\n"
+	.string "I'm enough!$"
 
 FortreeCity_Gym_Text_FlintDefeat:
 	.string "WINONA, I…\n"
 	.string "I lost!$"
 
 FortreeCity_Gym_Text_FlintPostBattle:
-	.string "I joined this GYM because WINONA\n"
-	.string "made flying look effortless.\p"
-	.string "Then I saw her carry supplies\n"
-	.string "through a storm all night.\p"
-	.string "That's what strength looks like.$"
+	.string "WINONA is cute and strong. The\n"
+	.string "ultimate LEADER! …Blush.$"
 
 FortreeCity_Gym_Text_AshleyIntro:
-	.string "WINONA taught me personally!\n"
-	.string "You can't beat me easily!$"
+	.string "WINONA taught me herself! You won't\n"
+	.string "beat me easily!$"
 
 FortreeCity_Gym_Text_AshleyDefeat:
 	.string "I was beaten…$"
 
 FortreeCity_Gym_Text_AshleyPostBattle:
-	.string "When the bridges sway in high wind,\n"
-	.string "WINONA checks every home.\p"
-	.string "She remembers who needs medicine\n"
-	.string "and whose roof still leaks.$"
+	.string "Thanks to WINONA, FORTREE lives\n"
+	.string "without fear.\p"
+	.string "She flies patrols over the forest\n"
+	.string "every dawn.$"
 
 FortreeCity_Gym_Text_HumbertoIntro:
-	.string "When WINONA takes to battle, her face\n"
-	.string "shines with beautiful determination…\p"
-	.string "I'm not letting you witness that\n"
-	.string "lovely sight!$"
+	.string "WINONA's face in battle shines with\n"
+	.string "determination… I won't let you see\l"
+	.string "it!$"
 
 FortreeCity_Gym_Text_HumbertoDefeat:
 	.string "Urk!\n"
 	.string "I couldn't stop you.$"
 
 FortreeCity_Gym_Text_HumbertoPostBattle:
-	.string "Our LEADER taught us that a\n"
-	.string "beautiful flight takes preparation.\p"
-	.string "She's mapping safer routes now.\n"
-	.string "The storms are changing.$"
+	.string "Don't get distracted staring at\n"
+	.string "WINONA, or you'll go crashing down!$"
 
 FortreeCity_Gym_Text_DariusIntro:
-	.string "You'd better know that there are all\n"
-	.string "sorts of FLYING-type POKéMON.\p"
-	.string "You do know that, right?$"
+	.string "There are all sorts of FLYING types.\n"
+	.string "You know that, right?$"
 
 FortreeCity_Gym_Text_DariusDefeat:
 	.string "You seem to know your stuff!$"
 
 FortreeCity_Gym_Text_DariusPostBattle:
-	.string "You handled my team's surprises.\n"
-	.string "WINONA won't be so predictable.\p"
-	.string "She watches the wind and adapts.\n"
-	.string "A strong TRAINER must do both.$"
+	.string "You beat me. But WINONA's POKéMON are\n"
+	.string "all business.$"
 
 FortreeCity_Gym_Text_WinonaIntro:
 	.string "I am WINONA. I am the LEADER of\n"

@@ -43,8 +43,10 @@ FortreeCity_House2_EventScript_WrongGuess::
 
 FortreeCity_House2_Text_HiddenPowersArousedByNature:
 	.string "People… POKéMON…\p"
-	.string "Their hidden powers are aroused by\n"
-	.string "living in natural environments…$"
+	.string "Their hidden powers wake when they\n"
+	.string "live close to nature.\p"
+	.string "Pave over the wild and you lose\n"
+	.string "more than trees.$"
 
 FortreeCity_House2_Text_CoinInWhichHand:
 	.string "Let this old woman see if your hidden\n"

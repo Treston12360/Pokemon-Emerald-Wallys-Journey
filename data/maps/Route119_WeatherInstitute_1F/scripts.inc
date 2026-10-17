@@ -69,10 +69,8 @@ Route119_WeatherInstitute_1F_EventScript_Grunt4::
 	end
 
 Route119_WeatherInstitute_1F_Text_Grunt1Intro:
-	.string "The BOSS got interested in\n"
-	.string "the research they have going here,\l"
-	.string "so he sent us out.\p"
-	.string "You quit meddling!$"
+	.string "The BOSS got interested in the\n"
+	.string "research here. Quit meddling!$"
 
 Route119_WeatherInstitute_1F_Text_Grunt1Defeat:
 	.string "Blast it…\n"
@@ -85,52 +83,45 @@ Route119_WeatherInstitute_1F_Text_Grunt1PostBattle:
 	.string "…I ask anyway. Nobody answers.$"
 
 Route119_WeatherInstitute_1F_Text_Grunt4Intro:
-	.string "Huh?\n"
-	.string "What's a kid doing here?$"
+	.string "Huh? What's a kid doing here?$"
 
 Route119_WeatherInstitute_1F_Text_Grunt4Defeat:
 	.string "Huh?\n"
 	.string "I lost?!$"
 
 Route119_WeatherInstitute_1F_Text_Grunt4PostBattle:
-	.string "Oh, no…\n"
-	.string "I'll catch an earful for losing to a kid…\p"
-	.string "I should just take a nap in the bed…$"
+	.string "I'll catch an earful for losing to a\n"
+	.string "kid… Maybe I'll nap in that bed.$"
 
 Route119_WeatherInstitute_1F_Text_EveryoneWentUpstairs:
-	.string "They made everyone go upstairs.\n"
-	.string "I hid here when they came in.\p\n"
-	.string "I don't know why they need our\n"
-	.string "weather records so badly.$"
+	.string "While I was sleeping, everyone went\n"
+	.string "upstairs!\p"
+	.string "…Was that TEAM AQUA? In the\n"
+	.string "building? While I slept?$"
+
 Route119_WeatherInstitute_1F_Text_WowYoureStrong:
-	.string "You got them to leave!\p\n"
-	.string "I was scared the whole time.\n"
-	.string "But I watched you stand up.\p\n"
-	.string "Maybe being brave means doing\n"
-	.string "something even when you're scared.$"
+	.string "Wow, you're strong!\p"
+	.string "I wish I could be a TRAINER like you.\n"
+	.string "Then I could protect this place.$"
+
 Route119_WeatherInstitute_1F_Text_ProfStudyingRain:
-	.string "A little rain feeds the forest.\n"
-	.string "Too much can ruin a harvest.\p\n"
-	.string "We study where it falls, how\n"
-	.string "long it lasts, and who it affects.\p\n"
-	.string "The charts don't show the people\n"
-	.string "whose homes are in its path.$"
+	.string "The PROFESSOR loves rain. Fact.\p"
+	.string "But if it keeps raining like this,\n"
+	.string "people will be in trouble. Also fact.$"
+
 Route119_WeatherInstitute_1F_Text_NoticingAbnormalWeather:
-	.string "These readings are alarming.\n"
-	.string "Dry air over one route, storms\n"
-	.string "building over the next.\p\n"
-	.string "There's no seasonal pattern\n"
-	.string "that accounts for both.\p\n"
-	.string "I sent our report to FORTREE.\n"
-	.string "Someone has to prepare.$"
+	.string "On the 2nd floor we study HOENN's\n"
+	.string "weather patterns.\p"
+	.string "We've seen strange rain over the\n"
+	.string "ocean. Spots where it never stops.\l"
+	.string "Like something underwater is awake.$"
+
 Route119_WeatherInstitute_1F_Text_WhatWereAquasUpTo:
-	.string "TEAM AQUA wanted our forecasts.\n"
-	.string "They said the sea was suffering.\p\n"
-	.string "That's a concern we share.\n"
-	.string "But they threatened our staff\n"
-	.string "to get the research.\p\n"
-	.string "Whatever their goal, that was\n"
-	.string "no way to pursue it.$"
+	.string "We've been saved!\p"
+	.string "What were the AQUAS after? A weather\n"
+	.string "POKéMON? That can't change the sea…\l"
+	.string "can it?$"
+
 Route119_WeatherInstitute_1F_Text_TakeRestInBed:
 	.string "There's a bed…\n"
 	.string "Let's take a rest.$"

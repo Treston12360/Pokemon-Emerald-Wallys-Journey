@@ -204,9 +204,8 @@ Route119_WeatherInstitute_2F_EventScript_WeatherScientist::
 	end
 
 Route119_WeatherInstitute_2F_Text_Grunt2Intro:
-	.string "The INSTITUTE created a type of\n"
-	.string "POKéMON that has something to do with\l"
-	.string "the weather. We're here to take them!$"
+	.string "The INSTITUTE made a weather POKéMON.\n"
+	.string "We're taking it!$"
 
 Route119_WeatherInstitute_2F_Text_Grunt2Defeat:
 	.string "Our plan's being spoiled by a kid?$"
@@ -218,9 +217,8 @@ Route119_WeatherInstitute_2F_Text_Grunt2PostBattle:
 	.string "…Or that's what they told us.$"
 
 Route119_WeatherInstitute_2F_Text_Grunt3Intro:
-	.string "We're TEAM AQUA!\n"
-	.string "We appear wherever anything rare is\l"
-	.string "found!$"
+	.string "We're TEAM AQUA! Wherever something\n"
+	.string "rare turns up, so do we!$"
 
 Route119_WeatherInstitute_2F_Text_Grunt3Defeat:
 	.string "You got me!$"
@@ -232,10 +230,8 @@ Route119_WeatherInstitute_2F_Text_Grunt3PostBattle:
 	.string "here.$"
 
 Route119_WeatherInstitute_2F_Text_Grunt5Intro:
-	.string "Don't tell me you're looking for that\n"
-	.string "weather POKéMON, too?\p"
-	.string "That's a no-no!\n"
-	.string "We were here to get it first!$"
+	.string "Looking for the weather POKéMON too?\n"
+	.string "No! We got here first!$"
 
 Route119_WeatherInstitute_2F_Text_Grunt5Defeat:
 	.string "Oh, will you look at my POKéMON?$"
@@ -267,25 +263,22 @@ Route119_WeatherInstitute_2F_Text_ShellyPostBattle:
 	.string "Then ask why it isn't you.$"
 
 Route119_WeatherInstitute_2F_Text_TeamMagmaJustPassedBy:
-	.string "We have a situation here!\p"
-	.string "A TEAM MAGMA mob just passed\n"
-	.string "the WEATHER INSTITUTE.\p"
-	.string "They appear to be headed for\n"
-	.string "MT. PYRE!$"
+	.string "We have a situation!\p"
+	.string "A TEAM MAGMA group just passed the\n"
+	.string "INSTITUTE, heading for MT. PYRE!$"
 
 Route119_WeatherInstitute_2F_Text_WeHaveToHurryToMtPyre:
-	.string "What?!\p"
-	.string "We can't waste any more time here!\n"
-	.string "We have to hurry to MT. PYRE, too!\p"
-	.string "Ahahahaha!\n"
-	.string "TEAM MAGMA, just you wait!$"
+	.string "What?! Then we have to hurry to MT.\n"
+	.string "PYRE too!\p"
+	.string "If MAGMA gets the ORB first, it's\n"
+	.string "over. Move!$"
 
 Route119_WeatherInstitute_2F_Text_ThanksPleaseTakePokemon:
-	.string "You protected our people and\n"
-	.string "our research. Thank you.\p\n"
-	.string "Please take this CASTFORM.\n"
-	.string "It deserves a TRAINER who\n"
-	.string "treats it as a partner.$"
+	.string "Thank you! You saved all of us.\p"
+	.string "Please, take this POKéMON. It's safer\n"
+	.string "with you than here.$"
+
+@ Unused
 Route119_WeatherInstitute_2F_Text_NoRoomForPokemon:
 	.string "Hm? You don't seem to have any room\n"
 	.string "for this POKéMON.$"
@@ -294,11 +287,11 @@ Route119_WeatherInstitute_2F_Text_PlayerReceivedCastform:
 	.string "{PLAYER} received CASTFORM!$"
 
 Route119_WeatherInstitute_2F_Text_PokemonChangesWithWeather:
-	.string "CASTFORM reacts to changes\n"
-	.string "in the atmosphere.\p\n"
-	.string "Care for it. We designed this\n"
-	.string "research to understand weather,\n"
-	.string "not turn it into a weapon.$"
+	.string "That POKéMON changes with the\n"
+	.string "weather.\p"
+	.string "It's sensitive. Lately it's been\n"
+	.string "stuck in its rain form for days.$"
+
 Route119_WeatherInstitute_2F_Text_ChangingWeatherRidiculous:
 	.string "The records tell us weather can\n"
 	.string "shift without warning.\p\n"
@@ -323,8 +316,7 @@ Route119_WeatherInstitute_2F_Text_KyogreWeather:
 	.string "{STR_VAR_1}…$"
 
 Route119_WeatherInstitute_2F_Text_NoAbnormalWeather:
-	.string "Abnormal weather conditions are\n"
-	.string "no longer being reported.\p"
-	.string "The occasional rainfall is a blessing,\n"
-	.string "really.$"
+	.string "The abnormal weather has stopped.\p"
+	.string "Normal rain again. It feels like a\n"
+	.string "blessing now.$"
 

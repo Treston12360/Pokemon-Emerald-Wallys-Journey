@@ -563,34 +563,29 @@ Route119_Text_ScottYouWonAtFortreeGym:
 	.string "… … … … … Click!$"
 
 Route119_Text_StayAwayFromWeatherInstitute:
-	.string "We're standing lookout here.\p"
-	.string "Hey, you! Stay away from the WEATHER\n"
-	.string "INSTITUTE. It's not safe.$"
+	.string "We're standing lookout.\p"
+	.string "Stay away from the WEATHER INSTITUTE.\n"
+	.string "For your own good. Really.$"
 
 Route119_Text_DontGoNearWeatherInstitute:
-	.string "Lookout duty is surprisingly boring.\p"
-	.string "Hey, you! Please don't go near the\n"
-	.string "WEATHER INSTITUTE.$"
+	.string "Lookout duty is boring.\p"
+	.string "Please don't go near the INSTITUTE.\n"
+	.string "I don't want anyone getting hurt.$"
 
 Route119_Text_ThoughtFlyByCatchingBirdMons:
-	.string "I thought you FLY by catching a whole\n"
-	.string "flock of BIRD POKéMON, and then\l"
-	.string "hanging on to them somehow.\p"
-	.string "But it turns out there's an HM move\n"
-	.string "called FLY!\p"
-	.string "I wish I'd known about that a long\n"
-	.string "time ago…$"
+	.string "I thought you FLY by catching a flock\n"
+	.string "of BIRD POKéMON and hanging on.\p"
+	.string "Turns out you need a BADGE. And one\n"
+	.string "very strong friend.$"
 
 Route119_Text_TallGrassSnaresBikeTires:
-	.string "Tch…\n"
-	.string "It's a no-go…\p"
-	.string "The tall grass snares BIKE tires.\n"
-	.string "There's no way you can cycle here.$"
+	.string "Tch… The tall grass tangles BIKE\n"
+	.string "tires. No cycling here.$"
 
 Route119_Text_CanYourMonMakeSecretBase:
-	.string "Can your POKéMON use its SECRET POWER\n"
-	.string "on a big pile of grass and make a\l"
-	.string "SECRET BASE?$"
+	.string "Can your POKéMON use SECRET POWER on\n"
+	.string "a big bush and make a SECRET BASE?\p"
+	.string "Everyone needs a place of their own.$"
 
 Route119_Text_RouteSignFortree:
 	.string "ROUTE 119\n"

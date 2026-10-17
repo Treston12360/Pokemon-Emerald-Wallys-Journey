@@ -263,30 +263,25 @@ Route118_Text_YouAgreeGoodRodIsGood:
 	.string "Wouldn't you agree?$"
 
 Route118_Text_IdenticalMindsTakeThis:
-	.string "Hmm!\n"
-	.string "We're of identical minds!\p"
-	.string "Hmm!\n"
-	.string "Take this GOOD ROD!$"
+	.string "We think alike! Take this GOOD ROD!$"
 
 Route118_Text_TryYourLuckFishing:
-	.string "Some families here fish to eat.\n"
-	.string "Others fish to make a living.\p\n"
-	.string "Either way, never take the river\n"
-	.string "for granted.$"
+	.string "Wherever there's water, try fishing.\p"
+	.string "You learn patience. HOENN could use\n"
+	.string "more of it.$"
+
 Route118_Text_DontYouLikeToFish:
-	.string "Don't you like to fish?$"
+	.string "You don't like fishing? Pity.$"
 
 Route118_Text_TryCatchingMonWithGoodRod:
-	.string "Try catching all sorts of POKéMON\n"
-	.string "with your GOOD ROD.$"
+	.string "Catch all sorts with your GOOD ROD.$"
 
 Route118_Text_CanCrossRiversWithSurf:
-	.string "The current is stronger than it\n"
-	.string "looks. A boatman taught me that.\p\n"
-	.string "With the right BADGE, your team\n"
-	.string "can help you SURF safely.\p\n"
-	.string "You don't need to teach the move.\n"
-	.string "That doesn't mean ignore the sea.$"
+	.string "No boat? With SURF you can cross\n"
+	.string "rivers and the sea.\p"
+	.string "The LEAGUE trusts you with the whole\n"
+	.string "ocean once you earn that BADGE.$"
+
 Route118_Text_RouteSignMauville:
 	.string "ROUTE 118\n"
 	.string "{LEFT_ARROW} MAUVILLE CITY$"
