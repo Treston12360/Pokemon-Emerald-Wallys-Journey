@@ -84,6 +84,14 @@
       "elevation": 3,
       "item": "ITEM_HEART_SCALE",
       "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_2"
+    },
+    {
+      "type": "hidden_item",
+      "x": 10,
+      "y": 3,
+      "elevation": 3,
+      "item": "ITEM_BLASTOISINITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_BLASTOISINITE"
     }
   ]
 }

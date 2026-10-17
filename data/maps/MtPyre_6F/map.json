@@ -72,5 +72,14 @@
     }
   ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 9,
+      "y": 5,
+      "elevation": 3,
+      "item": "ITEM_GENGARITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GENGARITE"
+    }
+  ]
 }

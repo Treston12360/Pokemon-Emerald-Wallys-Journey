@@ -200,6 +200,14 @@
       "y": 32,
       "elevation": 0,
       "secret_base_id": "SECRET_BASE_YELLOW_CAVE4_2"
+    },
+    {
+      "type": "hidden_item",
+      "x": 78,
+      "y": 38,
+      "elevation": 1,
+      "item": "ITEM_BARBARACITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_BARBARACITE"
     }
   ]
 }

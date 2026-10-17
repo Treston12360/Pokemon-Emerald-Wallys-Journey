@@ -110,6 +110,14 @@
       "elevation": 0,
       "item": "ITEM_FULL_RESTORE",
       "flag": "FLAG_HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_FULL_RESTORE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 6,
+      "y": 3,
+      "elevation": 3,
+      "item": "ITEM_KANGASKHANITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_KANGASKHANITE"
     }
   ]
 }

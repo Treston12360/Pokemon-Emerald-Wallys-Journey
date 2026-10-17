@@ -222,6 +222,22 @@
       "elevation": 3,
       "item": "ITEM_RARE_CANDY",
       "flag": "FLAG_HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY"
+    },
+    {
+      "type": "hidden_item",
+      "x": 46,
+      "y": 7,
+      "elevation": 3,
+      "item": "ITEM_CHIMECHITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_CHIMECHITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 43,
+      "y": 5,
+      "elevation": 3,
+      "item": "ITEM_PSYCHIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_PSYCHIUM_Z"
     }
   ]
 }

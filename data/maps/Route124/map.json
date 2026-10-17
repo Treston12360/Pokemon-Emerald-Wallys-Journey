@@ -216,6 +216,22 @@
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "Route124_EventScript_HuntersHouseSign"
+    },
+    {
+      "type": "hidden_item",
+      "x": 1,
+      "y": 1,
+      "elevation": 1,
+      "item": "ITEM_GRENINJITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GRENINJITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 2,
+      "y": 1,
+      "elevation": 1,
+      "item": "ITEM_WATERIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_WATERIUM_Z"
     }
   ]
 }

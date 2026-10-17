@@ -214,6 +214,14 @@
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "AbandonedShip_HiddenFloorRooms_EventScript_Trash"
+    },
+    {
+      "type": "hidden_item",
+      "x": 12,
+      "y": 6,
+      "elevation": 3,
+      "item": "ITEM_DARKINIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_DARKINIUM_Z"
     }
   ]
 }

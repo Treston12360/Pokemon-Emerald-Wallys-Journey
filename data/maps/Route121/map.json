@@ -535,6 +535,30 @@
       "elevation": 3,
       "item": "ITEM_MAX_REVIVE",
       "flag": "FLAG_HIDDEN_ITEM_ROUTE_121_MAX_REVIVE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 78,
+      "y": 18,
+      "elevation": 3,
+      "item": "ITEM_PIDGEOTITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_PIDGEOTITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 76,
+      "y": 16,
+      "elevation": 3,
+      "item": "ITEM_DELPHOXITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_DELPHOXITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 78,
+      "y": 17,
+      "elevation": 3,
+      "item": "ITEM_NORMALIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_NORMALIUM_Z"
     }
   ]
 }

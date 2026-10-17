@@ -105,6 +105,14 @@
       "elevation": 3,
       "item": "ITEM_BLUE_SHARD",
       "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_126_BLUE_SHARD"
+    },
+    {
+      "type": "hidden_item",
+      "x": 9,
+      "y": 3,
+      "elevation": 3,
+      "item": "ITEM_GYARADOSITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GYARADOSITE"
     }
   ]
 }

@@ -836,6 +836,22 @@
       "elevation": 3,
       "item": "ITEM_RARE_CANDY",
       "flag": "FLAG_HIDDEN_ITEM_ROUTE_123_RARE_CANDY"
+    },
+    {
+      "type": "hidden_item",
+      "x": 137,
+      "y": 18,
+      "elevation": 3,
+      "item": "ITEM_MEGANIUMITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_MEGANIUMITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 136,
+      "y": 15,
+      "elevation": 3,
+      "item": "ITEM_FAIRIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_FAIRIUM_Z"
     }
   ]
 }

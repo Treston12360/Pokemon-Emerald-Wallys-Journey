@@ -525,6 +525,14 @@
       "elevation": 3,
       "item": "ITEM_BLACK_GLASSES",
       "flag": "FLAG_HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES"
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 15,
+      "elevation": 3,
+      "item": "ITEM_SCOLIPITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_SCOLIPITE"
     }
   ]
 }

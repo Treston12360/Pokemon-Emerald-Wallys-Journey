@@ -54,6 +54,14 @@
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "ShoalCave_LowTideStairsRoom_EventScript_ShoalSalt3"
+    },
+    {
+      "type": "hidden_item",
+      "x": 13,
+      "y": 11,
+      "elevation": 3,
+      "item": "ITEM_ABOMASITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ABOMASITE"
     }
   ]
 }

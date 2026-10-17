@@ -80,6 +80,14 @@
       "elevation": 3,
       "item": "ITEM_RED_SHARD",
       "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_127_RED_SHARD"
+    },
+    {
+      "type": "hidden_item",
+      "x": 16,
+      "y": 66,
+      "elevation": 3,
+      "item": "ITEM_SHARPEDONITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_SHARPEDONITE"
     }
   ]
 }

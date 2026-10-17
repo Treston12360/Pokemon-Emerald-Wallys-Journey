@@ -52,6 +52,14 @@
       "elevation": 3,
       "item": "ITEM_PEARL",
       "flag": "FLAG_HIDDEN_ITEM_UNDERWATER_128_PEARL"
+    },
+    {
+      "type": "hidden_item",
+      "x": 80,
+      "y": 20,
+      "elevation": 3,
+      "item": "ITEM_STARMINITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_STARMINITE"
     }
   ]
 }

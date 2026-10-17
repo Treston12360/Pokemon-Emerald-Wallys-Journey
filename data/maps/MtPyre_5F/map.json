@@ -80,5 +80,14 @@
     }
   ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 5,
+      "y": 7,
+      "elevation": 3,
+      "item": "ITEM_GHOSTIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GHOSTIUM_Z"
+    }
+  ]
 }

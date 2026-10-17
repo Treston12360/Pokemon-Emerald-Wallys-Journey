@@ -87,5 +87,14 @@
     }
   ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 5,
+      "y": 8,
+      "elevation": 3,
+      "item": "ITEM_BANETTITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_BANETTITE"
+    }
+  ]
 }

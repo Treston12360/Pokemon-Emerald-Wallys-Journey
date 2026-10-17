@@ -765,6 +765,14 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "Route110_EventScript_CyclingRoadSign"
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 38,
+      "elevation": 3,
+      "item": "ITEM_RAICHUNITE_X",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_RAICHUNITE_X"
     }
   ]
 }

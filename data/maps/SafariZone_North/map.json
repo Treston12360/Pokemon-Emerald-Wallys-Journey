@@ -151,5 +151,14 @@
   ],
   "warp_events": [],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 38,
+      "y": 1,
+      "elevation": 3,
+      "item": "ITEM_PINSIRITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_PINSIRITE"
+    }
+  ]
 }

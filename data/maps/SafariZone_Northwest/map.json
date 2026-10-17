@@ -55,5 +55,22 @@
   ],
   "warp_events": [],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 6,
+      "elevation": 5,
+      "item": "ITEM_VENUSAURITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_VENUSAURITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 4,
+      "y": 6,
+      "elevation": 5,
+      "item": "ITEM_GRASSIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GRASSIUM_Z"
+    }
+  ]
 }

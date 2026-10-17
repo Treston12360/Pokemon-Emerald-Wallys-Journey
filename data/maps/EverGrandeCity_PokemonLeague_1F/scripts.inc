@@ -45,7 +45,6 @@ WallyJourney_PokemonLeague_PostgameMart:
 	.2byte ITEM_MAX_POTION
 	.2byte ITEM_FULL_RESTORE
 	.2byte ITEM_REVIVE
-	.2byte ITEM_GALLADITE
 	.2byte ITEM_GARDEVOIRITE
 	.2byte ITEM_METAL_COAT
 	.2byte ITEM_DRAGON_SCALE

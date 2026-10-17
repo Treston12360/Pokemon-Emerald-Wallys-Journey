@@ -52,5 +52,22 @@
     }
   ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 26,
+      "elevation": 3,
+      "item": "ITEM_GLALITITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GLALITITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 25,
+      "elevation": 3,
+      "item": "ITEM_ICIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ICIUM_Z"
+    }
+  ]
 }

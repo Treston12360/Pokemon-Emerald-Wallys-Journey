@@ -12,6 +12,7 @@ WallyJourney_EventScript_GiveGymHMs::
 	call_if_set FLAG_BADGE06_GET, WallyJourney_EventScript_GiveHM_FLY
 	call_if_set FLAG_BADGE07_GET, WallyJourney_EventScript_GiveHM_DIVE
 	call_if_set FLAG_BADGE08_GET, WallyJourney_EventScript_GiveHM_WATERFALL
+	call_if_set FLAG_BADGE06_GET, WallyJourney_EventScript_GiveZPowerRing
 	return
 
 WallyJourney_EventScript_GiveHM_CUT::
@@ -421,3 +422,28 @@ WallyJourney_Text_JirachiVanished:
 	.string "JIRACHI drifted away in a shimmer\n"
 	.string "of light…\p"
 	.string "It might come back here again.$"
+
+
+@ Wally's Journey: the Z-Power Ring arrives with the sixth badge (owner decision).
+@ Handed over by whichever Gym Leader the player talks to first after badge 6.
+WallyJourney_EventScript_GiveZPowerRing::
+	checkitem ITEM_Z_POWER_RING
+	goto_if_eq VAR_RESULT, TRUE, Common_EventScript_NopReturn
+	msgbox WallyJourney_Text_ZRingIntro, MSGBOX_DEFAULT
+	giveitem ITEM_Z_POWER_RING
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_HMBagFull
+	msgbox WallyJourney_Text_ZRingExplain, MSGBOX_DEFAULT
+	return
+
+WallyJourney_Text_ZRingIntro:
+	.string "One more thing. A TRAINER from the\n"
+	.string "ALOLA region left this with the\l"
+	.string "LEAGUE for whoever earned six BADGES.$"
+
+WallyJourney_Text_ZRingExplain:
+	.string "Hold a Z-CRYSTAL and the ring lets\n"
+	.string "your POKéMON unleash a Z-MOVE once\l"
+	.string "per battle.\p"
+	.string "Z-CRYSTALS are said to be hidden all\n"
+	.string "over HOENN. You can switch Z-MOVES\l"
+	.string "off in the OPTIONS if you prefer.$"

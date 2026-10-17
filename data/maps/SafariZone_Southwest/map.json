@@ -71,6 +71,22 @@
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "SafariZone_Southwest_EventScript_RestHouseSign"
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 36,
+      "elevation": 1,
+      "item": "ITEM_VICTREEBELITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_VICTREEBELITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 1,
+      "y": 37,
+      "elevation": 3,
+      "item": "ITEM_POISONIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_POISONIUM_Z"
     }
   ]
 }

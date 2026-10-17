@@ -285,6 +285,22 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "NewMauville_Inside_EventScript_Generator"
+    },
+    {
+      "type": "hidden_item",
+      "x": 4,
+      "y": 3,
+      "elevation": 3,
+      "item": "ITEM_AMPHAROSITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_AMPHAROSITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 5,
+      "y": 3,
+      "elevation": 3,
+      "item": "ITEM_ELECTRIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ELECTRIUM_Z"
     }
   ]
 }

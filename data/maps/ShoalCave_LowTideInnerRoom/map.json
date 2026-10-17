@@ -136,6 +136,14 @@
       "elevation": 5,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "ShoalCave_LowTideInnerRoom_EventScript_ShoalShell4"
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 4,
+      "elevation": 4,
+      "item": "ITEM_FROSLASSITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_FROSLASSITE"
     }
   ]
 }

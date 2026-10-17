@@ -458,6 +458,14 @@
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "MtChimney_EventScript_RouteSign"
+    },
+    {
+      "type": "hidden_item",
+      "x": 32,
+      "y": 6,
+      "elevation": 3,
+      "item": "ITEM_CAMERUPTITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_CAMERUPTITE"
     }
   ]
 }

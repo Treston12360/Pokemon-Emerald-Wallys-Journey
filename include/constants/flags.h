@@ -664,94 +664,94 @@
 #define FLAG_HIDDEN_ITEM_ROUTE_123_RARE_CANDY                (FLAG_HIDDEN_ITEMS_START + 0x6E)
 #define FLAG_HIDDEN_ITEM_ROUTE_105_BIG_PEARL                 (FLAG_HIDDEN_ITEMS_START + 0x6F)
 
-#define FLAG_UNUSED_0x264  0x264 // Unused Flag
-#define FLAG_UNUSED_0x265  0x265 // Unused Flag
-#define FLAG_UNUSED_0x266  0x266 // Unused Flag
-#define FLAG_UNUSED_0x267  0x267 // Unused Flag
-#define FLAG_UNUSED_0x268  0x268 // Unused Flag
-#define FLAG_UNUSED_0x269  0x269 // Unused Flag
-#define FLAG_UNUSED_0x26A  0x26A // Unused Flag
-#define FLAG_UNUSED_0x26B  0x26B // Unused Flag
-#define FLAG_UNUSED_0x26C  0x26C // Unused Flag
-#define FLAG_UNUSED_0x26D  0x26D // Unused Flag
-#define FLAG_UNUSED_0x26E  0x26E // Unused Flag
-#define FLAG_UNUSED_0x26F  0x26F // Unused Flag
-#define FLAG_UNUSED_0x270  0x270 // Unused Flag
-#define FLAG_UNUSED_0x271  0x271 // Unused Flag
-#define FLAG_UNUSED_0x272  0x272 // Unused Flag
-#define FLAG_UNUSED_0x273  0x273 // Unused Flag
-#define FLAG_UNUSED_0x274  0x274 // Unused Flag
-#define FLAG_UNUSED_0x275  0x275 // Unused Flag
-#define FLAG_UNUSED_0x276  0x276 // Unused Flag
-#define FLAG_UNUSED_0x277  0x277 // Unused Flag
-#define FLAG_UNUSED_0x278  0x278 // Unused Flag
-#define FLAG_UNUSED_0x279  0x279 // Unused Flag
-#define FLAG_UNUSED_0x27A  0x27A // Unused Flag
-#define FLAG_UNUSED_0x27B  0x27B // Unused Flag
-#define FLAG_UNUSED_0x27C  0x27C // Unused Flag
-#define FLAG_UNUSED_0x27D  0x27D // Unused Flag
-#define FLAG_UNUSED_0x27E  0x27E // Unused Flag
-#define FLAG_UNUSED_0x27F  0x27F // Unused Flag
-#define FLAG_UNUSED_0x280  0x280 // Unused Flag
-#define FLAG_UNUSED_0x281  0x281 // Unused Flag
-#define FLAG_UNUSED_0x282  0x282 // Unused Flag
-#define FLAG_UNUSED_0x283  0x283 // Unused Flag
-#define FLAG_UNUSED_0x284  0x284 // Unused Flag
-#define FLAG_UNUSED_0x285  0x285 // Unused Flag
-#define FLAG_UNUSED_0x286  0x286 // Unused Flag
-#define FLAG_UNUSED_0x287  0x287 // Unused Flag
-#define FLAG_UNUSED_0x288  0x288 // Unused Flag
-#define FLAG_UNUSED_0x289  0x289 // Unused Flag
-#define FLAG_UNUSED_0x28A  0x28A // Unused Flag
-#define FLAG_UNUSED_0x28B  0x28B // Unused Flag
-#define FLAG_UNUSED_0x28C  0x28C // Unused Flag
-#define FLAG_UNUSED_0x28D  0x28D // Unused Flag
-#define FLAG_UNUSED_0x28E  0x28E // Unused Flag
-#define FLAG_UNUSED_0x28F  0x28F // Unused Flag
-#define FLAG_UNUSED_0x290  0x290 // Unused Flag
-#define FLAG_UNUSED_0x291  0x291 // Unused Flag
-#define FLAG_UNUSED_0x292  0x292 // Unused Flag
-#define FLAG_UNUSED_0x293  0x293 // Unused Flag
-#define FLAG_UNUSED_0x294  0x294 // Unused Flag
-#define FLAG_UNUSED_0x295  0x295 // Unused Flag
-#define FLAG_UNUSED_0x296  0x296 // Unused Flag
-#define FLAG_UNUSED_0x297  0x297 // Unused Flag
-#define FLAG_UNUSED_0x298  0x298 // Unused Flag
-#define FLAG_UNUSED_0x299  0x299 // Unused Flag
-#define FLAG_UNUSED_0x29A  0x29A // Unused Flag
-#define FLAG_UNUSED_0x29B  0x29B // Unused Flag
-#define FLAG_UNUSED_0x29C  0x29C // Unused Flag
-#define FLAG_UNUSED_0x29D  0x29D // Unused Flag
-#define FLAG_UNUSED_0x29E  0x29E // Unused Flag
-#define FLAG_UNUSED_0x29F  0x29F // Unused Flag
-#define FLAG_UNUSED_0x2A0  0x2A0 // Unused Flag
-#define FLAG_UNUSED_0x2A1  0x2A1 // Unused Flag
-#define FLAG_UNUSED_0x2A2  0x2A2 // Unused Flag
-#define FLAG_UNUSED_0x2A3  0x2A3 // Unused Flag
-#define FLAG_UNUSED_0x2A4  0x2A4 // Unused Flag
-#define FLAG_UNUSED_0x2A5  0x2A5 // Unused Flag
-#define FLAG_UNUSED_0x2A6  0x2A6 // Unused Flag
-#define FLAG_UNUSED_0x2A7  0x2A7 // Unused Flag
-#define FLAG_UNUSED_0x2A8  0x2A8 // Unused Flag
-#define FLAG_UNUSED_0x2A9  0x2A9 // Unused Flag
-#define FLAG_UNUSED_0x2AA  0x2AA // Unused Flag
-#define FLAG_UNUSED_0x2AB  0x2AB // Unused Flag
-#define FLAG_UNUSED_0x2AC  0x2AC // Unused Flag
-#define FLAG_UNUSED_0x2AD  0x2AD // Unused Flag
-#define FLAG_UNUSED_0x2AE  0x2AE // Unused Flag
-#define FLAG_UNUSED_0x2AF  0x2AF // Unused Flag
-#define FLAG_UNUSED_0x2B0  0x2B0 // Unused Flag
-#define FLAG_UNUSED_0x2B1  0x2B1 // Unused Flag
-#define FLAG_UNUSED_0x2B2  0x2B2 // Unused Flag
-#define FLAG_UNUSED_0x2B3  0x2B3 // Unused Flag
-#define FLAG_UNUSED_0x2B4  0x2B4 // Unused Flag
-#define FLAG_UNUSED_0x2B5  0x2B5 // Unused Flag
-#define FLAG_UNUSED_0x2B6  0x2B6 // Unused Flag
-#define FLAG_UNUSED_0x2B7  0x2B7 // Unused Flag
-#define FLAG_UNUSED_0x2B8  0x2B8 // Unused Flag
-#define FLAG_UNUSED_0x2B9  0x2B9 // Unused Flag
-#define FLAG_UNUSED_0x2BA  0x2BA // Unused Flag
-#define FLAG_UNUSED_0x2BB  0x2BB // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_VENUSAURITE 0x264 // Wally's Journey: hidden Venusaurite in SafariZone_Northwest
+#define FLAG_HIDDEN_ITEM_WJ_CHARIZARDITE_X 0x265 // Wally's Journey: hidden Charizardite X in FieryPath
+#define FLAG_HIDDEN_ITEM_WJ_CHARIZARDITE_Y 0x266 // Wally's Journey: hidden Charizardite Y in ScorchedSlab
+#define FLAG_HIDDEN_ITEM_WJ_BLASTOISINITE 0x267 // Wally's Journey: hidden Blastoisinite in Underwater_Route124
+#define FLAG_HIDDEN_ITEM_WJ_BEEDRILLITE 0x268 // Wally's Journey: hidden Beedrillite in PetalburgWoods
+#define FLAG_HIDDEN_ITEM_WJ_PIDGEOTITE 0x269 // Wally's Journey: hidden Pidgeotite in Route121
+#define FLAG_HIDDEN_ITEM_WJ_ALAKAZITE 0x26A // Wally's Journey: hidden Alakazite in MirageTower_4F
+#define FLAG_HIDDEN_ITEM_WJ_SLOWBRONITE 0x26B // Wally's Journey: hidden Slowbronite in ShoalCave_LowTideLowerRoom
+#define FLAG_HIDDEN_ITEM_WJ_GENGARITE 0x26C // Wally's Journey: hidden Gengarite in MtPyre_6F
+#define FLAG_HIDDEN_ITEM_WJ_KANGASKHANITE 0x26D // Wally's Journey: hidden Kangaskhanite in SafariZone_Southeast
+#define FLAG_HIDDEN_ITEM_WJ_PINSIRITE 0x26E // Wally's Journey: hidden Pinsirite in SafariZone_North
+#define FLAG_HIDDEN_ITEM_WJ_GYARADOSITE 0x26F // Wally's Journey: hidden Gyaradosite in Underwater_Route126
+#define FLAG_HIDDEN_ITEM_WJ_AERODACTYLITE 0x270 // Wally's Journey: hidden Aerodactylite in DesertRuins
+#define FLAG_HIDDEN_ITEM_WJ_AMPHAROSITE 0x271 // Wally's Journey: hidden Ampharosite in NewMauville_Inside
+#define FLAG_HIDDEN_ITEM_WJ_STEELIXITE 0x272 // Wally's Journey: hidden Steelixite in GraniteCave_B2F
+#define FLAG_HIDDEN_ITEM_WJ_SCIZORITE 0x273 // Wally's Journey: hidden Scizorite in SafariZone_Northeast
+#define FLAG_HIDDEN_ITEM_WJ_HERACRONITE 0x274 // Wally's Journey: hidden Heracronite in Route119
+#define FLAG_HIDDEN_ITEM_WJ_HOUNDOOMINITE 0x275 // Wally's Journey: hidden Houndoominite in JaggedPass
+#define FLAG_HIDDEN_ITEM_WJ_TYRANITARITE 0x276 // Wally's Journey: hidden Tyranitarite in VictoryRoad_B2F
+#define FLAG_HIDDEN_ITEM_WJ_SABLENITE 0x277 // Wally's Journey: hidden Sablenite in GraniteCave_B1F
+#define FLAG_HIDDEN_ITEM_WJ_MAWILITE 0x278 // Wally's Journey: hidden Mawilite in VictoryRoad_1F
+#define FLAG_HIDDEN_ITEM_WJ_AGGRONITE 0x279 // Wally's Journey: hidden Aggronite in VictoryRoad_B1F
+#define FLAG_HIDDEN_ITEM_WJ_MEDICHAMITE 0x27A // Wally's Journey: hidden Medichamite in MtPyre_Exterior
+#define FLAG_HIDDEN_ITEM_WJ_MANECTITE 0x27B // Wally's Journey: hidden Manectite in NewMauville_Entrance
+#define FLAG_HIDDEN_ITEM_WJ_SHARPEDONITE 0x27C // Wally's Journey: hidden Sharpedonite in Underwater_Route127
+#define FLAG_HIDDEN_ITEM_WJ_CAMERUPTITE 0x27D // Wally's Journey: hidden Cameruptite in MtChimney
+#define FLAG_HIDDEN_ITEM_WJ_ALTARIANITE 0x27E // Wally's Journey: hidden Altarianite in SkyPillar_3F
+#define FLAG_HIDDEN_ITEM_WJ_BANETTITE 0x27F // Wally's Journey: hidden Banettite in MtPyre_4F
+#define FLAG_HIDDEN_ITEM_WJ_ABSOLITE 0x280 // Wally's Journey: hidden Absolite in Route120
+#define FLAG_HIDDEN_ITEM_WJ_GLALITITE 0x281 // Wally's Journey: hidden Glalitite in ShoalCave_LowTideIceRoom
+#define FLAG_HIDDEN_ITEM_WJ_SALAMENCITE 0x282 // Wally's Journey: hidden Salamencite in MeteorFalls_StevensCave
+#define FLAG_HIDDEN_ITEM_WJ_METAGROSSITE 0x283 // Wally's Journey: hidden Metagrossite in SkyPillar_5F
+#define FLAG_HIDDEN_ITEM_WJ_LOPUNNITE 0x284 // Wally's Journey: hidden Lopunnite in SafariZone_South
+#define FLAG_HIDDEN_ITEM_WJ_GARCHOMPITE 0x285 // Wally's Journey: hidden Garchompite in DesertUnderpass
+#define FLAG_HIDDEN_ITEM_WJ_LUCARIONITE 0x286 // Wally's Journey: hidden Lucarionite in SkyPillar_4F
+#define FLAG_HIDDEN_ITEM_WJ_ABOMASITE 0x287 // Wally's Journey: hidden Abomasite in ShoalCave_LowTideStairsRoom
+#define FLAG_HIDDEN_ITEM_WJ_GALLADITE 0x288 // Wally's Journey: hidden Galladite in ArtisanCave_B1F
+#define FLAG_HIDDEN_ITEM_WJ_AUDINITE 0x289 // Wally's Journey: hidden Audinite in Route103
+#define FLAG_HIDDEN_ITEM_WJ_CLEFABLITE 0x28A // Wally's Journey: hidden Clefablite in MeteorFalls_1F_2R
+#define FLAG_HIDDEN_ITEM_WJ_VICTREEBELITE 0x28B // Wally's Journey: hidden Victreebelite in SafariZone_Southwest
+#define FLAG_HIDDEN_ITEM_WJ_STARMINITE 0x28C // Wally's Journey: hidden Starminite in Underwater_Route128
+#define FLAG_HIDDEN_ITEM_WJ_DRAGONINITE 0x28D // Wally's Journey: hidden Dragoninite in SeafloorCavern_Room4
+#define FLAG_HIDDEN_ITEM_WJ_MEGANIUMITE 0x28E // Wally's Journey: hidden Meganiumite in Route123
+#define FLAG_HIDDEN_ITEM_WJ_FERALIGITE 0x28F // Wally's Journey: hidden Feraligite in Route119
+#define FLAG_HIDDEN_ITEM_WJ_SKARMORITE 0x290 // Wally's Journey: hidden Skarmorite in Route113
+#define FLAG_HIDDEN_ITEM_WJ_FROSLASSITE 0x291 // Wally's Journey: hidden Froslassite in ShoalCave_LowTideInnerRoom
+#define FLAG_HIDDEN_ITEM_WJ_EMBOARITE 0x292 // Wally's Journey: hidden Emboarite in Route112
+#define FLAG_HIDDEN_ITEM_WJ_EXCADRITE 0x293 // Wally's Journey: hidden Excadrite in RusturfTunnel
+#define FLAG_HIDDEN_ITEM_WJ_SCOLIPITE 0x294 // Wally's Journey: hidden Scolipite in Route116
+#define FLAG_HIDDEN_ITEM_WJ_SCRAFTINITE 0x295 // Wally's Journey: hidden Scraftinite in Route111
+#define FLAG_HIDDEN_ITEM_WJ_EELEKTROSSITE 0x296 // Wally's Journey: hidden Eelektrossite in Underwater_Route134
+#define FLAG_HIDDEN_ITEM_WJ_CHANDELURITE 0x297 // Wally's Journey: hidden Chandelurite in MtPyre_3F
+#define FLAG_HIDDEN_ITEM_WJ_CHESNAUGHTITE 0x298 // Wally's Journey: hidden Chesnaughtite in Route104
+#define FLAG_HIDDEN_ITEM_WJ_DELPHOXITE 0x299 // Wally's Journey: hidden Delphoxite in Route121
+#define FLAG_HIDDEN_ITEM_WJ_GRENINJITE 0x29A // Wally's Journey: hidden Greninjite in Route124
+#define FLAG_HIDDEN_ITEM_WJ_PYROARITE 0x29B // Wally's Journey: hidden Pyroarite in Route114
+#define FLAG_HIDDEN_ITEM_WJ_FLOETTITE 0x29C // Wally's Journey: hidden Floettite in Route117
+#define FLAG_HIDDEN_ITEM_WJ_MALAMARITE 0x29D // Wally's Journey: hidden Malamarite in Route132
+#define FLAG_HIDDEN_ITEM_WJ_BARBARACITE 0x29E // Wally's Journey: hidden Barbaracite in Route125
+#define FLAG_HIDDEN_ITEM_WJ_DRAGALGITE 0x29F // Wally's Journey: hidden Dragalgite in Route127
+#define FLAG_HIDDEN_ITEM_WJ_HAWLUCHANITE 0x2A0 // Wally's Journey: hidden Hawluchanite in Route118
+#define FLAG_HIDDEN_ITEM_WJ_DRAMPANITE 0x2A1 // Wally's Journey: hidden Drampanite in Route115
+#define FLAG_HIDDEN_ITEM_WJ_FALINKSITE 0x2A2 // Wally's Journey: hidden Falinksite in Route111
+#define FLAG_HIDDEN_ITEM_WJ_RAICHUNITE_X 0x2A3 // Wally's Journey: hidden Raichunite X in Route110
+#define FLAG_HIDDEN_ITEM_WJ_RAICHUNITE_Y 0x2A4 // Wally's Journey: hidden Raichunite Y in Route118
+#define FLAG_HIDDEN_ITEM_WJ_CHIMECHITE 0x2A5 // Wally's Journey: hidden Chimechite in MtPyre_Summit
+#define FLAG_HIDDEN_ITEM_WJ_STARAPTITE 0x2A6 // Wally's Journey: hidden Staraptite in Route119
+#define FLAG_HIDDEN_ITEM_WJ_GOLURKITE 0x2A7 // Wally's Journey: hidden Golurkite in AncientTomb
+#define FLAG_HIDDEN_ITEM_WJ_MEOWSTICITE 0x2A8 // Wally's Journey: hidden Meowsticite in Route106
+#define FLAG_HIDDEN_ITEM_WJ_CRABOMINITE 0x2A9 // Wally's Journey: hidden Crabominite in ShoalCave_LowTideEntranceRoom
+#define FLAG_HIDDEN_ITEM_WJ_GOLISOPITE 0x2AA // Wally's Journey: hidden Golisopite in Underwater_Route125
+#define FLAG_HIDDEN_ITEM_WJ_SCOVILLAINITE 0x2AB // Wally's Journey: hidden Scovillainite in Route111
+#define FLAG_HIDDEN_ITEM_WJ_BAXCALIBRITE 0x2AC // Wally's Journey: hidden Baxcalibrite in IslandCave
+#define FLAG_HIDDEN_ITEM_WJ_TATSUGIRINITE 0x2AD // Wally's Journey: hidden Tatsugirinite in Underwater_Route129
+#define FLAG_HIDDEN_ITEM_WJ_GLIMMORANITE 0x2AE // Wally's Journey: hidden Glimmoranite in ArtisanCave_1F
+#define FLAG_HIDDEN_ITEM_WJ_LATIASITE 0x2AF // Wally's Journey: hidden Latiasite in SouthernIsland_Interior
+#define FLAG_HIDDEN_ITEM_WJ_LATIOSITE 0x2B0 // Wally's Journey: hidden Latiosite in SouthernIsland_Interior
+#define FLAG_HIDDEN_ITEM_WJ_NORMALIUM_Z 0x2B1 // Wally's Journey: hidden Normalium Z in Route121
+#define FLAG_HIDDEN_ITEM_WJ_FIRIUM_Z 0x2B2 // Wally's Journey: hidden Firium Z in FieryPath
+#define FLAG_HIDDEN_ITEM_WJ_WATERIUM_Z 0x2B3 // Wally's Journey: hidden Waterium Z in Route124
+#define FLAG_HIDDEN_ITEM_WJ_ELECTRIUM_Z 0x2B4 // Wally's Journey: hidden Electrium Z in NewMauville_Inside
+#define FLAG_HIDDEN_ITEM_WJ_GRASSIUM_Z 0x2B5 // Wally's Journey: hidden Grassium Z in SafariZone_Northwest
+#define FLAG_HIDDEN_ITEM_WJ_ICIUM_Z 0x2B6 // Wally's Journey: hidden Icium Z in ShoalCave_LowTideIceRoom
+#define FLAG_HIDDEN_ITEM_WJ_FIGHTINIUM_Z 0x2B7 // Wally's Journey: hidden Fightinium Z in VictoryRoad_1F
+#define FLAG_HIDDEN_ITEM_WJ_POISONIUM_Z 0x2B8 // Wally's Journey: hidden Poisonium Z in SafariZone_Southwest
+#define FLAG_HIDDEN_ITEM_WJ_GROUNDIUM_Z 0x2B9 // Wally's Journey: hidden Groundium Z in DesertRuins
+#define FLAG_HIDDEN_ITEM_WJ_FLYINIUM_Z 0x2BA // Wally's Journey: hidden Flyinium Z in SkyPillar_2F
+#define FLAG_HIDDEN_ITEM_WJ_PSYCHIUM_Z 0x2BB // Wally's Journey: hidden Psychium Z in MtPyre_Summit
 
 // Event Flags
 #define FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG                      0x2BC
@@ -776,7 +776,7 @@
 #define FLAG_HIDE_MOSSDEEP_CITY_STEVENS_HOUSE_INVISIBLE_NINJA_BOY   0x2D7
 #define FLAG_HIDE_PETALBURG_CITY_WALLYS_MOM                         0x2D8
 
-#define FLAG_UNUSED_0x2D9                                           0x2D9 // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_BUGINIUM_Z 0x2D9 // Wally's Journey: hidden Buginium Z in Route120
 
 #define FLAG_HIDE_LILYCOVE_FAN_CLUB_INTERVIEWER                     0x2DA
 #define FLAG_HIDE_RUSTBORO_CITY_AQUA_GRUNT                          0x2DB
@@ -1178,7 +1178,7 @@
 #define FLAG_ITEM_OLD_MAGMA_HIDEOUT_B1F_MASTER_BALL                 0x465 // Unused Flag, leftover from the Ruby Magma hideout
 #define FLAG_ITEM_OLD_MAGMA_HIDEOUT_B1F_MAX_ELIXIR                  0x466 // Unused Flag, leftover from the Ruby Magma hideout
 #define FLAG_ITEM_OLD_MAGMA_HIDEOUT_B2F_NEST_BALL                   0x467 // Unused Flag, leftover from the Ruby Magma hideout
-#define FLAG_UNUSED_0x468                                           0x468 // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_ROCKIUM_Z 0x468 // Wally's Journey: hidden Rockium Z in GraniteCave_B2F
 #define FLAG_ITEM_MT_PYRE_2F_ULTRA_BALL                             0x469
 #define FLAG_ITEM_MT_PYRE_4F_SEA_INCENSE                            0x46A
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE                 0x46B
@@ -1186,16 +1186,16 @@
 #define FLAG_ITEM_MOSSDEEP_STEVENS_HOUSE_HM08                       0x46D // Unused Flag, leftover from R/S. HM08 is given to the player directly in Emerald
 #define FLAG_ITEM_ROUTE_119_NUGGET                                  0x46E
 #define FLAG_ITEM_ROUTE_104_POTION                                  0x46F
-#define FLAG_UNUSED_0x470                                           0x470 // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_GHOSTIUM_Z 0x470 // Wally's Journey: hidden Ghostium Z in MtPyre_5F
 #define FLAG_ITEM_ROUTE_103_PP_UP                                   0x471
-#define FLAG_UNUSED_0x472                                           0x472 // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_DRAGONIUM_Z 0x472 // Wally's Journey: hidden Dragonium Z in MeteorFalls_B1F_1R
 #define FLAG_ITEM_ROUTE_108_STAR_PIECE                              0x473
 #define FLAG_ITEM_ROUTE_109_POTION                                  0x474
 #define FLAG_ITEM_ROUTE_110_ELIXIR                                  0x475
 #define FLAG_ITEM_ROUTE_111_ELIXIR                                  0x476
 #define FLAG_ITEM_ROUTE_113_HYPER_POTION                            0x477
 #define FLAG_ITEM_ROUTE_115_HEAL_POWDER                             0x478
-#define FLAG_UNUSED_0x479                                           0x479 // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_DARKINIUM_Z 0x479 // Wally's Journey: hidden Darkinium Z in AbandonedShip_HiddenFloorRooms
 #define FLAG_ITEM_ROUTE_116_POTION                                  0x47A
 #define FLAG_ITEM_ROUTE_119_ELIXIR_2                                0x47B
 #define FLAG_ITEM_ROUTE_120_REVIVE                                  0x47C
@@ -1222,8 +1222,8 @@
 #define FLAG_ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET                     0x491
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL                  0x492
 
-#define FLAG_UNUSED_0x493                                           0x493 // Unused Flag
-#define FLAG_UNUSED_0x494                                           0x494 // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_STEELIUM_Z 0x493 // Wally's Journey: hidden Steelium Z in AncientTomb
+#define FLAG_HIDDEN_ITEM_WJ_FAIRIUM_Z 0x494 // Wally's Journey: hidden Fairium Z in Route123
 #define FLAG_UNUSED_0x495                                           0x495 // Unused Flag
 #define FLAG_UNUSED_0x496                                           0x496 // Unused Flag
 #define FLAG_UNUSED_0x497                                           0x497 // Unused Flag

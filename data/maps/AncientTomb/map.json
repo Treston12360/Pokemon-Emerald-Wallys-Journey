@@ -77,6 +77,22 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "AncientTomb_EventScript_CaveEntranceSide"
+    },
+    {
+      "type": "hidden_item",
+      "x": 4,
+      "y": 3,
+      "elevation": 3,
+      "item": "ITEM_GOLURKITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GOLURKITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 12,
+      "y": 3,
+      "elevation": 3,
+      "item": "ITEM_STEELIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_STEELIUM_Z"
     }
   ]
 }

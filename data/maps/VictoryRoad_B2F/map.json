@@ -154,6 +154,14 @@
       "elevation": 3,
       "item": "ITEM_MAX_REPEL",
       "flag": "FLAG_HIDDEN_ITEM_VICTORY_ROAD_B2F_MAX_REPEL"
+    },
+    {
+      "type": "hidden_item",
+      "x": 4,
+      "y": 3,
+      "elevation": 1,
+      "item": "ITEM_TYRANITARITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_TYRANITARITE"
     }
   ]
 }

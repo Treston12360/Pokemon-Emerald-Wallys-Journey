@@ -221,5 +221,14 @@
       "script": "RusturfTunnel_EventScript_TunnelBlockagePos3"
     }
   ],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 21,
+      "y": 4,
+      "elevation": 3,
+      "item": "ITEM_EXCADRITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_EXCADRITE"
+    }
+  ]
 }

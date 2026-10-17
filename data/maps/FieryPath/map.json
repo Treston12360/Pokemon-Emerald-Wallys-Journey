@@ -137,5 +137,22 @@
     }
   ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 20,
+      "elevation": 3,
+      "item": "ITEM_CHARIZARDITE_X",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_CHARIZARDITE_X"
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 19,
+      "elevation": 3,
+      "item": "ITEM_FIRIUM_Z",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_FIRIUM_Z"
+    }
+  ]
 }

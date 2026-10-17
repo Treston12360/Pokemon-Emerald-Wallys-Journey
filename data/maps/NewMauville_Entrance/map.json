@@ -42,5 +42,14 @@
       "script": "NewMauville_Entrance_EventScript_Door"
     }
   ],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 3,
+      "elevation": 3,
+      "item": "ITEM_MANECTITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_MANECTITE"
+    }
+  ]
 }

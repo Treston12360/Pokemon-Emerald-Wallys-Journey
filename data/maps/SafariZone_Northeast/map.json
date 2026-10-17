@@ -162,6 +162,14 @@
       "elevation": 3,
       "item": "ITEM_ZINC",
       "flag": "FLAG_HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_ZINC"
+    },
+    {
+      "type": "hidden_item",
+      "x": 2,
+      "y": 1,
+      "elevation": 3,
+      "item": "ITEM_SCIZORITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_SCIZORITE"
     }
   ]
 }

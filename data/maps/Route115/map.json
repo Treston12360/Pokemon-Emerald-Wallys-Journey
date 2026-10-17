@@ -451,6 +451,14 @@
       "elevation": 3,
       "item": "ITEM_HEART_SCALE",
       "flag": "FLAG_HIDDEN_ITEM_ROUTE_115_HEART_SCALE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 1,
+      "y": 78,
+      "elevation": 1,
+      "item": "ITEM_DRAMPANITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_DRAMPANITE"
     }
   ]
 }
