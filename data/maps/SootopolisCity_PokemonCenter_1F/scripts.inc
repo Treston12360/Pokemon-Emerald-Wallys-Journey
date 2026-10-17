@@ -52,18 +52,26 @@ SootopolisCity_PokemonCenter_1F_Text_WallaceToughestInHoenn:
 	.string "water from one pool to the next.$"
 
 SootopolisCity_PokemonCenter_1F_Text_EveryoneTakenRefuge:
-	.string "Everyone in town has taken refuge\n"
-	.string "and won't come out of their homes.\p"
-	.string "Even I would rather not venture\n"
-	.string "outside.$"
+	.string "We moved everyone we could\n"
+	.string "into the lower rooms.\p"
+	.string "Some people brought POKéMON.\n"
+	.string "Others left everything behind.\p"
+	.string "The nurses are sharing food\n"
+	.string "and checking every name.$"
 
 SootopolisCity_PokemonCenter_1F_Text_AlwaysBeFriendsWithPokemon:
-	.string "Whenever, wherever, and whatever\n"
-	.string "happens, I will always be friends with\l"
-	.string "POKéMON.\p"
-	.string "Because it's fun to be with POKéMON!$"
+	.string "People asked if I was afraid\n"
+	.string "of my own POKéMON.\p"
+	.string "Of course I was frightened.\n"
+	.string "But my partner was, too.\p"
+	.string "We stayed together.\n"
+	.string "That's what friendship means.$"
 
 SootopolisCity_PokemonCenter_1F_Text_ArentPokemonOurFriends:
-	.string "Aren't POKéMON our friends?\p"
-	.string "Why are they going wild this way?$"
+	.string "How can two POKéMON cause\n"
+	.string "so much suffering?\p"
+	.string "I know they're frightened\n"
+	.string "and confused, too.\p"
+	.string "But knowing that doesn't\n"
+	.string "make the danger smaller.$"
 
