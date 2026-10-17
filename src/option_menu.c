@@ -92,6 +92,9 @@ static const u8 gText_Option[]             = _("OPTION");
 static const u8 gText_TextSpeedSlow[]      = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SLOW");
 static const u8 gText_TextSpeedMid[]       = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MID");
 static const u8 gText_TextSpeedFast[]      = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}FAST");
+static const u8 gText_TextSpeedInstant[]   = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}INSTANT");
+static const u8 gText_ArrowLeft[]          = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}<");
+static const u8 gText_ArrowRight[]         = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}>");
 static const u8 gText_BattleSceneOn[]      = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}ON");
 static const u8 gText_BattleSceneOff[]     = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}OFF");
 static const u8 gText_BattleStyleShift[]   = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SHIFT");
@@ -449,22 +452,16 @@ static void DrawOptionMenuChoice(const u8 *text, u8 x, u8 y, u8 style)
 
 static u8 TextSpeed_ProcessInput(u8 selection)
 {
+    // Wally's Journey: SLOW / MID / FAST / INSTANT. INSTANT is the in-ROM
+    // speed-up; it never touches music, unlike emulator fast-forward.
     if (JOY_NEW(DPAD_RIGHT))
     {
-        if (selection <= 1)
-            selection++;
-        else
-            selection = 0;
-
+        selection = (selection < OPTIONS_TEXT_SPEED_INSTANT) ? selection + 1 : 0;
         sArrowPressed = TRUE;
     }
     if (JOY_NEW(DPAD_LEFT))
     {
-        if (selection != 0)
-            selection--;
-        else
-            selection = 2;
-
+        selection = (selection != 0) ? selection - 1 : OPTIONS_TEXT_SPEED_INSTANT;
         sArrowPressed = TRUE;
     }
     return selection;
@@ -472,25 +469,14 @@ static u8 TextSpeed_ProcessInput(u8 selection)
 
 static void TextSpeed_DrawChoices(u8 selection)
 {
-    u8 styles[3];
-    s32 widthSlow, widthMid, widthFast, xMid;
-
-    styles[0] = 0;
-    styles[1] = 0;
-    styles[2] = 0;
-    styles[selection] = 1;
-
-    DrawOptionMenuChoice(gText_TextSpeedSlow, 104, YPOS_TEXTSPEED, styles[0]);
-
-    widthSlow = GetStringWidth(FONT_NORMAL, gText_TextSpeedSlow, 0);
-    widthMid = GetStringWidth(FONT_NORMAL, gText_TextSpeedMid, 0);
-    widthFast = GetStringWidth(FONT_NORMAL, gText_TextSpeedFast, 0);
-
-    widthMid -= 94;
-    xMid = (widthSlow - widthMid - widthFast) / 2 + 104;
-    DrawOptionMenuChoice(gText_TextSpeedMid, xMid, YPOS_TEXTSPEED, styles[1]);
-
-    DrawOptionMenuChoice(gText_TextSpeedFast, GetStringRightAlignXOffset(FONT_NORMAL, gText_TextSpeedFast, 198), YPOS_TEXTSPEED, styles[2]);
+    // Four speeds don't fit side by side, so show the current one between arrows.
+    static const u8 *const sNames[] = {gText_TextSpeedSlow, gText_TextSpeedMid, gText_TextSpeedFast, gText_TextSpeedInstant};
+    if (selection > OPTIONS_TEXT_SPEED_INSTANT)
+        selection = OPTIONS_TEXT_SPEED_FAST;
+    FillWindowPixelRect(WIN_OPTIONS, PIXEL_FILL(1), 104, YPOS_TEXTSPEED, 96, 16);
+    DrawOptionMenuChoice(gText_ArrowLeft, 104, YPOS_TEXTSPEED, 0);
+    DrawOptionMenuChoice(sNames[selection], 116, YPOS_TEXTSPEED, 1);
+    DrawOptionMenuChoice(gText_ArrowRight, 190, YPOS_TEXTSPEED, 0);
 }
 
 static u8 BattleScene_ProcessInput(u8 selection)
