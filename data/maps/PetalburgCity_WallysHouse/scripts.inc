@@ -139,17 +139,19 @@ PetalburgCity_WallysHouse_Text_NoHmSurf:
 	.string "across water. Best of luck!$"
 
 
-@ Steven awards a Mega Ring and the stone matching the starter chosen on Route 101.
-@ The bag-item check also makes the event work for existing save files.
+@ Wally's Journey: after the player beats Norman, Steven waits in Wally's house
+@ and gives the Mega Bracelet plus the Mega Stone for the chosen starter.
+@ Item checks keep the scene safe if the Bag was full the first time.
 WallyJourney_EventScript_StevenMegaGift::
 	lock
 	faceplayer
-	goto_if_unset FLAG_BADGE05_GET, WallyJourney_StevenMega_NotYet
+	goto_if_set FLAG_RECEIVED_MEGA_BRACELET, WallyJourney_StevenMega_AfterGift
 	checkitem ITEM_MEGA_RING
 	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_CheckStarter
 	msgbox WallyJourney_StevenMega_Intro, MSGBOX_DEFAULT
 	giveitem ITEM_MEGA_RING
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	msgbox WallyJourney_StevenMega_Stone, MSGBOX_DEFAULT
 
 WallyJourney_StevenMega_CheckStarter::
 	goto_if_eq VAR_STARTER_MON, 0, WallyJourney_StevenMega_Treecko
@@ -158,24 +160,26 @@ WallyJourney_StevenMega_CheckStarter::
 
 WallyJourney_StevenMega_Treecko::
 	checkitem ITEM_SCEPTILITE
-	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_AfterGift
+	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_Finish
 	giveitem ITEM_SCEPTILITE
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	goto WallyJourney_StevenMega_Finish
 
 WallyJourney_StevenMega_Torchic::
 	checkitem ITEM_BLAZIKENITE
-	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_AfterGift
+	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_Finish
 	giveitem ITEM_BLAZIKENITE
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	goto WallyJourney_StevenMega_Finish
 
 WallyJourney_StevenMega_Mudkip::
 	checkitem ITEM_SWAMPERTITE
-	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_AfterGift
+	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_Finish
 	giveitem ITEM_SWAMPERTITE
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 WallyJourney_StevenMega_Finish::
+	setflag FLAG_RECEIVED_MEGA_BRACELET
+	setflag FLAG_HIDE_WALLYS_HOUSE_STEVEN
 	msgbox WallyJourney_StevenMega_End, MSGBOX_DEFAULT
 	release
 	end
@@ -185,27 +189,32 @@ WallyJourney_StevenMega_AfterGift::
 	release
 	end
 
-WallyJourney_StevenMega_NotYet::
-	msgbox WallyJourney_StevenMega_BeforeText, MSGBOX_DEFAULT
-	release
-	end
-
-WallyJourney_StevenMega_BeforeText:
-	.string "STEVEN: Keep training with your\n"
-	.string "POKéMON. We'll speak again once\n"
-	.string "you've earned five BADGES.$"
-
 WallyJourney_StevenMega_Intro:
-	.string "STEVEN: You defeated NORMAN!\p"
-	.string "You've earned this MEGA RING,\n"
-	.string "and a stone for your first partner.\p"
-	.string "Together, you can reach new heights!$"
+	.string "STEVEN: {PLAYER}! I heard you\n"
+	.string "defeated your father, NORMAN.\p"
+	.string "When we first met, you were just\n"
+	.string "starting out. Look at you now.\p"
+	.string "You've grown so much as a TRAINER.\p"
+	.string "While I was traveling in another\n"
+	.string "region, I came across this.\p"
+	.string "I believe it can help you and your\n"
+	.string "POKéMON reach new heights.$"
+
+WallyJourney_StevenMega_Stone:
+	.string "STEVEN: A MEGA BRACELET is only\n"
+	.string "half of it. Your partner needs a\l"
+	.string "MEGA STONE that answers its call.\p"
+	.string "I found one that suits the POKéMON\n"
+	.string "you started your journey with.$"
 
 WallyJourney_StevenMega_End:
-	.string "STEVEN: Give the stone to your\n"
-	.string "starter's final evolution.\p"
-	.string "The MEGA RING will respond when\n"
-	.string "you battle together!$"
+	.string "STEVEN: Have your first partner\n"
+	.string "hold that stone once it's fully\l"
+	.string "evolved.\p"
+	.string "When your bond is strong enough,\n"
+	.string "the bracelet will respond.\p"
+	.string "I look forward to seeing how far\n"
+	.string "you'll go. Until next time!$"
 
 WallyJourney_StevenMega_AfterText:
 	.string "STEVEN: Your bond with your\n"

@@ -53,8 +53,8 @@
 
 #define FLAG_WALLY_EXP_ALL_MODE   0x20 // Wally's Journey: Options menu EXP ALL (set) vs EXP SHARE (clear)
 #define FLAG_WALLY_Z_MOVES_OFF    0x21 // Wally's Journey: Options menu Z-MOVES OFF (set) vs ON (clear)
-#define FLAG_UNUSED_0x022    0x22 // Unused Flag
-#define FLAG_UNUSED_0x023    0x23 // Unused Flag
+#define FLAG_HIDE_WALLYS_HOUSE_STEVEN 0x22 // Wally's Journey: Steven waits in Wally's house after Norman
+#define FLAG_RECEIVED_MEGA_BRACELET   0x23 // Wally's Journey: Steven gave the Mega Bracelet
 #define FLAG_UNUSED_0x024    0x24 // Unused Flag
 #define FLAG_UNUSED_0x025    0x25 // Unused Flag
 #define FLAG_UNUSED_0x026    0x26 // Unused Flag
