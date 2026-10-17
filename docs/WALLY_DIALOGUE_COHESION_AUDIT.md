@@ -28,7 +28,18 @@
 6. **Verdanturf family:** gave Wally's existing aunt and uncle conversations post-player-Champion branches; they no longer call Wally the current Champion after his defeat.
 7. **Sootopolis crisis:** revised existing Maxie, Archie, and Steven dialogue so their motives, responsibility, Primal danger and Wallace's legend connect more credibly.
 8. **Drake:** removed the premature assertion that Wally has already learned humility before the player's Champion battle; his advice now foreshadows that growth.
-9. **Story bible and Juan's house comment:** corrected obsolete pre-Gym title broadcast timing and outdated optional-battle language. Older design history remains marked as superseded.
+9. **Norman and Petalburg School Kid:** fixed extra conversations that still called Wally the current Champion after the player had defeated him; corrected Norman's Surf explanation to match badge/HM permission without teaching.
+10. **Rustboro Cutter's house:** reworded the active CUT advice so it no longer contradicts the no-HM-teaching feature.
+11. **Story bible and Juan's house comment:** corrected obsolete pre-Gym title broadcast timing and outdated optional-battle language. Older design history remains marked as superseded.
+
+## Region-wide dialogue source inventory
+
+The first automated inventory reviewed **974 script files and 8,324 labeled dialogue blocks** in map/common scripts. It surfaced **24 candidate blocks mentioning both a Champion and Wally or Wallace**, and **31 candidate HM-gift wording blocks** (some are original FireRed/LeafGreen strings or unused historical labels). The inventory is a finding aid, not runtime coverage.
+
+- Verified that Cave of Origin and Juan's Sootopolis-Gym speeches call Wallace Champion **before** the post-Badge-8 title broadcast.
+- Verified that Verdanturf's main-town NPC and Petalburg's outdoor Wally's mother already had separate post-player-Champion branches.
+- Corrected missing post-player-Champion branches in Wally's own house, Wanda's house, and Petalburg House 2. Norman's postgame Gym conversation was also corrected.
+- Confirmed that the original extra HM-gift text in Rustboro Cutter's house, Mauville's Rock Smash Dude house and Steven's Mossdeep home is mostly retained as unused historical labels rather than active new gifts; rewrote Cutter's actively callable help dialogue.
 
 ## Consistency checks completed at source level
 
