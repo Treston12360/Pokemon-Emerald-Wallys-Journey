@@ -69,7 +69,7 @@ for starter in STARTER_SPECIES:
 
 # Catch accidental rollback of the expanded Gen 1-9 habitat tables.
 # Feebas uses the special 10% Route 119 Good Rod hook, not a JSON slot.
-MIN_WILD_SPECIES = 439
+MIN_WILD_SPECIES = 468
 if len(species) < MIN_WILD_SPECIES:
     errors.append(f"Wild roster fell from at least {MIN_WILD_SPECIES} species to {len(species)}")
 
@@ -91,6 +91,36 @@ EXPANSION_SPECIES = (
     "SPECIES_CARRACOSTA", "SPECIES_WUGTRIO", "SPECIES_PALAFIN",
     "SPECIES_SWANNA", "SPECIES_GRAPPLOCT", "SPECIES_BARRASKEWDA",
     "SPECIES_STARMIE",
+    # Additional habitat-based species introduced by Wally Journey.
+    "SPECIES_PACHIRISU",
+    "SPECIES_DRIFLOON",
+    "SPECIES_HAPPINY",
+    "SPECIES_CHATOT",
+    "SPECIES_SPIRITOMB",
+    "SPECIES_SKORUPI",
+    "SPECIES_SNOVER",
+    "SPECIES_PATRAT",
+    "SPECIES_PURRLOIN",
+    "SPECIES_PIDOVE",
+    "SPECIES_BLITZLE",
+    "SPECIES_AUDINO",
+    "SPECIES_VENIPEDE",
+    "SPECIES_MARACTUS",
+    "SPECIES_SCRAGGY",
+    "SPECIES_DARUMAKA",
+    "SPECIES_TRUBBISH",
+    "SPECIES_EMOLGA",
+    "SPECIES_ELGYEM",
+    "SPECIES_CUBCHOO",
+    "SPECIES_CRYOGONAL",
+    "SPECIES_MIENFOO",
+    "SPECIES_DRUDDIGON",
+    "SPECIES_BOUFFALANT",
+    "SPECIES_VULLABY",
+    "SPECIES_HEATMOR",
+    "SPECIES_DURANT",
+    "SPECIES_DRAMPA",
+    "SPECIES_SILICOBRA",
 )
 for mon in EXPANSION_SPECIES:
     if mon not in species:
