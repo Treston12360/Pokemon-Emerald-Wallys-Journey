@@ -137,3 +137,70 @@ PetalburgCity_WallysHouse_Text_NoHmSurf:
 	.string "You've grown into a fine TRAINER!\p"
 	.string "The BALANCE BADGE lets you SURF\n"
 	.string "across water. Best of luck!$"
+
+
+@ Steven awards a Mega Ring and the stone matching the starter chosen on Route 101.
+@ The bag-item check also makes the event work for existing save files.
+WallyJourney_EventScript_StevenMegaGift::
+	lock
+	faceplayer
+	goto_if_unset FLAG_BADGE05_GET, WallyJourney_StevenMega_NotYet
+	checkitem ITEM_MEGA_RING
+	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_AfterGift
+	msgbox WallyJourney_StevenMega_Intro, MSGBOX_DEFAULT
+	giveitem ITEM_MEGA_RING
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	compare VAR_STARTER_MON, 0
+	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_Treecko
+	compare VAR_STARTER_MON, 1
+	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_Torchic
+	goto WallyJourney_StevenMega_Mudkip
+
+WallyJourney_StevenMega_Treecko::
+	giveitem ITEM_SCEPTILITE
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	goto WallyJourney_StevenMega_Finish
+
+WallyJourney_StevenMega_Torchic::
+	giveitem ITEM_BLAZIKENITE
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	goto WallyJourney_StevenMega_Finish
+
+WallyJourney_StevenMega_Mudkip::
+	giveitem ITEM_SWAMPERTITE
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+WallyJourney_StevenMega_Finish::
+	msgbox WallyJourney_StevenMega_End, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_StevenMega_AfterGift::
+	msgbox WallyJourney_StevenMega_AfterText, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_StevenMega_NotYet::
+	msgbox WallyJourney_StevenMega_BeforeText, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_StevenMega_BeforeText:
+	.string "STEVEN: Keep training with your\n"
+	.string "POKéMON. We'll speak again once\n"
+	.string "you've earned five BADGES.$"
+
+WallyJourney_StevenMega_Intro:
+	.string "STEVEN: You defeated NORMAN!\p"
+	.string "You've earned this MEGA RING,\n"
+	.string "and a stone for your first partner.\p"
+	.string "Together, you can reach new heights!$"
+
+WallyJourney_StevenMega_End:
+	.string "STEVEN: Give the stone to your\n"
+	.string "starter's final evolution.\p"
+	.string "The MEGA RING will respond when\n"
+	.string "you battle together!$"
+
+WallyJourney_StevenMega_AfterText:
+	.string "STEVEN: Your bond with your\n"
+	.string "POKéMON is your greatest strength!$"
