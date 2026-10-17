@@ -53,12 +53,11 @@ RusturfTunnel_EventScript_ClearTunnelScene::
 	call_if_eq VAR_TEMP_1, 2, RusturfTunnel_EventScript_FaceWandasBoyfriend2
 	call_if_eq VAR_TEMP_1, 3, RusturfTunnel_EventScript_FaceWandasBoyfriend3
 	call RusturfTunnel_EventScript_WandasBoyfriendNotice
-	msgbox RusturfTunnel_Text_YouShatteredBoulderTakeHM, MSGBOX_DEFAULT
+	msgbox RusturfTunnel_Text_NoHmThanks, MSGBOX_DEFAULT
 	call_if_eq VAR_TEMP_1, 2, RusturfTunnel_EventScript_WandasBoyfriendApproachPlayer
 	call_if_eq VAR_TEMP_1, 3, RusturfTunnel_EventScript_WandasBoyfriendApproachPlayer
-	giveitem ITEM_HM_STRENGTH
 	setflag FLAG_RECEIVED_HM_STRENGTH
-	msgbox RusturfTunnel_Text_ExplainStrength, MSGBOX_DEFAULT
+	msgbox RusturfTunnel_Text_NoHmStrength, MSGBOX_DEFAULT
 	closemessage
 	call_if_eq VAR_TEMP_1, 1, RusturfTunnel_EventScript_BoyfriendApproachWanda1
 	call_if_eq VAR_TEMP_1, 2, RusturfTunnel_EventScript_BoyfriendApproachWanda2
@@ -525,3 +524,12 @@ RusturfTunnel_Text_MikePostBattle:
 	.string "protect POKéMON, right?\l"
 	.string "There's a feel-good story!$"
 
+
+RusturfTunnel_Text_NoHmThanks:
+	.string "You cleared the boulders!\p"
+	.string "Now WANDA and I can finally meet!$"
+
+RusturfTunnel_Text_NoHmStrength:
+	.string "With the HEAT BADGE, you can\n"
+	.string "move heavy rocks using STRENGTH.\p"
+	.string "Thank you for your help!$"
