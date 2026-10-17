@@ -14431,7 +14431,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_LILEEP
 Level: 25
@@ -14473,7 +14473,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_RELICANTH @ ITEM_HARD_STONE
 Level: 55
@@ -14523,7 +14523,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_TYRANITAR @ ITEM_QUICK_CLAW
 Level: 60
@@ -14581,7 +14581,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_TYRANITAR @ ITEM_CHOICE_BAND
 Level: 65
@@ -14639,7 +14639,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_MEDITITE @ ITEM_SALAC_BERRY
 Level: 31
@@ -14681,7 +14681,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_HITMONCHAN @ ITEM_BLACK_BELT
 Level: 55
@@ -14731,7 +14731,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_POLIWRATH @ ITEM_SALAC_BERRY
 Level: 60
@@ -14789,7 +14789,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_HITMONTOP @ ITEM_LUM_BERRY
 Level: 65
@@ -14847,7 +14847,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_PLUSLE
 Level: 34
@@ -14897,7 +14897,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_RAICHU @ ITEM_MYSTIC_WATER
 Level: 55
@@ -14947,7 +14947,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_PLUSLE @ ITEM_PETAYA_BERRY
 Level: 60
@@ -15005,7 +15005,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_RAICHU @ ITEM_MYSTIC_WATER
 Level: 65
@@ -15063,7 +15063,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_NINETALES
 Level: 39
@@ -15113,7 +15113,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_MAGCARGO @ ITEM_QUICK_CLAW
 Level: 55
@@ -15171,7 +15171,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_CHARIZARD @ ITEM_CHARCOAL
 Level: 60
@@ -15229,7 +15229,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_ARCANINE @ ITEM_CHARCOAL
 Level: 65
@@ -15287,7 +15287,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_DELCATTY
 Level: 50
@@ -15345,7 +15345,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_AIPOM @ ITEM_WIKI_BERRY
 Level: 55
@@ -15403,7 +15403,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_TAUROS @ ITEM_LUM_BERRY
 Level: 60
@@ -15461,7 +15461,7 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_SLAKING @ ITEM_LEFTOVERS
 Level: 65
@@ -15522,7 +15522,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer / Risky
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_CROBAT
 Level: 48
@@ -15580,7 +15580,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer / Risky
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_XATU @ ITEM_MIRACLE_SEED
 Level: 55
@@ -15638,7 +15638,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer / Risky
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_CROBAT @ ITEM_LEFTOVERS
 Level: 60
@@ -15696,7 +15696,7 @@ Gender: Female
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer / Risky
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_DRAGONITE @ ITEM_LEFTOVERS
 Level: 65
@@ -15754,7 +15754,7 @@ Gender: Male
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
 SPECIES_LUNATONE @ ITEM_SITRUS_BERRY
 Level: 50
@@ -15812,7 +15812,7 @@ Gender: Male
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
 SPECIES_MEDICHAM @ ITEM_MEDICHAMITE
 Level: 55
@@ -15870,7 +15870,7 @@ Gender: Male
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
 SPECIES_SLOWKING @ ITEM_CHESTO_BERRY
 Level: 60
@@ -15928,7 +15928,7 @@ Gender: Male
 Music: Female
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
-AI: Basic Trainer
+AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
 SPECIES_CLAYDOL @ ITEM_QUICK_CLAW
 Level: 65
