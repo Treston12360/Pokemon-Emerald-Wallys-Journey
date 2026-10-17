@@ -171,9 +171,12 @@ VictoryRoad_1F_Text_EdgarDefeat:
 	.string "My dream ends here again…$"
 
 VictoryRoad_1F_Text_EdgarPostBattle:
-	.string "You've made it this far. Keep the\n"
-	.string "momentum going and become the\l"
-	.string "CHAMPION! If anyone can, it's you!$"
+	.string "I've tried this road before.\n"
+	.string "Every time, I turn back.\p"
+	.string "Today I reached farther.\n"
+	.string "You helped me see that.\p"
+	.string "Go on. I'll follow when\n"
+	.string "I'm ready.$"
 
 VictoryRoad_1F_Text_AlbertIntro:
 	.string "I didn't come all this way to lose now.\n"
@@ -184,9 +187,12 @@ VictoryRoad_1F_Text_AlbertDefeat:
 	.string "I lost?$"
 
 VictoryRoad_1F_Text_AlbertPostBattle:
-	.string "I lost here…\p"
-	.string "That means I lack the qualifications\n"
-	.string "to become the CHAMPION…$"
+	.string "I told myself losing here\n"
+	.string "was impossible.\p"
+	.string "That made me careless.\n"
+	.string "You saw what I refused to.\p"
+	.string "Next time I'll prepare\n"
+	.string "for more than victory.$"
 
 VictoryRoad_1F_Text_HopeIntro:
 	.string "This seemingly infinite and harsh road\n"
@@ -222,5 +228,10 @@ VictoryRoad_1F_Text_KatelynnDefeat:
 	.string "This is a disgrace…$"
 
 VictoryRoad_1F_Text_KatelynnPostBattle:
-	.string "Humph, go right on ahead.\n"
-	.string "See if I care.$"
+	.string "I trained for months to\n"
+	.string "reach this place.\p"
+	.string "Losing to you hurts.\n"
+	.string "I'm not going to pretend\n"
+	.string "it doesn't.\p"
+	.string "But I made it here.\n"
+	.string "That still means something.$"
