@@ -340,20 +340,28 @@ MossdeepCity_SpaceCenter_2F_EventScript_BrendanRayquazaCall::
 	return
 
 MossdeepCity_SpaceCenter_2F_Text_MossdeepIdealForRockets:
-	.string "MOSSDEEP has mainly sunny weather,\n"
-	.string "and its winds are stable.\p"
-	.string "It's an ideal location for launching\n"
-	.string "rockets.$"
+	.string "MOSSDEEP usually has calm\n"
+	.string "winds and clear skies.\p"
+	.string "Lately our forecasts have\n"
+	.string "become less reliable.\p"
+	.string "A launch delay costs money.\n"
+	.string "A failed launch costs more.$"
 
 MossdeepCity_SpaceCenter_2F_Text_WhyWouldMagmaStealRocketFuel:
-	.string "Why would TEAM MAGMA want to steal\n"
-	.string "our rocket fuel in the first place?$"
+	.string "Why would TEAM MAGMA need\n"
+	.string "this much rocket fuel?\p"
+	.string "It isn't something you can\n"
+	.string "pour into any old machine.\p"
+	.string "Someone with technical\n"
+	.string "knowledge planned this.$"
 
 MossdeepCity_SpaceCenter_2F_Text_WouldveLikedToBeAstronaut:
-	.string "If only I was a little younger, I would\n"
-	.string "have liked being an astronaut…\p"
-	.string "No… It's not too late!\n"
-	.string "I can and will try!$"
+	.string "I used to dream of going\n"
+	.string "to space myself.\p"
+	.string "Now I help train the people\n"
+	.string "who might go someday.\p"
+	.string "It wasn't the dream I had.\n"
+	.string "It's still a good life.$"
 
 MossdeepCity_SpaceCenter_2F_Text_MagmaCantGetAwayWithThis:
 	.string "If TEAM MAGMA takes the rocket fuel,\n"
@@ -362,12 +370,18 @@ MossdeepCity_SpaceCenter_2F_Text_MagmaCantGetAwayWithThis:
 	.string "with such an outrage!$"
 
 MossdeepCity_SpaceCenter_2F_Text_WishOrdinaryPeopleCouldGoIntoSpace:
-	.string "I wish ordinary people could go into\n"
-	.string "space one day…$"
+	.string "I hope one day ordinary\n"
+	.string "people can see the stars\n"
+	.string "from above the clouds.\p"
+	.string "But first we have to make\n"
+	.string "that journey safe for them.$"
 
 MossdeepCity_SpaceCenter_2F_Text_DoesMagmaWantToGoToSpace:
-	.string "TEAM MAGMA…\n"
-	.string "Do they want to go to space, too?$"
+	.string "TEAM MAGMA says it wants\n"
+	.string "more room for people.\p"
+	.string "Space is vast, but stealing\n"
+	.string "fuel won't make HOENN's\n"
+	.string "families safer today.$"
 
 MossdeepCity_SpaceCenter_2F_Text_YoureOutnumberedTakeUsOn:
 	.string "What's wrong with you?\p"
