@@ -30,6 +30,7 @@ struct FieldMoveInfo
 };
 
 struct Pokemon;
+bool32 WallyHasFieldMoveLicense(enum FieldMove fieldMove);
 bool32 WallyCanUseHmWithoutTeaching(struct Pokemon *mon, enum FieldMove fieldMove);
 bool32 WallyPartyCanUseHmWithoutTeaching(enum FieldMove fieldMove);
 extern const struct FieldMoveInfo gFieldMoveInfo[];
