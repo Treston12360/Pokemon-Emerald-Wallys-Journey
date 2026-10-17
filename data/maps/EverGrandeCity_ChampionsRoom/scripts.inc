@@ -37,7 +37,7 @@ EverGrandeCity_ChampionsRoom_Movement_PlayerApproachWallace:
 	walk_up
 	step_end
 
-EverGrandeCity_ChampionsRoom_EventScript_Wallace::
+EverGrandeCity_ChampionsRoom_EventScript_Wally::
 	goto_if_set FLAG_SYS_GAME_CLEAR, WallyJourney_ChampionDefense_Wally
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
 	msgbox EverGrandeCity_ChampionsRoom_Text_IntroSpeech, MSGBOX_DEFAULT
@@ -45,7 +45,7 @@ EverGrandeCity_ChampionsRoom_EventScript_Wallace::
 	goto EverGrandeCity_ChampionsRoom_EventScript_Defeated
 	end
 
-WallyJourney_ChampionDefense_Wallace::
+WallyJourney_ChampionDefense_Wally::
 	@ After the Hall of Fame Wally returns with a stronger Mega team to challenge your title.
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
 	msgbox WallyJourney_ChampionDefense_Intro, MSGBOX_DEFAULT
