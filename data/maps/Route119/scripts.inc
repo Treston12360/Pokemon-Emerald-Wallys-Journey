@@ -489,19 +489,19 @@ Route119_Text_MayDefeat:
 	.string "struggling with your training.$"
 
 Route119_Text_MayPresentForYou:
-	.string "MAY: You keep surprising me,\\p"
-	.string "and you're not the only one.\\p"
-	.string "Dad's migration notes don't match\\n"
-	.string "the POKéMON we're seeing here.\\p"
+	.string "MAY: You keep surprising me,\p"
+	.string "and you're not the only one.\p"
+	.string "Dad's migration notes don't match\n"
+	.string "the POKéMON we're seeing here.\p"
 	.string "I want to find out why.$"
 
 Route119_Text_MayExplainFly:
-	.string "MAY: WINONA can teach you how\\n"
-	.string "to travel with FLY once you win\\l"
-	.string "the FEATHER BADGE.\\p"
-	.string "She'll give you the HM herself.\\n"
-	.string "You won't need to teach it to\\l"
-	.string "your POKéMON to use it.\\p"
+	.string "MAY: WINONA can teach you how\n"
+	.string "to travel with FLY once you win\l"
+	.string "the FEATHER BADGE.\p"
+	.string "She'll give you the HM herself.\n"
+	.string "You won't need to teach it to\l"
+	.string "your POKéMON to use it.\p"
 	.string "See you around, {PLAYER}!$"
 
 Route119_Text_BrendanIntro:
