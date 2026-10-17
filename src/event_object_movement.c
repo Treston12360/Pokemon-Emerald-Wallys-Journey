@@ -1,5 +1,6 @@
 #include "global.h"
 #include "wally_journey.h"
+#include "tilesets.h"
 #include "malloc.h"
 #include "battle_anim.h"
 #include "battle_pyramid.h"
@@ -2740,6 +2741,8 @@ void GetFollowerAction(struct ScriptContext *ctx) // Essentially a big switch fo
 }
 
 #define sLightType data[5]
+#define sLightDoorX data[3]
+#define sLightDoorY data[4]
 #define sLightXPos data[6]
 #define sLightYPos data[7]
 
@@ -2765,13 +2768,15 @@ void UpdateLightSprite(struct Sprite *sprite)
         return;
     }
 
-    if (!WallyJourney_IsLightOn(sprite->sLightType, x, y))
+    if (!WallyJourney_IsLightOn(sprite->sLightType,
+                                sprite->sLightType == LIGHT_TYPE_WINDOW ? sprite->sLightDoorX : x,
+                                sprite->sLightType == LIGHT_TYPE_WINDOW ? sprite->sLightDoorY : y))
     {
         sprite->invisible = TRUE;
         return;
     }
 
-    if (sprite->sLightType == LIGHT_TYPE_BALL || sprite->sLightType == LIGHT_TYPE_PORCH)
+    if (sprite->sLightType != LIGHT_TYPE_PKMN_CENTER_SIGN && sprite->sLightType != LIGHT_TYPE_POKE_MART_SIGN)
     {
         if (gPaletteFade.active) // if palette fade is active, don't flicker since the timer won't be updated
         {
@@ -2797,7 +2802,7 @@ void UpdateLightSprite(struct Sprite *sprite)
 }
 
 // Spawn a light at a map coordinate
-static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
+static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
 {
     struct Sprite *sprite;
     const struct SpriteTemplate *template;
@@ -2806,13 +2811,13 @@ static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
     {
         sprite = &gSprites[i];
         if (sprite->inUse && sprite->callback == UpdateLightSprite && sprite->sLightXPos == x && sprite->sLightYPos == y)
-            return;
+            return NULL;
     }
     lightType = min(lightType, ARRAY_COUNT(gFieldEffectLightTemplates) - 1); // bounds checking
     template = gFieldEffectLightTemplates[lightType];
     LoadSpriteSheetByTemplate(template, 0, 0);
     sprite = &gSprites[CreateSprite(template, 0, 0, 0)];
-    if ((lightType == LIGHT_TYPE_BALL || lightType == LIGHT_TYPE_PORCH) && (i = IndexOfSpritePaletteTag(template->paletteTag + 1)) < 16)
+    if ((lightType == LIGHT_TYPE_BALL || lightType == LIGHT_TYPE_PORCH || lightType == LIGHT_TYPE_WINDOW || lightType == LIGHT_TYPE_STREETLAMP) && (i = IndexOfSpritePaletteTag(template->paletteTag + 1)) < 16)
         sprite->oam.paletteNum = i;
     else
         UpdateSpritePaletteByTemplate(template, sprite);
@@ -2828,6 +2833,8 @@ static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
     default:
     case LIGHT_TYPE_BALL:
     case LIGHT_TYPE_PORCH:
+    case LIGHT_TYPE_WINDOW:
+    case LIGHT_TYPE_STREETLAMP:
         sprite->centerToCornerVecX = -(32 >> 1);
         sprite->centerToCornerVecY = -(32 >> 1);
         sprite->oam.priority = 1;
@@ -2845,6 +2852,7 @@ static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
         sprite->oam.objMode = ST_OAM_OBJ_BLEND;
         break;
     }
+    return sprite;
 }
 
 #undef sLightType
@@ -2854,6 +2862,69 @@ static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
 // Wally's Journey: automatic town lights. Pokémon Center and Mart signs glow
 // next to their doors, and every other door gets a warm porch glow. Built
 // from the map's own warps and metatiles, so no map needs editing.
+
+// Window metatiles (found by checking every Hoenn building front next to a
+// door). IDs below 0x200 are in the shared General tileset.
+static const u16 sWindowMetatiles_General[]   = {0x013, 0x1C2, 0x1C3};
+static const u16 sWindowMetatiles_Petalburg[] = {0x27D, 0x28F, 0x232};
+static const u16 sWindowMetatiles_Rustboro[]  = {0x23A, 0x242, 0x25C, 0x25D};
+static const u16 sWindowMetatiles_Dewford[]   = {0x235, 0x226};
+static const u16 sWindowMetatiles_Slateport[] = {0x251, 0x253};
+static const u16 sWindowMetatiles_Mauville[]  = {0x2AB, 0x2A6, 0x393};
+static const u16 sWindowMetatiles_Lavaridge[] = {0x239};
+static const u16 sWindowMetatiles_Fallarbor[] = {0x29E, 0x2A6};
+static const u16 sWindowMetatiles_Fortree[]   = {0x2C8, 0x2C9};
+static const u16 sWindowMetatiles_Lilycove[]  = {0x255, 0x335, 0x336, 0x34B, 0x34E, 0x2D6, 0x2D7};
+static const u16 sWindowMetatiles_Mossdeep[]  = {0x2A3, 0x2EC, 0x2EE};
+
+static bool32 MetatileInList(u32 metatile, const u16 *list, u32 count)
+{
+    u32 i;
+    for (i = 0; i < count; i++)
+    {
+        if (list[i] == metatile)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+#define IN_LIST(list) MetatileInList(metatile, list, ARRAY_COUNT(list))
+static bool32 IsWindowMetatile(u32 metatile)
+{
+    const struct Tileset *secondary = gMapHeader.mapLayout->secondaryTileset;
+    if (metatile < NUM_METATILES_IN_PRIMARY)
+        return gMapHeader.mapLayout->primaryTileset == &gTileset_General && IN_LIST(sWindowMetatiles_General);
+    if (secondary == &gTileset_Petalburg) return IN_LIST(sWindowMetatiles_Petalburg);
+    if (secondary == &gTileset_Rustboro)  return IN_LIST(sWindowMetatiles_Rustboro);
+    if (secondary == &gTileset_Dewford)   return IN_LIST(sWindowMetatiles_Dewford);
+    if (secondary == &gTileset_Slateport) return IN_LIST(sWindowMetatiles_Slateport);
+    if (secondary == &gTileset_Mauville)  return IN_LIST(sWindowMetatiles_Mauville);
+    if (secondary == &gTileset_Lavaridge) return IN_LIST(sWindowMetatiles_Lavaridge);
+    if (secondary == &gTileset_Fallarbor) return IN_LIST(sWindowMetatiles_Fallarbor);
+    if (secondary == &gTileset_Fortree)   return IN_LIST(sWindowMetatiles_Fortree);
+    if (secondary == &gTileset_Lilycove)  return IN_LIST(sWindowMetatiles_Lilycove);
+    if (secondary == &gTileset_Mossdeep)  return IN_LIST(sWindowMetatiles_Mossdeep);
+    return FALSE;
+}
+#undef IN_LIST
+
+// Rustboro's street lamps: the lamp head is the top half of a two-tile post.
+#define METATILE_Rustboro_StreetLampTop 0x212
+static void SpawnStreetLamps(s16 left, s16 right, s16 top, s16 bottom, s16 camX, s16 camY)
+{
+    s32 x, y;
+    if (gMapHeader.mapLayout->secondaryTileset != &gTileset_Rustboro || !MapHasNaturalLight(gMapHeader.mapType))
+        return;
+    for (y = top; y <= bottom; y++)
+    {
+        for (x = left; x <= right; x++)
+        {
+            if (MapGridGetMetatileIdAt(x, y) == METATILE_Rustboro_StreetLampTop)
+                SpawnLightSprite(x, y, camX, camY, LIGHT_TYPE_STREETLAMP);
+        }
+    }
+}
+
 #define METATILE_General_PokeCenter_Door  0x061
 #define METATILE_General_PokeCenter_Sign  0x062
 #define METATILE_General_Mart_Door        0x041
@@ -2876,8 +2947,28 @@ static void SpawnWarpLights(s16 left, s16 right, s16 top, s16 bottom, s16 camX, 
         else if (metatile == METATILE_General_Mart_Door && MapGridGetMetatileIdAt(x + 1, y) == METATILE_General_Mart_Sign)
             SpawnLightSprite(x + 1, y, camX, camY, LIGHT_TYPE_POKE_MART_SIGN);
         else if (MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(x, y)))
+        {
+            s32 wx, wy;
             SpawnLightSprite(x, y, camX, camY, LIGHT_TYPE_PORCH);
+            // Windows on the same building front as the door.
+            for (wy = y - 1; wy <= y; wy++)
+            {
+                for (wx = x - 3; wx <= x + 3; wx++)
+                {
+                    struct Sprite *light;
+                    if ((wx == x && wy == y) || !IsWindowMetatile(MapGridGetMetatileIdAt(wx, wy)))
+                        continue;
+                    light = SpawnLightSprite(wx, wy, camX, camY, LIGHT_TYPE_WINDOW);
+                    if (light != NULL)
+                    {
+                        light->data[3] = x; // sLightDoorX: windows share their door's schedule
+                        light->data[4] = y;
+                    }
+                }
+            }
+        }
     }
+    SpawnStreetLamps(left, right, top, bottom, camX, camY);
 }
 
 void TrySpawnLightSprites(s16 camX, s16 camY)

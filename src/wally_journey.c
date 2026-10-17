@@ -879,6 +879,7 @@ bool32 WallyJourney_IsLightOn(u32 lightType, s32 x, s32 y)
     switch (lightType)
     {
     case LIGHT_TYPE_PORCH:
+    case LIGHT_TYPE_WINDOW:
         h = WeatherHash((u32)x * 73856093u ^ (u32)y * 19349663u ^ gSaveBlock1Ptr->location.mapNum * 83492791u);
         if (h % 100 < 15)
             return FALSE;                               // nobody home tonight

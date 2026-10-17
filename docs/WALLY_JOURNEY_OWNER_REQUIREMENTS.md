@@ -215,7 +215,9 @@ Visible wildlife (build-passed, NOT emulator-verified — highest-risk item): th
 
 More (build-passed, not emulator-verified): **spring blossoms** — in spring some tree types flower pink (e.g. Route 114's forest, Fortree's palm crowns) while others turn fresh green (checked with offline renders). **Falling leaves / petals** — in autumn (red-orange-brown leaves) and spring (pink petals), six small sprites drift and flutter across outdoor maps in fair or cloudy weather, blown gently west (not on the open sea, in the desert or during story weather; skipped if no sprite palette is free). **Seasonal NPC lines** — ten townspeople (Rustboro, Slateport, Verdanturf, Lavaridge, Fortree, Lilycove ×2, Mossdeep ×2, Pacifidlog) say something different in spring, autumn and winter (`WallyJourney_GetSeasonForScript`); summer keeps their existing line.
 
-Still to do in this section: lit house windows, NPCs walking between spots, ambient audio.
+**House windows and street lamps (build-passed, not emulator-verified; window positions checked on offline night renders of every town):** building windows next to each door now glow in the evening, at night and in storms, sharing their house's lights-out hour (22:00–02:00, some houses stay dark). Window metatiles were found by scanning every Hoenn building front next to a door and checked by eye (General houses and Gym fronts; Petalburg/Littleroot/Oldale, Rustboro, Dewford, Slateport, Mauville/Verdanturf, Lavaridge, Fallarbor, Fortree, Lilycove and Mossdeep house styles). Rustboro's street lamps light up for the whole night. Sootopolis and Pacifidlog houses have no visible windows.
+
+Still to do in this section: NPCs walking between spots, ambient audio.
 
 ## Standard Poké Ball only — confirmed owner requirement (2026-10-16)
 
@@ -465,7 +467,8 @@ These are **wishlist items, not claims of implementation**. Adapt the design pri
 - **Berries:** Gen 4 yields (2–5 per plant instead of 2–3) and ripe berries never wither away until picked (`OW_BERRY_YIELD_RATE GEN_4`, `OW_BERRY_IMMORTAL`). Growth times unchanged.
 - **Renewable evolution items:** Lilycove Dept. Store 2F now also sells Fire/Water/Thunder/Leaf/Moon/Sun/Oval Stones, Razor Claw/Fang, Prism Scale, Deep Sea Tooth/Scale and Linking Cord (other trade items were already at the Pokémon League and Verdanturf/Slateport Marts).
 - **Small QoL:** summary screen cycles Stats / IVs (actual numbers) / EVs; fishing bites more often near land, at morning/evening and with a friendly follower; fly straight from the PokéNav or Town Map (press R) once you have the FEATHER BADGE. Already in the engine and confirmed in code: using medicine repeatedly stays in the party screen while you still have the item; Hidden Power shows its real type on the summary; egg/TM/tutor move relearner.
-- Still to do: overflow item storage, permanently clearing non-puzzle obstacles, skippable PokéNav intro, Frontier reward review.
+- **Obstacles stay cleared:** Cut trees and Rock Smash rocks (62 across Hoenn) now have their own saved flags, so once cleared they stay gone. Rocks on the six maps where some Pokémon are only found with Rock Smash (Granite Cave B2F, Routes 111 and 114, Safari Zone North and Northeast, Victory Road B1F) come back each real day so those species stay catchable. Trick House puzzles and the two story rocks in Rusturf Tunnel are unchanged.
+- Still to do: overflow item storage, skippable PokéNav intro, Frontier reward review.
 
 ### Optional / requires narrative review
 - Consider a postgame Zinnia appearance or Sky Pillar challenge **only** if it meaningfully fits the reworked lore, Wally's continuing role, and the player's agency. No automatic inclusion or copying of Legacy's event or dialogue.

@@ -486,6 +486,8 @@ enum
 #define LIGHT_TYPE_PKMN_CENTER_SIGN 1
 #define LIGHT_TYPE_POKE_MART_SIGN   2
 #define LIGHT_TYPE_PORCH            3 // Wally's Journey: glow at a house door, on a schedule
+#define LIGHT_TYPE_WINDOW           4 // Wally's Journey: glow in a house window, same schedule as its door
+#define LIGHT_TYPE_STREETLAMP       5 // Wally's Journey: street lamp, lit all night
 
 #define FIRST_DECORATION_SPRITE_GFX OBJ_EVENT_GFX_PICHU_DOLL
 
