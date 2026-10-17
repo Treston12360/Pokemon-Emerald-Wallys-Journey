@@ -70,17 +70,18 @@ EverGrandeCity_GlaciasRoom_Text_IntroSpeech:
 	.string "is as steady as your team.$"
 
 EverGrandeCity_GlaciasRoom_Text_Defeat:
-	.string "You and your POKéMON…\n"
-	.string "How hot your spirits burn!\p"
-	.string "The all-consuming heat overwhelms.\p"
-	.string "It's no surprise that my icy skills\n"
-	.string "failed to harm you.$"
+	.string "GLACIA: Remarkable.\p"
+	.string "You remained composed even\n"
+	.string "when the match turned.\p"
+	.string "You have earned this win.$"
 
 EverGrandeCity_GlaciasRoom_Text_PostBattleSpeech:
-	.string "I came to HOENN looking for TRAINERS\n"
-	.string "worth freezing.\p"
-	.string "I found two this year. The boy who\n"
-	.string "took the crown, and you.\p"
-	.string "Advance. Confirm the truly fearsome\n"
-	.string "side of the POKéMON LEAGUE.$"
+	.string "I once believed discipline\n"
+	.string "meant never showing doubt.\p"
+	.string "During the crisis, I had\n"
+	.string "to ask others for help.\p"
+	.string "It was the correct choice.\p"
+	.string "Strength also means knowing\n"
+	.string "what you cannot do alone.\p"
+	.string "Proceed. DRAKE awaits.$"
 
