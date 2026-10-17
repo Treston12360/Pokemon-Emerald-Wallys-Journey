@@ -134,6 +134,6 @@ PetalburgCity_WallysHouse_Text_WallyLeftWithoutTelling:
 
 
 PetalburgCity_WallysHouse_Text_NoHmSurf:
-	.string "You've grown into a fine TRAINER!\\p"
-	.string "The BALANCE BADGE lets you SURF\\n"
+	.string "You've grown into a fine TRAINER!\p"
+	.string "The BALANCE BADGE lets you SURF\n"
 	.string "across water. Best of luck!$"
