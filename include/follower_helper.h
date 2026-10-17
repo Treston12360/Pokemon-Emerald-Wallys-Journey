@@ -63,7 +63,8 @@ enum MessageCondition
     MSG_COND_WEATHER,
     MSG_COND_MUSIC,
     MSG_COND_TIME_OF_DAY,
-    MSG_COND_NEAR_MB
+    MSG_COND_NEAR_MB,
+    MSG_COND_SEASON, // Wally's Journey: outdoors in this season (enum WallySeason)
 };
 
 #define MATCH_U24(type, value) {type, {.raw = value}}
@@ -86,6 +87,7 @@ enum MessageCondition
 #define MATCH_TIME_OF_DAY(time) MATCH_U24(MSG_COND_TIME_OF_DAY, time)
 // Matches metatile behavior within a '+' shape of size `distance`
 #define MATCH_NEAR_MB(mb, distance) MATCH_U8(MSG_COND_NEAR_MB, mb, distance, 0)
+#define MATCH_SEASON(season) MATCH_U24(MSG_COND_SEASON, season)
 
 enum ConditionalMessage
 {
@@ -120,6 +122,16 @@ enum ConditionalMessage
     COND_MSG_DAY,
     COND_MSG_NIGHT,
     COND_MSG_ABNORMAL_WEATHER,
+    // Wally's Journey: living Hoenn reactions
+    COND_MSG_SNOW_ICE,
+    COND_MSG_SNOW,
+    COND_MSG_THUNDER,
+    COND_MSG_MIST,
+    COND_MSG_HOT_SPRINGS,
+    COND_MSG_SPRING,
+    COND_MSG_SUMMER_SEA,
+    COND_MSG_AUTUMN,
+    COND_MSG_WINTER,
     COND_MSG_COUNT,
 };
 

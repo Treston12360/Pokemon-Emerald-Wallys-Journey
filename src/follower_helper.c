@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "data.h"
 #include "event_scripts.h"
 #include "follower_helper.h"
@@ -75,6 +76,33 @@ static const u8 sCondMsg45[] = _("Your POKéMON is staring spellbound\nat the ni
 static const u8 sCondMsg46[] = _("Your POKéMON is happily gazing at\nthe beautiful, starry sky!");
 static const u8* const sNightTexts[] = {sCondMsg45, sCondMsg46, NULL};
 static const u8 sCondMsg50[] = _("{STR_VAR_1} is disturbed by the\nabnormal weather!");
+// Wally's Journey: weather and season reactions
+static const u8 sWallyMsgSnowIce1[] = _("{STR_VAR_1} is rolling around\nhappily in the snow!");
+static const u8 sWallyMsgSnowIce2[] = _("{STR_VAR_1} looks right at home in\nthe falling snow.");
+static const u8* const sWallySnowIceTexts[] = {sWallyMsgSnowIce1, sWallyMsgSnowIce2, NULL};
+static const u8 sWallyMsgSnow1[] = _("{STR_VAR_1} is trying to catch\nsnowflakes!");
+static const u8 sWallyMsgSnow2[] = _("{STR_VAR_1} is shivering a little.\nIt huddled up close to you.");
+static const u8 sWallyMsgSnow3[] = _("{STR_VAR_1} left little footprints\nin the snow.");
+static const u8* const sWallySnowTexts[] = {sWallyMsgSnow1, sWallyMsgSnow2, sWallyMsgSnow3, NULL};
+static const u8 sWallyMsgThunder1[] = _("{STR_VAR_1} flinched at the\nthunder!");
+static const u8 sWallyMsgThunder2[] = _("{STR_VAR_1} is watching the sky\nfor lightning.");
+static const u8* const sWallyThunderTexts[] = {sWallyMsgThunder1, sWallyMsgThunder2, NULL};
+static const u8 sWallyMsgMist1[] = _("{STR_VAR_1} is peering into the\nmist.");
+static const u8 sWallyMsgMist2[] = _("{STR_VAR_1} is staying close so it\ndoesn't get lost in the fog.");
+static const u8* const sWallyMistTexts[] = {sWallyMsgMist1, sWallyMsgMist2, NULL};
+static const u8 sWallyMsgHotSprings[] = _("{STR_VAR_1} keeps looking at the\nhot springs. It wants a soak!");
+static const u8 sWallyMsgSpring1[] = _("{STR_VAR_1} is sniffing the fresh\nspring air.");
+static const u8 sWallyMsgSpring2[] = _("{STR_VAR_1} is watching the new\nleaves sway in the breeze.");
+static const u8* const sWallySpringTexts[] = {sWallyMsgSpring1, sWallyMsgSpring2, NULL};
+static const u8 sWallyMsgSummerSea1[] = _("{STR_VAR_1} is soaking up the\nsummer sun by the sea!");
+static const u8 sWallyMsgSummerSea2[] = _("{STR_VAR_1} wants to run into the\nwaves!");
+static const u8* const sWallySummerSeaTexts[] = {sWallyMsgSummerSea1, sWallyMsgSummerSea2, NULL};
+static const u8 sWallyMsgAutumn1[] = _("{STR_VAR_1} is gazing at the red\nand gold leaves.");
+static const u8 sWallyMsgAutumn2[] = _("{STR_VAR_1} caught a falling leaf!");
+static const u8* const sWallyAutumnTexts[] = {sWallyMsgAutumn1, sWallyMsgAutumn2, NULL};
+static const u8 sWallyMsgWinter1[] = _("{STR_VAR_1} puffed out a little\ncloud of breath in the cold.");
+static const u8 sWallyMsgWinter2[] = _("{STR_VAR_1} is pressing close to\nyou to keep warm.");
+static const u8* const sWallyWinterTexts[] = {sWallyMsgWinter1, sWallyMsgWinter2, NULL};
 
 // See the struct definition in follower_helper.h for more info
 const struct FollowerMsgInfoExtended gFollowerConditionalMessages[COND_MSG_COUNT] =
@@ -390,6 +418,103 @@ const struct FollowerMsgInfoExtended gFollowerConditionalMessages[COND_MSG_COUNT
             MATCH_NOT_SPECIES(SPECIES_GROUDON),
             MATCH_NOT_SPECIES(SPECIES_RAYQUAZA),
         }
+    },
+    [COND_MSG_SNOW_ICE] =
+    {
+        .text = (u8*)sWallySnowIceTexts,
+        .textSpread = 1,
+        .emotion = FOLLOWER_EMOTION_HAPPY,
+        .conditions =
+        {
+            MATCH_TYPES(TYPE_ICE, TYPE_ICE),
+            MATCH_WEATHER(WEATHER_SNOW, WEATHER_SNOW),
+        },
+    },
+    [COND_MSG_SNOW] =
+    {
+        .text = (u8*)sWallySnowTexts,
+        .textSpread = 1,
+        .emotion = FOLLOWER_EMOTION_SURPRISE,
+        .conditions =
+        {
+            MATCH_NOT_TYPES(TYPE_ICE, TYPE_ICE),
+            MATCH_WEATHER(WEATHER_SNOW, WEATHER_SNOW),
+        },
+    },
+    [COND_MSG_THUNDER] =
+    {
+        .text = (u8*)sWallyThunderTexts,
+        .textSpread = 1,
+        .emotion = FOLLOWER_EMOTION_SURPRISE,
+        .conditions =
+        {
+            MATCH_WEATHER(WEATHER_RAIN_THUNDERSTORM, WEATHER_DOWNPOUR),
+        },
+    },
+    [COND_MSG_MIST] =
+    {
+        .text = (u8*)sWallyMistTexts,
+        .textSpread = 1,
+        .emotion = FOLLOWER_EMOTION_PENSIVE,
+        .conditions =
+        {
+            MATCH_WEATHER(WEATHER_FOG_HORIZONTAL, WEATHER_FOG_DIAGONAL),
+        },
+    },
+    [COND_MSG_HOT_SPRINGS] =
+    {
+        .text = sWallyMsgHotSprings,
+        .emotion = FOLLOWER_EMOTION_HAPPY,
+        .conditions =
+        {
+            MATCH_MAPSEC(MAPSEC_LAVARIDGE_TOWN),
+            MATCH_NEAR_MB(MB_HOT_SPRINGS, 4),
+        },
+    },
+    [COND_MSG_SPRING] =
+    {
+        .text = (u8*)sWallySpringTexts,
+        .textSpread = 1,
+        .emotion = FOLLOWER_EMOTION_HAPPY,
+        .conditions =
+        {
+            MATCH_SEASON(WALLY_SEASON_SPRING),
+            MATCH_WEATHER(WEATHER_SUNNY, WEATHER_SUNNY_CLOUDS),
+        },
+    },
+    [COND_MSG_SUMMER_SEA] =
+    {
+        .text = (u8*)sWallySummerSeaTexts,
+        .textSpread = 1,
+        .emotion = FOLLOWER_EMOTION_HAPPY,
+        .conditions =
+        {
+            MATCH_SEASON(WALLY_SEASON_SUMMER),
+            MATCH_WEATHER(WEATHER_SUNNY, WEATHER_SUNNY),
+            MATCH_NEAR_MB(MB_OCEAN_WATER, 4),
+        },
+    },
+    [COND_MSG_AUTUMN] =
+    {
+        .text = (u8*)sWallyAutumnTexts,
+        .textSpread = 1,
+        .emotion = FOLLOWER_EMOTION_PENSIVE,
+        .conditions =
+        {
+            MATCH_SEASON(WALLY_SEASON_AUTUMN),
+            MATCH_WEATHER(WEATHER_SUNNY, WEATHER_SUNNY_CLOUDS),
+        },
+    },
+    [COND_MSG_WINTER] =
+    {
+        .text = (u8*)sWallyWinterTexts,
+        .textSpread = 1,
+        .emotion = FOLLOWER_EMOTION_SAD,
+        .conditions =
+        {
+            MATCH_SEASON(WALLY_SEASON_WINTER),
+            MATCH_NOT_TYPES(TYPE_ICE, TYPE_FIRE),
+        },
     },
 };
 
