@@ -60,6 +60,19 @@ LilycoveCity_DepartmentStore_2F_Pokemart2:
 	.2byte ITEM_WAVE_MAIL
 	.2byte ITEM_MECH_MAIL
 	@ Wally's Journey: renewable evolution goods, so every evolution can be repeated
+	.2byte ITEM_FIRE_STONE
+	.2byte ITEM_WATER_STONE
+	.2byte ITEM_THUNDER_STONE
+	.2byte ITEM_LEAF_STONE
+	.2byte ITEM_MOON_STONE
+	.2byte ITEM_SUN_STONE
+	.2byte ITEM_OVAL_STONE
+	.2byte ITEM_RAZOR_CLAW
+	.2byte ITEM_RAZOR_FANG
+	.2byte ITEM_PRISM_SCALE
+	.2byte ITEM_DEEP_SEA_TOOTH
+	.2byte ITEM_DEEP_SEA_SCALE
+	.2byte ITEM_LINKING_CORD
 	.2byte ITEM_DAWN_STONE
 	.2byte ITEM_DUSK_STONE
 	.2byte ITEM_SHINY_STONE

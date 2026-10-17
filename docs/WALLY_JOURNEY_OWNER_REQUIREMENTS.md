@@ -457,6 +457,14 @@ These are **wishlist items, not claims of implementation**. Adapt the design pri
 - Improve small quality-of-life systems: optional milestone-gated fast travel, repeated medicine usage without reopening Bag, convenient overflow item storage where safe, IV/EV and nature display, Hidden Power type in summary, skippable PokéNav introduction, faster fishing, and selectively permanent clearance of non-puzzle obstacles.
 - Consider additional move-tutor/egg-move accessibility where not already covered by the existing Legends: Arceus-style relearning plan; ensure no redundant feature implementation.
 
+**Progress (2026-10-17, build-passed, not emulator-verified):**
+- **Gym Leader rematch tiers:** tiers 2–5 for all eight Leaders rescaled for the postgame (aces level 70 / 76 / 82 / 88, rest of the team up to 4 below) and under-evolved members evolved (Probopass, Rhyperior, Machamp, Magnezone, Electivire, Magmortar, Honchkrow, Yanmega, Politoed, Cradily/Armaldo). Rematches still unlock after the Hall of Fame through the PokéNav as in Emerald. Still to do: different dialogue per tier, specialist/type-master trainers, broader PokéNav trainer rematches.
+- **Acro Bike ledge hop:** while bunny hopping, the player can hop back *up* an ordinary one-way ledge when the ledge faces them and the tile beyond is free. Normal ledge jumping, bumpy slopes and rails are unchanged.
+- **Berries:** Gen 4 yields (2–5 per plant instead of 2–3) and ripe berries never wither away until picked (`OW_BERRY_YIELD_RATE GEN_4`, `OW_BERRY_IMMORTAL`). Growth times unchanged.
+- **Renewable evolution items:** Lilycove Dept. Store 2F now also sells Fire/Water/Thunder/Leaf/Moon/Sun/Oval Stones, Razor Claw/Fang, Prism Scale, Deep Sea Tooth/Scale and Linking Cord (other trade items were already at the Pokémon League and Verdanturf/Slateport Marts).
+- **Small QoL:** summary screen cycles Stats / IVs (actual numbers) / EVs; fishing bites more often near land, at morning/evening and with a friendly follower; fly straight from the PokéNav or Town Map (press R) once you have the FEATHER BADGE. Already in the engine and confirmed in code: using medicine repeatedly stays in the party screen while you still have the item; Hidden Power shows its real type on the summary; egg/TM/tutor move relearner.
+- Still to do: overflow item storage, permanently clearing non-puzzle obstacles, skippable PokéNav intro, Frontier reward review.
+
 ### Optional / requires narrative review
 - Consider a postgame Zinnia appearance or Sky Pillar challenge **only** if it meaningfully fits the reworked lore, Wally's continuing role, and the player's agency. No automatic inclusion or copying of Legacy's event or dialogue.
 - Compare Legacy's opponent AI, smart switching, rematch pacing and balance **for applicable concepts**, not direct team copying.
