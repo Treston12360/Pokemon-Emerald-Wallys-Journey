@@ -10,6 +10,7 @@
 #define WALLY_VAR_WALLY_WINS    VAR_UNUSED_0x40FA
 #define WALLY_VAR_LAST_SPECIES  VAR_UNUSED_0x40FB
 #define WALLY_VAR_PREV_SPECIES  VAR_UNUSED_0x40FC
+#define WALLY_VAR_TITLE_DEFENSES VAR_UNUSED_0x40FD
 
 enum WallyBiomeBit {
     WALLY_BIOME_FOREST       = 1 << 0,
@@ -52,6 +53,7 @@ void WallyJourney_Reset(void) {
     VarSet(WALLY_VAR_WALLY_WINS,0);
     VarSet(WALLY_VAR_LAST_SPECIES,0);
     VarSet(WALLY_VAR_PREV_SPECIES,0);
+    VarSet(WALLY_VAR_TITLE_DEFENSES,0);
 }
 void WallyJourney_OnMapEntered(u8 group,u8 num) {
     u16 badges = CountBadges();
