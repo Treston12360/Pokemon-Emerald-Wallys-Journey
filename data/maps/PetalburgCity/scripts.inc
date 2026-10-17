@@ -90,7 +90,17 @@ PetalburgCity_EventScript_Boy::
 	end
 
 PetalburgCity_EventScript_WallysMom::
+	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_EventScript_WallysMomAfterChampion
+	goto_if_ge VAR_WALLY_BROADCAST_STATE, 3, PetalburgCity_EventScript_WallysMomAfterBroadcast
 	msgbox PetalburgCity_Text_WhereIsWally, MSGBOX_NPC
+	end
+
+PetalburgCity_EventScript_WallysMomAfterBroadcast::
+	msgbox PetalburgCity_Text_WallyMomAfterBroadcast, MSGBOX_NPC
+	end
+
+PetalburgCity_EventScript_WallysMomAfterChampion::
+	msgbox PetalburgCity_Text_WallyMomAfterChampion, MSGBOX_NPC
 	end
 
 PetalburgCity_Movement_WalkToWallyHousePlayer:
@@ -761,3 +771,19 @@ PetalburgCity_Text_ImLookingForTalentedTrainers:
 	.string "Last one I found was a frail boy who\n"
 	.string "couldn't stop coughing. Hm. Wonder\l"
 	.string "how he's doing.$"
+
+PetalburgCity_Text_WallyMomAfterBroadcast:
+	.string "I saw WALLY on the television.\\p"
+	.string "They called him CHAMPION!\\p"
+	.string "He used to be afraid to walk to\\n"
+	.string "the next town by himself.\\p"
+	.string "I'm proud of him. I'm frightened,\\n"
+	.string "too. That never quite goes away.$"
+
+PetalburgCity_Text_WallyMomAfterChampion:
+	.string "WALLY called after your battle.\\p"
+	.string "He said he lost the title, then\\n"
+	.string "laughed like I'd never heard.\\p"
+	.string "He sounded happy, {PLAYER}.\\n"
+	.string "And so sure of himself.\\p"
+	.string "You both made it so far.$"
