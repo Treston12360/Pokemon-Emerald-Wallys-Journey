@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ensure all standard trade-evolution rules have a non-trade item alternative.
+"""Ensure all remaining trade rules have a solo item or level alternative.
 
 Static check on Gen 1-9 species_info family files. This verifies definitions,
 NOT item accessibility. Run: python3 tools/check_wally_solo_trade_evolutions.py
@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FAMILY_DIR = ROOT / "src/data/pokemon/species_info"
 SOURCE = re.compile(r"\[\s*(SPECIES_[A-Z0-9_]+)\s*\]\s*=")
 TRADE = re.compile(r"\{\s*EVO_TRADE\s*,\s*[^,{}]+\s*,\s*(SPECIES_[A-Z0-9_]+)\b")
+LEVEL = re.compile(r"\\{\\s*EVO_LEVEL\\s*,\\s*([0-9]+)\\s*,\\s*(SPECIES_[A-Z0-9_]+)\\b")
 ITEM = re.compile(r"\{\s*EVO_ITEM\s*,\s*(ITEM_[A-Z0-9_]+)\s*,\s*(SPECIES_[A-Z0-9_]+)\b")
 
 errors = []
@@ -26,11 +27,12 @@ for generation in range(1, 10):
             continue
         trade_targets = set(TRADE.findall(section))
         alternatives = {target: item for item, target in ITEM.findall(section)}
+        levels = {target: level for level, target in LEVEL.findall(section)}
         for target in trade_targets:
             checked += 1
-            if target not in alternatives:
-                errors.append(f"Gen {generation} {source.group(1)} -> {target}: no EVO_ITEM alternative")
-            else:
+            if target not in alternatives and target not in levels:
+                errors.append(f"Gen {generation} {source.group(1)} -> {target}: no solo item/level alternative")
+            elif target in alternatives:
                 requirements.add(alternatives[target])
 
 for error in errors:
