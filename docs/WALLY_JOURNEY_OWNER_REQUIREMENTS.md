@@ -233,3 +233,94 @@ Still to build: Wally story/rival battles/Champion arc, gym leader HM scenes, up
 - **Explain the Littleroot moving truck.** The family could not easily afford every aspect of relocating from Kanto. The original opening scene has the player travel in a moving van/truck; write a coherent in-world explanation for the unusual arrival and address that transporting a child unsecured among cargo is hazardous and not treated as ordinary or sensible. The owner's example is that the family couldn't afford another train/transport ticket. Adapt that *financial premise* while avoiding an unconvincing assertion that it would make riding unsecured in the cargo compartment safe or legal. Possible solution to evaluate: the player travels in a properly seated cab on a final short, supervised stretch of the move; they hop into the cargo compartment only after the truck has parked while helping with boxes, preserving the recognizable opening shot. Another narrative alternative needs equally careful continuity.
 - **Character continuity:** Norman and his spouse should sound like loving but stressed adults making imperfect decisions; don't vilify either or portray lack of money as moral failure. Link Wally's drive for independence and Team Magma's arguments about opportunity to the central story themes of ambition, family, security, and its unintended costs.
 - **Status:** Confirmed narrative requirements / possible staging options, not implemented game dialogue or cutscenes. Script the exact opening geography, travel timeline, family finances, and Gym conversation consistently with Emerald's existing plot and its technical constraints.
+
+## Mature Hoenn narrative reconstruction — OWNER APPROVED (2026-10-16)
+
+**Scope and fidelity:** The owner explicitly approved every story improvement in the October 16 discussion. This is a **cohesive expansion and repair of Pokémon Emerald**, not a grimdark reboot. Preserve recognizable routes, Gym progression, Emerald's dual Magma/Aqua crisis, the iconic Rayquaza resolution, Norman as the player's father, Juan in Sootopolis, Wallace's prior Champion status, and Wally ultimately becoming a charismatic, formidable Champion. Keep charm, hope, humor and exploration. Rewrite only where it strengthens logic, character, pacing or consequences. All points below are approved **design requirements**, not claims of implementation.
+
+### 1. Professor Birch, the starter, and the research journey
+- Retain Birch's urgent encounter with a wild Pokémon and the iconic starter selection. Add credible motivation for why Birch entrusts the player with a rare partner and Pokédex: Norman's known reputation and connection to Birch, the player's demonstrated judgment, and responsible follow-up support.
+- Give the Pokédex assignment meaningful research stakes. Birch studies unusual habitat changes, migration and weather patterns; player observations gradually connect to Magma/Aqua activity and the legendary imbalance.
+- Do not make Birch implausibly reckless or omniscient. The player earns further responsibility through demonstrated accomplishments.
+
+### 2. The authorities, Team Magma and Team Aqua
+- Establish both groups' legitimate public fronts or activities: habitat conservation, development advocacy, restoration work, community aid or research. Give sincere ordinary members credible motivations; distinguish rank-and-file beliefs from escalating leadership decisions.
+- Explain why organized authorities and adult trainers do not immediately dismantle the groups: incomplete evidence, deceptive fronts, limited jurisdiction, strategically timed distractions, and concurrent public-safety duties. Do not portray law enforcement and Champions as inexplicably idle.
+- Team Magma's argument about housing, farming, economic mobility and useful land must be **genuinely persuasive**. Link those concerns to Norman's family history and actual Hoenn residents. Team Aqua's environmental concerns must also be serious and credible. Neither group's catastrophic methods are justified by those concerns.
+- Show ideological disagreement and dissent inside the organizations as harmful actions escalate.
+
+### 3. Devon Corporation's credible complexity
+- Devon provides genuine jobs, equipment, research and regional prosperity but can still face credible criticism for industrial expansion, energy use, ecological impacts and economic power.
+- Do not turn Devon into a secretly evil corporation. Show understandable tradeoffs, public accountability and differing views among affected NPCs.
+- Tie Devon's technology and business relationships naturally to Team Aqua/Magma's debates and to Steven's personal conflict.
+
+### 4. Mt. Chimney meteorite plan
+- Give Magma a credible in-world geological hypothesis for using the meteorite and volcano rather than a vague, absurd plot device.
+- Place warnings from scientists/researchers that their model ignores nonlinear and unpredictable volcanic consequences. Maxie's failure is hubris, selective evidence and willingness to gamble with others' safety, not lack of intelligence.
+- Preserve the meteorite conflict, Mt. Chimney/Jagged Pass geography, and progression flags; ensure prior clues foreshadow the attempted scheme.
+
+### 5. Legendary myth, orbs and Sky Pillar
+- Lay out consistent ancient history linking Groudon, Kyogre, Rayquaza, the orbs, Sootopolis, Mt. Pyre, Seafloor Cavern and Sky Pillar.
+- Ancient records should be incomplete, contested or mistranslated in plausible ways, explaining why Maxie and Archie mistakenly believe artifacts can control forces they cannot.
+- Foreshadow Rayquaza without undermining its dramatic appearance. Keep the Emerald resolution but establish why awakening Rayquaza is the informed best option rather than an effortless last-minute deus ex machina.
+- Respect the owner's requirement that Kyogre/Groudon encounters feel enormous, more threatening and harder to catch; no ball-based difficulty compensation.
+
+### 6. Slateport/Lilycove submarine theft and response
+- Rework the submarine theft as a credible operation involving advance planning, distraction, compromised information/access, or an insider, with believable security and timing.
+- Captain Stern, Devon personnel, local authorities, and Steven should actively investigate and respond afterward. Show consequences and efforts to recover the submarine.
+- Retain Emerald's plot order, named locations, and path to Seafloor Cavern; avoid creating a transport, badge or event-flag softlock.
+
+### 7. Steven's values and family tension
+- Develop Steven as Devon president's son who appreciates the company's contribution but can challenge it on environmental responsibility and ethical decisions.
+- Steven should independently examine Team Magma/Aqua claims, ancient artifacts and the emerging crisis rather than showing up only to dispense key items.
+- Give him concrete jobs during the crisis, credible relationships with Wallace and the League, and meaningful dialogue connected to his father's business.
+- Preserve the confirmed **post-Norman Steven scene in Wally's house** gifting the Mega Bracelet and starter-specific Mega Stone with a personal speech about the player's growth and Steven's travels.
+
+### 8. May/Brendan's sustained arc and closure
+- Extend May/Brendan's growth beyond the original Lilycove rival stopping point. Add meaningful interactions through the escalating crisis, including research, relief or logistics work.
+- Give their motivations dimension: they might start as an experienced, confident trainer and gradually discover a long-term identity combining research and battling.
+- Provide a satisfying late-game rival confrontation and a meaningful resolution. Keep them distinct from Wally; they should not steal his Champion arc.
+
+### 9. Magma/Aqua accountability and redemption
+- Do not resolve the teams' moral failures with a single apology or instant universal forgiveness.
+- After the crisis, show concrete ecological repair, aid deliveries, research cooperation and personal accountability. Some former members renounce the groups, others remain conflicted, and some residents remain angry.
+- Maxie and Archie must face the specific damage caused by their overconfidence, while remaining capable of growth. Preserve hopeful tone without erasing consequences.
+
+### 10. Establish coherent Pokémon League rules
+- Define the Hoenn League's role in accrediting Gym Leaders, maintaining badge eligibility, authorizing Elite Four attempts, recognizing Champions and administering title defenses.
+- Present rules naturally through conversations, signage, broadcasts and event scripts; avoid long bureaucratic exposition.
+- Establish why Wallace is Champion earlier in the game and **how Wally legitimately defeats him for the title** before the player's final Champion match. Wallace becomes the former Champion; Juan's Gym role stays coherent.
+- Define when Wally defeats Wallace, who knows about it, how much the player hears, and how the reveal avoids an implausible or spoiled surprise.
+- Honor first Elite Four victory's postgame event-item eligibility while avoiding interruptions before Wally and the Hall of Fame. Confirm title-defense state after the player wins.
+
+### 11. Make Wally's ascent visibly earned and extremely cool
+- Wally begins genuinely shy and uncertain, then becomes **confident, cool, charismatic, composed, witty and fiercely capable** without losing kindness.
+- Show his training, setbacks, choices, independently gained experience, strategic team building, reputation among Gym Leaders, and material contribution during the crisis. Place recurring appearances and PokéNav contact according to a timeline; the 12+ rival-battle idea is a planning target, not a mandatory exact count.
+- Wally should demonstrate leadership and protect people/Pokémon in real scenes, not merely be praised by others.
+- Build toward the witnessed or credibly documented Wallace challenge. Give Champion Wally a striking entrance, distinct dialogue and battle presentation, and a rigorously balanced, exceptionally synergistic **six-Hoenn-species team that doesn't simply copy other characters' signature aces**.
+- He must feel like an imposing, stylish Champion and a genuine rival rather than a perpetually apologetic underdog.
+
+### 12. Tie postgame mythical events and other content to the crisis
+- After the first Elite Four clear, Steven, Birch and other researchers uncover ancient artifacts, restored access, recovered records and investigations explaining new opportunities across Hoenn.
+- Provide event item/quest access for all applicable event-exclusive species, including Deoxys, Jirachi, etc., with themed locations and unusually hard captures; no external distributions required and only regular Poké Balls remain available. Do not weaken capture rates just because of that ball restriction.
+- Keep the event unlock requirements clear and fair; do not require a second Champion defense simply to gain access.
+- Frame Champion defenses, Battle Frontier, Mega Stone exploration, Secret Base activities and contests as a world recovering and growing rather than an unrelated checklist. Do not gate routine side content unnecessarily.
+
+### 13. Persistent NPC reactions and real aftermath
+- Update relevant dialogue and schedules as badges are earned, Devon incidents become public, Magma/Aqua activities escalate, the legendary disaster unfolds, and recovery progresses.
+- People in Petalburg react to the Norman father/child Gym milestone; Slateport and coastal communities acknowledge interruptions; Sootopolis residents discuss specific events and repairs; people Wally helped recognize his growth.
+- Stage visible consequences appropriately: temporarily disrupted work, evacuations, assistance, repairs, habitat cleanup and gradual recovery. Avoid false resets where everyone forgets the catastrophe.
+- Keep event flags, rematches, save/load behavior and story skips coherent. Do not create calendar-dependent story locks from the requested day/night and seasonal systems.
+
+### 14. Cross-cutting maturity, family continuity and pacing
+- Respect the approved **Kanto-to-Hoenn** family relocation as this project's intentional continuity change from any original Johto backstory. Audit all dialogue so contradictory origins do not survive.
+- Norman's ambition, financial pressure, absence, post-Gym remorse and subsequent actions must be emotionally credible. The Littleroot moving-truck scene should retain recognizable imagery while resolving the safety/logistics oddity: show the player's safe travel, not an unattended long-distance ride among cargo.
+- Let conflicts have understandable stakes and competing perspectives. The central thematic thread is **ambition, responsibility and the unintended costs of good intentions**: Norman, Maxie, Archie, Steven, the player and Wally reflect it in distinct ways.
+- Use subtext rather than excessive monologues; preserve sympathetic but flawed adults, humor, warmth, Pokémon companionship and hopeful resolution.
+- Prepare a **story continuity bible** with a chronological beat sheet, per-character knowledge/motivation tables, map and dialogue changes, lore rules, badge/item/quest gates, and a contradiction/softlock checklist before bulk script rewrites.
+
+### Acceptance criteria / implementation tracking
+- Every new/rewritten scene should record original scene replaced, location, trigger, mandatory flags, characters present, dialogue intent, progression consequence and relevant save/reload tests.
+- Audit the complete original Emerald event order against planned changes, including Birch's starter event; Petalburg Gym and Steven's Wally-house scene; Devon goods; Mt. Chimney; Mt. Pyre; Slateport submarine; Seafloor Cavern; Sootopolis; Sky Pillar; Victory Road; Wallace-to-Wally succession; Elite Four; Hall of Fame and event unlocks.
+- Validate plot continuity for different player gender/rival identity and optional scene order, ensure no duplicate items or stranded quests, and compile/test the narrative in mGBA.
+- **Status:** All above is **owner-approved for the wishlist**. Detailed script changes, exact dialogue, cutscenes, trainer teams, event flags and emulator certification are **not yet completed**.
