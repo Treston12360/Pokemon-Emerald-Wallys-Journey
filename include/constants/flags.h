@@ -1224,18 +1224,18 @@
 
 #define FLAG_HIDDEN_ITEM_WJ_STEELIUM_Z 0x493 // Wally's Journey: hidden Steelium Z in AncientTomb
 #define FLAG_HIDDEN_ITEM_WJ_FAIRIUM_Z 0x494 // Wally's Journey: hidden Fairium Z in Route123
-#define FLAG_UNUSED_0x495                                           0x495 // Unused Flag
-#define FLAG_UNUSED_0x496                                           0x496 // Unused Flag
-#define FLAG_UNUSED_0x497                                           0x497 // Unused Flag
-#define FLAG_UNUSED_0x498                                           0x498 // Unused Flag
-#define FLAG_UNUSED_0x499                                           0x499 // Unused Flag
-#define FLAG_UNUSED_0x49A                                           0x49A // Unused Flag
-#define FLAG_UNUSED_0x49B                                           0x49B // Unused Flag
-#define FLAG_UNUSED_0x49C                                           0x49C // Unused Flag
-#define FLAG_UNUSED_0x49D                                           0x49D // Unused Flag
-#define FLAG_UNUSED_0x49E                                           0x49E // Unused Flag
-#define FLAG_UNUSED_0x49F                                           0x49F // Unused Flag
-#define FLAG_UNUSED_0x4A0                                           0x4A0 // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_DUSK_STONE 0x495 // Wally's Journey: hidden Dusk Stone in MtPyre_6F
+#define FLAG_HIDDEN_ITEM_WJ_DAWN_STONE 0x496 // Wally's Journey: hidden Dawn Stone in MeteorFalls_B1F_1R
+#define FLAG_HIDDEN_ITEM_WJ_SHINY_STONE 0x497 // Wally's Journey: hidden Shiny Stone in MirageTower_3F
+#define FLAG_HIDDEN_ITEM_WJ_ICE_STONE 0x498 // Wally's Journey: hidden Ice Stone in ShoalCave_LowTideIceRoom
+#define FLAG_HIDDEN_ITEM_WJ_BLACK_AUGURITE 0x499 // Wally's Journey: hidden Black Augurite in DesertRuins
+#define FLAG_HIDDEN_ITEM_WJ_PEAT_BLOCK 0x49A // Wally's Journey: hidden Peat Block in Route120
+#define FLAG_HIDDEN_ITEM_WJ_AUSPICIOUS_ARMOR 0x49B // Wally's Journey: hidden Auspicious Armor in FieryPath
+#define FLAG_HIDDEN_ITEM_WJ_MALICIOUS_ARMOR 0x49C // Wally's Journey: hidden Malicious Armor in MtPyre_Summit
+#define FLAG_HIDDEN_ITEM_WJ_METAL_ALLOY 0x49D // Wally's Journey: hidden Metal Alloy in NewMauville_Inside
+#define FLAG_HIDDEN_ITEM_WJ_SWEET_APPLE 0x49E // Wally's Journey: hidden Sweet Apple in Route123
+#define FLAG_HIDDEN_ITEM_WJ_TART_APPLE 0x49F // Wally's Journey: hidden Tart Apple in Route123
+#define FLAG_HIDDEN_ITEM_WJ_SYRUPY_APPLE 0x4A0 // Wally's Journey: hidden Syrupy Apple in Route119
 #define FLAG_UNUSED_0x4A1                                           0x4A1 // Unused Flag
 #define FLAG_UNUSED_0x4A2                                           0x4A2 // Unused Flag
 #define FLAG_UNUSED_0x4A3                                           0x4A3 // Unused Flag

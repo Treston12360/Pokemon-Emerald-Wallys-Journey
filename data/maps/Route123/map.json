@@ -852,6 +852,22 @@
       "elevation": 3,
       "item": "ITEM_FAIRIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_FAIRIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 136,
+      "y": 18,
+      "elevation": 3,
+      "item": "ITEM_SWEET_APPLE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_SWEET_APPLE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 135,
+      "y": 15,
+      "elevation": 3,
+      "item": "ITEM_TART_APPLE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_TART_APPLE"
     }
   ]
 }

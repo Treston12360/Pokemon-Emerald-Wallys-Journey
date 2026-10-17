@@ -93,6 +93,14 @@
       "elevation": 3,
       "item": "ITEM_GROUNDIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_GROUNDIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 5,
+      "y": 3,
+      "elevation": 3,
+      "item": "ITEM_BLACK_AUGURITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_BLACK_AUGURITE"
     }
   ]
 }

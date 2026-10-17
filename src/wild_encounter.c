@@ -29,6 +29,7 @@
 #include "constants/game_stat.h"
 #include "constants/item.h"
 #include "constants/items.h"
+#include "data/wally_rare_visitors.h"
 #include "constants/layouts.h"
 #include "constants/weather.h"
 
@@ -524,6 +525,22 @@ void CreateWildMon(enum Species species, u8 level)
 #define TRY_GET_ABILITY_INFLUENCED_WILD_MON_INDEX(wildPokemon, type, ability, ptr, count) TryGetAbilityInfluencedWildMonIndex(wildPokemon, type, ability, ptr)
 #endif
 
+// Wally's Journey: each rare visitor on this map/area gets its own exact roll.
+static enum Species WallyJourney_RollRareVisitor(enum WildPokemonArea area, enum Species species)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sWallyRareVisitors); i++)
+    {
+        const struct WallyRareVisitor *v = &sWallyRareVisitors[i];
+        if (v->area == area
+         && v->mapGroup == gSaveBlock1Ptr->location.mapGroup
+         && v->mapNum == gSaveBlock1Ptr->location.mapNum
+         && (Random() % 10000) < v->chance)
+            return v->species;
+    }
+    return species;
+}
+
 bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, enum WildPokemonArea area, u8 flags)
 {
     u8 wildMonIndex = 0;
@@ -578,7 +595,7 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, enum WildPok
     if (gMapHeader.mapLayoutId != LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS && flags & WILD_CHECK_KEEN_EYE && !IsAbilityAllowingEncounter(level))
         return FALSE;
 
-    CreateWildMon(wildMonInfo->wildPokemon[wildMonIndex].species, level);
+    CreateWildMon(WallyJourney_RollRareVisitor(area, wildMonInfo->wildPokemon[wildMonIndex].species), level);
     return TRUE;
 }
 

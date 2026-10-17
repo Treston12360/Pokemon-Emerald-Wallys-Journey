@@ -877,6 +877,14 @@
       "elevation": 1,
       "item": "ITEM_BUGINIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_BUGINIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 38,
+      "y": 97,
+      "elevation": 1,
+      "item": "ITEM_PEAT_BLOCK",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_PEAT_BLOCK"
     }
   ]
 }

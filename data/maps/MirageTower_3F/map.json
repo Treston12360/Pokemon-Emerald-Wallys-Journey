@@ -59,5 +59,14 @@
     }
   ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 14,
+      "y": 3,
+      "elevation": 3,
+      "item": "ITEM_SHINY_STONE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_SHINY_STONE"
+    }
+  ]
 }

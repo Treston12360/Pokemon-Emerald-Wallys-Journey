@@ -2450,7 +2450,7 @@ const struct SpeciesInfo gSpeciesInfoGen5[] =
         .levelUpLearnset = sBoldoreLevelUpLearnset,
         .teachableLearnset = sBoldoreTeachableLearnset,
         .evolutions = EVOLUTION({EVO_TRADE, 0, SPECIES_GIGALITH},
-                                {EVO_ITEM, ITEM_LINKING_CORD, SPECIES_GIGALITH}),
+                                {EVO_LEVEL, 38, SPECIES_GIGALITH} /* Wally's Journey: Emerald Legacy-style solo level, no Linking Cord */),
     },
 
     [SPECIES_GIGALITH] =
@@ -3188,7 +3188,7 @@ const struct SpeciesInfo gSpeciesInfoGen5[] =
         .levelUpLearnset = sGurdurrLevelUpLearnset,
         .teachableLearnset = sGurdurrTeachableLearnset,
         .evolutions = EVOLUTION({EVO_TRADE, 0, SPECIES_CONKELDURR},
-                                {EVO_ITEM, ITEM_LINKING_CORD, SPECIES_CONKELDURR}),
+                                {EVO_LEVEL, 38, SPECIES_CONKELDURR} /* Wally's Journey: Emerald Legacy-style solo level, no Linking Cord */),
     },
 
     [SPECIES_CONKELDURR] =

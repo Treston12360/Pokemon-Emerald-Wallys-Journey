@@ -153,6 +153,14 @@
       "elevation": 3,
       "item": "ITEM_FIRIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_FIRIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 21,
+      "elevation": 3,
+      "item": "ITEM_AUSPICIOUS_ARMOR",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_AUSPICIOUS_ARMOR"
     }
   ]
 }

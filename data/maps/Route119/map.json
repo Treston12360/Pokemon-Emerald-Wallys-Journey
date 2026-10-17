@@ -943,6 +943,14 @@
       "elevation": 3,
       "item": "ITEM_STARAPTITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_STARAPTITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 38,
+      "y": 6,
+      "elevation": 3,
+      "item": "ITEM_SYRUPY_APPLE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_SYRUPY_APPLE"
     }
   ]
 }

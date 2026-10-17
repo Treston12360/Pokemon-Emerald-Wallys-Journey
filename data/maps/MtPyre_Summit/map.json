@@ -238,6 +238,14 @@
       "elevation": 3,
       "item": "ITEM_PSYCHIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_PSYCHIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 46,
+      "y": 8,
+      "elevation": 3,
+      "item": "ITEM_MALICIOUS_ARMOR",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_MALICIOUS_ARMOR"
     }
   ]
 }

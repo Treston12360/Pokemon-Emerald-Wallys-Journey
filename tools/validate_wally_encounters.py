@@ -160,7 +160,10 @@ WILD_PRE_EVOLUTION = {
     "SPECIES_DOUBLADE": "SPECIES_HONEDGE",
     "SPECIES_AEGISLASH": "SPECIES_HONEDGE",
     "SPECIES_TOXTRICITY": "SPECIES_TOXEL",
-    "SPECIES_HAXORUS": "SPECIES_AXEW",
+    "SPECIES_HAXORUS": ("SPECIES_AXEW", "SPECIES_FRAXURE"),
+    "SPECIES_SHELGON": ("SPECIES_BAGON",),
+    "SPECIES_MAGNEZONE": ("SPECIES_MAGNEMITE", "SPECIES_MAGNETON"),
+    "SPECIES_TREVENANT": ("SPECIES_PHANTUMP",),  # Trevenant now evolves at Lv 38  # owner rule: evolved stage needs no wild slot
     "SPECIES_ZWEILOUS": "SPECIES_DEINO",
     "SPECIES_DRAKLOAK": "SPECIES_DREEPY",
     "SPECIES_HERDIER": "SPECIES_LILLIPUP",
@@ -186,7 +189,9 @@ WILD_PRE_EVOLUTION = {
     "SPECIES_SANDACONDA": "SPECIES_SILICOBRA",
 }
 for mon in EVOLVED_RARE_SPECIES:
-    if mon not in species and WILD_PRE_EVOLUTION.get(mon) not in species:
+    alts = WILD_PRE_EVOLUTION.get(mon, ())
+    alts = (alts,) if isinstance(alts, str) else alts
+    if mon not in species and not any(a in species for a in alts):
         errors.append(f"Missing rare evolution family from wild habitats: {mon}")
 
 # Story-only encounters must not accidentally enter normal grass/surf/fishing.

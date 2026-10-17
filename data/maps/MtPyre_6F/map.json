@@ -80,6 +80,14 @@
       "elevation": 3,
       "item": "ITEM_GENGARITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_GENGARITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 9,
+      "y": 4,
+      "elevation": 3,
+      "item": "ITEM_DUSK_STONE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_DUSK_STONE"
     }
   ]
 }

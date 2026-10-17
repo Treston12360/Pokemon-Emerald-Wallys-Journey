@@ -10151,7 +10151,7 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .teachableLearnset = sGravelerAlolaTeachableLearnset,
         .formSpeciesIdTable = sGravelerFormSpeciesIdTable,
         .evolutions = EVOLUTION({EVO_TRADE, 0, SPECIES_GOLEM_ALOLA},
-                                {EVO_ITEM, ITEM_LINKING_CORD, SPECIES_GOLEM_ALOLA}),
+                                {EVO_LEVEL, 38, SPECIES_GOLEM_ALOLA} /* Wally's Journey: Emerald Legacy-style solo level, no Linking Cord */),
     },
 
     [SPECIES_GOLEM_ALOLA] =

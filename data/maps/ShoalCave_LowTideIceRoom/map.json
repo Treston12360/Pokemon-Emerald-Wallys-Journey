@@ -68,6 +68,14 @@
       "elevation": 3,
       "item": "ITEM_ICIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ICIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 24,
+      "elevation": 3,
+      "item": "ITEM_ICE_STONE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ICE_STONE"
     }
   ]
 }
