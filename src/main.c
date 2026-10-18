@@ -458,7 +458,32 @@ void DoSoftReset(void)
     SoftReset(RESET_ALL);
 }
 
+// Wally's Journey: a cry's song data lives in gPokemonCrySongs while the sound
+// driver reads it. A cry that was just started has no channel yet (the driver
+// only picks it up on the next VBlank), so IsPokemonCryPlaying() reports it as
+// idle. Wiping the songs at that moment leaves the driver parsing zeros forever
+// (a hard freeze). The battle speed-up made this reachable: a send-out cry was
+// started and "finished" within the same frame. Never wipe a song that any
+// cry player is still using or about to start.
+bool32 IsAnyPokemonCryMusicPlayerBusy(void)
+{
+    u32 i;
+    for (i = 0; i < MAX_POKEMON_CRIES; i++)
+    {
+        struct MusicPlayerInfo *mplayInfo = &gPokemonCryMusicPlayers[i];
+        if (mplayInfo->status & MUSICPLAYER_STATUS_PAUSE)
+            continue;
+        if (mplayInfo->status & MUSICPLAYER_STATUS_TRACK)
+            return TRUE;
+        if (mplayInfo->tracks != NULL && (mplayInfo->tracks[0].flags & MPT_FLG_START))
+            return TRUE;
+    }
+    return FALSE;
+}
+
 void ClearPokemonCrySongs(void)
 {
+    if (IsAnyPokemonCryMusicPlayerBusy())
+        return;
     CpuFill16(0, gPokemonCrySongs, MAX_POKEMON_CRIES * sizeof(struct PokemonCrySong));
 }

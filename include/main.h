@@ -67,6 +67,7 @@ void SetTrainerHillVBlankCounter(u32 *counter);
 void ClearTrainerHillVBlankCounter(void);
 void DoSoftReset(void);
 void ClearPokemonCrySongs(void);
+bool32 IsAnyPokemonCryMusicPlayerBusy(void);
 void RestoreSerialTimer3IntrHandlers(void);
 void StartTimer1(void);
 void SeedRngAndSetTrainerId(void);
