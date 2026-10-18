@@ -12,11 +12,12 @@ MagmaHideout_3F_1R_EventScript_Grunt16::
 	end
 
 MagmaHideout_3F_1R_Text_Grunt9Intro:
-	.string "What did I do to deserve this post?\n"
-	.string "My left ear is burning up!$"
+	.string "Why'd they post me next to the\n"
+	.string "lava? My ear's melting!$"
 
 MagmaHideout_3F_1R_Text_Grunt9Defeat:
-	.string "I'm getting heat exhaustion…$"
+	.string "Heat exhaustion…\n"
+	.string "and defeat…$"
 
 MagmaHideout_3F_1R_Text_Grunt9PostBattle:
 	.string "Isn't it odd we wear hoods inside\n"
@@ -30,8 +31,8 @@ MagmaHideout_3F_1R_Text_Grunt16Intro:
 	.string "I'm not letting you ruin it!$"
 
 MagmaHideout_3F_1R_Text_Grunt16Defeat:
-	.string "Oh, no!\n"
-	.string "You're not to be trusted at all!$"
+	.string "No! You can't be trusted\n"
+	.string "with anything!$"
 
 MagmaHideout_3F_1R_Text_Grunt16PostBattle:
 	.string "TEAM AQUA talks about saving the\n"

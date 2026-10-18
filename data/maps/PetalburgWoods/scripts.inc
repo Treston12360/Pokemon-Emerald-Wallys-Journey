@@ -348,8 +348,8 @@ PetalburgWoods_Text_NoOneCrossesTeamAqua:
 	.string "Fine! Battle me, kid!$"
 
 PetalburgWoods_Text_YoureKiddingMe:
-	.string "You're kidding me!\n"
-	.string "You're tough!$"
+	.string "No way!\n"
+	.string "My bugs never lose in here!$"
 
 PetalburgWoods_Text_YouveGotSomeNerve:
 	.string "Grrr… You've got some nerve\n"
@@ -383,17 +383,17 @@ PetalburgWoods_Text_YoureLoadedWithItems:
 	.string "I can't give you these POKé BALLS.$"
 
 PetalburgWoods_Text_GoBugPokemonTeam:
-	.string "I caught a whole bunch of POKéMON!\p"
-	.string "Go, go, go!\n"
-	.string "My BUG POKéMON team!$"
+	.string "Grandpa says these woods used to\n"
+	.string "buzz all night.\p"
+	.string "Let's make them buzz! Go, bugs!$"
 
 PetalburgWoods_Text_ICouldntWin:
-	.string "I have all these POKéMON…\n"
-	.string "and I still couldn't win!$"
+	.string "A whole team…\n"
+	.string "and still not enough!$"
 
 PetalburgWoods_Text_ImOutOfPokeBalls:
-	.string "I caught a bunch of POKéMON.\n"
-	.string "Now I'm out of POKé BALLS.\p"
+	.string "I used my last POKé BALL on a\n"
+	.string "SILCOON.\p"
 	.string "The WURMPLE used to be everywhere.\n"
 	.string "Now you have to look really hard.$"
 
@@ -404,7 +404,8 @@ PetalburgWoods_Text_InstantlyPopularWithBugPokemon:
 	.string "they just ask if it's a DEVON robot.$"
 
 PetalburgWoods_Text_CantBePopularIfILose:
-	.string "I can't be popular if I lose!$"
+	.string "Nobody at school is going to\n"
+	.string "hear about this!$"
 
 PetalburgWoods_Text_PeopleRespectYou:
 	.string "If you have a big BUG POKéMON,\n"
@@ -421,8 +422,8 @@ PetalburgWoods_Text_IWantRematch2:
 	.string "I'm registering you in my POKéNAV!$"
 
 PetalburgWoods_Text_MyPokemonHaveGrown:
-	.string "My BUG POKéMON grew up!\n"
-	.string "I'll be popular again!$"
+	.string "My bugs evolved! Wait till\n"
+	.string "the class sees!$"
 
 PetalburgWoods_Text_CantBePopularIfLose:
 	.string "Nooo! My reputation!$"

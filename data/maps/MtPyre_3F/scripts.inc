@@ -33,13 +33,12 @@ MtPyre_3F_EventScript_RematchGabrielle::
 	end
 
 MtPyre_3F_Text_WilliamIntro:
-	.string "This mountain's air has lifted my\n"
-	.string "psychic power!\p"
-	.string "A mere child like you…\n"
-	.string "You dream of winning?$"
+	.string "The air here sharpens my mind!\n"
+	.string "A child can't win against this!$"
 
 MtPyre_3F_Text_WilliamDefeat:
-	.string "I drown in self-pity…$"
+	.string "I drown in self-pity…\n"
+	.string "in a graveyard, no less.$"
 
 MtPyre_3F_Text_WilliamPostBattle:
 	.string "I thought this mountain would\n"
@@ -50,24 +49,23 @@ MtPyre_3F_Text_WilliamPostBattle:
 	.string "more than being heard.$"
 
 MtPyre_3F_Text_KaylaIntro:
-	.string "Ahahahaha!\p"
-	.string "This is no place for children,\n"
-	.string "least of all you!$"
+	.string "Ahahahaha! A child, here? Go home\n"
+	.string "before the spirits notice you!$"
 
 MtPyre_3F_Text_KaylaDefeat:
-	.string "I lost that cleanly…$"
+	.string "I lost… cleanly. Ugh.$"
 
 MtPyre_3F_Text_KaylaPostBattle:
 	.string "My training still isn't enough…\n"
 	.string "On to the summit! Go, me!$"
 
 MtPyre_3F_Text_GabrielleIntro:
-	.string "Why have you come here?\n"
-	.string "To remember someone?$"
+	.string "Why have you come? To remember\n"
+	.string "someone?$"
 
 MtPyre_3F_Text_GabrielleDefeat:
-	.string "That was amazing!\n"
-	.string "You're a very special TRAINER.$"
+	.string "Amazing. The spirits\n"
+	.string "watched you closely.$"
 
 MtPyre_3F_Text_GabriellePostBattle:
 	.string "The partners we've lost taught\n"
@@ -83,18 +81,16 @@ MtPyre_3F_Text_GabrielleRegister:
 	.string "Please, I need to see your POKéNAV.$"
 
 MtPyre_3F_Text_GabrielleRematchIntro:
-	.string "Oh, it's you…\p"
-	.string "Have you come to show me how your\n"
-	.string "POKéMON have grown?$"
+	.string "Oh, it's you… Come to show me how\n"
+	.string "your POKéMON have grown?$"
 
 MtPyre_3F_Text_GabrielleRematchDefeat:
-	.string "How amazing!\n"
-	.string "You are a special person.$"
+	.string "You've grown too.\n"
+	.string "They can see it.$"
 
 MtPyre_3F_Text_GabriellePostRematch:
-	.string "POKéMON no longer of this world.\n"
-	.string "POKéMON with you now.\p"
-	.string "And POKéMON you've yet to meet…\p"
-	.string "All are to be cherished equally.\n"
-	.string "I see you remember that.$"
+	.string "The POKéMON who've passed. The\n"
+	.string "POKéMON with you. The ones to come.\p"
+	.string "Cherish them all the same.\n"
+	.string "You already do.$"
 

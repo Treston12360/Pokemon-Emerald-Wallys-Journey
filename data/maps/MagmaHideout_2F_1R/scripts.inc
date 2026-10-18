@@ -22,15 +22,13 @@ MagmaHideout_2F_1R_EventScript_Grunt5::
 	end
 
 MagmaHideout_2F_1R_Text_Grunt14Intro:
-	.string "What, what, what?\p"
-	.string "Only TEAM MAGMA members belong\n"
-	.string "in here!\p"
-	.string "You're not in uniform…\n"
-	.string "You rouse my suspicion! Battle!$"
+	.string "What, what, what? No uniform?\p"
+	.string "Only MAGMA belongs in here!\n"
+	.string "You're suspicious! Battle!$"
 
 MagmaHideout_2F_1R_Text_Grunt14Defeat:
-	.string "Aiyiyi…\n"
-	.string "My pride as a MAGMA member…$"
+	.string "Aiyiyi… I used to be proud\n"
+	.string "of this uniform…$"
 
 MagmaHideout_2F_1R_Text_Grunt14PostBattle:
 	.string "I used to swing a hammer on the\n"
@@ -39,12 +37,11 @@ MagmaHideout_2F_1R_Text_Grunt14PostBattle:
 	.string "FALLARBOR. I miss that.$"
 
 MagmaHideout_2F_1R_Text_Grunt3Intro:
-	.string "Hold it! You think I'll keep my\n"
-	.string "trap shut and let you by?$"
+	.string "Hold it! You think I'll just let\n"
+	.string "you walk by?$"
 
 MagmaHideout_2F_1R_Text_Grunt3Defeat:
-	.string "Ooh wow!\n"
-	.string "I concede!$"
+	.string "Wow! Okay! You can go!$"
 
 MagmaHideout_2F_1R_Text_Grunt3PostBattle:
 	.string "The scientists said the eruption\n"
@@ -54,22 +51,23 @@ MagmaHideout_2F_1R_Text_Grunt3PostBattle:
 	.string "the coward.$"
 
 MagmaHideout_2F_1R_Text_Grunt4Intro:
-	.string "Ahah!\n"
-	.string "An intruder!$"
+	.string "Ahah! An intruder! I trained a\n"
+	.string "whole year for this!$"
 
 MagmaHideout_2F_1R_Text_Grunt4Defeat:
-	.string "Graaah!$"
+	.string "Graaah! A whole year!$"
 
 MagmaHideout_2F_1R_Text_Grunt4PostBattle:
 	.string "I already lost.\n"
 	.string "Do I still have to run in circles?$"
 
 MagmaHideout_2F_1R_Text_Grunt5Intro:
-	.string "Oh, oh!\n"
-	.string "An intruder!$"
+	.string "An intruder? Down here? Nobody\n"
+	.string "told me about this!$"
 
 MagmaHideout_2F_1R_Text_Grunt5Defeat:
-	.string "Mutter…$"
+	.string "Mutter… mutter…\n"
+	.string "nobody tells me anything.$"
 
 MagmaHideout_2F_1R_Text_Grunt5PostBattle:
 	.string "Actually, I'm no expert at battling…\p"

@@ -176,8 +176,9 @@ RustboroCity_Gym_Text_JoshPostBattle:
 	.string "me are why.$"
 
 RustboroCity_Gym_Text_TommyIntro:
-	.string "If you can't beat me, you won't\n"
-	.string "stand a chance against ROXANNE!$"
+	.string "ROXANNE makes us write a battle plan\n"
+	.string "before every match.\p"
+	.string "Mine says I win in four turns!$"
 
 RustboroCity_Gym_Text_TommyDefeat:
 	.string "Wow! ROXANNE's going to want\n"
@@ -190,8 +191,9 @@ RustboroCity_Gym_Text_TommyPostBattle:
 	.string "practically a hug.$"
 
 RustboroCity_Gym_Text_MarcIntro:
-	.string "Middle of town or not, my ROCK\n"
-	.string "POKéMON need room to rampage!$"
+	.string "DEVON wanted this lot for an office.\p"
+	.string "ROXANNE kept it a GYM. My ROCK\n"
+	.string "POKéMON thank her!$"
 
 RustboroCity_Gym_Text_MarcDefeat:
 	.string "Oh man!\n"

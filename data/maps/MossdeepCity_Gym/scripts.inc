@@ -444,30 +444,28 @@ MossdeepCity_Gym_Text_VirgilPostBattle:
 	.string "they lost to them.$"
 
 MossdeepCity_Gym_Text_BlakeIntro:
-	.string "Fufufufu… Watch me levitate a POKé\n"
-	.string "BALL telekinetically!\p"
-	.string "Wrooooooooaaaar!\n"
-	.string "… … … … … … …\p"
-	.string "Sometimes, I'm out of sync…$"
+	.string "I'm going to read your mind like\n"
+	.string "the twins do!\p"
+	.string "… … … … … …\n"
+	.string "…You're thinking about lunch.$"
 
 MossdeepCity_Gym_Text_BlakeDefeat:
-	.string "My battling is out of\n"
-	.string "sync too!$"
+	.string "I read the wrong mind…\n"
+	.string "Mine.$"
 
 MossdeepCity_Gym_Text_BlakePostBattle:
-	.string "A POKé BALL was too heavy to lift\n"
-	.string "with my mind. But this dust bunny…\p"
-	.string "Whoooooooooh!\n"
-	.string "… … … … … …\p"
-	.string "No, I'm not cheating!\n"
-	.string "I didn't blow on it! Honestly!$"
+	.string "I applied for the SPACE CENTER and\n"
+	.string "got turned down. Twice.\p"
+	.string "TATE and LIZA said a GYM needs\n"
+	.string "stubborn people too.$"
 
 MossdeepCity_Gym_Text_HannahIntro:
 	.string "When you lose to me, don't feel bad.\n"
 	.string "I'm just too strong!$"
 
 MossdeepCity_Gym_Text_HannahDefeat:
-	.string "You're just too strong!$"
+	.string "Okay, maybe YOU'RE the one\n"
+	.string "who's too strong.$"
 
 MossdeepCity_Gym_Text_HannahPostBattle:
 	.string "I'm not going to get down about it.\p"
@@ -477,11 +475,14 @@ MossdeepCity_Gym_Text_HannahPostBattle:
 	.string "brave. That's my plan.$"
 
 MossdeepCity_Gym_Text_SamanthaIntro:
-	.string "I see your future…\n"
-	.string "Beat me, and I'll tell you!$"
+	.string "I read the stars from MOSSDEEP's\n"
+	.string "shore every night.\p"
+	.string "Tonight they said a challenger would\n"
+	.string "come. Here you are!$"
 
 MossdeepCity_Gym_Text_SamanthaDefeat:
-	.string "I surrender!$"
+	.string "The stars didn't say I'd\n"
+	.string "lose… Rude of them.$"
 
 MossdeepCity_Gym_Text_SamanthaPostBattle:
 	.string "Your future holds a fierce battle\n"
@@ -494,8 +495,8 @@ MossdeepCity_Gym_Text_MauraIntro:
 	.string "Come at me with all of them!$"
 
 MossdeepCity_Gym_Text_MauraDefeat:
-	.string "You've walked a road of\n"
-	.string "greatness!$"
+	.string "Every road you walked\n"
+	.string "showed in that battle.$"
 
 MossdeepCity_Gym_Text_MauraPostBattle:
 	.string "When the twins were small, they got\n"
@@ -504,26 +505,29 @@ MossdeepCity_Gym_Text_MauraPostBattle:
 	.string "same second. Across town.$"
 
 MossdeepCity_Gym_Text_SylviaIntro:
-	.string "Even at the risk of everything,\n"
-	.string "I will win this!$"
+	.string "The twins see the future.\n"
+	.string "I see doom.\p"
+	.string "Yours, mostly.$"
 
 MossdeepCity_Gym_Text_SylviaDefeat:
-	.string "What you did…\n"
-	.string "It horrifies me…$"
+	.string "That shouldn't have happened…\n"
+	.string "The omens were so clear…$"
 
 MossdeepCity_Gym_Text_SylviaPostBattle:
-	.string "How dare you beat me…\p"
-	.string "It won't be my fault if something\n"
-	.string "horrible befalls you…$"
+	.string "Hmph. I predicted doom for TATE and\n"
+	.string "LIZA once too.\p"
+	.string "They just laughed. At the same\n"
+	.string "second. It was unsettling.$"
 
 MossdeepCity_Gym_Text_NateIntro:
-	.string "Hohoho.\n"
-	.string "Let me show you how stubborn\l"
-	.string "the PSYCHIC type can be.$"
+	.string "Hohoho. I've stared at this tile\n"
+	.string "for three hours.\p"
+	.string "PSYCHIC types are patient.\n"
+	.string "Are you?$"
 
 MossdeepCity_Gym_Text_NateDefeat:
-	.string "Oh! My, my!\n"
-	.string "Fantastic style!$"
+	.string "Oh my, my!\n"
+	.string "You're quicker than you look.$"
 
 MossdeepCity_Gym_Text_NatePostBattle:
 	.string "I… I don't let defeat r-rattle me.\p"
@@ -531,22 +535,27 @@ MossdeepCity_Gym_Text_NatePostBattle:
 	.string "together and get up together.$"
 
 MossdeepCity_Gym_Text_KathleenIntro:
-	.string "Let me show you a perfectly\n"
-	.string "awful, horrifying time!$"
+	.string "The SPACE CENTER sees the sky.\n"
+	.string "I see what's beneath it.\p"
+	.string "Let me show you a horrifying time!$"
 
 MossdeepCity_Gym_Text_KathleenDefeat:
-	.string "N-nooooo!$"
+	.string "N-no! Too bright!\n"
+	.string "You're too bright!$"
 
 MossdeepCity_Gym_Text_KathleenPostBattle:
-	.string "Your energy is contagious!\n"
-	.string "Get away from me, quickly!$"
+	.string "Your energy is contagious! Go away!\p"
+	.string "…The twins are like that too.\n"
+	.string "It's exhausting.$"
 
 MossdeepCity_Gym_Text_CliffordIntro:
-	.string "I may be past my prime, but I\n"
-	.string "suggest you not patronize me.$"
+	.string "I spent thirty years calculating\n"
+	.string "rocket paths.\p"
+	.string "I've calculated yours, young one.$"
 
 MossdeepCity_Gym_Text_CliffordDefeat:
-	.string "Ah, the power of youth!$"
+	.string "My math was flawless.\n"
+	.string "You were not in it.$"
 
 MossdeepCity_Gym_Text_CliffordPostBattle:
 	.string "I taught the twins' father at the\n"
@@ -556,12 +565,14 @@ MossdeepCity_Gym_Text_CliffordPostBattle:
 	.string "right.$"
 
 MossdeepCity_Gym_Text_MaceyIntro:
-	.string "You're not getting through to\n"
-	.string "the twins! Not past me!$"
+	.string "I've known the twins since they\n"
+	.string "were in diapers.\p"
+	.string "Nobody gets to them without\n"
+	.string "getting past me!$"
 
 MossdeepCity_Gym_Text_MaceyDefeat:
-	.string "How are you so ridiculously\n"
-	.string "strong?$"
+	.string "How are you this strong?!\n"
+	.string "They're going to tease me.$"
 
 MossdeepCity_Gym_Text_MaceyPostBattle:
 	.string "Humph! You're strong, but you'd\n"
@@ -570,36 +581,37 @@ MossdeepCity_Gym_Text_MaceyPostBattle:
 	.string "that's what makes you scary.$"
 
 MossdeepCity_Gym_Text_NicholasIntro:
-	.string "Wroooar! Taste my super\n"
-	.string "POKéMON psychic power!$"
+	.string "Wroooar! I've been training my\n"
+	.string "mind by staring at stars!$"
 
 MossdeepCity_Gym_Text_NicholasDefeat:
-	.string "Oh!\n"
-	.string "Done in!$"
+	.string "Ow…\n"
+	.string "I think I sprained my brain.$"
 
 MossdeepCity_Gym_Text_NicholasPostBattle:
 	.string "Next I'll develop an\n"
 	.string "invincible POKéMON power! Soon!$"
 
 MossdeepCity_Gym_Text_TateAndLizaIntro:
-	.string "TATE: Hehehe… Were you surprised?\p"
-	.string "LIZA: Fufufu… Were you surprised?\p"
-	.string "TATE: That there are two GYM LEADERS?\n"
-	.string "LIZA: That there are two GYM LEADERS?\p"
-	.string "TATE: We're twins!\n"
-	.string "LIZA: We're twins!\p"
-	.string "TATE: We don't need to talk because…\n"
-	.string "LIZA: We can each determine what…\p"
-	.string "TATE: The other is thinking…\n"
-	.string "LIZA: All in our minds!\p"
-	.string "TATE: This combination of ours…\n"
+	.string "TATE: Hehehe… Surprised?\n"
+	.string "LIZA: Fufufu… Surprised?\p"
+	.string "TATE: Two LEADERS.\n"
+	.string "LIZA: One mind.\p"
+	.string "TATE: Mom and Dad build rockets\n"
+	.string "at the SPACE CENTER.\p"
+	.string "LIZA: We grew up counting the\n"
+	.string "launches from the roof.\p"
+	.string "TATE: Everyone said eleven was too\n"
+	.string "young to lead a GYM.\p"
+	.string "LIZA: Then they battled us.\p"
+	.string "TATE: Ready for our combination?\n"
 	.string "LIZA: Can you beat it?$"
 
 MossdeepCity_Gym_Text_TateAndLizaDefeat:
-	.string "TATE: What?! Our combination…\n"
-	.string "LIZA: …was shattered!\p"
+	.string "TATE: What?! We saw it coming…\n"
+	.string "LIZA: …and still couldn't stop it!\p"
 	.string "TATE: You win.\n"
-	.string "LIZA: So take this.$"
+	.string "LIZA: This is yours.$"
 
 MossdeepCity_Gym_Text_ReceivedMindBadge:
 	.string "{PLAYER} received the MIND BADGE\n"
@@ -637,13 +649,12 @@ MossdeepCity_Gym_Text_TateAndLizaPostBattle:
 	.string "LIZA: We're still mad about it!$"
 
 MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons:
-	.string "TATE: Hehehe… Were you surprised?\p"
-	.string "LIZA: That there are two GYM LEADERS?\p"
-	.string "TATE: Oops, you have only one…\n"
-	.string "LIZA: POKéMON that can battle.\p"
-	.string "TATE: We can't battle that way!\p"
-	.string "LIZA: If you want to challenge us,\n"
-	.string "bring some more POKéMON.$"
+	.string "TATE: Hehehe… Surprised?\n"
+	.string "LIZA: Two LEADERS!\p"
+	.string "TATE: But you only have one…\n"
+	.string "LIZA: …POKéMON that can battle.\p"
+	.string "TATE: There are two of us.\n"
+	.string "LIZA: So bring two POKéMON!$"
 
 MossdeepCity_Gym_Text_GymStatue:
 	.string "MOSSDEEP CITY POKéMON GYM$"
@@ -654,20 +665,17 @@ MossdeepCity_Gym_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 MossdeepCity_Gym_Text_TateAndLizaPreRematch:
-	.string "TATE: POKéMON…\n"
-	.string "LIZA: POKéMON…\p"
-	.string "TATE: By changing the party's mix…\n"
-	.string "LIZA: The battle style changes.\p"
-	.string "TATE: But me…\n"
-	.string "LIZA: But me…\p"
-	.string "TATE: I'll always be with LIZA!\n"
-	.string "LIZA: I'll always be with TATE!\p"
-	.string "TATE: Our combination…\n"
-	.string "LIZA: We'll show you again and again!$"
+	.string "TATE: You came back!\n"
+	.string "LIZA: We knew you would.\p"
+	.string "TATE: We've been training apart.\n"
+	.string "LIZA: It was awful.\p"
+	.string "TATE: But now we're even stronger\n"
+	.string "together.\p"
+	.string "LIZA: Let's show you!$"
 
 MossdeepCity_Gym_Text_TateAndLizaRematchDefeat:
 	.string "TATE: You and your POKéMON…\n"
-	.string "LIZA: …think as one, like us!$"
+	.string "LIZA: …you're two minds, one heart.$"
 
 MossdeepCity_Gym_Text_TateAndLizaPostRematch:
 	.string "TATE: Knock us down…\n"
@@ -676,16 +684,12 @@ MossdeepCity_Gym_Text_TateAndLizaPostRematch:
 	.string "LIZA: We always have.$"
 
 MossdeepCity_Gym_Text_TateAndLizaRematchNeedTwoMons:
-	.string "TATE: You're back again…\n"
-	.string "LIZA: You're back again…\p"
-	.string "TATE: To give us a rematch.\n"
-	.string "LIZA: To give us a rematch.\p"
-	.string "TATE: But…\n"
-	.string "LIZA: For our match…\p"
-	.string "TATE: You brought just one POKéMON!\n"
-	.string "LIZA: You brought just one POKéMON!\p"
-	.string "TATE: We need you to bring at least…\n"
-	.string "LIZA: Two POKéMON when you come back.$"
+	.string "TATE: You came back!\n"
+	.string "LIZA: We knew you would.\p"
+	.string "TATE: But you only have one…\n"
+	.string "LIZA: …POKéMON that can battle.\p"
+	.string "TATE: Bring two.\n"
+	.string "LIZA: Then we'll battle!$"
 
 MossdeepCity_Gym_Text_TateAndLizaPreRematch3:
 	.string "TATE: We used to read your moves…\n"

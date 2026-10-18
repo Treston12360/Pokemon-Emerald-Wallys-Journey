@@ -69,8 +69,8 @@ Route119_WeatherInstitute_1F_EventScript_Grunt4::
 	end
 
 Route119_WeatherInstitute_1F_Text_Grunt1Intro:
-	.string "The BOSS got interested in the\n"
-	.string "research here. Quit meddling!$"
+	.string "The BOSS wants the storm research\n"
+	.string "here. Stay out of it!$"
 
 Route119_WeatherInstitute_1F_Text_Grunt1Defeat:
 	.string "Blast it…\n"
@@ -83,15 +83,16 @@ Route119_WeatherInstitute_1F_Text_Grunt1PostBattle:
 	.string "…I ask anyway. Nobody answers.$"
 
 Route119_WeatherInstitute_1F_Text_Grunt4Intro:
-	.string "Huh? What's a kid doing here?$"
+	.string "A kid? Here? Go home before the\n"
+	.string "weather gets worse!$"
 
 Route119_WeatherInstitute_1F_Text_Grunt4Defeat:
-	.string "Huh?\n"
-	.string "I lost?!$"
+	.string "Huh? Beaten by a kid in\n"
+	.string "the rain?$"
 
 Route119_WeatherInstitute_1F_Text_Grunt4PostBattle:
-	.string "I'll catch an earful for losing to a\n"
-	.string "kid… Maybe I'll nap in that bed.$"
+	.string "I'll get chewed out for this… Maybe\n"
+	.string "I'll nap in that bed instead.$"
 
 Route119_WeatherInstitute_1F_Text_EveryoneWentUpstairs:
 	.string "While I was sleeping, everyone went\n"

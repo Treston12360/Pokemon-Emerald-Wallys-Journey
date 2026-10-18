@@ -108,34 +108,32 @@ AquaHideout_B1F_EventScript_Grunt7::
 
 AquaHideout_B1F_Text_Grunt2Intro:
 	.string "Want to know our HIDEOUT's secret?\n"
-	.string "You have to beat me first!$"
+	.string "Beat me first!$"
 
 AquaHideout_B1F_Text_Grunt2Defeat:
 	.string "I can't win at all…$"
 
 AquaHideout_B1F_Text_Grunt2PostBattle:
-	.string "Our HIDEOUT's secret?\p"
-	.string "Well, let's just say…\n"
-	.string "There's a submarine at the far end!\p"
-	.string "But, by now…\n"
-	.string "Kekekeke…$"
+	.string "Our secret? Fine.\p"
+	.string "There's a submarine at the\n"
+	.string "far end!\p"
+	.string "…But it's probably gone by now.\n"
+	.string "Kekeke…$"
 
 AquaHideout_B1F_Text_Grunt3Intro:
-	.string "Fuel supply loaded A-OK!\n"
-	.string "In-cruise snacks loaded A-OK!\p"
-	.string "Nothing left to do but KO a pesky\n"
-	.string "meddler!$"
+	.string "Fuel loaded! Snacks loaded!\n"
+	.string "Now to KO a meddler!$"
 
 AquaHideout_B1F_Text_Grunt3Defeat:
-	.string "I took a serious licking!$"
+	.string "Ow! Took a serious licking!$"
 
 AquaHideout_B1F_Text_Grunt3PostBattle:
-	.string "Humph! This was the plan anyway!\n"
-	.string "My job was to hold you up!$"
+	.string "Hmph! That was the plan anyway!\n"
+	.string "I was just holding you up!$"
 
 AquaHideout_B1F_Text_Grunt5Intro:
-	.string "Yawn… Guarding the HIDEOUT is\n"
-	.string "boring. I'll take you on.$"
+	.string "Yawn… Guard duty again. Fine,\n"
+	.string "I'll take you on.$"
 
 AquaHideout_B1F_Text_Grunt5Defeat:
 	.string "Yawn… Oh, I lost…\p"
@@ -143,18 +141,18 @@ AquaHideout_B1F_Text_Grunt5Defeat:
 	.string "know. Not to stand in a cave.$"
 
 AquaHideout_B1F_Text_Grunt5PostBattle:
-	.string "If you scurry too much, other TEAM\n"
-	.string "AQUA members might get you.\p"
+	.string "Careful, others might jump you.\p"
 	.string "…Honestly? Half of us are thinking\n"
 	.string "about quitting after this.$"
 
 AquaHideout_B1F_Text_Grunt7Intro:
-	.string "Hey! You there!\p"
-	.string "Which uniform is cooler?\n"
-	.string "TEAM AQUA's or TEAM MAGMA's?$"
+	.string "Hey, you! Quick question!\p"
+	.string "Whose uniform is cooler, ours or\n"
+	.string "TEAM MAGMA's?$"
 
 AquaHideout_B1F_Text_Grunt7Defeat:
-	.string "I lost in a cool way…$"
+	.string "I lost, but I looked\n"
+	.string "cool doing it.$"
 
 AquaHideout_B1F_Text_Grunt7PostBattle:
 	.string "With a cool uniform you look good\n"

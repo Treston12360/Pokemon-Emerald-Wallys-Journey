@@ -389,14 +389,15 @@ LavaridgeTown_Gym_1F_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryPreRematch:
-	.string "FLANNERY: Losing won't deflate me!\p"
-	.string "I love POKéMON. I love to battle.\n"
-	.string "And I love this GYM!\p"
-	.string "Let's exchange superhot moves again!$"
+	.string "FLANNERY: You came back!\p"
+	.string "Grandpa said real LEADERS want the\n"
+	.string "rematch more than the win.\p"
+	.string "I finally get what he meant.\n"
+	.string "Let's go!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeat:
 	.string "Whew!\n"
-	.string "Right on the edge of eruption!$"
+	.string "That was hotter than the springs!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryPostRematch:
 	.string "FLANNERY: I lost, and I feel great!\p"

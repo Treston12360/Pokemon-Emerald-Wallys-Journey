@@ -576,12 +576,12 @@ Route111_Text_VictorIntro:
 	.string "That's the spirit! I like you!$"
 
 Route111_Text_VictorDefeat:
-	.string "Aiyah!\n"
-	.string "Tougher than I expected!$"
+	.string "Aiyah! Our family hasn't\n"
+	.string "lost on this road in years!$"
 
 Route111_Text_VictorPostBattle:
-	.string "Hey, all!\n"
-	.string "I've found a strong TRAINER!$"
+	.string "Everyone! Come out!\n"
+	.string "This TRAINER's the real deal!$"
 
 Route111_Text_VictoriaIntro:
 	.string "Oh, my goodness! Aren't you young?\p"
@@ -590,12 +590,12 @@ Route111_Text_VictoriaIntro:
 	.string "It's my turn to battle now!$"
 
 Route111_Text_VictoriaDefeat:
-	.string "Oh, gosh!\n"
-	.string "I can't get over how strong you are!$"
+	.string "Oh, my! VICTOR's going to\n"
+	.string "hear about this!$"
 
 Route111_Text_VictoriaPostBattle:
-	.string "There's a strong TRAINER here!\n"
-	.string "This one's really strong!$"
+	.string "Kids! Grandma! There's a strong\n"
+	.string "TRAINER out here!$"
 
 Route111_Text_ViviIntro:
 	.string "You're stronger than Mommy? Wow!\p"
@@ -603,11 +603,12 @@ Route111_Text_ViviIntro:
 	.string "Really! Honestly!$"
 
 Route111_Text_ViviDefeat:
-	.string "Huh? Did I just lose?$"
+	.string "Huh? I lost?\n"
+	.string "I never lose!$"
 
 Route111_Text_ViviPostBattle:
 	.string "This stinks…\p"
-	.string "…Snivel… Grandma!$"
+	.string "…Snivel… Grandma, I lost!$"
 
 Route111_Text_VickyIntro:
 	.string "How dare you make my granddaughter\n"
@@ -617,7 +618,7 @@ Route111_Text_VickyIntro:
 
 Route111_Text_VickyDefeat:
 	.string "Kwah! You are strong…\n"
-	.string "My granddaughter was right…$"
+	.string "VIVI was right about you.$"
 
 Route111_Text_VickyPostBattle:
 	.string "Four of us under one roof, three\n"

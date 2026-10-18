@@ -301,16 +301,20 @@ MauvilleCity_Gym_Text_GymGuidePostVictory:
 	.string "outside of battle, legally.$"
 
 MauvilleCity_Gym_Text_KirkIntro:
-	.string "My electric soul will shatter your\n"
-	.string "dreams, whoa-yeah!$"
+	.string "I play WATTSON's birthday party every\n"
+	.string "year, whoa-yeah!\p"
+	.string "He dances worse than anyone alive.\n"
+	.string "Now feel the voltage!$"
 
 MauvilleCity_Gym_Text_KirkDefeat:
 	.string "Plugged in, amped up…\n"
 	.string "and blown out!$"
 
 MauvilleCity_Gym_Text_KirkPostBattle:
-	.string "POKéMON and rock, it's all about\n"
-	.string "heart, whoa-yeah!$"
+	.string "When NEW MAUVILLE shut down, my\n"
+	.string "dad lost his job down there.\p"
+	.string "WATTSON paid his rent for a year.\n"
+	.string "Never told anybody. Whoa-yeah.$"
 
 MauvilleCity_Gym_Text_ShawnIntro:
 	.string "I trained under WATTSON! I won't go\n"
@@ -327,7 +331,9 @@ MauvilleCity_Gym_Text_ShawnPostBattle:
 	.string "grid himself. The man is a legend.$"
 
 MauvilleCity_Gym_Text_BenIntro:
-	.string "This GYM's got puzzles! Fun, right?$"
+	.string "WATTSON rewires these barriers every\n"
+	.string "month just to mess with us!\p"
+	.string "I've memorized this month's. Mostly.$"
 
 MauvilleCity_Gym_Text_BenDefeat:
 	.string "The doors confused ME more\n"
@@ -339,8 +345,10 @@ MauvilleCity_Gym_Text_BenPostBattle:
 	.string "pressure won't last.$"
 
 MauvilleCity_Gym_Text_VivianIntro:
-	.string "My charm and my POKéMON will shock\n"
-	.string "you!$"
+	.string "I moved here for the job at the\n"
+	.string "GAME CORNER.\p"
+	.string "Four roommates, one bathroom.\n"
+	.string "I need to shock SOMEBODY!$"
 
 MauvilleCity_Gym_Text_VivianDefeat:
 	.string "Shocking!\n"
@@ -353,11 +361,13 @@ MauvilleCity_Gym_Text_VivianPostBattle:
 	.string "MAUVILLE. It… didn't go well.$"
 
 MauvilleCity_Gym_Text_AngeloIntro:
-	.string "I love shiny things! Your BADGES\n"
-	.string "are SO shiny!$"
+	.string "WATTSON says I can stay as long as\n"
+	.string "I keep the lights polished!\p"
+	.string "Ooh, your BADGES are shinier!$"
 
 MauvilleCity_Gym_Text_AngeloDefeat:
-	.string "Oh… my eyes are frazzled…$"
+	.string "Too bright… I can't see\n"
+	.string "straight anymore…$"
 
 MauvilleCity_Gym_Text_AngeloPostBattle:
 	.string "WATTSON lets anyone train here for\n"

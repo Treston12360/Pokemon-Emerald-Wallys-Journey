@@ -125,38 +125,35 @@ MagmaHideout_4F_EventScript_Tabitha::
 	end
 
 MagmaHideout_4F_Text_Grunt11Intro:
-	.string "I want to see GROUDON too, but they\n"
+	.string "I want to see GROUDON too! They\n"
 	.string "won't even show me its tail!\p"
-	.string "Oh, no!\n"
-	.string "I blabbed about GROUDON!$"
+	.string "Oh, no! I said GROUDON!$"
 
 MagmaHideout_4F_Text_Grunt11Defeat:
 	.string "You can't win without a calm\n"
 	.string "mind, I guess…$"
 
 MagmaHideout_4F_Text_Grunt11PostBattle:
-	.string "I wonder if GROUDON even has\n"
-	.string "a tail?$"
+	.string "Does GROUDON even have a tail?\n"
+	.string "Nobody will tell me.$"
 
 MagmaHideout_4F_Text_Grunt12Intro:
-	.string "Fuhahaha!\n"
-	.string "Soon! Very soon!\l"
-	.string "Our grand objective will be achieved!$"
+	.string "Fuhahaha! Soon! New land for\n"
+	.string "everyone! Very soon!$"
 
 MagmaHideout_4F_Text_Grunt12Defeat:
-	.string "Grrr…\n"
-	.string "I've come so far, but now this?$"
+	.string "Grrr… So close!$"
 
 MagmaHideout_4F_Text_Grunt12PostBattle:
 	.string "MAXIE, sir!\n"
-	.string "An intruder is headed your way!$"
+	.string "An intruder is coming your way!$"
 
 MagmaHideout_4F_Text_Grunt13Intro:
-	.string "You're not finished yet!\n"
-	.string "You won't get by me easily!$"
+	.string "You're not done yet! You won't\n"
+	.string "get past me!$"
 
 MagmaHideout_4F_Text_Grunt13Defeat:
-	.string "Was I that easy to knock down?$"
+	.string "Was I really that easy?$"
 
 MagmaHideout_4F_Text_Grunt13PostBattle:
 	.string "C-come on, one more match…\p"
@@ -175,12 +172,12 @@ MagmaHideout_4F_Text_TabithaIntro:
 	.string "Hehe! Hehehe!$"
 
 MagmaHideout_4F_Text_TabithaDefeat:
-	.string "Taken down again…\n"
-	.string "Hehe…$"
+	.string "Beaten again…\n"
+	.string "Hehe… doesn't matter now.$"
 
 MagmaHideout_4F_Text_TabithaPostBattle:
-	.string "…And while you wasted time on me,\n"
-	.string "MAXIE should have awakened GROUDON…$"
+	.string "…While you wasted time on me,\n"
+	.string "MAXIE should have woken GROUDON…$"
 
 MagmaHideout_4F_Text_MaxieAwakenGroudon:
 	.string "MAXIE: GROUDON…\p"

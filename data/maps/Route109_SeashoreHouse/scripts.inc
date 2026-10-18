@@ -148,8 +148,8 @@ Route109_SeashoreHouse_Text_DwayneIntro:
 	.string "this house is hotter than me!$"
 
 Route109_SeashoreHouse_Text_DwayneDefeated:
-	.string "That was a hot battle!\n"
-	.string "I accept that loss, matey!$"
+	.string "Arr, that was hot!\n"
+	.string "I'll drink to that loss!$"
 
 Route109_SeashoreHouse_Text_DwaynePostBattle:
 	.string "Hot battles and ice-cold SODA POP.\n"
@@ -160,17 +160,19 @@ Route109_SeashoreHouse_Text_JohannaIntro:
 	.string "effort. Show me fire!$"
 
 Route109_SeashoreHouse_Text_JohannaDefeated:
-	.string "That's hot!$"
+	.string "Too hot to handle!$"
 
 Route109_SeashoreHouse_Text_JohannaPostBattle:
-	.string "Whew, I'm thirsty. SODA POP time.$"
+	.string "The owner here gives SODA POP to\n"
+	.string "anyone who beats us all. Go on!$"
 
 Route109_SeashoreHouse_Text_SimonIntro:
-	.string "I'll show you how great my POKéMON\n"
-	.string "are, but don't cry!$"
+	.string "My POKéMON is the toughest at this\n"
+	.string "whole beach! Don't cry!$"
 
 Route109_SeashoreHouse_Text_SimonDefeated:
-	.string "…I lost, but I won't cry…$"
+	.string "I'm not crying…\n"
+	.string "It's sea spray.$"
 
 Route109_SeashoreHouse_Text_SimonPostBattle:
 	.string "If my POKéMON could SURF, I could\n"

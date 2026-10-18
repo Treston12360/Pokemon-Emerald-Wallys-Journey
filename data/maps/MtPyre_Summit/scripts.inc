@@ -422,16 +422,16 @@ MtPyre_Summit_EventScript_Grunt4::
 	end
 
 MtPyre_Summit_Text_Grunt1Intro:
-	.string "No! TEAM MAGMA got here ahead\n"
-	.string "of us! We can't fall behind!$"
+	.string "No! TEAM MAGMA beat us up here!\n"
+	.string "We can't fall behind!$"
 
 MtPyre_Summit_Text_Grunt1Defeat:
 	.string "I thought you were a MAGMA\n"
 	.string "coming back…$"
 
 MtPyre_Summit_Text_Grunt1PostBattle:
-	.string "Fine, you're strong…\n"
-	.string "But there are a lot of us!$"
+	.string "You're strong, I'll give you that.\n"
+	.string "But there are lots of us.$"
 
 MtPyre_Summit_Text_Grunt2Intro:
 	.string "Hah! Too bad for you!\p"
@@ -439,8 +439,8 @@ MtPyre_Summit_Text_Grunt2Intro:
 	.string "wimpy MAGMAS. Now you get us!$"
 
 MtPyre_Summit_Text_Grunt2Defeat:
-	.string "Urgh… Should've let you take on\n"
-	.string "TEAM MAGMA first…$"
+	.string "Urgh… I should've let MAGMA\n"
+	.string "deal with you first…$"
 
 MtPyre_Summit_Text_Grunt2PostBattle:
 	.string "The legends say the ORBS calm the\n"
@@ -449,8 +449,8 @@ MtPyre_Summit_Text_Grunt2PostBattle:
 	.string "…That's what we were told, anyway.$"
 
 MtPyre_Summit_Text_Grunt3Intro:
-	.string "You… We saw you at MT. CHIMNEY.\p"
-	.string "You're with neither TEAM, so why\n"
+	.string "You again… From MT. CHIMNEY.\p"
+	.string "You're not with either TEAM. Why\n"
 	.string "are you here?$"
 
 MtPyre_Summit_Text_Grunt3Defeat:
@@ -460,20 +460,18 @@ MtPyre_Summit_Text_Grunt3Defeat:
 	.string "here today.$"
 
 MtPyre_Summit_Text_Grunt3PostBattle:
-	.string "It doesn't matter!\n"
-	.string "We bought ourselves time!\p"
+	.string "Doesn't matter! We bought time.\p"
 	.string "The BOSS should have what he came\n"
 	.string "for by now!$"
 
 MtPyre_Summit_Text_Grunt4Intro:
-	.string "Oh, I know!\n"
-	.string "TEAM MAGMA wouldn't have you!\p"
-	.string "Well, don't think TEAM AQUA will\n"
-	.string "let you join either!$"
+	.string "Oh, I get it! MAGMA rejected you!\p"
+	.string "Well, TEAM AQUA won't take you\n"
+	.string "either!$"
 
 MtPyre_Summit_Text_Grunt4Defeat:
-	.string "If you want to join that badly,\n"
-	.string "we can consider it…$"
+	.string "Okay, okay! Maybe we'll\n"
+	.string "consider your application…$"
 
 MtPyre_Summit_Text_Grunt4PostBattle:
 	.string "The old couple begged us to stop.\n"

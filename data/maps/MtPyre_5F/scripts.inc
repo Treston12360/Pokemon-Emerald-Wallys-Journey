@@ -9,11 +9,12 @@ MtPyre_4F_EventScript_Tasha::
 	end
 
 MtPyre_4F_Text_TashaIntro:
-	.string "I love all things horrifying…\n"
-	.string "When I'm here… I shiver…$"
+	.string "I love horrifying things… This\n"
+	.string "mountain is perfect…$"
 
 MtPyre_4F_Text_TashaDefeat:
-	.string "Losing, I dislike…$"
+	.string "Losing… is the one horror\n"
+	.string "I don't like.$"
 
 MtPyre_4F_Text_TashaPostBattle:
 	.string "There are so many new stones up\n"

@@ -179,7 +179,9 @@ FortreeCity_Gym_Text_GymGuidePostVictory:
 	.string "the only ticket to VICTORY ROAD.$"
 
 FortreeCity_Gym_Text_JaredIntro:
-	.string "Behold the elegance of BIRD POKéMON!$"
+	.string "My family has lived in the same\n"
+	.string "treehouse for five generations!\p"
+	.string "We don't move. And I don't lose!$"
 
 FortreeCity_Gym_Text_JaredDefeat:
 	.string "You…\n"
@@ -211,16 +213,19 @@ FortreeCity_Gym_Text_FlintIntro:
 	.string "I'm enough!$"
 
 FortreeCity_Gym_Text_FlintDefeat:
-	.string "WINONA, I…\n"
-	.string "I lost!$"
+	.string "WINONA… I'm sorry…\n"
+	.string "I got grounded.$"
 
 FortreeCity_Gym_Text_FlintPostBattle:
-	.string "WINONA is cute and strong. The\n"
-	.string "ultimate LEADER! …Blush.$"
+	.string "I joined because WINONA saved my\n"
+	.string "SWABLU from a storm.\p"
+	.string "…And maybe because she's amazing.\n"
+	.string "Don't tell her. …Blush.$"
 
 FortreeCity_Gym_Text_AshleyIntro:
-	.string "WINONA taught me herself! You won't\n"
-	.string "beat me easily!$"
+	.string "WINONA found me in the nest room,\n"
+	.string "feeding a hurt TAILLOW.\p"
+	.string "She made me a TRAINER that day!$"
 
 FortreeCity_Gym_Text_AshleyDefeat:
 	.string "I was beaten…\n"
@@ -239,22 +244,25 @@ FortreeCity_Gym_Text_HumbertoIntro:
 
 FortreeCity_Gym_Text_HumbertoDefeat:
 	.string "Urk!\n"
-	.string "I couldn't stop you.$"
+	.string "You flew right past my guard.$"
 
 FortreeCity_Gym_Text_HumbertoPostBattle:
-	.string "Don't get distracted staring at\n"
-	.string "WINONA, or you'll go crashing down!$"
+	.string "Before WINONA, this GYM was all\n"
+	.string "show-offs and stunts.\p"
+	.string "She made it about the birds again.$"
 
 FortreeCity_Gym_Text_DariusIntro:
-	.string "There are all sorts of FLYING types.\n"
-	.string "You know that, right?$"
+	.string "Developers want to clear the forest\n"
+	.string "floor for houses.\p"
+	.string "WINONA's against it. So am I!$"
 
 FortreeCity_Gym_Text_DariusDefeat:
 	.string "You know your FLYING types!$"
 
 FortreeCity_Gym_Text_DariusPostBattle:
-	.string "You beat me. But WINONA's POKéMON are\n"
-	.string "all business.$"
+	.string "WINONA's POKéMON don't show off.\p"
+	.string "They fly like they're protecting\n"
+	.string "something. Because they are.$"
 
 FortreeCity_Gym_Text_WinonaIntro:
 	.string "I am WINONA, LEADER of the FORTREE\n"
@@ -266,10 +274,10 @@ FortreeCity_Gym_Text_WinonaIntro:
 	.string "Witness how gracefully we share it!$"
 
 FortreeCity_Gym_Text_WinonaDefeat:
-	.string "I have never seen anyone command\n"
-	.string "POKéMON with more grace than I…\p"
-	.string "In recognition of your skill, I\n"
-	.string "present you this GYM BADGE.$"
+	.string "You flew past me as if the wind\n"
+	.string "were yours…\p"
+	.string "This GYM BADGE is yours too.\n"
+	.string "You've earned it.$"
 
 FortreeCity_Gym_Text_ReceivedFeatherBadge:
 	.string "{PLAYER} received the FEATHER BADGE\n"
@@ -319,8 +327,8 @@ FortreeCity_Gym_Text_WinonaPreRematch:
 	.string "Show me your power at full flight!$"
 
 FortreeCity_Gym_Text_WinonaRematchDefeat:
-	.string "I couldn't reach your\n"
-	.string "height again…$"
+	.string "You climbed higher again…\n"
+	.string "I couldn't follow.$"
 
 FortreeCity_Gym_Text_WinonaPostRematch:
 	.string "WINONA: My wings are bruised, not\n"

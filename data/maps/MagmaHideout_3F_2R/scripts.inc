@@ -7,19 +7,18 @@ MagmaHideout_3F_2R_EventScript_Grunt10::
 	end
 
 MagmaHideout_3F_2R_Text_Grunt10Intro:
-	.string "I understand everything our leader\n"
-	.string "says. But you know what?\p"
-	.string "Digging up an ancient POKéMON?\n"
-	.string "Stealing someone's METEORITE?\p"
-	.string "I think we're going too far.\n"
-	.string "What do you think?$"
+	.string "I follow MAXIE. I do. But…\p"
+	.string "Waking an ancient POKéMON?\n"
+	.string "Stealing a METEORITE?\p"
+	.string "This isn't what we signed up for.\n"
+	.string "Is it?$"
 
 MagmaHideout_3F_2R_Text_Grunt10Defeat:
-	.string "Yeah, I think we're doing\n"
-	.string "something wrong somehow.$"
+	.string "Yeah… we really are doing\n"
+	.string "something wrong.$"
 
 MagmaHideout_3F_2R_Text_Grunt10PostBattle:
-	.string "Losing to you cleared my mind.\p"
-	.string "Next time I see MAXIE, I'm going to\n"
-	.string "ask him what we're really doing.$"
+	.string "Losing cleared my head.\p"
+	.string "Next time I see MAXIE, I'm asking\n"
+	.string "what we're really doing.$"
 

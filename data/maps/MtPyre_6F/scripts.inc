@@ -28,11 +28,12 @@ MtPyre_6F_EventScript_Cedric::
 	end
 
 MtPyre_6F_Text_ValerieIntro:
-	.string "When I'm here…\n"
-	.string "A curious power flows into me…$"
+	.string "Up here… I feel the spirits\n"
+	.string "moving through me…$"
 
 MtPyre_6F_Text_ValerieDefeat:
-	.string "The power is ebbing away…$"
+	.string "The spirits… let go\n"
+	.string "of me…$"
 
 MtPyre_6F_Text_ValeriePostBattle:
 	.string "The old keepers say the ORBS on\n"
@@ -47,22 +48,24 @@ MtPyre_6F_Text_ValerieRegister:
 	.string "your POKéNAV… Hiyah!$"
 
 MtPyre_6F_Text_ValerieRematchIntro:
-	.string "Behind you…\n"
-	.string "What is it…$"
+	.string "Something's behind you…\n"
+	.string "It wants to watch…$"
 
 MtPyre_6F_Text_ValerieRematchDefeat:
-	.string "Something faded away…$"
+	.string "It faded away…\n"
+	.string "It liked you.$"
 
 MtPyre_6F_Text_ValeriePostRematch:
 	.string "The POKéMON at rest here…\n"
-	.string "Sometimes, they play…$"
+	.string "Sometimes they play with visitors.$"
 
 MtPyre_6F_Text_CedricIntro:
-	.string "Lost your bearings?\n"
-	.string "Have no fear, for I am here!$"
+	.string "Lost? This mountain swallows\n"
+	.string "people! I'll guide you!$"
 
 MtPyre_6F_Text_CedricDefeat:
-	.string "Weren't you lost?$"
+	.string "…You weren't lost at all,\n"
+	.string "were you?$"
 
 MtPyre_6F_Text_CedricPostBattle:
 	.string "I thought a lost TRAINER\n"

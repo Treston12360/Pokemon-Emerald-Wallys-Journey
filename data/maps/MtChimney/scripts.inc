@@ -589,15 +589,15 @@ MtChimney_Text_MaxieYouHaventSeenLastOfMagma:
 
 MtChimney_Text_TabithaIntro:
 	.string "Hehehe!\p"
-	.string "So you've come all the way here!\p"
-	.string "But you're too late!\n"
-	.string "I've already delivered the METEORITE\l"
-	.string "from METEOR FALLS to the BOSS!$"
+	.string "You came all the way up here!\p"
+	.string "But you're too late! The METEORITE\n"
+	.string "from METEOR FALLS is with the\l"
+	.string "BOSS already!$"
 
 MtChimney_Text_TabithaDefeat:
-	.string "Hehehe…\p"
-	.string "Even though I've lost, if our leader\n"
-	.string "awakens that thing…$"
+	.string "Hehehe… I lost.\p"
+	.string "But once our leader wakes that\n"
+	.string "thing, none of this will matter…$"
 
 MtChimney_Text_TabithaPostBattle:
 	.string "You think you stopped something?\p"
@@ -614,8 +614,9 @@ MtChimney_Text_Grunt2Intro:
 	.string "So yeah. I'm here. Move!$"
 
 MtChimney_Text_Grunt2Defeat:
-	.string "Hunh?\n"
-	.string "What do you mean I lost?$"
+	.string "Hunh? I lost?\p"
+	.string "I signed up to build houses…\n"
+	.string "Why am I up here?$"
 
 MtChimney_Text_Grunt2PostBattle:
 	.string "Our BOSS says it'll make everyone's\n"
@@ -767,11 +768,11 @@ MtChimney_Text_ShelbyIntro:
 
 MtChimney_Text_ShelbyDefeat:
 	.string "Oh, my goodness.\n"
-	.string "Aren't you something!$"
+	.string "You'd give FLANNERY a run!$"
 
 MtChimney_Text_ShelbyPostBattle:
-	.string "Well, I've lost. I can hardly call\n"
-	.string "myself an EXPERT now.\p"
+	.string "Well, I've lost. I'm hardly an EXPERT\n"
+	.string "now.\p"
 	.string "I knew FLANNERY's grandfather.\n"
 	.string "He was hopeless at losing, too.$"
 
@@ -787,31 +788,31 @@ MtChimney_Text_ShelbyRematchIntro:
 
 MtChimney_Text_ShelbyRematchDefeat:
 	.string "Oh, my goodness.\n"
-	.string "Aren't you something!$"
+	.string "Still something special!$"
 
 MtChimney_Text_ShelbyPostRematch:
-	.string "Perhaps your heart has become one\n"
-	.string "with your POKéMON's.$"
+	.string "Your heart beats with your POKéMON's.\n"
+	.string "That's rare, dear.$"
 
 MtChimney_Text_MelissaIntro:
-	.string "I've got fire in me, baby.\n"
-	.string "I have to battle!$"
+	.string "I came for the volcano view and\n"
+	.string "stayed for the battles!$"
 
 MtChimney_Text_MelissaDefeat:
-	.string "Ooh, that was a scorching\n"
-	.string "match!$"
+	.string "Ooh, scorched!\n"
+	.string "What a match!$"
 
 MtChimney_Text_MelissaPostBattle:
-	.string "The heat of MT. CHIMNEY warms\n"
-	.string "me right up, baby!$"
+	.string "This heat feels great after FORTREE's\n"
+	.string "rain. I'm staying all week!$"
 
 MtChimney_Text_SheilaIntro:
-	.string "I finally made it to MT. CHIMNEY!\n"
-	.string "I want to battle up here!$"
+	.string "I saved for a year to visit\n"
+	.string "MT. CHIMNEY! Battle me!$"
 
 MtChimney_Text_SheilaDefeat:
-	.string "You battle like a MT. CHIMNEY\n"
-	.string "eruption!$"
+	.string "That was worth the whole\n"
+	.string "trip, honestly.$"
 
 MtChimney_Text_SheilaPostBattle:
 	.string "I came for the view and the\n"
@@ -820,23 +821,24 @@ MtChimney_Text_SheilaPostBattle:
 	.string "farm to the ash. Buy a few, okay?$"
 
 MtChimney_Text_ShirleyIntro:
-	.string "I bathed in the hot springs and\n"
-	.string "feel great! I'm sure to win!$"
+	.string "The hot springs fixed my back! I'm\n"
+	.string "sure to win now!$"
 
 MtChimney_Text_ShirleyDefeat:
 	.string "Yowch!\n"
-	.string "I'm getting a chill.$"
+	.string "My back again!$"
 
 MtChimney_Text_ShirleyPostBattle:
-	.string "Another dip in the hot springs for\n"
-	.string "me. Want to join? Just joking!$"
+	.string "Another soak for me. Want to join?\n"
+	.string "Just joking!$"
 
 MtChimney_Text_SawyerIntro:
-	.string "This is one fine mountain!\n"
-	.string "Plenty of company up here!$"
+	.string "I study volcanoes! This one's\n"
+	.string "delightfully grumpy today!$"
 
 MtChimney_Text_SawyerDefeat:
-	.string "Oh, you're a real firebrand!$"
+	.string "My data didn't predict\n"
+	.string "THAT eruption!$"
 
 MtChimney_Text_SawyerPostBattle:
 	.string "I studied this volcano for thirty\n"
@@ -854,9 +856,8 @@ MtChimney_Text_SawyerRematchIntro:
 	.string "I won't lose this time!$"
 
 MtChimney_Text_SawyerRematchDefeat:
-	.string "Gosh, you're still the same\n"
-	.string "firebrand!$"
+	.string "Still erupting, I see!$"
 
 MtChimney_Text_SawyerPostRematch:
-	.string "Actually, it really is hot here.\n"
-	.string "I'm overdressed for these parts.$"
+	.string "Thirty years up here and I still\n"
+	.string "wear wool. Bad habit.$"

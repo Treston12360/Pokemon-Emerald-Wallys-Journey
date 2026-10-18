@@ -509,12 +509,14 @@ RusturfTunnel_Text_BoyfriendOnOtherSideOfRock:
 	.string "reach RUSTBORO without a boat.$"
 
 RusturfTunnel_Text_MikeIntro:
-	.string "What do you call a wild man in the\n"
-	.string "mountains? A mountain man, right?$"
+	.string "I dug in these mountains thirty\n"
+	.string "years.\p"
+	.string "Then DEVON and the protesters got\n"
+	.string "in a fight, and here we are. Battle!$"
 
 RusturfTunnel_Text_MikeDefeat:
-	.string "My POKéMON…\n"
-	.string "ran out of steam.$"
+	.string "My POKéMON are as worn out\n"
+	.string "as this old tunnel…$"
 
 RusturfTunnel_Text_MikePostBattle:
 	.string "They stopped the tunnel to protect\n"

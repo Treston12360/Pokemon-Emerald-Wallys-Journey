@@ -57,12 +57,12 @@ MtPyre_2F_Text_TumbledFromFloorAbove:
 	.string "the floor above.$"
 
 MtPyre_2F_Text_MarkIntro:
-	.string "Hey! Searching for POKéMON?\n"
-	.string "You followed me! How rude!$"
+	.string "Hey! I'm looking for ghost POKéMON!\n"
+	.string "Did you follow me?!$"
 
 MtPyre_2F_Text_MarkDefeat:
-	.string "Ayieeeeh!\n"
-	.string "I'm sorry, forgive me, please!$"
+	.string "Ayieeeeh! I'm sorry!\n"
+	.string "Don't haunt me!$"
 
 MtPyre_2F_Text_MarkPostBattle:
 	.string "I came hoping to find a rare\n"
@@ -78,11 +78,12 @@ MtPyre_2F_Text_LukeIntro:
 	.string "I am. I know it!$"
 
 MtPyre_2F_Text_LukeDefeat:
-	.string "LUKE: Whoopsie!$"
+	.string "LUKE: Whoopsie!\n"
+	.string "That wasn't cool at all.$"
 
 MtPyre_2F_Text_LukePostBattle:
-	.string "LUKE: We lost, but that's okay!\n"
-	.string "I'm right here by your side!$"
+	.string "LUKE: We lost, but I'm still right\n"
+	.string "here for you, DEZ!$"
 
 MtPyre_2F_Text_LukeNotEnoughMons:
 	.string "LUKE: Bring more POKéMON if you\n"
@@ -91,30 +92,29 @@ MtPyre_2F_Text_LukeNotEnoughMons:
 	.string "how cool I am!$"
 
 MtPyre_2F_Text_DezIntro:
-	.string "DEZ: I came here on a dare with my\n"
-	.string "boyfriend.\p"
-	.string "It's scary, but he's here.\n"
-	.string "I'll make him look cool by beating you!$"
+	.string "DEZ: We came here on a dare.\p"
+	.string "It's so scary! But LUKE will\n"
+	.string "look cool if we beat you!$"
 
 MtPyre_2F_Text_DezDefeat:
-	.string "DEZ: Waaaah! I'm scared!$"
+	.string "DEZ: Waaah! LUKE, I'm scared!$"
 
 MtPyre_2F_Text_DezPostBattle:
-	.string "DEZ: We're lovey-dovey, so we\n"
-	.string "don't care if we lose!$"
+	.string "DEZ: It's okay! We're together.\n"
+	.string "That's what matters.$"
 
 MtPyre_2F_Text_DezNotEnoughMons:
-	.string "DEZ: Bring at least two POKéMON if\n"
-	.string "you want to challenge us.\p"
-	.string "My boyfriend's strong. One won't do.$"
+	.string "DEZ: We're a couple, so we battle\n"
+	.string "as a pair.\p"
+	.string "Bring two POKéMON!$"
 
 MtPyre_2F_Text_LeahIntro:
-	.string "You are an unfamiliar sight…\n"
-	.string "Depart before anything befalls you!$"
+	.string "I tend the graves here. You don't\n"
+	.string "look like a mourner…$"
 
 MtPyre_2F_Text_LeahDefeat:
-	.string "Hmm…\n"
-	.string "You're durable.$"
+	.string "Hm. You're sturdy.\n"
+	.string "The spirits approve.$"
 
 MtPyre_2F_Text_LeahPostBattle:
 	.string "My family has watched over\n"
@@ -125,12 +125,12 @@ MtPyre_2F_Text_LeahPostBattle:
 	.string "power, I will stand in the way.$"
 
 MtPyre_2F_Text_ZanderIntro:
-	.string "Kiyaaaaah!\n"
-	.string "I'm terrified!$"
+	.string "Kiyaaaah! I thought you were a\n"
+	.string "ghost!$"
 
 MtPyre_2F_Text_ZanderDefeat:
-	.string "Nooooooo!\n"
-	.string "I lost my wits!$"
+	.string "Nooooo! I lost my\n"
+	.string "nerve AND the match!$"
 
 MtPyre_2F_Text_ZanderPostBattle:
 	.string "I freak out whenever anything\n"

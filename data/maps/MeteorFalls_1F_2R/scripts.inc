@@ -81,8 +81,8 @@ MeteorFalls_1F_2R_Text_NicolasRegister:
 	.string "Let me register you in my POKéNAV.$"
 
 MeteorFalls_1F_2R_Text_NicolasRematchIntro:
-	.string "Since we met, we've trained with\n"
-	.string "our sights on number one. Battle!$"
+	.string "I've trained under the falls every\n"
+	.string "day since we met. Battle!$"
 
 MeteorFalls_1F_2R_Text_NicolasRematchDefeat:
 	.string "Urgh!\n"
@@ -93,12 +93,12 @@ MeteorFalls_1F_2R_Text_NicolasPostRematch:
 	.string "I can grow stronger too!$"
 
 MeteorFalls_1F_2R_Text_JohnIntro:
-	.string "JOHN: We've always battled as a\n"
-	.string "pair. We've confidence in us.$"
+	.string "JOHN: My wife and I have battled\n"
+	.string "side by side for fifty years.$"
 
 MeteorFalls_1F_2R_Text_JohnDefeat:
-	.string "JOHN: Oh, my.\n"
-	.string "We've lost, dear wife.$"
+	.string "JOHN: Well, dear…\n"
+	.string "we had a good run.$"
 
 MeteorFalls_1F_2R_Text_JohnPostBattle:
 	.string "JOHN: Fifty years married, and I\n"
@@ -121,26 +121,25 @@ MeteorFalls_1F_2R_Text_JayIntro:
 	.string "moving house. A battle is nothing.$"
 
 MeteorFalls_1F_2R_Text_JayDefeat:
-	.string "JAY: Oh, dear.\n"
-	.string "We've lost, my dear husband.$"
+	.string "JAY: Oh, dear husband.\n"
+	.string "We've been bested.$"
 
 MeteorFalls_1F_2R_Text_JayPostBattle:
-	.string "JAY: When we argued, we settled\n"
-	.string "it with a POKéMON battle.\p"
-	.string "Fewer broken plates that way.$"
+	.string "JAY: We settle arguments with\n"
+	.string "POKéMON battles. Saves plates.$"
 
 MeteorFalls_1F_2R_Text_JayNotEnoughMons:
-	.string "JAY: Aren't you a young one?\p"
-	.string "If you'd like to battle us, come\n"
-	.string "back with more POKéMON.$"
+	.string "JAY: Only one POKéMON, dear?\p"
+	.string "We battle as a pair. Come back\n"
+	.string "with two.$"
 
 MeteorFalls_1F_2R_Text_JohnRematchIntro:
-	.string "JOHN: We've always battled as a\n"
-	.string "pair. We've confidence in us.$"
+	.string "JOHN: Back for more, young one?\n"
+	.string "We're not done yet!$"
 
 MeteorFalls_1F_2R_Text_JohnRematchDefeat:
-	.string "JOHN: Oh, my.\n"
-	.string "Lost again, dear wife.$"
+	.string "JOHN: Beaten again, dear.\n"
+	.string "We're getting old.$"
 
 MeteorFalls_1F_2R_Text_JohnPostRematch:
 	.string "JOHN: We lost the farm, but never\n"
@@ -159,8 +158,8 @@ MeteorFalls_1F_2R_Text_JayRematchIntro:
 	.string "That makes a couple strong.$"
 
 MeteorFalls_1F_2R_Text_JayRematchDefeat:
-	.string "JAY: Oh, dear.\n"
-	.string "Lost again, my dear husband.$"
+	.string "JAY: Bested again!\n"
+	.string "What a strong young one.$"
 
 MeteorFalls_1F_2R_Text_JayPostRematch:
 	.string "JAY: Our daughter wants us to move\n"
@@ -169,7 +168,7 @@ MeteorFalls_1F_2R_Text_JayPostRematch:
 	.string "There never is anymore.$"
 
 MeteorFalls_1F_2R_Text_JayRematchNotEnoughMons:
-	.string "JAY: Aren't you a young one?\p"
-	.string "If you'd like to battle us, come\n"
-	.string "back with more POKéMON.$"
+	.string "JAY: Only one POKéMON, dear?\p"
+	.string "We battle as a pair. Come back\n"
+	.string "with two.$"
 

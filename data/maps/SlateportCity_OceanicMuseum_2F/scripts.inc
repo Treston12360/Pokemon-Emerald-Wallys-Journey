@@ -290,8 +290,8 @@ SlateportCity_OceanicMuseum_2F_Text_WereTeamAqua:
 	.string "Shut your yap and fork them over!$"
 
 SlateportCity_OceanicMuseum_2F_Text_Grunt1Defeat:
-	.string "Awaaaah!\n"
-	.string "A kid beat me!$"
+	.string "Awaaah! A kid?! We trained\n"
+	.string "for this!$"
 
 SlateportCity_OceanicMuseum_2F_Text_BossGoingToBeFurious:
 	.string "Oh, man, what a disaster…\n"

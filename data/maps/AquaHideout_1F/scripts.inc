@@ -106,12 +106,11 @@ AquaHideout_1F_Text_BossIsInSlateportCity:
 	.string "you something that crucial?$"
 
 AquaHideout_1F_Text_Grunt1Intro:
-	.string "Ayiyiyi!\n"
-	.string "Suspicious character spotted!$"
+	.string "Ayiyiyi! Intruder! Hands where I\n"
+	.string "can see them!$"
 
 AquaHideout_1F_Text_Grunt1Defeat:
-	.string "Grrrrr…\n"
-	.string "I lost it!$"
+	.string "Grrrr… I lost!$"
 
 AquaHideout_1F_Text_Grunt1PostBattle:
 	.string "I took the loss, but I did my job.\p"

@@ -1422,12 +1422,14 @@ PetalburgCity_Gym_Text_RandallPostBadge:
 	.string "he forgot to apply it at home.$"
 
 PetalburgCity_Gym_Text_ParkerIntro:
-	.string "This is the CONFUSION ROOM. Let me\n"
-	.string "see how well bonded you are!$"
+	.string "This is the CONFUSION ROOM.\p"
+	.string "NORMAN says a team that trusts\n"
+	.string "its TRAINER can't be confused.\l"
+	.string "Let's test that!$"
 
 PetalburgCity_Gym_Text_ParkerDefeat:
-	.string "I couldn't confuse your team.\n"
-	.string "Your bond is strong.$"
+	.string "Not confused for a second.\n"
+	.string "He was right about you.$"
 
 PetalburgCity_Gym_Text_ParkerPostBattle:
 	.string "The next room is the STRENGTH ROOM.\n"
@@ -1448,8 +1450,8 @@ PetalburgCity_Gym_Text_GeorgeIntro:
 	.string "foe heals up. Awful, isn't it?$"
 
 PetalburgCity_Gym_Text_GeorgeDefeat:
-	.string "I couldn't heal fast enough…\n"
-	.string "What power!$"
+	.string "I healed and healed…\n"
+	.string "and still fell.$"
 
 PetalburgCity_Gym_Text_GeorgePostBattle:
 	.string "I expected no less from the LEADER's\n"
@@ -1466,8 +1468,8 @@ PetalburgCity_Gym_Text_BerkeIntro:
 	.string "LEADER's kid.$"
 
 PetalburgCity_Gym_Text_BerkeDefeat:
-	.string "You're the real deal.\n"
-	.string "Just like him.$"
+	.string "You hit like he does.\n"
+	.string "That's a compliment.$"
 
 PetalburgCity_Gym_Text_BerkePostBattle:
 	.string "Your father is strong. He earned my\n"
@@ -1480,11 +1482,13 @@ PetalburgCity_Gym_Text_BerkePostBadge:
 	.string "TRAINERS got a lot tougher.$"
 
 PetalburgCity_Gym_Text_MaryIntro:
-	.string "Giggle… This is the ACCURACY ROOM.\n"
-	.string "Every attack lands. Nasty, right?$"
+	.string "Welcome to the ACCURACY ROOM!\p"
+	.string "Every hit lands here. Your dad\n"
+	.string "calls it the honesty room.$"
 
 PetalburgCity_Gym_Text_MaryDefeat:
-	.string "You were a cut above me…$"
+	.string "Every hit landed…\n"
+	.string "mostly yours.$"
 
 PetalburgCity_Gym_Text_MaryPostBattle:
 	.string "Stronger TRAINERS are waiting.\p"
@@ -1499,8 +1503,9 @@ PetalburgCity_Gym_Text_MaryPostBadge:
 	.string "POKéMON. And maybe with each other.$"
 
 PetalburgCity_Gym_Text_AlexiaIntro:
-	.string "The higher my DEFENSE, the more\n"
-	.string "reckless I can be!$"
+	.string "DEFENSE ROOM! I can take anything!\p"
+	.string "NORMAN once took a HYPER BEAM to\n"
+	.string "prove a point. I'm not kidding.$"
 
 PetalburgCity_Gym_Text_AlexiaDefeat:
 	.string "Our defenses crumbled…$"
@@ -1520,11 +1525,14 @@ PetalburgCity_Gym_Text_AlexiaPostBadge:
 	.string "sea. He'd want you to see all of it.$"
 
 PetalburgCity_Gym_Text_JodyIntro:
-	.string "Our LEADER said to go all out and\n"
-	.string "beat you. Even if you're his kid!$"
+	.string "NORMAN told us: don't go easy on\n"
+	.string "the kid.\p"
+	.string "Then he went to his office and\n"
+	.string "closed the door. Couldn't watch.$"
 
 PetalburgCity_Gym_Text_JodyDefeat:
-	.string "But… I went all out!$"
+	.string "Everything I had…\n"
+	.string "and it wasn't enough.$"
 
 PetalburgCity_Gym_Text_JodyPostBattle:
 	.string "You battle like your father.\p"
@@ -1598,8 +1606,8 @@ PetalburgCity_Gym_Text_NormanPreRematch:
 	.string "this everything I have!$"
 
 PetalburgCity_Gym_Text_NormanRematchDefeat:
-	.string "Uh… Haha…\n"
-	.string "Maybe I went too hard.$"
+	.string "Hah… I went all out,\n"
+	.string "and you still won.$"
 
 PetalburgCity_Gym_Text_NormanPostRematch:
 	.string "DAD: {PLAYER}…\n"

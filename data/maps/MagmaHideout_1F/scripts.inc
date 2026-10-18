@@ -23,8 +23,8 @@ MagmaHideout_1F_Text_Grunt1Intro:
 	.string "this corner.$"
 
 MagmaHideout_1F_Text_Grunt1Defeat:
-	.string "Late for training too…\n"
-	.string "I hate to say it, but I'm wimpy.$"
+	.string "Always late, always last.\n"
+	.string "I'm not cut out for this.$"
 
 MagmaHideout_1F_Text_Grunt1PostBattle:
 	.string "My folks farm on ROUTE 113. The ash\n"
@@ -33,21 +33,18 @@ MagmaHideout_1F_Text_Grunt1PostBattle:
 	.string "wanted. That's why I'm here.$"
 
 MagmaHideout_1F_Text_Grunt2Intro:
-	.string "Our leader told us to dig into\n"
-	.string "MT. CHIMNEY, so we dug and dug.\p"
-	.string "And we found something that blew\n"
-	.string "our minds!\p"
-	.string "What was it?\p"
-	.string "Fuhahaha!\n"
-	.string "I'll tell you if you beat me!$"
+	.string "MAXIE told us to dig into MT.\n"
+	.string "CHIMNEY, so we dug for months.\p"
+	.string "And we found something huge!\p"
+	.string "What was it? Fuhahaha!\n"
+	.string "Beat me and I'll tell you!$"
 
 MagmaHideout_1F_Text_Grunt2Defeat:
-	.string "Arrgh!\n"
-	.string "Taken down!$"
+	.string "Arrgh! Dug myself\n"
+	.string "into a hole!$"
 
 MagmaHideout_1F_Text_Grunt2PostBattle:
-	.string "I won't tell you after all.\n"
-	.string "You'll find out when you get there!\p"
-	.string "Surprises are best saved for the\n"
-	.string "end, don't you think?$"
+	.string "Actually, I won't tell. You'll see\n"
+	.string "it soon enough!\p"
+	.string "Best to save surprises for the end.$"
 
