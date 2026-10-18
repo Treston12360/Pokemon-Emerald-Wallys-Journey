@@ -183,25 +183,28 @@ FortreeCity_Gym_Text_JaredIntro:
 
 FortreeCity_Gym_Text_JaredDefeat:
 	.string "You…\n"
-	.string "You're strong…$"
+	.string "You fly higher than me.$"
 
 FortreeCity_Gym_Text_JaredPostBattle:
-	.string "A TRAINER must be smart to handle\n"
-	.string "surprises.\p"
-	.string "Do you have the smarts for our\n"
-	.string "LEADER?$"
+	.string "FORTREE can't build outward. The\n"
+	.string "forest won't allow it.\p"
+	.string "WINONA says that's a gift, not a\n"
+	.string "problem. Not everyone agrees.$"
 
 FortreeCity_Gym_Text_EdwardoIntro:
 	.string "Everyone who loves BIRD POKéMON wants\n"
 	.string "to join this GYM. I can't lose!$"
 
 FortreeCity_Gym_Text_EdwardoDefeat:
-	.string "It was too much of a load for me\n"
-	.string "to bear…$"
+	.string "Too heavy a load for my\n"
+	.string "wings…$"
 
 FortreeCity_Gym_Text_EdwardoPostBattle:
-	.string "The world is huge, full of tough\n"
-	.string "TRAINERS. I'll keep training.$"
+	.string "WINONA keeps a nest room above the\n"
+	.string "GYM.\p"
+	.string "Every injured bird POKéMON in the\n"
+	.string "forest ends up there. She feeds\l"
+	.string "them herself.$"
 
 FortreeCity_Gym_Text_FlintIntro:
 	.string "WINONA doesn't need to deal with you!\n"
@@ -220,7 +223,8 @@ FortreeCity_Gym_Text_AshleyIntro:
 	.string "beat me easily!$"
 
 FortreeCity_Gym_Text_AshleyDefeat:
-	.string "I was beaten…$"
+	.string "I was beaten…\n"
+	.string "WINONA will still be kind about it.$"
 
 FortreeCity_Gym_Text_AshleyPostBattle:
 	.string "Thanks to WINONA, FORTREE lives\n"
@@ -246,28 +250,26 @@ FortreeCity_Gym_Text_DariusIntro:
 	.string "You know that, right?$"
 
 FortreeCity_Gym_Text_DariusDefeat:
-	.string "You seem to know your stuff!$"
+	.string "You know your FLYING types!$"
 
 FortreeCity_Gym_Text_DariusPostBattle:
 	.string "You beat me. But WINONA's POKéMON are\n"
 	.string "all business.$"
 
 FortreeCity_Gym_Text_WinonaIntro:
-	.string "I am WINONA. I am the LEADER of\n"
-	.string "the FORTREE POKéMON GYM.\p"
-	.string "I have become one with BIRD POKéMON\n"
-	.string "and have soared the skies…\p"
-	.string "However grueling the battle, we have\n"
-	.string "triumphed with grace…\p"
-	.string "Witness the elegant choreography\n"
-	.string "of BIRD POKéMON and I!$"
+	.string "I am WINONA, LEADER of the FORTREE\n"
+	.string "GYM.\p"
+	.string "I grew up in these treetops, with\n"
+	.string "nothing above me but sky.\p"
+	.string "The sky belongs to no one. My\n"
+	.string "POKéMON and I only borrow it.\p"
+	.string "Witness how gracefully we share it!$"
 
 FortreeCity_Gym_Text_WinonaDefeat:
-	.string "Never before have I seen a TRAINER\n"
-	.string "command POKéMON with more grace\l"
-	.string "than I…\p"
-	.string "In recognition of your prowess,\n"
-	.string "I present to you this GYM BADGE.$"
+	.string "I have never seen anyone command\n"
+	.string "POKéMON with more grace than I…\p"
+	.string "In recognition of your skill, I\n"
+	.string "present you this GYM BADGE.$"
 
 FortreeCity_Gym_Text_ReceivedFeatherBadge:
 	.string "{PLAYER} received the FEATHER BADGE\n"
@@ -310,38 +312,29 @@ FortreeCity_Gym_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 FortreeCity_Gym_Text_WinonaPreRematch:
-	.string "WINONA: We humans can never escape\n"
-	.string "gravity's pull on the ground.\p"
-	.string "But by striving for excellence,\n"
-	.string "we have the power to soar!\p"
-	.string "You have scaled the pinnacle as\n"
-	.string "the reigning CHAMPION.\p"
-	.string "Please, allow me to see your power\n"
-	.string "at full flight!$"
+	.string "WINONA: We can never escape\n"
+	.string "gravity.\p"
+	.string "But we can choose how high we climb.\n"
+	.string "You've climbed to the very top.\p"
+	.string "Show me your power at full flight!$"
 
 FortreeCity_Gym_Text_WinonaRematchDefeat:
-	.string "I failed to reach your height again…$"
+	.string "I couldn't reach your\n"
+	.string "height again…$"
 
 FortreeCity_Gym_Text_WinonaPostRematch:
-	.string "WINONA: Even though I have lost,\n"
-	.string "the wings of my heart remain unbroken.\p"
-	.string "I can rise and soar again and\n"
-	.string "yet again.\p"
-	.string "I am convinced of it!$"
+	.string "WINONA: My wings are bruised, not\n"
+	.string "broken.\p"
+	.string "I'll rise again. The birds taught me\n"
+	.string "that.$"
 
 FortreeCity_Gym_Text_WinonaRematchNeedTwoMons:
-	.string "WINONA: We humans can never escape\n"
-	.string "gravity's pull on the ground.\p"
-	.string "But by striving for excellence,\n"
-	.string "we have the power to soar!\p"
-	.string "You have scaled the pinnacle as\n"
-	.string "the reigning CHAMPION.\p"
-	.string "Please, allow me to see your power\n"
-	.string "at full flight!\p"
-	.string "Oh, no… Do you have but one\n"
-	.string "POKéMON with you?\p"
-	.string "Please return with two POKéMON\n"
-	.string "at the very least.$"
+	.string "WINONA: We can never escape\n"
+	.string "gravity.\p"
+	.string "Oh… You have only one POKéMON\n"
+	.string "with you?\p"
+	.string "Rematches here are two at a time.\n"
+	.string "Please return with two.$"
 
 FortreeCity_Gym_Text_WinonaPreRematch3:
 	.string "WINONA: Since the storms, my BIRD\n"

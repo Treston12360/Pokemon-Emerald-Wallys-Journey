@@ -1278,24 +1278,22 @@ PetalburgCity_Gym_Text_YouHaveGottenStronger:
 
 PetalburgCity_Gym_Text_NormanIntro:
 	.string "DAD: Hm…\n"
-	.string "So, you did get four GYM BADGES.\p"
-	.string "Fine, as I promised, we will have\n"
-	.string "a POKéMON battle.\p"
+	.string "So you did get four GYM BADGES.\p"
+	.string "As I promised, we will battle.\p"
 	.string "{PLAYER}…\p"
-	.string "I'm so happy that I can have\n"
-	.string "a real battle with my own child.\p"
-	.string "But, a battle is a battle!\p"
-	.string "I will do everything in my power as\n"
-	.string "a GYM LEADER to win.\p"
-	.string "{PLAYER}, you'd better give it your\n"
-	.string "best shot, too!$"
+	.string "For years I trained so we'd never\n"
+	.string "have to struggle again.\p"
+	.string "I never imagined I'd be training\n"
+	.string "to face you.\p"
+	.string "But a battle is a battle!\n"
+	.string "I'll give it everything I have, as\l"
+	.string "a GYM LEADER!$"
 
 PetalburgCity_Gym_Text_NormanDefeat:
 	.string "…\p"
-	.string "I… I can't…\p"
-	.string "I can't believe it. {PLAYER}…\p"
-	.string "I lost to {PLAYER}?\p"
-	.string "But, rules are rules!\n"
+	.string "I… I lost to {PLAYER}.\p"
+	.string "My own child. Hm.\p"
+	.string "Rules are rules.\n"
 	.string "Here, take this.$"
 
 PetalburgCity_Gym_Text_ReceivedBalanceBadge:
@@ -1408,14 +1406,15 @@ PetalburgCity_Gym_Text_RandallIntro:
 	.string "don't you agree?$"
 
 PetalburgCity_Gym_Text_RandallDefeat:
-	.string "That was a magnificent battle!$"
+	.string "A magnificent battle!\n"
+	.string "NORMAN would be proud.$"
 
 PetalburgCity_Gym_Text_RandallPostBattle:
-	.string "Go on to the next room where a new\n"
-	.string "challenge awaits you.\p"
-	.string "At the left is the CONFUSION ROOM.\p"
-	.string "The right door leads to the DEFENSE\n"
-	.string "ROOM.$"
+	.string "Go on to the next room.\p"
+	.string "The left door is the CONFUSION ROOM.\n"
+	.string "The right leads to the DEFENSE ROOM.\p"
+	.string "NORMAN designed every room himself.\n"
+	.string "He was up all night for months.$"
 
 PetalburgCity_Gym_Text_RandallPostBadge:
 	.string "Win or lose, you never stop training.\p"
@@ -1427,12 +1426,16 @@ PetalburgCity_Gym_Text_ParkerIntro:
 	.string "see how well bonded you are!$"
 
 PetalburgCity_Gym_Text_ParkerDefeat:
-	.string "I couldn't confuse your team enough…\n"
-	.string "You share a strong bond together.$"
+	.string "I couldn't confuse your team.\n"
+	.string "Your bond is strong.$"
 
 PetalburgCity_Gym_Text_ParkerPostBattle:
 	.string "The next room is the STRENGTH ROOM.\n"
-	.string "Can you withstand brute force?$"
+	.string "Can you take brute force?\p"
+	.string "I trained with NORMAN back in JOHTO.\n"
+	.string "We both trained at night after work.\p"
+	.string "He was always the last to leave.\n"
+	.string "He still is.$"
 
 PetalburgCity_Gym_Text_ParkerPostBadge:
 	.string "After you beat our LEADER, training\n"
@@ -1445,8 +1448,8 @@ PetalburgCity_Gym_Text_GeorgeIntro:
 	.string "foe heals up. Awful, isn't it?$"
 
 PetalburgCity_Gym_Text_GeorgeDefeat:
-	.string "I couldn't restore HP enough…\n"
-	.string "What ATTACK power…$"
+	.string "I couldn't heal fast enough…\n"
+	.string "What power!$"
 
 PetalburgCity_Gym_Text_GeorgePostBattle:
 	.string "I expected no less from the LEADER's\n"
@@ -1463,8 +1466,8 @@ PetalburgCity_Gym_Text_BerkeIntro:
 	.string "LEADER's kid.$"
 
 PetalburgCity_Gym_Text_BerkeDefeat:
-	.string "Your power…\n"
-	.string "You're the real deal.$"
+	.string "You're the real deal.\n"
+	.string "Just like him.$"
 
 PetalburgCity_Gym_Text_BerkePostBattle:
 	.string "Your father is strong. He earned my\n"
@@ -1484,12 +1487,11 @@ PetalburgCity_Gym_Text_MaryDefeat:
 	.string "You were a cut above me…$"
 
 PetalburgCity_Gym_Text_MaryPostBattle:
-	.string "There are some even stronger\n"
-	.string "TRAINERS waiting for you.\p"
+	.string "Stronger TRAINERS are waiting.\p"
 	.string "The left is the DEFENSE ROOM, and\n"
 	.string "the right is the RECOVERY ROOM.\p"
-	.string "Your POKéMON's ATTACK power will be\n"
-	.string "on trial either way.$"
+	.string "NORMAN keeps a photo of you on his\n"
+	.string "desk. Did you know?$"
 
 PetalburgCity_Gym_Text_MaryPostBadge:
 	.string "What are we striving for as TRAINERS?\p"
@@ -1501,17 +1503,16 @@ PetalburgCity_Gym_Text_AlexiaIntro:
 	.string "reckless I can be!$"
 
 PetalburgCity_Gym_Text_AlexiaDefeat:
-	.string "Our defenses weren't enough…$"
+	.string "Our defenses crumbled…$"
 
 PetalburgCity_Gym_Text_AlexiaPostBattle:
-	.string "I think you've taught me a valuable\n"
-	.string "lesson here.\p"
-	.string "Now, go on! The left door goes to\n"
-	.string "the STRENGTH ROOM.\p"
-	.string "The right door opens to\n"
-	.string "the ONE-HIT KO ROOM.\p"
-	.string "Both of them have TRAINERS who are\n"
-	.string "skilled at offense.$"
+	.string "Go on! The left door goes to the\n"
+	.string "STRENGTH ROOM.\p"
+	.string "The right door opens to the\n"
+	.string "ONE-HIT KO ROOM.\p"
+	.string "Both have TRAINERS skilled at\n"
+	.string "offense. Your dad picked them\l"
+	.string "himself.$"
 
 PetalburgCity_Gym_Text_AlexiaPostBadge:
 	.string "Have you tried SURF yet?\p"
@@ -1589,20 +1590,16 @@ PetalburgCity_Gym_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 PetalburgCity_Gym_Text_NormanPreRematch:
-	.string "DAD: {PLAYER}…\n"
-	.string "I had a feeling that you would come.\p"
-	.string "I would never refuse to accept\n"
-	.string "a challenge from you.\p"
-	.string "You do understand, don't you?\p"
-	.string "Inside a GYM, it doesn't matter that\n"
-	.string "we are a parent and child.\p"
-	.string "…No, because we are parent and child,\n"
-	.string "we owe it to each other to do the best\l"
-	.string "we can. Isn't that right, {PLAYER}?$"
+	.string "DAD: {PLAYER}… I had a feeling you'd\n"
+	.string "come.\p"
+	.string "Inside this GYM, we're LEADER and\n"
+	.string "challenger.\p"
+	.string "…No. Because we're family, I'll give\n"
+	.string "this everything I have!$"
 
 PetalburgCity_Gym_Text_NormanRematchDefeat:
 	.string "Uh… Haha…\n"
-	.string "Maybe that was going too hard…$"
+	.string "Maybe I went too hard.$"
 
 PetalburgCity_Gym_Text_NormanPostRematch:
 	.string "DAD: {PLAYER}…\n"
@@ -1614,18 +1611,12 @@ PetalburgCity_Gym_Text_NormanPostRematch:
 	.string "That dream, I'm finally keeping.$"
 
 PetalburgCity_Gym_Text_NormanRematchNeedTwoMons:
-	.string "DAD: {PLAYER}…\n"
-	.string "I had a feeling that you would come.\p"
-	.string "I would never refuse to accept\n"
-	.string "a challenge from you.\p"
-	.string "You do understand, don't you?\p"
-	.string "Inside a GYM, it doesn't matter that\n"
-	.string "we are a parent and child.\p"
-	.string "Hm? Wait a second, {PLAYER}.\p"
-	.string "Do you only have one POKéMON that is\n"
-	.string "capable of battle?\p"
-	.string "Sorry, but you'll have to come back\n"
-	.string "with at least two POKéMON.$"
+	.string "DAD: {PLAYER}… I had a feeling you'd\n"
+	.string "come.\p"
+	.string "Hm? Only one POKéMON that can\n"
+	.string "battle?\p"
+	.string "Our rematches are two at a time.\n"
+	.string "Come back with at least two.$"
 
 PetalburgCity_Gym_Text_NormanPreRematch3:
 	.string "DAD: {PLAYER}. Your mother made me\n"

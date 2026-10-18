@@ -165,30 +165,37 @@ RustboroCity_Gym_Text_JoshIntro:
 	.string "We trained under ROXANNE!$"
 
 RustboroCity_Gym_Text_JoshDefeat:
-	.string "You were too good for me…$"
+	.string "I studied for this…\n"
+	.string "I really did!$"
 
 RustboroCity_Gym_Text_JoshPostBattle:
-	.string "You haven't seen what ROCK-types can\n"
-	.string "really do. Not yet.$"
+	.string "DEVON offered ROXANNE a research\n"
+	.string "job. Big salary, her own lab.\p"
+	.string "She turned it down to keep teaching\n"
+	.string "at the TRAINER'S SCHOOL. Kids like\l"
+	.string "me are why.$"
 
 RustboroCity_Gym_Text_TommyIntro:
 	.string "If you can't beat me, you won't\n"
 	.string "stand a chance against ROXANNE!$"
 
 RustboroCity_Gym_Text_TommyDefeat:
-	.string "Wow! You've got some potential!$"
+	.string "Wow! ROXANNE's going to want\n"
+	.string "notes on you!$"
 
 RustboroCity_Gym_Text_TommyPostBattle:
-	.string "ROXANNE is several times stronger\n"
-	.string "than me. Be on your guard.$"
+	.string "ROXANNE grades every battle here.\n"
+	.string "Even the ones she isn't in.\p"
+	.string "I got a C-minus. From her, that's\n"
+	.string "practically a hug.$"
 
 RustboroCity_Gym_Text_MarcIntro:
 	.string "Middle of town or not, my ROCK\n"
 	.string "POKéMON need room to rampage!$"
 
 RustboroCity_Gym_Text_MarcDefeat:
-	.string "Oh, man oh man!\n"
-	.string "Our challenger is one feisty customer!$"
+	.string "Oh man!\n"
+	.string "I cracked first!$"
 
 RustboroCity_Gym_Text_MarcPostBattle:
 	.string "Our LEADER picked ROCK-types at her\n"
@@ -196,25 +203,21 @@ RustboroCity_Gym_Text_MarcPostBattle:
 	.string "That took nerve. Respect it.$"
 
 RustboroCity_Gym_Text_RoxanneIntro:
-	.string "Hello, I am ROXANNE, the RUSTBORO\n"
-	.string "POKéMON GYM LEADER.\p"
-	.string "I became a GYM LEADER so that I might\n"
-	.string "apply what I learned at the POKéMON\l"
-	.string "TRAINER'S SCHOOL in battle.\p"
-	.string "Would you kindly demonstrate how you\n"
-	.string "battle, and with which POKéMON?$"
+	.string "Hello. I am ROXANNE, LEADER of the\n"
+	.string "RUSTBORO GYM.\p"
+	.string "I graduated top of the TRAINER'S\n"
+	.string "SCHOOL, and I still teach there.\p"
+	.string "My students learn from books.\n"
+	.string "I learn from challengers.\p"
+	.string "Show me what the books left out.$"
 
 RustboroCity_Gym_Text_RoxanneDefeat:
-	.string "So…\n"
-	.string "I lost…\p"
-	.string "It seems that I still have much more\n"
-	.string "to learn…\p"
-	.string "I understand.\p"
-	.string "The POKéMON LEAGUE's rules state\n"
-	.string "that TRAINERS are to be given this\l"
-	.string "if they defeat a GYM LEADER.\p"
-	.string "Please accept the official POKéMON\n"
-	.string "LEAGUE STONE BADGE.$"
+	.string "So… I lost.\p"
+	.string "I'll be studying this battle for\n"
+	.string "weeks. Thank you.\p"
+	.string "LEAGUE rules say a TRAINER who\n"
+	.string "defeats a GYM LEADER earns this.\p"
+	.string "Please accept the STONE BADGE.$"
 
 RustboroCity_Gym_Text_ReceivedStoneBadge:
 	.string "{PLAYER} received the STONE BADGE\n"
@@ -254,17 +257,12 @@ RustboroCity_Gym_Text_GymStatueCertified:
 RustboroCity_Gym_Text_RoxanneRegisterCall:
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "ROXANNE: Oh, hello, {PLAYER}?\n"
-	.string "This is ROXANNE of RUSTBORO CITY.\p"
-	.string "I heard from BRAWLY that you're\n"
-	.string "moving up through the ranks of\l"
-	.string "TRAINERS at an incredible clip.\p"
-	.string "Well, I'd rather not think that\n"
-	.string "I can't beat you.\p"
-	.string "I promise, I will shape up my GYM\n"
-	.string "so that you may challenge us again.\p"
-	.string "I hope you'll be looking forward to\n"
-	.string "that occasion as much as me!\p"
+	.string "ROXANNE: Hello, {PLAYER}? This is\n"
+	.string "ROXANNE of RUSTBORO.\p"
+	.string "BRAWLY tells me you're climbing fast.\n"
+	.string "I've added you to my lesson plans.\p"
+	.string "I'll rebuild my GYM so you can\n"
+	.string "challenge us again. Study hard.\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
 
@@ -273,34 +271,25 @@ RustboroCity_Gym_Text_RegisteredRoxanne:
 	.string "in the POKéNAV.$"
 
 RustboroCity_Gym_Text_RoxannePreRematch:
-	.string "ROXANNE: I'm so glad to see you again.\n"
-	.string "I'm ROXANNE, the GYM LEADER here.\p"
-	.string "I'm sure we've both experienced many\n"
-	.string "battles since we last met.\p"
-	.string "I would like to see how much better\n"
-	.string "we've become. Let us battle!$"
+	.string "ROXANNE: Welcome back.\p"
+	.string "I've reviewed our last battle eleven\n"
+	.string "times. I found four mistakes.\p"
+	.string "All mine. Let us see if I fixed them!$"
 
 RustboroCity_Gym_Text_RoxanneRematchDefeat:
-	.string "Grr…\n"
-	.string "Again, I have lost…$"
+	.string "…Five mistakes, then.$"
 
 RustboroCity_Gym_Text_RoxannePostRematch:
-	.string "ROXANNE: I still have much to learn\n"
-	.string "when it comes to battling POKéMON.\p"
-	.string "That awareness makes me love battling\n"
-	.string "all that much more!$"
+	.string "ROXANNE: Every loss is a lesson.\n"
+	.string "You are a very good teacher.\p"
+	.string "Please don't tell my students.$"
 
 RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons:
-	.string "ROXANNE: I'm so glad to see you again.\n"
-	.string "I'm ROXANNE, the GYM LEADER here.\p"
-	.string "I'm sure we've both experienced many\n"
-	.string "battles since we last met.\p"
-	.string "I would like to see how much better\n"
-	.string "we've become…\p"
-	.string "Oh, no…\n"
-	.string "You only have one POKéMON with you?\p"
-	.string "Please return with at least one more\n"
-	.string "POKéMON.$"
+	.string "ROXANNE: Welcome back.\p"
+	.string "Oh dear. You only have one POKéMON\n"
+	.string "with you?\p"
+	.string "Rematches here are two at a time.\n"
+	.string "Please return with one more.$"
 
 RustboroCity_Gym_Text_RoxannePreRematch3:
 	.string "ROXANNE: I rebuilt my team from the\n"

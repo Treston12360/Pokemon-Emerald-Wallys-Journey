@@ -305,8 +305,8 @@ MauvilleCity_Gym_Text_KirkIntro:
 	.string "dreams, whoa-yeah!$"
 
 MauvilleCity_Gym_Text_KirkDefeat:
-	.string "That was plugged in, amped up,\n"
-	.string "over-driven electric, man!$"
+	.string "Plugged in, amped up…\n"
+	.string "and blown out!$"
 
 MauvilleCity_Gym_Text_KirkPostBattle:
 	.string "POKéMON and rock, it's all about\n"
@@ -317,7 +317,8 @@ MauvilleCity_Gym_Text_ShawnIntro:
 	.string "down easy!$"
 
 MauvilleCity_Gym_Text_ShawnDefeat:
-	.string "Unplugged and turned off…$"
+	.string "Unplugged.\n"
+	.string "Totally switched off.$"
 
 MauvilleCity_Gym_Text_ShawnPostBattle:
 	.string "WATTSON's been battling since before\n"
@@ -329,7 +330,8 @@ MauvilleCity_Gym_Text_BenIntro:
 	.string "This GYM's got puzzles! Fun, right?$"
 
 MauvilleCity_Gym_Text_BenDefeat:
-	.string "It's no fun to lose…$"
+	.string "The doors confused ME more\n"
+	.string "than you!$"
 
 MauvilleCity_Gym_Text_BenPostBattle:
 	.string "WATTSON loves his switch traps. Says\n"
@@ -341,7 +343,8 @@ MauvilleCity_Gym_Text_VivianIntro:
 	.string "you!$"
 
 MauvilleCity_Gym_Text_VivianDefeat:
-	.string "I'm shocked by your power!$"
+	.string "Shocking!\n"
+	.string "In the bad way!$"
 
 MauvilleCity_Gym_Text_VivianPostBattle:
 	.string "WATTSON founded this city.\p"
@@ -350,34 +353,35 @@ MauvilleCity_Gym_Text_VivianPostBattle:
 	.string "MAUVILLE. It… didn't go well.$"
 
 MauvilleCity_Gym_Text_AngeloIntro:
-	.string "I love shiny things!$"
+	.string "I love shiny things! Your BADGES\n"
+	.string "are SO shiny!$"
 
 MauvilleCity_Gym_Text_AngeloDefeat:
-	.string "Oh…\n"
-	.string "My eyes are frazzled…$"
+	.string "Oh… my eyes are frazzled…$"
 
 MauvilleCity_Gym_Text_AngeloPostBattle:
-	.string "WATTSON's forehead is so shiny. It\n"
-	.string "makes me happy.$"
+	.string "WATTSON lets anyone train here for\n"
+	.string "free. Even me.\p"
+	.string "He says nobody in MAUVILLE gets\n"
+	.string "turned away. That's why it's so\l"
+	.string "crowded, I think.$"
 
 MauvilleCity_Gym_Text_WattsonIntro:
-	.string "I've given up on my plans to convert\n"
-	.string "the city, I have.\p"
-	.string "And so, I put my time into making\n"
-	.string "door traps in my GYM.\p"
-	.string "Oh? Now, what are you doing here?\p"
-	.string "What's that? You say you've gotten\n"
-	.string "past all my rigged doors?\p"
-	.string "Wahahahah!\n"
-	.string "Now, that is amusing!\p"
-	.string "Then, I, WATTSON, the LEADER of\n"
-	.string "MAUVILLE GYM, shall electrify you!$"
+	.string "Wahahaha! You got through my doors!\p"
+	.string "I built this city under one roof so\n"
+	.string "nobody would freeze or flood.\p"
+	.string "Then I built a power plant to light\n"
+	.string "all of HOENN. That one… I locked\l"
+	.string "away.\p"
+	.string "Now I build traps for TRAINERS.\n"
+	.string "Safer hobby!\p"
+	.string "I, WATTSON, LEADER of MAUVILLE GYM,\n"
+	.string "shall electrify you!$"
 
 MauvilleCity_Gym_Text_WattsonDefeat:
-	.string "Wahahahah!\n"
-	.string "Fine, I lost!\p"
-	.string "You ended up giving me a thrill!\n"
-	.string "Take this BADGE!$"
+	.string "Wahahaha! Fine, I lost!\p"
+	.string "That was the best jolt I've had in\n"
+	.string "years! Take this BADGE!$"
 
 MauvilleCity_Gym_Text_ReceivedDynamoBadge:
 	.string "{PLAYER} received the DYNAMO BADGE\n"
@@ -421,34 +425,27 @@ MauvilleCity_Gym_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 MauvilleCity_Gym_Text_WattsonPreRematch:
-	.string "WATTSON: Ah-ha! Here at last!\n"
-	.string "I know what you want.\l"
-	.string "You want to battle my POKéMON!\p"
-	.string "Wahahahaha!\p"
-	.string "I'll make sparks fly from you!\n"
+	.string "WATTSON: Ah-ha! Here at last!\p"
+	.string "I rerouted three generators to get\n"
+	.string "my team this charged. Wahahaha!\p"
 	.string "Don't say I didn't warn you!$"
 
 MauvilleCity_Gym_Text_WattsonRematchDefeat:
 	.string "Oof…\n"
-	.string "Our batteries ran dry…$"
+	.string "Batteries drained!$"
 
 MauvilleCity_Gym_Text_WattsonPostRematch:
-	.string "WATTSON: We'll have to recharge our\n"
-	.string "batteries again.\p"
-	.string "When we're fully charged up, we'll\n"
-	.string "gladly accept your challenge.\p"
-	.string "So, come back again sometime,\n"
-	.string "won't you?$"
+	.string "WATTSON: We'll recharge and try\n"
+	.string "again!\p"
+	.string "The city still runs on my old wiring,\n"
+	.string "you know. It holds. Mostly.\p"
+	.string "Come back anytime! Wahahaha!$"
 
 MauvilleCity_Gym_Text_WattsonRematchNeedTwoMons:
-	.string "WATTSON: Ah-ha! Here at last!\n"
-	.string "I know what you want.\l"
-	.string "You want to battle my POKéMON!\p"
-	.string "Wahahahaha!\p"
-	.string "Oops! Wait!\n"
-	.string "You've only one POKéMON with you!\p"
-	.string "Come see me with two or more\n"
-	.string "POKéMON, all right?$"
+	.string "WATTSON: Ah-ha! Here at last!\p"
+	.string "Oops! Wait! Only one POKéMON?\p"
+	.string "My rematches are two at a time.\n"
+	.string "Come back with two or more!$"
 
 MauvilleCity_Gym_Text_WattsonPreRematch3:
 	.string "WATTSON: Wahahaha! I rewired the\n"
