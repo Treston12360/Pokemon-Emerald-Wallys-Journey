@@ -485,9 +485,6 @@ enum
 #define LIGHT_TYPE_BALL             0
 #define LIGHT_TYPE_PKMN_CENTER_SIGN 1
 #define LIGHT_TYPE_POKE_MART_SIGN   2
-#define LIGHT_TYPE_PORCH            3 // Wally's Journey: glow at a house door, on a schedule
-#define LIGHT_TYPE_WINDOW           4 // Wally's Journey: glow in a house window, same schedule as its door
-#define LIGHT_TYPE_STREETLAMP       5 // Wally's Journey: street lamp, lit all night
 
 #define FIRST_DECORATION_SPRITE_GFX OBJ_EVENT_GFX_PICHU_DOLL
 
@@ -613,7 +610,6 @@ enum
 #define OBJ_EVENT_PAL_TAG_LIGHT_2                 0x8002
 #define OBJ_EVENT_PAL_TAG_EMOTES                  0x8003
 #define OBJ_EVENT_PAL_TAG_NEON_LIGHT              0x8004
-#define OBJ_EVENT_PAL_TAG_NEON_MART               0x8005 // distinct cool-colored MART lettering, immune to night dimming
 // Not a real OW palette tag; used for the white flash applied to followers
 #define OBJ_EVENT_PAL_TAG_WHITE                   (OBJ_EVENT_PAL_TAG_NONE - 1)
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF

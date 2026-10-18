@@ -497,16 +497,6 @@ const u8 gInitialMovementTypeFacingDirections[NUM_MOVEMENT_TYPES] = {
 #include "data/object_events/object_event_graphics_info.h"
 #include "data/object_events/object_event_graphics_info_followers.h"
 
-static const u16 sWallyCenterLetterPalette[16] =
-{
-    RGB2GBA(0, 0, 0), RGB2GBA(255, 239, 206), RGB2GBA(244, 142, 101),
-};
-
-static const u16 sWallyMartLetterPalette[16] =
-{
-    RGB2GBA(0, 0, 0), RGB2GBA(235, 249, 255), RGB2GBA(104, 189, 241),
-};
-
 static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc1,                  OBJ_EVENT_PAL_TAG_NPC_1},
     {gObjectEventPal_Npc2,                  OBJ_EVENT_PAL_TAG_NPC_2},
@@ -597,8 +587,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     // Dedicated neon colors for just the letter pixels of the two signs.
     // Blend immune palette tags keep them luminous when the town darkens;
     // the letters are already drawn on the tiles underneath during the day.
-    {sWallyCenterLetterPalette,             OBJ_EVENT_PAL_TAG_NEON_LIGHT},
-    {sWallyMartLetterPalette,               OBJ_EVENT_PAL_TAG_NEON_MART},
+    {gObjectEventPaletteNeonLight,          OBJ_EVENT_PAL_TAG_NEON_LIGHT},
 #ifdef BUGFIX
     {NULL,                                  OBJ_EVENT_PAL_TAG_NONE},
 #else
@@ -2755,8 +2744,6 @@ void GetFollowerAction(struct ScriptContext *ctx) // Essentially a big switch fo
 }
 
 #define sLightType data[5]
-#define sLightDoorX data[3]
-#define sLightDoorY data[4]
 #define sLightXPos data[6]
 #define sLightYPos data[7]
 
@@ -2782,15 +2769,13 @@ void UpdateLightSprite(struct Sprite *sprite)
         return;
     }
 
-    if (!WallyJourney_IsLightOn(sprite->sLightType,
-                                sprite->sLightType == LIGHT_TYPE_WINDOW ? sprite->sLightDoorX : x,
-                                sprite->sLightType == LIGHT_TYPE_WINDOW ? sprite->sLightDoorY : y))
+    if (gTimeOfDay != TIME_NIGHT)
     {
         sprite->invisible = TRUE;
         return;
     }
 
-    if (sprite->sLightType != LIGHT_TYPE_PKMN_CENTER_SIGN && sprite->sLightType != LIGHT_TYPE_POKE_MART_SIGN)
+    if (sprite->sLightType == LIGHT_TYPE_BALL)
     {
         if (gPaletteFade.active) // if palette fade is active, don't flicker since the timer won't be updated
         {
@@ -2816,7 +2801,7 @@ void UpdateLightSprite(struct Sprite *sprite)
 }
 
 // Spawn a light at a map coordinate
-static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
+static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
 {
     struct Sprite *sprite;
     const struct SpriteTemplate *template;
@@ -2825,13 +2810,13 @@ static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lig
     {
         sprite = &gSprites[i];
         if (sprite->inUse && sprite->callback == UpdateLightSprite && sprite->sLightXPos == x && sprite->sLightYPos == y)
-            return NULL;
+            return;
     }
     lightType = min(lightType, ARRAY_COUNT(gFieldEffectLightTemplates) - 1); // bounds checking
     template = gFieldEffectLightTemplates[lightType];
     LoadSpriteSheetByTemplate(template, 0, 0);
     sprite = &gSprites[CreateSprite(template, 0, 0, 0)];
-    if ((lightType == LIGHT_TYPE_BALL || lightType == LIGHT_TYPE_PORCH || lightType == LIGHT_TYPE_WINDOW || lightType == LIGHT_TYPE_STREETLAMP) && (i = IndexOfSpritePaletteTag(template->paletteTag + 1)) < 16)
+    if (lightType == 0 && (i = IndexOfSpritePaletteTag(template->paletteTag + 1)) < 16)
         sprite->oam.paletteNum = i;
     else
         UpdateSpritePaletteByTemplate(template, sprite);
@@ -2846,9 +2831,6 @@ static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lig
     {
     default:
     case LIGHT_TYPE_BALL:
-    case LIGHT_TYPE_PORCH:
-    case LIGHT_TYPE_WINDOW:
-    case LIGHT_TYPE_STREETLAMP:
         sprite->centerToCornerVecX = -(32 >> 1);
         sprite->centerToCornerVecY = -(32 >> 1);
         sprite->oam.priority = 1;
@@ -2856,15 +2838,6 @@ static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lig
         sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
         sprite->x += 8;
         sprite->y += 22 + sprite->centerToCornerVecY;
-        if (lightType == LIGHT_TYPE_WINDOW || lightType == LIGHT_TYPE_STREETLAMP)
-        {
-            // Wally's Journey: building lights sit on the wall, behind the
-            // player and NPCs walking past (owner playtest 2026-10-17).
-            sprite->oam.priority = 2;
-            sprite->subpriority = 0xFF;
-        }
-        if (lightType == LIGHT_TYPE_WINDOW)
-            sprite->y += 8; // centre the glow on the window pane, not above it
         break;
     case LIGHT_TYPE_PKMN_CENTER_SIGN:
     case LIGHT_TYPE_POKE_MART_SIGN:
@@ -2872,37 +2845,14 @@ static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lig
         sprite->centerToCornerVecY = -(16 >> 1);
         sprite->oam.priority = 2;
         sprite->subpriority = 0xFF;
-        sprite->oam.objMode = ST_OAM_OBJ_NORMAL;
+        sprite->oam.objMode = ST_OAM_OBJ_BLEND;
         break;
     }
-    return sprite;
 }
 
 #undef sLightType
 #undef sLightXPos
 #undef sLightYPos
-
-// Wally's Journey: night lighting for Center/Mart signs is attached to
-// their map doors but only the original tiny letters are illuminated.
-// Do not generate glow squares over doors or windows: their future glow
-// belongs in dedicated DNS tileset palettes, not alpha-blended sprites.
-
-// Window light must be painted into window tiles/palettes using the
-// pokeemerald-expansion DNS light-blend system, not a large 32x32 object
-// sprite pasted over each facade. Until those palette variants are authored,
-// leave windows in their original nighttime state. No automatic overlays.
-
-// Keep the expansion's built-in DNS tint and explicitly placed map lights.
-// Do not automatically draw PC/Mart neon, window blobs, or town street lamps.
-static void SpawnWarpLights(s16 left, s16 right, s16 top, s16 bottom, s16 camX, s16 camY)
-{
-    (void)left;
-    (void)right;
-    (void)top;
-    (void)bottom;
-    (void)camX;
-    (void)camY;
-}
 
 void TrySpawnLightSprites(s16 camX, s16 camY)
 {
@@ -2933,7 +2883,6 @@ void TrySpawnLightSprites(s16 camX, s16 camY)
          && template->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE)  // event is light sprite instead
             SpawnLightSprite(npcX, npcY, camX, camY, template->trainerRange_berryTreeId);
     }
-    SpawnWarpLights(left, right, top, bottom, camX, camY);
 }
 
 void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
@@ -2969,7 +2918,6 @@ void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
                     TrySpawnObjectEventTemplate(template, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, cameraX, cameraY);
             }
         }
-        SpawnWarpLights(left, right, top, bottom, cameraX, cameraY);
     }
 }
 

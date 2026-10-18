@@ -878,41 +878,6 @@ void WallyJourney_UpdateFallingLeaves(void)
 #undef tLeafWave
 #undef tLeafDrift
 
-// ------------------------------------------------------------ town lights
-// Neon signs and porch lights (spawned in event_object_movement.c). Lights
-// come on in the evening, at night and under storm skies. Pokémon Centers stay
-// lit all night; Marts switch off at 22:00; each house goes dark at its own
-// hour between 22:00 and 02:00, and a few stay dark.
-bool32 WallyJourney_IsLightOn(u32 lightType, s32 x, s32 y)
-{
-    u32 hour = gLocalTime.hours;
-    u32 weather = gWeatherPtr->currWeather;
-    bool32 stormy = (weather == WEATHER_RAIN_THUNDERSTORM || weather == WEATHER_DOWNPOUR);
-    bool32 dark = (gTimeOfDay == TIME_NIGHT || gTimeOfDay == TIME_EVENING);
-    bool32 lateNight = (hour < 5);
-    u32 h;
-
-    if (!dark && !stormy)
-        return FALSE;
-    switch (lightType)
-    {
-    case LIGHT_TYPE_PORCH:
-    case LIGHT_TYPE_WINDOW:
-        h = WeatherHash((u32)x * 73856093u ^ (u32)y * 19349663u ^ gSaveBlock1Ptr->location.mapNum * 83492791u);
-        if (h % 100 < 15)
-            return FALSE;                               // nobody home tonight
-        {
-            u32 lightsOut = 22 + (h >> 8) % 5;          // 22, 23, 24(=0), 25(=1), 26(=2)
-            u32 now = lateNight ? hour + 24 : hour;
-            return now < lightsOut;
-        }
-    case LIGHT_TYPE_POKE_MART_SIGN:
-        return !lateNight && hour < 22;
-    default:
-        return TRUE;                                    // Pokémon Center and placed lamps
-    }
-}
-
 // ------------------------------------------------------ townspeople routines
 // Outdoor flavour NPCs (see tools/gen_wally_ambient_npcs.py) go home at
 // night and shelter from rain, a different mix each day. Story characters,

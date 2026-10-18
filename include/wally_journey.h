@@ -33,7 +33,6 @@ void WallyJourney_TrySeasonNotice(void);
 void WallyJourney_UpdateFallingLeaves(void);
 void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFaded, bool32 isPrimary);
 bool32 WallyJourney_PrimaryFoliageStale(void);
-bool32 WallyJourney_IsLightOn(u32 lightType, s32 x, s32 y);
 struct ObjectEventTemplate;
 bool32 WallyJourney_IsNpcAway(const struct ObjectEventTemplate *template);
 bool32 WallyJourney_GetForecast(u32 mapSec, u8 *now, u8 *later);
