@@ -54,8 +54,9 @@ VictoryRoad_B1F_Text_ShannonPostBattle:
 	.string "people who've lost something.$"
 
 VictoryRoad_B1F_Text_MichelleIntro:
-	.string "This cave isn't the finish line.\n"
-	.string "It's just the hallway!$"
+	.string "This cave isn't the finish line.\p"
+	.string "It's just the hallway to the ELITE\n"
+	.string "FOUR. Battle!$"
 
 VictoryRoad_B1F_Text_MichelleDefeat:
 	.string "That's the way!\n"
@@ -81,8 +82,9 @@ VictoryRoad_B1F_Text_MitchellPostBattle:
 	.string "POKéMON hum with power.$"
 
 VictoryRoad_B1F_Text_HalleIntro:
-	.string "Whoa, relax! No need to be tense.\n"
-	.string "Let's have fun with this!$"
+	.string "Whoa, relax! No need to be tense.\p"
+	.string "I lost to SIDNEY last year. It's\n"
+	.string "not the end of the world!$"
 
 VictoryRoad_B1F_Text_HalleDefeat:
 	.string "Whoa! Wonderful!$"

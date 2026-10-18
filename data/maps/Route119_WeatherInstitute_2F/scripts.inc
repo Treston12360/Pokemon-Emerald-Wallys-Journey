@@ -204,8 +204,9 @@ Route119_WeatherInstitute_2F_EventScript_WeatherScientist::
 	end
 
 Route119_WeatherInstitute_2F_Text_Grunt2Intro:
-	.string "The INSTITUTE made a weather POKéMON.\n"
-	.string "We're taking it!$"
+	.string "The INSTITUTE made a POKéMON that\n"
+	.string "changes the weather!\p"
+	.string "TEAM AQUA needs it more!$"
 
 Route119_WeatherInstitute_2F_Text_Grunt2Defeat:
 	.string "A kid?! Our plan, ruined\n"
@@ -218,8 +219,9 @@ Route119_WeatherInstitute_2F_Text_Grunt2PostBattle:
 	.string "…Or that's what they told us.$"
 
 Route119_WeatherInstitute_2F_Text_Grunt3Intro:
-	.string "We're TEAM AQUA! Wherever something\n"
-	.string "rare turns up, so do we!$"
+	.string "We're TEAM AQUA!\p"
+	.string "We used to petition for storm\n"
+	.string "warnings. Now we take the research!$"
 
 Route119_WeatherInstitute_2F_Text_Grunt3Defeat:
 	.string "You got me!\p"
@@ -233,8 +235,9 @@ Route119_WeatherInstitute_2F_Text_Grunt3PostBattle:
 	.string "here.$"
 
 Route119_WeatherInstitute_2F_Text_Grunt5Intro:
-	.string "Looking for the weather POKéMON too?\n"
-	.string "No! We got here first!$"
+	.string "Looking for the weather POKéMON too?\p"
+	.string "We need it to bring the rains. You're\n"
+	.string "too late!$"
 
 Route119_WeatherInstitute_2F_Text_Grunt5Defeat:
 	.string "Look at my POKéMON!\n"

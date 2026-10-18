@@ -418,7 +418,8 @@ MossdeepCity_Gym_Text_GymGuidePostVictory:
 
 MossdeepCity_Gym_Text_PrestonIntro:
 	.string "The twins can read your mind.\n"
-	.string "I can't. So I'll just hit hard!$"
+	.string "I can't.\p"
+	.string "So I just hit really hard!$"
 
 MossdeepCity_Gym_Text_PrestonDefeat:
 	.string "I lost!\n"
@@ -431,8 +432,9 @@ MossdeepCity_Gym_Text_PrestonPostBattle:
 	.string "from the roof. They still do.$"
 
 MossdeepCity_Gym_Text_VirgilIntro:
-	.string "Show me your talent!\n"
-	.string "The twins will want a report!$"
+	.string "I keep the twins' battle notes.\p"
+	.string "They want a full report on you.\n"
+	.string "Show me your talent!$"
 
 MossdeepCity_Gym_Text_VirgilDefeat:
 	.string "Spectacular!$"
@@ -460,8 +462,10 @@ MossdeepCity_Gym_Text_BlakePostBattle:
 	.string "stubborn people too.$"
 
 MossdeepCity_Gym_Text_HannahIntro:
-	.string "When you lose to me, don't feel bad.\n"
-	.string "I'm just too strong!$"
+	.string "I tried out for the SPACE CENTER and\n"
+	.string "got rejected.\p"
+	.string "The twins took me in. I'm too strong\n"
+	.string "for you now!$"
 
 MossdeepCity_Gym_Text_HannahDefeat:
 	.string "Okay, maybe YOU'RE the one\n"
@@ -491,8 +495,9 @@ MossdeepCity_Gym_Text_SamanthaPostBattle:
 	.string "decided yet.$"
 
 MossdeepCity_Gym_Text_MauraIntro:
-	.string "The roads you've traveled…\n"
-	.string "Come at me with all of them!$"
+	.string "I read the roads people travel.\p"
+	.string "Yours started in LITTLEROOT and\n"
+	.string "hasn't stopped. Come at me!$"
 
 MossdeepCity_Gym_Text_MauraDefeat:
 	.string "Every road you walked\n"
@@ -581,8 +586,9 @@ MossdeepCity_Gym_Text_MaceyPostBattle:
 	.string "that's what makes you scary.$"
 
 MossdeepCity_Gym_Text_NicholasIntro:
-	.string "Wroooar! I've been training my\n"
-	.string "mind by staring at stars!$"
+	.string "I've trained my mind by staring at\n"
+	.string "stars from the SPACE CENTER roof!\p"
+	.string "Wroooar! Psychic power!$"
 
 MossdeepCity_Gym_Text_NicholasDefeat:
 	.string "Ow…\n"

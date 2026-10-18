@@ -12,8 +12,9 @@ MagmaHideout_3F_1R_EventScript_Grunt16::
 	end
 
 MagmaHideout_3F_1R_Text_Grunt9Intro:
-	.string "Why'd they post me next to the\n"
-	.string "lava? My ear's melting!$"
+	.string "They posted me right by the lava!\p"
+	.string "I used to be a schoolteacher in\n"
+	.string "FALLARBOR. What am I doing?$"
 
 MagmaHideout_3F_1R_Text_Grunt9Defeat:
 	.string "Heat exhaustion…\n"

@@ -422,8 +422,9 @@ MtPyre_Summit_EventScript_Grunt4::
 	end
 
 MtPyre_Summit_Text_Grunt1Intro:
-	.string "No! TEAM MAGMA beat us up here!\n"
-	.string "We can't fall behind!$"
+	.string "No! TEAM MAGMA beat us up here!\p"
+	.string "If they get the ORB first, ARCHIE\n"
+	.string "will never forgive us! Move!$"
 
 MtPyre_Summit_Text_Grunt1Defeat:
 	.string "I thought you were a MAGMA\n"

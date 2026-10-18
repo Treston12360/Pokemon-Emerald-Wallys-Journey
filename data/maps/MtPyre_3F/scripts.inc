@@ -33,8 +33,9 @@ MtPyre_3F_EventScript_RematchGabrielle::
 	end
 
 MtPyre_3F_Text_WilliamIntro:
-	.string "The air here sharpens my mind!\n"
-	.string "A child can't win against this!$"
+	.string "This mountain sharpens my mind!\p"
+	.string "The spirits speak to me. They say\n"
+	.string "you'll lose!$"
 
 MtPyre_3F_Text_WilliamDefeat:
 	.string "I drown in self-pity…\n"
@@ -49,8 +50,9 @@ MtPyre_3F_Text_WilliamPostBattle:
 	.string "more than being heard.$"
 
 MtPyre_3F_Text_KaylaIntro:
-	.string "Ahahahaha! A child, here? Go home\n"
-	.string "before the spirits notice you!$"
+	.string "Ahahahaha! A child, up here?\p"
+	.string "Go home before the spirits take an\n"
+	.string "interest in you!$"
 
 MtPyre_3F_Text_KaylaDefeat:
 	.string "I lost… cleanly. Ugh.$"

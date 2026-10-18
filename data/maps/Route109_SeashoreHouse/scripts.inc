@@ -144,8 +144,9 @@ Route109_SeashoreHouse_Text_ThatsTooBad:
 	.string "That's too bad.$"
 
 Route109_SeashoreHouse_Text_DwayneIntro:
-	.string "Looking for a battle? No TRAINER in\n"
-	.string "this house is hotter than me!$"
+	.string "Looking for a battle? I've worked\n"
+	.string "this SEASHORE HOUSE ten summers!\p"
+	.string "No TRAINER in here is hotter!$"
 
 Route109_SeashoreHouse_Text_DwayneDefeated:
 	.string "Arr, that was hot!\n"
@@ -156,8 +157,9 @@ Route109_SeashoreHouse_Text_DwaynePostBattle:
 	.string "That's SLATEPORT living.$"
 
 Route109_SeashoreHouse_Text_JohannaIntro:
-	.string "Boring battles aren't worth the\n"
-	.string "effort. Show me fire!$"
+	.string "Tourists come in, drink SODA POP, and\n"
+	.string "leave. Boring!\p"
+	.string "Show me some fire!$"
 
 Route109_SeashoreHouse_Text_JohannaDefeated:
 	.string "Too hot to handle!$"
@@ -167,8 +169,9 @@ Route109_SeashoreHouse_Text_JohannaPostBattle:
 	.string "anyone who beats us all. Go on!$"
 
 Route109_SeashoreHouse_Text_SimonIntro:
-	.string "My POKéMON is the toughest at this\n"
-	.string "whole beach! Don't cry!$"
+	.string "My POKéMON is the toughest on this\n"
+	.string "whole beach!\p"
+	.string "My big brother says so. Don't cry!$"
 
 Route109_SeashoreHouse_Text_SimonDefeated:
 	.string "I'm not crying…\n"

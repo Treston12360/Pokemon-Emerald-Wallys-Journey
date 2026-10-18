@@ -322,8 +322,9 @@ Route110_TrickHousePuzzle7_Text_WroteSecretCodeLockOpened::
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle7_Text_JoshuaIntro:
-	.string "The TRICK MASTER vanishes like\n"
-	.string "smoke every time! How?!$"
+	.string "The TRICK MASTER vanishes like smoke!\p"
+	.string "I've been taking notes for months.\n"
+	.string "Still no idea how!$"
 
 Route110_TrickHousePuzzle7_Text_JoshuaDefeat:
 	.string "Aiyeeeh! Way too strong!\n"
@@ -334,8 +335,9 @@ Route110_TrickHousePuzzle7_Text_JoshuaPostBattle:
 	.string "Especially after losing.$"
 
 Route110_TrickHousePuzzle7_Text_PatriciaIntro:
-	.string "Circling the same spot…\n"
-	.string "That's terrible luck…$"
+	.string "Circling the same spot…\p"
+	.string "In SOOTOPOLIS, that's terrible luck.\n"
+	.string "The old folks say so.$"
 
 Route110_TrickHousePuzzle7_Text_PatriciaDefeat:
 	.string "Defeated! A very bad omen…$"
@@ -345,8 +347,9 @@ Route110_TrickHousePuzzle7_Text_PatriciaPostBattle:
 	.string "times. The omens are dire.$"
 
 Route110_TrickHousePuzzle7_Text_AlexisIntro:
-	.string "Whoever wins gets through first.\n"
-	.string "I just feel it.$"
+	.string "Whoever wins gets through first.\p"
+	.string "I can feel it. I'm never wrong\n"
+	.string "about feelings!$"
 
 Route110_TrickHousePuzzle7_Text_AlexisDefeat:
 	.string "Oh! Then go ahead!$"
@@ -356,8 +359,9 @@ Route110_TrickHousePuzzle7_Text_AlexisPostBattle:
 	.string "I can feel it.$"
 
 Route110_TrickHousePuzzle7_Text_MarielaIntro:
-	.string "Nufufufu, finally! Someone to\n"
-	.string "battle! Let's go!$"
+	.string "Nufufufu, finally!\p"
+	.string "I've been stuck here so long I named\n"
+	.string "the walls. Battle!$"
 
 Route110_TrickHousePuzzle7_Text_MarielaDefeat:
 	.string "How are you so calm about\n"
@@ -368,8 +372,9 @@ Route110_TrickHousePuzzle7_Text_MarielaPostBattle:
 	.string "Not one bit!$"
 
 Route110_TrickHousePuzzle7_Text_AlvaroIntro:
-	.string "I watched you coming the whole way!\n"
-	.string "Very closely!$"
+	.string "I watched you coming the whole way!\p"
+	.string "Through the little holes in the\n"
+	.string "walls. Very closely!$"
 
 Route110_TrickHousePuzzle7_Text_AlvaroDefeat:
 	.string "I didn't see THAT coming…$"
@@ -379,8 +384,9 @@ Route110_TrickHousePuzzle7_Text_AlvaroPostBattle:
 	.string "weirdo to another, good luck!$"
 
 Route110_TrickHousePuzzle7_Text_EverettIntro:
-	.string "It's so cramped in here…\n"
-	.string "I can barely draw a POKé BALL.$"
+	.string "It's so cramped in here…\p"
+	.string "My whole apartment in MAUVILLE is\n"
+	.string "this size. I feel right at home.$"
 
 Route110_TrickHousePuzzle7_Text_EverettDefeat:
 	.string "Oh, yes. Strong, you are.$"

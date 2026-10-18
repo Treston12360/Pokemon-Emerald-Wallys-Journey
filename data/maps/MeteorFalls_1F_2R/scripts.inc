@@ -81,8 +81,10 @@ MeteorFalls_1F_2R_Text_NicolasRegister:
 	.string "Let me register you in my POKéNAV.$"
 
 MeteorFalls_1F_2R_Text_NicolasRematchIntro:
-	.string "I've trained under the falls every\n"
-	.string "day since we met. Battle!$"
+	.string "Since we met, I've trained under the\n"
+	.string "falls every day at dawn.\p"
+	.string "My clan's elders say I'm ready.\n"
+	.string "Let's see!$"
 
 MeteorFalls_1F_2R_Text_NicolasRematchDefeat:
 	.string "Urgh!\n"
@@ -93,8 +95,9 @@ MeteorFalls_1F_2R_Text_NicolasPostRematch:
 	.string "I can grow stronger too!$"
 
 MeteorFalls_1F_2R_Text_JohnIntro:
-	.string "JOHN: My wife and I have battled\n"
-	.string "side by side for fifty years.$"
+	.string "JOHN: We came here on our first date\n"
+	.string "fifty years ago.\p"
+	.string "We battled then. We battle now!$"
 
 MeteorFalls_1F_2R_Text_JohnDefeat:
 	.string "JOHN: Well, dear…\n"
@@ -135,7 +138,7 @@ MeteorFalls_1F_2R_Text_JayNotEnoughMons:
 
 MeteorFalls_1F_2R_Text_JohnRematchIntro:
 	.string "JOHN: Back for more, young one?\n"
-	.string "We're not done yet!$"
+	.string "These old bones aren't done!$"
 
 MeteorFalls_1F_2R_Text_JohnRematchDefeat:
 	.string "JOHN: Beaten again, dear.\n"

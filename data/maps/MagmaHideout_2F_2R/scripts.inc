@@ -38,8 +38,9 @@ MagmaHideout_2F_2R_Text_Grunt15PostBattle:
 	.string "I hope he isn't wrong now.$"
 
 MagmaHideout_2F_2R_Text_Grunt6Intro:
-	.string "This heat is awful. Maybe TEAM\n"
-	.string "AQUA has air conditioning…$"
+	.string "This heat is awful.\p"
+	.string "My sister's in TEAM AQUA. She says\n"
+	.string "their HIDEOUT has a breeze. Ugh!$"
 
 MagmaHideout_2F_2R_Text_Grunt6Defeat:
 	.string "Yeah… maybe I picked\n"

@@ -12,8 +12,9 @@ SeafloorCavern_Room1_EventScript_Grunt2::
 	end
 
 SeafloorCavern_Room1_Text_Grunt1Intro:
-	.string "A kid? Down here? Go home!\n"
-	.string "This is no place for you!$"
+	.string "A kid? Down here? Go home!\p"
+	.string "This cave could flood any second!\n"
+	.string "It's no place for you!$"
 
 SeafloorCavern_Room1_Text_Grunt1Defeat:
 	.string "I want to go home…\p"

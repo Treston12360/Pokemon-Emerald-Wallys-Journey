@@ -35,8 +35,9 @@ Route110_TrickHousePuzzle4_Text_WroteSecretCodeLockOpened:
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle4_Text_CoraIntro:
-	.string "Puzzles? Ugh, too much thinking.\n"
-	.string "I just want to battle!$"
+	.string "Puzzles? Ugh!\p"
+	.string "I just came in because I heard\n"
+	.string "TRAINERS were here. Battle!$"
 
 Route110_TrickHousePuzzle4_Text_CoraDefeat:
 	.string "I lost, but battling is\n"
@@ -47,8 +48,9 @@ Route110_TrickHousePuzzle4_Text_CoraPostBattle:
 	.string "too, right? Right?$"
 
 Route110_TrickHousePuzzle4_Text_YujiIntro:
-	.string "Boulders? I push them with one\n"
-	.string "finger! Watch this!$"
+	.string "I move boulders at the RUSTBORO\n"
+	.string "quarry for a living!\p"
+	.string "One finger! Watch!$"
 
 Route110_TrickHousePuzzle4_Text_YujiDefeat:
 	.string "I can move boulders, but\n"
@@ -59,8 +61,10 @@ Route110_TrickHousePuzzle4_Text_YujiPostBattle:
 	.string "You have to use your head too!$"
 
 Route110_TrickHousePuzzle4_Text_PaulaIntro:
-	.string "This TRICK HOUSE keeps getting\n"
-	.string "trickier, doesn't it?$"
+	.string "The TRICK HOUSE gets trickier every\n"
+	.string "time.\p"
+	.string "I think the TRICK MASTER reads our\n"
+	.string "minds. Battle!$"
 
 Route110_TrickHousePuzzle4_Text_PaulaDefeat:
 	.string "Aaak! Tricked by\n"

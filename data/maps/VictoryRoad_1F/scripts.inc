@@ -222,7 +222,9 @@ VictoryRoad_1F_Text_HopePostBattle:
 
 VictoryRoad_1F_Text_QuincyIntro:
 	.string "Want to know what VICTORY ROAD\n"
-	.string "really means? Win first!$"
+	.string "really means?\p"
+	.string "I've walked it five times. Win, and\n"
+	.string "I'll tell you!$"
 
 VictoryRoad_1F_Text_QuincyDefeat:
 	.string "Okay! You've earned\n"
@@ -236,8 +238,9 @@ VictoryRoad_1F_Text_QuincyPostBattle:
 	.string "That's why it's called VICTORY ROAD.$"
 
 VictoryRoad_1F_Text_KatelynnIntro:
-	.string "Anyone this far doesn't need a\n"
-	.string "speech. Come on!$"
+	.string "Anyone who gets this far doesn't\n"
+	.string "need a speech.\p"
+	.string "I quit my job for this. Come on!$"
 
 VictoryRoad_1F_Text_KatelynnDefeat:
 	.string "A disgrace… this close\n"

@@ -194,8 +194,10 @@ FortreeCity_Gym_Text_JaredPostBattle:
 	.string "problem. Not everyone agrees.$"
 
 FortreeCity_Gym_Text_EdwardoIntro:
-	.string "Everyone who loves BIRD POKéMON wants\n"
-	.string "to join this GYM. I can't lose!$"
+	.string "Every kid in FORTREE wants to join\n"
+	.string "this GYM.\p"
+	.string "WINONA only takes ten a year.\n"
+	.string "I'm one of them! I can't lose!$"
 
 FortreeCity_Gym_Text_EdwardoDefeat:
 	.string "Too heavy a load for my\n"
@@ -209,8 +211,9 @@ FortreeCity_Gym_Text_EdwardoPostBattle:
 	.string "them herself.$"
 
 FortreeCity_Gym_Text_FlintIntro:
-	.string "WINONA doesn't need to deal with you!\n"
-	.string "I'm enough!$"
+	.string "WINONA saved my SWABLU from a storm\n"
+	.string "when I was little.\p"
+	.string "I owe her. You won't reach her!$"
 
 FortreeCity_Gym_Text_FlintDefeat:
 	.string "WINONA… I'm sorry…\n"

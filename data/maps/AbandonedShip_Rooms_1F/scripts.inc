@@ -39,8 +39,10 @@ AbandonedShip_Rooms_1F_Text_TakingALookAround:
 	.string "made up its mind.$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaIntro:
-	.string "Why would anyone come aboard\n"
-	.string "this wreck? You're curious!$"
+	.string "My grandpa was a deckhand on this\n"
+	.string "ship.\p"
+	.string "He never said why she sank.\n"
+	.string "You're curious too, aren't you?$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaDefeat:
 	.string "Curious AND strong!$"
@@ -54,8 +56,8 @@ AbandonedShip_Rooms_1F_Text_ThaliaRegister:
 	.string "Let me register you as a memento!$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaRematchIntro:
-	.string "Back again? You must be REALLY\n"
-	.string "curious!$"
+	.string "Back again? Still curious about this\n"
+	.string "wreck? Me too. Battle!$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaRematchDefeat:
 	.string "Too strong!$"
@@ -65,8 +67,9 @@ AbandonedShip_Rooms_1F_Text_ThaliaPostRematch:
 	.string "something. I just know it!$"
 
 AbandonedShip_Rooms_1F_Text_DemetriusIntro:
-	.string "Waaah! Mom found me! …Huh?\n"
-	.string "You're not Mom!$"
+	.string "Waaah! Mom found me!\p"
+	.string "…Huh? You're not Mom.\n"
+	.string "Phew. Battle me so I can hide!$"
 
 AbandonedShip_Rooms_1F_Text_DemetriusDefeat:
 	.string "Phew. At least you're\n"

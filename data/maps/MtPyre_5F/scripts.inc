@@ -9,8 +9,9 @@ MtPyre_4F_EventScript_Tasha::
 	end
 
 MtPyre_4F_Text_TashaIntro:
-	.string "I love horrifying things… This\n"
-	.string "mountain is perfect…$"
+	.string "I love horrifying things…\p"
+	.string "PHOEBE grew up on this mountain. She\n"
+	.string "said it's lonely, not scary. Liar…$"
 
 MtPyre_4F_Text_TashaDefeat:
 	.string "Losing… is the one horror\n"

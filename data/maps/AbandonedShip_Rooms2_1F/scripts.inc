@@ -50,8 +50,10 @@ AbandonedShip_Rooms2_1F_EventScript_Garrison::
 	end
 
 AbandonedShip_Rooms2_1F_Text_DanIntro:
-	.string "DAN: We came for treasure and\n"
-	.string "found a TRAINER!$"
+	.string "DAN: KIRA heard there's treasure on\n"
+	.string "this wreck.\p"
+	.string "If we find it, we can stop renting.\n"
+	.string "Instead we found you!$"
 
 AbandonedShip_Rooms2_1F_Text_DanDefeat:
 	.string "DAN: Even together we couldn't\n"
@@ -66,8 +68,8 @@ AbandonedShip_Rooms2_1F_Text_DanNotEnoughMons:
 	.string "battle us both.$"
 
 AbandonedShip_Rooms2_1F_Text_KiraIntro:
-	.string "KIRA: Treasure? No! A TRAINER!\n"
-	.string "Even better!$"
+	.string "KIRA: Treasure means a house of our\n"
+	.string "own! Out of the way, TRAINER!$"
 
 AbandonedShip_Rooms2_1F_Text_KiraDefeat:
 	.string "KIRA: Ooh! There goes our\n"
@@ -119,7 +121,9 @@ AbandonedShip_Rooms2_1F_Text_KiraRematchNotEnoughMons:
 	.string "We need two to battle!$"
 
 AbandonedShip_Rooms2_1F_Text_JaniIntro:
-	.string "I can't swim, but I can battle!$"
+	.string "I can't swim a stroke. I came here on\n"
+	.string "a dare from my roommates.\p"
+	.string "But I can battle!$"
 
 AbandonedShip_Rooms2_1F_Text_JaniDefeat:
 	.string "Oops. That went badly.$"
@@ -129,8 +133,10 @@ AbandonedShip_Rooms2_1F_Text_JaniPostBattle:
 	.string "is kind of gross.$"
 
 AbandonedShip_Rooms2_1F_Text_GarrisonIntro:
-	.string "Strength and compassion. Those are\n"
-	.string "a TRAINER's true treasures!$"
+	.string "I rode this ship as a young man,\n"
+	.string "when she still carried passengers.\p"
+	.string "Now it's just me and the DEVON\n"
+	.string "crates. Humor an old man?$"
 
 AbandonedShip_Rooms2_1F_Text_GarrisonDefeat:
 	.string "Ah. You sparkle.$"

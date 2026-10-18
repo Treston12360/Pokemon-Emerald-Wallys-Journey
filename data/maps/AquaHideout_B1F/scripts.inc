@@ -122,8 +122,9 @@ AquaHideout_B1F_Text_Grunt2PostBattle:
 	.string "Kekeke…$"
 
 AquaHideout_B1F_Text_Grunt3Intro:
-	.string "Fuel loaded! Snacks loaded!\n"
-	.string "Now to KO a meddler!$"
+	.string "Fuel loaded! Snacks loaded!\p"
+	.string "ARCHIE says the sea will rise and\n"
+	.string "the reefs will come back. Move!$"
 
 AquaHideout_B1F_Text_Grunt3Defeat:
 	.string "Ow! Took a serious licking!$"
@@ -133,8 +134,9 @@ AquaHideout_B1F_Text_Grunt3PostBattle:
 	.string "I was just holding you up!$"
 
 AquaHideout_B1F_Text_Grunt5Intro:
-	.string "Yawn… Guard duty again. Fine,\n"
-	.string "I'll take you on.$"
+	.string "Yawn… I joined to rescue WINGULL.\p"
+	.string "Now I guard a door in a cave.\n"
+	.string "Fine, I'll take you on.$"
 
 AquaHideout_B1F_Text_Grunt5Defeat:
 	.string "Yawn… Oh, I lost…\p"

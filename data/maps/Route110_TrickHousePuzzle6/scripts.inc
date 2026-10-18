@@ -50,8 +50,9 @@ Route110_TrickHousePuzzle6_Text_WroteSecretCodeLockOpened:
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle6_Text_SophiaIntro:
-	.string "A strange house on ROUTE 110?\n"
-	.string "Of course I had to come in!$"
+	.string "A strange house on ROUTE 110?\p"
+	.string "I write a travel guide. This is\n"
+	.string "going on the cover!$"
 
 Route110_TrickHousePuzzle6_Text_SophiaDefeat:
 	.string "Ooh! A tough TRAINER!\n"
@@ -62,8 +63,9 @@ Route110_TrickHousePuzzle6_Text_SophiaPostBattle:
 	.string "I'll do it all again next time!$"
 
 Route110_TrickHousePuzzle6_Text_BennyIntro:
-	.string "Maybe my BIRD POKéMON can just fly\n"
-	.string "me over this wall…$"
+	.string "Maybe my BIRD POKéMON could fly me\n"
+	.string "over this wall…\p"
+	.string "Don't tell the TRICK MASTER!$"
 
 Route110_TrickHousePuzzle6_Text_BennyDefeat:
 	.string "Gwaaah! Blew it!$"
@@ -73,8 +75,9 @@ Route110_TrickHousePuzzle6_Text_BennyPostBattle:
 	.string "cheat, didn't I?$"
 
 Route110_TrickHousePuzzle6_Text_SebastianIntro:
-	.string "These spinning doors are making\n"
-	.string "me so dizzy…$"
+	.string "These spinning doors…\p"
+	.string "I get seasick on boats too.\n"
+	.string "Why did I come in here?$"
 
 Route110_TrickHousePuzzle6_Text_SebastianDefeat:
 	.string "Everything's spinning…\n"

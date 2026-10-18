@@ -107,8 +107,9 @@ Route110_TrickHousePuzzle2_Text_WroteSecretCodeLockOpened:
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle2_Text_TedIntro:
-	.string "Which button closes which hole?!\n"
-	.string "I've pressed them all twice!$"
+	.string "Which button closes which hole?!\p"
+	.string "I pressed them all twice. Then I\n"
+	.string "fell in one!$"
 
 Route110_TrickHousePuzzle2_Text_TedDefeat:
 	.string "Now I'm even more\n"
@@ -131,8 +132,9 @@ Route110_TrickHousePuzzle2_Text_PaulPostBattle:
 	.string "himself. Overnight. Nobody sees him.$"
 
 Route110_TrickHousePuzzle2_Text_GeorgiaIntro:
-	.string "I want my own GYM someday!\n"
-	.string "I'm studying traps here!$"
+	.string "I want my own GYM someday!\p"
+	.string "So I study traps here, like NORMAN\n"
+	.string "studied rooms. Battle!$"
 
 Route110_TrickHousePuzzle2_Text_GeorgiaDefeat:
 	.string "I studied traps, not\n"

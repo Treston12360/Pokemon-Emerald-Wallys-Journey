@@ -25,8 +25,10 @@ SSTidalLowerDeck_Text_PhillipPostBattle:
 	.string "does the scrubbing!$"
 
 SSTidalLowerDeck_Text_LeonardIntro:
-	.string "The hull's got plenty of room.\n"
-	.string "Perfect for a battle!$"
+	.string "Me and my brother scrub this whole\n"
+	.string "hull every trip!\p"
+	.string "Plenty of room for a battle down\n"
+	.string "here!$"
 
 SSTidalLowerDeck_Text_LeonardDefeat:
 	.string "Big bro! I lost!\n"

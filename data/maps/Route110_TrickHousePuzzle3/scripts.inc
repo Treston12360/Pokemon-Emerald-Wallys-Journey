@@ -309,8 +309,9 @@ Route110_TrickHousePuzzle3_Text_WroteSecretCodeLockOpened:
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle3_Text_JustinIntro:
-	.string "I keep ending up right back here!\n"
-	.string "Same room! Again!$"
+	.string "I keep ending up back here!\p"
+	.string "Same room. Same door. Same\n"
+	.string "TRAINER. Wait, you're new!$"
 
 Route110_TrickHousePuzzle3_Text_JustinDefeat:
 	.string "I'm lost AND beaten?\n"
@@ -321,8 +322,9 @@ Route110_TrickHousePuzzle3_Text_JustinPostBattle:
 	.string "Somebody get me out!$"
 
 Route110_TrickHousePuzzle3_Text_MarthaIntro:
-	.string "I have no idea where I am.\n"
-	.string "I'm starting to feel sad…$"
+	.string "I have no idea where I am.\p"
+	.string "My roommates bet I couldn't finish\n"
+	.string "this. They were right…$"
 
 Route110_TrickHousePuzzle3_Text_MarthaDefeat:
 	.string "You… You're awful!\n"
@@ -333,8 +335,9 @@ Route110_TrickHousePuzzle3_Text_MarthaPostBattle:
 	.string "direction. Great combo.$"
 
 Route110_TrickHousePuzzle3_Text_AlanIntro:
-	.string "I don't get it. Who builds a house\n"
-	.string "like this? And why?$"
+	.string "I don't get it.\p"
+	.string "Who builds a house like this right\n"
+	.string "next to CYCLING ROAD? And why?$"
 
 Route110_TrickHousePuzzle3_Text_AlanDefeat:
 	.string "I don't get it.\n"

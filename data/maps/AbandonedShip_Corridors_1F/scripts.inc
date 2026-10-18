@@ -11,8 +11,9 @@ AbandonedShip_Corridors_1F_EventScript_Charlie::
 	end
 
 AbandonedShip_Corridors_1F_Text_CharlieIntro:
-	.string "What's so funny about bringing my\n"
-	.string "inner tube onto a shipwreck?$"
+	.string "Laugh at my inner tube all you want.\p"
+	.string "This ship sank once already. I'm not\n"
+	.string "taking chances!$"
 
 AbandonedShip_Corridors_1F_Text_CharlieDefeat:
 	.string "Whoa! Overwhelmed!$"

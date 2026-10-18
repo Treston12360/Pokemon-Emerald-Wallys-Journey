@@ -148,8 +148,10 @@ JaggedPass_EventScript_Autumn::
 	end
 
 JaggedPass_Text_EricIntro:
-	.string "JAGGED PASS… This jagged bumpiness\n"
-	.string "rocks my soul!$"
+	.string "JAGGED PASS! This bumpy road rocks\n"
+	.string "my soul!\p"
+	.string "The ash on these rocks fell before\n"
+	.string "I was born. Respect it!$"
 
 JaggedPass_Text_EricDefeat:
 	.string "Losing left a bitter taste.\n"
@@ -162,7 +164,9 @@ JaggedPass_Text_EricPostBattle:
 	.string "Nobody should mess with it.$"
 
 JaggedPass_Text_DianaIntro:
-	.string "This isn't a casual hike. No picnics!$"
+	.string "This isn't a casual hike! No\n"
+	.string "picnics!\p"
+	.string "…Okay, one picnic. Battle first!$"
 
 JaggedPass_Text_DianaDefeat:
 	.string "Ohhh! The ground's too\n"
@@ -240,8 +244,10 @@ JaggedPass_Text_BoulderShakingInResponseToEmblem:
 	.string "to the MAGMA EMBLEM!$"
 
 JaggedPass_Text_JulioIntro:
-	.string "Aiyeeh! I'm riding this whole\n"
-	.string "thing in one go! Move!$"
+	.string "Aiyeeh! I'm riding this whole trail\n"
+	.string "in one go!\p"
+	.string "The LAVARIDGE kids do it daily.\n"
+	.string "If they can, I can! Move!$"
 
 JaggedPass_Text_JulioDefeat:
 	.string "I'm falling apart…\n"

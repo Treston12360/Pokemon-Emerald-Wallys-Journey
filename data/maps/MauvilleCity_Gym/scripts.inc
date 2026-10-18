@@ -317,8 +317,10 @@ MauvilleCity_Gym_Text_KirkPostBattle:
 	.string "Never told anybody. Whoa-yeah.$"
 
 MauvilleCity_Gym_Text_ShawnIntro:
-	.string "I trained under WATTSON! I won't go\n"
-	.string "down easy!$"
+	.string "WATTSON trained me for free when I\n"
+	.string "had nothing.\p"
+	.string "Now I train the new kids. I won't\n"
+	.string "go down easy!$"
 
 MauvilleCity_Gym_Text_ShawnDefeat:
 	.string "Unplugged.\n"

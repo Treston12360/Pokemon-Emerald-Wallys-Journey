@@ -54,8 +54,10 @@ AbandonedShip_Corridors_B1F_EventScript_Duncan::
 	end
 
 AbandonedShip_Corridors_B1F_Text_DuncanIntro:
-	.string "SAILORS always bring POKéMON to\n"
-	.string "sea. Quick battle?$"
+	.string "I crewed ships like this one for\n"
+	.string "twenty years.\p"
+	.string "Now I just come and visit her.\n"
+	.string "Quick battle?$"
 
 AbandonedShip_Corridors_B1F_Text_DuncanDefeat:
 	.string "Whoops! Sunk!$"

@@ -110,8 +110,10 @@ SootopolisCity_Gym_B1F_Text_ConniePostBattle:
 	.string "tile exactly once.$"
 
 SootopolisCity_Gym_B1F_Text_BridgetIntro:
-	.string "The highest-level GYM in HOENN…\n"
-	.string "Welcome to SOOTOPOLIS.$"
+	.string "Welcome to SOOTOPOLIS, the toughest\n"
+	.string "GYM in HOENN.\p"
+	.string "My family has guarded this city's\n"
+	.string "secrets for generations.$"
 
 SootopolisCity_Gym_B1F_Text_BridgetDefeat:
 	.string "You're stronger than anyone\n"
@@ -139,8 +141,9 @@ SootopolisCity_Gym_B1F_Text_OliviaPostBattle:
 	.string "WALLACE refused too, at first.$"
 
 SootopolisCity_Gym_B1F_Text_TiffanyIntro:
-	.string "A graceful glide, crossing no\n"
-	.string "lines… That's true beauty!$"
+	.string "A graceful glide, crossing no lines…\p"
+	.string "JUAN says that's how you walk this\n"
+	.string "ice. And how you live!$"
 
 SootopolisCity_Gym_B1F_Text_TiffanyDefeat:
 	.string "Well, excuse me?!\n"

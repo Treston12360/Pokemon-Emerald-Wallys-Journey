@@ -56,8 +56,9 @@ Route110_TrickHousePuzzle1_Text_SallyPostBattle:
 	.string "They grow back overnight! How?!$"
 
 Route110_TrickHousePuzzle1_Text_EddieIntro:
-	.string "I came in to ask for directions to\n"
-	.string "SLATEPORT. Now I'm trapped!$"
+	.string "I only came in to ask directions to\n"
+	.string "SLATEPORT!\p"
+	.string "That was three hours ago. Battle?$"
 
 Route110_TrickHousePuzzle1_Text_EddieDefeat:
 	.string "Lost my way AND the match…$"
@@ -67,8 +68,9 @@ Route110_TrickHousePuzzle1_Text_EddiePostBattle:
 	.string "fine. Mostly fine.$"
 
 Route110_TrickHousePuzzle1_Text_RobinIntro:
-	.string "Who IS the TRICK MASTER? I've been\n"
-	.string "investigating for weeks!$"
+	.string "Who IS the TRICK MASTER?\p"
+	.string "The neighbors say he was a famous\n"
+	.string "magician once. Battle!$"
 
 Route110_TrickHousePuzzle1_Text_RobinDefeat:
 	.string "I was thinking about the\n"

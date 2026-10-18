@@ -161,8 +161,10 @@ RustboroCity_Gym_Text_GymGuidePostVictory:
 	.string "the stairs to the CHAMPIONSHIP!$"
 
 RustboroCity_Gym_Text_JoshIntro:
-	.string "Don't take GYM TRAINERS lightly!\n"
-	.string "We trained under ROXANNE!$"
+	.string "ROXANNE grades our battles like\n"
+	.string "homework.\p"
+	.string "I'm going for an A. Don't take GYM\n"
+	.string "TRAINERS lightly!$"
 
 RustboroCity_Gym_Text_JoshDefeat:
 	.string "I studied for this…\n"

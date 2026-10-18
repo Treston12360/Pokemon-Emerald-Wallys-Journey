@@ -138,8 +138,10 @@ MagmaHideout_4F_Text_Grunt11PostBattle:
 	.string "Nobody will tell me.$"
 
 MagmaHideout_4F_Text_Grunt12Intro:
-	.string "Fuhahaha! Soon! New land for\n"
-	.string "everyone! Very soon!$"
+	.string "Fuhahaha! Soon, new land for\n"
+	.string "everyone!\p"
+	.string "No more renting! No more ash!\n"
+	.string "You won't stop it!$"
 
 MagmaHideout_4F_Text_Grunt12Defeat:
 	.string "Grrr… So close!$"
@@ -149,8 +151,9 @@ MagmaHideout_4F_Text_Grunt12PostBattle:
 	.string "An intruder is coming your way!$"
 
 MagmaHideout_4F_Text_Grunt13Intro:
-	.string "You're not done yet! You won't\n"
-	.string "get past me!$"
+	.string "You're not getting by!\p"
+	.string "I've seen the plans. MAXIE knows what\n"
+	.string "he's doing. He has to!$"
 
 MagmaHideout_4F_Text_Grunt13Defeat:
 	.string "Was I really that easy?$"

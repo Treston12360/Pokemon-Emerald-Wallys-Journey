@@ -763,8 +763,9 @@ MtChimney_Text_RouteSign:
 	.string "LAVARIDGE TOWN AHEAD$"
 
 MtChimney_Text_ShelbyIntro:
-	.string "I've soaked in the hot springs.\n"
-	.string "My old bones feel strong!$"
+	.string "I've soaked in LAVARIDGE's springs\n"
+	.string "every winter for sixty years.\p"
+	.string "My old bones feel strong today!$"
 
 MtChimney_Text_ShelbyDefeat:
 	.string "Oh, my goodness.\n"
@@ -783,8 +784,8 @@ MtChimney_Text_ShelbyRegister:
 	.string "a rematch.$"
 
 MtChimney_Text_ShelbyRematchIntro:
-	.string "Mesh your heart with your POKéMON\n"
-	.string "and you can do great things.$"
+	.string "Back to see this old woman? Mesh\n"
+	.string "your heart with your POKéMON, dear.$"
 
 MtChimney_Text_ShelbyRematchDefeat:
 	.string "Oh, my goodness.\n"
@@ -795,8 +796,9 @@ MtChimney_Text_ShelbyPostRematch:
 	.string "That's rare, dear.$"
 
 MtChimney_Text_MelissaIntro:
-	.string "I came for the volcano view and\n"
-	.string "stayed for the battles!$"
+	.string "I came for the volcano view!\p"
+	.string "The cable car line was an hour long.\n"
+	.string "Tourists everywhere. Battle!$"
 
 MtChimney_Text_MelissaDefeat:
 	.string "Ooh, scorched!\n"
@@ -807,8 +809,9 @@ MtChimney_Text_MelissaPostBattle:
 	.string "rain. I'm staying all week!$"
 
 MtChimney_Text_SheilaIntro:
-	.string "I saved for a year to visit\n"
-	.string "MT. CHIMNEY! Battle me!$"
+	.string "I saved for a whole year to visit\n"
+	.string "MT. CHIMNEY!\p"
+	.string "I'm not going home without a battle!$"
 
 MtChimney_Text_SheilaDefeat:
 	.string "That was worth the whole\n"
@@ -821,8 +824,9 @@ MtChimney_Text_SheilaPostBattle:
 	.string "farm to the ash. Buy a few, okay?$"
 
 MtChimney_Text_ShirleyIntro:
-	.string "The hot springs fixed my back! I'm\n"
-	.string "sure to win now!$"
+	.string "I work two jobs in MAUVILLE.\p"
+	.string "One day off a year, I come here.\n"
+	.string "The springs fixed my back! Battle!$"
 
 MtChimney_Text_ShirleyDefeat:
 	.string "Yowch!\n"
@@ -833,8 +837,10 @@ MtChimney_Text_ShirleyPostBattle:
 	.string "Just joking!$"
 
 MtChimney_Text_SawyerIntro:
-	.string "I study volcanoes! This one's\n"
-	.string "delightfully grumpy today!$"
+	.string "I've studied MT. CHIMNEY for thirty\n"
+	.string "years!\p"
+	.string "She's delightfully grumpy today.\n"
+	.string "So am I!$"
 
 MtChimney_Text_SawyerDefeat:
 	.string "My data didn't predict\n"
@@ -852,7 +858,7 @@ MtChimney_Text_SawyerRegister:
 	.string "Let me register you in my POKéNAV.$"
 
 MtChimney_Text_SawyerRematchIntro:
-	.string "Still plenty of company up here.\n"
+	.string "Back for more volcano science?\n"
 	.string "I won't lose this time!$"
 
 MtChimney_Text_SawyerRematchDefeat:

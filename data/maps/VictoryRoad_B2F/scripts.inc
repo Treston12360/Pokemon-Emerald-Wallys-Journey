@@ -60,8 +60,9 @@ VictoryRoad_B2F_Text_OwenPostBattle:
 	.string "over there.$"
 
 VictoryRoad_B2F_Text_CarolineIntro:
-	.string "Three floors of this cave.\n"
-	.string "You must be exhausted.$"
+	.string "Three floors of this cave. You must\n"
+	.string "be exhausted.\p"
+	.string "I've been down here a week!$"
 
 VictoryRoad_B2F_Text_CarolineDefeat:
 	.string "Not tired at all?!\n"
@@ -101,8 +102,10 @@ VictoryRoad_B2F_Text_FelixPostBattle:
 	.string "I can't even ride out a cave.$"
 
 VictoryRoad_B2F_Text_DianneIntro:
-	.string "Only the best of the best reach\n"
-	.string "this cave. Feeling it?$"
+	.string "Only the best of the best reach this\n"
+	.string "cave.\p"
+	.string "I watched WALLY's title match from\n"
+	.string "here on a radio. Feeling it?$"
 
 VictoryRoad_B2F_Text_DianneDefeat:
 	.string "Not even nervous!\n"

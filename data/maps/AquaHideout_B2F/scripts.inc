@@ -110,8 +110,9 @@ AquaHideout_B2F_Text_MattPostBattle:
 	.string "Think you'll find it? Hehehe!$"
 
 AquaHideout_B2F_Text_Grunt4Intro:
-	.string "Wahahah! I've been waiting forever!\n"
-	.string "You owe me a battle!$"
+	.string "Finally, someone to battle!\p"
+	.string "Everybody else went to the sub.\n"
+	.string "I got left behind. As usual!$"
 
 AquaHideout_B2F_Text_Grunt4Defeat:
 	.string "Waited all that time…\n"

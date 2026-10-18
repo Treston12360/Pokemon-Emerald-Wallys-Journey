@@ -13,7 +13,8 @@ SeafloorCavern_Room4_EventScript_Grunt4::
 
 SeafloorCavern_Room4_Text_Grunt3Intro:
 	.string "Who are you?! How did you get\n"
-	.string "down here?$"
+	.string "down here?\p"
+	.string "It took us a stolen submarine!$"
 
 SeafloorCavern_Room4_Text_Grunt3Defeat:
 	.string "Lost it… and I still\n"
@@ -24,8 +25,9 @@ SeafloorCavern_Room4_Text_Grunt3PostBattle:
 	.string "I'm not scared. Don't get me wrong!$"
 
 SeafloorCavern_Room4_Text_Grunt4Intro:
-	.string "Who are you? Where do you think\n"
-	.string "you're going?$"
+	.string "Where do you think you're going?\p"
+	.string "ARCHIE's almost there. You won't\n"
+	.string "interrupt him!$"
 
 SeafloorCavern_Room4_Text_Grunt4Defeat:
 	.string "I couldn't stop you!$"

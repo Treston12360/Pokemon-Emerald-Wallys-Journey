@@ -28,8 +28,10 @@ MtPyre_6F_EventScript_Cedric::
 	end
 
 MtPyre_6F_Text_ValerieIntro:
-	.string "Up here… I feel the spirits\n"
-	.string "moving through me…$"
+	.string "Up here… the spirits move through\n"
+	.string "me…\p"
+	.string "They're restless. Something is coming\n"
+	.string "for the ORBS…$"
 
 MtPyre_6F_Text_ValerieDefeat:
 	.string "The spirits… let go\n"
@@ -49,7 +51,7 @@ MtPyre_6F_Text_ValerieRegister:
 
 MtPyre_6F_Text_ValerieRematchIntro:
 	.string "Something's behind you…\n"
-	.string "It wants to watch…$"
+	.string "It followed you up the stairs…$"
 
 MtPyre_6F_Text_ValerieRematchDefeat:
 	.string "It faded away…\n"
@@ -60,8 +62,9 @@ MtPyre_6F_Text_ValeriePostRematch:
 	.string "Sometimes they play with visitors.$"
 
 MtPyre_6F_Text_CedricIntro:
-	.string "Lost? This mountain swallows\n"
-	.string "people! I'll guide you!$"
+	.string "Lost? This mountain swallows people!\p"
+	.string "I've guided mourners up here for\n"
+	.string "years. Battle first, then I'll guide!$"
 
 MtPyre_6F_Text_CedricDefeat:
 	.string "…You weren't lost at all,\n"

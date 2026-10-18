@@ -68,7 +68,9 @@ SSTidalRooms_Text_TakeRestOnBed:
 
 SSTidalRooms_Text_ColtonIntro:
 	.string "I sail to LILYCOVE for the CONTESTS\n"
-	.string "every month!$"
+	.string "every month!\p"
+	.string "This ferry's the only way I can\n"
+	.string "afford it!$"
 
 SSTidalRooms_Text_ColtonDefeat:
 	.string "What a delightful match!$"
@@ -78,7 +80,9 @@ SSTidalRooms_Text_ColtonPostBattle:
 	.string "CONTEST! What will I see?$"
 
 SSTidalRooms_Text_MicahIntro:
-	.string "Tell me, are your friends strong?$"
+	.string "Tell me, are your friends strong?\p"
+	.string "Mine have sailed every sea with me.\n"
+	.string "They are.$"
 
 SSTidalRooms_Text_MicahDefeat:
 	.string "Your friends are very strong.$"
@@ -89,7 +93,8 @@ SSTidalRooms_Text_MicahPostBattle:
 
 SSTidalRooms_Text_ThomasIntro:
 	.string "Child… did you knock before\n"
-	.string "entering?$"
+	.string "entering?\p"
+	.string "Manners matter, even on a ferry.$"
 
 SSTidalRooms_Text_ThomasDefeat:
 	.string "A loss is accepted calmly.$"
@@ -131,8 +136,9 @@ SSTidalRooms_Text_LeaNotEnoughMons:
 	.string "need two POKéMON…$"
 
 SSTidalRooms_Text_GarretIntro:
-	.string "Ah, perfect timing. I'm bored.\n"
-	.string "Entertain me.$"
+	.string "Ah, perfect timing. I'm bored.\p"
+	.string "Father bought the whole cabin row so\n"
+	.string "I'd have quiet. Entertain me.$"
 
 SSTidalRooms_Text_GarretDefeat:
 	.string "…That will do.\n"
@@ -144,7 +150,8 @@ SSTidalRooms_Text_GarretPostBattle:
 	.string "houses, so he buys boats instead.$"
 
 SSTidalRooms_Text_NaomiIntro:
-	.string "What an adorable TRAINER! Tea?\n"
+	.string "What an adorable TRAINER!\p"
+	.string "I'm touring HOENN by ferry. Tea?\n"
 	.string "Or a battle?$"
 
 SSTidalRooms_Text_NaomiDefeat:

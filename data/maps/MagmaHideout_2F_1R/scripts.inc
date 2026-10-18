@@ -37,8 +37,9 @@ MagmaHideout_2F_1R_Text_Grunt14PostBattle:
 	.string "FALLARBOR. I miss that.$"
 
 MagmaHideout_2F_1R_Text_Grunt3Intro:
-	.string "Hold it! You think I'll just let\n"
-	.string "you walk by?$"
+	.string "Hold it!\p"
+	.string "MAXIE promised my family a house on\n"
+	.string "the new land. You won't stop that!$"
 
 MagmaHideout_2F_1R_Text_Grunt3Defeat:
 	.string "Wow! Okay! You can go!$"
@@ -51,8 +52,10 @@ MagmaHideout_2F_1R_Text_Grunt3PostBattle:
 	.string "the coward.$"
 
 MagmaHideout_2F_1R_Text_Grunt4Intro:
-	.string "Ahah! An intruder! I trained a\n"
-	.string "whole year for this!$"
+	.string "An intruder! I trained a whole year\n"
+	.string "for this!\p"
+	.string "In the LAND INITIATIVE, I only ever\n"
+	.string "painted fences.$"
 
 MagmaHideout_2F_1R_Text_Grunt4Defeat:
 	.string "Graaah! A whole year!$"
@@ -62,8 +65,9 @@ MagmaHideout_2F_1R_Text_Grunt4PostBattle:
 	.string "Do I still have to run in circles?$"
 
 MagmaHideout_2F_1R_Text_Grunt5Intro:
-	.string "An intruder? Down here? Nobody\n"
-	.string "told me about this!$"
+	.string "An intruder? Down here?\p"
+	.string "Nobody tells me anything! Not the\n"
+	.string "plan, not the dig, nothing!$"
 
 MagmaHideout_2F_1R_Text_Grunt5Defeat:
 	.string "Mutter… mutter…\n"

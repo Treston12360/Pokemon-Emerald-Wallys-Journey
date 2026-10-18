@@ -1402,8 +1402,10 @@ PetalburgCity_Gym_Text_GymGuidePostVictory:
 	.string "when you won. He never smiles!$"
 
 PetalburgCity_Gym_Text_RandallIntro:
-	.string "Striking first is a huge advantage,\n"
-	.string "don't you agree?$"
+	.string "This is the SPEED ROOM. NORMAN\n"
+	.string "trained me here himself.\p"
+	.string "Striking first is everything.\n"
+	.string "Don't you agree?$"
 
 PetalburgCity_Gym_Text_RandallDefeat:
 	.string "A magnificent battle!\n"
@@ -1446,8 +1448,9 @@ PetalburgCity_Gym_Text_ParkerPostBadge:
 	.string "on us, but happier.$"
 
 PetalburgCity_Gym_Text_GeorgeIntro:
-	.string "Just when you think you've won, the\n"
-	.string "foe heals up. Awful, isn't it?$"
+	.string "The RECOVERY ROOM! Just when you\n"
+	.string "think you've won, we heal.\p"
+	.string "NORMAN calls it learning patience.$"
 
 PetalburgCity_Gym_Text_GeorgeDefeat:
 	.string "I healed and healed…\n"
@@ -1464,8 +1467,9 @@ PetalburgCity_Gym_Text_GeorgePostBadge:
 	.string "I'll lead one.$"
 
 PetalburgCity_Gym_Text_BerkeIntro:
-	.string "I won't go easy because you're the\n"
-	.string "LEADER's kid.$"
+	.string "NORMAN slept here the whole first\n"
+	.string "year, did you know?\p"
+	.string "I won't go easy on his kid!$"
 
 PetalburgCity_Gym_Text_BerkeDefeat:
 	.string "You hit like he does.\n"

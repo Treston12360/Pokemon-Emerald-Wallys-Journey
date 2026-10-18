@@ -35,7 +35,8 @@ Route110_TrickHousePuzzle8_Text_WroteSecretCodeLockOpened::
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle8_Text_VincentIntro:
-	.string "Not many people make it this far.\n"
+	.string "Not many make it this far.\p"
+	.string "I've been coming since I was a kid.\n"
 	.string "Respect.$"
 
 Route110_TrickHousePuzzle8_Text_VincentDefeat:
@@ -46,8 +47,9 @@ Route110_TrickHousePuzzle8_Text_VincentPostBattle:
 	.string "CHAMPION? No wonder!$"
 
 Route110_TrickHousePuzzle8_Text_KeiraIntro:
-	.string "You should feel lucky to battle\n"
-	.string "someone like me!$"
+	.string "You're lucky to battle me!\p"
+	.string "I've cleared the TRICK HOUSE eight\n"
+	.string "times!$"
 
 Route110_TrickHousePuzzle8_Text_KeiraDefeat:
 	.string "This is wrong!\n"
@@ -58,8 +60,9 @@ Route110_TrickHousePuzzle8_Text_KeiraPostBattle:
 	.string "Go ahead, brag.$"
 
 Route110_TrickHousePuzzle8_Text_LeroyIntro:
-	.string "Another TRICK HOUSE veteran?\n"
-	.string "You've suffered too, then.$"
+	.string "Another TRICK HOUSE veteran?\p"
+	.string "We've suffered the same puzzles.\n"
+	.string "Let's suffer a battle too.$"
 
 Route110_TrickHousePuzzle8_Text_LeroyDefeat:
 	.string "I see. A remarkable style.$"

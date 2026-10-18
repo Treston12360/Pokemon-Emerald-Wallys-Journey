@@ -106,8 +106,9 @@ AquaHideout_1F_Text_BossIsInSlateportCity:
 	.string "you something that crucial?$"
 
 AquaHideout_1F_Text_Grunt1Intro:
-	.string "Ayiyiyi! Intruder! Hands where I\n"
-	.string "can see them!$"
+	.string "Intruder! Hands where I can see them!\p"
+	.string "I've been on lookout since the SEA\n"
+	.string "TRUST days. Nobody gets past me!$"
 
 AquaHideout_1F_Text_Grunt1Defeat:
 	.string "Grrrr… I lost!$"

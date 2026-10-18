@@ -57,7 +57,8 @@ MtPyre_2F_Text_TumbledFromFloorAbove:
 	.string "the floor above.$"
 
 MtPyre_2F_Text_MarkIntro:
-	.string "Hey! I'm looking for ghost POKéMON!\n"
+	.string "Hey! I'm hunting ghost POKéMON for my\n"
+	.string "school report!\p"
 	.string "Did you follow me?!$"
 
 MtPyre_2F_Text_MarkDefeat:
@@ -125,8 +126,9 @@ MtPyre_2F_Text_LeahPostBattle:
 	.string "power, I will stand in the way.$"
 
 MtPyre_2F_Text_ZanderIntro:
-	.string "Kiyaaaah! I thought you were a\n"
-	.string "ghost!$"
+	.string "Kiyaaah! I thought you were a ghost!\p"
+	.string "I came to visit my grandpa's stone.\n"
+	.string "I didn't think it'd be this scary!$"
 
 MtPyre_2F_Text_ZanderDefeat:
 	.string "Nooooo! I lost my\n"
