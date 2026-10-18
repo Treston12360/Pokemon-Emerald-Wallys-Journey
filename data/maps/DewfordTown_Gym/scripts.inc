@@ -331,60 +331,74 @@ DewfordTown_Gym_Text_GymGuidePostVictory:
 	.string "Your future is bright, too!$"
 
 DewfordTown_Gym_Text_TakaoIntro:
-	.string "Might is right! Come on!$"
+	.string "I was BRAWLY's first student.\p"
+	.string "Back then this GYM was a bait shed,\n"
+	.string "and he was the kid gutting fish in it.\p"
+	.string "Come on!$"
 
 DewfordTown_Gym_Text_TakaoDefeat:
 	.string "My fists were faster than\n"
 	.string "my thinking!$"
 
 DewfordTown_Gym_Text_TakaoPostBattle:
-	.string "Your technique beat my power.\p"
-	.string "I trained my body. I forgot to train\n"
-	.string "my head. Lesson learned.$"
+	.string "His dad fished these waters forty\n"
+	.string "years. Then the catches dried up.\p"
+	.string "BRAWLY trained instead of mourning\n"
+	.string "it. That's this whole GYM, really.$"
 
 DewfordTown_Gym_Text_JocelynIntro:
-	.string "No need for BRAWLY to get involved!\n"
-	.string "I'll crush you myself!$"
+	.string "I swim here from ROUTE 106 every\n"
+	.string "morning before school!\p"
+	.string "You don't get to beat me after that!$"
 
 DewfordTown_Gym_Text_JocelynDefeat:
 	.string "How?! I trained every\n"
 	.string "morning before school!$"
 
 DewfordTown_Gym_Text_JocelynPostBattle:
-	.string "I won't waste this loss.\p"
-	.string "One day I'll lead a GYM. No, I'll be\n"
-	.string "CHAMPION! …People will laugh. Let\l"
-	.string "them.$"
+	.string "My parents wanted me at the TRAINER'S\n"
+	.string "SCHOOL in RUSTBORO.\p"
+	.string "We couldn't afford it. BRAWLY charges\n"
+	.string "nothing. He just says show up.\p"
+	.string "So I show up. Every day.$"
 
 DewfordTown_Gym_Text_LauraIntro:
-	.string "You found me in the dark?\n"
-	.string "Then you can face me!$"
+	.string "BRAWLY got lost in GRANITE CAVE for\n"
+	.string "a whole night when he was ten.\p"
+	.string "That's why it's dark in here.\n"
+	.string "You want to see how I learned?$"
 
 DewfordTown_Gym_Text_LauraDefeat:
 	.string "Waaah! I can't see where\n"
 	.string "I went wrong!$"
 
 DewfordTown_Gym_Text_LauraPostBattle:
-	.string "I battle in the dark to make my\n"
-	.string "heart stronger.\p"
-	.string "But it's so dark I've never actually\n"
-	.string "seen BRAWLY's face.$"
+	.string "Every win, the lights come up a\n"
+	.string "little.\p"
+	.string "He says that's how it felt walking out\n"
+	.string "of the cave at dawn.$"
 
 DewfordTown_Gym_Text_LilithIntro:
-	.string "Ufufu… Stumbling around in the dark?$"
+	.string "Ufufu… You think BRAWLY's all\n"
+	.string "smiles and surfing?\p"
+	.string "He's tougher than he looks.\n"
+	.string "So am I!$"
 
 DewfordTown_Gym_Text_LilithDefeat:
 	.string "Oh, you…\n"
 	.string "You walked right through me!$"
 
 DewfordTown_Gym_Text_LilithPostBattle:
-	.string "You should stay lost and end up back\n"
-	.string "at the entrance!\p"
-	.string "…Fine. Go. He's waiting.$"
+	.string "The LEAGUE offered him a GYM in\n"
+	.string "SLATEPORT once. Bigger. Brighter.\p"
+	.string "He said DEWFORD needed one more.\n"
+	.string "He was right.$"
 
 DewfordTown_Gym_Text_BrendenIntro:
-	.string "I'll show you the grit of a sailing\n"
-	.string "man!$"
+	.string "Three winters ago, my boat went\n"
+	.string "down off this island.\p"
+	.string "BRAWLY swam out in the storm and\n"
+	.string "dragged me in. Now I owe him this!$"
 
 DewfordTown_Gym_Text_BrendenDefeat:
 	.string "Capsized!\n"
@@ -392,22 +406,23 @@ DewfordTown_Gym_Text_BrendenDefeat:
 
 DewfordTown_Gym_Text_BrendenPostBattle:
 	.string "Aye. You're worthy of BRAWLY.\p"
-	.string "He'll battle you like a wave. Don't\n"
-	.string "fight it. Ride it.$"
+	.string "He won't fight you like a wall.\n"
+	.string "He'll come at you like a wave.$"
 
 DewfordTown_Gym_Text_CristianIntro:
-	.string "If you mean to pass, it's through me!$"
+	.string "The last LEADER here quit after one\n"
+	.string "season. Too far from everything.\p"
+	.string "BRAWLY stayed. So I stay too!$"
 
 DewfordTown_Gym_Text_CristianDefeat:
 	.string "Grrr! Overpowered!\n"
 	.string "BRAWLY will laugh at me!$"
 
 DewfordTown_Gym_Text_CristianPostBattle:
-	.string "You win. Go after that BADGE.\p"
-	.string "BRAWLY took this GYM when nobody\n"
-	.string "else wanted an island post.\p"
-	.string "Now kids swim over from the mainland\n"
-	.string "just to train here.$"
+	.string "Go after that BADGE.\p"
+	.string "Kids swim over from the mainland\n"
+	.string "just to train here now.\p"
+	.string "Nobody did that before him.$"
 
 DewfordTown_Gym_Text_BrawlyIntro:
 	.string "I'm BRAWLY! DEWFORD's GYM LEADER!\p"
