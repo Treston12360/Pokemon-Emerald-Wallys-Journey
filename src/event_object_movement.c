@@ -2913,26 +2913,16 @@ static void SpawnStreetLamps(s16 left, s16 right, s16 top, s16 bottom, s16 camX,
 #define METATILE_General_PokeCenter_Sign  0x062
 #define METATILE_General_Mart_Door        0x041
 #define METATILE_General_Mart_Sign        0x042
+// Keep the expansion's built-in DNS tint and explicitly placed map lights.
+// Do not automatically draw PC/Mart neon, window blobs, or town street lamps.
 static void SpawnWarpLights(s16 left, s16 right, s16 top, s16 bottom, s16 camX, s16 camY)
 {
-    u32 i;
-    if (gMapHeader.events == NULL || !MapHasNaturalLight(gMapHeader.mapType))
-        return;
-    for (i = 0; i < gMapHeader.events->warpCount; i++)
-    {
-        s16 x = gMapHeader.events->warps[i].x + MAP_OFFSET;
-        s16 y = gMapHeader.events->warps[i].y + MAP_OFFSET;
-        u32 metatile;
-        if (y < top || y > bottom || x < left || x > right)
-            continue;
-        metatile = MapGridGetMetatileIdAt(x, y);
-        if (metatile == METATILE_General_PokeCenter_Door && MapGridGetMetatileIdAt(x + 1, y) == METATILE_General_PokeCenter_Sign)
-            SpawnLightSprite(x + 1, y, camX, camY, LIGHT_TYPE_PKMN_CENTER_SIGN);
-        else if (metatile == METATILE_General_Mart_Door && MapGridGetMetatileIdAt(x + 1, y) == METATILE_General_Mart_Sign)
-            SpawnLightSprite(x + 1, y, camX, camY, LIGHT_TYPE_POKE_MART_SIGN);
-
-    }
-    SpawnStreetLamps(left, right, top, bottom, camX, camY);
+    (void)left;
+    (void)right;
+    (void)top;
+    (void)bottom;
+    (void)camX;
+    (void)camY;
 }
 
 void TrySpawnLightSprites(s16 camX, s16 camY)
