@@ -91,7 +91,7 @@ Route119_EventScript_BattleMayMudkip::
 	end
 
 Route119_EventScript_DefeatedMay::
-	msgbox Route119_Text_MayPresentForYou, MSGBOX_DEFAULT
+	msgbox Route119_Text_MayResearchAfterBattle, MSGBOX_DEFAULT
 	call Route119_EventScript_GiveFlyHM
 	msgbox Route119_Text_MayExplainFly, MSGBOX_DEFAULT
 	goto Route119_EventScript_RivalExitScottArrive
@@ -488,23 +488,21 @@ Route119_Text_MayDefeat:
 	.string "I was worried that you might be\n"
 	.string "struggling with your training.$"
 
-Route119_Text_MayPresentForYou:
-	.string "MAY: But I had absolutely nothing to\n"
-	.string "worry about! Keep it up!\p"
-	.string "And, here! I have a present for you.$"
+Route119_Text_MayResearchAfterBattle:
+	.string "MAY: You keep surprising me,\p"
+	.string "and you're not the only one.\p"
+	.string "Dad's migration notes don't match\n"
+	.string "the POKéMON we're seeing here.\p"
+	.string "I want to find out why.$"
 
 Route119_Text_MayExplainFly:
-	.string "MAY: Use FLY, and your POKéMON will\n"
-	.string "instantly carry you to any town you've\l"
-	.string "already visited.\p"
-	.string "But, to use FLY, you have to get\n"
-	.string "the GYM BADGE from FORTREE CITY.\l"
-	.string "That's important, so don't forget.\p"
-	.string "You should FLY home and visit\n"
-	.string "LITTLEROOT for a change.\p"
-	.string "I bet your mom's worried about you,\n"
-	.string "{PLAYER}{KUN}.\p"
-	.string "Well, let's meet again somewhere!$"
+	.string "MAY: WINONA can teach you how\n"
+	.string "to travel with FLY once you win\l"
+	.string "the FEATHER BADGE.\p"
+	.string "She'll give you the HM herself.\n"
+	.string "You won't need to teach it to\l"
+	.string "your POKéMON to use it.\p"
+	.string "See you around, {PLAYER}!$"
 
 Route119_Text_BrendanIntro:
 	.string "BRENDAN: {PLAYER}! So this is where\n"

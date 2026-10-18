@@ -12,9 +12,8 @@
 #include "constants/moves.h"
 #include "constants/party_menu.h"
 
-// Wally's Journey: HMs are travel licenses, not mandatory battle moves.
-// Preserve badges and HM item ownership. Require a compatible, non-egg
-// party Pokemon just like a real HM user would.
+// Wally's Journey: field HMs are unlocked by their badge and HM item.
+// No party member must learn (or even be capable of learning) the move.
 static enum Item WallyGetHmItem(enum FieldMove fieldMove)
 {
     switch (fieldMove)
@@ -30,17 +29,22 @@ static enum Item WallyGetHmItem(enum FieldMove fieldMove)
     default:                    return ITEM_NONE;
     }
 }
-bool32 WallyCanUseHmWithoutTeaching(struct Pokemon *mon, enum FieldMove fieldMove)
+bool32 WallyHasFieldMoveLicense(enum FieldMove fieldMove)
 {
     enum Item item = WallyGetHmItem(fieldMove);
-    enum Species species;
-    if (mon == NULL || item == ITEM_NONE || !IsFieldMoveUnlocked(fieldMove)
-     || !CheckBagHasItem(item, 1) || GetMonData(mon, MON_DATA_IS_EGG))
-        return FALSE;
-    species = GetMonData(mon, MON_DATA_SPECIES);
-    if (species == SPECIES_NONE)
-        return FALSE;
-    return CanLearnTeachableMove(species, FieldMove_GetMoveId(fieldMove));
+
+    // Kanto variants still use their own original field-move rules.
+    return !IS_FRLG && item != ITEM_NONE
+        && IsFieldMoveUnlocked(fieldMove) && CheckBagHasItem(item, 1);
+}
+
+bool32 WallyCanUseHmWithoutTeaching(struct Pokemon *mon, enum FieldMove fieldMove)
+{
+    // An eligible party slot is needed only for the existing animation/UI.
+    // Species learnsets do not affect HM field access.
+    return mon != NULL && WallyHasFieldMoveLicense(fieldMove)
+        && GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE
+        && !GetMonData(mon, MON_DATA_IS_EGG);
 }
 bool32 WallyPartyCanUseHmWithoutTeaching(enum FieldMove fieldMove)
 {

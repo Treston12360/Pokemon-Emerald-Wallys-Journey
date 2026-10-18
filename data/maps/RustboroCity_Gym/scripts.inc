@@ -221,21 +221,21 @@ RustboroCity_Gym_Text_ReceivedStoneBadge:
 	.string "from ROXANNE.$"
 
 RustboroCity_Gym_Text_StoneBadgeInfoTakeThis:
-	.string "The STONE BADGE heightens the ATTACK\n"
-	.string "power of your POKéMON.\p"
-	.string "It also enables them to use the HM move\n"
-	.string "CUT outside of battle.\p"
-	.string "Please take this with you, too.$"
+	.string "The STONE BADGE is yours.\p"
+	.string "It grants permission to use CUT\n"
+	.string "on small trees in the field.\p"
+	.string "I'll give you HM01, too.\n"
+	.string "Just face a tree and press A.\p"
+	.string "No POKéMON needs to learn CUT\n"
+	.string "or even be able to learn it.$"
 
 RustboroCity_Gym_Text_ExplainRockTomb:
-	.string "That TECHNICAL MACHINE, TM39,\n"
-	.string "contains ROCK TOMB.\p"
-	.string "It not only inflicts damage by dropping\n"
-	.string "rocks, it also lowers SPEED.\p"
-	.string "If you use a TM, it instantly teaches\n"
-	.string "the move to a POKéMON.\p"
-	.string "Remember, a TM can be used only once,\n"
-	.string "so think before you use it.$"
+	.string "TM39 teaches ROCK TOMB.\p"
+	.string "The attack damages its target\n"
+	.string "and may lower its SPEED.\p"
+	.string "And TMs are reusable now!\n"
+	.string "Teach ROCK TOMB as often as\l"
+	.string "you like. It won't disappear.$"
 
 RustboroCity_Gym_Text_RoxannePostBattle:
 	.string "You adapted to my strategy faster\n"

@@ -38,6 +38,16 @@ PetalburgCity_WallysHouse_EventScript_WallysDad::
 	release
 	end
 
+PetalburgCity_WallysHouse_EventScript_DadAfterPlayerChampion::
+	msgbox PetalburgCity_WallysHouse_Text_DadAfterPlayerChampion, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_WallysHouse_EventScript_MomAfterPlayerChampion::
+	msgbox PetalburgCity_WallysHouse_Text_MomAfterPlayerChampion, MSGBOX_DEFAULT
+	release
+	end
+
 PetalburgCity_WallysHouse_EventScript_ReceievedHMSurf::
 	msgbox PetalburgCity_WallysHouse_Text_WallyIsComingHomeSoon, MSGBOX_DEFAULT
 	release
@@ -45,6 +55,11 @@ PetalburgCity_WallysHouse_EventScript_ReceievedHMSurf::
 
 PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad::
 	msgbox PetalburgCity_WallysHouse_Text_YouMetWallyInEverGrandeCity, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_WallysHouse_EventScript_WallyWonChampionship::
+	msgbox PetalburgCity_WallysHouse_Text_WallyWonChampionship, MSGBOX_DEFAULT
 	release
 	end
 
@@ -131,6 +146,19 @@ PetalburgCity_WallysHouse_Text_YouMetWallyInEverGrandeCity:
 	.string "He calls before every title defense.\n"
 	.string "He says you're the one he's waiting\l"
 	.string "for.$"
+
+PetalburgCity_WallysHouse_Text_WallyWonChampionship:
+	.string "We watched it on TV, {PLAYER}{KUN}.\n"
+	.string "Our WALLY, beating WALLACE.\p"
+	.string "The boy who couldn't run to the end\n"
+	.string "of the street without coughing…\p"
+	.string "He's the CHAMPION now. I still can't\n"
+	.string "say it without my voice shaking.\p"
+	.string "He sent word after the match.\n"
+	.string "He asked whether you'd reached\l"
+	.string "the LEAGUE yet.\p"
+	.string "I hope he remembers that winning\n"
+	.string "isn't all that matters.$"
 
 PetalburgCity_WallysHouse_Text_WallyWasReallyHappy:
 	.string "WALLY was really happy when he told\n"
@@ -235,6 +263,23 @@ WallyJourney_StevenMega_End:
 WallyJourney_StevenMega_AfterText:
 	.string "STEVEN: Your bond with your\n"
 	.string "POKéMON is your greatest strength!$"
+
+
+PetalburgCity_WallysHouse_Text_DadAfterPlayerChampion:
+	.string "WALLY called after your battle.\p"
+	.string "He told us he'd lost the title,\n"
+	.string "and how he'd spoken to you.\p"
+	.string "He sounded ashamed. Then he asked\n"
+	.string "how we were doing.\p"
+	.string "I think he's finding his way back.$"
+
+PetalburgCity_WallysHouse_Text_MomAfterPlayerChampion:
+	.string "WALLY told us you won, {PLAYER}.\p"
+	.string "He was quiet for a long time.\n"
+	.string "Then he started talking about\l"
+	.string "the people who helped him grow.\p"
+	.string "He's still our determined boy.\n"
+	.string "I'm glad he's listening again.$"
 
 PetalburgCity_WallysHouse_Text_MomSawBroadcast:
 	.string "We saw the broadcast. All of\n"

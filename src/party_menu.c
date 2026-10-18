@@ -2970,10 +2970,24 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
         }
     }
 
-    // Licensed HMs are available as field actions without consuming move slots.
-    // Reserve up to three slots for SWITCH/ITEM/CANCEL (actions[] has 8 entries).
-    for (j = FIELD_MOVE_CUT; j <= FIELD_MOVE_WATERFALL; j++)
+    // Fly and Flash need party-menu entry points; other HMs can be used by
+    // interacting with their obstacle. Put them first so a full HM collection
+    // cannot crowd FLY out of the fixed-size party action list.
+    static const enum FieldMove sLicensedHmPriority[] =
     {
+        FIELD_MOVE_FLY,
+        FIELD_MOVE_FLASH,
+        FIELD_MOVE_CUT,
+        FIELD_MOVE_ROCK_SMASH,
+        FIELD_MOVE_STRENGTH,
+        FIELD_MOVE_SURF,
+        FIELD_MOVE_DIVE,
+        FIELD_MOVE_WATERFALL,
+    };
+    // Reserve three slots for SWITCH/ITEM/CANCEL (actions[] has 8 entries).
+    for (i = 0; i < ARRAY_COUNT(sLicensedHmPriority); i++)
+    {
+        j = sLicensedHmPriority[i];
         if (sPartyMenuInternal->numActions >= ARRAY_COUNT(sPartyMenuInternal->actions) - 3)
             break;
         if (!WallyCanUseHmWithoutTeaching(&mons[slotId], j)
