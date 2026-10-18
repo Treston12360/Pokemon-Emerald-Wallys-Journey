@@ -30,6 +30,8 @@ Tone rules: hopeful, warm, funny in places. Subtext over monologue. Flawed but s
 ### 2.1 Family and origins
 - The player's family moved **from Johto to Hoenn** (owner correction 2026-10-17; matches original Emerald). **Audit 2026-10-17:** Mom's arrival line and Norman's Gym talk say Johto; no line gives the family a Kanto origin. The Lilycove "I came from KANTO" NPC is a stranger, not family, and stays.
 - In Johto money was tight: Mom worked double shifts, Norman trained at night. Norman moved first to earn Gym Leader accreditation in Petalburg; the family followed once he could afford a house in Littleroot.
+- **Littleroot (owner, 2026-10-17):** a small, old, out-of-the-way town most people pass over. It was the only place Norman could afford, and he was "lucky" a house finally opened up there after years of saving. It is quaint, but not where anyone would choose to live if they had options. Its one draw is Birch's lab next door.
+- **Norman and Birch (owner, 2026-10-17):** long-time friends. Birch saw Norman's potential early, believed in him and pushed him to become a better Trainer. Norman took that push too far: chasing strength and a Gym Leader's pay, he left the family in Johto to train in Hoenn and, even after they arrived, spends too little time with the player and Mom. When the player beats him at the Petalburg Gym he finally sees it and feels genuinely bad (already the badge 5 confession). Birch carries a little guilt for having pushed him.
 - **The truck:** the family took the ferry from Johto. They couldn't afford another ticket for the overland leg, so the movers let the player ride **in the cab**. After the truck parked in Littleroot, the player climbed into the back to check the boxes. That's where the game opens. **Done** (no driving shot; Mom explains).
 
 ### 2.2 The Pokémon League (Hoenn)
@@ -55,6 +57,15 @@ Tone rules: hopeful, warm, funny in places. Subtext over monologue. Flawed but s
 - **Team Magma's front:** "Hoenn Land Initiative" — a housing and reclamation advocacy group that runs volunteer building days. Many grunts joined through it.
 - **Team Aqua's front:** "Hoenn Sea Trust" — beach cleanups, Wingull rescue, protests against coastal development. Many grunts joined through it.
 - **Why the authorities don't just arrest them:** both groups are legal organizations most of the time. Thefts are carried out in uniforms that aren't tied to the fronts. Police evidence lags behind events, and each team times its moves for when officers are needed elsewhere (the Slateport contest crowd, the Lilycove festival, the Mossdeep launch). Steven and the League help but have no arrest power.
+
+### 2.5a Magma and Aqua backstory (owner, 2026-10-17)
+- **They began as ordinary, respected groups ~10–15 years ago.** Maxie, a geologist, ran the Hoenn Land Initiative (town-hall housing plans, co-ops, lava-field reclamation studies). Archie, a sailor, ran the Hoenn Sea Trust (reef surveys, beach cleanups, petitions against Devon runoff).
+- **Hoenn got worse:** Devon's boom pushed rents up; the ash years ruined Fallarbor's farms; coastal building and runoff killed reefs near Slateport and Dewford; storm seasons flooded Pacifidlog. Petitions went nowhere.
+- **They radicalized:** moderates quit, the angry stayed, they took the names Team Magma and Team Aqua, uniforms and direct action. The charity work continued and is still how most grunts join. Both teams are public; Hoenn knows who they are.
+- **The leaders found the legend** and read the mistranslated "command" inscription (§2.3). Poor research (Maxie keeps only the models that agree with him) convinced them one decisive act would fix Hoenn and *save* lives.
+- **When the player arrives** both are already extreme but sincerely believe they are the good guys. The public is split: many hate the methods, some quietly agree, many remember when they were the good guys. Grunts were never told about Groudon and Kyogre; their doubts grow as the plan escalates.
+- **Tie to the player's family:** the family is exactly the kind of newcomer priced into Littleroot that Maxie's housing pitch is about.
+- **Delivery:** dialogue only (no new events, NPCs or flags). Each NPC's line must be true whenever it can be read.
 
 ### 2.6 Devon Corporation
 - Devon employs half of Rustboro and makes Poké Balls, the PokéNav, the Devon Scope and the submarine parts. Rustboro is prosperous because of it.
