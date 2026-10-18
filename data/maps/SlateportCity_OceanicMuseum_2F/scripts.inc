@@ -294,7 +294,7 @@ SlateportCity_OceanicMuseum_2F_Text_Grunt1Defeat:
 	.string "for this!$"
 
 SlateportCity_OceanicMuseum_2F_Text_BossGoingToBeFurious:
-	.string "Oh, man, what a disaster…\n"
+	.string "Oh, man, what a mess…\n"
 	.string "The BOSS is going to be furious…$"
 
 SlateportCity_OceanicMuseum_2F_Text_LetMeTakeCareOfThis:

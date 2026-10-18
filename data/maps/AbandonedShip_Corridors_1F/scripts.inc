@@ -11,15 +11,15 @@ AbandonedShip_Corridors_1F_EventScript_Charlie::
 	end
 
 AbandonedShip_Corridors_1F_Text_CharlieIntro:
-	.string "What's so funny about having my inner\n"
-	.string "tube aboard the ship?$"
+	.string "What's so funny about bringing my\n"
+	.string "inner tube onto a shipwreck?$"
 
 AbandonedShip_Corridors_1F_Text_CharlieDefeat:
-	.string "Whoa, you overwhelmed me!$"
+	.string "Whoa! Overwhelmed!$"
 
 AbandonedShip_Corridors_1F_Text_CharliePostBattle:
-	.string "It's not easy throwing POKé BALLS\n"
-	.string "while hanging on to an inner tube!$"
+	.string "Throwing POKé BALLS while holding\n"
+	.string "an inner tube is hard!$"
 
 AbandonedShip_Corridors_1F_Text_IsntItFunHere:
 	.string "Isn't it fun here?\p"

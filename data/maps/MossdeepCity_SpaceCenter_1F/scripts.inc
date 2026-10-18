@@ -384,11 +384,11 @@ MossdeepCity_SpaceCenter_1F_Text_StevenMagmaCantBeAllowedToTakeFuel:
 	.string "check out the town?$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt3Intro:
-	.string "As promised, we've come for\n"
+	.string "Like we warned you, we're here for\n"
 	.string "the rocket fuel!$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt3Defeat:
-	.string "Ran out of fuel…$"
+	.string "Out of fuel…$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt3PostBattle:
 	.string "Don't think you're on a roll!\p"
@@ -396,8 +396,8 @@ MossdeepCity_SpaceCenter_1F_Text_Grunt3PostBattle:
 	.string "the new land. Not burn it.$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt1Intro:
-	.string "We gave you fair warning!\n"
-	.string "There's nothing sneaky about us!$"
+	.string "We sent a warning! That's honest!\n"
+	.string "Nothing sneaky about us!$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt1Defeat:
 	.string "Grrr…\n"
@@ -408,9 +408,8 @@ MossdeepCity_SpaceCenter_1F_Text_Grunt1PostBattle:
 	.string "we'll come unannounced.$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt4Intro:
-	.string "The rocket fuel the SPACE CENTER has\n"
-	.string "in storage--that's what we're after.\p"
-	.string "We mean to take every last bit of it!$"
+	.string "The SPACE CENTER's fuel reserve.\n"
+	.string "We're taking every drop!$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt4Defeat:
 	.string "Please, spare some fuel?\n"
@@ -427,7 +426,8 @@ MossdeepCity_SpaceCenter_1F_Text_Grunt2Intro:
 	.string "gets past me!$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt2Defeat:
-	.string "Ack! Ack! Aaack!$"
+	.string "Ack! The fuel's not worth\n"
+	.string "this!$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt2PostBattle:
 	.string "Please, tell our leader that\n"

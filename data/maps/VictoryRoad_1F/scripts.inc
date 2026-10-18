@@ -178,7 +178,7 @@ VictoryRoad_1F_Text_EdgarIntro:
 	.string "But I'm not done yet!$"
 
 VictoryRoad_1F_Text_EdgarDefeat:
-	.string "My dream ends here again…\n"
+	.string "Fourth time, same spot.\n"
 	.string "See you next year, road.$"
 
 VictoryRoad_1F_Text_EdgarPostBattle:
@@ -190,12 +190,12 @@ VictoryRoad_1F_Text_EdgarPostBattle:
 	.string "I'm ready.$"
 
 VictoryRoad_1F_Text_AlbertIntro:
-	.string "I didn't come all this way to\n"
-	.string "lose. That isn't possible!$"
+	.string "Eight BADGES, three years.\n"
+	.string "I'm not losing here!$"
 
 VictoryRoad_1F_Text_AlbertDefeat:
-	.string "Impossible…\n"
-	.string "I lost?$"
+	.string "Three years…\n"
+	.string "gone in one battle.$"
 
 VictoryRoad_1F_Text_AlbertPostBattle:
 	.string "I told myself losing here\n"
@@ -206,11 +206,12 @@ VictoryRoad_1F_Text_AlbertPostBattle:
 	.string "for more than victory.$"
 
 VictoryRoad_1F_Text_HopeIntro:
-	.string "This harsh, endless road lives up\n"
-	.string "to its name of VICTORY.$"
+	.string "My grandmother walked this road\n"
+	.string "and never finished it. I will!$"
 
 VictoryRoad_1F_Text_HopeDefeat:
-	.string "Your battle style is fantastic…$"
+	.string "Grandma… I'm sorry.\n"
+	.string "You'd have liked this kid.$"
 
 VictoryRoad_1F_Text_HopePostBattle:
 	.string "You could become CHAMPION.\p"
@@ -220,12 +221,12 @@ VictoryRoad_1F_Text_HopePostBattle:
 	.string "Tired, and not stopping.$"
 
 VictoryRoad_1F_Text_QuincyIntro:
-	.string "What is VICTORY ROAD?\n"
-	.string "I'll tell you if you win!$"
+	.string "Want to know what VICTORY ROAD\n"
+	.string "really means? Win first!$"
 
 VictoryRoad_1F_Text_QuincyDefeat:
-	.string "Okay!\n"
-	.string "Well done!$"
+	.string "Okay! You've earned\n"
+	.string "the answer!$"
 
 VictoryRoad_1F_Text_QuincyPostBattle:
 	.string "Getting through here is the final\n"
@@ -235,11 +236,12 @@ VictoryRoad_1F_Text_QuincyPostBattle:
 	.string "That's why it's called VICTORY ROAD.$"
 
 VictoryRoad_1F_Text_KatelynnIntro:
-	.string "I've nothing to say to anyone\n"
-	.string "who's come this far. Come on!$"
+	.string "Anyone this far doesn't need a\n"
+	.string "speech. Come on!$"
 
 VictoryRoad_1F_Text_KatelynnDefeat:
-	.string "This is a disgrace…$"
+	.string "A disgrace… this close\n"
+	.string "to the end.$"
 
 VictoryRoad_1F_Text_KatelynnPostBattle:
 	.string "I trained for months to\n"

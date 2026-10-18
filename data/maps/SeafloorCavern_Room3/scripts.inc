@@ -13,19 +13,16 @@ SeafloorCavern_Room3_EventScript_Grunt5::
 
 SeafloorCavern_Room3_Text_ShellyIntro:
 	.string "Ahahahaha!\p"
-	.string "How did you manage to get here without\n"
-	.string "a submarine?\l"
-	.string "What an impressive child!\p"
-	.string "But… It won't do to have you\n"
-	.string "meddling about here.\p"
-	.string "And, I do want payback for what\n"
-	.string "happened at the WEATHER INSTITUTE…\p"
-	.string "I'm going to give you a little taste\n"
-	.string "of pain! Resign yourself to it!$"
+	.string "You got here without a submarine?\n"
+	.string "How impressive!\p"
+	.string "But I can't have you meddling.\p"
+	.string "And I owe you for the WEATHER\n"
+	.string "INSTITUTE…\p"
+	.string "Time for a little taste of pain!$"
 
 SeafloorCavern_Room3_Text_ShellyDefeat:
 	.string "Ahahahaha!\p"
-	.string "Ouch!$"
+	.string "Ow!$"
 
 SeafloorCavern_Room3_Text_ShellyPostBattle:
 	.string "You're strong. Annoyingly strong.\p"
@@ -35,16 +32,16 @@ SeafloorCavern_Room3_Text_ShellyPostBattle:
 	.string "…Forget I said that. Move.$"
 
 SeafloorCavern_Room3_Text_Grunt5Intro:
-	.string "For our dream to become real, we need\n"
-	.string "the power of POKéMON.\p"
-	.string "But meddlers like you use the power of\n"
-	.string "POKéMON to mess with us even at\l"
-	.string "a place like this!\p"
-	.string "Life just doesn't work the way we\n"
-	.string "need it to!$"
+	.string "We need POKéMON power to make\n"
+	.string "our dream real.\p"
+	.string "And meddlers like you use the same\n"
+	.string "power to stop us!\p"
+	.string "We tried petitions first, you know.\n"
+	.string "Nobody listened.$"
 
 SeafloorCavern_Room3_Text_Grunt5Defeat:
-	.string "Gwah!$"
+	.string "Gwah! Even down here,\n"
+	.string "it doesn't work out…$"
 
 SeafloorCavern_Room3_Text_Grunt5PostBattle:
 	.string "We don't question the BOSS.\n"

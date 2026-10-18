@@ -73,8 +73,8 @@ Route119_WeatherInstitute_1F_Text_Grunt1Intro:
 	.string "here. Stay out of it!$"
 
 Route119_WeatherInstitute_1F_Text_Grunt1Defeat:
-	.string "Blast it…\n"
-	.string "Blasted by a kid…$"
+	.string "Blast it… The BOSS will\n"
+	.string "hear about this.$"
 
 Route119_WeatherInstitute_1F_Text_Grunt1PostBattle:
 	.string "I'm just a GRUNT. I'm not supposed\n"

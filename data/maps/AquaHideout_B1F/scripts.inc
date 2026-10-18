@@ -111,7 +111,8 @@ AquaHideout_B1F_Text_Grunt2Intro:
 	.string "Beat me first!$"
 
 AquaHideout_B1F_Text_Grunt2Defeat:
-	.string "I can't win at all…$"
+	.string "I can't win at all…\n"
+	.string "Not here, not anywhere.$"
 
 AquaHideout_B1F_Text_Grunt2PostBattle:
 	.string "Our secret? Fine.\p"

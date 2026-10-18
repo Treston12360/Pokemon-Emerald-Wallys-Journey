@@ -35,36 +35,38 @@ Route110_TrickHousePuzzle4_Text_WroteSecretCodeLockOpened:
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle4_Text_CoraIntro:
-	.string "It's too much bother to think this out.\n"
-	.string "I only wanted to battle!$"
+	.string "Puzzles? Ugh, too much thinking.\n"
+	.string "I just want to battle!$"
 
 Route110_TrickHousePuzzle4_Text_CoraDefeat:
-	.string "Even though I lost, I still like battling\n"
-	.string "the best!$"
+	.string "I lost, but battling is\n"
+	.string "still the best part!$"
 
 Route110_TrickHousePuzzle4_Text_CoraPostBattle:
-	.string "Wouldn't you agree? You would go\n"
-	.string "anywhere if TRAINERS were there.$"
+	.string "You'd go anywhere for a battle\n"
+	.string "too, right? Right?$"
 
 Route110_TrickHousePuzzle4_Text_YujiIntro:
-	.string "Heh! Boulders like this, I can brush\n"
-	.string "aside with one finger!$"
+	.string "Boulders? I push them with one\n"
+	.string "finger! Watch this!$"
 
 Route110_TrickHousePuzzle4_Text_YujiDefeat:
-	.string "I can push boulders, but I can't solve\n"
-	.string "the puzzle…$"
+	.string "I can move boulders, but\n"
+	.string "not this puzzle…$"
 
 Route110_TrickHousePuzzle4_Text_YujiPostBattle:
 	.string "Being brawny isn't enough…\n"
 	.string "You have to use your head too!$"
 
 Route110_TrickHousePuzzle4_Text_PaulaIntro:
-	.string "The TRICK HOUSE is getting trickier,\n"
-	.string "isn't it?$"
+	.string "This TRICK HOUSE keeps getting\n"
+	.string "trickier, doesn't it?$"
 
 Route110_TrickHousePuzzle4_Text_PaulaDefeat:
-	.string "Aaak!$"
+	.string "Aaak! Tricked by\n"
+	.string "another TRAINER!$"
 
 Route110_TrickHousePuzzle4_Text_PaulaPostBattle:
-	.string "Has anyone made it to the end?$"
+	.string "Has anyone actually made it to\n"
+	.string "the end? Ever?$"
 

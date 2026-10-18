@@ -27,11 +27,12 @@ VictoryRoad_B1F_EventScript_Halle::
 	end
 
 VictoryRoad_B1F_Text_SamuelIntro:
-	.string "Getting closer to the POKéMON\n"
-	.string "LEAGUE… I'm getting stage fright…$"
+	.string "The LEAGUE is right there…\n"
+	.string "I can't stop shaking…$"
 
 VictoryRoad_B1F_Text_SamuelDefeat:
-	.string "I couldn't do a thing…$"
+	.string "I froze. I couldn't\n"
+	.string "do anything…$"
 
 VictoryRoad_B1F_Text_SamuelPostBattle:
 	.string "The LEAGUE feels far away again…\p"
@@ -39,12 +40,12 @@ VictoryRoad_B1F_Text_SamuelPostBattle:
 	.string "my training. How do I tell them?$"
 
 VictoryRoad_B1F_Text_ShannonIntro:
-	.string "To win through the LEAGUE, you need\n"
-	.string "your POKéMON's trust.$"
+	.string "The LEAGUE tests trust more than\n"
+	.string "strength. Let me test yours!$"
 
 VictoryRoad_B1F_Text_ShannonDefeat:
-	.string "Your bond is built on\n"
-	.string "solid trust.$"
+	.string "They trust you completely.\n"
+	.string "I could feel it.$"
 
 VictoryRoad_B1F_Text_ShannonPostBattle:
 	.string "PHOEBE of the ELITE FOUR grew up\n"
@@ -53,11 +54,12 @@ VictoryRoad_B1F_Text_ShannonPostBattle:
 	.string "people who've lost something.$"
 
 VictoryRoad_B1F_Text_MichelleIntro:
-	.string "This isn't the goal. It's only a\n"
-	.string "stop on the way to the LEAGUE.$"
+	.string "This cave isn't the finish line.\n"
+	.string "It's just the hallway!$"
 
 VictoryRoad_B1F_Text_MichelleDefeat:
-	.string "That's the way!$"
+	.string "That's the way!\n"
+	.string "Now go win!$"
 
 VictoryRoad_B1F_Text_MichellePostBattle:
 	.string "You'll do fine!\p"
@@ -67,27 +69,27 @@ VictoryRoad_B1F_Text_MichellePostBattle:
 	.string "should worry about.$"
 
 VictoryRoad_B1F_Text_MitchellIntro:
-	.string "My POKéMON are cosmically\n"
-	.string "awe-inspiring!$"
+	.string "I've trained my POKéMON under the\n"
+	.string "stars of MOSSDEEP! Behold!$"
 
 VictoryRoad_B1F_Text_MitchellDefeat:
-	.string "I've never met anyone like you.$"
+	.string "The stars didn't warn me\n"
+	.string "about you.$"
 
 VictoryRoad_B1F_Text_MitchellPostBattle:
-	.string "Even outside battle, I sense huge\n"
-	.string "power from you and your POKéMON.$"
+	.string "Even standing still, you and your\n"
+	.string "POKéMON hum with power.$"
 
 VictoryRoad_B1F_Text_HalleIntro:
-	.string "Okay, no need to get your back up!\n"
-	.string "Relax, let's take it easy!$"
+	.string "Whoa, relax! No need to be tense.\n"
+	.string "Let's have fun with this!$"
 
 VictoryRoad_B1F_Text_HalleDefeat:
-	.string "Whoa!\n"
-	.string "Wonderful!$"
+	.string "Whoa! Wonderful!$"
 
 VictoryRoad_B1F_Text_HallePostBattle:
-	.string "Sure, this is VICTORY ROAD.\p"
-	.string "But it's not that different from the\n"
-	.string "path you've taken so far.\p"
-	.string "Try to enjoy the rest of the way!$"
+	.string "Sure, it's VICTORY ROAD. But it's\n"
+	.string "the same path you've walked\l"
+	.string "this whole time.\p"
+	.string "Enjoy the rest of it!$"
 

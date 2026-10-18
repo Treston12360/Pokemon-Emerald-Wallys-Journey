@@ -12,22 +12,23 @@ SeafloorCavern_Room4_EventScript_Grunt4::
 	end
 
 SeafloorCavern_Room4_Text_Grunt3Intro:
-	.string "Who are you?\n"
-	.string "Where did you come in from?$"
+	.string "Who are you?! How did you get\n"
+	.string "down here?$"
 
 SeafloorCavern_Room4_Text_Grunt3Defeat:
-	.string "Lost it…$"
+	.string "Lost it… and I still\n"
+	.string "can't find the exit.$"
 
 SeafloorCavern_Room4_Text_Grunt3PostBattle:
 	.string "I can't find the way out!\p"
 	.string "I'm not scared. Don't get me wrong!$"
 
 SeafloorCavern_Room4_Text_Grunt4Intro:
-	.string "Who are you?\n"
-	.string "Where do you think you're going?$"
+	.string "Who are you? Where do you think\n"
+	.string "you're going?$"
 
 SeafloorCavern_Room4_Text_Grunt4Defeat:
-	.string "I failed to win!$"
+	.string "I couldn't stop you!$"
 
 SeafloorCavern_Room4_Text_Grunt4PostBattle:
 	.string "My partner left the map in the\n"

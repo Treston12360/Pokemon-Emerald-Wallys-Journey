@@ -39,40 +39,40 @@ AbandonedShip_Rooms_1F_Text_TakingALookAround:
 	.string "made up its mind.$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaIntro:
-	.string "What on earth would compel you to\n"
-	.string "come here? You must be curious!$"
+	.string "Why would anyone come aboard\n"
+	.string "this wreck? You're curious!$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaDefeat:
-	.string "Not just curious, but also strong…$"
+	.string "Curious AND strong!$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaPostBattle:
-	.string "The man next door…\p"
-	.string "He says he's just sightseeing,\n"
-	.string "but I don't know about that.$"
+	.string "The man next door says he's just\n"
+	.string "sightseeing. I don't buy it.$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaRegister:
 	.string "You're such a tough TRAINER!\n"
 	.string "Let me register you as a memento!$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaRematchIntro:
-	.string "What on earth would compel you to\n"
-	.string "come back? You must really be curious!$"
+	.string "Back again? You must be REALLY\n"
+	.string "curious!$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaRematchDefeat:
-	.string "Aren't you too strong?$"
+	.string "Too strong!$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaPostRematch:
-	.string "I'm sure that man's up to something!\n"
-	.string "He just acts so suspiciously!$"
+	.string "That man next door is up to\n"
+	.string "something. I just know it!$"
 
 AbandonedShip_Rooms_1F_Text_DemetriusIntro:
-	.string "Waaah!\n"
-	.string "I've been found! …Huh?$"
+	.string "Waaah! Mom found me! …Huh?\n"
+	.string "You're not Mom!$"
 
 AbandonedShip_Rooms_1F_Text_DemetriusDefeat:
-	.string "Oh, you're not my mom.$"
+	.string "Phew. At least you're\n"
+	.string "not my mom.$"
 
 AbandonedShip_Rooms_1F_Text_DemetriusPostBattle:
-	.string "I'm in trouble with my mom, so I ran.\n"
-	.string "Keep it a secret where I am!$"
+	.string "I ran away because Mom's mad.\n"
+	.string "Don't tell her where I am!$"
 

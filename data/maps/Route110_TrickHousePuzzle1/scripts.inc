@@ -44,34 +44,37 @@ Route110_TrickHousePuzzle1_Text_WroteSecretCodeLockOpened::
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle1_Text_SallyIntro:
-	.string "I'll hack and slash my way to victory\n"
-	.string "with the CUT we just learned!$"
+	.string "I just got my STONE BADGE, so I can\n"
+	.string "CUT trees now! Watch out!$"
 
 Route110_TrickHousePuzzle1_Text_SallyDefeat:
-	.string "Why are you so serious?$"
+	.string "Hey! You're taking this\n"
+	.string "way too seriously!$"
 
 Route110_TrickHousePuzzle1_Text_SallyPostBattle:
-	.string "I never get tired of hacking\n"
-	.string "and slashing!$"
+	.string "I've cut every tree in here twice.\n"
+	.string "They grow back overnight! How?!$"
 
 Route110_TrickHousePuzzle1_Text_EddieIntro:
-	.string "I wandered into this weird house\n"
-	.string "by accident…$"
+	.string "I came in to ask for directions to\n"
+	.string "SLATEPORT. Now I'm trapped!$"
 
 Route110_TrickHousePuzzle1_Text_EddieDefeat:
-	.string "And now I've lost…$"
+	.string "Lost my way AND the match…$"
 
 Route110_TrickHousePuzzle1_Text_EddiePostBattle:
-	.string "Lost my way, lost a battle, and\n"
-	.string "now I'm even more lost…$"
+	.string "If you get out, tell my mom I'm\n"
+	.string "fine. Mostly fine.$"
 
 Route110_TrickHousePuzzle1_Text_RobinIntro:
-	.string "Just who is the TRICK MASTER?$"
+	.string "Who IS the TRICK MASTER? I've been\n"
+	.string "investigating for weeks!$"
 
 Route110_TrickHousePuzzle1_Text_RobinDefeat:
-	.string "I lost while I was lost in thought!$"
+	.string "I was thinking about the\n"
+	.string "mystery, not the battle!$"
 
 Route110_TrickHousePuzzle1_Text_RobinPostBattle:
-	.string "You're strong!\n"
-	.string "Just who are you?$"
+	.string "You're strong! Wait… are YOU the\n"
+	.string "TRICK MASTER in disguise?$"
 

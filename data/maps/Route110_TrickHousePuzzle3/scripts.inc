@@ -309,37 +309,39 @@ Route110_TrickHousePuzzle3_Text_WroteSecretCodeLockOpened:
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle3_Text_JustinIntro:
-	.string "I keep coming back to this same place!$"
+	.string "I keep ending up right back here!\n"
+	.string "Same room! Again!$"
 
 Route110_TrickHousePuzzle3_Text_JustinDefeat:
-	.string "I'm already having trouble, and then\n"
-	.string "you have to beat me? It's not fair!$"
+	.string "I'm lost AND beaten?\n"
+	.string "This isn't fair!$"
 
 Route110_TrickHousePuzzle3_Text_JustinPostBattle:
-	.string "It's full of doors here!\n"
-	.string "It's too small and dark in here! Help!$"
+	.string "So many doors! It's so dark!\n"
+	.string "Somebody get me out!$"
 
 Route110_TrickHousePuzzle3_Text_MarthaIntro:
-	.string "I don't know what's going on here.\n"
+	.string "I have no idea where I am.\n"
 	.string "I'm starting to feel sad…$"
 
 Route110_TrickHousePuzzle3_Text_MarthaDefeat:
-	.string "You… You're awful!$"
+	.string "You… You're awful!\n"
+	.string "And now I'm sadder!$"
 
 Route110_TrickHousePuzzle3_Text_MarthaPostBattle:
-	.string "I know I'm weak!\n"
-	.string "And, I have no sense of direction!$"
+	.string "I'm weak, AND I have no sense of\n"
+	.string "direction. Great combo.$"
 
 Route110_TrickHousePuzzle3_Text_AlanIntro:
-	.string "I don't get it. What would anyone want\n"
-	.string "with a house this bizarre?$"
+	.string "I don't get it. Who builds a house\n"
+	.string "like this? And why?$"
 
 Route110_TrickHousePuzzle3_Text_AlanDefeat:
 	.string "I don't get it.\n"
-	.string "How did I lose?$"
+	.string "None of today makes sense.$"
 
 Route110_TrickHousePuzzle3_Text_AlanPostBattle:
-	.string "I don't get it.\n"
-	.string "How many traps are in this house?\p"
-	.string "You may be the one to solve that.$"
+	.string "I don't get it. How many traps does\n"
+	.string "this house even have?\p"
+	.string "Maybe you'll find out.$"
 

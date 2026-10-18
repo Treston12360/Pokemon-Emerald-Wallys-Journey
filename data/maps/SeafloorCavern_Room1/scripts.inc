@@ -12,8 +12,8 @@ SeafloorCavern_Room1_EventScript_Grunt2::
 	end
 
 SeafloorCavern_Room1_Text_Grunt1Intro:
-	.string "We don't need a kid around!\n"
-	.string "Go on home already!$"
+	.string "A kid? Down here? Go home!\n"
+	.string "This is no place for you!$"
 
 SeafloorCavern_Room1_Text_Grunt1Defeat:
 	.string "I want to go home…\p"
@@ -27,11 +27,11 @@ SeafloorCavern_Room1_Text_Grunt1PostBattle:
 	.string "who didn't have anywhere else.$"
 
 SeafloorCavern_Room1_Text_Grunt2Intro:
-	.string "That submarine… It's tiny inside.\n"
-	.string "I'm sore all over!$"
+	.string "That submarine is so cramped.\n"
+	.string "I'm sore everywhere!$"
 
 SeafloorCavern_Room1_Text_Grunt2Defeat:
-	.string "Losing makes me sore!$"
+	.string "Sore AND beaten…$"
 
 SeafloorCavern_Room1_Text_Grunt2PostBattle:
 	.string "That submarine we took is brutal\n"

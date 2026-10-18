@@ -32,12 +32,12 @@ VictoryRoad_B2F_EventScript_Dianne::
 	end
 
 VictoryRoad_B2F_Text_VitoIntro:
-	.string "I trained with my whole family,\n"
-	.string "every one of us! I won't lose!$"
+	.string "Five siblings, and I'm the one who\n"
+	.string "made it here! I won't lose!$"
 
 VictoryRoad_B2F_Text_VitoDefeat:
-	.string "Better than my family?!\n"
-	.string "Is that possible?!$"
+	.string "Stronger than all five\n"
+	.string "of us?!$"
 
 VictoryRoad_B2F_Text_VitoPostBattle:
 	.string "I was the best in my family.\n"
@@ -46,11 +46,12 @@ VictoryRoad_B2F_Text_VitoPostBattle:
 	.string "to see me either way. I hope.$"
 
 VictoryRoad_B2F_Text_OwenIntro:
-	.string "I heard there's a tough little kid\n"
-	.string "around. Is that you?$"
+	.string "I heard a kid from PETALBURG was\n"
+	.string "coming through. Is that you?$"
 
 VictoryRoad_B2F_Text_OwenDefeat:
-	.string "The little shrimp is tough!$"
+	.string "The little shrimp is\n"
+	.string "the real deal!$"
 
 VictoryRoad_B2F_Text_OwenPostBattle:
 	.string "The rumor says that tough kid is\n"
@@ -59,10 +60,12 @@ VictoryRoad_B2F_Text_OwenPostBattle:
 	.string "over there.$"
 
 VictoryRoad_B2F_Text_CarolineIntro:
-	.string "You must be getting a little tired.$"
+	.string "Three floors of this cave.\n"
+	.string "You must be exhausted.$"
 
 VictoryRoad_B2F_Text_CarolineDefeat:
-	.string "No signs of tiring at all!$"
+	.string "Not tired at all?!\n"
+	.string "What are you?$"
 
 VictoryRoad_B2F_Text_CarolinePostBattle:
 	.string "VICTORY ROAD and the LEAGUE are long\n"
@@ -71,24 +74,23 @@ VictoryRoad_B2F_Text_CarolinePostBattle:
 	.string "for this. She hasn't gone home since.$"
 
 VictoryRoad_B2F_Text_JulieIntro:
-	.string "Don't get complacent just because\n"
-	.string "you have lots of BADGES.\p"
-	.string "There's always someone better!$"
+	.string "Lots of BADGES, huh? Don't get\n"
+	.string "cocky. Someone's always better!$"
 
 VictoryRoad_B2F_Text_JulieDefeat:
-	.string "You're better than me!$"
+	.string "…Turns out that someone\n"
+	.string "is you.$"
 
 VictoryRoad_B2F_Text_JuliePostBattle:
-	.string "Look at your BADGES and remember\n"
-	.string "the TRAINERS you've faced.$"
+	.string "Look at your BADGES. Remember every\n"
+	.string "TRAINER behind each one.$"
 
 VictoryRoad_B2F_Text_FelixIntro:
-	.string "I've come this far, but the tension\n"
-	.string "is giving me awful stomach pain…$"
+	.string "So close to the LEAGUE…\n"
+	.string "My stomach is in knots…$"
 
 VictoryRoad_B2F_Text_FelixDefeat:
-	.string "Ooh…\n"
-	.string "It hurts…$"
+	.string "Ooh… my stomach…$"
 
 VictoryRoad_B2F_Text_FelixPostBattle:
 	.string "I get so tense this close to the\n"
@@ -99,13 +101,14 @@ VictoryRoad_B2F_Text_FelixPostBattle:
 	.string "I can't even ride out a cave.$"
 
 VictoryRoad_B2F_Text_DianneIntro:
-	.string "The elite of the elite gather in\n"
-	.string "this cave. How are you finding it?$"
+	.string "Only the best of the best reach\n"
+	.string "this cave. Feeling it?$"
 
 VictoryRoad_B2F_Text_DianneDefeat:
-	.string "Not rattled in the least!$"
+	.string "Not even nervous!\n"
+	.string "Impressive!$"
 
 VictoryRoad_B2F_Text_DiannePostBattle:
-	.string "You've got guts! I like that!\n"
-	.string "Keep it going!$"
+	.string "You've got guts. The ELITE FOUR\n"
+	.string "will like that.$"
 
