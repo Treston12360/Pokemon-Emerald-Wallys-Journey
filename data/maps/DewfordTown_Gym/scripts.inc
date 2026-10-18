@@ -334,7 +334,8 @@ DewfordTown_Gym_Text_TakaoIntro:
 	.string "Might is right! Come on!$"
 
 DewfordTown_Gym_Text_TakaoDefeat:
-	.string "Not enough power…$"
+	.string "My fists were faster than\n"
+	.string "my thinking!$"
 
 DewfordTown_Gym_Text_TakaoPostBattle:
 	.string "Your technique beat my power.\p"
@@ -346,8 +347,8 @@ DewfordTown_Gym_Text_JocelynIntro:
 	.string "I'll crush you myself!$"
 
 DewfordTown_Gym_Text_JocelynDefeat:
-	.string "But… How?\n"
-	.string "How could I lose so easily?$"
+	.string "How?! I trained every\n"
+	.string "morning before school!$"
 
 DewfordTown_Gym_Text_JocelynPostBattle:
 	.string "I won't waste this loss.\p"
@@ -356,11 +357,12 @@ DewfordTown_Gym_Text_JocelynPostBattle:
 	.string "them.$"
 
 DewfordTown_Gym_Text_LauraIntro:
-	.string "Don't you dare brush me off!$"
+	.string "You found me in the dark?\n"
+	.string "Then you can face me!$"
 
 DewfordTown_Gym_Text_LauraDefeat:
-	.string "Waaaaaaah!\n"
-	.string "I lost!$"
+	.string "Waaah! I can't see where\n"
+	.string "I went wrong!$"
 
 DewfordTown_Gym_Text_LauraPostBattle:
 	.string "I battle in the dark to make my\n"
@@ -373,7 +375,7 @@ DewfordTown_Gym_Text_LilithIntro:
 
 DewfordTown_Gym_Text_LilithDefeat:
 	.string "Oh, you…\n"
-	.string "I don't want to know you!$"
+	.string "You walked right through me!$"
 
 DewfordTown_Gym_Text_LilithPostBattle:
 	.string "You should stay lost and end up back\n"
@@ -385,8 +387,8 @@ DewfordTown_Gym_Text_BrendenIntro:
 	.string "man!$"
 
 DewfordTown_Gym_Text_BrendenDefeat:
-	.string "How'd this happen?\n"
-	.string "It's not like me to lose this way!$"
+	.string "Capsized!\n"
+	.string "I didn't see that swell coming!$"
 
 DewfordTown_Gym_Text_BrendenPostBattle:
 	.string "Aye. You're worthy of BRAWLY.\p"
@@ -397,26 +399,30 @@ DewfordTown_Gym_Text_CristianIntro:
 	.string "If you mean to pass, it's through me!$"
 
 DewfordTown_Gym_Text_CristianDefeat:
-	.string "Grrrrr!\n"
-	.string "Vastly overpowered!$"
+	.string "Grrr! Overpowered!\n"
+	.string "BRAWLY will laugh at me!$"
 
 DewfordTown_Gym_Text_CristianPostBattle:
-	.string "You win. Go after that BADGE.$"
+	.string "You win. Go after that BADGE.\p"
+	.string "BRAWLY took this GYM when nobody\n"
+	.string "else wanted an island post.\p"
+	.string "Now kids swim over from the mainland\n"
+	.string "just to train here.$"
 
 DewfordTown_Gym_Text_BrawlyIntro:
-	.string "I'm BRAWLY!\n"
-	.string "DEWFORD's GYM LEADER!\p"
-	.string "I've been churned in the rough waves\n"
-	.string "of these parts, and I've grown tough\l"
-	.string "in the pitch-black cave!\p"
-	.string "So you wanted to challenge me?\n"
-	.string "Let me see what you're made of!$"
+	.string "I'm BRAWLY! DEWFORD's GYM LEADER!\p"
+	.string "I learned to surf on these waves and\n"
+	.string "to fight in the dark of GRANITE CAVE.\p"
+	.string "Out here nobody comes to rescue you.\n"
+	.string "So you get strong enough to rescue\l"
+	.string "yourself.\p"
+	.string "Show me you can do that!$"
 
 DewfordTown_Gym_Text_BrawlyDefeat:
-	.string "Whoah, wow! You made a much bigger\n"
-	.string "splash than I expected!\p"
-	.string "You swamped me!\p"
-	.string "Okay, you've got me.\n"
+	.string "Whoa! You hit like a rogue wave!\p"
+	.string "I didn't even see you coming.\n"
+	.string "That's the point, huh?\p"
+	.string "Okay, you earned it.\n"
 	.string "Take this GYM BADGE!$"
 
 DewfordTown_Gym_Text_ReceivedKnuckleBadge:
@@ -457,31 +463,27 @@ DewfordTown_Gym_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 DewfordTown_Gym_Text_BrawlyPreRematch:
-	.string "BRAWLY: A wave may draw back, but it\n"
-	.string "always returns to the shore.\p"
-	.string "A giant wave of a talent like you…\n"
-	.string "I knew you would return!\p"
-	.string "Show me how much higher\n"
-	.string "you've gone!$"
+	.string "BRAWLY: A wave pulls back, but it\n"
+	.string "always comes back to the shore.\p"
+	.string "I knew you would too.\n"
+	.string "Show me how big you've gotten!$"
 
 DewfordTown_Gym_Text_BrawlyRematchDefeat:
-	.string "Wow!\n"
-	.string "Swamped again!$"
+	.string "Wiped out!\n"
+	.string "Again! What a rush!$"
 
 DewfordTown_Gym_Text_BrawlyPostRematch:
-	.string "BRAWLY: Battling is vast and it's deep.\n"
-	.string "You can't see the bottom.\l"
-	.string "It's just like the sea of HOENN!$"
+	.string "BRAWLY: Battling's like the sea out\n"
+	.string "there. You never touch the bottom.\p"
+	.string "That's why I keep diving.$"
 
 DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons:
-	.string "BRAWLY: A wave may draw back, but it\n"
-	.string "always returns to the shore.\p"
-	.string "A giant wave of a talent like you…\n"
-	.string "I knew you would return!\p"
-	.string "Oh? You only have one POKéMON\n"
-	.string "that can battle.\p"
-	.string "I'm sorry, but I'd like you to come back\n"
-	.string "with at least two POKéMON.$"
+	.string "BRAWLY: A wave pulls back, but it\n"
+	.string "always comes back to the shore.\p"
+	.string "Oh? Only one of your POKéMON can\n"
+	.string "battle?\p"
+	.string "Rematches here are two at a time.\n"
+	.string "Come back with at least two.$"
 
 DewfordTown_Gym_Text_BrawlyPreRematch3:
 	.string "BRAWLY: I spent all season hauling\n"

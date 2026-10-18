@@ -702,8 +702,9 @@ DewfordTown_Text_JustTellMeWhenYouNeedToSetSail:
 	.string "you need to set sail again!$"
 
 DewfordTown_Text_GettingItchToFish:
-	.string "This is a renowned fishing spot.\n"
-	.string "Are you getting the itch to fish?$"
+	.string "This is the best fishing spot in\n"
+	.string "HOENN. Was, anyway.\p"
+	.string "Getting the itch to fish?$"
 
 DewfordTown_Text_GiveYouOneOfMyRods:
 	.string "I like what I'm hearing!\p"
@@ -729,12 +730,15 @@ DewfordTown_Text_ThatsTooBadThen:
 	.string "should learn it someday.$"
 
 DewfordTown_Text_HowsYourFishing:
-	.string "Yo!\n"
-	.string "How's your fishing?$"
+	.string "Yo! How's your fishing?\p"
+	.string "My grandpa pulled CORSOLA off this\n"
+	.string "pier. I'm lucky to get a TENTACOOL.$"
 
 DewfordTown_Text_GreatHaulInSomeBigOnes:
 	.string "That's the spirit! Haul in some big\n"
-	.string "ones!$"
+	.string "ones.\p"
+	.string "Put the little ones back. They're\n"
+	.string "all the reef has left.$"
 
 DewfordTown_Text_FishingAdvice:
 	.string "Oh, hey, don't get down on yourself!\n"
