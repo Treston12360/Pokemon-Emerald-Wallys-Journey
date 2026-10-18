@@ -1335,6 +1335,8 @@ PetalburgCity_Gym_Text_DadHappyAndSad:
 	.string "But I missed birthdays, school\n"
 	.string "plays, ordinary evenings… I wasn't\l"
 	.string "there when you needed your dad.\p"
+	.string "BIRCH thinks he pushed me too far.\n"
+	.string "He didn't. That was all me.\p"
 	.string "Today, I watched you battle and\n"
 	.string "realized I'd missed you growing up.\p"
 	.string "I'm sorry, {PLAYER}.\p"

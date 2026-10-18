@@ -42,8 +42,10 @@ OldaleTown_PokemonCenter_1F_Text_TrainersCanUsePC:
 	.string "BIRCH used to drag him out to the\n"
 	.string "field. Said he'd never seen a\l"
 	.string "TRAINER with that kind of focus.\p"
-	.string "He pushed NORMAN hard. Maybe a\n"
-	.string "little too hard, if you ask me.$"
+	.string "BIRCH blames himself for how little\n"
+	.string "NORMAN gets home.\p"
+	.string "NORMAN just shakes his head. Says\n"
+	.string "nobody pushed him but himself.$"
 
 OldaleTown_PokemonCenter_1F_Text_PokemonCentersAreGreat:
 	.string "POKéMON CENTERS are free for every\n"
