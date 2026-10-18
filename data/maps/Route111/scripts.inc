@@ -577,11 +577,11 @@ Route111_Text_VictorIntro:
 
 Route111_Text_VictorDefeat:
 	.string "Aiyah!\n"
-	.string "You're a lot tougher than I expected!$"
+	.string "Tougher than I expected!$"
 
 Route111_Text_VictorPostBattle:
 	.string "Hey, all!\n"
-	.string "I've found a pretty strong TRAINER!$"
+	.string "I've found a strong TRAINER!$"
 
 Route111_Text_VictoriaIntro:
 	.string "Oh, my goodness! Aren't you young?\p"
@@ -620,8 +620,10 @@ Route111_Text_VickyDefeat:
 	.string "My granddaughter was right…$"
 
 Route111_Text_VickyPostBattle:
-	.string "If you're not in any hurry,\n"
-	.string "visit with us awhile.$"
+	.string "Four of us under one roof, three\n"
+	.string "generations.\p"
+	.string "It's crowded, but it's ours.\n"
+	.string "Visit awhile if you aren't busy.$"
 
 Route111_Text_ToughToKeepWinningUpTheRanks:
 	.string "Raise your POKéMON more, or the climb\n"

@@ -434,8 +434,8 @@ RusturfTunnel_Text_GruntIntro:
 	.string "So you want to battle me?$"
 
 RusturfTunnel_Text_GruntDefeat:
-	.string "Urrrggh! My career in crime comes to\n"
-	.string "a dead end!$"
+	.string "Urrrggh! Fine!\n"
+	.string "Take the stupid parts back!$"
 
 RusturfTunnel_Text_GruntTakePackage:
 	.string "This is plain not right…\p"
@@ -514,7 +514,7 @@ RusturfTunnel_Text_MikeIntro:
 
 RusturfTunnel_Text_MikeDefeat:
 	.string "My POKéMON…\n"
-	.string "Ran out of power…$"
+	.string "ran out of steam.$"
 
 RusturfTunnel_Text_MikePostBattle:
 	.string "They stopped the tunnel to protect\n"

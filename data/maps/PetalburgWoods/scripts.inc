@@ -348,7 +348,8 @@ PetalburgWoods_Text_NoOneCrossesTeamAqua:
 	.string "Fine! Battle me, kid!$"
 
 PetalburgWoods_Text_YoureKiddingMe:
-	.string "You're kidding me! You're tough!$"
+	.string "You're kidding me!\n"
+	.string "You're tough!$"
 
 PetalburgWoods_Text_YouveGotSomeNerve:
 	.string "Grrr… You've got some nerve\n"
@@ -387,19 +388,23 @@ PetalburgWoods_Text_GoBugPokemonTeam:
 	.string "My BUG POKéMON team!$"
 
 PetalburgWoods_Text_ICouldntWin:
-	.string "I have all these POKéMON,\n"
-	.string "but I couldn't win…$"
+	.string "I have all these POKéMON…\n"
+	.string "and I still couldn't win!$"
 
 PetalburgWoods_Text_ImOutOfPokeBalls:
 	.string "I caught a bunch of POKéMON.\n"
-	.string "Now I'm out of POKé BALLS.$"
+	.string "Now I'm out of POKé BALLS.\p"
+	.string "The WURMPLE used to be everywhere.\n"
+	.string "Now you have to look really hard.$"
 
 PetalburgWoods_Text_InstantlyPopularWithBugPokemon:
-	.string "If you take BUG POKéMON to school,\n"
-	.string "you get to be instantly popular!$"
+	.string "Bring BUG POKéMON to school and\n"
+	.string "you're instantly popular!\p"
+	.string "Well, in PETALBURG. In RUSTBORO\n"
+	.string "they just ask if it's a DEVON robot.$"
 
 PetalburgWoods_Text_CantBePopularIfILose:
-	.string "I can't be popular if I lose.$"
+	.string "I can't be popular if I lose!$"
 
 PetalburgWoods_Text_PeopleRespectYou:
 	.string "If you have a big BUG POKéMON,\n"
@@ -416,16 +421,17 @@ PetalburgWoods_Text_IWantRematch2:
 	.string "I'm registering you in my POKéNAV!$"
 
 PetalburgWoods_Text_MyPokemonHaveGrown:
-	.string "My BUG POKéMON have grown.\n"
-	.string "I'll be popular again.$"
+	.string "My BUG POKéMON grew up!\n"
+	.string "I'll be popular again!$"
 
 PetalburgWoods_Text_CantBePopularIfLose:
-	.string "I can't be popular if I lose.$"
+	.string "Nooo! My reputation!$"
 
 PetalburgWoods_Text_IveBeenTrainingHard:
-	.string "You get to be popular if you have\n"
-	.string "strong POKéMON, right?\l"
-	.string "So, I've been training hard.$"
+	.string "Strong POKéMON make you popular,\n"
+	.string "right? So I've trained so hard!\p"
+	.string "Even in the part of the woods where\n"
+	.string "the stream smells funny.$"
 
 PetalburgWoods_Text_StayOutOfTallGrass:
 	.string "Yo! Your POKéMON doing okay?\p"
