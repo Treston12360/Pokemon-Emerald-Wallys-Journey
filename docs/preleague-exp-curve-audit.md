@@ -1,6 +1,6 @@
 # Pre-League experience-curve audit (Wally's Journey)
 
-Status: **baseline extracted; cumulative EXP and accessibility simulation not yet completed.**
+Status: **simulated 2026-10-18 — target met, no level changes needed.** Re-run with `python3 tools/exp_curve_gaps.py`.
 
 ## Acceptance criterion
 
@@ -46,3 +46,40 @@ Do **not** claim the target is achieved until this simulation and an in-game pro
 ## Source of baseline
 
 `src/data/trainers.party` on `wally-journey-development`, inspected October 17, 2026. Baseline party file blob SHA: `7e0d67db93b6303b8e0903a5c3d256f7e7b28f7d`.
+
+## Simulation result (2026-10-18)
+
+`tools/exp_curve_sim.py` beats every reachable pre-League trainer in story order (500 battles: routes, Gyms, Trick House, hideouts, S.S. Tidal, Wally's eight fights, one rival variant per encounter; rematches, Battle Tents, Trainer Hill and postgame fights excluded) using the game's real EXP code: `expYield × level / 5`, no trainer 1.5×, Gen 7 level scaling, and Wally's Journey EXP ALL (the one-participant + one-EXP-Share total, split evenly over six). Wild battles are not counted, so real players run slightly higher.
+
+**Party average at Sidney: 49.8 (Sidney 51.8) — 2.0 levels under, inside the 48.8–50.8 target.** The result is stable across growth rates (all Medium Fast 50.0, all Medium Slow 50.0) and party timing (team of six from Route 104 or completed at Fortree: 49.8).
+
+Party average just before each important fight (negative gap = the player is lower):
+
+```
+fight                         party  foe avg  ace   gap
+ROXANNE_1                      11.0     13.3   15  -2.3
+BRAWLY_1                       12.8     17.3   19  -4.5
+WALLY_MAUVILLE                 19.3     16.0   16   3.3
+WATTSON_1                      20.0     24.0   25  -4.0
+WALLY_VERDANTURF               21.3     23.7   24  -2.3
+MAXIE_MT_CHIMNEY               26.0     26.2   28  -0.2
+FLANNERY_1                     26.8     29.8   32  -2.9
+WALLY_LAVARIDGE                27.0     29.0   31  -2.0
+NORMAN_1                       28.0     31.2   33  -3.2
+SHELLY_WEATHER_INSTITUTE       32.2     28.0   28   4.2
+WINONA_1                       33.0     36.8   38  -3.8
+WALLY_FORTREE                  33.2     33.2   35  -0.0
+WALLY_LILYCOVE                 36.2     38.5   41  -2.3
+MAXIE_MAGMA_HIDEOUT            37.2     38.4   40  -1.2
+TABITHA_MAGMA_HIDEOUT          38.2     29.2   33   8.9
+MATT                           38.2     34.0   34   4.2
+TATE_AND_LIZA_1                41.2     44.0   45  -2.8
+WALLY_MOSSDEEP                 41.3     45.2   47  -3.8
+ARCHIE                         43.8     46.0   47  -2.2
+WALLY_SOOTOPOLIS               44.2     54.8   58 -10.7
+JUAN_1                         45.3     43.2   46   2.2
+WALLY_VR_1                     48.3     51.5   53  -3.2
+SIDNEY                         49.8     51.8   53  -2.0
+```
+
+The player sits 2–4 levels under most Gym Leaders and admins, which is the usual "leader slightly ahead" feel. Wally at Sootopolis (−10.7) is intentionally a near-unwinnable test right after he clears the League; losing it does not block the story. No trainer levels were changed.
