@@ -57,8 +57,9 @@ MtPyre_2F_Text_TumbledFromFloorAbove:
 	.string "the floor above.$"
 
 MtPyre_2F_Text_MarkIntro:
-	.string "Hey! I'm hunting ghost POKéMON for my\n"
-	.string "school report!\p"
+	.string "Hey! I'm hunting ghosts for my school\n"
+	.string "report!\p"
+	.string "PHOEBE of the ELITE FOUR trained here.\n"
 	.string "Did you follow me?!$"
 
 MtPyre_2F_Text_MarkDefeat:
@@ -75,8 +76,8 @@ MtPyre_2F_Text_MarkPostBattle:
 
 MtPyre_2F_Text_LukeIntro:
 	.string "LUKE: We're here on a dare.\p"
-	.string "If I cream you, she'll see how cool\n"
-	.string "I am. I know it!$"
+	.string "Legend says the ORBS up top can calm\n"
+	.string "the giants. I'll calm you!$"
 
 MtPyre_2F_Text_LukeDefeat:
 	.string "LUKE: Whoopsie!\n"
@@ -93,9 +94,9 @@ MtPyre_2F_Text_LukeNotEnoughMons:
 	.string "how cool I am!$"
 
 MtPyre_2F_Text_DezIntro:
-	.string "DEZ: We came here on a dare.\p"
-	.string "It's so scary! But LUKE will\n"
-	.string "look cool if we beat you!$"
+	.string "DEZ: It's so scary up here!\p"
+	.string "They say the spirits guard something\n"
+	.string "at the summit. Let's beat you first!$"
 
 MtPyre_2F_Text_DezDefeat:
 	.string "DEZ: Waaah! LUKE, I'm scared!$"
@@ -110,8 +111,9 @@ MtPyre_2F_Text_DezNotEnoughMons:
 	.string "Bring two POKéMON!$"
 
 MtPyre_2F_Text_LeahIntro:
-	.string "I tend the graves here. You don't\n"
-	.string "look like a mourner…$"
+	.string "I tend the graves here.\p"
+	.string "My family has kept the summit's ORBS\n"
+	.string "for generations. You're no mourner…$"
 
 MtPyre_2F_Text_LeahDefeat:
 	.string "Hm. You're sturdy.\n"
@@ -127,8 +129,8 @@ MtPyre_2F_Text_LeahPostBattle:
 
 MtPyre_2F_Text_ZanderIntro:
 	.string "Kiyaaah! I thought you were a ghost!\p"
-	.string "I came to visit my grandpa's stone.\n"
-	.string "I didn't think it'd be this scary!$"
+	.string "Grandpa's stone is up here. He always\n"
+	.string "said the ORBS hum at night!$"
 
 MtPyre_2F_Text_ZanderDefeat:
 	.string "Nooooo! I lost my\n"

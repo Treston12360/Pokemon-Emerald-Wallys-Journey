@@ -48,6 +48,18 @@ Tone rules: hopeful, warm, funny in places. Subtext over monologue. Flawed but s
 - Waking Rayquaza is the **informed best option**: Steven and Wallace know the legend, and the Orbs have already failed. Not a last-second miracle.
 - Kyogre and Groudon later return to Marine Cave / Terra Cave. Their capture battles are enormous: level 75, holding their Orb, so they go **Primal** in battle. **Done.**
 
+### 2.3a Folklore told by trainers (2026-10-18, dialogue only)
+Told as rumor, family stories or old songs, never as confirmed fact.
+- **Land and sea giants:** Lavaridge's springs are "the land giant's breath"; Pacifidlog says floods come when "the sea giant is dreaming". Wailmer sing to keep it asleep.
+- **The one above the sky:** a green light from the Sky Pillar ends the worst storms. Nobody built the Sky Pillar.
+- **The Orbs:** kept at Mt. Pyre by keeper families; they *soothe*, they don't *command*. Some say they hum at night.
+- **Three sealed giants (rock, ice, steel):** sealed by the ancients in the desert ruins (Route 111), the island cave (Route 105) and the old tomb (Route 120). The Sealed Chamber (Route 134) holds the key. Dot writing nobody can read anymore.
+- **Twin dragons, red and blue (Latias/Latios):** seen at dusk over the sea routes, the Lilycove cove and near Southern Island; said to bless couples.
+- **The falling star with something alive inside (Deoxys):** Meteor Falls clans and Space Center staff both repeat it.
+- **Sootopolis:** the crater was made by a falling star; the Cave of Origin is "where life began"; the sea giant sleeps below.
+- **Wailord carried the first people to Hoenn.** A Wailord sang the night the Abandoned Ship sank in the storm Drake survived.
+- **Elite Four as people know them:** Sidney ran with a rough crowd and grinned through every win; Phoebe grew up on Mt. Pyre; Glacia crossed an ocean and never went home; Drake survived the great storm and went back for his crew.
+
 ### 2.4 The meteorite plan (Mt. Chimney)
 - Magma's geologists model the meteorite as a catalyst to **trigger a controlled flank eruption** that builds new land on the volcano's south side, toward the ash-starved farms.
 - Weather Institute and Fallarbor researchers warn that eruptions are **nonlinear**: a small push can uncork the whole chamber. Maxie keeps the models that agree with him and dismisses the rest.

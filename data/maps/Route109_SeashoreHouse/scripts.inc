@@ -157,9 +157,9 @@ Route109_SeashoreHouse_Text_DwaynePostBattle:
 	.string "That's SLATEPORT living.$"
 
 Route109_SeashoreHouse_Text_JohannaIntro:
-	.string "Tourists come in, drink SODA POP, and\n"
-	.string "leave. Boring!\p"
-	.string "Show me some fire!$"
+	.string "Tourists come, drink SODA POP, leave.\p"
+	.string "None of them know the reef used to\n"
+	.string "glow at night. Show me fire!$"
 
 Route109_SeashoreHouse_Text_JohannaDefeated:
 	.string "Too hot to handle!$"
@@ -169,9 +169,9 @@ Route109_SeashoreHouse_Text_JohannaPostBattle:
 	.string "anyone who beats us all. Go on!$"
 
 Route109_SeashoreHouse_Text_SimonIntro:
-	.string "My POKéMON is the toughest on this\n"
-	.string "whole beach!\p"
-	.string "My big brother says so. Don't cry!$"
+	.string "My POKéMON is the toughest here!\p"
+	.string "My brother's in TEAM AQUA. He says\n"
+	.string "I'm too young. Don't cry!$"
 
 Route109_SeashoreHouse_Text_SimonDefeated:
 	.string "I'm not crying…\n"

@@ -764,8 +764,9 @@ MtChimney_Text_RouteSign:
 
 MtChimney_Text_ShelbyIntro:
 	.string "I've soaked in LAVARIDGE's springs\n"
-	.string "every winter for sixty years.\p"
-	.string "My old bones feel strong today!$"
+	.string "for sixty years.\p"
+	.string "My grandmother said the springs are\n"
+	.string "the land giant's breath. Battle!$"
 
 MtChimney_Text_ShelbyDefeat:
 	.string "Oh, my goodness.\n"
@@ -797,8 +798,8 @@ MtChimney_Text_ShelbyPostRematch:
 
 MtChimney_Text_MelissaIntro:
 	.string "I came for the volcano view!\p"
-	.string "The cable car line was an hour long.\n"
-	.string "Tourists everywhere. Battle!$"
+	.string "A man in red was lecturing tourists\n"
+	.string "about new land. Creepy! Battle!$"
 
 MtChimney_Text_MelissaDefeat:
 	.string "Ooh, scorched!\n"
@@ -809,9 +810,9 @@ MtChimney_Text_MelissaPostBattle:
 	.string "rain. I'm staying all week!$"
 
 MtChimney_Text_SheilaIntro:
-	.string "I saved for a whole year to visit\n"
-	.string "MT. CHIMNEY!\p"
-	.string "I'm not going home without a battle!$"
+	.string "I saved a year to visit MT. CHIMNEY!\p"
+	.string "My dad farmed in FALLARBOR before\n"
+	.string "the ash years. I wanted to see it.$"
 
 MtChimney_Text_SheilaDefeat:
 	.string "That was worth the whole\n"
@@ -824,9 +825,10 @@ MtChimney_Text_SheilaPostBattle:
 	.string "farm to the ash. Buy a few, okay?$"
 
 MtChimney_Text_ShirleyIntro:
-	.string "I work two jobs in MAUVILLE.\p"
-	.string "One day off a year, I come here.\n"
-	.string "The springs fixed my back! Battle!$"
+	.string "I work two jobs in MAUVILLE. One day\n"
+	.string "off a year, I come here.\p"
+	.string "My landlord raised the rent again.\n"
+	.string "The springs help. Battle!$"
 
 MtChimney_Text_ShirleyDefeat:
 	.string "Yowch!\n"
@@ -837,10 +839,10 @@ MtChimney_Text_ShirleyPostBattle:
 	.string "Just joking!$"
 
 MtChimney_Text_SawyerIntro:
-	.string "I've studied MT. CHIMNEY for thirty\n"
+	.string "I've studied this volcano thirty\n"
 	.string "years!\p"
-	.string "She's delightfully grumpy today.\n"
-	.string "So am I!$"
+	.string "Push her even a little and she\n"
+	.string "could blow. Nobody listens!$"
 
 MtChimney_Text_SawyerDefeat:
 	.string "My data didn't predict\n"

@@ -63,8 +63,8 @@ MtPyre_6F_Text_ValeriePostRematch:
 
 MtPyre_6F_Text_CedricIntro:
 	.string "Lost? This mountain swallows people!\p"
-	.string "I've guided mourners up here for\n"
-	.string "years. Battle first, then I'll guide!$"
+	.string "Anyone in red or blue hoods who asks\n"
+	.string "me the way up? I won't guide them!$"
 
 MtPyre_6F_Text_CedricDefeat:
 	.string "…You weren't lost at all,\n"

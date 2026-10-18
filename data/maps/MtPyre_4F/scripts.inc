@@ -9,8 +9,9 @@ MtPyre_5F_EventScript_Atsushi::
 	end
 
 MtPyre_5F_Text_AtsushiIntro:
-	.string "Teacher, you rest here now.\n"
-	.string "Watch me grow!$"
+	.string "Teacher, you rest here now.\p"
+	.string "You taught me the land and sea must\n"
+	.string "never be woken. Watch me grow!$"
 
 MtPyre_5F_Text_AtsushiDefeat:
 	.string "Teacher…\n"

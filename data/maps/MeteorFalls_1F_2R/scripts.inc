@@ -63,8 +63,8 @@ MeteorFalls_1F_2R_EventScript_RematchJay::
 MeteorFalls_1F_2R_Text_NicolasIntro:
 	.string "DRAGON users train here, where the\n"
 	.string "stars fell.\p"
-	.string "DRAGON clans have trained under\n"
-	.string "these falls for centuries.$"
+	.string "My clan says a star once fell with\n"
+	.string "something alive inside it.$"
 
 MeteorFalls_1F_2R_Text_NicolasDefeat:
 	.string "Urgh!\n"
@@ -95,9 +95,10 @@ MeteorFalls_1F_2R_Text_NicolasPostRematch:
 	.string "I can grow stronger too!$"
 
 MeteorFalls_1F_2R_Text_JohnIntro:
-	.string "JOHN: We came here on our first date\n"
-	.string "fifty years ago.\p"
-	.string "We battled then. We battle now!$"
+	.string "JOHN: Fifty years ago, we watched the\n"
+	.string "meteor shower here on our first date.\p"
+	.string "The professor in FALLARBOR still\n"
+	.string "counts them. Battle!$"
 
 MeteorFalls_1F_2R_Text_JohnDefeat:
 	.string "JOHN: Well, dear…\n"

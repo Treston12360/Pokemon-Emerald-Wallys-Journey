@@ -34,8 +34,8 @@ MtPyre_3F_EventScript_RematchGabrielle::
 
 MtPyre_3F_Text_WilliamIntro:
 	.string "This mountain sharpens my mind!\p"
-	.string "The spirits speak to me. They say\n"
-	.string "you'll lose!$"
+	.string "The old texts say the ORB “soothes”\n"
+	.string "the titan. Some read “commands.” Fools.$"
 
 MtPyre_3F_Text_WilliamDefeat:
 	.string "I drown in self-pity…\n"
@@ -50,9 +50,9 @@ MtPyre_3F_Text_WilliamPostBattle:
 	.string "more than being heard.$"
 
 MtPyre_3F_Text_KaylaIntro:
-	.string "Ahahahaha! A child, up here?\p"
-	.string "Go home before the spirits take an\n"
-	.string "interest in you!$"
+	.string "A child, up here?\p"
+	.string "PHOEBE climbed these stairs at your\n"
+	.string "age. You're no PHOEBE. Battle!$"
 
 MtPyre_3F_Text_KaylaDefeat:
 	.string "I lost… cleanly. Ugh.$"
@@ -63,7 +63,9 @@ MtPyre_3F_Text_KaylaPostBattle:
 
 MtPyre_3F_Text_GabrielleIntro:
 	.string "Why have you come? To remember\n"
-	.string "someone?$"
+	.string "someone?\p"
+	.string "So many new stones since the reefs\n"
+	.string "began dying. So many.$"
 
 MtPyre_3F_Text_GabrielleDefeat:
 	.string "Amazing. The spirits\n"

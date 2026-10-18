@@ -12,8 +12,9 @@ SSTidalLowerDeck_EventScript_Leonard::
 	end
 
 SSTidalLowerDeck_Text_PhillipIntro:
-	.string "Arrgh! I'm sick of scrubbing this\n"
-	.string "huge ship! Quick battle!$"
+	.string "Arrgh! Sick of scrubbing!\p"
+	.string "This ferry runs the old route DRAKE\n"
+	.string "used to sail. Quick battle!$"
 
 SSTidalLowerDeck_Text_PhillipDefeat:
 	.string "Little bro! I lost!\n"
@@ -25,10 +26,9 @@ SSTidalLowerDeck_Text_PhillipPostBattle:
 	.string "does the scrubbing!$"
 
 SSTidalLowerDeck_Text_LeonardIntro:
-	.string "Me and my brother scrub this whole\n"
-	.string "hull every trip!\p"
-	.string "Plenty of room for a battle down\n"
-	.string "here!$"
+	.string "Me and my brother scrub this hull!\p"
+	.string "The captain says the ship's never\n"
+	.string "crossed a storm like DRAKE's.$"
 
 SSTidalLowerDeck_Text_LeonardDefeat:
 	.string "Big bro! I lost!\n"

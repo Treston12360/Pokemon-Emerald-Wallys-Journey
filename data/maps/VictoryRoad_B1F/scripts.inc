@@ -70,8 +70,9 @@ VictoryRoad_B1F_Text_MichellePostBattle:
 	.string "should worry about.$"
 
 VictoryRoad_B1F_Text_MitchellIntro:
-	.string "I've trained my POKéMON under the\n"
-	.string "stars of MOSSDEEP! Behold!$"
+	.string "I trained under MOSSDEEP's stars!\p"
+	.string "PHOEBE says the ELITE FOUR's ghosts\n"
+	.string "can feel fear. Behold!$"
 
 VictoryRoad_B1F_Text_MitchellDefeat:
 	.string "The stars didn't warn me\n"

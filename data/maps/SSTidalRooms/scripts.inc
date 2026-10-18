@@ -67,10 +67,9 @@ SSTidalRooms_Text_TakeRestOnBed:
 	.string "Let's take a rest.$"
 
 SSTidalRooms_Text_ColtonIntro:
-	.string "I sail to LILYCOVE for the CONTESTS\n"
-	.string "every month!\p"
-	.string "This ferry's the only way I can\n"
-	.string "afford it!$"
+	.string "I sail to LILYCOVE for CONTESTS!\p"
+	.string "WALLACE got his start in those halls.\n"
+	.string "This ferry's all I can afford!$"
 
 SSTidalRooms_Text_ColtonDefeat:
 	.string "What a delightful match!$"
@@ -80,9 +79,9 @@ SSTidalRooms_Text_ColtonPostBattle:
 	.string "CONTEST! What will I see?$"
 
 SSTidalRooms_Text_MicahIntro:
-	.string "Tell me, are your friends strong?\p"
-	.string "Mine have sailed every sea with me.\n"
-	.string "They are.$"
+	.string "Are your friends strong?\p"
+	.string "I sailed beside GLACIA's ship when she\n"
+	.string "first came to HOENN. Cold hands!$"
 
 SSTidalRooms_Text_MicahDefeat:
 	.string "Your friends are very strong.$"
@@ -92,9 +91,9 @@ SSTidalRooms_Text_MicahPostBattle:
 	.string "My POKéMON are my dearest friends.$"
 
 SSTidalRooms_Text_ThomasIntro:
-	.string "Child… did you knock before\n"
-	.string "entering?\p"
-	.string "Manners matter, even on a ferry.$"
+	.string "Child… did you knock?\p"
+	.string "MR. STONE of DEVON rides this ferry.\n"
+	.string "Manners matter here.$"
 
 SSTidalRooms_Text_ThomasDefeat:
 	.string "A loss is accepted calmly.$"
@@ -104,8 +103,9 @@ SSTidalRooms_Text_ThomasPostBattle:
 	.string "That is the code.$"
 
 SSTidalRooms_Text_JedIntro:
-	.string "JED: This is our honeymoon!\n"
-	.string "Feel our lovey-dovey power!$"
+	.string "JED: It's our honeymoon!\p"
+	.string "We're going to see SOUTHERN ISLAND!\n"
+	.string "Lovey-dovey power!$"
 
 SSTidalRooms_Text_JedDefeat:
 	.string "JED: Sigh… Not on our\n"
@@ -120,8 +120,8 @@ SSTidalRooms_Text_JedNotEnoughMons:
 	.string "as a couple. Bring two!$"
 
 SSTidalRooms_Text_LeaIntro:
-	.string "LEA: It's our honeymoon!\n"
-	.string "Feel our lovey-dovey power!$"
+	.string "LEA: Honeymoon! They say twin dragons\n"
+	.string "bless couples on SOUTHERN ISLAND!$"
 
 SSTidalRooms_Text_LeaDefeat:
 	.string "LEA: Oh, boo! Our love\n"
@@ -136,9 +136,10 @@ SSTidalRooms_Text_LeaNotEnoughMons:
 	.string "need two POKéMON…$"
 
 SSTidalRooms_Text_GarretIntro:
-	.string "Ah, perfect timing. I'm bored.\p"
-	.string "Father bought the whole cabin row so\n"
-	.string "I'd have quiet. Entertain me.$"
+	.string "I'm bored.\p"
+	.string "Father owns twelve houses in\n"
+	.string "LILYCOVE and none feel like home.\l"
+	.string "Entertain me.$"
 
 SSTidalRooms_Text_GarretDefeat:
 	.string "…That will do.\n"
@@ -151,8 +152,8 @@ SSTidalRooms_Text_GarretPostBattle:
 
 SSTidalRooms_Text_NaomiIntro:
 	.string "What an adorable TRAINER!\p"
-	.string "I'm touring HOENN by ferry. Tea?\n"
-	.string "Or a battle?$"
+	.string "I'm touring HOENN's legend sites by\n"
+	.string "ferry. Tea? Or a battle?$"
 
 SSTidalRooms_Text_NaomiDefeat:
 	.string "I see. The active type.$"

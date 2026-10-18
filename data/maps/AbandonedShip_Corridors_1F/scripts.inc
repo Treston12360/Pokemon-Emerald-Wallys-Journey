@@ -12,8 +12,8 @@ AbandonedShip_Corridors_1F_EventScript_Charlie::
 
 AbandonedShip_Corridors_1F_Text_CharlieIntro:
 	.string "Laugh at my inner tube all you want.\p"
-	.string "This ship sank once already. I'm not\n"
-	.string "taking chances!$"
+	.string "The storm that sank this ship nearly\n"
+	.string "sank DRAKE of the ELITE FOUR too!$"
 
 AbandonedShip_Corridors_1F_Text_CharlieDefeat:
 	.string "Whoa! Overwhelmed!$"

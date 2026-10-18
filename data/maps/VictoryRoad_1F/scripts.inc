@@ -173,9 +173,9 @@ VictoryRoad_1F_Text_WallyPostBattle:
 	.string "Don't get comfortable.$"
 
 VictoryRoad_1F_Text_EdgarIntro:
-	.string "This is my fourth time on this road.\p"
-	.string "My kids think I'm crazy. Maybe.\n"
-	.string "But I'm not done yet!$"
+	.string "Fourth time on this road!\p"
+	.string "SIDNEY beat me last year in three\n"
+	.string "turns. He grinned the whole time!$"
 
 VictoryRoad_1F_Text_EdgarDefeat:
 	.string "Fourth time, same spot.\n"
@@ -190,8 +190,9 @@ VictoryRoad_1F_Text_EdgarPostBattle:
 	.string "I'm ready.$"
 
 VictoryRoad_1F_Text_AlbertIntro:
-	.string "Eight BADGES, three years.\n"
-	.string "I'm not losing here!$"
+	.string "Eight BADGES, three years.\p"
+	.string "I watched WALLY's title match. If he\n"
+	.string "can, I can! Not losing here!$"
 
 VictoryRoad_1F_Text_AlbertDefeat:
 	.string "Three years…\n"
@@ -206,8 +207,10 @@ VictoryRoad_1F_Text_AlbertPostBattle:
 	.string "for more than victory.$"
 
 VictoryRoad_1F_Text_HopeIntro:
-	.string "My grandmother walked this road\n"
-	.string "and never finished it. I will!$"
+	.string "Grandma walked this road and never\n"
+	.string "finished.\p"
+	.string "She saw WALLACE win his title. I'll\n"
+	.string "finish for her!$"
 
 VictoryRoad_1F_Text_HopeDefeat:
 	.string "Grandma… I'm sorry.\n"
@@ -222,9 +225,9 @@ VictoryRoad_1F_Text_HopePostBattle:
 
 VictoryRoad_1F_Text_QuincyIntro:
 	.string "Want to know what VICTORY ROAD\n"
-	.string "really means?\p"
-	.string "I've walked it five times. Win, and\n"
-	.string "I'll tell you!$"
+	.string "means?\p"
+	.string "WALLACE told me once. Win, and I'll\n"
+	.string "tell you!$"
 
 VictoryRoad_1F_Text_QuincyDefeat:
 	.string "Okay! You've earned\n"
@@ -238,9 +241,9 @@ VictoryRoad_1F_Text_QuincyPostBattle:
 	.string "That's why it's called VICTORY ROAD.$"
 
 VictoryRoad_1F_Text_KatelynnIntro:
-	.string "Anyone who gets this far doesn't\n"
-	.string "need a speech.\p"
-	.string "I quit my job for this. Come on!$"
+	.string "I quit my job for this.\p"
+	.string "DRAKE says the LEAGUE tests your\n"
+	.string "heart, not your team. Come on!$"
 
 VictoryRoad_1F_Text_KatelynnDefeat:
 	.string "A disgrace… this close\n"

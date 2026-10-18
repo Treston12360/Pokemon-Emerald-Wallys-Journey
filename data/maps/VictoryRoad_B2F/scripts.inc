@@ -32,8 +32,9 @@ VictoryRoad_B2F_EventScript_Dianne::
 	end
 
 VictoryRoad_B2F_Text_VitoIntro:
-	.string "Five siblings, and I'm the one who\n"
-	.string "made it here! I won't lose!$"
+	.string "Five siblings, and I made it here!\p"
+	.string "GLACIA crossed an ocean for this.\n"
+	.string "I crossed HOENN! Won't lose!$"
 
 VictoryRoad_B2F_Text_VitoDefeat:
 	.string "Stronger than all five\n"
@@ -46,8 +47,8 @@ VictoryRoad_B2F_Text_VitoPostBattle:
 	.string "to see me either way. I hope.$"
 
 VictoryRoad_B2F_Text_OwenIntro:
-	.string "I heard a kid from PETALBURG was\n"
-	.string "coming through. Is that you?$"
+	.string "A kid from PETALBURG coming through?\p"
+	.string "NORMAN's kid? Huh. Is that you?$"
 
 VictoryRoad_B2F_Text_OwenDefeat:
 	.string "The little shrimp is\n"
@@ -60,9 +61,9 @@ VictoryRoad_B2F_Text_OwenPostBattle:
 	.string "over there.$"
 
 VictoryRoad_B2F_Text_CarolineIntro:
-	.string "Three floors of this cave. You must\n"
-	.string "be exhausted.\p"
-	.string "I've been down here a week!$"
+	.string "Three floors. You must be tired.\p"
+	.string "STEVEN made it through in one night,\n"
+	.string "they say. I've been here a week!$"
 
 VictoryRoad_B2F_Text_CarolineDefeat:
 	.string "Not tired at all?!\n"
@@ -75,8 +76,9 @@ VictoryRoad_B2F_Text_CarolinePostBattle:
 	.string "for this. She hasn't gone home since.$"
 
 VictoryRoad_B2F_Text_JulieIntro:
-	.string "Lots of BADGES, huh? Don't get\n"
-	.string "cocky. Someone's always better!$"
+	.string "Lots of BADGES? Don't get cocky.\p"
+	.string "WALLY had all eight too. Someone's\n"
+	.string "always better!$"
 
 VictoryRoad_B2F_Text_JulieDefeat:
 	.string "…Turns out that someone\n"

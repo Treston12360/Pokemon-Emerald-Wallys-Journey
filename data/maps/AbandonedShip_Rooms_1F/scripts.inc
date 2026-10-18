@@ -39,10 +39,9 @@ AbandonedShip_Rooms_1F_Text_TakingALookAround:
 	.string "made up its mind.$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaIntro:
-	.string "My grandpa was a deckhand on this\n"
-	.string "ship.\p"
-	.string "He never said why she sank.\n"
-	.string "You're curious too, aren't you?$"
+	.string "My grandpa was a deckhand here.\p"
+	.string "He said a WAILORD sang the night she\n"
+	.string "went down. A warning, he said.$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaDefeat:
 	.string "Curious AND strong!$"
@@ -67,9 +66,9 @@ AbandonedShip_Rooms_1F_Text_ThaliaPostRematch:
 	.string "something. I just know it!$"
 
 AbandonedShip_Rooms_1F_Text_DemetriusIntro:
-	.string "Waaah! Mom found me!\p"
-	.string "…Huh? You're not Mom.\n"
-	.string "Phew. Battle me so I can hide!$"
+	.string "Waaah! Mom found me! …Huh?\p"
+	.string "Phew. Mom says ghosts of the old crew\n"
+	.string "live here. Battle me so I can hide!$"
 
 AbandonedShip_Rooms_1F_Text_DemetriusDefeat:
 	.string "Phew. At least you're\n"

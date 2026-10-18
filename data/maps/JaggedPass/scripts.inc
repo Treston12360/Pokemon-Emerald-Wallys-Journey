@@ -164,9 +164,9 @@ JaggedPass_Text_EricPostBattle:
 	.string "Nobody should mess with it.$"
 
 JaggedPass_Text_DianaIntro:
-	.string "This isn't a casual hike! No\n"
-	.string "picnics!\p"
-	.string "…Okay, one picnic. Battle first!$"
+	.string "No picnics on a volcano, they say!\p"
+	.string "Grandma says a giant of the land\n"
+	.string "sleeps under it. I'm being quiet!$"
 
 JaggedPass_Text_DianaDefeat:
 	.string "Ohhh! The ground's too\n"
@@ -194,8 +194,9 @@ JaggedPass_Text_DianaPostRematch:
 	.string "noticing the taste. I haven't.$"
 
 JaggedPass_Text_EthanIntro:
-	.string "Every step here could slip. That's\n"
-	.string "why I train on it!$"
+	.string "Every step here could slip!\p"
+	.string "These rocks were lava in the ash\n"
+	.string "years. That's why I train here!$"
 
 JaggedPass_Text_EthanDefeat:
 	.string "It was over before we found\n"
@@ -244,10 +245,9 @@ JaggedPass_Text_BoulderShakingInResponseToEmblem:
 	.string "to the MAGMA EMBLEM!$"
 
 JaggedPass_Text_JulioIntro:
-	.string "Aiyeeh! I'm riding this whole trail\n"
-	.string "in one go!\p"
-	.string "The LAVARIDGE kids do it daily.\n"
-	.string "If they can, I can! Move!$"
+	.string "Aiyeeh! Riding this trail in one go!\p"
+	.string "The LAND INITIATIVE paved half of it.\n"
+	.string "Then they put on red hoods. Move!$"
 
 JaggedPass_Text_JulioDefeat:
 	.string "I'm falling apart…\n"
@@ -258,8 +258,10 @@ JaggedPass_Text_JulioPostBattle:
 	.string "hurts…$"
 
 JaggedPass_Text_AutumnIntro:
-	.string "I hike this pass to LAVARIDGE every\n"
-	.string "day for work. I'm tough!$"
+	.string "I hike to LAVARIDGE for work every\n"
+	.string "day.\p"
+	.string "Magma folks wave at me. They used to\n"
+	.string "build our fences. Now? I don't know.$"
 
 JaggedPass_Text_AutumnDefeat:
 	.string "Hmm…\n"

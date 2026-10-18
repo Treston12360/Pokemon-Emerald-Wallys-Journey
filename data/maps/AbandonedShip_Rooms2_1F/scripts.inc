@@ -121,9 +121,9 @@ AbandonedShip_Rooms2_1F_Text_KiraRematchNotEnoughMons:
 	.string "We need two to battle!$"
 
 AbandonedShip_Rooms2_1F_Text_JaniIntro:
-	.string "I can't swim a stroke. I came here on\n"
-	.string "a dare from my roommates.\p"
-	.string "But I can battle!$"
+	.string "I can't swim, but I came anyway.\p"
+	.string "My roommates say there's DEVON cargo\n"
+	.string "still sealed down below!$"
 
 AbandonedShip_Rooms2_1F_Text_JaniDefeat:
 	.string "Oops. That went badly.$"

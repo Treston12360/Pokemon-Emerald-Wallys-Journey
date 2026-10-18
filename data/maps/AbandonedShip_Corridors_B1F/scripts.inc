@@ -54,10 +54,10 @@ AbandonedShip_Corridors_B1F_EventScript_Duncan::
 	end
 
 AbandonedShip_Corridors_B1F_Text_DuncanIntro:
-	.string "I crewed ships like this one for\n"
-	.string "twenty years.\p"
-	.string "Now I just come and visit her.\n"
-	.string "Quick battle?$"
+	.string "I crewed with DRAKE before he joined\n"
+	.string "the LEAGUE.\p"
+	.string "He was the only one who went back\n"
+	.string "into the storm for us. Battle!$"
 
 AbandonedShip_Corridors_B1F_Text_DuncanDefeat:
 	.string "Whoops! Sunk!$"
