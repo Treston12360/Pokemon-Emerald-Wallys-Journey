@@ -23,25 +23,24 @@ MagmaHideout_2F_1R_EventScript_Grunt5::
 
 MagmaHideout_2F_1R_Text_Grunt14Intro:
 	.string "What, what, what?\p"
-	.string "Only TEAM MAGMA members are supposed\n"
-	.string "to be in here!\p"
-	.string "But you're not dressed in TEAM MAGMA's\n"
-	.string "uniform…\p"
-	.string "You rouse my suspicion!\n"
-	.string "Battle with me!$"
+	.string "Only TEAM MAGMA members belong\n"
+	.string "in here!\p"
+	.string "You're not in uniform…\n"
+	.string "You rouse my suspicion! Battle!$"
 
 MagmaHideout_2F_1R_Text_Grunt14Defeat:
 	.string "Aiyiyi…\n"
-	.string "My pride as a TEAM MAGMA member…$"
+	.string "My pride as a MAGMA member…$"
 
 MagmaHideout_2F_1R_Text_Grunt14PostBattle:
-	.string "If you suffer from chills, you should\n"
-	.string "join TEAM MAGMA.$"
+	.string "I used to swing a hammer on the\n"
+	.string "LAND INITIATIVE's building days.\p"
+	.string "We put up twelve houses in\n"
+	.string "FALLARBOR. I miss that.$"
 
 MagmaHideout_2F_1R_Text_Grunt3Intro:
-	.string "Hold it right there!\p"
-	.string "You don't really expect me to keep\n"
-	.string "my trap shut and let you waltz by me?$"
+	.string "Hold it! You think I'll keep my\n"
+	.string "trap shut and let you by?$"
 
 MagmaHideout_2F_1R_Text_Grunt3Defeat:
 	.string "Ooh wow!\n"
@@ -62,9 +61,8 @@ MagmaHideout_2F_1R_Text_Grunt4Defeat:
 	.string "Graaah!$"
 
 MagmaHideout_2F_1R_Text_Grunt4PostBattle:
-	.string "I've already lost.\p"
-	.string "Do I really need to keep running\n"
-	.string "around in a circle?$"
+	.string "I already lost.\n"
+	.string "Do I still have to run in circles?$"
 
 MagmaHideout_2F_1R_Text_Grunt5Intro:
 	.string "Oh, oh!\n"

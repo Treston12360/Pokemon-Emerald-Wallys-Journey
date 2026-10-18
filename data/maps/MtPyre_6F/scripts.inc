@@ -35,8 +35,10 @@ MtPyre_6F_Text_ValerieDefeat:
 	.string "The power is ebbing away…$"
 
 MtPyre_6F_Text_ValeriePostBattle:
-	.string "Perhaps the power is from the spirits\n"
-	.string "of POKéMON in fitful sleep here…$"
+	.string "The old keepers say the ORBS on\n"
+	.string "the summit sing two old songs.\p"
+	.string "One calms the land. One calms the\n"
+	.string "sea. Neither commands anything.$"
 
 MtPyre_6F_Text_ValerieRegister:
 	.string "Fufufu… I lost the match, but…\n"
@@ -56,8 +58,8 @@ MtPyre_6F_Text_ValeriePostRematch:
 	.string "Sometimes, they play…$"
 
 MtPyre_6F_Text_CedricIntro:
-	.string "Have you lost your bearings?\n"
-	.string "Have no fear for I am here!$"
+	.string "Lost your bearings?\n"
+	.string "Have no fear, for I am here!$"
 
 MtPyre_6F_Text_CedricDefeat:
 	.string "Weren't you lost?$"

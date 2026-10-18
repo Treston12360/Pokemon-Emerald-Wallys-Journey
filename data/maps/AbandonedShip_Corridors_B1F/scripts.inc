@@ -64,8 +64,10 @@ AbandonedShip_Corridors_B1F_Text_DuncanDefeat:
 AbandonedShip_Corridors_B1F_Text_DuncanPostBattle:
 	.string "The ship's bottom has sunk into the\n"
 	.string "depths.\p"
-	.string "If a POKéMON knew how to go underwater,\n"
-	.string "we might make some progress…$"
+	.string "If a POKéMON could go underwater,\n"
+	.string "we might make some progress…\p"
+	.string "She was a DEVON freighter, you know.\n"
+	.string "They never said what she carried.$"
 
 AbandonedShip_Corridors_B1F_Text_YayItsAShip:
 	.string "Yay! It's a ship!\p"

@@ -55,8 +55,8 @@ Route110_TrickHousePuzzle4_Text_YujiDefeat:
 	.string "the puzzle…$"
 
 Route110_TrickHousePuzzle4_Text_YujiPostBattle:
-	.string "It's not good enough to be brawny…\n"
-	.string "You have to use your head. Be brainy!$"
+	.string "Being brawny isn't enough…\n"
+	.string "You have to use your head too!$"
 
 Route110_TrickHousePuzzle4_Text_PaulaIntro:
 	.string "The TRICK HOUSE is getting trickier,\n"

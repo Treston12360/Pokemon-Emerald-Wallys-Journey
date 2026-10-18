@@ -16,7 +16,9 @@ SeafloorCavern_Room1_Text_Grunt1Intro:
 	.string "Go on home already!$"
 
 SeafloorCavern_Room1_Text_Grunt1Defeat:
-	.string "I want to go home…$"
+	.string "I want to go home…\p"
+	.string "I joined to save the reef. How did\n"
+	.string "I end up down here?$"
 
 SeafloorCavern_Room1_Text_Grunt1PostBattle:
 	.string "Half the crew didn't come back\n"
@@ -32,7 +34,6 @@ SeafloorCavern_Room1_Text_Grunt2Defeat:
 	.string "Losing makes me sore!$"
 
 SeafloorCavern_Room1_Text_Grunt2PostBattle:
-	.string "That submarine we jacked, man,\n"
-	.string "it's brutal as a ride.\l"
-	.string "It's way too tight in there!$"
+	.string "That submarine we took is brutal\n"
+	.string "to ride. Way too tight in there!$"
 

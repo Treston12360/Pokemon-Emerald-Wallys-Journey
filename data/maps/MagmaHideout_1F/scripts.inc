@@ -17,16 +17,14 @@ MagmaHideout_1F_EventScript_Grunt2::
 	end
 
 MagmaHideout_1F_Text_Grunt1Intro:
-	.string "When TEAM MAGMA has roll call, we get\n"
-	.string "important guarding assignments in\l"
-	.string "the order that we line up.\p"
-	.string "That's why I'm stuck off in this corner.\n"
-	.string "I'm always late to roll call!$"
+	.string "TEAM MAGMA hands out guard posts\n"
+	.string "in roll-call order.\p"
+	.string "I'm always late, so I'm stuck in\n"
+	.string "this corner.$"
 
 MagmaHideout_1F_Text_Grunt1Defeat:
-	.string "I'm always late for training sessions,\n"
-	.string "too!\p"
-	.string "I hate to say it, but I'm wimpy…$"
+	.string "Late for training too…\n"
+	.string "I hate to say it, but I'm wimpy.$"
 
 MagmaHideout_1F_Text_Grunt1PostBattle:
 	.string "My folks farm on ROUTE 113. The ash\n"
@@ -37,9 +35,9 @@ MagmaHideout_1F_Text_Grunt1PostBattle:
 MagmaHideout_1F_Text_Grunt2Intro:
 	.string "Our leader told us to dig into\n"
 	.string "MT. CHIMNEY, so we dug and dug.\p"
-	.string "And in the course of digging, we came\n"
-	.string "across something that blew our minds!\p"
-	.string "What did we find?\p"
+	.string "And we found something that blew\n"
+	.string "our minds!\p"
+	.string "What was it?\p"
 	.string "Fuhahaha!\n"
 	.string "I'll tell you if you beat me!$"
 
@@ -50,6 +48,6 @@ MagmaHideout_1F_Text_Grunt2Defeat:
 MagmaHideout_1F_Text_Grunt2PostBattle:
 	.string "I won't tell you after all.\n"
 	.string "You'll find out when you get there!\p"
-	.string "It'd be better if you saved surprises\n"
-	.string "to the end, don't you think?$"
+	.string "Surprises are best saved for the\n"
+	.string "end, don't you think?$"
 

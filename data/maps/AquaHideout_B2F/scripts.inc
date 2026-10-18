@@ -90,15 +90,13 @@ AquaHideout_B2F_Text_MattIntro:
 	.string "Hehehe…\p"
 	.string "Got here already, did you?\n"
 	.string "We underestimated you!\p"
-	.string "But this is it!\p"
-	.string "I'm a cut above the GRUNTS you've seen\n"
-	.string "so far.\p"
-	.string "I'm not stalling for time.\n"
+	.string "I'm a cut above the GRUNTS.\n"
+	.string "And I'm not stalling for time.\p"
 	.string "I'm going to pulverize you!$"
 
 AquaHideout_B2F_Text_MattDefeat:
 	.string "Hehehe…\n"
-	.string "So, I lost, too…$"
+	.string "So, I lost too…$"
 
 AquaHideout_B2F_Text_OurBossGotThroughHisPreparations:
 	.string "Hehehe!\p"
@@ -107,17 +105,16 @@ AquaHideout_B2F_Text_OurBossGotThroughHisPreparations:
 
 AquaHideout_B2F_Text_MattPostBattle:
 	.string "Hehehe!\p"
-	.string "Our BOSS has already gone on his way to\n"
+	.string "The BOSS has already set off for\n"
 	.string "some cave under the sea!\p"
-	.string "If you're going to give chase, you'd\n"
-	.string "better search the big, wide sea beyond\l"
-	.string "LILYCOVE.\p"
-	.string "But will you find it then?\n"
+	.string "Give chase if you like. Search the\n"
+	.string "big, wide sea beyond LILYCOVE.\p"
+	.string "But will you find it?\n"
 	.string "Hehehe!$"
 
 AquaHideout_B2F_Text_Grunt4Intro:
-	.string "Wahahah, I grew weary of waiting!\n"
-	.string "You owe me a battle, too!$"
+	.string "Wahahah, I got tired of waiting!\n"
+	.string "You owe me a battle!$"
 
 AquaHideout_B2F_Text_Grunt4Defeat:
 	.string "Tired of waiting…\n"
@@ -132,9 +129,9 @@ AquaHideout_B2F_Text_Grunt4PostBattle:
 AquaHideout_B2F_Text_Grunt6Intro:
 	.string "Warp panels, the HIDEOUT's pride\n"
 	.string "and joy!\p"
-	.string "You're clueless about where you are,\n"
-	.string "aren't you?\p"
-	.string "Fluster and tire out the enemy, then\n"
+	.string "You're clueless about where you\n"
+	.string "are, aren't you?\p"
+	.string "Fluster and tire the enemy, then\n"
 	.string "lower the boom! That's our plan!$"
 
 AquaHideout_B2F_Text_Grunt6Defeat:
@@ -149,11 +146,12 @@ AquaHideout_B2F_Text_Grunt6PostBattle:
 
 AquaHideout_B2F_Text_Grunt8Intro:
 	.string "When I joined TEAM AQUA, the first\n"
-	.string "thing I had to learn was how these\l"
-	.string "warp panels connected.$"
+	.string "thing I learned was these panels.\p"
+	.string "Not reef surveys. Not cleanups.\n"
+	.string "Warp panels.$"
 
 AquaHideout_B2F_Text_Grunt8Defeat:
-	.string "I was too occupied thinking about\n"
+	.string "I was too busy thinking about\n"
 	.string "the warp panels…$"
 
 AquaHideout_B2F_Text_Grunt8PostBattle:

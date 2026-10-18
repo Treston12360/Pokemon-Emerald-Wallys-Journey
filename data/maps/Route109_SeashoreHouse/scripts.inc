@@ -149,7 +149,7 @@ Route109_SeashoreHouse_Text_DwayneIntro:
 
 Route109_SeashoreHouse_Text_DwayneDefeated:
 	.string "That was a hot battle!\n"
-	.string "I can accept that loss, matey!$"
+	.string "I accept that loss, matey!$"
 
 Route109_SeashoreHouse_Text_DwaynePostBattle:
 	.string "Hot battles and ice-cold SODA POP.\n"

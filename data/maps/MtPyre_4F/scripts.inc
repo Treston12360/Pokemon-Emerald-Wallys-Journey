@@ -17,6 +17,6 @@ MtPyre_5F_Text_AtsushiDefeat:
 	.string "Please forgive me!$"
 
 MtPyre_5F_Text_AtsushiPostBattle:
-	.string "Until I improve, my teacher, who rests\n"
-	.string "here, will never find true peace…$"
+	.string "Until I improve, my teacher, who\n"
+	.string "rests here, can't find peace…$"
 

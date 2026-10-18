@@ -33,8 +33,8 @@ MtPyre_3F_EventScript_RematchGabrielle::
 	end
 
 MtPyre_3F_Text_WilliamIntro:
-	.string "The rich atmosphere of the mountain\n"
-	.string "has elevated my psychic power!\p"
+	.string "This mountain's air has lifted my\n"
+	.string "psychic power!\p"
 	.string "A mere child like you…\n"
 	.string "You dream of winning?$"
 
@@ -51,21 +51,19 @@ MtPyre_3F_Text_WilliamPostBattle:
 
 MtPyre_3F_Text_KaylaIntro:
 	.string "Ahahahaha!\p"
-	.string "This is no place for children, least\n"
-	.string "of all you!$"
+	.string "This is no place for children,\n"
+	.string "least of all you!$"
 
 MtPyre_3F_Text_KaylaDefeat:
 	.string "I lost that cleanly…$"
 
 MtPyre_3F_Text_KaylaPostBattle:
-	.string "This means my training is still not\n"
-	.string "enough…\p"
-	.string "I've got to keep working toward the\n"
-	.string "summit…\p"
-	.string "Go, me!$"
+	.string "My training still isn't enough…\n"
+	.string "On to the summit! Go, me!$"
 
 MtPyre_3F_Text_GabrielleIntro:
-	.string "Why have you come here?$"
+	.string "Why have you come here?\n"
+	.string "To remember someone?$"
 
 MtPyre_3F_Text_GabrielleDefeat:
 	.string "That was amazing!\n"
@@ -86,8 +84,8 @@ MtPyre_3F_Text_GabrielleRegister:
 
 MtPyre_3F_Text_GabrielleRematchIntro:
 	.string "Oh, it's you…\p"
-	.string "Have you come to show me your grown\n"
-	.string "POKéMON?$"
+	.string "Have you come to show me how your\n"
+	.string "POKéMON have grown?$"
 
 MtPyre_3F_Text_GabrielleRematchDefeat:
 	.string "How amazing!\n"
@@ -95,9 +93,8 @@ MtPyre_3F_Text_GabrielleRematchDefeat:
 
 MtPyre_3F_Text_GabriellePostRematch:
 	.string "POKéMON no longer of this world.\n"
-	.string "POKéMON that are with you now.\p"
-	.string "And the POKéMON that you will meet\n"
-	.string "in the future…\p"
-	.string "They are all to be equally cherished.\n"
-	.string "I see that you've remembered that.$"
+	.string "POKéMON with you now.\p"
+	.string "And POKéMON you've yet to meet…\p"
+	.string "All are to be cherished equally.\n"
+	.string "I see you remember that.$"
 

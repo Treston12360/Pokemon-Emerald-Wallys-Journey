@@ -173,11 +173,13 @@ VictoryRoad_1F_Text_WallyPostBattle:
 	.string "Don't get comfortable.$"
 
 VictoryRoad_1F_Text_EdgarIntro:
-	.string "I've made it this far a couple times,\n"
-	.string "but the last stretch is so long…$"
+	.string "This is my fourth time on this road.\p"
+	.string "My kids think I'm crazy. Maybe.\n"
+	.string "But I'm not done yet!$"
 
 VictoryRoad_1F_Text_EdgarDefeat:
-	.string "My dream ends here again…$"
+	.string "My dream ends here again…\n"
+	.string "See you next year, road.$"
 
 VictoryRoad_1F_Text_EdgarPostBattle:
 	.string "I've tried this road before.\n"
@@ -188,8 +190,8 @@ VictoryRoad_1F_Text_EdgarPostBattle:
 	.string "I'm ready.$"
 
 VictoryRoad_1F_Text_AlbertIntro:
-	.string "I didn't come all this way to lose now.\n"
-	.string "That possibility doesn't exist!$"
+	.string "I didn't come all this way to\n"
+	.string "lose. That isn't possible!$"
 
 VictoryRoad_1F_Text_AlbertDefeat:
 	.string "Impossible…\n"
@@ -204,18 +206,21 @@ VictoryRoad_1F_Text_AlbertPostBattle:
 	.string "for more than victory.$"
 
 VictoryRoad_1F_Text_HopeIntro:
-	.string "This seemingly infinite and harsh road\n"
-	.string "lives up to its name of VICTORY.$"
+	.string "This harsh, endless road lives up\n"
+	.string "to its name of VICTORY.$"
 
 VictoryRoad_1F_Text_HopeDefeat:
 	.string "Your battle style is fantastic…$"
 
 VictoryRoad_1F_Text_HopePostBattle:
-	.string "You seem to have the potential for\n"
-	.string "becoming the CHAMPION.$"
+	.string "You could become CHAMPION.\p"
+	.string "I watched that boy from VERDANTURF\n"
+	.string "take the title on TV.\p"
+	.string "He looked like you do now.\n"
+	.string "Tired, and not stopping.$"
 
 VictoryRoad_1F_Text_QuincyIntro:
-	.string "What is the VICTORY ROAD?\n"
+	.string "What is VICTORY ROAD?\n"
 	.string "I'll tell you if you win!$"
 
 VictoryRoad_1F_Text_QuincyDefeat:
@@ -223,15 +228,15 @@ VictoryRoad_1F_Text_QuincyDefeat:
 	.string "Well done!$"
 
 VictoryRoad_1F_Text_QuincyPostBattle:
-	.string "Getting through here safely--that's\n"
-	.string "the final test for any TRAINER aiming\l"
-	.string "to become the POKéMON CHAMPION.\p"
-	.string "That's why it's called the VICTORY\n"
-	.string "ROAD.$"
+	.string "Getting through here is the final\n"
+	.string "test for anyone aiming at the title.\p"
+	.string "No one carries you. No one finds\n"
+	.string "the way for you.\p"
+	.string "That's why it's called VICTORY ROAD.$"
 
 VictoryRoad_1F_Text_KatelynnIntro:
-	.string "I have nothing to say to anyone\n"
-	.string "that's come this far. Come on!$"
+	.string "I've nothing to say to anyone\n"
+	.string "who's come this far. Come on!$"
 
 VictoryRoad_1F_Text_KatelynnDefeat:
 	.string "This is a disgrace…$"

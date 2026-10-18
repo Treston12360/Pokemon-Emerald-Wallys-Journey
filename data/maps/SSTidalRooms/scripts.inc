@@ -142,9 +142,9 @@ SSTidalRooms_Text_GarretDefeat:
 	.string "…That will do.$"
 
 SSTidalRooms_Text_GarretPostBattle:
-	.string "Perhaps I shall get Father to acquire\n"
-	.string "a yacht for me.\l"
-	.string "A yacht for me and POKéMON!$"
+	.string "Perhaps Father will buy me a yacht.\p"
+	.string "He says HOENN has no room left for\n"
+	.string "houses, so he buys boats instead.$"
 
 SSTidalRooms_Text_NaomiIntro:
 	.string "Oh, you're such an adorable TRAINER.\n"
@@ -156,10 +156,9 @@ SSTidalRooms_Text_NaomiDefeat:
 	.string "You're the active sort.$"
 
 SSTidalRooms_Text_NaomiPostBattle:
-	.string "A world cruise on a luxury liner has its\n"
-	.string "charms, I must say…\p"
-	.string "But, I will admit there is an appealing\n"
-	.string "side to touring HOENN by ferry.$"
+	.string "A world cruise has its charms…\p"
+	.string "But touring HOENN by ferry is\n"
+	.string "appealing in its own way.$"
 
 SSTidalRooms_Text_NotSuspiciousTakeThis:
 	.string "Uh… Hi! I… I'm not acting suspicious!\n"

@@ -62,8 +62,8 @@ Route110_TrickHousePuzzle1_Text_EddieDefeat:
 	.string "And now I've lost…$"
 
 Route110_TrickHousePuzzle1_Text_EddiePostBattle:
-	.string "I lost my way, I lost a battle, and I'm\n"
-	.string "now even more lost… I can't get out…$"
+	.string "Lost my way, lost a battle, and\n"
+	.string "now I'm even more lost…$"
 
 Route110_TrickHousePuzzle1_Text_RobinIntro:
 	.string "Just who is the TRICK MASTER?$"

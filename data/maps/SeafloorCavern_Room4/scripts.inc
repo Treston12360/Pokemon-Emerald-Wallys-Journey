@@ -20,7 +20,7 @@ SeafloorCavern_Room4_Text_Grunt3Defeat:
 
 SeafloorCavern_Room4_Text_Grunt3PostBattle:
 	.string "I can't find the way out!\p"
-	.string "I'm not afraid. Don't get me wrong!$"
+	.string "I'm not scared. Don't get me wrong!$"
 
 SeafloorCavern_Room4_Text_Grunt4Intro:
 	.string "Who are you?\n"
@@ -30,7 +30,7 @@ SeafloorCavern_Room4_Text_Grunt4Defeat:
 	.string "I failed to win!$"
 
 SeafloorCavern_Room4_Text_Grunt4PostBattle:
-	.string "My partner forgot the map in that\n"
+	.string "My partner left the map in the\n"
 	.string "submarine!\p"
-	.string "How's that for being useless?$"
+	.string "How useless is that?$"
 

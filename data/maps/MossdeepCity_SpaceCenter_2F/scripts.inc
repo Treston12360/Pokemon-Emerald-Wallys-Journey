@@ -413,8 +413,9 @@ MossdeepCity_SpaceCenter_2F_Text_Grunt7Intro:
 	.string "But I'm not about to let you do that!$"
 
 MossdeepCity_SpaceCenter_2F_Text_Grunt7Defeat:
-	.string "We should've taken a break…\n"
-	.string "That's what we should've done…$"
+	.string "We should've taken a break…\p"
+	.string "I haven't slept since the mountain.\n"
+	.string "None of us have.$"
 
 MossdeepCity_SpaceCenter_2F_Text_Grunt6PostBattle:
 	.string "Three of us here, and look at the sorry\n"

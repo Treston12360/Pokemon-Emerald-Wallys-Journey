@@ -114,6 +114,8 @@ AquaHideout_1F_Text_Grunt1Defeat:
 	.string "I lost it!$"
 
 AquaHideout_1F_Text_Grunt1PostBattle:
-	.string "I took the loss for the TEAM,\n"
-	.string "but I did my job…$"
+	.string "I took the loss, but I did my job.\p"
+	.string "Three years of beach cleanups with\n"
+	.string "the SEA TRUST. Nothing changed.\p"
+	.string "This, at least, gets noticed.$"
 

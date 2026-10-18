@@ -57,8 +57,8 @@ MtPyre_2F_Text_TumbledFromFloorAbove:
 	.string "the floor above.$"
 
 MtPyre_2F_Text_MarkIntro:
-	.string "Hey! Are you searching for POKéMON?\n"
-	.string "You came along after me! You're rude!$"
+	.string "Hey! Searching for POKéMON?\n"
+	.string "You followed me! How rude!$"
 
 MtPyre_2F_Text_MarkDefeat:
 	.string "Ayieeeeh!\n"
@@ -74,45 +74,39 @@ MtPyre_2F_Text_MarkPostBattle:
 
 MtPyre_2F_Text_LukeIntro:
 	.string "LUKE: We're here on a dare.\p"
-	.string "Heheh, if I show her how cool I am,\n"
-	.string "she'll fall for me. I know it!\p"
-	.string "I know! I'll cream you and show her\n"
-	.string "how cool I am!$"
+	.string "If I cream you, she'll see how cool\n"
+	.string "I am. I know it!$"
 
 MtPyre_2F_Text_LukeDefeat:
 	.string "LUKE: Whoopsie!$"
 
 MtPyre_2F_Text_LukePostBattle:
-	.string "LUKE: Well, we lost but that's okay!\n"
-	.string "I'm right here by your side.\l"
-	.string "We'll make it through this dare!$"
+	.string "LUKE: We lost, but that's okay!\n"
+	.string "I'm right here by your side!$"
 
 MtPyre_2F_Text_LukeNotEnoughMons:
-	.string "LUKE: If you want to take me on,\n"
-	.string "bring some more POKéMON.\p"
-	.string "If you don't, I won't be able to show\n"
-	.string "off to my girl how cool I am!$"
+	.string "LUKE: Bring more POKéMON if you\n"
+	.string "want to take me on.\p"
+	.string "Otherwise I can't show my girl\n"
+	.string "how cool I am!$"
 
 MtPyre_2F_Text_DezIntro:
 	.string "DEZ: I came here on a dare with my\n"
 	.string "boyfriend.\p"
-	.string "It's really scary, but I'm with my\n"
-	.string "boyfriend. It's okay.\p"
-	.string "I know! I'll get my boyfriend to look\n"
-	.string "cool by beating you!$"
+	.string "It's scary, but he's here.\n"
+	.string "I'll make him look cool by beating you!$"
 
 MtPyre_2F_Text_DezDefeat:
 	.string "DEZ: Waaaah! I'm scared!$"
 
 MtPyre_2F_Text_DezPostBattle:
-	.string "DEZ: We're lovey-dovey, so we don't\n"
-	.string "care if we lose!$"
+	.string "DEZ: We're lovey-dovey, so we\n"
+	.string "don't care if we lose!$"
 
 MtPyre_2F_Text_DezNotEnoughMons:
-	.string "DEZ: If you want to challenge us, you\n"
-	.string "should bring at least two POKéMON.\p"
-	.string "My boyfriend's strong.\n"
-	.string "Just one POKéMON won't do at all.$"
+	.string "DEZ: Bring at least two POKéMON if\n"
+	.string "you want to challenge us.\p"
+	.string "My boyfriend's strong. One won't do.$"
 
 MtPyre_2F_Text_LeahIntro:
 	.string "You are an unfamiliar sight…\n"
@@ -139,7 +133,6 @@ MtPyre_2F_Text_ZanderDefeat:
 	.string "I lost my wits!$"
 
 MtPyre_2F_Text_ZanderPostBattle:
-	.string "I get freaked out every time I see\n"
-	.string "anything move…\p"
-	.string "I shouldn't have come here to train…$"
+	.string "I freak out whenever anything\n"
+	.string "moves… I shouldn't train here…$"
 

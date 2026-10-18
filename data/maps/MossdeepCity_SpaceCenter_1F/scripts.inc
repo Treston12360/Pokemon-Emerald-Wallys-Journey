@@ -391,8 +391,9 @@ MossdeepCity_SpaceCenter_1F_Text_Grunt3Defeat:
 	.string "Ran out of fuel…$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt3PostBattle:
-	.string "Don't think you're on a roll just\n"
-	.string "because you've beaten me!$"
+	.string "Don't think you're on a roll!\p"
+	.string "…They told us the fuel would power\n"
+	.string "the new land. Not burn it.$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt1Intro:
 	.string "We gave you fair warning!\n"
@@ -400,10 +401,10 @@ MossdeepCity_SpaceCenter_1F_Text_Grunt1Intro:
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt1Defeat:
 	.string "Grrr…\n"
-	.string "We should've used sneaky treachery…$"
+	.string "We should've been sneaky…$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt1PostBattle:
-	.string "Okay, I get it already! The next time,\n"
+	.string "Fine, I get it! Next time,\n"
 	.string "we'll come unannounced.$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt4Intro:
@@ -412,7 +413,7 @@ MossdeepCity_SpaceCenter_1F_Text_Grunt4Intro:
 	.string "We mean to take every last bit of it!$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt4Defeat:
-	.string "Please, can you spare some fuel?\n"
+	.string "Please, spare some fuel?\n"
 	.string "Even a chintzy cup will do!$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt4PostBattle:

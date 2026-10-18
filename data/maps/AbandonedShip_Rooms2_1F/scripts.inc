@@ -58,8 +58,8 @@ AbandonedShip_Rooms2_1F_Text_DanDefeat:
 	.string "we worked together…$"
 
 AbandonedShip_Rooms2_1F_Text_DanPostBattle:
-	.string "DAN: We can't find any treasures…\n"
-	.string "I wonder if someone got them already?$"
+	.string "DAN: No treasures anywhere…\n"
+	.string "Did someone beat us to them?$"
 
 AbandonedShip_Rooms2_1F_Text_DanNotEnoughMons:
 	.string "DAN: You don't even have two POKéMON.\n"
@@ -75,8 +75,8 @@ AbandonedShip_Rooms2_1F_Text_KiraDefeat:
 
 AbandonedShip_Rooms2_1F_Text_KiraPostBattle:
 	.string "KIRA: Where could the treasures be?\p"
-	.string "I've already decided what I'm buying\n"
-	.string "when we find the treasures!$"
+	.string "If we find them, we're putting a\n"
+	.string "down payment on a house!$"
 
 AbandonedShip_Rooms2_1F_Text_KiraNotEnoughMons:
 	.string "KIRA: Oh, you don't have two POKéMON?\n"
@@ -133,7 +133,7 @@ AbandonedShip_Rooms2_1F_Text_JaniDefeat:
 	.string "That didn't go very well.$"
 
 AbandonedShip_Rooms2_1F_Text_JaniPostBattle:
-	.string "Walking around barefoot in this ship\n"
+	.string "Walking barefoot in this ship\n"
 	.string "is kind of gross.$"
 
 AbandonedShip_Rooms2_1F_Text_GarrisonIntro:

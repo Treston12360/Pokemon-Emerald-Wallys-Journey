@@ -125,18 +125,18 @@ MagmaHideout_4F_EventScript_Tabitha::
 	end
 
 MagmaHideout_4F_Text_Grunt11Intro:
-	.string "I want to see GROUDON, too, but they\n"
-	.string "won't let me see even its tail…\p"
-	.string "It's got me feeling really frustrated.\p"
+	.string "I want to see GROUDON too, but they\n"
+	.string "won't even show me its tail!\p"
 	.string "Oh, no!\n"
 	.string "I blabbed about GROUDON!$"
 
 MagmaHideout_4F_Text_Grunt11Defeat:
-	.string "I guess it's impossible to win if one\n"
-	.string "doesn't have a calm mind…$"
+	.string "You can't win without a calm\n"
+	.string "mind, I guess…$"
 
 MagmaHideout_4F_Text_Grunt11PostBattle:
-	.string "I wonder if GROUDON even has a tail?$"
+	.string "I wonder if GROUDON even has\n"
+	.string "a tail?$"
 
 MagmaHideout_4F_Text_Grunt12Intro:
 	.string "Fuhahaha!\n"
@@ -153,7 +153,7 @@ MagmaHideout_4F_Text_Grunt12PostBattle:
 
 MagmaHideout_4F_Text_Grunt13Intro:
 	.string "You're not finished yet!\n"
-	.string "You're not getting by me easily!$"
+	.string "You won't get by me easily!$"
 
 MagmaHideout_4F_Text_Grunt13Defeat:
 	.string "Was I that easy to knock down?$"
@@ -179,7 +179,7 @@ MagmaHideout_4F_Text_TabithaDefeat:
 	.string "Hehe…$"
 
 MagmaHideout_4F_Text_TabithaPostBattle:
-	.string "…And while you wasted time with me,\n"
+	.string "…And while you wasted time on me,\n"
 	.string "MAXIE should have awakened GROUDON…$"
 
 MagmaHideout_4F_Text_MaxieAwakenGroudon:
@@ -208,7 +208,7 @@ MagmaHideout_4F_Text_MaxieOhItWasYou:
 	.string "You must have pulled a cheap stunt!$"
 
 MagmaHideout_4F_Text_MaxieDefeat:
-	.string "What makes you so adept at handling\n"
+	.string "How are you so adept with\n"
 	.string "POKéMON?$"
 
 MagmaHideout_4F_Text_MaxieImGoingAfterGroudon:

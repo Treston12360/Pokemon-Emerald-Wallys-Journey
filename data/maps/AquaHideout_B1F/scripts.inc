@@ -107,8 +107,8 @@ AquaHideout_B1F_EventScript_Grunt7::
 	end
 
 AquaHideout_B1F_Text_Grunt2Intro:
-	.string "If you want to know the secret about\n"
-	.string "our HIDEOUT, you have me to beat!$"
+	.string "Want to know our HIDEOUT's secret?\n"
+	.string "You have to beat me first!$"
 
 AquaHideout_B1F_Text_Grunt2Defeat:
 	.string "I can't win at all…$"
@@ -130,17 +130,17 @@ AquaHideout_B1F_Text_Grunt3Defeat:
 	.string "I took a serious licking!$"
 
 AquaHideout_B1F_Text_Grunt3PostBattle:
-	.string "Humph!\n"
-	.string "This was supposed to happen!\p"
-	.string "My mission was to just hold you up!$"
+	.string "Humph! This was the plan anyway!\n"
+	.string "My job was to hold you up!$"
 
 AquaHideout_B1F_Text_Grunt5Intro:
-	.string "Yawn… Keeping watch over the\n"
-	.string "HIDEOUT bores me. I'll take you on.$"
+	.string "Yawn… Guarding the HIDEOUT is\n"
+	.string "boring. I'll take you on.$"
 
 AquaHideout_B1F_Text_Grunt5Defeat:
-	.string "Yawn…\n"
-	.string "Oh, I lost…$"
+	.string "Yawn… Oh, I lost…\p"
+	.string "I signed up to save WINGULL, you\n"
+	.string "know. Not to stand in a cave.$"
 
 AquaHideout_B1F_Text_Grunt5PostBattle:
 	.string "If you scurry too much, other TEAM\n"
@@ -149,14 +149,13 @@ AquaHideout_B1F_Text_Grunt5PostBattle:
 	.string "about quitting after this.$"
 
 AquaHideout_B1F_Text_Grunt7Intro:
-	.string "Hey!\n"
-	.string "You there!\p"
-	.string "Which do you think is cooler?\n"
-	.string "TEAM AQUA's uniform or TEAM MAGMA's?$"
+	.string "Hey! You there!\p"
+	.string "Which uniform is cooler?\n"
+	.string "TEAM AQUA's or TEAM MAGMA's?$"
 
 AquaHideout_B1F_Text_Grunt7Defeat:
 	.string "I lost in a cool way…$"
 
 AquaHideout_B1F_Text_Grunt7PostBattle:
-	.string "If you have a cool uniform, you look\n"
-	.string "good even in a loss, don't you think?$"
+	.string "With a cool uniform you look good\n"
+	.string "even when you lose, right?$"

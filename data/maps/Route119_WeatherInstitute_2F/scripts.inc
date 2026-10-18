@@ -208,7 +208,7 @@ Route119_WeatherInstitute_2F_Text_Grunt2Intro:
 	.string "We're taking it!$"
 
 Route119_WeatherInstitute_2F_Text_Grunt2Defeat:
-	.string "Our plan's being spoiled by a kid?$"
+	.string "Our plan, spoiled by a kid?$"
 
 Route119_WeatherInstitute_2F_Text_Grunt2PostBattle:
 	.string "A POKéMON that shifts the weather?\n"
@@ -221,7 +221,9 @@ Route119_WeatherInstitute_2F_Text_Grunt3Intro:
 	.string "rare turns up, so do we!$"
 
 Route119_WeatherInstitute_2F_Text_Grunt3Defeat:
-	.string "You got me!$"
+	.string "You got me!\p"
+	.string "We only want the storm data. Floods\n"
+	.string "hit PACIFIDLOG every year!$"
 
 Route119_WeatherInstitute_2F_Text_Grunt3PostBattle:
 	.string "You don't know what the sea looked\n"
@@ -244,11 +246,10 @@ Route119_WeatherInstitute_2F_Text_Grunt5PostBattle:
 	.string "I don't have a good answer.$"
 Route119_WeatherInstitute_2F_Text_ShellyIntro:
 	.string "Ahahahaha!\p"
-	.string "You're going to meddle in TEAM AQUA's\n"
+	.string "You'll meddle in TEAM AQUA's\n"
 	.string "affairs?\p"
-	.string "You're either absolutely fearless,\n"
-	.string "simply ignorant, or both!\p"
-	.string "You're so cute, you're disgusting!\n"
+	.string "You're fearless, ignorant, or both!\p"
+	.string "So cute, it's disgusting!\n"
 	.string "I'll put you down, kiddy!$"
 
 Route119_WeatherInstitute_2F_Text_ShellyDefeat:
