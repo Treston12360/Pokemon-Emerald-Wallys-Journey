@@ -1198,8 +1198,9 @@ RustboroCity_Text_MayImNotGoingToLose:
 	.string "{PLAYER}{KUN}. I'm not going to lose!$"
 
 RustboroCity_Text_MayDefeat:
-	.string "Yikes!\n"
-	.string "You're better than I expected!$"
+	.string "Yikes! You're catching up fast!\p"
+	.string "I spent all week logging WURMPLE\n"
+	.string "for Dad instead of training. Worth it.$"
 
 RustboroCity_Text_MayMrBrineyHint:
 	.string "MAY: Oh, by the way, MR. BRINEY, who\n"
@@ -1244,8 +1245,9 @@ RustboroCity_Text_BrendanIWontGoEasy:
 	.string "a TRAINER, but I won't go easy!$"
 
 RustboroCity_Text_BrendanDefeat:
-	.string "Hmm…\n"
-	.string "You're pretty good.$"
+	.string "Hmm… You're pretty good.\p"
+	.string "I've been a TRAINER way longer.\n"
+	.string "That's not supposed to happen.$"
 
 RustboroCity_Text_BrendanMrBrineyHint:
 	.string "BRENDAN: By the way, you know\n"

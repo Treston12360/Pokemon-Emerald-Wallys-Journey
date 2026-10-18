@@ -483,10 +483,10 @@ Route119_Text_MayIntro:
 	.string "Of course you are! Go!$"
 
 Route119_Text_MayDefeat:
-	.string "Achah!\n"
-	.string "{PLAYER}{KUN}, you're strong!\p"
-	.string "I was worried that you might be\n"
-	.string "struggling with your training.$"
+	.string "Achah! {PLAYER}{KUN}, you're strong!\p"
+	.string "Dad hasn't slept right since the\n"
+	.string "rain started. Neither have I.\p"
+	.string "I'm glad one of us is doing great.$"
 
 Route119_Text_MayResearchAfterBattle:
 	.string "MAY: You keep surprising me,\n"
@@ -513,8 +513,11 @@ Route119_Text_BrendanIntro:
 	.string "It's a battle, so battle!$"
 
 Route119_Text_BrendanDefeat:
-	.string "Hmm…\n"
-	.string "You've gotten pretty darn decent.$"
+	.string "Hmm… You've gotten pretty darn\n"
+	.string "decent.\p"
+	.string "Dad's been at the LAB every night\n"
+	.string "since this rain started.\p"
+	.string "Guess both our dads are like that.$"
 
 Route119_Text_BrendanIllGiveYouThis:
 	.string "BRENDAN: I'd say you're good enough\n"

@@ -469,10 +469,10 @@ LilycoveCity_Text_MayWontBeBeaten:
 
 LilycoveCity_Text_MayDefeat:
 	.string "… … … … … … … …\p"
-	.string "I remember the battle I had with you,\n"
-	.string "{PLAYER}{KUN}, on ROUTE 103.\p"
-	.string "That battle helped you become this\n"
-	.string "strong, {PLAYER}{KUN}, didn't it?$"
+	.string "Remember ROUTE 103, {PLAYER}{KUN}?\n"
+	.string "I was showing you the ropes.\p"
+	.string "Now you're way past me. And I think\n"
+	.string "I'm okay with that.$"
 
 LilycoveCity_Text_MayGoingBackToLittleroot:
 	.string "MAY: I'm heading back to LITTLEROOT.\p"
@@ -532,10 +532,11 @@ LilycoveCity_Text_BrendanWontBeBeaten:
 	.string "going to lose to no {PLAYER}.$"
 
 LilycoveCity_Text_BrendanDefeat:
-	.string "Humph…\n"
-	.string "You've done a lot of raising.\p"
-	.string "That stings a bit--I had a head start\n"
-	.string "on you as a TRAINER…$"
+	.string "Humph… You've done a lot of raising.\p"
+	.string "I had a head start, and you blew\n"
+	.string "right past it.\p"
+	.string "Maybe battling was never really my\n"
+	.string "thing. Don't tell anyone.$"
 
 LilycoveCity_Text_BrendanGoingBackToLittleroot:
 	.string "BRENDAN: I'm going home to LITTLEROOT.\p"

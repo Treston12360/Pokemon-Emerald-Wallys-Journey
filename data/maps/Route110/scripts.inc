@@ -770,8 +770,9 @@ Route110_Text_MayLetsBattle:
 	.string "How about a little battle?$"
 
 Route110_Text_MayDefeated:
-	.string "Yikes!\n"
-	.string "You're better than I expected!$"
+	.string "Yikes! Okay, you're better than me.\p"
+	.string "…Honestly, I had more fun counting\n"
+	.string "the POKéMON under CYCLING ROAD.$"
 
 Route110_Text_MayTakeThis:
 	.string "MAY: {PLAYER}{KUN}, you've been busy\n"
@@ -796,8 +797,9 @@ Route110_Text_BrendanLetsBattle:
 	.string "I'll check for you.$"
 
 Route110_Text_BrendanDefeated:
-	.string "Hmm…\n"
-	.string "You're pretty good.$"
+	.string "Hmm… You're pretty good.\p"
+	.string "I was busy watching how your\n"
+	.string "POKéMON moved. For Dad. Mostly.$"
 
 Route110_Text_BrendanTakeThis:
 	.string "BRENDAN: {PLAYER}, you've trained\n"

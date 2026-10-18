@@ -1111,8 +1111,9 @@ Route104_Text_MayIntro:
 	.string "{PLAYER}{KUN}. I'm not going to lose!$"
 
 Route104_Text_MayDefeat:
-	.string "Yikes!\n"
-	.string "You're better than I expected!$"
+	.string "Yikes! You're catching up fast!\p"
+	.string "I spent all week logging WURMPLE\n"
+	.string "for Dad instead of training. Worth it.$"
 
 Route104_Text_MayPostBattle:
 	.string "MAY: I can tell you've gotten pretty\n"
@@ -1155,8 +1156,9 @@ Route104_Text_BrendanIntro:
 	.string "a TRAINER, but I won't go easy!$"
 
 Route104_Text_BrendanDefeat:
-	.string "Hmm…\n"
-	.string "You're pretty good.$"
+	.string "Hmm… You're pretty good.\p"
+	.string "I've been a TRAINER way longer.\n"
+	.string "That's not supposed to happen.$"
 
 Route104_Text_BrendanPostBattle:
 	.string "BRENDAN: You've gotten pretty decent\n"
