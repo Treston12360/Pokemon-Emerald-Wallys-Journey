@@ -149,20 +149,28 @@ LilycoveCity_House3_Text_HappyToHaveQuadruplets:
 	.string "it makes me happy.$"
 
 LilycoveCity_House3_Text_GoingToWinMultiBattles:
-	.string "We're having MULTI BATTLES, but I know\n"
-	.string "I'm going to win.$"
+	.string "We're having MULTI BATTLES, and I'm\n"
+	.string "going to win!\p"
+	.string "I'm TATE and she's LIZA. We\n"
+	.string "practice finishing each other's\l"
+	.string "sentences.$"
 
 LilycoveCity_House3_Text_LikeMixingAtRecordCorner:
-	.string "We like mixing stuff at\n"
-	.string "the RECORD CORNER.\p"
-	.string "But what gets mixed up?$"
+	.string "My big brother says STEVEN STONE\n"
+	.string "was the strongest TRAINER in HOENN.\p"
+	.string "But he never wanted to be\n"
+	.string "CHAMPION. Who doesn't want to be\l"
+	.string "CHAMPION?$"
 
 LilycoveCity_House3_Text_MakePokeblocksWithBerryBlender:
-	.string "We're going to make super {POKEBLOCK}S\n"
-	.string "with a BERRY BLENDER!$"
+	.string "We're making {POKEBLOCK}S! All four\n"
+	.string "of us share one room.\p"
+	.string "Mom says it's cozy. Dad says it's\n"
+	.string "temporary. They've said that for\l"
+	.string "three years.$"
 
 LilycoveCity_House3_Text_GoingToEnterContest:
-	.string "I want to brag about how tough my\n"
-	.string "POKéMON is, so we're going to enter\l"
-	.string "a CONTEST together.$"
+	.string "My MARILL is going in a CONTEST!\p"
+	.string "We found her in a net full of trash\n"
+	.string "by the docks. Now look at her.$"
 

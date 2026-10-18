@@ -12,7 +12,10 @@ AbandonedShip_Rooms_B1F_EventScript_FatMan::
 
 AbandonedShip_Rooms_B1F_Text_GettingQueasy:
 	.string "Urrrrppp…\p"
-	.string "I'm getting queasy just being aboard\n"
-	.string "this ship…\p"
-	.string "It's not even moving, but…$"
+	.string "It's not even moving, and I'm\n"
+	.string "queasy. How did people LIVE on\l"
+	.string "these things?\p"
+	.string "Then again, how do people live in\n"
+	.string "PACIFIDLOG? Same answer, I guess.\l"
+	.string "They had no choice.$"
 

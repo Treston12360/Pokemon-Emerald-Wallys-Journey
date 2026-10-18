@@ -52,9 +52,11 @@ MossdeepCity_House2_Movement_WingullExitEast:
 	step_end
 
 MossdeepCity_House2_Text_SisterMailsBoyfriendInFortree:
-	.string "My little sister exchanges MAIL with\n"
-	.string "her boyfriend in FORTREE.\p"
-	.string "I don't envy her one bit at all.$"
+	.string "TATE and LIZA finish each other's\n"
+	.string "sentences.\p"
+	.string "Their mother says they did it before\n"
+	.string "they could talk. Now they do it in\l"
+	.string "battle.$"
 
 MossdeepCity_House2_Text_PokemonCarriesMailBackAndForth:
 	.string "My friend lives in FORTREE. My\n"

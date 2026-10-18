@@ -105,7 +105,11 @@ PetalburgCity_WallysHouse_Text_ThanksForPlayingWithWally:
 	.string "gotten by now?$"
 
 PetalburgCity_WallysHouse_Text_WonderHowWallyIsDoing:
-	.string "I wonder how our WALLY is doing?$"
+	.string "I wonder how our WALLY is doing.\p"
+	.string "He writes that he's fine. He always\n"
+	.string "writes that he's fine.\p"
+	.string "He gets that from me. I hope that's\n"
+	.string "all he gets from me.$"
 
 PetalburgCity_WallysHouse_Text_PleaseExcuseUs:
 	.string "{PLAYER}{KUN}! Please excuse us for\n"

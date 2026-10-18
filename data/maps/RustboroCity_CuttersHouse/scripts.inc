@@ -37,10 +37,12 @@ RustboroCity_CuttersHouse_Text_ExplainCut:
 	.string "knows CUT or can learn it.$"
 
 RustboroCity_CuttersHouse_Text_DadHelpedClearLandOfTrees:
-	.string "When they were expanding the city of\n"
-	.string "RUSTBORO, my dad helped out.\p"
-	.string "He made his POKéMON use CUT to clear\n"
-	.string "the land of trees.$"
+	.string "My dad helped clear the forest when\n"
+	.string "RUSTBORO grew.\p"
+	.string "He was proud of it back then.\p"
+	.string "Now when it rains, the hillside\n"
+	.string "washes into the creek. He doesn't\l"
+	.string "talk about it anymore.$"
 
 
 RustboroCity_CuttersHouse_Text_NewCutDialogue:

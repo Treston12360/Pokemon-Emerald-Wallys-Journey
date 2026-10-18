@@ -27,11 +27,13 @@ SootopolisCity_House4_Text_AncientTreasuresWaitingInSea:
 	.string "Maybe it doesn't want to be found.$"
 
 SootopolisCity_House4_Text_StrollUnderwaterWithPokemon:
-	.string "Ancient treasures…\p"
-	.string "It would be nice if they existed, but\n"
-	.string "even if they didn't, it would be so\l"
-	.string "beautiful to take an underwater\l"
-	.string "stroll with my POKéMON.$"
+	.string "JUAN taught WALLACE everything.\n"
+	.string "Dance, water, patience.\p"
+	.string "When WALLACE left for the LEAGUE,\n"
+	.string "JUAN came out of retirement to keep\l"
+	.string "the GYM.\p"
+	.string "He says teaching is how you stay\n"
+	.string "young. His back disagrees.$"
 
 SootopolisCity_House4_Text_Azumarill:
 	.string "AZUMARILL: Marurii.$"

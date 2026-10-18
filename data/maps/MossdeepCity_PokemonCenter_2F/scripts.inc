@@ -23,7 +23,11 @@ MossdeepCity_PokemonCenter_2F_EventScript_Woman5::
 	end
 
 MossdeepCity_PokemonCenter_2F_Text_Woman5:
-	.string "If I win a whole lot of link battles\n"
-	.string "and show everyone how good I am,\l"
-	.string "I might get a fan following!$"
+	.string "The SPACE CENTER tracks every\n"
+	.string "falling star.\p"
+	.string "One scientist told me some of them\n"
+	.string "carry something alive inside.\p"
+	.string "She laughed after she said it.\n"
+	.string "She didn't look like she was\l"
+	.string "joking.$"
 

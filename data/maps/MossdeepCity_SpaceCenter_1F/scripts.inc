@@ -317,8 +317,12 @@ MossdeepCity_SpaceCenter_1F_Text_FoundThisYouCanHaveIt:
 	.string "have it.$"
 
 MossdeepCity_SpaceCenter_1F_Text_HoennFamousForMeteorShowers:
-	.string "The HOENN region has been famous for \n"
-	.string "its meteor showers for a long time.$"
+	.string "HOENN has been famous for meteor\n"
+	.string "showers for a long time.\p"
+	.string "The big one that hit METEOR FALLS\n"
+	.string "changed the cliffs forever.\p"
+	.string "Some of the rock that came down\n"
+	.string "with it still hasn't been explained.$"
 
 MossdeepCity_SpaceCenter_1F_Text_MagmaCantStealFuelTakeThis:
 	.string "TEAM MAGMA can't be allowed to steal\n"

@@ -22,5 +22,8 @@ AbandonedShip_Corridors_1F_Text_CharliePostBattle:
 	.string "while hanging on to an inner tube!$"
 
 AbandonedShip_Corridors_1F_Text_IsntItFunHere:
-	.string "Isn't it fun here?\n"
-	.string "I get excited just being here!$"
+	.string "Isn't it fun here?\p"
+	.string "My grandpa won't come near it. He\n"
+	.string "says the sea took enough people that\l"
+	.string "night. It doesn't need us poking\l"
+	.string "around.$"

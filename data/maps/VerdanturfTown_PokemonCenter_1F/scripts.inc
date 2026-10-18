@@ -25,12 +25,13 @@ VerdanturfTown_PokemonCenter_1F_EventScript_ExpertM::
 	end
 
 VerdanturfTown_PokemonCenter_1F_Text_FaithInYourPokemon:
-	.string "You can't consider yourself a real\n"
-	.string "TRAINER if you don't have faith\l"
-	.string "in your POKéMON.\p"
-	.string "Only those people who can believe\n"
-	.string "in their battling POKéMON can win\l"
-	.string "through to the very end.$"
+	.string "The tunnel to RUSTBORO was DEVON's\n"
+	.string "idea. Faster shipping.\p"
+	.string "They stopped digging when the\n"
+	.string "WHISMUR started going deaf from\l"
+	.string "the drills.\p"
+	.string "Took a lot of complaining. But they\n"
+	.string "did stop. Give them that.$"
 
 VerdanturfTown_PokemonCenter_1F_Text_VisitForBattleTent:
 	.string "Why would anyone visit VERDANTURF?\p"

@@ -31,8 +31,11 @@ Route111_Text_GoingToTryToMakeDifferentColorBerries:
 	.string "I hope you try hard, too!$"
 
 Route111_Text_WhatColorBerriesToLookForToday:
-	.string "I wonder what color BERRIES I'll look\n"
-	.string "for today?$"
+	.string "BERRIES grow strange out here by\n"
+	.string "the desert.\p"
+	.string "My mother says the sand moves a\n"
+	.string "little closer every year. Nobody\l"
+	.string "knows how to stop it.$"
 
 Route114_Text_LoveUsingBerryCrushShareBerry:
 	.string "I love using the BERRY CRUSH machine,\n"
@@ -44,9 +47,11 @@ Route114_Text_TryBerryCrushWithFriends:
 	.string "machine with your friends.$"
 
 Route114_Text_FunToThinkAboutBerries:
-	.string "Which BERRY should be planted?\n"
-	.string "Should you use or hoard BERRIES?\p"
-	.string "It's fun to think about.$"
+	.string "My family's farmed BERRIES here\n"
+	.string "for four generations.\p"
+	.string "Some years, the ash comes down\n"
+	.string "like snow. Those years, we eat what\l"
+	.string "we were going to sell.$"
 
 Route120_Text_BerriesExpressionOfLoveIsntIt:
 	.string "BERRIES grow by soaking up sunlight.\p"
@@ -69,8 +74,11 @@ Route120_Text_BerryIsRareRaiseItWithCare:
 	.string "I hope you raise it with loving care.$"
 
 Route120_Text_IllGetMoreBerriesFromBerryMaster:
-	.string "I'll get more BERRIES from\n"
-	.string "the BERRY MASTER.$"
+	.string "I'll get more BERRIES from the\n"
+	.string "BERRY MASTER.\p"
+	.string "He gives them away for free. Says\n"
+	.string "food belongs to whoever's hungry.\l"
+	.string "DEVON hates him.$"
 
 LilycoveCity_Text_BerrySuitsYou:
 	.string "When it gets right down to it…\p"
@@ -85,8 +93,11 @@ LilycoveCity_Text_BecauseYoureTrainer:
 
 LilycoveCity_Text_PokeblocksSuitPokemon:
 	.string "When it gets right down to it…\p"
-	.string "The way dignified simplicity suits me,\n"
-	.string "{POKEBLOCK}S perfectly suit POKéMON.$"
+	.string "LILYCOVE was built on land that was\n"
+	.string "sea fifty years ago.\p"
+	.string "Every city in HOENN is a fight\n"
+	.string "between land and water. We just\l"
+	.string "usually lose slower.$"
 
 Route123_BerryMastersHouse_Text_YoureDeservingOfBerry:
 	.string "You may call me the BERRY MASTER.\p"
@@ -127,9 +138,11 @@ Route123_BerryMastersHouse_Text_GoodSayingTakeThis:
 	.string "I want you to have this.$"
 
 Route123_BerryMastersHouse_Text_JoyNeverGoesOutOfMyLife:
-	.string "Our four grandchildren should become\n"
-	.string "more accomplished than my husband.\p"
-	.string "Joy never goes out of my life!$"
+	.string "My husband plants a BERRY tree for\n"
+	.string "every grandchild.\p"
+	.string "Four trees so far. He says when\n"
+	.string "they're grown, they'll feed\l"
+	.string "someone we'll never meet.$"
 
 Route123_BerryMastersHouse_Text_Ah:
 	.string "Ah…$"

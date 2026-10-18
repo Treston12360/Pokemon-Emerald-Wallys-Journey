@@ -746,9 +746,12 @@ MauvilleCity_GameCorner_Text_CoinsAreNeededToPlay:
 	.string "in the GAME CORNER.$"
 
 MauvilleCity_GameCorner_Text_RouletteOnlyLuck:
-	.string "This ROULETTE thing…\n"
-	.string "It's rather demanding.\p"
-	.string "Win or lose, it's only by luck.$"
+	.string "WATTSON built MAUVILLE under one\n"
+	.string "roof so nobody would freeze or flood.\p"
+	.string "Now there's a three-year wait for\n"
+	.string "an apartment. Under one roof.\p"
+	.string "He still says yes to everyone. That's\n"
+	.string "the problem. Wahahaha, he'd say.$"
 
 MauvilleCity_GameCorner_Text_UpTo3CoinsCanBeUsed:
 	.string "Up to three COINS can be used to play\n"

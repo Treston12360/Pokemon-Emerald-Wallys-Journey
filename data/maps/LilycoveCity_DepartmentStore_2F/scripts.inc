@@ -102,14 +102,21 @@ LilycoveCity_DepartmentStore_2F_Pokemart2:
 	pokemartlistend
 
 LilycoveCity_DepartmentStore_2F_Text_LearnToUseItemsProperly:
-	.string "Learn to use items properly.\n"
-	.string "That's basic, really.$"
+	.string "Prices keep going up. Rent too.\p"
+	.string "My grandmother bought her house\n"
+	.string "here with a fisherman's pay.\p"
+	.string "I couldn't buy a closet with mine.$"
 
 LilycoveCity_DepartmentStore_2F_Text_GoodGiftForHusband:
-	.string "My husband is waiting at home.\n"
-	.string "What would make a good gift for him?$"
+	.string "My husband fishes off the cove.\p"
+	.string "He used to bring home LUVDISC by\n"
+	.string "the bucket. Now one, maybe two.\p"
+	.string "The new docks went in. The fish\n"
+	.string "went out.$"
 
 LilycoveCity_DepartmentStore_2F_Text_StockUpOnItems:
-	.string "I'm leaving on a long journey soon.\n"
-	.string "I need to stock up on items.$"
+	.string "They want to fill in part of the\n"
+	.string "cove to build apartments.\p"
+	.string "We need homes. The sea needs room.\n"
+	.string "I don't know who's right.$"
 

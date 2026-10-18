@@ -94,16 +94,19 @@ LilycoveCity_CoveLilyMotel_2F_Text_ImTheGraphicArtist:
 	.string "POKéMON of HOENN interesting?$"
 
 LilycoveCity_CoveLilyMotel_2F_Text_GirlsAreCute:
-	.string "The girl TUBERS, they're cute, hey?\n"
-	.string "To battle against a cute TUBER…\p"
-	.string "Whoop, it's so awesome!\p"
-	.string "And the TWINS! Aren't they cute?\n"
-	.string "A 2-on-2 battle with TWINS…\p"
-	.string "Whoop, it's unbearably fun!$"
+	.string "I came all the way from the north,\n"
+	.string "like GLACIA did.\p"
+	.string "Everyone says HOENN is warm.\n"
+	.string "The people, I mean. The weather's\l"
+	.string "just hot.$"
 
 LilycoveCity_CoveLilyMotel_2F_Text_SeaBreezeTicklesHeart:
-	.string "The sea breeze tickles my heart.\n"
-	.string "It feels wonderful here!$"
+	.string "My brother joined the SEA TRUST to\n"
+	.string "clean beaches.\p"
+	.string "Now he calls it TEAM AQUA and comes\n"
+	.string "home at three in the morning.\p"
+	.string "He says it's for the sea. He used to\n"
+	.string "say it with a smile.$"
 
 LilycoveCity_CoveLilyMotel_2F_Text_NeverLeaveWithoutGameBoy:
 	.string "You never know when and where\n"

@@ -206,10 +206,10 @@ SafariZone_South_Text_Boy:
 	.string "POKéMON gather around.$"
 
 SafariZone_South_Text_Man:
-	.string "I want to keep going deeper, but I\n"
-	.string "forgot to bring a BIKE.\p"
-	.string "Something tells me that rare POKéMON\n"
-	.string "live in the outlying areas.$"
+	.string "Rare POKéMON live in the outer\n"
+	.string "areas.\p"
+	.string "That's where they're safest. Far\n"
+	.string "from us.$"
 
 SafariZone_Southwest_Text_Woman:
 	.string "Sometimes, when I toss a {POKEBLOCK} at \n"
@@ -218,19 +218,26 @@ SafariZone_Southwest_Text_Woman:
 	.string "about what they eat?$"
 
 SafariZone_Northwest_Text_Man:
-	.string "Gasp… Gasp…\n"
-	.string "I…made it out here…but…\p"
-	.string "I'm exhausted… I don't have the\n"
-	.string "energy to catch POKéMON…$"
+	.string "Gasp… I made it out here…\p"
+	.string "The rangers wanted to pave a path.\n"
+	.string "The old warden said no. Said the\l"
+	.string "POKéMON should set the pace.\p"
+	.string "I respect it. My legs don't.$"
 
 SafariZone_North_Text_Fisherman:
-	.string "I'm on a mission to find WATER POKéMON\n"
-	.string "you don't see in HOENN.\p"
-	.string "Do you have any idea where the lake is?$"
+	.string "The SAFARI ZONE is a reserve.\p"
+	.string "POKéMON from other regions whose\n"
+	.string "homes were lost live here safe.\p"
+	.string "They say there's a lake in here.\n"
+	.string "I'd like to see what found shelter\l"
+	.string "in it.$"
 
 SafariZone_North_Text_Man:
-	.string "I'm going to catch a lot of rare POKéMON\n"
-	.string "here and trade them with my friends!$"
+	.string "Catching here is allowed, but\n"
+	.string "counted.\p"
+	.string "The rangers track every POKéMON\n"
+	.string "that leaves. Too many, and the gates\l"
+	.string "close for a season.$"
 
 SafariZone_South_Text_Youngster:
 	.string "I put a {POKEBLOCK} on the {POKEBLOCK} FEEDER.\n"
@@ -280,18 +287,21 @@ SafariZone_South_Text_AreaOffLimits2:
 	.string "It's off-limits, sorry!$"
 
 SafariZone_Southeast_Text_LittleGirl:
-	.string "Wow! Whee! I haven't seen any of\n"
-	.string "these POKéMON before!$"
+	.string "Wow! I've never seen these POKéMON!\p"
+	.string "The ranger said their real homes\n"
+	.string "are gone. So this is their home now.$"
 
 SafariZone_Southeast_Text_FatMan:
-	.string "The POKéMON in this area are all\n"
-	.string "new to me.\p"
-	.string "And I'm allowed to catch these rare\n"
-	.string "POKéMON! Too cool!$"
+	.string "These POKéMON are all new to me!\p"
+	.string "The expansion was paid for by DEVON.\n"
+	.string "They put a plaque up. A big one.$"
 
 SafariZone_Southeast_Text_RichBoy:
-	.string "The POKéMON around here seem to be\n"
-	.string "from somewhere other than HOENN.$"
+	.string "These POKéMON came from far away.\p"
+	.string "Father says they were rescued from\n"
+	.string "regions that ran out of wild land.\p"
+	.string "He says HOENN won't. I'm not sure\n"
+	.string "he's right.$"
 
 SafariZone_Northeast_Text_Boy:
 	.string "I only have a couple SAFARI BALLS left.\p"
@@ -299,8 +309,10 @@ SafariZone_Northeast_Text_Boy:
 	.string "decide what I should catch.$"
 
 SafariZone_Northeast_Text_Woman:
-	.string "I heard that you can see PIKACHU here.\n"
-	.string "Where might one be?$"
+	.string "I heard you can see PIKACHU here.\p"
+	.string "They're common in KANTO. Here\n"
+	.string "they're a treasure. Funny how\l"
+	.string "that works.$"
 
 SafariZone_Northeast_Text_Girl:
 	.string "Oh, boo!\n"

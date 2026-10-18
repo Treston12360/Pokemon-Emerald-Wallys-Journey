@@ -10,10 +10,13 @@ SlateportCity_House_EventScript_Girl::
 	end
 
 SlateportCity_House_Text_NatureToDoWithStatGains:
-	.string "My POKéMON has a HASTY nature.\p"
-	.string "It's faster than my others. Natures\n"
-	.string "shape how they grow. Same with\l"
-	.string "people, my mom says.$"
+	.string "My grandmother had a story about a\n"
+	.string "titan of the sea.\p"
+	.string "When people took too much from the\n"
+	.string "ocean, it rose and swallowed the\l"
+	.string "coast.\p"
+	.string "She told it to make us behave.\n"
+	.string "Lately it doesn't feel like a story.$"
 
 SlateportCity_House_Text_MustBeGoingToBattleTent:
 	.string "You're a TRAINER, right?\p"

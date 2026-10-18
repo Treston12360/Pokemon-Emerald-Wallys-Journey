@@ -32,10 +32,11 @@ AbandonedShip_Rooms_1F_EventScript_ThaliaRematch::
 	end
 
 AbandonedShip_Rooms_1F_Text_TakingALookAround:
-	.string "Ships of this sort are rare, so I'm\n"
-	.string "taking a look around.\p"
-	.string "Hmhm…\n"
-	.string "There appear to be other cabins…$"
+	.string "My father was a cabin boy on this\n"
+	.string "ship.\p"
+	.string "He said the storm came out of a clear\n"
+	.string "sky. No warning. Like the sea had\l"
+	.string "made up its mind.$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaIntro:
 	.string "What on earth would compel you to\n"

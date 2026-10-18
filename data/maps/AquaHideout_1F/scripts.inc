@@ -61,12 +61,12 @@ AquaHideout_1F_Text_OurBossIsSnatchingSomething:
 	.string "you something that crucial?$"
 
 AquaHideout_1F_Text_WhereMightMagmaHideoutBe:
-	.string "What? What?\n"
-	.string "Are you a TEAM MAGMA grunt?\p"
-	.string "I hear that TEAM MAGMA is trying to\n"
-	.string "awaken an awesome POKéMON at their\l"
-	.string "HIDEOUT.\p"
-	.string "But where might their HIDEOUT be?$"
+	.string "What? Are you a MAGMA grunt?\p"
+	.string "They say MAGMA wants to wake some\n"
+	.string "ancient POKéMON. That's insane.\p"
+	.string "…Our BOSS keeps talking about the\n"
+	.string "sea “taking back what's hers.” I\l"
+	.string "thought that was a speech.$"
 
 AquaHideout_1F_Text_BossWentToJackASubmarine:
 	.string "What? What? What do you want with \n"
@@ -89,11 +89,11 @@ AquaHideout_1F_Text_BossIsOnRoute122:
 	.string "you something that crucial?$"
 
 AquaHideout_1F_Text_TeamMagmaAtMtChimney:
-	.string "What? What?\n"
-	.string "Are you a TEAM MAGMA grunt?\p"
-	.string "I hear that TEAM MAGMA is after\n"
-	.string "an awesome POKéMON at MT. CHIMNEY.\p"
-	.string "But what is that POKéMON like?$"
+	.string "What? Are you a MAGMA grunt?\p"
+	.string "I joined to stop the factories. Now\n"
+	.string "we're stealing a submarine.\p"
+	.string "Why does a beach cleanup need a\n"
+	.string "submarine? Nobody will tell me.$"
 
 AquaHideout_1F_Text_BossIsInSlateportCity:
 	.string "What? What? What do you want with\n"

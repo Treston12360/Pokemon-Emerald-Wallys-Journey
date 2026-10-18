@@ -43,10 +43,11 @@ FortreeCity_Mart_Text_SuperRepelBetter:
 	.string "REPEL.$"
 
 FortreeCity_Mart_Text_StockUpOnItems:
-	.string "I always stock up on more items than\n"
-	.string "I'm sure I'll need.\p"
-	.string "You never know what might happen.\n"
-	.string "Better to be safe than sorry!$"
+	.string "You heard of SIDNEY? ELITE FOUR?\p"
+	.string "He ran with a rough crowd as a kid.\n"
+	.string "The LEAGUE gave him a second chance.\p"
+	.string "He plays dirty in battle. But he's\n"
+	.string "never once lied to anyone.$"
 
 FortreeCity_Mart_Text_RareCandyMakesMonGrow:
 	.string "A RARE CANDY makes a POKéMON grow\n"

@@ -68,8 +68,10 @@ AbandonedShip_Corridors_B1F_Text_DuncanPostBattle:
 	.string "we might make some progress…$"
 
 AbandonedShip_Corridors_B1F_Text_YayItsAShip:
-	.string "Yay!\n"
-	.string "It's a ship!$"
+	.string "Yay! It's a ship!\p"
+	.string "Fish live in the hull now. The\n"
+	.string "reef out here is the only healthy\l"
+	.string "one left near DEWFORD.$"
 
 AbandonedShip_Corridors_B1F_Text_DoorIsLocked:
 	.string "The door is locked.\p"

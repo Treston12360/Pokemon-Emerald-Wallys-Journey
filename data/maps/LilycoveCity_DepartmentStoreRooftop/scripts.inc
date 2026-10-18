@@ -191,13 +191,18 @@ LilycoveCity_DepartmentStoreRooftop_Text_SetDatesForClearOutSales:
 	.string "commercials.$"
 
 LilycoveCity_DepartmentStoreRooftop_Text_BeenWaitingForClearOutSale:
-	.string "Yes! I've been waiting a long time for\n"
-	.string "this clear-out sale.\p"
-	.string "They have items that you can only get\n"
-	.string "here. I'm going to load up, that I am!$"
+	.string "The clear-out sale!\p"
+	.string "Half of this stuff says DEVON on it.\n"
+	.string "The other half was made with DEVON\l"
+	.string "parts.\p"
+	.string "You can't buy anything in HOENN\n"
+	.string "without buying a bit of RUSTBORO.$"
 
 LilycoveCity_DepartmentStoreRooftop_Text_BoneDryThirsty:
-	.string "Ohh… I'm bone-dry thirsty!$"
+	.string "Ohh… I'm bone-dry thirsty!\p"
+	.string "They say not to drink from the\n"
+	.string "streams near the factories anymore.\l"
+	.string "So I buy it. Bottled. By DEVON.$"
 
 LilycoveCity_DepartmentStoreRooftop_Text_WhichDrinkWouldYouLike:
 	.string "It's a VENDING MACHINE.\n"

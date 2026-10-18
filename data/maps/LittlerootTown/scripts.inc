@@ -963,10 +963,13 @@ LittlerootTown_Text_ComeHomeIfAnythingHappens:
 	.string "Go on, go get them, honey!$"
 
 LittlerootTown_Text_CanUsePCToStoreItems:
-	.string "DEVON built the PC storage system.\n"
-	.string "Half the town grumbles about DEVON.\p"
-	.string "Then they use the PC every day.\n"
-	.string "That's HOENN for you.$"
+	.string "Houses in LITTLEROOT used to sit\n"
+	.string "empty for years. Too far from jobs.\p"
+	.string "Then rents in the cities doubled.\n"
+	.string "Now people take whatever opens up.\p"
+	.string "Your dad waited a long time for that\n"
+	.string "house. Don't let him tell you\l"
+	.string "otherwise.$"
 
 LittlerootTown_Text_BirchSpendsDaysInLab:
 	.string "PROF. BIRCH spends days in his LAB,\n"

@@ -49,5 +49,8 @@ SootopolisCity_House6_Text_DontWantThisDoll:
 	.string "You don't want this DOLL?$"
 
 SootopolisCity_House6_Text_LovePlushDolls:
-	.string "I love plush DOLLS!$"
+	.string "I love plush DOLLS!\p"
+	.string "WALLACE gave me one when I was\n"
+	.string "little. He was a GYM LEADER then.\l"
+	.string "He gave one to every kid here.$"
 

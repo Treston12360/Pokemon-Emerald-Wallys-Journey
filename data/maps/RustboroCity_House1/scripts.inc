@@ -52,7 +52,10 @@ RustboroCity_House1_Text_YouDontWantToThatsOkay:
 
 RustboroCity_House1_Text_AnyPokemonCanBeCute:
 	.string "Any POKéMON can be cute if you raise\n"
-	.string "it with care and kindness.$"
+	.string "it with care.\p"
+	.string "Same with cities. RUSTBORO was\n"
+	.string "ugly once. Then DEVON came. Now it's\l"
+	.string "ugly in a richer way.$"
 
 RustboroCity_House1_Text_AllSortsOfPlaces:
 	.string "I travel all over HOENN.\p"

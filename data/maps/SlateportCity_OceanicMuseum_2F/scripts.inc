@@ -357,8 +357,10 @@ SlateportCity_OceanicMuseum_2F_Text_RemindsMeOfAbandonedShip:
 	.string "it. Some say he's still aboard.$"
 
 SlateportCity_OceanicMuseum_2F_Text_DontRunInMuseum:
-	.string "Don't you dare run inside the\n"
-	.string "MUSEUM!$"
+	.string "Don't run in the MUSEUM!\p"
+	.string "Also… this wing was paid for by\n"
+	.string "DEVON. Notice the reef exhibit\l"
+	.string "doesn't say what killed it?$"
 
 SlateportCity_OceanicMuseum_2F_Text_WantToRideSubmarine:
 	.string "The submarine's awesome! I want a\n"

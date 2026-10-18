@@ -20,8 +20,8 @@ FortreeCity_House3_Text_MetStevenHadAmazingPokemon:
 	.string "that.$"
 
 FortreeCity_House3_Text_OhYouHavePokedex:
-	.string "What's that thing you have there?\p"
-	.string "… … … … … …\p"
-	.string "Oh, it's called a POKéDEX?\n"
-	.string "It's really awesome!$"
+	.string "WINONA grew up in these trees.\p"
+	.string "She says FLYING POKéMON taught her\n"
+	.string "that you can't own the sky. You can\l"
+	.string "only share it.$"
 

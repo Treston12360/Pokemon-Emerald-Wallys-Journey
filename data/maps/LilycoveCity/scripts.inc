@@ -673,8 +673,11 @@ LilycoveCity_Text_SomeoneStoleMyPokemon:
 	.string "about who to blame.$"
 
 LilycoveCity_Text_MissingPokemonCameBack:
-	.string "My missing POKéMON…\n"
-	.string "It came back without me noticing!$"
+	.string "My missing POKéMON… came back!\p"
+	.string "There was a note on its collar.\n"
+	.string "“Sorry. Not all of us wanted this.”\p"
+	.string "It wasn't signed. But the handwriting\n"
+	.string "was shaky.$"
 
 LilycoveCity_Text_ImArtDealer:
 	.string "I'm an ART DEALER.\p"

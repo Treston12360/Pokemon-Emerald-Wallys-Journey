@@ -414,32 +414,32 @@ EverGrandeCity_ChampionsRoom_Text_PostBattleSpeech:
 	.string "Not to make you feel small.$"
 
 EverGrandeCity_ChampionsRoom_Text_MayAdvice:
-.string "MAY: {PLAYER}! I heard you'd\n"
+	.string "MAY: {PLAYER}! I heard you'd\n"
 	.string "reached the POKéMON LEAGUE.\p"
 	.string "I brought notes on WALLY's team.\n"
 	.string "Before you face him, you should…$"
 
 EverGrandeCity_ChampionsRoom_Text_MayItsAlreadyOver:
-.string "MAY: Wait. It's over already?\p"
+	.string "MAY: Wait. It's over already?\p"
 	.string "You beat WALLY? {PLAYER},\n"
 	.string "that's incredible!\p"
 	.string "I knew you'd give him a fight.\n"
 	.string "You won the whole thing!$"
 
 EverGrandeCity_ChampionsRoom_Text_BrendanAdvice:
-.string "BRENDAN: {PLAYER}! I heard\n"
+	.string "BRENDAN: {PLAYER}! I heard\n"
 	.string "WALLY was waiting for you.\p"
 	.string "I've been studying his team.\n"
 	.string "There's something you should know…$"
 
 EverGrandeCity_ChampionsRoom_Text_BrendanYouveWon:
-.string "BRENDAN: …You're telling me\n"
+	.string "BRENDAN: …You're telling me\n"
 	.string "you already beat him?\p"
 	.string "Of course you did. You've been\n"
 	.string "surprising us since day one.$"
 
 EverGrandeCity_ChampionsRoom_Text_BirchArriveRatePokedex:
-.string "PROF. BIRCH: There you are!\p"
+	.string "PROF. BIRCH: There you are!\p"
 	.string "{PLAYER}, I watched you grow\n"
 	.string "from that first day on ROUTE 101.\p"
 	.string "Then you faced your own father\n"
@@ -455,7 +455,7 @@ EverGrandeCity_ChampionsRoom_Text_BirchCongratulations:
 	.string "Now, go proudly into the final room!$"
 
 EverGrandeCity_ChampionsRoom_Text_WallaceComeWithMe:
-.string "WALLY: {PLAYER}…\p"
+	.string "WALLY: {PLAYER}…\p"
 	.string "No. Let me say it properly.\n"
 	.string "CHAMPION {PLAYER}.\p"
 	.string "I won't pretend it doesn't sting.\n"
@@ -463,20 +463,20 @@ EverGrandeCity_ChampionsRoom_Text_WallaceComeWithMe:
 	.string "Come on. The HALL OF FAME awaits.$"
 
 EverGrandeCity_ChampionsRoom_Text_WallaceWaitOutside:
-.string "WALLY: Only TRAINERS who've held\n"
+	.string "WALLY: Only TRAINERS who've held\n"
 	.string "the title can go past here.\p"
 	.string "{RIVAL}, I'm sorry. You'll have\n"
 	.string "to wait with PROF. BIRCH.\p"
 	.string "{PLAYER}, let's go.$"
 
 EverGrandeCity_ChampionsRoom_Text_MayCongratulations:
-.string "MAY: Just CHAMPIONS beyond here?\p"
+	.string "MAY: Just CHAMPIONS beyond here?\p"
 	.string "Then go on. You've earned it.\p"
 	.string "And when you're back, I want\n"
 	.string "every detail. Congratulations!$"
 
 EverGrandeCity_ChampionsRoom_Text_BrendanCongratulations:
-.string "BRENDAN: Rules are rules.\n"
+	.string "BRENDAN: Rules are rules.\n"
 	.string "We'll be right here.\p"
 	.string "Dad's going to want the whole\n"
 	.string "story. So will I.\p"

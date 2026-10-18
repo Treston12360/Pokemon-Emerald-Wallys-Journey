@@ -142,17 +142,25 @@ LilycoveCity_DepartmentStore_1F_Text_WelcomeToDeptStore:
 	.string "Welcome to LILYCOVE DEPARTMENT STORE.$"
 
 LilycoveCity_DepartmentStore_1F_Text_IBuyAllSortsOfThings:
-	.string "Whenever I come to the DEPARTMENT\n"
-	.string "STORE, I always end up buying all sorts\l"
-	.string "of things because it's so fun.$"
+	.string "The SEA TRUST office is down by the\n"
+	.string "cove. My aunt volunteers there.\p"
+	.string "She rescues WINGULL tangled in\n"
+	.string "nets. Nothing wrong with that.\p"
+	.string "She won't talk about the ones in the\n"
+	.string "blue bandanas. I don't ask.$"
 
 LilycoveCity_DepartmentStore_1F_Text_MomBuyingMeFurniture:
-	.string "Today, my mom is going to buy me some\n"
-	.string "nice furniture.$"
+	.string "PHOEBE of the ELITE FOUR grew up on\n"
+	.string "MT. PYRE with her grandmother.\p"
+	.string "She says the spirits up there aren't\n"
+	.string "scary. Just lonely.$"
 
 LilycoveCity_DepartmentStore_1F_Text_BuyingSomethingForAzumarill:
-	.string "I'm buying something for my AZUMARILL\n"
-	.string "as a reward for winning a CONTEST.$"
+	.string "I'm buying something for my\n"
+	.string "AZUMARILL. It won a CONTEST!\p"
+	.string "WALLACE judged once. He said my\n"
+	.string "AZUMARILL had “sincere sparkle.”\l"
+	.string "I'll never wash that memory off.$"
 
 LilycoveCity_DepartmentStore_1F_Text_Azumarill:
 	.string "AZUMARILL: Maririroo!$"

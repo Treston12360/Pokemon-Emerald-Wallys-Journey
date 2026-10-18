@@ -25,11 +25,14 @@ DewfordTown_PokemonCenter_1F_EventScript_Man::
 	end
 
 DewfordTown_PokemonCenter_1F_Text_StoneCavern:
-	.string "There's a stone cavern at the edge of\n"
-	.string "town. GRANITE CAVE.\p"
-	.string "A man in a fancy suit has been\n"
-	.string "going in and out all week.\l"
-	.string "Collecting rocks, of all things.$"
+	.string "There's a stone cavern at the edge\n"
+	.string "of town. GRANITE CAVE.\p"
+	.string "A man in a fancy suit goes in and out\n"
+	.string "all the time. DEVON's son, people\l"
+	.string "say. Collecting rocks.\p"
+	.string "My grandpa says the reef out front\n"
+	.string "was bright orange when he was young.\l"
+	.string "Now it's mostly grey.$"
 
 DewfordTown_PokemonCenter_1F_Text_FaintedMonCanUseHM:
 	.string "Even a fainted POKéMON can use a\n"

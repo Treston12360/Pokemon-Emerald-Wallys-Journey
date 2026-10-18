@@ -17,7 +17,11 @@ LilycoveCity_House4_Text_MysteriesAtBottomOfSea:
 	.string "that hummed. Like it was breathing.$"
 
 LilycoveCity_House4_Text_UnderwaterTrenchMossdeepSootopolis:
-	.string "There's a deep underwater trench\n"
-	.string "between MOSSDEEP and SOOTOPOLIS.\p"
-	.string "That's what someone told me, anyway.$"
+	.string "There's a deep trench between\n"
+	.string "MOSSDEEP and SOOTOPOLIS.\p"
+	.string "CAPT. STERN mapped it. He said\n"
+	.string "the water down there is warm. Too\l"
+	.string "warm.\p"
+	.string "Like something big is breathing\n"
+	.string "under it.$"
 

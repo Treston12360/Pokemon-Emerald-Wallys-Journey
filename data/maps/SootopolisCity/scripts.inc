@@ -1401,10 +1401,9 @@ SootopolisCity_Text_DoorIsClosed:
 	.string "The door is closed.$"
 
 SootopolisCity_Text_PhysicallyFitLivingHere:
-	.string "Diving in the sea. Climbing up and\n"
-	.string "down stairs all the time…\p"
-	.string "If you live in this town, you end up\n"
-	.string "getting physically fit.$"
+	.string "Diving, climbing stairs all day…\p"
+	.string "JUAN still climbs every one of them.\n"
+	.string "At his age! He calls it dancing.$"
 
 SootopolisCity_Text_GiantPokemonSuddenlyAppeared:
 	.string "These giant POKéMON suddenly appeared\n"
@@ -1571,11 +1570,12 @@ SootopolisCity_Text_FearedWorstWhenPokemonFlewDown:
 	.string "I feared the worst.$"
 
 SootopolisCity_Text_NightSkyFavoriteScenery:
-	.string "A circle of a night sky framed by\n"
-	.string "the crater of a volcano…\p"
-	.string "And in that ring, stars flicker and\n"
-	.string "blink as if they were alive…\l"
-	.string "It's my favorite scenery.$"
+	.string "A night sky framed by the crater…\p"
+	.string "My family has lived in this crater\n"
+	.string "for three hundred years.\p"
+	.string "We were told to guard the CAVE and\n"
+	.string "never ask what sleeps inside. I\l"
+	.string "never wanted to know. Until now.$"
 
 SootopolisCity_Text_WeatherWentWild:
 	.string "The weather was clear this morning,\n"
@@ -1602,7 +1602,7 @@ SootopolisCity_Text_GroudonPleaseStop:
 	.string "SOOTOPOLIS, will be utterly ruined!$"
 
 SootopolisCity_Text_AfterAllOurScheming:
-.string "MAXIE: There was a third…\p"
+	.string "MAXIE: There was a third…\p"
 	.string "I told myself more land meant\n"
 	.string "homes, farms, a future.\p"
 	.string "Then I ignored the people who\n"
@@ -1621,17 +1621,17 @@ SootopolisCity_Text_KyogreCalmDown:
 	.string "It's not responding at all!$"
 
 SootopolisCity_Text_TryingMeaninglessToPokemon:
-.string "ARCHIE: KYOGRE and GROUDON\n"
+	.string "ARCHIE: KYOGRE and GROUDON\n"
 	.string "have gone. The storms are over.\p"
 	.string "I said I was protecting the sea.\n"
 	.string "Instead, I made it a danger\l"
 	.string "to everyone along the coast.\p"
-	.string "KYOGRE didn't listen to my\n"
-	.string "promises. Why should they?\p"
+	.string "KYOGRE was never mine to\n"
+	.string "command. I see that now.\p"
 	.string "We've got work to do.$"
 
 SootopolisCity_Text_InvolvedWithCrisisComeWithMe:
-.string "STEVEN: {PLAYER}. Look at them.\p"
+	.string "STEVEN: {PLAYER}. Look at them.\p"
 	.string "GROUDON and KYOGRE are in their\n"
 	.string "ancient PRIMAL forms.\p"
 	.string "The ORBS didn't control them.\n"

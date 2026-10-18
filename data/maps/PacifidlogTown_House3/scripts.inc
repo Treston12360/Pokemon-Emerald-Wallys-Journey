@@ -63,7 +63,8 @@ PacifidlogTown_House3_Text_ReallyWantedToGetBagon:
 
 PacifidlogTown_House3_Text_IsThatAPokedex:
 	.string "Is that a POKéDEX?\p"
-	.string "Did you get to meet a lot of different\n"
-	.string "POKéMON?\p"
-	.string "I wish I was like you.$"
+	.string "The storms here get worse every\n"
+	.string "year. Grandpa says the sea is angry.\p"
+	.string "Dad says it's just warm water. I\n"
+	.string "don't know which is scarier.$"
 

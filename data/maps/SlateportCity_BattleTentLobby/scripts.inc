@@ -291,17 +291,26 @@ SlateportCity_BattleTentLobby_Text_ExplainTorment:
 	.string "I'm not laying a torment on you!$"
 
 SlateportCity_BattleTentLobby_Text_IllTryUsingBugMons:
-	.string "I don't really like BUG POKéMON,\n"
-	.string "but maybe I'll try using some for\l"
-	.string "a change of pace.\p"
-	.string "Who knows, I might even get to like\n"
-	.string "them!$"
+	.string "I knew ARCHIE before the bandana.\p"
+	.string "He ran the SEA TRUST. Beach\n"
+	.string "cleanups every Sunday. He'd buy\l"
+	.string "the kids lunch after.\p"
+	.string "Then the shipyard got bigger and\n"
+	.string "the fish got fewer. He stopped\l"
+	.string "asking nicely.$"
 
 SlateportCity_BattleTentLobby_Text_BattleEvenWithoutToughMons:
-	.string "You can battle all you want here even\n"
-	.string "if you don't have any tough POKéMON.$"
+	.string "Thirty years of ships, factories and\n"
+	.string "nobody watching what went in the\l"
+	.string "water.\p"
+	.string "The SEA TRUST tried petitions first.\n"
+	.string "Nobody read them.$"
 
 SlateportCity_BattleTentLobby_Text_NiceIfMoreSelection:
-	.string "Wouldn't it be nice if they had more of\n"
-	.string "a selection?$"
+	.string "See the old sailor's dock? That was\n"
+	.string "DRAKE's ship, before the LEAGUE.\p"
+	.string "He crewed through the worst storm\n"
+	.string "HOENN ever had. Lost friends.\p"
+	.string "He says it taught him what a TRAINER\n"
+	.string "really needs. He won't tell me what.$"
 

@@ -163,11 +163,13 @@ SootopolisCity_MysteryEventsHouse_1F_Movement_OldManMoveAsideRight:
 	step_end
 
 SootopolisCity_MysteryEventsHouse_1F_Text_OnlyAmusementWatchingBattles:
-	.string "When I was young, I traveled the world\n"
-	.string "as a POKéMON TRAINER.\p"
-	.string "Now that I've become an old buzzard,\n"
-	.string "my only amusement is watching young\l"
-	.string "TRAINERS battle.$"
+	.string "When I was young, I sailed with a\n"
+	.string "man named DRAKE.\p"
+	.string "We survived the great storm\n"
+	.string "together. He went to the LEAGUE. I\l"
+	.string "went home.\p"
+	.string "Now I watch young TRAINERS battle.\n"
+	.string "Some of them fight like him.$"
 
 SootopolisCity_MysteryEventsHouse_1F_Text_DoorAppearsToBeLocked:
 	.string "The door appears to be locked.$"

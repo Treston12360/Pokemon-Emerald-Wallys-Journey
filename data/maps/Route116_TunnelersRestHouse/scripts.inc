@@ -28,25 +28,22 @@ Route116_TunnelersRestHouse_EventScript_TunnelOpened::
 	end
 
 Route116_TunnelersRestHouse_Text_WeHadToStopBoring:
-	.string "That RUSTURF TUNNEL there…\p"
-	.string "At first, we had a huge work crew boring\n"
-	.string "through rock with the latest machinery.\l"
-	.string "But, we had to stop.\p"
-	.string "It turns out that we would have had\n"
-	.string "a negative effect on wild POKéMON in\l"
-	.string "the area.\p"
-	.string "So, we've got nothing to do but loll\n"
-	.string "around here doing nothing.$"
+	.string "That RUSTURF TUNNEL was a DEVON\n"
+	.string "job. Faster trucks to VERDANTURF.\p"
+	.string "We had the best drills money could\n"
+	.string "buy. Then the WHISMUR in there\l"
+	.string "started going deaf.\p"
+	.string "People complained. DEVON listened,\n"
+	.string "for once. So now we sit here and get\l"
+	.string "paid to do nothing.$"
 
 Route116_TunnelersRestHouse_Text_ManDiggingHisWayToVerdanturf:
-	.string "There's a man digging his way to\n"
-	.string "VERDANTURF all by his lonesome.\l"
-	.string "He's desperate to get through.\p"
-	.string "He says that if he digs little by little\n"
-	.string "without using machines, he won't\l"
-	.string "disturb POKéMON, and he'll avoid\l"
-	.string "harming the natural environment.\p"
-	.string "I wonder if he made it through yet.$"
+	.string "There's a man digging to VERDANTURF\n"
+	.string "by hand. No machines.\p"
+	.string "His girlfriend lives on the other\n"
+	.string "side. DEVON's trucks were never\l"
+	.string "coming for him.\p"
+	.string "I hope he makes it.$"
 
 Route116_TunnelersRestHouse_Text_GetToVerdanturfWithoutTunnel:
 	.string "To get to VERDANTURF without using\n"
@@ -55,8 +52,9 @@ Route116_TunnelersRestHouse_Text_GetToVerdanturfWithoutTunnel:
 	.string "then travel through MAUVILLE.$"
 
 Route116_TunnelersRestHouse_Text_TunnelHasGoneThrough:
-	.string "Did you hear? The TUNNEL to VERDANTURF\n"
-	.string "has gone through!\p"
-	.string "Sometimes, if you hope strongly enough,\n"
-	.string "dreams do come true.$"
+	.string "Did you hear? The TUNNEL went\n"
+	.string "through!\p"
+	.string "A whole company quit, and one man\n"
+	.string "with a shovel finished the job.\p"
+	.string "DEVON's putting it in their ads now.$"
 

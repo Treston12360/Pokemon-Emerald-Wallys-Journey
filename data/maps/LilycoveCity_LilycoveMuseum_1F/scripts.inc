@@ -242,17 +242,18 @@ LilycoveCity_LilycoveMuseum_1F_Text_WorksOfMagnificence:
 	.string "What works of great magnificence…$"
 
 LilycoveCity_LilycoveMuseum_1F_Text_MustntForgetLoveForFineArts:
-	.string "Battling with POKéMON is fun,\n"
-	.string "I'll grant you that.\p"
-	.string "But one mustn't forget our love for\n"
-	.string "the fine arts.$"
+	.string "Battling is fun, I'll grant you.\p"
+	.string "But WALLACE taught HOENN that a\n"
+	.string "battle can be art. Some of us still\l"
+	.string "wish he'd painted instead.$"
 
 LilycoveCity_LilycoveMuseum_1F_Text_ThisMuseumIsInspiration:
-	.string "This ART MUSEUM… Well, you could\n"
-	.string "see many fantastic paintings.\p"
-	.string "And the CURATOR is a wonderful person.\p"
-	.string "Among artists like myself, this MUSEUM\n"
-	.string "is an inspiration.$"
+	.string "We keep a rubbing of the MT. PYRE\n"
+	.string "inscription downstairs.\p"
+	.string "One scholar translated it as “the\n"
+	.string "ORB commands the titan.”\p"
+	.string "The older copy says “soothes.” The\n"
+	.string "two scholars never spoke again.$"
 
 LilycoveCity_LilycoveMuseum_1F_Text_ThisLadyIsPretty:
 	.string "This lady is pretty!\n"
@@ -263,17 +264,19 @@ LilycoveCity_LilycoveMuseum_1F_Text_ThisPokemonIsAdorable:
 	.string "Just like our little boy!$"
 
 LilycoveCity_LilycoveMuseum_1F_Text_HeardMuseumGotNewPaintings:
-	.string "I'd heard that this ART MUSEUM got\n"
-	.string "in some new paintings.\p"
-	.string "So, naturally I hurried over.\p"
-	.string "Are the new paintings up on\n"
-	.string "the second floor?$"
+	.string "There's an old portrait of the STONE\n"
+	.string "family in our storage room.\p"
+	.string "MR. STONE in a suit. Little STEVEN\n"
+	.string "holding a rock instead of his\l"
+	.string "father's hand.$"
 
 LilycoveCity_LilycoveMuseum_1F_Text_CuratorHasBeenCheerful:
-	.string "Lately, the CURATOR has been\n"
-	.string "unusually cheerful.\p"
-	.string "I bet something good happened for him.\n"
-	.string "Definitely.$"
+	.string "Every old painting of HOENN shows\n"
+	.string "the same two shapes.\p"
+	.string "A red one in the earth. A blue one\n"
+	.string "in the sea. Always fighting.\p"
+	.string "And sometimes a green line in the\n"
+	.string "sky above them.$"
 
 LilycoveCity_LilycoveMuseum_1F_Text_AimToSeeGreatPaintings:
 	.string "I aim to see many great paintings\n"

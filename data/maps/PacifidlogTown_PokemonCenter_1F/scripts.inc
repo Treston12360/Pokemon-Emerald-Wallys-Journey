@@ -28,12 +28,12 @@ PacifidlogTown_PokemonCenter_1F_EventScript_OldMan::
 	end
 
 PacifidlogTown_PokemonCenter_1F_Text_WhatColorTrainerCard:
-	.string "My TRAINER CARD is copper!\n"
-	.string "I used to wish it were gold.\p"
-	.string "Then I met someone who'd\n"
-	.string "crossed HOENN to help a friend.\p"
-	.string "Maybe a card can't tell you\n"
-	.string "what kind of TRAINER you are.$"
+	.string "Sailors lost at sea tell the same\n"
+	.string "story.\p"
+	.string "Two dragons, red and blue, that fly\n"
+	.string "too fast to see and guide you home.\p"
+	.string "I've never met anyone who saw them.\n"
+	.string "Just people who got home.$"
 
 PacifidlogTown_PokemonCenter_1F_Text_OnColonyOfCorsola:
 	.string "PACIFIDLOG floats on a colony of\n"

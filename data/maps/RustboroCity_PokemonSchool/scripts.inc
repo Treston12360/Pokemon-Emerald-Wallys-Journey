@@ -260,12 +260,17 @@ RustboroCity_PokemonSchool_Text_ExplainQuickClaw:
 	.string "topics to study!$"
 
 RustboroCity_PokemonSchool_Text_TradingRightNow:
-	.string "I'm trading POKéMON with my friend\n"
-	.string "right now.$"
+	.string "STEVEN STONE went to this school!\p"
+	.string "Teacher says he skipped class to\n"
+	.string "dig in the quarry. Still had the\l"
+	.string "best grades.$"
 
 RustboroCity_PokemonSchool_Text_AlwaysWantedSeedot:
-	.string "I always wanted a SEEDOT, and\n"
-	.string "I'm finally getting one!$"
+	.string "ROXANNE was the top student here.\p"
+	.string "Now she's the GYM LEADER and she\n"
+	.string "still teaches every week.\p"
+	.string "She says a rock type isn't slow.\n"
+	.string "It's patient. There's a difference.$"
 
 RustboroCity_PokemonSchool_Text_PokemontCantUseManMadeItems:
 	.string "POKéMON can hold items, but they\n"

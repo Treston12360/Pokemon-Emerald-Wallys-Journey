@@ -34,12 +34,13 @@ FortreeCity_PokemonCenter_1F_Text_GoToSafariZone:
 	.string "That's my suggestion.$"
 
 FortreeCity_PokemonCenter_1F_Text_RecordCornerIsNeat:
-	.string "Have you done anything at\n"
-	.string "the RECORD CORNER?\p"
-	.string "It's pretty neat. It mixes and matches\n"
-	.string "the records of TRAINERS.\p"
-	.string "I don't know quite how it works,\n"
-	.string "but it's cool. It's exciting, even!$"
+	.string "The oldest song in FORTREE is about\n"
+	.string "“the one above the sky.”\p"
+	.string "When the land and sea fought, it came\n"
+	.string "down and they both went quiet.\p"
+	.string "Grandma sings it when there's a\n"
+	.string "storm. I used to think it was\l"
+	.string "just a lullaby.$"
 
 FortreeCity_PokemonCenter_1F_Text_DoYouKnowAboutPokenav:
 	.string "Oh, wow, you have a POKéNAV!\n"

@@ -523,17 +523,14 @@ MtPyre_Summit_Text_OrbsHaveBeenTaken:
 
 MtPyre_Summit_Text_GroudonKyogreAwakened:
 	.string "Oh, my goodness…\p"
-	.string "You say that both GROUDON and KYOGRE\n"
-	.string "have been awakened?\p"
-	.string "It is said that the BLUE ORB and\n"
-	.string "the RED ORB quelled the rage of\l"
-	.string "the two POKéMON…\p"
-	.string "It is also said that the true owner\n"
-	.string "of the ORBS still exists.\p"
-	.string "However, no one knows who, or what\n"
-	.string "exactly, the ORBS belong to.\p"
-	.string "It could be a human, or perhaps\n"
-	.string "a POKéMON, but no one knows.$"
+	.string "GROUDON and KYOGRE, both awake?\p"
+	.string "The ORBS were never leashes. Our\n"
+	.string "ancestors offered them to soothe\l"
+	.string "the two. Nothing more.\p"
+	.string "Someone copied the old words wrong,\n"
+	.string "long ago. “Soothe” became “command.”\p"
+	.string "Those two men believed the copy.\n"
+	.string "And now the whole region pays.$"
 
 MtPyre_Summit_Text_ThoseTwoMenReturnedOrbs:
 	.string "The two men who took the ORBS came\n"
@@ -548,15 +545,13 @@ MtPyre_Summit_Text_ThoseTwoMenReturnedOrbs:
 	.string "something.$"
 
 MtPyre_Summit_Text_SuperAncientPokemonTaughtUs:
-	.string "The embodiments of the land, sea,\n"
-	.string "and the sky…\p"
-	.string "That is said to be the identities of\n"
-	.string "the super-ancient POKéMON…\p"
-	.string "In the same way that we humans and\n"
-	.string "POKéMON have life, our world, too,\l"
-	.string "is alive…\p"
-	.string "The super-ancient POKéMON have\n"
-	.string "taught us that…$"
+	.string "Land, sea, and the one above the sky.\p"
+	.string "The land and sea fight. The sky ends\n"
+	.string "the fight. That is the oldest story\l"
+	.string "we keep.\p"
+	.string "Our world is alive, child. It doesn't\n"
+	.string "belong to the people who shout the\l"
+	.string "loudest about saving it.$"
 
 MtPyre_Summit_Text_WillYouHearOutMyTale:
 	.string "MT. PYRE is where we calm the spirits\n"

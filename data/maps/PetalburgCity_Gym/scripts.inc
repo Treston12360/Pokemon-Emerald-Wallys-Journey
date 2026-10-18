@@ -1171,7 +1171,17 @@ PetalburgCity_Gym_Text_DadYoureHereWithYourPokemon:
 	.string "So you're going to be a TRAINER.\n"
 	.string "Like me. I… That's great news.\p"
 	.string "I'm sorry I wasn't there when the\n"
-	.string "truck arrived. The GYM, you know.$"
+	.string "truck arrived. The GYM, you know.\p"
+	.string "Truth is, I've been sleeping on a\n"
+	.string "cot in the back office all year.\p"
+	.string "Every house I could afford was\n"
+	.string "gone before I could even ask.\p"
+	.string "LITTLEROOT isn't much, I know.\n"
+	.string "Quiet. Old. Far from everything.\p"
+	.string "But the way rents are in HOENN,\n"
+	.string "we were lucky to get it at all.\p"
+	.string "Your mother waited a long time for\n"
+	.string "that house. So did you. …Thank you.$"
 
 PetalburgCity_Gym_Text_WallyIdLikeAPokemon:
 	.string "Um… I…\n"

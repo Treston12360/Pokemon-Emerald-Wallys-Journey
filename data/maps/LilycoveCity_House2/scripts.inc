@@ -25,5 +25,8 @@ LilycoveCity_House2_Text_NotAwakeYetHaveThis:
 
 LilycoveCity_House2_Text_SleepIsEssential:
 	.string "Yawn…\p"
-	.string "Sleep is essential for good health…\n"
-	.string "Sleep and regain health…$"
+	.string "I work the night shift at the docks.\n"
+	.string "We unload ships until sunrise.\p"
+	.string "Then the SEA TRUST folks come and\n"
+	.string "clean up what fell overboard.\l"
+	.string "Odd arrangement.$"

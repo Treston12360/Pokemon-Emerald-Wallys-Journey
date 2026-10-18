@@ -300,9 +300,12 @@ FallarborTown_BattleTentLobby_EventScript_ExitRules::
 	end
 
 FallarborTown_BattleTentLobby_Text_MakeThinkImJustKid:
-	.string "Fufufu. I let everyone think I'm just\n"
-	.string "a kid.\p"
-	.string "Then I shock them. Works every time.$"
+	.string "The LAND INITIATIVE dug out our\n"
+	.string "fields after the ashfall.\p"
+	.string "Red hoods, shovels, didn't ask for a\n"
+	.string "thing.\p"
+	.string "So when folks call them TEAM MAGMA\n"
+	.string "now, I don't know what to feel.$"
 
 FallarborTown_BattleTentLobby_Text_FallarborTentMyFavorite:
 	.string "Every BATTLE TENT has different\n"
@@ -311,10 +314,11 @@ FallarborTown_BattleTentLobby_Text_FallarborTentMyFavorite:
 	.string "smarts, not raw strength.$"
 
 FallarborTown_BattleTentLobby_Text_CameToCampOut:
-	.string "I heard about a tent and came to camp\n"
-	.string "out.\p"
-	.string "Tents are luxurious these days! I'll\n"
-	.string "stay a while.$"
+	.string "Back in the ash years, the sky over\n"
+	.string "FALLARBOR went grey for a month.\p"
+	.string "Crops died. Half my school moved to\n"
+	.string "the cities. Nobody came to help.\p"
+	.string "Well. Almost nobody.$"
 
 FallarborTown_BattleTentLobby_Text_ScottLookingForSomeone:
 	.string "SCOTT: Hi, {PLAYER}{KUN}!\n"

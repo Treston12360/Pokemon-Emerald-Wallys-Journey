@@ -489,7 +489,7 @@ Route119_Text_MayDefeat:
 	.string "struggling with your training.$"
 
 Route119_Text_MayResearchAfterBattle:
-	.string "MAY: You keep surprising me,\p"
+	.string "MAY: You keep surprising me,\n"
 	.string "and you're not the only one.\p"
 	.string "Dad's migration notes don't match\n"
 	.string "the POKéMON we're seeing here.\p"

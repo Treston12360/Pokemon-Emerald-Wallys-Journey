@@ -38,10 +38,12 @@ OldaleTown_PokemonCenter_1F_EventScript_WirelessClubAvailable::
 	end
 
 OldaleTown_PokemonCenter_1F_Text_TrainersCanUsePC:
-	.string "That PC in the corner there is\n"
-	.string "for any POKéMON TRAINER to use.\p"
-	.string "Naturally, that means you're welcome\n"
-	.string "to use it, too.$"
+	.string "PROF. BIRCH and NORMAN go way back.\p"
+	.string "BIRCH used to drag him out to the\n"
+	.string "field. Said he'd never seen a\l"
+	.string "TRAINER with that kind of focus.\p"
+	.string "He pushed NORMAN hard. Maybe a\n"
+	.string "little too hard, if you ask me.$"
 
 OldaleTown_PokemonCenter_1F_Text_PokemonCentersAreGreat:
 	.string "POKéMON CENTERS are free for every\n"
@@ -57,7 +59,10 @@ OldaleTown_PokemonCenter_1F_Text_WirelessClubNotAvailable:
 	.string "adjustments.$"
 
 OldaleTown_PokemonCenter_1F_Text_TradedInWirelessClub:
-	.string "The POKéMON WIRELESS CLUB on\n"
-	.string "the second floor was built recently.\p"
-	.string "I traded POKéMON right away.$"
+	.string "OLDALE and LITTLEROOT used to be\n"
+	.string "full of young families.\p"
+	.string "Then the jobs moved to the cities,\n"
+	.string "and the young families followed.\p"
+	.string "Now new people are trickling back.\n"
+	.string "Because it's all they can afford.$"
 

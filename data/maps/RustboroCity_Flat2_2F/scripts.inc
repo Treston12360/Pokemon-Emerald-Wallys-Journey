@@ -22,8 +22,13 @@ RustboroCity_Flat2_2F_EventScript_GavePremierBall::
 	end
 
 RustboroCity_Flat2_2F_Text_DevonWasTinyInOldDays:
-	.string "Way back in the old days, DEVON was just\n"
-	.string "a teeny, tiny company.$"
+	.string "DEVON started as a tiny workshop.\n"
+	.string "MR. STONE fixing POKé BALL hinges.\p"
+	.string "Now half of HOENN carries something\n"
+	.string "he made. He earned that.\p"
+	.string "But he built the factory by the\n"
+	.string "river. The river never asked to\l"
+	.string "be part of it.$"
 
 RustboroCity_Flat2_2F_Text_MyDaddyMadeThisYouCanHaveIt:
 	.string "My daddy's working at the CORPORATION.\p"
@@ -31,7 +36,8 @@ RustboroCity_Flat2_2F_Text_MyDaddyMadeThisYouCanHaveIt:
 	.string "But I can't use it, so you can have it.$"
 
 RustboroCity_Flat2_2F_Text_GoingToWorkAtDevonToo:
-	.string "My daddy's working at the CORPORATION.\p"
-	.string "When I grow up, I'm going to work for\n"
-	.string "DEVON, too.$"
+	.string "My daddy works at DEVON.\p"
+	.string "When I grow up, I'll work there too.\n"
+	.string "Then I'll be the boss and fix the\l"
+	.string "river.$"
 

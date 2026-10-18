@@ -1045,10 +1045,11 @@ Route104_Text_DontNeedThisTakeIt:
 	.string "Would you take it, please?$"
 
 Route104_Text_FlowerShopSellingSaplings:
-	.string "This FLOWER SHOP started selling\n"
-	.string "saplings recently.\p"
-	.string "It made me so happy, I went overboard\n"
-	.string "shopping. Where should I put them?$"
+	.string "This FLOWER SHOP sells saplings\n"
+	.string "now!\p"
+	.string "Folks from FALLARBOR buy them by\n"
+	.string "the cartload. Replanting what the\l"
+	.string "ash killed.$"
 
 Route104_Text_MrBrineysCottage:
 	.string "MR. BRINEY'S COTTAGE$"
