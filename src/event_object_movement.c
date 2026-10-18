@@ -2892,27 +2892,6 @@ static struct Sprite *SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lig
 // sprite pasted over each facade. Until those palette variants are authored,
 // leave windows in their original nighttime state. No automatic overlays.
 
-// Rustboro's street lamps: the lamp head is the top half of a two-tile post.
-#define METATILE_Rustboro_StreetLampTop 0x212
-static void SpawnStreetLamps(s16 left, s16 right, s16 top, s16 bottom, s16 camX, s16 camY)
-{
-    s32 x, y;
-    if (gMapHeader.mapLayout->secondaryTileset != &gTileset_Rustboro || !MapHasNaturalLight(gMapHeader.mapType))
-        return;
-    for (y = top; y <= bottom; y++)
-    {
-        for (x = left; x <= right; x++)
-        {
-            if (MapGridGetMetatileIdAt(x, y) == METATILE_Rustboro_StreetLampTop)
-                SpawnLightSprite(x, y, camX, camY, LIGHT_TYPE_STREETLAMP);
-        }
-    }
-}
-
-#define METATILE_General_PokeCenter_Door  0x061
-#define METATILE_General_PokeCenter_Sign  0x062
-#define METATILE_General_Mart_Door        0x041
-#define METATILE_General_Mart_Sign        0x042
 // Keep the expansion's built-in DNS tint and explicitly placed map lights.
 // Do not automatically draw PC/Mart neon, window blobs, or town street lamps.
 static void SpawnWarpLights(s16 left, s16 right, s16 top, s16 bottom, s16 camX, s16 camY)
