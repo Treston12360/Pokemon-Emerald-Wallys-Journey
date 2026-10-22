@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FAMILY_DIR = ROOT / "src/data/pokemon/species_info"
 SOURCE = re.compile(r"\[\s*(SPECIES_[A-Z0-9_]+)\s*\]\s*=")
 TRADE = re.compile(r"\{\s*EVO_TRADE\s*,\s*[^,{}]+\s*,\s*(SPECIES_[A-Z0-9_]+)\b")
-LEVEL = re.compile(r"\\{\\s*EVO_LEVEL\\s*,\\s*([0-9]+)\\s*,\\s*(SPECIES_[A-Z0-9_]+)\\b")
+LEVEL = re.compile(r"\{\s*EVO_LEVEL\s*,\s*([0-9]+)\s*,\s*(SPECIES_[A-Z0-9_]+)\b")
 ITEM = re.compile(r"\{\s*EVO_ITEM\s*,\s*(ITEM_[A-Z0-9_]+)\s*,\s*(SPECIES_[A-Z0-9_]+)\b")
 
 errors = []
