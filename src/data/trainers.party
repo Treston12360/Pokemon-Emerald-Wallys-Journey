@@ -536,13 +536,45 @@ Items: Super Potion
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Mightyena
-Level: 34
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+SPECIES_ELECTRODE
+Level: 38
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_RAIN_DANCE
+- MOVE_THUNDER
+- MOVE_EXPLOSION
+- MOVE_MIRROR_COAT
 
-Golbat
-Level: 34
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+SPECIES_CRAWDAUNT
+Level: 39
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_CRABHAMMER
+- MOVE_KNOCK_OFF
+- MOVE_ICE_BEAM
+- MOVE_BRICK_BREAK
+
+SPECIES_MACHAMP
+Level: 38
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_BODY_SLAM
+- MOVE_SUBMISSION
+- MOVE_ROCK_TOMB
+- MOVE_FOCUS_ENERGY
+
+SPECIES_HUNTAIL
+Level: 40
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_BODY_SLAM
+- MOVE_CURSE
+- MOVE_CRUNCH
+- MOVE_SURF
 
 === TRAINER_ZANDER ===
 Name: ZANDER
@@ -566,13 +598,35 @@ Music: Aqua
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Carvanha
-Level: 28
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+SPECIES_MIGHTYENA
+Level: 32
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_BITE
+- MOVE_TAKE_DOWN
+- MOVE_DIG
+- MOVE_SCARY_FACE
 
-Mightyena
-Level: 28
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+SPECIES_SEVIPER
+Level: 31
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_POISON_FANG
+- MOVE_IRON_TAIL
+- MOVE_GLARE
+- MOVE_CRUNCH
+
+SPECIES_GOREBYSS
+Level: 33
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_DOUBLE_EDGE
+- MOVE_PSYCHIC
+- MOVE_WATER_PULSE
+- MOVE_AMNESIA
 
 === TRAINER_SHELLY_SEAFLOOR_CAVERN ===
 Name: SHELLY
@@ -583,13 +637,35 @@ Music: Aqua
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Sharpedo
-Level: 37
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_SEVIPER
+Level: 44
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_POISON_TAIL
+- MOVE_POISON_FANG
+- MOVE_IRON_TAIL
+- MOVE_GLARE
 
-Mightyena
-Level: 37
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_CASTFORM
+Level: 44
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_WEATHER_BALL
+- MOVE_RAIN_DANCE
+- MOVE_HEADBUTT
+- MOVE_AURORA_BEAM
+
+SPECIES_GOREBYSS
+Level: 45
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_DOUBLE_EDGE
+- MOVE_PSYCHIC
+- MOVE_HYDRO_PUMP
+- MOVE_AMNESIA
 
 === TRAINER_ARCHIE ===
 Name: ARCHIE
@@ -603,7 +679,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_MIGHTYENA
 Level: 46
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_SUPER_FANG
 - MOVE_CRUNCH
 - MOVE_TAKE_DOWN
@@ -611,7 +689,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_WAILORD
 Level: 45
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_WATER_SPOUT
 - MOVE_AMNESIA
 - MOVE_SURF
@@ -619,7 +699,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_MACHAMP
 Level: 46
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_VITAL_THROW
 - MOVE_KNOCK_OFF
 - MOVE_EARTHQUAKE
@@ -627,7 +709,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_CROBAT
 Level: 46
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_AIR_CUTTER
 - MOVE_BITE
 - MOVE_SLUDGE_BOMB
@@ -635,7 +719,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_SHARPEDO @ ITEM_LIECHI_BERRY
 Level: 47
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SURF
 - MOVE_CRUNCH
 - MOVE_SLASH
@@ -1299,12 +1385,13 @@ Items: Hyper Potion
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Swellow
-Level: 26
+SPECIES_SWELLOW
+Level: 30
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Quick Attack
-- Agility
-- Wing Attack
+- MOVE_QUICK_ATTACK
+- MOVE_AGILITY
+- MOVE_WING_ATTACK
+- MOVE_FACADE
 
 === TRAINER_PARKER ===
 Name: PARKER
@@ -1316,12 +1403,12 @@ Items: Hyper Potion
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Spinda
-Level: 26
+SPECIES_SPINDA
+Level: 30
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Teeter Dance
-- Dizzy Punch
-- Focus Punch
+- MOVE_TEETER_DANCE
+- MOVE_DIZZY_PUNCH
+- MOVE_FEINT_ATTACK
 
 === TRAINER_GEORGE ===
 Name: GEORGE
@@ -1333,12 +1420,12 @@ Items: Hyper Potion
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Slakoth @ Sitrus Berry
-Level: 26
+SPECIES_SLAKOTH @ ITEM_SITRUS_BERRY
+Level: 30
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Slack Off
-- Counter
-- Shadow Ball
+- MOVE_SLACK_OFF
+- MOVE_COUNTER
+- MOVE_SHADOW_BALL
 
 === TRAINER_BERKE ===
 Name: BERKE
@@ -1350,11 +1437,12 @@ Items: Hyper Potion
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Vigoroth
-Level: 26
+SPECIES_VIGOROTH
+Level: 30
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Focus Energy
-- Slash
+- MOVE_FOCUS_ENERGY
+- MOVE_SLASH
+- MOVE_FEINT_ATTACK
 
 === TRAINER_BRAXTON ===
 Name: BRAXTON
@@ -1690,11 +1778,12 @@ Items: Hyper Potion
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Delcatty
-Level: 26
+SPECIES_DELCATTY
+Level: 30
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Feint Attack
-- Shock Wave
+- MOVE_FEINT_ATTACK
+- MOVE_SHOCK_WAVE
+- MOVE_SWIFT
 
 === TRAINER_ALEXIA ===
 Name: ALEXIA
@@ -1706,12 +1795,12 @@ Items: Hyper Potion
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Wigglytuff
-Level: 26
+SPECIES_WIGGLYTUFF
+Level: 30
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Defense Curl
-- Double Edge
-- Shadow Ball
+- MOVE_DEFENSE_CURL
+- MOVE_DOUBLE_EDGE
+- MOVE_SHADOW_BALL
 
 === TRAINER_JODY ===
 Name: JODY
@@ -1723,11 +1812,11 @@ Items: Hyper Potion
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Zangoose
-Level: 26
+SPECIES_ZANGOOSE
+Level: 30
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Swords Dance
-- Slash
+- MOVE_SWORDS_DANCE
+- MOVE_SLASH
 
 === TRAINER_WENDY ===
 Name: WENDY
@@ -2168,21 +2257,21 @@ Items: Full Restore
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Luvdisc @ Nugget
-Level: 39
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Attract
-- Sweet Kiss
-- Flail
-- Water Pulse
+SPECIES_LUVDISC @ ITEM_BRIGHT_POWDER
+Level: 50
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- MOVE_ATTRACT
+- MOVE_LOVELY_KISS
+- MOVE_RAIN_DANCE
+- MOVE_WATER_PULSE
 
-Luvdisc @ Nugget
-Level: 39
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Attract
-- Safeguard
-- Take Down
-- Water Pulse
+SPECIES_LUVDISC @ ITEM_BRIGHT_POWDER
+Level: 50
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- MOVE_ATTRACT
+- MOVE_LOVELY_KISS
+- MOVE_RAIN_DANCE
+- MOVE_WATER_PULSE
 
 === TRAINER_GRUNT_SPACE_CENTER_2 ===
 Name: GRUNT
@@ -2231,8 +2320,8 @@ Items: Full Restore
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Seaking @ Nugget
-Level: 40
+SPECIES_SEAKING @ ITEM_NUGGET
+Level: 45
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 === TRAINER_NAOMI ===
@@ -2382,9 +2471,9 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Goldeen
-Level: 40
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_WALREIN
+Level: 44
+IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 === TRAINER_BRIDGET ===
 Name: BRIDGET
@@ -2395,8 +2484,8 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Azumarill
-Level: 40
+SPECIES_AZUMARILL
+Level: 46
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 === TRAINER_OLIVIA ===
@@ -2408,28 +2497,28 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Clamperl
-Level: 35
+SPECIES_CLAMPERL
+Level: 45
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Iron Defense
-- Whirlpool
-- Rain Dance
-- Water Pulse
+- MOVE_IRON_DEFENSE
+- MOVE_WHIRLPOOL
+- MOVE_RAIN_DANCE
+- MOVE_WATER_PULSE
 
-Corphish
-Level: 37
+SPECIES_CRAWDAUNT
+Level: 45
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Taunt
-- Crabhammer
-- Water Pulse
+- MOVE_TAUNT
+- MOVE_CRABHAMMER
+- MOVE_WATER_PULSE
 
-Lombre
-Level: 39
+SPECIES_LUDICOLO
+Level: 45
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Uproar
-- Fury Swipes
-- Fake Out
-- Water Pulse
+- MOVE_UPROAR
+- MOVE_FURY_SWIPES
+- MOVE_FAKE_OUT
+- MOVE_WATER_PULSE
 
 === TRAINER_TIFFANY ===
 Name: TIFFANY
@@ -2440,12 +2529,12 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Carvanha
-Level: 39
+SPECIES_SHARPEDO
+Level: 45
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
-Sharpedo
-Level: 39
+SPECIES_SHARPEDO
+Level: 46
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_JESSICA_2 ===
@@ -3202,8 +3291,12 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Machop
-Level: 13
+SPECIES_MACHOP
+Level: 14
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+
+SPECIES_MACHOP
+Level: 14
 IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
 
 === TRAINER_HITOSHI ===
@@ -3394,20 +3487,21 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Electrike
-Level: 17
+SPECIES_VOLTORB
+Level: 20
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Quick Attack
-- Thunder Wave
-- Spark
-- Leer
+- MOVE_ROLLOUT
+- MOVE_SHOCK_WAVE
+- MOVE_SCREECH
+- MOVE_SELF_DESTRUCT
 
-Voltorb
-Level: 17
+SPECIES_ELECTRIKE
+Level: 20
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Charge
-- Shock Wave
-- Screech
+- MOVE_QUICK_ATTACK
+- MOVE_HOWL
+- MOVE_SHOCK_WAVE
+- MOVE_LEER
 
 === TRAINER_GRUNT_AQUA_HIDEOUT_7 ===
 Name: GRUNT
@@ -3448,12 +3542,12 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Voltorb
-Level: 17
+SPECIES_VOLTORB
+Level: 19
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
-Magnemite
-Level: 17
+SPECIES_MAGNEMITE
+Level: 18
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_FERNANDO_1 ===
@@ -4152,8 +4246,8 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Kirlia
-Level: 36
+SPECIES_GARDEVOIR
+Level: 40
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_VIRGIL ===
@@ -4165,9 +4259,9 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Ralts
-Level: 36
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_KADABRA
+Level: 40
+IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 === TRAINER_BLAKE ===
 Name: BLAKE
@@ -4178,8 +4272,8 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Girafarig
-Level: 36
+SPECIES_GIRAFARIG
+Level: 40
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_WILLIAM ===
@@ -4324,8 +4418,8 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Kirlia
-Level: 36
+SPECIES_ABSOL
+Level: 41
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_SAMANTHA ===
@@ -4337,8 +4431,8 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Xatu
-Level: 36
+SPECIES_XATU
+Level: 41
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_MAURA ===
@@ -4350,9 +4444,9 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Kadabra
-Level: 36
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_KADABRA
+Level: 40
+IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 === TRAINER_KAYLA ===
 Name: KAYLA
@@ -4628,7 +4722,9 @@ Mugshot: Purple
 
 SPECIES_MIGHTYENA @ ITEM_QUICK_CLAW
 Level: 51
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_CRUNCH
 - MOVE_SUPER_FANG
 - MOVE_YAWN
@@ -4636,7 +4732,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_MURKROW
 Level: 51
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
 - MOVE_PURSUIT
 - MOVE_STEEL_WING
@@ -4644,15 +4742,19 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SHIFTRY
 Level: 52
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_LEAF_BLADE
-- MOVE_FAINT_ATTACK
+- MOVE_FEINT_ATTACK
 - MOVE_AERIAL_ACE
 - MOVE_EXTRASENSORY
 
 SPECIES_CRAWDAUNT @ ITEM_SCOPE_LENS
 Level: 52
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_CRABHAMMER
 - MOVE_SWORDS_DANCE
 - MOVE_CRUNCH
@@ -4660,7 +4762,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_ABSOL @ ITEM_ABSOLITE
 Level: 53
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_CRUNCH
 - MOVE_IRON_TAIL
 - MOVE_ROCK_SLIDE
@@ -4679,7 +4783,9 @@ Mugshot: Green
 
 SPECIES_SABLEYE @ ITEM_SITRUS_BERRY
 Level: 52
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_MOONLIGHT
 - MOVE_CRUNCH
 - MOVE_SHADOW_BALL
@@ -4687,7 +4793,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_BANETTE @ ITEM_BANETTITE
 Level: 53
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_SHADOW_BALL
 - MOVE_THUNDERBOLT
 - MOVE_REVENGE
@@ -4695,7 +4803,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_NINETALES @ ITEM_WHITE_HERB
 Level: 52
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_OVERHEAT
 - MOVE_WILL_O_WISP
 - MOVE_SHADOW_BALL
@@ -4703,15 +4813,19 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_MEDICHAM @ ITEM_SALAC_BERRY
 Level: 52
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_PSYCHIC
-- MOVE_HI_JUMP_KICK
+- MOVE_HIGH_JUMP_KICK
 - MOVE_ENDURE
 - MOVE_REVERSAL
 
 SPECIES_DUSCLOPS @ ITEM_LEFTOVERS
 Level: 54
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_SHADOW_BALL
 - MOVE_ICE_BEAM
 - MOVE_ROCK_SLIDE
@@ -4730,7 +4844,9 @@ Mugshot: Pink
 
 SPECIES_GLALIE @ ITEM_GLALITITE
 Level: 54
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_BLIZZARD
 - MOVE_WATER_PULSE
 - MOVE_SHADOW_BALL
@@ -4738,15 +4854,19 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SNEASEL @ ITEM_SCOPE_LENS
 Level: 53
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- MOVE_FAINT_ATTACK
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_FEINT_ATTACK
 - MOVE_BLIZZARD
 - MOVE_SWORDS_DANCE
 - MOVE_SLASH
 
 SPECIES_CASTFORM
 Level: 53
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_WEATHER_BALL
 - MOVE_HYDRO_PUMP
 - MOVE_HAIL
@@ -4754,7 +4874,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_PILOSWINE @ ITEM_CHESTO_BERRY
 Level: 54
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_EARTHQUAKE
 - MOVE_BLIZZARD
 - MOVE_ROCK_SLIDE
@@ -4762,7 +4884,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_WALREIN @ ITEM_LEFTOVERS
 Level: 55
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_SURF
 - MOVE_BLIZZARD
 - MOVE_HAIL
@@ -4781,7 +4905,9 @@ Mugshot: Blue
 
 SPECIES_FLYGON @ ITEM_QUICK_CLAW
 Level: 54
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_FLAMETHROWER
 - MOVE_SIGNAL_BEAM
@@ -4789,7 +4915,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_ALTARIA @ ITEM_SHARP_BEAK
 Level: 55
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
 - MOVE_EARTHQUAKE
 - MOVE_DRAGON_DANCE
@@ -4797,7 +4925,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_HUNTAIL @ ITEM_PETAYA_BERRY
 Level: 53
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_BODY_SLAM
 - MOVE_CRUNCH
 - MOVE_HYDRO_PUMP
@@ -4805,7 +4935,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_KINGDRA
 Level: 55
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_REST
 - MOVE_SLEEP_TALK
 - MOVE_SURF
@@ -4813,7 +4945,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SALAMENCE @ ITEM_SALAMENCITE
 Level: 56
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_FLAMETHROWER
 - MOVE_DRAGON_CLAW
 - MOVE_ROCK_SLIDE
@@ -4831,20 +4965,26 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_ANORITH
 Level: 13
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SCRATCH
 - MOVE_HARDEN
 
 SPECIES_LILEEP
 Level: 12
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ASTONISH
 - MOVE_CONSTRICT
 - MOVE_HARDEN
 
 SPECIES_NOSEPASS @ ITEM_ORAN_BERRY
 Level: 15
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_THROW
 - MOVE_HARDEN
 - MOVE_HEADBUTT
@@ -4862,15 +5002,19 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_MAKUHITA @ ITEM_SITRUS_BERRY
 Level: 17
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_VITAL_THROW
 - MOVE_REVERSAL
 - MOVE_BULK_UP
-- MOVE_FAINT_ATTACK
+- MOVE_FEINT_ATTACK
 
 SPECIES_MEDITITE
 Level: 16
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_CONFUSION
 - MOVE_THUNDER_PUNCH
 - MOVE_LIGHT_SCREEN
@@ -4878,7 +5022,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_BRELOOM
 Level: 19
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_TACKLE
 - MOVE_MEGA_DRAIN
 - MOVE_BULK_UP
@@ -4896,7 +5042,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_CHINCHOU
 Level: 24
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_SHOCK_WAVE
 - MOVE_BUBBLE_BEAM
 - MOVE_ICY_WIND
@@ -4904,7 +5052,9 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 SPECIES_MAGNETON
 Level: 23
-IVs: 27 HP / 27 Atk / 27 Def / 27 SpA / 27 SpD / 27 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDER_SHOCK
 - MOVE_THUNDER_WAVE
 - MOVE_SUPERSONIC
@@ -4912,7 +5062,9 @@ IVs: 27 HP / 27 Atk / 27 Def / 27 SpA / 27 SpD / 27 Spe
 
 SPECIES_PLUSLE
 Level: 24
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SPARK
 - MOVE_CHARM
 - MOVE_QUICK_ATTACK
@@ -4920,7 +5072,9 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 SPECIES_MANECTRIC @ ITEM_LUM_BERRY
 Level: 25
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_QUICK_ATTACK
 - MOVE_BITE
 - MOVE_SHOCK_WAVE
@@ -4938,7 +5092,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_VULPIX
 Level: 29
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Calm
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_OVERHEAT
 - MOVE_WILL_O_WISP
 - MOVE_ROAR
@@ -4946,7 +5102,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_MAGCARGO
 Level: 28
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_OVERHEAT
 - MOVE_ROCK_THROW
 - MOVE_LIGHT_SCREEN
@@ -4954,7 +5112,9 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 SPECIES_CAMERUPT
 Level: 30
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_OVERHEAT
 - MOVE_MAGNITUDE
 - MOVE_SUNNY_DAY
@@ -4962,7 +5122,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_TORKOAL @ ITEM_WHITE_HERB
 Level: 32
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_OVERHEAT
 - MOVE_SUNNY_DAY
 - MOVE_BODY_SLAM
@@ -4980,15 +5142,19 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_VIGOROTH
 Level: 31
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SLASH
 - MOVE_FACADE
 - MOVE_ENCORE
-- MOVE_FAINT_ATTACK
+- MOVE_FEINT_ATTACK
 
 SPECIES_GIRAFARIG
 Level: 30
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_FACADE
 - MOVE_PSYBEAM
 - MOVE_BITE
@@ -4996,7 +5162,9 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 SPECIES_LINOONE @ ITEM_SITRUS_BERRY
 Level: 31
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_PURSUIT
 - MOVE_BELLY_DRUM
 - MOVE_FACADE
@@ -5004,11 +5172,13 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 SPECIES_SLAKING @ ITEM_SALAC_BERRY
 Level: 33
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_COUNTER
 - MOVE_YAWN
 - MOVE_FACADE
-- MOVE_FAINT_ATTACK
+- MOVE_FEINT_ATTACK
 
 === TRAINER_WINONA_1 ===
 Name: WINONA
@@ -5022,7 +5192,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_TROPIUS
 Level: 36
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_AERIAL_ACE
 - MOVE_MAGICAL_LEAF
 - MOVE_EARTHQUAKE
@@ -5030,7 +5202,9 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 SPECIES_SWELLOW
 Level: 37
-IVs: 27 HP / 27 Atk / 27 Def / 27 SpA / 27 SpD / 27 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_AERIAL_ACE
 - MOVE_STEEL_WING
 - MOVE_TAKE_DOWN
@@ -5038,7 +5212,9 @@ IVs: 27 HP / 27 Atk / 27 Def / 27 SpA / 27 SpD / 27 Spe
 
 SPECIES_PELIPPER
 Level: 36
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_WATER_PULSE
 - MOVE_SHOCK_WAVE
 - MOVE_ICE_BEAM
@@ -5046,7 +5222,9 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 SPECIES_SKARMORY @ ITEM_QUICK_CLAW
 Level: 37
-IVs: 29 HP / 29 Atk / 29 Def / 29 SpA / 29 SpD / 29 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_WHIRLWIND
 - MOVE_MUD_SLAP
 - MOVE_STEEL_WING
@@ -5054,7 +5232,9 @@ IVs: 29 HP / 29 Atk / 29 Def / 29 SpA / 29 SpD / 29 Spe
 
 SPECIES_ALTARIA @ ITEM_ALTARIANITE
 Level: 38
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_FLAMETHROWER
 - MOVE_DRAGON_DANCE
@@ -5072,7 +5252,9 @@ AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
 SPECIES_CLAYDOL
 Level: 44
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_ANCIENT_POWER
 - MOVE_PSYCHIC
@@ -5080,7 +5262,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_XATU
 Level: 44
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_PSYCHIC
 - MOVE_CALM_MIND
 - MOVE_SUNNY_DAY
@@ -5088,15 +5272,19 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_MEDICHAM @ ITEM_MEDICHAMITE
 Level: 43
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EXTRASENSORY
-- MOVE_HI_JUMP_KICK
+- MOVE_HIGH_JUMP_KICK
 - MOVE_ICE_PUNCH
 - MOVE_FIRE_PUNCH
 
 SPECIES_CHIMECHO
 Level: 43
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_SHADOW_BALL
 - MOVE_WISH
@@ -5104,7 +5292,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_LUNATONE @ ITEM_SITRUS_BERRY
 Level: 45
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_LIGHT_SCREEN
 - MOVE_HYPNOSIS
@@ -5112,7 +5302,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SOLROCK @ ITEM_SITRUS_BERRY
 Level: 45
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_SOLAR_BEAM
 - MOVE_FLAMETHROWER
@@ -5128,49 +5320,61 @@ Items: Hyper Potion / Hyper Potion
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-Luvdisc
+SPECIES_LUVDISC
 Level: 41
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
-- Water Pulse
-- Attract
-- Sweet Kiss
-- Flail
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_WATER_PULSE
+- MOVE_ATTRACT
+- MOVE_SWEET_KISS
+- MOVE_FLAIL
 
-Whiscash
+SPECIES_WHISCASH
 Level: 41
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
-- Rain Dance
-- Water Pulse
-- Amnesia
-- Earthquake
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_RAIN_DANCE
+- MOVE_WATER_PULSE
+- MOVE_AMNESIA
+- MOVE_EARTHQUAKE
 
-Sealeo
+SPECIES_SEALEO
 Level: 43
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
-- Encore
-- Body Slam
-- Aurora Beam
-- Water Pulse
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_ENCORE
+- MOVE_BODY_SLAM
+- MOVE_AURORA_BEAM
+- MOVE_WATER_PULSE
 
-Crawdaunt
+SPECIES_CRAWDAUNT
 Level: 43
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
-- Water Pulse
-- Crabhammer
-- Taunt
-- Leer
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_WATER_PULSE
+- MOVE_CRABHAMMER
+- MOVE_TAUNT
+- MOVE_LEER
 
-Kingdra @ Chesto Berry
+SPECIES_KINGDRA @ ITEM_CHESTO_BERRY
 Level: 46
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Water Pulse
-- Double Team
-- Ice Beam
-- Rest
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_WATER_PULSE
+- MOVE_DOUBLE_TEAM
+- MOVE_ICE_BEAM
+- MOVE_REST
 
 Gyarados @ ITEM_GYARADOSITE
 Level: 45
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Waterfall
 - Crunch
 - Earthquake
@@ -5545,15 +5749,37 @@ Pic: Pokefan M
 Gender: Male
 Music: Twins
 Double Battle: No
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Taillow @ Oran Berry
-Level: 16
-IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+Swellow @ Sharp Beak
+Level: 24
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- Aerial Ace
+- Quick Attack
+- Endeavor
+- Double Team
 
-Zigzagoon @ Oran Berry
-Level: 16
-IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+Loudred @ Sitrus Berry
+Level: 23
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- Stomp
+- Howl
+- Bite
+- Supersonic
+
+Linoone @ Silk Scarf
+Level: 24
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- Headbutt
+- Pin Missile
+- Covet
+- Sand Attack
 
 === TRAINER_MIGUEL_1 ===
 Name: MIGUEL
@@ -5684,11 +5910,37 @@ Pic: Pokefan F
 Gender: Female
 Music: Twins
 Double Battle: No
-AI: Check Bad Move / Try To Faint
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Roselia @ Oran Berry
-Level: 17
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Lombre @ Sitrus Berry
+Level: 24
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- Fake Out
+- Water Pulse
+- Mega Drain
+- Fury Swipes
+
+Masquerain @ Silver Powder
+Level: 24
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- Signal Beam
+- Air Cutter
+- Stun Spore
+- Scary Face
+
+Roselia @ Miracle Seed
+Level: 25
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- Magical Leaf
+- Poison Sting
+- Leech Seed
+- Stun Spore
 
 === TRAINER_VANESSA ===
 Name: VANESSA
@@ -5712,16 +5964,16 @@ Music: Twins
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Azurill @ Oran Berry
-Level: 35
+SPECIES_AZURILL @ ITEM_ORAN_BERRY
+Level: 40
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
-Marill @ Oran Berry
-Level: 37
+SPECIES_MARILL @ ITEM_ORAN_BERRY
+Level: 44
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
-Azumarill @ Oran Berry
-Level: 39
+SPECIES_AZUMARILL @ ITEM_ORAN_BERRY
+Level: 46
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_ISABEL_1 ===
@@ -5897,14 +6149,28 @@ Pic: Expert F
 Gender: Female
 Music: Intense
 Double Battle: No
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Meditite
-Level: 18
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Hariyama @ Sitrus Berry
+Level: 26
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+Ability: Thick Fat
+- Fake Out
+- Arm Thrust
+- Knock Off
+- Bulk Up
+
+Meditite @ Black Belt
+Level: 28
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+Ability: Pure Power
 - High Jump Kick
-- Meditate
 - Confusion
+- Bulk Up
 - Detect
 
 === TRAINER_SHELBY_1 ===
@@ -6031,10 +6297,23 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Geodude
+SPECIES_GEODUDE
+Level: 9
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_TACKLE
+- MOVE_DEFENSE_CURL
+
+SPECIES_ARON
 Level: 10
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Tackle
+- MOVE_TACKLE
+- MOVE_HARDEN
+
+SPECIES_GEODUDE
+Level: 9
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- MOVE_TACKLE
+- MOVE_DEFENSE_CURL
 
 === TRAINER_TOMMY ===
 Name: TOMMY
@@ -6045,13 +6324,18 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Geodude
-Level: 8
+SPECIES_GEODUDE
+Level: 9
 IVs: 13 HP / 13 Atk / 13 Def / 13 SpA / 13 SpD / 13 Spe
+- MOVE_TACKLE
+- MOVE_DEFENSE_CURL
 
-Geodude
-Level: 8
-IVs: 14 HP / 14 Atk / 14 Def / 14 SpA / 14 SpD / 14 Spe
+SPECIES_ARON
+Level: 10
+IVs: 13 HP / 13 Atk / 13 Def / 13 SpA / 13 SpD / 13 Spe
+- MOVE_METAL_CLAW
+- MOVE_TACKLE
+- MOVE_HARDEN
 
 === TRAINER_JOEY ===
 Name: JOEY
@@ -6075,21 +6359,21 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Zigzagoon
-Level: 17
+SPECIES_LINOONE
+Level: 18
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Headbutt
-- Sand Attack
-- Growl
-- Thunderbolt
+- MOVE_HEADBUTT
+- MOVE_SAND_ATTACK
+- MOVE_GROWL
+- MOVE_THUNDERBOLT
 
-Gulpin
+SPECIES_GULPIN
 Level: 17
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Amnesia
-- Sludge
-- Yawn
-- Pound
+- MOVE_AMNESIA
+- MOVE_SLUDGE
+- MOVE_YAWN
+- MOVE_POUND
 
 === TRAINER_QUINCY ===
 Name: QUINCY
@@ -7490,16 +7774,12 @@ Music: Cool
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Doduo
-Level: 27
+SPECIES_DODUO
+Level: 32
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
-Skarmory
-Level: 27
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-
-Tropius
-Level: 27
+SPECIES_TROPIUS
+Level: 32
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_HUMBERTO ===
@@ -7511,8 +7791,8 @@ Music: Cool
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Skarmory
-Level: 30
+SPECIES_SKARMORY
+Level: 34
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 === TRAINER_PRESLEY ===
@@ -7541,12 +7821,12 @@ Music: Cool
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Doduo
-Level: 29
+SPECIES_VIBRAVA
+Level: 33
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
-Pelipper
-Level: 29
+SPECIES_MASQUERAIN
+Level: 32
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 === TRAINER_COLIN ===
@@ -8002,8 +8282,8 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Meditite
-Level: 13
+SPECIES_MEDITITE
+Level: 14
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 === TRAINER_CYNDY_1 ===
@@ -9314,21 +9594,21 @@ Music: Twins
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Feebas @ Oran Berry
-Level: 39
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Flail
-- Water Pulse
-- Return
-- Attract
+SPECIES_FEEBAS @ ITEM_BRIGHT_POWDER
+Level: 50
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- MOVE_SURF
+- MOVE_BLIZZARD
+- MOVE_RAIN_DANCE
+- MOVE_ATTRACT
 
-Feebas @ Oran Berry
-Level: 39
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Flail
-- Water Pulse
-- Return
-- Attract
+SPECIES_FEEBAS @ ITEM_BRIGHT_POWDER
+Level: 50
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- MOVE_SURF
+- MOVE_BLIZZARD
+- MOVE_RAIN_DANCE
+- MOVE_ATTRACT
 
 === TRAINER_JAZMYN ===
 Name: JAZMYN
@@ -9521,17 +9801,35 @@ Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 Multi Party: Half
 
-Camerupt
-Level: 36
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_CROBAT @ ITEM_LEFTOVERS
+Level: 43
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_WING_ATTACK
+- MOVE_GIGA_DRAIN
+- MOVE_POISON_FANG
+- MOVE_CONFUSE_RAY
 
-Mightyena
-Level: 38
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_AGGRON
+Level: 43
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_EARTHQUAKE
+- MOVE_ROCK_SLIDE
+- MOVE_IRON_TAIL
+- MOVE_PROTECT
 
-Golbat
-Level: 40
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_ZANGOOSE
+Level: 44
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_CRUSH_CLAW
+- MOVE_FEINT_ATTACK
+- MOVE_SUNNY_DAY
+- MOVE_SWORDS_DANCE
 
 === TRAINER_EDWIN_2 ===
 Name: EDWIN
@@ -9614,7 +9912,7 @@ Mawile @ ITEM_SITRUS_BERRY
 Level: 50
 Ability: Intimidate
 Nature: Impish
-IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - MOVE_PLAY_ROUGH
 - MOVE_IRON_HEAD
 - MOVE_SUCKER_PUNCH
@@ -9624,7 +9922,7 @@ Crawdaunt
 Level: 51
 Ability: Adaptability
 Nature: Adamant
-IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - MOVE_CRABHAMMER
 - MOVE_KNOCK_OFF
 - MOVE_AQUA_JET
@@ -9634,7 +9932,7 @@ Flygon
 Level: 52
 Ability: Levitate
 Nature: Jolly
-IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - MOVE_EARTHQUAKE
 - MOVE_DRAGON_CLAW
 - MOVE_U_TURN
@@ -9644,7 +9942,7 @@ Gardevoir @ ITEM_LEFTOVERS
 Level: 53
 Ability: Trace
 Nature: Timid
-IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - MOVE_PSYCHIC
 - MOVE_MOONBLAST
 - MOVE_CALM_MIND
@@ -9659,9 +9957,11 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Treecko
+SPECIES_TREECKO
 Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Nature: Calm
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 
 === TRAINER_BRENDAN_ROUTE_110_MUDKIP ===
 Name: BRENDAN
@@ -9672,17 +9972,35 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Slugma
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Wingull
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Grovyle
+SPECIES_SPOINK
 Level: 20
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_CONFUSION
+- MOVE_TACKLE
+- MOVE_CONFUSE_RAY
+- MOVE_PSYCH_UP
+
+SPECIES_TORKOAL
+Level: 18
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_SMOG
+- MOVE_EMBER
+- MOVE_SMOKESCREEN
+- MOVE_FIRE_SPIN
+
+SPECIES_GROVYLE
+Level: 22
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_ABSORB
+- MOVE_QUICK_ATTACK
+- MOVE_FALSE_SWIPE
+- MOVE_RAZOR_LEAF
 
 === TRAINER_BRENDAN_ROUTE_119_MUDKIP ===
 Name: BRENDAN
@@ -9693,17 +10011,45 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Slugma
-Level: 29
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_GRUMPIG
+Level: 34
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYBEAM
 
-Pelipper
-Level: 29
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_KECLEON
+Level: 33
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYBEAM
 
-Grovyle
-Level: 31
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_TORKOAL
+Level: 33
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_CURSE
+- MOVE_BODY_SLAM
+- MOVE_FLAMETHROWER
+- MOVE_SUNNY_DAY
+
+SPECIES_GROVYLE
+Level: 35
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_ROCK_TOMB
+- MOVE_RAZOR_LEAF
+- MOVE_GROWTH
+- MOVE_SLASH
 
 === TRAINER_BRENDAN_ROUTE_103_TREECKO ===
 Name: BRENDAN
@@ -9714,9 +10060,11 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Torchic
+SPECIES_TORCHIC
 Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Nature: Calm
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 
 === TRAINER_BRENDAN_ROUTE_110_TREECKO ===
 Name: BRENDAN
@@ -9727,17 +10075,35 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Wingull
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Lombre
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Combusken
+SPECIES_SPOINK
 Level: 20
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_CONFUSION
+- MOVE_TACKLE
+- MOVE_CONFUSE_RAY
+- MOVE_PSYCH_UP
+
+SPECIES_WAILMER
+Level: 18
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_GROWL
+- MOVE_WATER_GUN
+- MOVE_WHIRLPOOL
+- MOVE_ASTONISH
+
+SPECIES_COMBUSKEN
+Level: 22
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_PECK
+- MOVE_FOCUS_ENERGY
+- MOVE_EMBER
+- MOVE_DOUBLE_KICK
 
 === TRAINER_BRENDAN_ROUTE_119_TREECKO ===
 Name: BRENDAN
@@ -9748,17 +10114,45 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Pelipper
-Level: 29
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_GRUMPIG
+Level: 34
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYBEAM
 
-Lombre
-Level: 29
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_KECLEON
+Level: 33
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYBEAM
 
-Combusken
-Level: 31
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_WAILMER
+Level: 33
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_WATER_PULSE
+- MOVE_ICE_BEAM
+- MOVE_GROWL
+- MOVE_ASTONISH
+
+SPECIES_COMBUSKEN
+Level: 35
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_FIRE_PUNCH
+- MOVE_ROLLING_KICK
+- MOVE_BULK_UP
+- MOVE_SUNNY_DAY
 
 === TRAINER_BRENDAN_ROUTE_103_TORCHIC ===
 Name: BRENDAN
@@ -9769,9 +10163,11 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Mudkip
+SPECIES_MUDKIP
 Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Nature: Impish
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Def / 4 SpD
 
 === TRAINER_BRENDAN_ROUTE_110_TORCHIC ===
 Name: BRENDAN
@@ -9782,17 +10178,35 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Lombre
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Slugma
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Marshtomp
+SPECIES_SPOINK
 Level: 20
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_CONFUSION
+- MOVE_TACKLE
+- MOVE_CONFUSE_RAY
+- MOVE_PSYCH_UP
+
+SPECIES_SHROOMISH
+Level: 18
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_TACKLE
+- MOVE_STUN_SPORE
+- MOVE_LEECH_SEED
+- MOVE_MEGA_DRAIN
+
+SPECIES_MARSHTOMP
+Level: 22
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_MUD_SHOT
+- MOVE_ROCK_TOMB
+- MOVE_WATER_GUN
+- MOVE_TACKLE
 
 === TRAINER_BRENDAN_ROUTE_119_TORCHIC ===
 Name: BRENDAN
@@ -9803,17 +10217,45 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Lombre
-Level: 29
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_GRUMPIG
+Level: 34
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYBEAM
 
-Slugma
-Level: 29
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_KECLEON
+Level: 33
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYBEAM
 
-Marshtomp
-Level: 31
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_BRELOOM
+Level: 33
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_MEGA_DRAIN
+- MOVE_HEADBUTT
+- MOVE_MACH_PUNCH
+- MOVE_LEECH_SEED
+
+SPECIES_MARSHTOMP
+Level: 35
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_MUD_SHOT
+- MOVE_ROCK_TOMB
+- MOVE_TAKE_DOWN
+- MOVE_BUBBLE_BEAM
 
 === TRAINER_MAY_ROUTE_103_MUDKIP ===
 Name: MAY
@@ -9826,7 +10268,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_TREECKO
 Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Nature: Calm
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 
 === TRAINER_MAY_ROUTE_110_MUDKIP ===
 Name: MAY
@@ -9839,7 +10283,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_SPOINK
 Level: 20
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_CONFUSION
 - MOVE_TACKLE
 - MOVE_CONFUSE_RAY
@@ -9847,7 +10293,9 @@ IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
 
 SPECIES_TORKOAL
 Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_SMOG
 - MOVE_EMBER
 - MOVE_SMOKESCREEN
@@ -9855,7 +10303,9 @@ IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
 
 SPECIES_GROVYLE
 Level: 22
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_ABSORB
 - MOVE_QUICK_ATTACK
 - MOVE_FALSE_SWIPE
@@ -9872,7 +10322,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_GRUMPIG
 Level: 34
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_SHOCK_WAVE
 - MOVE_REST
 - MOVE_SLEEP_TALK
@@ -9880,7 +10332,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_KECLEON
 Level: 33
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDERBOLT
 - MOVE_SUBSTITUTE
 - MOVE_SLASH
@@ -9888,7 +10342,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_TORKOAL
 Level: 33
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_CURSE
 - MOVE_BODY_SLAM
 - MOVE_FLAMETHROWER
@@ -9896,7 +10352,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_GROVYLE
 Level: 35
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_ROCK_TOMB
 - MOVE_RAZOR_LEAF
 - MOVE_GROWTH
@@ -9913,7 +10371,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_TORCHIC
 Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Nature: Calm
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 
 === TRAINER_MAY_ROUTE_110_TREECKO ===
 Name: MAY
@@ -9926,7 +10386,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_SPOINK
 Level: 20
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_CONFUSION
 - MOVE_TACKLE
 - MOVE_CONFUSE_RAY
@@ -9934,7 +10396,9 @@ IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
 
 SPECIES_WAILMER
 Level: 18
-IVs: 1 HP / 1 Atk / 1 Def / 1 SpA / 1 SpD / 1 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_GROWL
 - MOVE_WATER_GUN
 - MOVE_WHIRLPOOL
@@ -9942,7 +10406,9 @@ IVs: 1 HP / 1 Atk / 1 Def / 1 SpA / 1 SpD / 1 Spe
 
 SPECIES_COMBUSKEN
 Level: 22
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_PECK
 - MOVE_FOCUS_ENERGY
 - MOVE_EMBER
@@ -9959,7 +10425,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_GRUMPIG
 Level: 34
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_SHOCK_WAVE
 - MOVE_REST
 - MOVE_SLEEP_TALK
@@ -9967,7 +10435,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_KECLEON
 Level: 33
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDERBOLT
 - MOVE_SUBSTITUTE
 - MOVE_SLASH
@@ -9975,7 +10445,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_WAILMER
 Level: 33
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_WATER_PULSE
 - MOVE_ICE_BEAM
 - MOVE_GROWL
@@ -9983,7 +10455,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_COMBUSKEN
 Level: 35
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_FIRE_PUNCH
 - MOVE_ROLLING_KICK
 - MOVE_BULK_UP
@@ -10000,7 +10474,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_MUDKIP
 Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Nature: Impish
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Def / 4 SpD
 
 === TRAINER_MAY_ROUTE_110_TORCHIC ===
 Name: MAY
@@ -10013,7 +10489,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_SPOINK
 Level: 20
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_CONFUSION
 - MOVE_TACKLE
 - MOVE_CONFUSE_RAY
@@ -10021,7 +10499,9 @@ IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
 
 SPECIES_SHROOMISH
 Level: 18
-IVs: 27 HP / 27 Atk / 27 Def / 27 SpA / 27 SpD / 27 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_TACKLE
 - MOVE_STUN_SPORE
 - MOVE_LEECH_SEED
@@ -10029,7 +10509,9 @@ IVs: 27 HP / 27 Atk / 27 Def / 27 SpA / 27 SpD / 27 Spe
 
 SPECIES_MARSHTOMP
 Level: 22
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_MUD_SHOT
 - MOVE_ROCK_TOMB
 - MOVE_WATER_GUN
@@ -10046,7 +10528,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_GRUMPIG
 Level: 34
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_SHOCK_WAVE
 - MOVE_REST
 - MOVE_SLEEP_TALK
@@ -10054,7 +10538,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_KECLEON
 Level: 33
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDERBOLT
 - MOVE_SUBSTITUTE
 - MOVE_SLASH
@@ -10062,7 +10548,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_BRELOOM
 Level: 33
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_MEGA_DRAIN
 - MOVE_HEADBUTT
 - MOVE_MACH_PUNCH
@@ -10070,7 +10558,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_MARSHTOMP
 Level: 35
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_MUD_SHOT
 - MOVE_ROCK_TOMB
 - MOVE_TAKE_DOWN
@@ -10856,13 +11346,13 @@ Music: Hiker
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Geodude
-Level: 8
-IVs: 14 HP / 14 Atk / 14 Def / 14 SpA / 14 SpD / 14 Spe
+SPECIES_ARON
+Level: 9
+IVs: 13 HP / 13 Atk / 13 Def / 13 SpA / 13 SpD / 13 Spe
 
-Geodude
-Level: 8
-IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+SPECIES_GEODUDE
+Level: 10
+IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
 
 === TRAINER_BRENDEN ===
 Name: BRENDEN
@@ -10886,9 +11376,13 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Meditite
+SPECIES_MEDITITE
 Level: 13
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+
+SPECIES_MEDITITE
+Level: 13
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_CRISTIAN ===
 Name: CRISTIAN
@@ -10899,9 +11393,17 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Makuhita
-Level: 13
+SPECIES_MACHOP
+Level: 12
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+
+SPECIES_MAKUHITA
+Level: 14
 IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+
+SPECIES_MACHOP
+Level: 12
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
 
 === TRAINER_SYLVIA ===
 Name: SYLVIA
@@ -10912,8 +11414,8 @@ Music: Suspicious
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Meditite
-Level: 36
+SPECIES_MEDICHAM
+Level: 40
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_LEONARDO ===
@@ -11013,8 +11515,8 @@ Music: Rich
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Spoink
-Level: 36
+SPECIES_GRUMPIG
+Level: 41
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_KATHLEEN ===
@@ -11026,9 +11528,9 @@ Music: Suspicious
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Kadabra
-Level: 36
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_ALAKAZAM
+Level: 42
+IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
 
 === TRAINER_CLIFFORD ===
 Name: CLIFFORD
@@ -11039,9 +11541,9 @@ Music: Rich
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Girafarig
-Level: 36
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+SPECIES_GIRAFARIG
+Level: 42
+IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
 
 === TRAINER_NICHOLAS ===
 Name: NICHOLAS
@@ -11052,8 +11554,8 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Wobbuffet
-Level: 36
+SPECIES_WOBBUFFET
+Level: 42
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
 === TRAINER_GRUNT_SPACE_CENTER_3 ===
@@ -11134,8 +11636,8 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Natu
-Level: 36
+SPECIES_XATU
+Level: 42
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
 === TRAINER_BRENDAN_RUSTBORO_TREECKO ===
@@ -11147,13 +11649,24 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Lotad
+SPECIES_SPOINK
 Level: 13
-IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_TACKLE
+- MOVE_CONFUSION
+- MOVE_ODOR_SLEUTH
 
-Torchic
+SPECIES_TORCHIC
 Level: 15
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_GROWL
+- MOVE_PECK
+- MOVE_EMBER
+- MOVE_SAND_ATTACK
 
 === TRAINER_BRENDAN_RUSTBORO_MUDKIP ===
 Name: BRENDAN
@@ -11164,13 +11677,23 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Wingull
+SPECIES_SPOINK
 Level: 13
-IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_TACKLE
+- MOVE_CONFUSION
+- MOVE_ODOR_SLEUTH
 
-Treecko
+SPECIES_TREECKO
 Level: 15
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_LEER
+- MOVE_ABSORB
+- MOVE_QUICK_ATTACK
 
 === TRAINER_PAXTON ===
 Name: PAXTON
@@ -11228,21 +11751,35 @@ Music: Magma
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Numel
-Level: 18
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+SPECIES_CACNEA
+Level: 25
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_LEECH_SEED
+- MOVE_PURSUIT
+- MOVE_PIN_MISSILE
+- MOVE_INGRAIN
 
-Poochyena
-Level: 20
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+SPECIES_LAIRON
+Level: 25
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_METAL_CLAW
+- MOVE_ROCK_THROW
+- MOVE_MUD_SLAP
+- MOVE_HEADBUTT
 
-Numel
-Level: 22
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
-
-Zubat
-Level: 22
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+SPECIES_ZANGOOSE
+Level: 26
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_SLASH
+- MOVE_PURSUIT
+- MOVE_METAL_CLAW
+- MOVE_QUICK_ATTACK
 
 === TRAINER_JONATHAN ===
 Name: JONATHAN
@@ -11271,13 +11808,24 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Slugma
+SPECIES_SPOINK
 Level: 13
-IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_TACKLE
+- MOVE_CONFUSION
+- MOVE_ODOR_SLEUTH
 
-Mudkip
+SPECIES_MUDKIP
 Level: 15
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_TACKLE
+- MOVE_GROWL
+- MOVE_MUD_SLAP
+- MOVE_WATER_GUN
 
 === TRAINER_MAY_RUSTBORO_MUDKIP ===
 Name: MAY
@@ -11290,14 +11838,18 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_SPOINK
 Level: 13
-IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_TACKLE
 - MOVE_CONFUSION
 - MOVE_ODOR_SLEUTH
 
 SPECIES_TREECKO
 Level: 15
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_LEER
 - MOVE_ABSORB
 - MOVE_QUICK_ATTACK
@@ -11314,7 +11866,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_HOUNDOOM
 Level: 37
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_FLAMETHROWER
 - MOVE_CRUNCH
 - MOVE_SUNNY_DAY
@@ -11322,7 +11876,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_SHIFTRY
 Level: 38
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_LEAF_BLADE
 - MOVE_EXTRASENSORY
 - MOVE_FEINT_ATTACK
@@ -11330,7 +11886,9 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 SPECIES_AGGRON
 Level: 38
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_IRON_TAIL
 - MOVE_ROCK_THROW
 - MOVE_EARTHQUAKE
@@ -11338,7 +11896,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_CROBAT
 Level: 39
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_FLY
 - MOVE_POISON_FANG
 - MOVE_GIGA_DRAIN
@@ -11346,7 +11906,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_CAMERUPT @ ITEM_QUICK_CLAW
 Level: 40
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_FIRE_BLAST
 - MOVE_EARTHQUAKE
 - MOVE_ROCK_SLIDE
@@ -11364,7 +11926,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_MIGHTYENA
 Level: 26
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_BITE
 - MOVE_SAND_ATTACK
 - MOVE_TAKE_DOWN
@@ -11372,7 +11936,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_GOLBAT
 Level: 26
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_WING_ATTACK
 - MOVE_CONFUSE_RAY
 - MOVE_BITE
@@ -11380,7 +11946,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_NUZLEAF
 Level: 25
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_RAZOR_LEAF
 - MOVE_LEECH_SEED
 - MOVE_ROCK_TOMB
@@ -11388,7 +11956,9 @@ IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
 
 SPECIES_CAMERUPT
 Level: 28
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_MAGNITUDE
 - MOVE_FLAME_WHEEL
 - MOVE_ROCK_TOMB
@@ -11448,19 +12018,37 @@ Pic: Lass
 Gender: Female
 Music: Female
 Double Battle: No
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Marill
-Level: 15
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Azumarill @ Sitrus Berry
+Level: 24
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- Bubble Beam
+- Rollout
+- Defense Curl
+- Charm
 
-Shroomish
-Level: 15
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Numel @ Charcoal
+Level: 24
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- Flame Burst
+- Magnitude
+- Focus Energy
+- Take Down
 
-Numel
-Level: 15
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Breloom @ Oran Berry
+Level: 24
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- Mach Punch
+- Headbutt
+- Leech Seed
+- Stun Spore
 
 === TRAINER_HALEY_2 ===
 Name: HALEY
@@ -11577,8 +12165,8 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Luvdisc
-Level: 40
+SPECIES_GYARADOS
+Level: 46
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_CRISSY ===
@@ -11590,12 +12178,12 @@ Music: Female
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Goldeen
-Level: 39
+SPECIES_SEAKING
+Level: 45
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
-Wailmer
-Level: 39
+SPECIES_WAILORD
+Level: 45
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_RICK ===
@@ -12236,21 +12824,21 @@ Music: Intense
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Meditite
-Level: 17
+SPECIES_MEDITITE
+Level: 18
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Bide
-- Detect
-- Confusion
-- Thunder Punch
+- MOVE_BIDE
+- MOVE_DETECT
+- MOVE_CONFUSION
+- MOVE_THUNDER_PUNCH
 
-Meditite
-Level: 17
+SPECIES_MEDITITE
+Level: 18
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Thunder Punch
-- Detect
-- Confusion
-- Meditate
+- MOVE_THUNDER_PUNCH
+- MOVE_DETECT
+- MOVE_CONFUSION
+- MOVE_MEDITATE
 
 === TRAINER_DANIELLE ===
 Name: DANIELLE
@@ -12353,12 +12941,12 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Swellow
-Level: 29
+SPECIES_SWELLOW
+Level: 32
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
-Xatu
-Level: 29
+SPECIES_XATU
+Level: 33
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 === TRAINER_ASHLEY ===
@@ -12370,16 +12958,12 @@ Music: Girl
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Swablu
-Level: 27
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+SPECIES_SWABLU
+Level: 32
+IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
-Swablu
-Level: 27
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-
-Swablu
-Level: 27
+SPECIES_DODRIO
+Level: 32
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_WALLY_MAUVILLE ===
@@ -12393,7 +12977,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 Ralts
 Level: 16
-IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+Nature: Calm
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 
 === TRAINER_WALLY_VR_2 ===
 Name: WALLY
@@ -12469,7 +13055,6 @@ EVs: 4 HP / 252 SpA / 252 Spe
 - Focus Blast
 - Calm Mind
 
-
 === TRAINER_WALLY_SOOTOPOLIS ===
 Name: WALLY
 Class: Rival
@@ -12537,7 +13122,6 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Moonblast
 - Calm Mind
 - Focus Blast
-
 
 === TRAINER_BRENDAN_FINAL_TORCHIC ===
 Name: BRENDAN
@@ -12682,21 +13266,55 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Tropius
-Level: 31
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_KECLEON
+Level: 36
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYCHIC
 
-Slugma
-Level: 32
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_GRUMPIG
+Level: 37
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYCHIC
 
-Pelipper
-Level: 32
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_HERACROSS
+Level: 36
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_BRICK_BREAK
+- MOVE_COUNTER
+- MOVE_TWINEEDLE
+- MOVE_TAKE_DOWN
 
-Grovyle
-Level: 34
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+SPECIES_TORKOAL
+Level: 36
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_CURSE
+- MOVE_BODY_SLAM
+- MOVE_FLAMETHROWER
+- MOVE_AMNESIA
+
+SPECIES_SCEPTILE
+Level: 38
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_GROWTH
+- MOVE_SLASH
+- MOVE_ROCK_TOMB
+- MOVE_LEAF_BLADE
 
 === TRAINER_BRENDAN_LILYCOVE_TREECKO ===
 Name: BRENDAN
@@ -12707,21 +13325,55 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Tropius
-Level: 31
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_KECLEON
+Level: 36
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYCHIC
 
-Pelipper
-Level: 32
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_GRUMPIG
+Level: 37
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYCHIC
 
-Ludicolo
-Level: 32
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_DONPHAN
+Level: 36
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_EARTHQUAKE
+- MOVE_FLAIL
+- MOVE_TAKE_DOWN
+- MOVE_ROLLOUT
 
-Combusken
-Level: 34
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+SPECIES_WAILORD
+Level: 36
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_SURF
+- MOVE_ICE_BEAM
+- MOVE_ASTONISH
+- MOVE_AMNESIA
+
+SPECIES_BLAZIKEN
+Level: 38
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_BLAZE_KICK
+- MOVE_ROLLING_KICK
+- MOVE_BULK_UP
+- MOVE_MACH_PUNCH
 
 === TRAINER_BRENDAN_LILYCOVE_TORCHIC ===
 Name: BRENDAN
@@ -12732,21 +13384,55 @@ Music: Male
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Tropius
-Level: 31
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_KECLEON
+Level: 36
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDERBOLT
+- MOVE_SUBSTITUTE
+- MOVE_SLASH
+- MOVE_PSYCHIC
 
-Ludicolo
-Level: 32
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_GRUMPIG
+Level: 37
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_SHOCK_WAVE
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_PSYCHIC
 
-Slugma
-Level: 32
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+SPECIES_PINSIR
+Level: 36
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_SEISMIC_TOSS
+- MOVE_REVENGE
+- MOVE_TWINEEDLE
+- MOVE_BRICK_BREAK
 
-Marshtomp
-Level: 34
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+SPECIES_BRELOOM
+Level: 36
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_GIGA_DRAIN
+- MOVE_HEADBUTT
+- MOVE_COUNTER
+- MOVE_BRICK_BREAK
+
+SPECIES_SWAMPERT
+Level: 38
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_MUD_SHOT
+- MOVE_ROCK_TOMB
+- MOVE_TAKE_DOWN
+- MOVE_MUDDY_WATER
 
 === TRAINER_MAY_LILYCOVE_MUDKIP ===
 Name: MAY
@@ -12759,7 +13445,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_KECLEON
 Level: 36
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDERBOLT
 - MOVE_SUBSTITUTE
 - MOVE_SLASH
@@ -12767,7 +13455,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_GRUMPIG
 Level: 37
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_SHOCK_WAVE
 - MOVE_REST
 - MOVE_SLEEP_TALK
@@ -12775,7 +13465,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_HERACROSS
 Level: 36
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_BRICK_BREAK
 - MOVE_COUNTER
 - MOVE_TWINEEDLE
@@ -12783,7 +13475,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_TORKOAL
 Level: 36
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_CURSE
 - MOVE_BODY_SLAM
 - MOVE_FLAMETHROWER
@@ -12791,7 +13485,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_SCEPTILE @ ITEM_SCEPTILITE
 Level: 38
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_GROWTH
 - MOVE_SLASH
 - MOVE_ROCK_TOMB
@@ -12808,7 +13504,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_KECLEON
 Level: 36
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDERBOLT
 - MOVE_SUBSTITUTE
 - MOVE_SLASH
@@ -12816,7 +13514,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_GRUMPIG
 Level: 37
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_SHOCK_WAVE
 - MOVE_REST
 - MOVE_SLEEP_TALK
@@ -12824,7 +13524,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_DONPHAN
 Level: 36
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_EARTHQUAKE
 - MOVE_FLAIL
 - MOVE_TAKE_DOWN
@@ -12832,7 +13534,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_WAILORD
 Level: 36
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_SURF
 - MOVE_ICE_BEAM
 - MOVE_ASTONISH
@@ -12840,7 +13544,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_BLAZIKEN @ ITEM_BLAZIKENITE
 Level: 38
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_BLAZE_KICK
 - MOVE_ROLLING_KICK
 - MOVE_BULK_UP
@@ -12857,7 +13563,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_KECLEON
 Level: 36
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDERBOLT
 - MOVE_SUBSTITUTE
 - MOVE_SLASH
@@ -12865,7 +13573,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_GRUMPIG
 Level: 37
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_SHOCK_WAVE
 - MOVE_REST
 - MOVE_SLEEP_TALK
@@ -12873,7 +13583,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_PINSIR
 Level: 36
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SEISMIC_TOSS
 - MOVE_REVENGE
 - MOVE_TWINEEDLE
@@ -12881,7 +13593,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_BRELOOM
 Level: 36
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_GIGA_DRAIN
 - MOVE_HEADBUTT
 - MOVE_COUNTER
@@ -12889,7 +13603,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_SWAMPERT @ ITEM_SWAMPERTITE
 Level: 38
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_MUD_SHOT
 - MOVE_ROCK_TOMB
 - MOVE_TAKE_DOWN
@@ -13992,21 +14708,45 @@ Music: Magma
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Numel
-Level: 26
-IVs: 9 HP / 9 Atk / 9 Def / 9 SpA / 9 SpD / 9 Spe
+SPECIES_CROBAT
+Level: 36
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_WING_ATTACK
+- MOVE_GIGA_DRAIN
+- MOVE_SLUDGE_BOMB
+- MOVE_CONFUSE_RAY
 
-Mightyena
-Level: 28
-IVs: 9 HP / 9 Atk / 9 Def / 9 SpA / 9 SpD / 9 Spe
+SPECIES_LAIRON
+Level: 35
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_IRON_TAIL
+- MOVE_ROCK_TOMB
+- MOVE_SANDSTORM
+- MOVE_MUD_SLAP
 
-Zubat
-Level: 30
-IVs: 9 HP / 9 Atk / 9 Def / 9 SpA / 9 SpD / 9 Spe
+SPECIES_CACTURNE
+Level: 35
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_NEEDLE_ARM
+- MOVE_FEINT_ATTACK
+- MOVE_LEECH_SEED
+- MOVE_INGRAIN
 
-Camerupt
-Level: 33
-IVs: 9 HP / 9 Atk / 9 Def / 9 SpA / 9 SpD / 9 Spe
+SPECIES_ZANGOOSE
+Level: 37
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_CRUSH_CLAW
+- MOVE_FEINT_ATTACK
+- MOVE_SWORDS_DANCE
+- MOVE_METAL_CLAW
 
 === TRAINER_DARCY ===
 Name: DARCY
@@ -14038,7 +14778,9 @@ Multi Party: Half
 
 SPECIES_HOUNDOOM @ ITEM_SALAC_BERRY
 Level: 44
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_FLAMETHROWER
 - MOVE_SUNNY_DAY
 - MOVE_SOLAR_BEAM
@@ -14046,7 +14788,9 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 SPECIES_SHIFTRY
 Level: 44
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_LEAF_BLADE
 - MOVE_EXTRASENSORY
 - MOVE_FEINT_ATTACK
@@ -14054,7 +14798,9 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 SPECIES_CAMERUPT @ ITEM_FOCUS_BAND
 Level: 45
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_HEAT_WAVE
 - MOVE_EARTHQUAKE
 - MOVE_ROCK_SLIDE
@@ -14643,14 +15389,18 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_SPOINK
 Level: 13
-IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_TACKLE
 - MOVE_CONFUSION
 - MOVE_ODOR_SLEUTH
 
 SPECIES_TORCHIC
 Level: 15
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_GROWL
 - MOVE_PECK
 - MOVE_EMBER
@@ -14667,14 +15417,18 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 SPECIES_SPOINK
 Level: 13
-IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_TACKLE
 - MOVE_CONFUSION
 - MOVE_ODOR_SLEUTH
 
 SPECIES_MUDKIP
 Level: 15
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_TACKLE
 - MOVE_GROWL
 - MOVE_MUD_SLAP
@@ -14692,7 +15446,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_CRADILY
 Level: 69
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_SANDSTORM
 - MOVE_INGRAIN
 - MOVE_ROCK_TOMB
@@ -14700,7 +15456,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 SPECIES_ARMALDO
 Level: 69
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_TOMB
 - MOVE_METAL_CLAW
 - MOVE_CUT
@@ -14708,7 +15466,9 @@ IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 Aerodactyl @ Aerodactylite
 Level: 68
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Rock Slide
 - Bite
 - Wing Attack
@@ -14716,7 +15476,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_PROBOPASS @ ITEM_ORAN_BERRY
 Level: 70
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_SLIDE
 - MOVE_SPARK
 - MOVE_THUNDER_WAVE
@@ -14734,7 +15496,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 Aerodactyl @ Aerodactylite
 Level: 74
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Stone Edge
 - Crunch
 - Aerial Ace
@@ -14742,7 +15506,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_ARMALDO @ ITEM_KINGS_ROCK
 Level: 73
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_TOMB
 - MOVE_METAL_CLAW
 - MOVE_CUT
@@ -14750,7 +15516,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_RHYPERIOR @ ITEM_SOFT_SAND
 Level: 74
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_SLIDE
 - MOVE_EARTHQUAKE
 - MOVE_SANDSTORM
@@ -14758,7 +15526,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_CRADILY @ ITEM_APICOT_BERRY
 Level: 73
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_SANDSTORM
 - MOVE_INGRAIN
 - MOVE_RECOVER
@@ -14766,7 +15536,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_PROBOPASS @ ITEM_LEFTOVERS
 Level: 76
+Nature: Calm
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_SMELLINGSALT
 - MOVE_PROTECT
 - MOVE_THUNDERBOLT
@@ -14784,7 +15556,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_TYRANITAR @ ITEM_QUICK_CLAW
 Level: 80
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_ROCK_SLIDE
 - MOVE_THUNDERBOLT
 - MOVE_ICE_BEAM
@@ -14792,7 +15566,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_AERODACTYL @ ITEM_AERODACTYLITE
 Level: 79
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_ROCK_SLIDE
 - MOVE_DOUBLE_EDGE
 - MOVE_SKY_ATTACK
@@ -14800,7 +15576,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_DONPHAN @ ITEM_CHESTO_BERRY
 Level: 80
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_EARTHQUAKE
 - MOVE_ROCK_SLIDE
 - MOVE_SUBSTITUTE
@@ -14808,7 +15586,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_CRADILY @ ITEM_LEFTOVERS
 Level: 79
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_INGRAIN
 - MOVE_ANCIENT_POWER
 - MOVE_GIGA_DRAIN
@@ -14816,7 +15596,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_STEELIX @ ITEM_CHOICE_BAND
 Level: 80
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_SLIDE
 - MOVE_EXPLOSION
 - MOVE_CRUNCH
@@ -14824,7 +15606,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_PROBOPASS @ ITEM_MAGNET
 Level: 82
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_SLIDE
 - MOVE_PROTECT
 - MOVE_THUNDER
@@ -14842,7 +15626,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_TYRANITAR @ ITEM_CHOICE_BAND
 Level: 86
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_SLIDE
 - MOVE_EARTHQUAKE
 - MOVE_PURSUIT
@@ -14850,7 +15636,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_FLYGON @ ITEM_LEFTOVERS
 Level: 85
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_ROCK_SLIDE
 - MOVE_SUBSTITUTE
@@ -14858,7 +15646,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_AERODACTYL @ ITEM_AERODACTYLITE
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_ROCK_SLIDE
 - MOVE_DOUBLE_EDGE
 - MOVE_SKY_ATTACK
@@ -14866,7 +15656,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_CRADILY @ ITEM_SALAC_BERRY
 Level: 85
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_INGRAIN
 - MOVE_ANCIENT_POWER
 - MOVE_GIGA_DRAIN
@@ -14874,7 +15666,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_ARMALDO @ ITEM_QUICK_CLAW
 Level: 86
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_KNOCK_OFF
 - MOVE_SWORDS_DANCE
 - MOVE_TWINEEDLE
@@ -14882,7 +15676,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_PROBOPASS @ ITEM_BRIGHT_POWDER
 Level: 88
+Nature: Careful
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_ROCK_SLIDE
 - MOVE_PROTECT
 - MOVE_THUNDER_WAVE
@@ -14900,7 +15696,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 Medicham @ Medichamite
 Level: 69
-IVs: 22 HP / 22 Atk / 22 Def / 22 SpA / 22 SpD / 22 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - High Jump Kick
 - Zen Headbutt
 - Bullet Punch
@@ -14908,7 +15706,9 @@ IVs: 22 HP / 22 Atk / 22 Def / 22 SpA / 22 SpD / 22 Spe
 
 SPECIES_MACHAMP
 Level: 68
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_KARATE_CHOP
 - MOVE_ROCK_TOMB
 - MOVE_SEISMIC_TOSS
@@ -14916,7 +15716,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_BRELOOM
 Level: 69
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_MACH_PUNCH
 - MOVE_MEGA_DRAIN
 - MOVE_BULK_UP
@@ -14924,7 +15726,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 SPECIES_HARIYAMA @ ITEM_SITRUS_BERRY
 Level: 70
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_VITAL_THROW
 - MOVE_REVERSAL
 - MOVE_BULK_UP
@@ -14942,7 +15746,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 Medicham @ Medichamite
 Level: 74
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - High Jump Kick
 - Zen Headbutt
 - Bullet Punch
@@ -14950,7 +15756,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_BRELOOM @ ITEM_QUICK_CLAW
 Level: 73
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_FOCUS_PUNCH
 - MOVE_LEECH_SEED
 - MOVE_STUN_SPORE
@@ -14958,7 +15766,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_POLIWRATH @ ITEM_MYSTIC_WATER
 Level: 74
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_SURF
 - MOVE_HYPNOSIS
 - MOVE_FOCUS_PUNCH
@@ -14966,7 +15776,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_PRIMEAPE @ ITEM_HARD_STONE
 Level: 73
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_CROSS_CHOP
 - MOVE_BULK_UP
 - MOVE_ROCK_SLIDE
@@ -14974,7 +15786,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_HARIYAMA @ ITEM_LEFTOVERS
 Level: 76
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_REST
 - MOVE_SLEEP_TALK
 - MOVE_CROSS_CHOP
@@ -14992,7 +15806,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_POLIWRATH @ ITEM_SALAC_BERRY
 Level: 80
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_BELLY_DRUM
 - MOVE_BRICK_BREAK
 - MOVE_SUBSTITUTE
@@ -15000,7 +15816,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MAGMORTAR @ ITEM_WHITE_HERB
 Level: 79
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_OVERHEAT
 - MOVE_THUNDER_PUNCH
 - MOVE_CROSS_CHOP
@@ -15008,7 +15826,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MEDICHAM @ ITEM_MEDICHAMITE
 Level: 80
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_FAKE_OUT
 - MOVE_HI_JUMP_KICK
 - MOVE_BULK_UP
@@ -15016,7 +15836,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_ELECTIVIRE @ ITEM_MAGNET
 Level: 79
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_CROSS_CHOP
 - MOVE_THUNDERBOLT
 - MOVE_FIRE_PUNCH
@@ -15024,7 +15846,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_BRELOOM @ ITEM_QUICK_CLAW
 Level: 80
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_MACH_PUNCH
 - MOVE_SWORDS_DANCE
 - MOVE_SPORE
@@ -15032,7 +15856,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_HARIYAMA @ ITEM_CHOICE_BAND
 Level: 82
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_BODY_SLAM
 - MOVE_ROCK_SLIDE
 - MOVE_CROSS_CHOP
@@ -15050,7 +15876,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_HITMONTOP @ ITEM_LUM_BERRY
 Level: 86
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_FAKE_OUT
 - MOVE_MACH_PUNCH
 - MOVE_PURSUIT
@@ -15058,7 +15886,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_BRELOOM @ ITEM_SALAC_BERRY
 Level: 85
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_FOCUS_PUNCH
 - MOVE_GIGA_DRAIN
 - MOVE_SPORE
@@ -15066,7 +15896,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_BLAZIKEN @ ITEM_WHITE_HERB
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_OVERHEAT
 - MOVE_THUNDER_PUNCH
 - MOVE_HI_JUMP_KICK
@@ -15074,7 +15906,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MEDICHAM @ ITEM_MEDICHAMITE
 Level: 85
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_MEGA_KICK
 - MOVE_HI_JUMP_KICK
 - MOVE_BRICK_BREAK
@@ -15082,7 +15916,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_HERACROSS @ ITEM_QUICK_CLAW
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_CROSS_CHOP
 - MOVE_ROCK_SLIDE
 - MOVE_MEGAHORN
@@ -15090,7 +15926,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_HARIYAMA @ ITEM_LEFTOVERS
 Level: 88
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_FOCUS_PUNCH
 - MOVE_REVENGE
 - MOVE_ROCK_SLIDE
@@ -15108,7 +15946,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_PLUSLE
 Level: 69
-IVs: 26 HP / 26 Atk / 26 Def / 26 SpA / 26 SpD / 26 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_THUNDERBOLT
 - MOVE_MAGICAL_LEAF
 - MOVE_CHARM
@@ -15116,7 +15956,9 @@ IVs: 26 HP / 26 Atk / 26 Def / 26 SpA / 26 SpD / 26 Spe
 
 SPECIES_MINUN
 Level: 69
-IVs: 26 HP / 26 Atk / 26 Def / 26 SpA / 26 SpD / 26 Spe
+Nature: Calm
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_THUNDERBOLT
 - MOVE_WISH
 - MOVE_ENCORE
@@ -15124,7 +15966,9 @@ IVs: 26 HP / 26 Atk / 26 Def / 26 SpA / 26 SpD / 26 Spe
 
 SPECIES_LANTURN
 Level: 68
-IVs: 27 HP / 27 Atk / 27 Def / 27 SpA / 27 SpD / 27 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDERBOLT
 - MOVE_SURF
 - MOVE_CONFUSE_RAY
@@ -15132,7 +15976,9 @@ IVs: 27 HP / 27 Atk / 27 Def / 27 SpA / 27 SpD / 27 Spe
 
 SPECIES_MAGNEZONE
 Level: 68
-IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_SHOCK_WAVE
 - MOVE_THUNDER_WAVE
 - MOVE_REFLECT
@@ -15140,7 +15986,9 @@ IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
 
 SPECIES_MANECTRIC @ ITEM_MANECTITE
 Level: 70
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_THUNDERBOLT
 - MOVE_CRUNCH
 - MOVE_CHARGE
@@ -15158,7 +16006,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_RAICHU @ ITEM_MYSTIC_WATER
 Level: 74
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_THUNDERBOLT
 - MOVE_ENCORE
 - MOVE_FOCUS_PUNCH
@@ -15166,7 +16016,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_LANTURN @ ITEM_WIKI_BERRY
 Level: 73
+Nature: Careful
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_RAIN_DANCE
 - MOVE_DIVE
 - MOVE_THUNDER_WAVE
@@ -15174,7 +16026,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_JOLTEON @ ITEM_SPELL_TAG
 Level: 74
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_AGILITY
 - MOVE_THUNDER
 - MOVE_BATON_PASS
@@ -15182,7 +16036,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_ELECTIVIRE @ ITEM_SITRUS_BERRY
 Level: 73
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_ICE_PUNCH
 - MOVE_FIRE_PUNCH
 - MOVE_THUNDER
@@ -15190,7 +16046,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MANECTRIC @ ITEM_MANECTITE
 Level: 76
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_CRUNCH
 - MOVE_SHADOW_BALL
 - MOVE_THUNDERBOLT
@@ -15208,7 +16066,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_PLUSLE @ ITEM_PETAYA_BERRY
 Level: 80
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_THUNDERBOLT
 - MOVE_MAGICAL_LEAF
 - MOVE_THUNDER_WAVE
@@ -15216,7 +16076,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MINUN @ ITEM_LEFTOVERS
 Level: 79
+Nature: Calm
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_THUNDERBOLT
 - MOVE_WISH
 - MOVE_THUNDER_WAVE
@@ -15224,7 +16086,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_LANTURN @ ITEM_BRIGHT_POWDER
 Level: 80
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDER
 - MOVE_SURF
 - MOVE_CONFUSE_RAY
@@ -15232,7 +16096,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MAGNEZONE @ ITEM_QUICK_CLAW
 Level: 79
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDER_WAVE
 - MOVE_REFLECT
 - MOVE_THUNDER
@@ -15240,7 +16106,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_PORYGON2 @ ITEM_CHOICE_BAND
 Level: 80
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_HYPER_BEAM
 - MOVE_IRON_TAIL
 - MOVE_AERIAL_ACE
@@ -15248,7 +16116,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MANECTRIC @ ITEM_MANECTITE
 Level: 82
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_CRUNCH
 - MOVE_SHADOW_BALL
 - MOVE_THUNDERBOLT
@@ -15266,7 +16136,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_RAICHU @ ITEM_MYSTIC_WATER
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_VOLT_TACKLE
 - MOVE_SURF
 - MOVE_THUNDER_WAVE
@@ -15274,7 +16146,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_LANTURN @ ITEM_QUICK_CLAW
 Level: 85
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDER
 - MOVE_SURF
 - MOVE_THUNDER_WAVE
@@ -15282,7 +16156,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_JOLTEON @ ITEM_SPELL_TAG
 Level: 86
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_AGILITY
 - MOVE_THUNDER
 - MOVE_BATON_PASS
@@ -15290,7 +16166,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_PORYGON2 @ ITEM_SALAC_BERRY
 Level: 85
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDER
 - MOVE_ICE_BEAM
 - MOVE_THUNDER_WAVE
@@ -15298,7 +16176,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_ELECTIVIRE @ ITEM_LEFTOVERS
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_THUNDER
 - MOVE_CROSS_CHOP
 - MOVE_RAIN_DANCE
@@ -15306,7 +16186,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MANECTRIC @ ITEM_MANECTITE
 Level: 88
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_CRUNCH
 - MOVE_SHADOW_BALL
 - MOVE_THUNDER
@@ -15324,7 +16206,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_NINETALES
 Level: 69
-IVs: 29 HP / 29 Atk / 29 Def / 29 SpA / 29 SpD / 29 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_HEAT_WAVE
 - MOVE_SOLAR_BEAM
 - MOVE_WILL_O_WISP
@@ -15332,7 +16216,9 @@ IVs: 29 HP / 29 Atk / 29 Def / 29 SpA / 29 SpD / 29 Spe
 
 Camerupt @ Cameruptite
 Level: 68
-IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Lava Plume
 - Earth Power
 - Rock Slide
@@ -15340,7 +16226,9 @@ IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
 
 SPECIES_MAGCARGO
 Level: 69
-IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_OVERHEAT
 - MOVE_ROCK_SLIDE
 - MOVE_YAWN
@@ -15348,7 +16236,9 @@ IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
 
 SPECIES_RAPIDASH
 Level: 68
-IVs: 29 HP / 29 Atk / 29 Def / 29 SpA / 29 SpD / 29 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_OVERHEAT
 - MOVE_DOUBLE_KICK
 - MOVE_IRON_TAIL
@@ -15356,7 +16246,9 @@ IVs: 29 HP / 29 Atk / 29 Def / 29 SpA / 29 SpD / 29 Spe
 
 SPECIES_TORKOAL @ ITEM_WHITE_HERB
 Level: 70
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_OVERHEAT
 - MOVE_SUNNY_DAY
 - MOVE_BODY_SLAM
@@ -15374,7 +16266,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_MAGCARGO @ ITEM_QUICK_CLAW
 Level: 74
+Nature: Quiet
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_FIRE_BLAST
 - MOVE_ROCK_SLIDE
 - MOVE_AMNESIA
@@ -15382,7 +16276,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_BELLOSSOM @ ITEM_MIRACLE_SEED
 Level: 73
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_SYNTHESIS
 - MOVE_SOLAR_BEAM
 - MOVE_SLEEP_POWDER
@@ -15390,7 +16286,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_CAMERUPT @ ITEM_CAMERUPTITE
 Level: 74
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_OVERHEAT
 - MOVE_ATTRACT
 - MOVE_EARTHQUAKE
@@ -15398,7 +16296,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_CHARIZARD @ ITEM_HARD_STONE
 Level: 73
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_OVERHEAT
 - MOVE_SWORDS_DANCE
 - MOVE_AERIAL_ACE
@@ -15406,7 +16306,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MAGMORTAR @ ITEM_CHARCOAL
 Level: 74
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_FIRE_BLAST
 - MOVE_PSYCHIC
 - MOVE_THUNDER_PUNCH
@@ -15414,7 +16316,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_TORKOAL @ ITEM_LEFTOVERS
 Level: 76
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ERUPTION
 - MOVE_ROCK_SLIDE
 - MOVE_YAWN
@@ -15432,7 +16336,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_CHARIZARD @ ITEM_CHARCOAL
 Level: 80
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SUNNY_DAY
 - MOVE_HEAT_WAVE
 - MOVE_DRAGON_CLAW
@@ -15440,7 +16346,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_CAMERUPT @ ITEM_CAMERUPTITE
 Level: 79
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ERUPTION
 - MOVE_PROTECT
 - MOVE_EXPLOSION
@@ -15448,7 +16356,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_JUMPLUFF @ ITEM_LEFTOVERS
 Level: 80
+Nature: Careful
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_SLEEP_POWDER
 - MOVE_SYNTHESIS
 - MOVE_LEECH_SEED
@@ -15456,7 +16366,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_HOUNDOOM @ ITEM_WHITE_HERB
 Level: 79
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_OVERHEAT
 - MOVE_SUNNY_DAY
 - MOVE_SOLAR_BEAM
@@ -15464,7 +16376,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_RAPIDASH @ ITEM_FOCUS_BAND
 Level: 80
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_FIRE_BLAST
 - MOVE_HI_JUMP_KICK
 - MOVE_BATON_PASS
@@ -15472,7 +16386,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_TORKOAL @ ITEM_CHESTO_BERRY
 Level: 82
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ERUPTION
 - MOVE_ROCK_SLIDE
 - MOVE_YAWN
@@ -15490,7 +16406,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_ARCANINE @ ITEM_CHARCOAL
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_FIRE_BLAST
 - MOVE_EXTREME_SPEED
 - MOVE_SUNNY_DAY
@@ -15498,7 +16416,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MAGCARGO @ ITEM_QUICK_CLAW
 Level: 85
+Nature: Quiet
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_HEAT_WAVE
 - MOVE_SUBSTITUTE
 - MOVE_REFRESH
@@ -15506,7 +16426,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_SHIFTRY @ ITEM_SCOPE_LENS
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_LEAF_BLADE
 - MOVE_FAINT_ATTACK
 - MOVE_SYNTHESIS
@@ -15514,7 +16436,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_BLAZIKEN @ ITEM_BLAZIKENITE
 Level: 85
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_BLAZE_KICK
 - MOVE_HI_JUMP_KICK
 - MOVE_THUNDER_PUNCH
@@ -15522,7 +16446,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_TYPHLOSION @ ITEM_LIECHI_BERRY
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_ERUPTION
 - MOVE_ENDURE
 - MOVE_REVERSAL
@@ -15530,7 +16456,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_TORKOAL @ ITEM_WHITE_HERB
 Level: 88
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_OVERHEAT
 - MOVE_SUNNY_DAY
 - MOVE_CURSE
@@ -15548,7 +16476,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_DELCATTY
 Level: 68
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_HELPING_HAND
 - MOVE_WISH
 - MOVE_BLIZZARD
@@ -15556,7 +16486,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_EXPLOUD
 Level: 67
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_OVERHEAT
 - MOVE_TEETER_DANCE
 - MOVE_HYPER_VOICE
@@ -15564,7 +16496,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_ZANGOOSE
 Level: 68
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SLASH
 - MOVE_SWORDS_DANCE
 - MOVE_CUT
@@ -15572,7 +16506,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 Kangaskhan @ Kangaskhanite
 Level: 67
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Return
 - Sucker Punch
 - Earthquake
@@ -15580,7 +16516,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_GIRAFARIG
 Level: 68
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_SKILL_SWAP
 - MOVE_PSYCHIC
 - MOVE_THUNDERBOLT
@@ -15588,7 +16526,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SLAKING @ ITEM_CHESTO_BERRY
 Level: 70
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_REST
 - MOVE_FACADE
@@ -15606,7 +16546,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 Kangaskhan @ Kangaskhanite
 Level: 74
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Return
 - Sucker Punch
 - Earthquake
@@ -15614,7 +16556,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_STANTLER @ ITEM_SILK_SCARF
 Level: 73
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_DREAM_EATER
 - MOVE_HYPNOSIS
 - MOVE_REFLECT
@@ -15622,7 +16566,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_PORYGON2 @ ITEM_SHARP_BEAK
 Level: 74
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_RECOVER
 - MOVE_CURSE
 - MOVE_TRI_ATTACK
@@ -15630,7 +16576,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_EXPLOUD @ ITEM_SITRUS_BERRY
 Level: 73
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_TEETER_DANCE
 - MOVE_HYPER_VOICE
 - MOVE_OVERHEAT
@@ -15638,7 +16586,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_GIRAFARIG @ ITEM_TWISTED_SPOON
 Level: 74
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_THUNDERBOLT
 - MOVE_PSYCHIC
 - MOVE_WISH
@@ -15646,7 +16596,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_SLAKING @ ITEM_LEFTOVERS
 Level: 76
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_FACADE
 - MOVE_FOCUS_PUNCH
@@ -15664,7 +16616,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_TAUROS @ ITEM_LUM_BERRY
 Level: 80
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_DOUBLE_EDGE
 - MOVE_PURSUIT
 - MOVE_IRON_TAIL
@@ -15672,7 +16626,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Kangaskhan @ Kangaskhanite
 Level: 79
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Double-Edge
 - Sucker Punch
 - Earthquake
@@ -15680,7 +16636,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_URSARING @ ITEM_SALAC_BERRY
 Level: 80
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_REST
 - MOVE_SLEEP_TALK
 - MOVE_BODY_SLAM
@@ -15688,7 +16646,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_BLISSEY @ ITEM_LEFTOVERS
 Level: 79
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_REST
 - MOVE_THUNDER_WAVE
 - MOVE_WATER_PULSE
@@ -15696,7 +16656,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_GIRAFARIG @ ITEM_TWISTED_SPOON
 Level: 80
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_THUNDER_WAVE
 - MOVE_PSYCHIC
 - MOVE_WISH
@@ -15704,7 +16666,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_SLAKING @ ITEM_LEFTOVERS
 Level: 82
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_HYPER_BEAM
 - MOVE_DOUBLE_EDGE
@@ -15722,7 +16686,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_SLAKING @ ITEM_LEFTOVERS
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_BLIZZARD
 - MOVE_THUNDER
 - MOVE_CRUSH_CLAW
@@ -15730,7 +16696,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_BLISSEY @ ITEM_QUICK_CLAW
 Level: 85
+Nature: Careful
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_SEISMIC_TOSS
 - MOVE_HEAL_BELL
 - MOVE_SKILL_SWAP
@@ -15738,7 +16706,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_TAUROS @ ITEM_LUM_BERRY
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_DOUBLE_EDGE
 - MOVE_EARTHQUAKE
 - MOVE_IRON_TAIL
@@ -15746,7 +16716,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_SMEARGLE @ ITEM_SALAC_BERRY
 Level: 85
+Nature: Careful
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_BELLY_DRUM
 - MOVE_SUBSTITUTE
 - MOVE_SPORE
@@ -15754,7 +16726,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_SNORLAX @ ITEM_CHESTO_BERRY
 Level: 86
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_CURSE
 - MOVE_REST
 - MOVE_BODY_SLAM
@@ -15783,7 +16757,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_CROBAT
 Level: 68
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_AERIAL_ACE
 - MOVE_SLUDGE_BOMB
 - MOVE_GIGA_DRAIN
@@ -15791,7 +16767,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SKARMORY @ ITEM_QUICK_CLAW
 Level: 69
+Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Def / 4 SpD
 - MOVE_WHIRLWIND
 - MOVE_SPIKES
 - MOVE_PROTECT
@@ -15799,7 +16777,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_TROPIUS
 Level: 69
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_SMASH
 - MOVE_GIGA_DRAIN
 - MOVE_EARTHQUAKE
@@ -15807,7 +16787,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SWELLOW
 Level: 69
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
 - MOVE_STEEL_WING
 - MOVE_FACADE
@@ -15815,7 +16797,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_DODRIO
 Level: 68
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_DRILL_PECK
 - MOVE_TRI_ATTACK
 - MOVE_ENDEAVOR
@@ -15823,7 +16807,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_ALTARIA @ ITEM_ALTARIANITE
 Level: 70
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_FLAMETHROWER
 - MOVE_DRAGON_DANCE
@@ -15841,7 +16827,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_XATU @ ITEM_MIRACLE_SEED
 Level: 74
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_GIGA_DRAIN
 - MOVE_PSYCHIC
 - MOVE_REFLECT
@@ -15849,7 +16837,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MASQUERAIN @ ITEM_MYSTIC_WATER
 Level: 73
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_STUN_SPORE
 - MOVE_HYDRO_PUMP
 - MOVE_GIGA_DRAIN
@@ -15857,7 +16847,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_HONCHKROW @ ITEM_SHARP_BEAK
 Level: 74
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_SKY_ATTACK
 - MOVE_DOUBLE_EDGE
 - MOVE_FAINT_ATTACK
@@ -15865,7 +16857,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_PIDGEOT @ ITEM_LEFTOVERS
 Level: 73
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
 - MOVE_EXTREME_SPEED
 - MOVE_PROTECT
@@ -15873,7 +16867,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_MANTINE @ ITEM_WIKI_BERRY
 Level: 74
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_BLIZZARD
 - MOVE_HYDRO_PUMP
 - MOVE_HAZE
@@ -15881,7 +16877,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_ALTARIA @ ITEM_ALTARIANITE
 Level: 76
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
 - MOVE_DOUBLE_EDGE
 - MOVE_IRON_TAIL
@@ -15899,7 +16897,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_CROBAT @ ITEM_LEFTOVERS
 Level: 80
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SLEEP_TALK
 - MOVE_REST
 - MOVE_AERIAL_ACE
@@ -15907,7 +16907,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_SKARMORY @ ITEM_LUM_BERRY
 Level: 79
+Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Def / 4 SpD
 - MOVE_SPIKES
 - MOVE_PROTECT
 - MOVE_TOXIC
@@ -15915,7 +16917,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_TROPIUS @ ITEM_SOFT_SAND
 Level: 80
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_EARTHQUAKE
 - MOVE_SWORDS_DANCE
 - MOVE_FACADE
@@ -15923,7 +16927,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_DRAGONITE @ ITEM_KINGS_ROCK
 Level: 79
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_THUNDER_WAVE
 - MOVE_WATERFALL
 - MOVE_EARTHQUAKE
@@ -15931,7 +16937,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_SWELLOW @ ITEM_FOCUS_BAND
 Level: 80
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
 - MOVE_STEEL_WING
 - MOVE_AGILITY
@@ -15939,7 +16947,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_ALTARIA @ ITEM_ALTARIANITE
 Level: 82
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
 - MOVE_DOUBLE_EDGE
 - MOVE_IRON_TAIL
@@ -15957,7 +16967,9 @@ AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Preventi
 
 SPECIES_DRAGONITE @ ITEM_LEFTOVERS
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_THUNDER_WAVE
 - MOVE_EARTHQUAKE
 - MOVE_DYNAMIC_PUNCH
@@ -15965,7 +16977,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_YANMEGA @ ITEM_LIECHI_BERRY
 Level: 85
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SUBSTITUTE
 - MOVE_REVERSAL
 - MOVE_PROTECT
@@ -15973,7 +16987,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_CHARIZARD @ ITEM_FOCUS_BAND
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_FIRE_BLAST
 - MOVE_DRAGON_CLAW
 - MOVE_EARTHQUAKE
@@ -15981,7 +16997,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_SWELLOW @ ITEM_STARF_BERRY
 Level: 85
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SUBSTITUTE
 - MOVE_ENDEAVOR
 - MOVE_QUICK_ATTACK
@@ -15989,7 +17007,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_TROPIUS @ ITEM_SOFT_SAND
 Level: 86
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_EARTHQUAKE
 - MOVE_SWORDS_DANCE
 - MOVE_GIGA_DRAIN
@@ -15997,7 +17017,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_ALTARIA @ ITEM_ALTARIANITE
 Level: 88
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
 - MOVE_DRAGON_DANCE
 - MOVE_PURSUIT
@@ -16015,7 +17037,9 @@ AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
 SPECIES_LUNATONE @ ITEM_SITRUS_BERRY
 Level: 68
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_LIGHT_SCREEN
 - MOVE_HYPNOSIS
@@ -16023,7 +17047,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SOLROCK @ ITEM_SITRUS_BERRY
 Level: 67
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_SOLAR_BEAM
 - MOVE_FLAMETHROWER
@@ -16031,7 +17057,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 Medicham @ Medichamite
 Level: 68
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - High Jump Kick
 - Zen Headbutt
 - Bullet Punch
@@ -16039,7 +17067,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_STARMIE
 Level: 67
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_SURF
 - MOVE_PSYCHIC
 - MOVE_ICE_BEAM
@@ -16047,7 +17077,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_XATU
 Level: 68
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_PSYCHIC
 - MOVE_CALM_MIND
 - MOVE_SUNNY_DAY
@@ -16055,7 +17087,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_CLAYDOL
 Level: 70
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_ANCIENT_POWER
 - MOVE_PSYCHIC
@@ -16073,7 +17107,9 @@ AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
 SPECIES_MEDICHAM @ ITEM_MEDICHAMITE
 Level: 74
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SUNNY_DAY
 - MOVE_FIRE_PUNCH
 - MOVE_FAKE_OUT
@@ -16081,7 +17117,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_CLAYDOL @ ITEM_SOFT_SAND
 Level: 73
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_ROCK_SLIDE
 - MOVE_SKILL_SWAP
@@ -16089,7 +17127,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_GARDEVOIR @ ITEM_TWISTED_SPOON
 Level: 74
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_CALM_MIND
 - MOVE_PSYCHIC
 - MOVE_FIRE_PUNCH
@@ -16097,7 +17137,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_EXEGGUTOR @ ITEM_LUM_BERRY
 Level: 73
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_SYNTHESIS
 - MOVE_SOLAR_BEAM
 - MOVE_SUNNY_DAY
@@ -16105,7 +17147,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_LUNATONE @ ITEM_SITRUS_BERRY
 Level: 74
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_ICE_BEAM
 - MOVE_HYPNOSIS
@@ -16113,7 +17157,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SOLROCK @ ITEM_WHITE_HERB
 Level: 76
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCH_UP
 - MOVE_SOLAR_BEAM
 - MOVE_OVERHEAT
@@ -16131,7 +17177,9 @@ AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
 SPECIES_SLOWKING @ ITEM_CHESTO_BERRY
 Level: 80
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDER_WAVE
 - MOVE_FLAMETHROWER
 - MOVE_REST
@@ -16139,7 +17187,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SLOWBRO @ ITEM_SOFT_SAND
 Level: 79
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDER_WAVE
 - MOVE_CALM_MIND
 - MOVE_SURF
@@ -16147,7 +17197,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_GRUMPIG @ ITEM_LEFTOVERS
 Level: 80
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_YAWN
 - MOVE_PSYCHIC
 - MOVE_FIRE_PUNCH
@@ -16155,7 +17207,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_ALAKAZAM @ ITEM_ALAKAZITE
 Level: 79
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_PSYCHIC
 - MOVE_TRICK
 - MOVE_THUNDER_PUNCH
@@ -16163,7 +17217,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_LUNATONE @ ITEM_SITRUS_BERRY
 Level: 80
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_ICE_BEAM
 - MOVE_HYPNOSIS
@@ -16171,7 +17227,9 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 SPECIES_SOLROCK @ ITEM_WHITE_HERB
 Level: 82
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_SLIDE
 - MOVE_EARTHQUAKE
 - MOVE_OVERHEAT
@@ -16189,7 +17247,9 @@ AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
 SPECIES_CLAYDOL @ ITEM_QUICK_CLAW
 Level: 86
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_PSYCHIC
 - MOVE_SKILL_SWAP
@@ -16197,7 +17257,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_UMBREON @ ITEM_APICOT_BERRY
 Level: 85
+Nature: Careful
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_SUBSTITUTE
 - MOVE_BATON_PASS
 - MOVE_DOUBLE_TEAM
@@ -16205,7 +17267,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_ESPEON @ ITEM_STARF_BERRY
 Level: 86
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_BATON_PASS
 - MOVE_CALM_MIND
 - MOVE_SHADOW_BALL
@@ -16213,7 +17277,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_LUNATONE @ ITEM_LEFTOVERS
 Level: 85
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_ICE_BEAM
 - MOVE_BATON_PASS
@@ -16221,7 +17287,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 SPECIES_SOLROCK @ ITEM_LUM_BERRY
 Level: 86
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_FLAMETHROWER
 - MOVE_CALM_MIND
@@ -16229,7 +17297,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Gallade @ Galladite
 Level: 88
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Close Combat
 - Psycho Cut
 - Leaf Blade
@@ -16247,7 +17317,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 Politoed
 Level: 66
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Hypnosis
 - Rain Dance
 - Protect
@@ -16255,7 +17327,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Gyarados @ Gyaradosite
 Level: 66
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Waterfall
 - Crunch
 - Ice Fang
@@ -16263,7 +17337,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Walrein
 Level: 67
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Water Pulse
 - Body Slam
 - Protect
@@ -16271,7 +17347,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Crawdaunt @ Chesto Berry
 Level: 67
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - Rest
 - Crabhammer
 - Taunt
@@ -16279,7 +17357,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Kingdra @ Chesto Berry
 Level: 70
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - Water Pulse
 - Double Team
 - Ice Beam
@@ -16297,7 +17377,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 Politoed
 Level: 72
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Hypnosis
 - Rain Dance
 - Protect
@@ -16305,7 +17387,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Gyarados @ Gyaradosite
 Level: 72
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Waterfall
 - Crunch
 - Ice Fang
@@ -16313,7 +17397,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Walrein
 Level: 73
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Water Pulse
 - Body Slam
 - Protect
@@ -16321,7 +17407,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Crawdaunt @ Chesto Berry
 Level: 73
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - Rest
 - Guillotine
 - Taunt
@@ -16329,7 +17417,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Kingdra @ Chesto Berry
 Level: 76
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - Water Pulse
 - Double Team
 - Ice Beam
@@ -16347,7 +17437,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 Lapras
 Level: 78
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Hydro Pump
 - Perish Song
 - Ice Beam
@@ -16355,7 +17447,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Gyarados @ Gyaradosite
 Level: 79
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Waterfall
 - Crunch
 - Earthquake
@@ -16363,7 +17457,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Politoed
 Level: 78
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Hypnosis
 - Rain Dance
 - Protect
@@ -16371,7 +17467,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Walrein
 Level: 79
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Water Pulse
 - Body Slam
 - Protect
@@ -16379,7 +17477,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Crawdaunt @ Chesto Berry
 Level: 79
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - Rest
 - Guillotine
 - Taunt
@@ -16387,7 +17487,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Kingdra @ Chesto Berry
 Level: 82
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - Water Pulse
 - Double Team
 - Ice Beam
@@ -16405,7 +17507,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 Lapras
 Level: 84
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Hydro Pump
 - Perish Song
 - Ice Beam
@@ -16413,7 +17517,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Gyarados @ Gyaradosite
 Level: 85
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Waterfall
 - Crunch
 - Earthquake
@@ -16421,7 +17527,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Politoed
 Level: 84
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Hypnosis
 - Rain Dance
 - Hydro Pump
@@ -16429,7 +17537,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Walrein
 Level: 85
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Water Pulse
 - Body Slam
 - Protect
@@ -16437,7 +17547,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Crawdaunt @ Chesto Berry
 Level: 85
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - Rest
 - Guillotine
 - Taunt
@@ -16445,7 +17557,9 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 Kingdra @ Chesto Berry
 Level: 88
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - Water Pulse
 - Double Team
 - Ice Beam
@@ -16460,19 +17574,19 @@ Music: Suspicious
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Illumise
-Level: 17
+SPECIES_ILLUMISE
+Level: 18
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Shock Wave
-- Quick Attack
-- Charm
+- MOVE_SHOCK_WAVE
+- MOVE_MOONLIGHT
+- MOVE_CHARM
 
-Volbeat
+SPECIES_VOLBEAT
 Level: 17
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Shock Wave
-- Quick Attack
-- Confuse Ray
+- MOVE_SHOCK_WAVE
+- MOVE_QUICK_ATTACK
+- MOVE_CONFUSE_RAY
 
 === TRAINER_DARIUS ===
 Name: DARIUS
@@ -16483,9 +17597,13 @@ Music: Cool
 Double Battle: No
 AI: Basic Trainer / Smart Switching / HP Aware
 
-Tropius
-Level: 30
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+SPECIES_PELIPPER
+Level: 32
+IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+
+SPECIES_TROPIUS
+Level: 32
+IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 === TRAINER_STEVEN ===
 Name: STEVEN
@@ -17793,7 +18911,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 Kirlia
 Level: 24
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Confusion
 - Magical Leaf
 - Double Team
@@ -17801,7 +18921,9 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 Lombre
 Level: 23
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Bubble Beam
 - Mega Drain
 - Fake Out
@@ -17809,12 +18931,13 @@ IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 Trapinch
 Level: 24
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - Bulldoze
 - Bite
 - Rock Slide
 - Sand Attack
-
 
 === TRAINER_WALLY_LAVARIDGE ===
 Name: WALLY
@@ -17828,8 +18951,10 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 Mawile
 Level: 28
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 Ability: Intimidate
-IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
 - Iron Head
 - Bite
 - Fake Tears
@@ -17837,7 +18962,9 @@ IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
 
 Lombre
 Level: 28
-IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Bubble Beam
 - Giga Drain
 - Fake Out
@@ -17845,7 +18972,9 @@ IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
 
 Trapinch
 Level: 29
-IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - Dig
 - Crunch
 - Rock Slide
@@ -17853,12 +18982,13 @@ IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
 
 Kirlia @ Sitrus Berry
 Level: 31
-IVs: 16 HP / 16 Atk / 16 Def / 16 SpA / 16 SpD / 16 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Psybeam
 - Draining Kiss
 - Calm Mind
 - Magical Leaf
-
 
 === TRAINER_WALLY_FORTREE ===
 Name: WALLY
@@ -17872,7 +19002,9 @@ AI: Check Bad Move / Try To Faint / Check Viability / Smart Switching / HP Aware
 
 Crawdaunt
 Level: 32
-IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - Crabhammer
 - Knock Off
 - Protect
@@ -17880,8 +19012,10 @@ IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
 
 Mawile
 Level: 32
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 Ability: Intimidate
-IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
 - Iron Head
 - Play Rough
 - Sucker Punch
@@ -17889,7 +19023,9 @@ IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
 
 Lombre
 Level: 32
-IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - Surf
 - Giga Drain
 - Fake Out
@@ -17897,7 +19033,9 @@ IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
 
 Vibrava
 Level: 35
-IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - Dig
 - Dragon Breath
 - Rock Slide
@@ -17905,12 +19043,13 @@ IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
 
 Gardevoir @ Sitrus Berry
 Level: 35
-IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - Psychic
 - Dazzling Gleam
 - Calm Mind
 - Thunderbolt
-
 
 === TRAINER_WALLY_LILYCOVE ===
 Name: WALLY
@@ -17924,7 +19063,9 @@ AI: Check Bad Move / Try To Faint / Check Viability / Smart Switching / HP Aware
 
 Anorith
 Level: 37
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
 - Rock Slide
 - X-Scissor
 - Aqua Jet
@@ -17932,8 +19073,10 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 Mawile @ Rocky Helmet
 Level: 38
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 Ability: Intimidate
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 - Iron Head
 - Play Rough
 - Sucker Punch
@@ -17941,8 +19084,10 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 Ludicolo
 Level: 38
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 Ability: Swift Swim
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 - Surf
 - Giga Drain
 - Fake Out
@@ -17950,8 +19095,10 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 Crawdaunt
 Level: 38
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 Ability: Adaptability
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 - Crabhammer
 - Knock Off
 - Aqua Jet
@@ -17959,7 +19106,9 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 Vibrava
 Level: 39
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
 - Earthquake
 - Dragon Breath
 - Rock Slide
@@ -17967,13 +19116,14 @@ IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 
 Gardevoir @ Sitrus Berry
 Level: 41
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 Ability: Trace
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
 - Psychic
 - Moonblast
 - Calm Mind
 - Thunderbolt
-
 
 === TRAINER_WALLY_MOSSDEEP ===
 Name: WALLY
@@ -17988,7 +19138,7 @@ AI: Check Bad Move / Try To Faint / Check Viability / Smart Switching / HP Aware
 Armaldo @ Focus Sash
 Level: 44
 Nature: Adamant
-IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Stone Edge
 - X-Scissor
 - Aqua Jet
@@ -17998,7 +19148,7 @@ Mawile @ Rocky Helmet
 Level: 44
 Ability: Intimidate
 Nature: Impish
-IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Iron Head
 - Play Rough
 - Sucker Punch
@@ -18008,7 +19158,7 @@ Ludicolo @ Damp Rock
 Level: 45
 Ability: Swift Swim
 Nature: Modest
-IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Rain Dance
 - Hydro Pump
 - Giga Drain
@@ -18018,7 +19168,7 @@ Crawdaunt @ Life Orb
 Level: 45
 Ability: Adaptability
 Nature: Adamant
-IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Crabhammer
 - Knock Off
 - Aqua Jet
@@ -18027,7 +19177,7 @@ IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
 Flygon @ Soft Sand
 Level: 46
 Nature: Jolly
-IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Earthquake
 - Dragon Claw
 - U-turn
@@ -18037,7 +19187,7 @@ Gardevoir @ Sitrus Berry
 Level: 47
 Ability: Trace
 Nature: Timid
-IVs: 28 HP / 28 Atk / 28 Def / 28 SpA / 28 SpD / 28 Spe
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Psychic
 - Moonblast
 - Calm Mind
