@@ -1294,8 +1294,8 @@
 #define FLAG_HIDDEN_ITEM_WJ_MTPYRE_6F_BOTTLE_CAP 0x4D8 // Wally's Journey: hidden Bottle Cap in MtPyre_6F
 #define FLAG_HIDDEN_ITEM_WJ_SEAFLOORCAVERN_ROOM8_BOTTLE_CAP 0x4D9 // Wally's Journey: hidden Bottle Cap in SeafloorCavern_Room8
 #define FLAG_HIDDEN_ITEM_WJ_VICTORYROAD_B2F_GOLD_BOTTLE_CAP 0x4DA // Wally's Journey: hidden Gold Bottle Cap in VictoryRoad_B2F
-#define FLAG_UNUSED_0x4DB                           0x4DB // Unused Flag
-#define FLAG_UNUSED_0x4DC                           0x4DC // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE119_TOXIC_ORB 0x4DB // Wally's Journey: hidden Toxic Orb in Route119
+#define FLAG_HIDDEN_ITEM_WJ_FIERYPATH_FLAME_ORB 0x4DC // Wally's Journey: hidden Flame Orb in FieryPath
 #define FLAG_UNUSED_0x4DD                           0x4DD // Unused Flag
 #define FLAG_UNUSED_0x4DE                           0x4DE // Unused Flag
 #define FLAG_UNUSED_0x4DF                           0x4DF // Unused Flag
