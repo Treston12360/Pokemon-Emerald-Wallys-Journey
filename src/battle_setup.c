@@ -1088,14 +1088,66 @@ static void TryUpdateGymLeaderRematchFromTrainer(void)
         UpdateGymLeaderRematch();
 }
 
-static u16 GetTrainerAFlag(void)
+// Wally's Journey: one place that reads/writes a trainer's "defeated" flag. Trainers
+// 0-863 use the normal flag array; extra trainers (864+) use SaveBlock3 bits.
+#if !IS_FRLG
+#define WJ_EXTRA_TRAINER_MAGIC 0x5B
+static u8 *WJ_ExtraTrainerByte(u16 trainerId, u8 *bit)
 {
-    return TRAINER_FLAGS_START + TRAINER_BATTLE_PARAM.opponentA;
+    u32 n = trainerId - WJ_EXTRA_TRAINERS_START;
+    if (gSaveBlock3Ptr->wjExtraTrainerFlagsMagic != WJ_EXTRA_TRAINER_MAGIC)
+    {
+        // saves from before this existed: start every extra trainer undefeated
+        memset(gSaveBlock3Ptr->wjExtraTrainerFlags, 0, sizeof(gSaveBlock3Ptr->wjExtraTrainerFlags));
+        gSaveBlock3Ptr->wjExtraTrainerFlagsMagic = WJ_EXTRA_TRAINER_MAGIC;
+    }
+    *bit = 1 << (n % 8);
+    return &gSaveBlock3Ptr->wjExtraTrainerFlags[n / 8];
+}
+#endif
+
+static bool32 TrainerFlagGet(u16 trainerId)
+{
+#if !IS_FRLG
+    if (trainerId >= WJ_EXTRA_TRAINERS_START)
+    {
+        u8 bit;
+        if (trainerId >= TRAINERS_COUNT)
+            return FALSE;
+        return (*WJ_ExtraTrainerByte(trainerId, &bit) & bit) != 0;
+    }
+#endif
+    return FlagGet(TRAINER_FLAGS_START + trainerId);
 }
 
-static u16 GetTrainerBFlag(void)
+static void TrainerFlagWrite(u16 trainerId, bool32 set)
 {
-    return TRAINER_FLAGS_START + TRAINER_BATTLE_PARAM.opponentB;
+#if !IS_FRLG
+    if (trainerId >= WJ_EXTRA_TRAINERS_START)
+    {
+        u8 bit, *byte;
+        if (trainerId >= TRAINERS_COUNT)
+            return;
+        byte = WJ_ExtraTrainerByte(trainerId, &bit);
+        if (set)
+            *byte |= bit;
+        else
+            *byte &= ~bit;
+        return;
+    }
+#endif
+    if (set)
+        FlagSet(TRAINER_FLAGS_START + trainerId);
+    else
+        FlagClear(TRAINER_FLAGS_START + trainerId);
+}
+
+void WallyJourney_ResetExtraTrainerFlags(void)
+{
+#if !IS_FRLG
+    memset(gSaveBlock3Ptr->wjExtraTrainerFlags, 0, sizeof(gSaveBlock3Ptr->wjExtraTrainerFlags));
+    gSaveBlock3Ptr->wjExtraTrainerFlagsMagic = WJ_EXTRA_TRAINER_MAGIC;
+#endif
 }
 
 static bool32 IsPlayerDefeated(u32 battleOutcome)
@@ -1405,7 +1457,7 @@ void ConfigureApproachingFacilityTrainerBattle(struct ApproachingTrainer *approa
 bool32 GetTrainerFlagFromScriptPointer(const u8 *data)
 {
     TrainerBattleParameter *temp = (TrainerBattleParameter*)(data + TRAINERBATTLE_OPCODE_OFFSET);
-    return FlagGet(TRAINER_FLAGS_START + temp->params.opponentA);
+    return TrainerFlagGet(temp->params.opponentA);
 }
 
 bool32 GetRematchFromScriptPointer(const u8 *data)
@@ -1443,34 +1495,34 @@ bool8 GetTrainerFlag(void)
     else if (InTrainerHill())
         return GetHillTrainerFlag(gSelectedObjectEvent);
     else
-        return FlagGet(GetTrainerAFlag());
+        return TrainerFlagGet(TRAINER_BATTLE_PARAM.opponentA);
 }
 
 static void SetBattledTrainersFlags(void)
 {
     if (TRAINER_BATTLE_PARAM.opponentB != 0)
-        FlagSet(GetTrainerBFlag());
-    FlagSet(GetTrainerAFlag());
+        TrainerFlagWrite(TRAINER_BATTLE_PARAM.opponentB, TRUE);
+    TrainerFlagWrite(TRAINER_BATTLE_PARAM.opponentA, TRUE);
 }
 
 static void UNUSED SetBattledTrainerFlag(void)
 {
-    FlagSet(GetTrainerAFlag());
+    TrainerFlagWrite(TRAINER_BATTLE_PARAM.opponentA, TRUE);
 }
 
 bool8 HasTrainerBeenFought(u16 trainerId)
 {
-    return FlagGet(TRAINER_FLAGS_START + trainerId);
+    return TrainerFlagGet(trainerId);
 }
 
 void SetTrainerFlag(u16 trainerId)
 {
-    FlagSet(TRAINER_FLAGS_START + trainerId);
+    TrainerFlagWrite(trainerId, TRUE);
 }
 
 void ClearTrainerFlag(u16 trainerId)
 {
-    FlagClear(TRAINER_FLAGS_START + trainerId);
+    TrainerFlagWrite(trainerId, FALSE);
 }
 
 void BattleSetup_StartTrainerBattle(void)

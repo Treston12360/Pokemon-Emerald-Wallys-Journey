@@ -1,4 +1,5 @@
 #include "global.h"
+#include "battle_setup.h"
 #include "clock.h"
 #include "new_game.h"
 #include "wally_journey.h"
@@ -260,4 +261,5 @@ static void ResetDexNav(void)
 #endif
     gSaveBlock3Ptr->dexNavChain = 0;
     gSaveBlock3Ptr->wjCatchCountMagic = 0; // Wally's Journey: catch counts start over
+    WallyJourney_ResetExtraTrainerFlags();
 }

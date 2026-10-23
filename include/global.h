@@ -272,6 +272,11 @@ struct SaveBlock3
     // Wally's Journey: wild catches per National Dex number (Hidden Ability odds).
     u8 wjCatchCountMagic;
     u8 wjCatchCounts[NATIONAL_DEX_COUNT + 1];
+#if !IS_FRLG
+    // Wally's Journey: "defeated" bits for trainer IDs 864+ (WJ_EXTRA_TRAINERS_START).
+    u8 wjExtraTrainerFlagsMagic;
+    u8 wjExtraTrainerFlags[WJ_EXTRA_TRAINERS_COUNT / 8];
+#endif
 #if APRICORN_TREE_COUNT > 0
     u8 apricornTrees[NUM_APRICORN_TREE_BYTES];
 #endif

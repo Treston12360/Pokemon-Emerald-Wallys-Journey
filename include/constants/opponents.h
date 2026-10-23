@@ -873,8 +873,15 @@
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
 
-#define TRAINERS_COUNT_EMERALD     864
-#define MAX_TRAINERS_COUNT_EMERALD 864
+// Wally's Journey: room for 1,024 more trainers. IDs 0-863 keep their flags in the normal
+// flag array (unchanged, so old saves still work); IDs 864+ keep their "defeated" bit in
+// SaveBlock3 (gSaveBlock3Ptr->wjExtraTrainerFlags, see battle_setup.c). Partner IDs start
+// after all trainers (TRAINER_PARTNER), so new trainers never look like partners.
+#define TRAINER_FLAGS_COUNT_EMERALD 864
+#define WJ_EXTRA_TRAINERS_COUNT     1024
+#define WJ_EXTRA_TRAINERS_START     TRAINER_FLAGS_COUNT_EMERALD
+#define TRAINERS_COUNT_EMERALD     (TRAINER_FLAGS_COUNT_EMERALD + WJ_EXTRA_TRAINERS_COUNT)
+#define MAX_TRAINERS_COUNT_EMERALD TRAINERS_COUNT_EMERALD
 
 #if IS_FRLG
 #define TRAINERS_COUNT                      TRAINERS_COUNT_FRLG
