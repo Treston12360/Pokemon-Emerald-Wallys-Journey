@@ -4,6 +4,7 @@
 void BattleTransition_StartOnField(u8 transitionId);
 void BattleTransition_Start(u8 transitionId);
 bool8 IsBattleTransitionDone(void);
+bool32 WallyJourney_IsBattleTransitionRunning(void);
 bool8 FldEff_PokeballTrail(void);
 void Task_BattleTransition_Intro(u8 taskId);
 void GetBg0TilesDst(u16 **tilemap, u16 **tileset);

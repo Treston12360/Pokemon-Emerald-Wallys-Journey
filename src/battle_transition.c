@@ -1016,6 +1016,12 @@ void BattleTransition_Start(u8 transitionId)
 #define tTransitionId   data[1]
 #define tTransitionDone data[15]
 
+// Wally's Journey: lets the field callback fast-forward battle transitions.
+bool32 WallyJourney_IsBattleTransitionRunning(void)
+{
+    return FindTaskIdByFunc(Task_BattleTransition) != TASK_NONE;
+}
+
 bool8 IsBattleTransitionDone(void)
 {
     u8 taskId = FindTaskIdByFunc(Task_BattleTransition);

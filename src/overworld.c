@@ -1,4 +1,5 @@
 #include "global.h"
+#include "battle_transition.h"
 #include "overworld.h"
 #include "wally_journey.h"
 #include "battle_pyramid.h"
@@ -1896,7 +1897,24 @@ static void OverworldBasic(void)
 // This CB2 is used when starting
 void CB2_OverworldBasic(void)
 {
+    u32 i;
     OverworldBasic();
+    // Wally's Journey: battle transitions (wild and trainer) play ~4x faster.
+    // 7 task steps per frame; parts driven by VBlank can't be stepped, so 7 steps
+    // measured 84 -> 24 frames. Hold R for normal speed. Stops once the battle takes over CB2.
+    if (WallyJourney_IsBattleTransitionRunning() && !JOY_HELD(R_BUTTON))
+    {
+        for (i = 0; i < 6; i++)
+        {
+            if (gMain.callback2 != CB2_OverworldBasic || !WallyJourney_IsBattleTransitionRunning())
+                break;
+            RunTasks();
+            AnimateSprites();
+            CameraUpdate();
+            UpdateCameraPanning();
+            UpdatePaletteFade();
+        }
+    }
 }
 
 void CB2_Overworld(void)
