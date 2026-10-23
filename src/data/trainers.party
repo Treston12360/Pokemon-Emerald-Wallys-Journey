@@ -16776,12 +16776,12 @@ Class: Rival
 Pic: Brendan
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore / Full Restore
+Items: Full Restore / Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / Ace Pokemon / HP Aware / PP Stall Prevention
+AI: Smart Trainer / Prediction / Try To 2HKO / HP Aware / Ace Pokemon / Know Opponent Party
 
 SPECIES_DUSKNOIR @ ITEM_LEFTOVERS
-Level: 73
+Level: 100
 Ability: Frisk
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16792,7 +16792,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_WILL_O_WISP
 
 SPECIES_GOLISOPOD @ ITEM_ASSAULT_VEST
-Level: 73
+Level: 100
 Ability: Emergency Exit
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16803,7 +16803,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_KNOCK_OFF
 
 SPECIES_TOXTRICITY_AMPED @ ITEM_THROAT_SPRAY
-Level: 74
+Level: 100
 Ability: Punk Rock
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16814,7 +16814,7 @@ EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_VOLT_SWITCH
 
 SPECIES_KROOKODILE @ ITEM_CHOICE_SCARF
-Level: 74
+Level: 100
 Ability: Intimidate
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16825,7 +16825,7 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_CLOSE_COMBAT
 
 SPECIES_EMBOAR @ ITEM_CHOICE_BAND
-Level: 75
+Level: 100
 Ability: Reckless
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16836,7 +16836,7 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_WILD_CHARGE
 
 SPECIES_SCEPTILE @ ITEM_SCEPTILITE
-Level: 76
+Level: 100
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
