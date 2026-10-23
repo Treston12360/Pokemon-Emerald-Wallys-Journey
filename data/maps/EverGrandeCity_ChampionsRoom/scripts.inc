@@ -796,7 +796,11 @@ WallyJourney_ChampionPool_Treston::
 	msgbox WallyJourney_ChampionPool_TrestonIntro, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionPool_TrestonBattle
 WallyJourney_ChampionPool_TrestonAgain::
+	@ After he's been beaten once, TRESTON comes back with Darkrai.
 	msgbox WallyJourney_ChampionPool_TrestonIntroAgain, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_TRESTON_2, WallyJourney_ChampionPool_TrestonDefeat
+	msgbox WallyJourney_ChampionPool_TrestonVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
 WallyJourney_ChampionPool_TrestonBattle::
 	trainerbattle_no_intro TRAINER_TRESTON, WallyJourney_ChampionPool_TrestonDefeat
 	msgbox WallyJourney_ChampionPool_TrestonVictory, MSGBOX_DEFAULT
@@ -815,8 +819,9 @@ WallyJourney_ChampionPool_TrestonIntro:
 	.string "Let's see if yours is better.$"
 WallyJourney_ChampionPool_TrestonIntroAgain:
 	.string "TRESTON: Back for round two.\p"
-	.string "My team doesn't like losing.\n"
-	.string "Neither do I.$"
+	.string "I found something new since last\n"
+	.string "time. It's been giving my rivals\l"
+	.string "nightmares. Let's go!$"
 WallyJourney_ChampionPool_TrestonDefeat:
 	.string "...Not bad. Not bad at all.$"
 WallyJourney_ChampionPool_TrestonVictory:

@@ -16778,10 +16778,10 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Smart Trainer / Prediction / Try To 2HKO / HP Aware / Ace Pokemon / Know Opponent Party
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / Ace Pokemon / PP Stall Prevention
 
 SPECIES_DUSKNOIR @ ITEM_LEFTOVERS
-Level: 100
+Level: 74
 Ability: Frisk
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16792,7 +16792,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_WILL_O_WISP
 
 SPECIES_GOLISOPOD @ ITEM_ASSAULT_VEST
-Level: 100
+Level: 74
 Ability: Emergency Exit
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16803,7 +16803,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_KNOCK_OFF
 
 SPECIES_TOXTRICITY_AMPED @ ITEM_THROAT_SPRAY
-Level: 100
+Level: 75
 Ability: Punk Rock
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16814,7 +16814,7 @@ EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_VOLT_SWITCH
 
 SPECIES_KROOKODILE @ ITEM_CHOICE_SCARF
-Level: 100
+Level: 75
 Ability: Intimidate
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16825,7 +16825,7 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_CLOSE_COMBAT
 
 SPECIES_EMBOAR @ ITEM_CHOICE_BAND
-Level: 100
+Level: 76
 Ability: Reckless
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16836,7 +16836,7 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_WILD_CHARGE
 
 SPECIES_SCEPTILE @ ITEM_SCEPTILITE
-Level: 100
+Level: 77
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
@@ -17055,74 +17055,79 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_PURSUIT
 - MOVE_EARTHQUAKE
 
-=== TRAINER_WINONA_5 ===
-Name: WINONA
-Class: Leader
-Pic: Leader Winona
-Gender: Female
-Music: Female
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
-AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
+=== TRAINER_TRESTON_2 ===
+Name: TRESTON
+Class: Rival
+Pic: Brendan
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / Ace Pokemon / PP Stall Prevention
 
-SPECIES_DRAGONITE @ ITEM_LEFTOVERS
-Level: 86
-Nature: Jolly
+SPECIES_DARKRAI @ ITEM_LIFE_ORB
+Level: 80
+Ability: Bad Dreams
+Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_THUNDER_WAVE
-- MOVE_EARTHQUAKE
-- MOVE_DYNAMIC_PUNCH
-- MOVE_THUNDERBOLT
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_DARK_PULSE
+- MOVE_SLUDGE_BOMB
+- MOVE_FOCUS_BLAST
+- MOVE_NASTY_PLOT
 
-SPECIES_YANMEGA @ ITEM_LIECHI_BERRY
-Level: 85
-Nature: Jolly
+SPECIES_GOLISOPOD @ ITEM_ASSAULT_VEST
+Level: 80
+Ability: Emergency Exit
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_SUBSTITUTE
-- MOVE_REVERSAL
-- MOVE_PROTECT
-- MOVE_TWINEEDLE
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_FIRST_IMPRESSION
+- MOVE_LIQUIDATION
+- MOVE_LEECH_LIFE
+- MOVE_KNOCK_OFF
 
-SPECIES_CHARIZARD @ ITEM_FOCUS_BAND
-Level: 86
-Nature: Jolly
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_FIRE_BLAST
-- MOVE_DRAGON_CLAW
-- MOVE_EARTHQUAKE
-- MOVE_ROCK_SLIDE
-
-SPECIES_SWELLOW @ ITEM_STARF_BERRY
-Level: 85
-Nature: Jolly
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_SUBSTITUTE
-- MOVE_ENDEAVOR
-- MOVE_QUICK_ATTACK
-- MOVE_BATON_PASS
-
-SPECIES_TROPIUS @ ITEM_SOFT_SAND
-Level: 86
+SPECIES_TOXTRICITY_AMPED @ ITEM_THROAT_SPRAY
+Level: 81
+Ability: Punk Rock
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_EARTHQUAKE
-- MOVE_SWORDS_DANCE
-- MOVE_GIGA_DRAIN
-- MOVE_SYNTHESIS
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_OVERDRIVE
+- MOVE_BOOMBURST
+- MOVE_SLUDGE_BOMB
+- MOVE_VOLT_SWITCH
 
-SPECIES_ALTARIA @ ITEM_ALTARIANITE
-Level: 88
+SPECIES_KROOKODILE @ ITEM_CHOICE_SCARF
+Level: 81
+Ability: Intimidate
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_SKY_ATTACK
-- MOVE_DRAGON_DANCE
-- MOVE_PURSUIT
+- MOVE_EARTHQUAKE
+- MOVE_KNOCK_OFF
+- MOVE_STONE_EDGE
+- MOVE_CLOSE_COMBAT
+
+SPECIES_EMBOAR @ ITEM_CHOICE_BAND
+Level: 82
+Ability: Reckless
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_FLARE_BLITZ
+- MOVE_HEAD_SMASH
+- MOVE_CLOSE_COMBAT
+- MOVE_WILD_CHARGE
+
+SPECIES_SCEPTILE @ ITEM_SCEPTILITE
+Level: 84
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_LEAF_STORM
+- MOVE_DRAGON_PULSE
+- MOVE_FOCUS_BLAST
 - MOVE_EARTHQUAKE
 
 === TRAINER_TATE_AND_LIZA_2 ===

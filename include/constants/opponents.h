@@ -797,7 +797,7 @@
 #define TRAINER_WINONA_2                    790
 #define TRAINER_WINONA_3                    791
 #define TRAINER_WINONA_4                    792
-#define TRAINER_WINONA_5                    793
+#define TRAINER_TRESTON_2                    793 // Wally's Journey: TRESTON's later appearances, Darkrai team (was WINONA_5)
 #define TRAINER_TATE_AND_LIZA_2             794
 #define TRAINER_TATE_AND_LIZA_3             795
 #define TRAINER_TATE_AND_LIZA_4             796
