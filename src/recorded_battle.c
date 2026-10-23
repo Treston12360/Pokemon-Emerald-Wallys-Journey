@@ -285,6 +285,10 @@ bool32 MoveRecordedBattleToSaveData(void)
     struct RecordedBattleSave *battleSave, *savSection;
     u8 saveAttempts;
 
+    // Wally's Journey: the recorded-battle flash sector now holds the unlimited bag.
+    if (TRUE)
+        return FALSE;
+
     saveAttempts = 0;
     battleSave = AllocZeroed(sizeof(struct RecordedBattleSave));
     savSection = AllocZeroed(SECTOR_SIZE);

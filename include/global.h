@@ -294,7 +294,10 @@ struct Pokedex
     /*0x08*/ u32 spindaPersonality; // set when you first see Spinda
     /*0x0C*/ u32 unknown3;
 #if FREE_EXTRA_SEEN_FLAGS_SAVEBLOCK2 == FALSE
-    /*0x10*/ u8 filler[0x68]; // Previously Dex Flags, feel free to remove.
+    /*0x10*/ u8 filler[0x60]; // Previously Dex Flags, feel free to remove.
+    // Wally's Journey: ties the unlimited-bag flash sector to this save (see wally_bag.c).
+    /*0x70*/ u32 wjBagExtMagic;
+    /*0x74*/ u32 wjBagExtNonce;
 #endif //FREE_EXTRA_SEEN_FLAGS_SAVEBLOCK2
 };
 

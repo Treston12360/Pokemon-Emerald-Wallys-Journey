@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_bag.h"
 #include "malloc.h"
 #include "berry_powder.h"
 #include "fake_rtc.h"
@@ -26,7 +27,7 @@ static void ApplyNewEncryptionKeyToAllEncryptedData(u32 encryptionKey);
 
 struct LoadedSaveData
 {
- /*0x0000*/ struct Bag bag;
+ struct WJBagPockets bag; // Wally's Journey: full-size pockets
  /*0x02E8*/ struct Mail mail[MAIL_COUNT];
 };
 
@@ -245,12 +246,14 @@ void CopyPartyAndObjectsToSave(void)
 {
     SavePlayerParty();
     SaveObjectEvents();
+    WallyBag_PrepareSave();
 }
 
 void CopyPartyAndObjectsFromSave(void)
 {
     LoadPlayerParty();
     LoadObjectEvents();
+    WallyBag_LoadFromSave();
 }
 
 void LoadPlayerBag(void)
@@ -258,7 +261,7 @@ void LoadPlayerBag(void)
     int i;
 
     // load player bag.
-    memcpy(&gLoadedSaveData.bag, &gSaveBlock1Ptr->bag, sizeof(struct Bag));
+    memcpy(&gLoadedSaveData.bag, gWJBag, sizeof(*gWJBag));
 
     // load mail.
     for (i = 0; i < MAIL_COUNT; i++)
@@ -273,7 +276,7 @@ void SavePlayerBag(void)
     u32 encryptionKeyBackup;
 
     // save player bag.
-    memcpy(&gSaveBlock1Ptr->bag, &gLoadedSaveData.bag, sizeof(struct Bag));
+    memcpy(gWJBag, &gLoadedSaveData.bag, sizeof(*gWJBag));
 
     // save mail.
     for (i = 0; i < MAIL_COUNT; i++)

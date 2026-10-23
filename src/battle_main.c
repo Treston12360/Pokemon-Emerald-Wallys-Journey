@@ -2030,7 +2030,7 @@ static void EndLinkBattleInSteps(void)
 
             for (i = 0; i < battlerCount && (gLinkPlayers[i].version & 0xFF) == VERSION_EMERALD; i++);
 
-            if (!gSaveBlock2Ptr->frontier.disableRecordBattle && i == battlerCount)
+            if (FALSE && !gSaveBlock2Ptr->frontier.disableRecordBattle && i == battlerCount) // Wally's Journey: no battle recording
             {
                 if (FlagGet(FLAG_SYS_FRONTIER_PASS))
                 {
