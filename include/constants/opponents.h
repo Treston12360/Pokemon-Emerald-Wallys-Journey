@@ -801,11 +801,11 @@
 #define TRAINER_TATE_AND_LIZA_2             794
 #define TRAINER_TATE_AND_LIZA_3             795
 #define TRAINER_TATE_AND_LIZA_4             796
-#define TRAINER_TATE_AND_LIZA_5             797
+#define TRAINER_TRESTON_3             797 // Wally's Journey: TRESTON with Darkrai and Deoxys (was TATE_AND_LIZA_5)
 #define TRAINER_JUAN_2                      798
 #define TRAINER_JUAN_3                      799
 #define TRAINER_JUAN_4                      800
-#define TRAINER_JUAN_5                      801
+#define TRAINER_TRESTON_4                      801 // Wally's Journey: TRESTON with Darkrai, Deoxys and Giratina (was JUAN_5)
 #define TRAINER_ANGELO                      802
 #define TRAINER_DARIUS                      803
 #define TRAINER_STEVEN                      804

@@ -17340,75 +17340,79 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - Leaf Blade
 - Swords Dance
 
-=== TRAINER_TATE_AND_LIZA_5 ===
-Name: TATE&LIZA
-Class: Leader
-Pic: Leader Tate And Liza
+=== TRAINER_TRESTON_3 ===
+Name: TRESTON
+Class: Rival
+Pic: Brendan
 Gender: Male
-Music: Female
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
-AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
+Music: Male
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / Ace Pokemon / PP Stall Prevention
 
-SPECIES_CLAYDOL @ ITEM_QUICK_CLAW
-Level: 86
+SPECIES_DARKRAI @ ITEM_LIFE_ORB
+Level: 84
+Ability: Bad Dreams
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_DARK_PULSE
+- MOVE_SLUDGE_BOMB
+- MOVE_FOCUS_BLAST
+- MOVE_NASTY_PLOT
+
+SPECIES_DEOXYS @ ITEM_FOCUS_SASH
+Level: 84
+Nature: Naive
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 SpA / 252 Spe
+- MOVE_PSYCHO_BOOST
+- MOVE_SUPERPOWER
+- MOVE_ICE_BEAM
+- MOVE_EXTREME_SPEED
+
+SPECIES_TOXTRICITY_AMPED @ ITEM_THROAT_SPRAY
+Level: 85
+Ability: Punk Rock
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_OVERDRIVE
+- MOVE_BOOMBURST
+- MOVE_SLUDGE_BOMB
+- MOVE_VOLT_SWITCH
+
+SPECIES_KROOKODILE @ ITEM_CHOICE_SCARF
+Level: 85
+Ability: Intimidate
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
-- MOVE_PSYCHIC
-- MOVE_SKILL_SWAP
-- MOVE_LIGHT_SCREEN
+- MOVE_KNOCK_OFF
+- MOVE_STONE_EDGE
+- MOVE_CLOSE_COMBAT
 
-SPECIES_UMBREON @ ITEM_APICOT_BERRY
-Level: 85
-Nature: Careful
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 4 Def / 252 SpD
-- MOVE_SUBSTITUTE
-- MOVE_BATON_PASS
-- MOVE_DOUBLE_TEAM
-- MOVE_TOXIC
-
-SPECIES_ESPEON @ ITEM_STARF_BERRY
+SPECIES_EMBOAR @ ITEM_CHOICE_BAND
 Level: 86
+Ability: Reckless
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_FLARE_BLITZ
+- MOVE_HEAD_SMASH
+- MOVE_CLOSE_COMBAT
+- MOVE_WILD_CHARGE
+
+SPECIES_SCEPTILE @ ITEM_SCEPTILITE
+Level: 88
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_BATON_PASS
-- MOVE_CALM_MIND
-- MOVE_SHADOW_BALL
-- MOVE_PSYCHIC
-
-SPECIES_LUNATONE @ ITEM_LEFTOVERS
-Level: 85
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_PSYCHIC
-- MOVE_ICE_BEAM
-- MOVE_BATON_PASS
-- MOVE_COSMIC_POWER
-
-SPECIES_SOLROCK @ ITEM_LUM_BERRY
-Level: 86
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_PSYCHIC
-- MOVE_FLAMETHROWER
-- MOVE_CALM_MIND
-- MOVE_BATON_PASS
-
-Gallade @ Galladite
-Level: 88
-Nature: Jolly
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- Close Combat
-- Psycho Cut
-- Leaf Blade
-- Swords Dance
+- MOVE_LEAF_STORM
+- MOVE_DRAGON_PULSE
+- MOVE_FOCUS_BLAST
+- MOVE_EARTHQUAKE
 
 === TRAINER_JUAN_2 ===
 Name: JUAN
@@ -17620,75 +17624,78 @@ EVs: 252 HP / 252 Spe
 - MOVE_DOUBLE_TEAM
 - MOVE_ICE_BEAM
 
-=== TRAINER_JUAN_5 ===
-Name: JUAN
-Class: Leader
-Pic: Leader Juan
+=== TRAINER_TRESTON_4 ===
+Name: TRESTON
+Class: Rival
+Pic: Brendan
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / Ace Pokemon / PP Stall Prevention
 
-Lapras
-Level: 84
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- Hydro Pump
-- Perish Song
-- Ice Beam
-- Confuse Ray
-
-Gyarados @ Gyaradosite
-Level: 85
-Nature: Jolly
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- Waterfall
-- Crunch
-- Earthquake
-- Dragon Dance
-
-Politoed
-Level: 84
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- Hypnosis
-- Rain Dance
-- Hydro Pump
-- Perish Song
-
-Walrein
-Level: 85
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- Water Pulse
-- Body Slam
-- Protect
-- Sheer Cold
-
-Crawdaunt @ Chesto Berry
-Level: 85
-Nature: Adamant
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- Rest
-- Guillotine
-- Taunt
-- Double Team
-
-Kingdra @ Chesto Berry
-Level: 88
+SPECIES_DARKRAI @ ITEM_LIFE_ORB
+Level: 87
+Ability: Bad Dreams
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
-- Water Pulse
-- Double Team
-- Ice Beam
-- Rest
+- MOVE_DARK_PULSE
+- MOVE_SLUDGE_BOMB
+- MOVE_FOCUS_BLAST
+- MOVE_NASTY_PLOT
+
+SPECIES_DEOXYS @ ITEM_FOCUS_SASH
+Level: 87
+Nature: Naive
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 SpA / 252 Spe
+- MOVE_PSYCHO_BOOST
+- MOVE_SUPERPOWER
+- MOVE_ICE_BEAM
+- MOVE_EXTREME_SPEED
+
+SPECIES_TOXTRICITY_AMPED @ ITEM_THROAT_SPRAY
+Level: 88
+Ability: Punk Rock
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_OVERDRIVE
+- MOVE_BOOMBURST
+- MOVE_SLUDGE_BOMB
+- MOVE_VOLT_SWITCH
+
+SPECIES_GIRATINA_ORIGIN @ ITEM_GRISEOUS_CORE
+Level: 88
+Nature: Naive
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 SpA / 252 Spe
+- MOVE_DRACO_METEOR
+- MOVE_SHADOW_BALL
+- MOVE_EARTHQUAKE
+- MOVE_SHADOW_SNEAK
+
+SPECIES_EMBOAR @ ITEM_CHOICE_BAND
+Level: 89
+Ability: Reckless
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_FLARE_BLITZ
+- MOVE_HEAD_SMASH
+- MOVE_CLOSE_COMBAT
+- MOVE_WILD_CHARGE
+
+SPECIES_SCEPTILE @ ITEM_SCEPTILITE
+Level: 90
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_LEAF_STORM
+- MOVE_DRAGON_PULSE
+- MOVE_FOCUS_BLAST
+- MOVE_EARTHQUAKE
 
 === TRAINER_ANGELO ===
 Name: ANGELO

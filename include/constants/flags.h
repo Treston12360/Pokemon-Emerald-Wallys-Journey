@@ -76,8 +76,8 @@
 #define FLAG_WALLY_EXP_ALL_ON    0x36 // Wally's Journey: the EXP. ALL key item is switched on
 #define FLAG_WALLY_E4_REMATCH_DONE    0x37 // Wally's Journey: beat the Elite Four rematch teams (Gym Leaders go to their final teams)
 #define FLAG_WALLY_BEAT_TRESTON    0x38 // Wally's Journey: won the title defense against the secret challenger TRESTON
-#define FLAG_UNUSED_0x039    0x39 // Unused Flag
-#define FLAG_UNUSED_0x03A    0x3A // Unused Flag
+#define FLAG_WALLY_BEAT_TRESTON_2    0x39 // Wally's Journey: beat TRESTON's Darkrai team (he brings Deoxys next)
+#define FLAG_WALLY_BEAT_TRESTON_3    0x3A // Wally's Journey: beat TRESTON's Deoxys team (he brings Giratina next)
 #define FLAG_UNUSED_0x03B    0x3B // Unused Flag
 #define FLAG_UNUSED_0x03C    0x3C // Unused Flag
 #define FLAG_UNUSED_0x03D    0x3D // Unused Flag

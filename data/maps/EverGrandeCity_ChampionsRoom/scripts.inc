@@ -797,8 +797,24 @@ WallyJourney_ChampionPool_Treston::
 	goto WallyJourney_ChampionPool_TrestonBattle
 WallyJourney_ChampionPool_TrestonAgain::
 	@ After he's been beaten once, TRESTON comes back with Darkrai.
+	goto_if_set FLAG_WALLY_BEAT_TRESTON_2, WallyJourney_ChampionPool_TrestonThird
 	msgbox WallyJourney_ChampionPool_TrestonIntroAgain, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_TRESTON_2, WallyJourney_ChampionPool_TrestonDefeat
+	setflag FLAG_WALLY_BEAT_TRESTON_2
+	msgbox WallyJourney_ChampionPool_TrestonVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+@ After the Darkrai team is beaten, TRESTON also brings Deoxys.
+WallyJourney_ChampionPool_TrestonThird::
+	goto_if_set FLAG_WALLY_BEAT_TRESTON_3, WallyJourney_ChampionPool_TrestonFourth
+	msgbox WallyJourney_ChampionPool_TrestonIntroThird, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_TRESTON_3, WallyJourney_ChampionPool_TrestonDefeat
+	setflag FLAG_WALLY_BEAT_TRESTON_3
+	msgbox WallyJourney_ChampionPool_TrestonVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+@ After the Deoxys team is beaten, TRESTON's final team adds Giratina (every time from then on).
+WallyJourney_ChampionPool_TrestonFourth::
+	msgbox WallyJourney_ChampionPool_TrestonIntroFourth, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_TRESTON_4, WallyJourney_ChampionPool_TrestonDefeat
 	msgbox WallyJourney_ChampionPool_TrestonVictory, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionDefense_Won
 WallyJourney_ChampionPool_TrestonBattle::
@@ -822,6 +838,18 @@ WallyJourney_ChampionPool_TrestonIntroAgain:
 	.string "I found something new since last\n"
 	.string "time. It's been giving my rivals\l"
 	.string "nightmares. Let's go!$"
+WallyJourney_ChampionPool_TrestonIntroThird:
+	.string "TRESTON: You beat Darkrai. Fine.\p"
+	.string "Then I'll bring something that\n"
+	.string "came down from space.\l"
+	.string "No more holding back!$"
+WallyJourney_ChampionPool_TrestonIntroFourth:
+	.string "TRESTON: Darkrai. Deoxys.\n"
+	.string "You've beaten them both.\p"
+	.string "So this time, the one from the\n"
+	.string "other side came with me.\p"
+	.string "EMBOAR and SCEPTILE are still\n"
+	.string "here. They always will be. Go!$"
 WallyJourney_ChampionPool_TrestonDefeat:
 	.string "...Not bad. Not bad at all.$"
 WallyJourney_ChampionPool_TrestonVictory:
