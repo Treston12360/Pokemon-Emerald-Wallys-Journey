@@ -512,7 +512,6 @@ static u8 PickWildMonNature(enum Species species)
     return GetSynchronizedNature(WILDMON_ORIGIN, species);
 }
 
-#define WJ_WILD_HIDDEN_ABILITY_ODDS 20 // 5%
 
 void CreateWildMon(enum Species species, u8 level)
 {
@@ -520,8 +519,8 @@ void CreateWildMon(enum Species species, u8 level)
     u32 personality = GetMonPersonality(species, GetSynchronizedGender(WILDMON_ORIGIN, species), PickWildMonNature(species), RANDOM_UNOWN_LETTER);
     CreateMonWithIVs(&gParties[B_TRAINER_OPPONENT_A][0], species, level, personality, OTID_STRUCT_PLAYER_ID, USE_RANDOM_IVS);
     GiveMonInitialMoveset(&gParties[B_TRAINER_OPPONENT_A][0]);
-    // Wally's Journey: 1 in WJ_WILD_HIDDEN_ABILITY_ODDS wild Pokemon have their Hidden Ability.
-    if (GetSpeciesAbility(species, 2) != ABILITY_NONE && (Random() % WJ_WILD_HIDDEN_ABILITY_ODDS) == 0)
+    // Wally's Journey: Hidden Ability chance is 5% + 1% per catch of this species.
+    if (GetSpeciesAbility(species, 2) != ABILITY_NONE && (Random() % 100) < WallyJourney_HiddenAbilityChance(species))
     {
         u8 abilityNum = 2;
         SetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_ABILITY_NUM, &abilityNum);

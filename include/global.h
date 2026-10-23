@@ -269,6 +269,9 @@ struct SaveBlock3
     u8 dexNavSearchLevels[NUM_SPECIES];
 #endif
     u8 dexNavChain;
+    // Wally's Journey: wild catches per National Dex number (Hidden Ability odds).
+    u8 wjCatchCountMagic;
+    u8 wjCatchCounts[NATIONAL_DEX_COUNT + 1];
 #if APRICORN_TREE_COUNT > 0
     u8 apricornTrees[NUM_APRICORN_TREE_BYTES];
 #endif

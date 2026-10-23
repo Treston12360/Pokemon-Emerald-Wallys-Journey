@@ -193,6 +193,40 @@ static bool32 TakeExpShare(void)
 }
 #endif
 
+// Wild catch counts per National Dex number. The magic byte marks the table as
+// initialised so saves from before this feature start every species at zero.
+#define WJ_CATCH_MAGIC 0xA7
+static void EnsureCatchCounts(void)
+{
+    if (gSaveBlock3Ptr->wjCatchCountMagic != WJ_CATCH_MAGIC)
+    {
+        memset(gSaveBlock3Ptr->wjCatchCounts, 0, sizeof(gSaveBlock3Ptr->wjCatchCounts));
+        gSaveBlock3Ptr->wjCatchCountMagic = WJ_CATCH_MAGIC;
+    }
+}
+
+void WallyJourney_RecordCatch(u16 species)
+{
+    u16 dexNum = SpeciesToNationalPokedexNum(species);
+    EnsureCatchCounts();
+    if (dexNum == 0 || dexNum > NATIONAL_DEX_COUNT)
+        return;
+    if (gSaveBlock3Ptr->wjCatchCounts[dexNum] < 255)
+        gSaveBlock3Ptr->wjCatchCounts[dexNum]++;
+}
+
+// Percent chance (0-100) a wild Pokemon of this species has its Hidden Ability:
+// 5% base + 1% for every one of that species the player has caught.
+u32 WallyJourney_HiddenAbilityChance(u16 species)
+{
+    u16 dexNum = SpeciesToNationalPokedexNum(species);
+    u32 chance = 5;
+    EnsureCatchCounts();
+    if (dexNum != 0 && dexNum <= NATIONAL_DEX_COUNT)
+        chance += gSaveBlock3Ptr->wjCatchCounts[dexNum];
+    return chance > 100 ? 100 : chance;
+}
+
 // Called when the Options EXP. MODE is saved, and on map entry for older saves:
 // swaps Devon's Exp. Share and the EXP. ALL key item to match the mode.
 void WallyJourney_SyncExpItem(void)
