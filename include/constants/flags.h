@@ -75,7 +75,7 @@
 #define FLAG_WALLY_OWE_OFF    0x35 // Wally's Journey: Options menu SEE WILD MONS OFF (set) vs ON (clear)
 #define FLAG_WALLY_EXP_ALL_ON    0x36 // Wally's Journey: the EXP. ALL key item is switched on
 #define FLAG_WALLY_E4_REMATCH_DONE    0x37 // Wally's Journey: beat the Elite Four rematch teams (Gym Leaders go to their final teams)
-#define FLAG_UNUSED_0x038    0x38 // Unused Flag
+#define FLAG_WALLY_BEAT_TRESTON    0x38 // Wally's Journey: won the title defense against the secret challenger TRESTON
 #define FLAG_UNUSED_0x039    0x39 // Unused Flag
 #define FLAG_UNUSED_0x03A    0x3A // Unused Flag
 #define FLAG_UNUSED_0x03B    0x3B // Unused Flag

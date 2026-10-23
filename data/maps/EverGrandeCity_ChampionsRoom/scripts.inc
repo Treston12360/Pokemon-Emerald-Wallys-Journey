@@ -14,6 +14,8 @@ EverGrandeCity_ChampionsRoom_OnTransition:
 WallyJourney_ChampionDefense_SetChallengerGfx::
 	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_WALLY
 	goto_if_unset FLAG_SYS_GAME_CLEAR, Common_EventScript_NopReturn
+	@ The very first title defense is the secret challenger TRESTON.
+	goto_if_unset FLAG_WALLY_BEAT_TRESTON, WallyJourney_ChampionDefense_GfxTreston
 	call_if_eq VAR_UNUSED_0x40FD, 1, WallyJourney_ChampionDefense_GfxWallace
 	call_if_eq VAR_UNUSED_0x40FD, 2, WallyJourney_ChampionDefense_GfxSteven
 	call_if_ge VAR_UNUSED_0x40FD, 4, WallyJourney_ChampionDefense_PickChallenger
@@ -22,7 +24,8 @@ WallyJourney_ChampionDefense_SetChallengerGfx::
 @ Wally's Journey: from the 5th title defense on, the challenger is drawn at random:
 @ 0 WALLY  1 WALLACE  2 STEVEN  3 MAY/BRENDAN  4-11 a Gym Leader with their final team.
 WallyJourney_ChampionDefense_PickChallenger::
-	random 12
+	@ TRESTON (the first title defense) is also number 12 in the random draw.
+	random 13
 	copyvar VAR_WALLY_TITLE_CHALLENGER, VAR_RESULT
 	switch VAR_WALLY_TITLE_CHALLENGER
 	case 1, WallyJourney_ChampionDefense_GfxWallace
@@ -36,6 +39,11 @@ WallyJourney_ChampionDefense_PickChallenger::
 	case 9, WallyJourney_ChampionDefense_GfxWinona
 	case 10, WallyJourney_ChampionDefense_GfxLiza
 	case 11, WallyJourney_ChampionDefense_GfxJuan
+	case 12, WallyJourney_ChampionDefense_GfxTreston
+	return
+
+WallyJourney_ChampionDefense_GfxTreston::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_BRENDAN_NORMAL
 	return
 
 WallyJourney_ChampionDefense_GfxRival::
@@ -133,6 +141,7 @@ WallyJourney_ChampionDefense_Wally::
 	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
 	applymovement LOCALID_CHAMPIONS_ROOM_WALLACE, Common_Movement_FaceDown
 	waitmovement 0
+	goto_if_unset FLAG_WALLY_BEAT_TRESTON, WallyJourney_ChampionPool_Treston
 	switch VAR_UNUSED_0x40FD
 	case 0, WallyJourney_ChampionDefense_First
 	case 1, WallyJourney_ChampionDefense_Wallace
@@ -150,6 +159,7 @@ WallyJourney_ChampionDefense_Wally::
 	case 9, WallyJourney_ChampionPool_Winona
 	case 10, WallyJourney_ChampionPool_TateAndLiza
 	case 11, WallyJourney_ChampionPool_Juan
+	case 12, WallyJourney_ChampionPool_Treston
 	msgbox WallyJourney_ChampionDefense_FinalIntro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_WALLY_CHAMPION_FINAL, WallyJourney_ChampionDefense_FinalDefeat
 	msgbox WallyJourney_ChampionDefense_FinalVictory, MSGBOX_DEFAULT
@@ -780,3 +790,36 @@ WallyJourney_ChampionPool_NeedTwo:
 WallyJourney_ChampionDefense_SetE4RematchDone::
 	setflag FLAG_WALLY_E4_REMATCH_DONE
 	return
+
+WallyJourney_ChampionPool_Treston::
+	goto_if_set FLAG_WALLY_BEAT_TRESTON, WallyJourney_ChampionPool_TrestonAgain
+	msgbox WallyJourney_ChampionPool_TrestonIntro, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionPool_TrestonBattle
+WallyJourney_ChampionPool_TrestonAgain::
+	msgbox WallyJourney_ChampionPool_TrestonIntroAgain, MSGBOX_DEFAULT
+WallyJourney_ChampionPool_TrestonBattle::
+	trainerbattle_no_intro TRAINER_TRESTON, WallyJourney_ChampionPool_TrestonDefeat
+	msgbox WallyJourney_ChampionPool_TrestonVictory, MSGBOX_DEFAULT
+	@ The first win over TRESTON doesn't move the title-defense ladder on: Wally is next.
+	goto_if_set FLAG_WALLY_BEAT_TRESTON, WallyJourney_ChampionDefense_Won
+	setflag FLAG_WALLY_BEAT_TRESTON
+	closemessage
+	goto WallyJourney_ChampionDefense_NoCount
+
+WallyJourney_ChampionPool_TrestonIntro:
+	.string "???: So you're the CHAMPION\n"
+	.string "everyone keeps talking about.\p"
+	.string "Name's TRESTON. I cleared this\n"
+	.string "LEAGUE long before you got here.\p"
+	.string "This is my dream team.\n"
+	.string "Let's see if yours is better.$"
+WallyJourney_ChampionPool_TrestonIntroAgain:
+	.string "TRESTON: Back for round two.\p"
+	.string "My team doesn't like losing.\n"
+	.string "Neither do I.$"
+WallyJourney_ChampionPool_TrestonDefeat:
+	.string "...Not bad. Not bad at all.$"
+WallyJourney_ChampionPool_TrestonVictory:
+	.string "TRESTON: You earned that title.\p"
+	.string "I'll be back. Keep your team\n"
+	.string "sharp.$"
