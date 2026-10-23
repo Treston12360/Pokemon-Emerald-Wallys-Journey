@@ -401,6 +401,8 @@ FortreeCity_Gym_EventScript_WinonaRematchStage3::
 	goto_if_eq VAR_RESULT, NO, FortreeCity_Gym_EventScript_WinonaRematchDecline
 	cleartrainerflag TRAINER_WINONA_3
 	trainerbattle_double TRAINER_WINONA_3, FortreeCity_Gym_Text_WinonaGrowGo, FortreeCity_Gym_Text_WinonaGrowDefeat3, FortreeCity_Gym_Text_WinonaGrowNeedTwo
+	setvar VAR_0x8004, 6
+	special WallyJourney_RecordLeaderPostgameWin
 	msgbox FortreeCity_Gym_Text_WinonaGrowAfter3, MSGBOX_DEFAULT
 	release
 	end

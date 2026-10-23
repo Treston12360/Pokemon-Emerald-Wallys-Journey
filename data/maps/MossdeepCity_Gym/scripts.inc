@@ -754,6 +754,8 @@ MossdeepCity_Gym_EventScript_TateAndLizaRematchStage3::
 	goto_if_eq VAR_RESULT, NO, MossdeepCity_Gym_EventScript_TateAndLizaRematchDecline
 	cleartrainerflag TRAINER_TATE_AND_LIZA_3
 	trainerbattle_double TRAINER_TATE_AND_LIZA_3, MossdeepCity_Gym_Text_TateAndLizaGrowGo, MossdeepCity_Gym_Text_TateAndLizaGrowDefeat3, MossdeepCity_Gym_Text_TateAndLizaGrowNeedTwo
+	setvar VAR_0x8004, 7
+	special WallyJourney_RecordLeaderPostgameWin
 	msgbox MossdeepCity_Gym_Text_TateAndLizaGrowAfter3, MSGBOX_DEFAULT
 	release
 	end

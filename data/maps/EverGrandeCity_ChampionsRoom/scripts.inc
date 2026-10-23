@@ -16,10 +16,69 @@ WallyJourney_ChampionDefense_SetChallengerGfx::
 	goto_if_unset FLAG_SYS_GAME_CLEAR, Common_EventScript_NopReturn
 	call_if_eq VAR_UNUSED_0x40FD, 1, WallyJourney_ChampionDefense_GfxWallace
 	call_if_eq VAR_UNUSED_0x40FD, 2, WallyJourney_ChampionDefense_GfxSteven
+	call_if_ge VAR_UNUSED_0x40FD, 4, WallyJourney_ChampionDefense_PickChallenger
+	return
+
+@ Wally's Journey: from the 5th title defense on, the challenger is drawn at random:
+@ 0 WALLY  1 WALLACE  2 STEVEN  3 MAY/BRENDAN  4-11 a Gym Leader with their final team.
+WallyJourney_ChampionDefense_PickChallenger::
+	random 12
+	copyvar VAR_WALLY_TITLE_CHALLENGER, VAR_RESULT
+	switch VAR_WALLY_TITLE_CHALLENGER
+	case 1, WallyJourney_ChampionDefense_GfxWallace
+	case 2, WallyJourney_ChampionDefense_GfxSteven
+	case 3, WallyJourney_ChampionDefense_GfxRival
+	case 4, WallyJourney_ChampionDefense_GfxRoxanne
+	case 5, WallyJourney_ChampionDefense_GfxBrawly
+	case 6, WallyJourney_ChampionDefense_GfxWattson
+	case 7, WallyJourney_ChampionDefense_GfxFlannery
+	case 8, WallyJourney_ChampionDefense_GfxNorman
+	case 9, WallyJourney_ChampionDefense_GfxWinona
+	case 10, WallyJourney_ChampionDefense_GfxLiza
+	case 11, WallyJourney_ChampionDefense_GfxJuan
+	return
+
+WallyJourney_ChampionDefense_GfxRival::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MAY_NORMAL
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, Common_EventScript_NopReturn
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_BRENDAN_NORMAL
 	return
 
 WallyJourney_ChampionDefense_GfxWallace::
 	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_WALLACE
+	return
+
+WallyJourney_ChampionDefense_GfxRoxanne::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_ROXANNE
+	return
+
+WallyJourney_ChampionDefense_GfxBrawly::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_BRAWLY
+	return
+
+WallyJourney_ChampionDefense_GfxWattson::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_WATTSON
+	return
+
+WallyJourney_ChampionDefense_GfxFlannery::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_FLANNERY
+	return
+
+WallyJourney_ChampionDefense_GfxNorman::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_NORMAN
+	return
+
+WallyJourney_ChampionDefense_GfxWinona::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_WINONA
+	return
+
+WallyJourney_ChampionDefense_GfxLiza::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_LIZA
+	return
+
+WallyJourney_ChampionDefense_GfxJuan::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_JUAN
 	return
 
 WallyJourney_ChampionDefense_GfxSteven::
@@ -79,6 +138,18 @@ WallyJourney_ChampionDefense_Wally::
 	case 1, WallyJourney_ChampionDefense_Wallace
 	case 2, WallyJourney_ChampionDefense_Steven
 	goto_if_eq VAR_UNUSED_0x40FD, 3, WallyJourney_ChampionDefense_FinalFirst
+	switch VAR_WALLY_TITLE_CHALLENGER
+	case 1, WallyJourney_ChampionPool_Wallace
+	case 2, WallyJourney_ChampionPool_Steven
+	case 3, WallyJourney_ChampionPool_Rival
+	case 4, WallyJourney_ChampionPool_Roxanne
+	case 5, WallyJourney_ChampionPool_Brawly
+	case 6, WallyJourney_ChampionPool_Wattson
+	case 7, WallyJourney_ChampionPool_Flannery
+	case 8, WallyJourney_ChampionPool_Norman
+	case 9, WallyJourney_ChampionPool_Winona
+	case 10, WallyJourney_ChampionPool_TateAndLiza
+	case 11, WallyJourney_ChampionPool_Juan
 	msgbox WallyJourney_ChampionDefense_FinalIntro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_WALLY_CHAMPION_FINAL, WallyJourney_ChampionDefense_FinalDefeat
 	msgbox WallyJourney_ChampionDefense_FinalVictory, MSGBOX_DEFAULT
@@ -112,7 +183,10 @@ WallyJourney_ChampionDefense_FinalFirst::
 
 WallyJourney_ChampionDefense_Won::
 	closemessage
-	goto_if_ge VAR_UNUSED_0x40FD, 3, WallyJourney_ChampionDefense_NoCount
+	@ A title defense after the Elite Four rematch run sends the Gym Leaders to their final teams.
+	specialvar VAR_RESULT, WallyJourney_IsEliteFourRematchUnlocked
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_ChampionDefense_SetE4RematchDone
+	goto_if_ge VAR_UNUSED_0x40FD, 4, WallyJourney_ChampionDefense_NoCount
 	addvar VAR_UNUSED_0x40FD, 1
 WallyJourney_ChampionDefense_NoCount::
 	warp MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F, 9, 8
@@ -486,3 +560,223 @@ EverGrandeCity_ChampionsRoom_Text_BrendanCongratulations:
 WallyJourney_Text_ChampionWallyBack:
 	.string "WALLY: …I heard your footsteps all\n"
 	.string "the way up the stairs.$"
+
+@ Wally's Journey: open title-defense challengers (5th defense on).
+WallyJourney_ChampionPool_Wallace::
+	msgbox WallyJourney_ChampionPool_WallaceIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_WALLACE, WallyJourney_ChampionPool_WallaceDefeat
+	msgbox WallyJourney_ChampionPool_WallaceVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_Steven::
+	msgbox WallyJourney_ChampionPool_StevenIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_STEVEN, WallyJourney_ChampionPool_StevenDefeat
+	cleartrainerflag TRAINER_STEVEN
+	msgbox WallyJourney_ChampionPool_StevenVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_Rival::
+	msgbox WallyJourney_ChampionPool_RivalIntro, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionPool_RivalBattle
+WallyJourney_ChampionPool_RivalAfter::
+	msgbox WallyJourney_ChampionPool_RivalVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_Roxanne::
+	msgbox WallyJourney_ChampionPool_RoxanneIntro, MSGBOX_DEFAULT
+	cleartrainerflag TRAINER_ROXANNE_4
+	trainerbattle_double TRAINER_ROXANNE_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_RoxanneDefeat, WallyJourney_ChampionPool_NeedTwo
+	msgbox WallyJourney_ChampionPool_RoxanneVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_Brawly::
+	msgbox WallyJourney_ChampionPool_BrawlyIntro, MSGBOX_DEFAULT
+	cleartrainerflag TRAINER_BRAWLY_4
+	trainerbattle_double TRAINER_BRAWLY_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_BrawlyDefeat, WallyJourney_ChampionPool_NeedTwo
+	msgbox WallyJourney_ChampionPool_BrawlyVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_Wattson::
+	msgbox WallyJourney_ChampionPool_WattsonIntro, MSGBOX_DEFAULT
+	cleartrainerflag TRAINER_WATTSON_4
+	trainerbattle_double TRAINER_WATTSON_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_WattsonDefeat, WallyJourney_ChampionPool_NeedTwo
+	msgbox WallyJourney_ChampionPool_WattsonVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_Flannery::
+	msgbox WallyJourney_ChampionPool_FlanneryIntro, MSGBOX_DEFAULT
+	cleartrainerflag TRAINER_FLANNERY_4
+	trainerbattle_double TRAINER_FLANNERY_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_FlanneryDefeat, WallyJourney_ChampionPool_NeedTwo
+	msgbox WallyJourney_ChampionPool_FlanneryVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_Norman::
+	msgbox WallyJourney_ChampionPool_NormanIntro, MSGBOX_DEFAULT
+	cleartrainerflag TRAINER_NORMAN_4
+	trainerbattle_double TRAINER_NORMAN_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_NormanDefeat, WallyJourney_ChampionPool_NeedTwo
+	msgbox WallyJourney_ChampionPool_NormanVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_Winona::
+	msgbox WallyJourney_ChampionPool_WinonaIntro, MSGBOX_DEFAULT
+	cleartrainerflag TRAINER_WINONA_4
+	trainerbattle_double TRAINER_WINONA_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_WinonaDefeat, WallyJourney_ChampionPool_NeedTwo
+	msgbox WallyJourney_ChampionPool_WinonaVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_TateAndLiza::
+	msgbox WallyJourney_ChampionPool_TateAndLizaIntro, MSGBOX_DEFAULT
+	cleartrainerflag TRAINER_TATE_AND_LIZA_4
+	trainerbattle_double TRAINER_TATE_AND_LIZA_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_TateAndLizaDefeat, WallyJourney_ChampionPool_NeedTwo
+	msgbox WallyJourney_ChampionPool_TateAndLizaVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_Juan::
+	msgbox WallyJourney_ChampionPool_JuanIntro, MSGBOX_DEFAULT
+	cleartrainerflag TRAINER_JUAN_4
+	trainerbattle_double TRAINER_JUAN_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_JuanDefeat, WallyJourney_ChampionPool_NeedTwo
+	msgbox WallyJourney_ChampionPool_JuanVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_RivalBattle::
+	checkplayergender
+	goto_if_eq VAR_RESULT, FEMALE, WallyJourney_ChampionPool_Brendan
+	goto_if_eq VAR_STARTER_MON, 0, WallyJourney_ChampionPool_MayTreecko
+	goto_if_eq VAR_STARTER_MON, 1, WallyJourney_ChampionPool_MayTorchic
+	trainerbattle_no_intro TRAINER_MAY_FINAL_MUDKIP, WallyJourney_ChampionPool_RivalDefeat
+	goto WallyJourney_ChampionPool_RivalAfter
+WallyJourney_ChampionPool_MayTreecko::
+	trainerbattle_no_intro TRAINER_MAY_FINAL_TREECKO, WallyJourney_ChampionPool_RivalDefeat
+	goto WallyJourney_ChampionPool_RivalAfter
+WallyJourney_ChampionPool_MayTorchic::
+	trainerbattle_no_intro TRAINER_MAY_FINAL_TORCHIC, WallyJourney_ChampionPool_RivalDefeat
+	goto WallyJourney_ChampionPool_RivalAfter
+WallyJourney_ChampionPool_Brendan::
+	goto_if_eq VAR_STARTER_MON, 0, WallyJourney_ChampionPool_BrendanTreecko
+	goto_if_eq VAR_STARTER_MON, 1, WallyJourney_ChampionPool_BrendanTorchic
+	trainerbattle_no_intro TRAINER_BRENDAN_FINAL_MUDKIP, WallyJourney_ChampionPool_RivalDefeat
+	goto WallyJourney_ChampionPool_RivalAfter
+WallyJourney_ChampionPool_BrendanTreecko::
+	trainerbattle_no_intro TRAINER_BRENDAN_FINAL_TREECKO, WallyJourney_ChampionPool_RivalDefeat
+	goto WallyJourney_ChampionPool_RivalAfter
+WallyJourney_ChampionPool_BrendanTorchic::
+	trainerbattle_no_intro TRAINER_BRENDAN_FINAL_TORCHIC, WallyJourney_ChampionPool_RivalDefeat
+	goto WallyJourney_ChampionPool_RivalAfter
+
+WallyJourney_ChampionPool_WallaceIntro:
+	.string "WALLACE: I took my mentor's advice\n"
+	.string "and trained in SOOTOPOLIS.\p"
+	.string "The title isn't mine anymore, but\n"
+	.string "my pride still is. Defend it!$"
+WallyJourney_ChampionPool_WallaceDefeat:
+	.string "Beautiful. Truly beautiful.$"
+WallyJourney_ChampionPool_WallaceVictory:
+	.string "WALLACE: I'll be back to try again.\n"
+	.string "SOOTOPOLIS sends its regards.$"
+WallyJourney_ChampionPool_StevenIntro:
+	.string "STEVEN: I went back to my\n"
+	.string "exploring for a while.\p"
+	.string "I found a few things that made my\n"
+	.string "team stronger. Let me show you.$"
+WallyJourney_ChampionPool_StevenDefeat:
+	.string "Remarkable. As always.$"
+WallyJourney_ChampionPool_StevenVictory:
+	.string "STEVEN: I'll head back to the caves.\n"
+	.string "There's always more to dig up.$"
+WallyJourney_ChampionPool_RivalIntro:
+	.string "{RIVAL}: Surprise! I cleared the\n"
+	.string "ELITE FOUR too.\p"
+	.string "I've been training between\n"
+	.string "fieldwork. Let's see if it paid off!$"
+WallyJourney_ChampionPool_RivalDefeat:
+	.string "Ugh. Still not enough.$"
+WallyJourney_ChampionPool_RivalVictory:
+	.string "{RIVAL}: Fine. Back to fieldwork.\n"
+	.string "I'm still going to beat you someday!$"
+WallyJourney_ChampionPool_RoxanneIntro:
+	.string "ROXANNE: I closed the school for a\n"
+	.string "week to make this trip.\p"
+	.string "I've prepared for this exam more\n"
+	.string "than for any other. Begin!$"
+WallyJourney_ChampionPool_RoxanneDefeat:
+	.string "Full marks. Again.$"
+WallyJourney_ChampionPool_RoxanneVictory:
+	.string "ROXANNE: I'll grade my own mistakes\n"
+	.string "on the way home.$"
+WallyJourney_ChampionPool_BrawlyIntro:
+	.string "BRAWLY: Rode the tide all the way to\n"
+	.string "EVER GRANDE!\p"
+	.string "Your title's the biggest wave\n"
+	.string "around. Let's go!$"
+WallyJourney_ChampionPool_BrawlyDefeat:
+	.string "Wiped out! Worth it!$"
+WallyJourney_ChampionPool_BrawlyVictory:
+	.string "BRAWLY: Back to the island.\n"
+	.string "See you on the next swell!$"
+WallyJourney_ChampionPool_WattsonIntro:
+	.string "WATTSON: Wahahaha! This old man\n"
+	.string "cleared the ELITE FOUR!\p"
+	.string "Now let's see if I can charge\n"
+	.string "past the CHAMPION!$"
+WallyJourney_ChampionPool_WattsonDefeat:
+	.string "Wahahaha! Not today!$"
+WallyJourney_ChampionPool_WattsonVictory:
+	.string "WATTSON: Back to MAUVILLE.\n"
+	.string "That was the best fun I've had!$"
+WallyJourney_ChampionPool_FlanneryIntro:
+	.string "FLANNERY: I trained every day\n"
+	.string "since our last battle.\p"
+	.string "This time I'm taking that title.\n"
+	.string "Here I come!$"
+WallyJourney_ChampionPool_FlanneryDefeat:
+	.string "Argh! So close!$"
+WallyJourney_ChampionPool_FlanneryVictory:
+	.string "FLANNERY: Grandpa's going to tease\n"
+	.string "me about this one.$"
+WallyJourney_ChampionPool_NormanIntro:
+	.string "DAD: The ELITE FOUR let me through.\p"
+	.string "I'm not here as your father today.\n"
+	.string "I'm a challenger. Defend your title.$"
+WallyJourney_ChampionPool_NormanDefeat:
+	.string "...That's my kid.$"
+WallyJourney_ChampionPool_NormanVictory:
+	.string "DAD: Your mother is going to\n"
+	.string "laugh at me. Worth it.$"
+WallyJourney_ChampionPool_WinonaIntro:
+	.string "WINONA: The wind carried me here.\p"
+	.string "Let us see whose wings are\n"
+	.string "stronger today, CHAMPION.$"
+WallyJourney_ChampionPool_WinonaDefeat:
+	.string "You still fly higher.$"
+WallyJourney_ChampionPool_WinonaVictory:
+	.string "WINONA: I'll return to FORTREE\n"
+	.string "and keep training.$"
+WallyJourney_ChampionPool_TateAndLizaIntro:
+	.string "TATE: We cleared the ELITE FOUR!\n"
+	.string "LIZA: Together, like always!\p"
+	.string "TATE&LIZA: Now we want your title!$"
+WallyJourney_ChampionPool_TateAndLizaDefeat:
+	.string "TATE: Not again...\n"
+	.string "LIZA: ...we'll be back!$"
+WallyJourney_ChampionPool_TateAndLizaVictory:
+	.string "LIZA: We'll practice more!\n"
+	.string "TATE: Way more!$"
+WallyJourney_ChampionPool_JuanIntro:
+	.string "JUAN: I taught WALLACE, and I have\n"
+	.string "watched you from afar.\p"
+	.string "Allow me one last performance,\n"
+	.string "for the title itself.$"
+WallyJourney_ChampionPool_JuanDefeat:
+	.string "Bravo. The title suits you.$"
+WallyJourney_ChampionPool_JuanVictory:
+	.string "JUAN: I am content.\n"
+	.string "The stage remains yours.$"
+WallyJourney_ChampionPool_Go:
+	.string "Here we go!$"
+WallyJourney_ChampionPool_NeedTwo:
+	.string "You need two POKéMON for this\n"
+	.string "battle.$"
+
+WallyJourney_ChampionDefense_SetE4RematchDone::
+	setflag FLAG_WALLY_E4_REMATCH_DONE
+	return

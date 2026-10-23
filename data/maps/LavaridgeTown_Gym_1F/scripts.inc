@@ -466,6 +466,8 @@ LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage3::
 	goto_if_eq VAR_RESULT, NO, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline
 	cleartrainerflag TRAINER_FLANNERY_3
 	trainerbattle_double TRAINER_FLANNERY_3, LavaridgeTown_Gym_1F_Text_FlanneryGrowGo, LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat3, LavaridgeTown_Gym_1F_Text_FlanneryGrowNeedTwo
+	setvar VAR_0x8004, 4
+	special WallyJourney_RecordLeaderPostgameWin
 	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter3, MSGBOX_DEFAULT
 	release
 	end

@@ -551,6 +551,8 @@ DewfordTown_Gym_EventScript_BrawlyRematchStage3::
 	goto_if_eq VAR_RESULT, NO, DewfordTown_Gym_EventScript_BrawlyRematchDecline
 	cleartrainerflag TRAINER_BRAWLY_3
 	trainerbattle_double TRAINER_BRAWLY_3, DewfordTown_Gym_Text_BrawlyGrowGo, DewfordTown_Gym_Text_BrawlyGrowDefeat3, DewfordTown_Gym_Text_BrawlyGrowNeedTwo
+	setvar VAR_0x8004, 2
+	special WallyJourney_RecordLeaderPostgameWin
 	msgbox DewfordTown_Gym_Text_BrawlyGrowAfter3, MSGBOX_DEFAULT
 	release
 	end

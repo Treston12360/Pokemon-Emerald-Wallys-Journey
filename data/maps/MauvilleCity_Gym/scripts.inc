@@ -511,6 +511,8 @@ MauvilleCity_Gym_EventScript_WattsonRematchStage3::
 	goto_if_eq VAR_RESULT, NO, MauvilleCity_Gym_EventScript_WattsonRematchDecline
 	cleartrainerflag TRAINER_WATTSON_3
 	trainerbattle_double TRAINER_WATTSON_3, MauvilleCity_Gym_Text_WattsonGrowGo, MauvilleCity_Gym_Text_WattsonGrowDefeat3, MauvilleCity_Gym_Text_WattsonGrowNeedTwo
+	setvar VAR_0x8004, 3
+	special WallyJourney_RecordLeaderPostgameWin
 	msgbox MauvilleCity_Gym_Text_WattsonGrowAfter3, MSGBOX_DEFAULT
 	release
 	end

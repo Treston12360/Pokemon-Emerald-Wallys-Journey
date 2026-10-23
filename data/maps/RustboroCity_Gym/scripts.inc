@@ -347,6 +347,8 @@ RustboroCity_Gym_EventScript_RoxanneRematchStage3::
 	goto_if_eq VAR_RESULT, NO, RustboroCity_Gym_EventScript_RoxanneRematchDecline
 	cleartrainerflag TRAINER_ROXANNE_3
 	trainerbattle_double TRAINER_ROXANNE_3, RustboroCity_Gym_Text_RoxanneGrowGo, RustboroCity_Gym_Text_RoxanneGrowDefeat3, RustboroCity_Gym_Text_RoxanneGrowNeedTwo
+	setvar VAR_0x8004, 1
+	special WallyJourney_RecordLeaderPostgameWin
 	msgbox RustboroCity_Gym_Text_RoxanneGrowAfter3, MSGBOX_DEFAULT
 	release
 	end

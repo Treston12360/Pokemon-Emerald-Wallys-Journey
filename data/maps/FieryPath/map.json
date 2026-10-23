@@ -169,14 +169,6 @@
       "elevation": 3,
       "item": "ITEM_ABILITY_CAPSULE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_FIERYPATH_ABILITY_CAPSULE"
-    },
-    {
-      "type": "hidden_item",
-      "x": 12,
-      "y": 11,
-      "elevation": 3,
-      "item": "ITEM_FLAME_ORB",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_FIERYPATH_FLAME_ORB"
     }
   ]
 }

@@ -1334,8 +1334,12 @@ WallyJourney_EventScript_RivalMeet3::
 	playbgm MUS_ENCOUNTER_MAY, FALSE
 	msgbox WallyJourney_Text_RivalVERDANTURFIntro, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_WALLY_NO_WHITEOUT
 	trainerbattle_no_intro TRAINER_WALLY_VERDANTURF, WallyJourney_Text_RivalVERDANTURFDefeat
-	msgbox WallyJourney_Text_RivalVERDANTURFPost, MSGBOX_DEFAULT
+	specialvar VAR_RESULT, GetBattleOutcome
+	clearflag FLAG_WALLY_NO_WHITEOUT
+	call_if_ne VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalVERDANTURFWallyWon
+	call_if_eq VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalVERDANTURFPlayerWon
 	closemessage
 	setvar VAR_0x8009, LOCALID_ROUTE111_RIVAL_WALLY
 	call WallyJourney_EventScript_WallyWalksAway
@@ -1353,8 +1357,12 @@ WallyJourney_EventScript_RivalMeet4::
 	playbgm MUS_ENCOUNTER_MAY, FALSE
 	msgbox WallyJourney_Text_RivalLAVARIDGEIntro, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_WALLY_NO_WHITEOUT
 	trainerbattle_no_intro TRAINER_WALLY_LAVARIDGE, WallyJourney_Text_RivalLAVARIDGEDefeat
-	msgbox WallyJourney_Text_RivalLAVARIDGEPost, MSGBOX_DEFAULT
+	specialvar VAR_RESULT, GetBattleOutcome
+	clearflag FLAG_WALLY_NO_WHITEOUT
+	call_if_ne VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalLAVARIDGEWallyWon
+	call_if_eq VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalLAVARIDGEPlayerWon
 	closemessage
 	setvar VAR_0x8009, LOCALID_ROUTE112_RIVAL_WALLY
 	call WallyJourney_EventScript_WallyWalksAway
@@ -1372,8 +1380,12 @@ WallyJourney_EventScript_RivalMeet5::
 	playbgm MUS_ENCOUNTER_MAY, FALSE
 	msgbox WallyJourney_Text_RivalFORTREEIntro, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_WALLY_NO_WHITEOUT
 	trainerbattle_no_intro TRAINER_WALLY_FORTREE, WallyJourney_Text_RivalFORTREEDefeat
-	msgbox WallyJourney_Text_RivalFORTREEPost, MSGBOX_DEFAULT
+	specialvar VAR_RESULT, GetBattleOutcome
+	clearflag FLAG_WALLY_NO_WHITEOUT
+	call_if_ne VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalFORTREEWallyWon
+	call_if_eq VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalFORTREEPlayerWon
 	closemessage
 	setvar VAR_0x8009, LOCALID_ROUTE118_RIVAL_WALLY
 	call WallyJourney_EventScript_WallyWalksAway
@@ -1391,8 +1403,12 @@ WallyJourney_EventScript_RivalMeet6::
 	playbgm MUS_ENCOUNTER_MAY, FALSE
 	msgbox WallyJourney_Text_RivalLILYCOVEIntro, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_WALLY_NO_WHITEOUT
 	trainerbattle_no_intro TRAINER_WALLY_LILYCOVE, WallyJourney_Text_RivalLILYCOVEDefeat
-	msgbox WallyJourney_Text_RivalLILYCOVEPost, MSGBOX_DEFAULT
+	specialvar VAR_RESULT, GetBattleOutcome
+	clearflag FLAG_WALLY_NO_WHITEOUT
+	call_if_ne VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalLILYCOVEWallyWon
+	call_if_eq VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalLILYCOVEPlayerWon
 	closemessage
 	setvar VAR_0x8009, LOCALID_LILYCOVE_RIVAL_WALLY
 	call WallyJourney_EventScript_WallyWalksAway
@@ -1416,8 +1432,12 @@ WallyJourney_EventScript_RivalMeet7Go::
 	playbgm MUS_ENCOUNTER_MAY, FALSE
 	msgbox WallyJourney_Text_RivalMOSSDEEPIntro, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_WALLY_NO_WHITEOUT
 	trainerbattle_no_intro TRAINER_WALLY_MOSSDEEP, WallyJourney_Text_RivalMOSSDEEPDefeat
-	msgbox WallyJourney_Text_RivalMOSSDEEPPost, MSGBOX_DEFAULT
+	specialvar VAR_RESULT, GetBattleOutcome
+	clearflag FLAG_WALLY_NO_WHITEOUT
+	call_if_ne VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalMOSSDEEPWallyWon
+	call_if_eq VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalMOSSDEEPPlayerWon
 	closemessage
 	setvar VAR_0x8009, LOCALID_MOSSDEEP_RIVAL_WALLY
 	call WallyJourney_EventScript_WallyWalksAway
@@ -1649,3 +1669,80 @@ WallyJourney_Text_StatSpDef:
 	.string "SP. DEF$"
 WallyJourney_Text_StatSpeed:
 	.string "SPEED$"
+
+@ Wally's Journey: from Route 111 on, Wally is far stronger. Losing doesn't white out;
+@ the story continues either way with its own lines.
+WallyJourney_EventScript_RivalVERDANTURFWallyWon::
+	special HealPlayerParty
+	msgbox WallyJourney_Text_RivalVERDANTURFWallyWon, MSGBOX_DEFAULT
+	return
+
+WallyJourney_EventScript_RivalVERDANTURFPlayerWon::
+	msgbox WallyJourney_Text_RivalVERDANTURFPost, MSGBOX_DEFAULT
+	return
+
+WallyJourney_Text_RivalVERDANTURFWallyWon:
+	.string "WALLY: I... I won? I actually won!\p"
+	.string "I'm sorry, {PLAYER}! I mean...\n"
+	.string "thank you! I've never felt like\l"
+	.string "this before!$"
+
+WallyJourney_EventScript_RivalLAVARIDGEWallyWon::
+	special HealPlayerParty
+	msgbox WallyJourney_Text_RivalLAVARIDGEWallyWon, MSGBOX_DEFAULT
+	return
+
+WallyJourney_EventScript_RivalLAVARIDGEPlayerWon::
+	msgbox WallyJourney_Text_RivalLAVARIDGEPost, MSGBOX_DEFAULT
+	return
+
+WallyJourney_Text_RivalLAVARIDGEWallyWon:
+	.string "WALLY: I won again! My team really\n"
+	.string "is getting strong.\p"
+	.string "Maybe I'm not the one who needs\n"
+	.string "to catch up anymore.$"
+
+WallyJourney_EventScript_RivalFORTREEWallyWon::
+	special HealPlayerParty
+	msgbox WallyJourney_Text_RivalFORTREEWallyWon, MSGBOX_DEFAULT
+	return
+
+WallyJourney_EventScript_RivalFORTREEPlayerWon::
+	msgbox WallyJourney_Text_RivalFORTREEPost, MSGBOX_DEFAULT
+	return
+
+WallyJourney_Text_RivalFORTREEWallyWon:
+	.string "WALLY: See? I told you.\p"
+	.string "You should take me seriously\n"
+	.string "from now on.$"
+
+WallyJourney_EventScript_RivalLILYCOVEWallyWon::
+	special HealPlayerParty
+	msgbox WallyJourney_Text_RivalLILYCOVEWallyWon, MSGBOX_DEFAULT
+	return
+
+WallyJourney_EventScript_RivalLILYCOVEPlayerWon::
+	msgbox WallyJourney_Text_RivalLILYCOVEPost, MSGBOX_DEFAULT
+	return
+
+WallyJourney_Text_RivalLILYCOVEWallyWon:
+	.string "WALLY: Every move had a purpose.\n"
+	.string "Yours didn't.\p"
+	.string "I'll see you at the LEAGUE.\n"
+	.string "If you make it.$"
+
+WallyJourney_EventScript_RivalMOSSDEEPWallyWon::
+	special HealPlayerParty
+	msgbox WallyJourney_Text_RivalMOSSDEEPWallyWon, MSGBOX_DEFAULT
+	return
+
+WallyJourney_EventScript_RivalMOSSDEEPPlayerWon::
+	msgbox WallyJourney_Text_RivalMOSSDEEPPost, MSGBOX_DEFAULT
+	return
+
+WallyJourney_Text_RivalMOSSDEEPWallyWon:
+	.string "WALLY: That's what I thought.\p"
+	.string "Don't worry. I'll still help with\n"
+	.string "the weather. Then I'm off to\l"
+	.string "the LEAGUE.$"
+

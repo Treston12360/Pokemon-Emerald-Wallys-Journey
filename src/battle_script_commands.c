@@ -2214,6 +2214,10 @@ static void Cmd_getexp(void)
             if (GetConfig(B_TRAINER_EXP_MULTIPLIER) <= GEN_7 && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
                 calculatedExp = (calculatedExp * 150) / 100;
 
+            // Wally's Journey: repeatable Gym Leader rematches give a quarter of the EXP.
+            if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && WallyJourney_IsLeaderRematchTrainer(TRAINER_BATTLE_PARAM.opponentA))
+                calculatedExp /= 4;
+
             if (WallyJourney_IsExpAllMode())
             {
                 // Wally's Journey EXP ALL: hand out exactly the total a normal EXP SHARE

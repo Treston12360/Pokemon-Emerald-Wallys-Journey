@@ -777,19 +777,19 @@
 #define TRAINER_ROXANNE_2                   770
 #define TRAINER_ROXANNE_3                   771
 #define TRAINER_ROXANNE_4                   772
-#define TRAINER_ROXANNE_5                   773
+#define TRAINER_SIDNEY_2                   773 // Wally's Journey: Elite Four rematch (was ROXANNE_5)
 #define TRAINER_BRAWLY_2                    774
 #define TRAINER_BRAWLY_3                    775
 #define TRAINER_BRAWLY_4                    776
-#define TRAINER_BRAWLY_5                    777
+#define TRAINER_PHOEBE_2                    777 // Wally's Journey: Elite Four rematch (was BRAWLY_5)
 #define TRAINER_WATTSON_2                   778
 #define TRAINER_WATTSON_3                   779
 #define TRAINER_WATTSON_4                   780
-#define TRAINER_WATTSON_5                   781
+#define TRAINER_GLACIA_2                   781 // Wally's Journey: Elite Four rematch (was WATTSON_5)
 #define TRAINER_FLANNERY_2                  782
 #define TRAINER_FLANNERY_3                  783
 #define TRAINER_FLANNERY_4                  784
-#define TRAINER_FLANNERY_5                  785
+#define TRAINER_DRAKE_2                  785 // Wally's Journey: Elite Four rematch (was FLANNERY_5)
 #define TRAINER_NORMAN_2                    786
 #define TRAINER_NORMAN_3                    787
 #define TRAINER_NORMAN_4                    788

@@ -74,7 +74,7 @@
 #define FLAG_WALLY_SOOTOPOLIS_DOOR_DONE    0x34 // Wally's Journey: Wally's battle at the Sootopolis Gym door is done
 #define FLAG_WALLY_OWE_OFF    0x35 // Wally's Journey: Options menu SEE WILD MONS OFF (set) vs ON (clear)
 #define FLAG_WALLY_EXP_ALL_ON    0x36 // Wally's Journey: the EXP. ALL key item is switched on
-#define FLAG_UNUSED_0x037    0x37 // Unused Flag
+#define FLAG_WALLY_E4_REMATCH_DONE    0x37 // Wally's Journey: beat the Elite Four rematch teams (Gym Leaders go to their final teams)
 #define FLAG_UNUSED_0x038    0x38 // Unused Flag
 #define FLAG_UNUSED_0x039    0x39 // Unused Flag
 #define FLAG_UNUSED_0x03A    0x3A // Unused Flag
@@ -1295,7 +1295,7 @@
 #define FLAG_HIDDEN_ITEM_WJ_SEAFLOORCAVERN_ROOM8_BOTTLE_CAP 0x4D9 // Wally's Journey: hidden Bottle Cap in SeafloorCavern_Room8
 #define FLAG_HIDDEN_ITEM_WJ_VICTORYROAD_B2F_GOLD_BOTTLE_CAP 0x4DA // Wally's Journey: hidden Gold Bottle Cap in VictoryRoad_B2F
 #define FLAG_RECEIVED_WJ_TOXIC_ORB 0x4DB // Wally's Journey: traded 1,000 steps of ash for the Toxic Orb in Fallarbor
-#define FLAG_HIDDEN_ITEM_WJ_FIERYPATH_FLAME_ORB 0x4DC // Wally's Journey: hidden Flame Orb in FieryPath
+#define FLAG_RECEIVED_WJ_FLAME_ORB 0x4DC // Wally's Journey: traded 1,000 steps of ash for the Flame Orb in Fallarbor
 #define FLAG_UNUSED_0x4DD                           0x4DD // Unused Flag
 #define FLAG_UNUSED_0x4DE                           0x4DE // Unused Flag
 #define FLAG_UNUSED_0x4DF                           0x4DF // Unused Flag

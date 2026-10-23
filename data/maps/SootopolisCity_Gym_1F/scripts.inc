@@ -391,6 +391,8 @@ SootopolisCity_Gym_1F_EventScript_JuanRematchStage3::
 	goto_if_eq VAR_RESULT, NO, SootopolisCity_Gym_1F_EventScript_JuanRematchDecline
 	cleartrainerflag TRAINER_JUAN_3
 	trainerbattle_double TRAINER_JUAN_3, SootopolisCity_Gym_1F_Text_JuanGrowGo, SootopolisCity_Gym_1F_Text_JuanGrowDefeat3, SootopolisCity_Gym_1F_Text_JuanGrowNeedTwo
+	setvar VAR_0x8004, 8
+	special WallyJourney_RecordLeaderPostgameWin
 	msgbox SootopolisCity_Gym_1F_Text_JuanGrowAfter3, MSGBOX_DEFAULT
 	release
 	end

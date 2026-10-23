@@ -40,6 +40,8 @@ EverGrandeCity_PhoebesRoom_EventScript_Phoebe::
 	lock
 	faceplayer
 	goto_if_set FLAG_DEFEATED_ELITE_4_PHOEBE, EverGrandeCity_PhoebesRoom_EventScript_PostBattleSpeech
+	specialvar VAR_RESULT, WallyJourney_IsEliteFourRematchUnlocked
+	goto_if_eq VAR_RESULT, TRUE, EverGrandeCity_PhoebesRoom_EventScript_PhoebeRematch
 	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
 	msgbox EverGrandeCity_PhoebesRoom_Text_IntroSpeech, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_PHOEBE, EverGrandeCity_PhoebesRoom_Text_Defeat
@@ -47,6 +49,8 @@ EverGrandeCity_PhoebesRoom_EventScript_Phoebe::
 	end
 
 EverGrandeCity_PhoebesRoom_EventScript_PostBattleSpeech::
+	specialvar VAR_RESULT, WallyJourney_IsEliteFourRematchUnlocked
+	goto_if_eq VAR_RESULT, TRUE, EverGrandeCity_PhoebesRoom_EventScript_PhoebeRematchPost
 	msgbox EverGrandeCity_PhoebesRoom_Text_PostBattleSpeech, MSGBOX_DEFAULT
 	release
 	end
@@ -86,4 +90,29 @@ EverGrandeCity_PhoebesRoom_Text_PostBattleSpeech:
 	.string "I could feel it in battle.\p"
 	.string "Keep that trust as you\n"
 	.string "climb toward the CHAMPION.$"
+
+@ Wally's Journey: after the first Hall of Fame the Elite Four use their rematch teams (FRLG style).
+EverGrandeCity_PhoebesRoom_EventScript_PhoebeRematch::
+	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
+	msgbox EverGrandeCity_PhoebesRoom_Text_RematchIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_PHOEBE_2, EverGrandeCity_PhoebesRoom_Text_RematchDefeat
+	setflag FLAG_DEFEATED_ELITE_4_PHOEBE
+	call PokemonLeague_EliteFour_SetAdvanceToNextRoomMetatiles
+EverGrandeCity_PhoebesRoom_EventScript_PhoebeRematchPost::
+	msgbox EverGrandeCity_PhoebesRoom_Text_RematchPost, MSGBOX_DEFAULT
+	release
+	end
+
+EverGrandeCity_PhoebesRoom_Text_RematchIntro:
+	.string "PHOEBE: Welcome back, CHAMPION.\p"
+	.string "I trained on MT. PYRE again.\n"
+	.string "My team is stronger now, and\l"
+	.string "so am I.\p"
+	.string "Let's battle!$"
+
+EverGrandeCity_PhoebesRoom_Text_RematchDefeat:
+	.string "You're as strong as the stories say.$"
+
+EverGrandeCity_PhoebesRoom_Text_RematchPost:
+	.string "Keep going. GLACIA is waiting.$"
 

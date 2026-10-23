@@ -41,6 +41,8 @@ EverGrandeCity_DrakesRoom_EventScript_Drake::
 	lock
 	faceplayer
 	goto_if_set FLAG_DEFEATED_ELITE_4_DRAKE, EverGrandeCity_DrakesRoom_EventScript_PostBattleSpeech
+	specialvar VAR_RESULT, WallyJourney_IsEliteFourRematchUnlocked
+	goto_if_eq VAR_RESULT, TRUE, EverGrandeCity_DrakesRoom_EventScript_DrakeRematch
 	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
 	msgbox EverGrandeCity_DrakesRoom_Text_IntroSpeech, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_DRAKE, EverGrandeCity_DrakesRoom_Text_Defeat
@@ -48,6 +50,8 @@ EverGrandeCity_DrakesRoom_EventScript_Drake::
 	end
 
 EverGrandeCity_DrakesRoom_EventScript_PostBattleSpeech::
+	specialvar VAR_RESULT, WallyJourney_IsEliteFourRematchUnlocked
+	goto_if_eq VAR_RESULT, TRUE, EverGrandeCity_DrakesRoom_EventScript_DrakeRematchPost
 	msgbox EverGrandeCity_DrakesRoom_Text_PostBattleSpeech, MSGBOX_DEFAULT
 	release
 	end
@@ -93,4 +97,32 @@ EverGrandeCity_DrakesRoom_Text_PostBattleSpeech:
 	.string "Strength without listening\n"
 	.string "can take you only so far.\p"
 	.string "Go on. The CHAMPION awaits.$"
+
+@ Wally's Journey: after the first Hall of Fame the Elite Four use their rematch teams (FRLG style).
+EverGrandeCity_DrakesRoom_EventScript_DrakeRematch::
+	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
+	msgbox EverGrandeCity_DrakesRoom_Text_RematchIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_DRAKE_2, EverGrandeCity_DrakesRoom_Text_RematchDefeat
+	setvar VAR_0x8004, FANCOUNTER_DEFEATED_DRAKE
+	special Script_TryGainNewFanFromCounter
+	setflag FLAG_DEFEATED_ELITE_4_DRAKE
+	call PokemonLeague_EliteFour_SetAdvanceToNextRoomMetatiles
+EverGrandeCity_DrakesRoom_EventScript_DrakeRematchPost::
+	msgbox EverGrandeCity_DrakesRoom_Text_RematchPost, MSGBOX_DEFAULT
+	release
+	end
+
+EverGrandeCity_DrakesRoom_Text_RematchIntro:
+	.string "DRAKE: So you came back, CHAMPION.\p"
+	.string "A true captain doesn't rest on one\n"
+	.string "victory. Neither do I.\p"
+	.string "Show me you still have what\n"
+	.string "it takes!$"
+
+EverGrandeCity_DrakesRoom_Text_RematchDefeat:
+	.string "Superb! You still have it!$"
+
+EverGrandeCity_DrakesRoom_Text_RematchPost:
+	.string "Go. Someone is waiting to take\n"
+	.string "your title from you.$"
 

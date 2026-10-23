@@ -137,24 +137,39 @@ FallarborTown_Text_FlanneryAfterChampion:
 	.string "one who's me.”\p"
 	.string "Her grandfather loved that answer.$"
 
-@ Wally's Journey: trades 1,000 steps of ash (Soot Sack) for the Toxic Orb, once.
-	.set TOXIC_ORB_ASH_PRICE, 1000
+@ Wally's Journey: trades 1,000 steps of ash (Soot Sack) for a Toxic Orb, then
+@ another 1,000 for a Flame Orb. Each once.
+	.set ORB_ASH_PRICE, 1000
 
 FallarborTown_EventScript_AshChemist::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_WJ_TOXIC_ORB, FallarborTown_EventScript_AshChemistDone
+	goto_if_unset FLAG_RECEIVED_WJ_TOXIC_ORB, FallarborTown_EventScript_AshChemistStart
+	goto_if_set FLAG_RECEIVED_WJ_FLAME_ORB, FallarborTown_EventScript_AshChemistDone
+FallarborTown_EventScript_AshChemistStart::
 	msgbox FallarborTown_Text_AshChemistIntro, MSGBOX_DEFAULT
 	checkitem ITEM_SOOT_SACK
 	goto_if_eq VAR_RESULT, FALSE, FallarborTown_EventScript_AshChemistNoSack
-	goto_if_lt VAR_ASH_GATHER_COUNT, TOXIC_ORB_ASH_PRICE, FallarborTown_EventScript_AshChemistNotEnough
-	msgbox FallarborTown_Text_AshChemistOffer, MSGBOX_YESNO
+	goto_if_lt VAR_ASH_GATHER_COUNT, ORB_ASH_PRICE, FallarborTown_EventScript_AshChemistNotEnough
+	goto_if_set FLAG_RECEIVED_WJ_TOXIC_ORB, FallarborTown_EventScript_AshChemistFlame
+	msgbox FallarborTown_Text_AshChemistOfferToxic, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, FallarborTown_EventScript_AshChemistDeclined
 	giveitem ITEM_TOXIC_ORB
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
-	subvar VAR_ASH_GATHER_COUNT, TOXIC_ORB_ASH_PRICE
+	subvar VAR_ASH_GATHER_COUNT, ORB_ASH_PRICE
 	setflag FLAG_RECEIVED_WJ_TOXIC_ORB
-	msgbox FallarborTown_Text_AshChemistExplain, MSGBOX_DEFAULT
+	msgbox FallarborTown_Text_AshChemistExplainToxic, MSGBOX_DEFAULT
+	release
+	end
+
+FallarborTown_EventScript_AshChemistFlame::
+	msgbox FallarborTown_Text_AshChemistOfferFlame, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, FallarborTown_EventScript_AshChemistDeclined
+	giveitem ITEM_FLAME_ORB
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	subvar VAR_ASH_GATHER_COUNT, ORB_ASH_PRICE
+	setflag FLAG_RECEIVED_WJ_FLAME_ORB
+	msgbox FallarborTown_Text_AshChemistExplainFlame, MSGBOX_DEFAULT
 	release
 	end
 
@@ -183,32 +198,45 @@ FallarborTown_Text_AshChemistIntro:
 	.string "I study the ash that falls on\n"
 	.string "FALLARBOR. It's full of minerals\l"
 	.string "from deep inside MT. CHIMNEY.\p"
-	.string "I can bind them into an orb that\n"
-	.string "poisons whoever holds it.$"
+	.string "I can bind them into orbs. One\n"
+	.string "poisons whoever holds it. The\l"
+	.string "other burns them.$"
 
 FallarborTown_Text_AshChemistNoSack:
 	.string "Bring me 1,000 steps' worth of ash\n"
-	.string "and the orb is yours.\p"
+	.string "for each orb.\p"
 	.string "The GLASS WORKSHOP on ROUTE 113\n"
 	.string "gives out SOOT SACKS for it.$"
 
 FallarborTown_Text_AshChemistNotEnough:
 	.string "Your SOOT SACK holds {STR_VAR_1} steps\n"
-	.string "of ash. I need 1,000 for the orb.$"
+	.string "of ash. I need 1,000 for an orb.$"
 
-FallarborTown_Text_AshChemistOffer:
+FallarborTown_Text_AshChemistOfferToxic:
 	.string "That's enough ash. Trade 1,000\n"
 	.string "steps of it for a TOXIC ORB?$"
 
-FallarborTown_Text_AshChemistExplain:
+FallarborTown_Text_AshChemistOfferFlame:
+	.string "Enough ash for the other one.\n"
+	.string "Trade 1,000 steps for a FLAME ORB?$"
+
+FallarborTown_Text_AshChemistExplainToxic:
 	.string "A POKéMON holding that orb is badly\n"
 	.string "poisoned at the end of a turn.\p"
 	.string "That sounds cruel, but some\n"
-	.string "POKéMON get stronger when poisoned.$"
+	.string "POKéMON get stronger when poisoned.\p"
+	.string "Bring me another 1,000 steps of ash\n"
+	.string "and I'll make a FLAME ORB.$"
+
+FallarborTown_Text_AshChemistExplainFlame:
+	.string "A POKéMON holding that orb is\n"
+	.string "burned at the end of a turn.\p"
+	.string "Some POKéMON hit harder when\n"
+	.string "they're burned. Use it well.$"
 
 FallarborTown_Text_AshChemistDeclined:
 	.string "Come back if you change your mind.$"
 
 FallarborTown_Text_AshChemistDone:
 	.string "That was all the mineral I could\n"
-	.string "pull from the ash. One orb only.$"
+	.string "pull from the ash. Two orbs only.$"

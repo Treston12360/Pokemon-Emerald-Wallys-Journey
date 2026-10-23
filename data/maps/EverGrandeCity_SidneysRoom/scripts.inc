@@ -46,6 +46,8 @@ EverGrandeCity_SidneysRoom_EventScript_Sidney::
 	lock
 	faceplayer
 	goto_if_set FLAG_DEFEATED_ELITE_4_SIDNEY, EverGrandeCity_SidneysRoom_EventScript_PostBattleSpeech
+	specialvar VAR_RESULT, WallyJourney_IsEliteFourRematchUnlocked
+	goto_if_eq VAR_RESULT, TRUE, EverGrandeCity_SidneysRoom_EventScript_SidneyRematch
 	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
 	msgbox EverGrandeCity_SidneysRoom_Text_IntroSpeech, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_SIDNEY, EverGrandeCity_SidneysRoom_Text_Defeat
@@ -53,6 +55,8 @@ EverGrandeCity_SidneysRoom_EventScript_Sidney::
 	end
 
 EverGrandeCity_SidneysRoom_EventScript_PostBattleSpeech::
+	specialvar VAR_RESULT, WallyJourney_IsEliteFourRematchUnlocked
+	goto_if_eq VAR_RESULT, TRUE, EverGrandeCity_SidneysRoom_EventScript_SidneyRematchPost
 	msgbox EverGrandeCity_SidneysRoom_Text_PostBattleSpeech, MSGBOX_DEFAULT
 	release
 	end
@@ -92,4 +96,30 @@ EverGrandeCity_SidneysRoom_Text_PostBattleSpeech:
 	.string "through here. Now you have.\p"
 	.string "Don't let anyone tell you\n"
 	.string "your story's already written.$"
+
+@ Wally's Journey: after the first Hall of Fame the Elite Four use their rematch teams (FRLG style).
+EverGrandeCity_SidneysRoom_EventScript_SidneyRematch::
+	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
+	msgbox EverGrandeCity_SidneysRoom_Text_RematchIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_SIDNEY_2, EverGrandeCity_SidneysRoom_Text_RematchDefeat
+	setflag FLAG_DEFEATED_ELITE_4_SIDNEY
+	call PokemonLeague_EliteFour_SetAdvanceToNextRoomMetatiles
+EverGrandeCity_SidneysRoom_EventScript_SidneyRematchPost::
+	msgbox EverGrandeCity_SidneysRoom_Text_RematchPost, MSGBOX_DEFAULT
+	release
+	end
+
+EverGrandeCity_SidneysRoom_Text_RematchIntro:
+	.string "SIDNEY: Well, well. The CHAMPION\n"
+	.string "walked back in through the front door.\p"
+	.string "You didn't think we'd sit still\n"
+	.string "after you beat us, did you?\p"
+	.string "This is my real team. Let's go!$"
+
+EverGrandeCity_SidneysRoom_Text_RematchDefeat:
+	.string "Hah! I still can't touch you!$"
+
+EverGrandeCity_SidneysRoom_Text_RematchPost:
+	.string "Go on. The others brought\n"
+	.string "their best too.$"
 

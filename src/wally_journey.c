@@ -256,7 +256,7 @@ static u32 LeaderRematchStage(void)
     return 1;
 #else
     if (FlagGet(FLAG_SYS_GAME_CLEAR))
-        return VarGet(VAR_UNUSED_0x40FD) >= 1 ? 4 : 3;
+        return FlagGet(FLAG_WALLY_E4_REMATCH_DONE) ? 4 : 3;
     return CountBadges() >= 8 ? 2 : 1;
 #endif
 }
@@ -316,6 +316,40 @@ static void ClearMonMoves(struct Pokemon *mon)
         SetMonData(mon, MON_DATA_MOVE1 + i, &none);
         SetMonData(mon, MON_DATA_PP1 + i, &zero);
     }
+}
+
+// Special. VAR_0x8004 = gym number: this Leader was beaten in a post-League rematch.
+void WallyJourney_RecordLeaderPostgameWin(void)
+{
+    if (gSpecialVar_0x8004 >= 1 && gSpecialVar_0x8004 <= 8)
+        VarSet(VAR_WALLY_LEADER_POSTGAME_WINS, VarGet(VAR_WALLY_LEADER_POSTGAME_WINS) | (1 << (gSpecialVar_0x8004 - 1)));
+}
+
+// The Elite Four rematch is the last challenge: it opens once the player has
+// beaten every Gym Leader's post-League team, the final rival battle at Birch's
+// lab and Steven in Meteor Falls.
+bool8 WallyJourney_IsEliteFourRematchUnlocked(void)
+{
+#if IS_FRLG
+    return FALSE;
+#else
+    return FlagGet(FLAG_SYS_GAME_CLEAR)
+        && (VarGet(VAR_WALLY_LEADER_POSTGAME_WINS) & 0xFF) == 0xFF
+        && FlagGet(FLAG_WALLY_RIVAL_FINAL_DONE)
+        && FlagGet(FLAG_DEFEATED_METEOR_FALLS_STEVEN);
+#endif
+}
+
+bool32 WallyJourney_IsLeaderRematchTrainer(u16 trainerId)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sLeaderGrowthIds); i++)
+    {
+        // each leader's _2, _3 and _4 slots are consecutive
+        if (trainerId >= sLeaderGrowthIds[i] && trainerId <= sLeaderGrowthIds[i] + 2)
+            return TRUE;
+    }
+    return FALSE;
 }
 
 void WallyJourney_ScaleLeaderParty(struct Pokemon *party, u16 trainerId)

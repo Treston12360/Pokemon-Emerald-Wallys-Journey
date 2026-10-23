@@ -1682,6 +1682,8 @@ PetalburgCity_Gym_EventScript_NormanRematchStage3::
 	goto_if_eq VAR_RESULT, NO, PetalburgCity_Gym_EventScript_NormanRematchDecline
 	cleartrainerflag TRAINER_NORMAN_3
 	trainerbattle_double TRAINER_NORMAN_3, PetalburgCity_Gym_Text_NormanGrowGo, PetalburgCity_Gym_Text_NormanGrowDefeat3, PetalburgCity_Gym_Text_NormanGrowNeedTwo
+	setvar VAR_0x8004, 5
+	special WallyJourney_RecordLeaderPostgameWin
 	msgbox PetalburgCity_Gym_Text_NormanGrowAfter3, MSGBOX_DEFAULT
 	release
 	end

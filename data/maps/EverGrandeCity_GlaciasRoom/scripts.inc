@@ -40,6 +40,8 @@ EverGrandeCity_GlaciasRoom_EventScript_Glacia::
 	lock
 	faceplayer
 	goto_if_set FLAG_DEFEATED_ELITE_4_GLACIA, EverGrandeCity_GlaciasRoom_EventScript_PostBattleSpeech
+	specialvar VAR_RESULT, WallyJourney_IsEliteFourRematchUnlocked
+	goto_if_eq VAR_RESULT, TRUE, EverGrandeCity_GlaciasRoom_EventScript_GlaciaRematch
 	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
 	msgbox EverGrandeCity_GlaciasRoom_Text_IntroSpeech, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_GLACIA, EverGrandeCity_GlaciasRoom_Text_Defeat
@@ -47,6 +49,8 @@ EverGrandeCity_GlaciasRoom_EventScript_Glacia::
 	end
 
 EverGrandeCity_GlaciasRoom_EventScript_PostBattleSpeech::
+	specialvar VAR_RESULT, WallyJourney_IsEliteFourRematchUnlocked
+	goto_if_eq VAR_RESULT, TRUE, EverGrandeCity_GlaciasRoom_EventScript_GlaciaRematchPost
 	msgbox EverGrandeCity_GlaciasRoom_Text_PostBattleSpeech, MSGBOX_DEFAULT
 	release
 	end
@@ -84,4 +88,29 @@ EverGrandeCity_GlaciasRoom_Text_PostBattleSpeech:
 	.string "Strength also means knowing\n"
 	.string "what you cannot do alone.\p"
 	.string "Proceed. DRAKE awaits.$"
+
+@ Wally's Journey: after the first Hall of Fame the Elite Four use their rematch teams (FRLG style).
+EverGrandeCity_GlaciasRoom_EventScript_GlaciaRematch::
+	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
+	msgbox EverGrandeCity_GlaciasRoom_Text_RematchIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_GLACIA_2, EverGrandeCity_GlaciasRoom_Text_RematchDefeat
+	setflag FLAG_DEFEATED_ELITE_4_GLACIA
+	call PokemonLeague_EliteFour_SetAdvanceToNextRoomMetatiles
+EverGrandeCity_GlaciasRoom_EventScript_GlaciaRematchPost::
+	msgbox EverGrandeCity_GlaciasRoom_Text_RematchPost, MSGBOX_DEFAULT
+	release
+	end
+
+EverGrandeCity_GlaciasRoom_Text_RematchIntro:
+	.string "GLACIA: The CHAMPION, here to take\n"
+	.string "the challenge again?\p"
+	.string "Last time I held back a little.\n"
+	.string "Not today. Prepare to freeze.$"
+
+EverGrandeCity_GlaciasRoom_Text_RematchDefeat:
+	.string "...Even my coldest team melted.$"
+
+EverGrandeCity_GlaciasRoom_Text_RematchPost:
+	.string "DRAKE is next. He's been looking\n"
+	.string "forward to this.$"
 
