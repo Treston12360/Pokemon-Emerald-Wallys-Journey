@@ -136,3 +136,79 @@ FallarborTown_Text_FlanneryAfterChampion:
 	.string "She laughed. “I'm already the first\n"
 	.string "one who's me.”\p"
 	.string "Her grandfather loved that answer.$"
+
+@ Wally's Journey: trades 1,000 steps of ash (Soot Sack) for the Toxic Orb, once.
+	.set TOXIC_ORB_ASH_PRICE, 1000
+
+FallarborTown_EventScript_AshChemist::
+	lock
+	faceplayer
+	goto_if_set FLAG_RECEIVED_WJ_TOXIC_ORB, FallarborTown_EventScript_AshChemistDone
+	msgbox FallarborTown_Text_AshChemistIntro, MSGBOX_DEFAULT
+	checkitem ITEM_SOOT_SACK
+	goto_if_eq VAR_RESULT, FALSE, FallarborTown_EventScript_AshChemistNoSack
+	goto_if_lt VAR_ASH_GATHER_COUNT, TOXIC_ORB_ASH_PRICE, FallarborTown_EventScript_AshChemistNotEnough
+	msgbox FallarborTown_Text_AshChemistOffer, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, FallarborTown_EventScript_AshChemistDeclined
+	giveitem ITEM_TOXIC_ORB
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	subvar VAR_ASH_GATHER_COUNT, TOXIC_ORB_ASH_PRICE
+	setflag FLAG_RECEIVED_WJ_TOXIC_ORB
+	msgbox FallarborTown_Text_AshChemistExplain, MSGBOX_DEFAULT
+	release
+	end
+
+FallarborTown_EventScript_AshChemistNoSack::
+	msgbox FallarborTown_Text_AshChemistNoSack, MSGBOX_DEFAULT
+	release
+	end
+
+FallarborTown_EventScript_AshChemistNotEnough::
+	buffernumberstring STR_VAR_1, VAR_ASH_GATHER_COUNT
+	msgbox FallarborTown_Text_AshChemistNotEnough, MSGBOX_DEFAULT
+	release
+	end
+
+FallarborTown_EventScript_AshChemistDeclined::
+	msgbox FallarborTown_Text_AshChemistDeclined, MSGBOX_DEFAULT
+	release
+	end
+
+FallarborTown_EventScript_AshChemistDone::
+	msgbox FallarborTown_Text_AshChemistDone, MSGBOX_DEFAULT
+	release
+	end
+
+FallarborTown_Text_AshChemistIntro:
+	.string "I study the ash that falls on\n"
+	.string "FALLARBOR. It's full of minerals\l"
+	.string "from deep inside MT. CHIMNEY.\p"
+	.string "I can bind them into an orb that\n"
+	.string "poisons whoever holds it.$"
+
+FallarborTown_Text_AshChemistNoSack:
+	.string "Bring me 1,000 steps' worth of ash\n"
+	.string "and the orb is yours.\p"
+	.string "The GLASS WORKSHOP on ROUTE 113\n"
+	.string "gives out SOOT SACKS for it.$"
+
+FallarborTown_Text_AshChemistNotEnough:
+	.string "Your SOOT SACK holds {STR_VAR_1} steps\n"
+	.string "of ash. I need 1,000 for the orb.$"
+
+FallarborTown_Text_AshChemistOffer:
+	.string "That's enough ash. Trade 1,000\n"
+	.string "steps of it for a TOXIC ORB?$"
+
+FallarborTown_Text_AshChemistExplain:
+	.string "A POKéMON holding that orb is badly\n"
+	.string "poisoned at the end of a turn.\p"
+	.string "That sounds cruel, but some\n"
+	.string "POKéMON get stronger when poisoned.$"
+
+FallarborTown_Text_AshChemistDeclined:
+	.string "Come back if you change your mind.$"
+
+FallarborTown_Text_AshChemistDone:
+	.string "That was all the mineral I could\n"
+	.string "pull from the ash. One orb only.$"

@@ -959,14 +959,6 @@
       "elevation": 3,
       "item": "ITEM_GENTLE_MINT",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE119_GENTLE_MINT"
-    },
-    {
-      "type": "hidden_item",
-      "x": 24,
-      "y": 15,
-      "elevation": 3,
-      "item": "ITEM_TOXIC_ORB",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE119_TOXIC_ORB"
     }
   ]
 }
