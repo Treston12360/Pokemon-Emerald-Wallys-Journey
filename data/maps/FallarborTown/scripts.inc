@@ -75,16 +75,22 @@ FallarborTown_Text_ShadyCharactersCozmosHome:
 	.string "charity.$"
 
 FallarborTown_Text_RegionKnownForMeteors:
-	.string "This region's known for meteors.\p"
-	.string "METEOR FALLS was carved by one, they\n"
-	.string "say. Fire from the sky made this\l"
-	.string "whole valley.$"
+	.string "I ran a produce stand here for\n"
+	.string "thirty years. The ash closed it.\p"
+	.string "My lungs aren't what they were, so\n"
+	.string "I can't take farm work elsewhere.\p"
+	.string "No work, no money to leave. No\n"
+	.string "leaving, more ash in my lungs.\p"
+	.string "It's a circle. Hard to step out of\n"
+	.string "one when you're this tired.$"
 
 FallarborTown_Text_MyPreciousAzurill:
 	.string "This is my AZURILL!\p"
-	.string "The ash from MT. CHIMNEY makes our\n"
-	.string "crops grow, but it hurts to breathe\l"
-	.string "some days.\p"
+	.string "We had a berry farm. The ash from\n"
+	.string "MT. CHIMNEY buried it. Nothing\l"
+	.string "grows there now.\p"
+	.string "Dad coughs all night, so he can't\n"
+	.string "work the hours he used to.\p"
 	.string "TEAM MAGMA says they can fix the\n"
 	.string "mountain. Mom says to never trust\l"
 	.string "anyone who says “fix.”$"
@@ -105,7 +111,7 @@ FallarborTown_Text_BattleTentSign:
 
 FallarborTown_Text_TownSign:
 	.string "FALLARBOR TOWN\n"
-	.string "“A farm community with small gardens.”$"
+	.string "“A farm town that won't give up.”$"
 
 FallarborTown_Text_MoveTutorSign:
 	.string "MOVE TUTOR'S HOUSE\n"
@@ -113,8 +119,12 @@ FallarborTown_Text_MoveTutorSign:
 
 FallarborTown_Text_MyPreciousAzurill_W0:
 	.string "TEAM MAGMA ran off the mountain.\p"
-	.string "My neighbor's son was one of them.\n"
-	.string "He came home ashamed.\p"
+	.string "The ash still falls, though. Dad\n"
+	.string "says we'd move if we could.\p"
+	.string "But a house anywhere else costs\n"
+	.string "more than our farm ever made.\p"
+	.string "My neighbor's son was in MAGMA. He\n"
+	.string "came home ashamed.\p"
 	.string "His mom made him dinner anyway.\n"
 	.string "That's FALLARBOR.$"
 
@@ -195,16 +205,21 @@ FallarborTown_EventScript_AshChemistDone::
 	end
 
 FallarborTown_Text_AshChemistIntro:
-	.string "I study the ash that falls on\n"
-	.string "FALLARBOR. It's full of minerals\l"
-	.string "from deep inside MT. CHIMNEY.\p"
-	.string "I can bind them into orbs. One\n"
-	.string "poisons whoever holds it. The\l"
-	.string "other burns them.$"
+	.string "I collect the ash that falls on\n"
+	.string "FALLARBOR.\p"
+	.string "It killed our farms, and it makes\n"
+	.string "people sick. I want to know why.\p"
+	.string "If I learn what's in it, maybe I can\n"
+	.string "find a cure… and a way to make crops\l"
+	.string "grow in ash soil again.\p"
+	.string "The minerals I pull out on the way\n"
+	.string "bind into orbs. One poisons whoever\l"
+	.string "holds it. The other burns them.$"
 
 FallarborTown_Text_AshChemistNoSack:
 	.string "Bring me 1,000 steps' worth of ash\n"
-	.string "for each orb.\p"
+	.string "for each orb. All of it helps the\l"
+	.string "research.\p"
 	.string "The GLASS WORKSHOP on ROUTE 113\n"
 	.string "gives out SOOT SACKS for it.$"
 
@@ -238,5 +253,9 @@ FallarborTown_Text_AshChemistDeclined:
 	.string "Come back if you change your mind.$"
 
 FallarborTown_Text_AshChemistDone:
-	.string "That was all the mineral I could\n"
-	.string "pull from the ash. Two orbs only.$"
+	.string "Those were the only two orbs I\n"
+	.string "could make. The rest of the ash goes\l"
+	.string "to the research.\p"
+	.string "I'm growing seedlings in ash soil\n"
+	.string "now. Most die. A few don't.\p"
+	.string "That's a start.$"

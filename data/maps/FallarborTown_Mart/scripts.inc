@@ -55,8 +55,8 @@ FallarborTown_Mart_Text_Skitty:
 	.string "SKITTY: Miyao?$"
 
 FallarborTown_Mart_Text_SellNuggetIFound:
-	.string "I found this NUGGET. I suppose I'll\n"
-	.string "sell it.\p"
-	.string "…Shiny things are worth more to\n"
-	.string "others than to me.$"
+	.string "I found this NUGGET. I'll sell it.\p"
+	.string "That's this month's rent. The ash\n"
+	.string "took our orchard, so this is how we\l"
+	.string "get by now.$"
 

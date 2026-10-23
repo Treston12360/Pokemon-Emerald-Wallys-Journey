@@ -110,13 +110,19 @@ FallarborTown_PokemonCenter_1F_Text_FossilManiacEdgeOfTown:
 	.string "years.$"
 
 FallarborTown_PokemonCenter_1F_Text_PlantHardyTrees:
-	.string "We plant hardy trees here that can\n"
-	.string "survive the ash.\p"
-	.string "We adapted to the volcano. We didn't\n"
-	.string "try to move it.$"
+	.string "Our wheat fields ran all the way to\n"
+	.string "ROUTE 113. The ash smothered them.\p"
+	.string "This POKéMON CENTER sees more\n"
+	.string "coughing people than hurt POKéMON.\p"
+	.string "Most of us would leave. But who buys\n"
+	.string "a farm under ash? And who rents to\l"
+	.string "someone too sick to work?$"
 
 FallarborTown_PokemonCenter_1F_Text_PlantHardyTrees_W0:
-	.string "We're planting hardy trees again\n"
-	.string "after the storm.\p"
+	.string "The ash still falls, but we're\n"
+	.string "trying hardy trees again after\l"
+	.string "the storm.\p"
 	.string "Ex-MAGMA volunteers showed up to\n"
-	.string "help. Nobody turned them away.$"
+	.string "help. Nobody turned them away.\p"
+	.string "The ash scientist in town says\n"
+	.string "a few of his seedlings made it.$"
