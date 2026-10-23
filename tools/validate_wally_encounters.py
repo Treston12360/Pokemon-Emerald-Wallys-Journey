@@ -51,6 +51,17 @@ for group in encounters["wild_encounter_groups"]:
                 methods[field] += 1
 
 # Starter Pokémon from all nine generations must be catchable without trading.
+# Rare visitors (src/data/wally_rare_visitors.h) are real wild encounters too.
+import re as _re
+_vis = (ROOT / "src/data/wally_rare_visitors.h").read_text(encoding="utf-8")
+VISITOR_SPECIES = set(_re.findall(r"VISITOR\(MAP_\w+,\s*WILD_AREA_\w+,\s*(SPECIES_\w+)", _vis))
+species = set(species) | VISITOR_SPECIES
+# A form counts for its species (e.g. SPECIES_GIMMIGHOUL_CHEST -> SPECIES_GIMMIGHOUL).
+for _s in list(species):
+    _parts = _s.split("_")
+    for _k in range(2, len(_parts)):
+        species.add("_".join(_parts[:_k]))
+
 # Keep them uncommon in habitat-appropriate tables; all 27 species are required.
 STARTER_SPECIES = (
     "SPECIES_BULBASAUR", "SPECIES_CHARMANDER", "SPECIES_SQUIRTLE",
@@ -127,6 +138,7 @@ EXPANSION_SPECIES = (
 EXPANSION_PRE_EVOLUTION = {
     "SPECIES_SWANNA": "SPECIES_DUCKLETT",
     "SPECIES_BARRASKEWDA": "SPECIES_ARROKUDA",
+    "SPECIES_PALAFIN": "SPECIES_FINIZEN",  # final form isn't wild; Finizen is
 }
 for mon in EXPANSION_SPECIES:
     if mon not in species and EXPANSION_PRE_EVOLUTION.get(mon) not in species:
@@ -187,6 +199,9 @@ WILD_PRE_EVOLUTION = {
     "SPECIES_FERROTHORN": "SPECIES_FERROSEED",
     "SPECIES_GOLURK": "SPECIES_GOLETT",
     "SPECIES_SANDACONDA": "SPECIES_SILICOBRA",
+    "SPECIES_KINGAMBIT": ("SPECIES_BISHARP", "SPECIES_PAWNIARD"),  # owner: Kingambit isn't wild; Bisharp holds Leader's Crest
+    "SPECIES_CENTISKORCH": "SPECIES_SIZZLIPEDE",
+    "SPECIES_POLTEAGEIST": "SPECIES_SINISTEA",
 }
 for mon in EVOLVED_RARE_SPECIES:
     alts = WILD_PRE_EVOLUTION.get(mon, ())

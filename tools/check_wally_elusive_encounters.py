@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CAPS = {
     "SPECIES_SPIRITOMB": 1,
     "SPECIES_ROTOM": 1,
-    "SPECIES_MIMIKYU": 1,
+    "SPECIES_MIMIKYU_DISGUISED": 1,  # the catchable form
     "SPECIES_POLTEAGEIST": 1,
 }
 groups = json.loads((ROOT / "src/data/wild_encounters.json").read_text(encoding="utf-8"))["wild_encounter_groups"]
