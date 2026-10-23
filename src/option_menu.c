@@ -455,6 +455,7 @@ static void Task_OptionMenuSave(u8 taskId)
         FlagSet(FLAG_WALLY_EXP_ALL_MODE);
     else
         FlagClear(FLAG_WALLY_EXP_ALL_MODE);
+    WallyJourney_SyncExpItem(); // swap the Exp. Share / EXP. ALL item to match
     if (gTasks[taskId].tZMovesOff)
         FlagSet(FLAG_WALLY_Z_MOVES_OFF);
     else

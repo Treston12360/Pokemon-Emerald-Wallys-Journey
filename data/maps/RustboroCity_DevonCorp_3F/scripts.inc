@@ -160,10 +160,20 @@ RustboroCity_DevonCorp_3F_EventScript_MrStone::
 
 RustboroCity_DevonCorp_3F_EventScript_GiveExpShare::
 	msgbox RustboroCity_DevonCorp_3F_Text_ThankYouForDeliveringLetter, MSGBOX_DEFAULT
+	goto_if_unset FLAG_WALLY_EXP_ALL_MODE, RustboroCity_DevonCorp_3F_EventScript_GiveExpShareItem
+	giveitem ITEM_EXP_ALL
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_EXP_SHARE
+	setflag FLAG_WALLY_EXP_ALL_ON
+	msgbox RustboroCity_DevonCorp_3F_Text_ExplainExpAll, MSGBOX_DEFAULT
+	goto RustboroCity_DevonCorp_3F_EventScript_GiveExpShareDone
+
+RustboroCity_DevonCorp_3F_EventScript_GiveExpShareItem::
 	giveitem ITEM_EXP_SHARE
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	setflag FLAG_RECEIVED_EXP_SHARE
 	msgbox RustboroCity_DevonCorp_3F_Text_ExplainExpShare, MSGBOX_DEFAULT
+RustboroCity_DevonCorp_3F_EventScript_GiveExpShareDone:
 	closemessage
 	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
 	waitmovement 0
@@ -259,6 +269,17 @@ RustboroCity_DevonCorp_3F_Text_ExplainExpShare:
 	.string "actually battle.\p"
 	.string "I would say EXP. SHARE is quite useful\n"
 	.string "for raising weak POKéMON.$"
+
+RustboroCity_DevonCorp_3F_Text_ExplainExpAll:
+	.string "MR. STONE: That's the EXP. ALL, one of\n"
+	.string "DEVON's newest devices.\p"
+	.string "While it's on, the EXP Points from\n"
+	.string "a battle are split evenly across\l"
+	.string "your whole party.\p"
+	.string "Your team won't earn more in total.\n"
+	.string "It just spreads the reward around.\p"
+	.string "Use it from your BAG to turn it\n"
+	.string "on or off.$"
 
 RustboroCity_DevonCorp_3F_Text_NotFamiliarWithTrends:
 	.string "MR. STONE: Since my youth, I've\n"

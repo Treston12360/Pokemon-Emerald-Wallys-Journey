@@ -272,6 +272,27 @@ void ItemUseOutOfBattle_ExpShare(u8 taskId)
 #endif
 }
 
+// Wally's Journey: the EXP. ALL key item switches itself on and off.
+void ItemUseOutOfBattle_ExpAll(u8 taskId)
+{
+    const u8 *msg;
+    FlagToggle(FLAG_WALLY_EXP_ALL_ON);
+    if (FlagGet(FLAG_WALLY_EXP_ALL_ON))
+    {
+        PlaySE(SE_EXP_MAX);
+        msg = gText_ExpAllOn;
+    }
+    else
+    {
+        PlaySE(SE_PC_OFF);
+        msg = gText_ExpAllOff;
+    }
+    if (!gTasks[taskId].data[2]) // to account for pressing select in the overworld
+        DisplayItemMessageOnField(taskId, msg, Task_CloseCantUseKeyItemMessage);
+    else
+        DisplayItemMessage(taskId, FONT_NORMAL, msg, CloseItemMessage);
+}
+
 void ItemUseOutOfBattle_Bike(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;

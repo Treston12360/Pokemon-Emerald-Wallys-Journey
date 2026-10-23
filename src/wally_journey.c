@@ -12,6 +12,7 @@
 #include "rtc.h"
 #include "battle.h"
 #include "item.h"
+#include "pokemon_storage_system.h"
 #include "random.h"
 #include "constants/contest.h"
 #include "constants/weather.h"
@@ -78,6 +79,9 @@ void WallyJourney_Reset(void) {
     VarSet(WALLY_VAR_LAST_SPECIES,0);
     VarSet(WALLY_VAR_PREV_SPECIES,0);
     VarSet(WALLY_VAR_TITLE_DEFENSES,0);
+#if !IS_FRLG
+    FlagSet(FLAG_WALLY_EXP_ALL_MODE); // new games start with EXP. ALL (Options can switch to SHARE)
+#endif
 }
 void WallyJourney_OnMapEntered(u8 group,u8 num) {
     u16 badges = CountBadges();
@@ -89,6 +93,7 @@ void WallyJourney_OnMapEntered(u8 group,u8 num) {
     // National Dex from the start; also upgrades saves made before this change.
     if (FlagGet(FLAG_SYS_POKEDEX_GET) && !IsNationalPokedexEnabled())
         EnableNationalPokedex();
+    WallyJourney_SyncExpItem();
 }
 u16 WallyJourney_GetPeakBadges(void) {
     u16 old = VarGet(WALLY_VAR_PEAK_BADGES), now = CountBadges();
@@ -149,7 +154,65 @@ bool32 WallyJourney_IsExpAllMode(void)
 #if IS_FRLG
     return FALSE;
 #else
-    return FlagGet(FLAG_WALLY_EXP_ALL_MODE);
+    // The Options mode decides which item Devon's Exp. device is; EXP. ALL only
+    // works while the player has the key item and has it switched on.
+    return FlagGet(FLAG_WALLY_EXP_ALL_MODE) && FlagGet(FLAG_WALLY_EXP_ALL_ON)
+        && CheckBagHasItem(ITEM_EXP_ALL, 1);
+#endif
+}
+
+#if !IS_FRLG
+// Take one Exp. Share away from the player: bag first, then a party Pokemon's
+// held item, then a boxed Pokemon's held item.
+static bool32 TakeExpShare(void)
+{
+    u32 i, j;
+    u16 none = ITEM_NONE;
+    if (CheckBagHasItem(ITEM_EXP_SHARE, 1))
+        return RemoveBagItem(ITEM_EXP_SHARE, 1);
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_HELD_ITEM) == ITEM_EXP_SHARE)
+        {
+            SetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_HELD_ITEM, &none);
+            return TRUE;
+        }
+    }
+    for (i = 0; i < TOTAL_BOXES_COUNT; i++)
+    {
+        for (j = 0; j < IN_BOX_COUNT; j++)
+        {
+            if (GetBoxMonDataAt(i, j, MON_DATA_HELD_ITEM) == ITEM_EXP_SHARE)
+            {
+                SetBoxMonDataAt(i, j, MON_DATA_HELD_ITEM, &none);
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+#endif
+
+// Called when the Options EXP. MODE is saved, and on map entry for older saves:
+// swaps Devon's Exp. Share and the EXP. ALL key item to match the mode.
+void WallyJourney_SyncExpItem(void)
+{
+#if !IS_FRLG
+    if (!FlagGet(FLAG_RECEIVED_EXP_SHARE))
+        return;
+    if (FlagGet(FLAG_WALLY_EXP_ALL_MODE))
+    {
+        if (!CheckBagHasItem(ITEM_EXP_ALL, 1) && TakeExpShare())
+        {
+            AddBagItem(ITEM_EXP_ALL, 1);
+            FlagSet(FLAG_WALLY_EXP_ALL_ON);
+        }
+    }
+    else if (CheckBagHasItem(ITEM_EXP_ALL, 1))
+    {
+        RemoveBagItem(ITEM_EXP_ALL, 1);
+        AddBagItem(ITEM_EXP_SHARE, 1);
+    }
 #endif
 }
 

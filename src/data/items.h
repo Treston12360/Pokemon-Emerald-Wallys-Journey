@@ -16101,6 +16101,22 @@ const struct ItemInfo gItemsInfo[] =
         .iconPic = gItemIcon_PokeshiDoll,
         .iconPalette = gItemIconPalette_PokeshiDoll,
     },
+
+    [ITEM_EXP_ALL] =
+    {
+        .name = ITEM_NAME("Exp. All"),
+        .description = COMPOUND_STRING(
+            "Turn it on or off.\n"
+            "Shares battle Exp.\n"
+            "across the party."),
+        .price = 0,
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_ExpAll,
+        .iconPic = gItemIcon_ExpShare,
+        .iconPalette = gItemIconPalette_ExpShare,
+    },
 };
 
 #undef ITEM_NAME

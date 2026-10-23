@@ -73,7 +73,7 @@
 #define FLAG_WALLY_NO_WHITEOUT    0x33 // Wally's Journey: losing this trainer battle continues the script (cleared after every battle)
 #define FLAG_WALLY_SOOTOPOLIS_DOOR_DONE    0x34 // Wally's Journey: Wally's battle at the Sootopolis Gym door is done
 #define FLAG_WALLY_OWE_OFF    0x35 // Wally's Journey: Options menu SEE WILD MONS OFF (set) vs ON (clear)
-#define FLAG_UNUSED_0x036    0x36 // Unused Flag
+#define FLAG_WALLY_EXP_ALL_ON    0x36 // Wally's Journey: the EXP. ALL key item is switched on
 #define FLAG_UNUSED_0x037    0x37 // Unused Flag
 #define FLAG_UNUSED_0x038    0x38 // Unused Flag
 #define FLAG_UNUSED_0x039    0x39 // Unused Flag

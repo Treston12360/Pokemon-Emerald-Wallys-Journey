@@ -20,6 +20,7 @@ bool32 WallyJourney_IsForbiddenBall(u16 itemId);
 u16 WallyJourney_ConvertForbiddenBall(u16 itemId);
 // Options-menu toggles (saved as event flags, so they persist through save/load).
 bool32 WallyJourney_IsExpAllMode(void);
+void WallyJourney_SyncExpItem(void);
 bool32 WallyJourney_ZMovesEnabled(void);
 void WallyJourney_GiveWildRayquazaDragonAscent(void);
 // Seasons: 48 real hours each, spring -> summer -> autumn -> winter (RTC).
