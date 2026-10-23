@@ -307,6 +307,14 @@
       "elevation": 3,
       "item": "ITEM_EMBOARITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_EMBOARITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 20,
+      "y": 33,
+      "elevation": 3,
+      "item": "ITEM_SERIOUS_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE112_SERIOUS_MINT"
     }
   ]
 }

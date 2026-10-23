@@ -47,4 +47,5 @@ u32 WallyJourney_GetBattleSpeed(void);
 void WallyJourney_SetSpeeds(u32 overworld, u32 battle);
 u32 WallyJourney_OverworldExtraIterations(void);
 u32 WallyJourney_BattleExtraIterations(void);
+u16 WallyJourney_GetPartyMonLevel(void);
 #endif

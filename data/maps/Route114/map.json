@@ -513,6 +513,14 @@
       "elevation": 5,
       "item": "ITEM_PYROARITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_PYROARITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 29,
+      "y": 46,
+      "elevation": 3,
+      "item": "ITEM_MILD_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE114_MILD_MINT"
     }
   ]
 }

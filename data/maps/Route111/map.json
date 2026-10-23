@@ -1161,6 +1161,14 @@
       "elevation": 3,
       "item": "ITEM_SCOVILLAINITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_SCOVILLAINITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 17,
+      "y": 5,
+      "elevation": 3,
+      "item": "ITEM_RELAXED_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE111_RELAXED_MINT"
     }
   ]
 }

@@ -66,5 +66,14 @@
     }
   ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 7,
+      "y": 4,
+      "elevation": 3,
+      "item": "ITEM_ABILITY_CAPSULE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ABANDONEDSHIP_ROOMS_B1F_ABILITY_CAPSULE"
+    }
+  ]
 }

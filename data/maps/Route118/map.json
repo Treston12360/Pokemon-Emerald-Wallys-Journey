@@ -454,6 +454,14 @@
       "elevation": 3,
       "item": "ITEM_RAICHUNITE_Y",
       "flag": "FLAG_HIDDEN_ITEM_WJ_RAICHUNITE_Y"
+    },
+    {
+      "type": "hidden_item",
+      "x": 12,
+      "y": 15,
+      "elevation": 3,
+      "item": "ITEM_CALM_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE118_CALM_MINT"
     }
   ]
 }

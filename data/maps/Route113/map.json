@@ -469,6 +469,14 @@
       "elevation": 3,
       "item": "ITEM_SKARMORITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_SKARMORITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 69,
+      "y": 2,
+      "elevation": 3,
+      "item": "ITEM_MODEST_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE113_MODEST_MINT"
     }
   ]
 }

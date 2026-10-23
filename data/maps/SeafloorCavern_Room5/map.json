@@ -118,5 +118,14 @@
     }
   ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 6,
+      "y": 8,
+      "elevation": 3,
+      "item": "ITEM_ABILITY_CAPSULE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_SEAFLOORCAVERN_ROOM5_ABILITY_CAPSULE"
+    }
+  ]
 }

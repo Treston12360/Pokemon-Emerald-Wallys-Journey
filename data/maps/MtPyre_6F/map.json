@@ -88,6 +88,14 @@
       "elevation": 3,
       "item": "ITEM_DUSK_STONE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_DUSK_STONE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 7,
+      "y": 8,
+      "elevation": 3,
+      "item": "ITEM_BOTTLE_CAP",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_MTPYRE_6F_BOTTLE_CAP"
     }
   ]
 }

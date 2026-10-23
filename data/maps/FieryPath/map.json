@@ -161,6 +161,14 @@
       "elevation": 3,
       "item": "ITEM_AUSPICIOUS_ARMOR",
       "flag": "FLAG_HIDDEN_ITEM_WJ_AUSPICIOUS_ARMOR"
+    },
+    {
+      "type": "hidden_item",
+      "x": 5,
+      "y": 21,
+      "elevation": 3,
+      "item": "ITEM_ABILITY_CAPSULE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_FIERYPATH_ABILITY_CAPSULE"
     }
   ]
 }

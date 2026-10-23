@@ -73,5 +73,14 @@
     }
   ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 38,
+      "y": 9,
+      "elevation": 3,
+      "item": "ITEM_BRAVE_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GRANITECAVE_1F_BRAVE_MINT"
+    }
+  ]
 }

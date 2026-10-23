@@ -307,6 +307,14 @@
       "elevation": 3,
       "item": "ITEM_BEEDRILLITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_BEEDRILLITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 31,
+      "y": 6,
+      "elevation": 3,
+      "item": "ITEM_TIMID_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_PETALBURGWOODS_TIMID_MINT"
     }
   ]
 }

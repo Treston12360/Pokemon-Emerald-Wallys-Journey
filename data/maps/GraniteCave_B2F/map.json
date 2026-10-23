@@ -203,6 +203,14 @@
       "elevation": 3,
       "item": "ITEM_ROCKIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROCKIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 28,
+      "y": 1,
+      "elevation": 3,
+      "item": "ITEM_ABILITY_CAPSULE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GRANITECAVE_B2F_ABILITY_CAPSULE"
     }
   ]
 }

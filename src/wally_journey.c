@@ -86,6 +86,9 @@ void WallyJourney_OnMapEntered(u8 group,u8 num) {
         VarSet(WALLY_VAR_PEAK_BADGES,badges);
     if (bit && !(known & bit))
         VarSet(WALLY_VAR_BIOME_MASK,known | bit);
+    // National Dex from the start; also upgrades saves made before this change.
+    if (FlagGet(FLAG_SYS_POKEDEX_GET) && !IsNationalPokedexEnabled())
+        EnableNationalPokedex();
 }
 u16 WallyJourney_GetPeakBadges(void) {
     u16 old = VarGet(WALLY_VAR_PEAK_BADGES), now = CountBadges();
@@ -1120,4 +1123,13 @@ u32 WallyJourney_BattleExtraIterations(void)
      || (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED | BATTLE_TYPE_RECORDED_LINK)))
         return 0;
     return sBattleExtra[speed];
+}
+
+// Hyper Training NPC: level of party slot gSpecialVar_0x8004 (0 for eggs/empty).
+u16 WallyJourney_GetPartyMonLevel(void)
+{
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004];
+    if (gSpecialVar_0x8004 >= PARTY_SIZE || GetMonData(mon, MON_DATA_IS_EGG) || !GetMonData(mon, MON_DATA_SPECIES))
+        return 0;
+    return GetMonData(mon, MON_DATA_LEVEL);
 }

@@ -1468,3 +1468,184 @@ WallyJourney_Text_SeasonWinter:
 	.string "Winter has arrived in HOENN.\n"
 	.string "Snow is falling in the mountains.$"
 
+
+@ Wally's Journey: Hyper Training (Lilycove Pokemon Center). Bottle Cap = one stat, Gold Bottle Cap = all six.
+@ Stat ids: 0 HP, 1 Atk, 2 Def, 3 Speed, 4 SpAtk, 5 SpDef (enum Stat).
+@ Pokemon must be level 50+, matching Scarlet/Violet.
+WallyJourney_EventScript_HyperTrainer::
+	lock
+	faceplayer
+	msgbox WallyJourney_Text_HyperTrainerIntro, MSGBOX_DEFAULT
+	checkitem ITEM_GOLD_BOTTLE_CAP
+	copyvar VAR_0x8009, VAR_RESULT
+	checkitem ITEM_BOTTLE_CAP
+	copyvar VAR_0x800A, VAR_RESULT
+	goto_if_eq VAR_0x8009, TRUE, WallyJourney_EventScript_HyperTrainerAsk
+	goto_if_eq VAR_0x800A, TRUE, WallyJourney_EventScript_HyperTrainerAsk
+	msgbox WallyJourney_Text_HyperTrainerNoCaps, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_HyperTrainerAsk::
+	msgbox WallyJourney_Text_HyperTrainerWhichMon, MSGBOX_DEFAULT
+	special ChoosePartyMon
+	waitstate
+	goto_if_ge VAR_0x8004, PARTY_SIZE, WallyJourney_EventScript_HyperTrainerCancel
+	specialvar VAR_RESULT, WallyJourney_GetPartyMonLevel
+	goto_if_eq VAR_RESULT, 0, WallyJourney_EventScript_HyperTrainerCancel
+	goto_if_lt VAR_RESULT, 50, WallyJourney_EventScript_HyperTrainerTooLow
+	bufferpartymonnick STR_VAR_1, VAR_0x8004
+	goto_if_ne VAR_0x8009, TRUE, WallyJourney_EventScript_HyperTrainerPickStat
+	msgbox WallyJourney_Text_HyperTrainerUseGold, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, WallyJourney_EventScript_HyperTrainerGold
+	goto_if_ne VAR_0x800A, TRUE, WallyJourney_EventScript_HyperTrainerCancel
+
+WallyJourney_EventScript_HyperTrainerPickStat::
+	msgbox WallyJourney_Text_HyperTrainerWhichStat, MSGBOX_DEFAULT
+	dynmultichoice 0, 0, FALSE, 6, 0, DYN_MULTICHOICE_CB_NONE, WallyJourney_Text_StatHP, WallyJourney_Text_StatAtk, WallyJourney_Text_StatDef, WallyJourney_Text_StatSpAtk, WallyJourney_Text_StatSpDef, WallyJourney_Text_StatSpeed
+	switch VAR_RESULT
+	case 0, WallyJourney_EventScript_HyperTrainHP
+	case 1, WallyJourney_EventScript_HyperTrainAtk
+	case 2, WallyJourney_EventScript_HyperTrainDef
+	case 3, WallyJourney_EventScript_HyperTrainSpAtk
+	case 4, WallyJourney_EventScript_HyperTrainSpDef
+	case 5, WallyJourney_EventScript_HyperTrainSpeed
+	goto WallyJourney_EventScript_HyperTrainerCancel
+
+WallyJourney_EventScript_HyperTrainHP::
+	canhypertrain 0, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_HyperTrainerMaxed
+	hypertrain 0, VAR_0x8004
+	goto WallyJourney_EventScript_HyperTrainerDoneCap
+WallyJourney_EventScript_HyperTrainAtk::
+	canhypertrain 1, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_HyperTrainerMaxed
+	hypertrain 1, VAR_0x8004
+	goto WallyJourney_EventScript_HyperTrainerDoneCap
+WallyJourney_EventScript_HyperTrainDef::
+	canhypertrain 2, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_HyperTrainerMaxed
+	hypertrain 2, VAR_0x8004
+	goto WallyJourney_EventScript_HyperTrainerDoneCap
+WallyJourney_EventScript_HyperTrainSpAtk::
+	canhypertrain 4, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_HyperTrainerMaxed
+	hypertrain 4, VAR_0x8004
+	goto WallyJourney_EventScript_HyperTrainerDoneCap
+WallyJourney_EventScript_HyperTrainSpDef::
+	canhypertrain 5, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_HyperTrainerMaxed
+	hypertrain 5, VAR_0x8004
+	goto WallyJourney_EventScript_HyperTrainerDoneCap
+WallyJourney_EventScript_HyperTrainSpeed::
+	canhypertrain 3, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_HyperTrainerMaxed
+	hypertrain 3, VAR_0x8004
+	goto WallyJourney_EventScript_HyperTrainerDoneCap
+
+WallyJourney_EventScript_HyperTrainerDoneCap::
+	removeitem ITEM_BOTTLE_CAP
+	goto WallyJourney_EventScript_HyperTrainerDone
+
+WallyJourney_EventScript_HyperTrainerGold::
+	setvar VAR_0x8005, 0
+	canhypertrain 0, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	canhypertrain 1, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	canhypertrain 2, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	canhypertrain 4, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	canhypertrain 5, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	canhypertrain 3, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	goto_if_eq VAR_0x8005, 0, WallyJourney_EventScript_HyperTrainerMaxed
+	hypertrain 0, VAR_0x8004
+	hypertrain 1, VAR_0x8004
+	hypertrain 2, VAR_0x8004
+	hypertrain 4, VAR_0x8004
+	hypertrain 5, VAR_0x8004
+	hypertrain 3, VAR_0x8004
+	removeitem ITEM_GOLD_BOTTLE_CAP
+	goto WallyJourney_EventScript_HyperTrainerDone
+
+WallyJourney_EventScript_HyperTrainerCount::
+	addvar VAR_0x8005, 1
+	return
+
+WallyJourney_EventScript_HyperTrainerDone::
+	playfanfare MUS_LEVEL_UP
+	msgbox WallyJourney_Text_HyperTrainerDone, MSGBOX_DEFAULT
+	waitfanfare
+	release
+	end
+
+WallyJourney_EventScript_HyperTrainerMaxed::
+	msgbox WallyJourney_Text_HyperTrainerMaxed, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_HyperTrainerTooLow::
+	msgbox WallyJourney_Text_HyperTrainerTooLow, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_HyperTrainerCancel::
+	msgbox WallyJourney_Text_HyperTrainerCancel, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_Text_HyperTrainerIntro:
+	.string "I train POKéMON past their limits.\n"
+	.string "HYPER TRAINING, they call it.\p"
+	.string "Bring me a BOTTLE CAP and I'll max\n"
+	.string "out one stat. A GOLD BOTTLE CAP?\l"
+	.string "All six at once.$"
+
+WallyJourney_Text_HyperTrainerNoCaps:
+	.string "No BOTTLE CAPS, though.\p"
+	.string "They're rare. Folks say a few are\n"
+	.string "hidden in the deepest places in\l"
+	.string "HOENN. Keep your eyes open.$"
+
+WallyJourney_Text_HyperTrainerWhichMon:
+	.string "Which POKéMON? It has to be at\n"
+	.string "least level 50 to handle it.$"
+
+WallyJourney_Text_HyperTrainerUseGold:
+	.string "Use your GOLD BOTTLE CAP to max out\n"
+	.string "every stat of {STR_VAR_1}?$"
+
+WallyJourney_Text_HyperTrainerWhichStat:
+	.string "Which stat should {STR_VAR_1} push\n"
+	.string "to its limit?$"
+
+WallyJourney_Text_HyperTrainerDone:
+	.string "There! {STR_VAR_1} has been pushed\n"
+	.string "to its absolute limit!$"
+
+WallyJourney_Text_HyperTrainerMaxed:
+	.string "That's already as high as it goes.\n"
+	.string "Keep your cap for another one.$"
+
+WallyJourney_Text_HyperTrainerTooLow:
+	.string "Too young for this. Bring it back\n"
+	.string "at level 50 or higher.$"
+
+WallyJourney_Text_HyperTrainerCancel:
+	.string "Come back when you're ready.$"
+
+WallyJourney_Text_StatHP:
+	.string "HP$"
+WallyJourney_Text_StatAtk:
+	.string "ATTACK$"
+WallyJourney_Text_StatDef:
+	.string "DEFENSE$"
+WallyJourney_Text_StatSpAtk:
+	.string "SP. ATK$"
+WallyJourney_Text_StatSpDef:
+	.string "SP. DEF$"
+WallyJourney_Text_StatSpeed:
+	.string "SPEED$"

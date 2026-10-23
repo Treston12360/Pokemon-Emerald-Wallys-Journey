@@ -96,6 +96,23 @@ static u32 CheckTypeEffectiveness(enum BattlerId battlerAtk, enum BattlerId batt
 static u32 CheckTargetTypeEffectiveness(enum BattlerId battler);
 static void MoveSelectionDisplayMoveEffectiveness(u32 foeEffectiveness, enum BattlerId battler);
 
+// Wally's Journey: battle text palette (BG pal 5) slots 7/8/9 hold green/blue/red (graphics/battle_interface/text.pal).
+#define WJ_MOVE_COLOR_SUPER    7
+#define WJ_MOVE_COLOR_RESISTED 8
+#define WJ_MOVE_COLOR_IMMUNE   9
+
+// Order based numerically, with EFFECTIVENESS_CANNOT_VIEW at 0 to always prioritize any other effectiveness during comparison
+enum
+{
+    EFFECTIVENESS_CANNOT_VIEW,
+    EFFECTIVENESS_NO_EFFECT,
+    EFFECTIVENESS_MOSTLY_INEFFECTIVE,
+    EFFECTIVENESS_NOT_VERY_EFFECTIVE,
+    EFFECTIVENESS_NORMAL,
+    EFFECTIVENESS_SUPER_EFFECTIVE,
+    EFFECTIVENESS_EXTREMELY_EFFECTIVE,
+};
+
 static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(enum BattlerId battler) =
 {
     [CONTROLLER_GETMONDATA]               = BtlController_HandleGetMonData,
@@ -1660,10 +1677,40 @@ static void MoveSelectionDisplayMoveNames(enum BattlerId battler)
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
         MoveSelectionDestroyCursorAt(i);
+        u8 *txt = gDisplayedStringBattle;
+        // Wally's Journey: color move names by effectiveness against a seen target.
+        // Green = super effective, blue = not very effective, red = no effect, default = normal/status.
+        if (B_SHOW_EFFECTIVENESS && moveInfo->moves[i] != MOVE_NONE && !IsBattleMoveStatus(moveInfo->moves[i]))
+        {
+            u8 color = 0;
+            u32 savedCursor = gMoveSelectionCursor[battler];
+            gMoveSelectionCursor[battler] = i;
+            switch (CheckTargetTypeEffectiveness(battler))
+            {
+            case EFFECTIVENESS_SUPER_EFFECTIVE:
+            case EFFECTIVENESS_EXTREMELY_EFFECTIVE:
+                color = WJ_MOVE_COLOR_SUPER;
+                break;
+            case EFFECTIVENESS_NOT_VERY_EFFECTIVE:
+            case EFFECTIVENESS_MOSTLY_INEFFECTIVE:
+                color = WJ_MOVE_COLOR_RESISTED;
+                break;
+            case EFFECTIVENESS_NO_EFFECT:
+                color = WJ_MOVE_COLOR_IMMUNE;
+                break;
+            }
+            gMoveSelectionCursor[battler] = savedCursor;
+            if (color)
+            {
+                *txt++ = EXT_CTRL_CODE_BEGIN;
+                *txt++ = EXT_CTRL_CODE_COLOR;
+                *txt++ = color;
+            }
+        }
         if (IsGimmickSelected(battler, GIMMICK_DYNAMAX) || GetActiveGimmick(battler) == GIMMICK_DYNAMAX)
-            StringCopy(gDisplayedStringBattle, GetMoveName(GetMaxMove(battler, moveInfo->moves[i])));
+            StringCopy(txt, GetMoveName(GetMaxMove(battler, moveInfo->moves[i])));
         else
-            StringCopy(gDisplayedStringBattle, GetMoveName(moveInfo->moves[i]));
+            StringCopy(txt, GetMoveName(moveInfo->moves[i]));
         // Prints on windows B_WIN_MOVE_NAME_1, B_WIN_MOVE_NAME_2, B_WIN_MOVE_NAME_3, B_WIN_MOVE_NAME_4
         BattlePutTextOnWindow(gDisplayedStringBattle, i + B_WIN_MOVE_NAME_1);
         if (moveInfo->moves[i] != MOVE_NONE)
@@ -2348,17 +2395,6 @@ static void PlayerHandleBattleDebug(enum BattlerId battler)
     gBattlerControllerFuncs[battler] = Controller_WaitForDebug;
 }
 
-// Order based numerically, with EFFECTIVENESS_CANNOT_VIEW at 0 to always prioritize any other effectiveness during comparison
-enum
-{
-    EFFECTIVENESS_CANNOT_VIEW,
-    EFFECTIVENESS_NO_EFFECT,
-    EFFECTIVENESS_MOSTLY_INEFFECTIVE,
-    EFFECTIVENESS_NOT_VERY_EFFECTIVE,
-    EFFECTIVENESS_NORMAL,
-    EFFECTIVENESS_SUPER_EFFECTIVE,
-    EFFECTIVENESS_EXTREMELY_EFFECTIVE,
-};
 
 static bool32 ShouldShowTypeEffectiveness(u32 targetId)
 {

@@ -229,6 +229,14 @@
       "elevation": 3,
       "item": "ITEM_EXCADRITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_EXCADRITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 8,
+      "y": 1,
+      "elevation": 3,
+      "item": "ITEM_ADAMANT_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_RUSTURFTUNNEL_ADAMANT_MINT"
     }
   ]
 }

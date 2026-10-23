@@ -215,6 +215,14 @@
       "elevation": 3,
       "item": "ITEM_FIGHTINIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_FIGHTINIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 34,
+      "y": 15,
+      "elevation": 3,
+      "item": "ITEM_ABILITY_CAPSULE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_VICTORYROAD_1F_ABILITY_CAPSULE"
     }
   ]
 }

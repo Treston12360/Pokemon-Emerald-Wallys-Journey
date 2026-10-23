@@ -162,6 +162,14 @@
       "elevation": 1,
       "item": "ITEM_TYRANITARITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_TYRANITARITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 35,
+      "y": 17,
+      "elevation": 3,
+      "item": "ITEM_GOLD_BOTTLE_CAP",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_VICTORYROAD_B2F_GOLD_BOTTLE_CAP"
     }
   ]
 }

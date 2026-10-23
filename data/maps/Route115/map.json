@@ -459,6 +459,14 @@
       "elevation": 1,
       "item": "ITEM_DRAMPANITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_DRAMPANITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 14,
+      "y": 45,
+      "elevation": 3,
+      "item": "ITEM_JOLLY_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE115_JOLLY_MINT"
     }
   ]
 }

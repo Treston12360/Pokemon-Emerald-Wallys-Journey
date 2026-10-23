@@ -1236,28 +1236,28 @@
 #define FLAG_HIDDEN_ITEM_WJ_SWEET_APPLE 0x49E // Wally's Journey: hidden Sweet Apple in Route123
 #define FLAG_HIDDEN_ITEM_WJ_TART_APPLE 0x49F // Wally's Journey: hidden Tart Apple in Route123
 #define FLAG_HIDDEN_ITEM_WJ_SYRUPY_APPLE 0x4A0 // Wally's Journey: hidden Syrupy Apple in Route119
-#define FLAG_UNUSED_0x4A1                                           0x4A1 // Unused Flag
-#define FLAG_UNUSED_0x4A2                                           0x4A2 // Unused Flag
-#define FLAG_UNUSED_0x4A3                                           0x4A3 // Unused Flag
-#define FLAG_UNUSED_0x4A4                                           0x4A4 // Unused Flag
-#define FLAG_UNUSED_0x4A5                                           0x4A5 // Unused Flag
-#define FLAG_UNUSED_0x4A6                                           0x4A6 // Unused Flag
-#define FLAG_UNUSED_0x4A7                                           0x4A7 // Unused Flag
-#define FLAG_UNUSED_0x4A8                                           0x4A8 // Unused Flag
-#define FLAG_UNUSED_0x4A9                                           0x4A9 // Unused Flag
-#define FLAG_UNUSED_0x4AA                                           0x4AA // Unused Flag
-#define FLAG_UNUSED_0x4AB                                           0x4AB // Unused Flag
-#define FLAG_UNUSED_0x4AC                                           0x4AC // Unused Flag
-#define FLAG_UNUSED_0x4AD                                           0x4AD // Unused Flag
-#define FLAG_UNUSED_0x4AE                                           0x4AE // Unused Flag
-#define FLAG_UNUSED_0x4AF                                           0x4AF // Unused Flag
-#define FLAG_UNUSED_0x4B0                           0x4B0 // Unused Flag
-#define FLAG_UNUSED_0x4B1                           0x4B1 // Unused Flag
-#define FLAG_UNUSED_0x4B2                           0x4B2 // Unused Flag
-#define FLAG_UNUSED_0x4B3                           0x4B3 // Unused Flag
-#define FLAG_UNUSED_0x4B4                           0x4B4 // Unused Flag
-#define FLAG_UNUSED_0x4B5                           0x4B5 // Unused Flag
-#define FLAG_UNUSED_0x4B6                           0x4B6 // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_PETALBURGWOODS_TIMID_MINT 0x4A1 // Wally's Journey: hidden Timid Mint in PetalburgWoods
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE104_LONELY_MINT 0x4A2 // Wally's Journey: hidden Lonely Mint in Route104
+#define FLAG_HIDDEN_ITEM_WJ_RUSTURFTUNNEL_ADAMANT_MINT 0x4A3 // Wally's Journey: hidden Adamant Mint in RusturfTunnel
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE116_NAIVE_MINT 0x4A4 // Wally's Journey: hidden Naive Mint in Route116
+#define FLAG_HIDDEN_ITEM_WJ_GRANITECAVE_1F_BRAVE_MINT 0x4A5 // Wally's Journey: hidden Brave Mint in GraniteCave_1F
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE106_NAUGHTY_MINT 0x4A6 // Wally's Journey: hidden Naughty Mint in Route106
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE109_BOLD_MINT 0x4A7 // Wally's Journey: hidden Bold Mint in Route109
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE110_IMPISH_MINT 0x4A8 // Wally's Journey: hidden Impish Mint in Route110
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE117_LAX_MINT 0x4A9 // Wally's Journey: hidden Lax Mint in Route117
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE111_RELAXED_MINT 0x4AA // Wally's Journey: hidden Relaxed Mint in Route111
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE112_SERIOUS_MINT 0x4AB // Wally's Journey: hidden Serious Mint in Route112
+#define FLAG_HIDDEN_ITEM_WJ_JAGGEDPASS_RASH_MINT 0x4AC // Wally's Journey: hidden Rash Mint in JaggedPass
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE113_MODEST_MINT 0x4AD // Wally's Journey: hidden Modest Mint in Route113
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE114_MILD_MINT 0x4AE // Wally's Journey: hidden Mild Mint in Route114
+#define FLAG_HIDDEN_ITEM_WJ_METEORFALLS_1F_1R_QUIET_MINT 0x4AF // Wally's Journey: hidden Quiet Mint in MeteorFalls_1F_1R
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE115_JOLLY_MINT 0x4B0 // Wally's Journey: hidden Jolly Mint in Route115
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE118_CALM_MINT 0x4B1 // Wally's Journey: hidden Calm Mint in Route118
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE119_GENTLE_MINT 0x4B2 // Wally's Journey: hidden Gentle Mint in Route119
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE120_CAREFUL_MINT 0x4B3 // Wally's Journey: hidden Careful Mint in Route120
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE121_SASSY_MINT 0x4B4 // Wally's Journey: hidden Sassy Mint in Route121
+#define FLAG_HIDDEN_ITEM_WJ_ROUTE123_HASTY_MINT 0x4B5 // Wally's Journey: hidden Hasty Mint in Route123
+#define FLAG_HIDDEN_ITEM_WJ_NEWMAUVILLE_INSIDE_ABILITY_CAPSULE 0x4B6 // Wally's Journey: hidden Ability Capsule in NewMauville_Inside
 #define FLAG_WALLY_CLEARED_07                 0x4B7 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
 #define FLAG_WALLY_CLEARED_08                 0x4B8 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
 #define FLAG_WALLY_CLEARED_09                 0x4B9 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
@@ -1266,14 +1266,14 @@
 #define FLAG_WALLY_CLEARED_12                 0x4BC // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
 #define FLAG_WALLY_CLEARED_13                 0x4BD // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
 #define FLAG_WALLY_CLEARED_14                 0x4BE // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
-#define FLAG_UNUSED_0x4BF                           0x4BF // Unused Flag
-#define FLAG_UNUSED_0x4C0                           0x4C0 // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_FIERYPATH_ABILITY_CAPSULE 0x4BF // Wally's Journey: hidden Ability Capsule in FieryPath
+#define FLAG_HIDDEN_ITEM_WJ_ABANDONEDSHIP_ROOMS_B1F_ABILITY_CAPSULE 0x4C0 // Wally's Journey: hidden Ability Capsule in AbandonedShip_Rooms_B1F
 #define FLAG_WALLY_CLEARED_17                 0x4C1 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
-#define FLAG_UNUSED_0x4C2                           0x4C2 // Unused Flag
-#define FLAG_UNUSED_0x4C3                           0x4C3 // Unused Flag
-#define FLAG_UNUSED_0x4C4                           0x4C4 // Unused Flag
-#define FLAG_UNUSED_0x4C5                           0x4C5 // Unused Flag
-#define FLAG_UNUSED_0x4C6                           0x4C6 // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_MTPYRE_5F_ABILITY_CAPSULE 0x4C2 // Wally's Journey: hidden Ability Capsule in MtPyre_5F
+#define FLAG_HIDDEN_ITEM_WJ_SHOALCAVE_LOWTIDEENTRANCEROOM_ABILITY_CAPSULE 0x4C3 // Wally's Journey: hidden Ability Capsule in ShoalCave_LowTideEntranceRoom
+#define FLAG_HIDDEN_ITEM_WJ_SEAFLOORCAVERN_ROOM5_ABILITY_CAPSULE 0x4C4 // Wally's Journey: hidden Ability Capsule in SeafloorCavern_Room5
+#define FLAG_HIDDEN_ITEM_WJ_VICTORYROAD_1F_ABILITY_CAPSULE 0x4C5 // Wally's Journey: hidden Ability Capsule in VictoryRoad_1F
+#define FLAG_HIDDEN_ITEM_WJ_GRANITECAVE_B2F_ABILITY_CAPSULE 0x4C6 // Wally's Journey: hidden Ability Capsule in GraniteCave_B2F
 #define FLAG_WALLY_CLEARED_23                 0x4C7 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
 #define FLAG_WALLY_CLEARED_24                 0x4C8 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
 #define FLAG_WALLY_CLEARED_25                 0x4C9 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
@@ -1291,9 +1291,9 @@
 #define FLAG_WALLY_CLEARED_37                 0x4D5 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
 #define FLAG_WALLY_CLEARED_38                 0x4D6 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
 #define FLAG_WALLY_CLEARED_39                 0x4D7 // Wally's Journey: a Cut tree / Rock Smash rock stays cleared
-#define FLAG_UNUSED_0x4D8                           0x4D8 // Unused Flag
-#define FLAG_UNUSED_0x4D9                           0x4D9 // Unused Flag
-#define FLAG_UNUSED_0x4DA                           0x4DA // Unused Flag
+#define FLAG_HIDDEN_ITEM_WJ_MTPYRE_6F_BOTTLE_CAP 0x4D8 // Wally's Journey: hidden Bottle Cap in MtPyre_6F
+#define FLAG_HIDDEN_ITEM_WJ_SEAFLOORCAVERN_ROOM8_BOTTLE_CAP 0x4D9 // Wally's Journey: hidden Bottle Cap in SeafloorCavern_Room8
+#define FLAG_HIDDEN_ITEM_WJ_VICTORYROAD_B2F_GOLD_BOTTLE_CAP 0x4DA // Wally's Journey: hidden Gold Bottle Cap in VictoryRoad_B2F
 #define FLAG_UNUSED_0x4DB                           0x4DB // Unused Flag
 #define FLAG_UNUSED_0x4DC                           0x4DC // Unused Flag
 #define FLAG_UNUSED_0x4DD                           0x4DD // Unused Flag

@@ -885,6 +885,14 @@
       "elevation": 1,
       "item": "ITEM_PEAT_BLOCK",
       "flag": "FLAG_HIDDEN_ITEM_WJ_PEAT_BLOCK"
+    },
+    {
+      "type": "hidden_item",
+      "x": 2,
+      "y": 79,
+      "elevation": 3,
+      "item": "ITEM_CAREFUL_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE120_CAREFUL_MINT"
     }
   ]
 }

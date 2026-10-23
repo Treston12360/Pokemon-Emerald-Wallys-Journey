@@ -868,6 +868,14 @@
       "elevation": 3,
       "item": "ITEM_TART_APPLE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_TART_APPLE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 80,
+      "y": 1,
+      "elevation": 3,
+      "item": "ITEM_HASTY_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE123_HASTY_MINT"
     }
   ]
 }

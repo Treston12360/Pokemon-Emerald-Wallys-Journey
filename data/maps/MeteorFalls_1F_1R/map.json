@@ -214,6 +214,14 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "0x0"
+    },
+    {
+      "type": "hidden_item",
+      "x": 4,
+      "y": 17,
+      "elevation": 3,
+      "item": "ITEM_QUIET_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_METEORFALLS_1F_1R_QUIET_MINT"
     }
   ]
 }

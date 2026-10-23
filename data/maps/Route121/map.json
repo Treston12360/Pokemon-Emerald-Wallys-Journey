@@ -559,6 +559,14 @@
       "elevation": 3,
       "item": "ITEM_NORMALIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_NORMALIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 40,
+      "y": 5,
+      "elevation": 3,
+      "item": "ITEM_SASSY_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE121_SASSY_MINT"
     }
   ]
 }

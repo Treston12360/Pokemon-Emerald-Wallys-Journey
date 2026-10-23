@@ -951,6 +951,14 @@
       "elevation": 3,
       "item": "ITEM_SYRUPY_APPLE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_SYRUPY_APPLE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 27,
+      "y": 9,
+      "elevation": 3,
+      "item": "ITEM_GENTLE_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE119_GENTLE_MINT"
     }
   ]
 }

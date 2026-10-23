@@ -251,6 +251,14 @@
       "elevation": 3,
       "item": "ITEM_HOUNDOOMINITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_HOUNDOOMINITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 10,
+      "y": 17,
+      "elevation": 3,
+      "item": "ITEM_RASH_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_JAGGEDPASS_RASH_MINT"
     }
   ]
 }

@@ -142,6 +142,14 @@
       "elevation": 1,
       "item": "ITEM_MEOWSTICITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_MEOWSTICITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 31,
+      "y": 13,
+      "elevation": 3,
+      "item": "ITEM_NAUGHTY_MINT",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE106_NAUGHTY_MINT"
     }
   ]
 }
