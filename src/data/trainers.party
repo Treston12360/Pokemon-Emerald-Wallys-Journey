@@ -5758,7 +5758,7 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - Aerial Ace
 - Quick Attack
-- Endeavor
+- Steel Wing
 - Double Team
 
 Loudred @ Sitrus Berry
@@ -5769,7 +5769,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - Stomp
 - Howl
 - Bite
-- Supersonic
+- Disarming Voice
 
 Linoone @ Silk Scarf
 Level: 24
@@ -5929,7 +5929,7 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
 - Signal Beam
 - Air Cutter
-- Stun Spore
+- Psybeam
 - Scary Face
 
 Roselia @ Miracle Seed
@@ -12022,23 +12022,24 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 Azumarill @ Sitrus Berry
 Level: 24
-Nature: Modest
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- Bubble Beam
+EVs: 252 HP / 252 Atk / 4 Def
+Ability: Thick Fat
+- Aqua Tail
+- Aqua Jet
 - Rollout
 - Defense Curl
-- Charm
 
 Numel @ Charcoal
 Level: 24
-Nature: Brave
+Nature: Quiet
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- Flame Burst
-- Magnitude
-- Focus Energy
-- Take Down
+EVs: 252 HP / 252 SpA / 4 SpD
+- Lava Plume
+- Bulldoze
+- Ancient Power
+- Amnesia
 
 Breloom @ Oran Berry
 Level: 24
