@@ -75,14 +75,9 @@ MauvilleCity_Gym_EventScript_DeactivatePuzzle::
 
 MauvilleCity_Gym_EventScript_Wattson::
 	trainerbattle_single TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_Gym_EventScript_WattsonRematch
 	call WallyJourney_EventScript_GiveGymHMs
 	goto_if_unset FLAG_RECEIVED_TM_SHOCK_WAVE, MauvilleCity_Gym_EventScript_GiveShockWave2
-	goto_if_eq VAR_NEW_MAUVILLE_STATE, 2, MauvilleCity_Gym_EventScript_CompletedNewMauville
-	msgbox MauvilleCity_Gym_Text_WattsonPostBattle, MSGBOX_DEFAULT
-	release
-	end
+	goto MauvilleCity_Gym_EventScript_WattsonRematchOffer
 
 MauvilleCity_Gym_EventScript_WattsonDefeated::
 	message MauvilleCity_Gym_Text_ReceivedDynamoBadge
@@ -136,14 +131,7 @@ MauvilleCity_Gym_EventScript_CompletedNewMauville::
 	end
 
 MauvilleCity_Gym_EventScript_WattsonRematch::
-	setvar VAR_0x8004, TRAINER_WATTSON_1
-	special WallyJourney_GetRematchTier
-	goto_if_eq VAR_RESULT, 3, MauvilleCity_Gym_EventScript_WattsonRematchTier3
-	goto_if_eq VAR_RESULT, 4, MauvilleCity_Gym_EventScript_WattsonRematchTier4
-	goto_if_ge VAR_RESULT, 5, MauvilleCity_Gym_EventScript_WattsonRematchTier5
-	trainerbattle_rematch_double TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonPreRematch, MauvilleCity_Gym_Text_WattsonRematchDefeat, MauvilleCity_Gym_Text_WattsonRematchNeedTwoMons
-	msgbox MauvilleCity_Gym_Text_WattsonPostRematch, MSGBOX_AUTOCLOSE
-	end
+	goto MauvilleCity_Gym_EventScript_WattsonRematchOffer
 
 @ Wally's Journey: every rematch tier has its own opening line; the top two
 @ tiers share a tougher defeat and post-battle line.
@@ -488,3 +476,113 @@ MauvilleCity_Gym_Text_WattsonPostRematchElite:
 	.string "biggest mistake of my life.\p"
 	.string "Losing to you isn't. Best thing to\n"
 	.string "happen to this GYM in years!$"
+
+@ Wally's Journey: growing Gym Leader rematches (see WallyJourney_ScaleLeaderParty).
+MauvilleCity_Gym_EventScript_WattsonRematchOffer::
+	setvar VAR_0x8004, 3
+	special WallyJourney_SetupLeaderRematch
+	switch VAR_RESULT
+	case 1, MauvilleCity_Gym_EventScript_WattsonRematchStage1
+	case 2, MauvilleCity_Gym_EventScript_WattsonRematchStage2
+	case 3, MauvilleCity_Gym_EventScript_WattsonRematchStage3
+	case 4, MauvilleCity_Gym_EventScript_WattsonRematchStage4
+	goto MauvilleCity_Gym_EventScript_WattsonRematchStage1
+
+MauvilleCity_Gym_EventScript_WattsonRematchStage1::
+	msgbox MauvilleCity_Gym_Text_WattsonGrowOffer1, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MauvilleCity_Gym_EventScript_WattsonRematchDecline
+	cleartrainerflag TRAINER_WATTSON_2
+	trainerbattle_no_intro TRAINER_WATTSON_2, MauvilleCity_Gym_Text_WattsonGrowDefeat1
+	msgbox MauvilleCity_Gym_Text_WattsonGrowAfter1, MSGBOX_DEFAULT
+	release
+	end
+
+MauvilleCity_Gym_EventScript_WattsonRematchStage2::
+	msgbox MauvilleCity_Gym_Text_WattsonGrowOffer2, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MauvilleCity_Gym_EventScript_WattsonRematchDecline
+	cleartrainerflag TRAINER_WATTSON_2
+	trainerbattle_no_intro TRAINER_WATTSON_2, MauvilleCity_Gym_Text_WattsonGrowDefeat2
+	msgbox MauvilleCity_Gym_Text_WattsonGrowAfter2, MSGBOX_DEFAULT
+	release
+	end
+
+MauvilleCity_Gym_EventScript_WattsonRematchStage3::
+	msgbox MauvilleCity_Gym_Text_WattsonGrowOffer3, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MauvilleCity_Gym_EventScript_WattsonRematchDecline
+	cleartrainerflag TRAINER_WATTSON_3
+	trainerbattle_double TRAINER_WATTSON_3, MauvilleCity_Gym_Text_WattsonGrowGo, MauvilleCity_Gym_Text_WattsonGrowDefeat3, MauvilleCity_Gym_Text_WattsonGrowNeedTwo
+	msgbox MauvilleCity_Gym_Text_WattsonGrowAfter3, MSGBOX_DEFAULT
+	release
+	end
+
+MauvilleCity_Gym_EventScript_WattsonRematchStage4::
+	msgbox MauvilleCity_Gym_Text_WattsonGrowOffer4, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MauvilleCity_Gym_EventScript_WattsonRematchDecline
+	cleartrainerflag TRAINER_WATTSON_4
+	trainerbattle_double TRAINER_WATTSON_4, MauvilleCity_Gym_Text_WattsonGrowGo, MauvilleCity_Gym_Text_WattsonGrowDefeat4, MauvilleCity_Gym_Text_WattsonGrowNeedTwo
+	msgbox MauvilleCity_Gym_Text_WattsonGrowAfter4, MSGBOX_DEFAULT
+	release
+	end
+
+MauvilleCity_Gym_EventScript_WattsonRematchDecline::
+	goto_if_eq VAR_NEW_MAUVILLE_STATE, 2, MauvilleCity_Gym_EventScript_CompletedNewMauville
+	msgbox MauvilleCity_Gym_Text_WattsonPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+MauvilleCity_Gym_Text_WattsonGrowGo:
+	.string "Here we go!$"
+
+MauvilleCity_Gym_Text_WattsonGrowNeedTwo:
+	.string "You need two POKéMON for this\n"
+	.string "battle. Come back with more.$"
+
+MauvilleCity_Gym_Text_WattsonGrowOffer1:
+	.string "WATTSON: Wahahaha! {STR_VAR_1} BADGES!\p"
+	.string "I've charged my team up to\n"
+	.string "{STR_VAR_2}'s level. Want a jolt?$"
+
+MauvilleCity_Gym_Text_WattsonGrowDefeat1:
+	.string "Wahahaha! Shocked again!$"
+
+MauvilleCity_Gym_Text_WattsonGrowAfter1:
+	.string "Win your next BADGE and come back.\n"
+	.string "I'll recharge in the meantime!$"
+
+MauvilleCity_Gym_Text_WattsonGrowOffer2:
+	.string "WATTSON: Eight BADGES! Wahahaha!\p"
+	.string "My team runs near ELITE FOUR\n"
+	.string "voltage now. One more spark?$"
+
+MauvilleCity_Gym_Text_WattsonGrowDefeat2:
+	.string "Wahahaha! You've got the current\n"
+	.string "to take the LEAGUE!$"
+
+MauvilleCity_Gym_Text_WattsonGrowAfter2:
+	.string "Off to EVER GRANDE with you!$"
+
+MauvilleCity_Gym_Text_WattsonGrowOffer3:
+	.string "WATTSON: Wahahaha! The CHAMPION\n"
+	.string "came to see this old man!\p"
+	.string "My full team is charged.\n"
+	.string "Shall we?$"
+
+MauvilleCity_Gym_Text_WattsonGrowDefeat3:
+	.string "Wahahaha! What a battle!$"
+
+MauvilleCity_Gym_Text_WattsonGrowAfter3:
+	.string "Come back anytime. This old man\n"
+	.string "needs the exercise.$"
+
+MauvilleCity_Gym_Text_WattsonGrowOffer4:
+	.string "WATTSON: You defended your title!\p"
+	.string "My team is at full power now.\n"
+	.string "The biggest surge I've got!$"
+
+MauvilleCity_Gym_Text_WattsonGrowDefeat4:
+	.string "Wahahaha! I'm all out of juice!$"
+
+MauvilleCity_Gym_Text_WattsonGrowAfter4:
+	.string "Thank you for keeping an old\n"
+	.string "man's spark alive.$"
+

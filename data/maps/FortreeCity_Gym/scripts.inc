@@ -19,13 +19,9 @@ FortreeCity_Gym_EventScript_InitRotatingGates::
 
 FortreeCity_Gym_EventScript_Winona::
 	trainerbattle_single TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaIntro, FortreeCity_Gym_Text_WinonaDefeat, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, FortreeCity_Gym_EventScript_WinonaRematch
 	call WallyJourney_EventScript_GiveGymHMs
 	goto_if_unset FLAG_RECEIVED_TM_AERIAL_ACE, FortreeCity_Gym_EventScript_GiveAerialAce2
-	msgbox FortreeCity_Gym_Text_WinonaPostBattle, MSGBOX_DEFAULT
-	release
-	end
+	goto FortreeCity_Gym_EventScript_WinonaRematchOffer
 
 FortreeCity_Gym_EventScript_WinonaDefeated::
 	message FortreeCity_Gym_Text_ReceivedFeatherBadge
@@ -69,14 +65,7 @@ FortreeCity_Gym_EventScript_GiveAerialAce::
 	return
 
 FortreeCity_Gym_EventScript_WinonaRematch::
-	setvar VAR_0x8004, TRAINER_WINONA_1
-	special WallyJourney_GetRematchTier
-	goto_if_eq VAR_RESULT, 3, FortreeCity_Gym_EventScript_WinonaRematchTier3
-	goto_if_eq VAR_RESULT, 4, FortreeCity_Gym_EventScript_WinonaRematchTier4
-	goto_if_ge VAR_RESULT, 5, FortreeCity_Gym_EventScript_WinonaRematchTier5
-	trainerbattle_rematch_double TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaPreRematch, FortreeCity_Gym_Text_WinonaRematchDefeat, FortreeCity_Gym_Text_WinonaRematchNeedTwoMons
-	msgbox FortreeCity_Gym_Text_WinonaPostRematch, MSGBOX_AUTOCLOSE
-	end
+	goto FortreeCity_Gym_EventScript_WinonaRematchOffer
 
 @ Wally's Journey: every rematch tier has its own opening line; the top two
 @ tiers share a tougher defeat and post-battle line.
@@ -377,3 +366,114 @@ FortreeCity_Gym_Text_WinonaPostRematchElite:
 	.string "even made it.\p"
 	.string "Two different kinds of genius.\n"
 	.string "I'm glad HOENN has both.$"
+
+@ Wally's Journey: growing Gym Leader rematches (see WallyJourney_ScaleLeaderParty).
+FortreeCity_Gym_EventScript_WinonaRematchOffer::
+	setvar VAR_0x8004, 6
+	special WallyJourney_SetupLeaderRematch
+	switch VAR_RESULT
+	case 1, FortreeCity_Gym_EventScript_WinonaRematchStage1
+	case 2, FortreeCity_Gym_EventScript_WinonaRematchStage2
+	case 3, FortreeCity_Gym_EventScript_WinonaRematchStage3
+	case 4, FortreeCity_Gym_EventScript_WinonaRematchStage4
+	goto FortreeCity_Gym_EventScript_WinonaRematchStage1
+
+FortreeCity_Gym_EventScript_WinonaRematchStage1::
+	msgbox FortreeCity_Gym_Text_WinonaGrowOffer1, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, FortreeCity_Gym_EventScript_WinonaRematchDecline
+	cleartrainerflag TRAINER_WINONA_2
+	trainerbattle_no_intro TRAINER_WINONA_2, FortreeCity_Gym_Text_WinonaGrowDefeat1
+	msgbox FortreeCity_Gym_Text_WinonaGrowAfter1, MSGBOX_DEFAULT
+	release
+	end
+
+FortreeCity_Gym_EventScript_WinonaRematchStage2::
+	msgbox FortreeCity_Gym_Text_WinonaGrowOffer2, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, FortreeCity_Gym_EventScript_WinonaRematchDecline
+	cleartrainerflag TRAINER_WINONA_2
+	trainerbattle_no_intro TRAINER_WINONA_2, FortreeCity_Gym_Text_WinonaGrowDefeat2
+	msgbox FortreeCity_Gym_Text_WinonaGrowAfter2, MSGBOX_DEFAULT
+	release
+	end
+
+FortreeCity_Gym_EventScript_WinonaRematchStage3::
+	msgbox FortreeCity_Gym_Text_WinonaGrowOffer3, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, FortreeCity_Gym_EventScript_WinonaRematchDecline
+	cleartrainerflag TRAINER_WINONA_3
+	trainerbattle_double TRAINER_WINONA_3, FortreeCity_Gym_Text_WinonaGrowGo, FortreeCity_Gym_Text_WinonaGrowDefeat3, FortreeCity_Gym_Text_WinonaGrowNeedTwo
+	msgbox FortreeCity_Gym_Text_WinonaGrowAfter3, MSGBOX_DEFAULT
+	release
+	end
+
+FortreeCity_Gym_EventScript_WinonaRematchStage4::
+	msgbox FortreeCity_Gym_Text_WinonaGrowOffer4, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, FortreeCity_Gym_EventScript_WinonaRematchDecline
+	cleartrainerflag TRAINER_WINONA_4
+	trainerbattle_double TRAINER_WINONA_4, FortreeCity_Gym_Text_WinonaGrowGo, FortreeCity_Gym_Text_WinonaGrowDefeat4, FortreeCity_Gym_Text_WinonaGrowNeedTwo
+	msgbox FortreeCity_Gym_Text_WinonaGrowAfter4, MSGBOX_DEFAULT
+	release
+	end
+
+FortreeCity_Gym_EventScript_WinonaRematchDecline::
+	msgbox FortreeCity_Gym_Text_WinonaPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+FortreeCity_Gym_Text_WinonaGrowGo:
+	.string "Here we go!$"
+
+FortreeCity_Gym_Text_WinonaGrowNeedTwo:
+	.string "You need two POKéMON for this\n"
+	.string "battle. Come back with more.$"
+
+FortreeCity_Gym_Text_WinonaGrowOffer1:
+	.string "WINONA: You hold {STR_VAR_1} BADGES now.\p"
+	.string "My team has flown higher, up to\n"
+	.string "{STR_VAR_2}'s level. Will you fly with us?$"
+
+FortreeCity_Gym_Text_WinonaGrowDefeat1:
+	.string "You soared past us again.$"
+
+FortreeCity_Gym_Text_WinonaGrowAfter1:
+	.string "Come back after your next BADGE.\n"
+	.string "We'll be training on the wind.$"
+
+FortreeCity_Gym_Text_WinonaGrowOffer2:
+	.string "WINONA: Eight BADGES. The LEAGUE\n"
+	.string "waits beyond VICTORY ROAD.\p"
+	.string "My team flies just below the\n"
+	.string "ELITE FOUR now. One more flight?$"
+
+FortreeCity_Gym_Text_WinonaGrowDefeat2:
+	.string "Your wings are ready.$"
+
+FortreeCity_Gym_Text_WinonaGrowAfter2:
+	.string "Fly to EVER GRANDE.\n"
+	.string "The sky is yours.$"
+
+FortreeCity_Gym_Text_WinonaGrowOffer3:
+	.string "WINONA: The CHAMPION returns to\n"
+	.string "FORTREE.\p"
+	.string "My full team will greet you.\n"
+	.string "Will you battle?$"
+
+FortreeCity_Gym_Text_WinonaGrowDefeat3:
+	.string "Graceful and fierce.\n"
+	.string "A true CHAMPION.$"
+
+FortreeCity_Gym_Text_WinonaGrowAfter3:
+	.string "We'll keep training among\n"
+	.string "the treetops.$"
+
+FortreeCity_Gym_Text_WinonaGrowOffer4:
+	.string "WINONA: You defended your title.\p"
+	.string "My team has reached its peak.\n"
+	.string "Let us fly with everything we have.$"
+
+FortreeCity_Gym_Text_WinonaGrowDefeat4:
+	.string "No wind could lift us higher\n"
+	.string "than you.$"
+
+FortreeCity_Gym_Text_WinonaGrowAfter4:
+	.string "Visit FORTREE whenever you like.$"
+

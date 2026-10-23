@@ -3,13 +3,9 @@ RustboroCity_Gym_MapScripts::
 
 RustboroCity_Gym_EventScript_Roxanne::
 	trainerbattle_single TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxanneIntro, RustboroCity_Gym_Text_RoxanneDefeat, RustboroCity_Gym_EventScript_RoxanneDefeated, NO_MUSIC
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, RustboroCity_Gym_EventScript_RoxanneRematch
 	call WallyJourney_EventScript_GiveGymHMs
 	goto_if_unset FLAG_RECEIVED_TM_ROCK_TOMB, RustboroCity_Gym_EventScript_GiveRockTomb
-	msgbox RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT
-	release
-	end
+	goto RustboroCity_Gym_EventScript_RoxanneRematchOffer
 
 RustboroCity_Gym_EventScript_RoxanneDefeated::
 	message RustboroCity_Gym_Text_ReceivedStoneBadge
@@ -36,14 +32,7 @@ RustboroCity_Gym_EventScript_GiveRockTomb::
 	end
 
 RustboroCity_Gym_EventScript_RoxanneRematch::
-	setvar VAR_0x8004, TRAINER_ROXANNE_1
-	special WallyJourney_GetRematchTier
-	goto_if_eq VAR_RESULT, 3, RustboroCity_Gym_EventScript_RoxanneRematchTier3
-	goto_if_eq VAR_RESULT, 4, RustboroCity_Gym_EventScript_RoxanneRematchTier4
-	goto_if_ge VAR_RESULT, 5, RustboroCity_Gym_EventScript_RoxanneRematchTier5
-	trainerbattle_rematch_double TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxannePreRematch, RustboroCity_Gym_Text_RoxanneRematchDefeat, RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons
-	msgbox RustboroCity_Gym_Text_RoxannePostRematch, MSGBOX_AUTOCLOSE
-	end
+	goto RustboroCity_Gym_EventScript_RoxanneRematchOffer
 
 @ Wally's Journey: every rematch tier has its own opening line; the top two
 @ tiers share a tougher defeat and post-battle line.
@@ -323,3 +312,118 @@ RustboroCity_Gym_Text_RoxannePostRematchElite:
 	.string "read my notes on you.\p"
 	.string "I said no. Some lessons have to be\n"
 	.string "earned in battle.$"
+
+@ Wally's Journey: growing Gym Leader rematches (see WallyJourney_ScaleLeaderParty).
+RustboroCity_Gym_EventScript_RoxanneRematchOffer::
+	setvar VAR_0x8004, 1
+	special WallyJourney_SetupLeaderRematch
+	switch VAR_RESULT
+	case 1, RustboroCity_Gym_EventScript_RoxanneRematchStage1
+	case 2, RustboroCity_Gym_EventScript_RoxanneRematchStage2
+	case 3, RustboroCity_Gym_EventScript_RoxanneRematchStage3
+	case 4, RustboroCity_Gym_EventScript_RoxanneRematchStage4
+	goto RustboroCity_Gym_EventScript_RoxanneRematchStage1
+
+RustboroCity_Gym_EventScript_RoxanneRematchStage1::
+	msgbox RustboroCity_Gym_Text_RoxanneGrowOffer1, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, RustboroCity_Gym_EventScript_RoxanneRematchDecline
+	cleartrainerflag TRAINER_ROXANNE_2
+	trainerbattle_no_intro TRAINER_ROXANNE_2, RustboroCity_Gym_Text_RoxanneGrowDefeat1
+	msgbox RustboroCity_Gym_Text_RoxanneGrowAfter1, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_Gym_EventScript_RoxanneRematchStage2::
+	msgbox RustboroCity_Gym_Text_RoxanneGrowOffer2, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, RustboroCity_Gym_EventScript_RoxanneRematchDecline
+	cleartrainerflag TRAINER_ROXANNE_2
+	trainerbattle_no_intro TRAINER_ROXANNE_2, RustboroCity_Gym_Text_RoxanneGrowDefeat2
+	msgbox RustboroCity_Gym_Text_RoxanneGrowAfter2, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_Gym_EventScript_RoxanneRematchStage3::
+	msgbox RustboroCity_Gym_Text_RoxanneGrowOffer3, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, RustboroCity_Gym_EventScript_RoxanneRematchDecline
+	cleartrainerflag TRAINER_ROXANNE_3
+	trainerbattle_double TRAINER_ROXANNE_3, RustboroCity_Gym_Text_RoxanneGrowGo, RustboroCity_Gym_Text_RoxanneGrowDefeat3, RustboroCity_Gym_Text_RoxanneGrowNeedTwo
+	msgbox RustboroCity_Gym_Text_RoxanneGrowAfter3, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_Gym_EventScript_RoxanneRematchStage4::
+	msgbox RustboroCity_Gym_Text_RoxanneGrowOffer4, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, RustboroCity_Gym_EventScript_RoxanneRematchDecline
+	cleartrainerflag TRAINER_ROXANNE_4
+	trainerbattle_double TRAINER_ROXANNE_4, RustboroCity_Gym_Text_RoxanneGrowGo, RustboroCity_Gym_Text_RoxanneGrowDefeat4, RustboroCity_Gym_Text_RoxanneGrowNeedTwo
+	msgbox RustboroCity_Gym_Text_RoxanneGrowAfter4, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_Gym_EventScript_RoxanneRematchDecline::
+	msgbox RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_Gym_Text_RoxanneGrowGo:
+	.string "Here we go!$"
+
+RustboroCity_Gym_Text_RoxanneGrowNeedTwo:
+	.string "You need two POKéMON for this\n"
+	.string "battle. Come back with more.$"
+
+RustboroCity_Gym_Text_RoxanneGrowOffer1:
+	.string "ROXANNE: You have {STR_VAR_1} BADGES now.\p"
+	.string "I studied our battle and raised my\n"
+	.string "team to {STR_VAR_2}'s level.\p"
+	.string "Will you sit one more exam?$"
+
+RustboroCity_Gym_Text_RoxanneGrowDefeat1:
+	.string "My notes were right about you.\n"
+	.string "You're ahead of the lesson plan.$"
+
+RustboroCity_Gym_Text_RoxanneGrowAfter1:
+	.string "Come back after your next BADGE.\n"
+	.string "I'll have revised my team again.$"
+
+RustboroCity_Gym_Text_RoxanneGrowOffer2:
+	.string "ROXANNE: Eight BADGES. Next is the\n"
+	.string "POKéMON LEAGUE.\p"
+	.string "My team is close to ELITE FOUR\n"
+	.string "strength now. Shall we test you?$"
+
+RustboroCity_Gym_Text_RoxanneGrowDefeat2:
+	.string "You're ready. I'd stake my\n"
+	.string "teaching certificate on it.$"
+
+RustboroCity_Gym_Text_RoxanneGrowAfter2:
+	.string "Go to EVER GRANDE CITY.\n"
+	.string "I'll tell my students about you.$"
+
+RustboroCity_Gym_Text_RoxanneGrowOffer3:
+	.string "ROXANNE: Our CHAMPION came back to\n"
+	.string "my GYM. That's a lesson in itself.\p"
+	.string "My full team is ready.\n"
+	.string "Will you battle me?$"
+
+RustboroCity_Gym_Text_RoxanneGrowDefeat3:
+	.string "Even my best research team\n"
+	.string "couldn't hold you.$"
+
+RustboroCity_Gym_Text_RoxanneGrowAfter3:
+	.string "Defend your title, CHAMPION.\n"
+	.string "I'll keep refining my team.$"
+
+RustboroCity_Gym_Text_RoxanneGrowOffer4:
+	.string "ROXANNE: You've defended your title.\p"
+	.string "This is the strongest team I can\n"
+	.string "build. Will you face it?$"
+
+RustboroCity_Gym_Text_RoxanneGrowDefeat4:
+	.string "That was my best work.\n"
+	.string "You earned every point of it.$"
+
+RustboroCity_Gym_Text_RoxanneGrowAfter4:
+	.string "Any time you want a rematch,\n"
+	.string "my classroom is open.$"
+

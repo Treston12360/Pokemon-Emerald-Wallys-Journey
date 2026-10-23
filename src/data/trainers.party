@@ -15441,49 +15441,69 @@ Class: Leader
 Pic: Leader Roxanne
 Gender: Female
 Music: Female
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
-AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
+Items: Potion / Potion
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-SPECIES_CRADILY
-Level: 69
-Nature: Adamant
+SPECIES_TYRANITAR @ ITEM_QUICK_CLAW
+Level: 50
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_SANDSTORM
-- MOVE_INGRAIN
-- MOVE_ROCK_TOMB
-- MOVE_MEGA_DRAIN
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_ROCK_SLIDE
+- MOVE_THUNDERBOLT
+- MOVE_ICE_BEAM
+- MOVE_PROTECT
 
-SPECIES_ARMALDO
-Level: 69
-Nature: Adamant
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_ROCK_TOMB
-- MOVE_METAL_CLAW
-- MOVE_CUT
-- MOVE_ROCK_SMASH
-
-Aerodactyl @ Aerodactylite
-Level: 68
+SPECIES_AERODACTYL @ ITEM_AERODACTYLITE
+Level: 49
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- Rock Slide
-- Bite
-- Wing Attack
-- Taunt
+- MOVE_ROCK_SLIDE
+- MOVE_DOUBLE_EDGE
+- MOVE_SKY_ATTACK
+- MOVE_PROTECT
 
-SPECIES_PROBOPASS @ ITEM_ORAN_BERRY
-Level: 70
+SPECIES_DONPHAN @ ITEM_CHESTO_BERRY
+Level: 50
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_EARTHQUAKE
+- MOVE_ROCK_SLIDE
+- MOVE_SUBSTITUTE
+- MOVE_REST
+
+SPECIES_CRADILY @ ITEM_LEFTOVERS
+Level: 49
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_INGRAIN
+- MOVE_ANCIENT_POWER
+- MOVE_GIGA_DRAIN
+- MOVE_PROTECT
+
+SPECIES_STEELIX @ ITEM_CHOICE_BAND
+Level: 50
 Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_SLIDE
-- MOVE_SPARK
-- MOVE_THUNDER_WAVE
-- MOVE_SPARK
+- MOVE_EXPLOSION
+- MOVE_CRUNCH
+- MOVE_EARTHQUAKE
+
+SPECIES_PROBOPASS @ ITEM_MAGNET
+Level: 52
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_ROCK_SLIDE
+- MOVE_PROTECT
+- MOVE_THUNDER
+- MOVE_ICE_PUNCH
 
 === TRAINER_ROXANNE_3 ===
 Name: ROXANNE
@@ -15495,55 +15515,65 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-Aerodactyl @ Aerodactylite
-Level: 74
+SPECIES_TYRANITAR @ ITEM_QUICK_CLAW
+Level: 64
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_ROCK_SLIDE
+- MOVE_THUNDERBOLT
+- MOVE_ICE_BEAM
+- MOVE_PROTECT
+
+SPECIES_AERODACTYL @ ITEM_AERODACTYLITE
+Level: 63
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- Stone Edge
-- Crunch
-- Aerial Ace
-- Earthquake
+- MOVE_ROCK_SLIDE
+- MOVE_DOUBLE_EDGE
+- MOVE_SKY_ATTACK
+- MOVE_PROTECT
 
-SPECIES_ARMALDO @ ITEM_KINGS_ROCK
-Level: 73
+SPECIES_DONPHAN @ ITEM_CHESTO_BERRY
+Level: 64
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_ROCK_TOMB
-- MOVE_METAL_CLAW
-- MOVE_CUT
-- MOVE_ROCK_SMASH
+- MOVE_EARTHQUAKE
+- MOVE_ROCK_SLIDE
+- MOVE_SUBSTITUTE
+- MOVE_REST
 
-SPECIES_RHYPERIOR @ ITEM_SOFT_SAND
-Level: 74
+SPECIES_CRADILY @ ITEM_LEFTOVERS
+Level: 63
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_INGRAIN
+- MOVE_ANCIENT_POWER
+- MOVE_GIGA_DRAIN
+- MOVE_PROTECT
+
+SPECIES_STEELIX @ ITEM_CHOICE_BAND
+Level: 64
 Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_SLIDE
+- MOVE_EXPLOSION
+- MOVE_CRUNCH
 - MOVE_EARTHQUAKE
-- MOVE_SANDSTORM
-- MOVE_ROCK_SMASH
 
-SPECIES_CRADILY @ ITEM_APICOT_BERRY
-Level: 73
-Nature: Modest
+SPECIES_PROBOPASS @ ITEM_MAGNET
+Level: 66
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_SANDSTORM
-- MOVE_INGRAIN
-- MOVE_RECOVER
-- MOVE_GIGA_DRAIN
-
-SPECIES_PROBOPASS @ ITEM_LEFTOVERS
-Level: 76
-Nature: Calm
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 4 Def / 252 SpD
-- MOVE_SMELLINGSALT
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_ROCK_SLIDE
 - MOVE_PROTECT
-- MOVE_THUNDERBOLT
-- MOVE_THUNDER_WAVE
+- MOVE_THUNDER
+- MOVE_ICE_PUNCH
 
 === TRAINER_ROXANNE_4 ===
 Name: ROXANNE
@@ -15555,38 +15585,38 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_TYRANITAR @ ITEM_QUICK_CLAW
-Level: 80
-Nature: Modest
+SPECIES_TYRANITAR @ ITEM_CHOICE_BAND
+Level: 76
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
+EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_SLIDE
-- MOVE_THUNDERBOLT
-- MOVE_ICE_BEAM
-- MOVE_PROTECT
+- MOVE_EARTHQUAKE
+- MOVE_PURSUIT
+- MOVE_AERIAL_ACE
+
+SPECIES_FLYGON @ ITEM_LEFTOVERS
+Level: 75
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_EARTHQUAKE
+- MOVE_ROCK_SLIDE
+- MOVE_SUBSTITUTE
+- MOVE_FIRE_BLAST
 
 SPECIES_AERODACTYL @ ITEM_AERODACTYLITE
-Level: 79
+Level: 76
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_ROCK_SLIDE
 - MOVE_DOUBLE_EDGE
 - MOVE_SKY_ATTACK
-- MOVE_PROTECT
+- MOVE_TAUNT
 
-SPECIES_DONPHAN @ ITEM_CHESTO_BERRY
-Level: 80
-Nature: Adamant
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_EARTHQUAKE
-- MOVE_ROCK_SLIDE
-- MOVE_SUBSTITUTE
-- MOVE_REST
-
-SPECIES_CRADILY @ ITEM_LEFTOVERS
-Level: 79
+SPECIES_CRADILY @ ITEM_SALAC_BERRY
+Level: 75
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -15595,25 +15625,25 @@ EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_GIGA_DRAIN
 - MOVE_PROTECT
 
-SPECIES_STEELIX @ ITEM_CHOICE_BAND
-Level: 80
-Nature: Brave
+SPECIES_ARMALDO @ ITEM_QUICK_CLAW
+Level: 76
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_ROCK_SLIDE
-- MOVE_EXPLOSION
-- MOVE_CRUNCH
-- MOVE_EARTHQUAKE
+- MOVE_KNOCK_OFF
+- MOVE_SWORDS_DANCE
+- MOVE_TWINEEDLE
+- MOVE_ROCK_BLAST
 
-SPECIES_PROBOPASS @ ITEM_MAGNET
-Level: 82
-Nature: Brave
+SPECIES_PROBOPASS @ ITEM_BRIGHT_POWDER
+Level: 78
+Nature: Careful
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
+EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_ROCK_SLIDE
 - MOVE_PROTECT
-- MOVE_THUNDER
-- MOVE_ICE_PUNCH
+- MOVE_THUNDER_WAVE
+- MOVE_DOUBLE_TEAM
 
 === TRAINER_ROXANNE_5 ===
 Name: ROXANNE
@@ -15691,49 +15721,69 @@ Class: Leader
 Pic: Leader Brawly
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
-AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
+Items: Super Potion / Super Potion
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Medicham @ Medichamite
-Level: 69
-Nature: Jolly
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- High Jump Kick
-- Zen Headbutt
-- Bullet Punch
-- Ice Punch
-
-SPECIES_MACHAMP
-Level: 68
+SPECIES_POLIWRATH @ ITEM_SALAC_BERRY
+Level: 50
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_KARATE_CHOP
-- MOVE_ROCK_TOMB
-- MOVE_SEISMIC_TOSS
-- MOVE_REVENGE
+- MOVE_BELLY_DRUM
+- MOVE_BRICK_BREAK
+- MOVE_SUBSTITUTE
+- MOVE_EARTHQUAKE
 
-SPECIES_BRELOOM
-Level: 69
+SPECIES_MAGMORTAR @ ITEM_WHITE_HERB
+Level: 49
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_OVERHEAT
+- MOVE_THUNDER_PUNCH
+- MOVE_CROSS_CHOP
+- MOVE_FOLLOW_ME
+
+SPECIES_MEDICHAM @ ITEM_MEDICHAMITE
+Level: 50
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_FAKE_OUT
+- MOVE_HI_JUMP_KICK
+- MOVE_BULK_UP
+- MOVE_ROCK_SLIDE
+
+SPECIES_ELECTIVIRE @ ITEM_MAGNET
+Level: 49
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_CROSS_CHOP
+- MOVE_THUNDERBOLT
+- MOVE_FIRE_PUNCH
+- MOVE_THUNDER_WAVE
+
+SPECIES_BRELOOM @ ITEM_QUICK_CLAW
+Level: 50
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_MACH_PUNCH
-- MOVE_MEGA_DRAIN
-- MOVE_BULK_UP
-- MOVE_STUN_SPORE
+- MOVE_SWORDS_DANCE
+- MOVE_SPORE
+- MOVE_FACADE
 
-SPECIES_HARIYAMA @ ITEM_SITRUS_BERRY
-Level: 70
+SPECIES_HARIYAMA @ ITEM_CHOICE_BAND
+Level: 52
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_VITAL_THROW
-- MOVE_REVERSAL
-- MOVE_BULK_UP
-- MOVE_FAINT_ATTACK
+- MOVE_BODY_SLAM
+- MOVE_ROCK_SLIDE
+- MOVE_CROSS_CHOP
+- MOVE_EARTHQUAKE
 
 === TRAINER_BRAWLY_3 ===
 Name: BRAWLY
@@ -15745,55 +15795,65 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-Medicham @ Medichamite
-Level: 74
-Nature: Jolly
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- High Jump Kick
-- Zen Headbutt
-- Bullet Punch
-- Thunder Punch
-
-SPECIES_BRELOOM @ ITEM_QUICK_CLAW
-Level: 73
+SPECIES_POLIWRATH @ ITEM_SALAC_BERRY
+Level: 64
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_FOCUS_PUNCH
-- MOVE_LEECH_SEED
-- MOVE_STUN_SPORE
+- MOVE_BELLY_DRUM
+- MOVE_BRICK_BREAK
 - MOVE_SUBSTITUTE
+- MOVE_EARTHQUAKE
 
-SPECIES_POLIWRATH @ ITEM_MYSTIC_WATER
-Level: 74
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_SURF
-- MOVE_HYPNOSIS
-- MOVE_FOCUS_PUNCH
-- MOVE_ICE_BEAM
-
-SPECIES_PRIMEAPE @ ITEM_HARD_STONE
-Level: 73
+SPECIES_MAGMORTAR @ ITEM_WHITE_HERB
+Level: 63
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_OVERHEAT
+- MOVE_THUNDER_PUNCH
 - MOVE_CROSS_CHOP
+- MOVE_FOLLOW_ME
+
+SPECIES_MEDICHAM @ ITEM_MEDICHAMITE
+Level: 64
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_FAKE_OUT
+- MOVE_HI_JUMP_KICK
 - MOVE_BULK_UP
 - MOVE_ROCK_SLIDE
-- MOVE_FAINT_ATTACK
 
-SPECIES_HARIYAMA @ ITEM_LEFTOVERS
-Level: 76
+SPECIES_ELECTIVIRE @ ITEM_MAGNET
+Level: 63
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_CROSS_CHOP
+- MOVE_THUNDERBOLT
+- MOVE_FIRE_PUNCH
+- MOVE_THUNDER_WAVE
+
+SPECIES_BRELOOM @ ITEM_QUICK_CLAW
+Level: 64
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_REST
-- MOVE_SLEEP_TALK
+- MOVE_MACH_PUNCH
+- MOVE_SWORDS_DANCE
+- MOVE_SPORE
+- MOVE_FACADE
+
+SPECIES_HARIYAMA @ ITEM_CHOICE_BAND
+Level: 66
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_BODY_SLAM
+- MOVE_ROCK_SLIDE
 - MOVE_CROSS_CHOP
-- MOVE_WHIRLWIND
+- MOVE_EARTHQUAKE
 
 === TRAINER_BRAWLY_4 ===
 Name: BRAWLY
@@ -15805,65 +15865,65 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_POLIWRATH @ ITEM_SALAC_BERRY
-Level: 80
+SPECIES_HITMONTOP @ ITEM_LUM_BERRY
+Level: 76
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_BELLY_DRUM
-- MOVE_BRICK_BREAK
-- MOVE_SUBSTITUTE
-- MOVE_EARTHQUAKE
+- MOVE_FAKE_OUT
+- MOVE_MACH_PUNCH
+- MOVE_PURSUIT
+- MOVE_BULK_UP
 
-SPECIES_MAGMORTAR @ ITEM_WHITE_HERB
-Level: 79
+SPECIES_BRELOOM @ ITEM_SALAC_BERRY
+Level: 75
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_FOCUS_PUNCH
+- MOVE_GIGA_DRAIN
+- MOVE_SPORE
+- MOVE_SUBSTITUTE
+
+SPECIES_BLAZIKEN @ ITEM_WHITE_HERB
+Level: 76
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_OVERHEAT
 - MOVE_THUNDER_PUNCH
-- MOVE_CROSS_CHOP
-- MOVE_FOLLOW_ME
+- MOVE_HI_JUMP_KICK
+- MOVE_ROCK_SLIDE
 
 SPECIES_MEDICHAM @ ITEM_MEDICHAMITE
-Level: 80
+Level: 75
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_FAKE_OUT
+- MOVE_MEGA_KICK
 - MOVE_HI_JUMP_KICK
-- MOVE_BULK_UP
+- MOVE_BRICK_BREAK
 - MOVE_ROCK_SLIDE
 
-SPECIES_ELECTIVIRE @ ITEM_MAGNET
-Level: 79
+SPECIES_HERACROSS @ ITEM_QUICK_CLAW
+Level: 76
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_CROSS_CHOP
-- MOVE_THUNDERBOLT
-- MOVE_FIRE_PUNCH
-- MOVE_THUNDER_WAVE
-
-SPECIES_BRELOOM @ ITEM_QUICK_CLAW
-Level: 80
-Nature: Adamant
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_MACH_PUNCH
-- MOVE_SWORDS_DANCE
-- MOVE_SPORE
-- MOVE_FACADE
-
-SPECIES_HARIYAMA @ ITEM_CHOICE_BAND
-Level: 82
-Nature: Adamant
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_BODY_SLAM
 - MOVE_ROCK_SLIDE
-- MOVE_CROSS_CHOP
-- MOVE_EARTHQUAKE
+- MOVE_MEGAHORN
+- MOVE_SWORDS_DANCE
+
+SPECIES_HARIYAMA @ ITEM_LEFTOVERS
+Level: 78
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_FOCUS_PUNCH
+- MOVE_REVENGE
+- MOVE_ROCK_SLIDE
+- MOVE_TOXIC
 
 === TRAINER_BRAWLY_5 ===
 Name: BRAWLY
@@ -15941,59 +16001,69 @@ Class: Leader
 Pic: Leader Wattson
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
-AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
+Items: Super Potion / Super Potion
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-SPECIES_PLUSLE
-Level: 69
+SPECIES_PLUSLE @ ITEM_PETAYA_BERRY
+Level: 50
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_THUNDERBOLT
 - MOVE_MAGICAL_LEAF
-- MOVE_CHARM
 - MOVE_THUNDER_WAVE
+- MOVE_SUBSTITUTE
 
-SPECIES_MINUN
-Level: 69
+SPECIES_MINUN @ ITEM_LEFTOVERS
+Level: 49
 Nature: Calm
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 4 Def / 252 SpD
 - MOVE_THUNDERBOLT
 - MOVE_WISH
-- MOVE_ENCORE
 - MOVE_THUNDER_WAVE
+- MOVE_FOLLOW_ME
 
-SPECIES_LANTURN
-Level: 68
+SPECIES_LANTURN @ ITEM_BRIGHT_POWDER
+Level: 50
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_THUNDERBOLT
+- MOVE_THUNDER
 - MOVE_SURF
 - MOVE_CONFUSE_RAY
-- MOVE_THUNDER_WAVE
+- MOVE_RAIN_DANCE
 
-SPECIES_MAGNEZONE
-Level: 68
+SPECIES_MAGNEZONE @ ITEM_QUICK_CLAW
+Level: 49
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_SHOCK_WAVE
 - MOVE_THUNDER_WAVE
 - MOVE_REFLECT
-- MOVE_TRI_ATTACK
+- MOVE_THUNDER
+- MOVE_RAIN_DANCE
+
+SPECIES_PORYGON2 @ ITEM_CHOICE_BAND
+Level: 50
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_HYPER_BEAM
+- MOVE_IRON_TAIL
+- MOVE_AERIAL_ACE
+- MOVE_THIEF
 
 SPECIES_MANECTRIC @ ITEM_MANECTITE
-Level: 70
+Level: 52
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_THUNDERBOLT
 - MOVE_CRUNCH
-- MOVE_CHARGE
-- MOVE_THUNDER_WAVE
+- MOVE_SHADOW_BALL
+- MOVE_THUNDERBOLT
+- MOVE_ROAR
 
 === TRAINER_WATTSON_3 ===
 Name: WATTSON
@@ -16005,48 +16075,58 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_RAICHU @ ITEM_MYSTIC_WATER
-Level: 74
+SPECIES_PLUSLE @ ITEM_PETAYA_BERRY
+Level: 64
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_THUNDERBOLT
-- MOVE_ENCORE
-- MOVE_FOCUS_PUNCH
-- MOVE_SURF
+- MOVE_MAGICAL_LEAF
+- MOVE_THUNDER_WAVE
+- MOVE_SUBSTITUTE
 
-SPECIES_LANTURN @ ITEM_WIKI_BERRY
-Level: 73
-Nature: Careful
+SPECIES_MINUN @ ITEM_LEFTOVERS
+Level: 63
+Nature: Calm
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 4 Def / 252 SpD
-- MOVE_RAIN_DANCE
-- MOVE_DIVE
+- MOVE_THUNDERBOLT
+- MOVE_WISH
 - MOVE_THUNDER_WAVE
+- MOVE_FOLLOW_ME
+
+SPECIES_LANTURN @ ITEM_BRIGHT_POWDER
+Level: 64
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDER
+- MOVE_SURF
 - MOVE_CONFUSE_RAY
+- MOVE_RAIN_DANCE
 
-SPECIES_JOLTEON @ ITEM_SPELL_TAG
-Level: 74
-Nature: Timid
+SPECIES_MAGNEZONE @ ITEM_QUICK_CLAW
+Level: 63
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_AGILITY
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDER_WAVE
+- MOVE_REFLECT
 - MOVE_THUNDER
-- MOVE_BATON_PASS
-- MOVE_SHADOW_BALL
+- MOVE_RAIN_DANCE
 
-SPECIES_ELECTIVIRE @ ITEM_SITRUS_BERRY
-Level: 73
-Nature: Jolly
+SPECIES_PORYGON2 @ ITEM_CHOICE_BAND
+Level: 64
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_ICE_PUNCH
-- MOVE_FIRE_PUNCH
-- MOVE_THUNDER
-- MOVE_PSYCHIC
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_HYPER_BEAM
+- MOVE_IRON_TAIL
+- MOVE_AERIAL_ACE
+- MOVE_THIEF
 
 SPECIES_MANECTRIC @ ITEM_MANECTITE
-Level: 76
+Level: 66
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
@@ -16065,65 +16145,65 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_PLUSLE @ ITEM_PETAYA_BERRY
-Level: 80
-Nature: Timid
+SPECIES_RAICHU @ ITEM_MYSTIC_WATER
+Level: 76
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_THUNDERBOLT
-- MOVE_MAGICAL_LEAF
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_VOLT_TACKLE
+- MOVE_SURF
 - MOVE_THUNDER_WAVE
-- MOVE_SUBSTITUTE
-
-SPECIES_MINUN @ ITEM_LEFTOVERS
-Level: 79
-Nature: Calm
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 4 Def / 252 SpD
-- MOVE_THUNDERBOLT
 - MOVE_WISH
-- MOVE_THUNDER_WAVE
-- MOVE_FOLLOW_ME
 
-SPECIES_LANTURN @ ITEM_BRIGHT_POWDER
-Level: 80
+SPECIES_LANTURN @ ITEM_QUICK_CLAW
+Level: 75
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_THUNDER
 - MOVE_SURF
-- MOVE_CONFUSE_RAY
+- MOVE_THUNDER_WAVE
 - MOVE_RAIN_DANCE
 
-SPECIES_MAGNEZONE @ ITEM_QUICK_CLAW
-Level: 79
+SPECIES_JOLTEON @ ITEM_SPELL_TAG
+Level: 76
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_AGILITY
+- MOVE_THUNDER
+- MOVE_BATON_PASS
+- MOVE_SHADOW_BALL
+
+SPECIES_PORYGON2 @ ITEM_SALAC_BERRY
+Level: 75
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_THUNDER_WAVE
-- MOVE_REFLECT
 - MOVE_THUNDER
-- MOVE_RAIN_DANCE
+- MOVE_ICE_BEAM
+- MOVE_THUNDER_WAVE
+- MOVE_RECOVER
 
-SPECIES_PORYGON2 @ ITEM_CHOICE_BAND
-Level: 80
-Nature: Adamant
+SPECIES_ELECTIVIRE @ ITEM_LEFTOVERS
+Level: 76
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_HYPER_BEAM
-- MOVE_IRON_TAIL
-- MOVE_AERIAL_ACE
-- MOVE_THIEF
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_THUNDER
+- MOVE_CROSS_CHOP
+- MOVE_RAIN_DANCE
+- MOVE_ICE_PUNCH
 
 SPECIES_MANECTRIC @ ITEM_MANECTITE
-Level: 82
+Level: 78
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_CRUNCH
 - MOVE_SHADOW_BALL
-- MOVE_THUNDERBOLT
-- MOVE_ROAR
+- MOVE_THUNDER
+- MOVE_RAIN_DANCE
 
 === TRAINER_WATTSON_5 ===
 Name: WATTSON
@@ -16201,59 +16281,69 @@ Class: Leader
 Pic: Leader Flannery
 Gender: Female
 Music: Female
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
-AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
+Items: Hyper Potion / Hyper Potion
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-SPECIES_NINETALES
-Level: 69
-Nature: Timid
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_HEAT_WAVE
-- MOVE_SOLAR_BEAM
-- MOVE_WILL_O_WISP
-- MOVE_SUNNY_DAY
-
-Camerupt @ Cameruptite
-Level: 68
-Nature: Quiet
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- Lava Plume
-- Earth Power
-- Rock Slide
-- Yawn
-
-SPECIES_MAGCARGO
-Level: 69
-Nature: Quiet
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_OVERHEAT
-- MOVE_ROCK_SLIDE
-- MOVE_YAWN
-- MOVE_ATTRACT
-
-SPECIES_RAPIDASH
-Level: 68
+SPECIES_CHARIZARD @ ITEM_CHARCOAL
+Level: 50
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_OVERHEAT
-- MOVE_DOUBLE_KICK
-- MOVE_IRON_TAIL
-- MOVE_DOUBLE_EDGE
+- MOVE_SUNNY_DAY
+- MOVE_HEAT_WAVE
+- MOVE_DRAGON_CLAW
+- MOVE_ROCK_SLIDE
 
-SPECIES_TORKOAL @ ITEM_WHITE_HERB
-Level: 70
-Nature: Quiet
+SPECIES_CAMERUPT @ ITEM_CAMERUPTITE
+Level: 49
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_ERUPTION
+- MOVE_PROTECT
+- MOVE_EXPLOSION
+- MOVE_EARTHQUAKE
+
+SPECIES_JUMPLUFF @ ITEM_LEFTOVERS
+Level: 50
+Nature: Careful
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
+- MOVE_SLEEP_POWDER
+- MOVE_SYNTHESIS
+- MOVE_LEECH_SEED
+- MOVE_PROTECT
+
+SPECIES_HOUNDOOM @ ITEM_WHITE_HERB
+Level: 49
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_OVERHEAT
 - MOVE_SUNNY_DAY
-- MOVE_BODY_SLAM
-- MOVE_SLUDGE_BOMB
+- MOVE_SOLAR_BEAM
+- MOVE_REST
+
+SPECIES_RAPIDASH @ ITEM_FOCUS_BAND
+Level: 50
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_FIRE_BLAST
+- MOVE_HI_JUMP_KICK
+- MOVE_BATON_PASS
+- MOVE_AGILITY
+
+SPECIES_TORKOAL @ ITEM_CHESTO_BERRY
+Level: 52
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_ERUPTION
+- MOVE_ROCK_SLIDE
+- MOVE_YAWN
+- MOVE_REST
 
 === TRAINER_FLANNERY_3 ===
 Name: FLANNERY
@@ -16265,58 +16355,58 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_MAGCARGO @ ITEM_QUICK_CLAW
-Level: 74
-Nature: Quiet
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_FIRE_BLAST
-- MOVE_ROCK_SLIDE
-- MOVE_AMNESIA
-- MOVE_SUNNY_DAY
-
-SPECIES_BELLOSSOM @ ITEM_MIRACLE_SEED
-Level: 73
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_SYNTHESIS
-- MOVE_SOLAR_BEAM
-- MOVE_SLEEP_POWDER
-- MOVE_SUNNY_DAY
-
-SPECIES_CAMERUPT @ ITEM_CAMERUPTITE
-Level: 74
-Nature: Brave
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_OVERHEAT
-- MOVE_ATTRACT
-- MOVE_EARTHQUAKE
-- MOVE_ROCK_SLIDE
-
-SPECIES_CHARIZARD @ ITEM_HARD_STONE
-Level: 73
+SPECIES_CHARIZARD @ ITEM_CHARCOAL
+Level: 64
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_OVERHEAT
-- MOVE_SWORDS_DANCE
-- MOVE_AERIAL_ACE
+- MOVE_SUNNY_DAY
+- MOVE_HEAT_WAVE
+- MOVE_DRAGON_CLAW
 - MOVE_ROCK_SLIDE
 
-SPECIES_MAGMORTAR @ ITEM_CHARCOAL
-Level: 74
+SPECIES_CAMERUPT @ ITEM_CAMERUPTITE
+Level: 63
+Nature: Brave
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_ERUPTION
+- MOVE_PROTECT
+- MOVE_EXPLOSION
+- MOVE_EARTHQUAKE
+
+SPECIES_JUMPLUFF @ ITEM_LEFTOVERS
+Level: 64
+Nature: Careful
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
+- MOVE_SLEEP_POWDER
+- MOVE_SYNTHESIS
+- MOVE_LEECH_SEED
+- MOVE_PROTECT
+
+SPECIES_HOUNDOOM @ ITEM_WHITE_HERB
+Level: 63
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_OVERHEAT
+- MOVE_SUNNY_DAY
+- MOVE_SOLAR_BEAM
+- MOVE_REST
+
+SPECIES_RAPIDASH @ ITEM_FOCUS_BAND
+Level: 64
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_FIRE_BLAST
-- MOVE_PSYCHIC
-- MOVE_THUNDER_PUNCH
-- MOVE_CONFUSE_RAY
+- MOVE_HI_JUMP_KICK
+- MOVE_BATON_PASS
+- MOVE_AGILITY
 
-SPECIES_TORKOAL @ ITEM_LEFTOVERS
-Level: 76
+SPECIES_TORKOAL @ ITEM_CHESTO_BERRY
+Level: 66
 Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -16335,65 +16425,65 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_CHARIZARD @ ITEM_CHARCOAL
-Level: 80
+SPECIES_ARCANINE @ ITEM_CHARCOAL
+Level: 76
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_FIRE_BLAST
+- MOVE_EXTREME_SPEED
 - MOVE_SUNNY_DAY
+- MOVE_ROAR
+
+SPECIES_MAGCARGO @ ITEM_QUICK_CLAW
+Level: 75
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_HEAT_WAVE
-- MOVE_DRAGON_CLAW
+- MOVE_SUBSTITUTE
+- MOVE_REFRESH
 - MOVE_ROCK_SLIDE
 
-SPECIES_CAMERUPT @ ITEM_CAMERUPTITE
-Level: 79
+SPECIES_SHIFTRY @ ITEM_SCOPE_LENS
+Level: 76
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_LEAF_BLADE
+- MOVE_FAINT_ATTACK
+- MOVE_SYNTHESIS
+- MOVE_SUNNY_DAY
+
+SPECIES_BLAZIKEN @ ITEM_BLAZIKENITE
+Level: 75
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_BLAZE_KICK
+- MOVE_HI_JUMP_KICK
+- MOVE_THUNDER_PUNCH
+- MOVE_BOUNCE
+
+SPECIES_TYPHLOSION @ ITEM_LIECHI_BERRY
+Level: 76
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_ERUPTION
+- MOVE_ENDURE
+- MOVE_REVERSAL
+- MOVE_THUNDER_PUNCH
+
+SPECIES_TORKOAL @ ITEM_WHITE_HERB
+Level: 78
 Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_ERUPTION
-- MOVE_PROTECT
-- MOVE_EXPLOSION
-- MOVE_EARTHQUAKE
-
-SPECIES_JUMPLUFF @ ITEM_LEFTOVERS
-Level: 80
-Nature: Careful
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 4 Def / 252 SpD
-- MOVE_SLEEP_POWDER
-- MOVE_SYNTHESIS
-- MOVE_LEECH_SEED
-- MOVE_PROTECT
-
-SPECIES_HOUNDOOM @ ITEM_WHITE_HERB
-Level: 79
-Nature: Timid
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
 - MOVE_OVERHEAT
 - MOVE_SUNNY_DAY
-- MOVE_SOLAR_BEAM
-- MOVE_REST
-
-SPECIES_RAPIDASH @ ITEM_FOCUS_BAND
-Level: 80
-Nature: Timid
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_FIRE_BLAST
-- MOVE_HI_JUMP_KICK
-- MOVE_BATON_PASS
-- MOVE_AGILITY
-
-SPECIES_TORKOAL @ ITEM_CHESTO_BERRY
-Level: 82
-Nature: Brave
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_ERUPTION
+- MOVE_CURSE
 - MOVE_ROCK_SLIDE
-- MOVE_YAWN
-- MOVE_REST
 
 === TRAINER_FLANNERY_5 ===
 Name: FLANNERY
@@ -16471,69 +16561,69 @@ Class: Leader
 Pic: Leader Norman
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
-AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
+Items: Hyper Potion / Hyper Potion
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-SPECIES_DELCATTY
-Level: 68
+SPECIES_TAUROS @ ITEM_LUM_BERRY
+Level: 50
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_HELPING_HAND
-- MOVE_WISH
-- MOVE_BLIZZARD
-- MOVE_FAKE_OUT
-
-SPECIES_EXPLOUD
-Level: 67
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_OVERHEAT
-- MOVE_TEETER_DANCE
-- MOVE_HYPER_VOICE
-- MOVE_WATER_PULSE
-
-SPECIES_ZANGOOSE
-Level: 68
-Nature: Jolly
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_SLASH
-- MOVE_SWORDS_DANCE
-- MOVE_CUT
-- MOVE_BRICK_BREAK
+- MOVE_DOUBLE_EDGE
+- MOVE_PURSUIT
+- MOVE_IRON_TAIL
+- MOVE_EARTHQUAKE
 
 Kangaskhan @ Kangaskhanite
-Level: 67
+Level: 49
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- Return
+- Double-Edge
 - Sucker Punch
 - Earthquake
 - Fake Out
 
-SPECIES_GIRAFARIG
-Level: 68
+SPECIES_URSARING @ ITEM_SALAC_BERRY
+Level: 50
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_BODY_SLAM
+- MOVE_CRUNCH
+
+SPECIES_BLISSEY @ ITEM_LEFTOVERS
+Level: 49
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_REST
+- MOVE_THUNDER_WAVE
+- MOVE_WATER_PULSE
+- MOVE_BLIZZARD
+
+SPECIES_GIRAFARIG @ ITEM_TWISTED_SPOON
+Level: 50
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_SKILL_SWAP
+- MOVE_THUNDER_WAVE
 - MOVE_PSYCHIC
+- MOVE_WISH
 - MOVE_THUNDERBOLT
-- MOVE_EARTHQUAKE
 
-SPECIES_SLAKING @ ITEM_CHESTO_BERRY
-Level: 70
+SPECIES_SLAKING @ ITEM_LEFTOVERS
+Level: 52
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
-- MOVE_REST
-- MOVE_FACADE
-- MOVE_FAINT_ATTACK
+- MOVE_HYPER_BEAM
+- MOVE_DOUBLE_EDGE
+- MOVE_BRICK_BREAK
 
 === TRAINER_NORMAN_3 ===
 Name: NORMAN
@@ -16545,65 +16635,65 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-Kangaskhan @ Kangaskhanite
-Level: 74
+SPECIES_TAUROS @ ITEM_LUM_BERRY
+Level: 64
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- Return
+- MOVE_DOUBLE_EDGE
+- MOVE_PURSUIT
+- MOVE_IRON_TAIL
+- MOVE_EARTHQUAKE
+
+Kangaskhan @ Kangaskhanite
+Level: 63
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- Double-Edge
 - Sucker Punch
 - Earthquake
 - Fake Out
 
-SPECIES_STANTLER @ ITEM_SILK_SCARF
-Level: 73
-Nature: Jolly
+SPECIES_URSARING @ ITEM_SALAC_BERRY
+Level: 64
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_DREAM_EATER
-- MOVE_HYPNOSIS
-- MOVE_REFLECT
-- MOVE_DOUBLE_EDGE
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_REST
+- MOVE_SLEEP_TALK
+- MOVE_BODY_SLAM
+- MOVE_CRUNCH
 
-SPECIES_PORYGON2 @ ITEM_SHARP_BEAK
-Level: 74
+SPECIES_BLISSEY @ ITEM_LEFTOVERS
+Level: 63
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_RECOVER
-- MOVE_CURSE
-- MOVE_TRI_ATTACK
-- MOVE_AERIAL_ACE
-
-SPECIES_EXPLOUD @ ITEM_SITRUS_BERRY
-Level: 73
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_TEETER_DANCE
-- MOVE_HYPER_VOICE
-- MOVE_OVERHEAT
-- MOVE_BRICK_BREAK
+- MOVE_REST
+- MOVE_THUNDER_WAVE
+- MOVE_WATER_PULSE
+- MOVE_BLIZZARD
 
 SPECIES_GIRAFARIG @ ITEM_TWISTED_SPOON
-Level: 74
+Level: 64
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_THUNDERBOLT
+- MOVE_THUNDER_WAVE
 - MOVE_PSYCHIC
 - MOVE_WISH
-- MOVE_CALM_MIND
+- MOVE_THUNDERBOLT
 
 SPECIES_SLAKING @ ITEM_LEFTOVERS
-Level: 76
+Level: 66
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_EARTHQUAKE
-- MOVE_FACADE
-- MOVE_FOCUS_PUNCH
-- MOVE_COUNTER
+- MOVE_HYPER_BEAM
+- MOVE_DOUBLE_EDGE
+- MOVE_BRICK_BREAK
 
 === TRAINER_NORMAN_4 ===
 Name: NORMAN
@@ -16615,65 +16705,66 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
+SPECIES_SLAKING @ ITEM_LEFTOVERS
+Level: 76
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_BLIZZARD
+- MOVE_THUNDER
+- MOVE_CRUSH_CLAW
+- MOVE_ROCK_SLIDE
+
+SPECIES_BLISSEY @ ITEM_QUICK_CLAW
+Level: 75
+Nature: Careful
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
+- MOVE_SEISMIC_TOSS
+- MOVE_HEAL_BELL
+- MOVE_SKILL_SWAP
+- MOVE_THUNDER_WAVE
+
 SPECIES_TAUROS @ ITEM_LUM_BERRY
-Level: 80
+Level: 76
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_DOUBLE_EDGE
-- MOVE_PURSUIT
-- MOVE_IRON_TAIL
 - MOVE_EARTHQUAKE
+- MOVE_IRON_TAIL
+- MOVE_PURSUIT
 
-Kangaskhan @ Kangaskhanite
-Level: 79
-Nature: Jolly
+SPECIES_SMEARGLE @ ITEM_SALAC_BERRY
+Level: 75
+Nature: Careful
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- Double-Edge
-- Sucker Punch
-- Earthquake
-- Fake Out
+EVs: 252 HP / 4 Def / 252 SpD
+- MOVE_BELLY_DRUM
+- MOVE_SUBSTITUTE
+- MOVE_SPORE
+- MOVE_BATON_PASS
 
-SPECIES_URSARING @ ITEM_SALAC_BERRY
-Level: 80
-Nature: Adamant
+SPECIES_SNORLAX @ ITEM_CHESTO_BERRY
+Level: 76
+Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_CURSE
 - MOVE_REST
-- MOVE_SLEEP_TALK
 - MOVE_BODY_SLAM
-- MOVE_CRUNCH
+- MOVE_FOCUS_PUNCH
 
-SPECIES_BLISSEY @ ITEM_LEFTOVERS
-Level: 79
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_REST
-- MOVE_THUNDER_WAVE
-- MOVE_WATER_PULSE
-- MOVE_BLIZZARD
-
-SPECIES_GIRAFARIG @ ITEM_TWISTED_SPOON
-Level: 80
-Nature: Timid
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_THUNDER_WAVE
-- MOVE_PSYCHIC
-- MOVE_WISH
-- MOVE_THUNDERBOLT
-
-SPECIES_SLAKING @ ITEM_LEFTOVERS
-Level: 82
+SPECIES_KANGASKHAN @ ITEM_KANGASKHANITE
+Level: 78
+Ability: Scrappy
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_EARTHQUAKE
-- MOVE_HYPER_BEAM
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_FAKE_OUT
 - MOVE_DOUBLE_EDGE
-- MOVE_BRICK_BREAK
+- MOVE_POWER_UP_PUNCH
+- MOVE_SUCKER_PUNCH
 
 === TRAINER_NORMAN_5 ===
 Name: NORMAN
@@ -16752,69 +16843,69 @@ Class: Leader
 Pic: Leader Winona
 Gender: Female
 Music: Female
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
+Items: Hyper Potion / Hyper Potion
+Double Battle: No
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_CROBAT
-Level: 68
+SPECIES_CROBAT @ ITEM_LEFTOVERS
+Level: 50
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_SLEEP_TALK
+- MOVE_REST
 - MOVE_AERIAL_ACE
-- MOVE_SLUDGE_BOMB
-- MOVE_GIGA_DRAIN
-- MOVE_DOUBLE_EDGE
+- MOVE_CONFUSE_RAY
 
-SPECIES_SKARMORY @ ITEM_QUICK_CLAW
-Level: 69
+SPECIES_SKARMORY @ ITEM_LUM_BERRY
+Level: 49
 Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Def / 4 SpD
-- MOVE_WHIRLWIND
 - MOVE_SPIKES
 - MOVE_PROTECT
 - MOVE_TOXIC
+- MOVE_WHIRLWIND
 
-SPECIES_TROPIUS
-Level: 69
+SPECIES_TROPIUS @ ITEM_SOFT_SAND
+Level: 50
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_ROCK_SMASH
-- MOVE_GIGA_DRAIN
 - MOVE_EARTHQUAKE
-- MOVE_WHIRLWIND
+- MOVE_SWORDS_DANCE
+- MOVE_FACADE
+- MOVE_STEEL_WING
 
-SPECIES_SWELLOW
-Level: 69
+SPECIES_DRAGONITE @ ITEM_KINGS_ROCK
+Level: 49
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_THUNDER_WAVE
+- MOVE_WATERFALL
+- MOVE_EARTHQUAKE
+- MOVE_THUNDERBOLT
+
+SPECIES_SWELLOW @ ITEM_FOCUS_BAND
+Level: 50
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
 - MOVE_STEEL_WING
-- MOVE_FACADE
-- MOVE_WHIRLWIND
-
-SPECIES_DODRIO
-Level: 68
-Nature: Jolly
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_DRILL_PECK
-- MOVE_TRI_ATTACK
-- MOVE_ENDEAVOR
-- MOVE_PURSUIT
+- MOVE_AGILITY
+- MOVE_BATON_PASS
 
 SPECIES_ALTARIA @ ITEM_ALTARIANITE
-Level: 70
+Level: 52
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_EARTHQUAKE
-- MOVE_FLAMETHROWER
-- MOVE_DRAGON_DANCE
 - MOVE_SKY_ATTACK
+- MOVE_DOUBLE_EDGE
+- MOVE_IRON_TAIL
+- MOVE_EARTHQUAKE
 
 === TRAINER_WINONA_3 ===
 Name: WINONA
@@ -16826,58 +16917,58 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_XATU @ ITEM_MIRACLE_SEED
-Level: 74
-Nature: Timid
+SPECIES_CROBAT @ ITEM_LEFTOVERS
+Level: 64
+Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_GIGA_DRAIN
-- MOVE_PSYCHIC
-- MOVE_REFLECT
-- MOVE_CALM_MIND
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_SLEEP_TALK
+- MOVE_REST
+- MOVE_AERIAL_ACE
+- MOVE_CONFUSE_RAY
 
-SPECIES_MASQUERAIN @ ITEM_MYSTIC_WATER
-Level: 73
-Nature: Timid
+SPECIES_SKARMORY @ ITEM_LUM_BERRY
+Level: 63
+Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_STUN_SPORE
-- MOVE_HYDRO_PUMP
-- MOVE_GIGA_DRAIN
-- MOVE_SHADOW_BALL
+EVs: 252 HP / 252 Def / 4 SpD
+- MOVE_SPIKES
+- MOVE_PROTECT
+- MOVE_TOXIC
+- MOVE_WHIRLWIND
 
-SPECIES_HONCHKROW @ ITEM_SHARP_BEAK
-Level: 74
+SPECIES_TROPIUS @ ITEM_SOFT_SAND
+Level: 64
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_SKY_ATTACK
-- MOVE_DOUBLE_EDGE
-- MOVE_FAINT_ATTACK
+- MOVE_EARTHQUAKE
+- MOVE_SWORDS_DANCE
+- MOVE_FACADE
 - MOVE_STEEL_WING
 
-SPECIES_PIDGEOT @ ITEM_LEFTOVERS
-Level: 73
+SPECIES_DRAGONITE @ ITEM_KINGS_ROCK
+Level: 63
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_THUNDER_WAVE
+- MOVE_WATERFALL
+- MOVE_EARTHQUAKE
+- MOVE_THUNDERBOLT
+
+SPECIES_SWELLOW @ ITEM_FOCUS_BAND
+Level: 64
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
-- MOVE_EXTREME_SPEED
-- MOVE_PROTECT
-- MOVE_PURSUIT
-
-SPECIES_MANTINE @ ITEM_WIKI_BERRY
-Level: 74
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_BLIZZARD
-- MOVE_HYDRO_PUMP
-- MOVE_HAZE
-- MOVE_CONFUSE_RAY
+- MOVE_STEEL_WING
+- MOVE_AGILITY
+- MOVE_BATON_PASS
 
 SPECIES_ALTARIA @ ITEM_ALTARIANITE
-Level: 76
+Level: 66
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
@@ -16896,64 +16987,64 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-SPECIES_CROBAT @ ITEM_LEFTOVERS
-Level: 80
-Nature: Jolly
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_SLEEP_TALK
-- MOVE_REST
-- MOVE_AERIAL_ACE
-- MOVE_CONFUSE_RAY
-
-SPECIES_SKARMORY @ ITEM_LUM_BERRY
-Level: 79
-Nature: Impish
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Def / 4 SpD
-- MOVE_SPIKES
-- MOVE_PROTECT
-- MOVE_TOXIC
-- MOVE_WHIRLWIND
-
-SPECIES_TROPIUS @ ITEM_SOFT_SAND
-Level: 80
-Nature: Adamant
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_EARTHQUAKE
-- MOVE_SWORDS_DANCE
-- MOVE_FACADE
-- MOVE_STEEL_WING
-
-SPECIES_DRAGONITE @ ITEM_KINGS_ROCK
-Level: 79
+SPECIES_DRAGONITE @ ITEM_LEFTOVERS
+Level: 76
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_THUNDER_WAVE
-- MOVE_WATERFALL
 - MOVE_EARTHQUAKE
+- MOVE_DYNAMIC_PUNCH
 - MOVE_THUNDERBOLT
 
-SPECIES_SWELLOW @ ITEM_FOCUS_BAND
-Level: 80
+SPECIES_YANMEGA @ ITEM_LIECHI_BERRY
+Level: 75
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_SKY_ATTACK
-- MOVE_STEEL_WING
-- MOVE_AGILITY
+- MOVE_SUBSTITUTE
+- MOVE_REVERSAL
+- MOVE_PROTECT
+- MOVE_TWINEEDLE
+
+SPECIES_CHARIZARD @ ITEM_FOCUS_BAND
+Level: 76
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_FIRE_BLAST
+- MOVE_DRAGON_CLAW
+- MOVE_EARTHQUAKE
+- MOVE_ROCK_SLIDE
+
+SPECIES_SWELLOW @ ITEM_STARF_BERRY
+Level: 75
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- MOVE_SUBSTITUTE
+- MOVE_ENDEAVOR
+- MOVE_QUICK_ATTACK
 - MOVE_BATON_PASS
 
+SPECIES_TROPIUS @ ITEM_SOFT_SAND
+Level: 76
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_EARTHQUAKE
+- MOVE_SWORDS_DANCE
+- MOVE_GIGA_DRAIN
+- MOVE_SYNTHESIS
+
 SPECIES_ALTARIA @ ITEM_ALTARIANITE
-Level: 82
+Level: 78
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_SKY_ATTACK
-- MOVE_DOUBLE_EDGE
-- MOVE_IRON_TAIL
+- MOVE_DRAGON_DANCE
+- MOVE_PURSUIT
 - MOVE_EARTHQUAKE
 
 === TRAINER_WINONA_5 ===
@@ -17032,69 +17123,69 @@ Class: Leader
 Pic: Leader Tate And Liza
 Gender: Male
 Music: Female
-Items: Full Restore / Full Restore / Full Restore
+Items: Hyper Potion / Hyper Potion / Hyper Potion / Hyper Potion
 Double Battle: Yes
 AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
-SPECIES_LUNATONE @ ITEM_SITRUS_BERRY
-Level: 68
-Nature: Modest
+SPECIES_SLOWKING @ ITEM_CHESTO_BERRY
+Level: 50
+Nature: Quiet
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_PSYCHIC
-- MOVE_LIGHT_SCREEN
-- MOVE_HYPNOSIS
-- MOVE_CALM_MIND
-
-SPECIES_SOLROCK @ ITEM_SITRUS_BERRY
-Level: 67
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_PSYCHIC
-- MOVE_SOLAR_BEAM
+- MOVE_THUNDER_WAVE
 - MOVE_FLAMETHROWER
-- MOVE_SUNNY_DAY
+- MOVE_REST
+- MOVE_PSYCHIC
 
-Medicham @ Medichamite
-Level: 68
+SPECIES_SLOWBRO @ ITEM_SOFT_SAND
+Level: 49
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDER_WAVE
+- MOVE_CALM_MIND
+- MOVE_SURF
+- MOVE_PSYCHIC
+
+SPECIES_GRUMPIG @ ITEM_LEFTOVERS
+Level: 50
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- High Jump Kick
-- Zen Headbutt
-- Bullet Punch
-- Ice Punch
+- MOVE_YAWN
+- MOVE_PSYCHIC
+- MOVE_FIRE_PUNCH
+- MOVE_FOCUS_PUNCH
 
-SPECIES_STARMIE
-Level: 67
+SPECIES_ALAKAZAM @ ITEM_ALAKAZITE
+Level: 49
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_SURF
+- MOVE_PSYCHIC
+- MOVE_TRICK
+- MOVE_THUNDER_PUNCH
+- MOVE_THUNDER_WAVE
+
+SPECIES_LUNATONE @ ITEM_SITRUS_BERRY
+Level: 50
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_ICE_BEAM
-- MOVE_THUNDERBOLT
-
-SPECIES_XATU
-Level: 68
-Nature: Timid
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_PSYCHIC
-- MOVE_CALM_MIND
-- MOVE_SUNNY_DAY
-- MOVE_GIGA_DRAIN
-
-SPECIES_CLAYDOL
-Level: 70
-Nature: Timid
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_EARTHQUAKE
-- MOVE_ANCIENT_POWER
-- MOVE_PSYCHIC
+- MOVE_HYPNOSIS
 - MOVE_LIGHT_SCREEN
+
+SPECIES_SOLROCK @ ITEM_WHITE_HERB
+Level: 52
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_ROCK_SLIDE
+- MOVE_EARTHQUAKE
+- MOVE_OVERHEAT
+- MOVE_CURSE
 
 === TRAINER_TATE_AND_LIZA_3 ===
 Name: TATE&LIZA
@@ -17106,65 +17197,65 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
-SPECIES_MEDICHAM @ ITEM_MEDICHAMITE
-Level: 74
+SPECIES_SLOWKING @ ITEM_CHESTO_BERRY
+Level: 64
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDER_WAVE
+- MOVE_FLAMETHROWER
+- MOVE_REST
+- MOVE_PSYCHIC
+
+SPECIES_SLOWBRO @ ITEM_SOFT_SAND
+Level: 63
+Nature: Quiet
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_THUNDER_WAVE
+- MOVE_CALM_MIND
+- MOVE_SURF
+- MOVE_PSYCHIC
+
+SPECIES_GRUMPIG @ ITEM_LEFTOVERS
+Level: 64
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_SUNNY_DAY
+- MOVE_YAWN
+- MOVE_PSYCHIC
 - MOVE_FIRE_PUNCH
-- MOVE_FAKE_OUT
-- MOVE_HI_JUMP_KICK
+- MOVE_FOCUS_PUNCH
 
-SPECIES_CLAYDOL @ ITEM_SOFT_SAND
-Level: 73
-Nature: Jolly
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_EARTHQUAKE
-- MOVE_ROCK_SLIDE
-- MOVE_SKILL_SWAP
-- MOVE_FACADE
-
-SPECIES_GARDEVOIR @ ITEM_TWISTED_SPOON
-Level: 74
+SPECIES_ALAKAZAM @ ITEM_ALAKAZITE
+Level: 63
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
-- MOVE_CALM_MIND
 - MOVE_PSYCHIC
-- MOVE_FIRE_PUNCH
-- MOVE_THUNDERBOLT
-
-SPECIES_EXEGGUTOR @ ITEM_LUM_BERRY
-Level: 73
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_SYNTHESIS
-- MOVE_SOLAR_BEAM
-- MOVE_SUNNY_DAY
-- MOVE_SLEEP_POWDER
+- MOVE_TRICK
+- MOVE_THUNDER_PUNCH
+- MOVE_THUNDER_WAVE
 
 SPECIES_LUNATONE @ ITEM_SITRUS_BERRY
-Level: 74
+Level: 64
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_ICE_BEAM
 - MOVE_HYPNOSIS
-- MOVE_CALM_MIND
+- MOVE_LIGHT_SCREEN
 
 SPECIES_SOLROCK @ ITEM_WHITE_HERB
-Level: 76
-Nature: Modest
+Level: 66
+Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_PSYCH_UP
-- MOVE_SOLAR_BEAM
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_ROCK_SLIDE
+- MOVE_EARTHQUAKE
 - MOVE_OVERHEAT
-- MOVE_SUNNY_DAY
+- MOVE_CURSE
 
 === TRAINER_TATE_AND_LIZA_4 ===
 Name: TATE&LIZA
@@ -17176,65 +17267,65 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Try To 2HKO / HP Aware / Powerful Status
 
-SPECIES_SLOWKING @ ITEM_CHESTO_BERRY
-Level: 80
-Nature: Quiet
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_THUNDER_WAVE
-- MOVE_FLAMETHROWER
-- MOVE_REST
-- MOVE_PSYCHIC
-
-SPECIES_SLOWBRO @ ITEM_SOFT_SAND
-Level: 79
-Nature: Quiet
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- MOVE_THUNDER_WAVE
-- MOVE_CALM_MIND
-- MOVE_SURF
-- MOVE_PSYCHIC
-
-SPECIES_GRUMPIG @ ITEM_LEFTOVERS
-Level: 80
+SPECIES_CLAYDOL @ ITEM_QUICK_CLAW
+Level: 76
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
-- MOVE_YAWN
+- MOVE_EARTHQUAKE
 - MOVE_PSYCHIC
-- MOVE_FIRE_PUNCH
-- MOVE_FOCUS_PUNCH
+- MOVE_SKILL_SWAP
+- MOVE_LIGHT_SCREEN
 
-SPECIES_ALAKAZAM @ ITEM_ALAKAZITE
-Level: 79
+SPECIES_UMBREON @ ITEM_APICOT_BERRY
+Level: 75
+Nature: Careful
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
+- MOVE_SUBSTITUTE
+- MOVE_BATON_PASS
+- MOVE_DOUBLE_TEAM
+- MOVE_TOXIC
+
+SPECIES_ESPEON @ ITEM_STARF_BERRY
+Level: 76
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
+- MOVE_BATON_PASS
+- MOVE_CALM_MIND
+- MOVE_SHADOW_BALL
 - MOVE_PSYCHIC
-- MOVE_TRICK
-- MOVE_THUNDER_PUNCH
-- MOVE_THUNDER_WAVE
 
-SPECIES_LUNATONE @ ITEM_SITRUS_BERRY
-Level: 80
+SPECIES_LUNATONE @ ITEM_LEFTOVERS
+Level: 75
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_PSYCHIC
 - MOVE_ICE_BEAM
-- MOVE_HYPNOSIS
-- MOVE_LIGHT_SCREEN
+- MOVE_BATON_PASS
+- MOVE_COSMIC_POWER
 
-SPECIES_SOLROCK @ ITEM_WHITE_HERB
-Level: 82
-Nature: Adamant
+SPECIES_SOLROCK @ ITEM_LUM_BERRY
+Level: 76
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_ROCK_SLIDE
-- MOVE_EARTHQUAKE
-- MOVE_OVERHEAT
-- MOVE_CURSE
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_PSYCHIC
+- MOVE_FLAMETHROWER
+- MOVE_CALM_MIND
+- MOVE_BATON_PASS
+
+Gallade @ Galladite
+Level: 78
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 Atk / 4 HP / 252 Spe
+- Close Combat
+- Psycho Cut
+- Leaf Blade
+- Swords Dance
 
 === TRAINER_TATE_AND_LIZA_5 ===
 Name: TATE&LIZA
@@ -17312,59 +17403,69 @@ Class: Leader
 Pic: Leader Juan
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
+Items: Hyper Potion / Hyper Potion
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
-Politoed
-Level: 66
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- Hypnosis
-- Rain Dance
-- Protect
-- Hydro Pump
-
-Gyarados @ Gyaradosite
-Level: 66
+SPECIES_GYARADOS @ ITEM_GYARADOSITE
+Level: 52
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - Waterfall
 - Crunch
-- Ice Fang
+- Earthquake
 - Dragon Dance
 
-Walrein
-Level: 67
+SPECIES_WHISCASH @ ITEM_QUICK_CLAW
+Level: 52
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
-- Water Pulse
-- Body Slam
-- Protect
-- Ice Beam
+- MOVE_SURF
+- MOVE_YAWN
+- MOVE_ICY_WIND
+- MOVE_EARTHQUAKE
 
-Crawdaunt @ Chesto Berry
-Level: 67
+SPECIES_CRAWDAUNT @ ITEM_CHOICE_BAND
+Level: 52
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- Rest
-- Crabhammer
-- Taunt
-- Double Team
+- MOVE_CRABHAMMER
+- MOVE_SLUDGE_BOMB
+- MOVE_BLIZZARD
+- MOVE_CRUNCH
 
-Kingdra @ Chesto Berry
-Level: 70
+SPECIES_AZUMARILL @ ITEM_WHITE_HERB
+Level: 52
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_SUPERPOWER
+- MOVE_DOUBLE_EDGE
+- MOVE_IRON_TAIL
+- MOVE_HYDRO_PUMP
+
+SPECIES_LANTURN @ ITEM_LEFTOVERS
+Level: 52
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_RAIN_DANCE
+- MOVE_HYDRO_PUMP
+- MOVE_THUNDER
+- MOVE_THUNDER_WAVE
+
+SPECIES_KINGDRA @ ITEM_LUM_BERRY
+Level: 52
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
-- Water Pulse
-- Double Team
-- Ice Beam
-- Rest
+- MOVE_HYDRO_PUMP
+- MOVE_RAIN_DANCE
+- MOVE_BLIZZARD
+- MOVE_FLAIL
 
 === TRAINER_JUAN_3 ===
 Name: JUAN
@@ -17376,55 +17477,65 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Politoed
-Level: 72
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- Hypnosis
-- Rain Dance
-- Protect
-- Hydro Pump
-
-Gyarados @ Gyaradosite
-Level: 72
+SPECIES_GYARADOS @ ITEM_GYARADOSITE
+Level: 66
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
 - Waterfall
 - Crunch
-- Ice Fang
+- Earthquake
 - Dragon Dance
 
-Walrein
-Level: 73
+SPECIES_WHISCASH @ ITEM_QUICK_CLAW
+Level: 66
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
-- Water Pulse
-- Body Slam
-- Protect
-- Ice Beam
+- MOVE_SURF
+- MOVE_YAWN
+- MOVE_ICY_WIND
+- MOVE_EARTHQUAKE
 
-Crawdaunt @ Chesto Berry
-Level: 73
+SPECIES_CRAWDAUNT @ ITEM_CHOICE_BAND
+Level: 66
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
-- Rest
-- Guillotine
-- Taunt
-- Double Team
+- MOVE_CRABHAMMER
+- MOVE_SLUDGE_BOMB
+- MOVE_BLIZZARD
+- MOVE_CRUNCH
 
-Kingdra @ Chesto Berry
-Level: 76
+SPECIES_AZUMARILL @ ITEM_WHITE_HERB
+Level: 66
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_SUPERPOWER
+- MOVE_DOUBLE_EDGE
+- MOVE_IRON_TAIL
+- MOVE_HYDRO_PUMP
+
+SPECIES_LANTURN @ ITEM_LEFTOVERS
+Level: 66
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_RAIN_DANCE
+- MOVE_HYDRO_PUMP
+- MOVE_THUNDER
+- MOVE_THUNDER_WAVE
+
+SPECIES_KINGDRA @ ITEM_LUM_BERRY
+Level: 66
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
-- Water Pulse
-- Double Team
-- Ice Beam
-- Rest
+- MOVE_HYDRO_PUMP
+- MOVE_RAIN_DANCE
+- MOVE_BLIZZARD
+- MOVE_FLAIL
 
 === TRAINER_JUAN_4 ===
 Name: JUAN
@@ -17436,18 +17547,18 @@ Items: Full Restore / Full Restore / Full Restore
 Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
-Lapras
+SPECIES_POLITOED @ ITEM_WIKI_BERRY
 Level: 78
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- Hydro Pump
-- Perish Song
-- Ice Beam
-- Confuse Ray
+EVs: 252 HP / 252 Spe
+- MOVE_WHIRLPOOL
+- MOVE_PERISH_SONG
+- MOVE_HYPNOSIS
+- MOVE_PROTECT
 
-Gyarados @ Gyaradosite
-Level: 79
+SPECIES_GYARADOS @ ITEM_GYARADOSITE
+Level: 78
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
@@ -17456,45 +17567,45 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - Earthquake
 - Dragon Dance
 
-Politoed
+SPECIES_WALREIN @ ITEM_LEFTOVERS
 Level: 78
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- Hypnosis
-- Rain Dance
-- Protect
-- Hydro Pump
+EVs: 252 HP / 252 SpA
+- MOVE_SURF
+- MOVE_ICE_BEAM
+- MOVE_YAWN
+- MOVE_ROCK_SLIDE
 
-Walrein
-Level: 79
-Nature: Modest
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 SpA / 4 SpD
-- Water Pulse
-- Body Slam
-- Protect
-- Ice Beam
-
-Crawdaunt @ Chesto Berry
-Level: 79
+SPECIES_CRAWDAUNT @ ITEM_SCOPE_LENS
+Level: 78
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- Rest
-- Guillotine
-- Taunt
-- Double Team
+EVs: 252 Atk / 252 SpA
+- MOVE_CRABHAMMER
+- MOVE_RAIN_DANCE
+- MOVE_ANCIENT_POWER
+- MOVE_CRUNCH
 
-Kingdra @ Chesto Berry
-Level: 82
+SPECIES_BLASTOISE @ ITEM_MYSTIC_WATER
+Level: 78
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 SpA / 4 HP / 252 Spe
-- Water Pulse
-- Double Team
-- Ice Beam
-- Rest
+EVs: 252 HP / 252 SpA
+- MOVE_RAIN_DANCE
+- MOVE_YAWN
+- MOVE_HYDRO_CANNON
+- MOVE_EARTHQUAKE
+
+SPECIES_KINGDRA @ ITEM_CHESTO_BERRY
+Level: 78
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Spe
+- MOVE_OCTAZOOKA
+- MOVE_REST
+- MOVE_DOUBLE_TEAM
+- MOVE_ICE_BEAM
 
 === TRAINER_JUAN_5 ===
 Name: JUAN

@@ -134,13 +134,9 @@ DewfordTown_Gym_EventScript_StopCountingTrainers::
 
 DewfordTown_Gym_EventScript_Brawly::
 	trainerbattle_single TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, DewfordTown_Gym_EventScript_BrawlyRematch
 	call WallyJourney_EventScript_GiveGymHMs
 	goto_if_unset FLAG_RECEIVED_TM_BULK_UP, DewfordTown_Gym_EventScript_GiveBulkUp2
-	msgbox DewfordTown_Gym_Text_BrawlyPostBattle, MSGBOX_DEFAULT
-	release
-	end
+	goto DewfordTown_Gym_EventScript_BrawlyRematchOffer
 
 DewfordTown_Gym_EventScript_BrawlyDefeated::
 	call DewfordTown_Gym_EventScript_AnimateFlashFullBrightness
@@ -186,14 +182,7 @@ DewfordTown_Gym_EventScript_GiveBulkUp2:
 	end
 
 DewfordTown_Gym_EventScript_BrawlyRematch::
-	setvar VAR_0x8004, TRAINER_BRAWLY_1
-	special WallyJourney_GetRematchTier
-	goto_if_eq VAR_RESULT, 3, DewfordTown_Gym_EventScript_BrawlyRematchTier3
-	goto_if_eq VAR_RESULT, 4, DewfordTown_Gym_EventScript_BrawlyRematchTier4
-	goto_if_ge VAR_RESULT, 5, DewfordTown_Gym_EventScript_BrawlyRematchTier5
-	trainerbattle_rematch_double TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyPreRematch, DewfordTown_Gym_Text_BrawlyRematchDefeat, DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons
-	msgbox DewfordTown_Gym_Text_BrawlyPostRematch, MSGBOX_AUTOCLOSE
-	end
+	goto DewfordTown_Gym_EventScript_BrawlyRematchOffer
 
 @ Wally's Journey: every rematch tier has its own opening line; the top two
 @ tiers share a tougher defeat and post-battle line.
@@ -527,3 +516,115 @@ DewfordTown_Gym_Text_BrawlyPostRematchElite:
 	.string "something.\p"
 	.string "Never lose that. That's what makes\n"
 	.string "the wave.$"
+
+@ Wally's Journey: growing Gym Leader rematches (see WallyJourney_ScaleLeaderParty).
+DewfordTown_Gym_EventScript_BrawlyRematchOffer::
+	setvar VAR_0x8004, 2
+	special WallyJourney_SetupLeaderRematch
+	switch VAR_RESULT
+	case 1, DewfordTown_Gym_EventScript_BrawlyRematchStage1
+	case 2, DewfordTown_Gym_EventScript_BrawlyRematchStage2
+	case 3, DewfordTown_Gym_EventScript_BrawlyRematchStage3
+	case 4, DewfordTown_Gym_EventScript_BrawlyRematchStage4
+	goto DewfordTown_Gym_EventScript_BrawlyRematchStage1
+
+DewfordTown_Gym_EventScript_BrawlyRematchStage1::
+	msgbox DewfordTown_Gym_Text_BrawlyGrowOffer1, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, DewfordTown_Gym_EventScript_BrawlyRematchDecline
+	cleartrainerflag TRAINER_BRAWLY_2
+	trainerbattle_no_intro TRAINER_BRAWLY_2, DewfordTown_Gym_Text_BrawlyGrowDefeat1
+	msgbox DewfordTown_Gym_Text_BrawlyGrowAfter1, MSGBOX_DEFAULT
+	release
+	end
+
+DewfordTown_Gym_EventScript_BrawlyRematchStage2::
+	msgbox DewfordTown_Gym_Text_BrawlyGrowOffer2, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, DewfordTown_Gym_EventScript_BrawlyRematchDecline
+	cleartrainerflag TRAINER_BRAWLY_2
+	trainerbattle_no_intro TRAINER_BRAWLY_2, DewfordTown_Gym_Text_BrawlyGrowDefeat2
+	msgbox DewfordTown_Gym_Text_BrawlyGrowAfter2, MSGBOX_DEFAULT
+	release
+	end
+
+DewfordTown_Gym_EventScript_BrawlyRematchStage3::
+	msgbox DewfordTown_Gym_Text_BrawlyGrowOffer3, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, DewfordTown_Gym_EventScript_BrawlyRematchDecline
+	cleartrainerflag TRAINER_BRAWLY_3
+	trainerbattle_double TRAINER_BRAWLY_3, DewfordTown_Gym_Text_BrawlyGrowGo, DewfordTown_Gym_Text_BrawlyGrowDefeat3, DewfordTown_Gym_Text_BrawlyGrowNeedTwo
+	msgbox DewfordTown_Gym_Text_BrawlyGrowAfter3, MSGBOX_DEFAULT
+	release
+	end
+
+DewfordTown_Gym_EventScript_BrawlyRematchStage4::
+	msgbox DewfordTown_Gym_Text_BrawlyGrowOffer4, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, DewfordTown_Gym_EventScript_BrawlyRematchDecline
+	cleartrainerflag TRAINER_BRAWLY_4
+	trainerbattle_double TRAINER_BRAWLY_4, DewfordTown_Gym_Text_BrawlyGrowGo, DewfordTown_Gym_Text_BrawlyGrowDefeat4, DewfordTown_Gym_Text_BrawlyGrowNeedTwo
+	msgbox DewfordTown_Gym_Text_BrawlyGrowAfter4, MSGBOX_DEFAULT
+	release
+	end
+
+DewfordTown_Gym_EventScript_BrawlyRematchDecline::
+	msgbox DewfordTown_Gym_Text_BrawlyPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+DewfordTown_Gym_Text_BrawlyGrowGo:
+	.string "Here we go!$"
+
+DewfordTown_Gym_Text_BrawlyGrowNeedTwo:
+	.string "You need two POKéMON for this\n"
+	.string "battle. Come back with more.$"
+
+DewfordTown_Gym_Text_BrawlyGrowOffer1:
+	.string "BRAWLY: Whoa, {STR_VAR_1} BADGES already!\p"
+	.string "I rode a bigger wave with my team.\n"
+	.string "They're at {STR_VAR_2}'s level now.\p"
+	.string "Want to paddle out again?$"
+
+DewfordTown_Gym_Text_BrawlyGrowDefeat1:
+	.string "Wiped out again!\n"
+	.string "You're riding a monster swell.$"
+
+DewfordTown_Gym_Text_BrawlyGrowAfter1:
+	.string "Get your next BADGE, then come back.\n"
+	.string "I'll be training on the rocks.$"
+
+DewfordTown_Gym_Text_BrawlyGrowOffer2:
+	.string "BRAWLY: All eight BADGES, huh?\p"
+	.string "My team's nearly ELITE FOUR tough.\n"
+	.string "One last wave before the LEAGUE?$"
+
+DewfordTown_Gym_Text_BrawlyGrowDefeat2:
+	.string "Totally crushed. The LEAGUE\n"
+	.string "had better watch out.$"
+
+DewfordTown_Gym_Text_BrawlyGrowAfter2:
+	.string "Go get 'em at EVER GRANDE.\n"
+	.string "The whole island's rooting for you.$"
+
+DewfordTown_Gym_Text_BrawlyGrowOffer3:
+	.string "BRAWLY: The CHAMPION, back in\n"
+	.string "little old DEWFORD!\p"
+	.string "I've got my full crew now.\n"
+	.string "Rematch?$"
+
+DewfordTown_Gym_Text_BrawlyGrowDefeat3:
+	.string "You're the real deal, CHAMPION.$"
+
+DewfordTown_Gym_Text_BrawlyGrowAfter3:
+	.string "I'll keep training till I can ride\n"
+	.string "a wave like you.$"
+
+DewfordTown_Gym_Text_BrawlyGrowOffer4:
+	.string "BRAWLY: You kept your title. Nice!\p"
+	.string "This is my strongest team ever.\n"
+	.string "Ready for the biggest wave yet?$"
+
+DewfordTown_Gym_Text_BrawlyGrowDefeat4:
+	.string "Best wipeout of my life!$"
+
+DewfordTown_Gym_Text_BrawlyGrowAfter4:
+	.string "Come surf, battle, whatever.\n"
+	.string "You're always welcome here.$"
+

@@ -2278,6 +2278,7 @@ static void CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
     if (!GetTrainerStructFromId(trainerNum)->overrideTrainer)
     {
         CreateNPCTrainerPartyFromTrainer(party, GetTrainerStructFromId(trainerNum));
+        WallyJourney_ScaleLeaderParty(party, trainerNum); // growing Gym Leader rematches
         return;
     }
 

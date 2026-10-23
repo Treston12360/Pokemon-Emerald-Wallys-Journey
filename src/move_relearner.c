@@ -1139,5 +1139,7 @@ static bool32 IsTMMoveRelearnerActive(void)
 
 static bool32 IsTutorMoveRelearnerActive(void)
 {
-    return (FlagGet(P_FLAG_TUTOR_MOVES) || P_ENABLE_MOVE_RELEARNERS);
+    // Wally's Journey: off. It offered every tutor move (Superpower, Outrage...)
+    // at any level; tutor moves come from the move tutors in the world instead.
+    return FALSE;
 }

@@ -227,6 +227,173 @@ u32 WallyJourney_HiddenAbilityChance(u16 species)
     return chance > 100 ? 100 : chance;
 }
 
+// ---------------------------------------------------------------------------
+// Growing Gym Leader rematches.
+// Every leader can be rematched right after the badge. Before the League their
+// rematch team (TRAINER_X_2, the post-E4 team) is scaled down to the strength
+// of the NEXT Gym Leader: levels match the next leader's ace, Pokemon too young
+// for their evolution use the earlier form, and the team grows one member per
+// badge. With 8 badges it is the full team just under the Elite Four.
+// After the Hall of Fame they use TRAINER_X_3, and after the first title
+// defense TRAINER_X_4 (Champion Steven's levels).
+// ---------------------------------------------------------------------------
+#define WJ_LEAGUE_EVE_ACE 52
+static const u16 sLeaderGrowthIds[] = {
+    TRAINER_ROXANNE_2, TRAINER_BRAWLY_2, TRAINER_WATTSON_2, TRAINER_FLANNERY_2,
+    TRAINER_NORMAN_2, TRAINER_WINONA_2, TRAINER_TATE_AND_LIZA_2, TRAINER_JUAN_2,
+};
+// first-fight ace level and party size, by gym number (1-8)
+static const u8 sLeaderAce[] = {0, 15, 19, 25, 32, 33, 38, 45, 46};
+static const u8 sLeaderFirstCount[] = {0, 3, 3, 4, 4, 4, 5, 6, 6};
+static const u8 sLeaderNames[][12] = {
+    _(""), _("ROXANNE"), _("BRAWLY"), _("WATTSON"), _("FLANNERY"),
+    _("NORMAN"), _("WINONA"), _("TATE&LIZA"), _("JUAN"),
+};
+
+static u32 LeaderRematchStage(void)
+{
+#if IS_FRLG
+    return 1;
+#else
+    if (FlagGet(FLAG_SYS_GAME_CLEAR))
+        return VarGet(VAR_UNUSED_0x40FD) >= 1 ? 4 : 3;
+    return CountBadges() >= 8 ? 2 : 1;
+#endif
+}
+
+// Special. VAR_0x8004 = gym number (1-8). VAR_RESULT = stage:
+// 1 growing (before 8 badges), 2 League eve, 3 after the Hall of Fame,
+// 4 after the first title defense. STR_VAR_1 = badge count, STR_VAR_2 = the
+// next Gym Leader's name (the strength the team is scaled to).
+void WallyJourney_SetupLeaderRematch(void)
+{
+    u32 badges = CountBadges();
+    u32 next = badges + 1;
+    if (next > 8)
+        next = 8;
+    gSpecialVar_Result = LeaderRematchStage();
+    ConvertIntToDecimalStringN(gStringVar1, badges, STR_CONV_MODE_LEFT_ALIGN, 1);
+    StringCopy(gStringVar2, sLeaderNames[next]);
+}
+
+// Level a pre-evolution must reach to evolve into this species, or a stand-in
+// for stone/friendship/trade evolutions.
+static u32 EvolveLevelInto(u16 pre, u16 species)
+{
+    const struct Evolution *evo = GetSpeciesEvolutions(pre);
+    u32 i;
+    if (evo != NULL)
+    {
+        for (i = 0; evo[i].method != EVOLUTIONS_END; i++)
+        {
+            if (evo[i].targetSpecies == species && evo[i].method == EVO_LEVEL && evo[i].param > 0)
+                return evo[i].param;
+        }
+    }
+    return GetSpeciesPreEvolution(pre) != SPECIES_NONE ? 36 : 20;
+}
+
+static u16 SpeciesForLevel(u16 species, u32 level)
+{
+    u32 guard;
+    for (guard = 0; guard < 3; guard++)
+    {
+        u16 pre = GetSpeciesPreEvolution(species);
+        if (pre == SPECIES_NONE || level >= EvolveLevelInto(pre, species))
+            break;
+        species = pre;
+    }
+    return species;
+}
+
+static void ClearMonMoves(struct Pokemon *mon)
+{
+    u16 none = MOVE_NONE;
+    u8 zero = 0;
+    u32 i;
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        SetMonData(mon, MON_DATA_MOVE1 + i, &none);
+        SetMonData(mon, MON_DATA_PP1 + i, &zero);
+    }
+}
+
+void WallyJourney_ScaleLeaderParty(struct Pokemon *party, u16 trainerId)
+{
+#if !IS_FRLG
+    u32 gym, i, n, count, badges, target, aceLevel, stage;
+    for (gym = 0; gym < ARRAY_COUNT(sLeaderGrowthIds); gym++)
+        if (sLeaderGrowthIds[gym] == trainerId)
+            break;
+    if (gym == ARRAY_COUNT(sLeaderGrowthIds))
+        return;
+    gym++;
+    stage = LeaderRematchStage();
+    if (stage > 2)
+        return;
+    badges = CountBadges();
+    for (n = 0; n < PARTY_SIZE && GetMonData(&party[n], MON_DATA_SPECIES) != SPECIES_NONE; n++)
+        ;
+    if (n == 0)
+        return;
+    if (stage == 2)
+    {
+        target = WJ_LEAGUE_EVE_ACE;
+        count = n;
+    }
+    else
+    {
+        target = sLeaderAce[badges + 1 > 8 ? 8 : badges + 1];
+        count = sLeaderFirstCount[gym] + (badges > gym ? badges - gym : 0);
+        if (count > n)
+            count = n;
+    }
+    aceLevel = GetMonData(&party[n - 1], MON_DATA_LEVEL);
+    // keep the first count-1 members and the ace
+    if (count < n)
+    {
+        party[count - 1] = party[n - 1];
+        for (i = count; i < n; i++)
+            ZeroMonData(&party[i]);
+    }
+    for (i = 0; i < count; i++)
+    {
+        struct Pokemon *mon = &party[i];
+        u16 species = GetMonData(mon, MON_DATA_SPECIES);
+        u16 item = GetMonData(mon, MON_DATA_HELD_ITEM);
+        s32 level = (s32)target - ((s32)aceLevel - (s32)GetMonData(mon, MON_DATA_LEVEL));
+        u16 newSpecies;
+        u32 exp;
+        if (level < 2)
+            level = 2;
+        newSpecies = SpeciesForLevel(species, level);
+        if (newSpecies != species)
+        {
+            SetMonData(mon, MON_DATA_SPECIES, &newSpecies);
+            SetMonData(mon, MON_DATA_NICKNAME, GetSpeciesName(newSpecies));
+        }
+        // No Mega Evolution before the player has the Mega Bracelet (5 badges)
+        // or when the Pokemon isn't the stone's species yet.
+        if (GetItemHoldEffect(item) == HOLD_EFFECT_MEGA_STONE && (badges < 5 || newSpecies != species))
+        {
+            u16 none = ITEM_NONE;
+            SetMonData(mon, MON_DATA_HELD_ITEM, &none);
+        }
+        exp = gExperienceTables[gSpeciesInfo[newSpecies].growthRate][level];
+        SetMonData(mon, MON_DATA_EXP, &exp);
+        SetMonData(mon, MON_DATA_LEVEL, &level);
+        // Before the League eve the hand-picked late-game moves are too strong:
+        // use what the Pokemon knows by level-up at this level.
+        if (stage == 1 || newSpecies != species)
+        {
+            ClearMonMoves(mon);
+            GiveMonInitialMoveset(mon);
+        }
+        CalculateMonStats(mon);
+    }
+#endif
+}
+
 // Called when the Options EXP. MODE is saved, and on map entry for older saves:
 // swaps Devon's Exp. Share and the EXP. ALL key item to match the mode.
 void WallyJourney_SyncExpItem(void)

@@ -81,14 +81,10 @@ SootopolisCity_Gym_1F_Movement_FallThroughIce:
 
 SootopolisCity_Gym_1F_EventScript_Juan::
 	trainerbattle_single TRAINER_JUAN_1, SootopolisCity_Gym_1F_Text_JuanIntro, SootopolisCity_Gym_1F_Text_JuanDefeat, SootopolisCity_Gym_1F_EventScript_JuanDefeated, NO_MUSIC
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, SootopolisCity_Gym_1F_EventScript_JuanRematch
 	call WallyJourney_EventScript_GiveGymHMs
 	goto_if_unset FLAG_RECEIVED_TM_WATER_PULSE, SootopolisCity_Gym_1F_EventScript_GiveWaterPulse2
 	goto_if_unset FLAG_BADGE06_GET, SootopolisCity_Gym_1F_EventScript_GoGetFortreeBadge
-	msgbox SootopolisCity_Gym_1F_Text_JuanPostBattle, MSGBOX_DEFAULT
-	release
-	end
+	goto SootopolisCity_Gym_1F_EventScript_JuanRematchOffer
 
 SootopolisCity_Gym_1F_EventScript_JuanDefeated::
 	message SootopolisCity_Gym_1F_Text_ReceivedRainBadge
@@ -139,14 +135,7 @@ SootopolisCity_Gym_1F_EventScript_GoGetFortreeBadge::
 	end
 
 SootopolisCity_Gym_1F_EventScript_JuanRematch::
-	setvar VAR_0x8004, TRAINER_JUAN_1
-	special WallyJourney_GetRematchTier
-	goto_if_eq VAR_RESULT, 3, SootopolisCity_Gym_1F_EventScript_JuanRematchTier3
-	goto_if_eq VAR_RESULT, 4, SootopolisCity_Gym_1F_EventScript_JuanRematchTier4
-	goto_if_ge VAR_RESULT, 5, SootopolisCity_Gym_1F_EventScript_JuanRematchTier5
-	trainerbattle_rematch_double TRAINER_JUAN_1, SootopolisCity_Gym_1F_Text_JuanPreRematch, SootopolisCity_Gym_1F_Text_JuanRematchDefeat, SootopolisCity_Gym_1F_Text_JuanRematchNeedTwoMons
-	msgbox SootopolisCity_Gym_1F_Text_JuanPostRematch, MSGBOX_AUTOCLOSE
-	end
+	goto SootopolisCity_Gym_1F_EventScript_JuanRematchOffer
 
 @ Wally's Journey: every rematch tier has its own opening line; the top two
 @ tiers share a tougher defeat and post-battle line.
@@ -367,3 +356,114 @@ SootopolisCity_Gym_1F_Text_JuanPostRematchElite:
 	.string "elegance.\p"
 	.string "I was wrong. Yours is simply quieter\n"
 	.string "than mine.$"
+
+@ Wally's Journey: growing Gym Leader rematches (see WallyJourney_ScaleLeaderParty).
+SootopolisCity_Gym_1F_EventScript_JuanRematchOffer::
+	setvar VAR_0x8004, 8
+	special WallyJourney_SetupLeaderRematch
+	switch VAR_RESULT
+	case 1, SootopolisCity_Gym_1F_EventScript_JuanRematchStage1
+	case 2, SootopolisCity_Gym_1F_EventScript_JuanRematchStage2
+	case 3, SootopolisCity_Gym_1F_EventScript_JuanRematchStage3
+	case 4, SootopolisCity_Gym_1F_EventScript_JuanRematchStage4
+	goto SootopolisCity_Gym_1F_EventScript_JuanRematchStage1
+
+SootopolisCity_Gym_1F_EventScript_JuanRematchStage1::
+	msgbox SootopolisCity_Gym_1F_Text_JuanGrowOffer1, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, SootopolisCity_Gym_1F_EventScript_JuanRematchDecline
+	cleartrainerflag TRAINER_JUAN_2
+	trainerbattle_no_intro TRAINER_JUAN_2, SootopolisCity_Gym_1F_Text_JuanGrowDefeat1
+	msgbox SootopolisCity_Gym_1F_Text_JuanGrowAfter1, MSGBOX_DEFAULT
+	release
+	end
+
+SootopolisCity_Gym_1F_EventScript_JuanRematchStage2::
+	msgbox SootopolisCity_Gym_1F_Text_JuanGrowOffer2, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, SootopolisCity_Gym_1F_EventScript_JuanRematchDecline
+	cleartrainerflag TRAINER_JUAN_2
+	trainerbattle_no_intro TRAINER_JUAN_2, SootopolisCity_Gym_1F_Text_JuanGrowDefeat2
+	msgbox SootopolisCity_Gym_1F_Text_JuanGrowAfter2, MSGBOX_DEFAULT
+	release
+	end
+
+SootopolisCity_Gym_1F_EventScript_JuanRematchStage3::
+	msgbox SootopolisCity_Gym_1F_Text_JuanGrowOffer3, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, SootopolisCity_Gym_1F_EventScript_JuanRematchDecline
+	cleartrainerflag TRAINER_JUAN_3
+	trainerbattle_double TRAINER_JUAN_3, SootopolisCity_Gym_1F_Text_JuanGrowGo, SootopolisCity_Gym_1F_Text_JuanGrowDefeat3, SootopolisCity_Gym_1F_Text_JuanGrowNeedTwo
+	msgbox SootopolisCity_Gym_1F_Text_JuanGrowAfter3, MSGBOX_DEFAULT
+	release
+	end
+
+SootopolisCity_Gym_1F_EventScript_JuanRematchStage4::
+	msgbox SootopolisCity_Gym_1F_Text_JuanGrowOffer4, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, SootopolisCity_Gym_1F_EventScript_JuanRematchDecline
+	cleartrainerflag TRAINER_JUAN_4
+	trainerbattle_double TRAINER_JUAN_4, SootopolisCity_Gym_1F_Text_JuanGrowGo, SootopolisCity_Gym_1F_Text_JuanGrowDefeat4, SootopolisCity_Gym_1F_Text_JuanGrowNeedTwo
+	msgbox SootopolisCity_Gym_1F_Text_JuanGrowAfter4, MSGBOX_DEFAULT
+	release
+	end
+
+SootopolisCity_Gym_1F_EventScript_JuanRematchDecline::
+	msgbox SootopolisCity_Gym_1F_Text_JuanPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+SootopolisCity_Gym_1F_Text_JuanGrowGo:
+	.string "Here we go!$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowNeedTwo:
+	.string "You need two POKéMON for this\n"
+	.string "battle. Come back with more.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowOffer1:
+	.string "JUAN: Eight BADGES, mine among them.\p"
+	.string "Before the LEAGUE, allow me to test\n"
+	.string "you with my rehearsed team.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowDefeat1:
+	.string "Magnificent.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowAfter1:
+	.string "Go, and let EVER GRANDE see\n"
+	.string "your art.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowOffer2:
+	.string "JUAN: Eight BADGES, mine among them.\p"
+	.string "Before the LEAGUE, allow me to test\n"
+	.string "you. My team stands just beneath\l"
+	.string "the ELITE FOUR.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowDefeat2:
+	.string "Magnificent. WALLACE's old teacher\n"
+	.string "is satisfied.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowAfter2:
+	.string "Go, and let EVER GRANDE see\n"
+	.string "your art.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowOffer3:
+	.string "JUAN: The CHAMPION graces my GYM.\p"
+	.string "Allow me to present my full\n"
+	.string "ensemble.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowDefeat3:
+	.string "Bravo. A performance worthy\n"
+	.string "of the title.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowAfter3:
+	.string "I shall polish my team further.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowOffer4:
+	.string "JUAN: You have defended your title.\p"
+	.string "Then witness my finest work,\n"
+	.string "performed at full strength.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowDefeat4:
+	.string "Exquisite. I have nothing more\n"
+	.string "to teach.$"
+
+SootopolisCity_Gym_1F_Text_JuanGrowAfter4:
+	.string "Return whenever you wish.\n"
+	.string "The stage is always yours.$"
+

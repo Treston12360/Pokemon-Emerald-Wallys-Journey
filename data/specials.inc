@@ -643,5 +643,6 @@ gSpecials::
 	def_special WallyJourney_PickContestPrize
 	def_special WallyJourney_PickFrontierGimmickItem
 	def_special WallyJourney_GetRematchTier
+	def_special WallyJourney_SetupLeaderRematch
 	def_special WallyJourney_GetSeasonForScript
 	def_special WallyJourney_GetPartyMonLevel

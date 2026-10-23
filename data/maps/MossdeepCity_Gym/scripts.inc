@@ -55,13 +55,9 @@ MossdeepCity_Gym_EventScript_SetSwitch4Metatiles::
 
 MossdeepCity_Gym_EventScript_TateAndLiza::
 	trainerbattle_double TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaIntro, MossdeepCity_Gym_Text_TateAndLizaDefeat, MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons, MossdeepCity_Gym_EventScript_TateAndLizaDefeated, NO_MUSIC
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, MossdeepCity_Gym_EventScript_TateAndLizaRematch
 	call WallyJourney_EventScript_GiveGymHMs
 	goto_if_unset FLAG_RECEIVED_TM_CALM_MIND, MossdeepCity_Gym_EventScript_GiveCalmMind2
-	msgbox MossdeepCity_Gym_Text_TateAndLizaPostBattle, MSGBOX_DEFAULT
-	release
-	end
+	goto MossdeepCity_Gym_EventScript_TateAndLizaRematchOffer
 
 MossdeepCity_Gym_EventScript_TateAndLizaDefeated::
 	message MossdeepCity_Gym_Text_ReceivedMindBadge
@@ -114,14 +110,7 @@ MossdeepCity_Gym_EventScript_GiveCalmMind::
 	return
 
 MossdeepCity_Gym_EventScript_TateAndLizaRematch::
-	setvar VAR_0x8004, TRAINER_TATE_AND_LIZA_1
-	special WallyJourney_GetRematchTier
-	goto_if_eq VAR_RESULT, 3, MossdeepCity_Gym_EventScript_TateAndLizaRematchTier3
-	goto_if_eq VAR_RESULT, 4, MossdeepCity_Gym_EventScript_TateAndLizaRematchTier4
-	goto_if_ge VAR_RESULT, 5, MossdeepCity_Gym_EventScript_TateAndLizaRematchTier5
-	trainerbattle_rematch_double TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaPreRematch, MossdeepCity_Gym_Text_TateAndLizaRematchDefeat, MossdeepCity_Gym_Text_TateAndLizaRematchNeedTwoMons
-	msgbox MossdeepCity_Gym_Text_TateAndLizaPostRematch, MSGBOX_AUTOCLOSE
-	end
+	goto MossdeepCity_Gym_EventScript_TateAndLizaRematchOffer
 
 @ Wally's Journey: every rematch tier has its own opening line; the top two
 @ tiers share a tougher defeat and post-battle line.
@@ -730,3 +719,120 @@ MossdeepCity_Gym_Text_TateAndLizaPostRematchElite:
 	.string "LIZA: …you trust them.\p"
 	.string "TATE: That's harder to beat.\n"
 	.string "LIZA: Much harder.$"
+
+@ Wally's Journey: growing Gym Leader rematches (see WallyJourney_ScaleLeaderParty).
+MossdeepCity_Gym_EventScript_TateAndLizaRematchOffer::
+	setvar VAR_0x8004, 7
+	special WallyJourney_SetupLeaderRematch
+	switch VAR_RESULT
+	case 1, MossdeepCity_Gym_EventScript_TateAndLizaRematchStage1
+	case 2, MossdeepCity_Gym_EventScript_TateAndLizaRematchStage2
+	case 3, MossdeepCity_Gym_EventScript_TateAndLizaRematchStage3
+	case 4, MossdeepCity_Gym_EventScript_TateAndLizaRematchStage4
+	goto MossdeepCity_Gym_EventScript_TateAndLizaRematchStage1
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematchStage1::
+	msgbox MossdeepCity_Gym_Text_TateAndLizaGrowOffer1, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MossdeepCity_Gym_EventScript_TateAndLizaRematchDecline
+	cleartrainerflag TRAINER_TATE_AND_LIZA_2
+	trainerbattle_double TRAINER_TATE_AND_LIZA_2, MossdeepCity_Gym_Text_TateAndLizaGrowGo, MossdeepCity_Gym_Text_TateAndLizaGrowDefeat1, MossdeepCity_Gym_Text_TateAndLizaGrowNeedTwo
+	msgbox MossdeepCity_Gym_Text_TateAndLizaGrowAfter1, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematchStage2::
+	msgbox MossdeepCity_Gym_Text_TateAndLizaGrowOffer2, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MossdeepCity_Gym_EventScript_TateAndLizaRematchDecline
+	cleartrainerflag TRAINER_TATE_AND_LIZA_2
+	trainerbattle_double TRAINER_TATE_AND_LIZA_2, MossdeepCity_Gym_Text_TateAndLizaGrowGo, MossdeepCity_Gym_Text_TateAndLizaGrowDefeat2, MossdeepCity_Gym_Text_TateAndLizaGrowNeedTwo
+	msgbox MossdeepCity_Gym_Text_TateAndLizaGrowAfter2, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematchStage3::
+	msgbox MossdeepCity_Gym_Text_TateAndLizaGrowOffer3, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MossdeepCity_Gym_EventScript_TateAndLizaRematchDecline
+	cleartrainerflag TRAINER_TATE_AND_LIZA_3
+	trainerbattle_double TRAINER_TATE_AND_LIZA_3, MossdeepCity_Gym_Text_TateAndLizaGrowGo, MossdeepCity_Gym_Text_TateAndLizaGrowDefeat3, MossdeepCity_Gym_Text_TateAndLizaGrowNeedTwo
+	msgbox MossdeepCity_Gym_Text_TateAndLizaGrowAfter3, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematchStage4::
+	msgbox MossdeepCity_Gym_Text_TateAndLizaGrowOffer4, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MossdeepCity_Gym_EventScript_TateAndLizaRematchDecline
+	cleartrainerflag TRAINER_TATE_AND_LIZA_4
+	trainerbattle_double TRAINER_TATE_AND_LIZA_4, MossdeepCity_Gym_Text_TateAndLizaGrowGo, MossdeepCity_Gym_Text_TateAndLizaGrowDefeat4, MossdeepCity_Gym_Text_TateAndLizaGrowNeedTwo
+	msgbox MossdeepCity_Gym_Text_TateAndLizaGrowAfter4, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematchDecline::
+	msgbox MossdeepCity_Gym_Text_TateAndLizaPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_Gym_Text_TateAndLizaGrowGo:
+	.string "Here we go!$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowNeedTwo:
+	.string "You need two POKéMON for this\n"
+	.string "battle. Come back with more.$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowOffer1:
+	.string "TATE: {STR_VAR_1} BADGES...\n"
+	.string "LIZA: ...we saw it coming!\p"
+	.string "TATE: Our team grew to\n"
+	.string "LIZA: ...{STR_VAR_2}'s level!\p"
+	.string "TATE&LIZA: Rematch?$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowDefeat1:
+	.string "TATE: We lost...\n"
+	.string "LIZA: ...together, again!$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowAfter1:
+	.string "LIZA: Get your last BADGE!\n"
+	.string "TATE: We'll be practicing!$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowOffer2:
+	.string "TATE: Eight BADGES!\n"
+	.string "LIZA: The LEAGUE is next!\p"
+	.string "TATE: Our team is almost at\n"
+	.string "LIZA: ...ELITE FOUR level!\p"
+	.string "TATE&LIZA: One more battle?$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowDefeat2:
+	.string "TATE: You're ready...\n"
+	.string "LIZA: ...for the LEAGUE!$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowAfter2:
+	.string "LIZA: Good luck at EVER GRANDE!\n"
+	.string "TATE: We'll be watching!$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowOffer3:
+	.string "TATE: The CHAMPION!\n"
+	.string "LIZA: Here in MOSSDEEP!\p"
+	.string "TATE&LIZA: Our full team is ready!\n"
+	.string "Battle us?$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowDefeat3:
+	.string "TATE: Amazing...\n"
+	.string "LIZA: ...as expected!$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowAfter3:
+	.string "LIZA: We'll train harder!\n"
+	.string "TATE: Together!$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowOffer4:
+	.string "TATE: You kept your title!\n"
+	.string "LIZA: So we brought our best!\p"
+	.string "TATE&LIZA: Our strongest team!\n"
+	.string "Ready?$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowDefeat4:
+	.string "TATE: We couldn't...\n"
+	.string "LIZA: ...predict that!$"
+
+MossdeepCity_Gym_Text_TateAndLizaGrowAfter4:
+	.string "TATE&LIZA: Come back anytime!$"
+

@@ -45,13 +45,9 @@ LavaridgeTown_Gym_1F_EventScript_EndCheckBuryTrainers::
 
 LavaridgeTown_Gym_1F_EventScript_Flannery::
 	trainerbattle_single TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntro, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch
 	call WallyJourney_EventScript_GiveGymHMs
 	goto_if_unset FLAG_RECEIVED_TM_OVERHEAT, LavaridgeTown_Gym_1F_EventScript_GiveOverheat2
-	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostBattle, MSGBOX_DEFAULT
-	release
-	end
+	goto LavaridgeTown_Gym_1F_EventScript_FlanneryRematchOffer
 
 LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated::
 	message LavaridgeTown_Gym_1F_Text_ReceivedHeatBadge
@@ -98,14 +94,7 @@ LavaridgeTown_Gym_1F_EventScript_GiveOverheat::
 	return
 
 LavaridgeTown_Gym_1F_EventScript_FlanneryRematch::
-	setvar VAR_0x8004, TRAINER_FLANNERY_1
-	special WallyJourney_GetRematchTier
-	goto_if_eq VAR_RESULT, 3, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchTier3
-	goto_if_eq VAR_RESULT, 4, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchTier4
-	goto_if_ge VAR_RESULT, 5, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchTier5
-	trainerbattle_rematch_double TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryPreRematch, LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeat, LavaridgeTown_Gym_1F_Text_FlanneryRematchNeedTwoMons
-	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostRematch, MSGBOX_AUTOCLOSE
-	end
+	goto LavaridgeTown_Gym_1F_EventScript_FlanneryRematchOffer
 
 @ Wally's Journey: every rematch tier has its own opening line; the top two
 @ tiers share a tougher defeat and post-battle line.
@@ -442,3 +431,112 @@ LavaridgeTown_Gym_1F_Text_FlanneryPostRematchElite:
 	.string "I told him I learned it from losing\l"
 	.string "to you.\p"
 	.string "He laughed for ages.$"
+
+@ Wally's Journey: growing Gym Leader rematches (see WallyJourney_ScaleLeaderParty).
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchOffer::
+	setvar VAR_0x8004, 4
+	special WallyJourney_SetupLeaderRematch
+	switch VAR_RESULT
+	case 1, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage1
+	case 2, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage2
+	case 3, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage3
+	case 4, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage4
+	goto LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage1
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage1::
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer1, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline
+	cleartrainerflag TRAINER_FLANNERY_2
+	trainerbattle_no_intro TRAINER_FLANNERY_2, LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat1
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter1, MSGBOX_DEFAULT
+	release
+	end
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage2::
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer2, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline
+	cleartrainerflag TRAINER_FLANNERY_2
+	trainerbattle_no_intro TRAINER_FLANNERY_2, LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat2
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter2, MSGBOX_DEFAULT
+	release
+	end
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage3::
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer3, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline
+	cleartrainerflag TRAINER_FLANNERY_3
+	trainerbattle_double TRAINER_FLANNERY_3, LavaridgeTown_Gym_1F_Text_FlanneryGrowGo, LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat3, LavaridgeTown_Gym_1F_Text_FlanneryGrowNeedTwo
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter3, MSGBOX_DEFAULT
+	release
+	end
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage4::
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer4, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline
+	cleartrainerflag TRAINER_FLANNERY_4
+	trainerbattle_double TRAINER_FLANNERY_4, LavaridgeTown_Gym_1F_Text_FlanneryGrowGo, LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat4, LavaridgeTown_Gym_1F_Text_FlanneryGrowNeedTwo
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter4, MSGBOX_DEFAULT
+	release
+	end
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline::
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowGo:
+	.string "Here we go!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowNeedTwo:
+	.string "You need two POKéMON for this\n"
+	.string "battle. Come back with more.$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer1:
+	.string "FLANNERY: {STR_VAR_1} BADGES already?\p"
+	.string "I've been training like crazy.\n"
+	.string "My team's up to {STR_VAR_2}'s level!\p"
+	.string "Let's see if I'm a real LEADER yet!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat1:
+	.string "Ugh! Still not enough heat!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter1:
+	.string "Next BADGE, then come back.\n"
+	.string "I'll be hotter by then!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer2:
+	.string "FLANNERY: Eight BADGES!\p"
+	.string "My team's almost ELITE FOUR hot.\n"
+	.string "One more battle?$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat2:
+	.string "You're burning brighter than me.\n"
+	.string "Go show the LEAGUE!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter2:
+	.string "Grandpa's going to hear about this.$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer3:
+	.string "FLANNERY: The CHAMPION, in my GYM!\p"
+	.string "I'm not new at this anymore.\n"
+	.string "My full team is ready. Battle me!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat3:
+	.string "You're way too hot to handle!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter3:
+	.string "I'll keep training. One day I'll\n"
+	.string "melt that title right off you!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer4:
+	.string "FLANNERY: You kept your title!\p"
+	.string "This is everything I've got.\n"
+	.string "My hottest team ever!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat4:
+	.string "Okay, okay! You win! Wow!$"
+
+LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter4:
+	.string "Come back anytime.\n"
+	.string "The springs are always warm.$"
+

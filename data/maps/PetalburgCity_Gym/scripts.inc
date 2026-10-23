@@ -331,10 +331,7 @@ PetalburgCity_Gym_EventScript_NormanPostBattle::
 	goto_if_eq VAR_RESULT, TRUE, PetalburgCity_Gym_EventScript_GiveEnigmaBerry
 	call WallyJourney_EventScript_GiveGymHMs
 	goto_if_unset FLAG_RECEIVED_TM_FACADE, PetalburgCity_Gym_EventScript_GiveFacade2
-	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_Gym_EventScript_NoAmountOfTrainingIsEnough
-	msgbox PetalburgCity_Gym_Text_DadGoingToKeepTraining, MSGBOX_DEFAULT
-	release
-	end
+	goto PetalburgCity_Gym_EventScript_NormanRematchOffer
 
 PetalburgCity_Gym_EventScript_GiveFacade2::
 	call PetalburgCity_Gym_EventScript_GiveFacade
@@ -342,14 +339,7 @@ PetalburgCity_Gym_EventScript_GiveFacade2::
 	end
 
 PetalburgCity_Gym_EventScript_NormanRematch::
-	setvar VAR_0x8004, TRAINER_NORMAN_1
-	special WallyJourney_GetRematchTier
-	goto_if_eq VAR_RESULT, 3, PetalburgCity_Gym_EventScript_NormanRematchTier3
-	goto_if_eq VAR_RESULT, 4, PetalburgCity_Gym_EventScript_NormanRematchTier4
-	goto_if_ge VAR_RESULT, 5, PetalburgCity_Gym_EventScript_NormanRematchTier5
-	trainerbattle_rematch_double TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanPreRematch, PetalburgCity_Gym_Text_NormanRematchDefeat, PetalburgCity_Gym_Text_NormanRematchNeedTwoMons
-	msgbox PetalburgCity_Gym_Text_NormanPostRematch, MSGBOX_AUTOCLOSE
-	end
+	goto PetalburgCity_Gym_EventScript_NormanRematchOffer
 
 @ Wally's Journey: every rematch tier has its own opening line; the top two
 @ tiers share a tougher defeat and post-battle line.
@@ -1657,3 +1647,114 @@ PetalburgCity_Gym_Text_NormanPostRematchElite:
 	.string "DAD: WALLY asked me how to beat you.\p"
 	.string "I told him I'd let him know the\n"
 	.string "moment I figure it out myself.$"
+
+@ Wally's Journey: growing Gym Leader rematches (see WallyJourney_ScaleLeaderParty).
+PetalburgCity_Gym_EventScript_NormanRematchOffer::
+	setvar VAR_0x8004, 5
+	special WallyJourney_SetupLeaderRematch
+	switch VAR_RESULT
+	case 1, PetalburgCity_Gym_EventScript_NormanRematchStage1
+	case 2, PetalburgCity_Gym_EventScript_NormanRematchStage2
+	case 3, PetalburgCity_Gym_EventScript_NormanRematchStage3
+	case 4, PetalburgCity_Gym_EventScript_NormanRematchStage4
+	goto PetalburgCity_Gym_EventScript_NormanRematchStage1
+
+PetalburgCity_Gym_EventScript_NormanRematchStage1::
+	msgbox PetalburgCity_Gym_Text_NormanGrowOffer1, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PetalburgCity_Gym_EventScript_NormanRematchDecline
+	cleartrainerflag TRAINER_NORMAN_2
+	trainerbattle_no_intro TRAINER_NORMAN_2, PetalburgCity_Gym_Text_NormanGrowDefeat1
+	msgbox PetalburgCity_Gym_Text_NormanGrowAfter1, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_Gym_EventScript_NormanRematchStage2::
+	msgbox PetalburgCity_Gym_Text_NormanGrowOffer2, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PetalburgCity_Gym_EventScript_NormanRematchDecline
+	cleartrainerflag TRAINER_NORMAN_2
+	trainerbattle_no_intro TRAINER_NORMAN_2, PetalburgCity_Gym_Text_NormanGrowDefeat2
+	msgbox PetalburgCity_Gym_Text_NormanGrowAfter2, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_Gym_EventScript_NormanRematchStage3::
+	msgbox PetalburgCity_Gym_Text_NormanGrowOffer3, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PetalburgCity_Gym_EventScript_NormanRematchDecline
+	cleartrainerflag TRAINER_NORMAN_3
+	trainerbattle_double TRAINER_NORMAN_3, PetalburgCity_Gym_Text_NormanGrowGo, PetalburgCity_Gym_Text_NormanGrowDefeat3, PetalburgCity_Gym_Text_NormanGrowNeedTwo
+	msgbox PetalburgCity_Gym_Text_NormanGrowAfter3, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_Gym_EventScript_NormanRematchStage4::
+	msgbox PetalburgCity_Gym_Text_NormanGrowOffer4, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PetalburgCity_Gym_EventScript_NormanRematchDecline
+	cleartrainerflag TRAINER_NORMAN_4
+	trainerbattle_double TRAINER_NORMAN_4, PetalburgCity_Gym_Text_NormanGrowGo, PetalburgCity_Gym_Text_NormanGrowDefeat4, PetalburgCity_Gym_Text_NormanGrowNeedTwo
+	msgbox PetalburgCity_Gym_Text_NormanGrowAfter4, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_Gym_EventScript_NormanRematchDecline::
+	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_Gym_EventScript_NoAmountOfTrainingIsEnough
+	msgbox PetalburgCity_Gym_Text_DadGoingToKeepTraining, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_Gym_Text_NormanGrowGo:
+	.string "Here we go!$"
+
+PetalburgCity_Gym_Text_NormanGrowNeedTwo:
+	.string "You need two POKéMON for this\n"
+	.string "battle. Come back with more.$"
+
+PetalburgCity_Gym_Text_NormanGrowOffer1:
+	.string "DAD: {STR_VAR_1} BADGES. I'm proud of you.\p"
+	.string "I've trained my team up to\n"
+	.string "{STR_VAR_2}'s level. Want to spar?$"
+
+PetalburgCity_Gym_Text_NormanGrowDefeat1:
+	.string "You're stronger every time.\n"
+	.string "That's how it should be.$"
+
+PetalburgCity_Gym_Text_NormanGrowAfter1:
+	.string "Earn your next BADGE.\n"
+	.string "I'll be here, training.$"
+
+PetalburgCity_Gym_Text_NormanGrowOffer2:
+	.string "DAD: All eight BADGES.\p"
+	.string "Before the LEAGUE, let your father\n"
+	.string "test you one more time.$"
+
+PetalburgCity_Gym_Text_NormanGrowDefeat2:
+	.string "You're ready. Go on, then.$"
+
+PetalburgCity_Gym_Text_NormanGrowAfter2:
+	.string "See your mother before you go\n"
+	.string "to EVER GRANDE.$"
+
+PetalburgCity_Gym_Text_NormanGrowOffer3:
+	.string "DAD: My own child, the CHAMPION.\p"
+	.string "My full team is ready.\n"
+	.string "Show me what a CHAMPION can do.$"
+
+PetalburgCity_Gym_Text_NormanGrowDefeat3:
+	.string "That's my kid.$"
+
+PetalburgCity_Gym_Text_NormanGrowAfter3:
+	.string "I'll keep training. A father has\n"
+	.string "to keep up somehow.$"
+
+PetalburgCity_Gym_Text_NormanGrowOffer4:
+	.string "DAD: You've defended your title.\p"
+	.string "This is the strongest team I've\n"
+	.string "ever raised. No holding back.$"
+
+PetalburgCity_Gym_Text_NormanGrowDefeat4:
+	.string "...I've got nothing left.\n"
+	.string "Well done.$"
+
+PetalburgCity_Gym_Text_NormanGrowAfter4:
+	.string "Come home sometimes.\n"
+	.string "And come back to battle, too.$"
+
