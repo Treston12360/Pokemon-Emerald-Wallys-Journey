@@ -259,4 +259,5 @@ static void ResetDexNav(void)
     memset(gSaveBlock3Ptr->dexNavSearchLevels, 0, sizeof(gSaveBlock3Ptr->dexNavSearchLevels));
 #endif
     gSaveBlock3Ptr->dexNavChain = 0;
+    gSaveBlock3Ptr->wjCatchCountMagic = 0; // Wally's Journey: catch counts start over
 }

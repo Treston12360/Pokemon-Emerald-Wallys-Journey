@@ -1465,6 +1465,11 @@ static bool8 DecompressGraphics(void)
     case 6:
         LoadPalette(gSummaryScreen_Pal, BG_PLTT_ID(0), 8 * PLTT_SIZE_4BPP);
         LoadPalette(&gPPTextPalette, BG_PLTT_ID(8) + 1, PLTT_SIZEOF(16 - 1));
+        {
+            // Wally's Journey: green for the stat a nature raises (text palette 6, unused slot 15).
+            static const u16 sWJNatureUpGreen = RGB(2, 20, 6);
+            LoadPalette(&sWJNatureUpGreen, BG_PLTT_ID(6) + 15, PLTT_SIZEOF(1));
+        }
         sMonSummaryScreen->switchCounter++;
         break;
     case 7:
@@ -3828,8 +3833,9 @@ static void PrintRibbonCount(void)
 
 static void BufferStat(u8 *dst, enum Stat statIndex, u32 stat, u32 strId, u32 n)
 {
-    static const u8 sTextNatureDown[] = _("{COLOR}{08}");
-    static const u8 sTextNatureUp[] = _("{COLOR}{05}");
+    // Wally's Journey: raised stat green, lowered stat red.
+    static const u8 sTextNatureDown[] = _("{COLOR}{05}");
+    static const u8 sTextNatureUp[] = _("{COLOR}{15}");
     static const u8 sTextNatureNeutral[] = _("{COLOR}{01}");
     u8 *txtPtr;
 

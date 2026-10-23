@@ -1127,7 +1127,9 @@ static bool32 IsLevelUpMoveRelearnerActive(void)
 
 static bool32 IsEggMoveRelearnerActive(void)
 {
-    return (FlagGet(P_FLAG_EGG_MOVES) || P_ENABLE_MOVE_RELEARNERS);
+    // Wally's Journey: egg moves are in every level-up learnset at sensible levels,
+    // so the relearner only offers them once the Pokemon reaches that level.
+    return FALSE;
 }
 
 static bool32 IsTMMoveRelearnerActive(void)
