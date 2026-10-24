@@ -358,10 +358,52 @@ bool32 WallyJourney_IsLeaderRematchTrainer(u16 trainerId)
     return FALSE;
 }
 
+// May/Brendan's final team is levels 67-72 for the postgame battle on the way to the
+// Elite Four rematch. As a title challenger (5th defense on) the rest of the pool is at
+// 75-78, so there the same team is raised so its ace is level 78.
+#define WJ_TITLE_POOL_ACE 78
+static void WallyJourney_ScaleTitleRivalParty(struct Pokemon *party, u16 trainerId)
+{
+    static const u16 sRivalFinals[] = {
+        TRAINER_MAY_FINAL_TREECKO, TRAINER_MAY_FINAL_TORCHIC, TRAINER_MAY_FINAL_MUDKIP,
+        TRAINER_BRENDAN_FINAL_TREECKO, TRAINER_BRENDAN_FINAL_TORCHIC, TRAINER_BRENDAN_FINAL_MUDKIP,
+    };
+    u32 i, n;
+    s32 shift;
+    for (i = 0; i < ARRAY_COUNT(sRivalFinals); i++)
+        if (sRivalFinals[i] == trainerId)
+            break;
+    if (i == ARRAY_COUNT(sRivalFinals)
+     || gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM)
+     || gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM))
+        return;
+    for (n = 0; n < PARTY_SIZE && GetMonData(&party[n], MON_DATA_SPECIES) != SPECIES_NONE; n++)
+        ;
+    if (n == 0)
+        return;
+    shift = WJ_TITLE_POOL_ACE - (s32)GetMonData(&party[n - 1], MON_DATA_LEVEL);
+    if (shift <= 0)
+        return;
+    for (i = 0; i < n; i++)
+    {
+        struct Pokemon *mon = &party[i];
+        s32 level = (s32)GetMonData(mon, MON_DATA_LEVEL) + shift;
+        u16 species = GetMonData(mon, MON_DATA_SPECIES);
+        u32 exp;
+        if (level > MAX_LEVEL)
+            level = MAX_LEVEL;
+        exp = gExperienceTables[gSpeciesInfo[species].growthRate][level];
+        SetMonData(mon, MON_DATA_EXP, &exp);
+        SetMonData(mon, MON_DATA_LEVEL, &level);
+        CalculateMonStats(mon);
+    }
+}
+
 void WallyJourney_ScaleLeaderParty(struct Pokemon *party, u16 trainerId)
 {
 #if !IS_FRLG
     u32 gym, i, n, count, badges, target, aceLevel, stage;
+    WallyJourney_ScaleTitleRivalParty(party, trainerId);
     for (gym = 0; gym < ARRAY_COUNT(sLeaderGrowthIds); gym++)
         if (sLeaderGrowthIds[gym] == trainerId)
             break;
