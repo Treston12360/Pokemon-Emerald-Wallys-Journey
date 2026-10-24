@@ -41,9 +41,9 @@
   "bg_events": [
     {
       "type": "hidden_item",
-      "x": 78,
-      "y": 1,
-      "elevation": 0,
+      "x": 21,
+      "y": 18,
+      "elevation": 3,
       "item": "ITEM_GOLISOPITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_GOLISOPITE"
     }

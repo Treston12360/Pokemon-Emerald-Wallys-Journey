@@ -284,14 +284,6 @@
     },
     {
       "type": "hidden_item",
-      "x": 46,
-      "y": 7,
-      "elevation": 3,
-      "item": "ITEM_CHIMECHITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_CHIMECHITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 43,
       "y": 5,
       "elevation": 3,
@@ -305,6 +297,14 @@
       "elevation": 3,
       "item": "ITEM_MALICIOUS_ARMOR",
       "flag": "FLAG_HIDDEN_ITEM_WJ_MALICIOUS_ARMOR"
+    },
+    {
+      "type": "hidden_item",
+      "x": 8,
+      "y": 4,
+      "elevation": 3,
+      "item": "ITEM_CHIMECHITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_CHIMECHITE"
     }
   ]
 }

@@ -454,19 +454,19 @@
     },
     {
       "type": "hidden_item",
-      "x": 1,
-      "y": 78,
-      "elevation": 1,
-      "item": "ITEM_DRAMPANITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_DRAMPANITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 14,
       "y": 45,
       "elevation": 3,
       "item": "ITEM_JOLLY_MINT",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE115_JOLLY_MINT"
+    },
+    {
+      "type": "hidden_item",
+      "x": 7,
+      "y": 5,
+      "elevation": 3,
+      "item": "ITEM_LOPUNNITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_LOPUNNITE"
     }
   ]
 }

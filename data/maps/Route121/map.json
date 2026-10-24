@@ -539,22 +539,6 @@
     {
       "type": "hidden_item",
       "x": 78,
-      "y": 18,
-      "elevation": 3,
-      "item": "ITEM_PIDGEOTITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_PIDGEOTITE"
-    },
-    {
-      "type": "hidden_item",
-      "x": 76,
-      "y": 16,
-      "elevation": 3,
-      "item": "ITEM_DELPHOXITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_DELPHOXITE"
-    },
-    {
-      "type": "hidden_item",
-      "x": 78,
       "y": 17,
       "elevation": 3,
       "item": "ITEM_NORMALIUM_Z",
@@ -567,6 +551,14 @@
       "elevation": 3,
       "item": "ITEM_SASSY_MINT",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE121_SASSY_MINT"
+    },
+    {
+      "type": "hidden_item",
+      "x": 49,
+      "y": 10,
+      "elevation": 3,
+      "item": "ITEM_MEOWSTICITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_MEOWSTICITE"
     }
   ]
 }

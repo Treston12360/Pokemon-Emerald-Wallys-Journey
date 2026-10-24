@@ -116,8 +116,8 @@
   "bg_events": [
     {
       "type": "hidden_item",
-      "x": 5,
-      "y": 5,
+      "x": 4,
+      "y": 7,
       "elevation": 3,
       "item": "ITEM_CHANDELURITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_CHANDELURITE"

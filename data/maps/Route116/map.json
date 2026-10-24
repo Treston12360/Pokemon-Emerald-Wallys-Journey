@@ -528,19 +528,19 @@
     },
     {
       "type": "hidden_item",
-      "x": 3,
-      "y": 15,
-      "elevation": 3,
-      "item": "ITEM_SCOLIPITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_SCOLIPITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 25,
       "y": 11,
       "elevation": 3,
       "item": "ITEM_NAIVE_MINT",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE116_NAIVE_MINT"
+    },
+    {
+      "type": "hidden_item",
+      "x": 12,
+      "y": 11,
+      "elevation": 3,
+      "item": "ITEM_AUDINITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_AUDINITE"
     }
   ]
 }

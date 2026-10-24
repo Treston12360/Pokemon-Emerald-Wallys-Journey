@@ -423,6 +423,14 @@
       "elevation": 3,
       "item": "ITEM_BOLD_MINT",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE109_BOLD_MINT"
+    },
+    {
+      "type": "hidden_item",
+      "x": 33,
+      "y": 9,
+      "elevation": 3,
+      "item": "ITEM_STARMINITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_STARMINITE"
     }
   ]
 }

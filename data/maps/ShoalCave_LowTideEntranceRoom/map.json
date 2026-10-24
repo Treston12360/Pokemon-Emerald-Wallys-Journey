@@ -76,19 +76,19 @@
   "bg_events": [
     {
       "type": "hidden_item",
-      "x": 3,
-      "y": 23,
-      "elevation": 4,
-      "item": "ITEM_CRABOMINITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_CRABOMINITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 27,
       "y": 4,
       "elevation": 3,
       "item": "ITEM_ABILITY_CAPSULE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_SHOALCAVE_LOWTIDEENTRANCEROOM_ABILITY_CAPSULE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 18,
+      "y": 17,
+      "elevation": 3,
+      "item": "ITEM_CRABOMINITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_CRABOMINITE"
     }
   ]
 }

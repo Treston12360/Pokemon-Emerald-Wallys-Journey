@@ -461,8 +461,8 @@
     },
     {
       "type": "hidden_item",
-      "x": 32,
-      "y": 6,
+      "x": 21,
+      "y": 27,
       "elevation": 3,
       "item": "ITEM_CAMERUPTITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_CAMERUPTITE"

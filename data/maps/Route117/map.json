@@ -411,19 +411,19 @@
     },
     {
       "type": "hidden_item",
-      "x": 4,
-      "y": 18,
-      "elevation": 3,
-      "item": "ITEM_FLOETTITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_FLOETTITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 40,
       "y": 13,
       "elevation": 3,
       "item": "ITEM_LAX_MINT",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE117_LAX_MINT"
+    },
+    {
+      "type": "hidden_item",
+      "x": 19,
+      "y": 16,
+      "elevation": 3,
+      "item": "ITEM_FLOETTITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_FLOETTITE"
     }
   ]
 }

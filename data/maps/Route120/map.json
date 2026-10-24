@@ -864,14 +864,6 @@
     },
     {
       "type": "hidden_item",
-      "x": 38,
-      "y": 98,
-      "elevation": 1,
-      "item": "ITEM_ABSOLITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_ABSOLITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 36,
       "y": 96,
       "elevation": 1,
@@ -893,6 +885,22 @@
       "elevation": 3,
       "item": "ITEM_CAREFUL_MINT",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE120_CAREFUL_MINT"
+    },
+    {
+      "type": "hidden_item",
+      "x": 16,
+      "y": 38,
+      "elevation": 3,
+      "item": "ITEM_ABSOLITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_ABSOLITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 28,
+      "y": 79,
+      "elevation": 3,
+      "item": "ITEM_GRENINJITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GRENINJITE"
     }
   ]
 }

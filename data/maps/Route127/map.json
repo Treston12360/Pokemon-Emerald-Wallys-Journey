@@ -217,14 +217,6 @@
       "y": 24,
       "elevation": 0,
       "secret_base_id": "SECRET_BASE_YELLOW_CAVE1_3"
-    },
-    {
-      "type": "hidden_item",
-      "x": 1,
-      "y": 78,
-      "elevation": 1,
-      "item": "ITEM_DRAGALGITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_DRAGALGITE"
     }
   ]
 }

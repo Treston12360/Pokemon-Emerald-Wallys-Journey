@@ -922,30 +922,6 @@
     },
     {
       "type": "hidden_item",
-      "x": 36,
-      "y": 5,
-      "elevation": 3,
-      "item": "ITEM_HERACRONITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_HERACRONITE"
-    },
-    {
-      "type": "hidden_item",
-      "x": 35,
-      "y": 5,
-      "elevation": 3,
-      "item": "ITEM_FERALIGITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_FERALIGITE"
-    },
-    {
-      "type": "hidden_item",
-      "x": 35,
-      "y": 6,
-      "elevation": 3,
-      "item": "ITEM_STARAPTITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_STARAPTITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 38,
       "y": 6,
       "elevation": 3,
@@ -959,6 +935,22 @@
       "elevation": 3,
       "item": "ITEM_GENTLE_MINT",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE119_GENTLE_MINT"
+    },
+    {
+      "type": "hidden_item",
+      "x": 35,
+      "y": 17,
+      "elevation": 3,
+      "item": "ITEM_HAWLUCHANITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_HAWLUCHANITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 7,
+      "y": 120,
+      "elevation": 3,
+      "item": "ITEM_VICTREEBELITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_VICTREEBELITE"
     }
   ]
 }

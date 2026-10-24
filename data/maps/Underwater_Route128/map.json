@@ -55,11 +55,11 @@
     },
     {
       "type": "hidden_item",
-      "x": 80,
-      "y": 20,
+      "x": 55,
+      "y": 34,
       "elevation": 3,
-      "item": "ITEM_STARMINITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_STARMINITE"
+      "item": "ITEM_TATSUGIRINITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_TATSUGIRINITE"
     }
   ]
 }

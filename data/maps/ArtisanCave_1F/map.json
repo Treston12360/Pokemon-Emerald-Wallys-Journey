@@ -46,14 +46,5 @@
     }
   ],
   "coord_events": [],
-  "bg_events": [
-    {
-      "type": "hidden_item",
-      "x": 14,
-      "y": 9,
-      "elevation": 3,
-      "item": "ITEM_GLIMMORANITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_GLIMMORANITE"
-    }
-  ]
+  "bg_events": []
 }

@@ -39,6 +39,8 @@ void WallyJourney_UpdateLiveWeather(void);
 bool32 WallyJourney_TryRegionalCoordWeather(u32 coordWeather);
 void WallyJourney_TrySeasonNotice(void);
 void WallyJourney_UpdateFallingLeaves(void);
+bool32 WallyJourney_IsHiddenItemWaitingForBracelet(u16 item);
+void WallyJourney_UpdateMegaStoneSparkles(void);
 void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFaded, bool32 isPrimary);
 bool32 WallyJourney_PrimaryFoliageStale(void);
 struct ObjectEventTemplate;

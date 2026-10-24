@@ -80,14 +80,6 @@
     },
     {
       "type": "hidden_item",
-      "x": 4,
-      "y": 3,
-      "elevation": 3,
-      "item": "ITEM_AERODACTYLITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_AERODACTYLITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 12,
       "y": 3,
       "elevation": 3,
@@ -101,6 +93,14 @@
       "elevation": 3,
       "item": "ITEM_BLACK_AUGURITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_BLACK_AUGURITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 7,
+      "elevation": 3,
+      "item": "ITEM_AERODACTYLITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_AERODACTYLITE"
     }
   ]
 }

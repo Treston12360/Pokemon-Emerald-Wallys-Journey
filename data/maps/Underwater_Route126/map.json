@@ -113,6 +113,14 @@
       "elevation": 3,
       "item": "ITEM_GYARADOSITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_GYARADOSITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 11,
+      "y": 43,
+      "elevation": 3,
+      "item": "ITEM_DRAGALGITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_DRAGALGITE"
     }
   ]
 }

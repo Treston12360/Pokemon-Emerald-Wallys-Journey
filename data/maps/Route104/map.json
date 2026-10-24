@@ -629,19 +629,27 @@
     },
     {
       "type": "hidden_item",
-      "x": 1,
-      "y": 78,
-      "elevation": 1,
-      "item": "ITEM_CHESNAUGHTITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_CHESNAUGHTITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 31,
       "y": 56,
       "elevation": 3,
       "item": "ITEM_LONELY_MINT",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE104_LONELY_MINT"
+    },
+    {
+      "type": "hidden_item",
+      "x": 6,
+      "y": 4,
+      "elevation": 3,
+      "item": "ITEM_MEGANIUMITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_MEGANIUMITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 7,
+      "y": 9,
+      "elevation": 3,
+      "item": "ITEM_STARAPTITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_STARAPTITE"
     }
   ]
 }

@@ -1,103 +1,85 @@
 # Mega Stone and Z-Crystal locations
 
-Generated placement of hidden items (find with the Itemfinder or by checking the tile). Each uses its own `FLAG_HIDDEN_ITEM_WJ_*` flag. One of each; not repeatable. Story-given: starter stone (Steven, Wally's house). Postgame Pokémon League mart still sells Gardevoirite (earlier work); its Galladite was removed since Galladite is now hidden.
+Hidden items. **Mega Stones (2026-10-23):** each sits where its Pokémon lives (`tools/place_wally_mega_stones.py`: walkable, reachable, away from warps and edges, tucked into a nook, sand/grass/shore where the Pokémon lives there); they do not exist until the Mega Bracelet is in the Bag, then twinkle with Emerald's sparkle effect. Z-Crystals and Black Augurite stay plain hidden items. Each uses its own `FLAG_HIDDEN_ITEM_WJ_*` flag. One of each; not repeatable. Story-given: starter stone (Steven, Wally's house). Postgame Pokémon League mart still sells Gardevoirite (earlier work); its Galladite was removed since Galladite is now hidden.
 
 Status: placed in map data and builds. Not yet emulator-verified that every tile is reachable.
 
 | Item | Map | x, y |
 |---|---|---|
-| Venusaurite | SafariZone_Northwest | 3, 6 |
-| Charizardite X | FieryPath | 3, 20 |
-| Charizardite Y | ScorchedSlab | 5, 3 |
-| Blastoisinite | Underwater_Route124 | 10, 3 |
-| Beedrillite | PetalburgWoods | 44, 10 |
-| Pidgeotite | Route121 | 78, 18 |
-| Alakazite | MirageTower_4F | 11, 7 |
-| Slowbronite | ShoalCave_LowTideLowerRoom | 23, 3 |
-| Gengarite | MtPyre_6F | 9, 5 |
-| Kangaskhanite | SafariZone_Southeast | 6, 3 |
-| Pinsirite | SafariZone_North | 38, 1 |
-| Gyaradosite | Underwater_Route126 | 9, 3 |
-| Aerodactylite | DesertRuins | 4, 3 |
-| Ampharosite | NewMauville_Inside | 4, 3 |
-| Steelixite | GraniteCave_B2F | 3, 20 |
-| Scizorite | SafariZone_Northeast | 2, 1 |
-| Heracronite | Route119 | 36, 5 |
-| Houndoominite | JaggedPass | 3, 28 |
-| Tyranitarite | VictoryRoad_B2F | 4, 3 |
-| Sablenite | GraniteCave_B1F | 13, 16 |
-| Mawilite | VictoryRoad_1F | 28, 17 |
+| Abomasite | ShoalCave_LowTideStairsRoom | 6, 10 |
+| Absolite | Route120 | 16, 38 |
+| Aerodactylite | DesertRuins | 3, 7 |
 | Aggronite | VictoryRoad_B1F | 25, 5 |
-| Medichamite | MtPyre_Exterior | 30, 36 |
-| Manectite | NewMauville_Entrance | 3, 3 |
-| Sharpedonite | Underwater_Route127 | 16, 66 |
-| Cameruptite | MtChimney | 32, 6 |
-| Altarianite | SkyPillar_3F | 5, 12 |
+| Alakazite | GraniteCave_1F | 29, 5 |
+| Altarianite | SkyPillar_3F | 10, 8 |
+| Ampharosite | SafariZone_Southeast | 31, 11 |
+| Audinite | Route116 | 12, 11 |
 | Banettite | MtPyre_4F | 5, 8 |
-| Absolite | Route120 | 38, 98 |
-| Glalitite | ShoalCave_LowTideIceRoom | 3, 26 |
-| Salamencite | MeteorFalls_StevensCave | 24, 8 |
-| Metagrossite | SkyPillar_5F | 6, 12 |
-| Lopunnite | SafariZone_South | 4, 4 |
-| Garchompite | DesertUnderpass | 135, 17 |
-| Lucarionite | SkyPillar_4F | 10, 10 |
-| Abomasite | ShoalCave_LowTideStairsRoom | 13, 11 |
-| Galladite | ArtisanCave_B1F | 3, 11 |
-| Audinite | Route103 | 4, 15 |
-| Clefablite | MeteorFalls_1F_2R | 17, 3 |
-| Victreebelite | SafariZone_Southwest | 3, 36 |
-| Starminite | Underwater_Route128 | 80, 20 |
-| Dragoninite | SeafloorCavern_Room4 | 3, 8 |
-| Meganiumite | Route123 | 137, 18 |
-| Feraligite | Route119 | 35, 5 |
-| Skarmorite | Route113 | 3, 14 |
-| Froslassite | ShoalCave_LowTideInnerRoom | 3, 4 |
-| Emboarite | Route112 | 36, 52 |
+| Barbaracite | SeafloorCavern_Room1 | 12, 7 |
+| Baxcalibrite | ShoalCave_LowTideIceRoom | 6, 8 |
+| Beedrillite | PetalburgWoods | 25, 32 |
+| Blastoisinite | Route118 | 17, 9 |
+| Cameruptite | MtChimney | 21, 27 |
+| Chandelurite | MtPyre_3F | 4, 7 |
+| Charizardite X | FieryPath | 4, 7 |
+| Charizardite Y | Route112 | 27, 34 |
+| Chesnaughtite | SafariZone_Northwest | 28, 33 |
+| Chimechite | MtPyre_Summit | 8, 4 |
+| Clefablite | MeteorFalls_1F_2R | 25, 15 |
+| Crabominite | ShoalCave_LowTideEntranceRoom | 18, 17 |
+| Delphoxite | Route111 | 32, 48 |
+| Dragalgite | Underwater_Route126 | 11, 43 |
+| Dragoninite | SkyPillar_1F | 3, 6 |
+| Drampanite | MeteorFalls_StevensCave | 3, 17 |
+| Eelektrossite | NewMauville_Inside | 27, 34 |
+| Emboarite | FieryPath | 10, 32 |
 | Excadrite | RusturfTunnel | 21, 4 |
-| Scolipite | Route116 | 3, 15 |
-| Scraftinite | Route111 | 3, 32 |
-| Eelektrossite | Underwater_Route134 | 5, 6 |
-| Chandelurite | MtPyre_3F | 5, 5 |
-| Chesnaughtite | Route104 | 1, 78 |
-| Delphoxite | Route121 | 76, 16 |
-| Greninjite | Route124 | 1, 1 |
-| Pyroarite | Route114 | 29, 73 |
-| Floettite | Route117 | 4, 18 |
-| Malamarite | Route132 | 3, 3 |
-| Barbaracite | Route125 | 78, 38 |
-| Dragalgite | Route127 | 1, 78 |
-| Hawluchanite | Route118 | 76, 12 |
-| Drampanite | Route115 | 1, 78 |
-| Falinksite | Route111 | 4, 33 |
-| Raichunite X | Route110 | 3, 38 |
-| Raichunite Y | Route118 | 75, 13 |
-| Chimechite | MtPyre_Summit | 46, 7 |
-| Staraptite | Route119 | 35, 6 |
+| Falinksite | Route114 | 17, 49 |
+| Feraligite | Route114 | 9, 33 |
+| Floettite | Route117 | 19, 16 |
+| Froslassite | ShoalCave_LowTideInnerRoom | 3, 4 |
+| Galladite | VictoryRoad_B1F | 11, 13 |
+| Garchompite | MeteorFalls_B1F_2R | 3, 4 |
+| Gengarite | MtPyre_6F | 6, 5 |
+| Glalitite | ShoalCave_LowTideIceRoom | 7, 18 |
+| Glimmoranite | SeafloorCavern_Room3 | 12, 5 |
+| Golisopite | Underwater_Route125 | 21, 18 |
 | Golurkite | AncientTomb | 4, 3 |
-| Meowsticite | Route106 | 1, 1 |
-| Crabominite | ShoalCave_LowTideEntranceRoom | 3, 23 |
-| Golisopite | Underwater_Route125 | 78, 1 |
-| Scovillainite | Route111 | 3, 31 |
-| Baxcalibrite | IslandCave | 4, 3 |
-| Tatsugirinite | Underwater_Route129 | 12, 16 |
-| Glimmoranite | ArtisanCave_1F | 14, 9 |
+| Greninjite | Route120 | 28, 79 |
+| Gyaradosite | Underwater_Route126 | 9, 3 |
+| Hawluchanite | Route119 | 35, 17 |
+| Heracronite | SafariZone_North | 4, 10 |
+| Houndoominite | SafariZone_Northeast | 9, 25 |
+| Kangaskhanite | SafariZone_Southeast | 26, 16 |
 | Latiasite | SouthernIsland_Interior | 10, 6 |
 | Latiosite | SouthernIsland_Interior | 8, 8 |
-| Normalium Z | Route121 | 78, 17 |
-| Firium Z | FieryPath | 3, 19 |
-| Waterium Z | Route124 | 2, 1 |
-| Electrium Z | NewMauville_Inside | 5, 3 |
-| Grassium Z | SafariZone_Northwest | 4, 6 |
-| Icium Z | ShoalCave_LowTideIceRoom | 3, 25 |
-| Fightinium Z | VictoryRoad_1F | 30, 19 |
-| Poisonium Z | SafariZone_Southwest | 1, 37 |
-| Groundium Z | DesertRuins | 12, 3 |
-| Flyinium Z | SkyPillar_2F | 6, 12 |
-| Psychium Z | MtPyre_Summit | 43, 5 |
-| Buginium Z | Route120 | 36, 96 |
-| Rockium Z | GraniteCave_B2F | 4, 21 |
-| Ghostium Z | MtPyre_5F | 5, 7 |
-| Dragonium Z | MeteorFalls_B1F_1R | 24, 24 |
-| Darkinium Z | AbandonedShip_HiddenFloorRooms | 12, 6 |
-| Steelium Z | AncientTomb | 12, 3 |
-| Fairium Z | Route123 | 136, 15 |
+| Lopunnite | Route115 | 7, 5 |
+| Lucarionite | VictoryRoad_B2F | 37, 26 |
+| Malamarite | SeafloorCavern_Room7 | 8, 21 |
+| Manectite | Route110 | 31, 66 |
+| Mawilite | VictoryRoad_1F | 16, 20 |
+| Medichamite | MtPyre_Exterior | 13, 22 |
+| Meganiumite | Route104 | 6, 4 |
+| Meowsticite | Route121 | 49, 10 |
+| Metagrossite | MeteorFalls_StevensCave | 20, 22 |
+| Pidgeotite | Route102 | 22, 15 |
+| Pinsirite | SafariZone_Northwest | 33, 33 |
+| Pyroarite | Route114 | 22, 40 |
+| Raichunite X | Route110 | 36, 65 |
+| Raichunite Y | SafariZone_Southwest | 4, 10 |
+| Sablenite | GraniteCave_B1F | 13, 16 |
+| Salamencite | MeteorFalls_StevensCave | 24, 8 |
+| Scizorite | SafariZone_Northeast | 32, 18 |
+| Scolipite | PetalburgWoods | 27, 11 |
+| Scovillainite | Route111 | 30, 45 |
+| Scraftinite | JaggedPass | 20, 10 |
+| Sharpedonite | Underwater_Route127 | 16, 66 |
+| Skarmorite | Route113 | 28, 9 |
+| Slowbronite | ShoalCave_LowTideLowerRoom | 23, 3 |
+| Staraptite | Route104 | 7, 9 |
+| Starminite | Route109 | 33, 9 |
+| Steelixite | GraniteCave_B2F | 23, 16 |
+| Tatsugirinite | Underwater_Route128 | 55, 34 |
+| Tyranitarite | MagmaHideout_4F | 5, 6 |
+| Venusaurite | SafariZone_South | 35, 8 |
+| Victreebelite | Route119 | 7, 120 |

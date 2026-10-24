@@ -288,14 +288,6 @@
     },
     {
       "type": "hidden_item",
-      "x": 4,
-      "y": 3,
-      "elevation": 3,
-      "item": "ITEM_AMPHAROSITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_AMPHAROSITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 5,
       "y": 3,
       "elevation": 3,
@@ -317,6 +309,14 @@
       "elevation": 3,
       "item": "ITEM_ABILITY_CAPSULE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_NEWMAUVILLE_INSIDE_ABILITY_CAPSULE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 27,
+      "y": 34,
+      "elevation": 3,
+      "item": "ITEM_EELEKTROSSITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_EELEKTROSSITE"
     }
   ]
 }

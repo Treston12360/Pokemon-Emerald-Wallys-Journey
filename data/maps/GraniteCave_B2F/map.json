@@ -190,14 +190,6 @@
     },
     {
       "type": "hidden_item",
-      "x": 3,
-      "y": 20,
-      "elevation": 3,
-      "item": "ITEM_STEELIXITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_STEELIXITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 4,
       "y": 21,
       "elevation": 3,
@@ -211,6 +203,14 @@
       "elevation": 3,
       "item": "ITEM_ABILITY_CAPSULE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_GRANITECAVE_B2F_ABILITY_CAPSULE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 23,
+      "y": 16,
+      "elevation": 3,
+      "item": "ITEM_STEELIXITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_STEELIXITE"
     }
   ]
 }

@@ -26,6 +26,12 @@
 #include "trig.h"
 #include "sprite.h"
 #include "fieldmap.h"
+#include "global.fieldmap.h"
+#include "field_player_avatar.h"
+#include "constants/hold_effects.h"
+#include "constants/field_effects.h"
+#include "field_effect.h"
+#include "constants/event_bg.h"
 #include "constants/event_objects.h"
 #include "constants/rgb.h"
 
@@ -1430,4 +1436,51 @@ u16 WallyJourney_GetPartyMonLevel(void)
     if (gSpecialVar_0x8004 >= PARTY_SIZE || GetMonData(mon, MON_DATA_IS_EGG) || !GetMonData(mon, MON_DATA_SPECIES))
         return 0;
     return GetMonData(mon, MON_DATA_LEVEL);
+}
+
+// ---------------------------------------------------------------- Mega Stone sparkles
+// Owner design (2026-10-23): hidden Mega Stones don't exist until Steven gives the Mega
+// Bracelet (engine item ITEM_MEGA_RING). After that, every unclaimed Mega Stone on the
+// current map twinkles with Emerald's own sparkle effect (the Abandoned Ship key glint),
+// so they can be found by eye like the sparkling stones of the Hoenn remakes.
+#define MEGA_SPARKLE_PERIOD 96
+
+bool32 WallyJourney_IsHiddenItemWaitingForBracelet(u16 item)
+{
+    return GetItemHoldEffect(item) == HOLD_EFFECT_MEGA_STONE && !CheckBagHasItem(ITEM_MEGA_RING, 1);
+}
+
+void WallyJourney_UpdateMegaStoneSparkles(void)
+{
+    static u8 sTimer;
+    const struct MapEvents *events = gMapHeader.events;
+    s16 px, py;
+    u32 i;
+
+    if (++sTimer < MEGA_SPARKLE_PERIOD)
+        return;
+    sTimer = 0;
+    if (events == NULL || !CheckBagHasItem(ITEM_MEGA_RING, 1))
+        return;
+
+    PlayerGetDestCoords(&px, &py);
+    for (i = 0; i < events->bgEventCount; i++)
+    {
+        const struct BgEvent *bg = &events->bgEvents[i];
+        s16 dx, dy;
+        if (bg->kind != BG_EVENT_HIDDEN_ITEM)
+            continue;
+        if (GetItemHoldEffect(bg->bgUnion.hiddenItem.item) != HOLD_EFFECT_MEGA_STONE)
+            continue;
+        if (FlagGet(bg->bgUnion.hiddenItem.hiddenItemId + FLAG_HIDDEN_ITEMS_START))
+            continue;
+        dx = bg->x + MAP_OFFSET - px;
+        dy = bg->y + MAP_OFFSET - py;
+        if (dx < -8 || dx > 8 || dy < -6 || dy > 6)
+            continue; // only sparkle on screen
+        gFieldEffectArguments[0] = bg->x;
+        gFieldEffectArguments[1] = bg->y;
+        gFieldEffectArguments[2] = 1;
+        FieldEffectStart(FLDEFF_SPARKLE);
+    }
 }

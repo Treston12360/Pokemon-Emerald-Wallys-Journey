@@ -76,14 +76,6 @@
     {
       "type": "hidden_item",
       "x": 9,
-      "y": 5,
-      "elevation": 3,
-      "item": "ITEM_GENGARITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_GENGARITE"
-    },
-    {
-      "type": "hidden_item",
-      "x": 9,
       "y": 4,
       "elevation": 3,
       "item": "ITEM_DUSK_STONE",
@@ -96,6 +88,14 @@
       "elevation": 3,
       "item": "ITEM_BOTTLE_CAP",
       "flag": "FLAG_HIDDEN_ITEM_WJ_MTPYRE_6F_BOTTLE_CAP"
+    },
+    {
+      "type": "hidden_item",
+      "x": 6,
+      "y": 5,
+      "elevation": 3,
+      "item": "ITEM_GENGARITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GENGARITE"
     }
   ]
 }

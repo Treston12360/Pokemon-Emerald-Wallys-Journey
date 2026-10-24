@@ -509,18 +509,34 @@
     {
       "type": "hidden_item",
       "x": 29,
-      "y": 73,
-      "elevation": 5,
-      "item": "ITEM_PYROARITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_PYROARITE"
-    },
-    {
-      "type": "hidden_item",
-      "x": 29,
       "y": 46,
       "elevation": 3,
       "item": "ITEM_MILD_MINT",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ROUTE114_MILD_MINT"
+    },
+    {
+      "type": "hidden_item",
+      "x": 17,
+      "y": 49,
+      "elevation": 3,
+      "item": "ITEM_FALINKSITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_FALINKSITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 9,
+      "y": 33,
+      "elevation": 3,
+      "item": "ITEM_FERALIGITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_FERALIGITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 22,
+      "y": 40,
+      "elevation": 3,
+      "item": "ITEM_PYROARITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_PYROARITE"
     }
   ]
 }

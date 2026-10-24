@@ -261,12 +261,20 @@ WallyJourney_StevenMega_End:
 	.string "evolved.\p"
 	.string "When your bond is strong enough,\n"
 	.string "the bracelet will respond.\p"
+	.string "It responds to other MEGA STONES,\n"
+	.string "too. Wearing it, you'll sense them\l"
+	.string "as a faint sparkle on the ground.\p"
+	.string "HOENN hides many of them. Keep your\n"
+	.string "eyes open on your travels.\p"
 	.string "I look forward to seeing how far\n"
 	.string "you'll go. Until next time!$"
 
 WallyJourney_StevenMega_AfterText:
-	.string "STEVEN: Your bond with your\n"
-	.string "POKéMON is your greatest strength!$"
+	.string "STEVEN: Watch for that sparkle.\n"
+	.string "MEGA STONES rest where their\l"
+	.string "POKéMON feel at home.\p"
+	.string "Your bond with your POKéMON is\n"
+	.string "your greatest strength!$"
 
 
 PetalburgCity_WallysHouse_Text_DadAfterPlayerChampion:

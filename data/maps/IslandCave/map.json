@@ -77,14 +77,6 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "IslandCave_EventScript_CaveEntranceSide"
-    },
-    {
-      "type": "hidden_item",
-      "x": 4,
-      "y": 3,
-      "elevation": 3,
-      "item": "ITEM_BAXCALIBRITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_BAXCALIBRITE"
     }
   ]
 }

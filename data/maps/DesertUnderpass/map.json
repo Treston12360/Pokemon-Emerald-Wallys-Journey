@@ -40,14 +40,5 @@
     }
   ],
   "coord_events": [],
-  "bg_events": [
-    {
-      "type": "hidden_item",
-      "x": 135,
-      "y": 17,
-      "elevation": 0,
-      "item": "ITEM_GARCHOMPITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_GARCHOMPITE"
-    }
-  ]
+  "bg_events": []
 }

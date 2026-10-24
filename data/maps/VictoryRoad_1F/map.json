@@ -202,14 +202,6 @@
     },
     {
       "type": "hidden_item",
-      "x": 28,
-      "y": 17,
-      "elevation": 4,
-      "item": "ITEM_MAWILITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_MAWILITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 30,
       "y": 19,
       "elevation": 3,
@@ -223,6 +215,14 @@
       "elevation": 3,
       "item": "ITEM_ABILITY_CAPSULE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_VICTORYROAD_1F_ABILITY_CAPSULE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 16,
+      "y": 20,
+      "elevation": 4,
+      "item": "ITEM_MAWILITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_MAWILITE"
     }
   ]
 }

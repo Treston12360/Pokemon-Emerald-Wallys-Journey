@@ -78,14 +78,6 @@
       "elevation": 0,
       "item": "ITEM_IRON",
       "flag": "FLAG_HIDDEN_ITEM_ARTISAN_CAVE_B1F_IRON"
-    },
-    {
-      "type": "hidden_item",
-      "x": 3,
-      "y": 11,
-      "elevation": 3,
-      "item": "ITEM_GALLADITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_GALLADITE"
     }
   ]
 }

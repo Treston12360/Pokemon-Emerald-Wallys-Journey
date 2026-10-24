@@ -141,14 +141,6 @@
     {
       "type": "hidden_item",
       "x": 3,
-      "y": 20,
-      "elevation": 3,
-      "item": "ITEM_CHARIZARDITE_X",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_CHARIZARDITE_X"
-    },
-    {
-      "type": "hidden_item",
-      "x": 3,
       "y": 19,
       "elevation": 3,
       "item": "ITEM_FIRIUM_Z",
@@ -169,6 +161,22 @@
       "elevation": 3,
       "item": "ITEM_ABILITY_CAPSULE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_FIERYPATH_ABILITY_CAPSULE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 4,
+      "y": 7,
+      "elevation": 3,
+      "item": "ITEM_CHARIZARDITE_X",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_CHARIZARDITE_X"
+    },
+    {
+      "type": "hidden_item",
+      "x": 10,
+      "y": 32,
+      "elevation": 3,
+      "item": "ITEM_EMBOARITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_EMBOARITE"
     }
   ]
 }

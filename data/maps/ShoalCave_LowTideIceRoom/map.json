@@ -56,14 +56,6 @@
     {
       "type": "hidden_item",
       "x": 3,
-      "y": 26,
-      "elevation": 3,
-      "item": "ITEM_GLALITITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_GLALITITE"
-    },
-    {
-      "type": "hidden_item",
-      "x": 3,
       "y": 25,
       "elevation": 3,
       "item": "ITEM_ICIUM_Z",
@@ -76,6 +68,22 @@
       "elevation": 3,
       "item": "ITEM_ICE_STONE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ICE_STONE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 6,
+      "y": 8,
+      "elevation": 4,
+      "item": "ITEM_BAXCALIBRITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_BAXCALIBRITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 7,
+      "y": 18,
+      "elevation": 4,
+      "item": "ITEM_GLALITITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_GLALITITE"
     }
   ]
 }

@@ -67,14 +67,5 @@
     }
   ],
   "coord_events": [],
-  "bg_events": [
-    {
-      "type": "hidden_item",
-      "x": 11,
-      "y": 7,
-      "elevation": 3,
-      "item": "ITEM_ALAKAZITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_ALAKAZITE"
-    }
-  ]
+  "bg_events": []
 }

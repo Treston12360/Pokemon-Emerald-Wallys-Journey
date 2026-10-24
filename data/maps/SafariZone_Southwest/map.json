@@ -74,19 +74,19 @@
     },
     {
       "type": "hidden_item",
-      "x": 3,
-      "y": 36,
-      "elevation": 1,
-      "item": "ITEM_VICTREEBELITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_VICTREEBELITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 1,
       "y": 37,
       "elevation": 3,
       "item": "ITEM_POISONIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_POISONIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 4,
+      "y": 10,
+      "elevation": 3,
+      "item": "ITEM_RAICHUNITE_Y",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_RAICHUNITE_Y"
     }
   ]
 }

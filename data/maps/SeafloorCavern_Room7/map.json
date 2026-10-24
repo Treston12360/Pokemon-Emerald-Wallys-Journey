@@ -32,5 +32,14 @@
     }
   ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 8,
+      "y": 21,
+      "elevation": 3,
+      "item": "ITEM_MALAMARITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_MALAMARITE"
+    }
+  ]
 }

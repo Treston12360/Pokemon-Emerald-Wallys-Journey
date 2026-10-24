@@ -42,8 +42,8 @@
   "bg_events": [
     {
       "type": "hidden_item",
-      "x": 5,
-      "y": 12,
+      "x": 10,
+      "y": 8,
       "elevation": 3,
       "item": "ITEM_ALTARIANITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ALTARIANITE"

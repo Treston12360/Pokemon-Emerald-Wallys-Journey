@@ -39,14 +39,5 @@
     }
   ],
   "coord_events": [],
-  "bg_events": [
-    {
-      "type": "hidden_item",
-      "x": 5,
-      "y": 3,
-      "elevation": 3,
-      "item": "ITEM_CHARIZARDITE_Y",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_CHARIZARDITE_Y"
-    }
-  ]
+  "bg_events": []
 }

@@ -58,19 +58,27 @@
   "bg_events": [
     {
       "type": "hidden_item",
-      "x": 3,
-      "y": 6,
-      "elevation": 5,
-      "item": "ITEM_VENUSAURITE",
-      "flag": "FLAG_HIDDEN_ITEM_WJ_VENUSAURITE"
-    },
-    {
-      "type": "hidden_item",
       "x": 4,
       "y": 6,
       "elevation": 5,
       "item": "ITEM_GRASSIUM_Z",
       "flag": "FLAG_HIDDEN_ITEM_WJ_GRASSIUM_Z"
+    },
+    {
+      "type": "hidden_item",
+      "x": 28,
+      "y": 33,
+      "elevation": 3,
+      "item": "ITEM_CHESNAUGHTITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_CHESNAUGHTITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 33,
+      "y": 33,
+      "elevation": 3,
+      "item": "ITEM_PINSIRITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_PINSIRITE"
     }
   ]
 }

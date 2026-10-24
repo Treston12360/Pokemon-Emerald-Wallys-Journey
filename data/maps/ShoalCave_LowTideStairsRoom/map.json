@@ -57,8 +57,8 @@
     },
     {
       "type": "hidden_item",
-      "x": 13,
-      "y": 11,
+      "x": 6,
+      "y": 10,
       "elevation": 3,
       "item": "ITEM_ABOMASITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_ABOMASITE"

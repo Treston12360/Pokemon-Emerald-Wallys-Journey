@@ -113,8 +113,16 @@
     },
     {
       "type": "hidden_item",
-      "x": 6,
-      "y": 3,
+      "x": 31,
+      "y": 11,
+      "elevation": 3,
+      "item": "ITEM_AMPHAROSITE",
+      "flag": "FLAG_HIDDEN_ITEM_WJ_AMPHAROSITE"
+    },
+    {
+      "type": "hidden_item",
+      "x": 26,
+      "y": 16,
       "elevation": 3,
       "item": "ITEM_KANGASKHANITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_KANGASKHANITE"

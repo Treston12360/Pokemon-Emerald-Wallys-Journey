@@ -1695,6 +1695,7 @@ void CB1_Overworld(void)
     {
         WallyJourney_TrySeasonNotice();
         WallyJourney_UpdateFallingLeaves();
+        WallyJourney_UpdateMegaStoneSparkles();
         DoCB1_Overworld(gMain.newKeys, gMain.heldKeys);
     }
 }
