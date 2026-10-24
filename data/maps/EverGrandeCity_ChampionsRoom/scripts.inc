@@ -853,10 +853,16 @@ WallyJourney_ChampionPool_MaxieDefeat:
 	.string "that stopped us.$"
 
 WallyJourney_ChampionPool_MaxieVictory:
-	.string "MAXIE: I spent years trying to\n"
-	.string "reshape the land.\p"
-	.string "Now I'm learning to care for it\n"
-	.string "as it is. Thank you, CHAMPION.$"
+	.string "MAXIE: Even if GROUDON had given\n"
+	.string "us more land, people would have\l"
+	.string "filled it.\p"
+	.string "The same troubles would have\n"
+	.string "followed us.\p"
+	.string "A new HOENN wasn't the answer.\n"
+	.string "This one has to change, starting\l"
+	.string "with people like me.\p"
+	.string "That work is mine now.\n"
+	.string "Thank you, CHAMPION.$"
 
 WallyJourney_ChampionPool_ArchieIntro:
 	.string "ARCHIE: Ahoy, CHAMPION! Didn't\n"
@@ -875,9 +881,13 @@ WallyJourney_ChampionPool_ArchieDefeat:
 	.string "fair and square!$"
 
 WallyJourney_ChampionPool_ArchieVictory:
-	.string "ARCHIE: The sea doesn't need a new\n"
-	.string "world. It needs people looking\l"
-	.string "after this one.\p"
+	.string "ARCHIE: Say KYOGRE had given us\n"
+	.string "more sea. Sooner or later, we'd\l"
+	.string "have fouled that too.\p"
+	.string "A new world doesn't fix the people\n"
+	.string "living in it.\p"
+	.string "So we fix this one, starting with\n"
+	.string "ourselves.\p"
 	.string "See you on the water.$"
 
 WallyJourney_ChampionDefense_SetE4RematchDone::
