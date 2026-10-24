@@ -99,8 +99,28 @@ PlayersHouse_2F_EventScript_CheckWallClock::
 	incrementgamestat GAME_STAT_CHECKED_CLOCK
 	fadescreen FADE_TO_BLACK
 	special Special_ViewWallClock
+	msgbox PlayersHouse_2F_Text_AdjustClockHour, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, PlayersHouse_2F_EventScript_ClockLeave
+	msgbox PlayersHouse_2F_Text_SetClockToRealTime, MSGBOX_DEFAULT
+	closemessage
+	fadescreen FADE_TO_BLACK
+	special StartWallClock
+	msgbox PlayersHouse_2F_Text_ClockHourAdjusted, MSGBOX_DEFAULT
+PlayersHouse_2F_EventScript_ClockLeave::
 	releaseall
 	end
+
+PlayersHouse_2F_Text_AdjustClockHour:
+	.string "The clock follows your system clock.\n"
+	.string "Is it showing the wrong hour?$"
+
+PlayersHouse_2F_Text_SetClockToRealTime:
+	.string "Set the clock to the time it really\n"
+	.string "is now. Only the hour will change.$"
+
+PlayersHouse_2F_Text_ClockHourAdjusted:
+	.string "The hour is fixed. The minutes keep\n"
+	.string "following your system clock.$"
 
 @ Wally's Journey: the clock follows the device's own time (src/rtc.c), so there is nothing to set.
 PlayersHouse_2F_EventScript_SetWallClock::

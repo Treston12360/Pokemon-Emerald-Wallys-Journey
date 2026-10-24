@@ -8,6 +8,8 @@
 #include "text.h"
 #include "fake_rtc.h"
 #include "overworld.h"
+#include "event_data.h"
+#include "constants/vars.h"
 
 // iwram bss
 static u16 sErrorStatus;
@@ -316,10 +318,12 @@ void RtcCalcTimeDifference(struct SiiRtcInfo *rtc, struct Time *result, struct T
 
 // Wally's Journey: the clock always shows the device's own time (PC / 3DS / phone clock that the
 // emulator passes to the cartridge clock). Only whole days are kept in the save's offset, so day
-// counters stay relative to the start of the game; hours, minutes and seconds are never offset.
+// counters stay relative to the start of the game. Minutes and seconds are never offset. Some
+// emulators hand the game the wrong hour (for example a different time zone), so the player can
+// correct the hour at the wall clock; that whole-hour correction is VAR_WALLY_CLOCK_HOURS.
 static void WallyJourney_KeepDeviceTimeOfDay(void)
 {
-    gSaveBlock2Ptr->localTimeOffset.hours = 0;
+    gSaveBlock2Ptr->localTimeOffset.hours = VarGet(VAR_WALLY_CLOCK_HOURS) % HOURS_PER_DAY;
     gSaveBlock2Ptr->localTimeOffset.minutes = 0;
     gSaveBlock2Ptr->localTimeOffset.seconds = 0;
 }
@@ -351,9 +355,18 @@ enum TimeOfDay GetTimeOfDayForDex(void)
     return GenConfigTimeOfDay(timeOfDay);
 }
 
+// Wally's Journey: setting the wall clock only corrects the hour. The difference between the
+// device clock and the time the player set is rounded to whole hours; minutes keep following the
+// device, and the day count is left alone.
 void RtcInitLocalTimeOffset(s32 hour, s32 minute)
 {
-    RtcCalcLocalTimeOffset(0, hour, minute, 0);
+    s32 diff;
+    RtcGetInfo(&sRtc);
+    diff = (ConvertBcdToBinary(sRtc.hour) * MINUTES_PER_HOUR + ConvertBcdToBinary(sRtc.minute))
+         - (hour * MINUTES_PER_HOUR + minute);
+    diff = ((diff % (HOURS_PER_DAY * MINUTES_PER_HOUR)) + HOURS_PER_DAY * MINUTES_PER_HOUR) % (HOURS_PER_DAY * MINUTES_PER_HOUR);
+    VarSet(VAR_WALLY_CLOCK_HOURS, ((diff + MINUTES_PER_HOUR / 2) / MINUTES_PER_HOUR) % HOURS_PER_DAY);
+    RtcCalcLocalTime();
 }
 
 void RtcCalcLocalTimeOffset(s32 days, s32 hours, s32 minutes, s32 seconds)

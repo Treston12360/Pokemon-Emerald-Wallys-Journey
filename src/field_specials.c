@@ -196,7 +196,8 @@ void Special_ShowDiploma(void)
 
 void Special_ViewWallClock(void)
 {
-    gMain.savedCallback = CB2_ReturnToField;
+    // Wally's Journey: the script continues afterwards (offer to correct the hour).
+    gMain.savedCallback = CB2_ReturnToFieldContinueScript;
     SetMainCallback2(CB2_ViewWallClock);
     LockPlayerFieldControls();
 }
