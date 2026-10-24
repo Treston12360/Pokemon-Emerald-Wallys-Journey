@@ -376,9 +376,10 @@ RustboroCity_Gym_Text_RoxanneGrowNeedTwo:
 
 RustboroCity_Gym_Text_RoxanneGrowOffer1:
 	.string "ROXANNE: You have {STR_VAR_1} BADGES now.\p"
-	.string "I studied our battle and raised my\n"
-	.string "team to {STR_VAR_2}'s level.\p"
-	.string "Will you sit one more exam?$"
+	.string "A LEADER chooses a team to suit a\n"
+	.string "challenger's BADGES.\p"
+	.string "You've earned a harder exam.\n"
+	.string "Will you sit it?$"
 
 RustboroCity_Gym_Text_RoxanneGrowDefeat1:
 	.string "My notes were right about you.\n"
@@ -391,8 +392,8 @@ RustboroCity_Gym_Text_RoxanneGrowAfter1:
 RustboroCity_Gym_Text_RoxanneGrowOffer2:
 	.string "ROXANNE: Eight BADGES. Next is the\n"
 	.string "POKéMON LEAGUE.\p"
-	.string "My team is close to ELITE FOUR\n"
-	.string "strength now. Shall we test you?$"
+	.string "So I'll hold back much less this\n"
+	.string "time. Shall we test you?$"
 
 RustboroCity_Gym_Text_RoxanneGrowDefeat2:
 	.string "You're ready. I'd stake my\n"

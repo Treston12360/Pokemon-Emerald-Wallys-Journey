@@ -1712,8 +1712,10 @@ PetalburgCity_Gym_Text_NormanGrowNeedTwo:
 
 PetalburgCity_Gym_Text_NormanGrowOffer1:
 	.string "DAD: {STR_VAR_1} BADGES. I'm proud of you.\p"
-	.string "I've trained my team up to\n"
-	.string "{STR_VAR_2}'s level. Want to spar?$"
+	.string "A LEADER fights each challenger\n"
+	.string "with a team that suits their BADGES.\p"
+	.string "Yours have earned a tougher one.\n"
+	.string "Want to spar?$"
 
 PetalburgCity_Gym_Text_NormanGrowDefeat1:
 	.string "You're stronger every time.\n"

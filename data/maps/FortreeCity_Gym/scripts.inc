@@ -430,8 +430,10 @@ FortreeCity_Gym_Text_WinonaGrowNeedTwo:
 
 FortreeCity_Gym_Text_WinonaGrowOffer1:
 	.string "WINONA: You hold {STR_VAR_1} BADGES now.\p"
-	.string "My team has flown higher, up to\n"
-	.string "{STR_VAR_2}'s level. Will you fly with us?$"
+	.string "A LEADER's team is chosen to suit\n"
+	.string "the challenger's BADGES.\p"
+	.string "Yours let us fly higher.\n"
+	.string "Will you fly with us?$"
 
 FortreeCity_Gym_Text_WinonaGrowDefeat1:
 	.string "You soared past us again.$"
@@ -443,8 +445,8 @@ FortreeCity_Gym_Text_WinonaGrowAfter1:
 FortreeCity_Gym_Text_WinonaGrowOffer2:
 	.string "WINONA: Eight BADGES. The LEAGUE\n"
 	.string "waits beyond VICTORY ROAD.\p"
-	.string "My team flies just below the\n"
-	.string "ELITE FOUR now. One more flight?$"
+	.string "We will hold back far less today.\n"
+	.string "One more flight?$"
 
 FortreeCity_Gym_Text_WinonaGrowDefeat2:
 	.string "Your wings are ready.$"

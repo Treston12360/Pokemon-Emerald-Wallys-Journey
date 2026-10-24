@@ -1,6 +1,6 @@
 # Rare visitors (sub-1% encounter mechanic)
 
-Normal tables can't go below a 1% slot. A rare visitor gets its own exact chance per encounter of that type on that map, rolled on top of the normal table (`src/data/wally_rare_visitors.h`, roll in `WallyJourney_RollRareVisitor`, `src/wild_encounter.c`). Level comes from the slot rolled. Repel and Keen Eye checks still apply.
+Normal tables can't go below a 1% slot. A rare visitor gets its own exact chance per encounter of that type on that map, rolled on top of the normal table: one roll out of 10000 per encounter, and each visitor on that map/area owns its own slice, so each appears at exactly its listed chance however many visitors share the area (the validator checks they add up to no more than 100%) (`src/data/wally_rare_visitors.h`, roll in `WallyJourney_RollRareVisitor`, `src/wild_encounter.c`). Level comes from the slot rolled. Repel and Keen Eye checks still apply.
 
 | Species | Map | Type | Chance per encounter |
 |---|---|---|---|

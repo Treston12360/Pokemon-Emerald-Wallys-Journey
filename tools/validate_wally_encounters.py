@@ -56,6 +56,13 @@ import re as _re
 _vis = (ROOT / "src/data/wally_rare_visitors.h").read_text(encoding="utf-8")
 VISITOR_SPECIES = set(_re.findall(r"VISITOR\(MAP_\w+,\s*\w+,\s*(SPECIES_\w+)", _vis))
 species = set(species) | VISITOR_SPECIES
+# All visitors on one map/area share a single roll out of 10000, so their chances must fit.
+_vsum = {}
+for _m, _a, _c in _re.findall(r"VISITOR\((MAP_\w+),\s*(\w+),\s*SPECIES_\w+,\s*(\d+)\)", _vis):
+    _vsum[(_m, _a)] = _vsum.get((_m, _a), 0) + int(_c)
+for _k, _v in _vsum.items():
+    if _v > 10000:
+        raise SystemExit(f"rare visitors on {_k} add up to {_v}/10000")
 # A form counts for its species (e.g. SPECIES_GIMMIGHOUL_CHEST -> SPECIES_GIMMIGHOUL).
 for _s in list(species):
     _parts = _s.split("_")

@@ -495,9 +495,10 @@ LavaridgeTown_Gym_1F_Text_FlanneryGrowNeedTwo:
 
 LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer1:
 	.string "FLANNERY: {STR_VAR_1} BADGES already?\p"
-	.string "I've been training like crazy.\n"
-	.string "My team's up to {STR_VAR_2}'s level!\p"
-	.string "Let's see if I'm a real LEADER yet!$"
+	.string "GYM LEADERS match their team to a\n"
+	.string "challenger's BADGES, you know.\p"
+	.string "So I get to turn up the heat!\n"
+	.string "Let's go!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat1:
 	.string "Ugh! Still not enough heat!$"
@@ -508,8 +509,8 @@ LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter1:
 
 LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer2:
 	.string "FLANNERY: Eight BADGES!\p"
-	.string "My team's almost ELITE FOUR hot.\n"
-	.string "One more battle?$"
+	.string "Then I can bring out a lot more\n"
+	.string "of my real team. One more battle?$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat2:
 	.string "You're burning brighter than me.\n"

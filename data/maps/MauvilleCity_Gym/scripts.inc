@@ -541,8 +541,9 @@ MauvilleCity_Gym_Text_WattsonGrowNeedTwo:
 
 MauvilleCity_Gym_Text_WattsonGrowOffer1:
 	.string "WATTSON: Wahahaha! {STR_VAR_1} BADGES!\p"
-	.string "I've charged my team up to\n"
-	.string "{STR_VAR_2}'s level. Want a jolt?$"
+	.string "A LEADER sets the voltage to suit\n"
+	.string "the challenger. Yours just went\l"
+	.string "up! Want a jolt?$"
 
 MauvilleCity_Gym_Text_WattsonGrowDefeat1:
 	.string "Wahahaha! Shocked again!$"
@@ -553,8 +554,8 @@ MauvilleCity_Gym_Text_WattsonGrowAfter1:
 
 MauvilleCity_Gym_Text_WattsonGrowOffer2:
 	.string "WATTSON: Eight BADGES! Wahahaha!\p"
-	.string "My team runs near ELITE FOUR\n"
-	.string "voltage now. One more spark?$"
+	.string "Then I'll turn the dial way up.\n"
+	.string "One more spark?$"
 
 MauvilleCity_Gym_Text_WattsonGrowDefeat2:
 	.string "Wahahaha! You've got the current\n"

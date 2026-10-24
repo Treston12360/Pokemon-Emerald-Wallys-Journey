@@ -433,8 +433,8 @@ SootopolisCity_Gym_1F_Text_JuanGrowAfter1:
 SootopolisCity_Gym_1F_Text_JuanGrowOffer2:
 	.string "JUAN: Eight BADGES, mine among them.\p"
 	.string "Before the LEAGUE, allow me to test\n"
-	.string "you. My team stands just beneath\l"
-	.string "the ELITE FOUR.$"
+	.string "you. This time I shall hold back\l"
+	.string "far less.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowDefeat2:
 	.string "Magnificent. WALLACE's old teacher\n"

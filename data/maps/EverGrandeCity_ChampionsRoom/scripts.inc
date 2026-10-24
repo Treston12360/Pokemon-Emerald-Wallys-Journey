@@ -27,6 +27,10 @@ WallyJourney_ChampionDefense_PickChallenger::
 	@ TRESTON (the first title defense) is also number 12 in the random draw.
 	random 13
 	copyvar VAR_WALLY_TITLE_CHALLENGER, VAR_RESULT
+	@ The Gym Leaders battle as a Double Battle. With fewer than two
+	@ POKéMON able to battle, Wally takes the challenge instead.
+	special HasEnoughMonsForDoubleBattle
+	call_if_ne VAR_RESULT, PLAYER_HAS_TWO_USABLE_MONS, WallyJourney_ChampionDefense_NoDoubles
 	switch VAR_WALLY_TITLE_CHALLENGER
 	case 1, WallyJourney_ChampionDefense_GfxWallace
 	case 2, WallyJourney_ChampionDefense_GfxSteven
@@ -40,6 +44,12 @@ WallyJourney_ChampionDefense_PickChallenger::
 	case 10, WallyJourney_ChampionDefense_GfxLiza
 	case 11, WallyJourney_ChampionDefense_GfxJuan
 	case 12, WallyJourney_ChampionDefense_GfxTreston
+	return
+
+WallyJourney_ChampionDefense_NoDoubles::
+	goto_if_lt VAR_WALLY_TITLE_CHALLENGER, 4, Common_EventScript_NopReturn
+	goto_if_gt VAR_WALLY_TITLE_CHALLENGER, 11, Common_EventScript_NopReturn
+	setvar VAR_WALLY_TITLE_CHALLENGER, 0
 	return
 
 WallyJourney_ChampionDefense_GfxTreston::
@@ -595,56 +605,72 @@ WallyJourney_ChampionPool_RivalAfter::
 WallyJourney_ChampionPool_Roxanne::
 	msgbox WallyJourney_ChampionPool_RoxanneIntro, MSGBOX_DEFAULT
 	cleartrainerflag TRAINER_ROXANNE_4
-	trainerbattle_double TRAINER_ROXANNE_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_RoxanneDefeat, WallyJourney_ChampionPool_NeedTwo
+	@ No-intro form: this runs from the room script, not from talking to an object.
+	@ The trainer data marks the team as a Double Battle.
+	trainerbattle_no_intro TRAINER_ROXANNE_4, WallyJourney_ChampionPool_RoxanneDefeat
 	msgbox WallyJourney_ChampionPool_RoxanneVictory, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionDefense_Won
 
 WallyJourney_ChampionPool_Brawly::
 	msgbox WallyJourney_ChampionPool_BrawlyIntro, MSGBOX_DEFAULT
 	cleartrainerflag TRAINER_BRAWLY_4
-	trainerbattle_double TRAINER_BRAWLY_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_BrawlyDefeat, WallyJourney_ChampionPool_NeedTwo
+	@ No-intro form: this runs from the room script, not from talking to an object.
+	@ The trainer data marks the team as a Double Battle.
+	trainerbattle_no_intro TRAINER_BRAWLY_4, WallyJourney_ChampionPool_BrawlyDefeat
 	msgbox WallyJourney_ChampionPool_BrawlyVictory, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionDefense_Won
 
 WallyJourney_ChampionPool_Wattson::
 	msgbox WallyJourney_ChampionPool_WattsonIntro, MSGBOX_DEFAULT
 	cleartrainerflag TRAINER_WATTSON_4
-	trainerbattle_double TRAINER_WATTSON_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_WattsonDefeat, WallyJourney_ChampionPool_NeedTwo
+	@ No-intro form: this runs from the room script, not from talking to an object.
+	@ The trainer data marks the team as a Double Battle.
+	trainerbattle_no_intro TRAINER_WATTSON_4, WallyJourney_ChampionPool_WattsonDefeat
 	msgbox WallyJourney_ChampionPool_WattsonVictory, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionDefense_Won
 
 WallyJourney_ChampionPool_Flannery::
 	msgbox WallyJourney_ChampionPool_FlanneryIntro, MSGBOX_DEFAULT
 	cleartrainerflag TRAINER_FLANNERY_4
-	trainerbattle_double TRAINER_FLANNERY_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_FlanneryDefeat, WallyJourney_ChampionPool_NeedTwo
+	@ No-intro form: this runs from the room script, not from talking to an object.
+	@ The trainer data marks the team as a Double Battle.
+	trainerbattle_no_intro TRAINER_FLANNERY_4, WallyJourney_ChampionPool_FlanneryDefeat
 	msgbox WallyJourney_ChampionPool_FlanneryVictory, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionDefense_Won
 
 WallyJourney_ChampionPool_Norman::
 	msgbox WallyJourney_ChampionPool_NormanIntro, MSGBOX_DEFAULT
 	cleartrainerflag TRAINER_NORMAN_4
-	trainerbattle_double TRAINER_NORMAN_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_NormanDefeat, WallyJourney_ChampionPool_NeedTwo
+	@ No-intro form: this runs from the room script, not from talking to an object.
+	@ The trainer data marks the team as a Double Battle.
+	trainerbattle_no_intro TRAINER_NORMAN_4, WallyJourney_ChampionPool_NormanDefeat
 	msgbox WallyJourney_ChampionPool_NormanVictory, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionDefense_Won
 
 WallyJourney_ChampionPool_Winona::
 	msgbox WallyJourney_ChampionPool_WinonaIntro, MSGBOX_DEFAULT
 	cleartrainerflag TRAINER_WINONA_4
-	trainerbattle_double TRAINER_WINONA_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_WinonaDefeat, WallyJourney_ChampionPool_NeedTwo
+	@ No-intro form: this runs from the room script, not from talking to an object.
+	@ The trainer data marks the team as a Double Battle.
+	trainerbattle_no_intro TRAINER_WINONA_4, WallyJourney_ChampionPool_WinonaDefeat
 	msgbox WallyJourney_ChampionPool_WinonaVictory, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionDefense_Won
 
 WallyJourney_ChampionPool_TateAndLiza::
 	msgbox WallyJourney_ChampionPool_TateAndLizaIntro, MSGBOX_DEFAULT
 	cleartrainerflag TRAINER_TATE_AND_LIZA_4
-	trainerbattle_double TRAINER_TATE_AND_LIZA_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_TateAndLizaDefeat, WallyJourney_ChampionPool_NeedTwo
+	@ No-intro form: this runs from the room script, not from talking to an object.
+	@ The trainer data marks the team as a Double Battle.
+	trainerbattle_no_intro TRAINER_TATE_AND_LIZA_4, WallyJourney_ChampionPool_TateAndLizaDefeat
 	msgbox WallyJourney_ChampionPool_TateAndLizaVictory, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionDefense_Won
 
 WallyJourney_ChampionPool_Juan::
 	msgbox WallyJourney_ChampionPool_JuanIntro, MSGBOX_DEFAULT
 	cleartrainerflag TRAINER_JUAN_4
-	trainerbattle_double TRAINER_JUAN_4, WallyJourney_ChampionPool_Go, WallyJourney_ChampionPool_JuanDefeat, WallyJourney_ChampionPool_NeedTwo
+	@ No-intro form: this runs from the room script, not from talking to an object.
+	@ The trainer data marks the team as a Double Battle.
+	trainerbattle_no_intro TRAINER_JUAN_4, WallyJourney_ChampionPool_JuanDefeat
 	msgbox WallyJourney_ChampionPool_JuanVictory, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionDefense_Won
 
@@ -781,11 +807,6 @@ WallyJourney_ChampionPool_JuanDefeat:
 WallyJourney_ChampionPool_JuanVictory:
 	.string "JUAN: I am content.\n"
 	.string "The stage remains yours.$"
-WallyJourney_ChampionPool_Go:
-	.string "Here we go!$"
-WallyJourney_ChampionPool_NeedTwo:
-	.string "You need two POKéMON for this\n"
-	.string "battle.$"
 
 WallyJourney_ChampionDefense_SetE4RematchDone::
 	setflag FLAG_WALLY_E4_REMATCH_DONE

@@ -17425,7 +17425,7 @@ Double Battle: No
 AI: Basic Trainer / Smart Switching / Try To 2HKO / HP Aware / PP Stall Prevention
 
 SPECIES_GYARADOS @ ITEM_GYARADOSITE
-Level: 52
+Level: 50
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
@@ -17435,7 +17435,7 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - Dragon Dance
 
 SPECIES_WHISCASH @ ITEM_QUICK_CLAW
-Level: 52
+Level: 49
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -17445,7 +17445,7 @@ EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_EARTHQUAKE
 
 SPECIES_CRAWDAUNT @ ITEM_CHOICE_BAND
-Level: 52
+Level: 50
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -17455,7 +17455,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_CRUNCH
 
 SPECIES_AZUMARILL @ ITEM_WHITE_HERB
-Level: 52
+Level: 49
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -17465,7 +17465,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_HYDRO_PUMP
 
 SPECIES_LANTURN @ ITEM_LEFTOVERS
-Level: 52
+Level: 50
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -17495,7 +17495,7 @@ Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
 SPECIES_GYARADOS @ ITEM_GYARADOSITE
-Level: 66
+Level: 64
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
@@ -17505,7 +17505,7 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - Dragon Dance
 
 SPECIES_WHISCASH @ ITEM_QUICK_CLAW
-Level: 66
+Level: 63
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -17515,7 +17515,7 @@ EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_EARTHQUAKE
 
 SPECIES_CRAWDAUNT @ ITEM_CHOICE_BAND
-Level: 66
+Level: 64
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -17525,7 +17525,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_CRUNCH
 
 SPECIES_AZUMARILL @ ITEM_WHITE_HERB
-Level: 66
+Level: 63
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -17535,7 +17535,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_HYDRO_PUMP
 
 SPECIES_LANTURN @ ITEM_LEFTOVERS
-Level: 66
+Level: 64
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -17565,7 +17565,7 @@ Double Battle: Yes
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
 
 SPECIES_POLITOED @ ITEM_WIKI_BERRY
-Level: 78
+Level: 76
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Spe
@@ -17575,7 +17575,7 @@ EVs: 252 HP / 252 Spe
 - MOVE_PROTECT
 
 SPECIES_GYARADOS @ ITEM_GYARADOSITE
-Level: 78
+Level: 75
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
@@ -17585,7 +17585,7 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - Dragon Dance
 
 SPECIES_WALREIN @ ITEM_LEFTOVERS
-Level: 78
+Level: 76
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA
@@ -17595,7 +17595,7 @@ EVs: 252 HP / 252 SpA
 - MOVE_ROCK_SLIDE
 
 SPECIES_CRAWDAUNT @ ITEM_SCOPE_LENS
-Level: 78
+Level: 75
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 252 SpA
@@ -17605,7 +17605,7 @@ EVs: 252 Atk / 252 SpA
 - MOVE_CRUNCH
 
 SPECIES_BLASTOISE @ ITEM_MYSTIC_WATER
-Level: 78
+Level: 76
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA

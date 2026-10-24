@@ -580,9 +580,10 @@ DewfordTown_Gym_Text_BrawlyGrowNeedTwo:
 
 DewfordTown_Gym_Text_BrawlyGrowOffer1:
 	.string "BRAWLY: Whoa, {STR_VAR_1} BADGES already!\p"
-	.string "I rode a bigger wave with my team.\n"
-	.string "They're at {STR_VAR_2}'s level now.\p"
-	.string "Want to paddle out again?$"
+	.string "In GYM battles I pick my crew to\n"
+	.string "match the BADGES you've got.\p"
+	.string "With that many, I can bring a\n"
+	.string "bigger wave. Paddle out again?$"
 
 DewfordTown_Gym_Text_BrawlyGrowDefeat1:
 	.string "Wiped out again!\n"
@@ -594,7 +595,7 @@ DewfordTown_Gym_Text_BrawlyGrowAfter1:
 
 DewfordTown_Gym_Text_BrawlyGrowOffer2:
 	.string "BRAWLY: All eight BADGES, huh?\p"
-	.string "My team's nearly ELITE FOUR tough.\n"
+	.string "Then I don't have to go so easy.\n"
 	.string "One last wave before the LEAGUE?$"
 
 DewfordTown_Gym_Text_BrawlyGrowDefeat2:

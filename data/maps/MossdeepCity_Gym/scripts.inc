@@ -784,8 +784,8 @@ MossdeepCity_Gym_Text_TateAndLizaGrowNeedTwo:
 MossdeepCity_Gym_Text_TateAndLizaGrowOffer1:
 	.string "TATE: {STR_VAR_1} BADGES...\n"
 	.string "LIZA: ...we saw it coming!\p"
-	.string "TATE: Our team grew to\n"
-	.string "LIZA: ...{STR_VAR_2}'s level!\p"
+	.string "TATE: More BADGES means...\n"
+	.string "LIZA: ...we hold back less!\p"
 	.string "TATE&LIZA: Rematch?$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowDefeat1:
@@ -799,8 +799,8 @@ MossdeepCity_Gym_Text_TateAndLizaGrowAfter1:
 MossdeepCity_Gym_Text_TateAndLizaGrowOffer2:
 	.string "TATE: Eight BADGES!\n"
 	.string "LIZA: The LEAGUE is next!\p"
-	.string "TATE: Our team is almost at\n"
-	.string "LIZA: ...ELITE FOUR level!\p"
+	.string "TATE: So we'll show you...\n"
+	.string "LIZA: ...much more of our team!\p"
 	.string "TATE&LIZA: One more battle?$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowDefeat2:

@@ -549,19 +549,25 @@ static enum Species WallyJourney_SeasonalForm(enum Species species)
     return species;
 }
 
-// Wally's Journey: each rare visitor on this map/area gets its own exact roll.
+// Wally's Journey: one roll per encounter. Each rare visitor on this map/area owns its
+// own slice of 0-9999, so every visitor appears at exactly its listed chance (in 10000),
+// no matter how many other visitors share the area or where it sits in the list.
 static enum Species WallyJourney_RollRareVisitor(u32 area, enum Species species)
 {
-    u32 i;
+    u32 i, roll, top = 0;
     species = WallyJourney_SeasonalForm(species);
+    roll = Random32() % 10000;
     for (i = 0; i < ARRAY_COUNT(sWallyRareVisitors); i++)
     {
         const struct WallyRareVisitor *v = &sWallyRareVisitors[i];
         if (v->area == area
          && v->mapGroup == gSaveBlock1Ptr->location.mapGroup
-         && v->mapNum == gSaveBlock1Ptr->location.mapNum
-         && (Random() % 10000) < v->chance)
-            return v->species;
+         && v->mapNum == gSaveBlock1Ptr->location.mapNum)
+        {
+            top += v->chance;
+            if (roll < top)
+                return v->species;
+        }
     }
     return species;
 }
