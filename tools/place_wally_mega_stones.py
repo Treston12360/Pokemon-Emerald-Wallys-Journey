@@ -5,6 +5,7 @@ Owner rule (2026-10-23): Mega Stones "rest where their Pokémon feel at home" (S
 appear only after the Mega Bracelet, and sparkle on the ground. A good tile is:
   * walkable land (not water, ledge, door, ice slide), or any open tile on an underwater map,
   * reachable from the map's entrances (on foot or by Surf),
+  * not on stairs/ramps/bridges (elevation 0 or 15 on maps that have height levels),
   * at least 3 tiles from the map edge and 5 from any warp, not on another event,
   * tucked into a nook (walls/trees/rocks on one or more sides), like the stones in the Hoenn remakes.
 Stones already on such a tile in the right map stay put.
@@ -67,9 +68,9 @@ WATER = mbset(r'MB_POND_WATER', r'MB_INTERIOR_DEEP_WATER', r'MB_DEEP_WATER', r'M
               r'MB_EASTWARD_CURRENT', r'MB_WESTWARD_CURRENT', r'MB_NORTHWARD_CURRENT', r'MB_SOUTHWARD_CURRENT')
 SAND = mbset(r'MB_SAND', r'MB_DEEP_SAND')
 GRASS = mbset(r'MB_TALL_GRASS', r'MB_LONG_GRASS', r'MB_ASHGRASS')
-AVOID = mbset(r'MB_JUMP_\w+', r'MB_\w*DOOR\w*', r'MB_\w*WARP\w*', r'MB_\w*STAIRS\w*', r'MB_\w*LADDER\w*', r'MB_SLIDE_\w+',
+AVOID = mbset(r'MB_JUMP_\w+', r'MB_\w*_DOOR\w*', r'MB_\w*WARP\w*', r'MB_\w*STAIRS\w*', r'MB_\w*LADDER\w*', r'MB_SLIDE_\w+',
               r'MB_\w*ARROW\w*', r'MB_CRACKED\w*', r'MB_THIN_ICE', r'MB_ICE', r'MB_MUDDY_SLOPE', r'MB_\w*BRIDGE\w*',
-              r'MB_\w*_EDGE', r'MB_SECRET_BASE\w*', r'MB_\w*HOLE\w*', r'MB_\w*_COUNTER', r'MB_PC', r'MB_\w*SHELF\w*') | WATER
+              r'MB_\w*_EDGE', r'MB_SECRET_BASE\w*', r'MB_\w*HOLE\w*', r'MB_COUNTER', r'MB_PC', r'MB_\w*SHELF\w*') | WATER
 
 def tileset_attrs(sym):
     src = (ROOT / 'src/data/tilesets/metatiles.h').read_text()
@@ -90,6 +91,8 @@ class Grid:
         prim, sec = tileset_attrs(L['primary_tileset']), tileset_attrs(L['secondary_tileset'])
         self.attr = prim[:512] + [0] * max(0, 512 - len(prim)) + sec
         self.underwater = mapname.startswith('Underwater')
+        walk = {self.info(x, y)[1] for x in range(self.w) for y in range(self.h) if self.info(x, y)[0] == 0}
+        self.multilevel = bool(walk - {0, 15}) and bool(walk & {0, 15})
     def info(self, x, y):
         v = self.blocks[y * self.w + x]
         mt, coll, elev = v & 0x3FF, (v >> 10) & 3, v >> 12
@@ -141,6 +144,8 @@ def good(g, x, y, reach, occ, warps, ignore=None):
     coll, elev, beh = g.info(x, y)
     if coll or (x, y) not in reach:
         return None
+    if elev in (0, 15) and g.multilevel:
+        return None  # on multi-level maps these are stairs, ramps and bridges; a stone there looks wrong and may not respond
     if not g.underwater and beh in AVOID:
         return None
     if g.underwater and beh in AVOID - WATER:
@@ -189,7 +194,7 @@ def main(apply):
         if apply:
             MAPS[cur][1]['bg_events'].remove(b)
             nb = dict(b); nb['x'], nb['y'] = x, y
-            nb['elevation'] = g.info(x, y)[1] if g.info(x, y)[1] not in (0, 15) else b.get('elevation', 3)
+            nb['elevation'] = g.info(x, y)[1]
             MAPS[target][1]['bg_events'].append(nb)
     for r in moved: print('MOVE', *r)
     print('kept', len(kept), 'moved', len(moved), 'failed', failed)

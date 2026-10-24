@@ -218,9 +218,9 @@
     },
     {
       "type": "hidden_item",
-      "x": 16,
-      "y": 20,
-      "elevation": 4,
+      "x": 30,
+      "y": 3,
+      "elevation": 3,
       "item": "ITEM_MAWILITE",
       "flag": "FLAG_HIDDEN_ITEM_WJ_MAWILITE"
     }

@@ -2,7 +2,7 @@
 
 Hidden items. **Mega Stones (2026-10-23):** each sits where its Pokémon lives (`tools/place_wally_mega_stones.py`: walkable, reachable, away from warps and edges, tucked into a nook, sand/grass/shore where the Pokémon lives there); they do not exist until the Mega Bracelet is in the Bag, then twinkle with Emerald's sparkle effect. Z-Crystals and Black Augurite stay plain hidden items. Each uses its own `FLAG_HIDDEN_ITEM_WJ_*` flag. One of each; not repeatable. Story-given: starter stone (Steven, Wally's house). Postgame Pokémon League mart still sells Gardevoirite (earlier work); its Galladite was removed since Galladite is now hidden.
 
-Status: placed in map data and builds. Not yet emulator-verified that every tile is reachable.
+Status (2026-10-24): all 77 Mega Stones emulator-checked one by one (warped next to each with the Mega Bracelet: sparkle shows, "found one ..." message, stone goes to the Bag). Reachability from the map entrances is checked by the placement tool (walkable path, height levels respected), not by walking every route in-game.
 
 | Item | Map | x, y |
 |---|---|---|
@@ -10,7 +10,7 @@ Status: placed in map data and builds. Not yet emulator-verified that every tile
 | Absolite | Route120 | 16, 38 |
 | Aerodactylite | DesertRuins | 3, 7 |
 | Aggronite | VictoryRoad_B1F | 25, 5 |
-| Alakazite | GraniteCave_1F | 29, 5 |
+| Alakazite | GraniteCave_1F | 22, 8 |
 | Altarianite | SkyPillar_3F | 10, 8 |
 | Ampharosite | SafariZone_Southeast | 31, 11 |
 | Audinite | Route116 | 12, 11 |
@@ -57,7 +57,7 @@ Status: placed in map data and builds. Not yet emulator-verified that every tile
 | Lucarionite | VictoryRoad_B2F | 37, 26 |
 | Malamarite | SeafloorCavern_Room7 | 8, 21 |
 | Manectite | Route110 | 31, 66 |
-| Mawilite | VictoryRoad_1F | 16, 20 |
+| Mawilite | VictoryRoad_1F | 30, 3 |
 | Medichamite | MtPyre_Exterior | 13, 22 |
 | Meganiumite | Route104 | 6, 4 |
 | Meowsticite | Route121 | 49, 10 |
