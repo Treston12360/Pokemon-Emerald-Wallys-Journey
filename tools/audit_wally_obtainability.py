@@ -117,7 +117,7 @@ def visitor_species():
     f = ROOT / "src/data/wally_rare_visitors.h"
     if not f.exists():
         return set()
-    return set(re.findall(r"VISITOR\(\s*MAP_\w+\s*,\s*WILD_AREA_\w+\s*,\s*(SPECIES_\w+)", f.read_text(encoding="utf-8")))
+    return set(re.findall(r"VISITOR\(\s*MAP_\w+\s*,\s*\w+\s*,\s*(SPECIES_\w+)", f.read_text(encoding="utf-8")))
 
 
 def script_species():
@@ -164,6 +164,9 @@ def run():
 
     visitors = visitor_species()
     have = set(wild) | gifts | visitors
+    # Route 119 Feebas fishing tiles (gWildFeebas in src/wild_encounter.c) are a real wild source.
+    if "gWildFeebas" in (ROOT / "src/wild_encounter.c").read_text(encoding="utf-8"):
+        have.add("SPECIES_FEEBAS")
     links = item_form_links() + SEASONAL
     changed = True
     while changed:

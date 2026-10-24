@@ -87,3 +87,38 @@ Where a fitting map had no free table slot, the species became a **rare visitor*
 - **Bisharp in Seafloor Cavern is lv 35 but evolves at 52** (owner rule says wild level must not be below the evolution level). Needs an owner decision: lower Pawniard to Bisharp to about 35 (Legacy-style), or move Bisharp somewhere with lv 52+.
 
 Tools: `tools/validate_wally_encounters.py` and `tools/check_wally_wild_species_preservation.py` now count rare visitors (and forms) as wild; `tools/check_wally_wild_rarity.py` and `tools/audit_wally_habitat_rarity.py` report 0 flags.
+
+## Full pass, vanilla included (2026-10-23, owner request)
+
+Owner: "edit the pre existing emerald locations/rarities ... quality across the board; the original
+Emerald Pokémon don't need to be more common than everything else." Every Hoenn land, surf, Rock Smash
+and rod table was rewritten from one design file, `tools/wally_spawn_redesign.py`, built by
+`tools/build_wally_spawn_redesign.py` (weights -> slots; evolved species get legal levels or their
+pre-evolution).
+
+Global slot rates changed:
+- Surf 60/30/5/4/1 -> **35/30/20/10/5** (no more 60% Tentacool / 99% Marill seas).
+- Rock Smash 60/30/5/4/1 -> **40/30/15/10/5**.
+- Land (20/20/10/10/10/10/5/5/4/4/1/1) and rods unchanged.
+- 1% finds on water, Rock Smash and each rod are now rare visitors (exact chance, no slot).
+  Fishing visitors are new: `WJ_VISITOR_OLD_ROD/GOOD_ROD/SUPER_ROD` in `wally_rare_visitors.h`.
+
+Principles: the most natural species for the place lead (vanilla or not); vanilla natives that
+dominated (Shuppet 80-93% on every Mt. Pyre floor, Whismur 93% in Rusturf, Zubat 90% in Seafloor
+Cavern, Numel 64% on Route 112, Spinda 64% on Route 113, Golbat/Solrock in Meteor Falls, Marill 99%
+in every river) now share with fitting neighbors. Examples:
+- Mt. Pyre floors: Shuppet/Duskull lead, with Litwick, Gastly, Drifloon, Yamask, Misdreavus,
+  Honedge, Greavard spread by floor; exterior adds Cubone (graveyard) and Phantump (tree stumps).
+- Rusturf Tunnel (being dug): Timburr and Drilbur join; Seafloor Cavern: Binacle, Dwebble,
+  Sandygast, Corphish, Inkay, Pawniard (Bisharp at Lv 35 removed: it evolves at 52).
+- Rivers/ponds (102, 111, 114, 117, 119, 120, Petalburg): Lotad, Surskit, Wooper, Psyduck,
+  Goldeen, Basculin, Chewtle; Route 119's sea Tentacool/Wingull are gone (it's a river).
+- Route 112 lost its Marill (no water there); Charmander now lives on this volcanic trail.
+- Meteor Falls surf is Zubat/Golbat over water plus Goldeen, Barboach/Whiscash, Psyduck/Golduck.
+- Starters: Treecko moved to Petalburg Woods (forest), Mudkip to Route 102 (pond); all 1%.
+- Final forms that only come from stones, trades or friendship are no longer wild (Gallade,
+  Gourgeist, Electivire, Magmortar, Togetic, Togekiss, Crobat, Froslass, Slowking, Lucario);
+  their families stay catchable earlier. Validators and the species baseline record this.
+- Feebas stays on Route 119's six special fishing tiles (vanilla mechanic).
+Checks: validate_wally_encounters, species preservation, elusive caps, starter/pseudo rarity,
+evolution levels, obtainability (1044/1044) all pass.

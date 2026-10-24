@@ -25,7 +25,7 @@ existing = {
 # Rare visitors (src/data/wally_rare_visitors.h) are real wild encounters too.
 import re as _re
 _vis = (ROOT / "src/data/wally_rare_visitors.h").read_text(encoding="utf-8")
-VISITOR_SPECIES = set(_re.findall(r"VISITOR\(MAP_\w+,\s*WILD_AREA_\w+,\s*(SPECIES_\w+)", _vis))
+VISITOR_SPECIES = set(_re.findall(r"VISITOR\(MAP_\w+,\s*\w+,\s*(SPECIES_\w+)", _vis))
 existing |= VISITOR_SPECIES
 baseline = {
     line.strip()

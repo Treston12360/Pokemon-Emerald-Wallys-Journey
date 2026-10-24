@@ -54,7 +54,7 @@ for group in encounters["wild_encounter_groups"]:
 # Rare visitors (src/data/wally_rare_visitors.h) are real wild encounters too.
 import re as _re
 _vis = (ROOT / "src/data/wally_rare_visitors.h").read_text(encoding="utf-8")
-VISITOR_SPECIES = set(_re.findall(r"VISITOR\(MAP_\w+,\s*WILD_AREA_\w+,\s*(SPECIES_\w+)", _vis))
+VISITOR_SPECIES = set(_re.findall(r"VISITOR\(MAP_\w+,\s*\w+,\s*(SPECIES_\w+)", _vis))
 species = set(species) | VISITOR_SPECIES
 # A form counts for its species (e.g. SPECIES_GIMMIGHOUL_CHEST -> SPECIES_GIMMIGHOUL).
 for _s in list(species):
@@ -139,6 +139,7 @@ EXPANSION_PRE_EVOLUTION = {
     "SPECIES_SWANNA": "SPECIES_DUCKLETT",
     "SPECIES_BARRASKEWDA": "SPECIES_ARROKUDA",
     "SPECIES_PALAFIN": "SPECIES_FINIZEN",  # final form isn't wild; Finizen is
+    "SPECIES_LUCARIO": "SPECIES_RIOLU",  # 2026-10-23: friendship evolution, Riolu is wild
 }
 for mon in EXPANSION_SPECIES:
     if mon not in species and EXPANSION_PRE_EVOLUTION.get(mon) not in species:
@@ -202,6 +203,17 @@ WILD_PRE_EVOLUTION = {
     "SPECIES_KINGAMBIT": ("SPECIES_BISHARP", "SPECIES_PAWNIARD"),  # owner: Kingambit isn't wild; Bisharp holds Leader's Crest
     "SPECIES_CENTISKORCH": "SPECIES_SIZZLIPEDE",
     "SPECIES_POLTEAGEIST": "SPECIES_SINISTEA",
+    # 2026-10-23 full spawn pass: stone/trade/friendship final forms are no longer wild;
+    # their families stay catchable at an earlier stage.
+    "SPECIES_GOURGEIST": ("SPECIES_PUMPKABOO", "SPECIES_PUMPKABOO_AVERAGE"),
+    "SPECIES_GALLADE": "SPECIES_RALTS",
+    "SPECIES_TOGETIC": "SPECIES_TOGEPI",
+    "SPECIES_TOGEKISS": "SPECIES_TOGEPI",
+    "SPECIES_MAGMORTAR": ("SPECIES_MAGBY", "SPECIES_MAGMAR"),
+    "SPECIES_CROBAT": ("SPECIES_ZUBAT", "SPECIES_GOLBAT"),
+    "SPECIES_FROSLASS": "SPECIES_SNORUNT",
+    "SPECIES_SLOWKING": ("SPECIES_SLOWPOKE", "SPECIES_SLOWPOKE_GALAR"),
+    "SPECIES_ELECTIVIRE": "SPECIES_ELEKID",
 }
 for mon in EVOLVED_RARE_SPECIES:
     alts = WILD_PRE_EVOLUTION.get(mon, ())

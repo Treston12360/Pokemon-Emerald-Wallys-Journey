@@ -550,7 +550,7 @@ static enum Species WallyJourney_SeasonalForm(enum Species species)
 }
 
 // Wally's Journey: each rare visitor on this map/area gets its own exact roll.
-static enum Species WallyJourney_RollRareVisitor(enum WildPokemonArea area, enum Species species)
+static enum Species WallyJourney_RollRareVisitor(u32 area, enum Species species)
 {
     u32 i;
     species = WallyJourney_SeasonalForm(species);
@@ -627,8 +627,9 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, enum WildPok
 static u16 GenerateFishingWildMon(const struct WildPokemonInfo *wildMonInfo, u8 rod)
 {
     u8 wildMonIndex = ChooseWildMonIndex_Fishing(rod);
-    enum Species wildMonSpecies = wildMonInfo->wildPokemon[wildMonIndex].species;
     u8 level = ChooseWildMonLevel(wildMonInfo->wildPokemon, wildMonIndex, WILD_AREA_FISHING);
+    // Wally's Journey: rod-specific rare visitors (see wally_rare_visitors.h).
+    enum Species wildMonSpecies = WallyJourney_RollRareVisitor(WJ_VISITOR_OLD_ROD + rod, wildMonInfo->wildPokemon[wildMonIndex].species);
 
     UpdateChainFishingStreak();
     CreateWildMon(wildMonSpecies, level);
