@@ -26,7 +26,7 @@ area('ROUTE102', land=(3, 4, {'WURMPLE': 20, 'ZIGZAGOON': 20, 'LOTAD': 10, 'POOC
      super=(20, 35, {'CORPHISH': 40, 'GOLDEEN': 40, 'BARBOACH': 15, 'SEAKING': 5}))
 
 area('ROUTE103', land=(2, 4, {'ZIGZAGOON': 20, 'POOCHYENA': 20, 'WINGULL': 20, 'FLETCHLING': 10, 'PIDOVE': 10,
-                              'SQUAWKABILLY_GREEN': 5, 'SPRITZEE': 5, 'WATTREL': 4, 'RATTATA': 4, 'SKWOVET': 1, 'ZIGZAGOON ': 1}),
+                              'SQUAWKABILLY_GREEN': 5, 'WINGULL ': 5, 'WATTREL': 4, 'RATTATA': 4, 'SKWOVET': 1, 'ZIGZAGOON ': 1}),
      v_land={'SQUAWKABILLY_BLUE': 1, 'SQUAWKABILLY_YELLOW': 1, 'SQUAWKABILLY_WHITE': 0.5},
      water=sea('TENTACOOL', 'WINGULL', 'FINNEON', 'PELIPPER', 'BUIZEL'),
      old=OLD_SEA, good=(10, 25, {'TENTACOOL': 60, 'FINNEON': 20, 'WAILMER': 20}),
@@ -68,8 +68,8 @@ area('ROUTE109', water=sea('WINGULL', 'TENTACOOL', 'SHELLOS_WEST', 'PELIPPER', '
      super=(25, 40, {'WAILMER': 40, 'STARYU': 40, 'SHARPEDO': 15, 'LANTURN': 5}))
 
 area('ROUTE110', land=(12, 13, {'ELECTRIKE': 20, 'GULPIN': 20, 'PLUSLE': 10, 'MINUN': 10, 'ODDISH': 10, 'ZIGZAGOON': 10,
-                                'POOCHYENA': 5, 'BLITZLE': 5, 'MEOWTH': 4, 'JOLTIK': 4, 'MORPEKO': 1, 'EMOLGA': 1}),
-     v_land={'TADBULB': 1, 'TRUBBISH': 5, 'GRIMER_ALOLA': 1, 'RATTATA_ALOLA': 1, 'MORPEKO_FULL_BELLY': 2},
+                                'POOCHYENA': 5, 'BLITZLE': 5, 'MEOWTH': 4, 'PICHU': 4, 'MORPEKO': 1, 'PIKACHU': 1}),
+     v_land={'TADBULB': 1, 'TRUBBISH': 5, 'MEOWTH_ALOLA': 1, 'GLAMEOW': 2, 'GRIMER_ALOLA': 1, 'RATTATA_ALOLA': 1, 'MORPEKO_FULL_BELLY': 2},
      water=sea('TENTACOOL', 'WINGULL', 'FINNEON', 'PELIPPER', 'BRUXISH'),
      old=OLD_SEA, good=(10, 25, {'TENTACOOL': 60, 'WAILMER': 20, 'MAGIKARP': 20}),
      super=(25, 40, {'WAILMER': 40, 'CARVANHA': 40, 'SHARPEDO': 15, 'TENTACRUEL': 5}))
@@ -88,12 +88,12 @@ area('ROUTE112', land=(14, 16, {'NUMEL': 30, 'PONYTA': 15, 'GEODUDE': 15, 'MACHO
                                 'SLUGMA': 5, 'SALANDIT': 4, 'CHARMANDER': 1}),
      v_land={'CHIMCHAR': 1, 'GROWLITHE_HISUI': 0.5})
 
-area('ROUTE113', land=(14, 16, {'SPINDA': 25, 'SLUGMA': 20, 'SANDSHREW': 15, 'SPEAROW': 15, 'MUDBRAY': 10, 'SKARMORY': 5,
+area('ROUTE113', land=(14, 16, {'SPINDA': 25, 'SLUGMA': 20, 'SANDSHREW': 15, 'SPEAROW': 15, 'NUMEL': 10, 'SKARMORY': 5,
                                 'CHARCADET': 4, 'TORCHIC': 1}),
      v_land={'ZIGZAGOON_GALAR': 0.5, 'VIVILLON_HIGH_PLAINS': 0.5, 'MAGBY': 1})
 
 area('ROUTE114', land=(15, 18, {'SWABLU': 20, 'LOTAD': 15, 'SEVIPER': 10, 'ZANGOOSE': 10, 'LOMBRE': 10, 'NUZLEAF': 10,
-                                'MUNNA': 5, 'BOUFFALANT': 5, 'MASCHIFF': 4, 'GLAMEOW': 4, 'SEEDOT': 1, 'STUNKY': 1}),
+                                'MUNNA': 5, 'HOPPIP': 5, 'MASCHIFF': 4, 'FALINKS': 4, 'SEEDOT': 1, 'STUNKY': 1}),
      v_land={'WOOPER_PALDEA': 2, 'DROWZEE': 3, 'LITLEO': 4, 'VIVILLON_MEADOW': 0.5, 'VIVILLON_CONTINENTAL': 0.5, 'LITTEN': 1},
      water=(20, 30, {'LOTAD': 35, 'MARILL': 30, 'GOLDEEN': 20, 'LOMBRE': 10, 'WOOPER': 5}),
      v_water={'TOTODILE': 1},
@@ -115,13 +115,13 @@ area('ROUTE116', land=(6, 8, {'ZIGZAGOON': 15, 'TAILLOW': 15, 'WHISMUR': 15, 'NI
 
 area('ROUTE117', land=(13, 14, {'ODDISH': 20, 'ROSELIA': 15, 'POOCHYENA': 10, 'ILLUMISE': 10, 'VOLBEAT': 10, 'SEEDOT': 10,
                                 'FIDOUGH': 5, 'TANDEMAUS': 5, 'MINCCINO': 4, 'YAMPER': 4, 'BUDEW': 1, 'MARILL': 1}),
-     v_land={'FLABEBE_RED': 2, 'FLABEBE_ORANGE': 2, 'COMFEY': 0.5, 'FARFETCHD_GALAR': 0.5, 'SCORBUNNY': 1},
+     v_land={'SPRITZEE': 2, 'FLABEBE_RED': 2, 'FLABEBE_ORANGE': 2, 'COMFEY': 0.5, 'FARFETCHD_GALAR': 0.5, 'SCORBUNNY': 1},
      water=(20, 30, {'MARILL': 35, 'SURSKIT': 30, 'GOLDEEN': 20, 'TYMPOLE': 10, 'MASQUERAIN': 5}),
      v_water={'QUAXLY': 1},
      old=OLD_FRESH, good=(10, 25, {'GOLDEEN': 60, 'POLIWAG': 20, 'CORPHISH': 20}),
      super=(20, 35, {'CORPHISH': 40, 'POLIWAG': 40, 'CRAWDAUNT': 15, 'POLIWHIRL': 5}))
 
-area('ROUTE118', land=(24, 27, {'ELECTRIKE': 15, 'LINOONE': 15, 'ZIGZAGOON': 10, 'MANECTRIC': 10, 'WINGULL': 10, 'PACHIRISU': 10,
+area('ROUTE118', land=(24, 27, {'ELECTRIKE': 15, 'LINOONE': 15, 'ZIGZAGOON': 10, 'MANECTRIC': 10, 'WINGULL': 10, 'BLITZLE': 10,
                                 'SKIDDO': 5, 'TOGEDEMARU': 5, 'SHINX': 4, 'PELIPPER': 4, 'KECLEON': 1}),
      v_land={'VIVILLON_MARINE': 0.5},
      water=sea('TENTACOOL', 'WINGULL', 'ARROKUDA', 'PELIPPER', 'CARVANHA'),
@@ -130,16 +130,16 @@ area('ROUTE118', land=(24, 27, {'ELECTRIKE': 15, 'LINOONE': 15, 'ZIGZAGOON': 10,
      super=(25, 40, {'CARVANHA': 40, 'SHARPEDO': 40, 'BARRASKEWDA': 15, 'WAILMER': 5}))
 
 area('ROUTE119', land=(24, 27, {'ODDISH': 15, 'LINOONE': 15, 'BELLSPROUT': 10, 'CHATOT': 10, 'CUTIEFLY': 10, 'TROPIUS': 10,
-                                'VENONAT': 5, 'KARRABLAST': 5, 'FOMANTIS': 5, 'KECLEON': 4, 'HOPPIP': 4, 'GOOMY': 1}),
-     v_land={'TOEDSCOOL': 1, 'PONYTA_GALAR': 0.5, 'FLABEBE_WHITE': 1, 'VIVILLON_JUNGLE': 0.5, 'VIVILLON_MONSOON': 0.5, 'HATENNA': 1, 'ZIGZAGOON': 5},
+                                'VENONAT': 5, 'KARRABLAST': 5, 'FOMANTIS': 5, 'KECLEON': 4, 'PARAS': 4, 'GOOMY': 1}),
+     v_land={'TOEDSCOOL': 1, 'HAWLUCHA': 2, 'PONYTA_GALAR': 0.5, 'FLABEBE_WHITE': 1, 'VIVILLON_JUNGLE': 0.5, 'VIVILLON_MONSOON': 0.5, 'HATENNA': 1, 'ZIGZAGOON': 5},
      water=(25, 33, {'MARILL': 35, 'GOLDEEN': 30, 'BASCULIN_BLUE_STRIPED': 20, 'CHEWTLE': 10, 'BASCULIN': 5}),
      v_water={'SOBBLE': 1},
      old=OLD_FRESH, good=(10, 25, {'BASCULIN_RED_STRIPED': 60, 'GOLDEEN': 20, 'CARVANHA': 20}),
      super=(25, 40, {'CARVANHA': 40, 'BASCULIN_RED_STRIPED': 40, 'BASCULIN_WHITE_STRIPED': 15, 'SHARPEDO': 5}))
 
 area('ROUTE120', land=(25, 27, {'MIGHTYENA': 15, 'ODDISH': 15, 'POOCHYENA': 10, 'SURSKIT': 10, 'YANMA': 10, 'TANGELA': 10,
-                                'SHELMET': 5, 'DEDENNE': 5, 'CARNIVINE': 4, 'ABSOL': 4, 'ROWLET': 1, 'KECLEON': 1}),
-     v_land={'FOONGUS': 3, 'PANPOUR': 2, 'GRUBBIN': 3, 'ESPURR': 2, 'SLOWPOKE_GALAR': 0.5, 'STUNFISK_GALAR': 1,
+                                'SHELMET': 5, 'PACHIRISU': 5, 'CARNIVINE': 4, 'ABSOL': 4, 'ROWLET': 1, 'KECLEON': 1}),
+     v_land={'FOONGUS': 3, 'PANPOUR': 2, 'GRUBBIN': 3, 'EMOLGA': 2, 'INDEEDEE_M': 1, 'INDEEDEE_F': 1, 'IMPIDIMP': 1, 'SLOWPOKE_GALAR': 0.5, 'STUNFISK_GALAR': 1,
              'VIVILLON_RIVER': 0.5, 'VIVILLON_GARDEN': 0.5, 'FLAMIGO': 1},
      water=(25, 33, {'MARILL': 35, 'SURSKIT': 30, 'WOOPER': 20, 'DEWPIDER': 10, 'QUAGSIRE': 5}),
      v_water={'FROAKIE': 1},
@@ -149,7 +149,7 @@ area('ROUTE120', land=(25, 27, {'MIGHTYENA': 15, 'ODDISH': 15, 'POOCHYENA': 10, 
 area('ROUTE121', land=(26, 28, {'ODDISH': 15, 'MIGHTYENA': 15, 'POOCHYENA': 10, 'SHUPPET': 10, 'GLOOM': 10, 'WINGULL': 10,
                                 'NICKIT': 5, 'COTTONEE': 5, 'SWIRLIX': 4, 'SHROODLE': 4, 'EEVEE': 1, 'KECLEON': 1}),
      v_land={'MILCERY': 0.5, 'ORICORIO_BAILE': 2, 'VIVILLON_ELEGANT': 0.5, 'VIVILLON_MODERN': 0.5, 'ZORUA': 1,
-             'IMPIDIMP': 1, 'GOTHITA': 2},
+             'ESPURR': 2, 'GOTHITA': 2},
      water=sea('TENTACOOL', 'WINGULL', 'CRAMORANT', 'PELIPPER', 'STARYU'),
      old=OLD_SEA, good=(10, 25, {'TENTACOOL': 60, 'WAILMER': 20, 'STARYU': 20}),
      super=(25, 40, {'WAILMER': 40, 'STARYU': 40, 'SHARPEDO': 15, 'STARMIE': 5}))
@@ -160,7 +160,7 @@ area('ROUTE122', water=sea('TENTACOOL', 'WINGULL', 'FRILLISH', 'PELIPPER', 'TENT
 
 area('ROUTE123', land=(26, 28, {'ODDISH': 15, 'MIGHTYENA': 15, 'CHERUBI': 10, 'POOCHYENA': 10, 'SHUPPET': 10, 'GLOOM': 10,
                                 'SMOLIV': 5, 'EXEGGCUTE': 5, 'FLABEBE': 5, 'PETILIL': 4, 'MUNCHLAX': 1, 'KECLEON': 1}),
-     v_land={'INDEEDEE_M': 2, 'POLTCHAGEIST_COUNTERFEIT': 1, 'MEOWTH_ALOLA': 1, 'FLABEBE_BLUE': 1, 'INDEEDEE_F': 2,
+     v_land={'POLTCHAGEIST_COUNTERFEIT': 1, 'FLABEBE_BLUE': 1,
              'VIVILLON_SAVANNA': 0.5, 'VIVILLON_FANCY': 0.5, 'MIME_JR': 1},
      water=sea('TENTACOOL', 'WINGULL', 'FINNEON', 'PELIPPER', 'TENTACRUEL'),
      old=OLD_SEA, good=(10, 25, {'TENTACOOL': 60, 'WAILMER': 20, 'FINNEON': 20}),
@@ -259,6 +259,7 @@ area('GRANITE_CAVE_B1F', land=(9, 11, {'ARON': 25, 'ZUBAT': 25, 'MAKUHITA': 10, 
 area('GRANITE_CAVE_B2F', land=(10, 12, {'ARON': 25, 'ZUBAT': 25, 'SABLEYE': 15, 'ABRA': 10, 'GEODUDE': 10, 'ONIX': 5,
                                         'CARBINK': 4, 'CUFANT': 4, 'DURANT': 1, 'NOSEPASS': 1}),
      rock=(10, 20, {'GEODUDE': 40, 'NOSEPASS': 30, 'ROGGENROLA': 15, 'CARBINK': 10, 'GRAVELER': 5}),
+     v_land={'FERROSEED': 1},
      v_rock={'LILEEP': 1})
 area('GRANITE_CAVE_STEVENS_ROOM', land=(6, 10, {'MAKUHITA': 30, 'ZUBAT': 30, 'ARON': 20, 'ABRA': 10, 'SABLEYE': 5, 'GEODUDE': 4, 'BELDUM': 1}))
 
@@ -338,14 +339,14 @@ for m in ('CAVE_OF_ORIGIN_ENTRANCE', 'CAVE_OF_ORIGIN_1F', 'CAVE_OF_ORIGIN_UNUSED
           'CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP2', 'CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP3'):
     area(m, land=(30, 36, dict(COO)))
 
-area('NEW_MAUVILLE_ENTRANCE', land=(22, 26, {'VOLTORB': 30, 'MAGNEMITE': 30, 'KLINK': 15, 'TYNAMO': 10, 'PICHU': 10, 'VAROOM': 4, 'ROTOM': 1}),
+area('NEW_MAUVILLE_ENTRANCE', land=(22, 26, {'VOLTORB': 30, 'MAGNEMITE': 30, 'KLINK': 15, 'TYNAMO': 10, 'JOLTIK': 10, 'VAROOM': 4, 'ROTOM': 1}),
      v_land={'ELEKID': 1})
-area('NEW_MAUVILLE_INSIDE', land=(22, 26, {'MAGNEMITE': 30, 'VOLTORB': 30, 'KLINK': 15, 'TYNAMO': 10, 'MAGNETON': 5, 'PICHU': 5,
+area('NEW_MAUVILLE_INSIDE', land=(22, 26, {'MAGNEMITE': 30, 'VOLTORB': 30, 'KLINK': 15, 'TYNAMO': 10, 'JOLTIK': 5, 'DEDENNE': 5,
                                            'TOXEL': 4, 'ROTOM': 1}),
      v_land={'KLEFKI': 2, 'PORYGON': 0.5, 'VOLTORB_HISUI': 1, 'BURMY_TRASH': 2, 'ELEKID': 1})
 
 VR1 = {'GOLBAT': 20, 'HARIYAMA': 15, 'LAIRON': 15, 'LOUDRED': 10, 'MEDICHAM': 10, 'ZUBAT': 5, 'MAKUHITA': 5,
-       'MIENFOO': 5, 'FALINKS': 5, 'ARON': 4, 'RIOLU': 1}
+       'MIENFOO': 5, 'BOLDORE': 5, 'ARON': 4, 'RIOLU': 1}
 area('VICTORY_ROAD_1F', land=(36, 42, VR1))
 area('VICTORY_ROAD_B1F', land=(38, 42, {'GOLBAT': 25, 'HARIYAMA': 20, 'LAIRON': 15, 'MAWILE': 10, 'BOLDORE': 10, 'EXCADRILL': 5,
                                         'FRAXURE': 5, 'MIENSHAO': 4, 'DURALUDON': 4, 'DEINO': 1, 'MEDICHAM': 1}),
@@ -375,10 +376,10 @@ area('SHOAL_CAVE_LOW_TIDE_ICE_ROOM', land=(26, 32, {'SNORUNT': 20, 'SPHEAL': 20,
      v_land={'EISCUE_ICE': 1, 'SANDSHREW_ALOLA': 1, 'VULPIX_ALOLA': 0.5, 'DARUMAKA_GALAR': 0.5,
              'VIVILLON_POLAR': 0.5, 'VIVILLON_TUNDRA': 0.5, 'VIVILLON_ICY_SNOW': 0.5})
 
-SKY = {'GOLBAT': 25, 'SABLEYE': 20, 'CLAYDOL': 15, 'BANETTE': 10, 'SIGILYPH': 10, 'NOIBAT': 5, 'RUFFLET': 5, 'HAWLUCHA': 4}
+SKY = {'GOLBAT': 25, 'SABLEYE': 20, 'CLAYDOL': 15, 'BANETTE': 10, 'SIGILYPH': 10, 'NOIBAT': 5, 'RUFFLET': 5, 'BRONZOR': 4}
 area('SKY_PILLAR_1F', land=(33, 38, dict(SKY, BRONZONG=4, DRAMPA=1)), v_land={'DRAGONAIR': 1})
 area('SKY_PILLAR_3F', land=(33, 38, dict(SKY, ALTARIA=4, DRAMPA=1)), v_land={'SOLOSIS': 1})
-area('SKY_PILLAR_5F', land=(33, 39, dict(SKY, ALTARIA=4, TOGEPI=1)), v_land={'DRAGONAIR': 1})
+area('SKY_PILLAR_5F', land=(33, 39, dict(SKY, ALTARIA=4, DRAMPA=1)), v_land={'DRAGONAIR': 1})
 
 MAGMA = {'GEODUDE': 20, 'TORKOAL': 20, 'SLUGMA': 10, 'GRAVELER': 10, 'NUMEL': 10, 'CARKOL': 10, 'MAGMAR': 5, 'CENTISKORCH': 5}
 area('MAGMA_HIDEOUT_1F', land=(27, 33, dict(MAGMA, HEATMOR=4, LARVESTA=1)))
@@ -386,8 +387,8 @@ area('MAGMA_HIDEOUT_2F_1R', land=(27, 33, dict(MAGMA, HEATMOR=4, CAMERUPT=1)))
 area('MAGMA_HIDEOUT_2F_2R', land=(27, 33, dict(MAGMA, MAGCARGO=4, LARVESTA=1)))
 area('MAGMA_HIDEOUT_2F_3R', land=(27, 33, dict(MAGMA, HEATMOR=4, DRACOZOLT=1)))
 area('MAGMA_HIDEOUT_3F_1R', land=(27, 33, dict(MAGMA, MAGCARGO=4, PUPITAR=1)))
-area('MAGMA_HIDEOUT_3F_2R', land=(27, 33, dict(MAGMA, FERROSEED=4, CAMERUPT=1)))
-area('MAGMA_HIDEOUT_3F_3R', land=(27, 33, dict(MAGMA, FERROSEED=4, LARVESTA=1)))
+area('MAGMA_HIDEOUT_3F_2R', land=(27, 33, dict(MAGMA, HEATMOR=4, CAMERUPT=1)))
+area('MAGMA_HIDEOUT_3F_3R', land=(27, 33, dict(MAGMA, MAGCARGO=4, LARVESTA=1)))
 area('MAGMA_HIDEOUT_4F', land=(27, 33, dict(MAGMA, MAGCARGO=4, PUPITAR=1)))
 
 MT = {'SANDSHREW': 30, 'TRAPINCH': 30, 'BALTOY': 15, 'YAMASK_GALAR': 10}
@@ -402,7 +403,7 @@ area('DESERT_UNDERPASS', land=(35, 45, {'DITTO': 30, 'LOUDRED': 15, 'WHISMUR': 1
 # ================================================================= SAFARI ZONE
 area('SAFARI_ZONE_SOUTH', land=(25, 29, {'ODDISH': 20, 'GIRAFARIG': 15, 'DODUO': 15, 'NATU': 10, 'NIDORAN_F': 10, 'NIDORAN_M': 10,
                                          'TAUROS': 5, 'BOUNSWEET': 5, 'DEERLING': 4, 'MAREEP': 4, 'BULBASAUR': 1, 'PIKACHU': 1}),
-     v_land={'TAUROS_PALDEA_COMBAT': 1})
+     v_land={'TAUROS_PALDEA_COMBAT': 1, 'BOUFFALANT': 3, 'MUDBRAY': 3})
 area('SAFARI_ZONE_SOUTHWEST', land=(25, 29, {'ODDISH': 20, 'GIRAFARIG': 15, 'WOBBUFFET': 10, 'NATU': 10, 'DODUO': 10, 'PIKACHU': 10,
                                              'CROAGUNK': 5, 'YUNGOOS': 5, 'PSYDUCK': 4, 'NIDORINA': 4, 'TURTWIG': 1, 'NIDORINO': 1}),
      v_land={'TAUROS_PALDEA_BLAZE': 0.5, 'BURMY_PLANT': 2},

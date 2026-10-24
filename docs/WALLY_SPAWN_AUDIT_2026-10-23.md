@@ -122,3 +122,10 @@ in every river) now share with fitting neighbors. Examples:
 - Feebas stays on Route 119's six special fishing tiles (vanilla mechanic).
 Checks: validate_wally_encounters, species preservation, elusive caps, starter/pseudo rarity,
 evolution levels, obtainability (1044/1044) all pass.
+
+### Best-fit follow-up (owner: "it's okay if places end up samey as long as everything is in a place that best fits them")
+- Spritzee -> Route 117 flowers (from coastal Route 103). Joltik and Dedenne -> New Mauville (both feed on electricity); Pichu and Pikachu -> Route 110.
+- Indeedee, Impidimp, Emolga, Pachirisu -> Route 120's dark forest (Indeedee/Impidimp live in Glimwood Tangle).
+- Alolan Meowth and Glameow -> Route 110 with the other city strays. Espurr -> Route 121 by Lilycove.
+- Bouffalant and Mudbray -> Safari Zone South (ranch-like grassland). Hoppip -> Route 114 hills; Falinks -> Route 114 rocky meadow.
+- Hawlucha -> Route 119 jungle (tall trees), out of Sky Pillar. Togepi stays only in the Safari Zone. Ferroseed -> Granite Cave (iron cave ceilings), out of Magma Hideout.
