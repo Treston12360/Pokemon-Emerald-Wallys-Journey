@@ -314,9 +314,20 @@ void RtcCalcTimeDifference(struct SiiRtcInfo *rtc, struct Time *result, struct T
     }
 }
 
+// Wally's Journey: the clock always shows the device's own time (PC / 3DS / phone clock that the
+// emulator passes to the cartridge clock). Only whole days are kept in the save's offset, so day
+// counters stay relative to the start of the game; hours, minutes and seconds are never offset.
+static void WallyJourney_KeepDeviceTimeOfDay(void)
+{
+    gSaveBlock2Ptr->localTimeOffset.hours = 0;
+    gSaveBlock2Ptr->localTimeOffset.minutes = 0;
+    gSaveBlock2Ptr->localTimeOffset.seconds = 0;
+}
+
 void RtcCalcLocalTime(void)
 {
     RtcGetInfo(&sRtc);
+    WallyJourney_KeepDeviceTimeOfDay();
     RtcCalcTimeDifference(&sRtc, &gLocalTime, &gSaveBlock2Ptr->localTimeOffset);
 }
 
@@ -355,6 +366,8 @@ void RtcCalcLocalTimeOffset(s32 days, s32 hours, s32 minutes, s32 seconds)
         FakeRtc_ManuallySetTime(gLocalTime.days, gLocalTime.hours, gLocalTime.minutes, seconds);
     RtcGetInfo(&sRtc);
     RtcCalcTimeDifference(&sRtc, &gSaveBlock2Ptr->localTimeOffset, &gLocalTime);
+    WallyJourney_KeepDeviceTimeOfDay();
+    RtcCalcTimeDifference(&sRtc, &gLocalTime, &gSaveBlock2Ptr->localTimeOffset);
 }
 
 void CalcTimeDifference(struct Time *result, struct Time *t1, struct Time *t2)

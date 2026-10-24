@@ -102,9 +102,8 @@ PlayersHouse_2F_EventScript_CheckWallClock::
 	releaseall
 	end
 
+@ Wally's Journey: the clock follows the device's own time (src/rtc.c), so there is nothing to set.
 PlayersHouse_2F_EventScript_SetWallClock::
-	fadescreen FADE_TO_BLACK
-	special StartWallClock
 	return
 
 PlayersHouse_2F_Movement_MomEntersMale:
