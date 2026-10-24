@@ -23,9 +23,10 @@ WallyJourney_ChampionDefense_SetChallengerGfx::
 
 @ Wally's Journey: from the 5th title defense on, the challenger is drawn at random:
 @ 0 WALLY  1 WALLACE  2 STEVEN  3 MAY/BRENDAN  4-11 a Gym Leader with their final team.
+@ 12 TRESTON  13 MAXIE  14 ARCHIE (both reformed).
 WallyJourney_ChampionDefense_PickChallenger::
 	@ TRESTON (the first title defense) is also number 12 in the random draw.
-	random 13
+	random 15
 	copyvar VAR_WALLY_TITLE_CHALLENGER, VAR_RESULT
 	@ The Gym Leaders battle as a Double Battle. With fewer than two
 	@ POKéMON able to battle, Wally takes the challenge instead.
@@ -44,12 +45,22 @@ WallyJourney_ChampionDefense_PickChallenger::
 	case 10, WallyJourney_ChampionDefense_GfxLiza
 	case 11, WallyJourney_ChampionDefense_GfxJuan
 	case 12, WallyJourney_ChampionDefense_GfxTreston
+	case 13, WallyJourney_ChampionDefense_GfxMaxie
+	case 14, WallyJourney_ChampionDefense_GfxArchie
 	return
 
 WallyJourney_ChampionDefense_NoDoubles::
 	goto_if_lt VAR_WALLY_TITLE_CHALLENGER, 4, Common_EventScript_NopReturn
 	goto_if_gt VAR_WALLY_TITLE_CHALLENGER, 11, Common_EventScript_NopReturn
 	setvar VAR_WALLY_TITLE_CHALLENGER, 0
+	return
+
+WallyJourney_ChampionDefense_GfxMaxie::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MAXIE
+	return
+
+WallyJourney_ChampionDefense_GfxArchie::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_ARCHIE
 	return
 
 WallyJourney_ChampionDefense_GfxTreston::
@@ -170,6 +181,8 @@ WallyJourney_ChampionDefense_Wally::
 	case 10, WallyJourney_ChampionPool_TateAndLiza
 	case 11, WallyJourney_ChampionPool_Juan
 	case 12, WallyJourney_ChampionPool_Treston
+	case 13, WallyJourney_ChampionPool_Maxie
+	case 14, WallyJourney_ChampionPool_Archie
 	msgbox WallyJourney_ChampionDefense_FinalIntro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_WALLY_CHAMPION_FINAL, WallyJourney_ChampionDefense_FinalDefeat
 	msgbox WallyJourney_ChampionDefense_FinalVictory, MSGBOX_DEFAULT
@@ -807,6 +820,65 @@ WallyJourney_ChampionPool_JuanDefeat:
 WallyJourney_ChampionPool_JuanVictory:
 	.string "JUAN: I am content.\n"
 	.string "The stage remains yours.$"
+
+@ Wally's Journey: MAXIE and ARCHIE, reformed, as title challengers.
+WallyJourney_ChampionPool_Maxie::
+	msgbox WallyJourney_ChampionPool_MaxieIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_MAXIE_REFORMED, WallyJourney_ChampionPool_MaxieDefeat
+	msgbox WallyJourney_ChampionPool_MaxieVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_Archie::
+	msgbox WallyJourney_ChampionPool_ArchieIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_ARCHIE_REFORMED, WallyJourney_ChampionPool_ArchieDefeat
+	msgbox WallyJourney_ChampionPool_ArchieVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_MaxieIntro:
+	.string "MAXIE: CHAMPION. You remember me.\p"
+	.string "I nearly dried out HOENN for\n"
+	.string "a dream.\p"
+	.string "TEAM MAGMA is no more.\n"
+	.string "I ended it myself.\p"
+	.string "Some of my old members help in\n"
+	.string "FALLARBOR now. They test the ash-\l"
+	.string "covered soil so the farms there\l"
+	.string "can grow again.\p"
+	.string "I came to see the strength of a\n"
+	.string "TRAINER who fights for others.\l"
+	.string "Show me.$"
+
+WallyJourney_ChampionPool_MaxieDefeat:
+	.string "MAXIE: …So this is the strength\n"
+	.string "that stopped us.$"
+
+WallyJourney_ChampionPool_MaxieVictory:
+	.string "MAXIE: I spent years trying to\n"
+	.string "reshape the land.\p"
+	.string "Now I'm learning to care for it\n"
+	.string "as it is. Thank you, CHAMPION.$"
+
+WallyJourney_ChampionPool_ArchieIntro:
+	.string "ARCHIE: Ahoy, CHAMPION! Didn't\n"
+	.string "expect this old sea dog, did you?\p"
+	.string "I almost drowned HOENN chasing\n"
+	.string "KYOGRE. I won't ever forget that.\p"
+	.string "TEAM AQUA's finished. What's left\n"
+	.string "of my crew works with CAPT. STERN\l"
+	.string "now, cleaning up the sea and\l"
+	.string "paying back what we took.\p"
+	.string "But a sailor still loves a good\n"
+	.string "fight. Let's go!$"
+
+WallyJourney_ChampionPool_ArchieDefeat:
+	.string "ARCHIE: Hah! Sunk again,\n"
+	.string "fair and square!$"
+
+WallyJourney_ChampionPool_ArchieVictory:
+	.string "ARCHIE: The sea doesn't need a new\n"
+	.string "world. It needs people looking\l"
+	.string "after this one.\p"
+	.string "See you on the water.$"
 
 WallyJourney_ChampionDefense_SetE4RematchDone::
 	setflag FLAG_WALLY_E4_REMATCH_DONE

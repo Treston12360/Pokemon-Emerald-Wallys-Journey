@@ -19405,3 +19405,151 @@ EVs: 252 HP / 252 Atk / 4 Spe
 - Ice Punch
 - Rain Dance
 
+=== TRAINER_MAXIE_REFORMED ===
+Name: MAXIE
+Class: Pkmn Trainer 1
+Pic: Magma Leader Maxie
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / Ace Pokemon / PP Stall Prevention
+
+SPECIES_TORKOAL @ ITEM_HEAT_ROCK
+Level: 76
+Ability: Drought
+Nature: Bold
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Def / 4 SpA
+- MOVE_LAVA_PLUME
+- MOVE_EARTH_POWER
+- MOVE_STEALTH_ROCK
+- MOVE_YAWN
+
+SPECIES_HOUNDOOM @ ITEM_LIFE_ORB
+Level: 75
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
+- MOVE_FLAMETHROWER
+- MOVE_DARK_PULSE
+- MOVE_SLUDGE_BOMB
+- MOVE_NASTY_PLOT
+
+SPECIES_SHIFTRY @ ITEM_FOCUS_SASH
+Level: 76
+Ability: Chlorophyll
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_LEAF_BLADE
+- MOVE_KNOCK_OFF
+- MOVE_SUCKER_PUNCH
+- MOVE_SWORDS_DANCE
+
+SPECIES_CROBAT @ ITEM_SITRUS_BERRY
+Level: 75
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_BRAVE_BIRD
+- MOVE_CROSS_POISON
+- MOVE_U_TURN
+- MOVE_ROOST
+
+SPECIES_WEEZING @ ITEM_BLACK_SLUDGE
+Level: 76
+Ability: Levitate
+Nature: Bold
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Def / 4 SpA
+- MOVE_SLUDGE_BOMB
+- MOVE_FIRE_BLAST
+- MOVE_WILL_O_WISP
+- MOVE_PAIN_SPLIT
+
+SPECIES_CAMERUPT @ ITEM_LEFTOVERS
+Level: 78
+Ability: Solid Rock
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_ERUPTION
+- MOVE_EARTH_POWER
+- MOVE_SOLAR_BEAM
+- MOVE_ANCIENT_POWER
+
+=== TRAINER_ARCHIE_REFORMED ===
+Name: ARCHIE
+Class: Pkmn Trainer 1
+Pic: Aqua Leader Archie
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / Ace Pokemon / PP Stall Prevention
+
+SPECIES_PELIPPER @ ITEM_DAMP_ROCK
+Level: 76
+Ability: Drizzle
+Nature: Bold
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Def / 4 SpA
+- MOVE_SCALD
+- MOVE_HURRICANE
+- MOVE_U_TURN
+- MOVE_ROOST
+
+SPECIES_MIGHTYENA @ ITEM_CHOICE_BAND
+Level: 75
+Ability: Intimidate
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_CRUNCH
+- MOVE_PLAY_ROUGH
+- MOVE_SUCKER_PUNCH
+- MOVE_IRON_TAIL
+
+SPECIES_CROBAT @ ITEM_SITRUS_BERRY
+Level: 76
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_BRAVE_BIRD
+- MOVE_CROSS_POISON
+- MOVE_U_TURN
+- MOVE_ROOST
+
+SPECIES_MUK @ ITEM_BLACK_SLUDGE
+Level: 75
+Ability: Poison Touch
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_GUNK_SHOT
+- MOVE_KNOCK_OFF
+- MOVE_DRAIN_PUNCH
+- MOVE_SHADOW_SNEAK
+
+SPECIES_KINGDRA @ ITEM_LIFE_ORB
+Level: 76
+Ability: Swift Swim
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
+- MOVE_HYDRO_PUMP
+- MOVE_DRACO_METEOR
+- MOVE_ICE_BEAM
+- MOVE_FLASH_CANNON
+
+SPECIES_SHARPEDO @ ITEM_LIFE_ORB
+Level: 78
+Ability: Speed Boost
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_WATERFALL
+- MOVE_CRUNCH
+- MOVE_ICE_FANG
+- MOVE_PROTECT
