@@ -526,10 +526,9 @@ RusturfTunnel_Text_MikePostBattle:
 
 
 RusturfTunnel_Text_NoHmThanks:
-	.string "You cleared the boulders!\p"
+	.string "You smashed right through those\n"
+	.string "rocks!\p"
 	.string "Now WANDA and I can finally meet!$"
 
 RusturfTunnel_Text_NoHmStrength:
-	.string "With the HEAT BADGE, you can\n"
-	.string "move heavy rocks using STRENGTH.\p"
-	.string "Thank you for your help!$"
+	.string "Thank you so much for your help!$"
