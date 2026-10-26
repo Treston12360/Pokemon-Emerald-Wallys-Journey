@@ -72,6 +72,7 @@ enum WindowIds
 {
     WINDOW_INFO,
     WINDOW_REGISTERED,
+    WINDOW_RARE,
     WINDOW_COUNT,
 };
 
@@ -114,13 +115,21 @@ struct DexNavSearch
     u16 palBuffer[16];
 };
 
+// Wally's Journey: the DexNav is a checklist only. It lists what can be found on this map right
+// now (grass, surf, each rod, Rock Smash), shows "?" for Pokémon you haven't seen, and counts the
+// rare visitors you've found without naming them. Searching, registering, the detector, search
+// levels and chains are removed so rare Pokémon stay as rare as they're meant to be.
+#define WJ_DN_LAND_MAX  (COL_LAND_COUNT * 2 * 3)
+enum { WJ_WATER_SURF, WJ_WATER_OLD_ROD, WJ_WATER_GOOD_ROD, WJ_WATER_SUPER_ROD, WJ_WATER_ROCK_SMASH, WJ_WATER_MODES };
+#include "data/wally_dexnav_labels.h"
+
 struct DexNavGUI
 {
     MainCallback savedCallback;
     u8 state;
     u8 cursorSpriteId;
-    enum Species landSpecies[NUM_LAND_MONS_ENCOUNTER_SLOTS];
-    enum Species waterSpecies[NUM_WATER_MONS_ENCOUNTER_SLOTS];
+    enum Species landSpecies[WJ_DN_LAND_MAX];
+    enum Species waterSpecies[COL_WATER_COUNT];
     enum Species hiddenSpecies[NUM_HIDDEN_MONS_ENCOUNTER_SLOTS];
     u8 cursorRow;
     u8 cursorCol;
@@ -128,6 +137,16 @@ struct DexNavGUI
     u8 potential;
     u8 typeIconSpriteIds[2];
     u8 starSpriteIds[3];
+    // Wally's Journey checklist
+    u8 waterMode;               // WJ_WATER_SURF .. WJ_WATER_ROCK_SMASH (SELECT cycles)
+    u8 landPage;                // 12 land icons per page (L/R)
+    u8 landCount;
+    u8 landSpriteIds[COL_LAND_COUNT * 2];
+    u8 waterSpriteIds[COL_WATER_COUNT];
+    u8 landIsMonIcon[COL_LAND_COUNT * 2];
+    u8 waterIsMonIcon[COL_WATER_COUNT];
+    u8 capturedLandSpriteId;
+    u8 capturedWaterSpriteId;
 };
 
 // RAM
@@ -183,6 +202,13 @@ static const u32 sHiddenMonIconGfx[] = INCGFX_U32("graphics/dexnav/hidden.png", 
 static const u8 sText_DexNav_NoInfo[] = _("--------");
 static const u8 sText_DexNav_CaptureToSee[] = _("Capture first!");
 static const u8 sText_DexNav_PressRToRegister[] = _("R TO REGISTER!");
+static const u8 sText_WJ_Hint[] = _("{SELECT_BUTTON}WATER");
+static const u8 sText_WJ_HintPages[] = _("{SELECT_BUTTON}WATER {L_BUTTON}{R_BUTTON}LAND {STR_VAR_1}/{STR_VAR_2}");
+static const u8 sText_WJ_Caught[] = _("Caught");
+static const u8 sText_WJ_Seen[] = _("Seen");
+static const u8 sText_WJ_OfSeen[] = _("{STR_VAR_1} of {STR_VAR_2}");
+static const u8 sText_WJ_RareFound[] = _("{STR_VAR_1} of {STR_VAR_2} found");
+static const u8 sText_WJ_RareNone[] = _("None here");
 static const u8 sText_DexNav_SearchForRegisteredSpecies[] = _("Search {STR_VAR_1}");
 static const u8 sText_DexNav_NotFoundHere[] = _("This Pokémon cannot be found here!");
 static const u8 sText_ThreeQmarks[] = _("???");
@@ -220,6 +246,16 @@ static const struct WindowTemplate sDexNavGuiWindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 200,
+    },
+    [WINDOW_RARE] =
+    {
+        .bg = 0,
+        .tilemapLeft = 5,
+        .tilemapTop = 17,
+        .width = 9,
+        .height = 2,
+        .paletteNum = 15,
+        .baseBlock = 260,
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -948,6 +984,10 @@ static void RevealHiddenSearch(void)
 bool32 TryStartDexNavSearch(void)
 {
     u16 val = VarGet(DN_VAR_SPECIES);
+
+    // Wally's Journey: the DexNav is a checklist only; it never starts a search.
+    if (TRUE)
+        return FALSE;
 
     if (FlagGet(DN_FLAG_SEARCHING) && sDexNavSearchDataPtr->hiddenSearch)
     {
@@ -1683,122 +1723,38 @@ static void CreateSelectionCursor(void)
     UpdateCursorPosition();
 }
 
-static void CreateNoDataIcon(s16 x, s16 y)
+static u8 CreateNoDataIcon(s16 x, s16 y)
 {
-    CreateSprite(&sNoDataIconTemplate, x, y, 0);
+    return CreateSprite(&sNoDataIconTemplate, x, y, 0);
 }
 
-static bool8 CapturedAllLandMons(u32 headerId)
+static bool8 WJ_AllCaught(const enum Species *list, u32 count)
 {
-    u16 i;
-    enum Species species;
-    int count = 0;
-    enum TimeOfDay timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
-
-    const struct WildPokemonInfo *landMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo;
-
-    if (landMonsInfo != NULL)
+    u32 i, n = 0;
+    for (i = 0; i < count; i++)
     {
-        for (i = 0; i < NUM_LAND_MONS_ENCOUNTER_SLOTS; ++i)
-        {
-            species = landMonsInfo->wildPokemon[i].species;
-            if (species != SPECIES_NONE)
-            {
-                if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
-                    break;
-
-                count++;
-            }
-        }
-
-        if (i >= NUM_LAND_MONS_ENCOUNTER_SLOTS && count > 0) //All land mons caught
-            return TRUE;
-        else
+        if (list[i] == SPECIES_NONE)
+            continue;
+        if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(list[i]), FLAG_GET_CAUGHT))
             return FALSE;
+        n++;
     }
-
-    return TRUE;    //technically, no mon data means you caught them all
-}
-
-//Checks if all Pokemon that can be encountered while surfing have been capture
-static bool8 CapturedAllWaterMons(u32 headerId)
-{
-    u32 i;
-    enum Species species;
-    u8 count = 0;
-    enum TimeOfDay timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_WATER);
-
-    const struct WildPokemonInfo *waterMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo;
-
-    if (waterMonsInfo != NULL)
-    {
-        for (i = 0; i < NUM_WATER_MONS_ENCOUNTER_SLOTS; ++i)
-        {
-            species = waterMonsInfo->wildPokemon[i].species;
-            if (species != SPECIES_NONE)
-            {
-                count++;
-                if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
-                    break;
-            }
-        }
-
-        if (i >= NUM_WATER_MONS_ENCOUNTER_SLOTS && count > 0)
-            return TRUE;
-        else
-            return FALSE;
-    }
-
-    return TRUE;    //technically, no mon data means you caught them all
-}
-
-static bool8 CapturedAllHiddenMons(u32 headerId)
-{
-    u32 i;
-    enum Species species;
-    u8 count = 0;
-    enum TimeOfDay timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_HIDDEN);
-
-        const struct WildPokemonInfo *hiddenMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].hiddenMonsInfo;
-
-    if (hiddenMonsInfo != NULL)
-    {
-        for (i = 0; i < NUM_HIDDEN_MONS_ENCOUNTER_SLOTS; ++i)
-        {
-            species = hiddenMonsInfo->wildPokemon[i].species;
-            if (species != SPECIES_NONE)
-            {
-                count++;
-                if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
-                    break;
-            }
-        }
-
-        if (i >= NUM_HIDDEN_MONS_ENCOUNTER_SLOTS && count > 0)
-            return TRUE;
-        else
-            return FALSE;
-    }
-
-    return TRUE;    //technically, no mon data means you caught them all
+    return n > 0;
 }
 
 static void DexNavLoadCapturedAllSymbols(void)
 {
-    u32 headerId = GetCurrentMapWildMonHeaderId();
-    if (headerId == HEADER_NONE)
-        return;
+    if (sDexNavUiDataPtr->capturedLandSpriteId != SPRITE_NONE)
+        DestroySprite(&gSprites[sDexNavUiDataPtr->capturedLandSpriteId]);
+    if (sDexNavUiDataPtr->capturedWaterSpriteId != SPRITE_NONE)
+        DestroySprite(&gSprites[sDexNavUiDataPtr->capturedWaterSpriteId]);
+    sDexNavUiDataPtr->capturedLandSpriteId = SPRITE_NONE;
+    sDexNavUiDataPtr->capturedWaterSpriteId = SPRITE_NONE;
 
-    LoadCompressedSpriteSheetUsingHeap(&sCapturedAllPokemonSpriteSheet);
-
-    if (CapturedAllLandMons(headerId))
-        CreateSprite(&sCaptureAllMonsSpriteTemplate, 152, 58, 0);
-
-    if (CapturedAllWaterMons(headerId))
-        CreateSprite(&sCaptureAllMonsSpriteTemplate, 139, 17, 0);
-
-    if (CapturedAllHiddenMons(headerId))
-        CreateSprite(&sCaptureAllMonsSpriteTemplate, 114, 123, 0);
+    if (WJ_AllCaught(sDexNavUiDataPtr->landSpecies, sDexNavUiDataPtr->landCount))
+        sDexNavUiDataPtr->capturedLandSpriteId = CreateSprite(&sCaptureAllMonsSpriteTemplate, 152, 58, 0);
+    if (WJ_AllCaught(sDexNavUiDataPtr->waterSpecies, COL_WATER_COUNT))
+        sDexNavUiDataPtr->capturedWaterSpriteId = CreateSprite(&sCaptureAllMonsSpriteTemplate, 139, 17, 0);
 }
 
 //#define WIN_DETAILS_TILE        0x3a3
@@ -1830,7 +1786,7 @@ static void CB1_DexNavSearchCallback(void)
     CB1_InitDexNavSearch();
 }
 
-static void Task_DexNavExitAndSearch(u8 taskId)
+static UNUSED void Task_DexNavExitAndSearch(u8 taskId)
 {
     DespawnAllOverworldWildEncounters(OWE_GENERATED, 0);
     DexNavGuiFreeResources();
@@ -1857,151 +1813,218 @@ static void DexNavFadeAndExit(void)
     SetMainCallback2(DexNav_MainCB);
 }
 
-static bool8 SpeciesInArray(enum Species species, u8 section)
+static bool8 WJ_ListHas(const enum Species *list, u32 count, enum Species species)
 {
     u32 i;
-    enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(species);
-
-    switch (section)
+    for (i = 0; i < count; i++)
     {
-    case 0: //land
-        for (i = 0; i < NUM_LAND_MONS_ENCOUNTER_SLOTS; i++)
-        {
-            if (SpeciesToNationalPokedexNum(sDexNavUiDataPtr->landSpecies[i]) == dexNum)
-                return TRUE;
-        }
-        break;
-    case 1: //water
-        for (i = 0; i < NUM_WATER_MONS_ENCOUNTER_SLOTS; i++)
-        {
-            if (SpeciesToNationalPokedexNum(sDexNavUiDataPtr->waterSpecies[i]) == dexNum)
-                return TRUE;
-        }
-        break;
-    case 2: //hidden
-        for (i = 0; i < NUM_HIDDEN_MONS_ENCOUNTER_SLOTS; i++)
-        {
-            if (SpeciesToNationalPokedexNum(sDexNavUiDataPtr->hiddenSpecies[i]) == dexNum)
-                return TRUE;
-        }
-        break;
-    default:
-        break;
+        if (list[i] == species)
+            return TRUE;
     }
-
     return FALSE;
 }
 
-// get unique wild encounters on current map
-static void DexNavLoadEncounterData(void)
+// Unique species of one table, in table order. rod < 0: every entry; otherwise only that rod.
+static u32 WJ_CollectSpecies(const struct WildPokemonInfo *info, enum WildPokemonArea area, s32 rod, enum Species *dst, u32 count, u32 max)
 {
-    u8 grassIndex = 0;
-    u8 waterIndex = 0;
-    u8 hiddenIndex = 0;
-    enum Species species;
-    u32 i;
-    u32 headerId = GetCurrentMapWildMonHeaderId();
-    enum TimeOfDay timeOfDay;
+    u32 i, n, start = 0, end;
+    if (info == NULL || info->wildPokemon == NULL || info->encounterRate == 0)
+        return count;
+    n = WildInfoNumMons(info, area);
+    end = n;
+    if (rod >= 0 && info->numMons == 0)
+    {
+        // classic fishing slots: old 0-1, good 2-4, super 5-9
+        static const u8 sRodStart[] = {0, 2, 5}, sRodEnd[] = {2, 5, 10};
+        start = sRodStart[rod];
+        end = sRodEnd[rod];
+    }
+    for (i = start; i < end && count < max; i++)
+    {
+        enum Species species = info->wildPokemon[i].species;
+        if (rod >= 0 && info->numMons != 0 && info->wildPokemon[i].rod != rod)
+            continue;
+        if (species != SPECIES_NONE && !WJ_ListHas(dst, count, species))
+            dst[count++] = species;
+    }
+    return count;
+}
 
+static u32 WJ_LoadWaterMode(u32 headerId, u32 mode, enum Species *dst)
+{
+    enum TimeOfDay t;
+    memset(dst, 0, sizeof(enum Species) * COL_WATER_COUNT);
     if (headerId == HEADER_NONE)
-        return;
-
-    timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
-    const struct WildPokemonInfo *landMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo;
-    timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_WATER);
-    const struct WildPokemonInfo *waterMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo;
-    timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_HIDDEN);
-    const struct WildPokemonInfo *hiddenMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].hiddenMonsInfo;
-
-    // nop struct data
-    memset(sDexNavUiDataPtr->landSpecies, 0, sizeof(sDexNavUiDataPtr->landSpecies));
-    memset(sDexNavUiDataPtr->waterSpecies, 0, sizeof(sDexNavUiDataPtr->waterSpecies));
-    memset(sDexNavUiDataPtr->hiddenSpecies, 0, sizeof(sDexNavUiDataPtr->hiddenSpecies));
-
-    // land mons
-    if (landMonsInfo != NULL && landMonsInfo->encounterRate != 0)
+        return 0;
+    switch (mode)
     {
-        for (i = 0; i < NUM_LAND_MONS_ENCOUNTER_SLOTS; i++)
-        {
-            species = landMonsInfo->wildPokemon[i].species;
-            if (species != SPECIES_NONE && !SpeciesInArray(species, 0))
-                sDexNavUiDataPtr->landSpecies[grassIndex++] = landMonsInfo->wildPokemon[i].species;
-        }
-    }
-
-    // water mons
-    if (waterMonsInfo != NULL && waterMonsInfo->encounterRate != 0)
-    {
-        for (i = 0; i < NUM_WATER_MONS_ENCOUNTER_SLOTS; i++)
-        {
-            species = waterMonsInfo->wildPokemon[i].species;
-            if (species != SPECIES_NONE && !SpeciesInArray(species, 1))
-                sDexNavUiDataPtr->waterSpecies[waterIndex++] = waterMonsInfo->wildPokemon[i].species;
-        }
-    }
-
-    // hidden mons
-    if (hiddenMonsInfo != NULL) // no encounter rate check since 0 means land, 1 means water encounters
-    {
-        for (i = 0; i < NUM_HIDDEN_MONS_ENCOUNTER_SLOTS; i++)
-        {
-            species = hiddenMonsInfo->wildPokemon[i].species;
-            if (species != SPECIES_NONE && !SpeciesInArray(species, 2))
-                sDexNavUiDataPtr->hiddenSpecies[hiddenIndex++] = hiddenMonsInfo->wildPokemon[i].species;
-        }
+    case WJ_WATER_SURF:
+        t = GetTimeOfDayForEncounters(headerId, WILD_AREA_WATER);
+        return WJ_CollectSpecies(gWildMonHeaders[headerId].encounterTypes[t].waterMonsInfo, WILD_AREA_WATER, -1, dst, 0, COL_WATER_COUNT);
+    case WJ_WATER_ROCK_SMASH:
+        t = GetTimeOfDayForEncounters(headerId, WILD_AREA_ROCKS);
+        return WJ_CollectSpecies(gWildMonHeaders[headerId].encounterTypes[t].rockSmashMonsInfo, WILD_AREA_ROCKS, -1, dst, 0, COL_WATER_COUNT);
+    default:
+        t = GetTimeOfDayForEncounters(headerId, WILD_AREA_FISHING);
+        return WJ_CollectSpecies(gWildMonHeaders[headerId].encounterTypes[t].fishingMonsInfo, WILD_AREA_FISHING, mode - WJ_WATER_OLD_ROD, dst, 0, COL_WATER_COUNT);
     }
 }
 
-static void TryDrawIconInSlot(enum Species species, s16 x, s16 y)
+// get unique wild encounters on current map, for the current time of day
+static void DexNavLoadEncounterData(void)
 {
+    u32 headerId = GetCurrentMapWildMonHeaderId();
+    enum TimeOfDay t;
+
+    memset(sDexNavUiDataPtr->landSpecies, 0, sizeof(sDexNavUiDataPtr->landSpecies));
+    memset(sDexNavUiDataPtr->waterSpecies, 0, sizeof(sDexNavUiDataPtr->waterSpecies));
+    memset(sDexNavUiDataPtr->hiddenSpecies, 0, sizeof(sDexNavUiDataPtr->hiddenSpecies));
+    sDexNavUiDataPtr->landCount = 0;
+    if (headerId == HEADER_NONE)
+        return;
+
+    t = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
+    sDexNavUiDataPtr->landCount = WJ_CollectSpecies(gWildMonHeaders[headerId].encounterTypes[t].landMonsInfo, WILD_AREA_LAND, -1,
+                                                    sDexNavUiDataPtr->landSpecies, 0, WJ_DN_LAND_MAX);
+    WJ_LoadWaterMode(headerId, sDexNavUiDataPtr->waterMode, sDexNavUiDataPtr->waterSpecies);
+}
+
+// "x of y" for everything the checklist lists here right now (grass + surf + rods + Rock Smash)
+static void WJ_CountSeenHere(u32 *seen, u32 *total)
+{
+    enum Species all[WJ_DN_LAND_MAX + COL_WATER_COUNT * WJ_WATER_MODES];
+    enum Species mode[COL_WATER_COUNT];
+    u32 i, m, n = 0;
+    u32 headerId = GetCurrentMapWildMonHeaderId();
+
+    for (i = 0; i < sDexNavUiDataPtr->landCount; i++)
+        all[n++] = sDexNavUiDataPtr->landSpecies[i];
+    for (m = 0; m < WJ_WATER_MODES; m++)
+    {
+        u32 c = WJ_LoadWaterMode(headerId, m, mode);
+        for (i = 0; i < c; i++)
+        {
+            if (!WJ_ListHas(all, n, mode[i]))
+                all[n++] = mode[i];
+        }
+    }
+    *total = n;
+    *seen = 0;
+    for (i = 0; i < n; i++)
+    {
+        if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(all[i]), FLAG_GET_SEEN))
+            (*seen)++;
+    }
+}
+
+static u8 TryDrawIconInSlot(enum Species species, s16 x, s16 y, u8 *isMonIcon)
+{
+    *isMonIcon = FALSE;
     if (species == SPECIES_NONE || species > NUM_SPECIES)
-        CreateNoDataIcon(x, y);   //'X' in slot
-    else if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
-        CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF); //question mark
+        return CreateNoDataIcon(x, y);   //'X' in slot
+    *isMonIcon = TRUE;
+    if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
+        return CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF); //question mark
+    return CreateMonIcon(species, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF);
+}
+
+static void WJ_DestroyIcon(u8 *spriteId, u8 isMonIcon)
+{
+    if (*spriteId == SPRITE_NONE)
+        return;
+    if (isMonIcon)
+        FreeAndDestroyMonIconSprite(&gSprites[*spriteId]);
     else
-        CreateMonIcon(species, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF);
+        DestroySprite(&gSprites[*spriteId]);
+    *spriteId = SPRITE_NONE;
+}
+
+static void WJ_DrawLandIcons(void)
+{
+    u32 i;
+    for (i = 0; i < COL_LAND_COUNT * 2; i++)
+    {
+        s16 x = ROW_LAND_ICON_X + (24 * (i % COL_LAND_COUNT));
+        s16 y = ROW_LAND_TOP_ICON_Y + (i >= COL_LAND_COUNT ? 28 : 0);
+        WJ_DestroyIcon(&sDexNavUiDataPtr->landSpriteIds[i], sDexNavUiDataPtr->landIsMonIcon[i]);
+        sDexNavUiDataPtr->landSpriteIds[i] = TryDrawIconInSlot(sDexNavUiDataPtr->landSpecies[sDexNavUiDataPtr->landPage * COL_LAND_COUNT * 2 + i],
+                                                               x, y, &sDexNavUiDataPtr->landIsMonIcon[i]);
+    }
+}
+
+static void WJ_DrawWaterIcons(void)
+{
+    u32 i;
+    for (i = 0; i < COL_WATER_COUNT; i++)
+    {
+        WJ_DestroyIcon(&sDexNavUiDataPtr->waterSpriteIds[i], sDexNavUiDataPtr->waterIsMonIcon[i]);
+        sDexNavUiDataPtr->waterSpriteIds[i] = TryDrawIconInSlot(sDexNavUiDataPtr->waterSpecies[i], ROW_WATER_ICON_X + 24 * i, ROW_WATER_ICON_Y,
+                                                                &sDexNavUiDataPtr->waterIsMonIcon[i]);
+    }
+}
+
+static void WJ_PrintRare(void)
+{
+    u32 i, n = WallyJourney_GetRareVisitorCount(), total = 0, found = 0;
+    enum Species seenList[16];
+    u8 group, num, area;
+    u16 species;
+
+    for (i = 0; i < n && total < ARRAY_COUNT(seenList); i++)
+    {
+        WallyJourney_GetRareVisitor(i, &group, &num, &area, &species);
+        if (group != gSaveBlock1Ptr->location.mapGroup || num != gSaveBlock1Ptr->location.mapNum)
+            continue;
+        if (WJ_ListHas(seenList, total, species))
+            continue;
+        seenList[total++] = species;
+        if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
+            found++;
+    }
+    FillWindowPixelBuffer(WINDOW_RARE, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
+    if (total == 0)
+    {
+        AddTextPrinterParameterized3(WINDOW_RARE, FONT_SMALL, 0, 2, sFontColor_Black, 0, sText_WJ_RareNone);
+    }
+    else
+    {
+        ConvertIntToDecimalStringN(gStringVar1, found, STR_CONV_MODE_LEFT_ALIGN, 2);
+        ConvertIntToDecimalStringN(gStringVar2, total, STR_CONV_MODE_LEFT_ALIGN, 2);
+        StringExpandPlaceholders(gStringVar4, sText_WJ_RareFound);
+        AddTextPrinterParameterized3(WINDOW_RARE, FONT_SMALL, 0, 2, sFontColor_Black, 0, gStringVar4);
+    }
+    PutWindowTilemap(WINDOW_RARE);
+    CopyWindowToVram(WINDOW_RARE, 3);
+}
+
+static void WJ_SetWaterLabel(void)
+{
+    CopyToBgTilemapBufferRect(1, sWJDexNavWaterLabels[sDexNavUiDataPtr->waterMode], WJ_DEXNAV_LABEL_X, WJ_DEXNAV_LABEL_Y,
+                              WJ_DEXNAV_LABEL_W, WJ_DEXNAV_LABEL_H);
+    ScheduleBgCopyTilemapToVram(1);
 }
 
 static void DrawSpeciesIcons(void)
 {
-    s16 x, y;
     u32 i;
-    enum Species species;
-
     LoadCompressedSpriteSheetUsingHeap(&sNoDataIconSpriteSheet);
-    for (i = 0; i < NUM_LAND_MONS_ENCOUNTER_SLOTS; i++)
-    {
-        species = sDexNavUiDataPtr->landSpecies[i];
-        x = ROW_LAND_ICON_X + (24 * (i % COL_LAND_COUNT));
-        y = ROW_LAND_TOP_ICON_Y + (i > COL_LAND_MAX ? 28 : 0);
-        TryDrawIconInSlot(species, x, y);
-    }
-
-    for (i = 0; i < NUM_WATER_MONS_ENCOUNTER_SLOTS; i++)
-    {
-        species = sDexNavUiDataPtr->waterSpecies[i];
-        x = ROW_WATER_ICON_X + 24 * i;
-        y = ROW_WATER_ICON_Y;
-        TryDrawIconInSlot(species, x, y);
-    }
-
-    for (i = 0; i < NUM_HIDDEN_MONS_ENCOUNTER_SLOTS; i++)
-    {
-        species = sDexNavUiDataPtr->hiddenSpecies[i];
-        x = ROW_HIDDEN_ICON_X + 24 * i;
-        y = ROW_HIDDEN_ICON_Y;
-        if (FlagGet(DN_FLAG_DETECTOR_MODE))
-            TryDrawIconInSlot(species, x, y);
-       else if (species == SPECIES_NONE || species > NUM_SPECIES)
-            CreateNoDataIcon(x, y);
-        else
-            CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF); //question mark if detector mode inactive
-    }
+    LoadCompressedSpriteSheetUsingHeap(&sCapturedAllPokemonSpriteSheet);
+    for (i = 0; i < COL_LAND_COUNT * 2; i++)
+        sDexNavUiDataPtr->landSpriteIds[i] = SPRITE_NONE;
+    for (i = 0; i < COL_WATER_COUNT; i++)
+        sDexNavUiDataPtr->waterSpriteIds[i] = SPRITE_NONE;
+    sDexNavUiDataPtr->capturedLandSpriteId = SPRITE_NONE;
+    sDexNavUiDataPtr->capturedWaterSpriteId = SPRITE_NONE;
+    WJ_DrawLandIcons();
+    WJ_DrawWaterIcons();
+    WJ_SetWaterLabel();
+    WJ_PrintRare();
 }
 
 static enum Species DexNavGetSpecies(void)
 {
     enum Species species;
+    u32 base = sDexNavUiDataPtr->landPage * COL_LAND_COUNT * 2;
 
     switch (sDexNavUiDataPtr->cursorRow)
     {
@@ -2009,22 +2032,16 @@ static enum Species DexNavGetSpecies(void)
         species = sDexNavUiDataPtr->waterSpecies[sDexNavUiDataPtr->cursorCol];
         break;
     case ROW_LAND_TOP:
-        species = sDexNavUiDataPtr->landSpecies[sDexNavUiDataPtr->cursorCol];
+        species = sDexNavUiDataPtr->landSpecies[base + sDexNavUiDataPtr->cursorCol];
         break;
     case ROW_LAND_BOT:
-        species = sDexNavUiDataPtr->landSpecies[sDexNavUiDataPtr->cursorCol + COL_LAND_COUNT];
-        break;
-    case ROW_HIDDEN:
-        if (!FlagGet(DN_FLAG_DETECTOR_MODE))
-            species = SPECIES_NONE;
-        else
-            species = sDexNavUiDataPtr->hiddenSpecies[sDexNavUiDataPtr->cursorCol];
+        species = sDexNavUiDataPtr->landSpecies[base + sDexNavUiDataPtr->cursorCol + COL_LAND_COUNT];
         break;
     default:
         return SPECIES_NONE;
     }
 
-    if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
+    if (species == SPECIES_NONE || !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
         return SPECIES_NONE;
 
     return species;
@@ -2108,16 +2125,13 @@ static void PrintCurrentSpeciesInfo(void)
         SetTypeIconPosAndPal(type2, 168 + 33, 69, 1);
     }
 
-    //search level
+    //status (was search level)
     if (species == SPECIES_NONE)
-    {
         AddTextPrinterParameterized3(WINDOW_INFO, FONT_SMALL, 0, SEARCH_LEVEL_Y, sFontColor_Black, 0, sText_DexNav_NoInfo);
-    }
+    else if (GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT))
+        AddTextPrinterParameterized3(WINDOW_INFO, FONT_SMALL, 0, SEARCH_LEVEL_Y, sFontColor_Black, 0, sText_WJ_Caught);
     else
-    {
-        ConvertIntToDecimalStringN(gStringVar4, GetSearchLevel(species), 0, 4);
-        AddTextPrinterParameterized3(WINDOW_INFO, FONT_SMALL, 0, SEARCH_LEVEL_Y, sFontColor_Black, 0, gStringVar4);
-    }
+        AddTextPrinterParameterized3(WINDOW_INFO, FONT_SMALL, 0, SEARCH_LEVEL_Y, sFontColor_Black, 0, sText_WJ_Seen);
 
     //hidden ability
     if (species == SPECIES_NONE)
@@ -2136,9 +2150,15 @@ static void PrintCurrentSpeciesInfo(void)
         AddTextPrinterParameterized3(WINDOW_INFO, FONT_SMALL, 0, HA_INFO_Y, sFontColor_Black, 0, sText_DexNav_CaptureToSee);
     }
 
-    //current chain
-    ConvertIntToDecimalStringN(gStringVar1, gSaveBlock3Ptr->dexNavChain, STR_CONV_MODE_LEFT_ALIGN, 3);
-    AddTextPrinterParameterized3(WINDOW_INFO, FONT_SMALL, 0, CHAIN_BONUS_Y, sFontColor_Black, 0, gStringVar1);
+    //seen here (was current chain)
+    {
+        u32 seen, total;
+        WJ_CountSeenHere(&seen, &total);
+        ConvertIntToDecimalStringN(gStringVar1, seen, STR_CONV_MODE_LEFT_ALIGN, 3);
+        ConvertIntToDecimalStringN(gStringVar2, total, STR_CONV_MODE_LEFT_ALIGN, 3);
+        StringExpandPlaceholders(gStringVar4, sText_WJ_OfSeen);
+        AddTextPrinterParameterized3(WINDOW_INFO, FONT_SMALL, 0, CHAIN_BONUS_Y, sFontColor_Black, 0, gStringVar4);
+    }
 
     CopyWindowToVram(WINDOW_INFO, 3);
     PutWindowTilemap(WINDOW_INFO);
@@ -2155,17 +2175,20 @@ static void PrintMapName(void)
 
 static void PrintSearchableSpecies(enum Species species)
 {
+    u32 pages = (sDexNavUiDataPtr->landCount + COL_LAND_COUNT * 2 - 1) / (COL_LAND_COUNT * 2);
+    (void)species;
     FillWindowPixelBuffer(WINDOW_REGISTERED, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     PutWindowTilemap(WINDOW_REGISTERED);
-    if (species == SPECIES_NONE)
+    if (pages > 1)
     {
-        AddTextPrinterParameterized3(WINDOW_REGISTERED, FONT_NORMAL, 0, 0, sFontColor_White, TEXT_SKIP_DRAW, sText_DexNav_PressRToRegister);
+        ConvertIntToDecimalStringN(gStringVar1, sDexNavUiDataPtr->landPage + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
+        ConvertIntToDecimalStringN(gStringVar2, pages, STR_CONV_MODE_LEFT_ALIGN, 1);
+        StringExpandPlaceholders(gStringVar4, sText_WJ_HintPages);
+        AddTextPrinterParameterized3(WINDOW_REGISTERED, FONT_SMALL, 0, 2, sFontColor_White, TEXT_SKIP_DRAW, gStringVar4);
     }
     else
     {
-        StringCopy(gStringVar1, GetSpeciesName(species));
-        StringExpandPlaceholders(gStringVar4, sText_DexNav_SearchForRegisteredSpecies);
-        AddTextPrinterParameterized3(WINDOW_REGISTERED, FONT_NORMAL, 0, 0, sFontColor_White, TEXT_SKIP_DRAW, gStringVar4);
+        AddTextPrinterParameterized3(WINDOW_REGISTERED, FONT_SMALL, 0, 2, sFontColor_White, TEXT_SKIP_DRAW, sText_WJ_Hint);
     }
 
     PrintMapName();
@@ -2238,8 +2261,23 @@ static bool8 DexNav_DoGfxSetup(void)
         gMain.state++;
         break;
     case 7:
-        PrintSearchableSpecies(VarGet(DN_VAR_SPECIES) & DEXNAV_MASK_SPECIES);
+        {
+            // start the water row on the first list this map has (surf, then rods, then Rock Smash)
+            enum Species tmp[COL_WATER_COUNT];
+            u32 m, headerId = GetCurrentMapWildMonHeaderId();
+            sDexNavUiDataPtr->waterMode = WJ_WATER_SURF;
+            for (m = 0; m < WJ_WATER_MODES; m++)
+            {
+                if (WJ_LoadWaterMode(headerId, m, tmp) != 0)
+                {
+                    sDexNavUiDataPtr->waterMode = m;
+                    break;
+                }
+            }
+        }
+        sDexNavUiDataPtr->landPage = 0;
         DexNavLoadEncounterData();
+        PrintSearchableSpecies(SPECIES_NONE);
         gMain.state++;
         break;
     case 8:
@@ -2322,7 +2360,6 @@ static void Task_DexNavWaitFadeIn(u8 taskId)
 static void Task_DexNavMain(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
-    enum Species species;
 
     if (IsSEPlaying())
         return;
@@ -2337,15 +2374,12 @@ static void Task_DexNavMain(u8 taskId)
     {
         if (sDexNavUiDataPtr->cursorRow == ROW_WATER)
         {
-            sDexNavUiDataPtr->cursorRow = ROW_HIDDEN;
-            if (sDexNavUiDataPtr->cursorCol >= COL_HIDDEN_COUNT)
-                sDexNavUiDataPtr->cursorCol = COL_HIDDEN_MAX;
+            sDexNavUiDataPtr->cursorRow = ROW_LAND_BOT;
         }
         else
         {
-            if (sDexNavUiDataPtr->cursorRow == ROW_LAND_TOP && sDexNavUiDataPtr->cursorCol == COL_LAND_MAX)
+            if (sDexNavUiDataPtr->cursorRow == ROW_LAND_TOP && sDexNavUiDataPtr->cursorCol > COL_WATER_MAX)
                 sDexNavUiDataPtr->cursorCol = COL_WATER_MAX;
-
             sDexNavUiDataPtr->cursorRow--;
         }
 
@@ -2354,16 +2388,11 @@ static void Task_DexNavMain(u8 taskId)
     }
     else if (JOY_NEW(DPAD_DOWN))
     {
-        if (sDexNavUiDataPtr->cursorRow == ROW_HIDDEN)
+        if (sDexNavUiDataPtr->cursorRow == ROW_LAND_BOT)
         {
+            if (sDexNavUiDataPtr->cursorCol > COL_WATER_MAX)
+                sDexNavUiDataPtr->cursorCol = COL_WATER_MAX;
             sDexNavUiDataPtr->cursorRow = ROW_WATER;
-        }
-        else if (sDexNavUiDataPtr->cursorRow == ROW_LAND_BOT)
-        {
-            if (sDexNavUiDataPtr->cursorCol >= COL_HIDDEN_COUNT)
-                sDexNavUiDataPtr->cursorCol = COL_HIDDEN_MAX;
-
-            sDexNavUiDataPtr->cursorRow++;
         }
         else
         {
@@ -2376,89 +2405,48 @@ static void Task_DexNavMain(u8 taskId)
     else if (JOY_NEW(DPAD_LEFT))
     {
         if (sDexNavUiDataPtr->cursorCol == 0)
-        {
-            switch (sDexNavUiDataPtr->cursorRow)
-            {
-            case ROW_WATER:
-                sDexNavUiDataPtr->cursorCol = COL_WATER_MAX;
-                break;
-            case ROW_HIDDEN:
-                sDexNavUiDataPtr->cursorCol = COL_HIDDEN_MAX;
-                break;
-            default:
-                sDexNavUiDataPtr->cursorCol = COL_LAND_MAX;
-                break;
-            }
-        }
+            sDexNavUiDataPtr->cursorCol = (sDexNavUiDataPtr->cursorRow == ROW_WATER) ? COL_WATER_MAX : COL_LAND_MAX;
         else
-        {
             sDexNavUiDataPtr->cursorCol--;
-        }
 
         PlaySE(SE_RG_BAG_CURSOR);
         UpdateCursorPosition();
     }
     else if (JOY_NEW(DPAD_RIGHT))
     {
-        switch (sDexNavUiDataPtr->cursorRow)
-        {
-        case ROW_WATER:
-            if (sDexNavUiDataPtr->cursorCol == COL_WATER_MAX)
-                sDexNavUiDataPtr->cursorCol = 0;
-            else
-                sDexNavUiDataPtr->cursorCol++;
-            break;
-        case ROW_HIDDEN:
-            if (sDexNavUiDataPtr->cursorCol == COL_HIDDEN_MAX)
-                sDexNavUiDataPtr->cursorCol = 0;
-            else
-                sDexNavUiDataPtr->cursorCol++;
-            break;
-        default:
-            if (sDexNavUiDataPtr->cursorCol == COL_LAND_MAX)
-                sDexNavUiDataPtr->cursorCol = 0;
-            else
-                sDexNavUiDataPtr->cursorCol++;
-            break;
-        }
+        u32 max = (sDexNavUiDataPtr->cursorRow == ROW_WATER) ? COL_WATER_MAX : COL_LAND_MAX;
+        if (sDexNavUiDataPtr->cursorCol == max)
+            sDexNavUiDataPtr->cursorCol = 0;
+        else
+            sDexNavUiDataPtr->cursorCol++;
 
         PlaySE(SE_RG_BAG_CURSOR);
         UpdateCursorPosition();
     }
-    else if (JOY_NEW(R_BUTTON))
+    else if (JOY_NEW(SELECT_BUTTON))
     {
-        // check selection is valid. Play sound if invalid
-        species = DexNavGetSpecies();
-
-        if (species != SPECIES_NONE)
-        {
-            PrintSearchableSpecies(species);
-            //PlaySE(SE_DEX_SEARCH);
-            PlayCry_Script(species, 0);
-
-            // create value to store in a var
-            VarSet(DN_VAR_SPECIES, ((sDexNavUiDataPtr->environment << 14) | species));
-        }
-        else
-        {
-            PlaySE(SE_FAILURE);
-        }
+        // Wally's Journey: cycle the water row: Surf -> Old Rod -> Good Rod -> Super Rod -> Rock Smash
+        sDexNavUiDataPtr->waterMode = (sDexNavUiDataPtr->waterMode + 1) % WJ_WATER_MODES;
+        WJ_LoadWaterMode(GetCurrentMapWildMonHeaderId(), sDexNavUiDataPtr->waterMode, sDexNavUiDataPtr->waterSpecies);
+        WJ_DrawWaterIcons();
+        WJ_SetWaterLabel();
+        DexNavLoadCapturedAllSymbols();
+        PlaySE(SE_SELECT);
+        UpdateCursorPosition();
     }
-    else if (JOY_NEW(A_BUTTON))
+    else if (JOY_NEW(L_BUTTON | R_BUTTON))
     {
-        species = DexNavGetSpecies();
-        if (species == SPECIES_NONE)
+        u32 pages = (sDexNavUiDataPtr->landCount + COL_LAND_COUNT * 2 - 1) / (COL_LAND_COUNT * 2);
+        if (pages > 1)
         {
-            PlaySE(SE_FAILURE);
-        }
-        else
-        {
-            gSpecialVar_0x8000 = species;
-            gSpecialVar_0x8001 = sDexNavUiDataPtr->environment;
-            gSpecialVar_0x8002 = (sDexNavUiDataPtr->cursorRow == ROW_HIDDEN) ? TRUE : FALSE;
-            PlaySE(SE_DEX_SEARCH);
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-            task->func = Task_DexNavExitAndSearch;
+            if (JOY_NEW(R_BUTTON))
+                sDexNavUiDataPtr->landPage = (sDexNavUiDataPtr->landPage + 1) % pages;
+            else
+                sDexNavUiDataPtr->landPage = (sDexNavUiDataPtr->landPage + pages - 1) % pages;
+            WJ_DrawLandIcons();
+            PrintSearchableSpecies(SPECIES_NONE);
+            PlaySE(SE_SELECT);
+            UpdateCursorPosition();
         }
     }
 }
@@ -2469,6 +2457,10 @@ static void Task_DexNavMain(u8 taskId)
 bool32 TryFindHiddenPokemon(void)
 {
     u16 *stepPtr = GetVarPointer(DN_VAR_STEP_COUNTER);
+
+    // Wally's Journey: no hidden-Pokémon detector.
+    if (TRUE)
+        return FALSE;
 
     if (DEXNAV_ENABLED == 0
             || sDexNavSearchDataPtr == NULL

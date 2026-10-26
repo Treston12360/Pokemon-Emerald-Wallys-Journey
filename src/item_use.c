@@ -1,4 +1,5 @@
 #include "global.h"
+#include "battle_util.h"
 #include "wally_journey.h"
 #include "item_use.h"
 #include "battle.h"
@@ -1259,6 +1260,8 @@ bool32 CannotUseItemsInBattle(enum Item itemId, struct Pokemon *mon)
         break;
     case EFFECT_ITEM_ESCAPE:
         if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+            cannotUse = TRUE;
+        else if (WallyJourney_NoRunFromShiny()) // Wally's Journey: no escaping a wild shiny
             cannotUse = TRUE;
         break;
     case EFFECT_ITEM_THROW_BALL:

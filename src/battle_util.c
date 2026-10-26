@@ -646,6 +646,22 @@ void HandleAction_UseItem(void)
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
 
+// Wally's Journey (owner request 2026-10-26): you can't run from a wild shiny Pokémon. Running,
+// Run Away, Smoke Ball and similar fail with "Can't escape!", and moves that end the battle
+// (Roar, Whirlwind, Teleport) fail, the same as with WE_FLAG_NO_RUNNING.
+bool32 WallyJourney_NoRunFromShiny(void)
+{
+    u32 i;
+    if (gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+        return FALSE;
+    for (i = 0; i < 2; i++)
+    {
+        if (GetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_SPECIES) != SPECIES_NONE && IsMonShiny(&gParties[B_TRAINER_OPPONENT_A][i]))
+            return TRUE;
+    }
+    return FALSE;
+}
+
 bool32 TryRunFromBattle(enum BattlerId battler)
 {
     bool32 effect = FALSE;
@@ -654,7 +670,7 @@ bool32 TryRunFromBattle(enum BattlerId battler)
     u8 speedVar;
 
     // If this flag is set, running will never be successful under any circumstances.
-    if (FlagGet(WE_FLAG_NO_RUNNING))
+    if (FlagGet(WE_FLAG_NO_RUNNING) || WallyJourney_NoRunFromShiny())
         return effect;
 
     if (gBattleMons[battler].item == ITEM_ENIGMA_BERRY_E_READER)

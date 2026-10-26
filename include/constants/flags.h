@@ -78,8 +78,8 @@
 #define FLAG_WALLY_BEAT_TRESTON    0x38 // Wally's Journey: won the title defense against the secret challenger TRESTON
 #define FLAG_WALLY_BEAT_TRESTON_2    0x39 // Wally's Journey: beat TRESTON's Darkrai team (he brings Deoxys next)
 #define FLAG_WALLY_BEAT_TRESTON_3    0x3A // Wally's Journey: beat TRESTON's Deoxys team (he brings Giratina next)
-#define FLAG_UNUSED_0x03B    0x3B // Unused Flag
-#define FLAG_UNUSED_0x03C    0x3C // Unused Flag
+#define FLAG_DEXNAV_SEARCHING 0x3B // Wally's Journey: DexNav config (never set)
+#define FLAG_DEXNAV_DETECTOR  0x3C // Wally's Journey: DexNav config (never set)
 #define FLAG_UNUSED_0x03D    0x3D // Unused Flag
 #define FLAG_UNUSED_0x03E    0x3E // Unused Flag
 #define FLAG_UNUSED_0x03F    0x3F // Unused Flag

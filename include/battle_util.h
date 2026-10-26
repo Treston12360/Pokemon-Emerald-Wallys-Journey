@@ -61,6 +61,7 @@ bool32 IsAffectedByFollowMe(enum BattlerId battlerAtk, enum BattleSide defSide, 
 void HandleAction_UseMove(void);
 void HandleAction_Switch(void);
 void HandleAction_UseItem(void);
+bool32 WallyJourney_NoRunFromShiny(void);
 bool32 TryRunFromBattle(enum BattlerId battler);
 void HandleAction_Run(void);
 void HandleAction_WatchesCarefully(void);
