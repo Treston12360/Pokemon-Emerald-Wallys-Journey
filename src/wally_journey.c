@@ -1485,7 +1485,11 @@ u16 WallyJourney_GetPartyMonLevel(void)
 // Bracelet (engine item ITEM_MEGA_RING). After that, every unclaimed Mega Stone on the
 // current map twinkles with Emerald's own sparkle effect (the Abandoned Ship key glint),
 // so they can be found by eye like the sparkling stones of the Hoenn remakes.
-#define MEGA_SPARKLE_PERIOD 96
+// Polish (2026-10-26): each stone twinkles on its own beat (phase from its hidden-item id) so
+// several stones on screen don't blink in lockstep, each beat is a quick double twinkle so it's
+// easy to catch, and nothing sparkles while the screen is fading.
+#define MEGA_SPARKLE_PERIOD 80
+#define MEGA_SPARKLE_SECOND 9
 
 bool32 WallyJourney_IsHiddenItemWaitingForBracelet(u16 item)
 {
@@ -1499,20 +1503,23 @@ void WallyJourney_UpdateMegaStoneSparkles(void)
     s16 px, py;
     u32 i;
 
-    if (++sTimer < MEGA_SPARKLE_PERIOD)
-        return;
-    sTimer = 0;
-    if (events == NULL || !CheckBagHasItem(ITEM_MEGA_RING, 1))
+    if (++sTimer >= MEGA_SPARKLE_PERIOD)
+        sTimer = 0;
+    if (events == NULL || gPaletteFade.active || !CheckBagHasItem(ITEM_MEGA_RING, 1))
         return;
 
     PlayerGetDestCoords(&px, &py);
     for (i = 0; i < events->bgEventCount; i++)
     {
         const struct BgEvent *bg = &events->bgEvents[i];
+        u32 beat;
         s16 dx, dy;
         if (bg->kind != BG_EVENT_HIDDEN_ITEM)
             continue;
         if (GetItemHoldEffect(bg->bgUnion.hiddenItem.item) != HOLD_EFFECT_MEGA_STONE)
+            continue;
+        beat = (sTimer + bg->bgUnion.hiddenItem.hiddenItemId * 29) % MEGA_SPARKLE_PERIOD;
+        if (beat != 0 && beat != MEGA_SPARKLE_SECOND)
             continue;
         if (FlagGet(bg->bgUnion.hiddenItem.hiddenItemId + FLAG_HIDDEN_ITEMS_START))
             continue;
