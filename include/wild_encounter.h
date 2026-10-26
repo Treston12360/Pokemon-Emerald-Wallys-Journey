@@ -20,12 +20,17 @@ struct WildPokemon
     u8 minLevel;
     u8 maxLevel;
     enum Species species;
+    // Wally's Journey: weighted tables (any length). Unused (0) in fixed-slot tables.
+    u16 weight;         // chance in 1/10000 of this table (or of this rod's share)
+    u8 rod;             // fishing only: OLD_ROD / GOOD_ROD / SUPER_ROD
 };
 
 struct WildPokemonInfo
 {
     u8 encounterRate;
     const struct WildPokemon *wildPokemon;
+    // Wally's Journey: number of entries in a weighted table; 0 = classic fixed slots.
+    u8 numMons;
 };
 
 struct WildEncounterTypes
@@ -74,6 +79,8 @@ u32 ChooseWildMonIndex_Land(void);
 u32 ChooseWildMonIndex_Water(void);
 u32 ChooseWildMonIndex_Rocks(void);
 u32 ChooseHiddenMonIndex(void);
+u32 WildInfoNumMons(const struct WildPokemonInfo *info, enum WildPokemonArea area);
+u32 WildInfoChooseIndex(const struct WildPokemonInfo *info, enum WildPokemonArea area);
 u32 WallyJourney_GetRareVisitorCount(void);
 void WallyJourney_GetRareVisitor(u32 i, u8 *mapGroup, u8 *mapNum, u8 *area, u16 *species);
 bool32 MapHasNoEncounterData(void);

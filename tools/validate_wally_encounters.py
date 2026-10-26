@@ -37,7 +37,19 @@ for group in encounters["wild_encounter_groups"]:
             if data is None:
                 continue
             mons = data["mons"]
-            if len(mons) != len(rates):
+            if data.get("weighted"):
+                if not 0 < len(mons) < 256:
+                    errors.append(f"{location}: {field} weighted table has {len(mons)} entries (1-255)")
+                for mon in mons:
+                    if int(mon.get("weight", 0)) <= 0:
+                        errors.append(f"{location}: {field} {mon['species']} has no weight")
+                    if field == "fishing_mons" and mon.get("rod") not in ("old", "good", "super"):
+                        errors.append(f"{location}: fishing {mon['species']} has no rod")
+                if field == "fishing_mons":
+                    for rod in ("old", "good", "super"):
+                        if not any(m.get("rod") == rod for m in mons):
+                            errors.append(f"{location}: fishing table has nothing for the {rod} rod")
+            elif len(mons) != len(rates):
                 errors.append(f"{location}: {field} has {len(mons)} slots, expected {len(rates)}")
             for mon in mons:
                 sid = mon["species"]

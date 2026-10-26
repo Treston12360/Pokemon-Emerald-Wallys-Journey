@@ -119,7 +119,10 @@ class WildEncounterAssembler:
                     macro_total_name = macro_base + group_name_mapping[-1] + "_TOTAL"
                     self.WriteLine()
     
-    def WriteMonInfos(self, name, mons, encounter_rate):
+    def WriteMonInfos(self, name, mons, encounter_rate, weighted=False):
+        # Wally's Journey: "weighted": true tables list each Pokémon once with its own
+        # "weight" (chance in 1/10000) and, for fishing, its "rod"; any length is allowed.
+        rods = {"old": "OLD_ROD", "good": "GOOD_ROD", "super": "SUPER_ROD"}
         info_name = name + "Info"
         self.WriteLine(f"const struct WildPokemon {name}[] =")
         self.WriteLine("{")
@@ -127,11 +130,20 @@ class WildEncounterAssembler:
             species = mon["species"]
             min_level = 2 if "min_level" not in mon else mon["min_level"]
             max_level = 100 if "max_level" not in mon else mon["max_level"]
-            self.WriteLine(f"{{ {min_level}, {max_level}, {species} }},", 1)
+            if weighted:
+                rod = rods.get(mon.get("rod", ""), "0")
+                self.WriteLine(f"{{ {min_level}, {max_level}, {species}, {int(mon['weight'])}, {rod} }},", 1)
+            else:
+                self.WriteLine(f"{{ {min_level}, {max_level}, {species} }},", 1)
 
         self.WriteLine("};")
         self.WriteLine()
-        self.WriteLine(f"const struct WildPokemonInfo {info_name} = {{ {encounter_rate}, {name} }};")
+        if weighted:
+            if not 0 < len(mons) < 256:
+                raise Exception(f"{name}: weighted tables need 1-255 entries")
+            self.WriteLine(f"const struct WildPokemonInfo {info_name} = {{ {encounter_rate}, {name}, {len(mons)} }};")
+        else:
+            self.WriteLine(f"const struct WildPokemonInfo {info_name} = {{ {encounter_rate}, {name} }};")
         self.WriteLine()
     
     def WriteTerminator(self):
@@ -252,7 +264,7 @@ class WildEncounterAssembler:
                     mons = mons_entry["mons"]
 
                     mon_array_name = base_label + "_" + mon_type.title().replace("_", "")
-                    self.WriteMonInfos(mon_array_name, mons, encounter_rate)
+                    self.WriteMonInfos(mon_array_name, mons, encounter_rate, mons_entry.get("weighted", False))
                     headers["data"][shared_label][time][mon_type] = mon_array_name + "Info"
                 self.WriteLine(f"#endif")
 

@@ -5,6 +5,10 @@ Run: python3 tools/check_wally_elusive_encounters.py
 Species not listed here need a separate lore and historical encounter review.
 """
 import json
+import sys as _sys
+from pathlib import Path as _P
+_sys.path.insert(0, str(_P(__file__).resolve().parent))
+from wally_encounter_tables import species_rates
 from pathlib import Path
 from collections import defaultdict
 
@@ -25,12 +29,7 @@ for entry in main["encounters"]:
         table = entry.get(method)
         if not isinstance(table, dict) or "mons" not in table:
             continue
-        weights = field["encounter_rates"]
-        for group_name, indices in (field.get("groups") or {"all": list(range(len(weights)))}).items():
-            rates = defaultdict(int)
-            for i in indices:
-                species = table["mons"][i]["species"]
-                rates[species] += weights[i]
+        for group_name, rates in species_rates(table, field).items():
             for species, cap in CAPS.items():
                 if species in rates:
                     found[species] += 1

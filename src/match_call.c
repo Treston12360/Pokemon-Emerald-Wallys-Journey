@@ -1757,7 +1757,7 @@ static void PopulateSpeciesFromTrainerLocation(int matchCallId, u8 *destStr)
             numSpecies = 0;
             if (gWildMonHeaders[i].encounterTypes[timeOfDay].landMonsInfo)
             {
-                slot = GetLandEncounterSlotForMatchCall();
+                slot = WildInfoChooseIndex(gWildMonHeaders[i].encounterTypes[timeOfDay].landMonsInfo, WILD_AREA_LAND);
                 species[numSpecies] = gWildMonHeaders[i].encounterTypes[timeOfDay].landMonsInfo->wildPokemon[slot].species;
                 numSpecies++;
             }
@@ -1765,7 +1765,7 @@ static void PopulateSpeciesFromTrainerLocation(int matchCallId, u8 *destStr)
             timeOfDay = GetTimeOfDayForEncounters(i, WILD_AREA_WATER);
             if (gWildMonHeaders[i].encounterTypes[timeOfDay].waterMonsInfo)
             {
-                slot = GetWaterEncounterSlotForMatchCall();
+                slot = WildInfoChooseIndex(gWildMonHeaders[i].encounterTypes[timeOfDay].waterMonsInfo, WILD_AREA_WATER);
                 species[numSpecies] = gWildMonHeaders[i].encounterTypes[timeOfDay].waterMonsInfo->wildPokemon[slot].species;
                 numSpecies++;
             }

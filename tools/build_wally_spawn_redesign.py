@@ -87,6 +87,48 @@ def build(spec, rates, kind, where):
     review.append(f'  {where}: ' + ', '.join(f'{k} {v}%' for k, v in agg.most_common()))
     return mons
 
+def build_weighted(spec, kind, where, rod=None):
+    """Weighted table (no slot limit): each species once, weight = its share in 1/10000."""
+    lo, hi, weights = spec
+    w = collections.OrderedDict()
+    for k, v in weights.items():
+        k = k.strip(); w[k] = w.get(k, 0) + v
+    # Design weights are percentages. If a table's weights don't add up to 100, the rare ones
+    # (under 10%) keep their exact percentage and the common ones share the difference, the
+    # same way the old slot builder gave leftover slots to the most common species.
+    tot = sum(w.values())
+    big = sum(v for v in w.values() if v >= 10) or tot
+    scaled = collections.OrderedDict()
+    for sp, v in w.items():
+        if v >= 10 or big == tot:
+            scaled[sp] = v + (100.0 - tot) * v / big
+        else:
+            scaled[sp] = v
+    mons = []
+    for sp, v in scaled.items():
+        pct = v
+        a, b = levels(pct, lo, hi, kind)
+        full, mn = legal(sp, a, b, where)
+        m = {'min_level': mn, 'max_level': max(mn, b), 'species': full, 'weight': max(1, int(round(v * 100)))}
+        if rod:
+            m['rod'] = rod
+        mons.append(m)
+    fix = 10000 - sum(m['weight'] for m in mons)        # rounding: keep each table/rod at exactly 10000
+    max(mons, key=lambda m: m['weight'])['weight'] += fix
+    review.append(f'  {where}: ' + ', '.join(f"{m['species'][8:]} {m['weight']/100:g}%" for m in mons))
+    return mons
+
+def legacy_rod_entries(fm, rod):
+    """Entries for one rod from an existing table (classic slots or already weighted)."""
+    if fm.get('weighted'):
+        return [dict(m) for m in fm['mons'] if m.get('rod') == rod]
+    out = collections.OrderedDict()
+    for slot, r in zip(ROD[rod + '_rod'], FISH[rod]):
+        m = fm['mons'][slot]
+        key = (m['species'], m['min_level'], m['max_level'])
+        out[key] = out.get(key, 0) + r
+    return [{'min_level': k[1], 'max_level': k[2], 'species': k[0], 'weight': v * 100, 'rod': rod} for k, v in out.items()]
+
 byMap = {e['map']: e for e in G['encounters'] if 'map' in e}
 for name, spec in D.items():
     mp = 'MAP_' + name
@@ -97,17 +139,20 @@ for name, spec in D.items():
     for key, field in (('land', 'land_mons'), ('water', 'water_mons'), ('rock', 'rock_smash_mons')):
         if key in spec:
             e.setdefault(field, {'encounter_rate': {'land_mons': 20, 'water_mons': 4, 'rock_smash_mons': 20}[field]})
-            e[field]['mons'] = build(spec[key], RATES[field], 'land' if key == 'land' else 'other', f'{name} {key}')
+            e[field]['mons'] = build_weighted(spec[key], 'land' if key == 'land' else 'other', f'{name} {key}')
+            e[field]['weighted'] = True
     if any(k in spec for k in ('old', 'good', 'super')):
         fm = e.get('fishing_mons')
         if fm is None:
             raise SystemExit('no fishing table ' + mp)
-        mons = fm['mons']
+        mons = []
         for rod in ('old', 'good', 'super'):
             if rod in spec:
-                built = build(spec[rod], FISH[rod], 'other', f'{name} {rod}')
-                for slot, m in zip(ROD[rod + '_rod'], built):
-                    mons[slot] = m
+                mons += build_weighted(spec[rod], 'other', f'{name} {rod}', rod)
+            else:
+                mons += legacy_rod_entries(fm, rod)
+        fm['mons'] = mons
+        fm['weighted'] = True
 
 # Hoenn water / rock tables that the new global rates touch but the design does not cover
 emerald = A.emerald_maps()

@@ -469,16 +469,16 @@ static bool8 MapHasSpecies(const struct WildEncounterTypes *info, u32 headerSect
             return FALSE;
     }
 
-    if (MonListHasSpecies(info->landMonsInfo, species, NUM_LAND_MONS_ENCOUNTER_SLOTS))
+    if (MonListHasSpecies(info->landMonsInfo, species, WildInfoNumMons(info->landMonsInfo, WILD_AREA_LAND)))
         return TRUE;
-    if (MonListHasSpecies(info->waterMonsInfo, species, NUM_WATER_MONS_ENCOUNTER_SLOTS))
+    if (MonListHasSpecies(info->waterMonsInfo, species, WildInfoNumMons(info->waterMonsInfo, WILD_AREA_WATER)))
         return TRUE;
 // When searching the fishing encounters, this incorrectly uses the size of the land encounters.
 // As a result it's reading out of bounds of the fishing encounters tables.
     // Wally's Journey: always use the real fishing table size (vanilla read past its end).
-    if (MonListHasSpecies(info->fishingMonsInfo, species, NUM_FISHING_MONS_ENCOUNTER_SLOTS))
+    if (MonListHasSpecies(info->fishingMonsInfo, species, WildInfoNumMons(info->fishingMonsInfo, WILD_AREA_FISHING)))
         return TRUE;
-    if (MonListHasSpecies(info->rockSmashMonsInfo, species, NUM_ROCK_SMASH_MONS_ENCOUNTER_SLOTS))
+    if (MonListHasSpecies(info->rockSmashMonsInfo, species, WildInfoNumMons(info->rockSmashMonsInfo, WILD_AREA_ROCKS)))
         return TRUE;
     return FALSE;
 }

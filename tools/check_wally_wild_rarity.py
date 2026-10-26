@@ -9,6 +9,10 @@ This is an advisory check for DESIGN TARGETS, not a guarantee that every
 habitat, special encounter or species evolutionary line is correct.
 """
 import json
+import sys as _sys
+from pathlib import Path as _P
+_sys.path.insert(0, str(_P(__file__).resolve().parent))
+from wally_encounter_tables import species_rates, is_weighted
 from collections import defaultdict
 from pathlib import Path
 
@@ -42,17 +46,13 @@ def validate(data):
                 continue
             mons = table["mons"]
             weights = field["encounter_rates"]
-            if len(mons) != len(weights):
+            if not is_weighted(table) and len(mons) != len(weights):
                 violations.append(f"{loc} {method}: expected {len(weights)} entries, found {len(mons)}")
                 continue
-            groups = field.get("groups") or {"all": list(range(len(weights)))}
-            for rod, indices in groups.items():
-                subtotal = sum(weights[i] for i in indices)
-                if subtotal != 100:
+            for rod, rarity in species_rates(table, field).items():
+                subtotal = sum(rarity.values())
+                if abs(subtotal - 100) > 0.01:
                     violations.append(f"{loc} {method}/{rod}: weights total {subtotal}, not 100")
-                rarity = defaultdict(int)
-                for i in indices:
-                    rarity[mons[i]["species"]] += weights[i]
                 for name, percentage in sorted(rarity.items()):
                     if name in RARE:
                         checks.append((loc, method, rod, name, percentage))
