@@ -129,7 +129,8 @@ def legacy_rod_entries(fm, rod):
         out[key] = out.get(key, 0) + r
     return [{'min_level': k[1], 'max_level': k[2], 'species': k[0], 'weight': v * 100, 'rod': rod} for k, v in out.items()]
 
-byMap = {e['map']: e for e in G['encounters'] if 'map' in e}
+byMap = {e['map']: e for e in G['encounters'] if 'map' in e
+         and not e['base_label'].endswith(('_Morning', '_Evening', '_Night'))}  # base (DAY) entry
 for name, spec in D.items():
     mp = 'MAP_' + name
     e = byMap.get(mp)

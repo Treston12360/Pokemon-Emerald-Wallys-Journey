@@ -35,6 +35,14 @@ for entry in main["encounters"]:
                     found[species] += 1
                     if rates[species] > cap:
                         problems.append(f'{entry.get("map", entry.get("base_label"))} {method}/{group_name}: {species} {rates[species]}% > {cap}%')
+# Rare visitors (src/data/wally_rare_visitors.h): chance in 1/10000 per encounter of that type.
+import re as _re
+for _mp, _area, _sp, _ch in _re.findall(r"VISITOR\((MAP_\w+),\s*(\w+),\s*(SPECIES_\w+),\s*(\d+)\)",
+                                       (ROOT / "src/data/wally_rare_visitors.h").read_text(encoding="utf-8")):
+    if _sp in CAPS:
+        found[_sp] += 1
+        if int(_ch) / 100 > CAPS[_sp]:
+            problems.append(f"{_mp} {_area} (rare visitor): {_sp} {int(_ch) / 100}% > {CAPS[_sp]}%")
 for species in CAPS:
     if not found[species]:
         problems.append(f"{species}: no main wild placement (review gift/event availability)")

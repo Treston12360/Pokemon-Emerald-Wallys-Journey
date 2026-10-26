@@ -32,6 +32,9 @@ baseline = {
     for line in (ROOT / "tools/wally_wild_species_baseline.txt").read_text(encoding="utf-8").splitlines()
     if line.strip() and not line.startswith("#")
 }
+# Form aliases (SPECIES_SINISTEA = SPECIES_SINISTEA_PHONY, ...) are the same Pokemon.
+_alias = dict(_re.findall(r"^\s*(SPECIES_\w+) = (SPECIES_\w+),", (ROOT / "include/constants/species.h").read_text(encoding="utf-8"), _re.M))
+existing |= {a for a, b in _alias.items() if b in existing}
 missing = sorted(baseline - existing)
 added = sorted(existing - baseline)
 print(f"Wild species: {len(existing)}; baseline: {len(baseline)}; new: {len(added)}; missing: {len(missing)}")

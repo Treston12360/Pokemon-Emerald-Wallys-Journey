@@ -452,3 +452,9 @@ for _name, _spec in D.items():
         _local = [k for k in _spec['good'][2] if k not in _GENERIC]
         if _local:
             _spec['old'] = (5, 10, {'MAGIKARP': 70, _local[0]: 30})
+
+# ---------------------------------------------------------------- no-slot-limit clean-up (2026-10-26, owner approved)
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)) if '__file__' in globals() else 'tools')
+import wally_nocap_pass as _nocap
+_nocap.apply(D)

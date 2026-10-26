@@ -19,7 +19,7 @@ SPECIAL = {
     'TYRUNT', 'AMAURA', 'DRACOZOLT', 'ARCTOZOLT', 'DRACOVISH', 'ARCTOVISH',
     # owner elusive list and famously rare finds
     'SPIRITOMB', 'ROTOM', 'MIMIKYU_DISGUISED', 'POLTEAGEIST', 'KECLEON', 'EEVEE', 'RIOLU', 'DRAMPA',
-    'LARVESTA', 'GIMMIGHOUL_ROAMING', 'ZORUA_HISUI', 'MEOWTH_GALAR', 'EISCUE',
+    'LARVESTA', 'GIMMIGHOUL_ROAMING', 'ZORUA_HISUI', 'MEOWTH_GALAR', 'EISCUE_ICE',
     # babies
     'SMOOCHUM', 'TOXEL', 'MUNCHLAX',
 }
@@ -81,7 +81,7 @@ PRE_EVO = {
 # Names that are the same species in the game (form aliases), merged so one Pokemon has one entry.
 ALIAS = {'SINISTEA': 'SINISTEA_PHONY', 'MORPEKO': 'MORPEKO_FULL_BELLY', 'PUMPKABOO': 'PUMPKABOO_AVERAGE',
          'DEERLING': 'DEERLING_SPRING', 'FLABEBE': 'FLABEBE_RED', 'BURMY': 'BURMY_PLANT', 'SHELLOS': 'SHELLOS_WEST',
-         'WISHIWASHI': 'WISHIWASHI_SOLO', 'EISCUE_ICE': 'EISCUE', 'MIMIKYU': 'MIMIKYU_DISGUISED'}
+         'WISHIWASHI': 'WISHIWASHI_SOLO', 'EISCUE': 'EISCUE_ICE', 'MIMIKYU': 'MIMIKYU_DISGUISED'}
 
 KINDS = ('land', 'water', 'rock', 'old', 'good', 'super')
 LOG = []
@@ -117,7 +117,7 @@ def apply(D):
             vis = {}
             for sp, v in visitors.items():
                 name = ALIAS.get(sp, sp)
-                if v > 1 and table is not None:
+                if table is not None and (v > 1 or merged.get(name, 0) > 1):
                     LOG.append((area, kind, 'visitor into table', name, f'{v:g}%'))
                     merged[name] = merged.get(name, 0) + v
                 else:
