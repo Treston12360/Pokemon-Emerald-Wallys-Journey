@@ -154,6 +154,54 @@ for name, spec in D.items():
         fm['mons'] = mons
         fm['weighted'] = True
 
+# ---------------- time of day (owner request 2026-10-26)
+# The plain table is the DAY table (OW_TIME_OF_DAY_FALLBACK = TIME_DAY). Outdoor areas get extra
+# entries labelled <base>_Morning / _Evening / _Night with land and surf tables derived by
+# tools/wally_time_of_day.py. Fishing, Rock Smash and anything not derived fall back to DAY.
+import glob
+import wally_time_of_day as TOD
+MAPTYPE = {}
+for mj in glob.glob(R + '/data/maps/*/map.json'):
+    j = json.load(open(mj))
+    MAPTYPE[j['id']] = j.get('map_type')
+TIME_SUFFIX = tuple('_' + t.title() for t in TOD.TIMES if t != 'DAY')
+G['encounters'] = [e for e in G['encounters'] if not e['base_label'].endswith(TIME_SUFFIX)]
+tod_tables = 0
+for name, spec in D.items():
+    mp = 'MAP_' + name
+    if MAPTYPE.get(mp) not in TOD.OUTDOOR_TYPES:
+        continue
+    base = next(e for e in G['encounters'] if e.get('map') == mp and e['base_label'] == byMap[mp]['base_label'])
+    pos = G['encounters'].index(base) + 1
+    # The plain (DAY) table drops night-only / morning-only species (owner approved 'night only' =
+    # not out by day). Everything else in the DAY table stays as designed.
+    for key, field in (('land', 'land_mons'), ('water', 'water_mons')):
+        if key in spec:
+            lo, hi, wts = spec[key]
+            keep = {k: v for k, v in wts.items() if TOD.PATTERNS[TOD.ACTIVITY.get(k.strip(), 'ANY')][1] != 0}
+            d = (lo, hi, keep) if len(keep) != len(wts) else None
+            if d is not None:
+                review.append(f'{name} DAY')
+                base[field]['mons'] = build_weighted(d, 'land' if key == 'land' else 'other', f'{name} {key} DAY')
+                tod_tables += 1
+    for time in ('MORNING', 'EVENING', 'NIGHT'):
+        ent = {'map': mp, 'base_label': base['base_label'] + '_' + time.title()}
+        for key, field in (('land', 'land_mons'), ('water', 'water_mons')):
+            if key not in spec:
+                continue
+            d = TOD.derive(name, 'land' if key == 'land' else 'water', spec[key], time)
+            if d is None:
+                continue
+            review.append(f'{name} {time}')
+            ent[field] = {'encounter_rate': base[field]['encounter_rate'],
+                          'mons': build_weighted(d, 'land' if key == 'land' else 'other', f'{name} {key} {time}'),
+                          'weighted': True}
+            tod_tables += 1
+        if len(ent) > 2:
+            G['encounters'].insert(pos, ent)
+            pos += 1
+review.append(f'time-of-day tables: {tod_tables}')
+
 # Hoenn water / rock tables that the new global rates touch but the design does not cover
 emerald = A.emerald_maps()
 for e in G['encounters']:

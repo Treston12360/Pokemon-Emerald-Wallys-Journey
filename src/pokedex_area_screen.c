@@ -340,7 +340,20 @@ static void FindMapsWithMon(enum Species species)
         if (GetRegionMapType(headerSectionId) != currentRegionMapType)
             continue;
 
-        if (MapHasSpecies(&gWildMonHeaders[i].encounterTypes[gAreaTimeOfDay], headerSectionId, species))
+        // Wally's Journey: an area with no table for this time of day uses its fallback (day) table,
+        // the same way the encounter code does, one encounter type at a time.
+        {
+            const struct WildEncounterTypes *t = &gWildMonHeaders[i].encounterTypes[gAreaTimeOfDay];
+            const struct WildEncounterTypes *f = &gWildMonHeaders[i].encounterTypes[OW_TIME_OF_DAY_FALLBACK];
+            struct WildEncounterTypes merged;
+            merged.landMonsInfo = t->landMonsInfo ? t->landMonsInfo : f->landMonsInfo;
+            merged.waterMonsInfo = t->waterMonsInfo ? t->waterMonsInfo : f->waterMonsInfo;
+            merged.rockSmashMonsInfo = t->rockSmashMonsInfo ? t->rockSmashMonsInfo : f->rockSmashMonsInfo;
+            merged.fishingMonsInfo = t->fishingMonsInfo ? t->fishingMonsInfo : f->fishingMonsInfo;
+            merged.hiddenMonsInfo = t->hiddenMonsInfo ? t->hiddenMonsInfo : f->hiddenMonsInfo;
+            if (!MapHasSpecies(&merged, headerSectionId, species))
+                continue;
+        }
         {
             switch (gWildMonHeaders[i].mapGroup)
             {
