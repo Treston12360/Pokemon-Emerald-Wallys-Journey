@@ -8599,6 +8599,9 @@ static bool32 WallyJourney_OpponentMayMegaEvolve(enum BattlerId battler)
         trainerId = TRAINER_BATTLE_PARAM.opponentA;
     if (trainerId >= TRAINERS_COUNT)
         return FALSE;
+    // Owner exception: reformed MAXIE and ARCHIE as title-defense challengers.
+    if (trainerId == TRAINER_MAXIE_REFORMED || trainerId == TRAINER_ARCHIE_REFORMED)
+        return TRUE;
     switch (GetTrainerClassFromId(trainerId))
     {
     case TRAINER_CLASS_LEADER:
