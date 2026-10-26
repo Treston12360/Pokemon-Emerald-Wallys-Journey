@@ -3700,7 +3700,7 @@ u8 IsRunningFromBattleImpossible(enum BattlerId battler)
 
     if (FlagGet(WE_FLAG_NO_RUNNING) || WallyJourney_NoRunFromShiny())
     {
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CANT_ESCAPE;
+        gBattleCommunication[MULTISTRING_CHOOSER] = FlagGet(WE_FLAG_NO_RUNNING) ? B_MSG_CANT_ESCAPE : B_MSG_CANT_ESCAPE_SHINY;
         return BATTLE_RUN_FORBIDDEN;
     }
 
