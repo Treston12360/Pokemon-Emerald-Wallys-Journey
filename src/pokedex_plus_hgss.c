@@ -2195,11 +2195,9 @@ static bool8 CalculateMoves(void)
     if (gSpeciesInfo[species].isMegaEvolution || gSpeciesInfo[species].isGigantamax)
         species = GetFormSpeciesId(species, 0);
 
-    // Egg moves
-    if (HGSS_SHOW_EGG_MOVES_FOR_EVOS)
-        numEggMoves = CountSpeciesEggMoves(GetEggSpecies(species));
-    else
-        numEggMoves = CountSpeciesEggMoves(species);
+    // Wally's Journey: egg moves are part of every level-up learnset (at their own levels),
+    // so they are not listed separately; the level-up list already shows them in order.
+    (void)CountSpeciesEggMoves;
 
     // Level up moves
     const struct LevelUpMove *learnset = GetSpeciesLevelUpLearnset(species);

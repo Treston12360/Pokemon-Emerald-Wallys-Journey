@@ -572,6 +572,21 @@ static enum Species WallyJourney_RollRareVisitor(u32 area, enum Species species)
     return species;
 }
 
+// Wally's Journey: read-only access to the rare visitors for the Pokédex area map and DexNav.
+u32 WallyJourney_GetRareVisitorCount(void)
+{
+    return ARRAY_COUNT(sWallyRareVisitors);
+}
+
+void WallyJourney_GetRareVisitor(u32 i, u8 *mapGroup, u8 *mapNum, u8 *area, u16 *species)
+{
+    const struct WallyRareVisitor *v = &sWallyRareVisitors[i];
+    *mapGroup = v->mapGroup;
+    *mapNum = v->mapNum;
+    *area = v->area;
+    *species = v->species;
+}
+
 bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, enum WildPokemonArea area, u8 flags)
 {
     u8 wildMonIndex = 0;

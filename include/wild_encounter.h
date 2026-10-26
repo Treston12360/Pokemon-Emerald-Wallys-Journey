@@ -74,6 +74,8 @@ u32 ChooseWildMonIndex_Land(void);
 u32 ChooseWildMonIndex_Water(void);
 u32 ChooseWildMonIndex_Rocks(void);
 u32 ChooseHiddenMonIndex(void);
+u32 WallyJourney_GetRareVisitorCount(void);
+void WallyJourney_GetRareVisitor(u32 i, u8 *mapGroup, u8 *mapNum, u8 *area, u16 *species);
 bool32 MapHasNoEncounterData(void);
 enum TimeOfDay GetTimeOfDayForEncounters(u32 headerId, enum WildPokemonArea area);
 

@@ -358,6 +358,36 @@ static void FindMapsWithMon(enum Species species)
         }
     }
 
+    // Wally's Journey: rare visitors (sub-1% Pokémon, not in the normal tables) show on the
+    // map once the player has caught that species, so the map never spoils an unfound one.
+    if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
+    {
+        u32 v, n = WallyJourney_GetRareVisitorCount();
+        for (v = 0; v < n; v++)
+        {
+            u8 group, num, area;
+            u16 visitor;
+            WallyJourney_GetRareVisitor(v, &group, &num, &area, &visitor);
+            if (visitor != species)
+                continue;
+            if (GetRegionMapType(Overworld_GetMapHeaderByGroupAndId(group, num)->regionMapSectionId) != currentRegionMapType)
+                continue;
+            switch (group)
+            {
+            case MAP_GROUP_TOWNS_AND_ROUTES:
+            case MAP_GROUP_TOWNS_AND_ROUTES_FRLG:
+                SetAreaHasMon(group, num);
+                break;
+            case MAP_GROUP_DUNGEONS:
+            case MAP_GROUP_DUNGEONS_FRLG:
+            case MAP_GROUP_SPECIAL_AREA:
+            case MAP_GROUP_SPECIAL_AREA_FRLG:
+                SetSpecialMapHasMon(group, num);
+                break;
+            }
+        }
+    }
+
     // Add roamers to the area map
     for (i = 0; i < ROAMER_COUNT; i++)
     {
@@ -445,11 +475,8 @@ static bool8 MapHasSpecies(const struct WildEncounterTypes *info, u32 headerSect
         return TRUE;
 // When searching the fishing encounters, this incorrectly uses the size of the land encounters.
 // As a result it's reading out of bounds of the fishing encounters tables.
-#ifdef BUGFIX
+    // Wally's Journey: always use the real fishing table size (vanilla read past its end).
     if (MonListHasSpecies(info->fishingMonsInfo, species, NUM_FISHING_MONS_ENCOUNTER_SLOTS))
-#else
-    if (MonListHasSpecies(info->fishingMonsInfo, species, NUM_LAND_MONS_ENCOUNTER_SLOTS))
-#endif
         return TRUE;
     if (MonListHasSpecies(info->rockSmashMonsInfo, species, NUM_ROCK_SMASH_MONS_ENCOUNTER_SLOTS))
         return TRUE;
