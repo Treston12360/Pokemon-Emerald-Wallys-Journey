@@ -476,14 +476,11 @@ SlateportCity_Harbor_Text_TeamAquaLeftNeedDive:
 	.string "yours do it.$"
 
 SlateportCity_Harbor_Text_NeedDiveToCatchSub:
-	.string "CAPT. STERN: Trying to catch a\n"
-	.string "submarine… It's impossible.\p"
-	.string "You would need a POKéMON that knows\n"
-	.string "how to DIVE…\p"
-	.string "Perhaps if you went out to\n"
-	.string "MOSSDEEP CITY…\p"
-	.string "A lot of divers live out there, so\n"
-	.string "someone might teach you…$"
+	.string "CAPT. STERN: Catching a submarine at\n"
+	.string "sea means going under the waves.\p"
+	.string "The MIND BADGE from MOSSDEEP would\n"
+	.string "let you DIVE. TATE and LIZA run\l"
+	.string "the GYM there.$"
 
 SlateportCity_Harbor_Text_WontBeLongBeforeWeFinishFerry:
 	.string "CAPT. STERN: Oh, yes.\n"

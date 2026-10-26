@@ -4,11 +4,28 @@ VerdanturfTown_WandasHouse_MapScripts::
 VerdanturfTown_WandasHouse_EventScript_Wally::
 	lock
 	faceplayer
+	@ Wally's Journey: after the Route 111 battle (pending goes back to 0), he says so.
+	goto_if_unset FLAG_BADGE03_GET, VerdanturfTown_WandasHouse_EventScript_WallyBeforeRoute111
+	goto_if_ne VAR_WALLY_RIVAL_PENDING, 3, VerdanturfTown_WandasHouse_EventScript_WallyAfterRoute111
+VerdanturfTown_WandasHouse_EventScript_WallyBeforeRoute111::
 	goto_if_set FLAG_WALLY_SPEECH, VerdanturfTown_WandasHouse_EventScript_WallyShortSpeech
 	msgbox VerdanturfTown_WandasHouse_Text_StrongerSpeech, MSGBOX_DEFAULT
 	setflag FLAG_WALLY_SPEECH
 	release
 	end
+
+VerdanturfTown_WandasHouse_EventScript_WallyAfterRoute111::
+	msgbox VerdanturfTown_WandasHouse_Text_WallyAfterRoute111, MSGBOX_DEFAULT
+	release
+	end
+
+VerdanturfTown_WandasHouse_Text_WallyAfterRoute111:
+	.string "WALLY: We battled on ROUTE 111,\n"
+	.string "didn't we?\p"
+	.string "That's how I want to get stronger.\n"
+	.string "Battling you, again and again.\p"
+	.string "Next time, I'll be ready for\n"
+	.string "anything.$"
 
 VerdanturfTown_WandasHouse_EventScript_WallyShortSpeech::
 	msgbox VerdanturfTown_WandasHouse_Text_StrongerSpeechShort, MSGBOX_DEFAULT

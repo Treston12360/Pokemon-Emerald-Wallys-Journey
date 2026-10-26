@@ -317,10 +317,11 @@ RustboroCity_PokemonSchool_Text_ScottMetAlreadyCut:
 	.string "POKéMON battle experts.\p"
 	.string "So, what brings you to this SCHOOL?\n"
 	.string "Are you a TRAINER, too?\p"
-	.string "The first thing you should do is to\n"
-	.string "have a POKéMON learn the move CUT.\p"
-	.string "If I remember correctly, someone in\n"
-	.string "this town has CUT.$"
+	.string "Then ROXANNE's GYM is the place\n"
+	.string "to start.\p"
+	.string "Win her STONE BADGE and you'll be\n"
+	.string "able to CUT the small trees around\l"
+	.string "here, too.$"
 
 RustboroCity_PokemonSchool_Text_StudentTalentLevelUnknown:
 	.string "SCOTT: Hmm…\p"
