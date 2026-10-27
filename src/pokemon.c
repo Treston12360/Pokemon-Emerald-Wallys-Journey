@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "malloc.h"
 #include "apprentice.h"
 #include "battle.h"
@@ -889,6 +890,7 @@ bool32 ComputePlayerShinyOdds(u32 personality, u32 value)
         totalRerolls += 1;
 
     totalRerolls += CalculateChainFishingShinyRolls();
+    totalRerolls += WallyJourney_CatchComboShinyRolls(gWJShinyRollSpecies); // catch combo (wild only)
 
     if (gDexNavSpecies)
         totalRerolls += CalculateDexNavShinyRolls();

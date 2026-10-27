@@ -517,7 +517,10 @@ void CreateWildMon(enum Species species, u8 level)
 {
     ZeroEnemyPartyMons();
     u32 personality = GetMonPersonality(species, GetSynchronizedGender(WILDMON_ORIGIN, species), PickWildMonNature(species), RANDOM_UNOWN_LETTER);
+    gWJShinyRollSpecies = species;
     CreateMonWithIVs(&gParties[B_TRAINER_OPPONENT_A][0], species, level, personality, OTID_STRUCT_PLAYER_ID, USE_RANDOM_IVS);
+    gWJShinyRollSpecies = SPECIES_NONE;
+    WallyJourney_ApplyCatchComboIVs(&gParties[B_TRAINER_OPPONENT_A][0]);
     GiveMonInitialMoveset(&gParties[B_TRAINER_OPPONENT_A][0]);
     // Wally's Journey: Hidden Ability chance is 5% + 1% per catch of this species.
     if (GetSpeciesAbility(species, 2) != ABILITY_NONE && (Random() % 100) < WallyJourney_HiddenAbilityChance(species))
@@ -626,6 +629,30 @@ static u32 WildInfoWeightedIndex(const struct WildPokemonInfo *info, s32 rod)
     }
     if (total == 0)
         return first;
+    // Wally's Journey: catch combo. Some encounters are forced to the combo species if it's here.
+    if (WallyJourney_CatchComboEncounterPercent() != 0 && (Random() % 100) < WallyJourney_CatchComboEncounterPercent())
+    {
+        u16 dexNum = SpeciesToNationalPokedexNum(WallyJourney_CatchComboSpecies());
+        u32 comboTotal = 0;
+        for (i = 0; i < info->numMons; i++)
+            if ((rod < 0 || info->wildPokemon[i].rod == rod) && info->wildPokemon[i].weight != 0
+             && SpeciesToNationalPokedexNum(info->wildPokemon[i].species) == dexNum)
+                comboTotal += info->wildPokemon[i].weight;
+        if (comboTotal != 0)
+        {
+            roll = Random32() % comboTotal;
+            for (i = 0; i < info->numMons; i++)
+            {
+                if ((rod < 0 || info->wildPokemon[i].rod == rod) && info->wildPokemon[i].weight != 0
+                 && SpeciesToNationalPokedexNum(info->wildPokemon[i].species) == dexNum)
+                {
+                    if (roll < info->wildPokemon[i].weight)
+                        return i;
+                    roll -= info->wildPokemon[i].weight;
+                }
+            }
+        }
+    }
     roll = Random32() % total;
     for (i = 0; i < info->numMons; i++)
     {

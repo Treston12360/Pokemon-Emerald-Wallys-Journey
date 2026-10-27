@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "wild_encounter_ow.h"
 #include "battle_setup.h"
 #include "battle_main.h"
@@ -859,7 +860,9 @@ static void SetSpeciesInfoForOWE(struct InfoOWE *info, u32 x, u32 y)
     if (info->speciesId == SPECIES_UNOWN)
         info->speciesId = GetUnownSpeciesId(personality);
 
+    gWJShinyRollSpecies = info->speciesId;
     info->isShiny = ComputePlayerShinyOdds(personality, READ_OTID_FROM_SAVE);
+    gWJShinyRollSpecies = SPECIES_NONE;
     if (GetGenderFromSpeciesAndPersonality(info->speciesId, personality) == MON_FEMALE)
         info->isFemale = TRUE;
     else

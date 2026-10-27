@@ -341,7 +341,10 @@ static void BuildNormalStartMenu(void)
     AddStartMenuAction(MENU_ACTION_PLAYER);
     AddStartMenuAction(MENU_ACTION_SAVE);
     AddStartMenuAction(MENU_ACTION_OPTION);
-    AddStartMenuAction(MENU_ACTION_EXIT);
+    // Wally's Journey: the window holds 8 entries on screen (AddStartMenuWindow); with DEXNAV
+    // added a full menu has 9, so EXIT is left off then. B or START still closes the menu.
+    if (sNumStartMenuActions < 8)
+        AddStartMenuAction(MENU_ACTION_EXIT);
 }
 
 static void BuildDebugStartMenu(void)

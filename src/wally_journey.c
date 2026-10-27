@@ -41,6 +41,8 @@
 #include "constants/rgb.h"
 
 #define WALLY_VAR_PEAK_BADGES   VAR_UNUSED_0x40F7
+#define WALLY_VAR_COMBO_SPECIES VAR_UNUSED_0x40FE // catch combo (Let's Go style)
+#define WALLY_VAR_COMBO_COUNT   VAR_UNUSED_0x40FF
 #define WALLY_VAR_BIOME_MASK    VAR_UNUSED_0x40F8
 #define WALLY_VAR_WALLY_DEFEATS VAR_UNUSED_0x40F9
 #define WALLY_VAR_WALLY_WINS    VAR_UNUSED_0x40FA
@@ -224,6 +226,91 @@ void WallyJourney_RecordCatch(u16 species)
         return;
     if (gSaveBlock3Ptr->wjCatchCounts[dexNum] < 255)
         gSaveBlock3Ptr->wjCatchCounts[dexNum]++;
+    // Catch combo: catching the same species again extends it, any other species starts a new one.
+    if (dexNum == SpeciesToNationalPokedexNum(VarGet(WALLY_VAR_COMBO_SPECIES)) && VarGet(WALLY_VAR_COMBO_COUNT) != 0)
+    {
+        if (VarGet(WALLY_VAR_COMBO_COUNT) < 999)
+            VarSet(WALLY_VAR_COMBO_COUNT, VarGet(WALLY_VAR_COMBO_COUNT) + 1);
+    }
+    else
+    {
+        VarSet(WALLY_VAR_COMBO_SPECIES, species);
+        VarSet(WALLY_VAR_COMBO_COUNT, 1);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Catch combo (owner request 2026-10-27), after Pokemon: Let's Go. Catching the same species
+// in a row builds a combo; catching a different species starts over at 1. Running from or
+// knocking out a Pokemon doesn't break it. A wild Pokemon of the combo species gets:
+//   combo     extra shiny rolls   perfect IVs   chance an encounter is forced to it
+//   1-5              0                 0               0%
+//   6-10             0                 1               0%
+//   11-20            3                 2              10%
+//   21-30            7                 3              20%
+//   31+             11                 4              30%
+// Shiny rolls and perfect IVs are Let's Go's numbers. The encounter boost only applies where
+// the species is in that area's table (never a rare visitor), using its own slot and levels.
+// ---------------------------------------------------------------------------
+EWRAM_DATA u16 gWJShinyRollSpecies = 0; // species being rolled for shininess (wild only), else 0
+
+u32 WallyJourney_CatchCombo(u16 species)
+{
+    u16 dexNum = SpeciesToNationalPokedexNum(species);
+    if (dexNum == 0 || dexNum != SpeciesToNationalPokedexNum(VarGet(WALLY_VAR_COMBO_SPECIES)))
+        return 0;
+    return VarGet(WALLY_VAR_COMBO_COUNT);
+}
+
+u16 WallyJourney_CatchComboSpecies(void)
+{
+    return VarGet(WALLY_VAR_COMBO_COUNT) != 0 ? VarGet(WALLY_VAR_COMBO_SPECIES) : SPECIES_NONE;
+}
+
+u32 WallyJourney_CatchComboShinyRolls(u16 species)
+{
+    u32 combo = WallyJourney_CatchCombo(species);
+    if (combo >= 31) return 11;
+    if (combo >= 21) return 7;
+    if (combo >= 11) return 3;
+    return 0;
+}
+
+static u32 WJ_ComboPerfectIVs(u32 combo)
+{
+    if (combo >= 31) return 4;
+    if (combo >= 21) return 3;
+    if (combo >= 11) return 2;
+    if (combo >= 6) return 1;
+    return 0;
+}
+
+u32 WallyJourney_CatchComboEncounterPercent(void)
+{
+    u32 combo = VarGet(WALLY_VAR_COMBO_COUNT);
+    if (combo >= 31) return 30;
+    if (combo >= 21) return 20;
+    if (combo >= 11) return 10;
+    return 0;
+}
+
+// Raise a freshly made wild Pokemon's IVs for the combo: N different stats set to 31.
+void WallyJourney_ApplyCatchComboIVs(struct Pokemon *mon)
+{
+    u32 n = WJ_ComboPerfectIVs(WallyJourney_CatchCombo(GetMonData(mon, MON_DATA_SPECIES)));
+    u8 order[NUM_STATS] = {0, 1, 2, 3, 4, 5};
+    u32 i, j, iv = MAX_PER_STAT_IVS;
+    if (n == 0)
+        return;
+    for (i = NUM_STATS - 1; i > 0; i--)
+    {
+        u8 t;
+        j = Random() % (i + 1);
+        t = order[i]; order[i] = order[j]; order[j] = t;
+    }
+    for (i = 0; i < n; i++)
+        SetMonData(mon, MON_DATA_HP_IV + order[i], &iv);
+    CalculateMonStats(mon);
 }
 
 // Percent chance (0-100) a wild Pokemon of this species has its Hidden Ability:
