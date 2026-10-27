@@ -1599,7 +1599,20 @@ static bool32 WJ_OffScreen(s32 dx, s32 dy)
 }
 
 // special: VAR_0x8006/VAR_0x8007 = Wally's start tile (map coords), VAR_RESULT = TRUE if a path was found.
+static void WJ_PlanWallyApproach(bool32 fixedStart, s16 startX, s16 startY);
 void WallyJourney_PlanWallyApproach(void)
+{
+    WJ_PlanWallyApproach(FALSE, 0, 0);
+}
+
+// special: same, but Wally starts on the given tile (VAR_0x8006/VAR_0x8007, map coords), e.g. a cave
+// exit or door he walks in through; the start tile itself may be a warp.
+void WallyJourney_PlanWallyApproachFrom(void)
+{
+    WJ_PlanWallyApproach(TRUE, gSpecialVar_0x8006 + MAP_OFFSET, gSpecialVar_0x8007 + MAP_OFFSET);
+}
+
+static void WJ_PlanWallyApproach(bool32 fixedStart, s16 startX, s16 startY)
 {
     struct ObjectEvent *player = &gObjectEvents[gPlayerAvatar.objectEventId];
     s16 px = player->currentCoords.x, py = player->currentCoords.y;
@@ -1642,7 +1655,15 @@ void WallyJourney_PlanWallyApproach(void)
         s32 cx = (s32)(cur % WJ_GRID_W) - WJ_GRID_LEFT, cy = (s32)(cur / WJ_GRID_W) - WJ_GRID_UP;
         if (cur != queue[0])
         {
-            if (WJ_OffScreen(cx, cy))
+            if (fixedStart)
+            {
+                if (px + cx == startX && py + cy == startY)
+                {
+                    best = cur;
+                    break;
+                }
+            }
+            else if (WJ_OffScreen(cx, cy))
             {
                 best = cur;
                 break;
@@ -1661,13 +1682,18 @@ void WallyJourney_PlanWallyApproach(void)
             if (nx == 0 && ny == 0)
                 continue; // the player
             next = (ny + WJ_GRID_UP) * WJ_GRID_W + (nx + WJ_GRID_LEFT);
-            if (parentDir[next] != 0xFF || !WJ_TileWalkable(px + nx, py + ny, elevation))
+            if (parentDir[next] != 0xFF)
+                continue;
+            if (!WJ_TileWalkable(px + nx, py + ny, elevation)
+             && !(fixedStart && px + nx == startX && py + ny == startY))
                 continue;
             parentDir[next] = sWJOpposite[d]; // step from next back toward cur
             dist[next] = dist[cur] + 1;
             queue[tail++] = next;
         }
     }
+    if (best == WJ_GRID_N && fixedStart)
+        return; // the given entrance isn't connected: let the script fall back
     if (best == WJ_GRID_N)
     {
         // Nothing reachable off-screen (enclosed spot): come from the farthest reachable tile.

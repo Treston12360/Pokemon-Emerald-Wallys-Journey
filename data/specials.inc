@@ -649,6 +649,7 @@ gSpecials::
 	def_special WallyJourney_GetSeasonForScript
 	def_special WallyJourney_GetPartyMonLevel
 	def_special WallyJourney_PlanWallyApproach
+	def_special WallyJourney_PlanWallyApproachFrom
 	def_special WallyJourney_StartWallyApproach
 	def_special WallyJourney_StartWallyLeave
 	def_special WallyJourney_FaceWally

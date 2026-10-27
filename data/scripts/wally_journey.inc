@@ -1330,6 +1330,20 @@ WallyJourney_EventScript_WallyWalksUp::
 	special WallyJourney_FaceWally
 	return
 
+@ Same, but Wally enters from a given tile (VAR_0x8006/VAR_0x8007), e.g. a cave exit.
+WallyJourney_EventScript_WallyWalksUpFrom::
+	special WallyJourney_PlanWallyApproachFrom
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_WallyWalksUp
+	setobjectxyperm VAR_0x8009, VAR_0x8006, VAR_0x8007
+	addobject VAR_0x8009
+	playse SE_PIN
+	applymovement LOCALID_PLAYER, Common_Movement_ExclamationMark
+	waitmovement 0
+	special WallyJourney_StartWallyApproach
+	waitmovement VAR_0x8009
+	special WallyJourney_FaceWally
+	return
+
 WallyJourney_EventScript_WallyWalksUpNear::
 	special StorePlayerCoordsInVars
 	specialvar VAR_RESULT, GetPlayerFacingDirection
@@ -1403,11 +1417,16 @@ WallyJourney_Movement_WallyLeave:
 	walk_fast_down
 	step_end
 
+@ Owner request (2026-10-26): Wally's first rival battle after Wattson waits at the north end
+@ of the FIERY PATH (coord triggers on the corridor below the exit) instead of firing the
+@ moment the player steps onto Route 111. He walks in through the cave exit and back out.
 WallyJourney_EventScript_RivalMeet3::
 	lockall
-	setvar VAR_0x8009, LOCALID_ROUTE111_RIVAL_WALLY
+	setvar VAR_0x8009, LOCALID_FIERY_PATH_RIVAL_WALLY
 	clearflag FLAG_HIDE_WALLY_RIVAL_VERDANTURF
-	call WallyJourney_EventScript_WallyWalksUp
+	setvar VAR_0x8006, 26
+	setvar VAR_0x8007, 4
+	call WallyJourney_EventScript_WallyWalksUpFrom
 	playbgm MUS_ENCOUNTER_MAY, FALSE
 	msgbox WallyJourney_Text_RivalVERDANTURFIntro, MSGBOX_DEFAULT
 	closemessage
@@ -1418,7 +1437,7 @@ WallyJourney_EventScript_RivalMeet3::
 	call_if_ne VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalVERDANTURFWallyWon
 	call_if_eq VAR_RESULT, B_OUTCOME_WON, WallyJourney_EventScript_RivalVERDANTURFPlayerWon
 	closemessage
-	setvar VAR_0x8009, LOCALID_ROUTE111_RIVAL_WALLY
+	setvar VAR_0x8009, LOCALID_FIERY_PATH_RIVAL_WALLY
 	call WallyJourney_EventScript_WallyWalksAway
 	setflag FLAG_HIDE_WALLY_RIVAL_VERDANTURF
 	setvar VAR_WALLY_RIVAL_PENDING, 0
