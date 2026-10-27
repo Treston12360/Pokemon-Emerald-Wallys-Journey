@@ -7,6 +7,7 @@
 #include "task.h"
 #include "trainer_see.h"
 #include "util.h"
+#include "wally_journey.h"
 #include "constants/event_objects.h"
 #include "constants/flags.h"
 #include "constants/map_scripts.h"
@@ -457,6 +458,8 @@ bool8 TryRunOnFrameMapScript(void)
     const u8 *ptr = MapHeaderCheckScriptTable(MAP_SCRIPT_ON_FRAME_TABLE);
 
     if (!ptr)
+        return FALSE;
+    if (WallyJourney_HoldOnFrameScript(ptr))
         return FALSE;
 
     ScriptContext_SetupScript(ptr);

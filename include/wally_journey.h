@@ -3,6 +3,7 @@
 #include "global.h"
 #include "palette.h"
 void WallyJourney_Reset(void);
+bool32 WallyJourney_HoldOnFrameScript(const u8 *script);
 void WallyJourney_OnMapEntered(u8 mapGroup, u8 mapNum);
 u16 WallyJourney_GetPeakBadges(void);
 u16 WallyJourney_GetDiscoveredBiomes(void);

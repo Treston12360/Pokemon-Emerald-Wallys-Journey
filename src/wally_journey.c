@@ -1599,52 +1599,29 @@ static bool32 WJ_OffScreen(s32 dx, s32 dy)
 }
 
 // special: VAR_0x8006/VAR_0x8007 = Wally's start tile (map coords), VAR_RESULT = TRUE if a path was found.
-static void WJ_PlanWallyApproach(bool32 fixedStart, s16 startX, s16 startY);
+static bool32 WJ_PlanWallyApproach(bool32 fixedStart, s16 startX, s16 startY, bool32 allowOnScreen);
 void WallyJourney_PlanWallyApproach(void)
 {
-    WJ_PlanWallyApproach(FALSE, 0, 0);
+    gSpecialVar_Result = WJ_PlanWallyApproach(FALSE, 0, 0, TRUE);
 }
 
 // special: same, but Wally starts on the given tile (VAR_0x8006/VAR_0x8007, map coords), e.g. a cave
 // exit or door he walks in through; the start tile itself may be a warp.
 void WallyJourney_PlanWallyApproachFrom(void)
 {
-    WJ_PlanWallyApproach(TRUE, gSpecialVar_0x8006 + MAP_OFFSET, gSpecialVar_0x8007 + MAP_OFFSET);
+    gSpecialVar_Result = WJ_PlanWallyApproach(TRUE, gSpecialVar_0x8006 + MAP_OFFSET, gSpecialVar_0x8007 + MAP_OFFSET, TRUE);
 }
 
-static void WJ_PlanWallyApproach(bool32 fixedStart, s16 startX, s16 startY)
+// Breadth-first search from the tile next to the player where Wally will stop (tx, ty).
+// Returns the grid index of the tile Wally starts from, or WJ_GRID_N if none.
+static u32 WJ_SearchFromTarget(s16 px, s16 py, u8 elevation, s16 tx, s16 ty, bool32 fixedStart, s16 startX, s16 startY,
+                               bool32 allowOnScreen, u8 *parentDir, u8 *dist)
 {
-    struct ObjectEvent *player = &gObjectEvents[gPlayerAvatar.objectEventId];
-    s16 px = player->currentCoords.x, py = player->currentCoords.y;
-    u8 elevation = player->currentElevation;
-    u8 parentDir[WJ_GRID_N];     // direction of the step from this tile toward the target; 0xFF = unvisited
-    u8 dist[WJ_GRID_N];
     u16 queue[WJ_GRID_N];
-    u32 head = 0, tail = 0, i, d, best = WJ_GRID_N, far = WJ_GRID_N, n;
-    s16 tx = 0, ty = 0;
-    static const u8 sTryOrder[4][4] = { {0, 2, 3, 1}, {1, 2, 3, 0}, {2, 0, 1, 3}, {3, 0, 1, 2} };
-    u8 facing = player->facingDirection; // DIR_SOUTH=1 .. DIR_EAST=4
-    const u8 *order = sTryOrder[(facing >= DIR_SOUTH && facing <= DIR_EAST) ? facing - DIR_SOUTH : 0];
+    u32 head = 0, tail = 0, i, d, far = WJ_GRID_N, n;
 
-    gSpecialVar_Result = FALSE;
-    sWallyHasPath = FALSE;
     for (i = 0; i < WJ_GRID_N; i++)
         parentDir[i] = 0xFF;
-
-    // Wally stops on a free tile next to the player, in front of them if possible.
-    for (i = 0; i < 4; i++)
-    {
-        d = order[i];
-        if (WJ_TileWalkable(px + sWJStepX[d], py + sWJStepY[d], elevation))
-        {
-            tx = px + sWJStepX[d];
-            ty = py + sWJStepY[d];
-            break;
-        }
-    }
-    if (i == 4)
-        return;
-
     n = (ty - py + WJ_GRID_UP) * WJ_GRID_W + (tx - px + WJ_GRID_LEFT);
     parentDir[n] = 4;
     dist[n] = 0;
@@ -1658,15 +1635,11 @@ static void WJ_PlanWallyApproach(bool32 fixedStart, s16 startX, s16 startY)
             if (fixedStart)
             {
                 if (px + cx == startX && py + cy == startY)
-                {
-                    best = cur;
-                    break;
-                }
+                    return cur;
             }
             else if (WJ_OffScreen(cx, cy))
             {
-                best = cur;
-                break;
+                return cur;
             }
             if (far == WJ_GRID_N || dist[cur] > dist[far])
                 far = cur;
@@ -1692,15 +1665,46 @@ static void WJ_PlanWallyApproach(bool32 fixedStart, s16 startX, s16 startY)
             queue[tail++] = next;
         }
     }
-    if (best == WJ_GRID_N && fixedStart)
-        return; // the given entrance isn't connected: let the script fall back
-    if (best == WJ_GRID_N)
+    // Nothing reachable off-screen (enclosed spot): come from the farthest reachable tile.
+    if (!fixedStart && allowOnScreen && far != WJ_GRID_N && dist[far] >= 3)
+        return far;
+    return WJ_GRID_N;
+}
+
+static bool32 WJ_PlanWallyApproach(bool32 fixedStart, s16 startX, s16 startY, bool32 allowOnScreen)
+{
+    struct ObjectEvent *player = &gObjectEvents[gPlayerAvatar.objectEventId];
+    s16 px = player->currentCoords.x, py = player->currentCoords.y;
+    u8 elevation = player->currentElevation;
+    u8 parentDir[WJ_GRID_N];     // direction of the step from this tile toward the target; 0xFF = unvisited
+    u8 dist[WJ_GRID_N];
+    u32 i, d, best = WJ_GRID_N, pass;
+    s16 tx = 0, ty = 0;
+    static const u8 sTryOrder[4][4] = { {0, 2, 3, 1}, {1, 2, 3, 0}, {2, 0, 1, 3}, {3, 0, 1, 2} };
+    u8 facing = player->facingDirection; // DIR_SOUTH=1 .. DIR_EAST=4
+    const u8 *order = sTryOrder[(facing >= DIR_SOUTH && facing <= DIR_EAST) ? facing - DIR_SOUTH : 0];
+
+    sWallyHasPath = FALSE;
+
+    // Wally stops on a free tile next to the player, in front of them if possible. A free tile
+    // can be a dead end (e.g. a nook beside the player), so try each side in turn: first for a
+    // path from off-screen, then (if allowed) for the longest walk inside an enclosed spot.
+    for (pass = 0; pass < 2 && best == WJ_GRID_N; pass++)
     {
-        // Nothing reachable off-screen (enclosed spot): come from the farthest reachable tile.
-        if (far == WJ_GRID_N || dist[far] < 3)
-            return;
-        best = far;
+        if (pass == 1 && (!allowOnScreen || fixedStart))
+            break;
+        for (i = 0; i < 4 && best == WJ_GRID_N; i++)
+        {
+            d = order[i];
+            tx = px + sWJStepX[d];
+            ty = py + sWJStepY[d];
+            if (!WJ_TileWalkable(tx, ty, elevation))
+                continue;
+            best = WJ_SearchFromTarget(px, py, elevation, tx, ty, fixedStart, startX, startY, pass == 1, parentDir, dist);
+        }
     }
+    if (best == WJ_GRID_N)
+        return FALSE; // let the script fall back
 
     // Walk in: from the start tile follow the parent steps to the target.
     {
@@ -1733,8 +1737,48 @@ static void WJ_PlanWallyApproach(bool32 fixedStart, s16 startX, s16 startY)
     sWallyTargetY = ty;
     gSpecialVar_0x8006 = px + (s32)(best % WJ_GRID_W) - WJ_GRID_LEFT - MAP_OFFSET;
     gSpecialVar_0x8007 = py + (s32)(best / WJ_GRID_W) - WJ_GRID_UP - MAP_OFFSET;
-    gSpecialVar_Result = TRUE;
     sWallyHasPath = TRUE;
+    return TRUE;
+}
+
+// Owner report (2026-10-26): the route rival battles start from an on-frame map script the
+// moment the player is on the map. Hold the battle back (the script isn't started, so the player
+// keeps control) while Wally could only pop in: while the player is surfing, or standing where no
+// path leads in from off-screen (a nook, a gap between buildings). It starts once the player is
+// somewhere he can walk in to. Leaving the Mossdeep Gym it also waits for the player's first step.
+extern const u8 WallyJourney_EventScript_RivalMeet4[];
+extern const u8 WallyJourney_EventScript_RivalMeet5[];
+extern const u8 WallyJourney_EventScript_RivalMeet6[];
+extern const u8 WallyJourney_EventScript_RivalMeet7[];
+EWRAM_DATA static s16 sWallyHoldX = 0;
+EWRAM_DATA static s16 sWallyHoldY = 0;
+EWRAM_DATA static u8 sWallyHoldElevation = 0;
+EWRAM_DATA static bool8 sWallyHoldResult = FALSE;
+EWRAM_DATA static const u8 *sWallyHoldScript = NULL;
+bool32 WallyJourney_HoldOnFrameScript(const u8 *script)
+{
+    struct ObjectEvent *player;
+
+    if (script != WallyJourney_EventScript_RivalMeet4 && script != WallyJourney_EventScript_RivalMeet5
+     && script != WallyJourney_EventScript_RivalMeet6 && script != WallyJourney_EventScript_RivalMeet7)
+        return FALSE;
+    if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING | PLAYER_AVATAR_FLAG_UNDERWATER))
+        return TRUE;
+    player = &gObjectEvents[gPlayerAvatar.objectEventId];
+    if (script == WallyJourney_EventScript_RivalMeet7
+     && player->currentCoords.x == 38 + MAP_OFFSET && player->currentCoords.y == 10 + MAP_OFFSET)
+        return TRUE;
+    // The search only changes when the player moves; don't repeat it every frame.
+    if (player->currentCoords.x != sWallyHoldX || player->currentCoords.y != sWallyHoldY
+     || player->currentElevation != sWallyHoldElevation || script != sWallyHoldScript)
+    {
+        sWallyHoldX = player->currentCoords.x;
+        sWallyHoldY = player->currentCoords.y;
+        sWallyHoldElevation = player->currentElevation;
+        sWallyHoldScript = script;
+        sWallyHoldResult = !WJ_PlanWallyApproach(FALSE, 0, 0, FALSE);
+    }
+    return sWallyHoldResult;
 }
 
 // specialvar: TRUE if Wally walked in along a planned path (so he can walk back out of it).

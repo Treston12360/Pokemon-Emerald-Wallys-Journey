@@ -1518,12 +1518,7 @@ WallyJourney_EventScript_RivalMeet6::
 
 WallyJourney_EventScript_RivalMeet7::
 	lockall
-	special StorePlayerCoordsInVars
-	goto_if_ne VAR_0x8004, 38, WallyJourney_EventScript_RivalMeet7Go
-	goto_if_ne VAR_0x8005, 10, WallyJourney_EventScript_RivalMeet7Go
-	releaseall
-	end
-WallyJourney_EventScript_RivalMeet7Go::
+	@ Leaving the Gym, WallyJourney_HoldOnFrameScript waits for the player's first step.
 	setvar VAR_0x8009, LOCALID_MOSSDEEP_RIVAL_WALLY
 	clearflag FLAG_HIDE_WALLY_RIVAL_MOSSDEEP
 	call WallyJourney_EventScript_WallyWalksUp
