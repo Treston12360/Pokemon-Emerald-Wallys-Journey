@@ -208,24 +208,24 @@ WallyJourney_EventScript_RivalLAVARIDGEWon::
 
 WallyJourney_Text_RivalLAVARIDGEIntro:
 	.string "WALLY: Oh. {PLAYER}.\p"
-	.string "I just came down from JAGGED PASS.\n"
-	.string "I've been training on the volcano.\p"
-	.string "You beat FLANNERY? So did I.\n"
-	.string "It wasn't hard.\p"
-	.string "Everyone keeps saying how amazing\n"
-	.string "you are.\p"
-	.string "Let's find out if they're right.$"
+	.string "I've been training on this volcano.\p"
+	.string "You only just beat FLANNERY? And here\n"
+	.string "I thought I was being slow.\p"
+	.string "CHAMPION WALLACE saw me battle. He\n"
+	.string "wants to help push me to the next level.\p"
+	.string "I guess he saw something special in me.\p"
+	.string "Let's see if you have it too.$"
 
 
 WallyJourney_Text_RivalLAVARIDGEDefeat:
-	.string "Hmph. Fine.\n"
-	.string "You got lucky.$"
+	.string "Tch… You got lucky.$"
 
 
 WallyJourney_Text_RivalLAVARIDGEPost:
-	.string "WALLY: Don't get used to winning.\p"
-	.string "My team gets stronger every day.\n"
-	.string "Yours had better keep up.$"
+	.string "WALLY: I've been up training for three\n"
+	.string "straight days.\p"
+	.string "You're lucky I wasn't at my best.\p"
+	.string "Next time, I will be.$"
 
 
 WallyJourney_EventScript_RivalFORTREE::
@@ -240,29 +240,27 @@ WallyJourney_EventScript_RivalFORTREEWon::
 	end
 
 WallyJourney_Text_RivalFORTREEIntro:
-	.string "WALLY: {PLAYER}. Finally.\p"
-	.string "I heard you beat NORMAN.\n"
-	.string "Took you long enough.\p"
-	.string "I already have WINONA's badge.\n"
-	.string "She didn't last long against me.\p"
-	.string "Everyone in PETALBURG still thinks\n"
-	.string "of me as the sick kid you had\l"
-	.string "to help.\p"
-	.string "I'm done being that kid.\n"
-	.string "Let's battle.$"
+	.string "WALLY: Oh, look who finally showed up.\p"
+	.string "So you beat your dad. Congrats. I did\n"
+	.string "that days ago.\p"
+	.string "WINONA too. She barely put up a fight.\p"
+	.string "Everyone in PETALBURG still talks about\n"
+	.string "the sick kid you had to help.\p"
+	.string "Funny how things change, huh?\p"
+	.string "Try to keep up this time.$"
 
 
 WallyJourney_Text_RivalFORTREEDefeat:
-	.string "Tch… That was luck.\n"
-	.string "Nothing more.$"
+	.string "Tch. Don't let one win go to your head.$"
 
 
 WallyJourney_Text_RivalFORTREEPost:
-	.string "WALLY: Don't look so pleased.\p"
-	.string "I'm already a badge ahead of you,\n"
-	.string "and I get stronger every day.\p"
-	.string "Enjoy being ahead while you can.\n"
-	.string "It won't last.$"
+	.string "WALLY: Enjoy it. That's the last time\n"
+	.string "you'll beat me.\p"
+	.string "I'm a badge ahead of you, and the gap's\n"
+	.string "only getting bigger.\p"
+	.string "Go cry to your dad if you need a pep\n"
+	.string "talk.$"
 
 
 WallyJourney_EventScript_RivalLILYCOVE::
@@ -277,30 +275,29 @@ WallyJourney_EventScript_RivalLILYCOVEWon::
 	end
 
 WallyJourney_Text_RivalLILYCOVEIntro:
-	.string "WALLY: You're finally here.\p"
-	.string "I've built this team to win.\n"
-	.string "Every move has a purpose.\p"
-	.string "You helped me once, sure.\n"
-	.string "But that doesn't make you\l"
-	.string "my teacher forever.\p"
-	.string "Let's see whether you've\n"
-	.string "managed to keep up.$"
+	.string "WALLY: Oh. It's you.\p"
+	.string "Seven badges. TATE and LIZA didn't\n"
+	.string "even make me sweat.\p"
+	.string "How many do you have again? Six? Cute.\p"
+	.string "WALLACE trains me personally now. Funny\n"
+	.string "how he never offered to train you.\p"
+	.string "You helped me catch one POKéMON. Don't\n"
+	.string "act like that makes us even.\p"
+	.string "Go on. Embarrass yourself.$"
 
 
 WallyJourney_Text_RivalLILYCOVEDefeat:
-	.string "You're still ahead of me…\n"
-	.string "but not by much!$"
+	.string "Wow. Lucky again. Must be nice.$"
 
 
 WallyJourney_Text_RivalLILYCOVEPost:
-	.string "WALLY: WALLACE watched me\n"
-	.string "battle the other day.\p"
-	.string "He asked what I still\n"
+	.string "WALLY: WALLACE asked me what I still\n"
 	.string "needed to prove.\p"
-	.string "I almost laughed.\n"
-	.string "Isn't winning the answer?\p"
-	.string "Anyway, I'll see you\n"
-	.string "at the LEAGUE.$"
+	.string "I laughed. I'm about to take his title.\p"
+	.string "Enjoy beating me while it still counts\n"
+	.string "for something.\p"
+	.string "See you at the LEAGUE. Or not. I won't\n"
+	.string "be looking for you.$"
 
 
 WallyJourney_EventScript_RivalMOSSDEEP::
@@ -315,31 +312,31 @@ WallyJourney_EventScript_RivalMOSSDEEPWon::
 	end
 
 WallyJourney_Text_RivalMOSSDEEPIntro:
-	.string "WALLY: Eight BADGES. Already.\p"
-	.string "I'm heading for the\n"
-	.string "ELITE FOUR next.\p"
-	.string "You've made progress too.\n"
-	.string "Just not quite as fast.\p"
-	.string "The weather is turning.\n"
-	.string "I'll help where I can.\p"
-	.string "Then we battle. Let's see\n"
-	.string "if you can surprise me.$"
+	.string "WALLY: Seven badges. Took you long\n"
+	.string "enough.\p"
+	.string "I've had all eight for a while now.\p"
+	.string "ELITE FOUR next. Then WALLACE.\p"
+	.string "People say something's wrong with the\n"
+	.string "weather. Don't worry, I'll handle it.\p"
+	.string "That's what real TRAINERS do.\p"
+	.string "But first, let me remind you where you\n"
+	.string "stand.$"
 
 
 WallyJourney_Text_RivalMOSSDEEPDefeat:
-	.string "Close. Really close.\n"
-	.string "Next time it won't be.$"
+	.string "Tch. Enjoy it. It won't happen at the\n"
+	.string "LEAGUE.$"
 
 
 WallyJourney_Text_RivalMOSSDEEPPost:
-	.string "WALLY: WALLACE keeps asking\n"
-	.string "why I want to be CHAMPION.\p"
-	.string "Because I know I can win.\n"
-	.string "I haven't proved it yet.\p"
-	.string "He says strength is more\n"
-	.string "than collecting victories.\p"
-	.string "I'll show him what I can do\n"
-	.string "when I reach the LEAGUE.$"
+	.string "WALLY: WALLACE keeps asking why I want\n"
+	.string "to be CHAMPION.\p"
+	.string "Easy. Because I'm better than\n"
+	.string "everyone.\p"
+	.string "He says strength is more than\n"
+	.string "collecting wins.\p"
+	.string "Says the guy who's about to lose his\n"
+	.string "title to me.$"
 
 
 @ Wally's Journey (owner design): right before the 8th Gym, Wally stops the player at
@@ -443,42 +440,48 @@ WallyJourney_Movement_WallyWalkDown2:
 	step_end
 
 WallyJourney_Text_SootopolisWallyCalls:
-	.string "WALLY: {PLAYER}! Hold up.$"
+	.string "WALLY: {PLAYER}. Hold up.$"
 
 WallyJourney_Text_SootopolisWallyWon:
-	.string "WALLY: So that's the gap between\n"
-	.string "us now.\p"
-	.string "I told you I'd catch up. I didn't\n"
-	.string "think I'd pass you this fast.\p"
-	.string "Watch the broadcast tonight.\n"
-	.string "When I beat WALLACE, you'll know\l"
-	.string "exactly where we stand.$"
+	.string "WALLY: Pathetic. You're not a hero.\n"
+	.string "You're a fluke.\p"
+	.string "Watch the broadcast tonight. That's\n"
+	.string "the closest you'll ever get to the\l"
+	.string "title.$"
 
 WallyJourney_Text_RivalSOOTOPOLISIntro:
-	.string "WALLY: The storm's over.\n"
-	.string "Everyone I got into the shelters\l"
-	.string "walked out on their own.\p"
-	.string "I cleared the ELITE FOUR last week.\n"
-	.string "Then the sky went black, and I came\l"
-	.string "back to help.\p"
-	.string "WALLACE just left for EVER GRANDE.\n"
-	.string "Our title match is tonight.\p"
-	.string "One battle before I go. I'm saving\n"
-	.string "MEGA EVOLUTION for him.\p"
-	.string "And don't expect me to go easy just\n"
-	.string "because you watched me catch RALTS.$"
+	.string "WALLY: Wow. Everyone's calling you a\n"
+	.string "hero. It's honestly embarrassing.\p"
+	.string "I dragged this whole city into the\n"
+	.string "shelters while you soaked up all the\l"
+	.string "credit.\p"
+	.string "Typical. You've been riding everyone\n"
+	.string "else's coattails since PETALBURG.\p"
+	.string "I cleared the ELITE FOUR last week.\p"
+	.string "WALLACE was stuck here dealing with\n"
+	.string "the storm, so our title match got\l"
+	.string "pushed back.\p"
+	.string "Honestly? I don't think WALLACE is\n"
+	.string "even in my league anymore.\p"
+	.string "And here I thought he was a CHAMPION.\p"
+	.string "He just left for EVER GRANDE. Tonight I\n"
+	.string "take everything.\p"
+	.string "One battle before I go. You're not\n"
+	.string "worth MEGA EVOLUTION.\p"
+	.string "You're barely worth my time.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISDefeat:
-	.string "WALLY: …You still beat me.\n"
-	.string "Fine. Better you than WALLACE.$"
+	.string "WALLY: …You don't deserve this. You\n"
+	.string "never did.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISPost:
-	.string "WALLY: Enjoy it. Tonight I fight\n"
-	.string "at full strength.\p"
-	.string "When I take that title, you'll be\n"
-	.string "the one chasing me.$"
+	.string "WALLY: Savor it. It's the last good\n"
+	.string "thing that'll ever happen to you.\p"
+	.string "Tonight I become CHAMPION.\p"
+	.string "You'll just be another TRAINER who\n"
+	.string "peaked too early.$"
 
 
 
@@ -854,12 +857,12 @@ WallyJourney_EventScript_SootopolisCrisisWally::
 	end
 
 WallyJourney_Text_SootopolisCrisisWally:
-	.string "WALLY: {PLAYER}! Keep moving, I've\n"
+	.string "WALLY: Oh. It's you. Keep moving, I've\n"
 	.string "got this side of town.\p"
 	.string "Everyone's going into the POKéMON\n"
-	.string "CENTER, it's the strongest building.\p"
-	.string "Go! Whatever's out there, you're\n"
-	.string "the one who can reach it!$"
+	.string "CENTER. Somebody has to actually\l"
+	.string "protect people.\p"
+	.string "Go play hero. Try not to make it worse.$"
 
 @ Wally's Journey: Battle Frontier "Gimmick Collector". For 48 BP, a random
 @ Mega Stone or Z-Crystal the player doesn't own yet. A repeatable way to fill
@@ -971,21 +974,32 @@ WallyJourney_EventScript_PyreTeamUpNotYet::
 	end
 
 WallyJourney_Text_PyreWallyArrives:
-	.string "WALLY: {PLAYER}! Wait up!\p"
-	.string "The LEAGUE asked me to keep an eye\n"
-	.string "on MT. PYRE. TEAM AQUA is all over\l"
-	.string "the summit.\p"
-	.string "Two of them up ahead. We take them\n"
-	.string "together. Pick your best three!$"
+	.string "WALLY: Great. Of course it's you.\p"
+	.string "The LEAGUE asked me to babysit MT.\n"
+	.string "PYRE. TEAM AQUA is crawling all over the\l"
+	.string "summit.\p"
+	.string "There are two of them up ahead.\p"
+	.string "You know, I'm starting to feel sorry for\n"
+	.string "you.\p"
+	.string "How about I show you how a real TRAINER\n"
+	.string "fights?\p"
+	.string "Pick your best three. If you even have\n"
+	.string "three worth picking.$"
 
 WallyJourney_Text_PyreWallyAfter:
-	.string "WALLY: Not bad. You kept up.\p"
-	.string "Go on ahead. I'll make sure nobody\n"
-	.string "follows you up.$"
+	.string "WALLY: That was pathetic. I carried you\n"
+	.string "the whole way.\p"
+	.string "If I weren't here, TEAM AQUA would've\n"
+	.string "wiped the floor with you.\p"
+	.string "Go on. I'll stay here and clean up after\n"
+	.string "you, like always.\p"
+	.string "Try not to cry when it gets hard up\n"
+	.string "there.$"
 
 WallyJourney_Text_PyreWallyLater:
-	.string "WALLY: Not ready? That's fine.\n"
-	.string "Get your team together. I'll wait.$"
+	.string "WALLY: Not ready? Of course you're not.\p"
+	.string "Go sort out your team. I'll wait. Try not\n"
+	.string "to take all day.$"
 
 WallyJourney_Text_TitanRetreats:
 	.string "The wounded giant sank back into\n"
@@ -1906,10 +1920,18 @@ WallyJourney_EventScript_RivalVERDANTURFPlayerWon::
 	return
 
 WallyJourney_Text_RivalVERDANTURFWallyWon:
-	.string "WALLY: I... I won? I actually won!\p"
-	.string "I'm sorry, {PLAYER}! I mean...\n"
-	.string "thank you! I've never felt like\l"
-	.string "this before!$"
+	.string "WALLY: I… I won?\p"
+	.string "Huh. I always thought you were way\n"
+	.string "stronger than me.\p"
+	.string "I didn't think I could beat you at my\n"
+	.string "current strength.\p"
+	.string "…But I did. And it wasn't even that\n"
+	.string "hard.\p"
+	.string "Maybe I've been the strong one this\n"
+	.string "whole time.\p"
+	.string "Maybe you just got lucky with everyone\n"
+	.string "else.\p"
+	.string "See you around, {PLAYER}. Try to keep up.$"
 
 WallyJourney_EventScript_RivalLAVARIDGEWallyWon::
 	special HealPlayerParty
@@ -1921,10 +1943,7 @@ WallyJourney_EventScript_RivalLAVARIDGEPlayerWon::
 	return
 
 WallyJourney_Text_RivalLAVARIDGEWallyWon:
-	.string "WALLY: Ha! Did you think I'd go\n"
-	.string "easy on you?\p"
-	.string "Maybe you're the one who needs\n"
-	.string "to catch up now.$"
+	.string "WALLY: Oh. I guess you aren't special.$"
 
 WallyJourney_EventScript_RivalFORTREEWallyWon::
 	special HealPlayerParty
@@ -1936,9 +1955,8 @@ WallyJourney_EventScript_RivalFORTREEPlayerWon::
 	return
 
 WallyJourney_Text_RivalFORTREEWallyWon:
-	.string "WALLY: See? I'm not the one who\n"
-	.string "needs help anymore, looks like\l"
-	.string "you are.\p"
+	.string "WALLY: See? I'm not the one who needs\n"
+	.string "help anymore, looks like you are.\p"
 	.string "Remember that next time.$"
 
 WallyJourney_EventScript_RivalLILYCOVEWallyWon::
@@ -1951,10 +1969,10 @@ WallyJourney_EventScript_RivalLILYCOVEPlayerWon::
 	return
 
 WallyJourney_Text_RivalLILYCOVEWallyWon:
-	.string "WALLY: Every move had a purpose.\n"
-	.string "Yours didn't.\p"
-	.string "I'll see you at the LEAGUE.\n"
-	.string "If you make it.$"
+	.string "WALLY: Every move had a purpose. Yours\n"
+	.string "didn't.\p"
+	.string "Maybe go back to catching ZIGZAGOON.\n"
+	.string "That's more your level.$"
 
 WallyJourney_EventScript_RivalMOSSDEEPWallyWon::
 	special HealPlayerParty
@@ -1967,7 +1985,6 @@ WallyJourney_EventScript_RivalMOSSDEEPPlayerWon::
 
 WallyJourney_Text_RivalMOSSDEEPWallyWon:
 	.string "WALLY: That's what I thought.\p"
-	.string "Don't worry. I'll still help with\n"
-	.string "the weather. Then I'm off to\l"
-	.string "the LEAGUE.$"
+	.string "I'll go deal with the weather now. You\n"
+	.string "can watch.$"
 
