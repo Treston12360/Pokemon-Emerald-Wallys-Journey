@@ -207,23 +207,25 @@ WallyJourney_EventScript_RivalLAVARIDGEWon::
 	end
 
 WallyJourney_Text_RivalLAVARIDGEIntro:
-	.string "WALLY: {PLAYER}! I climbed all the\n"
-	.string "way up here by myself!\p"
-	.string "The hot springs helped me catch\n"
-	.string "my breath. Now I want to test\l"
-	.string "my team on you!$"
+	.string "WALLY: Oh. {PLAYER}.\p"
+	.string "I just came down from JAGGED PASS.\n"
+	.string "I've been training on the volcano.\p"
+	.string "You beat FLANNERY? So did I.\n"
+	.string "It wasn't hard.\p"
+	.string "Everyone keeps saying how amazing\n"
+	.string "you are.\p"
+	.string "Let's find out if they're right.$"
 
 
 WallyJourney_Text_RivalLAVARIDGEDefeat:
-	.string "You're amazing, {PLAYER}!\n"
-	.string "But I'm catching up!$"
+	.string "Hmph. Fine.\n"
+	.string "You got lucky.$"
 
 
 WallyJourney_Text_RivalLAVARIDGEPost:
-	.string "WALLY: My POKéMON and I are\n"
-	.string "learning to trust each other.\p"
-	.string "Next time, I'll be ready for\n"
-	.string "anything you throw at me!$"
+	.string "WALLY: Don't get used to winning.\p"
+	.string "My team gets stronger every day.\n"
+	.string "Yours had better keep up.$"
 
 
 WallyJourney_EventScript_RivalFORTREE::
@@ -1791,10 +1793,10 @@ WallyJourney_EventScript_RivalLAVARIDGEPlayerWon::
 	return
 
 WallyJourney_Text_RivalLAVARIDGEWallyWon:
-	.string "WALLY: I won again! My team really\n"
-	.string "is getting strong.\p"
-	.string "Maybe I'm not the one who needs\n"
-	.string "to catch up anymore.$"
+	.string "WALLY: Ha! Did you think I'd go\n"
+	.string "easy on you?\p"
+	.string "Maybe you're the one who needs\n"
+	.string "to catch up now.$"
 
 WallyJourney_EventScript_RivalFORTREEWallyWon::
 	special HealPlayerParty
