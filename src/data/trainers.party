@@ -9913,6 +9913,7 @@ Level: 50
 Ability: Intimidate
 Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Atk / 252 Def
 - MOVE_PLAY_ROUGH
 - MOVE_IRON_HEAD
 - MOVE_SUCKER_PUNCH
@@ -9923,6 +9924,7 @@ Level: 51
 Ability: Adaptability
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
 - MOVE_CRABHAMMER
 - MOVE_KNOCK_OFF
 - MOVE_AQUA_JET
@@ -9933,6 +9935,7 @@ Level: 52
 Ability: Levitate
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
 - MOVE_EARTHQUAKE
 - MOVE_DRAGON_CLAW
 - MOVE_U_TURN
@@ -9943,6 +9946,7 @@ Level: 53
 Ability: Trace
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
 - MOVE_PSYCHIC
 - MOVE_MOONBLAST
 - MOVE_CALM_MIND
@@ -12978,9 +12982,9 @@ AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Pr
 
 Ralts
 Level: 16
-Nature: Calm
+Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 4 Def / 252 SpD
+EVs: 252 HP / 252 SpA / 4 SpD
 
 === TRAINER_WALLY_VR_2 ===
 Name: WALLY
@@ -13070,6 +13074,7 @@ Armaldo @ Focus Sash
 Level: 53
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Spe
 - Stone Edge
 - X-Scissor
 - Aqua Jet
@@ -13080,6 +13085,7 @@ Level: 53
 Ability: Intimidate
 Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Atk / 252 Def
 - Iron Head
 - Play Rough
 - Sucker Punch
@@ -13090,6 +13096,7 @@ Level: 54
 Ability: Swift Swim
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
 - Rain Dance
 - Hydro Pump
 - Giga Drain
@@ -13100,6 +13107,7 @@ Level: 55
 Ability: Adaptability
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
 - Crabhammer
 - Knock Off
 - Aqua Jet
@@ -13109,6 +13117,7 @@ Flygon @ Choice Scarf
 Level: 56
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
 - Earthquake
 - Dragon Claw
 - U-turn
@@ -13119,6 +13128,7 @@ Level: 58
 Ability: Trace
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
 - Psychic
 - Moonblast
 - Calm Mind

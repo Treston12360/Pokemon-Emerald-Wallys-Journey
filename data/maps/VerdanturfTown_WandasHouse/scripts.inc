@@ -20,7 +20,7 @@ VerdanturfTown_WandasHouse_EventScript_WallyAfterRoute111::
 	end
 
 VerdanturfTown_WandasHouse_Text_WallyAfterRoute111:
-	.string "WALLY: We battled on ROUTE 111,\n"
+	.string "WALLY: We battled in the FIERY PATH,\n"
 	.string "didn't we?\p"
 	.string "That's how I want to get stronger.\n"
 	.string "Battling you, again and again.\p"

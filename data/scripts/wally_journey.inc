@@ -171,14 +171,16 @@ WallyJourney_EventScript_RivalVERDANTURFWon::
 	release
 	end
 
+@ Spoken at the north end of the FIERY PATH (owner-approved 2026-10-26).
 WallyJourney_Text_RivalVERDANTURFIntro:
-	.string "WALLY: {PLAYER}! Um… hi!\p"
-	.string "I heard you beat WATTSON. I've been\n"
-	.string "training on the hills near town.\p"
-	.string "The climb still catches my breath.\n"
-	.string "But I can keep going now!\p"
-	.string "W-would you battle me again?\n"
-	.string "I want to see how far I've come.$"
+	.string "WALLY: {PLAYER}! You made it through!\p"
+	.string "I came in from the other side.\n"
+	.string "It's so hot in here…\p"
+	.string "I heard you beat WATTSON! I've been\n"
+	.string "training every day since our battle\l"
+	.string "in MAUVILLE.\p"
+	.string "Will you battle me again? I want to\n"
+	.string "see how far I've come.$"
 
 
 WallyJourney_Text_RivalVERDANTURFDefeat:
@@ -189,8 +191,8 @@ WallyJourney_Text_RivalVERDANTURFDefeat:
 WallyJourney_Text_RivalVERDANTURFPost:
 	.string "WALLY: Every battle teaches me\n"
 	.string "something new.\p"
-	.string "I'm going to keep going. Not just\n"
-	.string "around VERDANTURF, either!$"
+	.string "I'm going to keep going. Next time,\n"
+	.string "I'll be even stronger!$"
 
 
 WallyJourney_EventScript_RivalLAVARIDGE::
