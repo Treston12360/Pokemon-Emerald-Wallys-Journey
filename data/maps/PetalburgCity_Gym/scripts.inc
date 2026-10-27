@@ -392,7 +392,6 @@ PetalburgCity_Gym_EventScript_NormanBattle::
 	setvar VAR_PETALBURG_GYM_STATE, 7
 	setflag FLAG_BADGE05_GET
 	setvar VAR_WALLY_RIVAL_PENDING, 5
-	clearflag FLAG_HIDE_WALLYS_HOUSE_STEVEN @ Wally's Journey: Steven now waits in Wally's house
 	special ResetHealLocationFromDewford
 	call EventScript_HideMrBriney
 	setflag FLAG_HIDE_MAUVILLE_GYM_WATTSON
@@ -406,14 +405,15 @@ PetalburgCity_Gym_EventScript_NormanBattle::
 	delay 30
 	msgbox PetalburgCity_Gym_Text_DadHappyAndSad, MSGBOX_DEFAULT
 	closemessage
+	@ Wally's Journey: Steven walks in, gives the Mega Bracelet and the starter's stone, and leaves.
 	delay 40
 	playse SE_DOOR
 	delay 10
-	addobject LOCALID_PETALBURG_GYM_WALLYS_DAD
+	addobject LOCALID_PETALBURG_GYM_STEVEN
 	switch VAR_FACING
-	case DIR_NORTH, PetalburgCity_Gym_EventScript_WallysDadArrivesNorth
-	case DIR_WEST, PetalburgCity_Gym_EventScript_WallysDadArrivesWest
-	case DIR_EAST, PetalburgCity_Gym_EventScript_WallysDadArrivesEast
+	case DIR_NORTH, PetalburgCity_Gym_EventScript_StevenArrivesNorth
+	case DIR_WEST, PetalburgCity_Gym_EventScript_StevenArrivesWest
+	case DIR_EAST, PetalburgCity_Gym_EventScript_StevenArrivesEast
 	end
 
 PetalburgCity_Gym_EventScript_GiveFacade::
@@ -424,183 +424,60 @@ PetalburgCity_Gym_EventScript_GiveFacade::
 	call WallyJourney_EventScript_GiveGymHMs
 	return
 
-PetalburgCity_Gym_EventScript_WallysDadArrivesNorth::
+PetalburgCity_Gym_EventScript_StevenArrivesNorth::
 	setvar VAR_0x8008, 1
-	goto PetalburgCity_Gym_EventScript_WallysDadArrives
+	goto PetalburgCity_Gym_EventScript_StevenArrives
 
-PetalburgCity_Gym_EventScript_WallysDadArrivesEast::
+PetalburgCity_Gym_EventScript_StevenArrivesEast::
 	setvar VAR_0x8008, 2
-	goto PetalburgCity_Gym_EventScript_WallysDadArrives
+	goto PetalburgCity_Gym_EventScript_StevenArrives
 
-PetalburgCity_Gym_EventScript_WallysDadArrivesWest::
+PetalburgCity_Gym_EventScript_StevenArrivesWest::
 	setvar VAR_0x8008, 3
-	goto PetalburgCity_Gym_EventScript_WallysDadArrives
+	goto PetalburgCity_Gym_EventScript_StevenArrives
 
-PetalburgCity_Gym_EventScript_WallysDadArrives::
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, PetalburgCity_Gym_Movement_WallysDadEnterGym
+PetalburgCity_Gym_EventScript_StevenArrives::
+	applymovement LOCALID_PETALBURG_GYM_STEVEN, PetalburgCity_Gym_Movement_StevenEnterGym
 	waitmovement 0
-	playse SE_PIN
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, Common_Movement_ExclamationMark
-	waitmovement 0
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, Common_Movement_Delay48
-	waitmovement 0
-	delay 10
-	call_if_eq VAR_0x8008, 1, PetalburgCity_Gym_EventScript_WallysDadApproachPlayerNorth
-	call_if_eq VAR_0x8008, 2, PetalburgCity_Gym_EventScript_WallysDadApproachPlayerEast
-	call_if_eq VAR_0x8008, 3, PetalburgCity_Gym_EventScript_WallysDadApproachPlayerWest
-	msgbox PetalburgCity_Gym_Text_PleaseComeWithMe, MSGBOX_DEFAULT
+	call_if_eq VAR_0x8008, 1, PetalburgCity_Gym_EventScript_StevenApproachPlayerNorth
+	call_if_eq VAR_0x8008, 2, PetalburgCity_Gym_EventScript_StevenApproachPlayerEast
+	call_if_eq VAR_0x8008, 3, PetalburgCity_Gym_EventScript_StevenApproachPlayerWest
+	call WallyJourney_EventScript_StevenGymMegaGift
 	closemessage
-	delay 20
-	call_if_eq VAR_0x8008, 1, PetalburgCity_Gym_EventScript_WallysDadFaceNormanNorth
-	call_if_eq VAR_0x8008, 2, PetalburgCity_Gym_EventScript_WallysDadFaceNormanEast
-	call_if_eq VAR_0x8008, 3, PetalburgCity_Gym_EventScript_WallysDadFaceNormanWest
-	msgbox PetalburgCity_Gym_Text_LetMeBorrowPlayer, MSGBOX_DEFAULT
-	closemessage
-	setflag FLAG_DONT_TRANSITION_MUSIC
-	playbgm MUS_FOLLOW_ME, FALSE
-	call_if_eq VAR_0x8008, 1, PetalburgCity_Gym_EventScript_ExitGymWithWallysDadNorth
-	call_if_eq VAR_0x8008, 2, PetalburgCity_Gym_EventScript_ExitGymWithWallysDadEast
-	call_if_eq VAR_0x8008, 3, PetalburgCity_Gym_EventScript_ExitGymWithWallysDadWest
-	removeobject LOCALID_PETALBURG_GYM_WALLYS_DAD
-	setvar VAR_PETALBURG_CITY_STATE, 4
-	clearflag FLAG_HIDE_PETALBURG_CITY_WALLYS_DAD
-	warp MAP_PETALBURG_CITY, 15, 8
-	waitstate
+	call_if_eq VAR_0x8008, 1, PetalburgCity_Gym_EventScript_StevenExitNorth
+	call_if_eq VAR_0x8008, 2, PetalburgCity_Gym_EventScript_StevenExitEast
+	call_if_eq VAR_0x8008, 3, PetalburgCity_Gym_EventScript_StevenExitWest
+	playse SE_DOOR
+	removeobject LOCALID_PETALBURG_GYM_STEVEN
+	setvar VAR_PETALBURG_CITY_STATE, 5
 	release
 	end
 
-PetalburgCity_Gym_EventScript_WallysDadFaceNormanNorth::
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, Common_Movement_WalkInPlaceFasterUp
-	waitmovement 0
-	return
-
-PetalburgCity_Gym_EventScript_WallysDadFaceNormanEast::
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, Common_Movement_WalkInPlaceFasterRight
-	waitmovement 0
-	return
-
-PetalburgCity_Gym_EventScript_WallysDadFaceNormanWest::
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, Common_Movement_WalkInPlaceFasterLeft
-	waitmovement 0
-	return
-
-PetalburgCity_Gym_EventScript_WallysDadApproachPlayerNorth::
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, PetalburgCity_Gym_Movement_WallysDadApproachPlayerNorth
+PetalburgCity_Gym_EventScript_StevenApproachPlayerNorth::
+	applymovement LOCALID_PETALBURG_GYM_STEVEN, PetalburgCity_Gym_Movement_StevenApproachPlayerNorth
 	waitmovement 0
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
 	applymovement LOCALID_PETALBURG_GYM_NORMAN, Common_Movement_WalkInPlaceFasterLeft
 	waitmovement 0
 	return
 
-PetalburgCity_Gym_EventScript_WallysDadApproachPlayerEast::
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, PetalburgCity_Gym_Movement_WallysDadApproachPlayerEast
+PetalburgCity_Gym_EventScript_StevenApproachPlayerEast::
+	applymovement LOCALID_PETALBURG_GYM_STEVEN, PetalburgCity_Gym_Movement_StevenApproachPlayerEast
 	waitmovement 0
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterDown
 	applymovement LOCALID_PETALBURG_GYM_NORMAN, Common_Movement_WalkInPlaceFasterDown
 	waitmovement 0
 	return
 
-PetalburgCity_Gym_EventScript_WallysDadApproachPlayerWest::
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, PetalburgCity_Gym_Movement_WallysDadApproachPlayerWest
+PetalburgCity_Gym_EventScript_StevenApproachPlayerWest::
+	applymovement LOCALID_PETALBURG_GYM_STEVEN, PetalburgCity_Gym_Movement_StevenApproachPlayerWest
 	waitmovement 0
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterDown
 	applymovement LOCALID_PETALBURG_GYM_NORMAN, Common_Movement_WalkInPlaceFasterDown
 	waitmovement 0
 	return
 
-PetalburgCity_Gym_EventScript_ExitGymWithWallysDadNorth::
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, PetalburgCity_Gym_Movement_WallysDadExitNorth
-	applymovement LOCALID_PETALBURG_GYM_NORMAN, Common_Movement_WalkInPlaceFasterDown
-	applymovement LOCALID_PLAYER, PetalburgCity_Gym_Movement_PlayerExitWithWallysDadNorth
-	waitmovement 0
-	return
-
-PetalburgCity_Gym_EventScript_ExitGymWithWallysDadEast::
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, PetalburgCity_Gym_Movement_WallysDadExitEast
-	applymovement LOCALID_PLAYER, PetalburgCity_Gym_Movement_PlayerExitWithWallysDadEast
-	waitmovement 0
-	return
-
-PetalburgCity_Gym_EventScript_ExitGymWithWallysDadWest::
-	applymovement LOCALID_PETALBURG_GYM_WALLYS_DAD, PetalburgCity_Gym_Movement_WallysDadExitWest
-	applymovement LOCALID_PLAYER, PetalburgCity_Gym_Movement_PlayerExitWithWallysDadWest
-	waitmovement 0
-	return
-
-PetalburgCity_Gym_Movement_WallysDadExitNorth:
-	walk_down
-	walk_down
-	walk_left
-	walk_left
-	walk_down
-	walk_down
-	walk_in_place_faster_up
-	delay_8
-	walk_in_place_down
-	set_invisible
-	step_end
-
-PetalburgCity_Gym_Movement_WallysDadExitEast:
-	walk_down
-	walk_down
-	walk_left
-	walk_left
-	walk_down
-	walk_down
-	walk_in_place_faster_up
-	delay_8
-	walk_in_place_down
-	set_invisible
-	step_end
-
-PetalburgCity_Gym_Movement_WallysDadExitWest:
-	walk_down
-	walk_down
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_down
-	walk_down
-	walk_in_place_faster_up
-	delay_8
-	walk_in_place_down
-	set_invisible
-	step_end
-
-PetalburgCity_Gym_Movement_PlayerExitWithWallysDadNorth:
-	delay_16
-	walk_down
-	walk_down
-	walk_left
-	walk_left
-	walk_down
-	walk_down
-	step_end
-
-PetalburgCity_Gym_Movement_PlayerExitWithWallysDadEast:
-	delay_16
-	walk_down
-	walk_down
-	walk_left
-	walk_down
-	walk_down
-	walk_down
-	step_end
-
-PetalburgCity_Gym_Movement_PlayerExitWithWallysDadWest:
-	delay_16
-	walk_down
-	walk_down
-	walk_down
-	walk_left
-	walk_left
-	walk_left
-	walk_down
-	walk_down
-	step_end
-
-PetalburgCity_Gym_Movement_WallysDadEnterGym:
+PetalburgCity_Gym_Movement_StevenEnterGym:
 	walk_up
 	delay_8
 	walk_in_place_faster_right
@@ -610,7 +487,7 @@ PetalburgCity_Gym_Movement_WallysDadEnterGym:
 	walk_in_place_faster_up
 	step_end
 
-PetalburgCity_Gym_Movement_WallysDadApproachPlayerNorth:
+PetalburgCity_Gym_Movement_StevenApproachPlayerNorth:
 	walk_right
 	walk_right
 	walk_up
@@ -619,7 +496,7 @@ PetalburgCity_Gym_Movement_WallysDadApproachPlayerNorth:
 	walk_in_place_faster_right
 	step_end
 
-PetalburgCity_Gym_Movement_WallysDadApproachPlayerEast:
+PetalburgCity_Gym_Movement_StevenApproachPlayerEast:
 	walk_right
 	walk_right
 	walk_up
@@ -627,7 +504,7 @@ PetalburgCity_Gym_Movement_WallysDadApproachPlayerEast:
 	walk_up
 	step_end
 
-PetalburgCity_Gym_Movement_WallysDadApproachPlayerWest:
+PetalburgCity_Gym_Movement_StevenApproachPlayerWest:
 	walk_right
 	walk_right
 	walk_up
@@ -1333,16 +1210,6 @@ PetalburgCity_Gym_Text_DadHappyAndSad:
 	.string "GYM early on Sundays and come home.\p"
 	.string "…If you'll let me.$"
 
-PetalburgCity_Gym_Text_PleaseComeWithMe:
-	.string "Ah, there you are, {PLAYER}{KUN}!\p"
-	.string "Please come with me.\n"
-	.string "I have something I want you to have.$"
-
-PetalburgCity_Gym_Text_LetMeBorrowPlayer:
-	.string "NORMAN, you don't mind, do you?\p"
-	.string "Let me borrow your {PLAYER}{KUN} for\n"
-	.string "a minute or two.$"
-
 PetalburgCity_Gym_Text_DadGoingToKeepTraining:
 	.string "DAD: {PLAYER}, I meant what I said.\n"
 	.string "The GYM closes early on Sundays now.\p"
@@ -1762,3 +1629,36 @@ PetalburgCity_Gym_Text_NormanGrowAfter4:
 	.string "Come home sometimes.\n"
 	.string "And come back to battle, too.$"
 
+PetalburgCity_Gym_EventScript_StevenExitNorth::
+PetalburgCity_Gym_EventScript_StevenExitEast::
+	applymovement LOCALID_PETALBURG_GYM_STEVEN, PetalburgCity_Gym_Movement_StevenExitNorthEast
+	waitmovement 0
+	return
+
+PetalburgCity_Gym_EventScript_StevenExitWest::
+	applymovement LOCALID_PETALBURG_GYM_STEVEN, PetalburgCity_Gym_Movement_StevenExitWest
+	waitmovement 0
+	return
+
+@ Back the way he came, out through the door he entered by.
+PetalburgCity_Gym_Movement_StevenExitNorthEast:
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	walk_down
+	walk_down
+	set_invisible
+	step_end
+
+PetalburgCity_Gym_Movement_StevenExitWest:
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_down
+	walk_down
+	set_invisible
+	step_end

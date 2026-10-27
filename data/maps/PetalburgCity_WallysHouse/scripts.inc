@@ -237,6 +237,44 @@ WallyJourney_StevenMega_AfterGift::
 	release
 	end
 
+@ Wally's Journey (owner request 2026-10-27): Steven walks into the Petalburg Gym right after
+@ Norman's talk and gives the gifts there (PetalburgCity_Gym_EventScript_StevenArrives). The
+@ Bag has no size limit, so the gifts always fit. The Wally's house version above stays only
+@ for saves where he was already waiting there.
+WallyJourney_EventScript_StevenGymMegaGift::
+	msgbox WallyJourney_StevenMega_GymIntro, MSGBOX_DEFAULT
+	giveitem ITEM_MEGA_RING
+	msgbox WallyJourney_StevenMega_Stone, MSGBOX_DEFAULT
+	call_if_eq VAR_STARTER_MON, 0, WallyJourney_EventScript_StevenGymGiveSceptilite
+	call_if_eq VAR_STARTER_MON, 1, WallyJourney_EventScript_StevenGymGiveBlazikenite
+	call_if_eq VAR_STARTER_MON, 2, WallyJourney_EventScript_StevenGymGiveSwampertite
+	setflag FLAG_RECEIVED_MEGA_BRACELET
+	setflag FLAG_HIDE_WALLYS_HOUSE_STEVEN
+	msgbox WallyJourney_StevenMega_End, MSGBOX_DEFAULT
+	return
+
+WallyJourney_EventScript_StevenGymGiveSceptilite::
+	giveitem ITEM_SCEPTILITE
+	return
+WallyJourney_EventScript_StevenGymGiveBlazikenite::
+	giveitem ITEM_BLAZIKENITE
+	return
+WallyJourney_EventScript_StevenGymGiveSwampertite::
+	giveitem ITEM_SWAMPERTITE
+	return
+
+WallyJourney_StevenMega_GymIntro:
+	.string "STEVEN: {PLAYER}! I caught the end of\n"
+	.string "your battle with NORMAN.\p"
+	.string "That was impressive. You and your\n"
+	.string "POKéMON fought as one.\p"
+	.string "When we first met, you were just\n"
+	.string "starting out. Look at you now.\p"
+	.string "While I was traveling in another\n"
+	.string "region, I came across this.\p"
+	.string "I believe it can help you and your\n"
+	.string "POKéMON reach new heights.$"
+
 WallyJourney_StevenMega_Intro:
 	.string "STEVEN: {PLAYER}! I heard you\n"
 	.string "defeated your father, NORMAN.\p"

@@ -148,8 +148,8 @@
       "flag": "FLAG_HIDE_PETALBURG_GYM_WALLY"
     },
     {
-      "local_id": "LOCALID_PETALBURG_GYM_WALLYS_DAD",
-      "graphics_id": "OBJ_EVENT_GFX_POKEFAN_M",
+      "local_id": "LOCALID_PETALBURG_GYM_STEVEN",
+      "graphics_id": "OBJ_EVENT_GFX_STEVEN",
       "x": 1,
       "y": 7,
       "elevation": 3,

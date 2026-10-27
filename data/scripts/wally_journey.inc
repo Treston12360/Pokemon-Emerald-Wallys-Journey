@@ -238,30 +238,28 @@ WallyJourney_EventScript_RivalFORTREEWon::
 	end
 
 WallyJourney_Text_RivalFORTREEIntro:
-	.string "WALLY: {PLAYER}. There you are.\p"
-	.string "Mom said you beat NORMAN.\n"
-	.string "Not bad. Really.\p"
-	.string "I beat WINONA, too.\n"
-	.string "She was clever, but I saw\l"
-	.string "through her strategy.\p"
-	.string "Don't treat me like that\n"
-	.string "kid from PETALBURG.\p"
-	.string "I'm not sure you've noticed\n"
-	.string "how strong I've become.$"
+	.string "WALLY: {PLAYER}. Finally.\p"
+	.string "I heard you beat NORMAN.\n"
+	.string "Took you long enough.\p"
+	.string "I already have WINONA's badge.\n"
+	.string "She didn't last long against me.\p"
+	.string "Everyone in PETALBURG still thinks\n"
+	.string "of me as the sick kid you had\l"
+	.string "to help.\p"
+	.string "I'm done being that kid.\n"
+	.string "Let's battle.$"
 
 
 WallyJourney_Text_RivalFORTREEDefeat:
-	.string "Tch… Still not enough.\n"
-	.string "That was close, though.$"
+	.string "Tch… That was luck.\n"
+	.string "Nothing more.$"
 
 
 WallyJourney_Text_RivalFORTREEPost:
-	.string "WALLY: You won again.\p"
-	.string "I used to be grateful just\n"
-	.string "to stand beside you.\p"
-	.string "Now I want to stand above\n"
-	.string "you on the rankings.\p"
-	.string "Enjoy being ahead.\n"
+	.string "WALLY: Don't look so pleased.\p"
+	.string "I'm already a badge ahead of you,\n"
+	.string "and I get stronger every day.\p"
+	.string "Enjoy being ahead while you can.\n"
 	.string "It won't last.$"
 
 
@@ -1808,9 +1806,10 @@ WallyJourney_EventScript_RivalFORTREEPlayerWon::
 	return
 
 WallyJourney_Text_RivalFORTREEWallyWon:
-	.string "WALLY: See? I told you.\p"
-	.string "You should take me seriously\n"
-	.string "from now on.$"
+	.string "WALLY: See? I'm not the one who\n"
+	.string "needs help anymore, looks like\l"
+	.string "you are.\p"
+	.string "Remember that next time.$"
 
 WallyJourney_EventScript_RivalLILYCOVEWallyWon::
 	special HealPlayerParty
