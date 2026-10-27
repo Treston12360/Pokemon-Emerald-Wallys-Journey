@@ -648,3 +648,13 @@ gSpecials::
 	def_special WallyJourney_IsEliteFourRematchUnlocked
 	def_special WallyJourney_GetSeasonForScript
 	def_special WallyJourney_GetPartyMonLevel
+	def_special WallyJourney_PlanWallyApproach
+	def_special WallyJourney_StartWallyApproach
+	def_special WallyJourney_StartWallyLeave
+	def_special WallyJourney_FaceWally
+	def_special WallyJourney_WallyHasPath
+	def_special WallyJourney_WallySurfStart
+	def_special WallyJourney_WallySurfLeaveBlob
+	def_special WallyJourney_WallySurfBlobBelow
+	def_special WallyJourney_WallySurfMount
+	def_special WallyJourney_WallySurfEnd

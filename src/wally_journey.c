@@ -28,9 +28,14 @@
 #include "fieldmap.h"
 #include "global.fieldmap.h"
 #include "field_player_avatar.h"
+#include "event_object_movement.h"
+#include "metatile_behavior.h"
+#include "script_movement.h"
+#include "constants/event_object_movement.h"
 #include "constants/hold_effects.h"
 #include "constants/field_effects.h"
 #include "field_effect.h"
+#include "field_effect_helpers.h"
 #include "constants/event_bg.h"
 #include "constants/event_objects.h"
 #include "constants/rgb.h"
@@ -1532,4 +1537,277 @@ void WallyJourney_UpdateMegaStoneSparkles(void)
         gFieldEffectArguments[2] = 1;
         FieldEffectStart(FLDEFF_SPARKLE);
     }
+}
+
+// ---------------------------------------------------------------- Wally walks in and out
+// Owner report (2026-10-26): on the route rival battles Wally popped into view two tiles in
+// front of the player and popped out of view after two steps. These battles start the moment
+// the player enters the map, from whichever side, so there is no fixed entry path. Instead:
+// find the nearest walkable tile just off-screen (but still inside the area where objects stay
+// loaded) that connects to the tile in front of the player, walk Wally in along that path, and
+// after the battle walk him back out the same way before removing him.
+#define WJ_PATH_MAX   48
+#define WJ_GRID_LEFT  9   // objects stay loaded from 9 tiles left of the player ...
+#define WJ_GRID_RIGHT 10  // ... to 10 right,
+#define WJ_GRID_UP    7   // 7 up
+#define WJ_GRID_DOWN  9   // and 9 down (RemoveObjectEventIfOutsideView)
+#define WJ_GRID_W     (WJ_GRID_LEFT + WJ_GRID_RIGHT + 1)
+#define WJ_GRID_H     (WJ_GRID_UP + WJ_GRID_DOWN + 1)
+#define WJ_GRID_N     (WJ_GRID_W * WJ_GRID_H)
+
+EWRAM_DATA static u8 sWallyInMoves[WJ_PATH_MAX + 2] = {0};
+EWRAM_DATA static u8 sWallyOutMoves[WJ_PATH_MAX + 2] = {0};
+EWRAM_DATA static bool8 sWallyHasPath = FALSE;
+EWRAM_DATA static s16 sWallyTargetX = 0;
+EWRAM_DATA static s16 sWallyTargetY = 0;
+
+static const s8 sWJStepX[4] = { 0, 0, -1, 1 };   // down, up, left, right
+static const s8 sWJStepY[4] = { 1, -1, 0, 0 };
+static const u8 sWJWalk[4] = { MOVEMENT_ACTION_WALK_NORMAL_DOWN, MOVEMENT_ACTION_WALK_NORMAL_UP,
+                               MOVEMENT_ACTION_WALK_NORMAL_LEFT, MOVEMENT_ACTION_WALK_NORMAL_RIGHT };
+static const u8 sWJFace[4] = { MOVEMENT_ACTION_FACE_DOWN, MOVEMENT_ACTION_FACE_UP,
+                               MOVEMENT_ACTION_FACE_LEFT, MOVEMENT_ACTION_FACE_RIGHT };
+static const u8 sWJOpposite[4] = { 1, 0, 3, 2 };
+
+static bool32 WJ_TileWalkable(s16 x, s16 y, u8 elevation)
+{
+    u32 behavior;
+    u8 tileElevation;
+
+    if (x < MAP_OFFSET || y < MAP_OFFSET
+     || x >= gMapHeader.mapLayout->width + MAP_OFFSET || y >= gMapHeader.mapLayout->height + MAP_OFFSET)
+        return FALSE;
+    if (MapGridGetCollisionAt(x, y))
+        return FALSE;
+    tileElevation = MapGridGetElevationAt(x, y);
+    if (tileElevation != elevation && tileElevation != 0 && tileElevation != 15 && elevation != 0 && elevation != 15)
+        return FALSE;
+    behavior = MapGridGetMetatileBehaviorAt(x, y);
+    if (MetatileBehavior_IsJumpEast(behavior) || MetatileBehavior_IsJumpWest(behavior)
+     || MetatileBehavior_IsJumpNorth(behavior) || MetatileBehavior_IsJumpSouth(behavior)
+     || MetatileBehavior_IsSurfableWaterOrUnderwater(behavior)
+     || MetatileBehavior_IsWarpDoor(behavior) || MetatileBehavior_IsNonAnimDoor(behavior))
+        return FALSE;
+    if (GetObjectEventIdByXY(x, y) != OBJECT_EVENTS_COUNT)
+        return FALSE;
+    return TRUE;
+}
+
+static bool32 WJ_OffScreen(s32 dx, s32 dy)
+{
+    return dx <= -8 || dx >= 8 || dy <= -6 || dy >= 6;
+}
+
+// special: VAR_0x8006/VAR_0x8007 = Wally's start tile (map coords), VAR_RESULT = TRUE if a path was found.
+void WallyJourney_PlanWallyApproach(void)
+{
+    struct ObjectEvent *player = &gObjectEvents[gPlayerAvatar.objectEventId];
+    s16 px = player->currentCoords.x, py = player->currentCoords.y;
+    u8 elevation = player->currentElevation;
+    u8 parentDir[WJ_GRID_N];     // direction of the step from this tile toward the target; 0xFF = unvisited
+    u8 dist[WJ_GRID_N];
+    u16 queue[WJ_GRID_N];
+    u32 head = 0, tail = 0, i, d, best = WJ_GRID_N, far = WJ_GRID_N, n;
+    s16 tx = 0, ty = 0;
+    static const u8 sTryOrder[4][4] = { {0, 2, 3, 1}, {1, 2, 3, 0}, {2, 0, 1, 3}, {3, 0, 1, 2} };
+    u8 facing = player->facingDirection; // DIR_SOUTH=1 .. DIR_EAST=4
+    const u8 *order = sTryOrder[(facing >= DIR_SOUTH && facing <= DIR_EAST) ? facing - DIR_SOUTH : 0];
+
+    gSpecialVar_Result = FALSE;
+    sWallyHasPath = FALSE;
+    for (i = 0; i < WJ_GRID_N; i++)
+        parentDir[i] = 0xFF;
+
+    // Wally stops on a free tile next to the player, in front of them if possible.
+    for (i = 0; i < 4; i++)
+    {
+        d = order[i];
+        if (WJ_TileWalkable(px + sWJStepX[d], py + sWJStepY[d], elevation))
+        {
+            tx = px + sWJStepX[d];
+            ty = py + sWJStepY[d];
+            break;
+        }
+    }
+    if (i == 4)
+        return;
+
+    n = (ty - py + WJ_GRID_UP) * WJ_GRID_W + (tx - px + WJ_GRID_LEFT);
+    parentDir[n] = 4;
+    dist[n] = 0;
+    queue[tail++] = n;
+    while (head < tail)
+    {
+        u32 cur = queue[head++];
+        s32 cx = (s32)(cur % WJ_GRID_W) - WJ_GRID_LEFT, cy = (s32)(cur / WJ_GRID_W) - WJ_GRID_UP;
+        if (cur != queue[0])
+        {
+            if (WJ_OffScreen(cx, cy))
+            {
+                best = cur;
+                break;
+            }
+            if (far == WJ_GRID_N || dist[cur] > dist[far])
+                far = cur;
+        }
+        if (dist[cur] >= WJ_PATH_MAX)
+            continue;
+        for (d = 0; d < 4; d++)
+        {
+            s32 nx = cx + sWJStepX[d], ny = cy + sWJStepY[d];
+            u32 next;
+            if (nx < -WJ_GRID_LEFT || nx > WJ_GRID_RIGHT || ny < -WJ_GRID_UP || ny > WJ_GRID_DOWN)
+                continue;
+            if (nx == 0 && ny == 0)
+                continue; // the player
+            next = (ny + WJ_GRID_UP) * WJ_GRID_W + (nx + WJ_GRID_LEFT);
+            if (parentDir[next] != 0xFF || !WJ_TileWalkable(px + nx, py + ny, elevation))
+                continue;
+            parentDir[next] = sWJOpposite[d]; // step from next back toward cur
+            dist[next] = dist[cur] + 1;
+            queue[tail++] = next;
+        }
+    }
+    if (best == WJ_GRID_N)
+    {
+        // Nothing reachable off-screen (enclosed spot): come from the farthest reachable tile.
+        if (far == WJ_GRID_N || dist[far] < 3)
+            return;
+        best = far;
+    }
+
+    // Walk in: from the start tile follow the parent steps to the target.
+    {
+        u32 cur = best, steps = 0;
+        while (parentDir[cur] != 4 && steps < WJ_PATH_MAX)
+        {
+            s32 cx = (s32)(cur % WJ_GRID_W) - WJ_GRID_LEFT, cy = (s32)(cur / WJ_GRID_W) - WJ_GRID_UP;
+            d = parentDir[cur];
+            sWallyInMoves[steps++] = sWJWalk[d];
+            cur = (cy + sWJStepY[d] + WJ_GRID_UP) * WJ_GRID_W + (cx + sWJStepX[d] + WJ_GRID_LEFT);
+        }
+        // face the player at the end
+        for (d = 0; d < 4; d++)
+            if (tx + sWJStepX[d] == px && ty + sWJStepY[d] == py)
+                break;
+        sWallyInMoves[steps] = sWJFace[d < 4 ? d : 0];
+        sWallyInMoves[steps + 1] = MOVEMENT_ACTION_STEP_END;
+        // Walk out: the same path backwards.
+        for (i = 0; i < steps; i++)
+        {
+            u8 in = sWallyInMoves[steps - 1 - i];
+            for (d = 0; d < 4; d++)
+                if (sWJWalk[d] == in)
+                    break;
+            sWallyOutMoves[i] = sWJWalk[sWJOpposite[d]];
+        }
+        sWallyOutMoves[steps] = MOVEMENT_ACTION_STEP_END;
+    }
+    sWallyTargetX = tx;
+    sWallyTargetY = ty;
+    gSpecialVar_0x8006 = px + (s32)(best % WJ_GRID_W) - WJ_GRID_LEFT - MAP_OFFSET;
+    gSpecialVar_0x8007 = py + (s32)(best / WJ_GRID_W) - WJ_GRID_UP - MAP_OFFSET;
+    gSpecialVar_Result = TRUE;
+    sWallyHasPath = TRUE;
+}
+
+// specialvar: TRUE if Wally walked in along a planned path (so he can walk back out of it).
+u16 WallyJourney_WallyHasPath(void)
+{
+    return sWallyHasPath;
+}
+
+// special: Wally (local id in VAR_0x8009) walks the planned path in / back out.
+void WallyJourney_StartWallyApproach(void)
+{
+    ScriptMovement_StartObjectMovementScript(gSpecialVar_0x8009, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, sWallyInMoves);
+}
+
+void WallyJourney_StartWallyLeave(void)
+{
+    sWallyHasPath = FALSE;
+    ScriptMovement_StartObjectMovementScript(gSpecialVar_0x8009, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, sWallyOutMoves);
+}
+
+// special: the player turns to face Wally once he has arrived.
+void WallyJourney_FaceWally(void)
+{
+    struct ObjectEvent *player = &gObjectEvents[gPlayerAvatar.objectEventId];
+    ObjectEventTurn(player, GetDirectionToFace(player->currentCoords.x, player->currentCoords.y, sWallyTargetX, sWallyTargetY));
+}
+
+// ---------------------------------------------------------------- Wally surfs (Sootopolis)
+// The 8th Gym stands on an island in Sootopolis's lake, so Wally can only reach the player by
+// water: the same surf blob the player rides is attached to his object while he crosses.
+EWRAM_DATA static u8 sWallySurfBlobSpriteId = 0;
+EWRAM_DATA static bool8 sWallySurfBlobActive = FALSE;
+
+static struct ObjectEvent *WJ_WallyObject(void)
+{
+    u8 objId;
+    if (TryGetObjectEventIdByLocalIdAndMap(gSpecialVar_0x8009, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, &objId))
+        return NULL;
+    return &gObjectEvents[objId];
+}
+
+static void WJ_CreateWallyBlob(s16 x, s16 y, u8 bobState)
+{
+    struct ObjectEvent *wally = WJ_WallyObject();
+    u8 objId;
+    if (wally == NULL)
+        return;
+    TryGetObjectEventIdByLocalIdAndMap(gSpecialVar_0x8009, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, &objId);
+    gFieldEffectArguments[0] = x;
+    gFieldEffectArguments[1] = y;
+    gFieldEffectArguments[2] = objId;
+    sWallySurfBlobSpriteId = FieldEffectStart(FLDEFF_SURF_BLOB);
+    sWallySurfBlobActive = (sWallySurfBlobSpriteId != MAX_SPRITES);
+    if (sWallySurfBlobActive)
+        SetSurfBlob_BobState(sWallySurfBlobSpriteId, bobState);
+}
+
+// special: Wally (VAR_0x8009) is in the water: put him on a surf blob that carries him.
+void WallyJourney_WallySurfStart(void)
+{
+    struct ObjectEvent *wally = WJ_WallyObject();
+    if (wally != NULL)
+        WJ_CreateWallyBlob(wally->currentCoords.x, wally->currentCoords.y, BOB_PLAYER_AND_MON);
+}
+
+// special: he's about to hop onto land: the blob stays behind in the water.
+void WallyJourney_WallySurfLeaveBlob(void)
+{
+    struct ObjectEvent *wally = WJ_WallyObject();
+    if (sWallySurfBlobActive)
+        SetSurfBlob_BobState(sWallySurfBlobSpriteId, BOB_JUST_MON);
+    if (wally != NULL)
+        gSprites[wally->spriteId].y2 = 0;
+}
+
+// special: he's about to hop into the water one tile below: the blob waits there.
+void WallyJourney_WallySurfBlobBelow(void)
+{
+    struct ObjectEvent *wally = WJ_WallyObject();
+    if (wally != NULL)
+        WJ_CreateWallyBlob(wally->currentCoords.x, wally->currentCoords.y + 1, BOB_NONE);
+}
+
+// special: he has landed on the blob: it carries him from here.
+void WallyJourney_WallySurfMount(void)
+{
+    if (sWallySurfBlobActive)
+        SetSurfBlob_BobState(sWallySurfBlobSpriteId, BOB_PLAYER_AND_MON);
+}
+
+// special: done with the water: remove the blob.
+void WallyJourney_WallySurfEnd(void)
+{
+    struct ObjectEvent *wally = WJ_WallyObject();
+    if (sWallySurfBlobActive)
+    {
+        DestroySprite(&gSprites[sWallySurfBlobSpriteId]);
+        sWallySurfBlobActive = FALSE;
+    }
+    if (wally != NULL)
+        gSprites[wally->spriteId].y2 = 0;
 }

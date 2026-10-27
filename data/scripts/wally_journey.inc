@@ -346,11 +346,22 @@ WallyJourney_Text_RivalMOSSDEEPPost:
 WallyJourney_EventScript_SootopolisWallyBattle::
 	msgbox WallyJourney_Text_SootopolisWallyCalls, MSGBOX_DEFAULT
 	closemessage
-	setobjectxyperm LOCALID_SOOTOPOLIS_RIVAL_WALLY, 31, 36
+	@ The Gym stands on an island in the lake: Wally surfs up from below the screen, hops
+	@ ashore and walks up to the player.
 	clearflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS
-	addobject LOCALID_SOOTOPOLIS_RIVAL_WALLY
 	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
-	applymovement LOCALID_SOOTOPOLIS_RIVAL_WALLY, WallyJourney_Movement_WallyWalkUp2
+	waitmovement 0
+	setvar VAR_0x8009, LOCALID_SOOTOPOLIS_RIVAL_WALLY
+	setobjectxyperm LOCALID_SOOTOPOLIS_RIVAL_WALLY, 31, 40
+	addobject LOCALID_SOOTOPOLIS_RIVAL_WALLY
+	special WallyJourney_WallySurfStart
+	applymovement LOCALID_SOOTOPOLIS_RIVAL_WALLY, WallyJourney_Movement_SootopolisSurfIn
+	waitmovement 0
+	special WallyJourney_WallySurfLeaveBlob
+	applymovement LOCALID_SOOTOPOLIS_RIVAL_WALLY, WallyJourney_Movement_HopUp
+	waitmovement 0
+	special WallyJourney_WallySurfEnd
+	applymovement LOCALID_SOOTOPOLIS_RIVAL_WALLY, WallyJourney_Movement_SootopolisWalkToPlayer
 	waitmovement 0
 	playbgm MUS_ENCOUNTER_MAY, FALSE
 	msgbox WallyJourney_Text_RivalSOOTOPOLISIntro, MSGBOX_DEFAULT
@@ -367,8 +378,17 @@ WallyJourney_EventScript_SootopolisPlayerWon::
 	msgbox WallyJourney_Text_RivalSOOTOPOLISPost, MSGBOX_DEFAULT
 WallyJourney_EventScript_SootopolisWallyLeaves::
 	closemessage
-	applymovement LOCALID_SOOTOPOLIS_RIVAL_WALLY, WallyJourney_Movement_WallyWalkDown2
+	@ He walks back to the shore, hops onto his POKéMON and surfs off below the screen.
+	setvar VAR_0x8009, LOCALID_SOOTOPOLIS_RIVAL_WALLY
+	applymovement LOCALID_SOOTOPOLIS_RIVAL_WALLY, WallyJourney_Movement_SootopolisWalkToShore
 	waitmovement 0
+	special WallyJourney_WallySurfBlobBelow
+	applymovement LOCALID_SOOTOPOLIS_RIVAL_WALLY, WallyJourney_Movement_HopDown
+	waitmovement 0
+	special WallyJourney_WallySurfMount
+	applymovement LOCALID_SOOTOPOLIS_RIVAL_WALLY, WallyJourney_Movement_SootopolisSurfOut
+	waitmovement 0
+	special WallyJourney_WallySurfEnd
 	removeobject LOCALID_SOOTOPOLIS_RIVAL_WALLY
 	setflag FLAG_HIDE_WALLY_RIVAL_SOOTOPOLIS
 	clearflag FLAG_WALLY_NO_WHITEOUT
@@ -376,6 +396,39 @@ WallyJourney_EventScript_SootopolisWallyLeaves::
 	applymovement LOCALID_PLAYER, Common_Movement_FaceUp
 	waitmovement 0
 	return
+
+@ Sootopolis: Wally starts on the lake at (31,40), below the screen; the island's south shore
+@ is (31,36) and the player stands at (31,33) in front of the Gym door.
+WallyJourney_Movement_SootopolisSurfIn:
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+WallyJourney_Movement_HopUp:
+	jump_up
+	step_end
+
+WallyJourney_Movement_SootopolisWalkToPlayer:
+	walk_up
+	walk_up
+	face_up
+	step_end
+
+WallyJourney_Movement_SootopolisWalkToShore:
+	walk_down
+	walk_down
+	step_end
+
+WallyJourney_Movement_HopDown:
+	jump_down
+	step_end
+
+WallyJourney_Movement_SootopolisSurfOut:
+	walk_down
+	walk_down
+	walk_down
+	step_end
 
 WallyJourney_Movement_WallyWalkUp2:
 	walk_up
@@ -871,10 +924,10 @@ WallyJourney_EventScript_PyreTeamUp::
 	goto_if_ne VAR_MT_PYRE_STATE, 0, WallyJourney_EventScript_PyreTeamUpNotYet
 	lockall
 	clearflag FLAG_HIDE_MT_PYRE_SUMMIT_WALLY
-	addobject LOCALID_MT_PYRE_SUMMIT_WALLY
-	playse SE_PIN
 	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
 	waitmovement 0
+	setvar VAR_0x8009, LOCALID_MT_PYRE_SUMMIT_WALLY
+	call WallyJourney_EventScript_WallyWalksUp
 	msgbox WallyJourney_Text_PyreWallyArrives, MSGBOX_DEFAULT
 	closemessage
 	special SavePlayerParty
@@ -894,19 +947,19 @@ WallyJourney_EventScript_PyreTeamUpWon::
 	settrainerflag TRAINER_GRUNT_MT_PYRE_2
 	msgbox WallyJourney_Text_PyreWallyAfter, MSGBOX_DEFAULT
 	closemessage
-	fadescreenswapbuffers FADE_TO_BLACK
-	removeobject LOCALID_MT_PYRE_SUMMIT_WALLY
+	@ He stays where he is to guard the way up, as he says; he's gone next time the map loads.
 	setflag FLAG_HIDE_MT_PYRE_SUMMIT_WALLY
-	fadescreenswapbuffers FADE_FROM_BLACK
 	releaseall
 	end
 
 WallyJourney_EventScript_PyreTeamUpCancel::
 	special LoadPlayerParty
 	fadescreen FADE_FROM_BLACK
-	removeobject LOCALID_MT_PYRE_SUMMIT_WALLY
-	setflag FLAG_HIDE_MT_PYRE_SUMMIT_WALLY
 	msgbox WallyJourney_Text_PyreWallyLater, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_0x8009, LOCALID_MT_PYRE_SUMMIT_WALLY
+	call WallyJourney_EventScript_WallyWalksAway
+	setflag FLAG_HIDE_MT_PYRE_SUMMIT_WALLY
 	applymovement LOCALID_PLAYER, Common_Movement_WalkDown
 	waitmovement 0
 	releaseall
@@ -1263,6 +1316,21 @@ WallyJourney_Text_DexResearchAllDone:
 @ stepping out of the Pokemon Center). He appears two tiles ahead of the player and walks up.
 @ Losing whites out as normal; the battle happens again next time.
 WallyJourney_EventScript_WallyWalksUp::
+	@ Wally walks in from just off-screen along a real path (planned in C); if the player is
+	@ boxed in with no path, fall back to stepping up from two tiles ahead.
+	special WallyJourney_PlanWallyApproach
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_WallyWalksUpNear
+	setobjectxyperm VAR_0x8009, VAR_0x8006, VAR_0x8007
+	addobject VAR_0x8009
+	playse SE_PIN
+	applymovement LOCALID_PLAYER, Common_Movement_ExclamationMark
+	waitmovement 0
+	special WallyJourney_StartWallyApproach
+	waitmovement VAR_0x8009
+	special WallyJourney_FaceWally
+	return
+
+WallyJourney_EventScript_WallyWalksUpNear::
 	special StorePlayerCoordsInVars
 	specialvar VAR_RESULT, GetPlayerFacingDirection
 	copyvar VAR_0x8006, VAR_0x8004
@@ -1315,6 +1383,15 @@ WallyJourney_Movement_StepLeft:
 	step_end
 
 WallyJourney_EventScript_WallyWalksAway::
+	@ He leaves the way he came, off the screen, before he is removed.
+	specialvar VAR_RESULT, WallyJourney_WallyHasPath
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_WallyWalksAwayNear
+	special WallyJourney_StartWallyLeave
+	waitmovement VAR_0x8009
+	removeobject VAR_0x8009
+	return
+
+WallyJourney_EventScript_WallyWalksAwayNear::
 	applymovement VAR_0x8009, WallyJourney_Movement_WallyLeave
 	waitmovement 0
 	removeobject VAR_0x8009
