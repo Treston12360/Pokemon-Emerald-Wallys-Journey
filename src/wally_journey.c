@@ -636,15 +636,26 @@ void WallyJourney_GiveWildRayquazaDragonAscent(void)
 // clock, so time keeps passing while the game is off and the season is the
 // same on every map and after every reload.
 #define WALLY_HOURS_PER_SEASON 48
+// Owner request (2026-10-27): every save on a PC set to the same clock is in the same season and
+// sees the same weather, so friends playing together match. Seasons and weather therefore run on
+// the real date and hour from the clock itself (hours since 1 Jan 2000), not on the save's own
+// in-game clock (which starts when each save is made). The offset lines the cycle up so autumn
+// starts at midnight on 27 Oct 2026: autumn 27-28 Oct, winter 29-30, spring 31 Oct-1 Nov,
+// summer 2-3 Nov, autumn again 4-5 Nov, and so on every 8 days.
+#define WALLY_SEASON_PHASE_HOURS 168
+static s32 WJ_RealClockHour(void)
+{
+    struct SiiRtcInfo rtc;
+    RtcGetInfo(&rtc);
+    return (s32)RtcGetDayCount(&rtc) * 24 + (s32)ConvertBcdToBinary(rtc.hour);
+}
+
 enum WallySeason WallyJourney_GetSeason(void)
 {
     s32 hours;
     if (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK)
         return WALLY_SEASON_SUMMER; // no or broken clock: plain Hoenn summer, no tint surprises
-    RtcCalcLocalTime();
-    hours = gLocalTime.days * 24 + gLocalTime.hours;
-    if (hours < 0)
-        hours = 0;
+    hours = WJ_RealClockHour() + WALLY_SEASON_PHASE_HOURS;
     return (hours / WALLY_HOURS_PER_SEASON) % 4;
 }
 
@@ -754,7 +765,7 @@ static enum WallySeason SeasonAtHour(s32 hour)
 {
     if (hour < 0)
         hour = 0;
-    return (hour / WALLY_HOURS_PER_SEASON) % 4;
+    return ((hour + WALLY_SEASON_PHASE_HOURS) / WALLY_HOURS_PER_SEASON) % 4;
 }
 
 enum { FRONT_SHOWERS, FRONT_RAIN, FRONT_STORM };
@@ -864,8 +875,7 @@ static EWRAM_DATA u8 sAutoFairWeather = 0;
 
 static s32 CurrentRealHour(void)
 {
-    RtcCalcLocalTime();
-    return gLocalTime.days * 24 + gLocalTime.hours;
+    return WJ_RealClockHour();
 }
 
 // The weather this system wants on the current map right now, or FALSE when
@@ -1361,7 +1371,7 @@ bool32 WallyJourney_IsNpcAway(const struct ObjectEventTemplate *template)
     if (i == ARRAY_COUNT(sWallyAmbientNpcScripts))
         return FALSE;
     timeOfDay = GetTimeOfDay(); // also refreshes gLocalTime
-    h = WeatherHash((u32)script ^ ((u32)gLocalTime.days * 2246822519u));
+    h = WeatherHash((u32)script ^ ((u32)(WJ_RealClockHour() / 24) * 2246822519u)); // same day for everyone
     if (timeOfDay == TIME_NIGHT && h % 100 < 65)
         return TRUE;                                    // gone home for the night
     if (timeOfDay == TIME_EVENING && h % 100 < 20)
