@@ -1753,6 +1753,134 @@ WallyJourney_Text_HyperTrainerTooLow:
 WallyJourney_Text_HyperTrainerCancel:
 	.string "Come back when you're ready.$"
 
+@ Wally's Journey (owner request 2026-10-27): using a Bottle Cap / Gold Bottle Cap from the Bag.
+@ Same effect as the Hyper Trainer (hypertrain), no level requirement, no NPC. Owner-approved messages.
+WallyJourney_EventScript_UseBottleCap::
+	special ChoosePartyMon
+	waitstate
+	goto_if_ge VAR_0x8004, PARTY_SIZE, WallyJourney_EventScript_UseBottleCapEnd
+	specialvar VAR_RESULT, WallyJourney_GetPartyMonLevel
+	goto_if_eq VAR_RESULT, 0, WallyJourney_EventScript_UseBottleCapEnd
+	bufferpartymonnick STR_VAR_1, VAR_0x8004
+	goto_if_eq VAR_ITEM_ID, ITEM_GOLD_BOTTLE_CAP, WallyJourney_EventScript_UseGoldBottleCap
+	msgbox WallyJourney_Text_CapWhichStat, MSGBOX_DEFAULT
+	dynmultichoice 0, 0, FALSE, 6, 0, DYN_MULTICHOICE_CB_NONE, WallyJourney_Text_StatHP, WallyJourney_Text_StatAtk, WallyJourney_Text_StatDef, WallyJourney_Text_StatSpAtk, WallyJourney_Text_StatSpDef, WallyJourney_Text_StatSpeed
+	closemessage
+	switch VAR_RESULT
+	case 0, WallyJourney_EventScript_CapStatHP
+	case 1, WallyJourney_EventScript_CapStatAtk
+	case 2, WallyJourney_EventScript_CapStatDef
+	case 3, WallyJourney_EventScript_CapStatSpAtk
+	case 4, WallyJourney_EventScript_CapStatSpDef
+	case 5, WallyJourney_EventScript_CapStatSpeed
+	goto WallyJourney_EventScript_UseBottleCapEnd
+
+WallyJourney_EventScript_CapStatHP::
+	canhypertrain 0, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_CapStatMaxed
+	hypertrain 0, VAR_0x8004
+	bufferstring STR_VAR_2, WallyJourney_Text_StatHP
+	goto WallyJourney_EventScript_CapStatDone
+WallyJourney_EventScript_CapStatAtk::
+	canhypertrain 1, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_CapStatMaxed
+	hypertrain 1, VAR_0x8004
+	bufferstring STR_VAR_2, WallyJourney_Text_StatAtk
+	goto WallyJourney_EventScript_CapStatDone
+WallyJourney_EventScript_CapStatDef::
+	canhypertrain 2, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_CapStatMaxed
+	hypertrain 2, VAR_0x8004
+	bufferstring STR_VAR_2, WallyJourney_Text_StatDef
+	goto WallyJourney_EventScript_CapStatDone
+WallyJourney_EventScript_CapStatSpAtk::
+	canhypertrain 4, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_CapStatMaxed
+	hypertrain 4, VAR_0x8004
+	bufferstring STR_VAR_2, WallyJourney_Text_StatSpAtk
+	goto WallyJourney_EventScript_CapStatDone
+WallyJourney_EventScript_CapStatSpDef::
+	canhypertrain 5, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_CapStatMaxed
+	hypertrain 5, VAR_0x8004
+	bufferstring STR_VAR_2, WallyJourney_Text_StatSpDef
+	goto WallyJourney_EventScript_CapStatDone
+WallyJourney_EventScript_CapStatSpeed::
+	canhypertrain 3, VAR_0x8004
+	goto_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_CapStatMaxed
+	hypertrain 3, VAR_0x8004
+	bufferstring STR_VAR_2, WallyJourney_Text_StatSpeed
+	goto WallyJourney_EventScript_CapStatDone
+
+WallyJourney_EventScript_CapStatDone::
+	removeitem ITEM_BOTTLE_CAP
+	playfanfare MUS_LEVEL_UP
+	msgbox WallyJourney_Text_CapStatDone, MSGBOX_DEFAULT
+	waitfanfare
+	goto WallyJourney_EventScript_UseBottleCapEnd
+
+WallyJourney_EventScript_CapStatMaxed::
+	msgbox WallyJourney_Text_CapStatMaxed, MSGBOX_DEFAULT
+	goto WallyJourney_EventScript_UseBottleCapEnd
+
+WallyJourney_EventScript_UseGoldBottleCap::
+	msgbox WallyJourney_Text_CapUseGold, MSGBOX_YESNO
+	goto_if_ne VAR_RESULT, YES, WallyJourney_EventScript_UseBottleCapEnd
+	setvar VAR_0x8005, 0
+	canhypertrain 0, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	canhypertrain 1, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	canhypertrain 2, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	canhypertrain 4, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	canhypertrain 5, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	canhypertrain 3, VAR_0x8004
+	call_if_eq VAR_RESULT, TRUE, WallyJourney_EventScript_HyperTrainerCount
+	goto_if_eq VAR_0x8005, 0, WallyJourney_EventScript_CapGoldMaxed
+	hypertrain 0, VAR_0x8004
+	hypertrain 1, VAR_0x8004
+	hypertrain 2, VAR_0x8004
+	hypertrain 4, VAR_0x8004
+	hypertrain 5, VAR_0x8004
+	hypertrain 3, VAR_0x8004
+	removeitem ITEM_GOLD_BOTTLE_CAP
+	playfanfare MUS_LEVEL_UP
+	msgbox WallyJourney_Text_CapGoldDone, MSGBOX_DEFAULT
+	waitfanfare
+	goto WallyJourney_EventScript_UseBottleCapEnd
+
+WallyJourney_EventScript_CapGoldMaxed::
+	msgbox WallyJourney_Text_CapGoldMaxed, MSGBOX_DEFAULT
+WallyJourney_EventScript_UseBottleCapEnd::
+	closemessage
+	releaseall
+	end
+
+WallyJourney_Text_CapWhichStat:
+	.string "Which stat should {STR_VAR_1}\n"
+	.string "max out?$"
+
+WallyJourney_Text_CapUseGold:
+	.string "Max out every stat of {STR_VAR_1}?$"
+
+WallyJourney_Text_CapStatDone:
+	.string "{STR_VAR_1}'s {STR_VAR_2} was\n"
+	.string "maxed out!$"
+
+WallyJourney_Text_CapGoldDone:
+	.string "All of {STR_VAR_1}'s stats were\n"
+	.string "maxed out!$"
+
+WallyJourney_Text_CapStatMaxed:
+	.string "That stat is already maxed out.$"
+
+WallyJourney_Text_CapGoldMaxed:
+	.string "{STR_VAR_1}'s stats are already\n"
+	.string "all maxed out.$"
+
 WallyJourney_Text_StatHP:
 	.string "HP$"
 WallyJourney_Text_StatAtk:

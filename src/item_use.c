@@ -824,6 +824,23 @@ static void ItemUseOnFieldCB_Berry(u8 taskId)
     DestroyTask(taskId);
 }
 
+// Wally's Journey (owner request 2026-10-27): Bottle Caps work from the Bag like Mints, no Hyper
+// Trainer needed. The Bag closes and WallyJourney_EventScript_UseBottleCap picks the Pokemon and stat.
+static void ItemUseOnFieldCB_BottleCap(u8 taskId)
+{
+    LockPlayerFieldControls();
+    ScriptContext_SetupScript(WallyJourney_EventScript_UseBottleCap);
+    DestroyTask(taskId);
+}
+
+void ItemUseOutOfBattle_BottleCap(u8 taskId)
+{
+    sItemUseOnFieldCB = ItemUseOnFieldCB_BottleCap;
+    gFieldCallback = FieldCB_UseItemOnField;
+    gBagMenu->newScreenCallback = CB2_ReturnToField;
+    Task_FadeAndCloseBagMenu(taskId);
+}
+
 void ItemUseOutOfBattle_WailmerPail(u8 taskId)
 {
     if (TryToWaterSudowoodo() == TRUE)
