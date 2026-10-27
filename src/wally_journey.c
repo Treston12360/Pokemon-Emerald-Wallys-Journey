@@ -1,6 +1,7 @@
 // Wally's Journey: persistent progression and observed-only rival memory.
 // Uses saved Emerald variable IDs; does not inspect the player's hidden party.
 #include "global.h"
+#include "pokedex.h"
 #include "main.h"
 #include "palette.h"
 #include "script.h"
@@ -41,8 +42,6 @@
 #include "constants/rgb.h"
 
 #define WALLY_VAR_PEAK_BADGES   VAR_UNUSED_0x40F7
-#define WALLY_VAR_COMBO_SPECIES VAR_UNUSED_0x40FE // catch combo (Let's Go style)
-#define WALLY_VAR_COMBO_COUNT   VAR_UNUSED_0x40FF
 #define WALLY_VAR_BIOME_MASK    VAR_UNUSED_0x40F8
 #define WALLY_VAR_WALLY_DEFEATS VAR_UNUSED_0x40F9
 #define WALLY_VAR_WALLY_WINS    VAR_UNUSED_0x40FA
@@ -218,58 +217,79 @@ static void EnsureCatchCounts(void)
     }
 }
 
+// Forms seen. A base form counts as seen when the Pokedex says so; any other form (regional
+// forms, Morpeko's modes...) only once that exact form has been seen in battle or obtained.
+#define WJ_FORM_SEEN_MAGIC 0x5F
+static void EnsureFormSeen(void)
+{
+    if (gSaveBlock3Ptr->wjFormSeenMagic != WJ_FORM_SEEN_MAGIC)
+    {
+        memset(gSaveBlock3Ptr->wjFormSeen, 0, sizeof(gSaveBlock3Ptr->wjFormSeen));
+        gSaveBlock3Ptr->wjFormSeenMagic = WJ_FORM_SEEN_MAGIC;
+    }
+}
+
+void WallyJourney_SetFormSeen(u16 species)
+{
+    if (species == SPECIES_NONE || species >= NUM_SPECIES)
+        return;
+    EnsureFormSeen();
+    gSaveBlock3Ptr->wjFormSeen[species / 8] |= 1 << (species % 8);
+}
+
+bool32 WallyJourney_FormSeen(u16 species)
+{
+    if (species == SPECIES_NONE || species >= NUM_SPECIES)
+        return FALSE;
+    EnsureFormSeen();
+    if (gSaveBlock3Ptr->wjFormSeen[species / 8] & (1 << (species % 8)))
+        return TRUE;
+    if (GET_BASE_SPECIES_ID(species) == species)
+        return GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN);
+    return FALSE;
+}
+
 void WallyJourney_RecordCatch(u16 species)
 {
     u16 dexNum = SpeciesToNationalPokedexNum(species);
+    WallyJourney_SetFormSeen(species);
     EnsureCatchCounts();
     if (dexNum == 0 || dexNum > NATIONAL_DEX_COUNT)
         return;
     if (gSaveBlock3Ptr->wjCatchCounts[dexNum] < 255)
         gSaveBlock3Ptr->wjCatchCounts[dexNum]++;
-    // Catch combo: catching the same species again extends it, any other species starts a new one.
-    if (dexNum == SpeciesToNationalPokedexNum(VarGet(WALLY_VAR_COMBO_SPECIES)) && VarGet(WALLY_VAR_COMBO_COUNT) != 0)
-    {
-        if (VarGet(WALLY_VAR_COMBO_COUNT) < 999)
-            VarSet(WALLY_VAR_COMBO_COUNT, VarGet(WALLY_VAR_COMBO_COUNT) + 1);
-    }
-    else
-    {
-        VarSet(WALLY_VAR_COMBO_SPECIES, species);
-        VarSet(WALLY_VAR_COMBO_COUNT, 1);
-    }
 }
 
 // ---------------------------------------------------------------------------
-// Catch combo (owner request 2026-10-27), after Pokemon: Let's Go. Catching the same species
-// in a row builds a combo; catching a different species starts over at 1. Running from or
-// knocking out a Pokemon doesn't break it. A wild Pokemon of the combo species gets:
-//   combo     extra shiny rolls   perfect IVs   chance an encounter is forced to it
-//   1-5              0                 0               0%
-//   6-10             0                 1               0%
-//   11-20            3                 2              10%
-//   21-30            7                 3              20%
-//   31+             11                 4              30%
-// Shiny rolls and perfect IVs are Let's Go's numbers. The encounter boost only applies where
-// the species is in that area's table (never a rare visitor), using its own slot and levels.
+// Catch bonus (owner request 2026-10-27): the more of a species you've caught in total (the same
+// per-species count as the Hidden Ability odds above; it never resets), the better the wild ones get.
+//   caught    extra shiny rolls   perfect IVs   encounter weight in tables
+//   0-5              0                 0              x1
+//   6-10             0                 1              x1
+//   11-20            3                 2              x1.25
+//   21-30            7                 3              x1.5
+//   31+             11                 4              x2
+// Shiny rolls and perfect IVs follow Pokemon: Let's Go's catch-combo tiers. The encounter boost
+// raises that species' weight in an area's table (so rarer Pokemon still appear); rare visitors
+// aren't affected.
 // ---------------------------------------------------------------------------
 EWRAM_DATA u16 gWJShinyRollSpecies = 0; // species being rolled for shininess (wild only), else 0
 
 u32 WallyJourney_CatchCombo(u16 species)
 {
     u16 dexNum = SpeciesToNationalPokedexNum(species);
-    if (dexNum == 0 || dexNum != SpeciesToNationalPokedexNum(VarGet(WALLY_VAR_COMBO_SPECIES)))
+    EnsureCatchCounts();
+    if (dexNum == 0 || dexNum > NATIONAL_DEX_COUNT)
         return 0;
-    return VarGet(WALLY_VAR_COMBO_COUNT);
-}
-
-u16 WallyJourney_CatchComboSpecies(void)
-{
-    return VarGet(WALLY_VAR_COMBO_COUNT) != 0 ? VarGet(WALLY_VAR_COMBO_SPECIES) : SPECIES_NONE;
+    return gSaveBlock3Ptr->wjCatchCounts[dexNum];
 }
 
 u32 WallyJourney_CatchComboShinyRolls(u16 species)
 {
-    u32 combo = WallyJourney_CatchCombo(species);
+    u32 combo;
+    if (species == SPECIES_NONE)
+        return 0;
+    combo = WallyJourney_CatchCombo(species);
     if (combo >= 31) return 11;
     if (combo >= 21) return 7;
     if (combo >= 11) return 3;
@@ -285,13 +305,14 @@ static u32 WJ_ComboPerfectIVs(u32 combo)
     return 0;
 }
 
-u32 WallyJourney_CatchComboEncounterPercent(void)
+// Table weight scaled for how many of this species have been caught.
+u32 WallyJourney_CatchComboWeight(u16 species, u32 weight)
 {
-    u32 combo = VarGet(WALLY_VAR_COMBO_COUNT);
-    if (combo >= 31) return 30;
-    if (combo >= 21) return 20;
-    if (combo >= 11) return 10;
-    return 0;
+    u32 combo = WallyJourney_CatchCombo(species);
+    if (combo >= 31) return weight * 2;
+    if (combo >= 21) return weight * 3 / 2;
+    if (combo >= 11) return weight * 5 / 4;
+    return weight;
 }
 
 // Raise a freshly made wild Pokemon's IVs for the combo: N different stats set to 31.

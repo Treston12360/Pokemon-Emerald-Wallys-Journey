@@ -5672,6 +5672,7 @@ void HandleSetPokedexFlagFromMon(struct Pokemon *mon, u32 caseId)
     enum NationalDexOrder nationalNum = SpeciesToNationalPokedexNum(GetMonData(mon, MON_DATA_SPECIES));
 
     HandleSetPokedexFlag(nationalNum, caseId, personality);
+    WallyJourney_SetFormSeen(GetMonData(mon, MON_DATA_SPECIES)); // the exact form, for the DexNav
 }
 
 bool8 HasTwoFramesAnimation(enum Species species)

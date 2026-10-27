@@ -59,6 +59,7 @@
 #include "constants/rgb.h"
 #include "constants/region_map_sections.h"
 #include "gba/m4a_internal.h"
+#include "wally_journey.h"
 
 #if DEXNAV_ENABLED
 STATIC_ASSERT(DN_FLAG_SEARCHING != 0, DNFlagSearching_Must_Not_Be_Zero);
@@ -120,6 +121,8 @@ struct DexNavSearch
 // rare visitors you've found without naming them. Searching, registering, the detector, search
 // levels and chains are removed so rare Pokémon stay as rare as they're meant to be.
 #define WJ_DN_LAND_MAX  (COL_LAND_COUNT * 2 * 3)
+#define WJ_DN_RARE_MAX  16
+#define WJ_DN_RARE_PAGE_FRAMES 120
 enum { WJ_WATER_SURF, WJ_WATER_OLD_ROD, WJ_WATER_GOOD_ROD, WJ_WATER_SUPER_ROD, WJ_WATER_ROCK_SMASH, WJ_WATER_MODES };
 #include "data/wally_dexnav_labels.h"
 
@@ -147,6 +150,13 @@ struct DexNavGUI
     u8 waterIsMonIcon[COL_WATER_COUNT];
     u8 capturedLandSpriteId;
     u8 capturedWaterSpriteId;
+    // rare visitors on this map: icons once seen, "?" until then, 3 at a time
+    enum Species rareSpecies[WJ_DN_RARE_MAX];
+    u8 rareCount;
+    u8 rarePage;
+    u16 rareTimer;
+    u8 rareSpriteIds[COL_HIDDEN_COUNT];
+    u8 rareIsMonIcon[COL_HIDDEN_COUNT];
 };
 
 // RAM
@@ -207,7 +217,6 @@ static const u8 sText_WJ_HintPages[] = _("{SELECT_BUTTON}WATER {L_BUTTON}{R_BUTT
 static const u8 sText_WJ_Caught[] = _("Caught");
 static const u8 sText_WJ_Seen[] = _("Seen");
 static const u8 sText_WJ_OfSeen[] = _("{STR_VAR_1} of {STR_VAR_2}");
-static const u8 sText_WJ_RareFound[] = _("{STR_VAR_1} of {STR_VAR_2} found");
 static const u8 sText_WJ_RareNone[] = _("None here");
 static const u8 sText_DexNav_SearchForRegisteredSpecies[] = _("Search {STR_VAR_1}");
 static const u8 sText_DexNav_NotFoundHere[] = _("This Pokémon cannot be found here!");
@@ -1892,7 +1901,7 @@ static void DexNavLoadEncounterData(void)
 // "x of y" for everything the checklist lists here right now (grass + surf + rods + Rock Smash)
 static void WJ_CountSeenHere(u32 *seen, u32 *total)
 {
-    enum Species all[WJ_DN_LAND_MAX + COL_WATER_COUNT * WJ_WATER_MODES];
+    enum Species all[WJ_DN_LAND_MAX + COL_WATER_COUNT * WJ_WATER_MODES + WJ_DN_RARE_MAX];
     enum Species mode[COL_WATER_COUNT];
     u32 i, m, n = 0;
     u32 headerId = GetCurrentMapWildMonHeaderId();
@@ -1908,11 +1917,16 @@ static void WJ_CountSeenHere(u32 *seen, u32 *total)
                 all[n++] = mode[i];
         }
     }
+    for (i = 0; i < sDexNavUiDataPtr->rareCount; i++)
+    {
+        if (!WJ_ListHas(all, n, sDexNavUiDataPtr->rareSpecies[i]))
+            all[n++] = sDexNavUiDataPtr->rareSpecies[i];
+    }
     *total = n;
     *seen = 0;
     for (i = 0; i < n; i++)
     {
-        if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(all[i]), FLAG_GET_SEEN))
+        if (WallyJourney_FormSeen(all[i]))
             (*seen)++;
     }
 }
@@ -1923,7 +1937,7 @@ static u8 TryDrawIconInSlot(enum Species species, s16 x, s16 y, u8 *isMonIcon)
     if (species == SPECIES_NONE || species > NUM_SPECIES)
         return CreateNoDataIcon(x, y);   //'X' in slot
     *isMonIcon = TRUE;
-    if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
+    if (!WallyJourney_FormSeen(species))
         return CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF); //question mark
     return CreateMonIcon(species, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF);
 }
@@ -1963,38 +1977,60 @@ static void WJ_DrawWaterIcons(void)
     }
 }
 
-static void WJ_PrintRare(void)
+// Every rare visitor on this map (any method), each species once.
+static void WJ_LoadRare(void)
 {
-    u32 i, n = WallyJourney_GetRareVisitorCount(), total = 0, found = 0;
-    enum Species seenList[16];
+    u32 i, n = WallyJourney_GetRareVisitorCount();
     u8 group, num, area;
     u16 species;
 
-    for (i = 0; i < n && total < ARRAY_COUNT(seenList); i++)
+    sDexNavUiDataPtr->rareCount = 0;
+    sDexNavUiDataPtr->rarePage = 0;
+    sDexNavUiDataPtr->rareTimer = 0;
+    for (i = 0; i < n && sDexNavUiDataPtr->rareCount < WJ_DN_RARE_MAX; i++)
     {
         WallyJourney_GetRareVisitor(i, &group, &num, &area, &species);
         if (group != gSaveBlock1Ptr->location.mapGroup || num != gSaveBlock1Ptr->location.mapNum)
             continue;
-        if (WJ_ListHas(seenList, total, species))
+        if (WJ_ListHas(sDexNavUiDataPtr->rareSpecies, sDexNavUiDataPtr->rareCount, species))
             continue;
-        seenList[total++] = species;
-        if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
-            found++;
+        sDexNavUiDataPtr->rareSpecies[sDexNavUiDataPtr->rareCount++] = species;
     }
+}
+
+// The RARE box: three icons at a time (seen ones as themselves, the rest as "?"),
+// turning to the next three every 2 seconds when there are more.
+static void WJ_DrawRareIcons(void)
+{
+    u32 i;
+    for (i = 0; i < COL_HIDDEN_COUNT; i++)
+    {
+        u32 idx = sDexNavUiDataPtr->rarePage * COL_HIDDEN_COUNT + i;
+        WJ_DestroyIcon(&sDexNavUiDataPtr->rareSpriteIds[i], sDexNavUiDataPtr->rareIsMonIcon[i]);
+        if (idx < sDexNavUiDataPtr->rareCount)
+            sDexNavUiDataPtr->rareSpriteIds[i] = TryDrawIconInSlot(sDexNavUiDataPtr->rareSpecies[idx], ROW_HIDDEN_ICON_X + 24 * i,
+                                                                   ROW_HIDDEN_ICON_Y, &sDexNavUiDataPtr->rareIsMonIcon[i]);
+    }
+}
+
+static void WJ_PrintRare(void)
+{
     FillWindowPixelBuffer(WINDOW_RARE, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
-    if (total == 0)
-    {
+    if (sDexNavUiDataPtr->rareCount == 0)
         AddTextPrinterParameterized3(WINDOW_RARE, FONT_SMALL, 0, 2, sFontColor_Black, 0, sText_WJ_RareNone);
-    }
-    else
-    {
-        ConvertIntToDecimalStringN(gStringVar1, found, STR_CONV_MODE_LEFT_ALIGN, 2);
-        ConvertIntToDecimalStringN(gStringVar2, total, STR_CONV_MODE_LEFT_ALIGN, 2);
-        StringExpandPlaceholders(gStringVar4, sText_WJ_RareFound);
-        AddTextPrinterParameterized3(WINDOW_RARE, FONT_SMALL, 0, 2, sFontColor_Black, 0, gStringVar4);
-    }
     PutWindowTilemap(WINDOW_RARE);
     CopyWindowToVram(WINDOW_RARE, 3);
+    WJ_DrawRareIcons();
+}
+
+static void WJ_UpdateRarePages(void)
+{
+    u32 pages = (sDexNavUiDataPtr->rareCount + COL_HIDDEN_COUNT - 1) / COL_HIDDEN_COUNT;
+    if (pages <= 1 || ++sDexNavUiDataPtr->rareTimer < WJ_DN_RARE_PAGE_FRAMES)
+        return;
+    sDexNavUiDataPtr->rareTimer = 0;
+    sDexNavUiDataPtr->rarePage = (sDexNavUiDataPtr->rarePage + 1) % pages;
+    WJ_DrawRareIcons();
 }
 
 static void WJ_SetWaterLabel(void)
@@ -2015,6 +2051,9 @@ static void DrawSpeciesIcons(void)
         sDexNavUiDataPtr->waterSpriteIds[i] = SPRITE_NONE;
     sDexNavUiDataPtr->capturedLandSpriteId = SPRITE_NONE;
     sDexNavUiDataPtr->capturedWaterSpriteId = SPRITE_NONE;
+    for (i = 0; i < COL_HIDDEN_COUNT; i++)
+        sDexNavUiDataPtr->rareSpriteIds[i] = SPRITE_NONE;
+    WJ_LoadRare();
     WJ_DrawLandIcons();
     WJ_DrawWaterIcons();
     WJ_SetWaterLabel();
@@ -2361,6 +2400,7 @@ static void Task_DexNavMain(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
 
+    WJ_UpdateRarePages();
     if (IsSEPlaying())
         return;
 

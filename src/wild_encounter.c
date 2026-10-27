@@ -625,42 +625,18 @@ static u32 WildInfoWeightedIndex(const struct WildPokemonInfo *info, s32 rod)
             first = i;
             found = TRUE;
         }
-        total += info->wildPokemon[i].weight;
+        total += WallyJourney_CatchComboWeight(info->wildPokemon[i].species, info->wildPokemon[i].weight); // catch bonus
     }
     if (total == 0)
         return first;
-    // Wally's Journey: catch combo. Some encounters are forced to the combo species if it's here.
-    if (WallyJourney_CatchComboEncounterPercent() != 0 && (Random() % 100) < WallyJourney_CatchComboEncounterPercent())
-    {
-        u16 dexNum = SpeciesToNationalPokedexNum(WallyJourney_CatchComboSpecies());
-        u32 comboTotal = 0;
-        for (i = 0; i < info->numMons; i++)
-            if ((rod < 0 || info->wildPokemon[i].rod == rod) && info->wildPokemon[i].weight != 0
-             && SpeciesToNationalPokedexNum(info->wildPokemon[i].species) == dexNum)
-                comboTotal += info->wildPokemon[i].weight;
-        if (comboTotal != 0)
-        {
-            roll = Random32() % comboTotal;
-            for (i = 0; i < info->numMons; i++)
-            {
-                if ((rod < 0 || info->wildPokemon[i].rod == rod) && info->wildPokemon[i].weight != 0
-                 && SpeciesToNationalPokedexNum(info->wildPokemon[i].species) == dexNum)
-                {
-                    if (roll < info->wildPokemon[i].weight)
-                        return i;
-                    roll -= info->wildPokemon[i].weight;
-                }
-            }
-        }
-    }
     roll = Random32() % total;
     for (i = 0; i < info->numMons; i++)
     {
         if (rod >= 0 && info->wildPokemon[i].rod != rod)
             continue;
-        if (roll < info->wildPokemon[i].weight)
+        if (roll < WallyJourney_CatchComboWeight(info->wildPokemon[i].species, info->wildPokemon[i].weight))
             return i;
-        roll -= info->wildPokemon[i].weight;
+        roll -= WallyJourney_CatchComboWeight(info->wildPokemon[i].species, info->wildPokemon[i].weight);
     }
     return first;
 }

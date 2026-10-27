@@ -280,6 +280,10 @@ struct SaveBlock3
 #if APRICORN_TREE_COUNT > 0
     u8 apricornTrees[NUM_APRICORN_TREE_BYTES];
 #endif
+    // Wally's Journey: forms seen (Alolan Meowth etc.), by species id. The Pokédex only records
+    // the national number, so a regional form counted as seen once its normal form was seen.
+    u8 wjFormSeenMagic;
+    u8 wjFormSeen[(NUM_SPECIES + 7) / 8];
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;
