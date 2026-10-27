@@ -310,8 +310,8 @@
     },
     {
       "type": "hidden_item",
-      "x": 27,
-      "y": 34,
+      "x": 25,
+      "y": 32,
       "elevation": 3,
       "item": "ITEM_CHARIZARDITE_Y",
       "flag": "FLAG_HIDDEN_ITEM_WJ_CHARIZARDITE_Y"

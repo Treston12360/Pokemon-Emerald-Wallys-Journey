@@ -22,7 +22,7 @@ Status (2026-10-24): all 77 Mega Stones emulator-checked one by one (warped next
 | Cameruptite | MtChimney | 21, 27 |
 | Chandelurite | MtPyre_3F | 4, 7 |
 | Charizardite X | FieryPath | 4, 7 |
-| Charizardite Y | Route112 | 27, 34 |
+| Charizardite Y | Route112 | 25, 32 |
 | Chesnaughtite | SafariZone_Northwest | 28, 33 |
 | Chimechite | MtPyre_Summit | 8, 4 |
 | Clefablite | MeteorFalls_1F_2R | 25, 15 |

@@ -1451,7 +1451,10 @@ WallyJourney_EventScript_RivalMeet4::
 	lockall
 	setvar VAR_0x8009, LOCALID_ROUTE112_RIVAL_WALLY
 	clearflag FLAG_HIDE_WALLY_RIVAL_LAVARIDGE
-	call WallyJourney_EventScript_WallyWalksUp
+	@ He comes down out of the JAGGED PASS entrance and goes back up it afterwards.
+	setvar VAR_0x8006, 6
+	setvar VAR_0x8007, 46
+	call WallyJourney_EventScript_WallyWalksUpFrom
 	playbgm MUS_ENCOUNTER_MAY, FALSE
 	msgbox WallyJourney_Text_RivalLAVARIDGEIntro, MSGBOX_DEFAULT
 	closemessage
