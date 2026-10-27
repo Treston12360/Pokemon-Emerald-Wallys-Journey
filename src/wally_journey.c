@@ -1526,9 +1526,23 @@ s32 WallyJourney_AdjustCatchRate(u32 species, s32 catchRate)
     return catchRate;
 #else
     const struct SpeciesInfo *info = &gSpeciesInfo[species];
-    if ((info->isRestrictedLegendary || info->isSubLegendary || info->isMythical) && catchRate > 3)
-        return 3;
-    return catchRate;
+    u32 caught;
+    if (info->isRestrictedLegendary || info->isSubLegendary || info->isMythical)
+        return catchRate > 3 ? 3 : catchRate;
+    if (info->isUltraBeast)
+        return catchRate;
+    // Catch bonus (owner request 2026-10-27): the more of this species caught in total, the easier
+    // it is to catch: 6-10 caught x1.1, 11-20 x1.25, 21-30 x1.5, 31+ x2 (capped at 255).
+    caught = WallyJourney_CatchCombo(species);
+    if (caught >= 31)
+        catchRate = catchRate * 2;
+    else if (caught >= 21)
+        catchRate = catchRate * 3 / 2;
+    else if (caught >= 11)
+        catchRate = catchRate * 5 / 4;
+    else if (caught >= 6)
+        catchRate = catchRate * 11 / 10;
+    return catchRate > 255 ? 255 : catchRate;
 #endif
 }
 
