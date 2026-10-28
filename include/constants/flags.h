@@ -695,7 +695,7 @@
 #define FLAG_HIDDEN_ITEM_WJ_ABSOLITE 0x280 // Wally's Journey: hidden Absolite in Route120
 #define FLAG_HIDDEN_ITEM_WJ_GLALITITE 0x281 // Wally's Journey: hidden Glalitite in ShoalCave_LowTideIceRoom
 #define FLAG_HIDDEN_ITEM_WJ_SALAMENCITE 0x282 // Wally's Journey: hidden Salamencite in MeteorFalls_StevensCave
-#define FLAG_HIDDEN_ITEM_WJ_METAGROSSITE 0x283 // Wally's Journey: hidden Metagrossite in SkyPillar_5F
+#define FLAG_HIDDEN_ITEM_WJ_METAGROSSITE 0x283 // Wally's Journey: Metagrossite item ball on Steven's table (Mossdeep); was hidden in Meteor Falls
 #define FLAG_HIDDEN_ITEM_WJ_LOPUNNITE 0x284 // Wally's Journey: hidden Lopunnite in SafariZone_South
 #define FLAG_HIDDEN_ITEM_WJ_GARCHOMPITE 0x285 // Wally's Journey: hidden Garchompite in DesertUnderpass
 #define FLAG_HIDDEN_ITEM_WJ_LUCARIONITE 0x286 // Wally's Journey: hidden Lucarionite in SkyPillar_4F

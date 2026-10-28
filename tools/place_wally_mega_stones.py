@@ -30,7 +30,7 @@ HOME = {
     'PINSIRITE': 'SafariZone_Northwest', 'SCOLIPITE': 'PetalburgWoods', 'SCRAFTINITE': 'JaggedPass',
     'STARAPTITE': 'Route104', 'VENUSAURITE': 'SafariZone_South', 'VICTREEBELITE': 'Route119',
     'BLASTOISINITE': 'Route118', 'BAXCALIBRITE': 'ShoalCave_LowTideIceRoom', 'TATSUGIRINITE': 'Underwater_Route128',
-    'GALLADITE': 'VictoryRoad_B1F', 'METAGROSSITE': 'MeteorFalls_StevensCave', 'HOUNDOOMINITE': 'SafariZone_Northeast',
+    'GALLADITE': 'VictoryRoad_B1F', 'HOUNDOOMINITE': 'SafariZone_Northeast',
     'ALAKAZITE': 'GraniteCave_1F', 'MANECTITE': 'Route110', 'AMPHAROSITE': 'SafariZone_Southeast',
     'RAICHUNITE_Y': 'SafariZone_Southwest',
     'CHARIZARDITE_Y': 'Route112', 'TYRANITARITE': 'MagmaHideout_4F', 'GARCHOMPITE': 'MeteorFalls_B1F_2R',

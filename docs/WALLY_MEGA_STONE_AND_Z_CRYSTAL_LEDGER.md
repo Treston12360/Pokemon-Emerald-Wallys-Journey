@@ -61,7 +61,7 @@ Status (2026-10-24): all 77 Mega Stones emulator-checked one by one (warped next
 | Medichamite | MtPyre_Exterior | 13, 22 |
 | Meganiumite | Route104 | 6, 4 |
 | Meowsticite | Route121 | 49, 10 |
-| Metagrossite | MeteorFalls_StevensCave | 20, 22 |
+| Metagrossite | MossdeepCity_StevensHouse (item ball on the table, from the first visit) | 7, 3 |
 | Pidgeotite | Route102 | 22, 15 |
 | Pinsirite | SafariZone_Northwest | 33, 33 |
 | Pyroarite | Route114 | 22, 40 |
