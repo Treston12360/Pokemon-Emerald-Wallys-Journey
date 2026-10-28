@@ -1620,25 +1620,75 @@ Class: Cooltrainer
 Pic: Cooltrainer M
 Gender: Male
 Music: Cool
-Items: Full Restore
+Items: Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware
 
-Dodrio
-Level: 42
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Medicham @ Black Belt
+Level: 48
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+Ability: Pure Power
+- High Jump Kick
+- Zen Headbutt
+- Ice Punch
+- Bullet Punch
 
-Kadabra
-Level: 42
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Swellow @ Sharp Beak
+Level: 47
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+Ability: Guts
+- Brave Bird
+- Facade
+- Quick Attack
+- Steel Wing
 
-Electrode
-Level: 42
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Exploud @ Silk Scarf
+Level: 47
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
+Ability: Scrappy
+- Hyper Voice
+- Flamethrower
+- Ice Beam
+- Focus Blast
 
-Shiftry
-Level: 42
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+Roserade @ Miracle Seed
+Level: 47
+Nature: Timid
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 SpA / 252 Spe
+Ability: Technician
+- Energy Ball
+- Sludge Bomb
+- Shadow Ball
+- Extrasensory
+
+Azumarill @ Sitrus Berry
+Level: 47
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+Ability: Huge Power
+- Liquidation
+- Play Rough
+- Aqua Jet
+- Knock Off
+
+Camerupt @ Charcoal
+Level: 46
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+Ability: Solid Rock
+- Earth Power
+- Flamethrower
+- Rock Slide
+- Yawn
 
 === TRAINER_OWEN ===
 Name: OWEN

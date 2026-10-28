@@ -32,19 +32,29 @@ VictoryRoad_B2F_EventScript_Dianne::
 	end
 
 VictoryRoad_B2F_Text_VitoIntro:
-	.string "Five siblings, and I made it here!\p"
-	.string "GLACIA crossed an ocean for this.\n"
-	.string "I crossed HOENN! Won't lose!$"
+	.string "If you came through ROUTE 111, you\n"
+	.string "might've met my family. The WINSTRATES.\p"
+	.string "I'm VITO. VICTOR and VICTORIA are my\n"
+	.string "parents, VIVI's my little sister, and\l"
+	.string "Grandma VICKY taught me everything I\l"
+	.string "know.\p"
+	.string "Grandma always said I'd be CHAMPION\n"
+	.string "someday.\p"
+	.string "Every POKéMON on my team carries\n"
+	.string "something from home.\p"
+	.string "Let's see how you handle the whole\n"
+	.string "WINSTRATE family at once!$"
 
 VictoryRoad_B2F_Text_VitoDefeat:
-	.string "Stronger than all five\n"
-	.string "of us?!$"
+	.string "No way… The pride of the WINSTRATES,\n"
+	.string "beaten.$"
 
 VictoryRoad_B2F_Text_VitoPostBattle:
-	.string "I was the best in my family.\n"
-	.string "I'd never lost…\p"
-	.string "Maybe I'll go home. They'll be glad\n"
-	.string "to see me either way. I hope.$"
+	.string "I'm not going home until I've beaten\n"
+	.string "the LEAGUE.\p"
+	.string "If you pass through ROUTE 111, tell\n"
+	.string "Grandma I'm still training.\p"
+	.string "…And don't tell her I lost.$"
 
 VictoryRoad_B2F_Text_OwenIntro:
 	.string "A kid from PETALBURG coming through?\p"
