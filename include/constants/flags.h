@@ -80,7 +80,7 @@
 #define FLAG_WALLY_BEAT_TRESTON_3    0x3A // Wally's Journey: beat TRESTON's Deoxys team (he brings Giratina next)
 #define FLAG_DEXNAV_SEARCHING 0x3B // Wally's Journey: DexNav config (never set)
 #define FLAG_DEXNAV_DETECTOR  0x3C // Wally's Journey: DexNav config (never set)
-#define FLAG_UNUSED_0x03D    0x3D // Unused Flag
+#define FLAG_RECEIVED_THROAT_SPRAY    0x3D // Wally's Journey: Lilycove Contest Hall singer
 #define FLAG_UNUSED_0x03E    0x3E // Unused Flag
 #define FLAG_UNUSED_0x03F    0x3F // Unused Flag
 #define FLAG_UNUSED_0x040    0x40 // Unused Flag

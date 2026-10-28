@@ -1073,3 +1073,30 @@ LilycoveCity_ContestLobby_Text_MadePokeblocksWithFamily:
 	.string "I bet you can make smoother, better\n"
 	.string "{POKEBLOCK}S if you have more people.$"
 
+@ Wally's Journey (owner request 2026-10-27): a contest singer gives the Throat Spray once.
+LilycoveCity_ContestLobby_EventScript_WJSinger::
+	lock
+	faceplayer
+	goto_if_set FLAG_RECEIVED_THROAT_SPRAY, LilycoveCity_ContestLobby_EventScript_WJSingerAfter
+	msgbox LilycoveCity_ContestLobby_Text_WJSingerGift, MSGBOX_DEFAULT
+	giveitem ITEM_THROAT_SPRAY
+	setflag FLAG_RECEIVED_THROAT_SPRAY
+	release
+	end
+
+LilycoveCity_ContestLobby_EventScript_WJSingerAfter::
+	msgbox LilycoveCity_ContestLobby_Text_WJSingerAfter, MSGBOX_DEFAULT
+	release
+	end
+
+LilycoveCity_ContestLobby_Text_WJSingerGift:
+	.string "I sing on that stage every night.\n"
+	.string "A spritz of this before each show\l"
+	.string "keeps my voice strong.\p"
+	.string "Here, take one. A POKéMON with\n"
+	.string "a big voice will love it.$"
+
+LilycoveCity_ContestLobby_Text_WJSingerAfter:
+	.string "A strong voice carries all the way\n"
+	.string "to the back row. Break a leg!$"
+
