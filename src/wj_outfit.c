@@ -25,7 +25,8 @@
 
 // Wally's Journey: player outfits. See include/wj_outfit.h.
 
-#define WJ_OUTFIT_MAGIC 0xA7
+#define WJ_OUTFIT_MAGIC 0xA8
+#define WJ_OUTFIT_MAGIC_087 0xA7 // 0.8.7 had 20 outfits in a different order
 
 enum { LAYER_NONE, LAYER_SKIN, LAYER_PRIMARY, LAYER_SECONDARY };
 
@@ -181,6 +182,18 @@ void WJ_OutfitOnNewGame(void)
 
 void WJ_OutfitOnLoad(void)
 {
+    if (gSaveBlock3Ptr->wjOutfitMagic == WJ_OUTFIT_MAGIC_087)
+    {
+        // 0.8.7 order: Brendan, May, Red, Leaf, Ethan, Lyra, Lucas, Dawn, Hilbert, ...
+        u32 old = gSaveBlock3Ptr->wjOutfit;
+        gSaveBlock3Ptr->wjOutfitMagic = WJ_OUTFIT_MAGIC;
+        if (old <= 3)
+            gSaveBlock3Ptr->wjOutfit = old;
+        else if (old == 8)
+            gSaveBlock3Ptr->wjOutfit = WJ_OUTFIT_HILBERT;
+        else
+            gSaveBlock3Ptr->wjOutfit = (gSaveBlock2Ptr->playerGender == MALE) ? WJ_OUTFIT_BRENDAN : WJ_OUTFIT_MAY;
+    }
     if (gSaveBlock3Ptr->wjOutfitMagic != WJ_OUTFIT_MAGIC || gSaveBlock3Ptr->wjOutfit >= WJ_OUTFIT_COUNT)
         gSaveBlock3Ptr->wjOutfitMagic = 0;
     if (!CheckBagHasItem(ITEM_OUTFIT_CASE, 1))

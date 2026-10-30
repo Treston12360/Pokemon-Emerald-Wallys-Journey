@@ -26,6 +26,16 @@ for n,g in gen.OUTFITS:
     nr=Image.new('P',(288,32),0); nr.putpalette(w.getpalette()); nr.paste(w,(0,0)); nr.paste(r,(144,0)); nr.save(d+'normal.png')
     for f in ('walking.png','running.png','ow.pal','ow_layers.pal'):
         if os.path.exists(d+f): os.remove(d+f)
+# 1b. owner-approved hand-made sheets (hilbert.py/hsurf.py/hbike.py/hprop.py output)
+import shutil
+HB=os.path.dirname(os.path.abspath(__file__))+'/hb/'
+for st in ('surfing','mach_bike','acro_bike','fishing','field_move','watering','decorating'):
+    shutil.copy(HB+st+'_B.png', OW+'hilbert/'+st+'.png')
+w=Image.open(gen.R+'graphics/object_events/pics/people/hilbert/walking.png'); r=Image.open(HB+'running_B.png')
+nr=Image.new('P',(288,32),0); nr.putpalette(w.getpalette()); nr.paste(w,(0,0)); nr.paste(r,(144,0)); nr.save(OW+'hilbert/normal.png')
+for n in ('red','leaf'):
+    for st in ('watering','decorating'):
+        shutil.copy(os.path.dirname(os.path.abspath(__file__))+'/%s/%s.png'%(n,st), OW+n+'/'+st+'.png')
 # 2. trainer pics + palettes
 meta=[]
 for n,g in gen.OUTFITS:
