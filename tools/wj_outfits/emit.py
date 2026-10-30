@@ -26,16 +26,17 @@ for n,g in gen.OUTFITS:
     nr=Image.new('P',(288,32),0); nr.putpalette(w.getpalette()); nr.paste(w,(0,0)); nr.paste(r,(144,0)); nr.save(d+'normal.png')
     for f in ('walking.png','running.png','ow.pal','ow_layers.pal'):
         if os.path.exists(d+f): os.remove(d+f)
-# 1b. owner-approved hand-made sheets (hilbert.py/hsurf.py/hbike.py/hprop.py output)
+# 1b. owner-approved made sheets (make_outfit.py / hilbert scripts) override generated ones
 import shutil
-HB=os.path.dirname(os.path.abspath(__file__))+'/hb/'
-for st in ('surfing','mach_bike','acro_bike','fishing','field_move','watering','decorating'):
-    shutil.copy(HB+st+'_B.png', OW+'hilbert/'+st+'.png')
-w=Image.open(gen.R+'graphics/object_events/pics/people/hilbert/walking.png'); r=Image.open(HB+'running_B.png')
-nr=Image.new('P',(288,32),0); nr.putpalette(w.getpalette()); nr.paste(w,(0,0)); nr.paste(r,(144,0)); nr.save(OW+'hilbert/normal.png')
-for n in ('red','leaf'):
-    for st in ('watering','decorating'):
-        shutil.copy(os.path.dirname(os.path.abspath(__file__))+'/%s/%s.png'%(n,st), OW+n+'/'+st+'.png')
+AP=os.path.dirname(os.path.abspath(__file__))+'/approved/'
+for n,g in gen.OUTFITS:
+    if not os.path.isdir(AP+n): continue
+    for st in ('surfing','mach_bike','acro_bike','fishing','field_move','watering','decorating'):
+        if os.path.exists(AP+n+'/'+st+'_B.png'): shutil.copy(AP+n+'/'+st+'_B.png', OW+n+'/'+st+'.png')
+    if os.path.exists(AP+n+'/running_B.png'):
+        pd=gen.R+'graphics/rogue_palettes/%s/'%gen.PALDIR.get(n,n); pal=gen.readpal(pd+'object_event_base.pal')
+        w=remap_to(Image.open(gen.R+'graphics/object_events/pics/people/%s/walking.png'%n),pal); r=Image.open(AP+n+'/running_B.png')
+        nr=Image.new('P',(288,32),0); nr.putpalette(w.getpalette()); nr.paste(w,(0,0)); nr.paste(r,(144,0)); nr.save(OW+n+'/normal.png')
 # 2. trainer pics + palettes
 meta=[]
 for n,g in gen.OUTFITS:

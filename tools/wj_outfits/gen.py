@@ -9,7 +9,7 @@ from PIL import Image
 R='/tmp/claude-0/-home-claude/c01f291d-beb5-5ce1-b8e2-6743db5de3e3/scratchpad/rogue/r/'
 G='/home/claude/pokemon-emerald-wallys-journey/'
 OUT=sys.argv[1] if len(sys.argv)>1 else G+'graphics/object_events/pics/people/wj_outfits/'
-OUTFITS=[('brendan','M'),('may','F'),('red','M'),('leaf','F'),('hilbert','M')]
+OUTFITS=[('brendan','M'),('may','F'),('red','M'),('leaf','F'),('hilbert','M'),('ethan','M'),('lyra','F'),('lucas','M'),('dawn','F'),('hilda','F'),('nate','M'),('rosa','F'),('calem','M'),('serena','F'),('elio','M'),('selene','F'),('victor','M'),('gloria','F'),('florian','M'),('juliana','F')]
 PALDIR={'red':'red_leaf','leaf':'red_leaf'}
 STATES={'walking':(16,9),'running':(16,9),'mach_bike':(32,9),'acro_bike':(32,27),'surfing':(32,6),
         'field_move':(32,5),'fishing':(32,12),'watering':(32,6),'decorating':(16,1)}

@@ -26,7 +26,7 @@
 // Wally's Journey: player outfits. See include/wj_outfit.h.
 
 #define WJ_OUTFIT_MAGIC 0xA8
-#define WJ_OUTFIT_MAGIC_087 0xA7 // 0.8.7 had 20 outfits in a different order
+#define WJ_OUTFIT_MAGIC_087 0xA7 // 0.8.7 had the 20 outfits in a different order
 
 enum { LAYER_NONE, LAYER_SKIN, LAYER_PRIMARY, LAYER_SECONDARY };
 
@@ -184,15 +184,16 @@ void WJ_OutfitOnLoad(void)
 {
     if (gSaveBlock3Ptr->wjOutfitMagic == WJ_OUTFIT_MAGIC_087)
     {
-        // 0.8.7 order: Brendan, May, Red, Leaf, Ethan, Lyra, Lucas, Dawn, Hilbert, ...
+        // 0.8.7 had the same 20 outfits in a different order.
+        static const u8 sFrom087[] = {
+            WJ_OUTFIT_BRENDAN, WJ_OUTFIT_MAY, WJ_OUTFIT_RED, WJ_OUTFIT_LEAF, WJ_OUTFIT_ETHAN, WJ_OUTFIT_LYRA,
+            WJ_OUTFIT_LUCAS, WJ_OUTFIT_DAWN, WJ_OUTFIT_HILBERT, WJ_OUTFIT_HILDA, WJ_OUTFIT_NATE, WJ_OUTFIT_ROSA,
+            WJ_OUTFIT_CALEM, WJ_OUTFIT_SERENA, WJ_OUTFIT_ELIO, WJ_OUTFIT_SELENE, WJ_OUTFIT_VICTOR, WJ_OUTFIT_GLORIA,
+            WJ_OUTFIT_FLORIAN, WJ_OUTFIT_JULIANA,
+        };
         u32 old = gSaveBlock3Ptr->wjOutfit;
         gSaveBlock3Ptr->wjOutfitMagic = WJ_OUTFIT_MAGIC;
-        if (old <= 3)
-            gSaveBlock3Ptr->wjOutfit = old;
-        else if (old == 8)
-            gSaveBlock3Ptr->wjOutfit = WJ_OUTFIT_HILBERT;
-        else
-            gSaveBlock3Ptr->wjOutfit = (gSaveBlock2Ptr->playerGender == MALE) ? WJ_OUTFIT_BRENDAN : WJ_OUTFIT_MAY;
+        gSaveBlock3Ptr->wjOutfit = (old < ARRAY_COUNT(sFrom087)) ? sFrom087[old] : ((gSaveBlock2Ptr->playerGender == MALE) ? WJ_OUTFIT_BRENDAN : WJ_OUTFIT_MAY);
     }
     if (gSaveBlock3Ptr->wjOutfitMagic != WJ_OUTFIT_MAGIC || gSaveBlock3Ptr->wjOutfit >= WJ_OUTFIT_COUNT)
         gSaveBlock3Ptr->wjOutfitMagic = 0;

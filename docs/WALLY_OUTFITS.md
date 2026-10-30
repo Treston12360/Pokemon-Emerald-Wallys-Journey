@@ -4,7 +4,8 @@ The **Outfit Case** key item (in the Bag from the start; old saves get it on Con
 menu any time on the overworld, and can be registered to Select. Your own sprite on the map is
 the live preview.
 
-- **OUTFIT**: Brendan, May, Red, Leaf, Hilbert.
+- **OUTFIT**: Brendan, May, Red, Leaf, Hilbert, Ethan, Lyra, Lucas, Dawn, Hilda, Nate, Rosa,
+  Calem, Serena, Elio, Selene, Victor, Gloria, Florian, Juliana.
 - **SKIN**: default or six tones. **COLOR 1 / COLOR 2**: default or 23 colours (what each
   recolours depends on the outfit, e.g. Hilbert's cap and jacket).
 - A keeps it, B puts back what you had, Start picks random colours.
@@ -13,8 +14,12 @@ The outfit changes your overworld sprite (walking, running, both bikes, surfing,
 moves, watering, decorating), your battle back sprite and your trainer card. Diving stays the
 usual dark silhouette. Your gender (and the story's he/she text) doesn't change.
 
-Only outfits with a full set of sprites for every action are included (owner rule: no
-patchwork). Emerald Rogue has 15 more protagonists, but only walking and riding art for them.
+Every outfit has a full set of sprites for every action, made the way the owner approved for
+Hilbert (`tools/wj_outfits/make_outfit.py`): running = their walking frames leaned 1px; surfing =
+their seated art (standing frame to hop on/off); bikes = their seated art on the bike, legs in
+their own leg colour; fishing / field move / watering / decorating = their standing art holding
+the item. Nate, Rosa, Elio, Selene, Victor, Gloria, Florian and Juliana have no battle back
+sprite in Emerald Rogue (see the ledger for what they use).
 
 ## Where the sprites come from
 
