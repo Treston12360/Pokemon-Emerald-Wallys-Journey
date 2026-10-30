@@ -10,12 +10,15 @@ EverGrandeCity_ChampionsRoom_OnTransition:
 	end
 
 @ Wally's Journey: title-defense ladder. VAR_UNUSED_0x40FD counts defenses won.
+@ Before the ladder: TRESTON, then CAMERON (neither counts).
 @ 0: Wally (lv 70-75)  1: Wallace (74-79)  2: Steven (Meteor Falls team)  3+: Wally final (82-88)
 WallyJourney_ChampionDefense_SetChallengerGfx::
 	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_WALLY
 	goto_if_unset FLAG_SYS_GAME_CLEAR, Common_EventScript_NopReturn
 	@ The very first title defense is the secret challenger TRESTON.
 	goto_if_unset FLAG_WALLY_BEAT_TRESTON, WallyJourney_ChampionDefense_GfxTreston
+	@ The second is CAMERON.
+	goto_if_unset FLAG_WALLY_BEAT_CAMERON, WallyJourney_ChampionDefense_GfxCameron
 	call_if_eq VAR_UNUSED_0x40FD, 1, WallyJourney_ChampionDefense_GfxWallace
 	call_if_eq VAR_UNUSED_0x40FD, 2, WallyJourney_ChampionDefense_GfxSteven
 	call_if_ge VAR_UNUSED_0x40FD, 4, WallyJourney_ChampionDefense_PickChallenger
@@ -173,6 +176,7 @@ WallyJourney_ChampionDefense_Wally::
 	applymovement LOCALID_CHAMPIONS_ROOM_WALLACE, Common_Movement_FaceDown
 	waitmovement 0
 	goto_if_unset FLAG_WALLY_BEAT_TRESTON, WallyJourney_ChampionPool_Treston
+	goto_if_unset FLAG_WALLY_BEAT_CAMERON, WallyJourney_ChampionPool_Cameron
 	switch VAR_UNUSED_0x40FD
 	case 0, WallyJourney_ChampionDefense_First
 	case 1, WallyJourney_ChampionDefense_Wallace
@@ -893,17 +897,32 @@ WallyJourney_ChampionPool_VitoVictory:
 	.string "I'll be back. A WINSTRATE never\n"
 	.string "quits!$"
 
+@ CAMERON is the second title defense (right after TRESTON), then joins the random draw.
 WallyJourney_ChampionPool_Cameron::
+	goto_if_set FLAG_WALLY_BEAT_CAMERON, WallyJourney_ChampionPool_CameronAgain
 	msgbox WallyJourney_ChampionPool_CameronIntro, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionPool_CameronBattle
+WallyJourney_ChampionPool_CameronAgain::
+	msgbox WallyJourney_ChampionPool_CameronIntroAgain, MSGBOX_DEFAULT
+WallyJourney_ChampionPool_CameronBattle::
 	trainerbattle_no_intro TRAINER_CAMERON_CHALLENGER, WallyJourney_ChampionPool_CameronDefeat
 	msgbox WallyJourney_ChampionPool_CameronVictory, MSGBOX_DEFAULT
-	goto WallyJourney_ChampionDefense_Won
+	@ Like TRESTON, the first win over CAMERON doesn't move the title-defense ladder on.
+	goto_if_set FLAG_WALLY_BEAT_CAMERON, WallyJourney_ChampionDefense_Won
+	setflag FLAG_WALLY_BEAT_CAMERON
+	closemessage
+	goto WallyJourney_ChampionDefense_NoCount
 
 WallyJourney_ChampionPool_CameronIntro:
 	.string "CAMERON: So you're the CHAMPION.\p"
 	.string "Name's CAMERON. I've been waiting a\n"
 	.string "long time for this battle.\p"
 	.string "Let's see what you've got!$"
+
+WallyJourney_ChampionPool_CameronIntroAgain:
+	.string "CAMERON: Back again, CHAMPION.\p"
+	.string "I've been training since last time.\n"
+	.string "Let's go!$"
 
 WallyJourney_ChampionPool_CameronDefeat:
 	.string "No way… That was close.$"

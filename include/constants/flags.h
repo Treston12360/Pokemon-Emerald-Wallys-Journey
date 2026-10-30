@@ -83,7 +83,7 @@
 #define FLAG_RECEIVED_THROAT_SPRAY    0x3D // Wally's Journey: Lilycove Contest Hall singer
 #define FLAG_WALLY_NUZLOCKE    0x3E // Wally's Journey: Options menu NUZLOCKE ON (set) vs OFF (clear)
 #define FLAG_WALLY_LEVEL_CAP   0x3F // Wally's Journey: Options menu LEVEL CAP ON (set) vs OFF (clear)
-#define FLAG_UNUSED_0x040    0x40 // Unused Flag
+#define FLAG_WALLY_BEAT_CAMERON    0x40 // Wally's Journey: won the second title defense, against CAMERON (right after TRESTON)
 #define FLAG_UNUSED_0x041    0x41 // Unused Flag
 #define FLAG_UNUSED_0x042    0x42 // Unused Flag
 #define FLAG_UNUSED_0x043    0x43 // Unused Flag
