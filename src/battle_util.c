@@ -648,11 +648,16 @@ void HandleAction_UseItem(void)
 
 // Wally's Journey (owner request 2026-10-26): you can't run from a wild shiny Pokémon. Running,
 // Run Away, Smoke Ball and similar fail with "Can't escape!", and moves that end the battle
-// (Roar, Whirlwind, Teleport) fail, the same as with WE_FLAG_NO_RUNNING.
+// (Roar, Whirlwind, Teleport) fail, the same as with WE_FLAG_NO_RUNNING. Not when you're out of
+// Poke Balls (owner request 2026-10-29).
 bool32 WallyJourney_NoRunFromShiny(void)
 {
     u32 i;
     if (gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+        return FALSE;
+    // Owner request 2026-10-29: with no Poke Balls left you can run, since a wild shiny can't be
+    // knocked out by you and couldn't be caught either.
+    if (!IsBagPocketNonEmpty(POCKET_POKE_BALLS))
         return FALSE;
     for (i = 0; i < 2; i++)
     {

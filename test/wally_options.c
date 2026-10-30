@@ -1,4 +1,6 @@
 #include "global.h"
+#include "battle.h"
+#include "battle_util.h"
 #include "caps.h"
 #include "event_data.h"
 #include "item.h"
@@ -86,4 +88,19 @@ TEST("Wally: a whole-party faint ends the Nuzlocke run and heals normally")
     EXPECT(!FlagGet(FLAG_WALLY_NUZLOCKE));
     EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_HP), GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_MAX_HP));
     ClearWallyFlags();
+}
+
+TEST("Wally: you can't run from a wild shiny, unless you're out of Poke Balls")
+{
+    bool32 shiny = TRUE;
+    gBattleTypeFlags = 0;
+    ZeroMonData(&gParties[B_TRAINER_OPPONENT_A][0]);
+    ZeroMonData(&gParties[B_TRAINER_OPPONENT_A][1]);
+    CreateMon(&gParties[B_TRAINER_OPPONENT_A][0], SPECIES_CATERPIE, 5, 0, OTID_STRUCT_PLAYER_ID);
+    SetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_IS_SHINY, &shiny);
+    ClearBag();
+    AddBagItem(ITEM_POKE_BALL, 1);
+    EXPECT(WallyJourney_NoRunFromShiny());
+    ClearBag();
+    EXPECT(!WallyJourney_NoRunFromShiny());
 }
