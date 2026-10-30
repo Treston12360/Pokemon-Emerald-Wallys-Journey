@@ -14,6 +14,20 @@
 #include "constants/items.h"
 #include "constants/moves.h"
 
+// Wally's Journey (owner request 2026-10-29): end-of-turn damage from poison, burns, weather, Leech
+// Seed, binding moves, Curse, Salt Cure, Perish Song, etc. can't knock out a wild shiny; it stays at
+// 1 HP. (Damage it does to itself, like recoil or Life Orb, isn't dealt here.)
+static void WJ_SetEndTurnDamage(enum BattlerId battler, s32 value)
+{
+    if (value >= gBattleMons[battler].hp && WallyJourney_IsProtectedWildShiny(battler))
+    {
+        gBattleStruct->passiveHpUpdate[battler] = gBattleMons[battler].hp - 1; // may be 0: no damage
+        return;
+    }
+    SetPassiveDamageAmount(battler, value);
+}
+#define SetPassiveDamageAmount WJ_SetEndTurnDamage
+
 static enum BattlerId GetBattlerSideForMessage(enum BattleSide side)
 {
     enum BattlerId battler;

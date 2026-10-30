@@ -8,6 +8,7 @@
 #include "event_data.h"
 #include "wally_journey.h"
 #include "constants/items.h"
+#include "constants/game_stat.h"
 #include "constants/moves.h"
 #include "pokemon.h"
 #include "rtc.h"
@@ -260,18 +261,183 @@ void WallyJourney_RecordCatch(u16 species)
         gSaveBlock3Ptr->wjCatchCounts[dexNum]++;
 }
 
+// Shiny encounters (owner request 2026-10-29, shown on the trainer card back): every wild battle
+// whose opponent is shiny adds 1 to GAME_STAT_WJ_SHINY_ENCOUNTERS, and the species is recorded
+// (by National Dex number) in the list of shinies met. Called as each wild battle starts.
+#define WJ_SHINY_SEEN_MAGIC 0x5A
+static void EnsureShinySeen(void)
+{
+    if (gSaveBlock3Ptr->wjShinySeenMagic != WJ_SHINY_SEEN_MAGIC)
+    {
+        memset(gSaveBlock3Ptr->wjShinySeen, 0, sizeof(gSaveBlock3Ptr->wjShinySeen));
+        gSaveBlock3Ptr->wjShinySeenMagic = WJ_SHINY_SEEN_MAGIC;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Nuzlocke option (owner request 2026-10-29). When the NUZLOCKE option is ON:
+//  - First encounter only: in each area (region map section, so all floors of a cave are one area)
+//    only the first random wild Pokemon met can be caught. Scripted/static battles (legendaries,
+//    roamers, Kecleon, Voltorb...) don't count and can always be caught.
+//  - Dupes clause: if every wild Pokemon in that first battle is a species you've already caught,
+//    it can't be caught but the area's catch isn't used up.
+//  - Shiny clause: a wild shiny can always be caught and never uses up the area (you can't run from
+//    or knock out a shiny, so it must stay catchable).
+//  - Fainted = gone: a fainted Pokemon stays at 0 HP; nothing heals or revives it (see HealPokemon,
+//    HealBoxPokemon and the revive item checks). If the whole party faints the run is over: the
+//    option switches itself OFF and the party is healed as usual, so the save never gets stuck.
+//  - Forced nicknames: after a catch the naming screen opens without asking.
+// ---------------------------------------------------------------------------
+#define WJ_NUZLOCKE_AREA_MAGIC 0x4E
+STATIC_ASSERT(MAPSEC_COUNT <= 8 * sizeof(gSaveBlock3Ptr->wjNuzlockeAreas), WallyNuzlockeAreasTooSmall);
+static EWRAM_DATA u8 sWJNuzlockeCatchBlock = WJ_NUZLOCKE_CATCH_OK;
+
+bool32 WallyJourney_NuzlockeOn(void)
+{
+#if IS_FRLG
+    return FALSE;
+#else
+    return FlagGet(FLAG_WALLY_NUZLOCKE);
+#endif
+}
+
+static void EnsureNuzlockeAreas(void)
+{
+    if (gSaveBlock3Ptr->wjNuzlockeAreaMagic != WJ_NUZLOCKE_AREA_MAGIC)
+    {
+        memset(gSaveBlock3Ptr->wjNuzlockeAreas, 0, sizeof(gSaveBlock3Ptr->wjNuzlockeAreas));
+        gSaveBlock3Ptr->wjNuzlockeAreaMagic = WJ_NUZLOCKE_AREA_MAGIC;
+    }
+}
+
+// Called by the normal random wild battle setup only (grass, water, caves, fishing, rocks, visible
+// wild Pokemon), after WallyJourney_RecordWildEncounterShinies.
+void WallyJourney_NuzlockeRouteEncounter(void)
+{
+    u32 i, count = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) ? 2 : 1;
+    u32 mapSec = gMapHeader.regionMapSectionId;
+    bool32 allDupes = TRUE;
+
+    sWJNuzlockeCatchBlock = WJ_NUZLOCKE_CATCH_OK;
+    if (!WallyJourney_NuzlockeOn() || mapSec >= MAPSEC_COUNT)
+        return;
+    EnsureNuzlockeAreas();
+    for (i = 0; i < count; i++)
+    {
+        struct Pokemon *mon = &gParties[B_TRAINER_OPPONENT_A][i];
+        u16 species = GetMonData(mon, MON_DATA_SPECIES);
+        if (species == SPECIES_NONE)
+            continue;
+        if (IsMonShiny(mon))
+            return; // shiny clause
+        if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
+            allDupes = FALSE;
+    }
+    if (gSaveBlock3Ptr->wjNuzlockeAreas[mapSec / 8] & (1 << (mapSec % 8)))
+        sWJNuzlockeCatchBlock = WJ_NUZLOCKE_CATCH_AREA_USED;
+    else if (allDupes)
+        sWJNuzlockeCatchBlock = WJ_NUZLOCKE_CATCH_DUPE;
+    else
+        gSaveBlock3Ptr->wjNuzlockeAreas[mapSec / 8] |= 1 << (mapSec % 8); // this is the area's encounter
+}
+
+u32 WallyJourney_NuzlockeCatchBlock(void)
+{
+    if (!WallyJourney_NuzlockeOn() || (gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+        return WJ_NUZLOCKE_CATCH_OK;
+    return sWJNuzlockeCatchBlock;
+}
+
+static bool32 WJ_PartyHasUsableMon(void)
+{
+    u32 i;
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][i];
+        if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE && !GetMonData(mon, MON_DATA_IS_EGG)
+         && GetMonData(mon, MON_DATA_HP) != 0)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// Called before the party is healed: a whole-party faint ends the Nuzlocke run.
+void WallyJourney_NuzlockeCheckRunOver(void)
+{
+    if (WallyJourney_NuzlockeOn() && !WJ_PartyHasUsableMon())
+        FlagClear(FLAG_WALLY_NUZLOCKE);
+}
+
+// TRUE when this fainted Pokemon must stay fainted.
+bool32 WallyJourney_NuzlockeKeepsFainted(struct Pokemon *mon)
+{
+    return WallyJourney_NuzlockeOn()
+        && GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE
+        && GetMonData(mon, MON_DATA_HP) == 0;
+}
+
+bool32 WallyJourney_NuzlockeKeepsBoxMonFainted(struct BoxPokemon *boxMon)
+{
+    struct Pokemon mon;
+    if (!WallyJourney_NuzlockeOn() || !GetBoxMonData(boxMon, MON_DATA_SANITY_HAS_SPECIES))
+        return FALSE;
+    BoxMonToMon(boxMon, &mon);
+    return GetMonData(&mon, MON_DATA_HP) == 0;
+}
+
+void WallyJourney_RecordWildEncounterShinies(void)
+{
+    u32 i, count = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) ? 2 : 1;
+    sWJNuzlockeCatchBlock = WJ_NUZLOCKE_CATCH_OK; // only a random encounter can block catching
+    EnsureShinySeen();
+    for (i = 0; i < count; i++)
+    {
+        u16 species = GetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_SPECIES);
+        u16 dexNum;
+        if (species == SPECIES_NONE || species >= NUM_SPECIES || !IsMonShiny(&gParties[B_TRAINER_OPPONENT_A][i]))
+            continue;
+        IncrementGameStat(GAME_STAT_WJ_SHINY_ENCOUNTERS);
+        dexNum = SpeciesToNationalPokedexNum(species);
+        if (dexNum != 0 && dexNum <= NATIONAL_DEX_COUNT)
+            gSaveBlock3Ptr->wjShinySeen[dexNum / 8] |= 1 << (dexNum % 8);
+    }
+}
+
+// Fills out[] with the species of every shiny met, in National Dex order; returns how many there
+// are in total (which can be more than max).
+u32 WallyJourney_GetShinySeenSpecies(u16 *out, u32 max)
+{
+    u32 dexNum, n = 0;
+    EnsureShinySeen();
+    for (dexNum = 1; dexNum <= NATIONAL_DEX_COUNT; dexNum++)
+    {
+        if (gSaveBlock3Ptr->wjShinySeen[dexNum / 8] & (1 << (dexNum % 8)))
+        {
+            if (n < max)
+                out[n] = NationalPokedexNumToSpecies(dexNum);
+            n++;
+        }
+    }
+    return n;
+}
+
 // ---------------------------------------------------------------------------
 // Catch bonus (owner request 2026-10-27): the more of a species you've caught in total (the same
 // per-species count as the Hidden Ability odds above; it never resets), the better the wild ones get.
+// Owner request 2026-10-29: the bonuses never stop growing (they used to top out at 31 caught).
+// Every 10 more caught past 31 keeps adding at the same pace as the 21-30 -> 31 step:
 //   caught    extra shiny rolls   perfect IVs   encounter weight in tables
 //   0-5              0                 0              x1
 //   6-10             0                 1              x1
 //   11-20            3                 2              x1.25
 //   21-30            7                 3              x1.5
-//   31+             11                 4              x2
-// Shiny rolls and perfect IVs follow Pokemon: Let's Go's catch-combo tiers. The encounter boost
-// raises that species' weight in an area's table (so rarer Pokemon still appear); rare visitors
-// aren't affected.
+//   31-40           11                 4              x2
+//   41-50           15                 5              x2.5
+//   51-60           19                 6 (all)        x3
+//   ...and so on: +4 shiny rolls and +x0.5 weight per 10 more (100 caught: 35 rolls, x5).
+// The count is stored per species up to 255, where it stops (x13, 99 rolls).
+// The encounter boost raises that species' weight in an area's table (so rarer Pokemon still
+// appear); rare visitors aren't affected.
 // ---------------------------------------------------------------------------
 EWRAM_DATA u16 gWJShinyRollSpecies = 0; // species being rolled for shininess (wild only), else 0
 
@@ -284,35 +450,43 @@ u32 WallyJourney_CatchCombo(u16 species)
     return gSaveBlock3Ptr->wjCatchCounts[dexNum];
 }
 
+// 0 below 11 caught, 1 for 11-20, 2 for 21-30, 3 for 31-40, 4 for 41-50, ...
+static u32 WJ_ComboTier(u32 combo)
+{
+    return combo >= 11 ? (combo - 1) / 10 : 0;
+}
+
 u32 WallyJourney_CatchComboShinyRolls(u16 species)
 {
-    u32 combo;
+    u32 tier;
     if (species == SPECIES_NONE)
         return 0;
-    combo = WallyJourney_CatchCombo(species);
-    if (combo >= 31) return 11;
-    if (combo >= 21) return 7;
-    if (combo >= 11) return 3;
-    return 0;
+    tier = WJ_ComboTier(WallyJourney_CatchCombo(species));
+    if (tier == 0)
+        return 0;
+    return 4 * tier - 1; // 3, 7, 11, 15, ...
 }
 
 static u32 WJ_ComboPerfectIVs(u32 combo)
 {
-    if (combo >= 31) return 4;
-    if (combo >= 21) return 3;
-    if (combo >= 11) return 2;
-    if (combo >= 6) return 1;
-    return 0;
+    u32 tier = WJ_ComboTier(combo);
+    if (tier == 0)
+        return combo >= 6 ? 1 : 0;
+    return tier + 1 > NUM_STATS ? NUM_STATS : tier + 1;
 }
 
 // Table weight scaled for how many of this species have been caught.
 u32 WallyJourney_CatchComboWeight(u16 species, u32 weight)
 {
-    u32 combo = WallyJourney_CatchCombo(species);
-    if (combo >= 31) return weight * 2;
-    if (combo >= 21) return weight * 3 / 2;
-    if (combo >= 11) return weight * 5 / 4;
-    return weight;
+    u32 tier = WJ_ComboTier(WallyJourney_CatchCombo(species));
+    u32 quarters; // multiplier in quarters: 4 = x1
+    if (tier == 0)
+        return weight;
+    if (tier <= 2)
+        quarters = 4 + tier;           // x1.25, x1.5
+    else
+        quarters = 8 + 2 * (tier - 3); // x2, x2.5, x3, ...
+    return weight * quarters / 4;
 }
 
 // Raise a freshly made wild Pokemon's IVs for the combo: N different stats set to 31.
@@ -512,11 +686,54 @@ static void WallyJourney_ScaleTitleRivalParty(struct Pokemon *party, u16 trainer
     }
 }
 
+// Vito as a title-defense challenger (owner request 2026-10-29): in the Champion's Room his team
+// scales to the player. His ace is raised to the level of the player's highest-level party Pokemon
+// (never below his Victory Road level, 48) and the rest of his team keeps the same gaps below it.
+// His Victory Road battle is unchanged.
+static void WallyJourney_ScaleVitoParty(struct Pokemon *party, u16 trainerId)
+{
+    u32 i, n, playerTop = 0, vitoTop = 0;
+    s32 shift;
+    if (trainerId != TRAINER_VITO
+     || gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM)
+     || gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM))
+        return;
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][i];
+        if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE && !GetMonData(mon, MON_DATA_IS_EGG)
+         && GetMonData(mon, MON_DATA_LEVEL) > playerTop)
+            playerTop = GetMonData(mon, MON_DATA_LEVEL);
+    }
+    for (n = 0; n < PARTY_SIZE && GetMonData(&party[n], MON_DATA_SPECIES) != SPECIES_NONE; n++)
+    {
+        if (GetMonData(&party[n], MON_DATA_LEVEL) > vitoTop)
+            vitoTop = GetMonData(&party[n], MON_DATA_LEVEL);
+    }
+    shift = (s32)playerTop - (s32)vitoTop;
+    if (n == 0 || shift <= 0)
+        return;
+    for (i = 0; i < n; i++)
+    {
+        struct Pokemon *mon = &party[i];
+        s32 level = (s32)GetMonData(mon, MON_DATA_LEVEL) + shift;
+        u16 species = GetMonData(mon, MON_DATA_SPECIES);
+        u32 exp;
+        if (level > MAX_LEVEL)
+            level = MAX_LEVEL;
+        exp = gExperienceTables[gSpeciesInfo[species].growthRate][level];
+        SetMonData(mon, MON_DATA_EXP, &exp);
+        SetMonData(mon, MON_DATA_LEVEL, &level);
+        CalculateMonStats(mon);
+    }
+}
+
 void WallyJourney_ScaleLeaderParty(struct Pokemon *party, u16 trainerId)
 {
 #if !IS_FRLG
     u32 gym, i, n, count, badges, target, aceLevel, stage;
     WallyJourney_ScaleTitleRivalParty(party, trainerId);
+    WallyJourney_ScaleVitoParty(party, trainerId);
     for (gym = 0; gym < ARRAY_COUNT(sLeaderGrowthIds); gym++)
         if (sLeaderGrowthIds[gym] == trainerId)
             break;
@@ -745,12 +962,13 @@ static enum WallyRegion GetRegionForMapSec(u32 mapSec)
     return WREGION_NONE;
 }
 
-// Hoenn is tropical: snow only falls on high ground in winter.
+// Owner request 2026-10-29: winter is snowy on every route and town (it used to be only the
+// highland routes 112/114/115 and Mt. Pyre, so most of Hoenn barely looked different from summer).
+// Every outdoor map gets snow-covered ground and frosted trees, and winter rain falls as snow.
+// The desert still stays dry (fronts pass over it), so Route 111 is snowy ground without snowfall.
 static bool32 IsSnowCountry(void)
 {
-    u16 map = gSaveBlock1Ptr->location.mapNum | (gSaveBlock1Ptr->location.mapGroup << 8);
-    return map == MAP_MT_PYRE_EXTERIOR || map == MAP_MT_PYRE_SUMMIT
-        || map == MAP_ROUTE112 || map == MAP_ROUTE114 || map == MAP_ROUTE115;
+    return TRUE;
 }
 
 static u32 WeatherHash(u32 a)

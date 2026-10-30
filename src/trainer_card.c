@@ -22,6 +22,7 @@
 #include "international_string_util.h"
 #include "pokedex.h"
 #include "pokemon_icon.h"
+#include "wally_journey.h"
 #include "graphics.h"
 #include "pokemon_icon.h"
 #include "trainer_pokemon_sprites.h"
@@ -39,6 +40,12 @@ enum {
     WIN_CARD_TEXT,
     WIN_TRAINER_PIC,
 };
+
+// Wally's Journey: own-card back shows wild/shiny encounter counts and the shinies met.
+#define WJ_CARD_SHINY_MAX      126 // 21 pages of 6
+#define WJ_CARD_SHINY_PER_PAGE PARTY_SIZE
+#define WJ_CARD_SHINY_PAGE_FRAMES 120
+#define WJ_OWN_HOENN_CARD (!sData->isLink && sData->cardType == CARD_TYPE_EMERALD)
 
 struct TrainerCardData
 {
@@ -90,6 +97,11 @@ struct TrainerCardData
     u16 bgTilemapBuffer[0x1000];
     u16 cardTop;
     u8 language;
+    // Wally's Journey: shinies met, shown as icons on the back of the player's own card.
+    u16 wjShinySpecies[WJ_CARD_SHINY_MAX];
+    u16 wjShinyCount;
+    u8 wjShinyPage;
+    u8 wjShinyTimer;
 };
 
 // EWRAM
@@ -142,6 +154,7 @@ static void PrintPokeblockStringOnCard(void);
 static void PrintUnionStringOnCard(void);
 static void PrintContestStringOnCard(void);
 static void PrintPokemonIconsOnCard(void);
+static void WJ_DrawShinyIconsPage(bool32 reloadTiles);
 static void PrintBattleFacilityStringOnCard(void);
 static void PrintStickersOnCard(void);
 static void BufferTextsVarsForCardPage2(void);
@@ -470,6 +483,15 @@ static void Task_TrainerCard(u8 taskId)
         }
         break;
     case STATE_HANDLE_INPUT_BACK:
+        if (WJ_OWN_HOENN_CARD && sData->wjShinyCount > WJ_CARD_SHINY_PER_PAGE
+         && ++sData->wjShinyTimer >= WJ_CARD_SHINY_PAGE_FRAMES)
+        {
+            sData->wjShinyTimer = 0;
+            if (++sData->wjShinyPage * WJ_CARD_SHINY_PER_PAGE >= sData->wjShinyCount)
+                sData->wjShinyPage = 0;
+            WJ_DrawShinyIconsPage(TRUE);
+            CopyBgTilemapBufferToVram(3);
+        }
         if (JOY_NEW(B_BUTTON))
         {
             if (gReceivedRemoteLinkPlayers && sData->isLink && InUnionRoom() == TRUE)
@@ -1174,8 +1196,18 @@ static void PrintProfilePhraseOnCard(void)
     }
 }
 
+static const u8 sText_WJWildEncounters[] = _("WILD ENCOUNTERS: {STR_VAR_1}");
+static const u8 sText_WJShinyEncounters[] = _("SHINY ENCOUNTERS");
+
 static void BufferNameForCardBack(void)
 {
+    if (WJ_OWN_HOENN_CARD)
+    {
+        // Owner request 2026-10-29: total wild encounters here instead of the name ("signature").
+        ConvertIntToDecimalStringN(gStringVar1, GetGameStat(GAME_STAT_WILD_BATTLES), STR_CONV_MODE_LEFT_ALIGN, 6);
+        StringExpandPlaceholders(sData->textPlayersCard, sText_WJWildEncounters);
+        return;
+    }
     StringCopy(sData->textPlayersCard, sData->trainerCard.playerName);
     ConvertInternationalString(sData->textPlayersCard, sData->language);
     if (sData->cardType != CARD_TYPE_FRLG)
@@ -1240,6 +1272,12 @@ static void BufferLinkBattleResults(void)
 
 static void PrintLinkBattleResultsOnCard(void)
 {
+    if (WJ_OWN_HOENN_CARD)
+    {
+        ConvertIntToDecimalStringN(gStringVar1, GetGameStat(GAME_STAT_WJ_SHINY_ENCOUNTERS), STR_CONV_MODE_LEFT_ALIGN, 6);
+        PrintStatOnBackOfCard(1, sText_WJShinyEncounters, gStringVar1, sTrainerCardStatColors);
+        return;
+    }
     if (sData->hasLinkResults)
     {
         StringCopy(gStringVar1, sData->textLinkBattleWins);
@@ -1257,7 +1295,7 @@ static void BufferNumTrades(void)
 
 static void PrintTradesStringOnCard(void)
 {
-    if (sData->hasTrades)
+    if (sData->hasTrades && !WJ_OWN_HOENN_CARD)
         PrintStatOnBackOfCard(2, gText_PokemonTrades, sData->textNumTrades, sTrainerCardStatColors);
 }
 
@@ -1296,7 +1334,7 @@ static void BufferLinkPokeblocksNum(void)
 
 static void PrintPokeblockStringOnCard(void)
 {
-    if (sData->cardType != CARD_TYPE_FRLG && sData->trainerCard.pokeblocksWithFriends)
+    if (sData->cardType != CARD_TYPE_FRLG && sData->trainerCard.pokeblocksWithFriends && !WJ_OWN_HOENN_CARD)
         PrintStatOnBackOfCard(3, gText_PokeblocksWithFriends, sData->textNumLinkPokeblocks, sTrainerCardStatColors);
 }
 
@@ -1353,11 +1391,42 @@ static void PrintBattleFacilityStringOnCard(void)
     }
 }
 
+// Wally's Journey: the current page of shiny icons on the own-card back, in the icon slots the
+// FRLG card uses for its party (BG3 tiles 224+, palettes 5-10). Rows 2-3 of the back.
+static void WJ_DrawShinyIconsPage(bool32 reloadTiles)
+{
+    u32 i;
+    static const u8 paletteSlots[] = {5, 6, 7, 8, 9, 10};
+
+    for (i = 0; i < WJ_CARD_SHINY_PER_PAGE; i++)
+    {
+        u32 idx = sData->wjShinyPage * WJ_CARD_SHINY_PER_PAGE + i;
+        u32 x = 4 + 4 * i;
+        if (idx < sData->wjShinyCount)
+        {
+            u16 species = sData->wjShinySpecies[idx];
+            if (reloadTiles)
+                LoadBgTiles(3, GetMonIconTiles(species, 0), 512, 16 * i + 32);
+            WriteSequenceToBgTilemapBuffer(3, 16 * i + 224, x, 8, 4, 4, paletteSlots[GetMonIconPaletteIndexFromSpecies(species)], 1);
+        }
+        else
+        {
+            FillBgTilemapBufferRect(3, 0, x, 8, 4, 4, 0);
+        }
+    }
+}
+
 static void PrintPokemonIconsOnCard(void)
 {
     u8 i;
     u8 paletteSlots[PARTY_SIZE] = {5, 6, 7, 8, 9, 10};
     u8 xOffsets[PARTY_SIZE] = {0, 4, 8, 12, 16, 20};
+
+    if (WJ_OWN_HOENN_CARD)
+    {
+        WJ_DrawShinyIconsPage(FALSE);
+        return;
+    }
 
     if (sData->cardType == CARD_TYPE_FRLG)
     {
@@ -1393,6 +1462,16 @@ static void LoadMonIconGfx(void)
     }
     LoadPalette(sData->monIconPal, BG_PLTT_ID(5), 6 * PLTT_SIZE_4BPP);
 
+    if (WJ_OWN_HOENN_CARD)
+    {
+        u32 n = WallyJourney_GetShinySeenSpecies(sData->wjShinySpecies, WJ_CARD_SHINY_MAX);
+        sData->wjShinyCount = n < WJ_CARD_SHINY_MAX ? n : WJ_CARD_SHINY_MAX;
+        sData->wjShinyPage = 0;
+        sData->wjShinyTimer = 0;
+        for (i = 0; i < WJ_CARD_SHINY_PER_PAGE && i < sData->wjShinyCount; i++)
+            LoadBgTiles(3, GetMonIconTiles(sData->wjShinySpecies[i], 0), 512, 16 * i + 32);
+        return;
+    }
     for (i = 0; i < PARTY_SIZE; i++)
     {
         if (sData->trainerCard.monSpecies[i])
@@ -1558,7 +1637,7 @@ static void DrawCardBackStats(void)
     }
     else
     {
-        if (sData->hasTrades)
+        if (sData->hasTrades && !WJ_OWN_HOENN_CARD)
         {
             FillBgTilemapBufferRect(3, 141, 27, 9, 1, 1, 0);
             FillBgTilemapBufferRect(3, 157, 27, 10, 1, 1, 0);

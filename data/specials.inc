@@ -643,6 +643,8 @@ gSpecials::
 	def_special WallyJourney_PickContestPrize
 	def_special WallyJourney_PickFrontierGimmickItem
 	def_special WallyJourney_GetRematchTier
+	def_special WallyJourney_VendingChooseQuantity
+	def_special WallyJourney_VendingBuy
 	def_special WallyJourney_SetupLeaderRematch
 	def_special WallyJourney_RecordLeaderPostgameWin
 	def_special WallyJourney_IsEliteFourRematchUnlocked

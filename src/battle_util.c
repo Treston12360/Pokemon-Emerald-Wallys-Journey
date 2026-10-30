@@ -662,6 +662,18 @@ bool32 WallyJourney_NoRunFromShiny(void)
     return FALSE;
 }
 
+// Wally's Journey (owner request 2026-10-29): a wild shiny can't be knocked out by anything but
+// itself. Attacks from others (including OHKO moves) and end-of-turn damage it didn't cause leave
+// it at 1 HP; its own recoil, Explosion, Life Orb, confusion hits and Struggle can still faint it.
+bool32 WallyJourney_IsProtectedWildShiny(enum BattlerId battler)
+{
+    if (gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+        return FALSE;
+    if (battler >= gBattlersCount || IsOnPlayerSide(battler))
+        return FALSE;
+    return IsMonShiny(GetBattlerMon(battler));
+}
+
 bool32 TryRunFromBattle(enum BattlerId battler)
 {
     bool32 effect = FALSE;
@@ -8111,6 +8123,10 @@ s32 GetAdjustedDamage(struct DamageContext *ctx, s32 damage)
     else if (GetMoveEffect(ctx->move) == EFFECT_FALSE_SWIPE)
     {
         enduredHit = TRUE;
+    }
+    else if (ctx->battlerAtk != ctx->battlerDef && WallyJourney_IsProtectedWildShiny(ctx->battlerDef))
+    {
+        enduredHit = TRUE; // Wally's Journey: only a wild shiny itself can knock itself out
     }
     else if (GetConfig(B_STURDY) >= GEN_5 && ctx->abilities[ctx->battlerDef] == ABILITY_STURDY && IsBattlerAtMaxHp(ctx->battlerDef))
     {

@@ -30,6 +30,8 @@
 #define tGameSpeed data[9]
 #define tBattleSpeed data[10]
 #define tWildMonsOff data[11]
+#define tNuzlocke data[12]
+#define tLevelCap data[13]
 
 enum
 {
@@ -44,6 +46,8 @@ enum
     MENUITEM_GAMESPEED,
     MENUITEM_BATTLESPEED,
     MENUITEM_WILDMONS,
+    MENUITEM_NUZLOCKE,
+    MENUITEM_LEVELCAP,
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
 };
@@ -69,6 +73,8 @@ enum
 #define YPOS_GAMESPEED    ITEM_Y(MENUITEM_GAMESPEED)
 #define YPOS_BATTLESPEED  ITEM_Y(MENUITEM_BATTLESPEED)
 #define YPOS_WILDMONS     ITEM_Y(MENUITEM_WILDMONS)
+#define YPOS_NUZLOCKE     ITEM_Y(MENUITEM_NUZLOCKE)
+#define YPOS_LEVELCAP     ITEM_Y(MENUITEM_LEVELCAP)
 
 static void Task_OptionMenuFadeIn(u8 taskId);
 static void Task_OptionMenuProcessInput(u8 taskId);
@@ -94,6 +100,7 @@ static u8 Toggle_ProcessInput(u8 selection);
 static void ExpMode_DrawChoices(u8 selection);
 static void ZMoves_DrawChoices(u8 selection);
 static void WildMons_DrawChoices(u8 selection);
+static void OnOff_DrawChoices(u8 selection, u8 y);
 static void RedrawVisibleOptions(u8 taskId);
 static u8 Cycle_ProcessInput(u8 selection, u8 count);
 static void Speed_DrawChoices(u8 selection, u8 y, bool32 battle);
@@ -143,6 +150,8 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_GAMESPEED]   = COMPOUND_STRING("GAME SPEED"),
     [MENUITEM_BATTLESPEED] = COMPOUND_STRING("BATTLE SPEED"),
     [MENUITEM_WILDMONS]    = COMPOUND_STRING("SEE WILD MONS"),
+    [MENUITEM_NUZLOCKE]    = COMPOUND_STRING("NUZLOCKE"),
+    [MENUITEM_LEVELCAP]    = COMPOUND_STRING("LEVEL CAP"),
     [MENUITEM_CANCEL]      = COMPOUND_STRING("CANCEL"),
 };
 
@@ -293,10 +302,14 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].tExpAll = 0;
         gTasks[taskId].tZMovesOff = 0;
         gTasks[taskId].tWildMonsOff = 0;
+        gTasks[taskId].tNuzlocke = 0;
+        gTasks[taskId].tLevelCap = 0;
 #else
         gTasks[taskId].tExpAll = FlagGet(FLAG_WALLY_EXP_ALL_MODE);
         gTasks[taskId].tZMovesOff = FlagGet(FLAG_WALLY_Z_MOVES_OFF);
         gTasks[taskId].tWildMonsOff = FlagGet(FLAG_WALLY_OWE_OFF);
+        gTasks[taskId].tNuzlocke = FlagGet(FLAG_WALLY_NUZLOCKE);
+        gTasks[taskId].tLevelCap = FlagGet(FLAG_WALLY_LEVEL_CAP);
 #endif
         gTasks[taskId].tGameSpeed = WallyJourney_GetOverworldSpeed() % WALLY_OW_SPEED_COUNT;
         gTasks[taskId].tBattleSpeed = WallyJourney_GetBattleSpeed() % WALLY_BATTLE_SPEED_COUNT;
@@ -418,6 +431,18 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             if (previousOption != gTasks[taskId].tWildMonsOff)
                 WildMons_DrawChoices(gTasks[taskId].tWildMonsOff);
             break;
+        case MENUITEM_NUZLOCKE:
+            previousOption = gTasks[taskId].tNuzlocke;
+            gTasks[taskId].tNuzlocke = Toggle_ProcessInput(gTasks[taskId].tNuzlocke);
+            if (previousOption != gTasks[taskId].tNuzlocke)
+                OnOff_DrawChoices(gTasks[taskId].tNuzlocke, YPOS_NUZLOCKE);
+            break;
+        case MENUITEM_LEVELCAP:
+            previousOption = gTasks[taskId].tLevelCap;
+            gTasks[taskId].tLevelCap = Toggle_ProcessInput(gTasks[taskId].tLevelCap);
+            if (previousOption != gTasks[taskId].tLevelCap)
+                OnOff_DrawChoices(gTasks[taskId].tLevelCap, YPOS_LEVELCAP);
+            break;
         case MENUITEM_GAMESPEED:
             previousOption = gTasks[taskId].tGameSpeed;
             gTasks[taskId].tGameSpeed = Cycle_ProcessInput(gTasks[taskId].tGameSpeed, WALLY_OW_SPEED_COUNT);
@@ -464,6 +489,14 @@ static void Task_OptionMenuSave(u8 taskId)
         FlagSet(FLAG_WALLY_OWE_OFF);
     else
         FlagClear(FLAG_WALLY_OWE_OFF);
+    if (gTasks[taskId].tNuzlocke)
+        FlagSet(FLAG_WALLY_NUZLOCKE);
+    else
+        FlagClear(FLAG_WALLY_NUZLOCKE);
+    if (gTasks[taskId].tLevelCap)
+        FlagSet(FLAG_WALLY_LEVEL_CAP);
+    else
+        FlagClear(FLAG_WALLY_LEVEL_CAP);
 #endif
     WallyJourney_SetSpeeds(gTasks[taskId].tGameSpeed, gTasks[taskId].tBattleSpeed);
 
@@ -795,6 +828,14 @@ static void WildMons_DrawChoices(u8 selection)
     DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleSceneOff, 198), YPOS_WILDMONS, selection == 1);
 }
 
+// NUZLOCKE / LEVEL CAP (owner request 2026-10-29): stored as "on" so a new game starts with them OFF.
+// Value 1 = ON, 0 = OFF; OFF is drawn on the right like the other toggles' second choice.
+static void OnOff_DrawChoices(u8 selection, u8 y)
+{
+    DrawOptionMenuChoice(gText_BattleSceneOn, 104, y, selection == 1);
+    DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleSceneOff, 198), y, selection == 0);
+}
+
 // Scroll so the cursor row is on screen, then redraw every visible row.
 static void RedrawVisibleOptions(u8 taskId)
 {
@@ -818,6 +859,8 @@ static void RedrawVisibleOptions(u8 taskId)
     if (ITEM_VISIBLE(MENUITEM_GAMESPEED))   Speed_DrawChoices(tGameSpeed, YPOS_GAMESPEED, FALSE);
     if (ITEM_VISIBLE(MENUITEM_BATTLESPEED)) Speed_DrawChoices(tBattleSpeed, YPOS_BATTLESPEED, TRUE);
     if (ITEM_VISIBLE(MENUITEM_WILDMONS))    WildMons_DrawChoices(tWildMonsOff);
+    if (ITEM_VISIBLE(MENUITEM_NUZLOCKE))    OnOff_DrawChoices(tNuzlocke, YPOS_NUZLOCKE);
+    if (ITEM_VISIBLE(MENUITEM_LEVELCAP))    OnOff_DrawChoices(tLevelCap, YPOS_LEVELCAP);
     HighlightOptionMenuItem(sel);
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }

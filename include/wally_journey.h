@@ -28,6 +28,21 @@ bool32 WallyJourney_IsLeaderRematchTrainer(u16 trainerId);
 void WallyJourney_RecordLeaderPostgameWin(void);
 bool8 WallyJourney_IsEliteFourRematchUnlocked(void);
 void WallyJourney_RecordCatch(u16 species);
+void WallyJourney_RecordWildEncounterShinies(void);
+u32 WallyJourney_GetShinySeenSpecies(u16 *out, u32 max);
+bool32 WallyJourney_NuzlockeOn(void);
+void WallyJourney_NuzlockeRouteEncounter(void);
+u32 WallyJourney_NuzlockeCatchBlock(void);
+bool32 WallyJourney_NuzlockeKeepsFainted(struct Pokemon *mon);
+bool32 WallyJourney_NuzlockeKeepsBoxMonFainted(struct BoxPokemon *boxMon);
+void WallyJourney_NuzlockeCheckRunOver(void);
+
+enum
+{
+    WJ_NUZLOCKE_CATCH_OK,
+    WJ_NUZLOCKE_CATCH_AREA_USED, // this area's one catch is already used up
+    WJ_NUZLOCKE_CATCH_DUPE,      // already caught this species (dupes clause: the area stays open)
+};
 void WallyJourney_SetFormSeen(u16 species);
 bool32 WallyJourney_FormSeen(u16 species);
 struct Pokemon;

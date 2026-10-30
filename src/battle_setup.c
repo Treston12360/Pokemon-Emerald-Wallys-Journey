@@ -381,6 +381,7 @@ void BattleSetup_StartMultiBattle(void)
         CreateBattleStartTask(GetWildBattleTransition(), 0);
         IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
         IncrementGameStat(GAME_STAT_WILD_BATTLES);
+        WallyJourney_RecordWildEncounterShinies();
         IncrementDailyWildBattles();
         TryUpdateGymLeaderRematchFromWild();
     }
@@ -417,6 +418,8 @@ static void DoStandardWildBattle(bool32 isDouble)
     CreateBattleStartTask(GetWildBattleTransition(), 0);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
+    WallyJourney_NuzlockeRouteEncounter();
     IncrementDailyWildBattles();
     TryUpdateGymLeaderRematchFromWild();
 }
@@ -450,6 +453,7 @@ void BattleSetup_StartRoamerBattle(void)
     CreateBattleStartTask(GetWildBattleTransition(), 0);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
     IncrementDailyWildBattles();
     TryUpdateGymLeaderRematchFromWild();
 }
@@ -475,6 +479,7 @@ static void DoGhostBattle(void)
     SetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_NICKNAME, gText_Ghost);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
 }
 
 static void DoBattlePikeWildBattle(void)
@@ -487,6 +492,7 @@ static void DoBattlePikeWildBattle(void)
     CreateBattleStartTask(GetWildBattleTransition(), 0);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
     IncrementDailyWildBattles();
     TryUpdateGymLeaderRematchFromWild();
 }
@@ -569,6 +575,7 @@ void BattleSetup_StartScriptedWildBattle(void)
     CreateBattleStartTask(GetWildBattleTransition(), 0);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
     IncrementDailyWildBattles();
     TryUpdateGymLeaderRematchFromWild();
 }
@@ -581,6 +588,7 @@ void BattleSetup_StartScriptedDoubleWildBattle(void)
     CreateBattleStartTask(GetWildBattleTransition(), 0);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
     IncrementDailyWildBattles();
     TryUpdateGymLeaderRematchFromWild();
 }
@@ -602,6 +610,7 @@ void StartMarowakBattle(void)
     SetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_NICKNAME, gText_Ghost);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
 }
 
 void BattleSetup_StartLatiBattle(void)
@@ -612,6 +621,7 @@ void BattleSetup_StartLatiBattle(void)
     CreateBattleStartTask(GetWildBattleTransition(), 0);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
     IncrementDailyWildBattles();
     TryUpdateGymLeaderRematchFromWild();
 }
@@ -654,6 +664,7 @@ void BattleSetup_StartLegendaryBattle(void)
 
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
     IncrementDailyWildBattles();
     TryUpdateGymLeaderRematchFromWild();
 }
@@ -671,6 +682,7 @@ void StartGroudonKyogreBattle(void)
 
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
     IncrementDailyWildBattles();
     TryUpdateGymLeaderRematchFromWild();
 }
@@ -704,6 +716,7 @@ void StartRegiBattle(void)
 
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    WallyJourney_RecordWildEncounterShinies();
     IncrementDailyWildBattles();
     TryUpdateGymLeaderRematchFromWild();
 }
@@ -1064,6 +1077,7 @@ static void CB2_StartFirstBattle(void)
         ClearPoisonStepCounter();
         IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
         IncrementGameStat(GAME_STAT_WILD_BATTLES);
+        WallyJourney_RecordWildEncounterShinies();
         IncrementDailyWildBattles();
         TryUpdateGymLeaderRematchFromWild();
     }

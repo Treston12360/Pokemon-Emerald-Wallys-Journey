@@ -81,8 +81,8 @@
 #define FLAG_DEXNAV_SEARCHING 0x3B // Wally's Journey: DexNav config (never set)
 #define FLAG_DEXNAV_DETECTOR  0x3C // Wally's Journey: DexNav config (never set)
 #define FLAG_RECEIVED_THROAT_SPRAY    0x3D // Wally's Journey: Lilycove Contest Hall singer
-#define FLAG_UNUSED_0x03E    0x3E // Unused Flag
-#define FLAG_UNUSED_0x03F    0x3F // Unused Flag
+#define FLAG_WALLY_NUZLOCKE    0x3E // Wally's Journey: Options menu NUZLOCKE ON (set) vs OFF (clear)
+#define FLAG_WALLY_LEVEL_CAP   0x3F // Wally's Journey: Options menu LEVEL CAP ON (set) vs OFF (clear)
 #define FLAG_UNUSED_0x040    0x40 // Unused Flag
 #define FLAG_UNUSED_0x041    0x41 // Unused Flag
 #define FLAG_UNUSED_0x042    0x42 // Unused Flag

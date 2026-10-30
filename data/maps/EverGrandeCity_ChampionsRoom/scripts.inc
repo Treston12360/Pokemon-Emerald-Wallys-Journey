@@ -23,10 +23,10 @@ WallyJourney_ChampionDefense_SetChallengerGfx::
 
 @ Wally's Journey: from the 5th title defense on, the challenger is drawn at random:
 @ 0 WALLY  1 WALLACE  2 STEVEN  3 MAY/BRENDAN  4-11 a Gym Leader with their final team.
-@ 12 TRESTON  13 MAXIE  14 ARCHIE (both reformed).
+@ 12 TRESTON  13 MAXIE  14 ARCHIE (both reformed)  15 VITO (the Winstrates' son, team scales to you).
 WallyJourney_ChampionDefense_PickChallenger::
 	@ TRESTON (the first title defense) is also number 12 in the random draw.
-	random 15
+	random 16
 	copyvar VAR_WALLY_TITLE_CHALLENGER, VAR_RESULT
 	@ The Gym Leaders battle as a Double Battle. With fewer than two
 	@ POKéMON able to battle, Wally takes the challenge instead.
@@ -47,6 +47,7 @@ WallyJourney_ChampionDefense_PickChallenger::
 	case 12, WallyJourney_ChampionDefense_GfxTreston
 	case 13, WallyJourney_ChampionDefense_GfxMaxie
 	case 14, WallyJourney_ChampionDefense_GfxArchie
+	case 15, WallyJourney_ChampionDefense_GfxVito
 	return
 
 WallyJourney_ChampionDefense_NoDoubles::
@@ -61,6 +62,10 @@ WallyJourney_ChampionDefense_GfxMaxie::
 
 WallyJourney_ChampionDefense_GfxArchie::
 	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_ARCHIE
+	return
+
+WallyJourney_ChampionDefense_GfxVito::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MAN_3
 	return
 
 WallyJourney_ChampionDefense_GfxTreston::
@@ -183,6 +188,7 @@ WallyJourney_ChampionDefense_Wally::
 	case 12, WallyJourney_ChampionPool_Treston
 	case 13, WallyJourney_ChampionPool_Maxie
 	case 14, WallyJourney_ChampionPool_Archie
+	case 15, WallyJourney_ChampionPool_Vito
 	msgbox WallyJourney_ChampionDefense_FinalIntro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_WALLY_CHAMPION_FINAL, WallyJourney_ChampionDefense_FinalDefeat
 	msgbox WallyJourney_ChampionDefense_FinalVictory, MSGBOX_DEFAULT
@@ -841,6 +847,45 @@ WallyJourney_ChampionPool_Archie::
 	trainerbattle_no_intro TRAINER_ARCHIE_REFORMED, WallyJourney_ChampionPool_ArchieDefeat
 	msgbox WallyJourney_ChampionPool_ArchieVictory, MSGBOX_DEFAULT
 	goto WallyJourney_ChampionDefense_Won
+
+@ Wally's Journey (owner request 2026-10-29): VITO, the Winstrates' son from Victory Road, as a
+@ title-defense challenger. His team scales to the player (WallyJourney_ScaleVitoParty). The same
+@ trainer as on Victory Road: if the player never beat him there, that battle stays available.
+WallyJourney_ChampionPool_Vito::
+	msgbox WallyJourney_ChampionPool_VitoIntro, MSGBOX_DEFAULT
+	checktrainerflag TRAINER_VITO
+	call_if_eq VAR_RESULT, FALSE, WallyJourney_ChampionPool_VitoRemember
+	trainerbattle_no_intro TRAINER_VITO, WallyJourney_ChampionPool_VitoDefeat
+	call_if_set FLAG_TEMP_1, WallyJourney_ChampionPool_VitoRestore
+	msgbox WallyJourney_ChampionPool_VitoVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_VitoRemember::
+	setflag FLAG_TEMP_1
+	return
+
+WallyJourney_ChampionPool_VitoRestore::
+	cleartrainerflag TRAINER_VITO
+	return
+
+WallyJourney_ChampionPool_VitoIntro:
+	.string "VITO: CHAMPION! Remember me?\n"
+	.string "VITO, of the WINSTRATES!\p"
+	.string "I didn't go home. I kept training,\n"
+	.string "just like Grandma VICKY taught me.\p"
+	.string "Whatever you've got, my team can\n"
+	.string "match it now.\p"
+	.string "The whole WINSTRATE family, one\n"
+	.string "more time. Let's go!$"
+
+WallyJourney_ChampionPool_VitoDefeat:
+	.string "Beaten again…\n"
+	.string "Grandma's going to hear about this.$"
+
+WallyJourney_ChampionPool_VitoVictory:
+	.string "VITO: You really are the CHAMPION.\p"
+	.string "I'll be back. A WINSTRATE never\n"
+	.string "quits!$"
 
 WallyJourney_ChampionPool_MaxieIntro:
 	.string "MAXIE: CHAMPION. You remember me.\p"

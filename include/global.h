@@ -284,6 +284,12 @@ struct SaveBlock3
     // the national number, so a regional form counted as seen once its normal form was seen.
     u8 wjFormSeenMagic;
     u8 wjFormSeen[(NUM_SPECIES + 7) / 8];
+    // Wally's Journey: national dex numbers met as a wild shiny (trainer card back).
+    u8 wjShinySeenMagic;
+    u8 wjShinySeen[(NATIONAL_DEX_COUNT + 8) / 8];
+    // Wally's Journey: Nuzlocke option, areas (region map sections) whose one catch is used up.
+    u8 wjNuzlockeAreaMagic;
+    u8 wjNuzlockeAreas[32];
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;

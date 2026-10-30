@@ -5,23 +5,36 @@
 #include "pokemon.h"
 
 
+// Wally's Journey (owner request 2026-10-29): optional LEVEL CAP in the Options menu. When it's
+// ON, the cap is the highest level on the next Gym Leader's team (this hack's first-battle teams),
+// then each Elite Four member's and Champion Wally's ace; Pokemon at the cap gain no EXP and
+// Rare Candies / EXP Candies can't take them past it. After the Hall of Fame there is no cap.
+// When the option is OFF the cap is MAX_LEVEL, i.e. no cap at all.
 u32 GetCurrentLevelCap(void)
 {
     static const u32 sLevelCapFlagMap[][2] =
     {
-        {FLAG_BADGE01_GET, 15},
-        {FLAG_BADGE02_GET, 19},
-        {FLAG_BADGE03_GET, 24},
-        {FLAG_BADGE04_GET, 29},
-        {FLAG_BADGE05_GET, 31},
-        {FLAG_BADGE06_GET, 33},
-        {FLAG_BADGE07_GET, 42},
-        {FLAG_BADGE08_GET, 46},
-        {FLAG_IS_CHAMPION, 58},
+        {FLAG_BADGE01_GET, 15},                 // Roxanne
+        {FLAG_BADGE02_GET, 19},                 // Brawly
+        {FLAG_BADGE03_GET, 25},                 // Wattson
+        {FLAG_BADGE04_GET, 32},                 // Flannery
+        {FLAG_BADGE05_GET, 33},                 // Norman
+        {FLAG_BADGE06_GET, 38},                 // Winona
+        {FLAG_BADGE07_GET, 45},                 // Tate & Liza
+        {FLAG_BADGE08_GET, 46},                 // Juan
+        {FLAG_DEFEATED_ELITE_4_SIDNEY, 53},     // Sidney
+        {FLAG_DEFEATED_ELITE_4_PHOEBE, 54},     // Phoebe
+        {FLAG_DEFEATED_ELITE_4_GLACIA, 55},     // Glacia
+        {FLAG_DEFEATED_ELITE_4_DRAKE, 56},      // Drake
+        {FLAG_SYS_GAME_CLEAR, 65},              // Champion Wally
     };
 
     u32 i;
 
+#if !IS_FRLG
+    if (!FlagGet(FLAG_WALLY_LEVEL_CAP))
+        return MAX_LEVEL;
+#endif
     if (B_LEVEL_CAP_TYPE == LEVEL_CAP_FLAG_LIST)
     {
         for (i = 0; i < ARRAY_COUNT(sLevelCapFlagMap); i++)

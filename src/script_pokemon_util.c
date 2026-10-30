@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "battle.h"
 #include "battle_gfx_sfx_util.h"
 #include "berry.h"
@@ -38,6 +39,7 @@ static void HealPlayerBoxes(void);
 void HealPlayerParty(void)
 {
     u32 i;
+    WallyJourney_NuzlockeCheckRunOver(); // Wally's Journey: a whole-party faint ends a Nuzlocke run
     for (i = 0; i < gPartiesCount[B_TRAINER_PLAYER]; i++)
         HealPokemon(&gParties[B_TRAINER_PLAYER][i]);
     if (OW_PC_HEAL >= GEN_8)

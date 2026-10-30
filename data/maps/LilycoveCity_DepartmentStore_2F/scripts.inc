@@ -74,7 +74,6 @@ LilycoveCity_DepartmentStore_2F_Pokemart2:
 	.2byte ITEM_DEEP_SEA_SCALE
 	.2byte ITEM_REAPER_CLOTH
 	.2byte ITEM_PROTECTOR
-	.2byte ITEM_LINKING_CORD
 	.2byte ITEM_DAWN_STONE
 	.2byte ITEM_DUSK_STONE
 	.2byte ITEM_SHINY_STONE

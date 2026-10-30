@@ -486,10 +486,13 @@ bool8 ItemfinderCheckForHiddenItems(const struct MapEvents *events, u8 taskId)
     }
 
     CheckForHiddenItemsInMapConnection(taskId);
-    if (gTasks[taskId].tItemFound == TRUE || gSprites[gObjectEvents[gPlayerAvatar.objectEventId].fieldEffectSpriteId].tItemFound)
-        return TRUE;
-    else
-        return FALSE;
+    // Wally's Journey fix: only read the result from where it was written. The old check read both
+    // the task and the player's field effect sprite; with the classic Itemfinder that sprite is
+    // whatever effect is on the player (tall grass rustle, etc.), whose data could look like
+    // "found at distance 0", so the Itemfinder said it was shaking wildly with nothing there.
+    if (I_ORAS_DOWSING_FLAG != 0)
+        return gSprites[gObjectEvents[gPlayerAvatar.objectEventId].fieldEffectSpriteId].tItemFound == TRUE;
+    return gTasks[taskId].tItemFound == TRUE;
 }
 
 static bool8 IsHiddenItemPresentAtCoords(const struct MapEvents *events, s16 x, s16 y)
@@ -1172,6 +1175,10 @@ static u32 GetBallThrowableState(void)
         return BALL_THROW_UNABLE_SEMI_INVULNERABLE;
     else if (FlagGet(WE_FLAG_NO_CATCHING) || !IsAllowedToUseBag())
         return BALL_THROW_UNABLE_DISABLED_FLAG;
+    else if (WallyJourney_NuzlockeCatchBlock() == WJ_NUZLOCKE_CATCH_AREA_USED)
+        return BALL_THROW_UNABLE_NUZLOCKE_AREA;
+    else if (WallyJourney_NuzlockeCatchBlock() == WJ_NUZLOCKE_CATCH_DUPE)
+        return BALL_THROW_UNABLE_NUZLOCKE_DUPE;
 
     return BALL_THROW_ABLE;
 }
@@ -1184,6 +1191,8 @@ bool32 CanThrowBall(void)
 static const u8 sText_CantThrowPokeBall_TwoMons[] = _("Cannot throw a ball!\nThere are two Pokémon out there!\p");
 static const u8 sText_CantThrowPokeBall_SemiInvulnerable[] = _("Cannot throw a ball!\nThere's no Pokémon in sight!\p");
 static const u8 sText_CantThrowPokeBall_Disabled[] = _("POKé BALLS cannot be used\nright now!\p");
+static const u8 sText_CantThrowPokeBall_NuzlockeArea[] = _("NUZLOCKE: you already had your\nencounter in this area!\p");
+static const u8 sText_CantThrowPokeBall_NuzlockeDupe[] = _("NUZLOCKE: you've already caught\nthis kind of POKéMON!\p");
 
 static void ItemUseInBattle_ShowPartyMenu(u8 taskId)
 {
@@ -1300,6 +1309,14 @@ bool32 CannotUseItemsInBattle(enum Item itemId, struct Pokemon *mon)
             failStr = sText_CantThrowPokeBall_Disabled;
             cannotUse = TRUE;
             break;
+        case BALL_THROW_UNABLE_NUZLOCKE_AREA:
+            failStr = sText_CantThrowPokeBall_NuzlockeArea;
+            cannotUse = TRUE;
+            break;
+        case BALL_THROW_UNABLE_NUZLOCKE_DUPE:
+            failStr = sText_CantThrowPokeBall_NuzlockeDupe;
+            cannotUse = TRUE;
+            break;
         }
         break;
     case EFFECT_ITEM_INCREASE_ALL_STATS:
@@ -1337,7 +1354,7 @@ bool32 CannotUseItemsInBattle(enum Item itemId, struct Pokemon *mon)
             cannotUse = TRUE;
         break;
     case EFFECT_ITEM_REVIVE:
-        if (hp != 0)
+        if (hp != 0 || (mon != NULL && WallyJourney_NuzlockeKeepsFainted(mon))) // Wally's Journey: Nuzlocke
             cannotUse = TRUE;
         break;
     case EFFECT_ITEM_RESTORE_PP:

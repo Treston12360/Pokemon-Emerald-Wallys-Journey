@@ -110,18 +110,19 @@ LilycoveCity_DepartmentStoreRooftop_EventScript_CheckMoneyLemonade::
 	checkmoney 350
 	return
 
-LilycoveCity_DepartmentStoreRooftop_EventScript_RemoveMoneyFreshWater::
-	removemoney 200
+LilycoveCity_DepartmentStoreRooftop_EventScript_PriceFreshWater::
+	setvar VAR_0x8005, 200
 	return
 
-LilycoveCity_DepartmentStoreRooftop_EventScript_RemoveMoneySodaPop::
-	removemoney 300
+LilycoveCity_DepartmentStoreRooftop_EventScript_PriceSodaPop::
+	setvar VAR_0x8005, 300
 	return
 
-LilycoveCity_DepartmentStoreRooftop_EventScript_RemoveMoneyLemonade::
-	removemoney 350
+LilycoveCity_DepartmentStoreRooftop_EventScript_PriceLemonade::
+	setvar VAR_0x8005, 350
 	return
 
+@ Wally's Journey: choose how many to buy (Up/Down +-1, Left/Right +-10, A buy, B cancel).
 LilycoveCity_DepartmentStoreRooftop_EventScript_TryBuyDrink::
 	call_if_eq VAR_TEMP_1, 0, LilycoveCity_DepartmentStoreRooftop_EventScript_CheckMoneyFreshWater
 	call_if_eq VAR_TEMP_1, 1, LilycoveCity_DepartmentStoreRooftop_EventScript_CheckMoneySodaPop
@@ -129,31 +130,28 @@ LilycoveCity_DepartmentStoreRooftop_EventScript_TryBuyDrink::
 	goto_if_eq VAR_RESULT, FALSE, LilycoveCity_DepartmentStoreRooftop_EventScript_NotEnoughMoneyForDrink
 	checkitemspace VAR_TEMP_0
 	goto_if_eq VAR_RESULT, FALSE, LilycoveCity_DepartmentStoreRooftop_EventScript_NoRoomForDrink
-	call_if_eq VAR_TEMP_1, 0, LilycoveCity_DepartmentStoreRooftop_EventScript_RemoveMoneyFreshWater
-	call_if_eq VAR_TEMP_1, 1, LilycoveCity_DepartmentStoreRooftop_EventScript_RemoveMoneySodaPop
-	call_if_eq VAR_TEMP_1, 2, LilycoveCity_DepartmentStoreRooftop_EventScript_RemoveMoneyLemonade
+	copyvar VAR_0x8004, VAR_TEMP_0
+	call_if_eq VAR_TEMP_1, 0, LilycoveCity_DepartmentStoreRooftop_EventScript_PriceFreshWater
+	call_if_eq VAR_TEMP_1, 1, LilycoveCity_DepartmentStoreRooftop_EventScript_PriceSodaPop
+	call_if_eq VAR_TEMP_1, 2, LilycoveCity_DepartmentStoreRooftop_EventScript_PriceLemonade
+	bufferitemname STR_VAR_2, VAR_TEMP_0
+	message LilycoveCity_DepartmentStoreRooftop_Text_HowManyDrinks
+	waitmessage
+	special WallyJourney_VendingChooseQuantity
+	waitstate
+	goto_if_eq VAR_RESULT, 0, LilycoveCity_DepartmentStoreRooftop_EventScript_ChooseNewDrink
+	special WallyJourney_VendingBuy
 	updatemoneybox
+	playse SE_VEND
+	msgbox LilycoveCity_DepartmentStoreRooftop_Text_CansOfDrinkDroppedDown, MSGBOX_DEFAULT
+	bufferitemname STR_VAR_2, VAR_TEMP_0
+	bufferstdstring STR_VAR_3, STDSTRING_ITEMS
+	msgbox gText_PutItemInPocket, MSGBOX_DEFAULT
+	random 64  @ 1/64 chance of an extra drink dropping
+	goto_if_ne VAR_RESULT, 0, LilycoveCity_DepartmentStoreRooftop_EventScript_ChooseNewDrink
+	checkitemspace VAR_TEMP_0
+	goto_if_eq VAR_RESULT, FALSE, LilycoveCity_DepartmentStoreRooftop_EventScript_ChooseNewDrink
 	bufferitemname STR_VAR_1, VAR_TEMP_0
-	playse SE_VEND
-	msgbox LilycoveCity_DepartmentStoreRooftop_Text_CanOfDrinkDroppedDown, MSGBOX_DEFAULT
-	additem VAR_TEMP_0
-	bufferitemname STR_VAR_2, VAR_TEMP_0
-	bufferstdstring STR_VAR_3, STDSTRING_ITEMS
-	msgbox gText_PutItemInPocket, MSGBOX_DEFAULT
-	random 64  @ 1/64 chance of an additional drink dropping
-	goto_if_ne VAR_RESULT, 0, LilycoveCity_DepartmentStoreRooftop_EventScript_ChooseNewDrink
-	checkitemspace VAR_TEMP_0
-	goto_if_eq VAR_RESULT, FALSE, LilycoveCity_DepartmentStoreRooftop_EventScript_NoRoomForDrink
-	playse SE_VEND
-	msgbox LilycoveCity_DepartmentStoreRooftop_Text_ExtraCanOfDrinkDroppedDown, MSGBOX_DEFAULT
-	additem VAR_TEMP_0
-	bufferitemname STR_VAR_2, VAR_TEMP_0
-	bufferstdstring STR_VAR_3, STDSTRING_ITEMS
-	msgbox gText_PutItemInPocket, MSGBOX_DEFAULT
-	random 64  @ 1/64 * the prev 1/64 chance of a third additional drink dropping, ~ 0.02% chance
-	goto_if_ne VAR_RESULT, 0, LilycoveCity_DepartmentStoreRooftop_EventScript_ChooseNewDrink
-	checkitemspace VAR_TEMP_0
-	goto_if_eq VAR_RESULT, 0, LilycoveCity_DepartmentStoreRooftop_EventScript_NoRoomForDrink
 	playse SE_VEND
 	msgbox LilycoveCity_DepartmentStoreRooftop_Text_ExtraCanOfDrinkDroppedDown, MSGBOX_DEFAULT
 	additem VAR_TEMP_0
@@ -211,6 +209,14 @@ LilycoveCity_DepartmentStoreRooftop_Text_WhichDrinkWouldYouLike:
 LilycoveCity_DepartmentStoreRooftop_Text_CanOfDrinkDroppedDown:
 	.string "Clang!\p"
 	.string "A can of {STR_VAR_1} dropped down.$"
+
+LilycoveCity_DepartmentStoreRooftop_Text_HowManyDrinks:
+	.string "How many {STR_VAR_2}\n"
+	.string "would you like?$"
+
+LilycoveCity_DepartmentStoreRooftop_Text_CansOfDrinkDroppedDown:
+	.string "Clang! Clang!\p"
+	.string "{STR_VAR_1} × {STR_VAR_2} dropped down.$"
 
 LilycoveCity_DepartmentStoreRooftop_Text_ExtraCanOfDrinkDroppedDown:
 	.string "Clang!\p"

@@ -3664,7 +3664,8 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, enum Item item, u8 partyIndex, 
                         }
                         // Check use validity.
                         if ((effectFlags & (ITEM4_REVIVE >> 2) && currentHP != 0)
-                              || (!(effectFlags & (ITEM4_REVIVE >> 2)) && currentHP == 0))
+                              || (!(effectFlags & (ITEM4_REVIVE >> 2)) && currentHP == 0)
+                              || (currentHP == 0 && WallyJourney_NuzlockeOn())) // Wally's Journey: Nuzlocke, fainted = gone
                         {
                             itemEffectParam++;
                             break;
@@ -6473,6 +6474,9 @@ void HealPokemon(struct Pokemon *mon)
 {
     u32 data;
 
+    if (WallyJourney_NuzlockeKeepsFainted(mon)) // Wally's Journey: Nuzlocke, fainted = gone
+        return;
+
     data = GetMonData(mon, MON_DATA_MAX_HP);
     SetMonData(mon, MON_DATA_HP, &data);
 
@@ -6485,6 +6489,9 @@ void HealPokemon(struct Pokemon *mon)
 void HealBoxPokemon(struct BoxPokemon *boxMon)
 {
     u32 data;
+
+    if (WallyJourney_NuzlockeKeepsBoxMonFainted(boxMon)) // Wally's Journey: Nuzlocke, fainted = gone
+        return;
 
     data = 0;
     SetBoxMonData(boxMon, MON_DATA_HP_LOST, &data);
