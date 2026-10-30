@@ -290,6 +290,11 @@ struct SaveBlock3
     // Wally's Journey: Nuzlocke option, areas (region map sections) whose one catch is used up.
     u8 wjNuzlockeAreaMagic;
     u8 wjNuzlockeAreas[32];
+    // Wally's Journey: player outfit (protagonist sprite + colours). Magic unset = vanilla Brendan/May.
+    u8 wjOutfitMagic;
+    u8 wjOutfit;
+    u8 wjOutfitSkin;
+    u8 wjOutfitColour[2];
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;

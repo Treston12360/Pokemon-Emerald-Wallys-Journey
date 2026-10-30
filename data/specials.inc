@@ -655,6 +655,7 @@ gSpecials::
 	def_special WallyJourney_StartWallyApproach
 	def_special WallyJourney_StartWallyLeave
 	def_special WallyJourney_FaceWally
+	def_special WJ_OutfitMenu
 	def_special WallyJourney_WallyHasPath
 	def_special WallyJourney_WallySurfStart
 	def_special WallyJourney_WallySurfLeaveBlob

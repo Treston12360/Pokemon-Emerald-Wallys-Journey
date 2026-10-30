@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wj_outfit.h"
 #include "scanline_effect.h"
 #include "palette.h"
 #include "task.h"
@@ -1985,7 +1986,9 @@ static void CreateTrainerCardTrainerPic(void)
     }
     else
     {
-        CreateTrainerCardTrainerPicSprite(FacilityClassToPicIndex(sTrainerPicFacilityClass[sData->cardType][sData->trainerCard.gender]),
+        // Wally's Journey: your own card shows your outfit.
+        CreateTrainerCardTrainerPicSprite((WJ_OWN_HOENN_CARD && WJ_OutfitActive()) ? TRAINER_PIC_WJ_PLAYER
+                                          : FacilityClassToPicIndex(sTrainerPicFacilityClass[sData->cardType][sData->trainerCard.gender]),
                     TRUE,
                     sTrainerPicOffset[sData->isHoenn][sData->trainerCard.gender][0],
                     sTrainerPicOffset[sData->isHoenn][sData->trainerCard.gender][1],

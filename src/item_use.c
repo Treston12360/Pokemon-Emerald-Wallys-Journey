@@ -274,6 +274,20 @@ void ItemUseOutOfBattle_ExpShare(u8 taskId)
 #endif
 }
 
+// Wally's Journey: the Outfit Case opens the outfit menu (from the Bag or registered to Select).
+static void ItemUseOnFieldCB_OutfitCase(u8 taskId)
+{
+    LockPlayerFieldControls();
+    ScriptContext_SetupScript(WallyJourney_EventScript_OutfitCase);
+    DestroyTask(taskId);
+}
+
+void ItemUseOutOfBattle_OutfitCase(u8 taskId)
+{
+    sItemUseOnFieldCB = ItemUseOnFieldCB_OutfitCase;
+    SetUpItemUseOnFieldCallback(taskId);
+}
+
 // Wally's Journey: the EXP. ALL key item switches itself on and off.
 void ItemUseOutOfBattle_ExpAll(u8 taskId)
 {

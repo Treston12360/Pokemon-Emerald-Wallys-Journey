@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wj_outfit.h"
 #include "wally_journey.h"
 #include "malloc.h"
 #include "apprentice.h"
@@ -5648,6 +5649,9 @@ enum TrainerPicID FacilityClassToPicIndex(u16 facilityClass)
 
 enum TrainerPicID PlayerGenderToFrontTrainerPicId(enum Gender playerGender)
 {
+    // Wally's Journey: the player's outfit.
+    if (WJ_OutfitActive() && playerGender == gSaveBlock2Ptr->playerGender)
+        return TRAINER_PIC_WJ_PLAYER;
     if (playerGender != MALE)
         return FacilityClassToPicIndex(IS_FRLG ? FACILITY_CLASS_LEAF : FACILITY_CLASS_MAY);
     else

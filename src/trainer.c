@@ -1,8 +1,12 @@
 #include "global.h"
 #include "constants/trainers.h"
+#include "wj_outfit.h"
 
 static enum TrainerPicID GetEmeraldTrainerPic(enum Gender gender)
 {
+    // Wally's Journey: the player's outfit.
+    if (WJ_OutfitActive() && gender == gSaveBlock2Ptr->playerGender)
+        return TRAINER_PIC_WJ_PLAYER;
     return gender == MALE ? TRAINER_PIC_BRENDAN : TRAINER_PIC_MAY;
 }
 static enum TrainerPicID GetRSTrainerPic(enum Gender gender)

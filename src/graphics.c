@@ -1,5 +1,6 @@
 #include "global.h"
 #include "graphics.h"
+#include "wj_outfit.h"
 
 const u32 gBattleTextboxTiles[] = INCGFX_U32("graphics/battle_interface/textbox.png", ".4bpp.smol");
 const u16 gBattleTextboxPalette[] = INCBIN_U16("graphics/battle_interface/textbox.gbapal");

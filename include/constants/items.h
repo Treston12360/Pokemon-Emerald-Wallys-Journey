@@ -1051,6 +1051,7 @@ enum __attribute__((packed)) Item
     ITEM_TATSUGIRINITE = 872,
     ITEM_GLIMMORANITE = 873,
     ITEM_EXP_ALL = 874, // Wally's Journey: key item, replaces the Exp. Share when EXP. MODE is ALL
+    ITEM_OUTFIT_CASE = 875, // Wally's Journey: key item, opens the outfit menu
 
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,

@@ -77,7 +77,7 @@ WallyJourney_ChampionDefense_GfxCameron::
 	return
 
 WallyJourney_ChampionDefense_GfxTreston::
-	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_BRENDAN_NORMAL
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_RIVAL_BRENDAN_NORMAL
 	return
 
 WallyJourney_ChampionDefense_GfxRival::

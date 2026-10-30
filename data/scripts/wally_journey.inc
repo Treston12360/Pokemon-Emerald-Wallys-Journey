@@ -1810,6 +1810,14 @@ WallyJourney_Text_HyperTrainerCancel:
 
 @ Wally's Journey (owner request 2026-10-27): using a Bottle Cap / Gold Bottle Cap from the Bag.
 @ Same effect as the Hyper Trainer (hypertrain), no level requirement, no NPC. Owner-approved messages.
+@ Wally's Journey: the Outfit Case key item. The menu runs as a task; it re-enables the script.
+WallyJourney_EventScript_OutfitCase::
+	lockall
+	special WJ_OutfitMenu
+	waitstate
+	releaseall
+	end
+
 WallyJourney_EventScript_UseBottleCap::
 	special ChoosePartyMon
 	waitstate

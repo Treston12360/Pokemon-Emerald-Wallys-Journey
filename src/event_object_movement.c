@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wj_outfit.h"
 #include "wally_journey.h"
 #include "tilesets.h"
 #include "malloc.h"
@@ -496,6 +497,12 @@ const u8 gInitialMovementTypeFacingDirections[NUM_MOVEMENT_TYPES] = {
 #include "data/object_events/object_event_subsprites.h"
 #include "data/object_events/object_event_graphics_info.h"
 #include "data/object_events/object_event_graphics_info_followers.h"
+#include "data/object_events/wj_outfit_gfx.h"
+
+const struct ObjectEventGraphicsInfo *WJ_GetOutfitGfxInfo(u32 outfit, u32 slot)
+{
+    return sWJOutfitGfxInfos[outfit][slot];
+}
 
 static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc1,                  OBJ_EVENT_PAL_TAG_NPC_1},
@@ -507,6 +514,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc3Reflection,        OBJ_EVENT_PAL_TAG_NPC_3_REFLECTION},
     {gObjectEventPal_Npc4Reflection,        OBJ_EVENT_PAL_TAG_NPC_4_REFLECTION},
     {gObjectEventPal_Brendan,               OBJ_EVENT_PAL_TAG_BRENDAN},
+    {gWJPlayerOwPal,                        OBJ_EVENT_PAL_TAG_WJ_PLAYER}, // Wally's Journey: player outfit
     {gObjectEventPal_BrendanReflection,     OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION},
     {gObjectEventPal_BridgeReflection,      OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION},
     {gObjectEventPal_PlayerUnderwater,      OBJ_EVENT_PAL_TAG_PLAYER_UNDERWATER},
@@ -3219,6 +3227,14 @@ const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u16 graphicsId)
 
     if (graphicsId >= NUM_OBJ_EVENT_GFX)
         graphicsId = OBJ_EVENT_GFX_NINJA_BOY;
+
+    // Wally's Journey: the player's outfit replaces their own Brendan/May sprites.
+    if (WJ_OutfitActive())
+    {
+        const struct ObjectEventGraphicsInfo *outfit = WJ_OutfitGraphicsInfo(graphicsId);
+        if (outfit != NULL)
+            return outfit;
+    }
 
     return gObjectEventGraphicsInfoPointers[graphicsId];
 }

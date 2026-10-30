@@ -583,8 +583,16 @@ const union AnimCmd *const sBackAnims_OldManPokedude[] = {
         .animation = anim,                                                                   \
     }}
 
+#include "wj_outfit_trainers.h"
+
 const struct TrainerPicInfo gTrainerPicInfo[TRAINER_PIC_COUNT] =
 {
+    // Wally's Journey: the player's outfit; filled in by WJ_OutfitRefresh.
+    [TRAINER_PIC_WJ_PLAYER] =
+    {
+        .frontPic = (const struct TrainerFrontPicInfo *)gWJPlayerFrontPicBuf,
+        .backPic = (const struct TrainerBackPicInfo *)gWJPlayerBackPicBuf,
+    },
     [TRAINER_PIC_NONE] =
     {
         .frontPic = TRAINER_FRONT_PIC(gTrainerFrontPic_None, gTrainerPalette_None),

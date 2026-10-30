@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wj_outfit.h"
 #include "battle_transition.h"
 #include "overworld.h"
 #include "wally_journey.h"
@@ -2168,6 +2169,7 @@ void CB2_ContinueSavedGame(void)
 
     LoadSaveblockMapHeader();
     WallyJourney_SanitizeParty();
+    WJ_OutfitOnLoad();
     ClearDiveAndHoleWarps();
     trainerHillMapId = GetCurrentTrainerHillMapId();
     if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)

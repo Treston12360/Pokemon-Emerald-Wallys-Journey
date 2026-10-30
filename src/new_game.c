@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wj_outfit.h"
 #include "battle_setup.h"
 #include "clock.h"
 #include "new_game.h"
@@ -237,6 +238,7 @@ void NewGameInitData(void)
     ResetDexNav();
     ClearFollowerNPCData();
     WallyJourney_Reset();
+    WJ_OutfitOnNewGame();
 }
 
 static void ResetMiniGamesRecords(void)

@@ -16117,6 +16117,22 @@ const struct ItemInfo gItemsInfo[] =
         .iconPic = gItemIcon_ExpShare,
         .iconPalette = gItemIconPalette_ExpShare,
     },
+
+    [ITEM_OUTFIT_CASE] =
+    {
+        .name = ITEM_NAME("Outfit Case"),
+        .description = COMPOUND_STRING(
+            "Change who you look\n"
+            "like and your colors\n"
+            "any time you want."),
+        .price = 0,
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_OutfitCase,
+        .iconPic = gItemIcon_CoinCase,
+        .iconPalette = gItemIconPalette_CoinCase,
+    },
 };
 
 #undef ITEM_NAME
