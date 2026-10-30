@@ -45,9 +45,8 @@ TEST("Wally: Route 112 grass can give Hisuian Growlithe, Chimchar and Charmander
     Test_MgbaPrintf("Route 112 total: Hisuian Growlithe %d, Chimchar %d, Charmander %d of %d encounters (%d tables)",
                     growlithe, chimchar, charmander, total, tables);
     EXPECT_GT(tables, 0);
-    // 0.5% and 1% of the encounters, with a wide margin for randomness.
-    EXPECT_GT(growlithe * 1000, total * 3);  // above 0.3%
-    EXPECT_LT(growlithe * 1000, total * 7);  // below 0.7%
+    // All three are 1% (Hisuian Growlithe raised from 0.5%, owner 2026-10-29); wide margin for randomness.
+    EXPECT_GT(growlithe * 1000, total * 7);  // above 0.7%
     EXPECT_GT(chimchar * 1000, total * 7);   // above 0.7%
     EXPECT_GT(charmander * 1000, total * 7); // above 0.7%
 }

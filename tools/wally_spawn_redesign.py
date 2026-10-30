@@ -86,7 +86,7 @@ area('ROUTE111', land=(19, 22, {'SANDSHREW': 20, 'TRAPINCH': 20, 'CACNEA': 15, '
 
 area('ROUTE112', land=(14, 16, {'NUMEL': 30, 'PONYTA': 15, 'GEODUDE': 15, 'MACHOP': 10, 'ROLYCOLY': 10, 'SKIDDO': 10,
                                 'SLUGMA': 5, 'SALANDIT': 4, 'CHARMANDER': 1}),
-     v_land={'CHIMCHAR': 1, 'GROWLITHE_HISUI': 0.5})
+     v_land={'CHIMCHAR': 1, 'GROWLITHE_HISUI': 1})  # owner 2026-10-29: Hisuian Growlithe as common as Chimchar/Charmander
 
 area('ROUTE113', land=(14, 16, {'SPINDA': 25, 'SLUGMA': 20, 'SANDSHREW': 15, 'SPEAROW': 15, 'NUMEL': 10, 'SKARMORY': 5,
                                 'CHARCADET': 4, 'TORCHIC': 1}),
