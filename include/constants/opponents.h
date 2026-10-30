@@ -872,6 +872,7 @@
 // Wally's Journey: trainers past 863 (defeated bits live in SaveBlock3, see below).
 #define TRAINER_MAXIE_REFORMED              864 // title-defense challenger (random pool)
 #define TRAINER_ARCHIE_REFORMED             865 // title-defense challenger (random pool)
+#define TRAINER_CAMERON_CHALLENGER          866 // title-defense challenger (random pool)
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled

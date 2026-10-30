@@ -2231,3 +2231,52 @@ void WallyJourney_WallySurfEnd(void)
     if (wally != NULL)
         gSprites[wally->spriteId].y2 = 0;
 }
+
+// Wally's Journey: on Continue, re-derive every party Pokémon's stats from its species,
+// level, nature, IVs and EVs, so nothing edited outside normal play (an old build's
+// battle debug menu wrote max HP and moves back to the party) carries over.
+// Legit Pokémon come out exactly the same; this only ever undoes edits.
+void WallyJourney_SanitizeParty(void)
+{
+    u32 i, j;
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gPlayerParty[i];
+        u32 species = GetMonData(mon, MON_DATA_SPECIES);
+        u32 evTotal = 0;
+        if (species == SPECIES_NONE || species >= NUM_SPECIES || GetMonData(mon, MON_DATA_IS_EGG))
+            continue;
+        for (j = 0; j < NUM_STATS; j++)
+        {
+            u32 iv = GetMonData(mon, MON_DATA_HP_IV + j);
+            u32 ev = GetMonData(mon, MON_DATA_HP_EV + j);
+            if (iv > MAX_PER_STAT_IVS)
+            {
+                iv = MAX_PER_STAT_IVS;
+                SetMonData(mon, MON_DATA_HP_IV + j, &iv);
+            }
+            if (ev > MAX_PER_STAT_EVS)
+            {
+                ev = MAX_PER_STAT_EVS;
+                SetMonData(mon, MON_DATA_HP_EV + j, &ev);
+            }
+            if (evTotal + ev > MAX_TOTAL_EVS)
+            {
+                ev = MAX_TOTAL_EVS - evTotal;
+                SetMonData(mon, MON_DATA_HP_EV + j, &ev);
+            }
+            evTotal += ev;
+        }
+        for (j = 0; j < MAX_MON_MOVES; j++)
+        {
+            u32 move = GetMonData(mon, MON_DATA_MOVE1 + j);
+            if (move >= MOVES_COUNT)
+            {
+                u32 none = MOVE_NONE, pp = 0;
+                SetMonData(mon, MON_DATA_MOVE1 + j, &none);
+                SetMonData(mon, MON_DATA_PP1 + j, &pp);
+            }
+        }
+        CalculateMonStats(mon);
+    }
+}

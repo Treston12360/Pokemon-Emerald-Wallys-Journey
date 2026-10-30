@@ -923,18 +923,60 @@ WallyJourney_Text_CollectorHaveAll:
 	.string "I could find. Impressive!$"
 
 @ Wally's Journey: Wally team-up at Mt. Pyre (the League asked him to watch it).
-@ Only fires while Team Aqua holds the summit and before they take the Orbs.
+@ Two Aqua grunts stand side by side on the path up. Talk to either one (or try to slip
+@ past them) and Wally walks up; then it's a 2-vs-2 Multi Battle with your best three.
+WallyJourney_EventScript_PyreGrunt1::
+	lock
+	faceplayer
+	goto_if_eq VAR_WALLY_PYRE_TEAMUP, 1, WallyJourney_EventScript_PyreGrunt1After
+	goto_if_defeated TRAINER_GRUNT_MT_PYRE_1, WallyJourney_EventScript_PyreGrunt1After
+	msgbox MtPyre_Summit_Text_Grunt1Intro, MSGBOX_DEFAULT
+	closemessage
+	goto WallyJourney_EventScript_PyreTeamUp
+WallyJourney_EventScript_PyreGrunt1After::
+	msgbox MtPyre_Summit_Text_Grunt1PostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+WallyJourney_EventScript_PyreGrunt2::
+	lock
+	faceplayer
+	goto_if_eq VAR_WALLY_PYRE_TEAMUP, 1, WallyJourney_EventScript_PyreGrunt2After
+	goto_if_defeated TRAINER_GRUNT_MT_PYRE_2, WallyJourney_EventScript_PyreGrunt2After
+	msgbox MtPyre_Summit_Text_Grunt2Intro, MSGBOX_DEFAULT
+	closemessage
+	goto WallyJourney_EventScript_PyreTeamUp
+WallyJourney_EventScript_PyreGrunt2After::
+	msgbox MtPyre_Summit_Text_Grunt2PostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+@ Stepping into the gap beside them: the nearer grunt spots you.
+WallyJourney_EventScript_PyreTeamUpSpotted::
+	goto_if_set FLAG_HIDE_MT_PYRE_SUMMIT_TEAM_AQUA, WallyJourney_EventScript_PyreTeamUpNotYet
+	goto_if_ne VAR_MT_PYRE_STATE, 0, WallyJourney_EventScript_PyreTeamUpNotYet
+	lockall
+	playse SE_PIN
+	applymovement LOCALID_MT_PYRE_SUMMIT_GRUNT_1, Common_Movement_ExclamationMark
+	waitmovement 0
+	applymovement LOCALID_MT_PYRE_SUMMIT_GRUNT_1, Common_Movement_FaceLeft
+	applymovement LOCALID_PLAYER, Common_Movement_FaceRight
+	waitmovement 0
+	msgbox MtPyre_Summit_Text_Grunt1Intro, MSGBOX_DEFAULT
+	closemessage
+	goto WallyJourney_EventScript_PyreTeamUp
+
 WallyJourney_EventScript_PyreTeamUp::
 	goto_if_set FLAG_HIDE_MT_PYRE_SUMMIT_TEAM_AQUA, WallyJourney_EventScript_PyreTeamUpNotYet
 	goto_if_ne VAR_MT_PYRE_STATE, 0, WallyJourney_EventScript_PyreTeamUpNotYet
 	lockall
 	clearflag FLAG_HIDE_MT_PYRE_SUMMIT_WALLY
-	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
-	waitmovement 0
 	setvar VAR_0x8009, LOCALID_MT_PYRE_SUMMIT_WALLY
 	call WallyJourney_EventScript_WallyWalksUp
 	msgbox WallyJourney_Text_PyreWallyArrives, MSGBOX_DEFAULT
 	closemessage
+	@ Pick three. The grunts are "Multi Party: Half", so the macro trims the party to
+	@ the three picked and puts everyone back (in the original order) afterwards.
 	special SavePlayerParty
 	fadescreen FADE_TO_BLACK
 	special ChooseHalfPartyForBattle
@@ -965,8 +1007,6 @@ WallyJourney_EventScript_PyreTeamUpCancel::
 	setvar VAR_0x8009, LOCALID_MT_PYRE_SUMMIT_WALLY
 	call WallyJourney_EventScript_WallyWalksAway
 	setflag FLAG_HIDE_MT_PYRE_SUMMIT_WALLY
-	applymovement LOCALID_PLAYER, Common_Movement_WalkDown
-	waitmovement 0
 	releaseall
 	end
 
@@ -978,7 +1018,8 @@ WallyJourney_Text_PyreWallyArrives:
 	.string "The LEAGUE asked me to babysit MT.\n"
 	.string "PYRE. TEAM AQUA is crawling all over the\l"
 	.string "summit.\p"
-	.string "There are two of them up ahead.\p"
+	.string "And look, two of them, right in front\n"
+	.string "of us.\p"
 	.string "You know, I'm starting to feel sorry for\n"
 	.string "you.\p"
 	.string "How about I show you how a real TRAINER\n"

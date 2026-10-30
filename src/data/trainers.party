@@ -435,6 +435,7 @@ Gender: Male
 Music: Aqua
 Double Battle: No
 AI: Basic Trainer
+Multi Party: Half
 
 Zubat
 Level: 32
@@ -448,6 +449,7 @@ Gender: Male
 Music: Aqua
 Double Battle: No
 AI: Basic Trainer
+Multi Party: Half
 
 Carvanha
 Level: 32
@@ -9955,11 +9957,12 @@ Class: Champion
 Pic: Wally
 Gender: Male
 Music: Male
+Items: Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / PP Stall Prevention
+AI: Basic Trainer / Omniscient / Smart Switching / Smart Mon Choices / Ace Pokemon / Try To 2HKO / HP Aware / Predict Switch / Predict Incoming Mon / Predict Move / Weigh Ability Prediction / PP Stall Prevention
 
 Mawile @ ITEM_SITRUS_BERRY
-Level: 50
+Level: 52
 Ability: Intimidate
 Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -9970,7 +9973,7 @@ EVs: 252 HP / 4 Atk / 252 Def
 - MOVE_THUNDER_WAVE
 
 Crawdaunt
-Level: 51
+Level: 53
 Ability: Adaptability
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -9981,7 +9984,7 @@ EVs: 4 HP / 252 Atk / 252 Spe
 - MOVE_SWORDS_DANCE
 
 Flygon
-Level: 52
+Level: 54
 Ability: Levitate
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -9992,7 +9995,7 @@ EVs: 4 HP / 252 Atk / 252 Spe
 - MOVE_ROCK_SLIDE
 
 Gardevoir @ ITEM_LEFTOVERS
-Level: 53
+Level: 55
 Ability: Trace
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -13118,10 +13121,10 @@ Gender: Male
 Music: Male
 Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / Ace Pokemon / Try To 2HKO / HP Aware / Powerful Status / PP Stall Prevention
+AI: Basic Trainer / Omniscient / Smart Switching / Smart Mon Choices / Ace Pokemon / Try To 2HKO / HP Aware / Powerful Status / Predict Switch / Predict Incoming Mon / Predict Move / Weigh Ability Prediction / PP Stall Prevention
 
 Armaldo @ Focus Sash
-Level: 53
+Level: 55
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Spe
@@ -13131,7 +13134,7 @@ EVs: 252 HP / 252 Atk / 4 Spe
 - Stealth Rock
 
 Mawile @ Rocky Helmet
-Level: 53
+Level: 55
 Ability: Intimidate
 Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -13142,7 +13145,7 @@ EVs: 252 HP / 4 Atk / 252 Def
 - Thunder Wave
 
 Ludicolo @ Damp Rock
-Level: 54
+Level: 56
 Ability: Swift Swim
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -13153,7 +13156,7 @@ EVs: 4 HP / 252 SpA / 252 Spe
 - Ice Beam
 
 Crawdaunt @ Life Orb
-Level: 55
+Level: 57
 Ability: Adaptability
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -13164,7 +13167,7 @@ EVs: 4 HP / 252 Atk / 252 Spe
 - Swords Dance
 
 Flygon @ Choice Scarf
-Level: 56
+Level: 58
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 4 HP / 252 Atk / 252 Spe
@@ -13174,7 +13177,7 @@ EVs: 4 HP / 252 Atk / 252 Spe
 - Stone Edge
 
 Gardevoir @ Leftovers
-Level: 58
+Level: 60
 Ability: Trace
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -16840,16 +16843,17 @@ Items: Full Restore / Full Restore / Full Restore / Full Restore
 Double Battle: No
 AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / Ace Pokemon / PP Stall Prevention
 
-SPECIES_DUSKNOIR @ ITEM_LEFTOVERS
+SPECIES_COFAGRIGUS @ ITEM_LEFTOVERS
 Level: 74
-Ability: Frisk
-Nature: Adamant
+Ability: Mummy
+Nature: Bold
+Shiny: Yes
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-EVs: 252 HP / 252 Atk / 4 Def
-- MOVE_POLTERGEIST
-- MOVE_SHADOW_SNEAK
-- MOVE_EARTHQUAKE
+EVs: 252 HP / 252 Def / 4 SpD
+- MOVE_SHADOW_BALL
+- MOVE_BODY_PRESS
 - MOVE_WILL_O_WISP
+- MOVE_IRON_DEFENSE
 
 SPECIES_GOLISOPOD @ ITEM_ASSAULT_VEST
 Level: 74
@@ -18946,12 +18950,12 @@ Class: Champion
 Pic: Wally
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore / Full Restore
+Items: Full Restore / Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Ace Pokemon / Try To 2HKO / HP Aware / Powerful Status / PP Stall Prevention
+AI: Basic Trainer / Omniscient / Smart Switching / Smart Mon Choices / Ace Pokemon / Try To 2HKO / HP Aware / Powerful Status / Predict Switch / Predict Incoming Mon / Predict Move / Weigh Ability Prediction / PP Stall Prevention
 
 Armaldo @ ITEM_FOCUS_SASH
-Level: 61
+Level: 63
 Ability: Battle Armor
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -18962,7 +18966,7 @@ EVs: 252 HP / 252 Atk / 4 Spe
 - MOVE_RAPID_SPIN
 
 Mawile @ ITEM_ROCKY_HELMET
-Level: 62
+Level: 64
 Ability: Intimidate
 Nature: Impish
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -18973,7 +18977,7 @@ EVs: 252 HP / 4 Atk / 252 Def
 - MOVE_THUNDER_WAVE
 
 Ludicolo @ ITEM_DAMP_ROCK
-Level: 62
+Level: 64
 Ability: Swift Swim
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -18984,7 +18988,7 @@ EVs: 4 HP / 252 SpA / 252 Spe
 - MOVE_ICE_BEAM
 
 Crawdaunt @ ITEM_LIFE_ORB
-Level: 63
+Level: 65
 Ability: Adaptability
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -18995,7 +18999,7 @@ EVs: 4 HP / 252 Atk / 252 Spe
 - MOVE_SWORDS_DANCE
 
 Flygon @ ITEM_CHOICE_SCARF
-Level: 63
+Level: 65
 Ability: Levitate
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -19006,7 +19010,7 @@ EVs: 4 HP / 252 Atk / 252 Spe
 - MOVE_STONE_EDGE
 
 Gardevoir @ ITEM_GARDEVOIRITE
-Level: 65
+Level: 67
 Ability: Trace
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -19098,12 +19102,12 @@ Class: Rival
 Pic: Wally
 Gender: Male
 Music: Male
-Items: Super Potion / Super Potion
+Items: Hyper Potion / Hyper Potion
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / PP Stall Prevention
+AI: Basic Trainer / Omniscient / Smart Switching / Smart Mon Choices / Ace Pokemon / Try To 2HKO / HP Aware / Predict Switch / Predict Incoming Mon / Predict Move / Weigh Ability Prediction / PP Stall Prevention
 
 SPECIES_MAWILE @ ITEM_SITRUS_BERRY
-Level: 28
+Level: 30
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19114,7 +19118,8 @@ Ability: Intimidate
 - MOVE_IRON_DEFENSE
 
 SPECIES_LOMBRE @ ITEM_MIRACLE_SEED
-Level: 28
+Level: 30
+Ability: Swift Swim
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -19124,7 +19129,7 @@ EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_LEECH_SEED
 
 SPECIES_TRAPINCH @ ITEM_SOFT_SAND
-Level: 28
+Level: 30
 Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19133,8 +19138,19 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_BUG_BITE
 - MOVE_BITE
 
+SPECIES_CORPHISH @ ITEM_EVIOLITE
+Level: 31
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+Ability: Adaptability
+- MOVE_RAZOR_SHELL
+- MOVE_KNOCK_OFF
+- MOVE_AQUA_JET
+- MOVE_SWORDS_DANCE
+
 SPECIES_KIRLIA @ ITEM_TWISTED_SPOON
-Level: 29
+Level: 31
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -19149,12 +19165,12 @@ Class: Rival
 Pic: Wally
 Gender: Male
 Music: Male
-Items: Super Potion / Super Potion
+Items: Hyper Potion / Hyper Potion / Hyper Potion
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / PP Stall Prevention
+AI: Basic Trainer / Omniscient / Smart Switching / Smart Mon Choices / Ace Pokemon / Try To 2HKO / HP Aware / Predict Switch / Predict Incoming Mon / Predict Move / Weigh Ability Prediction / PP Stall Prevention
 
 SPECIES_MAWILE @ ITEM_SITRUS_BERRY
-Level: 33
+Level: 35
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19165,7 +19181,8 @@ Ability: Intimidate
 - MOVE_IRON_DEFENSE
 
 SPECIES_LOMBRE @ ITEM_MYSTIC_WATER
-Level: 33
+Level: 35
+Ability: Swift Swim
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -19175,7 +19192,7 @@ EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_RAIN_DANCE
 
 SPECIES_TRAPINCH @ ITEM_SOFT_SAND
-Level: 34
+Level: 36
 Nature: Brave
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19184,8 +19201,19 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_BUG_BITE
 - MOVE_BITE
 
-SPECIES_GARDEVOIR @ ITEM_TWISTED_SPOON
+SPECIES_CRAWDAUNT @ ITEM_SCOPE_LENS
 Level: 36
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+Ability: Adaptability
+- MOVE_RAZOR_SHELL
+- MOVE_NIGHT_SLASH
+- MOVE_AQUA_JET
+- MOVE_SWORDS_DANCE
+
+SPECIES_GARDEVOIR @ ITEM_TWISTED_SPOON
+Level: 38
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
@@ -19200,12 +19228,12 @@ Class: Rival
 Pic: Wally
 Gender: Male
 Music: Male
-Items: Hyper Potion / Hyper Potion
+Items: Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / PP Stall Prevention
+AI: Basic Trainer / Omniscient / Smart Switching / Smart Mon Choices / Ace Pokemon / Try To 2HKO / HP Aware / Predict Switch / Predict Incoming Mon / Predict Move / Weigh Ability Prediction / PP Stall Prevention
 
 SPECIES_CRAWDAUNT @ ITEM_SCOPE_LENS
-Level: 37
+Level: 39
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19215,7 +19243,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_SWORDS_DANCE
 
 SPECIES_MAWILE @ ITEM_SITRUS_BERRY
-Level: 37
+Level: 39
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19226,7 +19254,8 @@ Ability: Intimidate
 - MOVE_IRON_DEFENSE
 
 SPECIES_LOMBRE @ ITEM_MYSTIC_WATER
-Level: 37
+Level: 39
+Ability: Swift Swim
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -19236,7 +19265,7 @@ EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_RAIN_DANCE
 
 SPECIES_VIBRAVA @ ITEM_SOFT_SAND
-Level: 38
+Level: 40
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19246,7 +19275,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_SCREECH
 
 SPECIES_GARDEVOIR @ ITEM_TWISTED_SPOON
-Level: 40
+Level: 42
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
@@ -19261,12 +19290,12 @@ Class: Rival
 Pic: Wally
 Gender: Male
 Music: Male
-Items: Hyper Potion / Hyper Potion
+Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / PP Stall Prevention
+AI: Basic Trainer / Omniscient / Smart Switching / Smart Mon Choices / Ace Pokemon / Try To 2HKO / HP Aware / Predict Switch / Predict Incoming Mon / Predict Move / Weigh Ability Prediction / PP Stall Prevention
 
 SPECIES_ARMALDO @ ITEM_HARD_STONE
-Level: 42
+Level: 44
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19276,7 +19305,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_IRON_DEFENSE
 
 SPECIES_MAWILE @ ITEM_SITRUS_BERRY
-Level: 42
+Level: 44
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19287,7 +19316,7 @@ Ability: Intimidate
 - MOVE_IRON_DEFENSE
 
 SPECIES_LUDICOLO @ ITEM_MYSTIC_WATER
-Level: 42
+Level: 44
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -19297,7 +19326,7 @@ EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_RAIN_DANCE
 
 SPECIES_CRAWDAUNT @ ITEM_SCOPE_LENS
-Level: 42
+Level: 44
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19307,7 +19336,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_SWORDS_DANCE
 
 SPECIES_VIBRAVA @ ITEM_SOFT_SAND
-Level: 44
+Level: 46
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19317,7 +19346,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_SCREECH
 
 SPECIES_GARDEVOIR @ ITEM_TWISTED_SPOON
-Level: 45
+Level: 47
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
@@ -19332,12 +19361,12 @@ Class: Rival
 Pic: Wally
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore
+Items: Full Restore / Full Restore / Full Restore
 Double Battle: No
-AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / PP Stall Prevention
+AI: Basic Trainer / Omniscient / Smart Switching / Smart Mon Choices / Ace Pokemon / Try To 2HKO / HP Aware / Predict Switch / Predict Incoming Mon / Predict Move / Weigh Ability Prediction / PP Stall Prevention
 
 SPECIES_ARMALDO @ ITEM_FOCUS_SASH
-Level: 50
+Level: 52
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19347,7 +19376,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_IRON_DEFENSE
 
 SPECIES_MAWILE @ ITEM_SITRUS_BERRY
-Level: 50
+Level: 52
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19358,7 +19387,7 @@ Ability: Intimidate
 - MOVE_IRON_DEFENSE
 
 SPECIES_LUDICOLO @ ITEM_LEFTOVERS
-Level: 50
+Level: 52
 Nature: Modest
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 SpA / 4 SpD
@@ -19368,7 +19397,7 @@ EVs: 252 HP / 252 SpA / 4 SpD
 - MOVE_RAIN_DANCE
 
 SPECIES_CRAWDAUNT @ ITEM_LIFE_ORB
-Level: 51
+Level: 53
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 HP / 252 Atk / 4 Def
@@ -19378,7 +19407,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_SWORDS_DANCE
 
 SPECIES_FLYGON @ ITEM_SOFT_SAND
-Level: 51
+Level: 53
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 Atk / 4 HP / 252 Spe
@@ -19388,7 +19417,7 @@ EVs: 252 Atk / 4 HP / 252 Spe
 - MOVE_DRAGON_DANCE
 
 SPECIES_GARDEVOIR @ ITEM_LEFTOVERS
-Level: 53
+Level: 55
 Nature: Timid
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 EVs: 252 SpA / 4 HP / 252 Spe
@@ -19613,3 +19642,80 @@ EVs: 4 HP / 252 Atk / 252 Spe
 - MOVE_CRUNCH
 - MOVE_ICE_FANG
 - MOVE_PROTECT
+
+=== TRAINER_CAMERON_CHALLENGER ===
+Name: CAMERON
+Class: Pkmn Trainer 1
+Pic: Cooltrainer M
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / Try To 2HKO / HP Aware / Ace Pokemon / PP Stall Prevention
+
+SPECIES_ARCANINE @ ITEM_CHOICE_BAND
+Level: 75
+Ability: Intimidate
+Nature: Adamant
+Shiny: Yes
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_FLARE_BLITZ
+- MOVE_EXTREME_SPEED
+- MOVE_CLOSE_COMBAT
+- MOVE_WILD_CHARGE
+
+SPECIES_GLISCOR @ ITEM_TOXIC_ORB
+Level: 75
+Ability: Poison Heal
+Nature: Impish
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Def / 4 Atk
+- MOVE_EARTHQUAKE
+- MOVE_KNOCK_OFF
+- MOVE_PROTECT
+- MOVE_SWORDS_DANCE
+
+SPECIES_PRIMARINA @ ITEM_THROAT_SPRAY
+Level: 75
+Ability: Liquid Voice
+Nature: Modest
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 SpA / 4 SpD
+- MOVE_SPARKLING_ARIA
+- MOVE_MOONBLAST
+- MOVE_HYPER_VOICE
+- MOVE_PSYCHIC
+
+SPECIES_COPPERAJAH @ ITEM_LIFE_ORB
+Level: 76
+Ability: Sheer Force
+Nature: Adamant
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 252 Atk / 4 Def
+- MOVE_IRON_HEAD
+- MOVE_PLAY_ROUGH
+- MOVE_ROCK_SLIDE
+- MOVE_HIGH_HORSEPOWER
+
+SPECIES_DRAGAPULT @ ITEM_FOCUS_SASH
+Level: 76
+Ability: Infiltrator
+Nature: Jolly
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 4 HP / 252 Atk / 252 Spe
+- MOVE_DRAGON_DARTS
+- MOVE_PHANTOM_FORCE
+- MOVE_U_TURN
+- MOVE_WILL_O_WISP
+
+SPECIES_UMBREON @ ITEM_LEFTOVERS
+Level: 77
+Ability: Inner Focus
+Nature: Careful
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+EVs: 252 HP / 4 Def / 252 SpD
+- MOVE_FOUL_PLAY
+- MOVE_WISH
+- MOVE_PROTECT
+- MOVE_TOXIC

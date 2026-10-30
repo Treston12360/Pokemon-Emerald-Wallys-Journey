@@ -2167,6 +2167,7 @@ void CB2_ContinueSavedGame(void)
         ResetWinStreaks();
 
     LoadSaveblockMapHeader();
+    WallyJourney_SanitizeParty();
     ClearDiveAndHoleWarps();
     trainerHillMapId = GetCurrentTrainerHillMapId();
     if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)

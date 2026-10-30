@@ -23,10 +23,10 @@ WallyJourney_ChampionDefense_SetChallengerGfx::
 
 @ Wally's Journey: from the 5th title defense on, the challenger is drawn at random:
 @ 0 WALLY  1 WALLACE  2 STEVEN  3 MAY/BRENDAN  4-11 a Gym Leader with their final team.
-@ 12 TRESTON  13 MAXIE  14 ARCHIE (both reformed)  15 VITO (the Winstrates' son, team scales to you).
+@ 12 TRESTON  13 MAXIE  14 ARCHIE (both reformed)  15 VITO (the Winstrates' son, team scales to you)  16 CAMERON.
 WallyJourney_ChampionDefense_PickChallenger::
 	@ TRESTON (the first title defense) is also number 12 in the random draw.
-	random 16
+	random 17
 	copyvar VAR_WALLY_TITLE_CHALLENGER, VAR_RESULT
 	@ The Gym Leaders battle as a Double Battle. With fewer than two
 	@ POKéMON able to battle, Wally takes the challenge instead.
@@ -48,6 +48,7 @@ WallyJourney_ChampionDefense_PickChallenger::
 	case 13, WallyJourney_ChampionDefense_GfxMaxie
 	case 14, WallyJourney_ChampionDefense_GfxArchie
 	case 15, WallyJourney_ChampionDefense_GfxVito
+	case 16, WallyJourney_ChampionDefense_GfxCameron
 	return
 
 WallyJourney_ChampionDefense_NoDoubles::
@@ -66,6 +67,10 @@ WallyJourney_ChampionDefense_GfxArchie::
 
 WallyJourney_ChampionDefense_GfxVito::
 	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MAN_3
+	return
+
+WallyJourney_ChampionDefense_GfxCameron::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_COOLTRAINER_M
 	return
 
 WallyJourney_ChampionDefense_GfxTreston::
@@ -189,6 +194,7 @@ WallyJourney_ChampionDefense_Wally::
 	case 13, WallyJourney_ChampionPool_Maxie
 	case 14, WallyJourney_ChampionPool_Archie
 	case 15, WallyJourney_ChampionPool_Vito
+	case 16, WallyJourney_ChampionPool_Cameron
 	msgbox WallyJourney_ChampionDefense_FinalIntro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_WALLY_CHAMPION_FINAL, WallyJourney_ChampionDefense_FinalDefeat
 	msgbox WallyJourney_ChampionDefense_FinalVictory, MSGBOX_DEFAULT
@@ -886,6 +892,27 @@ WallyJourney_ChampionPool_VitoVictory:
 	.string "VITO: You really are the CHAMPION.\p"
 	.string "I'll be back. A WINSTRATE never\n"
 	.string "quits!$"
+
+WallyJourney_ChampionPool_Cameron::
+	msgbox WallyJourney_ChampionPool_CameronIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_CAMERON_CHALLENGER, WallyJourney_ChampionPool_CameronDefeat
+	msgbox WallyJourney_ChampionPool_CameronVictory, MSGBOX_DEFAULT
+	goto WallyJourney_ChampionDefense_Won
+
+WallyJourney_ChampionPool_CameronIntro:
+	.string "CAMERON: So you're the CHAMPION.\p"
+	.string "Name's CAMERON. I've been waiting a\n"
+	.string "long time for this battle.\p"
+	.string "Let's see what you've got!$"
+
+WallyJourney_ChampionPool_CameronDefeat:
+	.string "No way… That was close.$"
+
+WallyJourney_ChampionPool_CameronVictory:
+	.string "CAMERON: You're the real deal,\n"
+	.string "CHAMPION.\p"
+	.string "I'll be back, and UMBREON will be\n"
+	.string "ready.$"
 
 WallyJourney_ChampionPool_MaxieIntro:
 	.string "MAXIE: CHAMPION. You remember me.\p"

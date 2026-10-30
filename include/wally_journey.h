@@ -44,6 +44,7 @@ enum
     WJ_NUZLOCKE_CATCH_DUPE,      // already caught this species (dupes clause: the area stays open)
 };
 void WallyJourney_SetFormSeen(u16 species);
+void WallyJourney_SanitizeParty(void);
 bool32 WallyJourney_FormSeen(u16 species);
 struct Pokemon;
 u32 WallyJourney_CatchCombo(u16 species);

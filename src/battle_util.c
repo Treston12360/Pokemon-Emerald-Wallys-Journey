@@ -10086,7 +10086,11 @@ bool32 AreMultiPartiesFullTeams(void)
         return FALSE;
     }
 
-    if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+    // Wally's Journey: the multi_* script macros call this BEFORE the battle type flags are
+    // set (BattleSetup_StartMultiBattle sets them), so gBattleTypeFlags is stale here. Use the
+    // trainer IDs setmultitrainerbattle just stored instead: no opponents means a wild battle.
+    if ((gMain.inBattle && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+     || (TRAINER_BATTLE_PARAM.opponentA == TRAINER_NONE && TRAINER_BATTLE_PARAM.opponentB == TRAINER_NONE))
     {
         gSpecialVar_Result = TRUE;
         return TRUE;
