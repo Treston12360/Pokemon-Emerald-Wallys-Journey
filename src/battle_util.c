@@ -8639,6 +8639,11 @@ static bool32 WallyJourney_OpponentMayMegaEvolve(enum BattlerId battler)
     // Owner exception: reformed MAXIE and ARCHIE as title-defense challengers.
     if (trainerId == TRAINER_MAXIE_REFORMED || trainerId == TRAINER_ARCHIE_REFORMED)
         return TRUE;
+    // Owner request 2026-11-02: MAXIE and ARCHIE Mega Evolve once the player has the
+    // Mega Bracelet (Magma Hideout, Space Center and Seafloor Cavern; not Mt. Chimney).
+    if ((trainerId == TRAINER_MAXIE_MAGMA_HIDEOUT || trainerId == TRAINER_MAXIE_MOSSDEEP
+      || trainerId == TRAINER_ARCHIE) && CheckBagHasItem(ITEM_MEGA_RING, 1))
+        return TRUE;
     switch (GetTrainerClassFromId(trainerId))
     {
     case TRAINER_CLASS_LEADER:

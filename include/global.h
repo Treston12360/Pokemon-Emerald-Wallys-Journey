@@ -295,6 +295,10 @@ struct SaveBlock3
     u8 wjOutfit;
     u8 wjOutfitSkin;
     u8 wjOutfitColour[2];
+    // Wally's Journey: important trainers' ace level, locked at the first encounter
+    // (0 = not met yet). Indexed by the save slot in src/data/wj_trainer_scaling.h.
+    u8 wjScaleMagic;
+    u8 wjScaleLock[48];
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;

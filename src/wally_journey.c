@@ -13,6 +13,9 @@
 #include "pokemon.h"
 #include "rtc.h"
 #include "battle.h"
+#include "random.h"
+#include "data.h"
+#include "trainer_util.h"
 #include "item.h"
 #include "pokemon_storage_system.h"
 #include "random.h"
@@ -535,8 +538,9 @@ static const u16 sLeaderGrowthIds[] = {
     TRAINER_ROXANNE_2, TRAINER_BRAWLY_2, TRAINER_WATTSON_2, TRAINER_FLANNERY_2,
     TRAINER_NORMAN_2, TRAINER_WINONA_2, TRAINER_TATE_AND_LIZA_2, TRAINER_JUAN_2,
 };
-// first-fight ace level and party size, by gym number (1-8)
-static const u8 sLeaderAce[] = {0, 15, 19, 25, 32, 33, 38, 45, 46};
+// first-fight ace level (the first-encounter scaling minimum, src/data/wj_trainer_scaling.h)
+// and party size, by gym number (1-8)
+static const u8 sLeaderAce[] = {0, 18, 20, 25, 32, 34, 39, 50, 54};
 static const u8 sLeaderFirstCount[] = {0, 3, 3, 4, 4, 4, 5, 6, 6};
 static const u8 sLeaderNames[][12] = {
     _(""), _("ROXANNE"), _("BRAWLY"), _("WATTSON"), _("FLANNERY"),
@@ -801,6 +805,162 @@ void WallyJourney_ScaleLeaderParty(struct Pokemon *party, u16 trainerId)
             ClearMonMoves(mon);
             GiveMonInitialMoveset(mon);
         }
+        CalculateMonStats(mon);
+    }
+#endif
+}
+
+// Important trainers scale at the first encounter (owner request 2026-11-02).
+// Ace level = the higher of the fight's minimum (expected highest player level when a
+// player who beats every trainer and does a little wild training arrives, plus the
+// margin) and the player's highest party level + the margin: Gyms +2, rivals +1,
+// admins +1, Maxie/Archie +2, Elite Four +3, Wally +4, the Winstrates and Vito +2.
+// The ace level is saved, so after a loss the player can train and the team stays
+// the same. Teams only go up, keep their level gaps, and evolve when the new level
+// is high enough. Table: tools/important_trainer_levels.py --header.
+struct WJScaledTrainer
+{
+    u16 trainerId;
+    u8 minAce;
+    u8 margin;
+    u8 slot;
+};
+#include "data/wj_trainer_scaling.h"
+STATIC_ASSERT(WJ_SCALED_SLOTS <= ARRAY_COUNT(((struct SaveBlock3 *)0)->wjScaleLock), WJScaleLockSlots);
+#define WJ_SCALE_MAGIC 0xB1
+
+static u32 WJ_PlayerTopLevel(void)
+{
+    u32 i, lv, top = 0;
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        // gPlayerParty can be the half team picked for a multi battle; the saved
+        // party is the whole team.
+        struct Pokemon *mons[2] = {&gPlayerParty[i], &gSaveBlock1Ptr->playerParty[i]};
+        u32 j;
+        for (j = 0; j < 2; j++)
+        {
+            if (j == 1 && !(gBattleTypeFlags & (BATTLE_TYPE_MULTI | BATTLE_TYPE_INGAME_PARTNER | BATTLE_TYPE_TWO_OPPONENTS)))
+                continue;
+            if (GetMonData(mons[j], MON_DATA_SPECIES) == SPECIES_NONE || GetMonData(mons[j], MON_DATA_IS_EGG))
+                continue;
+            lv = GetMonData(mons[j], MON_DATA_LEVEL);
+            if (lv > top)
+                top = lv;
+        }
+    }
+    return top;
+}
+
+// The species this Pokemon would be at `level`: level evolutions at their level;
+// a single stone/friendship/trade evolution at the same stand-in levels the
+// rematch scaling uses (20 from a first stage, 36 from a middle stage).
+static u16 WJ_EvolveForLevel(u16 species, u32 level)
+{
+    u32 guard, i;
+    for (guard = 0; guard < 2; guard++)
+    {
+        const struct Evolution *evo = GetSpeciesEvolutions(species);
+        u16 next = SPECIES_NONE, only = SPECIES_NONE;
+        u32 targets = 0;
+        if (evo == NULL)
+            break;
+        for (i = 0; evo[i].method != EVOLUTIONS_END; i++)
+        {
+            if (evo[i].targetSpecies == SPECIES_NONE)
+                continue;
+            if (evo[i].method == EVO_LEVEL && evo[i].param > 0)
+            {
+                if (level >= evo[i].param && next == SPECIES_NONE)
+                    next = evo[i].targetSpecies;
+                targets = 99; // has a real level evolution: never use the stand-in
+            }
+            else if (targets != 99 && evo[i].targetSpecies != only)
+            {
+                only = evo[i].targetSpecies;
+                targets++;
+            }
+        }
+        if (next == SPECIES_NONE && targets == 1
+         && level >= (GetSpeciesPreEvolution(species) != SPECIES_NONE ? 36u : 20u))
+            next = only;
+        if (next == SPECIES_NONE)
+            break;
+        species = next;
+    }
+    return species;
+}
+
+void WallyJourney_ScaleImportantParty(struct Pokemon *party, u16 trainerId)
+{
+#if !IS_FRLG
+    const struct WJScaledTrainer *entry = NULL;
+    u32 i, n, ace = 0, target;
+    s32 shift;
+    if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_FRONTIER))
+        return;
+    for (i = 0; i < ARRAY_COUNT(sWJScaledTrainers); i++)
+    {
+        if (sWJScaledTrainers[i].trainerId == trainerId)
+        {
+            entry = &sWJScaledTrainers[i];
+            break;
+        }
+    }
+    if (entry == NULL)
+        return;
+    // Vito's title-defense battle has its own scaling.
+    if (trainerId == TRAINER_VITO
+     && gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM)
+     && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM))
+        return;
+    if (gSaveBlock3Ptr->wjScaleMagic != WJ_SCALE_MAGIC)
+    {
+        memset(gSaveBlock3Ptr->wjScaleLock, 0, sizeof(gSaveBlock3Ptr->wjScaleLock));
+        gSaveBlock3Ptr->wjScaleMagic = WJ_SCALE_MAGIC;
+    }
+    target = gSaveBlock3Ptr->wjScaleLock[entry->slot];
+    if (target == 0)
+    {
+        target = WJ_PlayerTopLevel() + entry->margin;
+        if (target < entry->minAce)
+            target = entry->minAce;
+        if (target > MAX_LEVEL)
+            target = MAX_LEVEL;
+        gSaveBlock3Ptr->wjScaleLock[entry->slot] = target;
+    }
+    for (n = 0; n < PARTY_SIZE && GetMonData(&party[n], MON_DATA_SPECIES) != SPECIES_NONE; n++)
+    {
+        if (GetMonData(&party[n], MON_DATA_LEVEL) > ace)
+            ace = GetMonData(&party[n], MON_DATA_LEVEL);
+    }
+    shift = (s32)target - (s32)ace;
+    if (n == 0 || shift <= 0)
+        return;
+    for (i = 0; i < n; i++)
+    {
+        struct Pokemon *mon = &party[i];
+        u16 species = GetMonData(mon, MON_DATA_SPECIES);
+        s32 level = (s32)GetMonData(mon, MON_DATA_LEVEL) + shift;
+        u16 newSpecies;
+        u32 exp;
+        if (level > MAX_LEVEL)
+            level = MAX_LEVEL;
+        newSpecies = WJ_EvolveForLevel(species, level);
+        if (newSpecies != species)
+        {
+            enum Ability ability = GetMonAbility(mon);
+            u8 nickname[POKEMON_NAME_LENGTH + 1];
+            GetMonData(mon, MON_DATA_NICKNAME, nickname);
+            SetMonData(mon, MON_DATA_SPECIES, &newSpecies);
+            // keep the ability when the evolution has it (Adaptability Corphish -> Crawdaunt)
+            SetCorrectAbilityNum(mon, newSpecies, ability);
+            if (StringCompare(nickname, GetSpeciesName(species)) == 0)
+                SetMonData(mon, MON_DATA_NICKNAME, GetSpeciesName(newSpecies));
+        }
+        exp = gExperienceTables[gSpeciesInfo[newSpecies].growthRate][level];
+        SetMonData(mon, MON_DATA_EXP, &exp);
+        SetMonData(mon, MON_DATA_LEVEL, &level);
         CalculateMonStats(mon);
     }
 #endif
