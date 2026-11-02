@@ -19,7 +19,9 @@ Hilbert (`tools/wj_outfits/make_outfit.py`): running = their walking frames lean
 their seated art (standing frame to hop on/off); bikes = their seated art on the bike, legs in
 their own leg colour; fishing / field move / watering / decorating = their standing art holding
 the item. Nate, Rosa, Elio, Selene, Victor, Gloria, Florian and Juliana have no battle back
-sprite in Emerald Rogue (see the ledger for what they use).
+sprite in Emerald Rogue, so (owner decision 2026-11-02) they are hidden from the Outfit Case
+until real backs exist; 12 outfits are offered. A save wearing one of them goes back to
+Brendan/May on load. Their sheets stay in the repo.
 
 ## Where the sprites come from
 

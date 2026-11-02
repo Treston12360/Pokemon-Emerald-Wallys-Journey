@@ -100,6 +100,27 @@ EWRAM_DATA u32 gWJPlayerBackPicBuf[(sizeof(struct TrainerBackPicInfo) + 3) / 4] 
 extern const struct TrainerFrontPicInfo gWJOutfitFrontPics[WJ_OUTFIT_COUNT];
 extern const struct TrainerBackPicInfo gWJOutfitBackPics[WJ_OUTFIT_COUNT];
 
+// Owner decision 2026-11-02: these eight have no battle back sprite of their own yet, so they
+// stay out of the Outfit Case until real backs exist. A save wearing one goes back to
+// Brendan/May on load.
+static bool32 WJ_OutfitHidden(u32 outfit)
+{
+    switch (outfit)
+    {
+    case WJ_OUTFIT_NATE:
+    case WJ_OUTFIT_ROSA:
+    case WJ_OUTFIT_ELIO:
+    case WJ_OUTFIT_SELENE:
+    case WJ_OUTFIT_VICTOR:
+    case WJ_OUTFIT_GLORIA:
+    case WJ_OUTFIT_FLORIAN:
+    case WJ_OUTFIT_JULIANA:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 bool32 WJ_OutfitActive(void)
 {
     return gSaveBlock3Ptr->wjOutfitMagic == WJ_OUTFIT_MAGIC && gSaveBlock3Ptr->wjOutfit < WJ_OUTFIT_COUNT;
@@ -197,6 +218,8 @@ void WJ_OutfitOnLoad(void)
     }
     if (gSaveBlock3Ptr->wjOutfitMagic != WJ_OUTFIT_MAGIC || gSaveBlock3Ptr->wjOutfit >= WJ_OUTFIT_COUNT)
         gSaveBlock3Ptr->wjOutfitMagic = 0;
+    else if (WJ_OutfitHidden(gSaveBlock3Ptr->wjOutfit))
+        gSaveBlock3Ptr->wjOutfit = (gSaveBlock2Ptr->playerGender == MALE) ? WJ_OUTFIT_BRENDAN : WJ_OUTFIT_MAY;
     if (!CheckBagHasItem(ITEM_OUTFIT_CASE, 1))
         AddBagItem(ITEM_OUTFIT_CASE, 1);
     WJ_OutfitRefresh();
@@ -348,7 +371,9 @@ static void ChangeRow(u8 taskId, s32 delta)
     switch (row)
     {
     case ROW_OUTFIT:
-        gSaveBlock3Ptr->wjOutfit = (gSaveBlock3Ptr->wjOutfit + WJ_OUTFIT_COUNT + delta) % WJ_OUTFIT_COUNT;
+        do
+            gSaveBlock3Ptr->wjOutfit = (gSaveBlock3Ptr->wjOutfit + WJ_OUTFIT_COUNT + delta) % WJ_OUTFIT_COUNT;
+        while (WJ_OutfitHidden(gSaveBlock3Ptr->wjOutfit));
         break;
     case ROW_SKIN:
         if (!OutfitHasLayer(LAYER_SKIN))
