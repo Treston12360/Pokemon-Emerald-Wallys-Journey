@@ -319,6 +319,20 @@ static void HandleInputChooseAction(enum BattlerId battler)
         }
     }
 
+    // Wally's Journey (owner request 2026-11-02): L picks RUN straight away, same as
+    // choosing RUN (so trainer battles still say there's no running). Not in L=A mode.
+    if (JOY_NEW(L_BUTTON) && gSaveBlock2Ptr->optionsButtonMode != OPTIONS_BUTTON_MODE_L_EQUALS_A)
+    {
+        PlaySE(SE_SELECT);
+        TryHideLastUsedBall();
+        ActionSelectionDestroyCursorAt(gActionSelectionCursor[battler]);
+        gActionSelectionCursor[battler] = 3;
+        ActionSelectionCreateCursorAt(gActionSelectionCursor[battler], 0);
+        BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_RUN, 0);
+        BtlController_Complete(battler);
+        return;
+    }
+
     if (JOY_NEW(A_BUTTON))
     {
         PlaySE(SE_SELECT);

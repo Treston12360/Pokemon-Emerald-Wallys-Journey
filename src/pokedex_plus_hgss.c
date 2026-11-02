@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "battle_main.h"
 #include "battle_util.h"
 #include "bg.h"
@@ -93,6 +94,7 @@ static const u8 sText_Stats_EggCycles_Fast[] = _("{EMOJI_DIZZYEGG}");
 static const u8 sText_Stats_EggCycles_Normal[] = _("{EMOJI_DIZZYEGG}{EMOJI_DIZZYEGG}");
 static const u8 sText_Stats_EggCycles_Slow[] = _("{EMOJI_DIZZYEGG}{EMOJI_DIZZYEGG}{EMOJI_DIZZYEGG}");
 static const u8 sText_Stats_Growthrate[] = _("GROW: ");
+static const u8 sText_Stats_Caught[] = _("CAUGHT: ");
 static const u8 sText_Stats_Friendship[] = _("FRIENDSHIP:");
 static const u8 sText_Stats_Friendship_BigAnger[] = _("{EMOJI_BIGANGER}");
 static const u8 sText_Stats_Friendship_Neutral[] = _("{EMOJI_NEUTRAL}");
@@ -480,7 +482,7 @@ static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
         .tilemapLeft = 0,
         .tilemapTop = 6,
         .width = 12,
-        .height = 8,
+        .height = 9, // Wally's Journey: one more row for CAUGHT
         .paletteNum = 0,
         .baseBlock = 1 + 60 + 40 + 48,
     },
@@ -492,7 +494,7 @@ static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
         .width = 12,
         .height = 2,
         .paletteNum = 15,
-        .baseBlock = 1 + 60 + 40 + 48 + 96,
+        .baseBlock = 1 + 60 + 40 + 48 + 108,
     },
     [WIN_STATS_MOVES_TOP] =
     {
@@ -502,7 +504,7 @@ static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
         .width = 18,
         .height = 4,
         .paletteNum = 0,
-        .baseBlock = 1 + 60 + 40 + 48 + 96 + 24,
+        .baseBlock = 1 + 60 + 40 + 48 + 108 + 24,
     },
     [WIN_STATS_MOVES_DESCRIPTION] =
     {
@@ -512,7 +514,7 @@ static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
         .width = 18,
         .height = 4,
         .paletteNum = 0,
-        .baseBlock = 1 + 60 + 40 + 48 + 96 + 24 + 72,
+        .baseBlock = 1 + 60 + 40 + 48 + 108 + 24 + 72,
     },
     [WIN_STATS_MOVES_BOTTOM] =
     {
@@ -522,7 +524,7 @@ static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
         .width = 18,
         .height = 2,
         .paletteNum = 0,
-        .baseBlock = 1 + 60 + 40 + 48 + 96 + 24 + 72 + 72,
+        .baseBlock = 1 + 60 + 40 + 48 + 108 + 24 + 72 + 72,
     },
     [WIN_STATS_ABILITIES] =
     {
@@ -532,7 +534,7 @@ static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
         .width = 18,
         .height = 8,
         .paletteNum = 0,
-        .baseBlock = 1 + 60 + 40 + 48 + 96 + 24 + 72 + 72 + 36,
+        .baseBlock = 1 + 60 + 40 + 48 + 108 + 24 + 72 + 72 + 36,
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -2732,6 +2734,14 @@ static void PrintStatsScreen_Left(u8 taskId)
         default:
             break;
         }
+        align_x = GetStringRightAlignXOffset(0, strEV, total_x);
+        PrintStatsScreenTextSmall(WIN_STATS_LEFT, strEV, align_x, base_y + base_y_offset*base_i);
+        base_i++;
+
+        // Wally's Journey (owner request 2026-11-02): how many of this species you've caught,
+        // the count the catch bonus (shiny rolls, perfect IVs, Hidden Ability odds) grows with.
+        PrintStatsScreenTextSmall(WIN_STATS_LEFT, sText_Stats_Caught, base_x, base_y + base_y_offset*base_i);
+        ConvertIntToDecimalStringN(strEV, WallyJourney_CatchCombo(NationalPokedexNumToSpeciesForm(sPokedexListItem->dexNum)), STR_CONV_MODE_LEFT_ALIGN, 3);
         align_x = GetStringRightAlignXOffset(0, strEV, total_x);
         PrintStatsScreenTextSmall(WIN_STATS_LEFT, strEV, align_x, base_y + base_y_offset*base_i);
     }

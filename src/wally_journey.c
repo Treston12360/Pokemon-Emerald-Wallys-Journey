@@ -428,17 +428,19 @@ u32 WallyJourney_GetShinySeenSpecies(u16 *out, u32 max)
 // Catch bonus (owner request 2026-10-27): the more of a species you've caught in total (the same
 // per-species count as the Hidden Ability odds above; it never resets), the better the wild ones get.
 // Owner request 2026-10-29: the bonuses never stop growing (they used to top out at 31 caught).
-// Every 10 more caught past 31 keeps adding at the same pace as the 21-30 -> 31 step:
+// Every 10 more caught keeps adding. Owner request 2026-11-02: shiny, IV and Hidden Ability
+// bonuses slightly lower (were 3/7/11/15/19 rolls, 1/2/3/4/5/6 IVs, +1% Hidden Ability per catch).
 //   caught    extra shiny rolls   perfect IVs   encounter weight in tables
 //   0-5              0                 0              x1
 //   6-10             0                 1              x1
-//   11-20            3                 2              x1.25
-//   21-30            7                 3              x1.5
-//   31-40           11                 4              x2
-//   41-50           15                 5              x2.5
-//   51-60           19                 6 (all)        x3
-//   ...and so on: +4 shiny rolls and +x0.5 weight per 10 more (100 caught: 35 rolls, x5).
-// The count is stored per species up to 255, where it stops (x13, 99 rolls).
+//   11-20            2                 1              x1.25
+//   21-30            5                 2              x1.5
+//   31-40            8                 3              x2
+//   41-50           11                 4              x2.5
+//   51-60           14                 5              x3
+//   61-70           17                 6 (all)        x3.5
+//   ...and so on: +3 shiny rolls and +x0.5 weight per 10 more (100 caught: 26 rolls, x5).
+// The count is stored per species up to 255, where it stops (x13, 74 rolls).
 // The encounter boost raises that species' weight in an area's table (so rarer Pokemon still
 // appear); rare visitors aren't affected.
 // ---------------------------------------------------------------------------
@@ -467,15 +469,15 @@ u32 WallyJourney_CatchComboShinyRolls(u16 species)
     tier = WJ_ComboTier(WallyJourney_CatchCombo(species));
     if (tier == 0)
         return 0;
-    return 4 * tier - 1; // 3, 7, 11, 15, ...
+    return 3 * tier - 1; // 2, 5, 8, 11, ...
 }
 
 static u32 WJ_ComboPerfectIVs(u32 combo)
 {
     u32 tier = WJ_ComboTier(combo);
-    if (tier == 0)
+    if (tier <= 1)
         return combo >= 6 ? 1 : 0;
-    return tier + 1 > NUM_STATS ? NUM_STATS : tier + 1;
+    return tier > NUM_STATS ? NUM_STATS : tier;
 }
 
 // Table weight scaled for how many of this species have been caught.
@@ -512,14 +514,15 @@ void WallyJourney_ApplyCatchComboIVs(struct Pokemon *mon)
 }
 
 // Percent chance (0-100) a wild Pokemon of this species has its Hidden Ability:
-// 5% base + 1% for every one of that species the player has caught.
+// 5% base + 1% for every two of that species the player has caught (owner 2026-11-02;
+// was 1% per catch).
 u32 WallyJourney_HiddenAbilityChance(u16 species)
 {
     u16 dexNum = SpeciesToNationalPokedexNum(species);
     u32 chance = 5;
     EnsureCatchCounts();
     if (dexNum != 0 && dexNum <= NATIONAL_DEX_COUNT)
-        chance += gSaveBlock3Ptr->wjCatchCounts[dexNum];
+        chance += gSaveBlock3Ptr->wjCatchCounts[dexNum] / 2;
     return chance > 100 ? 100 : chance;
 }
 
