@@ -536,7 +536,7 @@ Gender: Male
 Music: Aqua
 Items: Super Potion
 Double Battle: No
-AI: Basic Trainer / Smart Switching / HP Aware
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware
 
 SPECIES_ELECTRODE
 Level: 38
@@ -568,7 +568,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_ROCK_TOMB
 - MOVE_FOCUS_ENERGY
 
-SPECIES_HUNTAIL
+SPECIES_HUNTAIL @ ITEM_SITRUS_BERRY
 Level: 40
 Nature: Adamant
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -9850,7 +9850,8 @@ Pic: Magma Admin
 Gender: Male
 Music: Magma
 Double Battle: No
-AI: Basic Trainer / Smart Switching / HP Aware
+Items: Super Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware
 Multi Party: Half
 
 SPECIES_CROBAT @ ITEM_LEFTOVERS
@@ -9873,7 +9874,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_IRON_TAIL
 - MOVE_PROTECT
 
-SPECIES_ZANGOOSE
+SPECIES_ZANGOOSE @ ITEM_SITRUS_BERRY
 Level: 44
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -11806,7 +11807,8 @@ Pic: Magma Admin
 Gender: Male
 Music: Magma
 Double Battle: No
-AI: Basic Trainer / Smart Switching / HP Aware
+Items: Super Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware
 
 SPECIES_CACNEA
 Level: 25
@@ -11828,7 +11830,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_MUD_SLAP
 - MOVE_HEADBUTT
 
-SPECIES_ZANGOOSE
+SPECIES_ZANGOOSE @ ITEM_SITRUS_BERRY
 Level: 26
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
@@ -14770,7 +14772,8 @@ Pic: Magma Admin
 Gender: Male
 Music: Magma
 Double Battle: No
-AI: Basic Trainer / Smart Switching / HP Aware
+Items: Super Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware
 
 SPECIES_CROBAT
 Level: 36
@@ -14802,7 +14805,7 @@ EVs: 252 HP / 252 Atk / 4 Def
 - MOVE_LEECH_SEED
 - MOVE_INGRAIN
 
-SPECIES_ZANGOOSE
+SPECIES_ZANGOOSE @ ITEM_SITRUS_BERRY
 Level: 37
 Nature: Jolly
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
