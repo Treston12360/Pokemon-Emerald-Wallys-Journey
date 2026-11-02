@@ -431,14 +431,14 @@ u32 WallyJourney_GetShinySeenSpecies(u16 *out, u32 max)
 // Every 10 more caught keeps adding. Owner request 2026-11-02: shiny, IV and Hidden Ability
 // bonuses slightly lower (were 3/7/11/15/19 rolls, 1/2/3/4/5/6 IVs, +1% Hidden Ability per catch).
 //   caught    extra shiny rolls   perfect IVs   encounter weight in tables
-//   0-5              0                 0              x1
-//   6-10             0                 1              x1
+//   0-10             0                 0              x1
 //   11-20            2                 1              x1.25
-//   21-30            5                 2              x1.5
-//   31-40            8                 3              x2
-//   41-50           11                 4              x2.5
-//   51-60           14                 5              x3
-//   61-70           17                 6 (all)        x3.5
+//   21-30            5                 1              x1.5
+//   31-40            8                 2              x2
+//   41-50           11                 2              x2.5
+//   51-60           14                 3              x3
+//   61-70           17                 3              x3.5
+//   (perfect IVs: +1 every 20 caught after 11, all 6 at 111)
 //   ...and so on: +3 shiny rolls and +x0.5 weight per 10 more (100 caught: 26 rolls, x5).
 // The count is stored per species up to 255, where it stops (x13, 74 rolls).
 // The encounter boost raises that species' weight in an area's table (so rarer Pokemon still
@@ -474,9 +474,12 @@ u32 WallyJourney_CatchComboShinyRolls(u16 species)
 
 static u32 WJ_ComboPerfectIVs(u32 combo)
 {
-    u32 tier = WJ_ComboTier(combo);
-    if (tier <= 1)
-        return combo >= 6 ? 1 : 0;
+    u32 tier;
+    // Owner request 2026-11-02 (second pass): one perfect IV at 11 caught, then one more
+    // every 20: 11-30 1, 31-50 2, 51-70 3, 71-90 4, 91-110 5, 111+ 6.
+    if (combo < 11)
+        return 0;
+    tier = (combo - 11) / 20 + 1;
     return tier > NUM_STATS ? NUM_STATS : tier;
 }
 
