@@ -46,6 +46,7 @@ enum
 };
 void WallyJourney_SetFormSeen(u16 species);
 void WallyJourney_SanitizeParty(void);
+void WallyJourney_GrantStarterStones(void);
 bool32 WallyJourney_FormSeen(u16 species);
 struct Pokemon;
 u32 WallyJourney_CatchCombo(u16 species);

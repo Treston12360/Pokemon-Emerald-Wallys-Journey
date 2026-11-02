@@ -2399,6 +2399,29 @@ void WallyJourney_WallySurfEnd(void)
 // level, nature, IVs and EVs, so nothing edited outside normal play (an old build's
 // battle debug menu wrote max HP and moves back to the party) carries over.
 // Legit Pokémon come out exactly the same; this only ever undoes edits.
+// Owner request 2026-11-02: Steven now gives all three starter Mega Stones. Saves that
+// already got the Mega Bracelet receive the two they're missing, once (silently). A stone
+// already in the Bag or held by a party Pokemon counts as owned.
+void WallyJourney_GrantStarterStones(void)
+{
+#if !IS_FRLG
+    static const u16 sStones[] = {ITEM_SCEPTILITE, ITEM_BLAZIKENITE, ITEM_SWAMPERTITE};
+    u32 i, j;
+    if (!FlagGet(FLAG_RECEIVED_MEGA_BRACELET) || FlagGet(FLAG_WALLY_ALL_STARTER_STONES))
+        return;
+    for (i = 0; i < ARRAY_COUNT(sStones); i++)
+    {
+        bool32 owned = CheckBagHasItem(sStones[i], 1);
+        for (j = 0; j < PARTY_SIZE && !owned; j++)
+            if (GetMonData(&gPlayerParty[j], MON_DATA_HELD_ITEM) == sStones[i])
+                owned = TRUE;
+        if (!owned)
+            AddBagItem(sStones[i], 1);
+    }
+    FlagSet(FLAG_WALLY_ALL_STARTER_STONES);
+#endif
+}
+
 void WallyJourney_SanitizeParty(void)
 {
     u32 i, j;

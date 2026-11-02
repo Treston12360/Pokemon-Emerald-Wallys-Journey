@@ -2169,6 +2169,7 @@ void CB2_ContinueSavedGame(void)
 
     LoadSaveblockMapHeader();
     WallyJourney_SanitizeParty();
+    WallyJourney_GrantStarterStones();
     WJ_OutfitOnLoad();
     ClearDiveAndHoleWarps();
     trainerHillMapId = GetCurrentTrainerHillMapId();

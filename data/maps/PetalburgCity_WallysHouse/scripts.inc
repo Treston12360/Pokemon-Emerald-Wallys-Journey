@@ -202,31 +202,10 @@ WallyJourney_EventScript_StevenMegaGift::
 	msgbox WallyJourney_StevenMega_Stone, MSGBOX_DEFAULT
 
 WallyJourney_StevenMega_CheckStarter::
-	goto_if_eq VAR_STARTER_MON, 0, WallyJourney_StevenMega_Treecko
-	goto_if_eq VAR_STARTER_MON, 1, WallyJourney_StevenMega_Torchic
-	goto WallyJourney_StevenMega_Mudkip
-
-WallyJourney_StevenMega_Treecko::
-	checkitem ITEM_SCEPTILITE
-	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_Finish
-	giveitem ITEM_SCEPTILITE
-	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
-	goto WallyJourney_StevenMega_Finish
-
-WallyJourney_StevenMega_Torchic::
-	checkitem ITEM_BLAZIKENITE
-	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_Finish
-	giveitem ITEM_BLAZIKENITE
-	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
-	goto WallyJourney_StevenMega_Finish
-
-WallyJourney_StevenMega_Mudkip::
-	checkitem ITEM_SWAMPERTITE
-	goto_if_eq VAR_RESULT, TRUE, WallyJourney_StevenMega_Finish
-	giveitem ITEM_SWAMPERTITE
-	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	call WallyJourney_EventScript_StevenGiveStarterStones
 WallyJourney_StevenMega_Finish::
 	setflag FLAG_RECEIVED_MEGA_BRACELET
+	setflag FLAG_WALLY_ALL_STARTER_STONES
 	setflag FLAG_HIDE_WALLYS_HOUSE_STEVEN
 	msgbox WallyJourney_StevenMega_End, MSGBOX_DEFAULT
 	release
@@ -245,21 +224,32 @@ WallyJourney_EventScript_StevenGymMegaGift::
 	msgbox WallyJourney_StevenMega_GymIntro, MSGBOX_DEFAULT
 	giveitem ITEM_MEGA_RING
 	msgbox WallyJourney_StevenMega_Stone, MSGBOX_DEFAULT
-	call_if_eq VAR_STARTER_MON, 0, WallyJourney_EventScript_StevenGymGiveSceptilite
-	call_if_eq VAR_STARTER_MON, 1, WallyJourney_EventScript_StevenGymGiveBlazikenite
-	call_if_eq VAR_STARTER_MON, 2, WallyJourney_EventScript_StevenGymGiveSwampertite
+	call WallyJourney_EventScript_StevenGiveStarterStones
 	setflag FLAG_RECEIVED_MEGA_BRACELET
+	setflag FLAG_WALLY_ALL_STARTER_STONES
 	setflag FLAG_HIDE_WALLYS_HOUSE_STEVEN
 	msgbox WallyJourney_StevenMega_End, MSGBOX_DEFAULT
 	return
 
-WallyJourney_EventScript_StevenGymGiveSceptilite::
+@ Owner request 2026-11-02: Steven gives all three starter Mega Stones (any already in the
+@ Bag are skipped). Saves past this scene get the missing ones once on load
+@ (WallyJourney_GrantStarterStones).
+WallyJourney_EventScript_StevenGiveStarterStones::
+	checkitem ITEM_SCEPTILITE
+	call_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_StevenGiveSceptilite
+	checkitem ITEM_BLAZIKENITE
+	call_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_StevenGiveBlazikenite
+	checkitem ITEM_SWAMPERTITE
+	call_if_eq VAR_RESULT, FALSE, WallyJourney_EventScript_StevenGiveSwampertite
+	return
+
+WallyJourney_EventScript_StevenGiveSceptilite::
 	giveitem ITEM_SCEPTILITE
 	return
-WallyJourney_EventScript_StevenGymGiveBlazikenite::
+WallyJourney_EventScript_StevenGiveBlazikenite::
 	giveitem ITEM_BLAZIKENITE
 	return
-WallyJourney_EventScript_StevenGymGiveSwampertite::
+WallyJourney_EventScript_StevenGiveSwampertite::
 	giveitem ITEM_SWAMPERTITE
 	return
 
@@ -290,12 +280,13 @@ WallyJourney_StevenMega_Stone:
 	.string "STEVEN: A MEGA BRACELET is only\n"
 	.string "half of it. Your partner needs a\l"
 	.string "MEGA STONE that answers its call.\p"
-	.string "I found one that suits the POKéMON\n"
-	.string "you started your journey with.$"
+	.string "I found three, one for each POKéMON\n"
+	.string "a HOENN TRAINER can start with.\l"
+	.string "Take them all.$"
 
 WallyJourney_StevenMega_End:
 	.string "STEVEN: Have your first partner\n"
-	.string "hold that stone once it's fully\l"
+	.string "hold its stone once it's fully\l"
 	.string "evolved.\p"
 	.string "When your bond is strong enough,\n"
 	.string "the bracelet will respond.\p"

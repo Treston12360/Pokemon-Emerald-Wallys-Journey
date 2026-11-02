@@ -599,7 +599,15 @@ void SetZEffect(const u8 *nextInstr)
     }
 }
 
+// Wally's Journey (owner request 2026-11-02): Z-Moves hit for 3/4 of their usual power
+// (180 -> 135, 200 -> 150). Status Z-Moves are unchanged.
+static u32 GetZMovePowerUnscaled(enum Move move);
 u32 GetZMovePower(enum Move move)
+{
+    return GetZMovePowerUnscaled(move) * 3 / 4;
+}
+
+static u32 GetZMovePowerUnscaled(enum Move move)
 {
     if (GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS)
         return 0;

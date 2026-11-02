@@ -1223,7 +1223,7 @@ WallyJourney_Pokemart_FrontierTrainingGoods:
 	.2byte ITEM_JOLLY_MINT
 	.2byte ITEM_NAIVE_MINT
 	.2byte ITEM_SERIOUS_MINT
-	.2byte ITEM_ABILITY_CAPSULE
+	.2byte ITEM_ABILITY_PATCH
 	.2byte ITEM_BOTTLE_CAP
 	pokemartlistend
 
@@ -1351,7 +1351,7 @@ WallyJourney_EventScript_DexResearchAllDone::
 
 WallyJourney_Text_FrontierTrainingGoods:
 	.string "Serious TRAINERS fine-tune their\n"
-	.string "POKéMON. Mints, capsules, caps…\l"
+	.string "POKéMON. Mints, patches, caps…\l"
 	.string "Take a look!$"
 WallyJourney_Text_DexResearchCount:
 	.string "Let's see your POKéDEX data…\n"
