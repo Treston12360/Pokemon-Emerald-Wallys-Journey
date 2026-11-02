@@ -97,6 +97,11 @@ ORDER = [
  ('Route132', None), ('Route133', None), ('Route134', None), ('MeteorFalls_1F_2R', None),
  ('VictoryRoad_1F', None), ('VictoryRoad_B1F', None), ('VictoryRoad_B2F', None),
 ]
+# Rematch tiers (columns 2-5 of gRematchTable) are never first-run fights, even when a
+# Gym script names them directly.
+REMATCHES = set()
+for row in re.findall(r'REMATCH\((TRAINER_\w+(?:,\s*TRAINER_\w+)*)', open('src/battle_setup.c').read()):
+    REMATCHES.update(x.strip() for x in row.split(',')[1:])
 SKIP = re.compile(r'TRAINER_(MAY|BRENDAN)_|TRAINER_WALLY_(VR_2|CHAMPION)|TRAINER_STEVEN$')
 CHECKPOINTS = {'RustboroCity_Gym': 'Roxanne', 'DewfordTown_Gym': 'Brawly', 'MauvilleCity_Gym': 'Wattson',
                'LavaridgeTown_Gym_1F': 'Flannery', 'PetalburgCity_Gym': 'Norman', 'FortreeCity_Gym': 'Winona',
@@ -108,7 +113,7 @@ def encounters():
         if m == '@':
             lst = ids
         else:
-            lst = [t for t in mapTrainers.get(m, []) if not SKIP.search(t)]
+            lst = [t for t in mapTrainers.get(m, []) if not SKIP.search(t) and t not in REMATCHES]
         for t in lst:
             if t in seen: continue
             seen.add(t)
