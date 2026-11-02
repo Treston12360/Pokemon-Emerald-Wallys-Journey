@@ -1262,7 +1262,7 @@ WallyJourney_EventScript_DexResearchNext0::
 
 WallyJourney_EventScript_DexResearchTier1::
 	goto_if_lt VAR_0x8006, 50, WallyJourney_EventScript_DexResearchNext1
-	giveitem ITEM_ABILITY_CAPSULE, 1
+	giveitem ITEM_ABILITY_PATCH, 1
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	addvar VAR_WALLY_DEX_REWARD_TIER, 1
 	goto WallyJourney_EventScript_DexResearchLoop

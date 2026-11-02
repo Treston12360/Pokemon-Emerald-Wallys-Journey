@@ -1771,7 +1771,7 @@ void WallyJourney_PickContestPrize(void)
     static const u16 sNormal[] = {ITEM_POKE_BALL, ITEM_SUPER_POTION, ITEM_REPEL};
     static const u16 sSuper[]  = {ITEM_HEART_SCALE, ITEM_PP_UP, ITEM_NUGGET};
     static const u16 sHyper[]  = {ITEM_RARE_CANDY, ITEM_PP_UP, ITEM_BIG_NUGGET, ITEM_HEART_SCALE};
-    static const u16 sMaster[] = {ITEM_PP_MAX, ITEM_RARE_CANDY, ITEM_ABILITY_CAPSULE, ITEM_BOTTLE_CAP, ITEM_STAR_PIECE};
+    static const u16 sMaster[] = {ITEM_PP_MAX, ITEM_RARE_CANDY, ITEM_ABILITY_PATCH, ITEM_BOTTLE_CAP, ITEM_STAR_PIECE};
     const u16 *pool; u32 n;
     switch (VarGet(VAR_CONTEST_RANK))
     {

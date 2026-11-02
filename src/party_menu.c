@@ -5066,17 +5066,36 @@ void ItemUseCB_AbilityCapsule(u8 taskId, TaskFunc task)
     gTasks[taskId].func = Task_AbilityCapsule;
 }
 
+// Wally's Journey (owner request 2026-11-02): the Ability Patch lets you pick any of the
+// Pokemon's other abilities (regular or Hidden) from a list, instead of only swapping to
+// the Hidden Ability.
+#define tChoiceCount data[7] // data[4-5] hold tOldFunc
+#define tChoice(i)   data[8 + (i)]
+static const u8 sText_AbilityPatchWhich[] = _("Which ability should\n{STR_VAR_1} have?");
+
 void Task_AbilityPatch(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
+    u32 i, j;
 
     switch (tState)
     {
     case 0:
+    {
+        enum Ability current = GetMonAbility(&gParties[B_TRAINER_PLAYER][tMonId]);
+        tChoiceCount = 0;
+        for (i = 0; tSpecies && i < NUM_ABILITY_SLOTS; i++)
+        {
+            enum Ability ability = GetSpeciesAbility(tSpecies, i);
+            bool32 dupe = (ability == ABILITY_NONE || ability == current);
+            for (j = 0; !dupe && j < (u32)tChoiceCount; j++)
+                if (GetSpeciesAbility(tSpecies, tChoice(j)) == ability)
+                    dupe = TRUE;
+            if (!dupe)
+                tChoice(tChoiceCount++) = i;
+        }
         // Can't use.
-        if (GetSpeciesAbility(tSpecies, tAbilityNum) == 0
-            || !tSpecies
-            )
+        if (tChoiceCount == 0)
         {
             gPartyMenuUseExitCallback = FALSE;
             PlaySE(SE_SELECT);
@@ -5087,39 +5106,51 @@ void Task_AbilityPatch(u8 taskId)
         }
         gPartyMenuUseExitCallback = TRUE;
         GetMonNickname(&gParties[B_TRAINER_PLAYER][tMonId], gStringVar1);
-        StringCopy(gStringVar2, gAbilitiesInfo[GetAbilityBySpecies(tSpecies, tAbilityNum)].name);
-        StringExpandPlaceholders(gStringVar4, sText_askText);
+        StringExpandPlaceholders(gStringVar4, sText_AbilityPatchWhich);
         PlaySE(SE_SELECT);
         DisplayPartyMenuMessage(gStringVar4, 1);
         ScheduleBgCopyTilemapToVram(2);
         tState++;
         break;
+    }
     case 1:
         if (!IsPartyMenuTextPrinterActive())
         {
-            PartyMenuDisplayYesNoMenu();
+            u8 windowId = DisplaySelectionWindow(SELECTWINDOW_MOVES);
+            for (i = 0; i < (u32)tChoiceCount; i++)
+            {
+                const u8 *name = gAbilitiesInfo[GetSpeciesAbility(tSpecies, tChoice(i))].name;
+                u8 fontId = GetFontIdToFit(name, FONT_NORMAL, 0, 72);
+                AddTextPrinterParameterized(windowId, fontId, name, 8, (i * 16) + 1, TEXT_SKIP_DRAW, NULL);
+            }
+            InitMenuInUpperLeftCornerNormal(windowId, tChoiceCount, 0);
+            ScheduleBgCopyTilemapToVram(2);
             tState++;
         }
         break;
     case 2:
-        switch (Menu_ProcessInputNoWrapClearOnChoose())
-        {
-        case 0:
-            tState++;
+    {
+        s8 input = Menu_ProcessInput();
+        if (input == MENU_NOTHING_CHOSEN)
             break;
-        case 1:
-        case MENU_B_PRESSED:
+        PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[0]);
+        if (input == MENU_B_PRESSED)
+        {
             gPartyMenuUseExitCallback = FALSE;
             PlaySE(SE_SELECT);
-            ScheduleBgCopyTilemapToVram(2);
             // Don't exit party selections screen, return to choosing a mon.
             ClearStdWindowAndFrameToTransparent(6, 0);
             ClearWindowTilemap(6);
             DisplayPartyMenuStdMessage(5);
+            ScheduleBgCopyTilemapToVram(2);
             gTasks[taskId].func = (void *)GetWordTaskArg(taskId, tOldFunc);
             return;
         }
+        tAbilityNum = tChoice(input);
+        StringCopy(gStringVar2, gAbilitiesInfo[GetSpeciesAbility(tSpecies, tAbilityNum)].name);
+        tState++;
         break;
+    }
     case 3:
         PlaySE(SE_USE_ITEM);
         StringExpandPlaceholders(gStringVar4, sText_doneText);
@@ -5138,6 +5169,8 @@ void Task_AbilityPatch(u8 taskId)
         break;
     }
 }
+#undef tChoiceCount
+#undef tChoice
 
 void ItemUseCB_AbilityPatch(u8 taskId, TaskFunc task)
 {
@@ -5146,10 +5179,6 @@ void ItemUseCB_AbilityPatch(u8 taskId, TaskFunc task)
     tState = 0;
     tMonId = gPartyMenu.slotId;
     tSpecies = GetMonData(&gParties[B_TRAINER_PLAYER][tMonId], MON_DATA_SPECIES);
-    if (GetMonData(&gParties[B_TRAINER_PLAYER][tMonId], MON_DATA_ABILITY_NUM) == 2)
-        tAbilityNum = 0;
-    else
-        tAbilityNum = 2;
     SetWordTaskArg(taskId, tOldFunc, (uintptr_t)(gTasks[taskId].func));
     gTasks[taskId].func = Task_AbilityPatch;
 }
