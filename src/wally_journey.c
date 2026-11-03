@@ -821,15 +821,18 @@ void WallyJourney_ScaleLeaderParty(struct Pokemon *party, u16 trainerId)
 // player who beats every trainer and does a little wild training arrives, plus the
 // margin) and the player's highest party level + the margin: Gyms +2, rivals +1,
 // admins +1, Maxie/Archie +2, Elite Four +3, Wally +4, the Winstrates and Vito +2.
+// For Wally (owner 2026-11-03) the minimum and margin apply to his lowest Pokemon, so his
+// whole team is at least the player's highest level + 4 and his ace keeps its lead.
 // The ace level is saved, so after a loss the player can train and the team stays
 // the same. Teams only go up, keep their level gaps, and evolve when the new level
 // is high enough. Table: tools/important_trainer_levels.py --header.
 struct WJScaledTrainer
 {
     u16 trainerId;
-    u8 minAce;
+    u8 minAce;   // minimum level of the ace (or of the lowest Pokemon when byLowest)
     u8 margin;
     u8 slot;
+    u8 byLowest; // Wally (owner 2026-11-03): the whole team is at least top + margin
 };
 #include "data/wj_trainer_scaling.h"
 STATIC_ASSERT(WJ_SCALED_SLOTS <= ARRAY_COUNT(((struct SaveBlock3 *)0)->wjScaleLock), WJScaleLockSlots);
@@ -901,7 +904,7 @@ void WallyJourney_ScaleImportantParty(struct Pokemon *party, u16 trainerId)
 {
 #if !IS_FRLG
     const struct WJScaledTrainer *entry = NULL;
-    u32 i, n, ace = 0, target;
+    u32 i, n, ace = 0, lowest = MAX_LEVEL, target;
     s32 shift;
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_FRONTIER))
         return;
@@ -939,8 +942,10 @@ void WallyJourney_ScaleImportantParty(struct Pokemon *party, u16 trainerId)
     {
         if (GetMonData(&party[n], MON_DATA_LEVEL) > ace)
             ace = GetMonData(&party[n], MON_DATA_LEVEL);
+        if (GetMonData(&party[n], MON_DATA_LEVEL) < lowest)
+            lowest = GetMonData(&party[n], MON_DATA_LEVEL);
     }
-    shift = (s32)target - (s32)ace;
+    shift = (s32)target - (s32)(entry->byLowest ? lowest : ace);
     if (n == 0 || shift <= 0)
         return;
     for (i = 0; i < n; i++)
