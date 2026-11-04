@@ -105,6 +105,12 @@ All the screens below were recoloured to Emerald green, palette only.
   - Still to do: add the **Cleffa** entry to `gen_2_families.h`, then build and test a Ditto transform in battle.
   - Then merge into `wally-journey-development`.
 
+## ▶ NEXT TASK: 3D battle backgrounds
+
+The owner wants the 3D in-game battle backgrounds done next. Read `tools/wj3d/README.md` first: it lists the
+downloads needed, what was tried, why it failed, and a step-by-step plan to finish. Show the owner one
+finished route in the game before doing more maps.
+
 ## OWNER ORDER (2026-11-04)
 
 The owner picked this order: 1 DexNav check (done), 3 start menu colours (done), 5 EV allocator (done), **9 3D battle backgrounds (in progress)**, then the rest. **Never** do the lit night windows for more towns (owner dropped it).
