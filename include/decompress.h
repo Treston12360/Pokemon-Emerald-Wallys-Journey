@@ -74,6 +74,7 @@ u32 LoadCompressedSpriteSheetByTemplate(const struct SpriteTemplate *template, s
 u32 LoadCompressedSpriteSheetOverrideBuffer(const struct CompressedSpriteSheet *src, void *buffer);
 bool8 LoadCompressedSpriteSheetUsingHeap(const struct CompressedSpriteSheet *src);
 
+extern bool8 gLoadDittoFacePic;
 void HandleLoadSpecialPokePic(bool32 isFrontPic, void *dest, enum Species species, u32 personality);
 void HandleLoadSpecialPokePicIsEgg(bool32 isFrontPic, void *dest, enum Species species, u32 personality, bool32 isEgg);
 

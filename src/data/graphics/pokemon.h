@@ -27684,3 +27684,22 @@ const u32 gObjectEventPic_Substitute[] = INCGFX_COMP("graphics/pokemon/question_
     const u32 gMonFrontPic_Egg[] = INCGFX_U32("graphics/pokemon/egg/anim_front.png", ".4bpp.smol");
     const u16 gMonPalette_Egg[] = INCGFX_U16("graphics/pokemon/egg/normal.pal", ".gbapal");
     const u8 gMonIcon_Egg[] = INCGFX_U8("graphics/pokemon/egg/icon.png", ".4bpp");
+
+// Ditto-face sprites (AsparagusEduardo, TeamAquasHideout/pokeemerald AsparagusEduardo/ditto)
+#if P_DITTO_SPRITES
+const u32 gMonFrontPic_BulbasaurDitto[] = INCBIN_U32("graphics/pokemon/bulbasaur/anim_front_ditto.4bpp.smol");
+const u32 gMonBackPic_BulbasaurDitto[] = INCBIN_U32("graphics/pokemon/bulbasaur/back_ditto.4bpp.smol");
+const u32 gMonFrontPic_IvysaurDitto[] = INCBIN_U32("graphics/pokemon/ivysaur/anim_front_ditto.4bpp.smol");
+const u32 gMonFrontPic_VenusaurDitto[] = INCBIN_U32("graphics/pokemon/venusaur/anim_front_ditto.4bpp.smol");
+const u32 gMonFrontPic_CleffaDitto[] = INCBIN_U32("graphics/pokemon/cleffa/anim_front_ditto.4bpp.smol");
+const u32 gMonFrontPic_ClefairyDitto[] = INCBIN_U32("graphics/pokemon/clefairy/anim_front_ditto.4bpp.smol");
+const u32 gMonFrontPic_ClefableDitto[] = INCBIN_U32("graphics/pokemon/clefable/anim_front_ditto.4bpp.smol");
+const u32 gMonFrontPic_GrowlitheDitto[] = INCBIN_U32("graphics/pokemon/growlithe/anim_front_ditto.4bpp.smol");
+const u32 gMonBackPic_GrowlitheDitto[] = INCBIN_U32("graphics/pokemon/growlithe/back_ditto.4bpp.smol");
+const u32 gMonFrontPic_ArcanineDitto[] = INCBIN_U32("graphics/pokemon/arcanine/anim_front_ditto.4bpp.smol");
+const u32 gMonBackPic_ArcanineDitto[] = INCBIN_U32("graphics/pokemon/arcanine/back_ditto.4bpp.smol");
+const u32 gMonFrontPic_DoduoDitto[] = INCBIN_U32("graphics/pokemon/doduo/anim_front_ditto.4bpp.smol");
+const u32 gMonBackPic_DoduoDitto[] = INCBIN_U32("graphics/pokemon/doduo/back_ditto.4bpp.smol");
+const u32 gMonFrontPic_DodrioDitto[] = INCBIN_U32("graphics/pokemon/dodrio/anim_front_ditto.4bpp.smol");
+const u32 gMonBackPic_DodrioDitto[] = INCBIN_U32("graphics/pokemon/dodrio/back_ditto.4bpp.smol");
+#endif

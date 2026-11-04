@@ -657,9 +657,11 @@ void BattleLoadMonSpriteGfx(struct Pokemon *mon, enum BattlerId battler)
     }
 
     position = GetBattlerPosition(battler);
+    gLoadDittoFacePic = (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE);
     HandleLoadSpecialPokePic(!IsOnPlayerSide(battler),
                              gMonSpritesGfxPtr->spritesGfx[position],
                              species, personalityValue);
+    gLoadDittoFacePic = FALSE;
 
     paletteOffset = OBJ_PLTT_ID(battler);
 
@@ -951,10 +953,12 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
             personalityValue = GetMonData(monAtk, MON_DATA_PERSONALITY);
             isShiny = GetMonData(monAtk, MON_DATA_IS_SHINY);
         }
+        gLoadDittoFacePic = (changeType == SPECIES_GFX_CHANGE_TRANSFORM);
         HandleLoadSpecialPokePic(!IsOnPlayerSide(battlerAtk),
                                  gMonSpritesGfxPtr->spritesGfx[position],
                                  targetSpecies,
                                  personalityValue);
+        gLoadDittoFacePic = FALSE;
     }
     src = gMonSpritesGfxPtr->spritesGfx[position];
     dst = (void *)(OBJ_VRAM0 + gSprites[gBattlerSpriteIds[battlerAtk]].oam.tileNum * 32);

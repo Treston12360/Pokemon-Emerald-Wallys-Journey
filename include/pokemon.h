@@ -441,6 +441,10 @@ struct SpeciesInfo /*0xC4*/
     const union AnimCmd *const *frontAnimFrames;
     const u32 *frontPic;
     const u32 *backPic;
+#if P_DITTO_SPRITES
+    const u32 *frontPicDitto; // NULL: no Ditto-face art, the normal sprite is used
+    const u32 *backPicDitto;
+#endif
     const u16 *palette;
     const u16 *shinyPalette;
     const u8 *iconSprite;
