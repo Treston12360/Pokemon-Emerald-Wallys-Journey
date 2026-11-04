@@ -89,6 +89,7 @@ static u16 AreaBit(u8 group,u8 num) {
     return 0;
 }
 void WallyJourney_Reset(void) {
+    FlagSet(FLAG_WALLY_EVS_RESET); // new games start under Stat Points already
     VarSet(WALLY_VAR_PEAK_BADGES,0);
     VarSet(WALLY_VAR_BIOME_MASK,0);
     VarSet(WALLY_VAR_WALLY_DEFEATS,0);
@@ -2482,6 +2483,45 @@ void WallyJourney_GrantStarterStones(void)
     }
     FlagSet(FLAG_WALLY_ALL_STARTER_STONES);
 #endif
+}
+
+// Wally's Journey: when Stat Points arrived, every Pokémon the player already had lost its
+// EVs once (party, PC boxes, Day Care) so it can spend its level's points instead (owner's call).
+void WallyJourney_ResetEVsForStatPoints(void)
+{
+    static const u8 zero = 0;
+    u32 i, j, box, slot;
+
+    if (FlagGet(FLAG_WALLY_EVS_RESET))
+        return;
+    FlagSet(FLAG_WALLY_EVS_RESET);
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE)
+            continue;
+        for (j = 0; j < NUM_STATS; j++)
+            SetMonData(&gPlayerParty[i], MON_DATA_HP_EV + j, &zero);
+        CalculateMonStats(&gPlayerParty[i]);
+    }
+    for (box = 0; box < TOTAL_BOXES_COUNT; box++)
+    {
+        for (slot = 0; slot < IN_BOX_COUNT; slot++)
+        {
+            struct BoxPokemon *mon = GetBoxedMonPtr(box, slot);
+            if (GetBoxMonData(mon, MON_DATA_SPECIES) == SPECIES_NONE)
+                continue;
+            for (j = 0; j < NUM_STATS; j++)
+                SetBoxMonData(mon, MON_DATA_HP_EV + j, &zero);
+        }
+    }
+    for (i = 0; i < DAYCARE_MON_COUNT; i++)
+    {
+        struct BoxPokemon *mon = &gSaveBlock1Ptr->daycare.mons[i].mon;
+        if (GetBoxMonData(mon, MON_DATA_SPECIES) == SPECIES_NONE)
+            continue;
+        for (j = 0; j < NUM_STATS; j++)
+            SetBoxMonData(mon, MON_DATA_HP_EV + j, &zero);
+    }
 }
 
 void WallyJourney_SanitizeParty(void)
