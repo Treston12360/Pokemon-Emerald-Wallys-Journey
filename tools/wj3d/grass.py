@@ -12,8 +12,9 @@ def load(root,layout):
         if not(0<=x<W and 0<=y<H): return False
         v=struct.unpack_from('<H',d,(y*W+x)*2)[0]; m=v&0x3ff
         a=pa[m] if m<512 else sa[m-512]
-        return (a&0xff)==0x02 and ((v>>10)&3)==0
+        return (a&0xff) in ENC and ((v>>10)&3)==0
     return g,W,H
+ENC={0x02,0x03,0x06,0x24,0x25}
 layout=sys.argv[1]
 gv,W,H=load('/home/claude/tools-src/pret',layout)
 gh,_,_=load('/home/claude/pokemon-emerald-wallys-journey',layout)

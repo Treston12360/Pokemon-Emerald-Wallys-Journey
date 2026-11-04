@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Regenerate src/data/wj3d_backdrops.h from graphics/battle_environment/wj3d/<map>/.
 Folder names are map names in lower case without "MAP_" (route104 -> MAP_ROUTE104,
-petalburg_city -> MAP_PETALBURG_CITY). The INCGFX lines must be literal: the build's
+petalburg_city -> MAP_PETALBURG_CITY). An optional environment.txt in a folder (e.g.
+BATTLE_ENVIRONMENT_SAND) limits that backdrop to battles in that environment. The INCGFX lines must be literal: the build's
 scaninc/preproc read them before the C preprocessor runs."""
 import os
 ROOT = os.path.join(os.path.dirname(__file__), '..')
@@ -19,7 +20,9 @@ out += ['', 'static const struct WJ3DBackdrop sWJ3DBackdrops[] =', '{']
 for d in dirs:
     n = ''.join(p.capitalize() for p in d.split('_'))
     m = 'MAP_' + d.upper()
-    out.append(f'    {{MAP_GROUP({m}), MAP_NUM({m}), sWJ3D_{n}_Tiles, sWJ3D_{n}_Map, sWJ3D_{n}_Pal}},')
+    envf = os.path.join(base, d, 'environment.txt')   # optional, e.g. BATTLE_ENVIRONMENT_SAND
+    env = open(envf).read().strip() if os.path.exists(envf) else 'WJ3D_ANY_ENVIRONMENT'
+    out.append(f'    {{MAP_GROUP({m}), MAP_NUM({m}), sWJ3D_{n}_Tiles, sWJ3D_{n}_Map, sWJ3D_{n}_Pal, {env}}},')
 out += ['};', '']
 open(os.path.join(ROOT, 'src/data/wj3d_backdrops.h'), 'w').write('\n'.join(out))
 print('backdrops:', ', '.join(dirs))

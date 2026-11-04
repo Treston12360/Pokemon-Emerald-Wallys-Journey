@@ -38,6 +38,7 @@
 // Wally's Journey: per-map 3D battle backdrops, captured from Emerald 3DS's 3D battles
 // (tools/wj3d_backdrop.py). Used on land (grass / plain / sand) for ordinary wild and
 // trainer battles; everything else keeps the stock backgrounds.
+#define WJ3D_ANY_ENVIRONMENT 0xFF
 struct WJ3DBackdrop
 {
     u16 mapGroup;
@@ -45,6 +46,7 @@ struct WJ3DBackdrop
     const u32 *tiles;
     const u32 *tilemap;
     const u16 *palette;
+    u8 environment; // WJ3D_ANY_ENVIRONMENT = any of the land environments below, else only this one (Route 111 desert)
 };
 #include "data/wj3d_backdrops.h"
 
@@ -63,7 +65,8 @@ static const struct WJ3DBackdrop *WJ3D_GetBackdrop(u32 environment)
     {
         if (sWJ3DBackdrops[i].tiles != NULL
          && sWJ3DBackdrops[i].mapGroup == gSaveBlock1Ptr->location.mapGroup
-         && sWJ3DBackdrops[i].mapNum == gSaveBlock1Ptr->location.mapNum)
+         && sWJ3DBackdrops[i].mapNum == gSaveBlock1Ptr->location.mapNum
+         && (sWJ3DBackdrops[i].environment == WJ3D_ANY_ENVIRONMENT || sWJ3DBackdrops[i].environment == environment))
             return &sWJ3DBackdrops[i];
     }
     return NULL;
