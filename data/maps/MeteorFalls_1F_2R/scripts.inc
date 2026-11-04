@@ -61,7 +61,7 @@ MeteorFalls_1F_2R_EventScript_RematchJay::
 	end
 
 MeteorFalls_1F_2R_Text_NicolasIntro:
-	.string "DRAGON users train here, where the\n"
+	.string "Dragon users train here, where the\n"
 	.string "stars fell.\p"
 	.string "My clan says a star once fell with\n"
 	.string "something alive inside it.$"
@@ -78,7 +78,7 @@ MeteorFalls_1F_2R_Text_NicolasPostBattle:
 
 MeteorFalls_1F_2R_Text_NicolasRegister:
 	.string "I want to know more about your power.\n"
-	.string "Let me register you in my POKéNAV.$"
+	.string "Let me register you in my PokéNav.$"
 
 MeteorFalls_1F_2R_Text_NicolasRematchIntro:
 	.string "Since we met, I've trained under the\n"
@@ -95,84 +95,84 @@ MeteorFalls_1F_2R_Text_NicolasPostRematch:
 	.string "I can grow stronger too!$"
 
 MeteorFalls_1F_2R_Text_JohnIntro:
-	.string "JOHN: Fifty years ago, we watched the\n"
+	.string "John: Fifty years ago, we watched the\n"
 	.string "meteor shower here on our first date.\p"
-	.string "The professor in FALLARBOR still\n"
+	.string "The professor in Fallarbor still\n"
 	.string "counts them. Battle!$"
 
 MeteorFalls_1F_2R_Text_JohnDefeat:
-	.string "JOHN: Well, dear…\n"
+	.string "John: Well, dear…\n"
 	.string "we had a good run.$"
 
 MeteorFalls_1F_2R_Text_JohnPostBattle:
-	.string "JOHN: Fifty years married, and I\n"
+	.string "John: Fifty years married, and I\n"
 	.string "have yet to beat her once.\p"
-	.string "We came to HOENN when FALLARBOR\n"
+	.string "We came to Hoenn when Fallarbor\n"
 	.string "still grew wheat. Then the ash came.$"
 
 MeteorFalls_1F_2R_Text_JohnNotEnoughMons:
-	.string "JOHN: Well, well, a young TRAINER!\p"
+	.string "John: Well, well, a young Trainer!\p"
 	.string "We battle two at a time. Come back\n"
-	.string "with more POKéMON, won't you?$"
+	.string "with more Pokémon, won't you?$"
 
 MeteorFalls_1F_2R_Text_JohnRegister:
-	.string "JOHN: Young TRAINER, if the chance\n"
+	.string "John: Young Trainer, if the chance\n"
 	.string "arises, will you battle with us again?$"
 
 MeteorFalls_1F_2R_Text_JayIntro:
-	.string "JAY: Fifty years married, dear.\p"
+	.string "Jay: Fifty years married, dear.\p"
 	.string "We've weathered drought, ash and\n"
 	.string "moving house. A battle is nothing.$"
 
 MeteorFalls_1F_2R_Text_JayDefeat:
-	.string "JAY: Oh, dear husband.\n"
+	.string "Jay: Oh, dear husband.\n"
 	.string "We've been bested.$"
 
 MeteorFalls_1F_2R_Text_JayPostBattle:
-	.string "JAY: We settle arguments with\n"
-	.string "POKéMON battles. Saves plates.$"
+	.string "Jay: We settle arguments with\n"
+	.string "Pokémon battles. Saves plates.$"
 
 MeteorFalls_1F_2R_Text_JayNotEnoughMons:
-	.string "JAY: Only one POKéMON, dear?\p"
+	.string "Jay: Only one Pokémon, dear?\p"
 	.string "We battle as a pair. Come back\n"
 	.string "with two.$"
 
 MeteorFalls_1F_2R_Text_JohnRematchIntro:
-	.string "JOHN: Back for more, young one?\n"
+	.string "John: Back for more, young one?\n"
 	.string "These old bones aren't done!$"
 
 MeteorFalls_1F_2R_Text_JohnRematchDefeat:
-	.string "JOHN: Beaten again, dear.\n"
+	.string "John: Beaten again, dear.\n"
 	.string "We're getting old.$"
 
 MeteorFalls_1F_2R_Text_JohnPostRematch:
-	.string "JOHN: We lost the farm, but never\n"
+	.string "John: We lost the farm, but never\n"
 	.string "each other.\p"
 	.string "You'll learn that's the harvest\n"
 	.string "that counts.$"
 
 MeteorFalls_1F_2R_Text_JohnRematchNotEnoughMons:
-	.string "JOHN: Well, well, a young TRAINER!\p"
+	.string "John: Well, well, a young Trainer!\p"
 	.string "We battle two at a time. Come back\n"
-	.string "with more POKéMON, won't you?$"
+	.string "with more Pokémon, won't you?$"
 
 MeteorFalls_1F_2R_Text_JayRematchIntro:
-	.string "JAY: Fifty years, and we've held\n"
+	.string "Jay: Fifty years, and we've held\n"
 	.string "each other up the whole way.\p"
 	.string "That makes a couple strong.$"
 
 MeteorFalls_1F_2R_Text_JayRematchDefeat:
-	.string "JAY: Bested again!\n"
+	.string "Jay: Bested again!\n"
 	.string "What a strong young one.$"
 
 MeteorFalls_1F_2R_Text_JayPostRematch:
-	.string "JAY: Our daughter wants us to move\n"
-	.string "in with her in RUSTBORO.\p"
+	.string "Jay: Our daughter wants us to move\n"
+	.string "in with her in Rustboro.\p"
 	.string "There's no room, of course.\n"
 	.string "There never is anymore.$"
 
 MeteorFalls_1F_2R_Text_JayRematchNotEnoughMons:
-	.string "JAY: Only one POKéMON, dear?\p"
+	.string "Jay: Only one Pokémon, dear?\p"
 	.string "We battle as a pair. Come back\n"
 	.string "with two.$"
 

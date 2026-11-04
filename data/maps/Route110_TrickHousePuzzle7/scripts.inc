@@ -317,12 +317,12 @@ Route110_TrickHousePuzzle7_EventScript_Everett::
 Route110_TrickHousePuzzle7_Text_WroteSecretCodeLockOpened::
 	.string "{PLAYER} wrote down the secret code\n"
 	.string "on the door.\p"
-	.string "“TRICK MASTER is huggable.”\n"
+	.string "“Trick Master is huggable.”\n"
 	.string "… … … … … … … …\p"
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle7_Text_JoshuaIntro:
-	.string "The TRICK MASTER vanishes like smoke!\p"
+	.string "The Trick Master vanishes like smoke!\p"
 	.string "I've been taking notes for months.\n"
 	.string "Still no idea how!$"
 
@@ -336,7 +336,7 @@ Route110_TrickHousePuzzle7_Text_JoshuaPostBattle:
 
 Route110_TrickHousePuzzle7_Text_PatriciaIntro:
 	.string "Circling the same spot…\p"
-	.string "In SOOTOPOLIS, that's terrible luck.\n"
+	.string "In Sootopolis, that's terrible luck.\n"
 	.string "The old folks say so.$"
 
 Route110_TrickHousePuzzle7_Text_PatriciaDefeat:
@@ -377,7 +377,7 @@ Route110_TrickHousePuzzle7_Text_AlvaroIntro:
 	.string "walls. Very closely!$"
 
 Route110_TrickHousePuzzle7_Text_AlvaroDefeat:
-	.string "I didn't see THAT coming…$"
+	.string "I didn't see That coming…$"
 
 Route110_TrickHousePuzzle7_Text_AlvaroPostBattle:
 	.string "Weird place to meet, huh? As one\n"
@@ -385,7 +385,7 @@ Route110_TrickHousePuzzle7_Text_AlvaroPostBattle:
 
 Route110_TrickHousePuzzle7_Text_EverettIntro:
 	.string "It's so cramped in here…\p"
-	.string "My whole apartment in MAUVILLE is\n"
+	.string "My whole apartment in Mauville is\n"
 	.string "this size. I feel right at home.$"
 
 Route110_TrickHousePuzzle7_Text_EverettDefeat:

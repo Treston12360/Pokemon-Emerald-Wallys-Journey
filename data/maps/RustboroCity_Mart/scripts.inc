@@ -63,19 +63,19 @@ RustboroCity_Mart_EventScript_BugCatcher::
 	end
 
 RustboroCity_Mart_Text_BuyingHealsInCaseOfShroomish:
-	.string "PARLYZ HEALS and ANTIDOTES.\p"
-	.string "PETALBURG WOODS has gotten meaner\n"
+	.string "Parlyz Heals and Antidotes.\p"
+	.string "Petalburg Woods has gotten meaner\n"
 	.string "since the river changed. The\l"
-	.string "POKéMON are stressed.$"
+	.string "Pokémon are stressed.$"
 
 RustboroCity_Mart_Text_ShouldBuySuperPotionsInstead:
-	.string "My POKéMON evolved. More HP now.\p"
-	.string "Time for SUPER POTIONS. Growing up\n"
+	.string "My Pokémon evolved. More HP now.\p"
+	.string "Time for Super Potions. Growing up\n"
 	.string "costs more. Nobody warns you.$"
 
 RustboroCity_Mart_Text_GettingEscapeRopeJustInCase:
-	.string "ESCAPE ROPE, just in case.\p"
-	.string "GRANITE CAVE is dark and deep. The\n"
-	.string "smart TRAINERS are the ones who\l"
+	.string "Escape Rope, just in case.\p"
+	.string "Granite Cave is dark and deep. The\n"
+	.string "smart Trainers are the ones who\l"
 	.string "plan their way out.$"
 

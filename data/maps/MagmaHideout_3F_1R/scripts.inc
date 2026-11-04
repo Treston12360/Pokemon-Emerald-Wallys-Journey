@@ -14,7 +14,7 @@ MagmaHideout_3F_1R_EventScript_Grunt16::
 MagmaHideout_3F_1R_Text_Grunt9Intro:
 	.string "They posted me right by the lava!\p"
 	.string "I used to be a schoolteacher in\n"
-	.string "FALLARBOR. What am I doing?$"
+	.string "Fallarbor. What am I doing?$"
 
 MagmaHideout_3F_1R_Text_Grunt9Defeat:
 	.string "Heat exhaustion…\n"
@@ -26,8 +26,8 @@ MagmaHideout_3F_1R_Text_Grunt9PostBattle:
 
 MagmaHideout_3F_1R_Text_Grunt16Intro:
 	.string "I joined after the floods took our\n"
-	.string "house on ROUTE 103.\p"
-	.string "MAXIE was the only one who showed\n"
+	.string "house on Route 103.\p"
+	.string "Maxie was the only one who showed\n"
 	.string "up with a plan instead of a speech.\p"
 	.string "I'm not letting you ruin it!$"
 
@@ -36,7 +36,7 @@ MagmaHideout_3F_1R_Text_Grunt16Defeat:
 	.string "with anything!$"
 
 MagmaHideout_3F_1R_Text_Grunt16PostBattle:
-	.string "TEAM AQUA talks about saving the\n"
+	.string "Team Aqua talks about saving the\n"
 	.string "sea. Fine.\p"
 	.string "But who's saving the people who\n"
 	.string "live on the shore?$"

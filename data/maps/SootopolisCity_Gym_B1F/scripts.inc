@@ -52,22 +52,22 @@ SootopolisCity_Gym_B1F_EventScript_Daphne::
 	end
 
 SootopolisCity_Gym_B1F_Text_AndreaIntro:
-	.string "JUAN taught me to dance on ice\n"
+	.string "Juan taught me to dance on ice\n"
 	.string "before he taught me to battle.\p"
 	.string "Watch my footwork!$"
 
 SootopolisCity_Gym_B1F_Text_AndreaDefeat:
-	.string "I slipped… JUAN will make\n"
+	.string "I slipped… Juan will make\n"
 	.string "me dance it again.$"
 
 SootopolisCity_Gym_B1F_Text_AndreaPostBattle:
 	.string "Watch what happens if you crack all\n"
 	.string "the floor tiles.\p"
-	.string "JUAN laid this ice himself. He calls\n"
+	.string "Juan laid this ice himself. He calls\n"
 	.string "it dancing practice.$"
 
 SootopolisCity_Gym_B1F_Text_CrissyIntro:
-	.string "JUAN only battles TRAINERS who\n"
+	.string "Juan only battles Trainers who\n"
 	.string "make it through his ice.\p"
 	.string "And you won't get through me!$"
 
@@ -76,28 +76,28 @@ SootopolisCity_Gym_B1F_Text_CrissyDefeat:
 	.string "Your cute face fooled me!$"
 
 SootopolisCity_Gym_B1F_Text_CrissyPostBattle:
-	.string "JUAN retired once. Then WALLACE left\n"
-	.string "for the LEAGUE and the GYM sat empty.\p"
+	.string "Juan retired once. Then Wallace left\n"
+	.string "for the League and the Gym sat empty.\p"
 	.string "He came back the next morning. Said\n"
-	.string "an empty GYM is a sad dance floor.$"
+	.string "an empty Gym is a sad dance floor.$"
 
 SootopolisCity_Gym_B1F_Text_DaphneIntro:
-	.string "Watching JUAN battle…\n"
-	.string "That's why I became a TRAINER.$"
+	.string "Watching Juan battle…\n"
+	.string "That's why I became a Trainer.$"
 
 SootopolisCity_Gym_B1F_Text_DaphneDefeat:
 	.string "That was more graceful than\n"
 	.string "anything I've ever done.$"
 
 SootopolisCity_Gym_B1F_Text_DaphnePostBattle:
-	.string "JUAN was WALLACE's teacher.\p"
-	.string "He watches WALLACE's matches on TV\n"
+	.string "Juan was Wallace's teacher.\p"
+	.string "He watches Wallace's matches on TV\n"
 	.string "with the sound off. Just to see the\l"
 	.string "movement.$"
 
 SootopolisCity_Gym_B1F_Text_ConnieIntro:
 	.string "This ice is from the crater lake.\n"
-	.string "JUAN cuts it himself every spring.\p"
+	.string "Juan cuts it himself every spring.\p"
 	.string "Let me show you how harsh it is!$"
 
 SootopolisCity_Gym_B1F_Text_ConnieDefeat:
@@ -106,12 +106,12 @@ SootopolisCity_Gym_B1F_Text_ConnieDefeat:
 
 SootopolisCity_Gym_B1F_Text_ConniePostBattle:
 	.string "Here's a secret.\p"
-	.string "To reach JUAN, step on each floor\n"
+	.string "To reach Juan, step on each floor\n"
 	.string "tile exactly once.$"
 
 SootopolisCity_Gym_B1F_Text_BridgetIntro:
-	.string "Welcome to SOOTOPOLIS, the toughest\n"
-	.string "GYM in HOENN.\p"
+	.string "Welcome to Sootopolis, the toughest\n"
+	.string "Gym in Hoenn.\p"
 	.string "My family has guarded this city's\n"
 	.string "secrets for generations.$"
 
@@ -120,13 +120,13 @@ SootopolisCity_Gym_B1F_Text_BridgetDefeat:
 	.string "who's come down here in years.$"
 
 SootopolisCity_Gym_B1F_Text_BridgetPostBattle:
-	.string "My family has guarded the CAVE OF\n"
-	.string "ORIGIN for generations.\p"
-	.string "JUAN's family too. He's the one who\n"
+	.string "My family has guarded the Cave Of\n"
+	.string "Origin for generations.\p"
+	.string "Juan's family too. He's the one who\n"
 	.string "taught me the old songs.$"
 
 SootopolisCity_Gym_B1F_Text_OliviaIntro:
-	.string "I train beside JUAN every morning\n"
+	.string "I train beside Juan every morning\n"
 	.string "at dawn.\p"
 	.string "He's seventy. I can barely keep up.$"
 
@@ -137,26 +137,26 @@ SootopolisCity_Gym_B1F_Text_OliviaDefeat:
 SootopolisCity_Gym_B1F_Text_OliviaPostBattle:
 	.string "You have potential. Stay and train\n"
 	.string "with us?\p"
-	.string "…No? JUAN said you'd refuse.\n"
-	.string "WALLACE refused too, at first.$"
+	.string "…No? Juan said you'd refuse.\n"
+	.string "Wallace refused too, at first.$"
 
 SootopolisCity_Gym_B1F_Text_TiffanyIntro:
 	.string "A graceful glide, crossing no lines…\p"
-	.string "JUAN says that's how you walk this\n"
+	.string "Juan says that's how you walk this\n"
 	.string "ice. And how you live!$"
 
 SootopolisCity_Gym_B1F_Text_TiffanyDefeat:
 	.string "Well, excuse me?!\n"
-	.string "That was MY spotlight!$"
+	.string "That was My spotlight!$"
 
 SootopolisCity_Gym_B1F_Text_TiffanyPostBattle:
 	.string "How strong you are has nothing to do\n"
 	.string "with how old you are.\p"
-	.string "JUAN is seventy. He out-dances all\n"
+	.string "Juan is seventy. He out-dances all\n"
 	.string "of us.$"
 
 SootopolisCity_Gym_B1F_Text_BethanyIntro:
-	.string "I came to SOOTOPOLIS for one week.\n"
+	.string "I came to Sootopolis for one week.\n"
 	.string "That was six years ago. Oops!$"
 
 SootopolisCity_Gym_B1F_Text_BethanyDefeat:
@@ -169,8 +169,8 @@ SootopolisCity_Gym_B1F_Text_BethanyPostBattle:
 	.string "stories. I'm never leaving.$"
 
 SootopolisCity_Gym_B1F_Text_AnnikaIntro:
-	.string "My POKéMON came from the CAVE OF\n"
-	.string "ORIGIN's shore. Very rare!\p"
+	.string "My Pokémon came from the Cave Of\n"
+	.string "Origin's shore. Very rare!\p"
 	.string "Want to see them?$"
 
 SootopolisCity_Gym_B1F_Text_AnnikaDefeat:
@@ -178,12 +178,12 @@ SootopolisCity_Gym_B1F_Text_AnnikaDefeat:
 	.string "up close and fainted.$"
 
 SootopolisCity_Gym_B1F_Text_AnnikaPostBattle:
-	.string "JUAN praised my POKéMON once.\n"
+	.string "Juan praised my Pokémon once.\n"
 	.string "I joined the next day.\p"
 	.string "Oh, if only I'd met him years ago…$"
 
 SootopolisCity_Gym_B1F_Text_BriannaIntro:
-	.string "Giggle… JUAN says a frown ruins\n"
+	.string "Giggle… Juan says a frown ruins\n"
 	.string "a performance.\p"
 	.string "Yours is charming, though.$"
 
@@ -192,7 +192,7 @@ SootopolisCity_Gym_B1F_Text_BriannaDefeat:
 	.string "lost my composure.$"
 
 SootopolisCity_Gym_B1F_Text_BriannaPostBattle:
-	.string "You won't lay a finger on JUAN.\p"
+	.string "You won't lay a finger on Juan.\p"
 	.string "He's never lost to anyone but\n"
-	.string "WALLACE. And WALLACE cried after.$"
+	.string "Wallace. And Wallace cried after.$"
 

@@ -90,7 +90,7 @@ AquaHideout_B2F_Text_MattIntro:
 	.string "Hehehe…\p"
 	.string "You got here fast. We\n"
 	.string "underestimated you!\p"
-	.string "I'm a cut above the GRUNTS. No\n"
+	.string "I'm a cut above the Grunts. No\n"
 	.string "stalling. I'll pulverize you!$"
 
 AquaHideout_B2F_Text_MattDefeat:
@@ -99,14 +99,14 @@ AquaHideout_B2F_Text_MattDefeat:
 
 AquaHideout_B2F_Text_OurBossGotThroughHisPreparations:
 	.string "Hehehe!\p"
-	.string "While I was toying with you, our BOSS\n"
+	.string "While I was toying with you, our Boss\n"
 	.string "got through his preparations!$"
 
 AquaHideout_B2F_Text_MattPostBattle:
-	.string "Hehehe! The BOSS already left for\n"
+	.string "Hehehe! The Boss already left for\n"
 	.string "some cave under the sea!\p"
 	.string "Chase him if you like. Search the\n"
-	.string "wide sea beyond LILYCOVE.\p"
+	.string "wide sea beyond Lilycove.\p"
 	.string "Think you'll find it? Hehehe!$"
 
 AquaHideout_B2F_Text_Grunt4Intro:
@@ -119,7 +119,7 @@ AquaHideout_B2F_Text_Grunt4Defeat:
 	.string "for this?$"
 
 AquaHideout_B2F_Text_Grunt4PostBattle:
-	.string "BOSS…\n"
+	.string "Boss…\n"
 	.string "Is this good enough?\p"
 	.string "…I signed up to save the sea.\n"
 	.string "Stealing a submarine isn't that.$"
@@ -137,12 +137,12 @@ AquaHideout_B2F_Text_Grunt6Defeat:
 
 AquaHideout_B2F_Text_Grunt6PostBattle:
 	.string "Oh no… Where did I put our spare\n"
-	.string "POKé BALLS?\p"
-	.string "If I lose them, the BOSS will\n"
+	.string "Poké Balls?\p"
+	.string "If I lose them, the Boss will\n"
 	.string "chew me out…$"
 
 AquaHideout_B2F_Text_Grunt8Intro:
-	.string "My first lesson in TEAM AQUA:\n"
+	.string "My first lesson in Team Aqua:\n"
 	.string "these warp panels.\p"
 	.string "Not reef surveys. Not cleanups.\n"
 	.string "Warp panels.$"
@@ -152,6 +152,6 @@ AquaHideout_B2F_Text_Grunt8Defeat:
 	.string "panels instead of you…$"
 
 AquaHideout_B2F_Text_Grunt8PostBattle:
-	.string "Some of us told ARCHIE the old\n"
+	.string "Some of us told Archie the old\n"
 	.string "texts don't say “control.”\p"
 	.string "He didn't want to hear it.$"

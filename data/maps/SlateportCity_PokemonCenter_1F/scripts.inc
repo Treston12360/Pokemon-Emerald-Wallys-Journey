@@ -32,17 +32,17 @@ SlateportCity_PokemonCenter_1F_Text_TradedMonWithFriend_W0_Script:
 SlateportCity_PokemonCenter_1F_Text_RaiseDifferentTypesOfPokemon:
 	.string "A battle tip?\p"
 	.string "Raise a balanced team. One strong\n"
-	.string "POKéMON can be countered. A team\l"
+	.string "Pokémon can be countered. A team\l"
 	.string "that covers each other can't.$"
 
 SlateportCity_PokemonCenter_1F_Text_TradedMonWithFriend:
-	.string "I trade POKéMON with my friends.\p"
+	.string "I trade Pokémon with my friends.\p"
 	.string "Trading teaches you to let go of\n"
 	.string "something you love, and trust\l"
 	.string "someone else with it.$"
 
 SlateportCity_PokemonCenter_1F_Text_TradedMonWithFriend_W0:
-	.string "TEAM AQUA marched right into the\n"
+	.string "Team Aqua marched right into the\n"
 	.string "harbor like they owned it.\p"
 	.string "The police showed up after. Always\n"
 	.string "after.$"

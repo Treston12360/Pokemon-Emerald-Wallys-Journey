@@ -150,11 +150,11 @@ FortreeCity_Gym_EventScript_GymStatue::
 	end
 
 FortreeCity_Gym_Text_GymGuideAdvice:
-	.string "Yo, how's it going, CHAMPION-\n"
+	.string "Yo, how's it going, Champion-\n"
 	.string "bound {PLAYER}?\p"
-	.string "FORTREE GYM LEADER WINONA is\n"
-	.string "a master of FLYING-type POKéMON.\p"
-	.string "She's waiting at the back of this GYM,\n"
+	.string "Fortree Gym Leader Winona is\n"
+	.string "a master of Flying-type Pokémon.\p"
+	.string "She's waiting at the back of this Gym,\n"
 	.string "behind the rotating doors.\p"
 	.string "She's waiting for new challengers\n"
 	.string "who are trying to take wing!\p"
@@ -163,9 +163,9 @@ FortreeCity_Gym_Text_GymGuideAdvice:
 FortreeCity_Gym_Text_GymGuidePostVictory:
 	.string "You did it!\n"
 	.string "You've achieved liftoff!\p"
-	.string "Heads up: the LEAGUE counts BADGES,\n"
-	.string "not who you beat. Eight BADGES is\l"
-	.string "the only ticket to VICTORY ROAD.$"
+	.string "Heads up: the League counts Badges,\n"
+	.string "not who you beat. Eight Badges is\l"
+	.string "the only ticket to Victory Road.$"
 
 FortreeCity_Gym_Text_JaredIntro:
 	.string "My family has lived in the same\n"
@@ -177,15 +177,15 @@ FortreeCity_Gym_Text_JaredDefeat:
 	.string "You fly higher than me.$"
 
 FortreeCity_Gym_Text_JaredPostBattle:
-	.string "FORTREE can't build outward. The\n"
+	.string "Fortree can't build outward. The\n"
 	.string "forest won't allow it.\p"
-	.string "WINONA says that's a gift, not a\n"
+	.string "Winona says that's a gift, not a\n"
 	.string "problem. Not everyone agrees.$"
 
 FortreeCity_Gym_Text_EdwardoIntro:
-	.string "Every kid in FORTREE wants to join\n"
-	.string "this GYM.\p"
-	.string "WINONA only takes ten a year.\n"
+	.string "Every kid in Fortree wants to join\n"
+	.string "this Gym.\p"
+	.string "Winona only takes ten a year.\n"
 	.string "I'm one of them! I can't lose!$"
 
 FortreeCity_Gym_Text_EdwardoDefeat:
@@ -193,44 +193,44 @@ FortreeCity_Gym_Text_EdwardoDefeat:
 	.string "wings…$"
 
 FortreeCity_Gym_Text_EdwardoPostBattle:
-	.string "WINONA keeps a nest room above the\n"
-	.string "GYM.\p"
-	.string "Every injured bird POKéMON in the\n"
+	.string "Winona keeps a nest room above the\n"
+	.string "Gym.\p"
+	.string "Every injured bird Pokémon in the\n"
 	.string "forest ends up there. She feeds\l"
 	.string "them herself.$"
 
 FortreeCity_Gym_Text_FlintIntro:
-	.string "WINONA saved my SWABLU from a storm\n"
+	.string "Winona saved my Swablu from a storm\n"
 	.string "when I was little.\p"
 	.string "I owe her. You won't reach her!$"
 
 FortreeCity_Gym_Text_FlintDefeat:
-	.string "WINONA… I'm sorry…\n"
+	.string "Winona… I'm sorry…\n"
 	.string "I got grounded.$"
 
 FortreeCity_Gym_Text_FlintPostBattle:
-	.string "I joined because WINONA saved my\n"
-	.string "SWABLU from a storm.\p"
+	.string "I joined because Winona saved my\n"
+	.string "Swablu from a storm.\p"
 	.string "…And maybe because she's amazing.\n"
 	.string "Don't tell her. …Blush.$"
 
 FortreeCity_Gym_Text_AshleyIntro:
-	.string "WINONA found me in the nest room,\n"
-	.string "feeding a hurt TAILLOW.\p"
-	.string "She made me a TRAINER that day!$"
+	.string "Winona found me in the nest room,\n"
+	.string "feeding a hurt Taillow.\p"
+	.string "She made me a Trainer that day!$"
 
 FortreeCity_Gym_Text_AshleyDefeat:
 	.string "I was beaten…\n"
-	.string "WINONA will still be kind about it.$"
+	.string "Winona will still be kind about it.$"
 
 FortreeCity_Gym_Text_AshleyPostBattle:
-	.string "Thanks to WINONA, FORTREE lives\n"
+	.string "Thanks to Winona, Fortree lives\n"
 	.string "without fear.\p"
 	.string "She flies patrols over the forest\n"
 	.string "every dawn.$"
 
 FortreeCity_Gym_Text_HumbertoIntro:
-	.string "WINONA's face in battle shines with\n"
+	.string "Winona's face in battle shines with\n"
 	.string "determination… I won't let you see\l"
 	.string "it!$"
 
@@ -239,80 +239,80 @@ FortreeCity_Gym_Text_HumbertoDefeat:
 	.string "You flew right past my guard.$"
 
 FortreeCity_Gym_Text_HumbertoPostBattle:
-	.string "Before WINONA, this GYM was all\n"
+	.string "Before Winona, this Gym was all\n"
 	.string "show-offs and stunts.\p"
 	.string "She made it about the birds again.$"
 
 FortreeCity_Gym_Text_DariusIntro:
 	.string "Developers want to clear the forest\n"
 	.string "floor for houses.\p"
-	.string "WINONA's against it. So am I!$"
+	.string "Winona's against it. So am I!$"
 
 FortreeCity_Gym_Text_DariusDefeat:
-	.string "You know your FLYING types!$"
+	.string "You know your Flying types!$"
 
 FortreeCity_Gym_Text_DariusPostBattle:
-	.string "WINONA's POKéMON don't show off.\p"
+	.string "Winona's Pokémon don't show off.\p"
 	.string "They fly like they're protecting\n"
 	.string "something. Because they are.$"
 
 FortreeCity_Gym_Text_WinonaIntro:
-	.string "I am WINONA, LEADER of the FORTREE\n"
-	.string "GYM.\p"
+	.string "I am Winona, Leader of the Fortree\n"
+	.string "Gym.\p"
 	.string "I grew up in these treetops, with\n"
 	.string "nothing above me but sky.\p"
 	.string "The sky belongs to no one. My\n"
-	.string "POKéMON and I only borrow it.\p"
+	.string "Pokémon and I only borrow it.\p"
 	.string "Witness how gracefully we share it!$"
 
 FortreeCity_Gym_Text_WinonaDefeat:
 	.string "You flew past me as if the wind\n"
 	.string "were yours…\p"
-	.string "This GYM BADGE is yours too.\n"
+	.string "This Gym Badge is yours too.\n"
 	.string "You've earned it.$"
 
 FortreeCity_Gym_Text_ReceivedFeatherBadge:
-	.string "{PLAYER} received the FEATHER BADGE\n"
-	.string "from WINONA.$"
+	.string "{PLAYER} received the Feather Badge\n"
+	.string "from Winona.$"
 
 FortreeCity_Gym_Text_ExplainFeatherBadgeTakeThis:
-	.string "With the FEATHER BADGE, all POKéMON up\n"
+	.string "With the Feather Badge, all Pokémon up\n"
 	.string "to LV 70, even those received through\l"
 	.string "trades, will obey your every command.\p"
 	.string "You will also be able to use\n"
-	.string "the HM move FLY outside of battle.\p"
+	.string "the HM move Fly outside of battle.\p"
 	.string "And this…\n"
 	.string "This is a gift from me.$"
 
 FortreeCity_Gym_Text_ExplainAerialAce:
-	.string "TM40 contains AERIAL ACE.\p"
+	.string "TM40 contains Aerial Ace.\p"
 	.string "Its speed…\n"
-	.string "No POKéMON should be able to avoid it.\p"
+	.string "No Pokémon should be able to avoid it.\p"
 	.string "… … … … … …$"
 
 FortreeCity_Gym_Text_RegisteredWinona:
-	.string "Registered GYM LEADER WINONA\n"
-	.string "in the POKéNAV.$"
+	.string "Registered Gym Leader Winona\n"
+	.string "in the PokéNav.$"
 
 FortreeCity_Gym_Text_WinonaPostBattle:
 	.string "Though I fell to you, I will remain\n"
-	.string "devoted to BIRD POKéMON.\p"
-	.string "A boy named WALLY came through a week\n"
+	.string "devoted to Bird Pokémon.\p"
+	.string "A boy named Wally came through a week\n"
 	.string "ago. He read my whole strategy by the\l"
 	.string "second turn.\p"
 	.string "Polite boy. A little too sure of\n"
-	.string "himself. Terrifying TRAINER.$"
+	.string "himself. Terrifying Trainer.$"
 
 FortreeCity_Gym_Text_GymStatue:
-	.string "FORTREE CITY POKéMON GYM$"
+	.string "Fortree City Pokémon Gym$"
 
 FortreeCity_Gym_Text_GymStatueCertified:
-	.string "FORTREE CITY POKéMON GYM\p"
-	.string "WINONA'S CERTIFIED TRAINERS:\n"
+	.string "Fortree City Pokémon Gym\p"
+	.string "Winona's Certified Trainers:\n"
 	.string "{PLAYER}$"
 
 FortreeCity_Gym_Text_WinonaPreRematch:
-	.string "WINONA: We can never escape\n"
+	.string "Winona: We can never escape\n"
 	.string "gravity.\p"
 	.string "But we can choose how high we climb.\n"
 	.string "You've climbed to the very top.\p"
@@ -323,35 +323,35 @@ FortreeCity_Gym_Text_WinonaRematchDefeat:
 	.string "I couldn't follow.$"
 
 FortreeCity_Gym_Text_WinonaPostRematch:
-	.string "WINONA: My wings are bruised, not\n"
+	.string "Winona: My wings are bruised, not\n"
 	.string "broken.\p"
 	.string "I'll rise again. The birds taught me\n"
 	.string "that.$"
 
 FortreeCity_Gym_Text_WinonaRematchNeedTwoMons:
-	.string "WINONA: We can never escape\n"
+	.string "Winona: We can never escape\n"
 	.string "gravity.\p"
-	.string "Oh… You have only one POKéMON\n"
+	.string "Oh… You have only one Pokémon\n"
 	.string "with you?\p"
 	.string "Rematches here are two at a time.\n"
 	.string "Please return with two.$"
 
 FortreeCity_Gym_Text_WinonaPreRematch3:
-	.string "WINONA: Since the storms, my BIRD\n"
-	.string "POKéMON have flown rescue patrols\l"
+	.string "Winona: Since the storms, my Bird\n"
+	.string "Pokémon have flown rescue patrols\l"
 	.string "every dawn.\p"
 	.string "Their wings have never been stronger.\n"
 	.string "Shall we see?$"
 
 FortreeCity_Gym_Text_WinonaPreRematch4:
-	.string "WINONA: The sky over FORTREE has\n"
+	.string "Winona: The sky over Fortree has\n"
 	.string "changed. Wetter. Wilder.\p"
 	.string "We've learned to fly through it\n"
 	.string "instead of waiting for it to pass.\p"
-	.string "Let us soar, CHAMPION.$"
+	.string "Let us soar, Champion.$"
 
 FortreeCity_Gym_Text_WinonaPreRematch5:
-	.string "WINONA: In every flight there is a\n"
+	.string "Winona: In every flight there is a\n"
 	.string "moment when you stop fighting the\l"
 	.string "wind and become part of it.\p"
 	.string "That is the team you face now.\n"
@@ -361,11 +361,11 @@ FortreeCity_Gym_Text_WinonaRematchDefeatElite:
 	.string "Grounded… but never broken.$"
 
 FortreeCity_Gym_Text_WinonaPostRematchElite:
-	.string "WINONA: WALLY read my strategy by the\n"
+	.string "Winona: Wally read my strategy by the\n"
 	.string "second turn. You read it before I'd\l"
 	.string "even made it.\p"
 	.string "Two different kinds of genius.\n"
-	.string "I'm glad HOENN has both.$"
+	.string "I'm glad Hoenn has both.$"
 
 @ Wally's Journey: growing Gym Leader rematches (see WallyJourney_ScaleLeaderParty).
 FortreeCity_Gym_EventScript_WinonaRematchOffer::
@@ -425,13 +425,13 @@ FortreeCity_Gym_Text_WinonaGrowGo:
 	.string "Here we go!$"
 
 FortreeCity_Gym_Text_WinonaGrowNeedTwo:
-	.string "You need two POKéMON for this\n"
+	.string "You need two Pokémon for this\n"
 	.string "battle. Come back with more.$"
 
 FortreeCity_Gym_Text_WinonaGrowOffer1:
-	.string "WINONA: You hold {STR_VAR_1} BADGES now.\p"
-	.string "A LEADER's team is chosen to suit\n"
-	.string "the challenger's BADGES.\p"
+	.string "Winona: You hold {STR_VAR_1} Badges now.\p"
+	.string "A Leader's team is chosen to suit\n"
+	.string "the challenger's Badges.\p"
 	.string "Yours let us fly higher.\n"
 	.string "Will you fly with us?$"
 
@@ -439,12 +439,12 @@ FortreeCity_Gym_Text_WinonaGrowDefeat1:
 	.string "You soared past us again.$"
 
 FortreeCity_Gym_Text_WinonaGrowAfter1:
-	.string "Come back after your next BADGE.\n"
+	.string "Come back after your next Badge.\n"
 	.string "We'll be training on the wind.$"
 
 FortreeCity_Gym_Text_WinonaGrowOffer2:
-	.string "WINONA: Eight BADGES. The LEAGUE\n"
-	.string "waits beyond VICTORY ROAD.\p"
+	.string "Winona: Eight Badges. The League\n"
+	.string "waits beyond Victory Road.\p"
 	.string "We will hold back far less today.\n"
 	.string "One more flight?$"
 
@@ -452,25 +452,25 @@ FortreeCity_Gym_Text_WinonaGrowDefeat2:
 	.string "Your wings are ready.$"
 
 FortreeCity_Gym_Text_WinonaGrowAfter2:
-	.string "Fly to EVER GRANDE.\n"
+	.string "Fly to Ever Grande.\n"
 	.string "The sky is yours.$"
 
 FortreeCity_Gym_Text_WinonaGrowOffer3:
-	.string "WINONA: The CHAMPION returns to\n"
-	.string "FORTREE.\p"
+	.string "Winona: The Champion returns to\n"
+	.string "Fortree.\p"
 	.string "My full team will greet you.\n"
 	.string "Will you battle?$"
 
 FortreeCity_Gym_Text_WinonaGrowDefeat3:
 	.string "Graceful and fierce.\n"
-	.string "A true CHAMPION.$"
+	.string "A true Champion.$"
 
 FortreeCity_Gym_Text_WinonaGrowAfter3:
 	.string "We'll keep training among\n"
 	.string "the treetops.$"
 
 FortreeCity_Gym_Text_WinonaGrowOffer4:
-	.string "WINONA: You defended your title.\p"
+	.string "Winona: You defended your title.\p"
 	.string "My team has reached its peak.\n"
 	.string "Let us fly with everything we have.$"
 
@@ -479,5 +479,5 @@ FortreeCity_Gym_Text_WinonaGrowDefeat4:
 	.string "than you.$"
 
 FortreeCity_Gym_Text_WinonaGrowAfter4:
-	.string "Visit FORTREE whenever you like.$"
+	.string "Visit Fortree whenever you like.$"
 

@@ -40,18 +40,18 @@ AbandonedShip_Rooms_1F_Text_TakingALookAround:
 
 AbandonedShip_Rooms_1F_Text_ThaliaIntro:
 	.string "My grandpa was a deckhand here.\p"
-	.string "He said a WAILORD sang the night she\n"
+	.string "He said a Wailord sang the night she\n"
 	.string "went down. A warning, he said.$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaDefeat:
-	.string "Curious AND strong!$"
+	.string "Curious And strong!$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaPostBattle:
 	.string "The man next door says he's just\n"
 	.string "sightseeing. I don't buy it.$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaRegister:
-	.string "You're such a tough TRAINER!\n"
+	.string "You're such a tough Trainer!\n"
 	.string "Let me register you as a memento!$"
 
 AbandonedShip_Rooms_1F_Text_ThaliaRematchIntro:

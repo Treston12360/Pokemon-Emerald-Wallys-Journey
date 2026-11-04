@@ -13,9 +13,9 @@ AbandonedShip_Rooms_B1F_EventScript_FatMan::
 AbandonedShip_Rooms_B1F_Text_GettingQueasy:
 	.string "Urrrrppp…\p"
 	.string "It's not even moving, and I'm\n"
-	.string "queasy. How did people LIVE on\l"
+	.string "queasy. How did people Live on\l"
 	.string "these things?\p"
 	.string "Then again, how do people live in\n"
-	.string "PACIFIDLOG? Same answer, I guess.\l"
+	.string "Pacifidlog? Same answer, I guess.\l"
 	.string "They had no choice.$"
 

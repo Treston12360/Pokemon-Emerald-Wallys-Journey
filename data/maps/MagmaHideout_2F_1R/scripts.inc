@@ -23,7 +23,7 @@ MagmaHideout_2F_1R_EventScript_Grunt5::
 
 MagmaHideout_2F_1R_Text_Grunt14Intro:
 	.string "What, what, what? No uniform?\p"
-	.string "Only MAGMA belongs in here!\n"
+	.string "Only Magma belongs in here!\n"
 	.string "You're suspicious! Battle!$"
 
 MagmaHideout_2F_1R_Text_Grunt14Defeat:
@@ -32,13 +32,13 @@ MagmaHideout_2F_1R_Text_Grunt14Defeat:
 
 MagmaHideout_2F_1R_Text_Grunt14PostBattle:
 	.string "I used to swing a hammer on the\n"
-	.string "LAND INITIATIVE's building days.\p"
+	.string "Land Initiative's building days.\p"
 	.string "We put up twelve houses in\n"
-	.string "FALLARBOR. I miss that.$"
+	.string "Fallarbor. I miss that.$"
 
 MagmaHideout_2F_1R_Text_Grunt3Intro:
 	.string "Hold it!\p"
-	.string "MAXIE promised my family a house on\n"
+	.string "Maxie promised my family a house on\n"
 	.string "the new land. You won't stop that!$"
 
 MagmaHideout_2F_1R_Text_Grunt3Defeat:
@@ -46,7 +46,7 @@ MagmaHideout_2F_1R_Text_Grunt3Defeat:
 
 MagmaHideout_2F_1R_Text_Grunt3PostBattle:
 	.string "The scientists said the eruption\n"
-	.string "model was wrong. MAXIE called them\l"
+	.string "model was wrong. Maxie called them\l"
 	.string "cowards.\p"
 	.string "I didn't say anything. Maybe I'm\n"
 	.string "the coward.$"
@@ -54,7 +54,7 @@ MagmaHideout_2F_1R_Text_Grunt3PostBattle:
 MagmaHideout_2F_1R_Text_Grunt4Intro:
 	.string "An intruder! I trained a whole year\n"
 	.string "for this!\p"
-	.string "In the LAND INITIATIVE, I only ever\n"
+	.string "In the Land Initiative, I only ever\n"
 	.string "painted fences.$"
 
 MagmaHideout_2F_1R_Text_Grunt4Defeat:

@@ -21,17 +21,17 @@ LilycoveCity_House1_EventScript_Kecleon::
 	end
 
 LilycoveCity_House1_Text_PokemonPartnersNotTools:
-	.string "POKéMON are partners. Not tools.\p"
-	.string "TEAM AQUA says they love POKéMON.\n"
+	.string "Pokémon are partners. Not tools.\p"
+	.string "Team Aqua says they love Pokémon.\n"
 	.string "Then they use them to steal.\p"
 	.string "Love isn't what you say. It's what\n"
 	.string "you do.$"
 
 LilycoveCity_House1_Text_Kecleon:
-	.string "KECLEON: Ruroro?$"
+	.string "Kecleon: Ruroro?$"
 
 LilycoveCity_House1_Text_PokemonPartnersNotTools_W0:
-	.string "TEAM AQUA used their WAILMER as\n"
+	.string "Team Aqua used their Wailmer as\n"
 	.string "battering rams in the cove.\p"
 	.string "Partners, not tools. I'll keep\n"
 	.string "saying it until someone listens.$"

@@ -1197,8 +1197,8 @@ static void PrintProfilePhraseOnCard(void)
     }
 }
 
-static const u8 sText_WJWildEncounters[] = _("WILD ENCOUNTERS: {STR_VAR_1}");
-static const u8 sText_WJShinyEncounters[] = _("SHINY ENCOUNTERS");
+static const u8 sText_WJWildEncounters[] = _("Wild Encounters: {STR_VAR_1}");
+static const u8 sText_WJShinyEncounters[] = _("Shiny Encounters");
 
 static void BufferNameForCardBack(void)
 {

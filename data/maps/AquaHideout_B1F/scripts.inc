@@ -107,7 +107,7 @@ AquaHideout_B1F_EventScript_Grunt7::
 	end
 
 AquaHideout_B1F_Text_Grunt2Intro:
-	.string "Want to know our HIDEOUT's secret?\n"
+	.string "Want to know our Hideout's secret?\n"
 	.string "Beat me first!$"
 
 AquaHideout_B1F_Text_Grunt2Defeat:
@@ -123,7 +123,7 @@ AquaHideout_B1F_Text_Grunt2PostBattle:
 
 AquaHideout_B1F_Text_Grunt3Intro:
 	.string "Fuel loaded! Snacks loaded!\p"
-	.string "ARCHIE says the sea will rise and\n"
+	.string "Archie says the sea will rise and\n"
 	.string "the reefs will come back. Move!$"
 
 AquaHideout_B1F_Text_Grunt3Defeat:
@@ -134,13 +134,13 @@ AquaHideout_B1F_Text_Grunt3PostBattle:
 	.string "I was just holding you up!$"
 
 AquaHideout_B1F_Text_Grunt5Intro:
-	.string "Yawn… I joined to rescue WINGULL.\p"
+	.string "Yawn… I joined to rescue Wingull.\p"
 	.string "Now I guard a door in a cave.\n"
 	.string "Fine, I'll take you on.$"
 
 AquaHideout_B1F_Text_Grunt5Defeat:
 	.string "Yawn… Oh, I lost…\p"
-	.string "I signed up to save WINGULL, you\n"
+	.string "I signed up to save Wingull, you\n"
 	.string "know. Not to stand in a cave.$"
 
 AquaHideout_B1F_Text_Grunt5PostBattle:
@@ -151,7 +151,7 @@ AquaHideout_B1F_Text_Grunt5PostBattle:
 AquaHideout_B1F_Text_Grunt7Intro:
 	.string "Hey, you! Quick question!\p"
 	.string "Whose uniform is cooler, ours or\n"
-	.string "TEAM MAGMA's?$"
+	.string "Team Magma's?$"
 
 AquaHideout_B1F_Text_Grunt7Defeat:
 	.string "I lost, but I looked\n"

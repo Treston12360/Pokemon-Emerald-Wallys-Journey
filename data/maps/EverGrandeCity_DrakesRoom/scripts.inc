@@ -66,12 +66,12 @@ EverGrandeCity_DrakesRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_DrakesRoom_Text_IntroSpeech:
-	.string "DRAKE: I am DRAKE, the\n"
-	.string "last of the ELITE FOUR.\p"
+	.string "Drake: I am Drake, the\n"
+	.string "last of the Elite Four.\p"
 	.string "I've sailed through storms\n"
 	.string "that swallowed whole ships.\p"
 	.string "During the crisis, I saw\n"
-	.string "TRAINERS brave the waves\l"
+	.string "Trainers brave the waves\l"
 	.string "for people they never met.\p"
 	.string "Courage alone isn't enough.\n"
 	.string "You must know when to act\l"
@@ -79,7 +79,7 @@ EverGrandeCity_DrakesRoom_Text_IntroSpeech:
 	.string "Show me what you've learned.$"
 
 EverGrandeCity_DrakesRoom_Text_Defeat:
-	.string "DRAKE: Ha! Well fought!\p"
+	.string "Drake: Ha! Well fought!\p"
 	.string "You've the judgment of\n"
 	.string "a seasoned captain.$"
 
@@ -89,14 +89,14 @@ EverGrandeCity_DrakesRoom_Text_PostBattleSpeech:
 	.string "Neither ever cared what\n"
 	.string "I wanted of them.\p"
 	.string "A good captain listens.\n"
-	.string "A good TRAINER does, too.\p"
-	.string "WALLY fought hard when he\n"
+	.string "A good Trainer does, too.\p"
+	.string "Wally fought hard when he\n"
 	.string "came through here.\p"
 	.string "But I told him what I'm\n"
 	.string "telling you now:\p"
 	.string "Strength without listening\n"
 	.string "can take you only so far.\p"
-	.string "Go on. The CHAMPION awaits.$"
+	.string "Go on. The Champion awaits.$"
 
 @ Wally's Journey: after the first Hall of Fame the Elite Four use their rematch teams (FRLG style).
 EverGrandeCity_DrakesRoom_EventScript_DrakeRematch::
@@ -113,7 +113,7 @@ EverGrandeCity_DrakesRoom_EventScript_DrakeRematchPost::
 	end
 
 EverGrandeCity_DrakesRoom_Text_RematchIntro:
-	.string "DRAKE: So you came back, CHAMPION.\p"
+	.string "Drake: So you came back, Champion.\p"
 	.string "A true captain doesn't rest on one\n"
 	.string "victory. Neither do I.\p"
 	.string "Show me you still have what\n"

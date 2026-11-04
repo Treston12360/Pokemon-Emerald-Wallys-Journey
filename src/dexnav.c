@@ -211,9 +211,9 @@ static const u32 sHiddenMonIconGfx[] = INCGFX_U32("graphics/dexnav/hidden.png", 
 // strings
 static const u8 sText_DexNav_NoInfo[] = _("--------");
 static const u8 sText_DexNav_CaptureToSee[] = _("Capture first!");
-static const u8 sText_DexNav_PressRToRegister[] = _("R TO REGISTER!");
-static const u8 sText_WJ_Hint[] = _("{SELECT_BUTTON}WATER");
-static const u8 sText_WJ_HintPages[] = _("{SELECT_BUTTON}WATER {L_BUTTON}{R_BUTTON}LAND {STR_VAR_1}/{STR_VAR_2}");
+static const u8 sText_DexNav_PressRToRegister[] = _("R To Register!");
+static const u8 sText_WJ_Hint[] = _("{SELECT_BUTTON}Water");
+static const u8 sText_WJ_HintPages[] = _("{SELECT_BUTTON}Water {L_BUTTON}{R_BUTTON}Land {STR_VAR_1}/{STR_VAR_2}");
 static const u8 sText_WJ_Caught[] = _("Caught");
 static const u8 sText_WJ_Seen[] = _("Seen");
 static const u8 sText_WJ_OfSeen[] = _("{STR_VAR_1} of {STR_VAR_2}");
@@ -221,11 +221,11 @@ static const u8 sText_WJ_RareNone[] = _("None here");
 static const u8 sText_DexNav_SearchForRegisteredSpecies[] = _("Search {STR_VAR_1}");
 static const u8 sText_DexNav_NotFoundHere[] = _("This Pokémon cannot be found here!");
 static const u8 sText_ThreeQmarks[] = _("???");
-static const u8 sText_SearchLevel[] = _("SEARCH {LV}. {STR_VAR_1}");
+static const u8 sText_SearchLevel[] = _("Search {LV}. {STR_VAR_1}");
 static const u8 sText_MonLevel[] = _("{LV}. {STR_VAR_1}");
-static const u8 sText_EggMove[] = _("MOVE: {STR_VAR_1}");
+static const u8 sText_EggMove[] = _("Move: {STR_VAR_1}");
 static const u8 sText_HeldItem[] = _("{STR_VAR_1}");
-static const u8 sText_StartExit[] = _("{START_BUTTON} EXIT");
+static const u8 sText_StartExit[] = _("{START_BUTTON} Exit");
 static const u8 sText_DexNavChain[] = _("{NO} {STR_VAR_1}");
 static const u8 sText_DexNavChainLong[] = _("{NO}{STR_VAR_1}");
 

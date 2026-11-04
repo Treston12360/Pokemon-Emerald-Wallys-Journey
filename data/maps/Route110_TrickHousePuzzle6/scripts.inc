@@ -45,17 +45,17 @@ Route110_TrickHousePuzzle6_EventScript_Sebastian::
 Route110_TrickHousePuzzle6_Text_WroteSecretCodeLockOpened:
 	.string "{PLAYER} wrote down the secret code\n"
 	.string "on the door.\p"
-	.string "“TRICK MASTER is my life.”\n"
+	.string "“Trick Master is my life.”\n"
 	.string "… … … … … … … …\p"
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle6_Text_SophiaIntro:
-	.string "A strange house on ROUTE 110?\p"
+	.string "A strange house on Route 110?\p"
 	.string "I write a travel guide. This is\n"
 	.string "going on the cover!$"
 
 Route110_TrickHousePuzzle6_Text_SophiaDefeat:
-	.string "Ooh! A tough TRAINER!\n"
+	.string "Ooh! A tough Trainer!\n"
 	.string "What a find!$"
 
 Route110_TrickHousePuzzle6_Text_SophiaPostBattle:
@@ -63,9 +63,9 @@ Route110_TrickHousePuzzle6_Text_SophiaPostBattle:
 	.string "I'll do it all again next time!$"
 
 Route110_TrickHousePuzzle6_Text_BennyIntro:
-	.string "Maybe my BIRD POKéMON could fly me\n"
+	.string "Maybe my Bird Pokémon could fly me\n"
 	.string "over this wall…\p"
-	.string "Don't tell the TRICK MASTER!$"
+	.string "Don't tell the Trick Master!$"
 
 Route110_TrickHousePuzzle6_Text_BennyDefeat:
 	.string "Gwaaah! Blew it!$"

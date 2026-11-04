@@ -303,8 +303,8 @@ MossdeepCity_SpaceCenter_1F_Text_RocketLaunchDemandsPerfection:
 	.string "who trust our work.$"
 
 MossdeepCity_SpaceCenter_1F_Text_MagmaHaveSightsOnSpaceCenter:
-	.string "TEAM MAGMA sent a warning\n"
-	.string "to the SPACE CENTER.\p"
+	.string "Team Magma sent a warning\n"
+	.string "to the Space Center.\p"
 	.string "We're securing the fuel\n"
 	.string "and moving staff to safety.\p"
 	.string "A launch can wait.\n"
@@ -317,15 +317,15 @@ MossdeepCity_SpaceCenter_1F_Text_FoundThisYouCanHaveIt:
 	.string "have it.$"
 
 MossdeepCity_SpaceCenter_1F_Text_HoennFamousForMeteorShowers:
-	.string "HOENN has been famous for meteor\n"
+	.string "Hoenn has been famous for meteor\n"
 	.string "showers for a long time.\p"
-	.string "The big one that hit METEOR FALLS\n"
+	.string "The big one that hit Meteor Falls\n"
 	.string "changed the cliffs forever.\p"
 	.string "Some of the rock that came down\n"
 	.string "with it still hasn't been explained.$"
 
 MossdeepCity_SpaceCenter_1F_Text_MagmaCantStealFuelTakeThis:
-	.string "TEAM MAGMA can't be allowed to steal\n"
+	.string "Team Magma can't be allowed to steal\n"
 	.string "the rocket fuel.\p"
 	.string "Oh, by the way, you can have this stone\n"
 	.string "I found on the beach.$"
@@ -339,7 +339,7 @@ MossdeepCity_SpaceCenter_1F_Text_CantStrollOnBeachWithMagma:
 	.string "evenings back soon.$"
 
 MossdeepCity_SpaceCenter_1F_Text_DidPokemonComeFromSpace:
-	.string "Some people claim that POKéMON came\n"
+	.string "Some people claim that Pokémon came\n"
 	.string "from space. Could it be true?\p"
 	.string "Our telescope tracked a meteorite\n"
 	.string "splashing down near a tiny island,\l"
@@ -348,9 +348,9 @@ MossdeepCity_SpaceCenter_1F_Text_DidPokemonComeFromSpace:
 	.string "glowing on our scans.$"
 
 MossdeepCity_SpaceCenter_1F_Text_AquaShouldBeatMagma:
-	.string "Why doesn't the LEAGUE just arrest\n"
-	.string "TEAM MAGMA?\p"
-	.string "STEVEN told us the police need a\n"
+	.string "Why doesn't the League just arrest\n"
+	.string "Team Magma?\p"
+	.string "Steven told us the police need a\n"
 	.string "crime first. Posting a threat to\l"
 	.string "a door is creepy, not illegal.\p"
 	.string "So they're waiting outside. And we\n"
@@ -367,14 +367,14 @@ MossdeepCity_SpaceCenter_1F_Text_RocketsBoggleMyMind:
 MossdeepCity_SpaceCenter_1F_Text_MagmaWantsToSpoilMyDream:
 	.string "A giant chunk of metal bursts through\n"
 	.string "the skies and flies into space…\p"
-	.string "But TEAM MAGMA wants to spoil\n"
+	.string "But Team Magma wants to spoil\n"
 	.string "that dream of mine!\p"
 	.string "I'm not having any of that!$"
 
 MossdeepCity_SpaceCenter_1F_Text_StevenMagmaCantBeAllowedToTakeFuel:
-	.string "STEVEN: {PLAYER}{KUN}, have you read that\n"
+	.string "Steven: {PLAYER}{KUN}, have you read that\n"
 	.string "proclamation already?\p"
-	.string "TEAM MAGMA is coming after the rocket\n"
+	.string "Team Magma is coming after the rocket\n"
 	.string "fuel on this island.\p"
 	.string "I don't know what they'd need it for,\n"
 	.string "but they can't be allowed to take it.\p"
@@ -386,7 +386,7 @@ MossdeepCity_SpaceCenter_1F_Text_StevenMagmaCantBeAllowedToTakeFuel:
 MossdeepCity_SpaceCenter_1F_Text_Grunt3Intro:
 	.string "We warned you we'd come for the\n"
 	.string "rocket fuel!\p"
-	.string "MAXIE needs it for the volcano.\n"
+	.string "Maxie needs it for the volcano.\n"
 	.string "Step aside!$"
 
 MossdeepCity_SpaceCenter_1F_Text_Grunt3Defeat:
@@ -442,11 +442,11 @@ MossdeepCity_SpaceCenter_1F_Text_Grunt2PostBattle:
 MossdeepCity_SpaceCenter_1F_Text_MagmaIntentToStealNotice:
 	.string "This is…\n"
 	.string "An intent-to-steal notice?\p"
-	.string "“To the staff of the SPACE CENTER:\n"
+	.string "“To the staff of the Space Center:\n"
 	.string "How are you? We are doing fine.\p"
 	.string "“We will soon visit you to take your\n"
 	.string "rocket fuel.\p"
 	.string "“Please don't try to stop us.\n"
 	.string "We will take the fuel no matter what.\p"
 	.string "“Let there be more land!\n"
-	.string "                                          TEAM MAGMA”$"
+	.string "                                          Team Magma”$"

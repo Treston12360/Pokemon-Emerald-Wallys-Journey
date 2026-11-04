@@ -708,26 +708,26 @@ PetalburgCity_EventScript_GymBoy::
 	end
 
 PetalburgCity_Text_WhereIsWally:
-	.string "Where has our WALLY gone?\p"
+	.string "Where has our Wally gone?\p"
 	.string "The doctor says the air in\n"
-	.string "VERDANTURF could change his life.\p"
+	.string "Verdanturf could change his life.\p"
 	.string "He's so small. I just want him to\n"
 	.string "have the chance.$"
 
 PetalburgCity_Text_AreYouRookieTrainer:
-	.string "Hiya! Rookie TRAINER?\p"
+	.string "Hiya! Rookie Trainer?\p"
 	.string "Here's what nobody tells you. When\n"
-	.string "you reach a new town, check the GYM.\p"
-	.string "Then check the people. The GYM\n"
+	.string "you reach a new town, check the Gym.\p"
+	.string "Then check the people. The Gym\n"
 	.string "tells you how strong a town is.\l"
 	.string "The people tell you why.$"
 
 PetalburgCity_Text_ThisIsPetalburgGym:
-	.string "See? This is PETALBURG CITY's GYM.$"
+	.string "See? This is Petalburg City's Gym.$"
 
 PetalburgCity_Text_ThisIsGymSign:
-	.string "This is the GYM's sign. Look for it\n"
-	.string "whenever you're looking for a GYM.$"
+	.string "This is the Gym's sign. Look for it\n"
+	.string "whenever you're looking for a Gym.$"
 
 PetalburgCity_Text_WaterReflection:
 	.string "My face is reflected in the water.\p"
@@ -736,27 +736,27 @@ PetalburgCity_Text_WaterReflection:
 	.string "What do you see in yours?$"
 
 PetalburgCity_Text_FullPartyExplanation:
-	.string "You can carry six POKéMON. Catch a\n"
-	.string "seventh and it goes to a PC BOX.\p"
-	.string "DEVON built that system. Like it or\n"
-	.string "not, half of HOENN runs on DEVON.$"
+	.string "You can carry six Pokémon. Catch a\n"
+	.string "seventh and it goes to a PC Box.\p"
+	.string "Devon built that system. Like it or\n"
+	.string "not, half of Hoenn runs on Devon.$"
 
 PetalburgCity_Text_GymSign:
-	.string "PETALBURG CITY POKéMON GYM\n"
-	.string "LEADER: NORMAN\l"
+	.string "Petalburg City Pokémon Gym\n"
+	.string "Leader: Norman\l"
 	.string "“A man in pursuit of power!”$"
 
 PetalburgCity_Text_CitySign:
-	.string "PETALBURG CITY\n"
+	.string "Petalburg City\n"
 	.string "“Where people mingle with nature.”$"
 
 PetalburgCity_Text_WallyHouseSign:
-	.string "WALLY'S HOUSE$"
+	.string "Wally's House$"
 
 PetalburgCity_Text_AreYouATrainer:
 	.string "Excuse me!\p"
 	.string "From the way you're dressed… are\n"
-	.string "you a POKéMON TRAINER?$"
+	.string "you a Pokémon Trainer?$"
 
 PetalburgCity_Text_WellMaybeNot:
 	.string "… … … … … …\p"
@@ -766,22 +766,22 @@ PetalburgCity_Text_WellMaybeNot:
 	.string "Don't worry. The road fixes that.$"
 
 PetalburgCity_Text_ImLookingForTalentedTrainers:
-	.string "I travel HOENN looking for talented\n"
-	.string "TRAINERS.\p"
+	.string "I travel Hoenn looking for talented\n"
+	.string "Trainers.\p"
 	.string "Last one I found was a frail boy who\n"
 	.string "couldn't stop coughing. Hm. Wonder\l"
 	.string "how he's doing.$"
 
 PetalburgCity_Text_WallyMomAfterBroadcast:
-	.string "I saw WALLY on the television.\p"
-	.string "They called him CHAMPION!\p"
+	.string "I saw Wally on the television.\p"
+	.string "They called him Champion!\p"
 	.string "He used to be afraid to walk to\n"
 	.string "the next town by himself.\p"
 	.string "I'm proud of him. I'm frightened,\n"
 	.string "too. That never quite goes away.$"
 
 PetalburgCity_Text_WallyMomAfterChampion:
-	.string "WALLY called after your battle.\p"
+	.string "Wally called after your battle.\p"
 	.string "He said he lost the title. Then he\n"
 	.string "said he owed you an apology.\p"
 	.string "He sounded lighter than he has in\n"

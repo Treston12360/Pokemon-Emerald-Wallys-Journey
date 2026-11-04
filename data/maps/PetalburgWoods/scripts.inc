@@ -316,12 +316,12 @@ PetalburgWoods_EventScript_JamesRematch::
 	end
 
 PetalburgWoods_Text_NotAOneToBeFound:
-	.string "Hmmm… Not a single SHROOMISH where\n"
+	.string "Hmmm… Not a single Shroomish where\n"
 	.string "there used to be dozens…$"
 
 PetalburgWoods_Text_HaveYouSeenShroomish:
-	.string "Have you seen any SHROOMISH?\p"
-	.string "The DEVON runoff killed half the\n"
+	.string "Have you seen any Shroomish?\p"
+	.string "The Devon runoff killed half the\n"
 	.string "mushrooms by the river. I'm counting\l"
 	.string "what's left.$"
 
@@ -331,20 +331,20 @@ PetalburgWoods_Text_IWasGoingToAmbushYou:
 	.string "I got sick of waiting, so here I am!$"
 
 PetalburgWoods_Text_HandOverThosePapers:
-	.string "You! DEVON RESEARCHER!\p"
-	.string "Those papers prove DEVON's been\n"
+	.string "You! Devon Researcher!\p"
+	.string "Those papers prove Devon's been\n"
 	.string "dumping quarry runoff into the river.\l"
 	.string "Hand them over!$"
 
 PetalburgWoods_Text_YouHaveToHelpMe:
 	.string "Aiyeeeh!\p"
-	.string "You're a TRAINER, aren't you? Please,\n"
+	.string "You're a Trainer, aren't you? Please,\n"
 	.string "you've got to help me!$"
 
 PetalburgWoods_Text_NoOneCrossesTeamAqua:
 	.string "Hunh? You're protecting him?\p"
-	.string "He's carrying proof DEVON poisons\n"
-	.string "the river, and you're on HIS side?\p"
+	.string "He's carrying proof Devon poisons\n"
+	.string "the river, and you're on His side?\p"
 	.string "Fine! Battle me, kid!$"
 
 PetalburgWoods_Text_YoureKiddingMe:
@@ -353,26 +353,26 @@ PetalburgWoods_Text_YoureKiddingMe:
 
 PetalburgWoods_Text_YouveGotSomeNerve:
 	.string "Grrr… You've got some nerve\n"
-	.string "meddling with TEAM AQUA!\l"
+	.string "meddling with Team Aqua!\l"
 	.string "Come on and battle me again!\p"
 	.string "I wish I could say that, but I'm out of\n"
-	.string "POKéMON…\p"
-	.string "And, hey, we of TEAM AQUA are also\n"
-	.string "after something in RUSTBORO.\p"
+	.string "Pokémon…\p"
+	.string "And, hey, we of Team Aqua are also\n"
+	.string "after something in Rustboro.\p"
 	.string "I'll let you go today!$"
 
 PetalburgWoods_Text_ThatWasAwfullyClose:
 	.string "Whew… That was close!\p"
 	.string "Those papers are internal water\n"
-	.string "reports. DEVON fixes its own\l"
+	.string "reports. Devon fixes its own\l"
 	.string "problems. Quietly.\p"
 	.string "…You didn't hear that last part.\n"
-	.string "Here, take these POKé BALLS.$"
+	.string "Here, take these Poké Balls.$"
 
 PetalburgWoods_Text_TeamAquaAfterSomethingInRustboro:
-	.string "That TEAM AQUA thug said they were\n"
-	.string "after something in RUSTBORO too.\p"
-	.string "DEVON's headquarters is in RUSTBORO.$"
+	.string "That Team Aqua thug said they were\n"
+	.string "after something in Rustboro too.\p"
+	.string "Devon's headquarters is in Rustboro.$"
 
 PetalburgWoods_Text_ICantBeWastingTime:
 	.string "Uh-oh! It's a crisis! I can't be\n"
@@ -380,7 +380,7 @@ PetalburgWoods_Text_ICantBeWastingTime:
 
 PetalburgWoods_Text_YoureLoadedWithItems:
 	.string "You're loaded with items.\n"
-	.string "I can't give you these POKé BALLS.$"
+	.string "I can't give you these Poké Balls.$"
 
 PetalburgWoods_Text_GoBugPokemonTeam:
 	.string "Grandpa says these woods used to\n"
@@ -392,34 +392,34 @@ PetalburgWoods_Text_ICouldntWin:
 	.string "and still not enough!$"
 
 PetalburgWoods_Text_ImOutOfPokeBalls:
-	.string "I used my last POKé BALL on a\n"
-	.string "SILCOON.\p"
-	.string "The WURMPLE used to be everywhere.\n"
+	.string "I used my last Poké Ball on a\n"
+	.string "Silcoon.\p"
+	.string "The Wurmple used to be everywhere.\n"
 	.string "Now you have to look really hard.$"
 
 PetalburgWoods_Text_InstantlyPopularWithBugPokemon:
-	.string "Bring BUG POKéMON to school and\n"
+	.string "Bring Bug Pokémon to school and\n"
 	.string "you're instantly popular!\p"
-	.string "Well, in PETALBURG. In RUSTBORO\n"
-	.string "they just ask if it's a DEVON robot.$"
+	.string "Well, in Petalburg. In Rustboro\n"
+	.string "they just ask if it's a Devon robot.$"
 
 PetalburgWoods_Text_CantBePopularIfILose:
 	.string "Nobody at school is going to\n"
 	.string "hear about this!$"
 
 PetalburgWoods_Text_PeopleRespectYou:
-	.string "If you have a big BUG POKéMON,\n"
+	.string "If you have a big Bug Pokémon,\n"
 	.string "people respect you for it.$"
 
 PetalburgWoods_Text_IWantRematch1:
-	.string "I want a rematch when my BUG\n"
-	.string "POKéMON grow up!\p"
-	.string "I'm registering you in my POKéNAV!$"
+	.string "I want a rematch when my Bug\n"
+	.string "Pokémon grow up!\p"
+	.string "I'm registering you in my PokéNav!$"
 
 PetalburgWoods_Text_IWantRematch2:
-	.string "I want a rematch when my BUG \n"
-	.string "POKéMON grow up!\p"
-	.string "I'm registering you in my POKéNAV!$"
+	.string "I want a rematch when my Bug \n"
+	.string "Pokémon grow up!\p"
+	.string "I'm registering you in my PokéNav!$"
 
 PetalburgWoods_Text_MyPokemonHaveGrown:
 	.string "My bugs evolved! Wait till\n"
@@ -429,13 +429,13 @@ PetalburgWoods_Text_CantBePopularIfLose:
 	.string "Nooo! My reputation!$"
 
 PetalburgWoods_Text_IveBeenTrainingHard:
-	.string "Strong POKéMON make you popular,\n"
+	.string "Strong Pokémon make you popular,\n"
 	.string "right? So I've trained so hard!\p"
 	.string "Even in the part of the woods where\n"
 	.string "the stream smells funny.$"
 
 PetalburgWoods_Text_StayOutOfTallGrass:
-	.string "Yo! Your POKéMON doing okay?\p"
+	.string "Yo! Your Pokémon doing okay?\p"
 	.string "If they're hurt, stay out of the\n"
 	.string "tall grass. The woods don't care how\l"
 	.string "tired you are.$"
@@ -448,32 +448,32 @@ PetalburgWoods_Text_HiddenItemsExplanation:
 
 PetalburgWoods_Text_TryUsingThisItem:
 	.string "Oh, neat!\n"
-	.string "That's the BADGE from RUSTBORO GYM!\p"
-	.string "You must be a TRAINER.\n"
+	.string "That's the Badge from Rustboro Gym!\p"
+	.string "You must be a Trainer.\n"
 	.string "You should try using this item.$"
 
 PetalburgWoods_Text_MiracleSeedExplanation:
-	.string "That's a MIRACLE SEED. A POKéMON\n"
+	.string "That's a Miracle Seed. A Pokémon\n"
 	.string "holding it hits harder with\l"
-	.string "GRASS-type moves.\p"
-	.string "Held items matter. Ask any GYM\n"
-	.string "LEADER.$"
+	.string "Grass-type moves.\p"
+	.string "Held items matter. Ask any Gym\n"
+	.string "Leader.$"
 
 PetalburgWoods_Text_TrainerTipsExperience:
-	.string "TRAINER TIPS\p"
-	.string "Any POKéMON that appears even once\n"
+	.string "Trainer Tips\p"
+	.string "Any Pokémon that appears even once\n"
 	.string "in a battle is awarded EXP Points.\p"
-	.string "To raise a weak POKéMON, put it at the\n"
+	.string "To raise a weak Pokémon, put it at the\n"
 	.string "left of the team list.\p"
 	.string "As soon as a battle starts, switch it\n"
 	.string "out. It will earn EXP Points without\l"
 	.string "being exposed to any harm.$"
 
 PetalburgWoods_Text_TrainerTipsPP:
-	.string "TRAINER TIPS\p"
-	.string "In addition to Hit Points (HP), POKéMON\n"
+	.string "Trainer Tips\p"
+	.string "In addition to Hit Points (HP), Pokémon\n"
 	.string "have Power Points (PP) that are used to\l"
 	.string "make moves during battle.\p"
-	.string "If a POKéMON runs out of PP, it must be\n"
-	.string "taken to a POKéMON CENTER.$"
+	.string "If a Pokémon runs out of PP, it must be\n"
+	.string "taken to a Pokémon Center.$"
 

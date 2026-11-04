@@ -31,14 +31,14 @@ MtPyre_6F_Text_ValerieIntro:
 	.string "Up here… the spirits move through\n"
 	.string "me…\p"
 	.string "They're restless. Something is coming\n"
-	.string "for the ORBS…$"
+	.string "for the Orbs…$"
 
 MtPyre_6F_Text_ValerieDefeat:
 	.string "The spirits… let go\n"
 	.string "of me…$"
 
 MtPyre_6F_Text_ValeriePostBattle:
-	.string "The old keepers say the ORBS on\n"
+	.string "The old keepers say the Orbs on\n"
 	.string "the summit sing two old songs.\p"
 	.string "One calms the land. One calms the\n"
 	.string "sea. Neither commands anything.$"
@@ -47,7 +47,7 @@ MtPyre_6F_Text_ValerieRegister:
 	.string "Fufufu… I lost the match, but…\n"
 	.string "I have this little ability…\p"
 	.string "Without ever laying my hands on\n"
-	.string "your POKéNAV… Hiyah!$"
+	.string "your PokéNav… Hiyah!$"
 
 MtPyre_6F_Text_ValerieRematchIntro:
 	.string "Something's behind you…\n"
@@ -58,7 +58,7 @@ MtPyre_6F_Text_ValerieRematchDefeat:
 	.string "It liked you.$"
 
 MtPyre_6F_Text_ValeriePostRematch:
-	.string "The POKéMON at rest here…\n"
+	.string "The Pokémon at rest here…\n"
 	.string "Sometimes they play with visitors.$"
 
 MtPyre_6F_Text_CedricIntro:
@@ -71,7 +71,7 @@ MtPyre_6F_Text_CedricDefeat:
 	.string "were you?$"
 
 MtPyre_6F_Text_CedricPostBattle:
-	.string "I thought a lost TRAINER\n"
+	.string "I thought a lost Trainer\n"
 	.string "would be easy to defeat.\p"
 	.string "But I saw how frightened\n"
 	.string "people look up here.\p"

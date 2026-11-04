@@ -12,12 +12,12 @@ RustboroCity_Flat1_1F_EventScript_Woman::
 RustboroCity_Flat1_1F_Text_EveryPokemonHasAbility:
 	.string "Three families used to live in this\n"
 	.string "building. Now it's eleven.\p"
-	.string "DEVON keeps hiring, and everyone\n"
+	.string "Devon keeps hiring, and everyone\n"
 	.string "who's hired needs a bed.$"
 
 RustboroCity_Flat1_1F_Text_PokemonStrange:
-	.string "I used to babysit the PRESIDENT's\n"
-	.string "boy. STEVEN.\p"
+	.string "I used to babysit the President's\n"
+	.string "boy. Steven.\p"
 	.string "Quiet kid. Big empty house. His\n"
 	.string "father was always at the office.\p"
 	.string "He'd come home with his pockets full\n"

@@ -297,31 +297,31 @@ DewfordTown_Gym_EventScript_GymStatue::
 	end
 
 DewfordTown_Gym_Text_GymGuideAdvice:
-	.string "Hey, how's it going, CHAMPION-\n"
+	.string "Hey, how's it going, Champion-\n"
 	.string "bound {PLAYER}?\p"
-	.string "DEWFORD's GYM LEADER BRAWLY commands\n"
-	.string "FIGHTING-type POKéMON.\p"
-	.string "Going against him with NORMAL-type\n"
-	.string "POKéMON is asking for trouble.\p"
-	.string "FIGHTING POKéMON will lay a serious\n"
-	.string "smack down on NORMAL POKéMON,\l"
+	.string "Dewford's Gym Leader Brawly commands\n"
+	.string "Fighting-type Pokémon.\p"
+	.string "Going against him with Normal-type\n"
+	.string "Pokémon is asking for trouble.\p"
+	.string "Fighting Pokémon will lay a serious\n"
+	.string "smack down on Normal Pokémon,\l"
 	.string "so be careful!\p"
-	.string "What's worse, the GYM is as dark as\n"
+	.string "What's worse, the Gym is as dark as\n"
 	.string "the ocean floor.\p"
 	.string "But it will get brighter after defeating\n"
-	.string "the TRAINERS in your way.\p"
+	.string "the Trainers in your way.\p"
 	.string "Hey, okay, go for it!$"
 
 DewfordTown_Gym_Text_GymGuidePostVictory:
 	.string "Whoah! It's gotten so bright in here!\p"
-	.string "Here's a tip: the LEAGUE reviews\n"
-	.string "every GYM each year. BRAWLY keeps\l"
+	.string "Here's a tip: the League reviews\n"
+	.string "every Gym each year. Brawly keeps\l"
 	.string "the lights off and still passes!\p"
 	.string "Your future is bright, too!$"
 
 DewfordTown_Gym_Text_TakaoIntro:
-	.string "I was BRAWLY's first student.\p"
-	.string "Back then this GYM was a bait shed,\n"
+	.string "I was Brawly's first student.\p"
+	.string "Back then this Gym was a bait shed,\n"
 	.string "and he was the kid gutting fish in it.\p"
 	.string "Come on!$"
 
@@ -332,11 +332,11 @@ DewfordTown_Gym_Text_TakaoDefeat:
 DewfordTown_Gym_Text_TakaoPostBattle:
 	.string "His dad fished these waters forty\n"
 	.string "years. Then the catches dried up.\p"
-	.string "BRAWLY trained instead of mourning\n"
-	.string "it. That's this whole GYM, really.$"
+	.string "Brawly trained instead of mourning\n"
+	.string "it. That's this whole Gym, really.$"
 
 DewfordTown_Gym_Text_JocelynIntro:
-	.string "I swim here from ROUTE 106 every\n"
+	.string "I swim here from Route 106 every\n"
 	.string "morning before school!\p"
 	.string "You don't get to beat me after that!$"
 
@@ -345,14 +345,14 @@ DewfordTown_Gym_Text_JocelynDefeat:
 	.string "morning before school!$"
 
 DewfordTown_Gym_Text_JocelynPostBattle:
-	.string "My parents wanted me at the TRAINER'S\n"
-	.string "SCHOOL in RUSTBORO.\p"
-	.string "We couldn't afford it. BRAWLY charges\n"
+	.string "My parents wanted me at the Trainer's\n"
+	.string "School in Rustboro.\p"
+	.string "We couldn't afford it. Brawly charges\n"
 	.string "nothing. He just says show up.\p"
 	.string "So I show up. Every day.$"
 
 DewfordTown_Gym_Text_LauraIntro:
-	.string "BRAWLY got lost in GRANITE CAVE for\n"
+	.string "Brawly got lost in Granite Cave for\n"
 	.string "a whole night when he was ten.\p"
 	.string "That's why it's dark in here.\n"
 	.string "You want to see how I learned?$"
@@ -368,7 +368,7 @@ DewfordTown_Gym_Text_LauraPostBattle:
 	.string "of the cave at dawn.$"
 
 DewfordTown_Gym_Text_LilithIntro:
-	.string "Ufufu… You think BRAWLY's all\n"
+	.string "Ufufu… You think Brawly's all\n"
 	.string "smiles and surfing?\p"
 	.string "He's tougher than he looks.\n"
 	.string "So am I!$"
@@ -378,15 +378,15 @@ DewfordTown_Gym_Text_LilithDefeat:
 	.string "You walked right through me!$"
 
 DewfordTown_Gym_Text_LilithPostBattle:
-	.string "The LEAGUE offered him a GYM in\n"
-	.string "SLATEPORT once. Bigger. Brighter.\p"
-	.string "He said DEWFORD needed one more.\n"
+	.string "The League offered him a Gym in\n"
+	.string "Slateport once. Bigger. Brighter.\p"
+	.string "He said Dewford needed one more.\n"
 	.string "He was right.$"
 
 DewfordTown_Gym_Text_BrendenIntro:
 	.string "Three winters ago, my boat went\n"
 	.string "down off this island.\p"
-	.string "BRAWLY swam out in the storm and\n"
+	.string "Brawly swam out in the storm and\n"
 	.string "dragged me in. Now I owe him this!$"
 
 DewfordTown_Gym_Text_BrendenDefeat:
@@ -394,29 +394,29 @@ DewfordTown_Gym_Text_BrendenDefeat:
 	.string "I didn't see that swell coming!$"
 
 DewfordTown_Gym_Text_BrendenPostBattle:
-	.string "Aye. You're worthy of BRAWLY.\p"
+	.string "Aye. You're worthy of Brawly.\p"
 	.string "He won't fight you like a wall.\n"
 	.string "He'll come at you like a wave.$"
 
 DewfordTown_Gym_Text_CristianIntro:
-	.string "The last LEADER here quit after one\n"
+	.string "The last Leader here quit after one\n"
 	.string "season. Too far from everything.\p"
-	.string "BRAWLY stayed. So I stay too!$"
+	.string "Brawly stayed. So I stay too!$"
 
 DewfordTown_Gym_Text_CristianDefeat:
 	.string "Grrr! Overpowered!\n"
-	.string "BRAWLY will laugh at me!$"
+	.string "Brawly will laugh at me!$"
 
 DewfordTown_Gym_Text_CristianPostBattle:
-	.string "Go after that BADGE.\p"
+	.string "Go after that Badge.\p"
 	.string "Kids swim over from the mainland\n"
 	.string "just to train here now.\p"
 	.string "Nobody did that before him.$"
 
 DewfordTown_Gym_Text_BrawlyIntro:
-	.string "I'm BRAWLY! DEWFORD's GYM LEADER!\p"
+	.string "I'm Brawly! Dewford's Gym Leader!\p"
 	.string "I learned to surf on these waves and\n"
-	.string "to fight in the dark of GRANITE CAVE.\p"
+	.string "to fight in the dark of Granite Cave.\p"
 	.string "Out here nobody comes to rescue you.\n"
 	.string "So you get strong enough to rescue\l"
 	.string "yourself.\p"
@@ -427,47 +427,47 @@ DewfordTown_Gym_Text_BrawlyDefeat:
 	.string "I didn't even see you coming.\n"
 	.string "That's the point, huh?\p"
 	.string "Okay, you earned it.\n"
-	.string "Take this GYM BADGE!$"
+	.string "Take this Gym Badge!$"
 
 DewfordTown_Gym_Text_ReceivedKnuckleBadge:
-	.string "{PLAYER} received the KNUCKLE BADGE\n"
-	.string "from BRAWLY.$"
+	.string "{PLAYER} received the Knuckle Badge\n"
+	.string "from Brawly.$"
 
 DewfordTown_Gym_Text_KnuckleBadgeInfoTakeThis:
-	.string "The KNUCKLE BADGE makes all POKéMON\n"
+	.string "The Knuckle Badge makes all Pokémon\n"
 	.string "up to Level 30, even those you get in\l"
 	.string "trades, obey without question.\p"
 	.string "And, you'll be able to use the HM move\n"
-	.string "FLASH outside of battle.\p"
-	.string "If you'd like, use this TECHNICAL\n"
-	.string "MACHINE, too.$"
+	.string "Flash outside of battle.\p"
+	.string "If you'd like, use this Technical\n"
+	.string "Machine, too.$"
 
 DewfordTown_Gym_Text_ExplainBulkUp:
-	.string "That TM08 contains BULK UP.\p"
-	.string "It's a move that raises both ATTACK\n"
-	.string "and DEFENSE stats.\p"
+	.string "That TM08 contains Bulk Up.\p"
+	.string "It's a move that raises both Attack\n"
+	.string "and Defense stats.\p"
 	.string "… … … … … …$"
 
 DewfordTown_Gym_Text_RegisteredBrawly:
-	.string "Registered GYM LEADER BRAWLY\n"
-	.string "in the POKéNAV.$"
+	.string "Registered Gym Leader Brawly\n"
+	.string "in the PokéNav.$"
 
 DewfordTown_Gym_Text_BrawlyPostBattle:
 	.string "You caught the wave and rode it all\n"
 	.string "the way in.\p"
 	.string "Keep that up, and one day you'll\n"
-	.string "cause a storm across HOENN!$"
+	.string "cause a storm across Hoenn!$"
 
 DewfordTown_Gym_Text_GymStatue:
-	.string "DEWFORD TOWN POKéMON GYM$"
+	.string "Dewford Town Pokémon Gym$"
 
 DewfordTown_Gym_Text_GymStatueCertified:
-	.string "DEWFORD TOWN POKéMON GYM\p"
-	.string "BRAWLY'S CERTIFIED TRAINERS:\n"
+	.string "Dewford Town Pokémon Gym\p"
+	.string "Brawly's Certified Trainers:\n"
 	.string "{PLAYER}$"
 
 DewfordTown_Gym_Text_BrawlyPreRematch:
-	.string "BRAWLY: A wave pulls back, but it\n"
+	.string "Brawly: A wave pulls back, but it\n"
 	.string "always comes back to the shore.\p"
 	.string "I knew you would too.\n"
 	.string "Show me how big you've gotten!$"
@@ -477,41 +477,41 @@ DewfordTown_Gym_Text_BrawlyRematchDefeat:
 	.string "Again! What a rush!$"
 
 DewfordTown_Gym_Text_BrawlyPostRematch:
-	.string "BRAWLY: Battling's like the sea out\n"
+	.string "Brawly: Battling's like the sea out\n"
 	.string "there. You never touch the bottom.\p"
 	.string "That's why I keep diving.$"
 
 DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons:
-	.string "BRAWLY: A wave pulls back, but it\n"
+	.string "Brawly: A wave pulls back, but it\n"
 	.string "always comes back to the shore.\p"
-	.string "Oh? Only one of your POKéMON can\n"
+	.string "Oh? Only one of your Pokémon can\n"
 	.string "battle?\p"
 	.string "Rematches here are two at a time.\n"
 	.string "Come back with at least two.$"
 
 DewfordTown_Gym_Text_BrawlyPreRematch3:
-	.string "BRAWLY: I spent all season hauling\n"
+	.string "Brawly: I spent all season hauling\n"
 	.string "relief crates between the islands.\p"
 	.string "Best training I ever did.\n"
 	.string "Let's see if it shows!$"
 
 DewfordTown_Gym_Text_BrawlyPreRematch4:
-	.string "BRAWLY: The swells have been huge\n"
+	.string "Brawly: The swells have been huge\n"
 	.string "since the storms.\p"
 	.string "I learned to ride them instead of\n"
 	.string "fighting them. Let's go!$"
 
 DewfordTown_Gym_Text_BrawlyPreRematch5:
-	.string "BRAWLY: No more hiding in the dark.\n"
+	.string "Brawly: No more hiding in the dark.\n"
 	.string "I turned the lights on for this one.\p"
 	.string "I want to see every move coming.\n"
-	.string "Bring the storm, CHAMPION!$"
+	.string "Bring the storm, Champion!$"
 
 DewfordTown_Gym_Text_BrawlyRematchDefeatElite:
 	.string "Wiped out! What a ride!$"
 
 DewfordTown_Gym_Text_BrawlyPostRematchElite:
-	.string "BRAWLY: CHAMPION or not, you still\n"
+	.string "Brawly: Champion or not, you still\n"
 	.string "fight like someone protecting\l"
 	.string "something.\p"
 	.string "Never lose that. That's what makes\n"
@@ -575,13 +575,13 @@ DewfordTown_Gym_Text_BrawlyGrowGo:
 	.string "Here we go!$"
 
 DewfordTown_Gym_Text_BrawlyGrowNeedTwo:
-	.string "You need two POKéMON for this\n"
+	.string "You need two Pokémon for this\n"
 	.string "battle. Come back with more.$"
 
 DewfordTown_Gym_Text_BrawlyGrowOffer1:
-	.string "BRAWLY: Whoa, {STR_VAR_1} BADGES already!\p"
-	.string "In GYM battles I pick my crew to\n"
-	.string "match the BADGES you've got.\p"
+	.string "Brawly: Whoa, {STR_VAR_1} Badges already!\p"
+	.string "In Gym battles I pick my crew to\n"
+	.string "match the Badges you've got.\p"
 	.string "With that many, I can bring a\n"
 	.string "bigger wave. Paddle out again?$"
 
@@ -590,37 +590,37 @@ DewfordTown_Gym_Text_BrawlyGrowDefeat1:
 	.string "You're riding a monster swell.$"
 
 DewfordTown_Gym_Text_BrawlyGrowAfter1:
-	.string "Get your next BADGE, then come back.\n"
+	.string "Get your next Badge, then come back.\n"
 	.string "I'll be training on the rocks.$"
 
 DewfordTown_Gym_Text_BrawlyGrowOffer2:
-	.string "BRAWLY: All eight BADGES, huh?\p"
+	.string "Brawly: All eight Badges, huh?\p"
 	.string "Then I don't have to go so easy.\n"
-	.string "One last wave before the LEAGUE?$"
+	.string "One last wave before the League?$"
 
 DewfordTown_Gym_Text_BrawlyGrowDefeat2:
-	.string "Totally crushed. The LEAGUE\n"
+	.string "Totally crushed. The League\n"
 	.string "had better watch out.$"
 
 DewfordTown_Gym_Text_BrawlyGrowAfter2:
-	.string "Go get 'em at EVER GRANDE.\n"
+	.string "Go get 'em at Ever Grande.\n"
 	.string "The whole island's rooting for you.$"
 
 DewfordTown_Gym_Text_BrawlyGrowOffer3:
-	.string "BRAWLY: The CHAMPION, back in\n"
-	.string "little old DEWFORD!\p"
+	.string "Brawly: The Champion, back in\n"
+	.string "little old Dewford!\p"
 	.string "I've got my full crew now.\n"
 	.string "Rematch?$"
 
 DewfordTown_Gym_Text_BrawlyGrowDefeat3:
-	.string "You're the real deal, CHAMPION.$"
+	.string "You're the real deal, Champion.$"
 
 DewfordTown_Gym_Text_BrawlyGrowAfter3:
 	.string "I'll keep training till I can ride\n"
 	.string "a wave like you.$"
 
 DewfordTown_Gym_Text_BrawlyGrowOffer4:
-	.string "BRAWLY: You kept your title. Nice!\p"
+	.string "Brawly: You kept your title. Nice!\p"
 	.string "This is my strongest team ever.\n"
 	.string "Ready for the biggest wave yet?$"
 

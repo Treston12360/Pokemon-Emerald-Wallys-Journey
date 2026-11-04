@@ -52,8 +52,8 @@ AquaHideout_1F_EventScript_Grunt1Defeated::
 
 AquaHideout_1F_Text_OurBossIsSnatchingSomething:
 	.string "What? What? What do you want with \n"
-	.string "TEAM AQUA?\p"
-	.string "Our BOSS isn't here! He's gone off to\n"
+	.string "Team Aqua?\p"
+	.string "Our Boss isn't here! He's gone off to\n"
 	.string "snatch something important!\p"
 	.string "… …\n"
 	.string "Where did he go?\p"
@@ -61,17 +61,17 @@ AquaHideout_1F_Text_OurBossIsSnatchingSomething:
 	.string "you something that crucial?$"
 
 AquaHideout_1F_Text_WhereMightMagmaHideoutBe:
-	.string "What? Are you a MAGMA grunt?\p"
-	.string "They say MAGMA wants to wake some\n"
-	.string "ancient POKéMON. That's insane.\p"
-	.string "…Our BOSS keeps talking about the\n"
+	.string "What? Are you a Magma grunt?\p"
+	.string "They say Magma wants to wake some\n"
+	.string "ancient Pokémon. That's insane.\p"
+	.string "…Our Boss keeps talking about the\n"
 	.string "sea “taking back what's hers.” I\l"
 	.string "thought that was a speech.$"
 
 AquaHideout_1F_Text_BossWentToJackASubmarine:
 	.string "What? What? What do you want with \n"
-	.string "TEAM AQUA?\p"
-	.string "Our BOSS isn't here!\n"
+	.string "Team Aqua?\p"
+	.string "Our Boss isn't here!\n"
 	.string "He's gone off to jack a submarine!\p"
 	.string "… …\n"
 	.string "Where did he go?\p"
@@ -80,16 +80,16 @@ AquaHideout_1F_Text_BossWentToJackASubmarine:
 
 AquaHideout_1F_Text_BossIsOnRoute122:
 	.string "What? What? What do you want with \n"
-	.string "TEAM AQUA?\p"
-	.string "Our BOSS isn't here! He's on his way to\n"
-	.string "MT. PYRE on ROUTE 122!\p"
+	.string "Team Aqua?\p"
+	.string "Our Boss isn't here! He's on his way to\n"
+	.string "Mt. Pyre on Route 122!\p"
 	.string "… …\n"
 	.string "Why did he go?\p"
 	.string "Wahaha! Do you really think I'd tell\n"
 	.string "you something that crucial?$"
 
 AquaHideout_1F_Text_TeamMagmaAtMtChimney:
-	.string "What? Are you a MAGMA grunt?\p"
+	.string "What? Are you a Magma grunt?\p"
 	.string "I joined to stop the factories. Now\n"
 	.string "we're stealing a submarine.\p"
 	.string "Why does a beach cleanup need a\n"
@@ -97,9 +97,9 @@ AquaHideout_1F_Text_TeamMagmaAtMtChimney:
 
 AquaHideout_1F_Text_BossIsInSlateportCity:
 	.string "What? What? What do you want with\n"
-	.string "TEAM AQUA?\p"
-	.string "Our BOSS isn't here!\n"
-	.string "He's on his way to SLATEPORT CITY!\p"
+	.string "Team Aqua?\p"
+	.string "Our Boss isn't here!\n"
+	.string "He's on his way to Slateport City!\p"
 	.string "… …\n"
 	.string "Why did he go?\p"
 	.string "Wahaha! Do you really think I'd tell\n"
@@ -107,8 +107,8 @@ AquaHideout_1F_Text_BossIsInSlateportCity:
 
 AquaHideout_1F_Text_Grunt1Intro:
 	.string "Intruder! Hands where I can see them!\p"
-	.string "I've been on lookout since the SEA\n"
-	.string "TRUST days. Nobody gets past me!$"
+	.string "I've been on lookout since the Sea\n"
+	.string "Trust days. Nobody gets past me!$"
 
 AquaHideout_1F_Text_Grunt1Defeat:
 	.string "Grrrr… I lost!$"
@@ -116,6 +116,6 @@ AquaHideout_1F_Text_Grunt1Defeat:
 AquaHideout_1F_Text_Grunt1PostBattle:
 	.string "I took the loss, but I did my job.\p"
 	.string "Three years of beach cleanups with\n"
-	.string "the SEA TRUST. Nothing changed.\p"
+	.string "the Sea Trust. Nothing changed.\p"
 	.string "This, at least, gets noticed.$"
 

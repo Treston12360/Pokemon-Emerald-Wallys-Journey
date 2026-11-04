@@ -54,18 +54,18 @@ LilycoveCity_PokemonCenter_1F_EventScript_ManiacBadTeamGone::
 	end
 
 LilycoveCity_PokemonCenter_1F_Text_HowManyKindsOfPokemon:
-	.string "I wonder how many kinds of POKéMON\n"
+	.string "I wonder how many kinds of Pokémon\n"
 	.string "there are in the world.\p"
 	.string "It'd be great to cross seas and\n"
-	.string "trade POKéMON with people far away.$"
+	.string "trade Pokémon with people far away.$"
 
 LilycoveCity_PokemonCenter_1F_Text_HeardAboutRottenScoundrels:
 	.string "A traveler told me people\n"
 	.string "were stealing research\l"
-	.string "equipment and POKéMON.\p"
+	.string "equipment and Pokémon.\p"
 	.string "I used to think these teams\n"
 	.string "were just arguing about\l"
-	.string "how to protect HOENN.\p"
+	.string "how to protect Hoenn.\p"
 	.string "Now I'm not so sure.$"
 
 LilycoveCity_PokemonCenter_1F_Text_HaventSeenRottenScoundrels:
@@ -74,10 +74,10 @@ LilycoveCity_PokemonCenter_1F_Text_HaventSeenRottenScoundrels:
 	.string "That doesn't mean the problem\n"
 	.string "went away.\p"
 	.string "I hope whoever was hurt gets\n"
-	.string "their POKéMON back.$"
+	.string "their Pokémon back.$"
 
 LilycoveCity_PokemonCenter_1F_Text_HowManyKindsOfPokemon_W0:
-	.string "The cave in the cove was TEAM AQUA's\n"
+	.string "The cave in the cove was Team Aqua's\n"
 	.string "base the whole time.\p"
 	.string "Right under our noses. Makes you\n"
 	.string "wonder what else we didn't see.$"

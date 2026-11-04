@@ -54,8 +54,8 @@ AbandonedShip_Corridors_B1F_EventScript_Duncan::
 	end
 
 AbandonedShip_Corridors_B1F_Text_DuncanIntro:
-	.string "I crewed with DRAKE before he joined\n"
-	.string "the LEAGUE.\p"
+	.string "I crewed with Drake before he joined\n"
+	.string "the League.\p"
 	.string "He was the only one who went back\n"
 	.string "into the storm for us. Battle!$"
 
@@ -65,25 +65,25 @@ AbandonedShip_Corridors_B1F_Text_DuncanDefeat:
 AbandonedShip_Corridors_B1F_Text_DuncanPostBattle:
 	.string "The ship's bottom has sunk into the\n"
 	.string "depths.\p"
-	.string "If a POKéMON could go underwater,\n"
+	.string "If a Pokémon could go underwater,\n"
 	.string "we might make some progress…\p"
-	.string "She was a DEVON freighter, you know.\n"
+	.string "She was a Devon freighter, you know.\n"
 	.string "They never said what she carried.$"
 
 AbandonedShip_Corridors_B1F_Text_YayItsAShip:
 	.string "Yay! It's a ship!\p"
 	.string "Fish live in the hull now. The\n"
 	.string "reef out here is the only healthy\l"
-	.string "one left near DEWFORD.$"
+	.string "one left near Dewford.$"
 
 AbandonedShip_Corridors_B1F_Text_DoorIsLocked:
 	.string "The door is locked.\p"
-	.string "“STORAGE” is painted on the door.$"
+	.string "“Storage” is painted on the door.$"
 
 AbandonedShip_Corridors_B1F_Text_InsertedStorageKey:
 	.string "{PLAYER} inserted and turned the\n"
-	.string "STORAGE KEY.\p"
-	.string "The inserted KEY stuck fast,\n"
+	.string "Storage Key.\p"
+	.string "The inserted Key stuck fast,\n"
 	.string "but the door opened.$"
 
 AbandonedShip_Text_TheDoorIsOpen:

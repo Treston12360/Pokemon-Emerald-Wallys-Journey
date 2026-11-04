@@ -69,15 +69,15 @@ Route119_WeatherInstitute_1F_EventScript_Grunt4::
 	end
 
 Route119_WeatherInstitute_1F_Text_Grunt1Intro:
-	.string "The BOSS wants the storm research\n"
+	.string "The Boss wants the storm research\n"
 	.string "here. Stay out of it!$"
 
 Route119_WeatherInstitute_1F_Text_Grunt1Defeat:
-	.string "Blast it… The BOSS will\n"
+	.string "Blast it… The Boss will\n"
 	.string "hear about this.$"
 
 Route119_WeatherInstitute_1F_Text_Grunt1PostBattle:
-	.string "I'm just a GRUNT. I'm not supposed\n"
+	.string "I'm just a Grunt. I'm not supposed\n"
 	.string "to ask what the weather research\l"
 	.string "is for.\p"
 	.string "…I ask anyway. Nobody answers.$"
@@ -97,21 +97,21 @@ Route119_WeatherInstitute_1F_Text_Grunt4PostBattle:
 Route119_WeatherInstitute_1F_Text_EveryoneWentUpstairs:
 	.string "While I was sleeping, everyone went\n"
 	.string "upstairs!\p"
-	.string "…Was that TEAM AQUA? In the\n"
+	.string "…Was that Team Aqua? In the\n"
 	.string "building? While I slept?$"
 
 Route119_WeatherInstitute_1F_Text_WowYoureStrong:
 	.string "Wow, you're strong!\p"
-	.string "I wish I could be a TRAINER like you.\n"
+	.string "I wish I could be a Trainer like you.\n"
 	.string "Then I could protect this place.$"
 
 Route119_WeatherInstitute_1F_Text_ProfStudyingRain:
-	.string "The PROFESSOR loves rain. Fact.\p"
+	.string "The Professor loves rain. Fact.\p"
 	.string "But if it keeps raining like this,\n"
 	.string "people will be in trouble. Also fact.$"
 
 Route119_WeatherInstitute_1F_Text_NoticingAbnormalWeather:
-	.string "On the 2nd floor we study HOENN's\n"
+	.string "On the 2nd floor we study Hoenn's\n"
 	.string "weather patterns.\p"
 	.string "We've seen strange rain over the\n"
 	.string "ocean. Spots where it never stops.\l"
@@ -119,8 +119,8 @@ Route119_WeatherInstitute_1F_Text_NoticingAbnormalWeather:
 
 Route119_WeatherInstitute_1F_Text_WhatWereAquasUpTo:
 	.string "We've been saved!\p"
-	.string "What were the AQUAS after? A weather\n"
-	.string "POKéMON? That can't change the sea…\l"
+	.string "What were the Aquas after? A weather\n"
+	.string "Pokémon? That can't change the sea…\l"
 	.string "can it?$"
 
 Route119_WeatherInstitute_1F_Text_TakeRestInBed:

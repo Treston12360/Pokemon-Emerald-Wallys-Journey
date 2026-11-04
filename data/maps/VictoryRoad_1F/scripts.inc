@@ -130,35 +130,35 @@ VictoryRoad_1F_EventScript_Katelynn::
 	end
 
 VictoryRoad_1F_Text_WallyNotGoingToLoseAnymore:
-	.string "WALLY: Oh. You're still here. I was\n"
+	.string "Wally: Oh. You're still here. I was\n"
 	.string "hoping you'd have quit by now.\p"
 	.string "You saw the broadcast. I crushed\n"
-	.string "WALLACE in front of all of HOENN.\p"
-	.string "I'm CHAMPION now. Everyone you've ever\n"
+	.string "Wallace in front of all of Hoenn.\p"
+	.string "I'm Champion now. Everyone you've ever\n"
 	.string "beaten is beneath me. Including your\l"
 	.string "dad.\p"
-	.string "Four POKéMON. Half my strength. No MEGA\n"
-	.string "EVOLUTION.\p"
+	.string "Four Pokémon. Half my strength. No Mega\n"
+	.string "Evolution.\p"
 	.string "Honestly, even that feels like bullying.\p"
 	.string "Go on. Show me how far a nobody from\n"
-	.string "LITTLEROOT can get.$"
+	.string "Littleroot can get.$"
 
 VictoryRoad_1F_Text_WallyEntranceDefeat:
-	.string "WALLY: …Don't flatter yourself. I\n"
+	.string "Wally: …Don't flatter yourself. I\n"
 	.string "could've crushed you any time I wanted.$"
 
 VictoryRoad_1F_Text_WallyPostEntranceBattle:
-	.string "WALLY: Congratulations. You beat half\n"
+	.string "Wally: Congratulations. You beat half\n"
 	.string "of me.\p"
 	.string "Your dad must be so proud. Oh, wait. I\n"
 	.string "beat him too.\p"
-	.string "The ELITE FOUR are going to tear you\n"
+	.string "The Elite Four are going to tear you\n"
 	.string "apart, and I'm going to enjoy watching.\p"
 	.string "If you somehow crawl up to my room, I'll\n"
 	.string "end your journey myself.$"
 
 VictoryRoad_1F_Text_WallyIntro:
-	.string "WALLY: Hey, CHAMPION.\p"
+	.string "Wally: Hey, Champion.\p"
 	.string "I train down here between title\n"
 	.string "challenges. Nobody bothers me.\p"
 	.string "Want to see what I've been working\n"
@@ -169,13 +169,13 @@ VictoryRoad_1F_Text_WallyDefeat:
 	.string "That just means I keep going.$"
 
 VictoryRoad_1F_Text_WallyPostBattle:
-	.string "WALLY: When I'm ready, I'll come up\n"
+	.string "Wally: When I'm ready, I'll come up\n"
 	.string "those stairs and take the title back.\p"
 	.string "Don't get comfortable.$"
 
 VictoryRoad_1F_Text_EdgarIntro:
 	.string "Fourth time on this road!\p"
-	.string "SIDNEY beat me last year in three\n"
+	.string "Sidney beat me last year in three\n"
 	.string "turns. He grinned the whole time!$"
 
 VictoryRoad_1F_Text_EdgarDefeat:
@@ -191,8 +191,8 @@ VictoryRoad_1F_Text_EdgarPostBattle:
 	.string "I'm ready.$"
 
 VictoryRoad_1F_Text_AlbertIntro:
-	.string "Eight BADGES, three years.\p"
-	.string "I watched WALLY's title match. If he\n"
+	.string "Eight Badges, three years.\p"
+	.string "I watched Wally's title match. If he\n"
 	.string "can, I can! Not losing here!$"
 
 VictoryRoad_1F_Text_AlbertDefeat:
@@ -210,7 +210,7 @@ VictoryRoad_1F_Text_AlbertPostBattle:
 VictoryRoad_1F_Text_HopeIntro:
 	.string "Grandma walked this road and never\n"
 	.string "finished.\p"
-	.string "She saw WALLACE win his title. I'll\n"
+	.string "She saw Wallace win his title. I'll\n"
 	.string "finish for her!$"
 
 VictoryRoad_1F_Text_HopeDefeat:
@@ -218,16 +218,16 @@ VictoryRoad_1F_Text_HopeDefeat:
 	.string "You'd have liked this kid.$"
 
 VictoryRoad_1F_Text_HopePostBattle:
-	.string "You could become CHAMPION.\p"
-	.string "I watched that boy from VERDANTURF\n"
+	.string "You could become Champion.\p"
+	.string "I watched that boy from Verdanturf\n"
 	.string "take the title on TV.\p"
 	.string "He looked like you do now.\n"
 	.string "Tired, and not stopping.$"
 
 VictoryRoad_1F_Text_QuincyIntro:
-	.string "Want to know what VICTORY ROAD\n"
+	.string "Want to know what Victory Road\n"
 	.string "means?\p"
-	.string "WALLACE told me once. Win, and I'll\n"
+	.string "Wallace told me once. Win, and I'll\n"
 	.string "tell you!$"
 
 VictoryRoad_1F_Text_QuincyDefeat:
@@ -239,11 +239,11 @@ VictoryRoad_1F_Text_QuincyPostBattle:
 	.string "test for anyone aiming at the title.\p"
 	.string "No one carries you. No one finds\n"
 	.string "the way for you.\p"
-	.string "That's why it's called VICTORY ROAD.$"
+	.string "That's why it's called Victory Road.$"
 
 VictoryRoad_1F_Text_KatelynnIntro:
 	.string "I quit my job for this.\p"
-	.string "DRAKE says the LEAGUE tests your\n"
+	.string "Drake says the League tests your\n"
 	.string "heart, not your team. Come on!$"
 
 VictoryRoad_1F_Text_KatelynnDefeat:
@@ -260,8 +260,8 @@ VictoryRoad_1F_Text_KatelynnPostBattle:
 	.string "That still means something.$"
 
 VictoryRoad_1F_Text_WallyWinsEntranceBattle:
-	.string "WALLY: Pathetic. Even half of me is too\n"
+	.string "Wally: Pathetic. Even half of me is too\n"
 	.string "much for you.\p"
-	.string "Go home to LITTLEROOT, {PLAYER}.\p"
+	.string "Go home to Littleroot, {PLAYER}.\p"
 	.string "Nobody up there is waiting for you.\n"
 	.string "Honestly? Nobody ever was.$"

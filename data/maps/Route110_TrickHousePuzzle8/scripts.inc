@@ -30,7 +30,7 @@ Route110_TrickHousePuzzle8_EventScript_Leroy::
 Route110_TrickHousePuzzle8_Text_WroteSecretCodeLockOpened::
 	.string "{PLAYER} wrote down the secret code\n"
 	.string "on the door.\p"
-	.string "“TRICK MASTER I love.”\n"
+	.string "“Trick Master I love.”\n"
 	.string "… … … … … … … …\p"
 	.string "The lock clicked open!$"
 
@@ -43,12 +43,12 @@ Route110_TrickHousePuzzle8_Text_VincentDefeat:
 	.string "So you're tough too…$"
 
 Route110_TrickHousePuzzle8_Text_VincentPostBattle:
-	.string "You beat the POKéMON LEAGUE\n"
-	.string "CHAMPION? No wonder!$"
+	.string "You beat the Pokémon League\n"
+	.string "Champion? No wonder!$"
 
 Route110_TrickHousePuzzle8_Text_KeiraIntro:
 	.string "You're lucky to battle me!\p"
-	.string "I've cleared the TRICK HOUSE eight\n"
+	.string "I've cleared the Trick House eight\n"
 	.string "times!$"
 
 Route110_TrickHousePuzzle8_Text_KeiraDefeat:
@@ -60,7 +60,7 @@ Route110_TrickHousePuzzle8_Text_KeiraPostBattle:
 	.string "Go ahead, brag.$"
 
 Route110_TrickHousePuzzle8_Text_LeroyIntro:
-	.string "Another TRICK HOUSE veteran?\p"
+	.string "Another Trick House veteran?\p"
 	.string "We've suffered the same puzzles.\n"
 	.string "Let's suffer a battle too.$"
 
@@ -68,6 +68,6 @@ Route110_TrickHousePuzzle8_Text_LeroyDefeat:
 	.string "I see. A remarkable style.$"
 
 Route110_TrickHousePuzzle8_Text_LeroyPostBattle:
-	.string "The TRICK MASTER must be thrilled\n"
+	.string "The Trick Master must be thrilled\n"
 	.string "to have a challenger like you.$"
 

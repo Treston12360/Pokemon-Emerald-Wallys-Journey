@@ -34,7 +34,7 @@ MtPyre_3F_EventScript_RematchGabrielle::
 
 MtPyre_3F_Text_WilliamIntro:
 	.string "This mountain sharpens my mind!\p"
-	.string "The old texts say the ORB “soothes”\n"
+	.string "The old texts say the Orb “soothes”\n"
 	.string "the titan. Some read “commands.” Fools.$"
 
 MtPyre_3F_Text_WilliamDefeat:
@@ -51,8 +51,8 @@ MtPyre_3F_Text_WilliamPostBattle:
 
 MtPyre_3F_Text_KaylaIntro:
 	.string "A child, up here?\p"
-	.string "PHOEBE climbed these stairs at your\n"
-	.string "age. You're no PHOEBE. Battle!$"
+	.string "Phoebe climbed these stairs at your\n"
+	.string "age. You're no Phoebe. Battle!$"
 
 MtPyre_3F_Text_KaylaDefeat:
 	.string "I lost… cleanly. Ugh.$"
@@ -80,21 +80,21 @@ MtPyre_3F_Text_GabriellePostBattle:
 	.string "They deserve an open heart.$"
 
 MtPyre_3F_Text_GabrielleRegister:
-	.string "I would like to see your POKéMON\n"
+	.string "I would like to see your Pokémon\n"
 	.string "when they grow up some more…\p"
-	.string "Please, I need to see your POKéNAV.$"
+	.string "Please, I need to see your PokéNav.$"
 
 MtPyre_3F_Text_GabrielleRematchIntro:
 	.string "Oh, it's you… Come to show me how\n"
-	.string "your POKéMON have grown?$"
+	.string "your Pokémon have grown?$"
 
 MtPyre_3F_Text_GabrielleRematchDefeat:
 	.string "You've grown too.\n"
 	.string "They can see it.$"
 
 MtPyre_3F_Text_GabriellePostRematch:
-	.string "The POKéMON who've passed. The\n"
-	.string "POKéMON with you. The ones to come.\p"
+	.string "The Pokémon who've passed. The\n"
+	.string "Pokémon with you. The ones to come.\p"
 	.string "Cherish them all the same.\n"
 	.string "You already do.$"
 

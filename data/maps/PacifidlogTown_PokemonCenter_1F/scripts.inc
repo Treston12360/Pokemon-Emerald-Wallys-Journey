@@ -36,8 +36,8 @@ PacifidlogTown_PokemonCenter_1F_Text_WhatColorTrainerCard:
 	.string "Just people who got home.$"
 
 PacifidlogTown_PokemonCenter_1F_Text_OnColonyOfCorsola:
-	.string "PACIFIDLOG floats on a colony of\n"
-	.string "CORSOLA.\p"
+	.string "Pacifidlog floats on a colony of\n"
+	.string "Corsola.\p"
 	.string "They hold us up, we keep the water\n"
 	.string "clean for them. That's the deal.\l"
 	.string "Nobody had to sign anything.$"

@@ -550,8 +550,8 @@ static const u16 sLeaderGrowthIds[] = {
 static const u8 sLeaderAce[] = {0, 18, 20, 25, 32, 34, 39, 50, 54};
 static const u8 sLeaderFirstCount[] = {0, 3, 3, 4, 4, 4, 5, 6, 6};
 static const u8 sLeaderNames[][12] = {
-    _(""), _("ROXANNE"), _("BRAWLY"), _("WATTSON"), _("FLANNERY"),
-    _("NORMAN"), _("WINONA"), _("TATE&LIZA"), _("JUAN"),
+    _(""), _("Roxanne"), _("Brawly"), _("Wattson"), _("Flannery"),
+    _("Norman"), _("Winona"), _("Tate&Liza"), _("Juan"),
 };
 
 static u32 LeaderRematchStage(void)

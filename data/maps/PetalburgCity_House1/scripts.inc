@@ -12,16 +12,16 @@ PetalburgCity_House1_EventScript_Woman::
 PetalburgCity_House1_Text_TravelingIsWonderful:
 	.string "When I was young, I roamed the seas\n"
 	.string "and the mountains.\p"
-	.string "HOENN was quieter then. No teams,\n"
+	.string "Hoenn was quieter then. No teams,\n"
 	.string "no factories, no fighting over\l"
 	.string "what the land is for.\p"
 	.string "Or maybe I just didn't notice.$"
 
 PetalburgCity_House1_Text_GoOnAdventure:
 	.string "Sigh… I wish I could go on an\n"
-	.string "adventure with POKéMON…\p"
+	.string "adventure with Pokémon…\p"
 	.string "My parents said it's too dangerous.\n"
-	.string "TEAM MAGMA and TEAM AQUA, strange\l"
+	.string "Team Magma and Team Aqua, strange\l"
 	.string "weather…\p"
 	.string "Maybe that's exactly why someone\n"
 	.string "should.$"

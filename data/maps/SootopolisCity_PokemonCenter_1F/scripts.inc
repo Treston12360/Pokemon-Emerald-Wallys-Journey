@@ -44,31 +44,31 @@ SootopolisCity_PokemonCenter_1F_EventScript_WomanNoLegendaries::
 	end
 
 SootopolisCity_PokemonCenter_1F_Text_WallaceToughestInHoenn:
-	.string "This town's GYM LEADER, JUAN, taught\n"
-	.string "WALLACE everything he knows.\p"
-	.string "And they say WALLACE has been guiding\n"
-	.string "a sickly boy from PETALBURG.\p"
+	.string "This town's Gym Leader, Juan, taught\n"
+	.string "Wallace everything he knows.\p"
+	.string "And they say Wallace has been guiding\n"
+	.string "a sickly boy from Petalburg.\p"
 	.string "Strength gets passed down here, like\n"
 	.string "water from one pool to the next.$"
 
 SootopolisCity_PokemonCenter_1F_Text_EveryoneTakenRefuge:
 	.string "We moved everyone we could\n"
 	.string "into the lower rooms.\p"
-	.string "Some people brought POKéMON.\n"
+	.string "Some people brought Pokémon.\n"
 	.string "Others left everything behind.\p"
 	.string "The nurses are sharing food\n"
 	.string "and checking every name.$"
 
 SootopolisCity_PokemonCenter_1F_Text_AlwaysBeFriendsWithPokemon:
 	.string "People asked if I was afraid\n"
-	.string "of my own POKéMON.\p"
+	.string "of my own Pokémon.\p"
 	.string "Of course I was frightened.\n"
 	.string "But my partner was, too.\p"
 	.string "We stayed together.\n"
 	.string "That's what friendship means.$"
 
 SootopolisCity_PokemonCenter_1F_Text_ArentPokemonOurFriends:
-	.string "How can two POKéMON cause\n"
+	.string "How can two Pokémon cause\n"
 	.string "so much suffering?\p"
 	.string "I know they're frightened\n"
 	.string "and confused, too.\p"

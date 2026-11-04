@@ -23,7 +23,7 @@ MossdeepCity_PokemonCenter_2F_EventScript_Woman5::
 	end
 
 MossdeepCity_PokemonCenter_2F_Text_Woman5:
-	.string "The SPACE CENTER tracks every\n"
+	.string "The Space Center tracks every\n"
 	.string "falling star.\p"
 	.string "One scientist told me some of them\n"
 	.string "carry something alive inside.\p"

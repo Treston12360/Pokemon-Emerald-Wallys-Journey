@@ -37,19 +37,19 @@ FortreeCity_Mart_EventScript_Boy::
 	end
 
 FortreeCity_Mart_Text_SuperRepelBetter:
-	.string "SUPER REPEL lasts a long time,\n"
+	.string "Super Repel lasts a long time,\n"
 	.string "and it gets the job done.\p"
 	.string "It's much better than an ordinary\n"
-	.string "REPEL.$"
+	.string "Repel.$"
 
 FortreeCity_Mart_Text_StockUpOnItems:
-	.string "You heard of SIDNEY? ELITE FOUR?\p"
+	.string "You heard of Sidney? Elite Four?\p"
 	.string "He ran with a rough crowd as a kid.\n"
-	.string "The LEAGUE gave him a second chance.\p"
+	.string "The League gave him a second chance.\p"
 	.string "He plays dirty in battle. But he's\n"
 	.string "never once lied to anyone.$"
 
 FortreeCity_Mart_Text_RareCandyMakesMonGrow:
-	.string "A RARE CANDY makes a POKéMON grow\n"
+	.string "A Rare Candy makes a Pokémon grow\n"
 	.string "immediately by one level.$"
 

@@ -340,7 +340,7 @@ MossdeepCity_SpaceCenter_2F_EventScript_BrendanRayquazaCall::
 	return
 
 MossdeepCity_SpaceCenter_2F_Text_MossdeepIdealForRockets:
-	.string "MOSSDEEP usually has calm\n"
+	.string "Mossdeep usually has calm\n"
 	.string "winds and clear skies.\p"
 	.string "Lately our forecasts have\n"
 	.string "become less reliable.\p"
@@ -348,7 +348,7 @@ MossdeepCity_SpaceCenter_2F_Text_MossdeepIdealForRockets:
 	.string "A failed launch costs more.$"
 
 MossdeepCity_SpaceCenter_2F_Text_WhyWouldMagmaStealRocketFuel:
-	.string "Why would TEAM MAGMA need\n"
+	.string "Why would Team Magma need\n"
 	.string "this much rocket fuel?\p"
 	.string "It isn't something you can\n"
 	.string "pour into any old machine.\p"
@@ -364,7 +364,7 @@ MossdeepCity_SpaceCenter_2F_Text_WouldveLikedToBeAstronaut:
 	.string "It's still a good life.$"
 
 MossdeepCity_SpaceCenter_2F_Text_MagmaCantGetAwayWithThis:
-	.string "If TEAM MAGMA takes the rocket fuel,\n"
+	.string "If Team Magma takes the rocket fuel,\n"
 	.string "I won't be able to go to space!\p"
 	.string "They can't be allowed to get away\n"
 	.string "with such an outrage!$"
@@ -377,10 +377,10 @@ MossdeepCity_SpaceCenter_2F_Text_WishOrdinaryPeopleCouldGoIntoSpace:
 	.string "that journey safe for them.$"
 
 MossdeepCity_SpaceCenter_2F_Text_DoesMagmaWantToGoToSpace:
-	.string "TEAM MAGMA says it wants\n"
+	.string "Team Magma says it wants\n"
 	.string "more room for people.\p"
 	.string "Space is vast, but stealing\n"
-	.string "fuel won't make HOENN's\l"
+	.string "fuel won't make Hoenn's\l"
 	.string "families safer today.$"
 
 MossdeepCity_SpaceCenter_2F_Text_YoureOutnumberedTakeUsOn:
@@ -437,33 +437,33 @@ MossdeepCity_SpaceCenter_2F_Text_WellTakeCareOfYou:
 	.string "we'll take care of you at the same time!$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieDontInterfere:
-	.string "MAXIE: Clear out of the way!\n"
+	.string "Maxie: Clear out of the way!\n"
 	.string "Don't you dare interfere!$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenWhyStealRocketFuel:
-	.string "STEVEN: TEAM MAGMA…\p"
+	.string "Steven: Team Magma…\p"
 	.string "What's the point of stealing rocket\n"
 	.string "fuel?$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieUseFuelToEruptVolcano:
-	.string "MAXIE: Since you're so curious,\n"
+	.string "Maxie: Since you're so curious,\n"
 	.string "you deserve an explanation.\p"
 	.string "We're going to fire the entire load\n"
-	.string "into MT. CHIMNEY.\p"
-	.string "GROUDON won't answer us. Very well.\n"
+	.string "into Mt. Chimney.\p"
+	.string "Groudon won't answer us. Very well.\n"
 	.string "The mountain will.\p"
 	.string "A forced eruption. New ground for\n"
 	.string "every family that's been told to\l"
 	.string "wait.$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenAreYouReadyToBattle:
-	.string "STEVEN: {PLAYER}{KUN}!\n"
+	.string "Steven: {PLAYER}{KUN}!\n"
 	.string "You're going to help me?\p"
 	.string "Let's go into battle together!\n"
 	.string "Are you ready?$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenHurryGetReadyQuickly:
-	.string "STEVEN: Then, hurry!\n"
+	.string "Steven: Then, hurry!\n"
 	.string "Get ready quickly!$"
 
 MossdeepCity_SpaceCenter_2F_Text_JustWantToExpandLand:
@@ -474,8 +474,8 @@ MossdeepCity_SpaceCenter_Text_TabithaDefeat:
 	.string "I'm with our leader…$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieWeFailedIsAquaAlsoMisguided:
-	.string "MAXIE: We failed to make the volcano\n"
-	.string "erupt. We failed to control GROUDON.\p"
+	.string "Maxie: We failed to make the volcano\n"
+	.string "erupt. We failed to control Groudon.\p"
 	.string "I told my people I could give them\n"
 	.string "land. Homes. A future.\p"
 	.string "And I nearly burned the ground out\n"
@@ -484,21 +484,21 @@ MossdeepCity_SpaceCenter_2F_Text_MaxieWeFailedIsAquaAlsoMisguided:
 	.string "The problem is real. My answer\n"
 	.string "was not.\p"
 	.string "And if I was wrong to reshape the\n"
-	.string "world by force… then ARCHIE is\l"
+	.string "world by force… then Archie is\l"
 	.string "just as wrong.$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieWeWillGiveUp:
-	.string "MAXIE: All right…\n"
+	.string "Maxie: All right…\n"
 	.string "We will give up on the fuel…\p"
 	.string "There appear to be more important\n"
 	.string "matters that I must examine…$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenThankYouComeSeeMeAtHome:
-	.string "STEVEN: Whew, that was too tense.\n"
+	.string "Steven: Whew, that was too tense.\n"
 	.string "{PLAYER}{KUN}, thank you.\p"
 	.string "I have something to give you as\n"
 	.string "thanks for your support.\p"
 	.string "Please come see me at home\n"
 	.string "after this.\p"
-	.string "Oh, yes, I don't live in RUSTBORO CITY.\n"
+	.string "Oh, yes, I don't live in Rustboro City.\n"
 	.string "I live right here on this island.$"

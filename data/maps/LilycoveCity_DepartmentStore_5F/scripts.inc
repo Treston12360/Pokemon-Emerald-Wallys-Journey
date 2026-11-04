@@ -185,21 +185,21 @@ LilycoveCity_DepartmentStore_5F_EventScript_LittleGirl::
 	end
 
 LilycoveCity_DepartmentStore_5F_Text_PlaceFullOfCuteDolls:
-	.string "WALLACE won the Master Rank CONTEST\n"
-	.string "here before he ever led a GYM.\p"
+	.string "Wallace won the Master Rank Contest\n"
+	.string "here before he ever led a Gym.\p"
 	.string "He says a battle should be beautiful\n"
-	.string "too. My MILOTIC agrees.$"
+	.string "too. My Milotic agrees.$"
 
 LilycoveCity_DepartmentStore_5F_Text_GettingDollInsteadOfPokemon:
-	.string "GLACIA of the ELITE FOUR came\n"
+	.string "Glacia of the Elite Four came\n"
 	.string "through the harbor years ago.\p"
 	.string "Came from somewhere cold. Said she\n"
-	.string "was looking for a TRAINER strong\l"
+	.string "was looking for a Trainer strong\l"
 	.string "enough to melt her.\p"
 	.string "She's still looking, I hear.$"
 
 LilycoveCity_DepartmentStore_5F_Text_SellManyCuteMatsHere:
-	.string "They sell many cute MATS here.\p"
+	.string "They sell many cute Mats here.\p"
 	.string "I wonder which one I should get?\n"
 	.string "Maybe I'll buy them all…$"
 

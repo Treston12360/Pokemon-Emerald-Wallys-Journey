@@ -33,14 +33,14 @@ LavaridgeTown_Mart_EventScript_OldWoman::
 	end
 
 LavaridgeTown_Mart_Text_XSpeedFirstStrike:
-	.string "X SPEED boosts SPEED in battle.\p"
+	.string "X Speed boosts Speed in battle.\p"
 	.string "Strike first and you set the pace.\n"
 	.string "Most fights are won in the opening.$"
 
 LavaridgeTown_Mart_Text_LocalSpecialtyOnMtChimney:
 	.string "There's a local treat sold only on\n"
-	.string "MT. CHIMNEY's peak.\p"
-	.string "POKéMON love it. The vendor's been\n"
-	.string "nervous lately, with TEAM MAGMA up\l"
+	.string "Mt. Chimney's peak.\p"
+	.string "Pokémon love it. The vendor's been\n"
+	.string "nervous lately, with Team Magma up\l"
 	.string "there.$"
 

@@ -349,60 +349,60 @@ OldaleTown_Text_SavingMyProgress:
 	.string "before a long route.\p"
 	.string "My brother didn't once. Lost a whole\n"
 	.string "day. Learned more from that than\l"
-	.string "from any GYM.$"
+	.string "from any Gym.$"
 
 OldaleTown_Text_IWorkAtPokemonMart:
-	.string "Hi! I work at the POKéMON MART.\p"
+	.string "Hi! I work at the Pokémon Mart.\p"
 	.string "Can I borrow you for a second? I\n"
 	.string "promise this isn't a sales pitch.\l"
 	.string "Mostly.$"
 
 OldaleTown_Text_ThisIsAPokemonMart:
-	.string "This is a POKéMON MART.\n"
+	.string "This is a Pokémon Mart.\n"
 	.string "Just look for our blue roof.\p"
 	.string "We sell a variety of goods including\n"
-	.string "POKé BALLS for catching POKéMON.\p"
+	.string "Poké Balls for catching Pokémon.\p"
 	.string "Here, I'd like you to have this as\n"
 	.string "a promotional item.$"
 
 OldaleTown_Text_PotionExplanation:
-	.string "A POTION works anywhere, anytime.\p"
-	.string "Out on a route, far from a POKéMON\n"
-	.string "CENTER, that can mean everything.$"
+	.string "A Potion works anywhere, anytime.\p"
+	.string "Out on a route, far from a Pokémon\n"
+	.string "Center, that can mean everything.$"
 
 OldaleTown_Text_WaitDontComeInHere:
 	.string "Aaaah! Wait! Don't step there!\p"
 	.string "I just found footprints of a rare\n"
-	.string "POKéMON! Let me finish sketching\l"
+	.string "Pokémon! Let me finish sketching\l"
 	.string "them first.$"
 
 OldaleTown_Text_DiscoveredFootprints:
 	.string "I just found the footprints of a\n"
-	.string "rare POKéMON!\p"
-	.string "Let me finish sketching. PROF. BIRCH\n"
+	.string "rare Pokémon!\p"
+	.string "Let me finish sketching. Prof. Birch\n"
 	.string "pays for good field notes.$"
 
 OldaleTown_Text_FinishedSketchingFootprints:
 	.string "I finished sketching the footprints.\p"
 	.string "…They were mine. All of them.\p"
-	.string "Don't tell PROF. BIRCH.$"
+	.string "Don't tell Prof. Birch.$"
 
 OldaleTown_Text_MayLetsGoBack:
-	.string "MAY: {PLAYER}{KUN}!\n"
+	.string "May: {PLAYER}{KUN}!\n"
 	.string "Over here!\l"
 	.string "Let's hurry home!$"
 
 OldaleTown_Text_BrendanLetsGoBack:
-	.string "BRENDAN: I'm heading back to my dad's\n"
-	.string "LAB now.\l"
+	.string "Brendan: I'm heading back to my dad's\n"
+	.string "Lab now.\l"
 	.string "{PLAYER}, you should hustle back, too.$"
 
 OldaleTown_Text_TownSign:
-	.string "OLDALE TOWN\n"
+	.string "Oldale Town\n"
 	.string "“Where things start off scarce.”$"
 
 OldaleTown_Text_SavingMyProgress_W0:
-	.string "You're the kid from LITTLEROOT?\n"
-	.string "The CHAMPION?\p"
+	.string "You're the kid from Littleroot?\n"
+	.string "The Champion?\p"
 	.string "I'm saving my progress right now so\n"
 	.string "I never forget meeting you.$"

@@ -1941,9 +1941,9 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
     }
 
     u8 pwr_num[4], acc_num[4];
-    u8 cat_desc[7] = _("CAT: ");
-    u8 pwr_desc[7] = _("PWR: ");
-    u8 acc_desc[7] = _("ACC: ");
+    u8 cat_desc[7] = _("Cat: ");
+    u8 pwr_desc[7] = _("Pwr: ");
+    u8 acc_desc[7] = _("Acc: ");
     u8 cat_start[] = _("{CLEAR_TO 3}");
     u8 pwr_start[] = _("{CLEAR_TO 56}");
     u8 acc_start[] = _("{CLEAR_TO 108}");

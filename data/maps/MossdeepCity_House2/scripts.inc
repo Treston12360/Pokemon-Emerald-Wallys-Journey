@@ -52,19 +52,19 @@ MossdeepCity_House2_Movement_WingullExitEast:
 	step_end
 
 MossdeepCity_House2_Text_SisterMailsBoyfriendInFortree:
-	.string "TATE and LIZA finish each other's\n"
+	.string "Tate and Liza finish each other's\n"
 	.string "sentences.\p"
 	.string "Their mother says they did it before\n"
 	.string "they could talk. Now they do it in\l"
 	.string "battle.$"
 
 MossdeepCity_House2_Text_PokemonCarriesMailBackAndForth:
-	.string "My friend lives in FORTREE. My\n"
-	.string "POKéMON carries MAIL between us.\p"
+	.string "My friend lives in Fortree. My\n"
+	.string "Pokémon carries Mail between us.\p"
 	.string "Two towns with nothing in common.\n"
 	.string "And somehow we never run out of\l"
 	.string "things to say.$"
 
 MossdeepCity_House2_Text_Wingull:
-	.string "WINGULL: Pihyoh!$"
+	.string "Wingull: Pihyoh!$"
 

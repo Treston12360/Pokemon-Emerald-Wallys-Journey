@@ -16,13 +16,13 @@ Route119_House_EventScript_Wingull::
 	end
 
 Route119_House_Text_RumorAboutCaveOfOrigin:
-	.string "They say there's a CAVE OF ORIGIN\n"
-	.string "under SOOTOPOLIS.\p"
+	.string "They say there's a Cave Of Origin\n"
+	.string "under Sootopolis.\p"
 	.string "Old stories call it the place where\n"
 	.string "the land and sea were first born.\p"
 	.string "And where they'd fight again, if\n"
 	.string "anyone woke them.$"
 
 Route119_House_Text_Wingull:
-	.string "WINGULL: Pihyoh!$"
+	.string "Wingull: Pihyoh!$"
 

@@ -25,25 +25,25 @@ FortreeCity_House5_EventScript_Zigzagoon::
 	end
 
 FortreeCity_House5_Text_TreeHousesAreGreat:
-	.string "FORTREE's tree houses are the best\n"
-	.string "place to live with POKéMON.\p"
+	.string "Fortree's tree houses are the best\n"
+	.string "place to live with Pokémon.\p"
 	.string "We built around the trees instead\n"
 	.string "of cutting them down. Took longer.\l"
 	.string "Worth it.$"
 
 FortreeCity_House5_Text_AdaptedToNature:
-	.string "People and POKéMON adapted to nature\n"
+	.string "People and Pokémon adapted to nature\n"
 	.string "to survive.\p"
-	.string "TEAM MAGMA wants nature to adapt to\n"
-	.string "us. TEAM AQUA wants us to disappear.\p"
+	.string "Team Magma wants nature to adapt to\n"
+	.string "us. Team Aqua wants us to disappear.\p"
 	.string "There's a middle. Nobody wants to\n"
 	.string "live there.$"
 
 FortreeCity_House5_Text_Zigzagoon:
-	.string "ZIGZAGOON: Bufuu!$"
+	.string "Zigzagoon: Bufuu!$"
 
 FortreeCity_House5_Text_AdaptedToNature_W0:
 	.string "This rain isn't natural. The trees\n"
 	.string "know it.\p"
-	.string "Listen. Not one BIRD POKéMON is\n"
+	.string "Listen. Not one Bird Pokémon is\n"
 	.string "singing.$"

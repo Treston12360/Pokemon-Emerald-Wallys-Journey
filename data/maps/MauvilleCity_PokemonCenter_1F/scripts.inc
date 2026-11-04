@@ -47,21 +47,21 @@ MauvilleCity_PokemonCenter_1F_Text_ManOverThereSaysWeirdThings:
 MauvilleCity_PokemonCenter_1F_Text_MyDataUpdatedFromRecordCorner:
 	.string "I've been on the housing list for two\n"
 	.string "years.\p"
-	.string "A LAND INITIATIVE fella came by. Said\n"
+	.string "A Land Initiative fella came by. Said\n"
 	.string "they'll build new towns on the old\l"
 	.string "lava fields.\p"
 	.string "Red hood, nice smile. My mother says\n"
 	.string "not to go. I'm thinking about it.$"
 
 MauvilleCity_PokemonCenter_1F_Text_RecordCornerSoundsFun:
-	.string "I heard MAXIE speak once, years ago.\n"
-	.string "Town hall in FALLARBOR.\p"
+	.string "I heard Maxie speak once, years ago.\n"
+	.string "Town hall in Fallarbor.\p"
 	.string "He had blueprints. Real plans for\n"
 	.string "homes and farms. People cried.\p"
 	.string "That's the man they call a criminal\n"
 	.string "now. Something happened to him.$"
 
 MauvilleCity_PokemonCenter_1F_Text_ManOverThereSaysWeirdThings_W0:
-	.string "WATTSON lost to a kid and laughed so\n"
+	.string "Wattson lost to a kid and laughed so\n"
 	.string "hard the lights flickered.\p"
 	.string "That was you? Wahahaha!$"

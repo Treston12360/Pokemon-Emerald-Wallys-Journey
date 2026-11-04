@@ -475,82 +475,82 @@ MauvilleCity_EventScript_RegisterWallyCall::
 	end
 
 MauvilleCity_Text_UncleHesTooPeppy:
-	.string "UNCLE: It's because of POKéMON that\n"
+	.string "Uncle: It's because of Pokémon that\n"
 	.string "this boy's got more pep, I suppose…\l"
 	.string "But he's become a bit too peppy…$"
 
 MauvilleCity_Text_WallyWantToChallengeGym:
-	.string "WALLY: Aww, UNCLE, please?\p"
-	.string "I want to challenge this GYM and see\n"
+	.string "Wally: Aww, Uncle, please?\p"
+	.string "I want to challenge this Gym and see\n"
 	.string "how much better I've become.\p"
 	.string "Please? May I, please?$"
 
 MauvilleCity_Text_UncleYourePushingIt:
-	.string "UNCLE: Now hold on, WALLY.\p"
-	.string "Since you started living with POKéMON,\n"
+	.string "Uncle: Now hold on, Wally.\p"
+	.string "Since you started living with Pokémon,\n"
 	.string "you have grown quite a lot stronger.\p"
 	.string "But don't you think you're pushing it\n"
-	.string "to suddenly challenge a GYM?$"
+	.string "to suddenly challenge a Gym?$"
 
 MauvilleCity_Text_WallyWeCanBeatAnyone:
-	.string "WALLY: I know I can do this.\p"
-	.string "RALTS and I have trained\n"
-	.string "every day in VERDANTURF.\p"
-	.string "UNCLE still sees the boy\n"
+	.string "Wally: I know I can do this.\p"
+	.string "Ralts and I have trained\n"
+	.string "every day in Verdanturf.\p"
+	.string "Uncle still sees the boy\n"
 	.string "who couldn't leave home.\p"
 	.string "I need to show him\n"
 	.string "I'm not that boy anymore.$"
 
 MauvilleCity_Text_WallyWillYouBattleMe:
-	.string "WALLY: Oh! Hi, {PLAYER}!\p"
+	.string "Wally: Oh! Hi, {PLAYER}!\p"
 	.string "I've gotten a lot stronger since\n"
 	.string "we met.\p"
-	.string "{PLAYER}, I want you and my UNCLE to\n"
+	.string "{PLAYER}, I want you and my Uncle to\n"
 	.string "understand that.\p"
 	.string "{PLAYER}, please, will you have\n"
 	.string "a battle with me?$"
 
 MauvilleCity_Text_WallyMyUncleWontKnowImStrong:
-	.string "WALLY: Oh… If you won't battle me,\n"
-	.string "{PLAYER}, my UNCLE won't know that I've\l"
+	.string "Wally: Oh… If you won't battle me,\n"
+	.string "{PLAYER}, my Uncle won't know that I've\l"
 	.string "become really strong.$"
 
 MauvilleCity_Text_UncleCanYouBattleWally:
-	.string "UNCLE: {PLAYER}{KUN}, was it?\n"
-	.string "On WALLY's behalf, can I ask you to\l"
+	.string "Uncle: {PLAYER}{KUN}, was it?\n"
+	.string "On Wally's behalf, can I ask you to\l"
 	.string "battle with him just this once?\p"
 	.string "I don't think he's going to listen to\n"
 	.string "any reason the way he is now.$"
 
 MauvilleCity_Text_WallyPleaseBattleMe:
-	.string "WALLY: {PLAYER}, please!\n"
+	.string "Wally: {PLAYER}, please!\n"
 	.string "Battle with me, please.$"
 
 MauvilleCity_Text_WallyHereICome:
-	.string "WALLY: {PLAYER}, thank you.\p"
+	.string "Wally: {PLAYER}, thank you.\p"
 	.string "Okay… Here I come!$"
 
 MauvilleCity_Text_WallyDefeat:
-	.string "WALLY: … … … … … … …\p"
+	.string "Wally: … … … … … … …\p"
 	.string "… … … … … … … …\p"
 	.string "I lost…$"
 
 MauvilleCity_Text_WallyIllGoBackToVerdanturf:
-	.string "WALLY: …I lost.\p"
-	.string "UNCLE, I'll come back to\n"
-	.string "VERDANTURF with you.\p"
+	.string "Wally: …I lost.\p"
+	.string "Uncle, I'll come back to\n"
+	.string "Verdanturf with you.\p"
 	.string "But I won't stay there forever.\n"
 	.string "I'm going to get stronger.$"
 
 MauvilleCity_Text_ThankYouNotEnoughToBattle:
 	.string "{PLAYER}, thank you.\n"
-	.string "Being a TRAINER is tough, isn't it?\p"
-	.string "It's not enough just to have POKéMON\n"
+	.string "Being a Trainer is tough, isn't it?\p"
+	.string "It's not enough just to have Pokémon\n"
 	.string "and make them battle. That isn't what\l"
-	.string "being a real TRAINER is about.$"
+	.string "being a real Trainer is about.$"
 
 MauvilleCity_Text_UncleNoNeedToBeDown:
-	.string "UNCLE: WALLY, there's no need to be so\n"
+	.string "Uncle: Wally, there's no need to be so\n"
 	.string "down on yourself.\p"
 	.string "Why, what's keeping you from becoming\n"
 	.string "stronger and stronger?\p"
@@ -558,84 +558,84 @@ MauvilleCity_Text_UncleNoNeedToBeDown:
 	.string "Everyone's waiting for you.$"
 
 MauvilleCity_Text_UncleVisitUsSometime:
-	.string "UNCLE: {PLAYER}{KUN}, it just dawned on me\n"
-	.string "that you must be the TRAINER who kept\l"
-	.string "an eye out for WALLY when he caught\l"
-	.string "his POKéMON.\p"
-	.string "Why don't you visit us in VERDANTURF\n"
+	.string "Uncle: {PLAYER}{KUN}, it just dawned on me\n"
+	.string "that you must be the Trainer who kept\l"
+	.string "an eye out for Wally when he caught\l"
+	.string "his Pokémon.\p"
+	.string "Why don't you visit us in Verdanturf\n"
 	.string "sometime?\l"
-	.string "I'm sure WALLY would enjoy it.$"
+	.string "I'm sure Wally would enjoy it.$"
 
 
 MauvilleCity_Text_WallyPokenavCall:
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "WALLY: Oh, hello, {PLAYER}!\p"
+	.string "Wally: Oh, hello, {PLAYER}!\p"
 	.string "I just wanted to tell you that\n"
-	.string "my uncle bought me a POKéNAV!\p"
+	.string "my uncle bought me a PokéNav!\p"
 	.string "Now I can get in touch with you\n"
 	.string "anytime, {PLAYER}!\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
 
 MauvilleCity_Text_RegisteredWally:
-	.string "Registered WALLY\n"
-	.string "in the POKéNAV.$"
+	.string "Registered Wally\n"
+	.string "in the PokéNav.$"
 
 MauvilleCity_Text_ScottYouDidntHoldBack:
-	.string "SCOTT: Hehe…\n"
+	.string "Scott: Hehe…\n"
 	.string "I was watching that match!\p"
-	.string "You're friends with that boy WALLY,\n"
+	.string "You're friends with that boy Wally,\n"
 	.string "aren't you?\p"
 	.string "But you didn't hold anything back\n"
 	.string "and beat him impressively.\p"
-	.string "Yeah! That's what a real POKéMON\n"
+	.string "Yeah! That's what a real Pokémon\n"
 	.string "battle is all about!\p"
-	.string "I idolize TRAINERS like that!\p"
+	.string "I idolize Trainers like that!\p"
 	.string "… … … … … …\n"
 	.string "I'll be cheering for you!$"
 
 MauvilleCity_Text_WattsonNeedFavorTakeKey:
-	.string "WATTSON: Oh, {PLAYER}{KUN}!\n"
+	.string "Wattson: Oh, {PLAYER}{KUN}!\n"
 	.string "You look like you have a lot of zip!\l"
 	.string "That's a good thing, wahahahaha!\p"
 	.string "Fine! I've decided!\n"
 	.string "I need a favor, {PLAYER}{KUN}!\p"
-	.string "MAUVILLE CITY has an underground\n"
-	.string "sector called NEW MAUVILLE.\p"
+	.string "Mauville City has an underground\n"
+	.string "sector called New Mauville.\p"
 	.string "{PLAYER}{KUN}, I'd like you to go there and\n"
-	.string "switch off the GENERATOR.\p"
-	.string "The GENERATOR has been running a bit\n"
+	.string "switch off the Generator.\p"
+	.string "The Generator has been running a bit\n"
 	.string "haywire. It's getting unsafe.\p"
-	.string "Here, this is the KEY to get into\n"
-	.string "NEW MAUVILLE.$"
+	.string "Here, this is the Key to get into\n"
+	.string "New Mauville.$"
 
 MauvilleCity_Text_WattsonWontBeChallenge:
-	.string "WATTSON: Don't you worry about it.\n"
+	.string "Wattson: Don't you worry about it.\n"
 	.string "It won't be a challenge to you.\p"
-	.string "The entrance to NEW MAUVILLE is just\n"
-	.string "a short SURF away from ROUTE 110.\p"
+	.string "The entrance to New Mauville is just\n"
+	.string "a short Surf away from Route 110.\p"
 	.string "That's it, then, you have my trust!\n"
 	.string "Wahahahaha!$"
 
 MauvilleCity_Text_WattsonThanksTakeTM:
-	.string "WATTSON: Wahahahaha!\p"
+	.string "Wattson: Wahahahaha!\p"
 	.string "I knew it, {PLAYER}{KUN}! I knew I'd made\n"
 	.string "the right choice asking you!\p"
 	.string "This is my thanks--a TM containing\n"
-	.string "THUNDERBOLT!\p"
+	.string "Thunderbolt!\p"
 	.string "Go on, you've earned it!$"
 
 MauvilleCity_Text_WattsonYoungTakeCharge:
-	.string "WATTSON: Wahahahaha!\p"
+	.string "Wattson: Wahahahaha!\p"
 	.string "It pleases me to no end to see\n"
 	.string "the young step up and take charge!$"
 
 MauvilleCity_Text_NurseHurtMonBackToHealth:
 	.string "Battles are fun and all.\p"
-	.string "But my WINGULL got hurt bad once,\n"
+	.string "But my Wingull got hurt bad once,\n"
 	.string "and I sat with it all night at the\l"
-	.string "POKéMON CENTER.\p"
+	.string "Pokémon Center.\p"
 	.string "That night taught me more than any\n"
 	.string "win.$"
 
@@ -646,37 +646,37 @@ MauvilleCity_Text_AllSortsOfPeopleComeThrough:
 	.string "people coming through.$"
 
 MauvilleCity_Text_RydelVeryGenerous:
-	.string "RYDEL gives BIKES to TRAINERS for\n"
+	.string "Rydel gives Bikes to Trainers for\n"
 	.string "free.\p"
-	.string "He told me, “A kid on a BIKE sees\n"
+	.string "He told me, “A kid on a Bike sees\n"
 	.string "the whole region. That's how you\l"
 	.string "grow up right.”\p"
 	.string "Wish more adults thought like that.$"
 
 MauvilleCity_Text_PokemonCanJumpYouOnBike:
-	.string "Even on a BIKE, wild POKéMON can\n"
+	.string "Even on a Bike, wild Pokémon can\n"
 	.string "jump you.\p"
 	.string "They're not being mean. We built\n"
 	.string "roads through their homes. They're\l"
 	.string "just reminding us.$"
 
 MauvilleCity_Text_CitySign:
-	.string "MAUVILLE CITY\n"
+	.string "Mauville City\n"
 	.string "“The bright and shiny city of fun!”$"
 
 MauvilleCity_Text_GymSign:
-	.string "MAUVILLE CITY POKéMON GYM\n"
-	.string "LEADER: WATTSON\l"
+	.string "Mauville City Pokémon Gym\n"
+	.string "Leader: Wattson\l"
 	.string "“The cheerfully electrifying man!”$"
 
 MauvilleCity_Text_BikeShopSign:
 	.string "“Ride in gravel and shake up your\n"
 	.string "soul!”\l"
-	.string "RYDEL'S CYCLES$"
+	.string "Rydel's Cycles$"
 
 MauvilleCity_Text_GameCornerSign:
 	.string "“The play spot for all!”\n"
-	.string "MAUVILLE GAME CORNER$"
+	.string "Mauville Game Corner$"
 
 MauvilleCity_Text_ExplainTV:
 	.string "Hi, do you check out TV at all?\p"
@@ -692,7 +692,7 @@ MauvilleCity_Text_ExplainTV:
 
 MauvilleCity_Text_BeenCheckingOutTV:
 	.string "Hi! Have you been watching TV?\p"
-	.string "Everything's DEVON ads and weather\n"
+	.string "Everything's Devon ads and weather\n"
 	.string "warnings lately.$"
 
 MauvilleCity_Text_AllSortsOfPeopleComeThroughAftermath:
@@ -700,18 +700,18 @@ MauvilleCity_Text_AllSortsOfPeopleComeThroughAftermath:
 	.string "through here day and night, all\l"
 	.string "heading for the coast.\p"
 	.string "Some of the drivers used to wear\n"
-	.string "MAGMA red. They don't talk about it.$"
+	.string "Magma red. They don't talk about it.$"
 
 MauvilleCity_Text_NurseHurtMonBackToHealthChampion:
-	.string "I saw your CHAMPION battle on TV.\p"
-	.string "My WINGULL's healed now. We\n"
+	.string "I saw your Champion battle on TV.\p"
+	.string "My Wingull's healed now. We\n"
 	.string "watched it together.\p"
 	.string "I cheered when you won. It gave\n"
 	.string "me the courage to try again.$"
 
 MauvilleCity_Text_RydelVeryGenerousChampion:
-	.string "RYDEL says you used one of his\n"
-	.string "BIKES on the road to CHAMPION.\p"
+	.string "Rydel says you used one of his\n"
+	.string "Bikes on the road to Champion.\p"
 	.string "He's told that story to every\n"
 	.string "customer this week!\p"
 	.string "He won't admit he's proud.\n"

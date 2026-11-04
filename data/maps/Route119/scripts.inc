@@ -475,11 +475,11 @@ Route119_EventScript_ScottWonAtFortreeGymCall::
 	end
 
 Route119_Text_MayIntro:
-	.string "MAY: {PLAYER}{KUN}!\n"
+	.string "May: {PLAYER}{KUN}!\n"
 	.string "Where were you? I was looking for you!\p"
 	.string "How much stronger have you gotten?\n"
 	.string "Let me check for you!\p"
-	.string "Ready with your POKéMON?\n"
+	.string "Ready with your Pokémon?\n"
 	.string "Of course you are! Go!$"
 
 Route119_Text_MayDefeat:
@@ -489,24 +489,24 @@ Route119_Text_MayDefeat:
 	.string "I'm glad one of us is doing great.$"
 
 Route119_Text_MayResearchAfterBattle:
-	.string "MAY: You keep surprising me,\n"
+	.string "May: You keep surprising me,\n"
 	.string "and you're not the only one.\p"
 	.string "Dad's migration notes don't match\n"
-	.string "the POKéMON we're seeing here.\p"
+	.string "the Pokémon we're seeing here.\p"
 	.string "I want to find out why.$"
 
 Route119_Text_MayExplainFly:
-	.string "MAY: WINONA can teach you how\n"
-	.string "to travel with FLY once you win\l"
-	.string "the FEATHER BADGE.\p"
+	.string "May: Winona can teach you how\n"
+	.string "to travel with Fly once you win\l"
+	.string "the Feather Badge.\p"
 	.string "She'll give you the HM herself.\n"
 	.string "You won't need to teach it to\l"
-	.string "your POKéMON to use it.\p"
+	.string "your Pokémon to use it.\p"
 	.string "See you around, {PLAYER}!$"
 
 Route119_Text_BrendanIntro:
-	.string "BRENDAN: {PLAYER}! So this is where\n"
-	.string "you've been looking for POKéMON?\p"
+	.string "Brendan: {PLAYER}! So this is where\n"
+	.string "you've been looking for Pokémon?\p"
 	.string "Let me see how good you got.\n"
 	.string "I'll test you!\p"
 	.string "Now!\n"
@@ -515,47 +515,47 @@ Route119_Text_BrendanIntro:
 Route119_Text_BrendanDefeat:
 	.string "Hmm… You've gotten pretty darn\n"
 	.string "decent.\p"
-	.string "Dad's been at the LAB every night\n"
+	.string "Dad's been at the Lab every night\n"
 	.string "since this rain started.\p"
 	.string "Guess both our dads are like that.$"
 
 Route119_Text_BrendanIllGiveYouThis:
-	.string "BRENDAN: I'd say you're good enough\n"
-	.string "to search for POKéMON anywhere.\p"
+	.string "Brendan: I'd say you're good enough\n"
+	.string "to search for Pokémon anywhere.\p"
 	.string "Here, I'll give you this.\n"
 	.string "Try it out.$"
 
 Route119_Text_BrendanExplainFly:
-	.string "BRENDAN: Use FLY, and your POKéMON\n"
+	.string "Brendan: Use Fly, and your Pokémon\n"
 	.string "instantly carries you to any town\l"
 	.string "you've already visited.\p"
-	.string "But you need the FORTREE GYM BADGE \n"
+	.string "But you need the Fortree Gym Badge \n"
 	.string "to do that.\p"
 	.string "Anyway, I have to move along.$"
 
 Route119_Text_ScottWayToGoBeSeeingYou:
-	.string "SCOTT: Hahahah!\n"
+	.string "Scott: Hahahah!\n"
 	.string "Way to go, {PLAYER}{KUN}!\p"
-	.string "I just passed by a TRAINER riding\n"
-	.string "a BIKE.\p"
-	.string "You just beat that TRAINER, didn't you?\n"
+	.string "I just passed by a Trainer riding\n"
+	.string "a Bike.\p"
+	.string "You just beat that Trainer, didn't you?\n"
 	.string "It was pretty obvious that you did.\p"
 	.string "The kid looked really upset with\n"
 	.string "a face all red from anger.\p"
 	.string "I sure seem to run into you often.\n"
-	.string "Are you off to FORTREE GYM next?\p"
-	.string "I expect that you'll do well at the GYM.\n"
+	.string "Are you off to Fortree Gym next?\p"
+	.string "I expect that you'll do well at the Gym.\n"
 	.string "Well, I'll be seeing you!$"
 
 
 Route119_Text_ScottYouWonAtFortreeGym:
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "SCOTT: Hiya, {PLAYER}{KUN}, it's me!\p"
+	.string "Scott: Hiya, {PLAYER}{KUN}, it's me!\p"
 	.string "Just as I thought, you won at\n"
-	.string "the FORTREE GYM.\p"
+	.string "the Fortree Gym.\p"
 	.string "Your strength…\n"
-	.string "Perhaps you really are the TRAINER\l"
+	.string "Perhaps you really are the Trainer\l"
 	.string "that I've been searching for.\p"
 	.string "Remember, you have a fan in me.\n"
 	.string "I'll be cheering from the sidelines.\l"
@@ -565,53 +565,53 @@ Route119_Text_ScottYouWonAtFortreeGym:
 
 Route119_Text_StayAwayFromWeatherInstitute:
 	.string "We're standing lookout.\p"
-	.string "Stay away from the WEATHER INSTITUTE.\n"
+	.string "Stay away from the Weather Institute.\n"
 	.string "For your own good. Really.$"
 
 Route119_Text_DontGoNearWeatherInstitute:
 	.string "Lookout duty is boring.\p"
-	.string "Please don't go near the INSTITUTE.\n"
+	.string "Please don't go near the Institute.\n"
 	.string "I don't want anyone getting hurt.$"
 
 Route119_Text_ThoughtFlyByCatchingBirdMons:
-	.string "I thought you FLY by catching a flock\n"
-	.string "of BIRD POKéMON and hanging on.\p"
-	.string "Turns out you need a BADGE. And one\n"
+	.string "I thought you Fly by catching a flock\n"
+	.string "of Bird Pokémon and hanging on.\p"
+	.string "Turns out you need a Badge. And one\n"
 	.string "very strong friend.$"
 
 Route119_Text_TallGrassSnaresBikeTires:
-	.string "Tch… The tall grass tangles BIKE\n"
+	.string "Tch… The tall grass tangles Bike\n"
 	.string "tires. No cycling here.$"
 
 Route119_Text_CanYourMonMakeSecretBase:
-	.string "Can your POKéMON use SECRET POWER on\n"
-	.string "a big bush and make a SECRET BASE?\p"
+	.string "Can your Pokémon use Secret Power on\n"
+	.string "a big bush and make a Secret Base?\p"
 	.string "Everyone needs a place of their own.$"
 
 Route119_Text_RouteSignFortree:
-	.string "ROUTE 119\n"
-	.string "{RIGHT_ARROW} FORTREE CITY$"
+	.string "Route 119\n"
+	.string "{RIGHT_ARROW} Fortree City$"
 
 Route119_Text_WeatherInstitute:
-	.string "WEATHER INSTITUTE$"
+	.string "Weather Institute$"
 
 Route119_Text_TrainerTipsDecoration:
-	.string "TRAINER TIPS\p"
+	.string "Trainer Tips\p"
 	.string "Up to sixteen decorations and\n"
 	.string "furniture items can be placed in\l"
-	.string "a SECRET BASE.\p"
+	.string "a Secret Base.\p"
 	.string "Pick your favorite items and create\n"
-	.string "your very own SECRET BASE exactly the\l"
+	.string "your very own Secret Base exactly the\l"
 	.string "way you want.$"
 
 Route119_Text_NoHmFly:
 	.string "That was a great battle!\p"
-	.string "I've been logging every POKéMON on\n"
+	.string "I've been logging every Pokémon on\n"
 	.string "this route for Dad. There's way\l"
 	.string "more rain than there should be.\p"
 	.string "Something big is going on.$"
 
 Route119_Text_NoHmFlyAdvice:
-	.string "With the FEATHER BADGE, FLY\n"
-	.string "will carry you across HOENN.\p"
+	.string "With the Feather Badge, Fly\n"
+	.string "will carry you across Hoenn.\p"
 	.string "See you around!$"

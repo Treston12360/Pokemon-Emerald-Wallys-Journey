@@ -232,76 +232,76 @@ MeteorFalls_1F_1R_EventScript_MetCozmo::
 	end
 
 MeteorFalls_1F_1R_Text_WithThisMeteorite:
-	.string "Hehehe! With this METEORITE, the\n"
-	.string "model works. MT. CHIMNEY will…$"
+	.string "Hehehe! With this Meteorite, the\n"
+	.string "model works. Mt. Chimney will…$"
 
 MeteorFalls_1F_1R_Text_DontExpectMercyFromMagma:
-	.string "Heh? Get in TEAM MAGMA's way and you\n"
+	.string "Heh? Get in Team Magma's way and you\n"
 	.string "get no mercy!\p"
 	.string "This is about housing. About land.\n"
 	.string "About people!$"
 
 MeteorFalls_1F_1R_Text_HoldItRightThereMagma:
-	.string "Hold it, TEAM MAGMA!\p"
+	.string "Hold it, Team Magma!\p"
 	.string "You think you can reshape the world\n"
 	.string "because you've got a theory?$"
 
 MeteorFalls_1F_1R_Text_BeSeeingYouTeamAqua:
 	.string "Hehehe!\n"
-	.string "Even TEAM AQUA joins us!\p"
+	.string "Even Team Aqua joins us!\p"
 	.string "But it's too much trouble to deal with\n"
 	.string "you all…\p"
 	.string "Heh, it doesn't matter!\p"
-	.string "We've got the METEORITE, so off to\n"
-	.string "MT. CHIMNEY we go!\p"
-	.string "Hehehe! Be seeing you, you TEAM\n"
-	.string "AQUA dingbats!$"
+	.string "We've got the Meteorite, so off to\n"
+	.string "Mt. Chimney we go!\p"
+	.string "Hehehe! Be seeing you, you Team\n"
+	.string "Aqua dingbats!$"
 
 MeteorFalls_1F_1R_Text_ArchieSeenYouBefore:
-	.string "ARCHIE: Didn't I see you before?\n"
-	.string "At SLATEPORT's MUSEUM?\p"
+	.string "Archie: Didn't I see you before?\n"
+	.string "At Slateport's Museum?\p"
 	.string "Ah, so your name is {PLAYER}.\p"
 	.string "At the time, I thought you were one\n"
-	.string "of TEAM MAGMA's goons.\p"
+	.string "of Team Magma's goons.\p"
 	.string "Humph…\n"
 	.string "You're one odd kid.\p"
-	.string "TEAM MAGMA is a dangerous group of\n"
+	.string "Team Magma is a dangerous group of\n"
 	.string "total fanatics.\p"
 	.string "They engage in destruction, claiming\n"
 	.string "to expand the land mass.\p"
 	.string "They are the rivals to us,\n"
-	.string "the sea-loving TEAM AQUA!$"
+	.string "the sea-loving Team Aqua!$"
 
 MeteorFalls_1F_1R_Text_BossWeShouldChaseMagma:
-	.string "BOSS, we should chase TEAM MAGMA!$"
+	.string "Boss, we should chase Team Magma!$"
 
 MeteorFalls_1F_1R_Text_ArchieYesNoTellingWhatMagmaWillDo:
-	.string "ARCHIE: Yes, yes, we must!\n"
+	.string "Archie: Yes, yes, we must!\n"
 	.string "We've got to hurry.\p"
-	.string "There's no telling what TEAM MAGMA\n"
-	.string "will do at MT. CHIMNEY!$"
+	.string "There's no telling what Team Magma\n"
+	.string "will do at Mt. Chimney!$"
 
 MeteorFalls_1F_1R_Text_ArchieFarewell:
-	.string "ARCHIE: Keep an eye on TEAM MAGMA,\n"
+	.string "Archie: Keep an eye on Team Magma,\n"
 	.string "{PLAYER}.\p"
 	.string "They think they can fix the land.\n"
 	.string "I know better. Farewell.$"
 
 MeteorFalls_1F_1R_Text_MeetProfCozmo:
-	.string "I… I'm COZMO… a PROFESSOR…\p"
-	.string "A group called the HOENN LAND\n"
-	.string "INITIATIVE asked me to guide them\l"
+	.string "I… I'm Cozmo… a Professor…\p"
+	.string "A group called the Hoenn Land\n"
+	.string "Initiative asked me to guide them\l"
 	.string "here. Housing researchers, they\l"
 	.string "said.\p"
 	.string "Then they put on red hoods and took\n"
-	.string "my METEORITE. TEAM MAGMA…\p"
-	.string "Then TEAM AQUA arrived.\n"
+	.string "my Meteorite. Team Magma…\p"
+	.string "Then Team Aqua arrived.\n"
 	.string "I don't understand any of it.\p"
 	.string "What are they going to do with that\n"
-	.string "METEORITE at MT. CHIMNEY?$"
+	.string "Meteorite at Mt. Chimney?$"
 
 MeteorFalls_1F_1R_Text_WhatsTeamMagmaDoingAtMtChimney:
-	.string "PROF. COZMO: That TEAM MAGMA…\p"
+	.string "Prof. Cozmo: That Team Magma…\p"
 	.string "They said they were building homes.\n"
-	.string "What do they want with a METEORITE\l"
-	.string "at MT. CHIMNEY?$"
+	.string "What do they want with a Meteorite\l"
+	.string "at Mt. Chimney?$"

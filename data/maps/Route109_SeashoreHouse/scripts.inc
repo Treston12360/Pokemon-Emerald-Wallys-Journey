@@ -102,18 +102,18 @@ Route109_SeashoreHouse_EventScript_TrainersNotCompleted::
 	end
 
 Route109_SeashoreHouse_Text_SeashoreHouseIntro:
-	.string "I'm the owner of the SEASHORE HOUSE.\n"
-	.string "But you can call me MR. SEA!\p"
+	.string "I'm the owner of the Seashore House.\n"
+	.string "But you can call me Mr. Sea!\p"
 	.string "What I love above all is to see hot\n"
-	.string "POKéMON battles.\p"
+	.string "Pokémon battles.\p"
 	.string "Let me see that your heart burns hot!\p"
-	.string "If you can defeat all the TRAINERS\n"
+	.string "If you can defeat all the Trainers\n"
 	.string "here, I'll reward your efforts.$"
 
 Route109_SeashoreHouse_Text_ShowMeSomeHotMatches:
 	.string "Show me some hot matches!\p"
-	.string "I run this SEASHORE HOUSE just to\n"
-	.string "watch TRAINERS give it everything.$"
+	.string "I run this Seashore House just to\n"
+	.string "watch Trainers give it everything.$"
 
 Route109_SeashoreHouse_Text_TakeTheseSodaPopBottles:
 	.string "You're scorching hot!\n"
@@ -121,15 +121,15 @@ Route109_SeashoreHouse_Text_TakeTheseSodaPopBottles:
 	.string "I'm more than just satisfied!\p"
 	.string "As thanks for showing me your hot\n"
 	.string "streak, I want you to take these.\p"
-	.string "It's half a dozen bottles of SODA POP!$"
+	.string "It's half a dozen bottles of Soda Pop!$"
 
 Route109_SeashoreHouse_Text_BagFull:
-	.string "Oh, but hey, your BAG's jammed full.\n"
+	.string "Oh, but hey, your Bag's jammed full.\n"
 	.string "I'll hang on to these for you.$"
 
 Route109_SeashoreHouse_Text_WantToBuySodaPop:
-	.string "Want to buy some SODA POP?\n"
-	.string "POKéMON love it!\p"
+	.string "Want to buy some Soda Pop?\n"
+	.string "Pokémon love it!\p"
 	.string "Just ¥300 a bottle!\n"
 	.string "Buy some!$"
 
@@ -145,19 +145,19 @@ Route109_SeashoreHouse_Text_ThatsTooBad:
 
 Route109_SeashoreHouse_Text_DwayneIntro:
 	.string "Looking for a battle? I've worked\n"
-	.string "this SEASHORE HOUSE ten summers!\p"
-	.string "No TRAINER in here is hotter!$"
+	.string "this Seashore House ten summers!\p"
+	.string "No Trainer in here is hotter!$"
 
 Route109_SeashoreHouse_Text_DwayneDefeated:
 	.string "Arr, that was hot!\n"
 	.string "I'll drink to that loss!$"
 
 Route109_SeashoreHouse_Text_DwaynePostBattle:
-	.string "Hot battles and ice-cold SODA POP.\n"
-	.string "That's SLATEPORT living.$"
+	.string "Hot battles and ice-cold Soda Pop.\n"
+	.string "That's Slateport living.$"
 
 Route109_SeashoreHouse_Text_JohannaIntro:
-	.string "Tourists come, drink SODA POP, leave.\p"
+	.string "Tourists come, drink Soda Pop, leave.\p"
 	.string "None of them know the reef used to\n"
 	.string "glow at night. Show me fire!$"
 
@@ -165,12 +165,12 @@ Route109_SeashoreHouse_Text_JohannaDefeated:
 	.string "Too hot to handle!$"
 
 Route109_SeashoreHouse_Text_JohannaPostBattle:
-	.string "The owner here gives SODA POP to\n"
+	.string "The owner here gives Soda Pop to\n"
 	.string "anyone who beats us all. Go on!$"
 
 Route109_SeashoreHouse_Text_SimonIntro:
-	.string "My POKéMON is the toughest here!\p"
-	.string "My brother's in TEAM AQUA. He says\n"
+	.string "My Pokémon is the toughest here!\p"
+	.string "My brother's in Team Aqua. He says\n"
 	.string "I'm too young. Don't cry!$"
 
 Route109_SeashoreHouse_Text_SimonDefeated:
@@ -178,8 +178,8 @@ Route109_SeashoreHouse_Text_SimonDefeated:
 	.string "It's sea spray.$"
 
 Route109_SeashoreHouse_Text_SimonPostBattle:
-	.string "If my POKéMON could SURF, I could\n"
+	.string "If my Pokémon could Surf, I could\n"
 	.string "ditch this inner tube.\p"
-	.string "Need the BALANCE BADGE first. Your\n"
-	.string "dad's BADGE, right?$"
+	.string "Need the Balance Badge first. Your\n"
+	.string "dad's Badge, right?$"
 

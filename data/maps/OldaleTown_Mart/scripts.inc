@@ -53,20 +53,20 @@ OldaleTown_Mart_EventScript_Boy::
 	end
 
 OldaleTown_Mart_Text_PokeBallsAreSoldOut:
-	.string "The clerk says the POKé BALLS are\n"
+	.string "The clerk says the Poké Balls are\n"
 	.string "sold out.\p"
-	.string "Everyone's buying since the LEAGUE\n"
+	.string "Everyone's buying since the League\n"
 	.string "banned the fancy ones. Only plain\l"
-	.string "POKé BALLS now.$"
+	.string "Poké Balls now.$"
 
 OldaleTown_Mart_Text_ImGoingToBuyPokeBalls:
-	.string "I'm buying a stack of POKé BALLS!\p"
+	.string "I'm buying a stack of Poké Balls!\p"
 	.string "Only the plain ones are legal, so\n"
 	.string "I'll just have to be patient.$"
 
 OldaleTown_Mart_Text_RestoreHPWithPotion:
-	.string "If a POKéMON gets hurt and loses its HP\n"
+	.string "If a Pokémon gets hurt and loses its HP\n"
 	.string "and faints, it won't be able to battle.\p"
-	.string "To prevent your POKéMON from fainting,\n"
-	.string "restore its HP with a POTION.$"
+	.string "To prevent your Pokémon from fainting,\n"
+	.string "restore its HP with a Potion.$"
 

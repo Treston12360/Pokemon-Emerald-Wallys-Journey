@@ -43,7 +43,7 @@ MtPyre_2F_EventScript_Zander::
 	end
 
 MtPyre_2F_Text_MemoriesOfSkitty:
-	.string "My SKITTY used to sleep in\n"
+	.string "My Skitty used to sleep in\n"
 	.string "the warmest patch of sunlight.\p"
 	.string "I still leave the curtains open\n"
 	.string "at home, out of habit.\p"
@@ -59,7 +59,7 @@ MtPyre_2F_Text_TumbledFromFloorAbove:
 MtPyre_2F_Text_MarkIntro:
 	.string "Hey! I'm hunting ghosts for my school\n"
 	.string "report!\p"
-	.string "PHOEBE of the ELITE FOUR trained here.\n"
+	.string "Phoebe of the Elite Four trained here.\n"
 	.string "Did you follow me?!$"
 
 MtPyre_2F_Text_MarkDefeat:
@@ -68,51 +68,51 @@ MtPyre_2F_Text_MarkDefeat:
 
 MtPyre_2F_Text_MarkPostBattle:
 	.string "I came hoping to find a rare\n"
-	.string "POKéMON among the graves.\p"
+	.string "Pokémon among the graves.\p"
 	.string "It sounded harmless when I\n"
 	.string "said it to my friends.\p"
 	.string "Now I'm thinking about why\n"
 	.string "people come here at all.$"
 
 MtPyre_2F_Text_LukeIntro:
-	.string "LUKE: We're here on a dare.\p"
-	.string "Legend says the ORBS up top can calm\n"
+	.string "Luke: We're here on a dare.\p"
+	.string "Legend says the Orbs up top can calm\n"
 	.string "the giants. I'll calm you!$"
 
 MtPyre_2F_Text_LukeDefeat:
-	.string "LUKE: Whoopsie!\n"
+	.string "Luke: Whoopsie!\n"
 	.string "That wasn't cool at all.$"
 
 MtPyre_2F_Text_LukePostBattle:
-	.string "LUKE: We lost, but I'm still right\n"
-	.string "here for you, DEZ!$"
+	.string "Luke: We lost, but I'm still right\n"
+	.string "here for you, Dez!$"
 
 MtPyre_2F_Text_LukeNotEnoughMons:
-	.string "LUKE: Bring more POKéMON if you\n"
+	.string "Luke: Bring more Pokémon if you\n"
 	.string "want to take me on.\p"
 	.string "Otherwise I can't show my girl\n"
 	.string "how cool I am!$"
 
 MtPyre_2F_Text_DezIntro:
-	.string "DEZ: It's so scary up here!\p"
+	.string "Dez: It's so scary up here!\p"
 	.string "They say the spirits guard something\n"
 	.string "at the summit. Let's beat you first!$"
 
 MtPyre_2F_Text_DezDefeat:
-	.string "DEZ: Waaah! LUKE, I'm scared!$"
+	.string "Dez: Waaah! Luke, I'm scared!$"
 
 MtPyre_2F_Text_DezPostBattle:
-	.string "DEZ: It's okay! We're together.\n"
+	.string "Dez: It's okay! We're together.\n"
 	.string "That's what matters.$"
 
 MtPyre_2F_Text_DezNotEnoughMons:
-	.string "DEZ: We're a couple, so we battle\n"
+	.string "Dez: We're a couple, so we battle\n"
 	.string "as a pair.\p"
-	.string "Bring two POKéMON!$"
+	.string "Bring two Pokémon!$"
 
 MtPyre_2F_Text_LeahIntro:
 	.string "I tend the graves here.\p"
-	.string "My family has kept the summit's ORBS\n"
+	.string "My family has kept the summit's Orbs\n"
 	.string "for generations. You're no mourner…$"
 
 MtPyre_2F_Text_LeahDefeat:
@@ -121,7 +121,7 @@ MtPyre_2F_Text_LeahDefeat:
 
 MtPyre_2F_Text_LeahPostBattle:
 	.string "My family has watched over\n"
-	.string "MT. PYRE for generations.\p"
+	.string "Mt. Pyre for generations.\p"
 	.string "A shrine is not a treasure\n"
 	.string "chest for anyone to empty.\p"
 	.string "If people come here seeking\n"
@@ -130,11 +130,11 @@ MtPyre_2F_Text_LeahPostBattle:
 MtPyre_2F_Text_ZanderIntro:
 	.string "Kiyaaah! I thought you were a ghost!\p"
 	.string "Grandpa's stone is up here. He always\n"
-	.string "said the ORBS hum at night!$"
+	.string "said the Orbs hum at night!$"
 
 MtPyre_2F_Text_ZanderDefeat:
 	.string "Nooooo! I lost my\n"
-	.string "nerve AND the match!$"
+	.string "nerve And the match!$"
 
 MtPyre_2F_Text_ZanderPostBattle:
 	.string "I freak out whenever anything\n"

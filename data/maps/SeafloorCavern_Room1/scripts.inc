@@ -23,7 +23,7 @@ SeafloorCavern_Room1_Text_Grunt1Defeat:
 
 SeafloorCavern_Room1_Text_Grunt1PostBattle:
 	.string "Half the crew didn't come back\n"
-	.string "after LILYCOVE.\p"
+	.string "after Lilycove.\p"
 	.string "The ones who stayed are the ones\n"
 	.string "who didn't have anywhere else.$"
 
@@ -32,7 +32,7 @@ SeafloorCavern_Room1_Text_Grunt2Intro:
 	.string "I'm sore everywhere!$"
 
 SeafloorCavern_Room1_Text_Grunt2Defeat:
-	.string "Sore AND beaten…$"
+	.string "Sore And beaten…$"
 
 SeafloorCavern_Room1_Text_Grunt2PostBattle:
 	.string "That submarine we took is brutal\n"

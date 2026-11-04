@@ -35,19 +35,19 @@ MossdeepCity_Mart_EventScript_Sailor::
 	end
 
 MossdeepCity_Mart_Text_ReviveIsFantastic:
-	.string "REVIVE is fantastic!\p"
-	.string "Give it to a fainted POKéMON,\n"
-	.string "and the POKéMON will arise.\p"
-	.string "But be careful, REVIVE doesn't restore\n"
+	.string "Revive is fantastic!\p"
+	.string "Give it to a fainted Pokémon,\n"
+	.string "and the Pokémon will arise.\p"
+	.string "But be careful, Revive doesn't restore\n"
 	.string "the used-up PP of moves.$"
 
 MossdeepCity_Mart_Text_MaxRepelLastsLongest:
-	.string "MAX REPEL keeps all weak POKéMON away.\p"
-	.string "Out of all the REPEL sprays, it lasts\n"
+	.string "Max Repel keeps all weak Pokémon away.\p"
+	.string "Out of all the Repel sprays, it lasts\n"
 	.string "the longest.$"
 
 MossdeepCity_Mart_Text_NetAndDiveBallsRare:
-	.string "Fancy POKé BALLS? Not in HOENN!\p"
-	.string "A plain POKé BALL and a lot of\n"
+	.string "Fancy Poké Balls? Not in Hoenn!\p"
+	.string "A plain Poké Ball and a lot of\n"
 	.string "patience. That's how it's done.$"
 

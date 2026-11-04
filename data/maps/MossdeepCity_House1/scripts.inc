@@ -36,10 +36,10 @@ MossdeepCity_House1_Text_DoesntLikeOrDislikePokeblocks:
 	.string "any {POKEBLOCK}S.$"
 
 MossdeepCity_House1_Text_HusbandCanTellPokeblockMonLikes:
-	.string "STEVEN moved here to get away from\n"
-	.string "RUSTBORO.\p"
+	.string "Steven moved here to get away from\n"
+	.string "Rustboro.\p"
 	.string "His father writes every month. The\n"
-	.string "mail carrier says STEVEN reads every\l"
+	.string "mail carrier says Steven reads every\l"
 	.string "letter.\p"
 	.string "He's never written back.$"
 

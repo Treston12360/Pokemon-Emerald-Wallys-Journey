@@ -19,8 +19,8 @@ SootopolisCity_House2_EventScript_DontKnowAboutOrbs::
 	return
 
 SootopolisCity_House2_Text_DidYouKnowAboutMtPyreOrbs:
-	.string "Two ancient ORBS rest atop\n"
-	.string "MT. PYRE. Have you heard?\p"
+	.string "Two ancient Orbs rest atop\n"
+	.string "Mt. Pyre. Have you heard?\p"
 	.string "Our grandparents were told\n"
 	.string "they belong side by side.\p"
 	.string "The old stories disagree\n"
@@ -36,7 +36,7 @@ SootopolisCity_House2_Text_YesTwoOrbsSideBySide:
 
 SootopolisCity_House2_Text_OughtToVisitAndSee:
 	.string "Then perhaps you should\n"
-	.string "visit MT. PYRE someday.\p"
+	.string "visit Mt. Pyre someday.\p"
 	.string "Not everything worth finding\n"
 	.string "was left there for us to take.$"
 

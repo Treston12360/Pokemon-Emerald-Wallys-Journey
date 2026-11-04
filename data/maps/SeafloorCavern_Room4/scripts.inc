@@ -26,7 +26,7 @@ SeafloorCavern_Room4_Text_Grunt3PostBattle:
 
 SeafloorCavern_Room4_Text_Grunt4Intro:
 	.string "Where do you think you're going?\p"
-	.string "ARCHIE's almost there. You won't\n"
+	.string "Archie's almost there. You won't\n"
 	.string "interrupt him!$"
 
 SeafloorCavern_Room4_Text_Grunt4Defeat:

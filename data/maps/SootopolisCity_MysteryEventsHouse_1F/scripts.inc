@@ -164,18 +164,18 @@ SootopolisCity_MysteryEventsHouse_1F_Movement_OldManMoveAsideRight:
 
 SootopolisCity_MysteryEventsHouse_1F_Text_OnlyAmusementWatchingBattles:
 	.string "When I was young, I sailed with a\n"
-	.string "man named DRAKE.\p"
+	.string "man named Drake.\p"
 	.string "We survived the great storm\n"
-	.string "together. He went to the LEAGUE. I\l"
+	.string "together. He went to the League. I\l"
 	.string "went home.\p"
-	.string "Now I watch young TRAINERS battle.\n"
+	.string "Now I watch young Trainers battle.\n"
 	.string "Some of them fight like him.$"
 
 SootopolisCity_MysteryEventsHouse_1F_Text_DoorAppearsToBeLocked:
 	.string "The door appears to be locked.$"
 
 SootopolisCity_MysteryEventsHouse_1F_Text_ChallengeVisitingTrainer:
-	.string "A TRAINER named {STR_VAR_1}\n"
+	.string "A Trainer named {STR_VAR_1}\n"
 	.string "is visiting my home.\p"
 	.string "Would you like to challenge\n"
 	.string "{STR_VAR_1}?$"

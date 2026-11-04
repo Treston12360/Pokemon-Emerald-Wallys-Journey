@@ -27,6 +27,6 @@ LilycoveCity_House2_Text_SleepIsEssential:
 	.string "Yawn…\p"
 	.string "I work the night shift at the docks.\n"
 	.string "We unload ships until sunrise.\p"
-	.string "Then the SEA TRUST folks come and\n"
+	.string "Then the Sea Trust folks come and\n"
 	.string "clean up what fell overboard.\l"
 	.string "Odd arrangement.$"

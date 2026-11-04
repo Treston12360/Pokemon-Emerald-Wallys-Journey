@@ -547,18 +547,18 @@ LilycoveCity_Harbor_Text_FerryUnavailable:
 
 LilycoveCity_Harbor_Text_MayISeeYourTicket:
 	.string "Hello, are you here for the ferry?\p"
-	.string "STEVEN and PROF. BIRCH cleared you\n"
+	.string "Steven and Prof. Birch cleared you\n"
 	.string "for the survey islands as well.\p"
-	.string "May I see your TICKET?$"
+	.string "May I see your Ticket?$"
 
 LilycoveCity_Harbor_Text_NoTicket:
-	.string "{PLAYER} doesn't have the TICKET…\p"
+	.string "{PLAYER} doesn't have the Ticket…\p"
 	.string "I'm terribly sorry.\p"
-	.string "You must have a TICKET to board\n"
+	.string "You must have a Ticket to board\n"
 	.string "the ferry.$"
 
 LilycoveCity_Harbor_Text_FlashTicketWhereTo:
-	.string "{PLAYER} flashed the TICKET.\p"
+	.string "{PLAYER} flashed the Ticket.\p"
 	.string "Perfect! That's all you need!\p"
 	.string "And where would you like to go?$"
 
@@ -566,10 +566,10 @@ LilycoveCity_Harbor_Text_SailAnotherTime:
 	.string "Please sail with us another time!$"
 
 LilycoveCity_Harbor_Text_SlateportItIs:
-	.string "SLATEPORT CITY it is, then!$"
+	.string "Slateport City it is, then!$"
 
 LilycoveCity_Harbor_Text_BattleFrontierItIs:
-	.string "BATTLE FRONTIER it is, then!$"
+	.string "Battle Frontier it is, then!$"
 
 LilycoveCity_Harbor_Text_PleaseBoard:
 	.string "Please board the ferry and wait for\n"
@@ -579,16 +579,16 @@ LilycoveCity_Harbor_Text_WhereWouldYouLikeToGo:
 	.string "Then, where would you like to go?$"
 
 LilycoveCity_Harbor_Text_SailorFerryUnavailable:
-	.string "The S.S. TIDAL isn't ready.\n"
+	.string "The S.S. Tidal isn't ready.\n"
 	.string "We've been without work.\p"
 	.string "People depend on the ferry\n"
 	.string "for jobs and family visits.\p"
-	.string "I hope the SLATEPORT crew\n"
+	.string "I hope the Slateport crew\n"
 	.string "can finish safely.$"
 
 LilycoveCity_Harbor_Text_SailorFerryAvailable:
-	.string "The S.S. TIDAL is sailing!\n"
-	.string "The SLATEPORT crew did it.\p"
+	.string "The S.S. Tidal is sailing!\n"
+	.string "The Slateport crew did it.\p"
 	.string "Now I can bring people\n"
 	.string "home to their families.\p"
 	.string "It's good to have work\n"

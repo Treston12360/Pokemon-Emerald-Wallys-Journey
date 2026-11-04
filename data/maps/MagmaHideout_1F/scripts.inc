@@ -17,7 +17,7 @@ MagmaHideout_1F_EventScript_Grunt2::
 	end
 
 MagmaHideout_1F_Text_Grunt1Intro:
-	.string "TEAM MAGMA hands out guard posts\n"
+	.string "Team Magma hands out guard posts\n"
 	.string "in roll-call order.\p"
 	.string "I'm always late, so I'm stuck in\n"
 	.string "this corner.$"
@@ -27,14 +27,14 @@ MagmaHideout_1F_Text_Grunt1Defeat:
 	.string "I'm not cut out for this.$"
 
 MagmaHideout_1F_Text_Grunt1PostBattle:
-	.string "My folks farm on ROUTE 113. The ash\n"
+	.string "My folks farm on Route 113. The ash\n"
 	.string "ruins half the crop every year.\p"
 	.string "More land, safe land. That's all I\n"
 	.string "wanted. That's why I'm here.$"
 
 MagmaHideout_1F_Text_Grunt2Intro:
-	.string "MAXIE told us to dig into MT.\n"
-	.string "CHIMNEY, so we dug for months.\p"
+	.string "Maxie told us to dig into Mt.\n"
+	.string "Chimney, so we dug for months.\p"
 	.string "And we found something huge!\p"
 	.string "What was it? Fuhahaha!\n"
 	.string "Beat me and I'll tell you!$"

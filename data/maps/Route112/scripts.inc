@@ -108,20 +108,20 @@ Route112_EventScript_Shayla::
 	end
 
 Route112_Text_LeaderGoingToAwakenThing:
-	.string "Is the BOSS really going to push the\n"
+	.string "Is the Boss really going to push the\n"
 	.string "volcano?\p"
 	.string "The scientists said the model was\n"
 	.string "fine. Mostly.$"
 
 Route112_Text_YeahWeNeedMeteorite:
-	.string "We need a METEORITE to do it.\p"
+	.string "We need a Meteorite to do it.\p"
 	.string "The energy inside it can shift the\n"
 	.string "magma chamber. Make new land rise.\l"
 	.string "That's the theory.$"
 
 Route112_Text_OhThatsWhyCrewWentToFallarbor:
 	.string "So that's why the crew went to\n"
-	.string "FALLARBOR. PROF. COZMO has one.$"
+	.string "Fallarbor. Prof. Cozmo has one.$"
 
 Route112_Text_CantLetAnyonePassUntilTheyreBack:
 	.string "Until they're back, nobody passes.\p"
@@ -129,22 +129,22 @@ Route112_Text_CantLetAnyonePassUntilTheyreBack:
 	.string "Really.$"
 
 Route112_Text_NotEasyToGetBackToLavaridge:
-	.string "I want to get to MAUVILLE, but if I\n"
+	.string "I want to get to Mauville, but if I\n"
 	.string "jump these ledges, getting back to\l"
-	.string "LAVARIDGE is a pain.$"
+	.string "Lavaridge is a pain.$"
 
 Route112_Text_MtChimneyCableCarSign:
-	.string "MT. CHIMNEY CABLE CAR\n"
+	.string "Mt. Chimney Cable Car\n"
 	.string "“A short walk {UP_ARROW} way!”$"
 
 Route112_Text_MtChimneySign:
-	.string "MT. CHIMNEY\p"
-	.string "“For LAVARIDGE TOWN or the summit,\n"
-	.string "please take the CABLE CAR.”$"
+	.string "Mt. Chimney\p"
+	.string "“For Lavaridge Town or the summit,\n"
+	.string "please take the Cable Car.”$"
 
 Route112_Text_RouteSignLavaridge:
-	.string "ROUTE 112\n"
-	.string "{LEFT_ARROW} LAVARIDGE TOWN$"
+	.string "Route 112\n"
+	.string "{LEFT_ARROW} Lavaridge Town$"
 
 Route112_OnFrame:
 	map_script_2 VAR_WALLY_RIVAL_PENDING, 4, WallyJourney_EventScript_RivalMeet4

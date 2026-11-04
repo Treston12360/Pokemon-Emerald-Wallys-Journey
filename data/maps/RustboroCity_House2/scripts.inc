@@ -15,18 +15,18 @@ RustboroCity_House2_Text_RoxanneKnowsALot_W0_Script:
 	end
 
 RustboroCity_House2_Text_TrainerSchoolExcellent:
-	.string "The TRAINER'S SCHOOL is excellent.\p"
-	.string "ROXANNE teaches there between GYM\n"
-	.string "challenges. She says a LEADER who\l"
+	.string "The Trainer's School is excellent.\p"
+	.string "Roxanne teaches there between Gym\n"
+	.string "challenges. She says a Leader who\l"
 	.string "stops learning stops leading.$"
 
 RustboroCity_House2_Text_RoxanneKnowsALot:
-	.string "ROXANNE, the GYM LEADER, really knows\n"
-	.string "a lot about POKéMON.\p"
+	.string "Roxanne, the Gym Leader, really knows\n"
+	.string "a lot about Pokémon.\p"
 	.string "She's really strong, too!$"
 
 RustboroCity_House2_Text_RoxanneKnowsALot_W0:
-	.string "ROXANNE told her class about your\n"
+	.string "Roxanne told her class about your\n"
 	.string "battle today.\p"
 	.string "“Observe how they adapted,” she said.\n"
 	.string "“That is the lesson.”$"

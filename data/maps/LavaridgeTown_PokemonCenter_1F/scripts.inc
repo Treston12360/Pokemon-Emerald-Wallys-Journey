@@ -29,21 +29,21 @@ LavaridgeTown_PokemonCenter_1F_EventScript_Gentleman::
 	end
 
 LavaridgeTown_PokemonCenter_1F_Text_TrainersPokemonSpendTimeTogether:
-	.string "POKéMON get closer to TRAINERS who\n"
+	.string "Pokémon get closer to Trainers who\n"
 	.string "spend time with them.\p"
 	.string "Not training time. Just time.\n"
 	.string "Sitting. Walking. Eating together.$"
 
 LavaridgeTown_PokemonCenter_1F_Text_HotSpringCanInvigorate:
 	.string "The springs are warm because of\n"
-	.string "something sleeping under HOENN.\p"
+	.string "something sleeping under Hoenn.\p"
 	.string "That's what the old folks say. A\n"
 	.string "titan that raised the land from fire.\p"
 	.string "The mountain rumbles in its sleep.\n"
 	.string "We don't poke it.$"
 
 LavaridgeTown_PokemonCenter_1F_Text_TrainersShouldRestToo:
-	.string "Hohoho! FLANNERY took over the GYM\n"
+	.string "Hohoho! Flannery took over the Gym\n"
 	.string "from her grandfather.\p"
 	.string "Young, loud and nervous. He was all\n"
 	.string "three once too.\p"

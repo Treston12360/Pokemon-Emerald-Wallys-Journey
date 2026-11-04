@@ -30,14 +30,14 @@ Route110_TrickHousePuzzle4_EventScript_Paula::
 Route110_TrickHousePuzzle4_Text_WroteSecretCodeLockOpened:
 	.string "{PLAYER} wrote down the secret code\n"
 	.string "on the door.\p"
-	.string "“TRICK MASTER is cool.”\n"
+	.string "“Trick Master is cool.”\n"
 	.string "… … … … … … … …\p"
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle4_Text_CoraIntro:
 	.string "Puzzles? Ugh!\p"
 	.string "I just came in because I heard\n"
-	.string "TRAINERS were here. Battle!$"
+	.string "Trainers were here. Battle!$"
 
 Route110_TrickHousePuzzle4_Text_CoraDefeat:
 	.string "I lost, but battling is\n"
@@ -48,7 +48,7 @@ Route110_TrickHousePuzzle4_Text_CoraPostBattle:
 	.string "too, right? Right?$"
 
 Route110_TrickHousePuzzle4_Text_YujiIntro:
-	.string "I move boulders at the RUSTBORO\n"
+	.string "I move boulders at the Rustboro\n"
 	.string "quarry for a living!\p"
 	.string "One finger! Watch!$"
 
@@ -61,14 +61,14 @@ Route110_TrickHousePuzzle4_Text_YujiPostBattle:
 	.string "You have to use your head too!$"
 
 Route110_TrickHousePuzzle4_Text_PaulaIntro:
-	.string "The TRICK HOUSE gets trickier every\n"
+	.string "The Trick House gets trickier every\n"
 	.string "time.\p"
-	.string "I think the TRICK MASTER reads our\n"
+	.string "I think the Trick Master reads our\n"
 	.string "minds. Battle!$"
 
 Route110_TrickHousePuzzle4_Text_PaulaDefeat:
 	.string "Aaak! Tricked by\n"
-	.string "another TRAINER!$"
+	.string "another Trainer!$"
 
 Route110_TrickHousePuzzle4_Text_PaulaPostBattle:
 	.string "Has anyone actually made it to\n"

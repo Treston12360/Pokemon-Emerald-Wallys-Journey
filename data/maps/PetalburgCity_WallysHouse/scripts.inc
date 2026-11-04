@@ -91,21 +91,21 @@ PetalburgCity_WallysHouse_EventScript_ReceivedHMSurf::
 PetalburgCity_WallysHouse_Text_ThanksForPlayingWithWally:
 	.string "You're…\n"
 	.string "Ah, you must be {PLAYER}{KUN}, right?\p"
-	.string "Thank you for playing with WALLY a\n"
+	.string "Thank you for playing with Wally a\n"
 	.string "little while ago.\p"
 	.string "He's been frail and sickly ever\n"
 	.string "since he was a baby.\p"
 	.string "We've sent him to stay with my relatives\n"
-	.string "in VERDANTURF TOWN for a while.\p"
+	.string "in Verdanturf Town for a while.\p"
 	.string "The air is a lot cleaner there\n"
 	.string "than it is here.\p"
-	.string "What's that? Where's WALLY?\n"
-	.string "He's already left, our WALLY.\p"
+	.string "What's that? Where's Wally?\n"
+	.string "He's already left, our Wally.\p"
 	.string "I wonder where he could have\n"
 	.string "gotten by now?$"
 
 PetalburgCity_WallysHouse_Text_WonderHowWallyIsDoing:
-	.string "I wonder how our WALLY is doing.\p"
+	.string "I wonder how our Wally is doing.\p"
 	.string "He writes that he's fine. He always\n"
 	.string "writes that he's fine.\p"
 	.string "He gets that from me. I hope that's\n"
@@ -114,14 +114,14 @@ PetalburgCity_WallysHouse_Text_WonderHowWallyIsDoing:
 PetalburgCity_WallysHouse_Text_PleaseExcuseUs:
 	.string "{PLAYER}{KUN}! Please excuse us for\n"
 	.string "dragging you here this way.\p"
-	.string "But our WALLY's become very healthy\n"
-	.string "since he went to VERDANTURF TOWN.\p"
+	.string "But our Wally's become very healthy\n"
+	.string "since he went to Verdanturf Town.\p"
 	.string "We owe it all to you!\p"
-	.string "When WALLY left town, you helped\n"
-	.string "him catch a POKéMON, right?\p"
-	.string "I think that made WALLY really\n"
+	.string "When Wally left town, you helped\n"
+	.string "him catch a Pokémon, right?\p"
+	.string "I think that made Wally really\n"
 	.string "happy.\p"
-	.string "Actually, not just WALLY.\n"
+	.string "Actually, not just Wally.\n"
 	.string "It made me, his father, happy too.\p"
 	.string "Happy that he's gained such a great\n"
 	.string "friend as you.\p"
@@ -129,23 +129,23 @@ PetalburgCity_WallysHouse_Text_PleaseExcuseUs:
 	.string "I'd really like you to have this.$"
 
 PetalburgCity_WallysHouse_Text_SurfGoAllSortsOfPlaces:
-	.string "If your POKéMON can SURF, you'll be\n"
+	.string "If your Pokémon can Surf, you'll be\n"
 	.string "able to go to all sorts of places.$"
 
 PetalburgCity_WallysHouse_Text_WallyIsComingHomeSoon:
-	.string "WALLY calls from the road now.\p"
+	.string "Wally calls from the road now.\p"
 	.string "He told me he's been challenging\n"
-	.string "GYMS. He wouldn't say how many he's\l"
+	.string "Gyms. He wouldn't say how many he's\l"
 	.string "won. That's how I know it's a lot.\p"
 	.string "I'm looking forward to having him\n"
 	.string "home again.$"
 
 PetalburgCity_WallysHouse_Text_YouMetWallyInEverGrandeCity:
 	.string "We watched it on TV, {PLAYER}{KUN}.\n"
-	.string "Our WALLY, beating WALLACE.\p"
+	.string "Our Wally, beating Wallace.\p"
 	.string "The boy who couldn't run to the end\n"
 	.string "of the street without coughing…\p"
-	.string "He's the CHAMPION now. I still can't\n"
+	.string "He's the Champion now. I still can't\n"
 	.string "say it without my voice shaking.\p"
 	.string "He calls before every title defense.\n"
 	.string "He says you're the one he's waiting\l"
@@ -153,37 +153,37 @@ PetalburgCity_WallysHouse_Text_YouMetWallyInEverGrandeCity:
 
 PetalburgCity_WallysHouse_Text_WallyWonChampionship:
 	.string "We watched it on TV, {PLAYER}{KUN}.\n"
-	.string "Our WALLY, beating WALLACE.\p"
+	.string "Our Wally, beating Wallace.\p"
 	.string "The boy who couldn't run to the end\n"
 	.string "of the street without coughing…\p"
-	.string "He's the CHAMPION now. I still can't\n"
+	.string "He's the Champion now. I still can't\n"
 	.string "say it without my voice shaking.\p"
 	.string "He sent word after the match.\n"
 	.string "He asked whether you'd reached\l"
-	.string "the LEAGUE yet.\p"
+	.string "the League yet.\p"
 	.string "I hope he remembers that winning\n"
 	.string "isn't all that matters.$"
 
 PetalburgCity_WallysHouse_Text_WallyWasReallyHappy:
-	.string "WALLY was really happy when he told\n"
-	.string "us that he caught a POKéMON.\p"
+	.string "Wally was really happy when he told\n"
+	.string "us that he caught a Pokémon.\p"
 	.string "It's been ages since I've seen him\n"
 	.string "smile like that.$"
 
 PetalburgCity_WallysHouse_Text_WallyLeftWithoutTelling:
 	.string "I want you to keep this a secret\n"
 	.string "from my husband…\p"
-	.string "But our WALLY left VERDANTURF TOWN\n"
+	.string "But our Wally left Verdanturf Town\n"
 	.string "without telling anyone.\p"
 	.string "He sent a letter. It said, “I need\n"
 	.string "to find out what I can do on my own.”\p"
-	.string "WALLY is frail, but he's stubborn.\n"
+	.string "Wally is frail, but he's stubborn.\n"
 	.string "I'm scared for him. And proud.$"
 
 
 PetalburgCity_WallysHouse_Text_NoHmSurf:
-	.string "You've grown into a fine TRAINER!\p"
-	.string "The BALANCE BADGE lets you SURF\n"
+	.string "You've grown into a fine Trainer!\p"
+	.string "The Balance Badge lets you Surf\n"
 	.string "across water. Best of luck!$"
 
 
@@ -254,60 +254,60 @@ WallyJourney_EventScript_StevenGiveSwampertite::
 	return
 
 WallyJourney_StevenMega_GymIntro:
-	.string "STEVEN: {PLAYER}! I caught the end of\n"
-	.string "your battle with NORMAN.\p"
+	.string "Steven: {PLAYER}! I caught the end of\n"
+	.string "your battle with Norman.\p"
 	.string "That was impressive. You and your\n"
-	.string "POKéMON fought as one.\p"
+	.string "Pokémon fought as one.\p"
 	.string "When we first met, you were just\n"
 	.string "starting out. Look at you now.\p"
 	.string "While I was traveling in another\n"
 	.string "region, I came across this.\p"
 	.string "I believe it can help you and your\n"
-	.string "POKéMON reach new heights.$"
+	.string "Pokémon reach new heights.$"
 
 WallyJourney_StevenMega_Intro:
-	.string "STEVEN: {PLAYER}! I heard you\n"
-	.string "defeated your father, NORMAN.\p"
+	.string "Steven: {PLAYER}! I heard you\n"
+	.string "defeated your father, Norman.\p"
 	.string "When we first met, you were just\n"
 	.string "starting out. Look at you now.\p"
-	.string "You've grown so much as a TRAINER.\p"
+	.string "You've grown so much as a Trainer.\p"
 	.string "While I was traveling in another\n"
 	.string "region, I came across this.\p"
 	.string "I believe it can help you and your\n"
-	.string "POKéMON reach new heights.$"
+	.string "Pokémon reach new heights.$"
 
 WallyJourney_StevenMega_Stone:
-	.string "STEVEN: A MEGA BRACELET is only\n"
+	.string "Steven: A Mega Bracelet is only\n"
 	.string "half of it. Your partner needs a\l"
-	.string "MEGA STONE that answers its call.\p"
-	.string "I found three, one for each POKéMON\n"
-	.string "a HOENN TRAINER can start with.\l"
+	.string "Mega Stone that answers its call.\p"
+	.string "I found three, one for each Pokémon\n"
+	.string "a Hoenn Trainer can start with.\l"
 	.string "Take them all.$"
 
 WallyJourney_StevenMega_End:
-	.string "STEVEN: Have your first partner\n"
+	.string "Steven: Have your first partner\n"
 	.string "hold its stone once it's fully\l"
 	.string "evolved.\p"
 	.string "When your bond is strong enough,\n"
 	.string "the bracelet will respond.\p"
-	.string "It responds to other MEGA STONES,\n"
+	.string "It responds to other Mega Stones,\n"
 	.string "too. Wearing it, you'll sense them\l"
 	.string "as a faint sparkle on the ground.\p"
-	.string "HOENN hides many of them. Keep your\n"
+	.string "Hoenn hides many of them. Keep your\n"
 	.string "eyes open on your travels.\p"
 	.string "I look forward to seeing how far\n"
 	.string "you'll go. Until next time!$"
 
 WallyJourney_StevenMega_AfterText:
-	.string "STEVEN: Watch for that sparkle.\n"
-	.string "MEGA STONES rest where their\l"
-	.string "POKéMON feel at home.\p"
-	.string "Your bond with your POKéMON is\n"
+	.string "Steven: Watch for that sparkle.\n"
+	.string "Mega Stones rest where their\l"
+	.string "Pokémon feel at home.\p"
+	.string "Your bond with your Pokémon is\n"
 	.string "your greatest strength!$"
 
 
 PetalburgCity_WallysHouse_Text_DadAfterPlayerChampion:
-	.string "WALLY called after your battle.\p"
+	.string "Wally called after your battle.\p"
 	.string "He told us he'd lost the title,\n"
 	.string "and how he'd spoken to you.\p"
 	.string "He sounded ashamed. Then he asked\n"
@@ -315,7 +315,7 @@ PetalburgCity_WallysHouse_Text_DadAfterPlayerChampion:
 	.string "I think he's finding his way back.$"
 
 PetalburgCity_WallysHouse_Text_MomAfterPlayerChampion:
-	.string "WALLY told us you won, {PLAYER}.\p"
+	.string "Wally told us you won, {PLAYER}.\p"
 	.string "He was quiet for a long time.\n"
 	.string "Then he started talking about\l"
 	.string "the people who helped him grow.\p"
@@ -324,9 +324,9 @@ PetalburgCity_WallysHouse_Text_MomAfterPlayerChampion:
 
 PetalburgCity_WallysHouse_Text_MomSawBroadcast:
 	.string "We saw the broadcast. All of\n"
-	.string "PETALBURG did.\p"
+	.string "Petalburg did.\p"
 	.string "I used to worry he'd never leave\n"
-	.string "his room. Now he's the CHAMPION.\p"
+	.string "his room. Now he's the Champion.\p"
 	.string "He still writes home every week.\n"
 	.string "He always asks how you're doing.$"
 
@@ -342,7 +342,7 @@ PetalburgCity_WallysHouse_EventScript_MomAfterTitle::
 
 PetalburgCity_WallysHouse_Text_DadAfterTitle:
 	.string "We watched your battle, {PLAYER}{KUN}.\p"
-	.string "When WALLY lost, I was afraid he'd\n"
+	.string "When Wally lost, I was afraid he'd\n"
 	.string "shut himself in his room again.\p"
 	.string "Instead he called and talked for an\n"
 	.string "hour. About you, mostly.\p"
@@ -351,9 +351,9 @@ PetalburgCity_WallysHouse_Text_DadAfterTitle:
 	.string "And then, for once, he sounded calm.$"
 
 PetalburgCity_WallysHouse_Text_MomAfterTitle:
-	.string "WALLY isn't the CHAMPION anymore.\p"
+	.string "Wally isn't the Champion anymore.\p"
 	.string "I thought I'd be sad. But he came\n"
 	.string "home for dinner and laughed again.\p"
-	.string "He trains at the BATTLE FRONTIER now.\n"
+	.string "He trains at the Battle Frontier now.\n"
 	.string "He says he's coming back for your\l"
 	.string "title. The right way, this time.$"

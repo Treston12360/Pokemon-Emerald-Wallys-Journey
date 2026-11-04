@@ -10,7 +10,7 @@ MtPyre_4F_EventScript_Tasha::
 
 MtPyre_4F_Text_TashaIntro:
 	.string "I love horrifying things…\p"
-	.string "PHOEBE grew up on this mountain. She\n"
+	.string "Phoebe grew up on this mountain. She\n"
 	.string "said it's lonely, not scary. Liar…$"
 
 MtPyre_4F_Text_TashaDefeat:
@@ -20,6 +20,6 @@ MtPyre_4F_Text_TashaDefeat:
 MtPyre_4F_Text_TashaPostBattle:
 	.string "There are so many new stones up\n"
 	.string "here every year…\p"
-	.string "People from SLATEPORT, mostly.\n"
-	.string "POKéMON from the reef.$"
+	.string "People from Slateport, mostly.\n"
+	.string "Pokémon from the reef.$"
 

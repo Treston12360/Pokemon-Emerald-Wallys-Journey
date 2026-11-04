@@ -26,18 +26,18 @@ DewfordTown_PokemonCenter_1F_EventScript_Man::
 
 DewfordTown_PokemonCenter_1F_Text_StoneCavern:
 	.string "There's a stone cavern at the edge\n"
-	.string "of town. GRANITE CAVE.\p"
+	.string "of town. Granite Cave.\p"
 	.string "A man in a fancy suit goes in and out\n"
-	.string "all the time. DEVON's son, people\l"
+	.string "all the time. Devon's son, people\l"
 	.string "say. Collecting rocks.\p"
 	.string "My grandpa says the reef out front\n"
 	.string "was bright orange when he was young.\l"
 	.string "Now it's mostly grey.$"
 
 DewfordTown_PokemonCenter_1F_Text_FaintedMonCanUseHM:
-	.string "Even a fainted POKéMON can use a\n"
-	.string "field move like FLASH.\p"
+	.string "Even a fainted Pokémon can use a\n"
+	.string "field move like Flash.\p"
 	.string "As long as you've got the right\n"
-	.string "BADGE. The LEAGUE trusts the BADGE,\l"
-	.string "not the POKéMON's mood.$"
+	.string "Badge. The League trusts the Badge,\l"
+	.string "not the Pokémon's mood.$"
 

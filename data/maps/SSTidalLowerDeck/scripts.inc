@@ -13,7 +13,7 @@ SSTidalLowerDeck_EventScript_Leonard::
 
 SSTidalLowerDeck_Text_PhillipIntro:
 	.string "Arrgh! Sick of scrubbing!\p"
-	.string "This ferry runs the old route DRAKE\n"
+	.string "This ferry runs the old route Drake\n"
 	.string "used to sail. Quick battle!$"
 
 SSTidalLowerDeck_Text_PhillipDefeat:
@@ -21,21 +21,21 @@ SSTidalLowerDeck_Text_PhillipDefeat:
 	.string "You're scrubbing alone tonight!$"
 
 SSTidalLowerDeck_Text_PhillipPostBattle:
-	.string "We're the CLEANUP BROTHERS!\p"
+	.string "We're the Cleanup Brothers!\p"
 	.string "Big bro pours the soap, little bro\n"
 	.string "does the scrubbing!$"
 
 SSTidalLowerDeck_Text_LeonardIntro:
 	.string "Me and my brother scrub this hull!\p"
 	.string "The captain says the ship's never\n"
-	.string "crossed a storm like DRAKE's.$"
+	.string "crossed a storm like Drake's.$"
 
 SSTidalLowerDeck_Text_LeonardDefeat:
 	.string "Big bro! I lost!\n"
 	.string "Don't make me scrub more!$"
 
 SSTidalLowerDeck_Text_LeonardPostBattle:
-	.string "We're the CLEANUP BROTHERS!\p"
+	.string "We're the Cleanup Brothers!\p"
 	.string "Big bro pours the soap, little bro\n"
 	.string "does the scrubbing!$"
 

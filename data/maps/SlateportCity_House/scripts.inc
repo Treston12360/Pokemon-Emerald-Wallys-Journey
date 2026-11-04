@@ -19,8 +19,8 @@ SlateportCity_House_Text_NatureToDoWithStatGains:
 	.string "Lately it doesn't feel like a story.$"
 
 SlateportCity_House_Text_MustBeGoingToBattleTent:
-	.string "You're a TRAINER, right?\p"
-	.string "Then you're here for the BATTLE\n"
-	.string "TENT. Or for CAPT. STERN's\l"
+	.string "You're a Trainer, right?\p"
+	.string "Then you're here for the Battle\n"
+	.string "Tent. Or for Capt. Stern's\l"
 	.string "autograph.$"
 

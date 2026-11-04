@@ -33,7 +33,7 @@ DewfordTown_House2_Text_BrawlySoCool_W0_Script:
 
 DewfordTown_House2_Text_WantYouToHaveSilkScarf:
 	.string "Gorge your eyes on this!\p"
-	.string "It's a SILK SCARF. It's right at the\n"
+	.string "It's a Silk Scarf. It's right at the\n"
 	.string "cutting edge of fashion, yeah!\p"
 	.string "Oh, I can see your eyes twinkling!\n"
 	.string "You appreciate my dazzling style!\p"
@@ -42,26 +42,26 @@ DewfordTown_House2_Text_WantYouToHaveSilkScarf:
 
 DewfordTown_House2_Text_NoRoom:
 	.string "Oh, you don't have room?\p"
-	.string "Now, listen tight, this SCARF is a must-\n"
+	.string "Now, listen tight, this Scarf is a must-\n"
 	.string "have! Why, I would sell all my items\l"
 	.string "in order to get it!$"
 
 DewfordTown_House2_Text_ExplainSilkScarf:
-	.string "The SILK SCARF raises the power of\n"
-	.string "NORMAL-type moves.\p"
-	.string "It's a marvelous SCARF that will go\n"
-	.string "with almost all POKéMON!$"
+	.string "The Silk Scarf raises the power of\n"
+	.string "Normal-type moves.\p"
+	.string "It's a marvelous Scarf that will go\n"
+	.string "with almost all Pokémon!$"
 
 DewfordTown_House2_Text_BrawlySoCool:
-	.string "You crossed the sea to visit DEWFORD?\p"
-	.string "Let me guess. BRAWLY.\p"
-	.string "He trained in the dark of GRANITE\n"
-	.string "CAVE for years. Came out tougher\l"
+	.string "You crossed the sea to visit Dewford?\p"
+	.string "Let me guess. Brawly.\p"
+	.string "He trained in the dark of Granite\n"
+	.string "Cave for years. Came out tougher\l"
 	.string "than the waves. Everyone here\l"
 	.string "idolizes him.$"
 
 DewfordTown_House2_Text_BrawlySoCool_W0:
-	.string "You beat BRAWLY? He's been out\n"
+	.string "You beat Brawly? He's been out\n"
 	.string "surfing all afternoon to cool off.\p"
 	.string "He says he likes you. That's how he\n"
 	.string "says it, anyway.$"

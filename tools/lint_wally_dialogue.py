@@ -107,6 +107,16 @@ def lint(label, s):
     return sorted(set(errs))
 
 
+def _decap(s):
+    import importlib.util, os
+    global _DECAP
+    if '_DECAP' not in globals():
+        spec = importlib.util.spec_from_file_location('decap_text', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'decap_text.py'))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        _DECAP = m.fix_text
+    return _DECAP(s)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--base")
@@ -117,7 +127,8 @@ def main():
     bad = 0
     changed = 0
     for label, (path, s) in sorted(cur.items(), key=lambda kv: kv[1][0]):
-        if not a.all and base and label in base and base[label][1] == s:
+        # vanilla is compared after the same decapitalisation the game text went through (tools/decap_text.py)
+        if not a.all and base and label in base and _decap(base[label][1]) == s:
             continue
         changed += 1
         errs = lint(label, s)

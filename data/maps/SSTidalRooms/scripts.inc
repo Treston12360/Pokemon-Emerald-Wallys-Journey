@@ -67,8 +67,8 @@ SSTidalRooms_Text_TakeRestOnBed:
 	.string "Let's take a rest.$"
 
 SSTidalRooms_Text_ColtonIntro:
-	.string "I sail to LILYCOVE for CONTESTS!\p"
-	.string "WALLACE got his start in those halls.\n"
+	.string "I sail to Lilycove for Contests!\p"
+	.string "Wallace got his start in those halls.\n"
 	.string "This ferry's all I can afford!$"
 
 SSTidalRooms_Text_ColtonDefeat:
@@ -76,69 +76,69 @@ SSTidalRooms_Text_ColtonDefeat:
 
 SSTidalRooms_Text_ColtonPostBattle:
 	.string "I'm so excited for the next\n"
-	.string "CONTEST! What will I see?$"
+	.string "Contest! What will I see?$"
 
 SSTidalRooms_Text_MicahIntro:
 	.string "Are your friends strong?\p"
-	.string "I sailed beside GLACIA's ship when she\n"
-	.string "first came to HOENN. Cold hands!$"
+	.string "I sailed beside Glacia's ship when she\n"
+	.string "first came to Hoenn. Cold hands!$"
 
 SSTidalRooms_Text_MicahDefeat:
 	.string "Your friends are very strong.$"
 
 SSTidalRooms_Text_MicahPostBattle:
 	.string "Friends needn't be human.\n"
-	.string "My POKéMON are my dearest friends.$"
+	.string "My Pokémon are my dearest friends.$"
 
 SSTidalRooms_Text_ThomasIntro:
 	.string "Child… did you knock?\p"
-	.string "MR. STONE of DEVON rides this ferry.\n"
+	.string "Mr. Stone of Devon rides this ferry.\n"
 	.string "Manners matter here.$"
 
 SSTidalRooms_Text_ThomasDefeat:
 	.string "A loss is accepted calmly.$"
 
 SSTidalRooms_Text_ThomasPostBattle:
-	.string "A GENTLEMAN is never ruffled.\n"
+	.string "A Gentleman is never ruffled.\n"
 	.string "That is the code.$"
 
 SSTidalRooms_Text_JedIntro:
-	.string "JED: It's our honeymoon!\p"
-	.string "We're going to see SOUTHERN ISLAND!\n"
+	.string "Jed: It's our honeymoon!\p"
+	.string "We're going to see Southern Island!\n"
 	.string "Lovey-dovey power!$"
 
 SSTidalRooms_Text_JedDefeat:
-	.string "JED: Sigh… Not on our\n"
+	.string "Jed: Sigh… Not on our\n"
 	.string "honeymoon…$"
 
 SSTidalRooms_Text_JedPostBattle:
-	.string "JED: First time our love lost.\n"
+	.string "Jed: First time our love lost.\n"
 	.string "You're amazing!$"
 
 SSTidalRooms_Text_JedNotEnoughMons:
-	.string "JED: Only one POKéMON? We battle\n"
+	.string "Jed: Only one Pokémon? We battle\n"
 	.string "as a couple. Bring two!$"
 
 SSTidalRooms_Text_LeaIntro:
-	.string "LEA: Honeymoon! They say twin dragons\n"
-	.string "bless couples on SOUTHERN ISLAND!$"
+	.string "Lea: Honeymoon! They say twin dragons\n"
+	.string "bless couples on Southern Island!$"
 
 SSTidalRooms_Text_LeaDefeat:
-	.string "LEA: Oh, boo! Our love\n"
+	.string "Lea: Oh, boo! Our love\n"
 	.string "deserved better!$"
 
 SSTidalRooms_Text_LeaPostBattle:
-	.string "LEA: Our love lost?! You must be\n"
-	.string "an awesome TRAINER!$"
+	.string "Lea: Our love lost?! You must be\n"
+	.string "an awesome Trainer!$"
 
 SSTidalRooms_Text_LeaNotEnoughMons:
-	.string "LEA: We wanted to battle! But you\n"
-	.string "need two POKéMON…$"
+	.string "Lea: We wanted to battle! But you\n"
+	.string "need two Pokémon…$"
 
 SSTidalRooms_Text_GarretIntro:
 	.string "I'm bored.\p"
 	.string "Father owns twelve houses in\n"
-	.string "LILYCOVE and none feel like home.\l"
+	.string "Lilycove and none feel like home.\l"
 	.string "Entertain me.$"
 
 SSTidalRooms_Text_GarretDefeat:
@@ -147,12 +147,12 @@ SSTidalRooms_Text_GarretDefeat:
 
 SSTidalRooms_Text_GarretPostBattle:
 	.string "Perhaps Father will buy me a yacht.\p"
-	.string "He says HOENN has no room left for\n"
+	.string "He says Hoenn has no room left for\n"
 	.string "houses, so he buys boats instead.$"
 
 SSTidalRooms_Text_NaomiIntro:
-	.string "What an adorable TRAINER!\p"
-	.string "I'm touring HOENN's legend sites by\n"
+	.string "What an adorable Trainer!\p"
+	.string "I'm touring Hoenn's legend sites by\n"
 	.string "ferry. Tea? Or a battle?$"
 
 SSTidalRooms_Text_NaomiDefeat:
@@ -160,18 +160,18 @@ SSTidalRooms_Text_NaomiDefeat:
 
 SSTidalRooms_Text_NaomiPostBattle:
 	.string "A world cruise has its charms…\p"
-	.string "But touring HOENN by ferry is\n"
+	.string "But touring Hoenn by ferry is\n"
 	.string "appealing in its own way.$"
 
 SSTidalRooms_Text_NotSuspiciousTakeThis:
 	.string "Uh… Hi! I… I'm not acting suspicious!\n"
 	.string "Uh… You can have this! For free!\p"
-	.string "It… Honestly, I didn't SNATCH it from\n"
+	.string "It… Honestly, I didn't Snatch it from\n"
 	.string "someone! I'd never do such a thing!\l"
 	.string "It's clean! You can use it!$"
 
 SSTidalRooms_Text_ExplainSnatch:
-	.string "SNATCH steals the beneficial effects\n"
+	.string "Snatch steals the beneficial effects\n"
 	.string "of certain moves before they can be\l"
 	.string "used by a foe or ally.$"
 

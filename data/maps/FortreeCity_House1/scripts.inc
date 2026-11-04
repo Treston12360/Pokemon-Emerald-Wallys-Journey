@@ -64,12 +64,12 @@ FortreeCity_House1_Text_YouWontTradeMe:
 	.string "Even after I bared my heart to you?$"
 
 FortreeCity_House1_Text_GoingToMakeVolbeatStrong:
-	.string "I'm going to make VOLBEAT super\n"
+	.string "I'm going to make Volbeat super\n"
 	.string "strong from this moment on!\p"
-	.string "I hope you do the same with PLUSLE!$"
+	.string "I hope you do the same with Plusle!$"
 
 FortreeCity_House1_Text_TradingMemoriesWithOthers:
-	.string "Trading POKéMON means trusting\n"
+	.string "Trading Pokémon means trusting\n"
 	.string "another person with a friend.\p"
 	.string "My grandson traded his first\n"
 	.string "partner when his friend moved.\p"
@@ -77,5 +77,5 @@ FortreeCity_House1_Text_TradingMemoriesWithOthers:
 	.string "Neither forgot the other.$"
 
 FortreeCity_House1_Text_Zigzagoon:
-	.string "ZIGZAGOON: Gumomoh?$"
+	.string "Zigzagoon: Gumomoh?$"
 

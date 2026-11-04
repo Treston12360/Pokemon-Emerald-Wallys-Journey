@@ -422,11 +422,11 @@ RusturfTunnel_Text_ComeAndGetSome:
 	.string "get some!$"
 
 RusturfTunnel_Text_Peeko:
-	.string "PEEKO: Pii pihyoh!$"
+	.string "Peeko: Pii pihyoh!$"
 
 RusturfTunnel_Text_GruntIntro:
 	.string "Grah, keelhaul it all!\p"
-	.string "That hostage POKéMON turned out to\n"
+	.string "That hostage Pokémon turned out to\n"
 	.string "be worthless!\p"
 	.string "And to think I made a getaway…\n"
 	.string "In this tunnel to nowhere!\p"
@@ -440,17 +440,17 @@ RusturfTunnel_Text_GruntDefeat:
 RusturfTunnel_Text_GruntTakePackage:
 	.string "This is plain not right…\p"
 	.string "They told me this part was going to\n"
-	.string "shut down DEVON's new dredger.\l"
+	.string "shut down Devon's new dredger.\l"
 	.string "Save the reef, they said.\p"
 	.string "Tch! Take it! But somebody has to\n"
 	.string "stand up to them!$"
 
 RusturfTunnel_Text_PeekoGladToSeeYouSafe:
-	.string "PEEKO! Thank goodness you're safe!$"
+	.string "Peeko! Thank goodness you're safe!$"
 
 RusturfTunnel_Text_ThankYouLetsGoHomePeeko:
-	.string "PEEKO owes her life to you!\p"
-	.string "They call me MR. BRINEY.\n"
+	.string "Peeko owes her life to you!\p"
+	.string "They call me Mr. Briney.\n"
 	.string "And, you are?\p"
 	.string "… … … … … … … …\n"
 	.string "… … … … … … … …\p"
@@ -459,27 +459,27 @@ RusturfTunnel_Text_ThankYouLetsGoHomePeeko:
 	.string "Now, if there's anything that troubles\n"
 	.string "you, don't hesitate to tell me!\p"
 	.string "You can usually find me in my cottage\n"
-	.string "by the sea near PETALBURG WOODS.\p"
-	.string "Come, PEEKO, we should make our way\n"
+	.string "by the sea near Petalburg Woods.\p"
+	.string "Come, Peeko, we should make our way\n"
 	.string "home.\p"
-	.string "PEEKO: Pihyoh!$"
+	.string "Peeko: Pihyoh!$"
 
 RusturfTunnel_Text_WhyCantTheyKeepDigging:
 	.string "… …\p"
 	.string "They stopped digging. Folks in\n"
-	.string "VERDANTURF protested DEVON's quarry\l"
+	.string "Verdanturf protested Devon's quarry\l"
 	.string "work, said it was scaring the\l"
-	.string "WHISMUR away.\p"
-	.string "My beloved waits in VERDANTURF just\n"
+	.string "Whismur away.\p"
+	.string "My beloved waits in Verdanturf just\n"
 	.string "beyond this rock…\p"
 	.string "I understand both sides. I just\n"
 	.string "wish it didn't have to be my side\l"
 	.string "that waits.$"
 
 RusturfTunnel_Text_ToGetToVerdanturf:
-	.string "From RUSTBORO to VERDANTURF, you have\n"
-	.string "to go through DEWFORD, SLATEPORT and\l"
-	.string "MAUVILLE.\p"
+	.string "From Rustboro to Verdanturf, you have\n"
+	.string "to go through Dewford, Slateport and\l"
+	.string "Mauville.\p"
 	.string "A whole day's trip. That's why the\n"
 	.string "tunnel matters.$"
 
@@ -490,15 +490,15 @@ RusturfTunnel_Text_YouShatteredBoulderTakeHM:
 	.string "I'd like you to have this HM.$"
 
 RusturfTunnel_Text_ExplainStrength:
-	.string "That HM contains STRENGTH.\p"
-	.string "If a muscular POKéMON were to learn\n"
+	.string "That HM contains Strength.\p"
+	.string "If a muscular Pokémon were to learn\n"
 	.string "that, it would be able to move even\l"
 	.string "large boulders.$"
 
 RusturfTunnel_Text_WandaReunion:
-	.string "WANDA!\n"
+	.string "Wanda!\n"
 	.string "Now I can see you anytime!\p"
-	.string "WANDA: That's…wonderful.\p"
+	.string "Wanda: That's…wonderful.\p"
 	.string "Please, take some rest at my home.$"
 
 RusturfTunnel_Text_BoyfriendOnOtherSideOfRock:
@@ -506,21 +506,21 @@ RusturfTunnel_Text_BoyfriendOnOtherSideOfRock:
 	.string "of this rock.\p"
 	.string "He's not just digging to see me.\n"
 	.string "He's digging so the whole town can\l"
-	.string "reach RUSTBORO without a boat.$"
+	.string "reach Rustboro without a boat.$"
 
 RusturfTunnel_Text_MikeIntro:
 	.string "I dug in these mountains thirty\n"
 	.string "years.\p"
-	.string "Then DEVON and the protesters got\n"
+	.string "Then Devon and the protesters got\n"
 	.string "in a fight, and here we are. Battle!$"
 
 RusturfTunnel_Text_MikeDefeat:
-	.string "My POKéMON are as worn out\n"
+	.string "My Pokémon are as worn out\n"
 	.string "as this old tunnel…$"
 
 RusturfTunnel_Text_MikePostBattle:
 	.string "They stopped the tunnel to protect\n"
-	.string "the POKéMON in here.\p"
+	.string "the Pokémon in here.\p"
 	.string "Good story. Shame about everyone\n"
 	.string "stuck taking the long way round.$"
 
@@ -528,7 +528,7 @@ RusturfTunnel_Text_MikePostBattle:
 RusturfTunnel_Text_NoHmThanks:
 	.string "You smashed right through those\n"
 	.string "rocks!\p"
-	.string "Now WANDA and I can finally meet!$"
+	.string "Now Wanda and I can finally meet!$"
 
 RusturfTunnel_Text_NoHmStrength:
 	.string "Thank you so much for your help!$"

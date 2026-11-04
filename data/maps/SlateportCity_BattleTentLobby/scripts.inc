@@ -274,7 +274,7 @@ SlateportCity_BattleTentLobby_EventScript_ExitRules::
 
 SlateportCity_BattleTentLobby_Text_CouldntFindMonForMe:
 	.string "So, like, I couldn't find myself any\n"
-	.string "POKéMON that were, like, for me.\p"
+	.string "Pokémon that were, like, for me.\p"
 	.string "So, I figured, like, hey, I should file\n"
 	.string "a complaint to the guy there?\p"
 	.string "And he wouldn't hear me out, like, hey!\n"
@@ -284,15 +284,15 @@ SlateportCity_BattleTentLobby_Text_CouldntFindMonForMe:
 
 SlateportCity_BattleTentLobby_Text_ExplainTorment:
 	.string "That's, like, TM41, you know?\n"
-	.string "Hey, it's TORMENT, you hearing me?\p"
+	.string "Hey, it's Torment, you hearing me?\p"
 	.string "Like, it won't let the other guy\n"
 	.string "use the same move twice in a row, see?\p"
 	.string "Hey, now, you listen here, like,\n"
 	.string "I'm not laying a torment on you!$"
 
 SlateportCity_BattleTentLobby_Text_IllTryUsingBugMons:
-	.string "I knew ARCHIE before the bandana.\p"
-	.string "He ran the SEA TRUST. Beach\n"
+	.string "I knew Archie before the bandana.\p"
+	.string "He ran the Sea Trust. Beach\n"
 	.string "cleanups every Sunday. He'd buy\l"
 	.string "the kids lunch after.\p"
 	.string "Then the shipyard got bigger and\n"
@@ -303,14 +303,14 @@ SlateportCity_BattleTentLobby_Text_BattleEvenWithoutToughMons:
 	.string "Thirty years of ships, factories and\n"
 	.string "nobody watching what went in the\l"
 	.string "water.\p"
-	.string "The SEA TRUST tried petitions first.\n"
+	.string "The Sea Trust tried petitions first.\n"
 	.string "Nobody read them.$"
 
 SlateportCity_BattleTentLobby_Text_NiceIfMoreSelection:
 	.string "See the old sailor's dock? That was\n"
-	.string "DRAKE's ship, before the LEAGUE.\p"
+	.string "Drake's ship, before the League.\p"
 	.string "He crewed through the worst storm\n"
-	.string "HOENN ever had. Lost friends.\p"
-	.string "He says it taught him what a TRAINER\n"
+	.string "Hoenn ever had. Lost friends.\p"
+	.string "He says it taught him what a Trainer\n"
 	.string "really needs. He won't tell me what.$"
 

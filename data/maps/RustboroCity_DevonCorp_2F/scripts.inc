@@ -270,76 +270,76 @@ RustboroCity_DevonCorp_2F_EventScript_WorkOnNext::
 
 RustboroCity_DevonCorp_2F_Text_DeviceForTalkingToPokemon:
 	.string "We're building a device to talk\n"
-	.string "with POKéMON.\p"
-	.string "The PRESIDENT's dream. He says if we\n"
+	.string "with Pokémon.\p"
+	.string "The President's dream. He says if we\n"
 	.string "could ask them, we'd stop making so\l"
 	.string "many mistakes.$"
 
 RustboroCity_DevonCorp_2F_Text_DevelopingNewBalls:
 	.string "I'm developing new kinds of\n"
-	.string "POKé BALLS…\p"
-	.string "But HOENN's conservation law only\n"
-	.string "licenses the standard POKé BALL.\p"
+	.string "Poké Balls…\p"
+	.string "But Hoenn's conservation law only\n"
+	.string "licenses the standard Poké Ball.\p"
 	.string "Stronger balls made catching too\n"
 	.string "easy, and wild populations crashed.\l"
 	.string "So… back to the drawing board.$"
 
 RustboroCity_DevonCorp_2F_Text_WeFinallyMadeNewBalls:
 	.string "We finally made new kinds of\n"
-	.string "POKé BALLS! A REPEAT BALL and a\l"
-	.string "TIMER BALL!\p"
-	.string "…And the LEAGUE rejected both.\p"
-	.string "Only the standard POKé BALL is legal\n"
-	.string "in HOENN. It keeps wild POKéMON safe\l"
+	.string "Poké Balls! A Repeat Ball and a\l"
+	.string "Timer Ball!\p"
+	.string "…And the League rejected both.\p"
+	.string "Only the standard Poké Ball is legal\n"
+	.string "in Hoenn. It keeps wild Pokémon safe\l"
 	.string "from overcatching.\p"
 	.string "Honestly? I think they're right.$"
 
 RustboroCity_DevonCorp_2F_Text_IMadePokenav:
-	.string "I designed the POKéNAV!\p"
-	.string "STEVEN tested the prototype. He\n"
+	.string "I designed the PokéNav!\p"
+	.string "Steven tested the prototype. He\n"
 	.string "broke it in a cave in a week.\l"
 	.string "Best feedback I ever got.$"
 
 RustboroCity_DevonCorp_2F_Text_WowThatsAPokenav:
 	.string "Oh, wow!\n"
-	.string "That's a POKéNAV!\p"
+	.string "That's a PokéNav!\p"
 	.string "It came about as a result of our\n"
-	.string "PRESIDENT's desire to learn about\l"
-	.string "the feelings of POKéMON.\p"
+	.string "President's desire to learn about\l"
+	.string "the feelings of Pokémon.\p"
 	.string "Would you like me to describe its\n"
 	.string "features in detail?\p"
 	.string "No, no. I think you'll find out just by\n"
-	.string "trying the POKéNAV out.$"
+	.string "trying the PokéNav out.$"
 
 RustboroCity_DevonCorp_2F_Text_DeviceToVisualizePokemonDreams:
 	.string "I'm trying to build a device that\n"
-	.string "shows POKéMON dreams.\p"
+	.string "shows Pokémon dreams.\p"
 	.string "Lately the test subjects all dream\n"
 	.string "of water. Endless water. Strange.$"
 
 RustboroCity_DevonCorp_2F_Text_DevelopDeviceToResurrectFossils:
 	.string "I've been trying to develop a device\n"
-	.string "that resurrects POKéMON from fossils…\p"
+	.string "that resurrects Pokémon from fossils…\p"
 	.string "And, it's working!$"
 
 RustboroCity_DevonCorp_2F_Text_WantToBringFossilBackToLife:
 	.string "Wait! That thing you have there…\n"
-	.string "Is that a POKéMON fossil?\p"
-	.string "Would you like to bring that POKéMON\n"
+	.string "Is that a Pokémon fossil?\p"
+	.string "Would you like to bring that Pokémon\n"
 	.string "back to life?\p"
 	.string "I can with my newly developed\n"
-	.string "FOSSIL REGENERATOR.$"
+	.string "Fossil Regenerator.$"
 
 RustboroCity_DevonCorp_2F_Text_OhIsThatSo:
 	.string "Oh, is that so?\p"
-	.string "DEVON's technological expertise\n"
+	.string "Devon's technological expertise\n"
 	.string "is outstanding, I tell you.$"
 
 RustboroCity_DevonCorp_2F_Text_TwoFossilsPickOne:
 	.string "Oh, now that's a surprise!\n"
 	.string "You have not one, but two, fossils?\p"
 	.string "Unfortunately, my machine can only\n"
-	.string "regenerate one POKéMON at a time.\p"
+	.string "regenerate one Pokémon at a time.\p"
 	.string "Would you like to pick one of your\n"
 	.string "fossils for regeneration?$"
 
@@ -347,10 +347,10 @@ RustboroCity_DevonCorp_2F_Text_HandedFossilToResearcher:
 	.string "Excellent!\n"
 	.string "Let's do this right away.\p"
 	.string "{PLAYER} handed the {STR_VAR_1} to\n"
-	.string "the DEVON RESEARCHER.$"
+	.string "the Devon Researcher.$"
 
 RustboroCity_DevonCorp_2F_Text_FossilRegeneratorTakesTime:
-	.string "The FOSSIL REGENERATOR, which I made,\n"
+	.string "The Fossil Regenerator, which I made,\n"
 	.string "is incredible.\p"
 	.string "But it has one drawback--it takes\n"
 	.string "a long time to work.\p"
@@ -359,29 +359,29 @@ RustboroCity_DevonCorp_2F_Text_FossilRegeneratorTakesTime:
 
 RustboroCity_DevonCorp_2F_Text_FossilizedMonBroughtBackToLife:
 	.string "Thanks for waiting!\p"
-	.string "Your fossilized POKéMON has been\n"
+	.string "Your fossilized Pokémon has been\n"
 	.string "brought back to life!\p"
-	.string "The fossil was an ancient POKéMON.\n"
+	.string "The fossil was an ancient Pokémon.\n"
 	.string "{STR_VAR_2}, it was!$"
 
 RustboroCity_DevonCorp_2F_Text_ReceivedMonFromResearcher:
 	.string "{PLAYER} received {STR_VAR_2} from\n"
-	.string "the DEVON RESEARCHER.$"
+	.string "the Devon Researcher.$"
 
 @ Unused
 RustboroCity_DevonCorp_2F_Text_TooManyPokemon:
-	.string "Uh-oh, you've got too many POKéMON.\n"
+	.string "Uh-oh, you've got too many Pokémon.\n"
 	.string "You have no room for this one.$"
 
 RustboroCity_DevonCorp_2F_Text_DevelopNewPokenavFeature:
-	.string "I'm working on a new POKéNAV\n"
+	.string "I'm working on a new PokéNav\n"
 	.string "feature. It's not going well.\p"
 	.string "Deadlines don't care about\n"
 	.string "inspiration.$"
 
 RustboroCity_DevonCorp_2F_Text_WhatToWorkOnNext:
 	.string "What should I build next?\p"
-	.string "DEVON lets us chase our ideas. The\n"
-	.string "price is that the PRESIDENT decides\l"
+	.string "Devon lets us chase our ideas. The\n"
+	.string "price is that the President decides\l"
 	.string "what they're for.$"
 

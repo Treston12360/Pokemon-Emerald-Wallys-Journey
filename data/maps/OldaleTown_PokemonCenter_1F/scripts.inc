@@ -38,30 +38,30 @@ OldaleTown_PokemonCenter_1F_EventScript_WirelessClubAvailable::
 	end
 
 OldaleTown_PokemonCenter_1F_Text_TrainersCanUsePC:
-	.string "PROF. BIRCH and NORMAN go way back.\p"
-	.string "BIRCH used to drag him out to the\n"
+	.string "Prof. Birch and Norman go way back.\p"
+	.string "Birch used to drag him out to the\n"
 	.string "field. Said he'd never seen a\l"
-	.string "TRAINER with that kind of focus.\p"
-	.string "BIRCH blames himself for how little\n"
-	.string "NORMAN gets home.\p"
-	.string "NORMAN just shakes his head. Says\n"
+	.string "Trainer with that kind of focus.\p"
+	.string "Birch blames himself for how little\n"
+	.string "Norman gets home.\p"
+	.string "Norman just shakes his head. Says\n"
 	.string "nobody pushed him but himself.$"
 
 OldaleTown_PokemonCenter_1F_Text_PokemonCentersAreGreat:
-	.string "POKéMON CENTERS are free for every\n"
-	.string "TRAINER. The LEAGUE pays for it.\p"
+	.string "Pokémon Centers are free for every\n"
+	.string "Trainer. The League pays for it.\p"
 	.string "Rich kid, poor kid, same care. I\n"
 	.string "think that's the best thing about\l"
-	.string "HOENN.$"
+	.string "Hoenn.$"
 
 OldaleTown_PokemonCenter_1F_Text_WirelessClubNotAvailable:
-	.string "The POKéMON WIRELESS CLUB on\n"
+	.string "The Pokémon Wireless Club on\n"
 	.string "the second floor was built recently.\p"
 	.string "But they say they're still making\n"
 	.string "adjustments.$"
 
 OldaleTown_PokemonCenter_1F_Text_TradedInWirelessClub:
-	.string "OLDALE and LITTLEROOT used to be\n"
+	.string "Oldale and Littleroot used to be\n"
 	.string "full of young families.\p"
 	.string "Then the jobs moved to the cities,\n"
 	.string "and the young families followed.\p"

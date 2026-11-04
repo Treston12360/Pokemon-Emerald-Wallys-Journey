@@ -110,7 +110,7 @@ LilycoveCity_DepartmentStore_2F_Text_LearnToUseItemsProperly:
 
 LilycoveCity_DepartmentStore_2F_Text_GoodGiftForHusband:
 	.string "My husband fishes off the cove.\p"
-	.string "He used to bring home LUVDISC by\n"
+	.string "He used to bring home Luvdisc by\n"
 	.string "the bucket. Now one, maybe two.\p"
 	.string "The new docks went in. The fish\n"
 	.string "went out.$"

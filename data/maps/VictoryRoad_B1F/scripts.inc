@@ -27,7 +27,7 @@ VictoryRoad_B1F_EventScript_Halle::
 	end
 
 VictoryRoad_B1F_Text_SamuelIntro:
-	.string "The LEAGUE is right there…\n"
+	.string "The League is right there…\n"
 	.string "I can't stop shaking…$"
 
 VictoryRoad_B1F_Text_SamuelDefeat:
@@ -35,12 +35,12 @@ VictoryRoad_B1F_Text_SamuelDefeat:
 	.string "do anything…$"
 
 VictoryRoad_B1F_Text_SamuelPostBattle:
-	.string "The LEAGUE feels far away again…\p"
+	.string "The League feels far away again…\p"
 	.string "My parents mortgaged the house for\n"
 	.string "my training. How do I tell them?$"
 
 VictoryRoad_B1F_Text_ShannonIntro:
-	.string "The LEAGUE tests trust more than\n"
+	.string "The League tests trust more than\n"
 	.string "strength. Let me test yours!$"
 
 VictoryRoad_B1F_Text_ShannonDefeat:
@@ -48,15 +48,15 @@ VictoryRoad_B1F_Text_ShannonDefeat:
 	.string "I could feel it.$"
 
 VictoryRoad_B1F_Text_ShannonPostBattle:
-	.string "PHOEBE of the ELITE FOUR grew up\n"
-	.string "on MT. PYRE.\p"
-	.string "She says GHOST POKéMON only trust\n"
+	.string "Phoebe of the Elite Four grew up\n"
+	.string "on Mt. Pyre.\p"
+	.string "She says Ghost Pokémon only trust\n"
 	.string "people who've lost something.$"
 
 VictoryRoad_B1F_Text_MichelleIntro:
 	.string "This cave isn't the finish line.\p"
-	.string "It's just the hallway to the ELITE\n"
-	.string "FOUR. Battle!$"
+	.string "It's just the hallway to the Elite\n"
+	.string "Four. Battle!$"
 
 VictoryRoad_B1F_Text_MichelleDefeat:
 	.string "That's the way!\n"
@@ -64,14 +64,14 @@ VictoryRoad_B1F_Text_MichelleDefeat:
 
 VictoryRoad_B1F_Text_MichellePostBattle:
 	.string "You'll do fine!\p"
-	.string "One warning: SIDNEY talks tough, but\n"
+	.string "One warning: Sidney talks tough, but\n"
 	.string "he's the fairest of the four.\p"
 	.string "It's the quiet ones after him you\n"
 	.string "should worry about.$"
 
 VictoryRoad_B1F_Text_MitchellIntro:
-	.string "I trained under MOSSDEEP's stars!\p"
-	.string "PHOEBE says the ELITE FOUR's ghosts\n"
+	.string "I trained under Mossdeep's stars!\p"
+	.string "Phoebe says the Elite Four's ghosts\n"
 	.string "can feel fear. Behold!$"
 
 VictoryRoad_B1F_Text_MitchellDefeat:
@@ -80,18 +80,18 @@ VictoryRoad_B1F_Text_MitchellDefeat:
 
 VictoryRoad_B1F_Text_MitchellPostBattle:
 	.string "Even standing still, you and your\n"
-	.string "POKéMON hum with power.$"
+	.string "Pokémon hum with power.$"
 
 VictoryRoad_B1F_Text_HalleIntro:
 	.string "Whoa, relax! No need to be tense.\p"
-	.string "I lost to SIDNEY last year. It's\n"
+	.string "I lost to Sidney last year. It's\n"
 	.string "not the end of the world!$"
 
 VictoryRoad_B1F_Text_HalleDefeat:
 	.string "Whoa! Wonderful!$"
 
 VictoryRoad_B1F_Text_HallePostBattle:
-	.string "Sure, it's VICTORY ROAD. But it's\n"
+	.string "Sure, it's Victory Road. But it's\n"
 	.string "the same path you've walked\l"
 	.string "this whole time.\p"
 	.string "Enjoy the rest of it!$"

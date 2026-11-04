@@ -39,13 +39,13 @@ Route110_TrickHousePuzzle1_EventScript_Robin::
 Route110_TrickHousePuzzle1_Text_WroteSecretCodeLockOpened::
 	.string "{PLAYER} wrote down the secret code\n"
 	.string "on the door.\p"
-	.string "“TRICK MASTER is fabulous.”\n"
+	.string "“Trick Master is fabulous.”\n"
 	.string "… … … … … … … …\p"
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle1_Text_SallyIntro:
-	.string "I just got my STONE BADGE, so I can\n"
-	.string "CUT trees now! Watch out!$"
+	.string "I just got my Stone Badge, so I can\n"
+	.string "Cut trees now! Watch out!$"
 
 Route110_TrickHousePuzzle1_Text_SallyDefeat:
 	.string "Hey! You're taking this\n"
@@ -57,18 +57,18 @@ Route110_TrickHousePuzzle1_Text_SallyPostBattle:
 
 Route110_TrickHousePuzzle1_Text_EddieIntro:
 	.string "I only came in to ask directions to\n"
-	.string "SLATEPORT!\p"
+	.string "Slateport!\p"
 	.string "That was three hours ago. Battle?$"
 
 Route110_TrickHousePuzzle1_Text_EddieDefeat:
-	.string "Lost my way AND the match…$"
+	.string "Lost my way And the match…$"
 
 Route110_TrickHousePuzzle1_Text_EddiePostBattle:
 	.string "If you get out, tell my mom I'm\n"
 	.string "fine. Mostly fine.$"
 
 Route110_TrickHousePuzzle1_Text_RobinIntro:
-	.string "Who IS the TRICK MASTER?\p"
+	.string "Who Is the Trick Master?\p"
 	.string "The neighbors say he was a famous\n"
 	.string "magician once. Battle!$"
 
@@ -77,6 +77,6 @@ Route110_TrickHousePuzzle1_Text_RobinDefeat:
 	.string "mystery, not the battle!$"
 
 Route110_TrickHousePuzzle1_Text_RobinPostBattle:
-	.string "You're strong! Wait… are YOU the\n"
-	.string "TRICK MASTER in disguise?$"
+	.string "You're strong! Wait… are You the\n"
+	.string "Trick Master in disguise?$"
 

@@ -16,8 +16,8 @@ SeafloorCavern_Room3_Text_ShellyIntro:
 	.string "You got here without a submarine?\n"
 	.string "How impressive!\p"
 	.string "But I can't have you meddling.\p"
-	.string "And I owe you for the WEATHER\n"
-	.string "INSTITUTE…\p"
+	.string "And I owe you for the Weather\n"
+	.string "Institute…\p"
 	.string "Time for a little taste of pain!$"
 
 SeafloorCavern_Room3_Text_ShellyDefeat:
@@ -27,12 +27,12 @@ SeafloorCavern_Room3_Text_ShellyDefeat:
 SeafloorCavern_Room3_Text_ShellyPostBattle:
 	.string "You're strong. Annoyingly strong.\p"
 	.string "But listen to me. If this goes\n"
-	.string "wrong, it won't be MAGMA's fault or\l"
+	.string "wrong, it won't be Magma's fault or\l"
 	.string "yours. It'll be ours.\p"
 	.string "…Forget I said that. Move.$"
 
 SeafloorCavern_Room3_Text_Grunt5Intro:
-	.string "We need POKéMON power to make\n"
+	.string "We need Pokémon power to make\n"
 	.string "our dream real.\p"
 	.string "And meddlers like you use the same\n"
 	.string "power to stop us!\p"
@@ -44,7 +44,7 @@ SeafloorCavern_Room3_Text_Grunt5Defeat:
 	.string "it doesn't work out…$"
 
 SeafloorCavern_Room3_Text_Grunt5PostBattle:
-	.string "We don't question the BOSS.\n"
+	.string "We don't question the Boss.\n"
 	.string "That's the rule.\p"
 	.string "But here you are, one kid, walking\n"
 	.string "straight at him.\p"

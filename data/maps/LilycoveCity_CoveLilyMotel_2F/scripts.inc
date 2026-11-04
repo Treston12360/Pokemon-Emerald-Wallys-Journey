@@ -66,9 +66,9 @@ LilycoveCity_CoveLilyMotel_2F_EventScript_MetScott::
 	end
 
 LilycoveCity_CoveLilyMotel_2F_Text_ShowMeCompletedDex:
-	.string "I'm the GAME DESIGNER.\p"
+	.string "I'm the Game Designer.\p"
 	.string "Oh, is that right?\n"
-	.string "You're working on a POKéDEX?\p"
+	.string "You're working on a Pokédex?\p"
 	.string "It's tough trying to complete it,\n"
 	.string "but don't give up.\p"
 	.string "If you do complete it, please come\n"
@@ -77,33 +77,33 @@ LilycoveCity_CoveLilyMotel_2F_Text_ShowMeCompletedDex:
 LilycoveCity_CoveLilyMotel_2F_Text_FilledPokedexGiveYouThis:
 	.string "Wow! That's awesome!\n"
 	.string "Yep, it's totally awesome!\p"
-	.string "This POKéDEX is completely filled!\n"
-	.string "You really must love POKéMON!\p"
+	.string "This Pokédex is completely filled!\n"
+	.string "You really must love Pokémon!\p"
 	.string "I'm so impressed!\p"
 	.string "Let me give you something in\n"
 	.string "recognition of your feat!$"
 
 LilycoveCity_CoveLilyMotel_2F_Text_ImTheProgrammer:
 	.string "Me? You're talking to me?\n"
-	.string "I'm the PROGRAMMER.\p"
-	.string "I wonder what the SLOTS are\n"
+	.string "I'm the Programmer.\p"
+	.string "I wonder what the Slots are\n"
 	.string "like here.$"
 
 LilycoveCity_CoveLilyMotel_2F_Text_ImTheGraphicArtist:
-	.string "I'm the GRAPHIC ARTIST! Aren't the\n"
-	.string "POKéMON of HOENN interesting?$"
+	.string "I'm the Graphic Artist! Aren't the\n"
+	.string "Pokémon of Hoenn interesting?$"
 
 LilycoveCity_CoveLilyMotel_2F_Text_GirlsAreCute:
 	.string "I came all the way from the north,\n"
-	.string "like GLACIA did.\p"
-	.string "Everyone says HOENN is warm.\n"
+	.string "like Glacia did.\p"
+	.string "Everyone says Hoenn is warm.\n"
 	.string "The people, I mean. The weather's\l"
 	.string "just hot.$"
 
 LilycoveCity_CoveLilyMotel_2F_Text_SeaBreezeTicklesHeart:
-	.string "My brother joined the SEA TRUST to\n"
+	.string "My brother joined the Sea Trust to\n"
 	.string "clean beaches.\p"
-	.string "Now he calls it TEAM AQUA and comes\n"
+	.string "Now he calls it Team Aqua and comes\n"
 	.string "home at three in the morning.\p"
 	.string "He says it's for the sea. He used to\n"
 	.string "say it with a smile.$"
@@ -112,27 +112,27 @@ LilycoveCity_CoveLilyMotel_2F_Text_NeverLeaveWithoutGameBoy:
 	.string "You never know when and where\n"
 	.string "people will challenge you.\p"
 	.string "That's why I never leave home without\n"
-	.string "my GAME BOY ADVANCE.$"
+	.string "my Game Boy Advance.$"
 
 LilycoveCity_CoveLilyMotel_2F_Text_SnoozingPreferBattles:
-	.string "SCOTT: … … … … …\n"
+	.string "Scott: … … … … …\n"
 	.string "… … … … … Zzz…\p"
 	.string "… … … … … Huh?!\n"
 	.string "Oh, sorry, sorry! I was snoozing!\p"
-	.string "I came to check out this POKéMON\n"
-	.string "CONTEST thing.\p"
+	.string "I came to check out this Pokémon\n"
+	.string "Contest thing.\p"
 	.string "I have to admit, it does look quite\n"
 	.string "entertaining, but…\p"
 	.string "Consider me a purist--I prefer\n"
-	.string "battles and tough TRAINERS.\p"
+	.string "battles and tough Trainers.\p"
 	.string "But that's just me.\p"
 	.string "{PLAYER}{KUN}, I hope you'll enjoy everything\n"
-	.string "like the GYMS, CONTESTS, BATTLE TENT,\l"
+	.string "like the Gyms, Contests, Battle Tent,\l"
 	.string "the whole works!$"
 
 LilycoveCity_CoveLilyMotel_2F_Text_ContestsDoTakeStrategy:
-	.string "SCOTT: I think it does take strategy\n"
-	.string "to win a CONTEST.\p"
-	.string "Devising CONTEST strategies is one way\n"
-	.string "of becoming a better TRAINER, I'd say.$"
+	.string "Scott: I think it does take strategy\n"
+	.string "to win a Contest.\p"
+	.string "Devising Contest strategies is one way\n"
+	.string "of becoming a better Trainer, I'd say.$"
 

@@ -269,10 +269,10 @@ SlateportCity_OceanicMuseum_2F_EventScript_MuseumPatron3::
 	end
 
 SlateportCity_OceanicMuseum_2F_Text_ThankYouForTheParts:
-	.string "Yes? If you're looking for STERN,\n"
+	.string "Yes? If you're looking for Stern,\n"
 	.string "that would be me.\p"
 	.string "Ah! Those must be the parts I ordered\n"
-	.string "from MR. STONE of DEVON.\p"
+	.string "from Mr. Stone of Devon.\p"
 	.string "Thank you! That's great!\n"
 	.string "We can prepare for our expedition now.$"
 
@@ -281,12 +281,12 @@ SlateportCity_OceanicMuseum_2F_Text_WellTakeThoseParts:
 	.string "We'll take those parts!$"
 
 SlateportCity_OceanicMuseum_2F_Text_SternWhoAreYou:
-	.string "CAPT. STERN: Wh-what?\n"
+	.string "Capt. Stern: Wh-what?\n"
 	.string "Who are you people?$"
 
 SlateportCity_OceanicMuseum_2F_Text_WereTeamAqua:
-	.string "We're TEAM AQUA!\p"
-	.string "Our BOSS wants those parts!\n"
+	.string "We're Team Aqua!\p"
+	.string "Our Boss wants those parts!\n"
 	.string "Shut your yap and fork them over!$"
 
 SlateportCity_OceanicMuseum_2F_Text_Grunt1Defeat:
@@ -295,7 +295,7 @@ SlateportCity_OceanicMuseum_2F_Text_Grunt1Defeat:
 
 SlateportCity_OceanicMuseum_2F_Text_BossGoingToBeFurious:
 	.string "Oh, man, what a mess…\n"
-	.string "The BOSS is going to be furious…$"
+	.string "The Boss is going to be furious…$"
 
 SlateportCity_OceanicMuseum_2F_Text_LetMeTakeCareOfThis:
 	.string "Humph, sniveling wimp!\n"
@@ -318,15 +318,15 @@ SlateportCity_OceanicMuseum_2F_Text_CameToSeeWhatsTakingSoLong:
 	.string "simps are held up by a mere child?$"
 
 SlateportCity_OceanicMuseum_2F_Text_ArchieWarning:
-	.string "We are TEAM AQUA, and I am our\n"
-	.string "leader, ARCHIE.\p"
-	.string "…You're not TEAM MAGMA. Too young,\n"
+	.string "We are Team Aqua, and I am our\n"
+	.string "leader, Archie.\p"
+	.string "…You're not Team Magma. Too young,\n"
 	.string "and wrong colors.\p"
-	.string "Listen, kid. Every year HOENN's\n"
+	.string "Listen, kid. Every year Hoenn's\n"
 	.string "coast loses more reef to dredging,\l"
 	.string "shipping and new building land.\p"
-	.string "WINGULL nest on concrete now.\n"
-	.string "The CORSOLA beds off ROUTE 105 are\l"
+	.string "Wingull nest on concrete now.\n"
+	.string "The Corsola beds off Route 105 are\l"
 	.string "half dead.\p"
 	.string "Somebody has to stand up for the\n"
 	.string "sea. If the law won't, we will.\p"
@@ -334,15 +334,15 @@ SlateportCity_OceanicMuseum_2F_Text_ArchieWarning:
 	.string "what's at stake.$"
 
 SlateportCity_OceanicMuseum_2F_Text_SternThankYouForSavingUs:
-	.string "CAPT. STERN: You're…\n"
+	.string "Capt. Stern: You're…\n"
 	.string "Ah, okay, you're {PLAYER}{KUN}…\p"
 	.string "Anyway, that was a tense situation!\n"
 	.string "Thank you for saving us!\p"
 	.string "Oh, yes, I almost forgot that you\n"
-	.string "even brought the parts from DEVON!$"
+	.string "even brought the parts from Devon!$"
 
 SlateportCity_OceanicMuseum_2F_Text_SternIveGotToGo:
-	.string "CAPT. STERN: Whoops!\n"
+	.string "Capt. Stern: Whoops!\n"
 	.string "There's no time to lose!\p"
 	.string "We have to set out on our ocean-floor\n"
 	.string "expedition really soon.\p"
@@ -353,14 +353,14 @@ SlateportCity_OceanicMuseum_2F_Text_SternIveGotToGo:
 
 SlateportCity_OceanicMuseum_2F_Text_RemindsMeOfAbandonedShip:
 	.string "That ship model reminds me of the\n"
-	.string "ABANDONED SHIP near DEWFORD.\p"
+	.string "Abandoned Ship near Dewford.\p"
 	.string "They say its captain went down with\n"
 	.string "it. Some say he's still aboard.$"
 
 SlateportCity_OceanicMuseum_2F_Text_DontRunInMuseum:
-	.string "Don't run in the MUSEUM!\p"
+	.string "Don't run in the Museum!\p"
 	.string "Also… this wing was paid for by\n"
-	.string "DEVON. Notice the reef exhibit\l"
+	.string "Devon. Notice the reef exhibit\l"
 	.string "doesn't say what killed it?$"
 
 SlateportCity_OceanicMuseum_2F_Text_WantToRideSubmarine:
@@ -368,13 +368,13 @@ SlateportCity_OceanicMuseum_2F_Text_WantToRideSubmarine:
 	.string "ride!$"
 
 SlateportCity_OceanicMuseum_2F_Text_WaterQualitySample1:
-	.string "“WATER QUALITY SAMPLE 1,” the\n"
+	.string "“Water Quality Sample 1,” the\n"
 	.string "label says.\p"
 	.string "The sea is all connected, but the\n"
 	.string "water seems to differ by region.$"
 
 SlateportCity_OceanicMuseum_2F_Text_WaterQualitySample2:
-	.string "“WATER QUALITY SAMPLE 2,” the\n"
+	.string "“Water Quality Sample 2,” the\n"
 	.string "label says.\p"
 	.string "Does the saltiness of seawater differ\n"
 	.string "by region, too?$"
@@ -391,10 +391,10 @@ SlateportCity_OceanicMuseum_2F_Text_PressureExperiment:
 	.string "thousands of tons on a small area.”$"
 
 SlateportCity_OceanicMuseum_2F_Text_HoennModel:
-	.string "“MODEL OF HOENN REGION”\p"
+	.string "“Model Of Hoenn Region”\p"
 	.string "It's a miniature diorama of the\n"
-	.string "HOENN region.\p"
-	.string "Where is LITTLEROOT TOWN on this?$"
+	.string "Hoenn region.\p"
+	.string "Where is Littleroot Town on this?$"
 
 SlateportCity_OceanicMuseum_2F_Text_DeepSeawaterDisplay:
 	.string "It's a display on the flow of seawater.\p"
@@ -408,21 +408,21 @@ SlateportCity_OceanicMuseum_2F_Text_SurfaceSeawaterDisplay:
 	.string "as currents driven by the winds.”$"
 
 SlateportCity_OceanicMuseum_2F_Text_SSTidalReplica:
-	.string "“THE FERRY S.S. TIDAL\p"
+	.string "“The Ferry S.S. Tidal\p"
 	.string "“A scale replica of the ship under\n"
-	.string "construction at STERN'S SHIPYARD.”$"
+	.string "construction at Stern's Shipyard.”$"
 
 SlateportCity_OceanicMuseum_2F_Text_SubmarineReplica:
-	.string "“SUBMARINE EXPLORER 1\p"
+	.string "“Submarine Explorer 1\p"
 	.string "“A replica of the high-performance\n"
 	.string "ocean floor exploration submarine.”$"
 
 SlateportCity_OceanicMuseum_2F_Text_SumbersibleReplica:
-	.string "“SUBMERSIBLE POD\p"
+	.string "“Submersible Pod\p"
 	.string "“A replica of a compact, unmanned\n"
 	.string "pod for seafloor exploration.”$"
 
 SlateportCity_OceanicMuseum_2F_Text_SSAnneReplica:
-	.string "“S.S. ANNE\p"
+	.string "“S.S. Anne\p"
 	.string "“A replica of the luxury liner that\n"
 	.string "circles the globe.”$"

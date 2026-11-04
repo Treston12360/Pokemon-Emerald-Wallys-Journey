@@ -63,11 +63,11 @@ EverGrandeCity_PhoebesRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_PhoebesRoom_Text_IntroSpeech:
-	.string "PHOEBE: Welcome!\n"
+	.string "Phoebe: Welcome!\n"
 	.string "I've heard about you.\p"
 	.string "I was raised with the\n"
-	.string "stories of MT. PYRE.\p"
-	.string "When the ORBS were taken,\n"
+	.string "stories of Mt. Pyre.\p"
+	.string "When the Orbs were taken,\n"
 	.string "I saw what happens when\l"
 	.string "people stop listening.\p"
 	.string "A bond isn't something\n"
@@ -75,13 +75,13 @@ EverGrandeCity_PhoebesRoom_Text_IntroSpeech:
 	.string "Now show me yours!$"
 
 EverGrandeCity_PhoebesRoom_Text_Defeat:
-	.string "PHOEBE: Oh! You found a\n"
+	.string "Phoebe: Oh! You found a\n"
 	.string "way through my team!\p"
 	.string "I wasn't expecting that.\n"
 	.string "Heehee! Well done!$"
 
 EverGrandeCity_PhoebesRoom_Text_PostBattleSpeech:
-	.string "On MT. PYRE, people leave\n"
+	.string "On Mt. Pyre, people leave\n"
 	.string "flowers for old partners.\p"
 	.string "But the best way to honor\n"
 	.string "a bond is to care for the\l"
@@ -89,7 +89,7 @@ EverGrandeCity_PhoebesRoom_Text_PostBattleSpeech:
 	.string "Your team trusts you.\n"
 	.string "I could feel it in battle.\p"
 	.string "Keep that trust as you\n"
-	.string "climb toward the CHAMPION.$"
+	.string "climb toward the Champion.$"
 
 @ Wally's Journey: after the first Hall of Fame the Elite Four use their rematch teams (FRLG style).
 EverGrandeCity_PhoebesRoom_EventScript_PhoebeRematch::
@@ -104,8 +104,8 @@ EverGrandeCity_PhoebesRoom_EventScript_PhoebeRematchPost::
 	end
 
 EverGrandeCity_PhoebesRoom_Text_RematchIntro:
-	.string "PHOEBE: Welcome back, CHAMPION.\p"
-	.string "I trained on MT. PYRE again.\n"
+	.string "Phoebe: Welcome back, Champion.\p"
+	.string "I trained on Mt. Pyre again.\n"
 	.string "My team is stronger now, and\l"
 	.string "so am I.\p"
 	.string "Let's battle!$"
@@ -114,5 +114,5 @@ EverGrandeCity_PhoebesRoom_Text_RematchDefeat:
 	.string "You're as strong as the stories say.$"
 
 EverGrandeCity_PhoebesRoom_Text_RematchPost:
-	.string "Keep going. GLACIA is waiting.$"
+	.string "Keep going. Glacia is waiting.$"
 

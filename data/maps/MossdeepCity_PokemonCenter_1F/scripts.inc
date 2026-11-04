@@ -29,7 +29,7 @@ MossdeepCity_PokemonCenter_1F_EventScript_Girl::
 	end
 
 MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable:
-	.string "TATE and LIZA finish each\n"
+	.string "Tate and Liza finish each\n"
 	.string "other's sentences.\p"
 	.string "It looks like mind reading.\n"
 	.string "But they've trained together\l"
@@ -39,14 +39,14 @@ MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable:
 
 MossdeepCity_PokemonCenter_1F_Text_AbilitiesMightChangeMoves:
 	.string "A move can be strong against\n"
-	.string "a POKéMON's type and still fail.\p"
-	.string "An ABILITY can change what\n"
+	.string "a Pokémon's type and still fail.\p"
+	.string "An Ability can change what\n"
 	.string "happens in battle.\p"
 	.string "Knowing your opponent is\n"
 	.string "more than memorizing a chart.$"
 
 MossdeepCity_PokemonCenter_1F_Text_GymLeaderDuoFormidable_W0:
-	.string "You beat TATE and LIZA?\n"
+	.string "You beat Tate and Liza?\n"
 	.string "They've been studying the\l"
 	.string "battle together ever since.\p"
 	.string "They don't blame each other.\n"

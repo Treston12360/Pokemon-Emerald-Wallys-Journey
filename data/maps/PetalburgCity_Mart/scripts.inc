@@ -62,19 +62,19 @@ PetalburgCity_Mart_EventScript_Man::
 	end
 
 PetalburgCity_Mart_Text_WeakWillGrowStronger:
-	.string "A weak POKéMON will grow stronger.\p"
-	.string "So will a weak TRAINER. Love helps.\n"
+	.string "A weak Pokémon will grow stronger.\p"
+	.string "So will a weak Trainer. Love helps.\n"
 	.string "Stubbornness helps more.$"
 
 PetalburgCity_Mart_Text_RepelIsUseful:
-	.string "REPEL keeps weak wild POKéMON away.\p"
+	.string "Repel keeps weak wild Pokémon away.\p"
 	.string "Useful when you're in a hurry. Or\n"
 	.string "when your team's hurt and you just\l"
 	.string "need to get home.$"
 
 PetalburgCity_Mart_Text_TakeSomeAntidotesWithYou:
-	.string "Carry ANTIDOTES.\p"
-	.string "A poisoned POKéMON keeps losing HP\n"
+	.string "Carry Antidotes.\p"
+	.string "A poisoned Pokémon keeps losing HP\n"
 	.string "while you walk. I learned that the\l"
-	.string "hard way in PETALBURG WOODS.$"
+	.string "hard way in Petalburg Woods.$"
 

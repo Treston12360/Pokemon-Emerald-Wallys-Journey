@@ -56,11 +56,11 @@ FortreeCity_DecorationShop_PokemartDecor_Chairs:
 FortreeCity_DecorationShop_Text_MerchandiseSentToPC:
 	.string "Things you buy here go straight to\n"
 	.string "your PC.\p"
-	.string "DEVON delivery. Wish they'd deliver\n"
+	.string "Devon delivery. Wish they'd deliver\n"
 	.string "me home too.$"
 
 FortreeCity_DecorationShop_Text_BuyingDeskForDolls:
-	.string "I'm buying a desk for my DOLLS.\p"
-	.string "My SECRET BASE has to look perfect.\n"
+	.string "I'm buying a desk for my Dolls.\p"
+	.string "My Secret Base has to look perfect.\n"
 	.string "It's the only place that's mine.$"
 

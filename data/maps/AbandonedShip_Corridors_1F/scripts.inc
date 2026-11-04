@@ -13,13 +13,13 @@ AbandonedShip_Corridors_1F_EventScript_Charlie::
 AbandonedShip_Corridors_1F_Text_CharlieIntro:
 	.string "Laugh at my inner tube all you want.\p"
 	.string "The storm that sank this ship nearly\n"
-	.string "sank DRAKE of the ELITE FOUR too!$"
+	.string "sank Drake of the Elite Four too!$"
 
 AbandonedShip_Corridors_1F_Text_CharlieDefeat:
 	.string "Whoa! Overwhelmed!$"
 
 AbandonedShip_Corridors_1F_Text_CharliePostBattle:
-	.string "Throwing POKé BALLS while holding\n"
+	.string "Throwing Poké Balls while holding\n"
 	.string "an inner tube is hard!$"
 
 AbandonedShip_Corridors_1F_Text_IsntItFunHere:

@@ -6,7 +6,7 @@ OldaleTown_House1_EventScript_Woman::
 	end
 
 OldaleTown_House1_Text_LeftPokemonGoesOutFirst:
-	.string "In a battle, the first POKéMON in\n"
+	.string "In a battle, the first Pokémon in\n"
 	.string "your party goes out first.\p"
 	.string "My dad always led with his toughest.\n"
 	.string "My mom led with her smartest. She\l"

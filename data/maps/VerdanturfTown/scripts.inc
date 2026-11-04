@@ -89,7 +89,7 @@ VerdanturfTown_EventScript_RusturfTunnelSign::
 
 VerdanturfTown_Text_ManTryingToDigTunnel:
 	.string "My papa says this tunnel is full of\n"
-	.string "timid POKéMON.\p"
+	.string "timid Pokémon.\p"
 	.string "Loud noises scare them. That's why\n"
 	.string "people protested the digging.$"
 
@@ -100,75 +100,75 @@ VerdanturfTown_Text_ManDugTunnelForLove:
 	.string "do.$"
 
 VerdanturfTown_Text_AirCleanHere:
-	.string "The winds keep MT. CHIMNEY's ash\n"
-	.string "away from VERDANTURF.\p"
-	.string "Sick kids from all over HOENN come\n"
-	.string "here to breathe. WALLY was one.\p"
+	.string "The winds keep Mt. Chimney's ash\n"
+	.string "away from Verdanturf.\p"
+	.string "Sick kids from all over Hoenn come\n"
+	.string "here to breathe. Wally was one.\p"
 	.string "Look at him now.$"
 
 VerdanturfTown_Text_MakeBattleTentDebut:
 	.string "I'm on a winning streak, so I'm\n"
-	.string "making my BATTLE TENT debut.\p"
-	.string "Saw a kid named WALLY train out\n"
+	.string "making my Battle Tent debut.\p"
+	.string "Saw a kid named Wally train out\n"
 	.string "here before he left. Never seen\l"
 	.string "anyone take notes like that.$"
 
 VerdanturfTown_Text_GuyTryingToBustThroughCave:
-	.string "See the cave by the POKéMON MART?\p"
+	.string "See the cave by the Pokémon Mart?\p"
 	.string "A guy in there is breaking boulders\n"
 	.string "by hand. Wouldn't use machines.\l"
-	.string "Didn't want to scare the WHISMUR.$"
+	.string "Didn't want to scare the Whismur.$"
 
 VerdanturfTown_Text_EasyToGetToRustboroNow:
 	.string "The cave's a tunnel now! Easy trips\n"
-	.string "to RUSTBORO.\p"
+	.string "to Rustboro.\p"
 	.string "And they did it without bulldozers.\n"
-	.string "The WHISMUR are still in there.$"
+	.string "The Whismur are still in there.$"
 
 VerdanturfTown_Text_TownSign:
-	.string "VERDANTURF TOWN\p"
+	.string "Verdanturf Town\p"
 	.string "“The windswept highlands with the\n"
 	.string "sweet fragrance of grass.”$"
 
 VerdanturfTown_Text_WandasHouse:
-	.string "WANDA'S HOUSE$"
+	.string "Wanda's House$"
 
 VerdanturfTown_Text_BattleTentSign:
-	.string "BATTLE TENT VERDANTURF SITE\n"
+	.string "Battle Tent Verdanturf Site\n"
 	.string "“Feast Your Eyes on Battles!”$"
 
 VerdanturfTown_Text_RusturfTunnelSign:
-	.string "RUSTURF TUNNEL\n"
-	.string "“Linking RUSTBORO and VERDANTURF\p"
+	.string "Rusturf Tunnel\n"
+	.string "“Linking Rustboro and Verdanturf\p"
 	.string "“The tunnel project has been\n"
 	.string "canceled.”$"
 
 VerdanturfTown_Text_AirCleanHere_W0:
-	.string "WALLY's the CHAMPION. Our WALLY.\p"
+	.string "Wally's the Champion. Our Wally.\p"
 	.string "He used to sit on that bench and\n"
 	.string "watch the other kids run.\p"
 	.string "The whole town cried.$"
 
 VerdanturfTown_Text_AirCleanHereAfterChampion:
-	.string "We all cheered when WALLY became\n"
-	.string "CHAMPION. Then you beat him!\p"
+	.string "We all cheered when Wally became\n"
+	.string "Champion. Then you beat him!\p"
 	.string "He came back here yesterday.\n"
 	.string "Sat on his old bench awhile.\p"
 	.string "This time, he watched the other\n"
 	.string "kids run with a big smile.$"
 
 VerdanturfTown_Text_MakeBattleTentDebut_Spring:
-	.string "Spring air in VERDANTURF is the best\n"
-	.string "in HOENN.\p"
-	.string "I'm entering the BATTLE TENT this\n"
+	.string "Spring air in Verdanturf is the best\n"
+	.string "in Hoenn.\p"
+	.string "I'm entering the Battle Tent this\n"
 	.string "season. My winning streak needs a\l"
 	.string "stage.$"
 
 VerdanturfTown_Text_MakeBattleTentDebut_Autumn:
-	.string "The leaves along ROUTE 117 are\n"
+	.string "The leaves along Route 117 are\n"
 	.string "turning.\p"
 	.string "Feels like the end of something. Or\n"
-	.string "the start. The BATTLE TENT will tell\l"
+	.string "the start. The Battle Tent will tell\l"
 	.string "me which.$"
 
 VerdanturfTown_Text_MakeBattleTentDebut_Winter:

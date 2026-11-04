@@ -69,7 +69,7 @@ EverGrandeCity_SidneysRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_SidneysRoom_Text_IntroSpeech:
-	.string "SIDNEY: Hey, challenger!\n"
+	.string "Sidney: Hey, challenger!\n"
 	.string "Glad you made it.\p"
 	.string "I helped track the teams\n"
 	.string "when they went underground.\p"
@@ -87,12 +87,12 @@ EverGrandeCity_SidneysRoom_Text_Defeat:
 	.string "That's a good battle!$"
 
 EverGrandeCity_SidneysRoom_Text_PostBattleSpeech:
-	.string "SIDNEY: Know what I like\n"
+	.string "Sidney: Know what I like\n"
 	.string "about battling?\p"
 	.string "Someone can surprise you\n"
 	.string "even when you think you've\l"
 	.string "figured them out.\p"
-	.string "WALLY did that when he came\n"
+	.string "Wally did that when he came\n"
 	.string "through here. Now you have.\p"
 	.string "Don't let anyone tell you\n"
 	.string "your story's already written.$"
@@ -110,7 +110,7 @@ EverGrandeCity_SidneysRoom_EventScript_SidneyRematchPost::
 	end
 
 EverGrandeCity_SidneysRoom_Text_RematchIntro:
-	.string "SIDNEY: Well, well. The CHAMPION\n"
+	.string "Sidney: Well, well. The Champion\n"
 	.string "walked back in through the front door.\p"
 	.string "You didn't think we'd sit still\n"
 	.string "after you beat us, did you?\p"

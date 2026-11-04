@@ -148,7 +148,7 @@ JaggedPass_EventScript_Autumn::
 	end
 
 JaggedPass_Text_EricIntro:
-	.string "JAGGED PASS! This bumpy road rocks\n"
+	.string "Jagged Pass! This bumpy road rocks\n"
 	.string "my soul!\p"
 	.string "The ash on these rocks fell before\n"
 	.string "I was born. Respect it!$"
@@ -158,7 +158,7 @@ JaggedPass_Text_EricDefeat:
 	.string "Like the ash up here.$"
 
 JaggedPass_Text_EricPostBattle:
-	.string "I lost at POKéMON, but in love of the\n"
+	.string "I lost at Pokémon, but in love of the\n"
 	.string "mountains, I win.\p"
 	.string "This mountain made this valley.\n"
 	.string "Nobody should mess with it.$"
@@ -170,7 +170,7 @@ JaggedPass_Text_DianaIntro:
 
 JaggedPass_Text_DianaDefeat:
 	.string "Ohhh! The ground's too\n"
-	.string "bumpy for picnics AND battles!$"
+	.string "bumpy for picnics And battles!$"
 
 JaggedPass_Text_DianaPostBattle:
 	.string "Some people ride bikes up this bumpy\n"
@@ -190,7 +190,7 @@ JaggedPass_Text_DianaRematchDefeat:
 
 JaggedPass_Text_DianaPostRematch:
 	.string "My sandwich has ash on it again.\p"
-	.string "FALLARBOR folks say you stop\n"
+	.string "Fallarbor folks say you stop\n"
 	.string "noticing the taste. I haven't.$"
 
 JaggedPass_Text_EthanIntro:
@@ -203,13 +203,13 @@ JaggedPass_Text_EthanDefeat:
 	.string "our footing…$"
 
 JaggedPass_Text_EthanPostBattle:
-	.string "With an ACRO BIKE I could jump these\n"
+	.string "With an Acro Bike I could jump these\n"
 	.string "ledges.$"
 
 JaggedPass_Text_EthanRegister:
 	.string "When I get more used to this bumpiness,\n"
 	.string "I'll be sure to win!\p"
-	.string "Can you register me in your POKéNAV?$"
+	.string "Can you register me in your PokéNav?$"
 
 JaggedPass_Text_EthanRematchIntro:
 	.string "I've climbed this so much I sing\n"
@@ -220,7 +220,7 @@ JaggedPass_Text_EthanRematchDefeat:
 	.string "footing…$"
 
 JaggedPass_Text_EthanPostRematch:
-	.string "Maybe RYDEL's ACRO BIKE would\n"
+	.string "Maybe Rydel's Acro Bike would\n"
 	.string "handle these bumps.$"
 
 JaggedPass_Text_GruntIntro:
@@ -231,7 +231,7 @@ JaggedPass_Text_GruntIntro:
 JaggedPass_Text_GruntDefeat:
 	.string "Urrrgh…\p"
 	.string "I joined to build houses for\n"
-	.string "FALLARBOR farmers.\p"
+	.string "Fallarbor farmers.\p"
 	.string "When did it turn into guarding\n"
 	.string "a hole in a mountain?$"
 
@@ -242,11 +242,11 @@ JaggedPass_Text_GoWhereverYouWant:
 
 JaggedPass_Text_BoulderShakingInResponseToEmblem:
 	.string "Oh! This boulder is shaking in response\n"
-	.string "to the MAGMA EMBLEM!$"
+	.string "to the Magma Emblem!$"
 
 JaggedPass_Text_JulioIntro:
 	.string "Aiyeeh! Riding this trail in one go!\p"
-	.string "The LAND INITIATIVE paved half of it.\n"
+	.string "The Land Initiative paved half of it.\n"
 	.string "Then they put on red hoods. Move!$"
 
 JaggedPass_Text_JulioDefeat:
@@ -258,7 +258,7 @@ JaggedPass_Text_JulioPostBattle:
 	.string "hurts…$"
 
 JaggedPass_Text_AutumnIntro:
-	.string "I hike to LAVARIDGE for work every\n"
+	.string "I hike to Lavaridge for work every\n"
 	.string "day.\p"
 	.string "Magma folks wave at me. They used to\n"
 	.string "build our fences. Now? I don't know.$"
@@ -269,6 +269,6 @@ JaggedPass_Text_AutumnDefeat:
 
 JaggedPass_Text_AutumnPostBattle:
 	.string "What's that odd rock up the hill?\p"
-	.string "TEAM MAGMA guards it. Says it's a\n"
+	.string "Team Magma guards it. Says it's a\n"
 	.string "“survey site.” Sure.$"
 

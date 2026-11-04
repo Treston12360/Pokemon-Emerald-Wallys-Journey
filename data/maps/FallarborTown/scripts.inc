@@ -70,7 +70,7 @@ FallarborTown_EventScript_MoveTutorSign::
 FallarborTown_Text_ShadyCharactersCozmosHome:
 	.string "Something's wrong.\p"
 	.string "Shady people in red have been going\n"
-	.string "in and out of PROF. COZMO's house.\l"
+	.string "in and out of Prof. Cozmo's house.\l"
 	.string "They said they were from a housing\l"
 	.string "charity.$"
 
@@ -85,53 +85,53 @@ FallarborTown_Text_RegionKnownForMeteors:
 	.string "one when you're this tired.$"
 
 FallarborTown_Text_MyPreciousAzurill:
-	.string "This is my AZURILL!\p"
+	.string "This is my Azurill!\p"
 	.string "We had a berry farm. The ash from\n"
-	.string "MT. CHIMNEY buried it. Nothing\l"
+	.string "Mt. Chimney buried it. Nothing\l"
 	.string "grows there now.\p"
 	.string "Dad coughs all night, so he can't\n"
 	.string "work the hours he used to.\p"
-	.string "TEAM MAGMA says they can fix the\n"
+	.string "Team Magma says they can fix the\n"
 	.string "mountain. Mom says to never trust\l"
 	.string "anyone who says “fix.”$"
 
 FallarborTown_Text_Azurill:
-	.string "AZURILL: Rooreelooo.$"
+	.string "Azurill: Rooreelooo.$"
 
 FallarborTown_Text_HaveYouChallengedFlannery:
-	.string "Have you challenged FLANNERY yet?\p"
-	.string "Her grandfather was ELITE FOUR.\n"
+	.string "Have you challenged Flannery yet?\p"
+	.string "Her grandfather was Elite Four.\n"
 	.string "Everyone expected her to be him.\p"
 	.string "She's spent a year proving she's\n"
 	.string "someone else. I respect that.$"
 
 FallarborTown_Text_BattleTentSign:
-	.string "BATTLE TENT FALLARBOR SITE\n"
+	.string "Battle Tent Fallarbor Site\n"
 	.string "“May the Greatest Teams Gather!”$"
 
 FallarborTown_Text_TownSign:
-	.string "FALLARBOR TOWN\n"
+	.string "Fallarbor Town\n"
 	.string "“A farm town that won't give up.”$"
 
 FallarborTown_Text_MoveTutorSign:
-	.string "MOVE TUTOR'S HOUSE\n"
-	.string "“New moves taught to POKéMON.”$"
+	.string "Move Tutor's House\n"
+	.string "“New moves taught to Pokémon.”$"
 
 FallarborTown_Text_MyPreciousAzurill_W0:
-	.string "TEAM MAGMA ran off the mountain.\p"
+	.string "Team Magma ran off the mountain.\p"
 	.string "The ash still falls, though. Dad\n"
 	.string "says we'd move if we could.\p"
 	.string "But a house anywhere else costs\n"
 	.string "more than our farm ever made.\p"
-	.string "My neighbor's son was in MAGMA. He\n"
+	.string "My neighbor's son was in Magma. He\n"
 	.string "came home ashamed.\p"
 	.string "His mom made him dinner anyway.\n"
-	.string "That's FALLARBOR.$"
+	.string "That's Fallarbor.$"
 
 FallarborTown_Text_MeteorResearchAfterChampion:
-	.string "PROF. COZMO is back at work.\n"
+	.string "Prof. Cozmo is back at work.\n"
 	.string "This time he shares his notes\l"
-	.string "with ROXANNE in RUSTBORO.\p"
+	.string "with Roxanne in Rustboro.\p"
 	.string "He says the meteorite wasn't\n"
 	.string "dangerous because it fell.\p"
 	.string "It became dangerous when\n"
@@ -139,10 +139,10 @@ FallarborTown_Text_MeteorResearchAfterChampion:
 	.string "exactly what it could do.$"
 
 FallarborTown_Text_FlanneryAfterChampion:
-	.string "FLANNERY came through town with\n"
+	.string "Flannery came through town with\n"
 	.string "supplies after the storm.\p"
 	.string "Someone called her the next great\n"
-	.string "LEADER in her family.\p"
+	.string "Leader in her family.\p"
 	.string "She laughed. “I'm already the first\n"
 	.string "one who's me.”\p"
 	.string "Her grandfather loved that answer.$"
@@ -206,7 +206,7 @@ FallarborTown_EventScript_AshChemistDone::
 
 FallarborTown_Text_AshChemistIntro:
 	.string "I collect the ash that falls on\n"
-	.string "FALLARBOR.\p"
+	.string "Fallarbor.\p"
 	.string "It killed our farms, and it makes\n"
 	.string "people sick. I want to know why.\p"
 	.string "If I learn what's in it, maybe I can\n"
@@ -220,33 +220,33 @@ FallarborTown_Text_AshChemistNoSack:
 	.string "Bring me 1,000 steps' worth of ash\n"
 	.string "for each orb. All of it helps the\l"
 	.string "research.\p"
-	.string "The GLASS WORKSHOP on ROUTE 113\n"
-	.string "gives out SOOT SACKS for it.$"
+	.string "The Glass Workshop on Route 113\n"
+	.string "gives out Soot Sacks for it.$"
 
 FallarborTown_Text_AshChemistNotEnough:
-	.string "Your SOOT SACK holds {STR_VAR_1} steps\n"
+	.string "Your Soot Sack holds {STR_VAR_1} steps\n"
 	.string "of ash. I need 1,000 for an orb.$"
 
 FallarborTown_Text_AshChemistOfferToxic:
 	.string "That's enough ash. Trade 1,000\n"
-	.string "steps of it for a TOXIC ORB?$"
+	.string "steps of it for a Toxic Orb?$"
 
 FallarborTown_Text_AshChemistOfferFlame:
 	.string "Enough ash for the other one.\n"
-	.string "Trade 1,000 steps for a FLAME ORB?$"
+	.string "Trade 1,000 steps for a Flame Orb?$"
 
 FallarborTown_Text_AshChemistExplainToxic:
-	.string "A POKéMON holding that orb is badly\n"
+	.string "A Pokémon holding that orb is badly\n"
 	.string "poisoned at the end of a turn.\p"
 	.string "That sounds cruel, but some\n"
-	.string "POKéMON get stronger when poisoned.\p"
+	.string "Pokémon get stronger when poisoned.\p"
 	.string "Bring me another 1,000 steps of ash\n"
-	.string "and I'll make a FLAME ORB.$"
+	.string "and I'll make a Flame Orb.$"
 
 FallarborTown_Text_AshChemistExplainFlame:
-	.string "A POKéMON holding that orb is\n"
+	.string "A Pokémon holding that orb is\n"
 	.string "burned at the end of a turn.\p"
-	.string "Some POKéMON hit harder when\n"
+	.string "Some Pokémon hit harder when\n"
 	.string "they're burned. Use it well.$"
 
 FallarborTown_Text_AshChemistDeclined:

@@ -123,21 +123,21 @@ LilycoveCity_House3_Text_ExplainPokeblocks:
 	.string "the better it is. Don't forget this!\p"
 	.string "A good {POKEBLOCK} has a low feel\n"
 	.string "rating and a high level.\p"
-	.string "A POKéMON can eat more good\n"
+	.string "A Pokémon can eat more good\n"
 	.string "{POKEBLOCK}S than ordinary ones, too.\p"
 	.string "And this is important.\p"
 	.string "If you want to make smooth {POKEBLOCK}S,\n"
-	.string "use different kinds of BERRIES.\p"
-	.string "Don't be stingy--the kinds of BERRIES\n"
+	.string "use different kinds of Berries.\p"
+	.string "Don't be stingy--the kinds of Berries\n"
 	.string "affect the smoothness of {POKEBLOCK}S.\p"
 	.string "And another thing.\p"
-	.string "The more people blending BERRIES,\n"
+	.string "The more people blending Berries,\n"
 	.string "the smoother the {POKEBLOCK}S.\p"
 	.string "That's why you should talk to other\n"
 	.string "people and make {POKEBLOCK}S together.\p"
 	.string "That's about all you need to know to\n"
 	.string "make good {POKEBLOCK}S.\p"
-	.string "If everyone had POKéMON they love,\n"
+	.string "If everyone had Pokémon they love,\n"
 	.string "smooth {POKEBLOCK}S, and a loving family,\l"
 	.string "the world would be a happier place.\p"
 	.string "Don't give up, dear!$"
@@ -149,18 +149,18 @@ LilycoveCity_House3_Text_HappyToHaveQuadruplets:
 	.string "it makes me happy.$"
 
 LilycoveCity_House3_Text_GoingToWinMultiBattles:
-	.string "We're having MULTI BATTLES, and I'm\n"
+	.string "We're having Multi Battles, and I'm\n"
 	.string "going to win!\p"
-	.string "I'm TATE and she's LIZA. We\n"
+	.string "I'm Tate and she's Liza. We\n"
 	.string "practice finishing each other's\l"
 	.string "sentences.$"
 
 LilycoveCity_House3_Text_LikeMixingAtRecordCorner:
-	.string "My big brother says STEVEN STONE\n"
-	.string "was the strongest TRAINER in HOENN.\p"
+	.string "My big brother says Steven Stone\n"
+	.string "was the strongest Trainer in Hoenn.\p"
 	.string "But he never wanted to be\n"
-	.string "CHAMPION. Who doesn't want to be\l"
-	.string "CHAMPION?$"
+	.string "Champion. Who doesn't want to be\l"
+	.string "Champion?$"
 
 LilycoveCity_House3_Text_MakePokeblocksWithBerryBlender:
 	.string "We're making {POKEBLOCK}S! All four\n"
@@ -170,7 +170,7 @@ LilycoveCity_House3_Text_MakePokeblocksWithBerryBlender:
 	.string "three years.$"
 
 LilycoveCity_House3_Text_GoingToEnterContest:
-	.string "My MARILL is going in a CONTEST!\p"
+	.string "My Marill is going in a Contest!\p"
 	.string "We found her in a net full of trash\n"
 	.string "by the docks. Now look at her.$"
 

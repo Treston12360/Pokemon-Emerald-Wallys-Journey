@@ -20,25 +20,25 @@ RustboroCity_CuttersHouse_EventScript_Lass::
 RustboroCity_CuttersHouse_Text_YouCanPutThisHMToGoodUse:
 	.string "That determined expression…\n"
 	.string "That limber way you move…\l"
-	.string "And your well-trained POKéMON…\p"
-	.string "You're obviously a skilled TRAINER!\p"
+	.string "And your well-trained Pokémon…\p"
+	.string "You're obviously a skilled Trainer!\p"
 	.string "No, wait, don't say a word.\n"
 	.string "I can tell just by looking at you.\p"
 	.string "I'm sure that you can put this\n"
-	.string "HIDDEN MACHINE to good use.\p"
+	.string "Hidden Machine to good use.\p"
 	.string "No need to be modest or shy.\n"
 	.string "Go on, take it!$"
 
 RustboroCity_CuttersHouse_Text_ExplainCut:
-	.string "CUT clears small trees when you\n"
-	.string "have the STONE BADGE and HM01.\p"
+	.string "Cut clears small trees when you\n"
+	.string "have the Stone Badge and HM01.\p"
 	.string "Just press A facing a tree.\n"
-	.string "You don't need a POKéMON that\l"
-	.string "knows CUT or can learn it.$"
+	.string "You don't need a Pokémon that\l"
+	.string "knows Cut or can learn it.$"
 
 RustboroCity_CuttersHouse_Text_DadHelpedClearLandOfTrees:
 	.string "My dad helped clear the forest when\n"
-	.string "RUSTBORO grew.\p"
+	.string "Rustboro grew.\p"
 	.string "He was proud of it back then.\p"
 	.string "Now when it rains, the hillside\n"
 	.string "washes into the creek. He doesn't\l"
@@ -47,8 +47,8 @@ RustboroCity_CuttersHouse_Text_DadHelpedClearLandOfTrees:
 
 RustboroCity_CuttersHouse_Text_NewCutDialogue:
 	.string "Those little trees grow fast!\p"
-	.string "Once you've earned the STONE\n"
-	.string "BADGE and received HM01,\l"
+	.string "Once you've earned the Stone\n"
+	.string "Badge and received HM01,\l"
 	.string "face a tree and press A.\p"
-	.string "You won't need to teach CUT\n"
-	.string "to any of your POKéMON.$"
+	.string "You won't need to teach Cut\n"
+	.string "to any of your Pokémon.$"

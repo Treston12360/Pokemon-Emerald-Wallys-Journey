@@ -54,41 +54,41 @@ struct WJColour
 // The colour each layer's brightest shade turns into; darker shades scale down from it.
 static const struct WJColour sColours[] =
 {
-    {COMPOUND_STRING("DEFAULT"), 0, 0, 0},
-    {COMPOUND_STRING("RED"),     31,  6,  6},
-    {COMPOUND_STRING("CRIMSON"), 24,  3,  6},
-    {COMPOUND_STRING("ORANGE"),  31, 16,  4},
-    {COMPOUND_STRING("GOLD"),    31, 24,  6},
-    {COMPOUND_STRING("YELLOW"),  31, 30,  8},
-    {COMPOUND_STRING("LIME"),    18, 31,  6},
-    {COMPOUND_STRING("GREEN"),    6, 24,  8},
-    {COMPOUND_STRING("FOREST"),   4, 16,  6},
-    {COMPOUND_STRING("TEAL"),     4, 22, 20},
-    {COMPOUND_STRING("CYAN"),     8, 28, 31},
-    {COMPOUND_STRING("SKY"),     14, 22, 31},
-    {COMPOUND_STRING("BLUE"),     6, 12, 31},
-    {COMPOUND_STRING("NAVY"),     5,  7, 20},
-    {COMPOUND_STRING("PURPLE"),  18,  8, 28},
-    {COMPOUND_STRING("VIOLET"),  24, 16, 31},
-    {COMPOUND_STRING("PINK"),    31, 16, 24},
-    {COMPOUND_STRING("MAGENTA"), 28,  6, 22},
-    {COMPOUND_STRING("BROWN"),   20, 12,  6},
-    {COMPOUND_STRING("TAN"),     28, 22, 14},
-    {COMPOUND_STRING("WHITE"),   31, 31, 31},
-    {COMPOUND_STRING("SILVER"),  24, 24, 26},
-    {COMPOUND_STRING("GRAY"),    16, 16, 18},
-    {COMPOUND_STRING("BLACK"),    7,  7,  8},
+    {COMPOUND_STRING("Default"), 0, 0, 0},
+    {COMPOUND_STRING("Red"),     31,  6,  6},
+    {COMPOUND_STRING("Crimson"), 24,  3,  6},
+    {COMPOUND_STRING("Orange"),  31, 16,  4},
+    {COMPOUND_STRING("Gold"),    31, 24,  6},
+    {COMPOUND_STRING("Yellow"),  31, 30,  8},
+    {COMPOUND_STRING("Lime"),    18, 31,  6},
+    {COMPOUND_STRING("Green"),    6, 24,  8},
+    {COMPOUND_STRING("Forest"),   4, 16,  6},
+    {COMPOUND_STRING("Teal"),     4, 22, 20},
+    {COMPOUND_STRING("Cyan"),     8, 28, 31},
+    {COMPOUND_STRING("Sky"),     14, 22, 31},
+    {COMPOUND_STRING("Blue"),     6, 12, 31},
+    {COMPOUND_STRING("Navy"),     5,  7, 20},
+    {COMPOUND_STRING("Purple"),  18,  8, 28},
+    {COMPOUND_STRING("Violet"),  24, 16, 31},
+    {COMPOUND_STRING("Pink"),    31, 16, 24},
+    {COMPOUND_STRING("Magenta"), 28,  6, 22},
+    {COMPOUND_STRING("Brown"),   20, 12,  6},
+    {COMPOUND_STRING("Tan"),     28, 22, 14},
+    {COMPOUND_STRING("White"),   31, 31, 31},
+    {COMPOUND_STRING("Silver"),  24, 24, 26},
+    {COMPOUND_STRING("Gray"),    16, 16, 18},
+    {COMPOUND_STRING("Black"),    7,  7,  8},
 };
 
 static const struct WJColour sSkinTones[] =
 {
-    {COMPOUND_STRING("DEFAULT"), 0, 0, 0},
-    {COMPOUND_STRING("TONE 1"), 31, 27, 23},
-    {COMPOUND_STRING("TONE 2"), 31, 24, 18},
-    {COMPOUND_STRING("TONE 3"), 28, 20, 14},
-    {COMPOUND_STRING("TONE 4"), 23, 16, 10},
-    {COMPOUND_STRING("TONE 5"), 17, 11,  7},
-    {COMPOUND_STRING("TONE 6"), 12,  8,  5},
+    {COMPOUND_STRING("Default"), 0, 0, 0},
+    {COMPOUND_STRING("Tone 1"), 31, 27, 23},
+    {COMPOUND_STRING("Tone 2"), 31, 24, 18},
+    {COMPOUND_STRING("Tone 3"), 28, 20, 14},
+    {COMPOUND_STRING("Tone 4"), 23, 16, 10},
+    {COMPOUND_STRING("Tone 5"), 17, 11,  7},
+    {COMPOUND_STRING("Tone 6"), 12,  8,  5},
 };
 
 EWRAM_DATA u16 gWJPlayerOwPal[16] = {0};
@@ -288,10 +288,10 @@ static const struct WindowTemplate sOutfitWindowTemplate =
 
 static const u8 *const sRowNames[ROW_COUNT] =
 {
-    COMPOUND_STRING("OUTFIT"),
-    COMPOUND_STRING("SKIN"),
-    COMPOUND_STRING("COLOR 1"),
-    COMPOUND_STRING("COLOR 2"),
+    COMPOUND_STRING("Outfit"),
+    COMPOUND_STRING("Skin"),
+    COMPOUND_STRING("Color 1"),
+    COMPOUND_STRING("Color 2"),
 };
 
 static bool32 OutfitHasLayer(u32 layer)
@@ -360,8 +360,8 @@ static void DrawOutfitMenu(u8 taskId)
         }
         AddTextPrinterParameterized(windowId, FONT_SMALL, gStringVar4, 44, row * 16 + 2, TEXT_SKIP_DRAW, NULL);
     }
-    AddTextPrinterParameterized(windowId, FONT_SMALL, COMPOUND_STRING("{A_BUTTON} DONE {B_BUTTON} CANCEL"), 0, ROW_COUNT * 16 + 2, TEXT_SKIP_DRAW, NULL);
-    AddTextPrinterParameterized(windowId, FONT_SMALL, COMPOUND_STRING("{START_BUTTON} RANDOM COLORS"), 0, ROW_COUNT * 16 + 14, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized(windowId, FONT_SMALL, COMPOUND_STRING("{A_BUTTON} Done {B_BUTTON} Cancel"), 0, ROW_COUNT * 16 + 2, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized(windowId, FONT_SMALL, COMPOUND_STRING("{START_BUTTON} Random Colors"), 0, ROW_COUNT * 16 + 14, TEXT_SKIP_DRAW, NULL);
     CopyWindowToVram(windowId, COPYWIN_FULL);
 }
 

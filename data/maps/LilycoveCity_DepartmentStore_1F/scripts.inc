@@ -139,40 +139,40 @@ LilycoveCity_DepartmentStore_1F_EventScript_FloorNamesSign::
 	end
 
 LilycoveCity_DepartmentStore_1F_Text_WelcomeToDeptStore:
-	.string "Welcome to LILYCOVE DEPARTMENT STORE.$"
+	.string "Welcome to Lilycove Department Store.$"
 
 LilycoveCity_DepartmentStore_1F_Text_IBuyAllSortsOfThings:
-	.string "The SEA TRUST office is down by the\n"
+	.string "The Sea Trust office is down by the\n"
 	.string "cove. My aunt volunteers there.\p"
-	.string "She rescues WINGULL tangled in\n"
+	.string "She rescues Wingull tangled in\n"
 	.string "nets. Nothing wrong with that.\p"
 	.string "She won't talk about the ones in the\n"
 	.string "blue bandanas. I don't ask.$"
 
 LilycoveCity_DepartmentStore_1F_Text_MomBuyingMeFurniture:
-	.string "PHOEBE of the ELITE FOUR grew up on\n"
-	.string "MT. PYRE with her grandmother.\p"
+	.string "Phoebe of the Elite Four grew up on\n"
+	.string "Mt. Pyre with her grandmother.\p"
 	.string "She says the spirits up there aren't\n"
 	.string "scary. Just lonely.$"
 
 LilycoveCity_DepartmentStore_1F_Text_BuyingSomethingForAzumarill:
 	.string "I'm buying something for my\n"
-	.string "AZUMARILL. It won a CONTEST!\p"
-	.string "WALLACE judged once. He said my\n"
-	.string "AZUMARILL had “sincere sparkle.”\l"
+	.string "Azumarill. It won a Contest!\p"
+	.string "Wallace judged once. He said my\n"
+	.string "Azumarill had “sincere sparkle.”\l"
 	.string "I'll never wash that memory off.$"
 
 LilycoveCity_DepartmentStore_1F_Text_Azumarill:
-	.string "AZUMARILL: Maririroo!$"
+	.string "Azumarill: Maririroo!$"
 
 LilycoveCity_DepartmentStore_1F_Text_FloorNamesSign:
-	.string "1F: SERVICE COUNTER\n"
-	.string "    LOTTERY CORNER\p"
-	.string "2F: TRAINER'S ZONE\p"
-	.string "3F: BATTLE COLLECTION\p"
-	.string "4F: TM CORNER\p"
-	.string "5F: POKé DOLL FLOOR\p"
-	.string "ROOFTOP: ROOFTOP PLAZA$"
+	.string "1F: Service Counter\n"
+	.string "    Lottery Corner\p"
+	.string "2F: Trainer's Zone\p"
+	.string "3F: Battle Collection\p"
+	.string "4F: TM Corner\p"
+	.string "5F: Poké Doll Floor\p"
+	.string "Rooftop: Rooftop Plaza$"
 
 @ Unused
 LilycoveCity_DepartmentStore_1F_Text_WirelessCommIsFun:

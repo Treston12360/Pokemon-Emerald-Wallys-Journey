@@ -352,19 +352,19 @@ MossdeepCity_Movement_ScottExitEast:
 	step_end
 
 MossdeepCity_Text_WantKingsRockStevenGaveMe:
-	.string "I got this from STEVEN, but I don't\n"
+	.string "I got this from Steven, but I don't\n"
 	.string "know what it's good for.\p"
-	.string "I think it's called KING'S ROCK.\n"
+	.string "I think it's called King's Rock.\n"
 	.string "Do you want it?$"
 
 MossdeepCity_Text_YouCanKeepIt:
 	.string "Why would you want it?\n"
 	.string "You're weird.\p"
 	.string "You can keep it, but keep it a secret\n"
-	.string "from STEVEN.$"
+	.string "from Steven.$"
 
 MossdeepCity_Text_StevensHouseOverThere:
-	.string "STEVEN's house is over there.\n"
+	.string "Steven's house is over there.\n"
 	.string "He's away more than he's home.\p"
 	.string "He says the stones he collects\n"
 	.string "tell stories about the earth.\p"
@@ -372,7 +372,7 @@ MossdeepCity_Text_StevensHouseOverThere:
 	.string "just as carefully.$"
 
 MossdeepCity_Text_WhatToDoWithWeirdRock:
-	.string "STEVEN gave me a strange rock.\n"
+	.string "Steven gave me a strange rock.\n"
 	.string "I thought it was worthless.\p"
 	.string "Then he explained how long\n"
 	.string "it took nature to make it.\p"
@@ -380,20 +380,20 @@ MossdeepCity_Text_WhatToDoWithWeirdRock:
 	.string "But I understand the gift.$"
 
 MossdeepCity_Text_WailmerWatching:
-	.string "Around MOSSDEEP you can see wild\n"
-	.string "WAILMER! WAILMER watching!\p"
+	.string "Around Mossdeep you can see wild\n"
+	.string "Wailmer! Wailmer watching!\p"
 	.string "There were more when I was little.\n"
-	.string "The TEAM AQUA folks aren't wrong\l"
+	.string "The Team Aqua folks aren't wrong\l"
 	.string "about everything.$"
 
 MossdeepCity_Text_SpaceCenterReceivedLetter:
-	.string "The island's SPACE CENTER has been\n"
+	.string "The island's Space Center has been\n"
 	.string "launching huge rockets.\p"
 	.string "There's been some kind of an uproar\n"
 	.string "over a letter they received recently.$"
 
 MossdeepCity_Text_SpaceCenterLaunchingRockets:
-	.string "The SPACE CENTER keeps sending\n"
+	.string "The Space Center keeps sending\n"
 	.string "rockets into the sky.\p"
 	.string "My daughter asks why we study\n"
 	.string "the stars while the sea\l"
@@ -402,14 +402,14 @@ MossdeepCity_Text_SpaceCenterLaunchingRockets:
 	.string "curious about both.$"
 
 MossdeepCity_Text_MossdeepTargetedByMagma:
-	.string "I heard from a SAILOR buddy that\n"
-	.string "TEAM AQUA set up shop in LILYCOVE.\p"
+	.string "I heard from a Sailor buddy that\n"
+	.string "Team Aqua set up shop in Lilycove.\p"
 	.string "I also heard that someone came along\n"
 	.string "and wiped the floor with them!\p"
-	.string "But MOSSDEEP here's been targeted\n"
-	.string "by that TEAM MAGMA.\p"
+	.string "But Mossdeep here's been targeted\n"
+	.string "by that Team Magma.\p"
 	.string "If you want to know what they're up to,\n"
-	.string "go visit the SPACE CENTER.$"
+	.string "go visit the Space Center.$"
 
 MossdeepCity_Text_FeelReliefOnLand:
 	.string "When I'm at sea, I miss the\n"
@@ -430,20 +430,20 @@ MossdeepCity_Text_NiceIfWorldCoveredByFlowers:
 MossdeepCity_Text_LifeNeedsSeaToLive:
 	.string "All life needs the sea, even life\n"
 	.string "that lives on land.\p"
-	.string "TEAM MAGMA forgot that. TEAM AQUA\n"
+	.string "Team Magma forgot that. Team Aqua\n"
 	.string "forgot the other half.\p"
 	.string "The shoreline is where both are\n"
 	.string "true at once.$"
 
 MossdeepCity_Text_SurfExhilarating:
 	.string "A voyage on a ship is fine.\p"
-	.string "But crossing the sea with POKéMON\n"
-	.string "using SURF…\p"
+	.string "But crossing the sea with Pokémon\n"
+	.string "using Surf…\p"
 	.string "Now that's an exhilarating trip!\n"
 	.string "Wouldn't you agree, youngster?$"
 
 MossdeepCity_Text_SpecialSpaceCenterRock:
-	.string "The SPACE CENTER staff left this\n"
+	.string "The Space Center staff left this\n"
 	.string "rock here for good luck.\p"
 	.string "Nobody admits it, but they all touch\n"
 	.string "it before a launch.\p"
@@ -454,48 +454,48 @@ MossdeepCity_Text_ItsAWhiteRock:
 	.string "It's a white rock.$"
 
 MossdeepCity_Text_GymSign:
-	.string "MOSSDEEP CITY POKéMON GYM\n"
-	.string "LEADERS: LIZA & TATE\p"
+	.string "Mossdeep City Pokémon Gym\n"
+	.string "Leaders: Liza & Tate\p"
 	.string "“The mystic combination!”$"
 
 MossdeepCity_Text_CitySign:
-	.string "MOSSDEEP CITY\n"
-	.string "“Our slogan: Cherish POKéMON!”$"
+	.string "Mossdeep City\n"
+	.string "“Our slogan: Cherish Pokémon!”$"
 
 MossdeepCity_Text_SpaceCenterSign:
-	.string "MOSSDEEP SPACE CENTER\n"
+	.string "Mossdeep Space Center\n"
 	.string "“The closest place to space.”$"
 
 MossdeepCity_Text_ScottSomethingWrongWithTown:
-	.string "SCOTT: {PLAYER}{KUN}, feeling good?\n"
+	.string "Scott: {PLAYER}{KUN}, feeling good?\n"
 	.string "I'm doing great!\p"
-	.string "I'd heard MOSSDEEP's GYM LEADER is\n"
+	.string "I'd heard Mossdeep's Gym Leader is\n"
 	.string "pretty strong, so I decided to come\l"
 	.string "take a look-see for myself.\p"
 	.string "But there's something wrong about\n"
 	.string "this town.\p"
 	.string "People are going on about a warning\n"
-	.string "letter and the SPACE CENTER…\p"
+	.string "letter and the Space Center…\p"
 	.string "I don't think it concerns me in any\n"
 	.string "way, though.$"
 
 MossdeepCity_Text_SootopolisNewGymLeader:
 	.string "The waves feel great on my feet.\p"
-	.string "You know SOOTOPOLIS? JUAN runs the\n"
-	.string "GYM again. He taught WALLACE.\p"
-	.string "And now WALLACE has his own student.\n"
-	.string "Some skinny kid from PETALBURG.$"
+	.string "You know Sootopolis? Juan runs the\n"
+	.string "Gym again. He taught Wallace.\p"
+	.string "And now Wallace has his own student.\n"
+	.string "Some skinny kid from Petalburg.$"
 
 MossdeepCity_OnFrame:
 	map_script_2 VAR_WALLY_RIVAL_PENDING, 7, WallyJourney_EventScript_RivalMeet7
 	.2byte 0
 
 MossdeepCity_Text_WailmerWatching_W0:
-	.string "TEAM MAGMA tried to steal the rocket\n"
-	.string "fuel! STEVEN and some kid stopped\l"
+	.string "Team Magma tried to steal the rocket\n"
+	.string "fuel! Steven and some kid stopped\l"
 	.string "them.\p"
 	.string "…Wait. You're that kid, aren't you?\n"
-	.string "MOSSDEEP owes you one.$"
+	.string "Mossdeep owes you one.$"
 
 MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W0:
 	.string "The flowers are coming back after\n"
@@ -509,7 +509,7 @@ MossdeepCity_Text_NiceIfWorldCoveredByFlowers_W1:
 
 MossdeepCity_Text_SpecialSpaceCenterRock_Spring:
 	.string "Spring is launch season at the\n"
-	.string "SPACE CENTER.\p"
+	.string "Space Center.\p"
 	.string "The staff touch the lucky rock before\n"
 	.string "every launch. I counted twelve this\l"
 	.string "week.$"
@@ -517,18 +517,18 @@ MossdeepCity_Text_SpecialSpaceCenterRock_Spring:
 MossdeepCity_Text_SpecialSpaceCenterRock_Autumn:
 	.string "Autumn nights here are perfect for\n"
 	.string "stargazing.\p"
-	.string "The SPACE CENTER opens its telescope\n"
+	.string "The Space Center opens its telescope\n"
 	.string "to the public. You should go.$"
 
 MossdeepCity_Text_SpecialSpaceCenterRock_Winter:
-	.string "In winter the stars over MOSSDEEP are\n"
+	.string "In winter the stars over Mossdeep are\n"
 	.string "so clear it almost hurts.\p"
-	.string "The SPACE CENTER says it's the best\n"
+	.string "The Space Center says it's the best\n"
 	.string "season for meteor showers.$"
 
 MossdeepCity_Text_LifeNeedsSeaToLive_Spring:
-	.string "In spring, the WAILMER come back to\n"
-	.string "MOSSDEEP.\p"
+	.string "In spring, the Wailmer come back to\n"
+	.string "Mossdeep.\p"
 	.string "The sea remembers its seasons. People\n"
 	.string "forget theirs.$"
 

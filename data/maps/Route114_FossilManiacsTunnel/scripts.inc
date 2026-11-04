@@ -54,28 +54,28 @@ Route114_FossilManiacsTunnel_EventScript_PlayerRevivedFossil::
 	end
 
 Route114_FossilManiacsTunnel_Text_LookInDesertForFossils:
-	.string "I'm the FOSSIL MANIAC…\n"
-	.string "I'm a nice guy who loves FOSSILS…\p"
-	.string "Do you want a FOSSIL?\p"
-	.string "But the FOSSILS around these parts all\n"
+	.string "I'm the Fossil Maniac…\n"
+	.string "I'm a nice guy who loves Fossils…\p"
+	.string "Do you want a Fossil?\p"
+	.string "But the Fossils around these parts all\n"
 	.string "belong to me… None for you…\p"
 	.string "If you can't bear to go without\n"
-	.string "a FOSSIL, look in a desert where there\l"
+	.string "a Fossil, look in a desert where there\l"
 	.string "are boulders and sand that may hide\l"
-	.string "FOSSILS…$"
+	.string "Fossils…$"
 
 Route114_FossilManiacsTunnel_Text_DevonCorpRevivingFossils:
-	.string "You found a FOSSIL, didn't you?\n"
+	.string "You found a Fossil, didn't you?\n"
 	.string "It's so dreamy…\p"
-	.string "DEVON says it can bring them back to\n"
-	.string "life. MR. STONE calls it progress.\p"
+	.string "Devon says it can bring them back to\n"
+	.string "life. Mr. Stone calls it progress.\p"
 	.string "I just wonder if anyone asked the\n"
-	.string "FOSSIL. It waited a long time to\l"
+	.string "Fossil. It waited a long time to\l"
 	.string "rest.$"
 
 Route114_FossilManiacsTunnel_Text_FossilsAreWonderful:
-	.string "FOSSILS are so… wonderful…\p"
-	.string "DEVON offered to buy my whole\n"
+	.string "Fossils are so… wonderful…\p"
+	.string "Devon offered to buy my whole\n"
 	.string "collection. I said no.\p"
 	.string "Some things shouldn't have a price.$"
 
@@ -87,5 +87,5 @@ Route114_FossilManiacsTunnel_Text_NotSafeThatWay:
 	.string "I think there's a giant cavern\n"
 	.string "underneath now…\p"
 	.string "But I've left it alone because I don't\n"
-	.string "think there are any FOSSILS there…$"
+	.string "think there are any Fossils there…$"
 

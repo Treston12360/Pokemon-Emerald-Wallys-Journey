@@ -61,50 +61,50 @@ CaveOfOrigin_B1F_EventScript_AtSkyPillar::
 
 CaveOfOrigin_B1F_Text_WallaceStory:
 	.string "Ah, so you are {PLAYER}{KUN}?\n"
-	.string "STEVEN speaks highly of you.\p"
-	.string "My name is WALLACE. I am the\n"
-	.string "CHAMPION of HOENN.\p"
-	.string "Before the LEAGUE, I led this town's\n"
-	.string "GYM. My mentor JUAN keeps it now.\p"
+	.string "Steven speaks highly of you.\p"
+	.string "My name is Wallace. I am the\n"
+	.string "Champion of Hoenn.\p"
+	.string "Before the League, I led this town's\n"
+	.string "Gym. My mentor Juan keeps it now.\p"
 	.string "… … … … … …\n"
 	.string "… … … … … …\p"
-	.string "GROUDON and KYOGRE are fighting\n"
+	.string "Groudon and Kyogre are fighting\n"
 	.string "over this whole region.\p"
 	.string "The old records speak of a third.\n"
-	.string "A sky serpent named RAYQUAZA that\l"
+	.string "A sky serpent named Rayquaza that\l"
 	.string "once ended their war.\p"
 	.string "But the records never say where it\n"
-	.string "rests. You've walked more of HOENN\l"
+	.string "rests. You've walked more of Hoenn\l"
 	.string "than any of us lately.$"
 
 CaveOfOrigin_B1F_Text_WhereIsRayquaza:
-	.string "WALLACE: {PLAYER}{KUN}, do you perhaps\n"
-	.string "know where RAYQUAZA is now?\p"
+	.string "Wallace: {PLAYER}{KUN}, do you perhaps\n"
+	.string "know where Rayquaza is now?\p"
 	.string "If you do, please tell me.$"
 
 CaveOfOrigin_B1F_Text_ButWereInCaveOfOrigin:
-	.string "WALLACE: The CAVE OF ORIGIN?\p"
+	.string "Wallace: The Cave Of Origin?\p"
 	.string "But that's right here!\n"
 	.string "I need you to do better than that!\p"
 	.string "Please, I need you to think about\n"
-	.string "where RAYQUAZA might be right now.$"
+	.string "where Rayquaza might be right now.$"
 
 CaveOfOrigin_B1F_Text_OldLadyDidntMentionThat:
-	.string "WALLACE: MT. PYRE?\p"
-	.string "The keepers there guard the ORBS,\n"
-	.string "not RAYQUAZA. They told me so.\p"
+	.string "Wallace: Mt. Pyre?\p"
+	.string "The keepers there guard the Orbs,\n"
+	.string "not Rayquaza. They told me so.\p"
 	.string "Though… didn't they say something\n"
 	.string "about a tower by the sea?$"
 
 CaveOfOrigin_B1F_Text_CantYouRememberSomehow:
-	.string "WALLACE: Huh? You don't remember?\n"
+	.string "Wallace: Huh? You don't remember?\n"
 	.string "Hmm… That's a problem…\p"
 	.string "Can't you remember somehow?$"
 
 CaveOfOrigin_B1F_Text_WellHeadToSkyPillar:
-	.string "WALLACE: The SKY PILLAR?\p"
+	.string "Wallace: The Sky Pillar?\p"
 	.string "That's it!\n"
-	.string "It must be the SKY PILLAR!\p"
+	.string "It must be the Sky Pillar!\p"
 	.string "{PLAYER}{KUN}, there's not a moment to lose!\n"
-	.string "We'll head to the SKY PILLAR right away!$"
+	.string "We'll head to the Sky Pillar right away!$"
 

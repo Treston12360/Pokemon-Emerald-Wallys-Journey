@@ -245,11 +245,11 @@ Route118_EventScript_Deandre::
 	end
 
 Route118_Text_StevenQuestions:
-	.string "STEVEN: {PLAYER}! It's good to see\n"
+	.string "Steven: {PLAYER}! It's good to see\n"
 	.string "you again. How is your journey?\p"
-	.string "The WEATHER INSTITUTE has reported\n"
+	.string "The Weather Institute has reported\n"
 	.string "rain patterns that don't add up.\p"
-	.string "DEVON's instruments can measure\n"
+	.string "Devon's instruments can measure\n"
 	.string "the change, not explain it.\p"
 	.string "I've asked researchers to share\n"
 	.string "their findings, not bury them.\p"
@@ -259,34 +259,34 @@ Route118_Text_StevenQuestions:
 	.string "aren't always people who are right.$"
 Route118_Text_YouAgreeGoodRodIsGood:
 	.string "Hmm!\n"
-	.string "A GOOD ROD is really good!\p"
+	.string "A Good Rod is really good!\p"
 	.string "Wouldn't you agree?$"
 
 Route118_Text_IdenticalMindsTakeThis:
-	.string "We think alike! Take this GOOD ROD!$"
+	.string "We think alike! Take this Good Rod!$"
 
 Route118_Text_TryYourLuckFishing:
 	.string "Wherever there's water, try fishing.\p"
-	.string "You learn patience. HOENN could use\n"
+	.string "You learn patience. Hoenn could use\n"
 	.string "more of it.$"
 
 Route118_Text_DontYouLikeToFish:
 	.string "You don't like fishing? Pity.$"
 
 Route118_Text_TryCatchingMonWithGoodRod:
-	.string "Catch all sorts with your GOOD ROD.$"
+	.string "Catch all sorts with your Good Rod.$"
 
 Route118_Text_CanCrossRiversWithSurf:
-	.string "No boat? With SURF you can cross\n"
+	.string "No boat? With Surf you can cross\n"
 	.string "rivers and the sea.\p"
-	.string "The LEAGUE trusts you with the whole\n"
-	.string "ocean once you earn that BADGE.$"
+	.string "The League trusts you with the whole\n"
+	.string "ocean once you earn that Badge.$"
 
 Route118_Text_RouteSignMauville:
-	.string "ROUTE 118\n"
-	.string "{LEFT_ARROW} MAUVILLE CITY$"
+	.string "Route 118\n"
+	.string "{LEFT_ARROW} Mauville City$"
 
 Route118_Text_RouteSign119:
-	.string "ROUTE 118\n"
-	.string "{UP_ARROW} ROUTE 119$"
+	.string "Route 118\n"
+	.string "{UP_ARROW} Route 119$"
 

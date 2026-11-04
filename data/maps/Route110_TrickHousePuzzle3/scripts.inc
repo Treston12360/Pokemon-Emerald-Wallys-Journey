@@ -304,17 +304,17 @@ Route110_TrickHousePuzzle3_EventScript_Alan::
 Route110_TrickHousePuzzle3_Text_WroteSecretCodeLockOpened:
 	.string "{PLAYER} wrote down the secret code\n"
 	.string "on the door.\p"
-	.string "“TRICK MASTER is coveted.”\n"
+	.string "“Trick Master is coveted.”\n"
 	.string "… … … … … … … …\p"
 	.string "The lock clicked open!$"
 
 Route110_TrickHousePuzzle3_Text_JustinIntro:
 	.string "I keep ending up back here!\p"
 	.string "Same room. Same door. Same\n"
-	.string "TRAINER. Wait, you're new!$"
+	.string "Trainer. Wait, you're new!$"
 
 Route110_TrickHousePuzzle3_Text_JustinDefeat:
-	.string "I'm lost AND beaten?\n"
+	.string "I'm lost And beaten?\n"
 	.string "This isn't fair!$"
 
 Route110_TrickHousePuzzle3_Text_JustinPostBattle:
@@ -331,13 +331,13 @@ Route110_TrickHousePuzzle3_Text_MarthaDefeat:
 	.string "And now I'm sadder!$"
 
 Route110_TrickHousePuzzle3_Text_MarthaPostBattle:
-	.string "I'm weak, AND I have no sense of\n"
+	.string "I'm weak, And I have no sense of\n"
 	.string "direction. Great combo.$"
 
 Route110_TrickHousePuzzle3_Text_AlanIntro:
 	.string "I don't get it.\p"
 	.string "Who builds a house like this right\n"
-	.string "next to CYCLING ROAD? And why?$"
+	.string "next to Cycling Road? And why?$"
 
 Route110_TrickHousePuzzle3_Text_AlanDefeat:
 	.string "I don't get it.\n"

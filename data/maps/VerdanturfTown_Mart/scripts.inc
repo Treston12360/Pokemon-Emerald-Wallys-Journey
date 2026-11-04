@@ -41,19 +41,19 @@ VerdanturfTown_Mart_EventScript_Lass::
 	end
 
 VerdanturfTown_Mart_Text_XSpecialIsCrucial:
-	.string "X SPECIAL boosts some moves for one\n"
+	.string "X Special boosts some moves for one\n"
 	.string "battle.\p"
 	.string "Good to have. Better to not need.$"
 
 VerdanturfTown_Mart_Text_NoStrategyGuidesForBattleTent:
-	.string "No strategy guides for the BATTLE\n"
-	.string "TENT anywhere.\p"
+	.string "No strategy guides for the Battle\n"
+	.string "Tent anywhere.\p"
 	.string "Guess you have to rely on your own\n"
 	.string "wits. Like everything else.$"
 
 VerdanturfTown_Mart_Text_NestBallOnWeakenedPokemon:
-	.string "A sleeping or paralyzed POKéMON is\n"
+	.string "A sleeping or paralyzed Pokémon is\n"
 	.string "easier to catch.\p"
-	.string "With only plain POKé BALLS, that's\n"
+	.string "With only plain Poké Balls, that's\n"
 	.string "the whole game.$"
 

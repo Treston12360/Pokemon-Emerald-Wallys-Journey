@@ -54,9 +54,9 @@ PacifidlogTown_EventScript_TownSign::
 	end
 
 PacifidlogTown_Text_FastRunningCurrent:
-	.string "The sea between PACIFIDLOG and\n"
-	.string "SLATEPORT has a fast-running tide.\p"
-	.string "If you decide to SURF, you could end\n"
+	.string "The sea between Pacifidlog and\n"
+	.string "Slateport has a fast-running tide.\p"
+	.string "If you decide to Surf, you could end\n"
 	.string "up swept away somewhere else.$"
 
 PacifidlogTown_Text_NeatHousesOnWater:
@@ -67,7 +67,7 @@ PacifidlogTown_Text_NeatHousesOnWater:
 	.string "Turns out floating is a good plan.$"
 
 PacifidlogTown_Text_SkyPillarTooScary:
-	.string "The SKY PILLAR? That tall tower out\n"
+	.string "The Sky Pillar? That tall tower out\n"
 	.string "past the currents?\p"
 	.string "Grandma says when land and sea go to\n"
 	.string "war, a green light comes down from\l"
@@ -76,14 +76,14 @@ PacifidlogTown_Text_SkyPillarTooScary:
 	.string "never see that light.$"
 
 PacifidlogTown_Text_TownSign:
-	.string "PACIFIDLOG TOWN\p"
+	.string "Pacifidlog Town\p"
 	.string "“Where the morning sun smiles upon\n"
 	.string "the waters.”$"
 
 PacifidlogTown_Text_FastRunningCurrentAftermath:
 	.string "The storm tore two of our rafts\n"
 	.string "loose and sent them out to sea.\p"
-	.string "Volunteers in AQUA blue helped us\n"
+	.string "Volunteers in Aqua blue helped us\n"
 	.string "tie new ones. Grandpa still won't\l"
 	.string "let them in the house.$"
 
@@ -96,14 +96,14 @@ PacifidlogTown_Text_NeatHousesOnWater_W0:
 PacifidlogTown_Text_SkyPillarTooScary_Spring:
 	.string "Spring tides lift the whole town a\n"
 	.string "little higher.\p"
-	.string "The CORSOLA love it. So do I.$"
+	.string "The Corsola love it. So do I.$"
 
 PacifidlogTown_Text_SkyPillarTooScary_Autumn:
 	.string "Autumn currents run fast past\n"
-	.string "PACIFIDLOG.\p"
+	.string "Pacifidlog.\p"
 	.string "Grandma says that's when the green\n"
 	.string "light was last seen over the\l"
-	.string "SKY PILLAR.$"
+	.string "Sky Pillar.$"
 
 PacifidlogTown_Text_SkyPillarTooScary_Winter:
 	.string "Winter here isn't cold. Just wet.\n"

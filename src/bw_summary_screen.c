@@ -403,21 +403,21 @@ static const u8 sText_NextLv[]                              = _("Next Lv.");
 static const u8 sText_RentalPkmn[]                          = _("Rental Pokémon");
 static const u8 sText_None[]                                = _("None");
 #else
-static const u8 sText_Cancel[]                              = _("CANCEL");
-static const u8 sText_Switch[]                              = _("SWITCH");
-static const u8 sText_PkmnInfo[]                            = _("POKéMON INFO");
-static const u8 sText_PkmnSkills[]                          = _("POKéMON SKILLS");
-static const u8 sText_BattleMoves[]                         = _("BATTLE MOVES");
-static const u8 sText_ContestMoves[]                        = _("CONTEST MOVES");
-static const u8 sText_Info[]                                = _("INFO");
-static const u8 sText_ViewIVs[]                             = _("VIEW IV");
-static const u8 sText_ViewEVs[]                             = _("VIEW EV");
-static const u8 sText_ViewStats[]                           = _("VIEW STATS");
-static const u8 sText_ViewIVs_Graded[]                      = _("SEE INNATE");
-static const u8 sText_ViewEVs_Graded[]                      = _("SEE EFFORT");
-static const u8 sText_NextLv[]                              = _("NEXT LV.");
-static const u8 sText_RentalPkmn[]                          = _("RENTAL POKéMON");
-static const u8 sText_None[]                                = _("NONE");
+static const u8 sText_Cancel[]                              = _("Cancel");
+static const u8 sText_Switch[]                              = _("Switch");
+static const u8 sText_PkmnInfo[]                            = _("Pokémon Info");
+static const u8 sText_PkmnSkills[]                          = _("Pokémon Skills");
+static const u8 sText_BattleMoves[]                         = _("Battle Moves");
+static const u8 sText_ContestMoves[]                        = _("Contest Moves");
+static const u8 sText_Info[]                                = _("Info");
+static const u8 sText_ViewIVs[]                             = _("View IV");
+static const u8 sText_ViewEVs[]                             = _("View EV");
+static const u8 sText_ViewStats[]                           = _("View Stats");
+static const u8 sText_ViewIVs_Graded[]                      = _("See Innate");
+static const u8 sText_ViewEVs_Graded[]                      = _("See Effort");
+static const u8 sText_NextLv[]                              = _("Next LV.");
+static const u8 sText_RentalPkmn[]                          = _("Rental Pokémon");
+static const u8 sText_None[]                                = _("None");
 #endif
 
 // bg gfx
@@ -5534,7 +5534,7 @@ static inline bool32 ShouldShowRename(void)
 
 static void ShowCancelOrRenamePrompt(void)
 {
-    const u8 *promptText = ShouldShowRename() ? COMPOUND_STRING("RENAME") : gText_Cancel2;
+    const u8 *promptText = ShouldShowRename() ? COMPOUND_STRING("Rename") : gText_Cancel2;
 
     int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, promptText, 62);
     int iconXPos = stringXPos - 16;

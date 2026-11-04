@@ -46,16 +46,16 @@ FallarborTown_Mart_EventScript_Skitty::
 	end
 
 FallarborTown_Mart_Text_DecidingSkittyEvolve:
-	.string "Should I evolve my SKITTY?\p"
-	.string "One MOON STONE and it's done. No\n"
+	.string "Should I evolve my Skitty?\p"
+	.string "One Moon Stone and it's done. No\n"
 	.string "going back. Big decisions are like\l"
 	.string "that.$"
 
 FallarborTown_Mart_Text_Skitty:
-	.string "SKITTY: Miyao?$"
+	.string "Skitty: Miyao?$"
 
 FallarborTown_Mart_Text_SellNuggetIFound:
-	.string "I found this NUGGET. I'll sell it.\p"
+	.string "I found this Nugget. I'll sell it.\p"
 	.string "That's this month's rent. The ash\n"
 	.string "took our orchard, so this is how we\l"
 	.string "get by now.$"

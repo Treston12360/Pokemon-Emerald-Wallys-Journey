@@ -262,38 +262,38 @@ Route101_Text_HelpMe:
 Route101_Text_PleaseHelp:
 	.string "Hello! You over there!\n"
 	.string "Please! Help!\p"
-	.string "In my BAG!\n"
-	.string "There's a POKé BALL!$"
+	.string "In my Bag!\n"
+	.string "There's a Poké Ball!$"
 
 Route101_Text_DontLeaveMe:
 	.string "Wh-Where are you going?!\n"
 	.string "Don't leave me like this!$"
 
 Route101_Text_YouSavedMe:
-	.string "PROF. BIRCH: Whew…\p"
+	.string "Prof. Birch: Whew…\p"
 	.string "I was in the tall grass studying wild\n"
-	.string "POKéMON when I was jumped.\p"
+	.string "Pokémon when I was jumped.\p"
 	.string "You saved me.\n"
 	.string "Thanks a lot!\p"
 	.string "Oh?\p"
 	.string "Hi, you're {PLAYER}{KUN}!\p"
 	.string "This is not the place to chat, so come\n"
-	.string "by my POKéMON LAB later, okay?$"
+	.string "by my Pokémon Lab later, okay?$"
 
 Route101_Text_TakeTiredPokemonToPokeCenter:
-	.string "If POKéMON get tired, take them to a\n"
-	.string "POKéMON CENTER. There's one in\l"
-	.string "OLDALE TOWN.\p"
-	.string "The LEAGUE pays for them. Healing is\n"
-	.string "free for every TRAINER, rich or poor.$"
+	.string "If Pokémon get tired, take them to a\n"
+	.string "Pokémon Center. There's one in\l"
+	.string "Oldale Town.\p"
+	.string "The League pays for them. Healing is\n"
+	.string "free for every Trainer, rich or poor.$"
 
 Route101_Text_WildPokemonInTallGrass:
-	.string "Wild POKéMON jump out of tall grass.\p"
+	.string "Wild Pokémon jump out of tall grass.\p"
 	.string "Want to catch one? Walk in and\n"
 	.string "search. Just remember, you're in\l"
 	.string "their home.$"
 
 Route101_Text_RouteSign:
-	.string "ROUTE 101\n"
-	.string "{UP_ARROW} OLDALE TOWN$"
+	.string "Route 101\n"
+	.string "{UP_ARROW} Oldale Town$"
 

@@ -115,46 +115,46 @@ FortreeCity_Movement_KecleonFlee:
 
 FortreeCity_Text_SawGiganticPokemonInSky:
 	.string "No one believes me, but I saw this\n"
-	.string "gigantic POKéMON in the sky.\p"
+	.string "gigantic Pokémon in the sky.\p"
 	.string "It seemed to squirm as it flew toward\n"
-	.string "ROUTE 131.\p"
+	.string "Route 131.\p"
 	.string "By the way… Sniff…\n"
 	.string "Um… You, uh…smell singed.\p"
 	.string "Were you at a volcano or something?$"
 
 FortreeCity_Text_SomethingBlockingGym:
-	.string "I want to go to the GYM, but\n"
+	.string "I want to go to the Gym, but\n"
 	.string "something's blocking the way.\p"
-	.string "Something invisible. FORTREE's\n"
-	.string "KECLEON don't like strangers.$"
+	.string "Something invisible. Fortree's\n"
+	.string "Kecleon don't like strangers.$"
 
 FortreeCity_Text_ThisTimeIllBeatWinona:
-	.string "My best POKéMON is with me. This\n"
-	.string "time, I'll beat WINONA.$"
+	.string "My best Pokémon is with me. This\n"
+	.string "time, I'll beat Winona.$"
 
 FortreeCity_Text_TreesGrowByDrinkingRainwater:
 	.string "The ground absorbs rainwater, and\n"
 	.string "trees grow by drinking that water…\p"
-	.string "Our FORTREE CITY exists because\n"
+	.string "Our Fortree City exists because\n"
 	.string "there's both water and soil.$"
 
 FortreeCity_Text_EveryoneHealthyAndLively:
 	.string "We live up in the trees, and we\n"
 	.string "live long.\p"
-	.string "WINONA says it's the wind. I say\n"
+	.string "Winona says it's the wind. I say\n"
 	.string "it's that nobody here is ever in\l"
 	.string "a hurry.$"
 
 FortreeCity_Text_BugPokemonComeThroughWindow:
 	.string "Living in the trees is lovely.\p"
-	.string "But FORTREE can't grow outward. No\n"
+	.string "But Fortree can't grow outward. No\n"
 	.string "room. My kids will have to move\l"
 	.string "away to find homes.\p"
-	.string "I understand what TEAM MAGMA wants.\n"
+	.string "I understand what Team Magma wants.\n"
 	.string "I just don't trust how.$"
 
 FortreeCity_Text_PokemonThatEvolveWhenTraded:
-	.string "Some POKéMON only evolve when traded.\p"
+	.string "Some Pokémon only evolve when traded.\p"
 	.string "Strange, isn't it? Sometimes you\n"
 	.string "grow by trusting someone else with\l"
 	.string "what matters to you.$"
@@ -164,40 +164,40 @@ FortreeCity_Text_SomethingUnseeable:
 
 FortreeCity_Text_UnseeableUseDevonScope:
 	.string "Something unseeable is in the way.\p"
-	.string "Want to use the DEVON SCOPE?$"
+	.string "Want to use the Devon Scope?$"
 
 FortreeCity_Text_UsedDevonScopePokemonFled:
-	.string "{PLAYER} used the DEVON SCOPE.\p"
-	.string "An invisible POKéMON became completely\n"
+	.string "{PLAYER} used the Devon Scope.\p"
+	.string "An invisible Pokémon became completely\n"
 	.string "visible!\p"
-	.string "The startled POKéMON fled!$"
+	.string "The startled Pokémon fled!$"
 
 FortreeCity_Text_CitySign:
-	.string "FORTREE CITY\n"
+	.string "Fortree City\n"
 	.string "“The treetop city that frolics with\l"
 	.string "nature.”$"
 
 FortreeCity_Text_GymSign:
-	.string "FORTREE CITY POKéMON GYM\n"
-	.string "LEADER: WINONA\p"
+	.string "Fortree City Pokémon Gym\n"
+	.string "Leader: Winona\p"
 	.string "“The bird user taking flight into\n"
 	.string "the world.”$"
 
 FortreeCity_Text_TreesGrowByDrinkingRainwaterAftermath:
 	.string "All that rain during the crisis\n"
 	.string "drowned the roots of the old trees.\p"
-	.string "The WEATHER INSTITUTE says it'll take\n"
+	.string "The Weather Institute says it'll take\n"
 	.string "years for the forest to recover.\p"
 	.string "We're planting new ones anyway.$"
 
 FortreeCity_Text_EveryoneHealthyAndLively_W0:
-	.string "WINONA came down from the GYM after\n"
+	.string "Winona came down from the Gym after\n"
 	.string "your battle.\p"
 	.string "She never does that. You impressed\n"
 	.string "her.$"
 
 FortreeCity_Text_BugPokemonComeThroughWindow_Spring:
-	.string "New leaves everywhere. FORTREE looks\n"
+	.string "New leaves everywhere. Fortree looks\n"
 	.string "brand new every spring.\p"
 	.string "But the town still can't grow\n"
 	.string "outward. Someday my kids will have\l"

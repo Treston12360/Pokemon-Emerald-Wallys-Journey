@@ -35,13 +35,13 @@ MauvilleCity_Mart_EventScript_Man::
 	end
 
 MauvilleCity_Mart_Text_ItemsToTemporarilyElevateStats:
-	.string "Items like X ATTACK and X DEFEND\n"
-	.string "boost a POKéMON for one battle.\p"
+	.string "Items like X Attack and X Defend\n"
+	.string "boost a Pokémon for one battle.\p"
 	.string "Good in a pinch. But nothing replaces\n"
 	.string "real training.$"
 
 MauvilleCity_Mart_Text_DecisionsDetermineBattle:
 	.string "Attack, or use an item…\p"
-	.string "The TRAINER's choices decide the\n"
+	.string "The Trainer's choices decide the\n"
 	.string "battle. Same as life, really.$"
 

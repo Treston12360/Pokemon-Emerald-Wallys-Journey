@@ -63,7 +63,7 @@ EverGrandeCity_GlaciasRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_GlaciasRoom_Text_IntroSpeech:
-	.string "GLACIA: I am GLACIA.\n"
+	.string "Glacia: I am Glacia.\n"
 	.string "You may begin when ready.\p"
 	.string "During the storms, we moved\n"
 	.string "families to safer ground.\p"
@@ -74,7 +74,7 @@ EverGrandeCity_GlaciasRoom_Text_IntroSpeech:
 	.string "is as steady as your team.$"
 
 EverGrandeCity_GlaciasRoom_Text_Defeat:
-	.string "GLACIA: Remarkable.\p"
+	.string "Glacia: Remarkable.\p"
 	.string "You remained composed even\n"
 	.string "when the match turned.\p"
 	.string "You have earned this win.$"
@@ -87,7 +87,7 @@ EverGrandeCity_GlaciasRoom_Text_PostBattleSpeech:
 	.string "It was the correct choice.\p"
 	.string "Strength also means knowing\n"
 	.string "what you cannot do alone.\p"
-	.string "Proceed. DRAKE awaits.$"
+	.string "Proceed. Drake awaits.$"
 
 @ Wally's Journey: after the first Hall of Fame the Elite Four use their rematch teams (FRLG style).
 EverGrandeCity_GlaciasRoom_EventScript_GlaciaRematch::
@@ -102,7 +102,7 @@ EverGrandeCity_GlaciasRoom_EventScript_GlaciaRematchPost::
 	end
 
 EverGrandeCity_GlaciasRoom_Text_RematchIntro:
-	.string "GLACIA: The CHAMPION, here to take\n"
+	.string "Glacia: The Champion, here to take\n"
 	.string "the challenge again?\p"
 	.string "Last time I held back a little.\n"
 	.string "Not today. Prepare to freeze.$"
@@ -111,6 +111,6 @@ EverGrandeCity_GlaciasRoom_Text_RematchDefeat:
 	.string "...Even my coldest team melted.$"
 
 EverGrandeCity_GlaciasRoom_Text_RematchPost:
-	.string "DRAKE is next. He's been looking\n"
+	.string "Drake is next. He's been looking\n"
 	.string "forward to this.$"
 

@@ -7,9 +7,9 @@ AbandonedShip_Rooms2_B1F_EventScript_Camper::
 
 AbandonedShip_Rooms2_B1F_Text_PerfectPlaceToGoExploring:
 	.string "This is a perfect place to explore!\p"
-	.string "DEVON wanted to scrap this wreck\n"
+	.string "Devon wanted to scrap this wreck\n"
 	.string "for metal.\p"
-	.string "CAPT. STERN said it was a grave and\n"
-	.string "a home for POKéMON. He won. For\l"
+	.string "Capt. Stern said it was a grave and\n"
+	.string "a home for Pokémon. He won. For\l"
 	.string "now.$"
 

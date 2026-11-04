@@ -23,28 +23,28 @@ MagmaHideout_2F_2R_EventScript_Grunt8::
 
 MagmaHideout_2F_2R_Text_Grunt15Intro:
 	.string "I'm a surveyor. I mapped every valley\n"
-	.string "in HOENN for MAXIE's housing plans.\p"
+	.string "in Hoenn for Maxie's housing plans.\p"
 	.string "The numbers work. They really do.\n"
 	.string "So why do I feel sick about this?$"
 
 MagmaHideout_2F_2R_Text_Grunt15Defeat:
 	.string "I may have lost… but\n"
-	.string "GROUDON won't.$"
+	.string "Groudon won't.$"
 
 MagmaHideout_2F_2R_Text_Grunt15PostBattle:
-	.string "We have the BLUE ORB now. MAXIE\n"
-	.string "says GROUDON will listen to it.\p"
+	.string "We have the Blue Orb now. Maxie\n"
+	.string "says Groudon will listen to it.\p"
 	.string "…He's never been wrong before.\n"
 	.string "I hope he isn't wrong now.$"
 
 MagmaHideout_2F_2R_Text_Grunt6Intro:
 	.string "This heat is awful.\p"
-	.string "My sister's in TEAM AQUA. She says\n"
-	.string "their HIDEOUT has a breeze. Ugh!$"
+	.string "My sister's in Team Aqua. She says\n"
+	.string "their Hideout has a breeze. Ugh!$"
 
 MagmaHideout_2F_2R_Text_Grunt6Defeat:
 	.string "Yeah… maybe I picked\n"
-	.string "the wrong TEAM.$"
+	.string "the wrong Team.$"
 
 MagmaHideout_2F_2R_Text_Grunt6PostBattle:
 	.string "Don't you miss the sea, down in\n"
@@ -52,7 +52,7 @@ MagmaHideout_2F_2R_Text_Grunt6PostBattle:
 
 MagmaHideout_2F_2R_Text_Grunt7Intro:
 	.string "Feel those tremors? Is that the\n"
-	.string "volcano? Or GROU…\p"
+	.string "volcano? Or Grou…\p"
 	.string "Whoops! Never mind!$"
 
 MagmaHideout_2F_2R_Text_Grunt7Defeat:
@@ -64,9 +64,9 @@ MagmaHideout_2F_2R_Text_Grunt7PostBattle:
 	.string "matter. Our goal is close!$"
 
 MagmaHideout_2F_2R_Text_Grunt8Intro:
-	.string "One of our guys lost his MAGMA\n"
-	.string "EMBLEM and freaked out…\p"
-	.string "Hey! Did YOU find it?!$"
+	.string "One of our guys lost his Magma\n"
+	.string "Emblem and freaked out…\p"
+	.string "Hey! Did You find it?!$"
 
 MagmaHideout_2F_2R_Text_Grunt8Defeat:
 	.string "I can't believe this…$"

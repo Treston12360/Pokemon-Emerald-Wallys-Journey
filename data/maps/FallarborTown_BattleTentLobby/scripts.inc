@@ -300,29 +300,29 @@ FallarborTown_BattleTentLobby_EventScript_ExitRules::
 	end
 
 FallarborTown_BattleTentLobby_Text_MakeThinkImJustKid:
-	.string "The LAND INITIATIVE dug out our\n"
+	.string "The Land Initiative dug out our\n"
 	.string "fields after the ashfall.\p"
 	.string "Red hoods, shovels, didn't ask for a\n"
 	.string "thing.\p"
-	.string "So when folks call them TEAM MAGMA\n"
+	.string "So when folks call them Team Magma\n"
 	.string "now, I don't know what to feel.$"
 
 FallarborTown_BattleTentLobby_Text_FallarborTentMyFavorite:
-	.string "Every BATTLE TENT has different\n"
+	.string "Every Battle Tent has different\n"
 	.string "rules.\p"
 	.string "This one's my favorite. It's about\n"
 	.string "smarts, not raw strength.$"
 
 FallarborTown_BattleTentLobby_Text_CameToCampOut:
 	.string "Back in the ash years, the sky over\n"
-	.string "FALLARBOR went grey for a month.\p"
+	.string "Fallarbor went grey for a month.\p"
 	.string "Crops died. Half my school moved to\n"
 	.string "the cities. Nobody came to help.\p"
 	.string "Well. Almost nobody.$"
 
 FallarborTown_BattleTentLobby_Text_ScottLookingForSomeone:
-	.string "SCOTT: Hi, {PLAYER}{KUN}!\n"
-	.string "So you came out to this BATTLE TENT!\p"
+	.string "Scott: Hi, {PLAYER}{KUN}!\n"
+	.string "So you came out to this Battle Tent!\p"
 	.string "The people in these parts tend to be\n"
 	.string "easygoing and laid-back.\p"
 	.string "But, you see, what I'm looking for are\n"
@@ -330,13 +330,13 @@ FallarborTown_BattleTentLobby_Text_ScottLookingForSomeone:
 	.string "How should I say this?\p"
 	.string "Someone bursting with the desire\n"
 	.string "and the drive to win.\p"
-	.string "If there were a TRAINER like that,\n"
+	.string "If there were a Trainer like that,\n"
 	.string "I'd immediately…\p"
 	.string "Whoops! Never mind!\n"
 	.string "Keep working at it!$"
 
 FallarborTown_BattleTentLobby_Text_ScottMakeChallenge:
-	.string "SCOTT: Instead of wasting your\n"
+	.string "Scott: Instead of wasting your\n"
 	.string "time with the likes of me, why not\l"
 	.string "make a challenge?$"
 

@@ -29,20 +29,20 @@ RustboroCity_PokemonCenter_1F_EventScript_Girl::
 	end
 
 RustboroCity_PokemonCenter_1F_Text_PokemonHavePersonalities:
-	.string "My POKéMON is NAIVE. My friend's is\n"
-	.string "JOLLY.\p"
+	.string "My Pokémon is Naive. My friend's is\n"
+	.string "Jolly.\p"
 	.string "Natures change how they grow. Just\n"
 	.string "like people.$"
 
 RustboroCity_PokemonCenter_1F_Text_MaleAndFemalePokemon:
-	.string "Male and female POKéMON…\p"
-	.string "PROF. BIRCH says the differences are\n"
+	.string "Male and female Pokémon…\p"
+	.string "Prof. Birch says the differences are\n"
 	.string "real, but subtle. Like a lot of\l"
 	.string "things in life.$"
 
 RustboroCity_PokemonCenter_1F_Text_HMCutNextDoor:
-	.string "ROXANNE gave me HM CUT along with\n"
-	.string "my STONE BADGE.\p"
-	.string "She said the BADGE is the license.\n"
+	.string "Roxanne gave me HM Cut along with\n"
+	.string "my Stone Badge.\p"
+	.string "She said the Badge is the license.\n"
 	.string "The HM is just proof you earned it.$"
 

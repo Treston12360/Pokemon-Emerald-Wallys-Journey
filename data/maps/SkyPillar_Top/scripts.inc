@@ -188,11 +188,11 @@ SkyPillar_Top_Movement_CameraPanDown:
 	step_end
 
 SkyPillar_Top_Text_RayquazaFlewOff:
-	.string "The awakened RAYQUAZA flew off…$"
+	.string "The awakened Rayquaza flew off…$"
 
 
 WallyJourney_Text_RayquazaMeteorPower:
-	.string "RAYQUAZA's scales shimmer with the\n"
+	.string "Rayquaza's scales shimmer with the\n"
 	.string "light of a falling star…\p"
 	.string "The same power it used to calm\n"
-	.string "SOOTOPOLIS still burns inside it!$"
+	.string "Sootopolis still burns inside it!$"

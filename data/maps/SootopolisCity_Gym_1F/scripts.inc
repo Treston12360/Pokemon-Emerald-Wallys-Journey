@@ -190,11 +190,11 @@ SootopolisCity_Gym_1F_EventScript_GymStatue::
 	end
 
 SootopolisCity_Gym_1F_Text_GymGuideAdvice:
-	.string "Yo! How's it going, CHAMPION-\n"
+	.string "Yo! How's it going, Champion-\n"
 	.string "bound {PLAYER}?\p"
-	.string "SOOTOPOLIS's GYM LEADER JUAN is\n"
-	.string "a master of WATER-type POKéMON.\p"
-	.string "And, to get to JUAN, an icy floor\n"
+	.string "Sootopolis's Gym Leader Juan is\n"
+	.string "a master of Water-type Pokémon.\p"
+	.string "And, to get to Juan, an icy floor\n"
 	.string "will hamper your progress…\p"
 	.string "Listen, I'm sorry, but that's all the\n"
 	.string "advice that I have for you.\p"
@@ -202,23 +202,23 @@ SootopolisCity_Gym_1F_Text_GymGuideAdvice:
 	.string "go for it yourself!$"
 
 SootopolisCity_Gym_1F_Text_GymGuidePostVictory:
-	.string "Yow! You've beaten even JUAN, who\n"
-	.string "was supposedly the best in all HOENN!\p"
-	.string "Okay! Check out your TRAINER CARD.\p"
-	.string "With all eight BADGES, the LEAGUE\n"
-	.string "will let you through VICTORY ROAD.\p"
+	.string "Yow! You've beaten even Juan, who\n"
+	.string "was supposedly the best in all Hoenn!\p"
+	.string "Okay! Check out your Trainer Card.\p"
+	.string "With all eight Badges, the League\n"
+	.string "will let you through Victory Road.\p"
 	.string "And whoever wins tonight's title\n"
 	.string "match has to accept any challenger\l"
-	.string "who clears the ELITE FOUR!$"
+	.string "who clears the Elite Four!$"
 
 SootopolisCity_Gym_1F_Text_JuanIntro:
 	.string "Let me ask you.\n"
 	.string "Did you know?\l"
 	.string "Ah, I should not be so coy.\p"
-	.string "It was I who taught WALLACE all there\n"
-	.string "is to know about POKéMON.\p"
-	.string "When he became CHAMPION, I came back\n"
-	.string "to lead this GYM in his place.\p"
+	.string "It was I who taught Wallace all there\n"
+	.string "is to know about Pokémon.\p"
+	.string "When he became Champion, I came back\n"
+	.string "to lead this Gym in his place.\p"
 	.string "Tonight he defends that title against\n"
 	.string "the boy he guided. You've met him.\p"
 	.string "Teachers and students, one after\n"
@@ -228,7 +228,7 @@ SootopolisCity_Gym_1F_Text_JuanIntro:
 	.string "Please, you shall bear witness to\n"
 	.string "our artistry.\p"
 	.string "A grand illusion of water sculpted\n"
-	.string "by POKéMON and myself!$"
+	.string "by Pokémon and myself!$"
 
 @ NOTE: This defeat text actually causes a buffer overflow. It's about 50 bytes too long for
 @ the gDisplayedStringBattle buffer that it's put into, and it stomps all over the gBattleTextBuffs
@@ -240,68 +240,68 @@ SootopolisCity_Gym_1F_Text_JuanDefeat:
 	.string "You have the shine of a skill that\n"
 	.string "will overcome all.\p"
 	.string "But compared with me, or even\n"
-	.string "WALLACE, you lack a little elegance.\p"
+	.string "Wallace, you lack a little elegance.\p"
 	.string "Perhaps I should lend you my coat?\p"
 	.string "… … … … … …\n"
 	.string "… … … … … …\p"
 	.string "Hahaha, I merely jest!\p"
-	.string "Take this GYM BADGE. You have\n"
+	.string "Take this Gym Badge. You have\n"
 	.string "earned it.$"
 
 SootopolisCity_Gym_1F_Text_ReceivedRainBadge:
-	.string "{PLAYER} received the RAIN BADGE\n"
-	.string "from JUAN.$"
+	.string "{PLAYER} received the Rain Badge\n"
+	.string "from Juan.$"
 
 SootopolisCity_Gym_1F_Text_ExplainRainBadgeTakeThis:
-	.string "Having the RAIN BADGE shall assure you\n"
-	.string "the full obedience of all your POKéMON\l"
+	.string "Having the Rain Badge shall assure you\n"
+	.string "the full obedience of all your Pokémon\l"
 	.string "to your every command.\p"
-	.string "The RAIN BADGE also allows the use\n"
-	.string "of the HM move WATERFALL to scale\l"
+	.string "The Rain Badge also allows the use\n"
+	.string "of the HM move Waterfall to scale\l"
 	.string "walls of cascading water.\p"
 	.string "And, so that you never forget the\n"
 	.string "battle we shared, take this…$"
 
 SootopolisCity_Gym_1F_Text_ExplainWaterPulse:
-	.string "The TECHNICAL MACHINE I handed you\n"
-	.string "contains WATER PULSE.\p"
+	.string "The Technical Machine I handed you\n"
+	.string "contains Water Pulse.\p"
 	.string "In use, it will occasionally confuse\n"
 	.string "the target with ultrasonic waves.\p"
 	.string "… … … … … …$"
 
 SootopolisCity_Gym_1F_Text_RegisteredJuan:
-	.string "Registered GYM LEADER JUAN\n"
-	.string "in the POKéNAV.$"
+	.string "Registered Gym Leader Juan\n"
+	.string "in the PokéNav.$"
 
 SootopolisCity_Gym_1F_Text_JuanPostBattle:
-	.string "The TRAINERS who have gathered all\n"
-	.string "the GYM BADGES of HOENN should make\l"
+	.string "The Trainers who have gathered all\n"
+	.string "the Gym Badges of Hoenn should make\l"
 	.string "way to the ultimate destination.\p"
-	.string "The POKéMON LEAGUE, on the island\n"
-	.string "of EVER GRANDE.\p"
-	.string "There, under LEAGUE rules, any\n"
-	.string "TRAINER who clears the ELITE FOUR\l"
-	.string "may challenge the CHAMPION.\p"
+	.string "The Pokémon League, on the island\n"
+	.string "of Ever Grande.\p"
+	.string "There, under League rules, any\n"
+	.string "Trainer who clears the Elite Four\l"
+	.string "may challenge the Champion.\p"
 	.string "Whoever holds the title after\n"
 	.string "tonight, that is your path.$"
 
 SootopolisCity_Gym_1F_Text_GoGetFortreeBadge:
-	.string "There remains but one BADGE to\n"
-	.string "obtain in HOENN.\p"
-	.string "If you wish to challenge the POKéMON\n"
-	.string "LEAGUE, you must obtain the last\l"
-	.string "BADGE from the GYM in FORTREE.$"
+	.string "There remains but one Badge to\n"
+	.string "obtain in Hoenn.\p"
+	.string "If you wish to challenge the Pokémon\n"
+	.string "League, you must obtain the last\l"
+	.string "Badge from the Gym in Fortree.$"
 
 SootopolisCity_Gym_1F_Text_GymStatue:
-	.string "SOOTOPOLIS CITY POKéMON GYM$"
+	.string "Sootopolis City Pokémon Gym$"
 
 SootopolisCity_Gym_1F_Text_GymStatueCertified:
-	.string "SOOTOPOLIS CITY POKéMON GYM\p"
-	.string "JUAN'S CERTIFIED TRAINERS:\n"
+	.string "Sootopolis City Pokémon Gym\p"
+	.string "Juan's Certified Trainers:\n"
 	.string "{PLAYER}$"
 
 SootopolisCity_Gym_1F_Text_JuanPreRematch:
-	.string "JUAN: Ah, the GYM had returned to\n"
+	.string "Juan: Ah, the Gym had returned to\n"
 	.string "its serenity…\p"
 	.string "And now our young typhoon returns!\p"
 	.string "I shall be delighted to dance with\n"
@@ -312,47 +312,47 @@ SootopolisCity_Gym_1F_Text_JuanRematchDefeat:
 	.string "Magnificent!$"
 
 SootopolisCity_Gym_1F_Text_JuanPostRematch:
-	.string "JUAN: If I asked you to be my\n"
+	.string "Juan: If I asked you to be my\n"
 	.string "apprentice, you would refuse.\p"
 	.string "If I offered you my coat, you would\n"
 	.string "refuse that too.\p"
-	.string "WALLACE accepted both. Perhaps that\n"
+	.string "Wallace accepted both. Perhaps that\n"
 	.string "is the difference between you.$"
 
 SootopolisCity_Gym_1F_Text_JuanRematchNeedTwoMons:
-	.string "JUAN: Ah, our young typhoon returns!\p"
+	.string "Juan: Ah, our young typhoon returns!\p"
 	.string "Ah, no, no, no. You have but one\n"
-	.string "POKéMON with you.\p"
+	.string "Pokémon with you.\p"
 	.string "My rematches are danced in pairs.\n"
 	.string "Please return with two.$"
 
 SootopolisCity_Gym_1F_Text_JuanPreRematch3:
-	.string "JUAN: WALLACE has come home to\n"
+	.string "Juan: Wallace has come home to\n"
 	.string "train under me once more.\p"
 	.string "Teacher and student, side by side\n"
 	.string "again. He has made me sharper.\p"
 	.string "Let us see whether it is enough!$"
 
 SootopolisCity_Gym_1F_Text_JuanPreRematch4:
-	.string "JUAN: SOOTOPOLIS has nearly healed\n"
+	.string "Juan: Sootopolis has nearly healed\n"
 	.string "from the storm.\p"
 	.string "The water in the crater runs clear\n"
 	.string "again. It reminds me why we guard it.\p"
 	.string "Come. Let us make it ripple!$"
 
 SootopolisCity_Gym_1F_Text_JuanPreRematch5:
-	.string "JUAN: In my long life I have taught\n"
-	.string "one CHAMPION and lost to two more.\p"
+	.string "Juan: In my long life I have taught\n"
+	.string "one Champion and lost to two more.\p"
 	.string "This is my final masterpiece.\n"
 	.string "Every wave perfected.\p"
-	.string "Shall we dance, CHAMPION?$"
+	.string "Shall we dance, Champion?$"
 
 SootopolisCity_Gym_1F_Text_JuanRematchDefeatElite:
 	.string "Magnificent. The student surpasses\n"
 	.string "everyone.$"
 
 SootopolisCity_Gym_1F_Text_JuanPostRematchElite:
-	.string "JUAN: I once said you lacked\n"
+	.string "Juan: I once said you lacked\n"
 	.string "elegance.\p"
 	.string "I was wrong. Yours is simply quieter\n"
 	.string "than mine.$"
@@ -415,37 +415,37 @@ SootopolisCity_Gym_1F_Text_JuanGrowGo:
 	.string "Here we go!$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowNeedTwo:
-	.string "You need two POKéMON for this\n"
+	.string "You need two Pokémon for this\n"
 	.string "battle. Come back with more.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowOffer1:
-	.string "JUAN: Eight BADGES, mine among them.\p"
-	.string "Before the LEAGUE, allow me to test\n"
+	.string "Juan: Eight Badges, mine among them.\p"
+	.string "Before the League, allow me to test\n"
 	.string "you with my rehearsed team.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowDefeat1:
 	.string "Magnificent.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowAfter1:
-	.string "Go, and let EVER GRANDE see\n"
+	.string "Go, and let Ever Grande see\n"
 	.string "your art.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowOffer2:
-	.string "JUAN: Eight BADGES, mine among them.\p"
-	.string "Before the LEAGUE, allow me to test\n"
+	.string "Juan: Eight Badges, mine among them.\p"
+	.string "Before the League, allow me to test\n"
 	.string "you. This time I shall hold back\l"
 	.string "far less.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowDefeat2:
-	.string "Magnificent. WALLACE's old teacher\n"
+	.string "Magnificent. Wallace's old teacher\n"
 	.string "is satisfied.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowAfter2:
-	.string "Go, and let EVER GRANDE see\n"
+	.string "Go, and let Ever Grande see\n"
 	.string "your art.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowOffer3:
-	.string "JUAN: The CHAMPION graces my GYM.\p"
+	.string "Juan: The Champion graces my Gym.\p"
 	.string "Allow me to present my full\n"
 	.string "ensemble.$"
 
@@ -457,7 +457,7 @@ SootopolisCity_Gym_1F_Text_JuanGrowAfter3:
 	.string "I shall polish my team further.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowOffer4:
-	.string "JUAN: You have defended your title.\p"
+	.string "Juan: You have defended your title.\p"
 	.string "Then witness my finest work,\n"
 	.string "performed at full strength.$"
 

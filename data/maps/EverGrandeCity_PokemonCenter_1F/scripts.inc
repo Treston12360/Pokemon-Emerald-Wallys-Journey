@@ -79,8 +79,8 @@ EverGrandeCity_PokemonCenter_1F_Movement_ScottExit:
 	step_end
 
 EverGrandeCity_PokemonCenter_1F_Text_LeagueAfterVictoryRoad:
-	.string "The POKéMON LEAGUE lies\n"
-	.string "beyond VICTORY ROAD.\p"
+	.string "The Pokémon League lies\n"
+	.string "beyond Victory Road.\p"
 	.string "The path isn't there to\n"
 	.string "punish challengers.\p"
 	.string "It's there to ask whether\n"
@@ -88,26 +88,26 @@ EverGrandeCity_PokemonCenter_1F_Text_LeagueAfterVictoryRoad:
 	.string "for what comes next.$"
 
 EverGrandeCity_PokemonCenter_1F_Text_BelieveInYourPokemon:
-	.string "VICTORY ROAD brings out\n"
-	.string "what a TRAINER has learned.\p"
+	.string "Victory Road brings out\n"
+	.string "what a Trainer has learned.\p"
 	.string "Some rush ahead. Others\n"
 	.string "stop to help a stranger.\p"
-	.string "Neither a BADGE nor a win\n"
+	.string "Neither a Badge nor a win\n"
 	.string "can tell the whole story.$"
 
 EverGrandeCity_PokemonCenter_1F_Text_ScottHappyForYou:
-	.string "SCOTT: {PLAYER}{KUN}, you've clawed your\n"
-	.string "way up to face the POKéMON LEAGUE!\p"
+	.string "Scott: {PLAYER}{KUN}, you've clawed your\n"
+	.string "way up to face the Pokémon League!\p"
 	.string "I'm happy for you!\n"
 	.string "You made my cheering worthwhile!\p"
 	.string "{PLAYER}{KUN}, if you were to become\n"
-	.string "the POKéMON LEAGUE CHAMPION…\p"
+	.string "the Pokémon League Champion…\p"
 	.string "I'll get in touch with you then.\p"
 	.string "Okay, {PLAYER}{KUN}.\n"
 	.string "Go for greatness!$"
 
 EverGrandeCity_PokemonCenter_1F_Text_BelieveInYourPokemon_W0:
-	.string "The new CHAMPION, in person!\p"
-	.string "WALLY trains in VICTORY ROAD now.\n"
+	.string "The new Champion, in person!\p"
+	.string "Wally trains in Victory Road now.\n"
 	.string "He says he's coming for the title.\p"
 	.string "Better not get comfortable.$"
