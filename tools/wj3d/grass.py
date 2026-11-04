@@ -14,7 +14,8 @@ def load(root,layout):
         a=pa[m] if m<512 else sa[m-512]
         return (a&0xff) in ENC and ((v>>10)&3)==0
     return g,W,H
-ENC={0x02,0x03,0x06,0x24,0x25}
+import os
+ENC=set(int(v,16) for v in os.environ.get("ENC","02,03,06,24,25").split(","))
 layout=sys.argv[1]
 gv,W,H=load('/home/claude/tools-src/pret',layout)
 gh,_,_=load('/home/claude/pokemon-emerald-wallys-journey',layout)

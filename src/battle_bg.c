@@ -36,7 +36,7 @@
 #include "wally_journey.h"
 
 // Wally's Journey: per-map 3D battle backdrops, captured from Emerald 3DS's 3D battles
-// (tools/wj3d_backdrop.py). Used on land (grass / plain / sand) for ordinary wild and
+// (tools/wj3d_backdrop.py). Used on land (grass / plain / sand), in caves and indoor wild-battle places for ordinary wild and
 // trainer battles; everything else keeps the stock backgrounds.
 #define WJ3D_ANY_ENVIRONMENT 0xFF
 struct WJ3DBackdrop
@@ -58,8 +58,11 @@ static const struct WJ3DBackdrop *WJ3D_GetBackdrop(u32 environment)
     if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK
                           | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_LEGENDARY | BATTLE_TYPE_SECRET_BASE))
         return NULL;
+    // Land, caves and indoor wild-battle places (Mt. Pyre's inside, New Mauville). Water, Gyms and
+    // other special backgrounds keep the stock ones. Only maps with a captured backdrop are affected.
     if (environment != BATTLE_ENVIRONMENT_GRASS && environment != BATTLE_ENVIRONMENT_LONG_GRASS
-     && environment != BATTLE_ENVIRONMENT_PLAIN && environment != BATTLE_ENVIRONMENT_SAND)
+     && environment != BATTLE_ENVIRONMENT_PLAIN && environment != BATTLE_ENVIRONMENT_SAND
+     && environment != BATTLE_ENVIRONMENT_CAVE && environment != BATTLE_ENVIRONMENT_BUILDING)
         return NULL;
     for (i = 0; i < ARRAY_COUNT(sWJ3DBackdrops); i++)
     {
