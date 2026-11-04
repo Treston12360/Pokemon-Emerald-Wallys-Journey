@@ -33,6 +33,47 @@
 #include "constants/battle_anim.h"
 #include "constants/battle_partner.h"
 #include "data/battle_environment.h"
+#include "wally_journey.h"
+
+// Wally's Journey: per-map 3D battle backdrops, captured from Emerald 3DS's 3D battles
+// (tools/wj3d_backdrop.py). Used on land (grass / plain / sand) for ordinary wild and
+// trainer battles; everything else keeps the stock backgrounds.
+struct WJ3DBackdrop
+{
+    u16 mapGroup;
+    u16 mapNum;
+    const u32 *tiles;
+    const u32 *tilemap;
+    const u16 *palette;
+};
+#include "data/wj3d_backdrops.h"
+
+static const struct WJ3DBackdrop *WJ3D_GetBackdrop(u32 environment)
+{
+    u32 i;
+    if (!WJ_3D_BATTLE_BACKGROUNDS || ARRAY_COUNT(sWJ3DBackdrops) == 0)
+        return NULL;
+    if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK
+                          | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_LEGENDARY | BATTLE_TYPE_SECRET_BASE))
+        return NULL;
+    if (environment != BATTLE_ENVIRONMENT_GRASS && environment != BATTLE_ENVIRONMENT_LONG_GRASS
+     && environment != BATTLE_ENVIRONMENT_PLAIN && environment != BATTLE_ENVIRONMENT_SAND)
+        return NULL;
+    for (i = 0; i < ARRAY_COUNT(sWJ3DBackdrops); i++)
+    {
+        if (sWJ3DBackdrops[i].tiles != NULL
+         && sWJ3DBackdrops[i].mapGroup == gSaveBlock1Ptr->location.mapGroup
+         && sWJ3DBackdrops[i].mapNum == gSaveBlock1Ptr->location.mapNum)
+            return &sWJ3DBackdrops[i];
+    }
+    return NULL;
+}
+
+static void WJ3D_LoadBackdropPalette(const struct WJ3DBackdrop *bd)
+{
+    LoadPalette(bd->palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+    WallyJourney_ApplySeasonalFoliage(2, 3, TRUE, FALSE); // the season's colours, like the map
+}
 
 // .rodata
 
@@ -930,6 +971,15 @@ static void LoadBattleEnvironmentGfx(u16 environment)
 {
     if (environment >= NELEMS(gBattleEnvironmentInfo))
         environment = BATTLE_ENVIRONMENT_PLAIN;  // If higher than the number of entries in gBattleEnvironmentInfo, use the default.
+    const struct WJ3DBackdrop *bd = WJ3D_GetBackdrop(environment);
+    if (bd != NULL)
+    {
+        DecompressDataWithHeaderVram(bd->tiles, (void *)(BG_CHAR_ADDR(2)));
+        DecompressDataWithHeaderVram(bd->tilemap, (void *)(BG_SCREEN_ADDR(26)));
+        WJ3D_LoadBackdropPalette(bd);
+        TimeMixBattleBgPalette();
+        return;
+    }
     // Copy to bg3
     DecompressDataWithHeaderVram(gBattleEnvironmentInfo[environment].background.tileset, (void *)(BG_CHAR_ADDR(2)));
     DecompressDataWithHeaderVram(gBattleEnvironmentInfo[environment].background.tilemap, (void *)(BG_SCREEN_ADDR(26)));
@@ -1396,13 +1446,22 @@ bool8 LoadChosenBattleElement(u8 caseId)
         LoadPalette(BattleUI_GetTextboxPalette(), BG_PLTT_ID(0), 2 * PLTT_SIZE_4BPP); // bwBattleUI
         break;
     case 3:
-        DecompressDataWithHeaderVram(gBattleEnvironmentInfo[GetBattleEnvironmentOverride()].background.tileset, (void *)(BG_CHAR_ADDR(2)));
+        if (WJ3D_GetBackdrop(GetBattleEnvironmentOverride()))
+            DecompressDataWithHeaderVram(WJ3D_GetBackdrop(GetBattleEnvironmentOverride())->tiles, (void *)(BG_CHAR_ADDR(2)));
+        else
+            DecompressDataWithHeaderVram(gBattleEnvironmentInfo[GetBattleEnvironmentOverride()].background.tileset, (void *)(BG_CHAR_ADDR(2)));
         break;
     case 4:
-        DecompressDataWithHeaderVram(gBattleEnvironmentInfo[GetBattleEnvironmentOverride()].background.tilemap, (void *)(BG_SCREEN_ADDR(26)));
+        if (WJ3D_GetBackdrop(GetBattleEnvironmentOverride()))
+            DecompressDataWithHeaderVram(WJ3D_GetBackdrop(GetBattleEnvironmentOverride())->tilemap, (void *)(BG_SCREEN_ADDR(26)));
+        else
+            DecompressDataWithHeaderVram(gBattleEnvironmentInfo[GetBattleEnvironmentOverride()].background.tilemap, (void *)(BG_SCREEN_ADDR(26)));
         break;
     case 5:
-        LoadPalette(gBattleEnvironmentInfo[GetBattleEnvironmentOverride()].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+        if (WJ3D_GetBackdrop(GetBattleEnvironmentOverride()))
+            WJ3D_LoadBackdropPalette(WJ3D_GetBackdrop(GetBattleEnvironmentOverride()));
+        else
+            LoadPalette(gBattleEnvironmentInfo[GetBattleEnvironmentOverride()].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
         TimeMixBattleBgPalette();
         break;
     case 6:

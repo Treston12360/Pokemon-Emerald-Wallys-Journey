@@ -458,5 +458,6 @@
 
 // Battle DNS (Kasen): battle backgrounds take the overworld day/night tint on outdoor maps
 #define B_APPLY_DNS_TO_BACKGROUND           TRUE
+#define WJ_3D_BATTLE_BACKGROUNDS            TRUE  // Wally's Journey: per-map backdrops captured from Emerald 3DS (src/data/wj3d_backdrops.h)
 
 #endif // GUARD_CONFIG_BATTLE_H

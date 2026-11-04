@@ -6,8 +6,7 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 
 - Repo: `Treston12360/Pokemon-Emerald-Wallys-Journey`, branch `wally-journey-development`.
 - Base: pokeemerald-expansion **1.17.2**.
-- The last ROM sent to the owner was **0.9.0** (rows 1–15 below).
-- Rows 16+ are on `wally-journey-development` but **not released yet**.
+- The last ROM sent to the owner was **0.9.1** (rows 1–17 below).
 
 ## Owner rules (always)
 
@@ -127,6 +126,7 @@ The owner picked this order: 1 DexNav check (done), 3 start menu colours (done),
    - Credit "Emerald 3DS by Zallax and contributors" (CC BY-NC-SA).
    - Proposed first batch: Routes 101–103, Oldale, Petalburg, Petalburg Gym, Elite Four rooms.
    - No lit-window work in battle (the owner dropped it).
+   - **Status (2026-11-04):** game side is in: `WJ_3D_BATTLE_BACKGROUNDS`, `src/data/wj3d_backdrops.h` (empty table = stock backgrounds everywhere), hook in `battle_bg.c` (land environments, ordinary battles only; season recolour + day/night tint applied). Converter `tools/wj3d_backdrop.py` (3DS frame → 3 palettes / ≤511 tiles / top 14 tile rows; tested on an old capture). **Blocker:** clean captures. Plan: an Emerald 3DS data pack with Pokémon/trainer/battle-interface graphics blanked (built by a patched copy of its builder; keep followers in or the game crashes). The blanked pack still crashed the emulator at boot on the last try; not solved yet. Saves for each map come from a hooked vanilla pret build (new game warps to the map) run in mGBA, then copied to the 3DS save folder.
 4. **Reports for the owner** (no code):
    - **Outfits:** compare mudskip `feature/outfits-system-rhh` with our Outfit Case.
    - **Gacha:** build agsmgmaster64 `gacha-expansion` and show what the machine/prizes look like before placing it.
