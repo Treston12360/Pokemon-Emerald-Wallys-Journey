@@ -139,3 +139,4 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 - [Complete FireRed Upgrade](https://github.com/Skeli789/Complete-Fire-Red-Upgrade)
 - [pokeemerald](https://github.com/pret/pokeemerald/)
 - Gen 5-style party menu: Archie ([TeamAquasHideout/pokeemerald gen5ish_party_menu](https://github.com/TeamAquasHideout/pokeemerald/tree/gen5ish_party_menu)), based on TheXaman's party menu (Wally's Journey recoloured it green)
+- Gen 5-style summary screen: RavePossum ([ravepossum/pokeemerald-expansion bw_summary_screen_expansion](https://github.com/ravepossum/pokeemerald-expansion/tree/bw_summary_screen_expansion)), as used in Emerald Imperium (Wally's Journey recoloured it green)
