@@ -10,9 +10,13 @@ static u16 GetInverseEffectivenessSound(enum Move move, u32 species)
 {
     switch (gTypeEffectivenessTable[GetMoveType(move)][GetSpeciesType(species, 0)])
     {
+    case UQ_4_12(4.0):
+        return SE_MOSTLY_INEFFECTIVE;
     case UQ_4_12(2.0):
         return SE_NOT_EFFECTIVE;
     case UQ_4_12(0.0):
+    case UQ_4_12(0.25):
+        return SE_EXTREMELY_EFFECTIVE;
     case UQ_4_12(0.5):
         return SE_SUPER_EFFECTIVE;
     case UQ_4_12(1.0):

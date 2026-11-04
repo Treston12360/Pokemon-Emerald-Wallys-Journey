@@ -276,6 +276,8 @@
 #define SE_PIKE_CURTAIN_CLOSE       267 // SE_CURTAIN
 #define SE_PIKE_CURTAIN_OPEN        268 // SE_CURTAIN1
 #define SE_SUDOWOODO_SHAKE          269 // SE_USSOKI
+#define SE_EXTREMELY_EFFECTIVE      270
+#define SE_MOSTLY_INEFFECTIVE       271
 
 // Music
 #define START_MUS                   350
