@@ -6,7 +6,7 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 
 - Repo: `Treston12360/Pokemon-Emerald-Wallys-Journey`, branch `wally-journey-development`.
 - Base: pokeemerald-expansion **1.17.2**.
-- The last ROM sent to the owner was **0.9.1** (rows 1–17 below).
+- The last ROM sent to the owner was **0.9.2** (rows 1–18 below).
 
 ## Owner rules (always)
 
@@ -95,6 +95,7 @@ All the screens below were recoloured to Emerald green, palette only.
 | 15 | Overworld character shadows | Pawkkie | already built into expansion 1.17 (`OW_OBJECT_VANILLA_SHADOWS FALSE`), nothing to port |
 | 16 | Vol's HGSS-style start menu, green | vol8 `start_menu_1`, HashtagMarky's expansion port | Pokédex icon asks Pokédex/DexNav; Pike/Pyramid/link rooms keep the old menu |
 | 17 | Stat Points (EV allocator), green | Bivurnum `ev-allocator` on TAH's stat editor | no battle EVs; 10 points per level to Lv51; Party → Stat Points |
+| 18 | BW move names coloured by effectiveness, green text-box line | ours | green/blue/red names (needs the foe species seen; expansion marks "seen" at the END of the first battle); box keeps type colour; red line + move-box marks → green. In 0.9.2 |
 
 ## IN PROGRESS
 
@@ -106,11 +107,16 @@ All the screens below were recoloured to Emerald green, palette only.
 
 ## OWNER ORDER (2026-11-04)
 
-The owner picked this order: 1 DexNav check (done), 3 start menu colours (done), 5 EV allocator (done), **9 3D battle backgrounds (next)**, then the rest. **Never** do the lit night windows for more towns (owner dropped it).
+The owner picked this order: 1 DexNav check (done), 3 start menu colours (done), 5 EV allocator (done), **9 3D battle backgrounds (in progress)**, then the rest. **Never** do the lit night windows for more towns (owner dropped it).
+
+**New from the owner (2026-11-04), add to the order after the 3D backgrounds unless told otherwise:**
+- **Save screen looks glitched.** The owner reported "the save menu when saving is kinda glitched". Not looked at yet. Likely place: Vol's start menu Save (`Vol_SelectedFunc_Save` in `src/vol_start_menu.c`) — it draws the save info window with `LoadUserWindowBorderGfx` while the Vol menu's own BG0 tiles/palette 14 are loaded, and `STD_WINDOW_PALETTE_NUM` is 14 too (the Vol bar uses palette 14). Reproduce with the owner's 0.8.8 save (Start → Save), take screenshots, ask the owner what looks wrong if unclear.
+- **Pokédex in Emerald green.** We use the HGSS-style Pokédex (`POKEDEX_PLUS_HGSS`, `HGSS_DECAPPED`). Palette-only recolour (red/blue UI → Emerald greens; keep type colours), mockup first, owner approval before applying.
+- **Battle menu size:** owner felt the BW action buttons look big / cut off at the bottom. That is the original art (the lower buttons' bottom edge is off-screen by design). Shrinking needs new art (not allowed). Offered: palette-only lighter button fill. Waiting for the owner's answer.
 
 ## TO DO, in suggested priority order
 
-1. **Pre-release checks for what's DONE** (these block 0.9.0):
+1. **Checks still not done** (do before the overhaul is called finished):
    - **Battle UI:** a double battle (BW UI + mid-battle evo of the right Pokémon), a trainer battle with Mega/Z triggers, the Safari Zone.
    - **Bag:** the Bag used in battle, the Battle Pyramid bag, and a pocket with more than 255 stacks.
    - **Summary:** an Egg's summary page.
@@ -123,10 +129,10 @@ The owner picked this order: 1 DexNav check (done), 3 start menu colours (done),
    - Make 4 season versions with our SeasonalColor.
    - Day/night comes free from item 10.
    - The code picks a backdrop per map and falls back to the current backgrounds.
-   - Credit "Emerald 3DS by Zallax and contributors" (CC BY-NC-SA).
+   - Credit "Emerald 3DS by Zallax and contributors" (its port code is MIT; the 3D world is generated from the player's own ROM).
    - Proposed first batch: Routes 101–103, Oldale, Petalburg, Petalburg Gym, Elite Four rooms.
    - No lit-window work in battle (the owner dropped it).
-   - **Status (2026-11-04):** game side is in: `WJ_3D_BATTLE_BACKGROUNDS`, `src/data/wj3d_backdrops.h` (empty table = stock backgrounds everywhere), hook in `battle_bg.c` (land environments, ordinary battles only; season recolour + day/night tint applied). Converter `tools/wj3d_backdrop.py` (3DS frame → 3 palettes / ≤511 tiles / top 14 tile rows; tested on an old capture). **Blocker:** clean captures. Plan: an Emerald 3DS data pack with Pokémon/trainer/battle-interface graphics blanked (built by a patched copy of its builder; keep followers in or the game crashes). The blanked pack still crashed the emulator at boot on the last try; not solved yet. Saves for each map come from a hooked vanilla pret build (new game warps to the map) run in mGBA, then copied to the 3DS save folder.
+   - **Status (2026-11-04):** game side is in: `WJ_3D_BATTLE_BACKGROUNDS`, `src/data/wj3d_backdrops.h` (empty table = stock backgrounds everywhere), hook in `battle_bg.c` (land environments, ordinary battles only; season recolour + day/night tint applied). Converter `tools/wj3d_backdrop.py` (3DS frame → 3 palettes / ≤511 tiles / top 14 tile rows; tested on an old capture). **Blocker:** clean captures. Tools and findings are in `tools/wj3d/README.md` (read it first).
 4. **Reports for the owner** (no code):
    - **Outfits:** compare mudskip `feature/outfits-system-rhh` with our Outfit Case.
    - **Gacha:** build agsmgmaster64 `gacha-expansion` and show what the machine/prizes look like before placing it.

@@ -1,0 +1,514 @@
+1200
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+10 A
+90
+shot run104/ow
+14 d
+6
+shot run104/w00a
+14 d
+6
+shot run104/w00b
+14 u
+6
+shot run104/w00c
+14 u
+6
+shot run104/w00e
+14 d
+6
+shot run104/w01a
+14 d
+6
+shot run104/w01b
+14 u
+6
+shot run104/w01c
+14 u
+6
+shot run104/w01e
+14 d
+6
+shot run104/w02a
+14 d
+6
+shot run104/w02b
+14 u
+6
+shot run104/w02c
+14 u
+6
+shot run104/w02e
+14 d
+6
+shot run104/w03a
+14 d
+6
+shot run104/w03b
+14 u
+6
+shot run104/w03c
+14 u
+6
+shot run104/w03e
+14 d
+6
+shot run104/w04a
+14 d
+6
+shot run104/w04b
+14 u
+6
+shot run104/w04c
+14 u
+6
+shot run104/w04e
+14 d
+6
+shot run104/w05a
+14 d
+6
+shot run104/w05b
+14 u
+6
+shot run104/w05c
+14 u
+6
+shot run104/w05e
+14 d
+6
+shot run104/w06a
+14 d
+6
+shot run104/w06b
+14 u
+6
+shot run104/w06c
+14 u
+6
+shot run104/w06e
+14 d
+6
+shot run104/w07a
+14 d
+6
+shot run104/w07b
+14 u
+6
+shot run104/w07c
+14 u
+6
+shot run104/w07e
+14 d
+6
+shot run104/w08a
+14 d
+6
+shot run104/w08b
+14 u
+6
+shot run104/w08c
+14 u
+6
+shot run104/w08e
+14 d
+6
+shot run104/w09a
+14 d
+6
+shot run104/w09b
+14 u
+6
+shot run104/w09c
+14 u
+6
+shot run104/w09e
+14 d
+6
+shot run104/w10a
+14 d
+6
+shot run104/w10b
+14 u
+6
+shot run104/w10c
+14 u
+6
+shot run104/w10e
+14 d
+6
+shot run104/w11a
+14 d
+6
+shot run104/w11b
+14 u
+6
+shot run104/w11c
+14 u
+6
+shot run104/w11e
+14 d
+6
+shot run104/w12a
+14 d
+6
+shot run104/w12b
+14 u
+6
+shot run104/w12c
+14 u
+6
+shot run104/w12e
+14 d
+6
+shot run104/w13a
+14 d
+6
+shot run104/w13b
+14 u
+6
+shot run104/w13c
+14 u
+6
+shot run104/w13e
+14 d
+6
+shot run104/w14a
+14 d
+6
+shot run104/w14b
+14 u
+6
+shot run104/w14c
+14 u
+6
+shot run104/w14e
+14 d
+6
+shot run104/w15a
+14 d
+6
+shot run104/w15b
+14 u
+6
+shot run104/w15c
+14 u
+6
+shot run104/w15e
+14 d
+6
+shot run104/w16a
+14 d
+6
+shot run104/w16b
+14 u
+6
+shot run104/w16c
+14 u
+6
+shot run104/w16e
+14 d
+6
+shot run104/w17a
+14 d
+6
+shot run104/w17b
+14 u
+6
+shot run104/w17c
+14 u
+6
+shot run104/w17e
+14 d
+6
+shot run104/w18a
+14 d
+6
+shot run104/w18b
+14 u
+6
+shot run104/w18c
+14 u
+6
+shot run104/w18e
+14 d
+6
+shot run104/w19a
+14 d
+6
+shot run104/w19b
+14 u
+6
+shot run104/w19c
+14 u
+6
+shot run104/w19e
+14 d
+6
+shot run104/w20a
+14 d
+6
+shot run104/w20b
+14 u
+6
+shot run104/w20c
+14 u
+6
+shot run104/w20e
+14 d
+6
+shot run104/w21a
+14 d
+6
+shot run104/w21b
+14 u
+6
+shot run104/w21c
+14 u
+6
+shot run104/w21e
+14 d
+6
+shot run104/w22a
+14 d
+6
+shot run104/w22b
+14 u
+6
+shot run104/w22c
+14 u
+6
+shot run104/w22e
+14 d
+6
+shot run104/w23a
+14 d
+6
+shot run104/w23b
+14 u
+6
+shot run104/w23c
+14 u
+6
+shot run104/w23e
+14 d
+6
+shot run104/w24a
+14 d
+6
+shot run104/w24b
+14 u
+6
+shot run104/w24c
+14 u
+6
+shot run104/w24e
+14 d
+6
+shot run104/w25a
+14 d
+6
+shot run104/w25b
+14 u
+6
+shot run104/w25c
+14 u
+6
+shot run104/w25e
+14 d
+6
+shot run104/w26a
+14 d
+6
+shot run104/w26b
+14 u
+6
+shot run104/w26c
+14 u
+6
+shot run104/w26e
+14 d
+6
+shot run104/w27a
+14 d
+6
+shot run104/w27b
+14 u
+6
+shot run104/w27c
+14 u
+6
+shot run104/w27e
+14 d
+6
+shot run104/w28a
+14 d
+6
+shot run104/w28b
+14 u
+6
+shot run104/w28c
+14 u
+6
+shot run104/w28e
+14 d
+6
+shot run104/w29a
+14 d
+6
+shot run104/w29b
+14 u
+6
+shot run104/w29c
+14 u
+6
+shot run104/w29e
+14 d
+6
+shot run104/w30a
+14 d
+6
+shot run104/w30b
+14 u
+6
+shot run104/w30c
+14 u
+6
+shot run104/w30e
+14 d
+6
+shot run104/w31a
+14 d
+6
+shot run104/w31b
+14 u
+6
+shot run104/w31c
+14 u
+6
+shot run104/w31e
+14 d
+6
+shot run104/w32a
+14 d
+6
+shot run104/w32b
+14 u
+6
+shot run104/w32c
+14 u
+6
+shot run104/w32e
+14 d
+6
+shot run104/w33a
+14 d
+6
+shot run104/w33b
+14 u
+6
+shot run104/w33c
+14 u
+6
+shot run104/w33e
+14 d
+6
+shot run104/w34a
+14 d
+6
+shot run104/w34b
+14 u
+6
+shot run104/w34c
+14 u
+6
+shot run104/w34e
+14 d
+6
+shot run104/w35a
+14 d
+6
+shot run104/w35b
+14 u
+6
+shot run104/w35c
+14 u
+6
+shot run104/w35e
+14 d
+6
+shot run104/w36a
+14 d
+6
+shot run104/w36b
+14 u
+6
+shot run104/w36c
+14 u
+6
+shot run104/w36e
+14 d
+6
+shot run104/w37a
+14 d
+6
+shot run104/w37b
+14 u
+6
+shot run104/w37c
+14 u
+6
+shot run104/w37e
+14 d
+6
+shot run104/w38a
+14 d
+6
+shot run104/w38b
+14 u
+6
+shot run104/w38c
+14 u
+6
+shot run104/w38e
+14 d
+6
+shot run104/w39a
+14 d
+6
+shot run104/w39b
+14 u
+6
+shot run104/w39c
+14 u
+6
+shot run104/w39e
