@@ -271,7 +271,7 @@ const struct EasyChatWordInfo gEasyChatGroup_Actions[] = {
     },
     [EC_INDEX(EC_WORD_COULDN_T)] =
     {
-        .text = COMPOUND_STRING("Couldn'T"),
+        .text = COMPOUND_STRING("Couldn't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_SAID),
         .enabled = TRUE,
     },

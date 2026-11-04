@@ -1997,9 +1997,27 @@ static u8 CreateBagInputHandlerTask(u8 location)
     return taskId;
 }
 
+// Wally's Journey: the unlimited bag makes a full-size name buffer 21 KB, too big for the
+// heap during battles. The buffer only holds the pocket on screen, so it is sized for that
+// pocket and grown when a bigger pocket is opened (spare rows for items that come back).
+static EWRAM_DATA u16 sListBuffer2Rows = 0;
+
+static void EnsureBagItemListRows(u32 needed)
+{
+    needed = min(needed + PARTY_SIZE + 8, MAX_POCKET_ITEMS);
+    if (sListBuffer2 != NULL && sListBuffer2Rows >= needed)
+        return;
+    if (sListBuffer2 != NULL)
+        Free(sListBuffer2);
+    sListBuffer2 = Alloc(needed * sizeof(sListBuffer2->name[0]));
+    sListBuffer2Rows = needed;
+}
+
 static void AllocateBagItemListBuffers(void)
 {
-    sListBuffer2 = Alloc(sizeof(*sListBuffer2));
+    sListBuffer2 = NULL;
+    sListBuffer2Rows = 0;
+    EnsureBagItemListRows(0);
 }
 
 #if SWSH_BAG_BATTLE_POCKETS
@@ -2016,9 +2034,10 @@ static bool32 UsingBattlePockets(void)
 
 // battlePocketRefs entries pack the real bag slot an entry points at
 // Wally's Journey: our unlimited bag has pockets bigger than 256 slots, so the slot gets 16 bits.
-#define BATTLE_POCKET_REF(srcPocket, srcSlot) (((u32)(srcPocket) << 16) | (srcSlot))
-#define BATTLE_POCKET_REF_POCKET(ref)         ((ref) >> 16)
-#define BATTLE_POCKET_REF_SLOT(ref)           ((ref) & 0xFFFF)
+#define BATTLE_POCKET_REF(srcPocket, srcSlot) ((u16)(((srcPocket) << 12) | (srcSlot)))
+#define BATTLE_POCKET_REF_POCKET(ref)         ((ref) >> 12)
+#define BATTLE_POCKET_REF_SLOT(ref)           ((ref) & 0xFFF)
+STATIC_ASSERT(BATTLE_POCKET_CAPACITY <= 0x1000 && POCKETS_COUNT <= 16, BattlePocketRefFitsU16);
 
 static enum BattlePocket GetItemBattlePocket(enum Pocket srcPocket, enum Item itemId)
 {
@@ -2075,13 +2094,13 @@ static void BuildBattlePocketLists(void)
 
 static enum Item BattlePocketGetItemId(u8 pocketId, u32 pos)
 {
-    u32 ref = gBagMenu->battlePocketRefs[pocketId - POCKETS_COUNT][pos];
+    u16 ref = gBagMenu->battlePocketRefs[pocketId - POCKETS_COUNT][pos];
     return GetBagItemId(BATTLE_POCKET_REF_POCKET(ref), BATTLE_POCKET_REF_SLOT(ref));
 }
 
 static struct ItemSlot BattlePocketGetSlot(u8 pocketId, u32 pos)
 {
-    u32 ref = gBagMenu->battlePocketRefs[pocketId - POCKETS_COUNT][pos];
+    u16 ref = gBagMenu->battlePocketRefs[pocketId - POCKETS_COUNT][pos];
     return GetBagItemIdAndQuantity(BATTLE_POCKET_REF_POCKET(ref), BATTLE_POCKET_REF_SLOT(ref));
 }
 
@@ -2251,6 +2270,7 @@ static void BagList_MoveSlot(u8 pocketId, u32 from, u32 to)
 
 static void LoadBagItemListBuffers(u8 pocketId)
 {
+    EnsureBagItemListRows(gBagMenu->numItemStacks[pocketId]);
     for (u16 i = 0; i < gBagMenu->numItemStacks[pocketId]; i++)
         GetItemNameFromPocket(sListBuffer2->name[i], BagList_GetItemId(pocketId, i));
 }

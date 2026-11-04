@@ -61,7 +61,7 @@ const struct EasyChatWordInfo gEasyChatGroup_Battle[] = {
     },
     [EC_INDEX(EC_WORD_CAN_T_WIN)] =
     {
-        .text = COMPOUND_STRING("Can'T Win"),
+        .text = COMPOUND_STRING("Can't Win"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_EASY),
         .enabled = TRUE,
     },

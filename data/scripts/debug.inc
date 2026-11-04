@@ -342,7 +342,7 @@ Debug_Follower_NPC_Not_Enabled::
 	end
 
 Debug_Enable_To_Use_Follower_NPCs:
-	.string "Feature unavailable.\nSet Fnpc_Enable_NPC_Followers to\lTRUE in 'include/config/follower_npc.h'.$"
+	.string "Feature unavailable.\nSet Fnpc_Enable_NPC_Followers to\lTrue in 'include/config/follower_npc.h'.$"
 
 Debug_Follower_NPC_Event_Script::
 	lock

@@ -8,7 +8,7 @@ gText_AlreadySavedFile::
 
 gText_SavingDontTurnOff::
 	.string "Saving…\n"
-	.string "Don'T Turn Off The Power.$"
+	.string "Don't turn off the power.$"
 
 gText_PlayerSavedGame::
 	.string "{PLAYER} saved the game.$"
@@ -30,4 +30,4 @@ gText_SaveError::
 
 gText_SavingDontTurnOffPower::
 	.string "Saving…\n"
-	.string "Don'T Turn Off The Power.$"
+	.string "Don't turn off the power.$"

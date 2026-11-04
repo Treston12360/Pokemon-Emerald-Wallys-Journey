@@ -457,7 +457,7 @@ MossdeepCity_Gym_Text_HannahIntro:
 	.string "for you now!$"
 
 MossdeepCity_Gym_Text_HannahDefeat:
-	.string "Okay, maybe You'Re the one\n"
+	.string "Okay, maybe You're the one\n"
 	.string "who's too strong.$"
 
 MossdeepCity_Gym_Text_HannahPostBattle:

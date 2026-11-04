@@ -20,7 +20,7 @@ KEEP = {  # acronyms and symbols that stay upper case
     'HP', 'PP', 'TM', 'TMS', 'HM', 'HMS', 'TV', 'PC', 'OK', 'EXP', 'IV', 'IVS', 'EV', 'EVS', 'ID', 'IDNO',
     'HQ', 'KO', 'PKMN', 'DNA', 'UFO', 'SS', 'TMHM', 'NPC', 'AM', 'PM', 'GBA', 'EX', 'VS', 'LV', 'CD', 'DS',
     'OT', 'BP', 'SE', 'NE', 'NW', 'SW', 'II', 'III', 'IV', 'VI', 'VII', 'VIII', 'IX', 'XI', 'XII',
-    'TRAINERCARD',
+    'TRAINERCARD', 'NCL', 'NES', 'GBA',
 }
 SPECIAL = {
     'POKéMON': 'Pokémon', 'POKEMON': 'Pokémon', 'POKéDEX': 'Pokédex', 'POKéNAV': 'PokéNav',
@@ -31,7 +31,10 @@ SPECIAL = {
 }
 
 LETTERS = 'A-Za-zé'
-TOKEN = re.compile(r"(?<![%s])([A-Zé][A-Zé]+)('S)?(?![a-zé])" % LETTERS)
+TOKEN = re.compile(r"(?<![%s])([A-Zé][A-Zé]+)('(?:S|T|LL|RE|VE|D|M))?(?![a-zé])" % LETTERS)
+# whole ALL-CAPS sentences that read better in sentence case than in title case
+SENTENCES = {"DON'T TURN OFF THE POWER.": "Don't turn off the power."}
+SKIP_FILES = {'src/data/bw_battle_ui.h'}  # BW battle buttons use a capitals-only font
 
 
 def fix_word(m):
@@ -44,14 +47,39 @@ def fix_word(m):
     else:
         out = w[0] + w[1:].lower()
     if poss:
-        out += "'s"
+        out += poss.lower()
     return out
 
 
+def _sentence(seg):
+    # an ALL-CAPS sentence ("DON'T TURN OFF THE POWER.") becomes sentence case
+    words = TOKEN.sub(fix_word, seg)
+    out, start = [], True
+    for w in re.split(r'(\s+)', words):
+        if w.strip() == '':
+            out.append(w); continue
+        core = re.sub(r"[^A-Za-zé']", '', w)
+        keep = core.upper() in KEEP or core in SPECIAL.values() or core.upper().rstrip("'S") in SPECIAL
+        if not start and not keep:
+            w = w.lower() if not any(v in w for v in SPECIAL.values()) else w
+        out.append(w)
+        start = bool(re.search(r'[.!?…]\$?$', w))
+    return ''.join(out)
+
+
+def _is_caps_sentence(seg):
+    letters = re.sub(r'[^A-Za-zé]', '', seg)
+    return (len(seg.split()) >= 3 and letters and not re.search(r'[a-z]', letters.replace('é', ''))
+            and re.search(r'[.!?…]\$?\s*$', seg))
+
+
 def fix_text(t):
-    parts = re.split(r'(\{[^}]*\})', t)
+    parts = re.split(r'(\{[^}]*\}|\\[a-z])', t)  # braces and \n \l \p escapes are left as they are
     for i in range(0, len(parts), 2):  # even parts are outside braces
-        parts[i] = TOKEN.sub(fix_word, parts[i])
+        if parts[i].strip().rstrip('$') in SENTENCES:
+            parts[i] = parts[i].replace(parts[i].strip().rstrip('$'), SENTENCES[parts[i].strip().rstrip('$')])
+        else:
+            parts[i] = TOKEN.sub(fix_word, parts[i])
     return ''.join(parts)
 
 
@@ -92,7 +120,7 @@ def main():
     files = glob.glob('data/**/*.inc', recursive=True) + glob.glob('data/**/*.s', recursive=True)
     files += glob.glob('src/**/*.c', recursive=True) + glob.glob('src/**/*.h', recursive=True)
     files += ['src/data/trainers.party']
-    files = [f for f in files if os.path.isfile(f) and '/test/' not in f]
+    files = [f for f in files if os.path.isfile(f) and '/test/' not in f and f not in SKIP_FILES]
     changes = []
     for f in sorted(set(files)):
         process_file(f, changes)

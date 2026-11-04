@@ -380,7 +380,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_7 =
                     .spDefenseIV = 10,
                     .abilityNum = 1,
                     .personality = PERSONALITY_MALE_IMPISH_4,
-                    .nickname = _("Farfetch'D"),
+                    .nickname = _("Farfetch'd"),
                     .friendship = MAX_FRIENDSHIP
                 },
                 {

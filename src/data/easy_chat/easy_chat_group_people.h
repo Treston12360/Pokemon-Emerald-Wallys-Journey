@@ -37,13 +37,13 @@ const struct EasyChatWordInfo gEasyChatGroup_People[] = {
     },
     [EC_INDEX(EC_WORD_YOU_RE)] =
     {
-        .text = COMPOUND_STRING("You'Re"),
+        .text = COMPOUND_STRING("You're"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_BOY),
         .enabled = TRUE,
     },
     [EC_INDEX(EC_WORD_YOU_VE)] =
     {
-        .text = COMPOUND_STRING("You'Ve"),
+        .text = COMPOUND_STRING("You've"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_BROTHER),
         .enabled = TRUE,
     },
@@ -187,7 +187,7 @@ const struct EasyChatWordInfo gEasyChatGroup_People[] = {
     },
     [EC_INDEX(EC_WORD_AREN_T)] =
     {
-        .text = COMPOUND_STRING("Aren'T"),
+        .text = COMPOUND_STRING("Aren't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_ME),
         .enabled = TRUE,
     },
@@ -355,13 +355,13 @@ const struct EasyChatWordInfo gEasyChatGroup_People[] = {
     },
     [EC_INDEX(EC_WORD_THEY_RE)] =
     {
-        .text = COMPOUND_STRING("They'Re"),
+        .text = COMPOUND_STRING("They're"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_TO_US),
         .enabled = TRUE,
     },
     [EC_INDEX(EC_WORD_THEY_VE)] =
     {
-        .text = COMPOUND_STRING("They'Ve"),
+        .text = COMPOUND_STRING("They've"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_TO_WHOM),
         .enabled = TRUE,
     },
@@ -391,7 +391,7 @@ const struct EasyChatWordInfo gEasyChatGroup_People[] = {
     },
     [EC_INDEX(EC_WORD_WE_RE)] =
     {
-        .text = COMPOUND_STRING("We'Re"),
+        .text = COMPOUND_STRING("We're"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_WHO),
         .enabled = TRUE,
     },
@@ -403,7 +403,7 @@ const struct EasyChatWordInfo gEasyChatGroup_People[] = {
     },
     [EC_INDEX(EC_WORD_WE_VE)] =
     {
-        .text = COMPOUND_STRING("We'Ve"),
+        .text = COMPOUND_STRING("We've"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_WHO_WAS),
         .enabled = TRUE,
     },

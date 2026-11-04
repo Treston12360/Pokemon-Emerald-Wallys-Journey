@@ -286,8 +286,8 @@ static const u8 sText_TheLevelIs[] = _("The level is ");
 static const u8 sText_TheFeelIs[] = _(", and the feel is ");
 static const u8 sText_Dot2[] = _(".");
 
-static const u8 sText_SavingDontTurnOff2[] = _("Saving…\nDON'T Turn Off The Power.");
-static const u8 sText_BlenderMaxSpeedRecord[] = _("Berry Blender\nMAXIMUM Speed Record!");
+static const u8 sText_SavingDontTurnOff2[] = _("Saving…\nDon't turn off the power.");
+static const u8 sText_BlenderMaxSpeedRecord[] = _("Berry Blender\nMaximum Speed Record!");
 static const u8 sText_234Players[] = _("2 Players\n3 Players\n4 Players");
 
 static const struct BgTemplate sBgTemplates[3] =

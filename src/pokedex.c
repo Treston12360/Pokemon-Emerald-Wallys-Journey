@@ -702,7 +702,7 @@ static const u8 sText_ListByBodyColor[] = _("List by body color.\nSpotted Pokém
 static const u8 sText_ListByType[] = _("List by type.\nOwned Pokémon only.");
 static const u8 sText_ExecuteSearchSwitch[] = _("Execute search/switch.");
 static const u8 sText_DexEmptyString[] = _("");
-static const u8 sText_DexSearchDontSpecify[] = _("Don'T Specify.");
+static const u8 sText_DexSearchDontSpecify[] = _("Don't Specify.");
 static const u8 sText_DexSearchTypeNone[] = _("None");
 
 ALIGNED(4) static const u8 sExpandedPlaceholder_PokedexDescription[] = _("");

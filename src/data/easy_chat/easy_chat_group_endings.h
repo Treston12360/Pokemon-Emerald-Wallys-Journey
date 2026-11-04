@@ -73,7 +73,7 @@ const struct EasyChatWordInfo gEasyChatGroup_Endings[] = {
     },
     [EC_INDEX(EC_WORD_ISN_T_IT_QUES)] =
     {
-        .text = COMPOUND_STRING("Isn'T It?"),
+        .text = COMPOUND_STRING("Isn't It?"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_BETTER),
         .enabled = TRUE,
     },
@@ -115,19 +115,19 @@ const struct EasyChatWordInfo gEasyChatGroup_Endings[] = {
     },
     [EC_INDEX(EC_WORD_ISN_T)] =
     {
-        .text = COMPOUND_STRING("Isn'T"),
+        .text = COMPOUND_STRING("Isn't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_DOES),
         .enabled = TRUE,
     },
     [EC_INDEX(EC_WORD_WON_T)] =
     {
-        .text = COMPOUND_STRING("Won'T"),
+        .text = COMPOUND_STRING("Won't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_DOESN_T),
         .enabled = TRUE,
     },
     [EC_INDEX(EC_WORD_CAN_T)] =
     {
-        .text = COMPOUND_STRING("Can'T"),
+        .text = COMPOUND_STRING("Can't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_DON_T),
         .enabled = TRUE,
     },
@@ -139,7 +139,7 @@ const struct EasyChatWordInfo gEasyChatGroup_Endings[] = {
     },
     [EC_INDEX(EC_WORD_DON_T)] =
     {
-        .text = COMPOUND_STRING("Don'T"),
+        .text = COMPOUND_STRING("Don't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_FOR),
         .enabled = TRUE,
     },
@@ -169,13 +169,13 @@ const struct EasyChatWordInfo gEasyChatGroup_Endings[] = {
     },
     [EC_INDEX(EC_WORD_WASN_T)] =
     {
-        .text = COMPOUND_STRING("Wasn'T"),
+        .text = COMPOUND_STRING("Wasn't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_IS),
         .enabled = TRUE,
     },
     [EC_INDEX(EC_WORD_WEREN_T)] =
     {
-        .text = COMPOUND_STRING("Weren'T"),
+        .text = COMPOUND_STRING("Weren't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_IS_IT_QUES),
         .enabled = TRUE,
     },
@@ -187,7 +187,7 @@ const struct EasyChatWordInfo gEasyChatGroup_Endings[] = {
     },
     [EC_INDEX(EC_WORD_HAVEN_T)] =
     {
-        .text = COMPOUND_STRING("Haven'T"),
+        .text = COMPOUND_STRING("Haven't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_ISN_T_IT_QUES),
         .enabled = TRUE,
     },
@@ -361,13 +361,13 @@ const struct EasyChatWordInfo gEasyChatGroup_Endings[] = {
     },
     [EC_INDEX(EC_WORD_DIDN_T)] =
     {
-        .text = COMPOUND_STRING("Didn'T"),
+        .text = COMPOUND_STRING("Didn't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_WHILE),
         .enabled = TRUE,
     },
     [EC_INDEX(EC_WORD_DOESN_T)] =
     {
-        .text = COMPOUND_STRING("Doesn'T"),
+        .text = COMPOUND_STRING("Doesn't"),
         .alphabeticalOrder = EC_INDEX(EC_WORD_WHOM),
         .enabled = TRUE,
     },

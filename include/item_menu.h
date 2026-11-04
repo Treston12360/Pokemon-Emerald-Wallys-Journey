@@ -191,7 +191,7 @@ struct BagMenu
 #endif
 #if SWSH_BAG_BATTLE_POCKETS
     // (srcPocket << 8) | srcSlot for each entry of each battle pocket
-    u32 battlePocketRefs[BATTLE_POCKETS_COUNT][BATTLE_POCKET_CAPACITY];
+    u16 battlePocketRefs[BATTLE_POCKETS_COUNT][BATTLE_POCKET_CAPACITY];
 #endif
 #endif
 };
