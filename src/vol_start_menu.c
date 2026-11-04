@@ -938,6 +938,11 @@ static void Vol_StartMenu_ExitAndClearTilemap(void)
     }
     ScheduleBgCopyTilemapToVram(0);
 
+    // Wally's Journey: the menu replaced BG palettes 14 (window frame) and 15 (message box) with its
+    // own. Put the field's message box and window frame graphics back, so a box shown right after the
+    // menu closes (Save, Safari Retire, a sign or NPC) has its normal frame and colours.
+    LoadMessageBoxAndBorderGfx();
+
     for (enum VolSmallOptions spriteId = VOL_START_MENU_OPTION_1; spriteId < VOL_START_MENU_OPTION_COUNT; spriteId++)
     {
         if (sVol_StartMenu->menuSmallSpriteId[spriteId] != SPRITE_NONE)
@@ -1135,7 +1140,11 @@ static void Vol_SelectedFunc_Save(void)
     {
         Vol_StartMenu_ExitAndClearTilemap();
         FreezeObjectEvents();
-        LoadUserWindowBorderGfx(sVol_StartMenu->windowIdSaveInfo, STD_WINDOW_BASE_TILE_NUM, BG_PLTT_ID(STD_WINDOW_PALETTE_NUM));
+        // Wally's Journey fix (owner report 2026-11-04, "save menu kinda glitched"): this used to call
+        // LoadUserWindowBorderGfx(sVol_StartMenu->windowIdSaveInfo, ...) here, but
+        // Vol_StartMenu_ExitAndClearTilemap had already freed sVol_StartMenu, so the frame was loaded
+        // for a garbage window and the save info / Yes-No boxes had broken borders. The exit function
+        // now reloads the message box and frame graphics itself.
         LockPlayerFieldControls();
         SaveGame();
         gTasks[FindTaskIdByFunc(Task_Vol_StartMenu_HandleMainInput)].func = Task_Vol_StartMenu_WaitSaveGame;
