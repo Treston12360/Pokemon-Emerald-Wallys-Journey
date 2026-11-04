@@ -321,3 +321,4 @@ bool32 IsBattlerInvolvedInSkyDrop(enum BattlerId battler);
 bool32 IsAsleepOrComatose(enum BattlerId battler, enum Ability ability);
 
 #endif // GUARD_BATTLE_UTIL_H
+u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx);

@@ -140,3 +140,5 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 - [pokeemerald](https://github.com/pret/pokeemerald/)
 - Gen 5-style party menu: Archie ([TeamAquasHideout/pokeemerald gen5ish_party_menu](https://github.com/TeamAquasHideout/pokeemerald/tree/gen5ish_party_menu)), based on TheXaman's party menu (Wally's Journey recoloured it green)
 - Gen 5-style summary screen: RavePossum ([ravepossum/pokeemerald-expansion bw_summary_screen_expansion](https://github.com/ravepossum/pokeemerald-expansion/tree/bw_summary_screen_expansion)), as used in Emerald Imperium (Wally's Journey recoloured it green)
+- Black/White-style battle UI: mudskip ([mudskipper13/pokeemerald feature/bwBattleUI](https://github.com/mudskipper13/pokeemerald/tree/feature/bwBattleUI)) (Wally's Journey recoloured the text box and cursor green)
+- Dynamic move descriptions: Flash1Lucky ([Flash1Lucky/pokeemerald-expansion dynamic-move-descriptions](https://github.com/Flash1Lucky/pokeemerald-expansion/tree/dynamic-move-descriptions))

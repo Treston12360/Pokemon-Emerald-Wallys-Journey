@@ -6507,7 +6507,7 @@ static bool32 DmgCalc_IsAbilityOnField(enum Ability ability, enum Ability abilit
     return FALSE;
 }
 
-static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
+u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
 {
     u32 holdEffectParamAtk;
     u32 basePower = CalcMoveBasePower(ctx);
