@@ -48,6 +48,23 @@ Findings so far (2026-11-04):
   1200`, then Start, 4× Down (SAVE), A, A, wait 1000 frames. Use the first 131072 bytes of the .sav.
 - Emulation speed: about 7 frames per second; a walk-into-battle run is ~35 minutes.
 
+## Working pipeline (2026-11-04, used for Routes 101-104)
+1. **No 3DS health boxes:** copy `Emerald3DS.3dsx` and rename `hud.bin` in its romfs (UTF-16 name, e.g. to
+   `hxd.bin`): the port then logs "battle/hud.bin missing, info boxes stay as the GBA's" and draws the GBA
+   boxes, which the pack blanks. Pack regex (with `mkpak_clean.py`, padded blanks):
+   `^(graphics/pokemon/[^/]+/(front|back|anim_front)\.4bpp\.lz|graphics/battle_interface/(healthbox_[a-z_]+|enemy_mon_shadow|ball_status_bar|battle_bar)\.4bpp\.lz|generated/assets/build_root_src_graphics__gHealthboxElementsGfxTable\.bin|graphics/fonts/[a-z_]+\.latfont)$`
+   What's left: three cream (255,255,222) text-window bars and the foe's drop shadow.
+2. **OpenGL, not software:** run `azahar_fe` with `FE_GL=1 FE_GFX=OpenGL` (Mesa llvmpipe). The software
+   renderer crashes in `Pica::Texture::LookupTexelInTile` once the 3D overworld is on. `voxel=1 voxel_battle=1`.
+3. `grass.py LAYOUT_X` finds a grass tile with grass above/below in both vanilla and our maps.
+4. `capture_route.sh name MAP_X x y` (env `GAME3DSX`, `PAK`): builds the pret capture ROM for that spot
+   (pret `src/new_game.c` has `WJ_MAP/WJ_X/WJ_Y` defines), makes the save in mGBA, runs the 3DS capture
+   (~35 min). `shots/c6.ppm` is the "What will X do?" frame.
+5. `autoclean.py shots/c6.ppm clean400.png`: upper bar = copy of the strip above (keeps leaves/grass), the
+   other bars and the shadow = OpenCV inpaint (those spots sit under our own health boxes in game).
+6. `to_gba.py clean400.png gba.png`, then `tools/wj3d_backdrop.py gba.png graphics/battle_environment/wj3d/<map>`
+   (folder = map name lower case without MAP_), then `tools/wj3d_gen_table.py` rewrites the table.
+
 ## Step-by-step to finish (do these in order)
 
 1. **Get a clean capture of one route.** Rebuild the blanked pack skipping `rayquaza/`
