@@ -2,25 +2,30 @@
 #include "bike.h"
 #include "clock.h"
 #include "event_data.h"
+#include "event_object_movement.h"
 #include "field_camera.h"
+#include "field_effect.h"
 #include "field_effect_helpers.h"
 #include "field_player_avatar.h"
 #include "field_special_scene.h"
 #include "field_tasks.h"
 #include "fieldmap.h"
+#include "field_weather.h"
 #include "item.h"
 #include "main.h"
 #include "metatile_behavior.h"
 #include "overworld.h"
+#include "random.h"
 #include "script.h"
 #include "secret_base.h"
 #include "sound.h"
 #include "task.h"
+#include "constants/field_effects.h"
 #include "constants/field_tasks.h"
 #include "constants/items.h"
 #include "constants/songs.h"
 #include "constants/metatile_labels.h"
-
+#include "constants/weather.h"
 /*  This file handles some persistent tasks that run in the overworld.
  *  - Task_RunTimeBasedEvents: Periodically updates local time and RTC events. Also triggers ambient cries.
  *  - Task_MuddySlope: Handles the metatile animation when the player steps on muddy slopes.
@@ -56,6 +61,7 @@ static void SootopolisGymIcePerStepCallback(u8);
 static void CrackedFloorPerStepCallback(u8);
 static void IcefallCaveIcePerStepCallback(u8);
 static void Task_MuddySlope(u8);
+static void TimedRipplePerStepCallback(u8);
 
 static const TaskFunc sPerStepCallbacks[] =
 {
@@ -67,7 +73,8 @@ static const TaskFunc sPerStepCallbacks[] =
     [STEP_CB_TRUCK]             = EndTruckSequence,
     [STEP_CB_SECRET_BASE]       = SecretBasePerStepCallback,
     [STEP_CB_CRACKED_FLOOR]     = CrackedFloorPerStepCallback,
-    [STEP_CB_ICEFALL_CAVE]      = IcefallCaveIcePerStepCallback
+    [STEP_CB_ICEFALL_CAVE]      = IcefallCaveIcePerStepCallback,
+    [STEP_CB_TIMED_RIPPLE]      = TimedRipplePerStepCallback
 };
 
 // The positions of each map space with crackable ice in Icefall Cave.
@@ -248,9 +255,11 @@ void ResetFieldTasksArgs(void)
 #undef tAmbientCryState
 #undef tAmbientCryDelay
 
+// Wally's Journey: maps with no special step callback get the ambient pond/puddle
+// ripples (OriginalGRE's ambient_pond_ripples) automatically, so every pond ripples.
 static void DummyPerStepCallback(u8 taskId)
 {
-
+    TimedRipplePerStepCallback(taskId);
 }
 
 static const struct PacifidlogMetatileOffsets *GetPacifidlogBridgeMetatileOffsets(const struct PacifidlogMetatileOffsets *offsets, u16 metatileBehavior)
@@ -956,6 +965,7 @@ static void Task_MuddySlope(u8 taskId)
         cameraOffsetY = gCamera.y;
     }
     else
+#undef WEATHER_MULTIPLIER
     {
         cameraOffsetX = 0;
         cameraOffsetY = 0;
@@ -1086,3 +1096,52 @@ static void IcefallCaveIcePerStepCallback(u8 taskId)
 #undef tIceX
 #undef tIceY
 #undef tDelay
+
+#define tRippleTimer data[15] // own data slot: the dummy callback task shares this task
+#define FREQ_RIPPLE 20
+#define WEATHER_MULTIPLIER 10
+
+static void TimedRipplePerStepCallback(u8 taskId)
+{
+    s16 x, y, rippleIncrement, xTarget, yTarget;
+    s16 *data = gTasks[taskId].data;
+    
+    //Determine wether to use the rain multiplier; increment counter and check if it's time for a ripple attempt
+    rippleIncrement = 1;
+    if (GetCurrentWeather() == WEATHER_RAIN ||
+        GetCurrentWeather() == WEATHER_DOWNPOUR ||
+        GetCurrentWeather() == WEATHER_RAIN_THUNDERSTORM)
+        {rippleIncrement *= WEATHER_MULTIPLIER;}
+    tRippleTimer += rippleIncrement;
+    if (tRippleTimer >= FREQ_RIPPLE)
+    {
+    tRippleTimer = 0;
+
+    //Get player's location and pick a random tile in screen range
+    PlayerGetDestCoords(&x, &y);
+    xTarget = x + ((s16)RandomUniform(RNG_NONE, 0, 14) - 7);
+    yTarget = y + ((s16)RandomUniform(RNG_NONE, 0, 10) - 5);
+        //Check if the picked tile has MB_PUDDLE, MB_POND_WATER or MB_SOOTOPOLIS_DEEP_WATER
+        if (MetatileBehavior_HasRipples(MapGridGetMetatileBehaviorAt(xTarget,yTarget)))
+        {
+            gFieldEffectArguments[0] = xTarget; //x coordinate of target tile
+            gFieldEffectArguments[1] = yTarget; //y coordinate of target tile
+            gFieldEffectArguments[2] = 151; //graphics priorities; idk the fine details but these values work
+            gFieldEffectArguments[3] = 3; //graphics priorities; if this one is less than 3 ripples will display over land on water edge tiles
+
+            //Convert target location to pixel coords
+            SetSpritePosToOffsetMapCoords((s16 *)&gFieldEffectArguments[0], (s16 *)&gFieldEffectArguments[1], 8, 8);
+
+            //Add pixel offsets to allow off-center ripples
+            gFieldEffectArguments[0] += ((s16)RandomUniform(RNG_NONE, 0, 8) - 4);
+            gFieldEffectArguments[1] += ((s16)RandomUniform(RNG_NONE, 0, 8) - 4);
+            
+            FieldEffectStart(FLDEFF_RIPPLE);
+        }
+    }
+}
+
+#undef tRippleTimer
+#undef FREQ_RIPPLE
+#undef WEATHER_MULTIPLIER
+#undef tRippleTimer
