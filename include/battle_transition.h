@@ -3,10 +3,10 @@
 
 void BattleTransition_StartOnField(u8 transitionId);
 void BattleTransition_Start(u8 transitionId);
+bool8 IsBattleTransitionIntroActive(void);
 bool8 IsBattleTransitionDone(void);
 bool32 WallyJourney_IsBattleTransitionRunning(void);
 bool8 FldEff_PokeballTrail(void);
-void Task_BattleTransition_Intro(u8 taskId);
 void GetBg0TilesDst(u16 **tilemap, u16 **tileset);
 
 extern const struct SpritePalette gSpritePalette_Pokeball;
@@ -22,8 +22,7 @@ enum MugshotColor
     MUGSHOT_COLOR_COUNT
 };
 
-enum BattleTransition
-{
+enum BattleTransition {
     B_TRANSITION_BLUR,
     B_TRANSITION_SWIRL,
     B_TRANSITION_SHUFFLE,
@@ -62,6 +61,33 @@ enum BattleTransition
     B_TRANSITION_FRONTIER_CIRCLES_CROSS_IN_SEQ,
     B_TRANSITION_FRONTIER_CIRCLES_ASYMMETRIC_SPIRAL_IN_SEQ,
     B_TRANSITION_FRONTIER_CIRCLES_SYMMETRIC_SPIRAL_IN_SEQ,
+    // end base emerald transitions
+    // start yoshord transitions
+    B_TRANSITION_TPP_HOST,
+    B_TRANSITION_SWORDS_OF_JUSTICE,
+    B_TRANSITION_VERTICAL_FOLDS,
+    B_TRANSITION_VERTICAL_FOLDS_CENTERED,
+    B_TRANSITION_HORIZONTAL_FOLDS,
+    B_TRANSITION_HORIZONTAL_FOLDS_CENTERED,
+    B_TRANSITION_INVERSE_POKEBALLS_TRAIL,
+    B_TRANSITION_INVERSE_ANGLED_WIPES,
+    B_TRANSITION_SPEED_LINES,
+    B_TRANSITION_REGIROCK_ORAS,
+    B_TRANSITION_REGICE_ORAS,
+    B_TRANSITION_REGISTEEL_ORAS,
+    B_TRANSITION_REGIELEKI_ORAS,
+    B_TRANSITION_REGIDRAGO_ORAS,
+    B_TRANSITION_TRIANGLE_TESSELLATION_CENTERED,
+    B_TRANSITION_TRIANGLE_TESSELLATION_ZAROYALE,
+    B_TRANSITION_DOUBLE_CLOCK_WIPE_POKEBALL,
+    B_TRANSITION_WATER_DPP,
+    B_TRANSITION_AIRBRUSH_TILE,
+    B_TRANSITION_GALAR_GYM_GRASS,
+    B_TRANSITION_GALAR_GYM_WATER,
+    B_TRANSITION_GALAR_GYM_ROCK,
+    B_TRANSITION_POKEBALL_GROW_SPLIT,
+
+    // end yoshord transitions
     B_TRANSITION_COUNT
 };
 

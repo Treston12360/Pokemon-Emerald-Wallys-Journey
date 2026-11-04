@@ -699,14 +699,15 @@ void StartRegiBattle(void)
     species = GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_SPECIES);
     switch (species)
     {
+    // Wally's Journey: ORAS-style Regi transitions (rayrobdod's battle_transitions)
     case SPECIES_REGIROCK:
-        transitionId = B_TRANSITION_REGIROCK;
+        transitionId = B_TRANSITION_REGIROCK_ORAS;
         break;
     case SPECIES_REGICE:
-        transitionId = B_TRANSITION_REGICE;
+        transitionId = B_TRANSITION_REGICE_ORAS;
         break;
     case SPECIES_REGISTEEL:
-        transitionId = B_TRANSITION_REGISTEEL;
+        transitionId = B_TRANSITION_REGISTEEL_ORAS;
         break;
     default:
         transitionId = B_TRANSITION_GRID_SQUARES;

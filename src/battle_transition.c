@@ -2,12 +2,13 @@
 #include "battle.h"
 #include "battle_transition.h"
 #include "battle_transition_frontier.h"
+#include "battle_transition_shared.h"
+#include "battle_transition_yoshord.h"
 #include "bg.h"
 #include "decompress.h"
 #include "event_object_movement.h"
 #include "field_camera.h"
 #include "field_effect.h"
-#include "field_weather.h"
 #include "gpu_regs.h"
 #include "main.h"
 #include "malloc.h"
@@ -31,9 +32,6 @@
 
 #define B_TRANS_DMA_FLAGS (1 | ((DMA_SRC_INC | DMA_DEST_FIXED | DMA_REPEAT | DMA_16BIT | DMA_START_HBLANK | DMA_ENABLE) << 16))
 
-// Used by each transition task to determine which of its functions to call
-#define tState          data[0]
-
 // Below are data defines for InitBlackWipe and UpdateBlackWipe, for the TransitionData data array.
 // These will be re-used by any transitions that use these functions.
 #define tWipeStartX data[0]
@@ -48,35 +46,6 @@
 #define tWipeYDist  data[9]
 #define tWipeTemp   data[10]
 
-#define SET_TILE(ptr, posY, posX, tile) \
-{                                       \
-    u32 index = (posY) * 32 + posX;     \
-    ptr[index] = tile | (0xF0 << 8);    \
-}
-
-struct TransitionData
-{
-    vu8 VBlank_DMA;
-    u16 WININ;
-    u16 WINOUT;
-    u16 WIN0H;
-    u16 WIN0V;
-    u16 unused1;
-    u16 unused2;
-    u16 BLDCNT;
-    u16 BLDALPHA;
-    u16 BLDY;
-    s16 cameraX;
-    s16 cameraY;
-    s16 BG0HOFS_Lower;
-    s16 BG0HOFS_Upper;
-    s16 BG0VOFS; // used but not set
-    s16 unused3;
-    s16 counter;
-    s16 unused4;
-    s16 data[11];
-};
-
 struct RectangularSpiralLine
 {
     u8 state;
@@ -86,8 +55,6 @@ struct RectangularSpiralLine
     bool8 outward;
 };
 
-typedef bool8 (*TransitionStateFunc)(struct Task *task);
-typedef bool8 (*TransitionSpriteCallback)(struct Sprite *sprite);
 typedef bool8 (*TransitionSpriteCallbackPartner)(struct Sprite *sprite);
 
 static bool8 Transition_StartIntro(struct Task *);
@@ -97,7 +64,6 @@ static bool8 Transition_WaitForMain(struct Task *);
 
 static void LaunchBattleTransitionTask(u8);
 static void Task_BattleTransition(u8);
-static void Task_Intro(u8);
 static void Task_Blur(u8);
 static void Task_Swirl(u8);
 static void Task_Shuffle(u8);
@@ -128,7 +94,6 @@ static void Task_FrontierLogoWave(u8);
 static void Task_FrontierSquares(u8);
 static void Task_FrontierSquaresScroll(u8);
 static void Task_FrontierSquaresSpiral(u8);
-static void VBlankCB_BattleTransition(void);
 static void VBlankCB_Swirl(void);
 static void HBlankCB_Swirl(void);
 static void VBlankCB_Shuffle(void);
@@ -175,7 +140,7 @@ static bool8 Groudon_PaletteBrighten(struct Task *);
 static bool8 WeatherDuo_FadeOut(struct Task *);
 static bool8 WeatherDuo_End(struct Task *);
 static bool8 BigPokeball_Init(struct Task *);
-static bool8 BigPokeball_SetGfx(struct Task *);
+bool8 BigPokeball_SetGfx(struct Task *);
 static bool8 PatternWeave_Blend1(struct Task *);
 static bool8 PatternWeave_Blend2(struct Task *);
 static bool8 PatternWeave_FinishAppear(struct Task *);
@@ -261,20 +226,10 @@ static void Mugshots_CreateTrainerPics(struct Task *);
 static void VBlankCB_Mugshots(void);
 static void VBlankCB_MugshotsFadeOut(void);
 static void HBlankCB_Mugshots(void);
-static void InitTransitionData(void);
-static void FadeScreenBlack(void);
-static void CreateIntroTask(s16, s16, s16, s16, s16);
-static void SetCircularMask(u16 *, s16, s16, s16);
-static void SetSinWave(s16 *, s16, s16, s16, s16, s16);
-static void GetBg0TilemapDst(u16 **);
 static void InitBlackWipe(s16 *, s16, s16, s16, s16, s16, s16);
-static bool8 UpdateBlackWipe(s16 *, bool8, bool8);
 static void SetTrainerPicSlideDirection(s16, s16);
 static void IncrementTrainerPicState(s16);
 static s16 IsTrainerPicSlideDone(s16);
-static bool8 TransitionIntro_FadeToGray(struct Task *);
-static bool8 TransitionIntro_FadeFromGray(struct Task *);
-static bool8 IsIntroTaskDone(void);
 static bool16 UpdateRectangularSpiralLine(const s16 *const *, struct RectangularSpiralLine *);
 static void SpriteCB_FldEffPokeballTrail(struct Sprite *);
 static void SpriteCB_MugshotTrainerPic(struct Sprite *);
@@ -292,7 +247,7 @@ static u8 sTestingTransitionId;
 static u8 sTestingTransitionState;
 static struct RectangularSpiralLine sRectangularSpiralLines[4];
 
-EWRAM_DATA static struct TransitionData *sTransitionData = NULL;
+EWRAM_DATA struct TransitionData *sTransitionData = NULL;
 
 static const u32 sBigPokeball_Tileset[] = INCGFX_U32("graphics/battle_transitions/big_pokeball.png", ".4bpp");
 static const u32 sPokeballTrail_Tileset[] = INCGFX_U32("graphics/battle_transitions/pokeball_trail.png", ".4bpp");
@@ -338,7 +293,42 @@ static const u32 sFrontierSquares_Tilemap[] = INCBIN_U32("graphics/battle_transi
 // All battle transitions use the same intro
 static const TaskFunc sTasks_Intro[B_TRANSITION_COUNT] =
 {
-    [0 ... B_TRANSITION_COUNT - 1] = &Task_Intro
+    [B_TRANSITION_BLUR ... B_TRANSITION_SHUFFLE] = &Task_Intro,
+    [B_TRANSITION_BIG_POKEBALL] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_POKEBALLS_TRAIL] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_CLOCKWISE_WIPE ... B_TRANSITION_WHITE_BARS_FADE] = &Task_Intro,
+    [B_TRANSITION_GRID_SQUARES] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_ANGLED_WIPES] = &Task_Intro,
+    [B_TRANSITION_MUGSHOT ... B_TRANSITION_REGIROCK] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_KYOGRE ... B_TRANSITION_BLACKHOLE_PULSATE] = &Task_Intro,
+    [B_TRANSITION_RECTANGULAR_SPIRAL ... B_TRANSITION_FRONTIER_CIRCLES_SYMMETRIC_SPIRAL_IN_SEQ] = &Task_IntroWithClearBg0,
+    // end base emerald transitions
+    // start yoshord transitions
+    [B_TRANSITION_TPP_HOST] = Task_IntroWithClearBg0,
+    [B_TRANSITION_SWORDS_OF_JUSTICE] = &Task_Intro,
+    [B_TRANSITION_VERTICAL_FOLDS] = &Task_Intro,
+    [B_TRANSITION_VERTICAL_FOLDS_CENTERED] = &Task_Intro,
+    [B_TRANSITION_HORIZONTAL_FOLDS] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_HORIZONTAL_FOLDS_CENTERED] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_INVERSE_POKEBALLS_TRAIL] = &Task_InverseIntroWithClearBg0,
+    [B_TRANSITION_INVERSE_ANGLED_WIPES] = &Task_InverseIntro,
+    [B_TRANSITION_SPEED_LINES] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_REGIROCK_ORAS] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_REGICE_ORAS] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_REGISTEEL_ORAS] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_REGIELEKI_ORAS] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_REGIDRAGO_ORAS] = &Task_IntroWithClearBg0,
+    [B_TRANSITION_TRIANGLE_TESSELLATION_CENTERED] = &Task_Intro,
+    [B_TRANSITION_TRIANGLE_TESSELLATION_ZAROYALE] = &Task_Intro,
+    [B_TRANSITION_DOUBLE_CLOCK_WIPE_POKEBALL] = &Task_Intro,
+    [B_TRANSITION_WATER_DPP] = &Task_Intro,
+    [B_TRANSITION_AIRBRUSH_TILE] = &Task_Intro,
+    [B_TRANSITION_GALAR_GYM_GRASS] = &Task_Intro,
+    [B_TRANSITION_GALAR_GYM_WATER] = &Task_Intro,
+    [B_TRANSITION_GALAR_GYM_ROCK] = &Task_Intro,
+    [B_TRANSITION_POKEBALL_GROW_SPLIT] = &Task_IntroWithClearBg0,
+
+    // end yoshord transitions
 };
 
 // After the intro each transition has a unique main task.
@@ -383,6 +373,33 @@ static const TaskFunc sTasks_Main[B_TRANSITION_COUNT] =
     [B_TRANSITION_FRONTIER_CIRCLES_CROSS_IN_SEQ] = Task_FrontierCirclesCrossInSeq,
     [B_TRANSITION_FRONTIER_CIRCLES_ASYMMETRIC_SPIRAL_IN_SEQ] = Task_FrontierCirclesAsymmetricSpiralInSeq,
     [B_TRANSITION_FRONTIER_CIRCLES_SYMMETRIC_SPIRAL_IN_SEQ] = Task_FrontierCirclesSymmetricSpiralInSeq,
+    // end base emerald transitions
+    // start yoshord transitions
+    [B_TRANSITION_TPP_HOST] = Task_TppHost,
+    [B_TRANSITION_SWORDS_OF_JUSTICE] = Task_SwordsOfJustice,
+    [B_TRANSITION_VERTICAL_FOLDS] = Task_VerticalFolds,
+    [B_TRANSITION_VERTICAL_FOLDS_CENTERED] = Task_VerticalFoldsCentered,
+    [B_TRANSITION_HORIZONTAL_FOLDS] = Task_HorizontalFolds,
+    [B_TRANSITION_HORIZONTAL_FOLDS_CENTERED] = Task_HorizontalFoldsCentered,
+    [B_TRANSITION_INVERSE_POKEBALLS_TRAIL] = Task_PokeballsTrail,
+    [B_TRANSITION_INVERSE_ANGLED_WIPES] = Task_AngledWipes,
+    [B_TRANSITION_SPEED_LINES] = &Task_SpeedLines,
+    [B_TRANSITION_REGIROCK_ORAS] = &Task_RegirockOras,
+    [B_TRANSITION_REGICE_ORAS] = &Task_RegiceOras,
+    [B_TRANSITION_REGISTEEL_ORAS] = &Task_RegisteelOras,
+    [B_TRANSITION_REGIELEKI_ORAS] = &Task_RegielekiOras,
+    [B_TRANSITION_REGIDRAGO_ORAS] = &Task_RegidragoOras,
+    [B_TRANSITION_TRIANGLE_TESSELLATION_CENTERED] = &Task_TriangleTessellationCentered,
+    [B_TRANSITION_TRIANGLE_TESSELLATION_ZAROYALE] = &Task_TriangleTessellationZARoyale,
+    [B_TRANSITION_DOUBLE_CLOCK_WIPE_POKEBALL] = &Task_DoubleClockWipePokeball,
+    [B_TRANSITION_WATER_DPP] = &Task_WaterDpp,
+    [B_TRANSITION_AIRBRUSH_TILE] = &Task_AirbrushTile,
+    [B_TRANSITION_GALAR_GYM_GRASS] = &Task_GalarGymGrass,
+    [B_TRANSITION_GALAR_GYM_WATER] = &Task_GalarGymWater,
+    [B_TRANSITION_GALAR_GYM_ROCK] = &Task_GalarGymRock,
+    [B_TRANSITION_POKEBALL_GROW_SPLIT] = &Task_PokeballGrowSplit,
+
+    // end yoshord transitions
 };
 
 static const TransitionStateFunc sTaskHandlers[] =
@@ -751,12 +768,6 @@ static const s16 sAngledWipes_MoveData[NUM_ANGLED_WIPES][5] =
 
 static const s16 sAngledWipes_EndDelays[NUM_ANGLED_WIPES] = {8, 4, 2, 1, 1, 1, 0};
 
-static const TransitionStateFunc sTransitionIntroFuncs[] =
-{
-    TransitionIntro_FadeToGray,
-    TransitionIntro_FadeFromGray
-};
-
 static const struct SpriteFrameImage sSpriteImage_Pokeball[] =
 {
     {sPokeball_Gfx, sizeof(sPokeball_Gfx)}
@@ -1022,6 +1033,15 @@ bool32 WallyJourney_IsBattleTransitionRunning(void)
     return FindTaskIdByFunc(Task_BattleTransition) != TASK_NONE;
 }
 
+bool8 IsBattleTransitionIntroActive(void)
+{
+    u8 taskId = FindTaskIdByFunc(Task_BattleTransition);
+    if (TASK_NONE == taskId)
+        return FALSE;
+
+    return 1 == gTasks[taskId].tState;
+}
+
 bool8 IsBattleTransitionDone(void)
 {
     u8 taskId = FindTaskIdByFunc(Task_BattleTransition);
@@ -1099,19 +1119,6 @@ static bool8 Transition_WaitForMain(struct Task *task)
 
 #undef tTransitionId
 #undef tTransitionDone
-
-static void Task_Intro(u8 taskId)
-{
-    if (gTasks[taskId].tState == 0)
-    {
-        gTasks[taskId].tState++;
-        CreateIntroTask(0, 0, 3, 2, 2);
-    }
-    else if (IsIntroTaskDone())
-    {
-        DestroyTask(taskId);
-    }
-}
 
 //--------------------
 // B_TRANSITION_BLUR
@@ -1442,7 +1449,7 @@ static bool8 BigPokeball_Init(struct Task *task)
     return FALSE;
 }
 
-static bool8 BigPokeball_SetGfx(struct Task *task)
+bool8 BigPokeball_SetGfx(struct Task *task)
 {
     s16 i, j;
     u16 *tilemap, *tileset;
@@ -4000,134 +4007,23 @@ static void VBlankCB_AngledWipes(void)
 #undef tDelay
 
 //-----------------------------------
-// Transition intro
-//-----------------------------------
-
-#define tFadeToGrayDelay       data[1]
-#define tFadeFromGrayDelay     data[2]
-#define tNumFades              data[3]
-#define tFadeToGrayIncrement   data[4]
-#define tFadeFromGrayIncrement data[5]
-#define tDelayTimer            data[6]
-#define tBlend                 data[7]
-#define tBldCntSaved           data[8]
-#define tShadowColor           data[9]
-
-static void CreateIntroTask(s16 fadeToGrayDelay, s16 fadeFromGrayDelay, s16 numFades, s16 fadeToGrayIncrement, s16 fadeFromGrayIncrement)
-{
-    u8 taskId = CreateTask(Task_BattleTransition_Intro, 3);
-    gTasks[taskId].tFadeToGrayDelay = fadeToGrayDelay;
-    gTasks[taskId].tFadeFromGrayDelay = fadeFromGrayDelay;
-    gTasks[taskId].tNumFades = numFades;
-    gTasks[taskId].tFadeToGrayIncrement = fadeToGrayIncrement;
-    gTasks[taskId].tFadeFromGrayIncrement = fadeFromGrayIncrement;
-    gTasks[taskId].tDelayTimer = fadeToGrayDelay;
-}
-
-static bool8 IsIntroTaskDone(void)
-{
-    if (FindTaskIdByFunc(Task_BattleTransition_Intro) == TASK_NONE)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-void Task_BattleTransition_Intro(u8 taskId)
-{
-    while (sTransitionIntroFuncs[gTasks[taskId].tState](&gTasks[taskId]));
-}
-
-static bool8 TransitionIntro_FadeToGray(struct Task *task)
-{
-    u8 paletteNum = IndexOfSpritePaletteTag(TAG_WEATHER_START);
-    u16 index = OBJ_PLTT_ID(paletteNum) + SHADOW_COLOR_INDEX;
-    if (task->tDelayTimer == 0 || --task->tDelayTimer == 0)
-    {
-        task->tDelayTimer = task->tFadeToGrayDelay;
-        task->tBlend += task->tFadeToGrayIncrement;
-        if (task->tBlend > 16)
-            task->tBlend = 16;
-        if (paletteNum < 16)
-            task->tShadowColor = gPlttBufferFaded[index];
-        BlendPalettes(PALETTES_ALL, task->tBlend, RGB(11, 11, 11));
-        if (paletteNum < 16)
-            gPlttBufferFaded[index] = task->tShadowColor;
-    }
-    if (task->tBlend >= 16)
-    {
-        // Fade to gray complete, start fade back
-        // Save BLDCNT and turn off targets temporarily
-        task->tBldCntSaved = GetGpuReg(REG_OFFSET_BLDCNT);
-        SetGpuReg(REG_OFFSET_BLDCNT, task->tBldCntSaved & ~BLDCNT_TGT2_BG_ALL);
-        if (paletteNum < 16)
-            gPlttBufferFaded[index] = RGB(11, 11, 11);
-        task->tState++;
-        task->tDelayTimer = task->tFadeFromGrayDelay;
-    }
-    return FALSE;
-}
-
-static bool8 TransitionIntro_FadeFromGray(struct Task *task)
-{
-    if (task->tDelayTimer == 0 || --task->tDelayTimer == 0)
-    {
-        u8 paletteNum = IndexOfSpritePaletteTag(TAG_WEATHER_START);
-        task->tDelayTimer = task->tFadeFromGrayDelay;
-        task->tBlend -= task->tFadeFromGrayIncrement;
-        if (task->tBlend < 0)
-            task->tBlend = 0;
-        BlendPalettes(PALETTES_ALL, task->tBlend, RGB(11, 11, 11));
-        // Restore BLDCNT
-        SetGpuReg(REG_OFFSET_BLDCNT, task->tBldCntSaved);
-        if (paletteNum < 16)
-        {
-            u16 index = OBJ_PLTT_ID(paletteNum) + SHADOW_COLOR_INDEX;
-            gPlttBufferFaded[index] = task->tShadowColor;
-        }
-    }
-    if (task->tBlend == 0)
-    {
-        if (--task->tNumFades == 0)
-        {
-            // All fades done, end intro
-            DestroyTask(FindTaskIdByFunc(Task_BattleTransition_Intro));
-        }
-        else
-        {
-            // Fade from gray complete, start new fade
-            task->tDelayTimer = task->tFadeToGrayDelay;
-            task->tState = 0;
-        }
-    }
-    return FALSE;
-}
-
-#undef tFadeToGrayDelay
-#undef tFadeFromGrayDelay
-#undef tNumFades
-#undef tFadeToGrayIncrement
-#undef tFadeFromGrayIncrement
-#undef tDelayTimer
-#undef tBlend
-
-//-----------------------------------
 // General transition functions
 //-----------------------------------
 
-static void InitTransitionData(void)
+void InitTransitionData(void)
 {
     memset(sTransitionData, 0, sizeof(*sTransitionData));
     GetCameraOffsetWithPan(&sTransitionData->cameraX, &sTransitionData->cameraY);
 }
 
-static void VBlankCB_BattleTransition(void)
+void VBlankCB_BattleTransition(void)
 {
     LoadOam();
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
 }
 
-static void GetBg0TilemapDst(u16 **tileset)
+void GetBg0TilemapDst(u16 **tileset)
 {
     u16 charBase = REG_BG0CNT >> 2;
     charBase <<= 14;
@@ -4146,19 +4042,19 @@ void GetBg0TilesDst(u16 **tilemap, u16 **tileset)
     *tileset = (u16 *)(BG_VRAM + charBase);
 }
 
-static void FadeScreenBlack(void)
+void FadeScreenBlack(void)
 {
     BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
 }
 
-static void SetSinWave(s16 *array, s16 sinAdd, s16 index, s16 indexIncrementer, s16 amplitude, s16 arrSize)
+void SetSinWave(s16 *array, s16 sinAdd, s16 index, s16 indexIncrementer, s16 amplitude, s16 arrSize)
 {
     u8 i;
     for (i = 0; arrSize > 0; arrSize--, i++, index += indexIncrementer)
         array[i] = sinAdd + Sin(index & 0xFF, amplitude);
 }
 
-static void SetCircularMask(u16 *buffer, s16 centerX, s16 centerY, s16 radius)
+void SetCircularMask(u16 *buffer, s16 centerX, s16 centerY, s16 radius)
 {
     s16 i;
 
@@ -4237,7 +4133,7 @@ static void InitBlackWipe(s16 *data, s16 startX, s16 startY, s16 endX, s16 endY,
     tWipeTemp = 0;
 }
 
-static bool8 UpdateBlackWipe(s16 *data, bool8 xExact, bool8 yExact)
+bool8 UpdateBlackWipe(s16 *data, bool8 xExact, bool8 yExact)
 {
     u8 numFinished;
 

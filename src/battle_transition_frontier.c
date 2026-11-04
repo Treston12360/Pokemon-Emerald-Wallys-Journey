@@ -3,6 +3,7 @@
 #include "decompress.h"
 #include "battle_transition_frontier.h"
 #include "battle_transition.h"
+#include "battle_transition_shared.h"
 #include "task.h"
 #include "palette.h"
 #include "trig.h"
@@ -18,8 +19,6 @@
 
     This file handles category 3. Functions for the other two are handled in battle_transition.c
 */
-
-typedef bool8 (*TransitionStateFunc)(struct Task *task);
 
 static void SpriteCB_LogoCircleSlide(struct Sprite *sprite);
 static void SpriteCB_LogoCircleSpiral(struct Sprite *sprite);
