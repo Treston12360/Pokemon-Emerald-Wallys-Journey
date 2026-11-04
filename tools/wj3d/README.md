@@ -32,6 +32,22 @@ Findings so far (2026-11-04):
 - Saves per map: hook vanilla pret `WarpToTruck()` to the map/x/y, play the new game in mGBA, save, copy the
   .sav to the 3DS SD folder as `emerald3ds.sav`.
 
+## Findings 2026-11-04 (second session) — blanking WORKS now
+- **Cause of the boot/battle FATALs:** the 3DS port reads every asset at its original stored size; a blanked
+  LZ stream is much shorter, so it logs `asset short read` and stops. `mkpak_clean.py` now pads each blank
+  back to the original size. With that, blanking Rayquaza (title) and Pokémon/healthbox pictures works.
+  Put an empty `debug.txt` in the SD folder to get `port.log` with the exact asset errors.
+- **The 3D overworld (`voxel=1`) crashes the Azahar core** (SIGSEGV) after loading a save in this headless
+  setup. Use `voxel=0` + `voxel_battle=1`: the overworld is 2D, battles are still 3D.
+- **Downloads:** Emerald 3DS `.../releases/download/v0.5.0/Emerald3DS-WebPayload.zip` works; the Azahar core
+  is on Azahar's own release: `https://github.com/azahar-emu/azahar/releases/download/2126.2/azahar-libretro-linux-x86_64-2126.2.zip`
+  (buildbot.libretro.com may be blocked). Build `azahar_fe.c` with libretro.h from libretro/libretro-common.
+- **Route 104 save:** pret pokeemerald (`make modern`) with `WarpToTruck` → `MAP_ROUTE104` (23,60), a Lv30
+  Mudkip and the Pokédex/running flags given in `NewGameInitData`, and `Task_NewGameBirchSpeech_Init`
+  jumping straight to `CB2_NewGame`. In the mGBA harness: `1200 / 10 S / 300 / 10 A / 400 / 10 A / 300 / 10 A /
+  1200`, then Start, 4× Down (SAVE), A, A, wait 1000 frames. Use the first 131072 bytes of the .sav.
+- Emulation speed: about 7 frames per second; a walk-into-battle run is ~35 minutes.
+
 ## Step-by-step to finish (do these in order)
 
 1. **Get a clean capture of one route.** Rebuild the blanked pack skipping `rayquaza/`

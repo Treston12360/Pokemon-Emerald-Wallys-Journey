@@ -40,7 +40,12 @@ def patched(entry, rom, literals, bitmaps, sources=None):
         hits.append(p)
         if p.endswith('.lz'):
             n = struct.unpack('<I', data[:4])[0] >> 8
-            return lz_blank(n)
+            blank = lz_blank(n)
+            # The 3DS port reads every asset at its original stored size ("asset short read"
+            # otherwise), so pad the much shorter blank stream back to that size.
+            if len(blank) > len(data):
+                return data
+            return blank + bytes(len(data) - len(blank))
         return b'\x01' + bytes(len(data) - 1)
     return data
 build.build_entry = patched
