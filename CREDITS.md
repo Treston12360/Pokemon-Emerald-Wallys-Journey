@@ -142,3 +142,4 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 - Gen 5-style summary screen: RavePossum ([ravepossum/pokeemerald-expansion bw_summary_screen_expansion](https://github.com/ravepossum/pokeemerald-expansion/tree/bw_summary_screen_expansion)), as used in Emerald Imperium (Wally's Journey recoloured it green)
 - Black/White-style battle UI: mudskip ([mudskipper13/pokeemerald feature/bwBattleUI](https://github.com/mudskipper13/pokeemerald/tree/feature/bwBattleUI)) (Wally's Journey recoloured the text box and cursor green)
 - Dynamic move descriptions: Flash1Lucky ([Flash1Lucky/pokeemerald-expansion dynamic-move-descriptions](https://github.com/Flash1Lucky/pokeemerald-expansion/tree/dynamic-move-descriptions))
+- Sword/Shield-style message box: montmoguri ([montmoguri/pokeemerald-expansion swsh_message_box](https://github.com/montmoguri/pokeemerald-expansion/tree/swsh_message_box)) (Wally's Journey made the name tag green)
