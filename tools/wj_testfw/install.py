@@ -5,6 +5,8 @@ T=os.path.dirname(os.path.abspath(__file__)); R=os.path.dirname(os.path.dirname(
 KEEP=T+'/orig'
 files=['src/new_game.c','src/battle_setup.c']
 def on(scn):
+    if 'WJTest_' in open(R+'/src/new_game.c').read():
+        sys.exit('test hooks are already on: run "install.py off" first')  # else orig/ gets the hooked copy
     os.makedirs(KEEP,exist_ok=True)
     for f in files: shutil.copy(R+'/'+f, KEEP+'/'+os.path.basename(f))
     shutil.copy(T+'/wj_test.c', R+'/src/wj_test.c')
@@ -14,7 +16,7 @@ def on(scn):
         vr=', '.join('{%s, %s}'%(a,b) for a,b in s.get('vars',[]))
         pt=', '.join('{SPECIES_%s, %d}'%(a,b) for a,b in s.get('party',[('MEWTWO',100),('MEW',100)]))
         rows.append('    {MAP_GROUP(%s), MAP_NUM(%s), %d, %d, {%s}, {%s}, {%s}}'%(s['map'],s['map'],s['x'],s['y'],fl,vr or '{0,0}',pt))
-    open(R+'/src/wj_test_scenarios.h','w').write(('#define WJ_WEAK 1\n' if any(s.get('weak') for s in scn) else '')+('#define WJ_DEXDEMO 1\n' if any(s.get('dexdemo') for s in scn) else '')+'#include "constants/opponents.h"\n#include "constants/trainers.h"\nstatic const struct WJTestScenario sWJTestScenarios[] = {\n'+',\n'.join(rows)+'\n};\n')
+    open(R+'/src/wj_test_scenarios.h','w').write(('#define WJ_WEAK 1\n' if any(s.get('weak') for s in scn) else '')+('#define WJ_DEXDEMO 1\n' if any(s.get('dexdemo') for s in scn) else '')+('#define WJ_ALMOST 1\n' if any(s.get('almost') for s in scn) else '')+'#include "constants/opponents.h"\n#include "constants/trainers.h"\nstatic const struct WJTestScenario sWJTestScenarios[] = {\n'+',\n'.join(rows)+'\n};\n')
     s=open(R+'/src/new_game.c').read()
     a='        SetWarpDestination(MAP_GROUP(MAP_INSIDE_OF_TRUCK), MAP_NUM(MAP_INSIDE_OF_TRUCK), WARP_ID_NONE, -1, -1);'
     assert a in s; s=s.replace(a,'        { void WJTest_Warp(void); WJTest_Warp(); }',1)

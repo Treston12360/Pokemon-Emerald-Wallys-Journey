@@ -6,9 +6,8 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 
 - Repo: `Treston12360/Pokemon-Emerald-Wallys-Journey`, branch `wally-journey-development`.
 - Base: pokeemerald-expansion **1.17.2**.
-- The last ROM sent to the owner was **0.8.12** (BW party + summary screens).
-- Everything below marked DONE is on `wally-journey-development` but **not released yet**.
-- The next ROM will be `WallysJourneyUpdate0.9.0.gba`.
+- The last ROM sent to the owner was **0.9.0** (rows 1–15 below).
+- Rows 16+ are on `wally-journey-development` but **not released yet**.
 
 ## Owner rules (always)
 
@@ -95,6 +94,8 @@ All the screens below were recoloured to Emerald green, palette only.
 | 13 | Extra battle transitions | rayrobdod (yoshord) | Regirock/Regice/Registeel use the ORAS ones; the rest are available but unused |
 | 14 | Mid-battle evolution | shachar700 / Zetraphes | keeps stat stages/effects; B cancels for the rest of that battle |
 | 15 | Overworld character shadows | Pawkkie | already built into expansion 1.17 (`OW_OBJECT_VANILLA_SHADOWS FALSE`), nothing to port |
+| 16 | Vol's HGSS-style start menu, green | vol8 `start_menu_1`, HashtagMarky's expansion port | Pokédex icon asks Pokédex/DexNav; Pike/Pyramid/link rooms keep the old menu |
+| 17 | Stat Points (EV allocator), green | Bivurnum `ev-allocator` on TAH's stat editor | no battle EVs; 10 points per level to Lv51; Party → Stat Points |
 
 ## IN PROGRESS
 
@@ -104,15 +105,9 @@ All the screens below were recoloured to Emerald green, palette only.
   - Still to do: add the **Cleffa** entry to `gen_2_families.h`, then build and test a Ditto transform in battle.
   - Then merge into `wally-journey-development`.
 
-## OWNER PRIORITIES (2026-11-03, these come first)
+## OWNER ORDER (2026-11-04)
 
-1. Seasons, day/night: polish and check more maps.
-2. BW screens: party, summary and battle.
-3. Sword/Shield screens, including the chat/message boxes.
-4. Capitalization: decapitalize all text, showing the owner a sample first.
-5. **DexNav must stay reachable.** If Vol's start menu goes in, DexNav needs a slot. Port an existing icon from another start-menu art set; don't draw one.
-
-Other items wait until these are done.
+The owner picked this order: 1 DexNav check (done), 3 start menu colours (done), 5 EV allocator (done), **9 3D battle backgrounds (next)**, then the rest. **Never** do the lit night windows for more towns (owner dropped it).
 
 ## TO DO, in suggested priority order
 
@@ -122,18 +117,7 @@ Other items wait until these are done.
    - **Summary:** an Egg's summary page.
    - **Transitions:** watch one Regi transition with R held. Battle transitions are fast-forwarded unless R is held.
    - **New text:** the Sword/Shield PC menu and bag use mixed-case words ("Store", "Summary"); the decapitalize task will settle this.
-2. **Owner decisions needed** (ask, don't guess):
-   - **EV allocator** (Bivurnum `ev-allocator`, base: TeamAquasHideout sandbox):
-     - It removes EV gain from battles entirely and gives points to spend in a new party-menu screen.
-     - It adds the line "It also gained some EVs!", which needs approval.
-     - Confirm the owner wants battle EVs gone.
-   - **Vol's start menu** (vol8 `start_menu_1`, vanilla pokeemerald, HGSS-style icon column):
-     - It has no DexNav slot, and we have no icon art for one (no drawing allowed).
-     - Ask: keep DexNav elsewhere, drop it from the menu, or find an existing icon to port.
-   - **Decapitalize all text** (prof-harpe `Decapitalized`): the owner said yes.
-     - Do it **last**, after other ports add text.
-     - Show the owner a sample of changed dialogue before shipping.
-     - Then set `BW_SUMMARY_DECAP` to TRUE.
+2. **Owner decisions needed:** none open right now.
 3. **3D battle backgrounds** (the biggest remaining job). Plan:
    - Capture backdrops from Emerald 3DS v0.5.0 in its 3D BATTLE mode (Azahar libretro core).
    - Inpaint out sprites/HUD, convert to GBA (240×160, about 60 colours).
@@ -147,7 +131,6 @@ Other items wait until these are done.
    - **Outfits:** compare mudskip `feature/outfits-system-rhh` with our Outfit Case.
    - **Gacha:** build agsmgmaster64 `gacha-expansion` and show what the machine/prizes look like before placing it.
 5. **New main menu with mugshot** (Archie & Mudskip, pret wiki; vanilla): port and recolour green.
-6. **Later, when the owner has more usage:** night palettes for more towns' windows (palette edits only).
 
 ## Source branches (all public GitHub)
 
@@ -168,10 +151,7 @@ Other items wait until these are done.
   - shachar700/pokeemerald-fork `rhh-13.2-midBattleEvo`
 - **Not ported yet**
   - TeamAquasHideout/pokeemerald `AsparagusEduardo/ditto`
-  - Bivurnum/pokeemerald-expansion `ev-allocator`
-  - vol8/pokeemerald `start_menu_1`
   - agsmgmaster64/worldlinkdeluxe-ame `gacha-expansion`
-  - prof-harpe/pokeemerald-expansion `Decapitalized`
 - **Reference:** Emerald Imperium's full source is ei-showdown/emerald-imperium `release`.
 
 How we port: take only the feature's own diff against the expansion release it was built on (`git diff <base> <tip>`), copy its new files, `patch -F3` the changed ones, and then **check every fuzzy hunk landed in the right function**. Several landed in the wrong function silently during this project.

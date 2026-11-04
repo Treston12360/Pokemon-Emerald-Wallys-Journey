@@ -1,4 +1,5 @@
 #include "global.h"
+#include "ui_stat_editor.h"
 #include "item_menu.h"
 #include "battle.h"
 #include "battle_controllers.h"
@@ -7131,7 +7132,7 @@ static void BagMenu_UseRareCandy(u8 taskId)
         if (holdEffectParam == 0)
         {
             ConvertIntToDecimalStringN(gStringVar2, sBagItemUseState->finalLevel, STR_CONV_MODE_LEFT_ALIGN, 3);
-            StringExpandPlaceholders(gStringVar4, gText_PkmnElevatedToLvVar2);
+            StringExpandPlaceholders(gStringVar4, StatEditor_LevelUpGivesPoints(sBagItemUseState->initialLevel, sBagItemUseState->finalLevel) ? gText_PkmnElevatedToLvVar2EVs : gText_PkmnElevatedToLvVar2);
         }
         else
         {

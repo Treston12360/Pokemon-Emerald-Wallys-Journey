@@ -8,6 +8,7 @@
 #include "battle_ai_record.h"
 #include "battle_ai_util.h"
 #include "battle_scripts.h"
+#include "ui_stat_editor.h"
 #include "battle_switch_in.h"
 #include "battle_environment.h"
 #include "battle_gimmick.h"
@@ -2301,8 +2302,7 @@ static void Cmd_getexp(void)
             {
                 gBattleScripting.getexpState = 5;
                 gBattleStruct->battlerExpReward = 0;
-                if (B_MAX_LEVEL_EV_GAINS >= GEN_5)
-                    MonGainEVs(&gParties[B_TRAINER_PLAYER][*expMonId], faintedSpecies);
+                // Wally's Journey: no EVs from battles; they come from Stat Points (ui_stat_editor.c)
             }
             else
             {
@@ -2375,7 +2375,7 @@ static void Cmd_getexp(void)
                         gBattleStruct->teamGotExpMsgPrinted = TRUE;
                     }
 
-                    MonGainEVs(&gParties[B_TRAINER_PLAYER][*expMonId], faintedSpecies);
+                    // Wally's Journey: no EVs from battles; they come from Stat Points (ui_stat_editor.c)
                 }
                 gBattleScripting.getexpState++;
             }
@@ -2417,7 +2417,11 @@ static void Cmd_getexp(void)
                 PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff2, 3, GetMonData(&gParties[B_TRAINER_PLAYER][*expMonId], MON_DATA_LEVEL));
 
                 gLeveledUpInBattle |= 1 << *expMonId;
-                BattleScriptCall(BattleScript_LevelUp);
+                u32 newLevel = GetMonData(&gParties[B_TRAINER_PLAYER][*expMonId], MON_DATA_LEVEL);
+                if (StatEditor_LevelUpGivesPoints(newLevel - 1, newLevel))
+                    BattleScriptCall(BattleScript_LevelUpWithStatPoints);
+                else
+                    BattleScriptCall(BattleScript_LevelUp);
                 gBattleStruct->battlerExpReward = T1_READ_32(&gBattleResources->bufferB[0][2]);
                 AdjustFriendship(&gParties[B_TRAINER_PLAYER][*expMonId], FRIENDSHIP_EVENT_GROW_LEVEL);
 

@@ -60,7 +60,17 @@ void WJTest_ApplyState(void)
         { u8 ml = 5; SetMonData(&gPlayerParty[i], MON_DATA_MET_LEVEL, &ml); }
         if (s->party[i][1] >= 90) { u8 bon = 0xFF; SetMonMoveSlot(&gPlayerParty[i], MOVE_FLASH_CANNON, 0); SetMonData(&gPlayerParty[i], MON_DATA_PP_BONUSES, &bon); { u8 pp = 16; SetMonData(&gPlayerParty[i], MON_DATA_PP1, &pp); } }
         { u32 hp = GetMonData(&gPlayerParty[i], MON_DATA_MAX_HP); SetMonData(&gPlayerParty[i], MON_DATA_HP, &hp); }
+#ifdef WJ_ALMOST
+        // TEST ONLY ("almost": true): one EXP point short of the next level
+        { u32 sp = s->party[i][0], lv = s->party[i][1];
+          u32 exp = gExperienceTables[gSpeciesInfo[sp].growthRate][lv + 1] - 1;
+          SetMonData(&gPlayerParty[i], MON_DATA_EXP, &exp);
+          SetMonMoveSlot(&gPlayerParty[i], MOVE_SURF, 0); }
+#endif
     }
+#ifdef WJ_ALMOST
+    AddBagItem(ITEM_RARE_CANDY, 5);
+#endif
     CalculatePlayerPartyCount();
 #ifdef WJ_DEXDEMO
     { u32 sp; for (sp = 1; sp <= 386; sp++) { GetSetPokedexFlag(SpeciesToNationalPokedexNum(sp), FLAG_SET_SEEN); if (sp % 3 != 0) GetSetPokedexFlag(SpeciesToNationalPokedexNum(sp), FLAG_SET_CAUGHT); } }
