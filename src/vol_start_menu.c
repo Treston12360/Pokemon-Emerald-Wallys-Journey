@@ -55,6 +55,8 @@
 #include "rtc.h"
 #include "event_object_movement.h"
 #include "gba/isagbprint.h"
+#include "dexnav.h"
+#include "wild_encounter.h"
 
 /* CONFIGS */
 #define VOL_START_UPDATE_CLOCK_DISPLAY    TRUE
@@ -73,6 +75,7 @@ static void SpriteCB_IconFlag(struct Sprite* sprite);
 
 /* TASKs */
 static void Task_Vol_StartMenu_HandleMainInput(u8 taskId);
+static void Vol_StartMenu_ExitAndClearTilemap(void);
 static void Task_Vol_StartMenu_WaitSaveGame(u8 taskId);
 
 /* UNLOCKED FUNC */
@@ -155,6 +158,7 @@ struct Vol_StartMenu
     u32 windowIdMenuName;
     u32 windowIdSafariBalls;
     u32 windowIdSaveInfo;
+    u32 windowIdDexChoice;
 };
 
 static EWRAM_DATA struct Vol_StartMenu *sVol_StartMenu = NULL;
@@ -664,26 +668,26 @@ static struct VolMenuOptions sVolOptions[VOL_START_MENU_COUNT] =
     },
 };
 
-static const u8 *const gDayNameStringsTableShortned[] =
+static const u8 *const gDayNameStringsTableShortned[WEEKDAY_COUNT] =
 {
-    COMPOUND_STRING("Fri,"),
-    COMPOUND_STRING("Sat,"),
-    COMPOUND_STRING("Sun,"),
-    COMPOUND_STRING("Mon,"),
-    COMPOUND_STRING("Tue,"),
-    COMPOUND_STRING("Wed,"),
-    COMPOUND_STRING("Thu,"),
+    [WEEKDAY_SUN] = COMPOUND_STRING("Sun,"),
+    [WEEKDAY_MON] = COMPOUND_STRING("Mon,"),
+    [WEEKDAY_TUE] = COMPOUND_STRING("Tue,"),
+    [WEEKDAY_WED] = COMPOUND_STRING("Wed,"),
+    [WEEKDAY_THU] = COMPOUND_STRING("Thu,"),
+    [WEEKDAY_FRI] = COMPOUND_STRING("Fri,"),
+    [WEEKDAY_SAT] = COMPOUND_STRING("Sat,"),
 };
 
-static const u8 *const gDayNameStringsTable[] =
+static const u8 *const gDayNameStringsTable[WEEKDAY_COUNT] =
 {
-    COMPOUND_STRING("Friday,"),
-    COMPOUND_STRING("Saturday,"),
-    COMPOUND_STRING("Sunday,"),
-    COMPOUND_STRING("Monday,"),
-    COMPOUND_STRING("Tuesday,"),
-    COMPOUND_STRING("Wednesday,"),
-    COMPOUND_STRING("Thursday,"),
+    [WEEKDAY_SUN] = COMPOUND_STRING("Sunday,"),
+    [WEEKDAY_MON] = COMPOUND_STRING("Monday,"),
+    [WEEKDAY_TUE] = COMPOUND_STRING("Tuesday,"),
+    [WEEKDAY_WED] = COMPOUND_STRING("Wednesday,"),
+    [WEEKDAY_THU] = COMPOUND_STRING("Thursday,"),
+    [WEEKDAY_FRI] = COMPOUND_STRING("Friday,"),
+    [WEEKDAY_SAT] = COMPOUND_STRING("Saturday,"),
 };
 
 static void Vol_SetFirstSelectedMenu(void)
@@ -697,6 +701,25 @@ static void Vol_SetFirstSelectedMenu(void)
         }
     }
 }
+
+// Wally's Journey: the Pokédex icon asks "Pokédex or DexNav?" (no new icon art needed)
+static const struct WindowTemplate sWindowTemplate_DexChoice = {
+    .bg = 0,
+    .tilemapLeft = 18,
+    .tilemapTop = 1,
+    .width = 7,
+    .height = 4,
+    .paletteNum = 15,
+    .baseBlock = 0x80
+};
+
+#define DEX_CHOICE_FRAME_TILE STD_WINDOW_BASE_TILE_NUM
+#define DEX_CHOICE_FRAME_PAL  13
+
+static const struct MenuAction sDexChoiceActions[] = {
+    {COMPOUND_STRING("Pokédex"), {NULL}},
+    {COMPOUND_STRING("DexNav"),  {NULL}},
+};
 
 static void ShowSafariBallsWindow(void)
 {
@@ -850,13 +873,21 @@ static void Vol_StartMenu_PrintClockDisplay(void)
     if (VOL_START_24_HOUR_MODE)
         xOffset = 3;
 
-    StringCopy(gStringVar3, weekdayNames[(gLocalTime.days % WEEKDAY_COUNT)]);
+    // Wally's Journey: gLocalTime.days is negative when the clock is earlier than the save's
+    // start date. "days % 7" then indexed outside the table and crashed, and GetDayOfWeek()
+    // loops for ages on negative days, so work the weekday out here. Day 0 is a Saturday
+    // (gGen3Epoch), the same as the rest of the game.
+    RtcCalcLocalTime();
+    s32 dayMod = gLocalTime.days % WEEKDAY_COUNT;
+    if (dayMod < 0)
+        dayMod += WEEKDAY_COUNT;
+    u32 weekday = (WEEKDAY_SAT + dayMod) % WEEKDAY_COUNT;
+    FillWindowPixelBuffer(sVol_StartMenu->windowIdClock, PIXEL_FILL(TEXT_COLOR_WHITE));
     AddTextPrinterParameterized(sVol_StartMenu->windowIdClock, weekdayFont,
-        weekdayNames[(gLocalTime.days % WEEKDAY_COUNT)], 1 + xOffset, 1 - yOffset, TEXT_SKIP_DRAW, NULL
+        weekdayNames[weekday], 1 + xOffset, 1 - yOffset, TEXT_SKIP_DRAW, NULL
     );
 
     u8 time[24];
-    RtcCalcLocalTime();
     FormatDecimalTimeWithoutSeconds(time, gLocalTime.hours, gLocalTime.minutes, VOL_START_24_HOUR_MODE);
 	AddTextPrinterParameterized(sVol_StartMenu->windowIdClock, FONT_NORMAL, time,
         GetStringRightAlignXOffset(FONT_NORMAL, time, sWindowTemplate_StartClock.width * 8) - 1 - xOffset,
@@ -976,6 +1007,88 @@ static void Vol_SelectedFunc_Pokedex(void)
     DoCleanUpAndChangeCallback(CB2_OpenPokedex);
 }
 
+bool32 Vol_StartMenu_ShouldUse(void)
+{
+    // places where the old menu has entries Vol's menu doesn't (Retire, Pyramid Bag, link options)
+    return !IsOverworldLinkActive()
+        && !InUnionRoom()
+        && !InBattlePike()
+        && CurrentBattlePyramidLocation() == PYRAMID_LOCATION_NONE
+        && !InMultiPartnerRoom();
+}
+
+static bool32 Vol_DexNavAvailable(void)
+{
+    return DN_FLAG_DEXNAV_GET != 0 && FlagGet(DN_FLAG_DEXNAV_GET);
+}
+
+static void Vol_CloseDexChoice(void)
+{
+    ClearStdWindowAndFrameToTransparent(sVol_StartMenu->windowIdDexChoice, TRUE);
+    RemoveWindow(sVol_StartMenu->windowIdDexChoice);
+}
+
+static void Task_Vol_WaitFadeOpenDexNav(u8 taskId)
+{
+    if (gPaletteFade.active)
+        return;
+    PlayRainStoppingSoundEffect();
+    Vol_StartMenu_ExitAndClearTilemap();
+    DestroyTask(taskId);
+    CreateTask(Task_OpenDexNavFromStartMenu, 0);
+}
+
+static void Task_Vol_StartMenu_DexChoice(u8 taskId)
+{
+    s8 choice = Menu_ProcessInputNoWrap();
+
+    if (choice == MENU_NOTHING_CHOSEN)
+        return;
+
+    if (choice == MENU_B_PRESSED)
+    {
+        PlaySE(SE_SELECT);
+        Vol_CloseDexChoice();
+        gTasks[taskId].func = Task_Vol_StartMenu_HandleMainInput;
+        return;
+    }
+
+    if (choice == 1 && MapHasNoEncounterData())
+    {
+        PlaySE(SE_FAILURE); // nothing to search for here, same rule as the old menu
+        return;
+    }
+
+    Vol_CloseDexChoice();
+    if (choice == 0)
+    {
+        // Pokédex: same as before
+        FadeScreen(FADE_TO_BLACK, 0);
+        sVol_StartMenu->isLoading = TRUE;
+        gTasks[taskId].func = Task_Vol_StartMenu_HandleMainInput;
+    }
+    else
+    {
+        // DexNav: fade, close this menu, then the same launch the old start menu used
+        FadeScreen(FADE_TO_BLACK, 0);
+        gTasks[taskId].func = Task_Vol_WaitFadeOpenDexNav;
+    }
+}
+
+static void Vol_OpenDexChoice(u8 taskId)
+{
+    u32 windowId = AddWindow(&sWindowTemplate_DexChoice);
+    sVol_StartMenu->windowIdDexChoice = windowId;
+    LoadUserWindowBorderGfx(windowId, DEX_CHOICE_FRAME_TILE, BG_PLTT_ID(DEX_CHOICE_FRAME_PAL));
+    DrawStdFrameWithCustomTileAndPalette(windowId, FALSE, DEX_CHOICE_FRAME_TILE, DEX_CHOICE_FRAME_PAL);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_WHITE));
+    PrintMenuTable(windowId, ARRAY_COUNT(sDexChoiceActions), sDexChoiceActions);
+    InitMenuInUpperLeftCornerNormal(windowId, ARRAY_COUNT(sDexChoiceActions), 0);
+    PutWindowTilemap(windowId);
+    CopyWindowToVram(windowId, COPYWIN_FULL);
+    gTasks[taskId].func = Task_Vol_StartMenu_DexChoice;
+}
+
 static void Vol_SelectedFunc_Pokemon(void)
 {
     DoCleanUpAndChangeCallback(CB2_PartyMenuFromStartMenu);
@@ -1092,7 +1205,12 @@ static void Task_Vol_StartMenu_HandleMainInput(u8 taskId)
     
     if (JOY_NEW(A_BUTTON))
     {
-        if (sVol_StartMenu->isLoading == FALSE)
+        if (sVol_StartMenu->isLoading == FALSE && menuSelected == VOL_START_MENU_POKEDEX && Vol_DexNavAvailable())
+        {
+            PlaySE(SE_SELECT);
+            Vol_OpenDexChoice(taskId);
+        }
+        else if (sVol_StartMenu->isLoading == FALSE)
         {
             if (menuSelected != VOL_START_MENU_SAVE && menuSelected != VOL_START_MENU_FLAG)
                 FadeScreen(FADE_TO_BLACK, 0);

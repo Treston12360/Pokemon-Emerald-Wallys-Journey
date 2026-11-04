@@ -141,7 +141,6 @@ static u8 BattlePyramidRetireInputCallback(void);
 
 // Task callbacks
 static void StartMenuTask(u8 taskId);
-// static void SaveGameTask(u8 taskId);
 static void Task_SaveAfterLinkBattle(u8 taskId);
 static void Task_WaitForBattleTowerLinkSave(u8 taskId);
 static bool8 FieldCB_ReturnToFieldStartMenu(void);
@@ -580,12 +579,19 @@ static void CreateStartMenuTask(TaskFunc followupFunc)
 
 static bool8 FieldCB_ReturnToFieldStartMenu(void)
 {
-    // if (InitStartMenuStep() == FALSE)
-    // {
-    //     return FALSE;
-    // }
-  
-    Vol_StartMenu_Init();
+    if (Vol_StartMenu_ShouldUse())
+    {
+        // Wally's Journey: Vol's start menu draws itself; just fade the field back in
+        Vol_StartMenu_Init();
+        FadeInFromBlack();
+        LockPlayerFieldControls();
+        return TRUE;
+    }
+
+    if (InitStartMenuStep() == FALSE)
+    {
+        return FALSE;
+    }
 
     ReturnToFieldOpenStartMenu();
     return TRUE;
@@ -620,6 +626,13 @@ void Task_ShowStartMenu(u8 taskId)
 
 void ShowStartMenu(void)
 {
+    // Wally's Journey: Vol's start menu everywhere except link rooms, the Battle Pike/Pyramid
+    // and the multi partner room, which need the old menu's Retire / Pyramid Bag / link entries
+    if (Vol_StartMenu_ShouldUse())
+    {
+        Vol_StartMenu_Init();
+        return;
+    }
     if (!IsOverworldLinkActive())
     {
         FreezeObjectEvents();

@@ -230,8 +230,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     {
         FlagSet(FLAG_OPENED_START_MENU);
         PlaySE(SE_WIN_OPEN);
-        // ShowStartMenu();
-        Vol_StartMenu_Init();
+        ShowStartMenu(); // Wally's Journey: opens Vol's start menu where it can be used
         return TRUE;
     }
 
