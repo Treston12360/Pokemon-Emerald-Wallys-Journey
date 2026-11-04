@@ -47,6 +47,7 @@
 #include "pokerus.h"
 #include "random.h"
 #include "recorded_battle.h"
+#include "reshow_battle_screen.h"
 #include "roamer.h"
 #include "safari_zone.h"
 #include "scanline_effect.h"
@@ -110,6 +111,8 @@ static void BattleStartClearSetData(void);
 static void DoBattleIntro(void);
 static void TryDoEventsBeforeFirstTurn(void);
 static void HandleTurnActionSelectionState(void);
+static void PlayerTryEvolution(void);
+static void WaitForEvolutionThenTryAnother(void);
 static void RunTurnActionsFunctions(void);
 static void SetActionsAndBattlersTurnOrder(void);
 static void UpdateBattlerPartyOrdersOnSwitch(enum BattlerId battler);
@@ -500,6 +503,8 @@ void CB2_InitBattle(void)
             SetMainCallback2(CB2_PreInitIngamePlayerPartnerBattle);
         }
         gBattleCommunication[MULTIUSE_STATE] = 0;
+        gPlayerDoesNotWantToEvolveLeft = FALSE;
+        gPlayerDoesNotWantToEvolveRight = FALSE;
     }
     else
     {
@@ -3689,7 +3694,7 @@ bool32 EndTurnEvents(void) // Called from Battle Script
     AssignUsableGimmicks();
     SetShellSideArmCategory();
     SetAiLogicDataForTurn(gAiLogicData); // get assumed abilities, hold effects, etc of all battlers
-    SetBattleCallback(HandleTurnActionSelectionState);
+    SetBattleCallback(PlayerTryEvolution); // mid-battle evolution first, then action selection
 
     return FALSE;
 }
@@ -3814,6 +3819,80 @@ enum
     STATE_WAIT_SET_BEFORE_ACTION,
     STATE_SELECTION_SCRIPT_MAY_RUN
 };
+
+// Mid-battle evolution (shachar700's rhh-13.2-midBattleEvo, after Zetraphes' MidBattleEvo):
+// at the start of a turn, a player Pokémon on the field that levelled up and can evolve
+// evolves right away instead of after the battle. Pressing B stops it for this battle.
+EWRAM_DATA bool8 gPlayerDoesNotWantToEvolveLeft = FALSE;
+EWRAM_DATA bool8 gPlayerDoesNotWantToEvolveRight = FALSE;
+static EWRAM_DATA u8 sBattleEnvironmentBackup = 0;
+
+#define LEFT_PKMN gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]
+#define RIGHT_PKMN gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)]
+
+static void CB2_SetUpReshowBattleScreenAfterEvolution(void)
+{
+    gBattleEnvironment = sBattleEnvironmentBackup;
+    SetMainCallback2(ReshowBattleScreenAfterMenu);
+}
+
+#define tSpeciesToEvolveInto data[0]
+#define tBattlerPosition     data[1]
+
+static void Task_BeginBattleEvolutionScene(u8 taskId)
+{
+    if (!gPaletteFade.active)
+    {
+        u8 partyId = gTasks[taskId].tBattlerPosition;
+        u16 species = gTasks[taskId].tSpeciesToEvolveInto;
+        FreeAllWindowBuffers();
+        gCB2_AfterEvolution = CB2_SetUpReshowBattleScreenAfterEvolution;
+        sBattleEnvironmentBackup = gBattleEnvironment;
+        DestroyTask(taskId);
+        EvolutionScene(&gParties[B_TRAINER_PLAYER][partyId], species, TRUE, partyId);
+    }
+}
+
+static bool32 TryStartMidBattleEvolution(u32 partyId)
+{
+    enum Species species;
+    u8 taskId;
+    if (!(gLeveledUpInBattle & (1u << partyId)))
+        return FALSE;
+    gLeveledUpInBattle &= ~(1u << partyId);
+    species = GetEvolutionTargetSpecies(&gParties[B_TRAINER_PLAYER][partyId], EVO_MODE_NORMAL, ITEM_NONE, NULL, NULL, CHECK_EVO);
+    if (species == SPECIES_NONE)
+        return FALSE;
+    BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+    SetBattleCallback(WaitForEvolutionThenTryAnother);
+    taskId = CreateTask(Task_BeginBattleEvolutionScene, 0);
+    gTasks[taskId].tSpeciesToEvolveInto = species;
+    gTasks[taskId].tBattlerPosition = partyId;
+    return TRUE;
+}
+
+static void PlayerTryEvolution(void)
+{
+    if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_SAFARI | BATTLE_TYPE_CATCH_TUTORIAL)))
+    {
+        if (!gPlayerDoesNotWantToEvolveLeft && gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].hp != 0
+         && TryStartMidBattleEvolution(LEFT_PKMN))
+            return;
+        if (IsDoubleBattle() && !gPlayerDoesNotWantToEvolveRight && gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].hp != 0
+         && TryStartMidBattleEvolution(RIGHT_PKMN))
+            return;
+    }
+    SetBattleCallback(HandleTurnActionSelectionState);
+}
+
+static void WaitForEvolutionThenTryAnother(void)
+{
+    if (gMain.callback2 == BattleMainCB2 && !gPaletteFade.active)
+        SetBattleCallback(PlayerTryEvolution);
+}
+
+#undef tSpeciesToEvolveInto
+#undef tBattlerPosition
 
 static void HandleTurnActionSelectionState(void)
 {

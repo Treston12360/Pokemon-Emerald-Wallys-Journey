@@ -1105,6 +1105,8 @@ extern MainCallback gPreBattleCallback1;
 extern void (*gBattleMainFunc)(void);
 extern struct BattleResults gBattleResults;
 extern u8 gLeveledUpInBattle;
+extern bool8 gPlayerDoesNotWantToEvolveLeft;
+extern bool8 gPlayerDoesNotWantToEvolveRight;
 extern u8 gHealthboxSpriteIds[MAX_BATTLERS_COUNT];
 extern u8 gMultiUsePlayerCursor;
 extern u8 gNumberOfMovesToChoose;
