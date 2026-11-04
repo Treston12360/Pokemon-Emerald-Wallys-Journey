@@ -46,6 +46,8 @@
 #include "constants/songs.h"
 #include "constants/trainer_hill.h"
 
+#include "vol_start_menu.h"
+
 static EWRAM_DATA u8 sWildEncounterImmunitySteps = 0;
 static EWRAM_DATA u16 sPrevMetatileBehavior = 0;
 
@@ -228,7 +230,8 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     {
         FlagSet(FLAG_OPENED_START_MENU);
         PlaySE(SE_WIN_OPEN);
-        ShowStartMenu();
+        // ShowStartMenu();
+        Vol_StartMenu_Init();
         return TRUE;
     }
 
