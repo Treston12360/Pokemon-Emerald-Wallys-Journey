@@ -1,6 +1,8 @@
 #ifndef GUARD_CONFIG_POKEMON_H
 #define GUARD_CONFIG_POKEMON_H
 
+#define P_DITTO_SPRITES                 TRUE        // Transformed Pokémon keep Ditto's face (AsparagusEduardo); only species with art
+
 // Species data settings
 #define P_UPDATED_TYPES             GEN_LATEST  // Some Pokémon have received type updates after their introduction.
 #define P_UPDATED_STATS             GEN_LATEST  // Some Pokémon have received base stat updates after their introduction.

@@ -1130,6 +1130,9 @@ void LoadSpecialPokePic(void *dest, enum Species species, u32 personality, bool8
     LoadSpecialPokePicIsEgg(dest, species, personality, isFrontPic, FALSE);
 }
 
+// Set by battle code while loading the sprite of a transformed Pokémon (Ditto face support).
+EWRAM_DATA bool8 gLoadDittoFacePic = FALSE;
+
 void LoadSpecialPokePicIsEgg(void *dest, enum Species species, u32 personality, bool8 isFrontPic, bool32 isEgg)
 {
     species = SanitizeSpeciesId(species);
@@ -1145,6 +1148,11 @@ void LoadSpecialPokePicIsEgg(void *dest, enum Species species, u32 personality, 
     }
     else if (isFrontPic)
     {
+    #if P_DITTO_SPRITES
+        if (gLoadDittoFacePic && gSpeciesInfo[species].frontPicDitto != NULL)
+            DecompressDataWithHeaderWram(gSpeciesInfo[species].frontPicDitto, dest);
+        else
+    #endif
     #if P_GENDER_DIFFERENCES
         if (gSpeciesInfo[species].frontPicFemale != NULL && IsPersonalityFemale(species, personality))
             DecompressDataWithHeaderWram(gSpeciesInfo[species].frontPicFemale, dest);
@@ -1157,6 +1165,11 @@ void LoadSpecialPokePicIsEgg(void *dest, enum Species species, u32 personality, 
     }
     else
     {
+    #if P_DITTO_SPRITES
+        if (gLoadDittoFacePic && gSpeciesInfo[species].backPicDitto != NULL)
+            DecompressDataWithHeaderWram(gSpeciesInfo[species].backPicDitto, dest);
+        else
+    #endif
     #if P_GENDER_DIFFERENCES
         if (gSpeciesInfo[species].backPicFemale != NULL && IsPersonalityFemale(species, personality))
             DecompressDataWithHeaderWram(gSpeciesInfo[species].backPicFemale, dest);

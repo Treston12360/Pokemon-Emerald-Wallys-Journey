@@ -2038,6 +2038,7 @@ u8 CreateAdditionalMonSpriteForMoveAnim(enum Species species, bool32 isBackpic, 
 
     if (gMonSpritesGfxPtr != NULL && gMonSpritesGfxPtr->buffer == NULL)
         gMonSpritesGfxPtr->buffer = AllocZeroed(MON_PIC_SIZE * MAX_MON_PIC_FRAMES);
+    gLoadDittoFacePic = (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE);
     if (!isBackpic)
     {
         LoadPalette(GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personality), OBJ_PLTT_ID(palette), PLTT_SIZE_4BPP);
@@ -2054,6 +2055,7 @@ u8 CreateAdditionalMonSpriteForMoveAnim(enum Species species, bool32 isBackpic, 
                            personality,
                            FALSE);
     }
+    gLoadDittoFacePic = FALSE;
 
     RequestDma3Copy(gMonSpritesGfxPtr->buffer, (void *)(OBJ_VRAM0 + (sheet * 0x20)), MON_PIC_SIZE, 1);
     FREE_AND_SET_NULL(gMonSpritesGfxPtr->buffer);

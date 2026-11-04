@@ -55,6 +55,10 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .palette = gMonPalette_Bulbasaur,
         .shinyPalette = gMonShinyPalette_Bulbasaur,
         .iconSprite = gMonIcon_Bulbasaur,
+#if P_DITTO_SPRITES
+        .frontPicDitto = gMonFrontPic_BulbasaurDitto,
+        .backPicDitto = gMonBackPic_BulbasaurDitto,
+#endif
         .iconPalIndex = P_GBA_STYLE_SPECIES_ICONS ? 1 : 4,
         .pokemonJumpType = PKMN_JUMP_TYPE_SLOW,
         SHADOW(1, -1, SHADOW_SIZE_S)
@@ -126,6 +130,9 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .palette = gMonPalette_Ivysaur,
         .shinyPalette = gMonShinyPalette_Ivysaur,
         .iconSprite = gMonIcon_Ivysaur,
+#if P_DITTO_SPRITES
+        .frontPicDitto = gMonFrontPic_IvysaurDitto,
+#endif
         .iconPalIndex = P_GBA_STYLE_SPECIES_ICONS ? 1 : 4,
         .pokemonJumpType = PKMN_JUMP_TYPE_NONE,
         SHADOW(-1, 3, SHADOW_SIZE_L)
@@ -203,6 +210,9 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .palette = gMonPalette_Venusaur,
         .shinyPalette = gMonShinyPalette_Venusaur,
         .iconSprite = gMonIcon_Venusaur,
+#if P_DITTO_SPRITES
+        .frontPicDitto = gMonFrontPic_VenusaurDitto,
+#endif
         .iconPalIndex = P_GBA_STYLE_SPECIES_ICONS ? 1 : 4,
 #if P_GENDER_DIFFERENCES && !P_GBA_STYLE_SPECIES_GFX
         .frontPicFemale = gMonFrontPic_VenusaurF,
@@ -5158,6 +5168,9 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .palette = gMonPalette_Cleffa,
         .shinyPalette = gMonShinyPalette_Cleffa,
         .iconSprite = gMonIcon_Cleffa,
+#if P_DITTO_SPRITES
+        .frontPicDitto = gMonFrontPic_CleffaDitto,
+#endif
         .iconPalIndex = 0,
         .pokemonJumpType = PKMN_JUMP_TYPE_NORMAL,
         SHADOW(0, -4, SHADOW_SIZE_S)
@@ -5234,6 +5247,9 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .palette = gMonPalette_Clefairy,
         .shinyPalette = gMonShinyPalette_Clefairy,
         .iconSprite = gMonIcon_Clefairy,
+#if P_DITTO_SPRITES
+        .frontPicDitto = gMonFrontPic_ClefairyDitto,
+#endif
         .iconPalIndex = 0,
         .pokemonJumpType = PKMN_JUMP_TYPE_NORMAL,
         SHADOW(1, 1, SHADOW_SIZE_S)
@@ -5316,6 +5332,9 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .palette = gMonPalette_Clefable,
         .shinyPalette = gMonShinyPalette_Clefable,
         .iconSprite = gMonIcon_Clefable,
+#if P_DITTO_SPRITES
+        .frontPicDitto = gMonFrontPic_ClefableDitto,
+#endif
         .iconPalIndex = 0,
         .pokemonJumpType = PKMN_JUMP_TYPE_NONE,
         SHADOW(0, 7, SHADOW_SIZE_M)
@@ -8138,6 +8157,10 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .palette = gMonPalette_Growlithe,
         .shinyPalette = gMonShinyPalette_Growlithe,
         .iconSprite = gMonIcon_Growlithe,
+#if P_DITTO_SPRITES
+        .frontPicDitto = gMonFrontPic_GrowlitheDitto,
+        .backPicDitto = gMonBackPic_GrowlitheDitto,
+#endif
         .iconPalIndex = P_GBA_STYLE_SPECIES_ICONS ? 0 : 3,
         .pokemonJumpType = PKMN_JUMP_TYPE_FAST,
         SHADOW(0, 4, SHADOW_SIZE_M)
@@ -8208,6 +8231,10 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .palette = gMonPalette_Arcanine,
         .shinyPalette = gMonShinyPalette_Arcanine,
         .iconSprite = gMonIcon_Arcanine,
+#if P_DITTO_SPRITES
+        .frontPicDitto = gMonFrontPic_ArcanineDitto,
+        .backPicDitto = gMonBackPic_ArcanineDitto,
+#endif
         .iconPalIndex = P_GBA_STYLE_SPECIES_ICONS ? 0 : 3,
         .pokemonJumpType = PKMN_JUMP_TYPE_NONE,
         SHADOW(-4, 11, SHADOW_SIZE_XL_BATTLE_ONLY)
@@ -11511,6 +11538,10 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .palette = gMonPalette_Doduo,
         .shinyPalette = gMonShinyPalette_Doduo,
         .iconSprite = gMonIcon_Doduo,
+#if P_DITTO_SPRITES
+        .frontPicDitto = gMonFrontPic_DoduoDitto,
+        .backPicDitto = gMonBackPic_DoduoDitto,
+#endif
         .iconPalIndex = 2,
 #if P_GENDER_DIFFERENCES && !P_GBA_STYLE_SPECIES_GFX
         .frontPicFemale = gMonFrontPic_DoduoF,
@@ -11606,6 +11637,10 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .palette = gMonPalette_Dodrio,
         .shinyPalette = gMonShinyPalette_Dodrio,
         .iconSprite = gMonIcon_Dodrio,
+#if P_DITTO_SPRITES
+        .frontPicDitto = gMonFrontPic_DodrioDitto,
+        .backPicDitto = gMonBackPic_DodrioDitto,
+#endif
         .iconPalIndex = 2,
 #if P_GENDER_DIFFERENCES && !P_GBA_STYLE_SPECIES_GFX
         .frontPicFemale = gMonFrontPic_DodrioF,
