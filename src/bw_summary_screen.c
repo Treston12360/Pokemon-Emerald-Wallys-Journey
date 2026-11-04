@@ -2065,6 +2065,11 @@ static bool8 DecompressGraphics(void)
     case 8:
         LoadPalette(sSummaryScreen_Pal_BW, BG_PLTT_ID(0), 8 * PLTT_SIZE_4BPP);
         LoadPalette(&sSummaryScreen_PPTextPalette_BW, BG_PLTT_ID(8) + 1, PLTT_SIZEOF(16 - 1));
+        {
+            // Wally's Journey: green for the stat a nature raises (text palette 6, slot 15 is unused).
+            static const u16 sWJNatureUpGreen = RGB(2, 20, 6);
+            LoadPalette(&sWJNatureUpGreen, BG_PLTT_ID(6) + 15, PLTT_SIZEOF(1));
+        }
         sMonSummaryScreen->switchCounter++;
         break;
     case 9:
@@ -4293,8 +4298,10 @@ static void UNUSED PrintRibbonCount(void)
 
 static void BufferStat(u8 *dst, s8 statIndex, u32 stat, u32 strId, u32 align)
 {
-    static const u8 sTextNatureDown[] = _("{COLOR}{08}");
-    static const u8 sTextNatureUp[] = _("{COLOR}{05}");
+    // Wally's Journey: raised stat green with an up arrow, lowered stat red with a down arrow
+    // (same colours as our old summary screen).
+    static const u8 sTextNatureDown[] = _("{COLOR}{05}");
+    static const u8 sTextNatureUp[] = _("{COLOR}{15}");
     static const u8 sTextNatureNeutral[] = _("{COLOR}{01}");
     static const u8 sTextUpArrow[] = _(" {UP_ARROW}");
     static const u8 sTextDownArrow[] = _(" {DOWN_ARROW}");
