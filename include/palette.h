@@ -18,6 +18,7 @@
 #define PALETTES_MAP     0x00001FFF
 #define PALETTES_OBJECTS 0xFFFF0000
 #define PALETTES_ALL     (PALETTES_BG | PALETTES_OBJECTS)
+#define PALETTES_BATTLE_BG  (1 << 2 | 1 << 3 | 1 << 4)
 
 #define PLTT_ID(n) ((n) * 16)
 #define BG_PLTT_OFFSET 0x000
@@ -106,6 +107,8 @@ void BlendPalettes(u32 selectedPalettes, u8 coeff, u32 color);
 void BlendPalettesFine(u32 palettes, u16 *src, u16 *dst, u32 coeff, u32 color);
 void BlendPalettesUnfaded(u32 selectedPalettes, u8 coeff, u32 color);
 void BlendPalettesGradually(u32 selectedPalettes, s8 delay, u8 coeff, u8 coeffTarget, u16 color, u8 priority, u8 id);
+void TimeMixBattleBgPalette(void);
+void WallyJourney_ApplyNightLights(u32 palettes, const u16 *dst); // overworld.c
 void TimeMixPalettes(u32 palettes, u16 *src, u16 *dst, struct BlendSettings *blend0, struct BlendSettings *blend1, u16 weight0);
 void AvgPaletteWeighted(u16 *src0, u16 *src1, u16 *dst, u16 weight0);
 void TintPalette_GrayScale(u16 *palette, u32 count);

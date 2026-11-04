@@ -144,3 +144,6 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 - Dynamic move descriptions: Flash1Lucky ([Flash1Lucky/pokeemerald-expansion dynamic-move-descriptions](https://github.com/Flash1Lucky/pokeemerald-expansion/tree/dynamic-move-descriptions))
 - Sword/Shield-style message box: montmoguri ([montmoguri/pokeemerald-expansion swsh_message_box](https://github.com/montmoguri/pokeemerald-expansion/tree/swsh_message_box)) (Wally's Journey made the name tag green)
 - Sword/Shield-style storage system and bag: montmoguri ([montmoguri/pokeemerald-expansion](https://github.com/montmoguri/pokeemerald-expansion), branches swsh_storage_system and swsh_bag_menu; comfy_anim by its authors) (Wally's Journey recoloured the lime accents Emerald green)
+- Hourly day/night tints and night window palettes: ShinyDragonHunter ([ShinyDragonHunter/pokeemerald DayNight](https://github.com/ShinyDragonHunter/pokeemerald/tree/DayNight))
+- Hand-made seasonal palettes for the General tileset: BelialClover ([BelialClover/pokeemerald seasons](https://github.com/BelialClover/pokeemerald/tree/seasons))
+- Day/night on battle backgrounds: Kasen ([Kasenn/pokeemerald-expansion-kasen battle-dns](https://github.com/Kasenn/pokeemerald-expansion-kasen/tree/battle-dns))

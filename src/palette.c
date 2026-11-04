@@ -7,6 +7,7 @@
 #include "menu.h"
 #include "gpu_regs.h"
 #include "task.h"
+#include "overworld.h"
 #include "constants/field_weather.h"
 #include "constants/rgb.h"
 
@@ -898,7 +899,7 @@ void BlendPalettes(u32 selectedPalettes, u8 coeff, u32 color)
 
 // Blends a weighted average of two blend parameters
 // Parameters can be either blended (as in BlendPalettes) or tinted (as in TintPaletteRGB_Copy)
-void TimeMixPalettes(u32 palettes, u16 *src, u16 *dst, struct BlendSettings *blend0, struct BlendSettings *blend1, u16 weight0)
+static void TimeMixPalettes_Internal(u32 palettes, u16 *src, u16 *dst, struct BlendSettings *blend0, struct BlendSettings *blend1, u16 weight0)
 {
     s32 r0, g0, b0, r1, g1, b1, defR, defG, defB, altR, altG, altB;
     u32 color0, coeff0, color1, coeff1;
@@ -1049,6 +1050,13 @@ void TimeMixPalettes(u32 palettes, u16 *src, u16 *dst, struct BlendSettings *ble
         }
         palettes >>= 1;
     } while (palettes);
+}
+
+void TimeMixPalettes(u32 palettes, u16 *src, u16 *dst, struct BlendSettings *blend0, struct BlendSettings *blend1, u16 weight0)
+{
+    TimeMixPalettes_Internal(palettes, src, dst, blend0, blend1, weight0);
+    WallyJourney_ApplyNightLights(palettes, dst); // Wally's Journey: lit windows at night
+
 }
 
 // Apply weighted average to palettes, preserving high bits of dst throughout
@@ -1276,4 +1284,14 @@ static void Task_BlendPalettesGradually(u8 taskId)
             tCoeff = target;
         }
     }
+}
+
+// Battle backgrounds follow the overworld day/night tint (Kasen's "battle-dns" branch,
+// background part only: Pokémon and trainer sprites keep their normal colours).
+void TimeMixBattleBgPalette(void)
+{
+    if (!B_APPLY_DNS_TO_BACKGROUND || !MapHasNaturalLight(gMapHeader.mapType))
+        return;
+    UpdatePalettesWithTime(PALETTES_BATTLE_BG);
+    CpuCopy16(&gPlttBufferFaded[BG_PLTT_ID(2)], &gPlttBufferUnfaded[BG_PLTT_ID(2)], 3 * PLTT_SIZE_4BPP);
 }

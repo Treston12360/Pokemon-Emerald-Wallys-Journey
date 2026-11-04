@@ -456,4 +456,7 @@
 #define B_POOL_RULE_MEGA_STONE_CLAUSE       FALSE    // Pick only 1 Pokémon with a Mega Stone.
 #define B_POOL_RULE_Z_CRYSTAL_CLAUSE        FALSE    // Pick only 1 Pokémon with a Z-Crystal.
 
+// Battle DNS (Kasen): battle backgrounds take the overworld day/night tint on outdoor maps
+#define B_APPLY_DNS_TO_BACKGROUND           TRUE
+
 #endif // GUARD_CONFIG_BATTLE_H

@@ -2,6 +2,7 @@
 #include "wj_outfit.h"
 #include "battle_transition.h"
 #include "overworld.h"
+#include "tilesets.h"
 #include "wally_journey.h"
 #include "battle_pyramid.h"
 #include "battle_setup.h"
@@ -1716,75 +1717,138 @@ const struct BlendSettings gTimeOfDayBlend[] =
 
 #define MORNING_HOUR_MIDDLE (MORNING_HOUR_BEGIN + ((MORNING_HOUR_END - MORNING_HOUR_BEGIN) / 2))
 
+// Wally's Journey: hour-by-hour day/night tints with smooth blending inside each hour,
+// from ShinyDragonHunter's pokeemerald DayNight branch (sTimeOfDayTints). Values are
+// per-channel multipliers in 1/256 (255 = unchanged); 10:00-16:59 use the season's
+// daytime look instead (WallyJourney_GetSeasonDayBlend).
+#define DN_TINT(r, g, b) {(u8)min(255, (r) * 256 / 100), (u8)min(255, (g) * 256 / 100), (u8)min(255, (b) * 256 / 100)}
+static const u8 sWJHourTints[HOURS_PER_DAY][3] =
+{
+    [0]  = DN_TINT(60, 60, 92),
+    [1]  = DN_TINT(60, 60, 92),
+    [2]  = DN_TINT(60, 60, 92),
+    [3]  = DN_TINT(60, 60, 92),
+    [4]  = DN_TINT(60, 65, 100),
+    [5]  = DN_TINT(70, 70, 90),
+    [6]  = DN_TINT(70, 70, 90),
+    [7]  = DN_TINT(70, 70, 90),
+    [8]  = DN_TINT(90, 85, 100),
+    [9]  = DN_TINT(100, 90, 100),
+    [10] = DN_TINT(100, 100, 100),
+    [11] = DN_TINT(100, 100, 100),
+    [12] = DN_TINT(100, 100, 100),
+    [13] = DN_TINT(100, 100, 100),
+    [14] = DN_TINT(100, 100, 100),
+    [15] = DN_TINT(100, 100, 100),
+    [16] = DN_TINT(100, 100, 100),
+    [17] = DN_TINT(100, 98, 90),
+    [18] = DN_TINT(90, 70, 67),
+    [19] = DN_TINT(75, 66, 77),
+    [20] = DN_TINT(70, 63, 82),
+    [21] = DN_TINT(60, 60, 92),
+    [22] = DN_TINT(60, 60, 92),
+    [23] = DN_TINT(60, 60, 92),
+};
+#undef DN_TINT
+
+static bool32 WJ_IsPlainDayHour(s32 hour)
+{
+    return hour >= 10 && hour <= 16;
+}
+
+static struct BlendSettings WJ_HourBlend(s32 hour)
+{
+    struct BlendSettings blend = {0};
+    if (WJ_IsPlainDayHour(hour))
+        return WallyJourney_GetSeasonDayBlend();
+    blend.isTint = TRUE;
+    blend.blendColor = sWJHourTints[hour][0] | (sWJHourTints[hour][1] << 8) | (sWJHourTints[hour][2] << 16);
+    return blend;
+}
+
+// 0 = full night, 256 = full day (drives the tilesets' night swap palettes)
+static u32 WJ_HourDaylight(s32 hour)
+{
+    u32 avg = (sWJHourTints[hour][0] + sWJHourTints[hour][1] + sWJHourTints[hour][2]) / 3;
+    u32 night = (sWJHourTints[0][0] + sWJHourTints[0][1] + sWJHourTints[0][2]) / 3;
+    if (avg <= night)
+        return 0;
+    return min(256, (avg - night) * 256 / (255 - night));
+}
+
 void UpdateTimeOfDay(bool32 updateBlend)
 {
-    s32 hours, minutes;
+    s32 hours, minutes, next;
     RtcCalcLocalTime();
     hours = sHoursOverride ? sHoursOverride : gLocalTime.hours;
     minutes = sHoursOverride ? 0 : gLocalTime.minutes;
 
-    if (IsBetweenHours(hours, MORNING_HOUR_BEGIN, MORNING_HOUR_MIDDLE)) // night->morning
-    {
-        if (updateBlend)
-        {
-            gTimeBlend.startBlend = gTimeOfDayBlend[TIME_NIGHT];
-            gTimeBlend.endBlend = gTimeOfDayBlend[TIME_MORNING];
-            gTimeBlend.weight = TIME_BLEND_WEIGHT(MORNING_HOUR_BEGIN, MORNING_HOUR_MIDDLE);
-            gTimeBlend.altWeight = (DEFAULT_WEIGHT - gTimeBlend.weight) / 2;
-        }
+    if (IsBetweenHours(hours, MORNING_HOUR_BEGIN, MORNING_HOUR_END))
         gTimeOfDay = TIME_MORNING;
-    }
-    else if (IsBetweenHours(hours, MORNING_HOUR_MIDDLE, MORNING_HOUR_END)) // morning->day
-    {
-        if (updateBlend)
-        {
-            gTimeBlend.startBlend = gTimeOfDayBlend[TIME_MORNING];
-            gTimeBlend.endBlend = WallyJourney_GetSeasonDayBlend();
-            gTimeBlend.weight = TIME_BLEND_WEIGHT(MORNING_HOUR_MIDDLE, MORNING_HOUR_END);
-            gTimeBlend.altWeight = (DEFAULT_WEIGHT - gTimeBlend.weight) / 2 + (DEFAULT_WEIGHT / 2);
-        }
-        gTimeOfDay = TIME_MORNING;
-    }
-    else if (IsBetweenHours(hours, EVENING_HOUR_BEGIN, EVENING_HOUR_END)) // evening
-    {
-        if (updateBlend)
-        {
-            gTimeBlend.startBlend = WallyJourney_GetSeasonDayBlend();
-            gTimeBlend.endBlend = gTimeOfDayBlend[TIME_EVENING];
-            gTimeBlend.weight = TIME_BLEND_WEIGHT(EVENING_HOUR_BEGIN, EVENING_HOUR_END);
-            gTimeBlend.altWeight = gTimeBlend.weight / 2 + (DEFAULT_WEIGHT / 2);
-        }
+    else if (IsBetweenHours(hours, EVENING_HOUR_BEGIN, EVENING_HOUR_END))
         gTimeOfDay = TIME_EVENING;
-    }
-    else if (IsBetweenHours(hours, NIGHT_HOUR_BEGIN, NIGHT_HOUR_BEGIN + 1)) // evening->night
-    {
-        if (updateBlend)
-        {
-            gTimeBlend.startBlend = gTimeOfDayBlend[TIME_EVENING];
-            gTimeBlend.endBlend = gTimeOfDayBlend[TIME_NIGHT];
-            gTimeBlend.weight = TIME_BLEND_WEIGHT(NIGHT_HOUR_BEGIN, NIGHT_HOUR_BEGIN + 1);
-            gTimeBlend.altWeight = gTimeBlend.weight / 2;
-        }
+    else if (IsBetweenHours(hours, NIGHT_HOUR_BEGIN, NIGHT_HOUR_END))
         gTimeOfDay = TIME_NIGHT;
-    }
-    else if (IsBetweenHours(hours, NIGHT_HOUR_BEGIN, NIGHT_HOUR_END)) // night
-    {
-        if (updateBlend)
-        {
-            gTimeBlend.weight = DEFAULT_WEIGHT;
-            gTimeBlend.altWeight = 0;
-            gTimeBlend.startBlend = gTimeBlend.endBlend = gTimeOfDayBlend[TIME_NIGHT];
-        }
-        gTimeOfDay = TIME_NIGHT;
-    }
-    else // day
-    {
-        if (updateBlend)
-        {
-            gTimeBlend.weight = gTimeBlend.altWeight = DEFAULT_WEIGHT;
-            gTimeBlend.startBlend = gTimeBlend.endBlend = WallyJourney_GetSeasonDayBlend();
-        }
+    else
         gTimeOfDay = TIME_DAY;
+
+    if (updateBlend)
+    {
+        u32 d0, d1;
+        next = (hours + 1) % HOURS_PER_DAY;
+        gTimeBlend.startBlend = WJ_HourBlend(hours);
+        gTimeBlend.endBlend = WJ_HourBlend(next);
+        gTimeBlend.weight = 256 - (256 * minutes) / MINUTES_PER_HOUR;
+        d0 = WJ_HourDaylight(hours);
+        d1 = WJ_HourDaylight(next);
+        gTimeBlend.altWeight = (d0 * gTimeBlend.weight + d1 * (256 - gTimeBlend.weight)) / 256;
+    }
+}
+
+// Night "lit windows" palettes (same source). Only the non-black colours replace the
+// tinted ones, so the window glass glows while the rest of the palette is night-tinted.
+struct WJNightOverride
+{
+    const struct Tileset *tileset;
+    u8 slot;
+    const u16 *palette;
+};
+static const u16 sNightGeneral01_05[] = INCGFX_U16("data/tilesets/primary/general/override_palettes/01_05.pal", ".gbapal");
+static const u16 sNightPetalburg06_08[] = INCGFX_U16("data/tilesets/secondary/petalburg/override_palettes/06_08.pal", ".gbapal");
+static const struct WJNightOverride sWJNightOverrides[] =
+{
+    // General slot 1 is left out: it also colours ponds/sea, which their palette turned yellow.
+    {&gTileset_General,   5, sNightGeneral01_05},
+    {&gTileset_Petalburg, 6, sNightPetalburg06_08},
+    {&gTileset_Petalburg, 8, sNightPetalburg06_08},
+};
+
+static bool32 WJ_WindowsLit(void)
+{
+    s32 hours = sHoursOverride ? sHoursOverride : gLocalTime.hours;
+    return hours >= 20 || hours < 5;
+}
+
+// Called after the day/night mix wrote palettes into dst (only acts on gPlttBufferFaded).
+void WallyJourney_ApplyNightLights(u32 palettes, const u16 *dst)
+{
+    u32 i, j, base;
+    if (dst < gPlttBufferFaded || dst >= gPlttBufferFaded + 16 * 16 || !MapHasNaturalLight(gMapHeader.mapType) || !WJ_WindowsLit())
+        return;
+    if (gMapHeader.mapLayout == NULL)
+        return;
+    base = (dst - gPlttBufferFaded) / 16;
+    for (i = 0; i < ARRAY_COUNT(sWJNightOverrides); i++)
+    {
+        const struct WJNightOverride *o = &sWJNightOverrides[i];
+        u32 slot = o->slot;
+        bool32 primary = slot < GetNumPalsInPrimary(gMapHeader.mapLayout);
+        const struct Tileset *ts = primary ? gMapHeader.mapLayout->primaryTileset : gMapHeader.mapLayout->secondaryTileset;
+        if (ts != o->tileset || slot < base || !(palettes & (1u << (slot - base))))
+            continue;
+        for (j = 1; j < 16; j++)
+            if ((o->palette[j] & 0x7FFF) != RGB_BLACK)
+                gPlttBufferFaded[slot * 16 + j] = o->palette[j];
     }
 }
 

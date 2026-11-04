@@ -31,6 +31,7 @@
 #include "trig.h"
 #include "sprite.h"
 #include "fieldmap.h"
+#include "tilesets.h"
 #include "global.fieldmap.h"
 #include "field_player_avatar.h"
 #include "event_object_movement.h"
@@ -1555,17 +1556,70 @@ static u16 SeasonalColor(u16 color, u32 mode, u32 slot)
     return RGB(r, g, b);
 }
 
+// Hand-made seasonal palettes for the General tileset (routes and most towns), from
+// BelialClover's pokeemerald "seasons" branch. Only slots 1, 2, 3 and 5 have art; every
+// other palette (and every other tileset) keeps the SeasonalColor formula below.
+static const u16 sGeneralSummer[4][16] = {
+    INCGFX_U16("data/tilesets/primary/general/palettes/summer/01.pal", ".gbapal"),
+    INCGFX_U16("data/tilesets/primary/general/palettes/summer/02.pal", ".gbapal"),
+    INCGFX_U16("data/tilesets/primary/general/palettes/summer/03.pal", ".gbapal"),
+    INCGFX_U16("data/tilesets/primary/general/palettes/summer/05.pal", ".gbapal"),
+};
+static const u16 sGeneralAutumn[4][16] = {
+    INCGFX_U16("data/tilesets/primary/general/palettes/autumn/01.pal", ".gbapal"),
+    INCGFX_U16("data/tilesets/primary/general/palettes/autumn/02.pal", ".gbapal"),
+    INCGFX_U16("data/tilesets/primary/general/palettes/autumn/03.pal", ".gbapal"),
+    INCGFX_U16("data/tilesets/primary/general/palettes/autumn/05.pal", ".gbapal"),
+};
+static const u16 sGeneralWinter[4][16] = {
+    INCGFX_U16("data/tilesets/primary/general/palettes/winter/01.pal", ".gbapal"),
+    INCGFX_U16("data/tilesets/primary/general/palettes/winter/02.pal", ".gbapal"),
+    INCGFX_U16("data/tilesets/primary/general/palettes/winter/03.pal", ".gbapal"),
+    INCGFX_U16("data/tilesets/primary/general/palettes/winter/05.pal", ".gbapal"),
+};
+static const u8 sGeneralSeasonSlots[4] = {1, 2, 3, 5};
+
+static const u16 (*GeneralSeasonPalettes(void))[16]
+{
+    if (!MapHasNaturalLight(gMapHeader.mapType) || (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK))
+        return NULL;
+    if (gMapHeader.mapLayout == NULL || gMapHeader.mapLayout->primaryTileset != &gTileset_General)
+        return NULL;
+    switch (WallyJourney_GetSeason())
+    {
+    case WALLY_SEASON_SUMMER: return sGeneralSummer;
+    case WALLY_SEASON_AUTUMN: return sGeneralAutumn;
+    case WALLY_SEASON_WINTER: return sGeneralWinter;
+    default:                  return NULL; // spring: formula
+    }
+}
+
 // Recolour BG palettes [palStart, palStart + palCount) just loaded from a tileset.
 void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFaded, bool32 isPrimary)
 {
     u32 mode = CurrentFoliageMode();
-    u32 slot, c;
+    u32 slot, c, k;
+    const u16 (*handmade)[16] = isPrimary ? GeneralSeasonPalettes() : NULL;
     if (isPrimary)
         sPrimaryFoliagePlus1 = mode + 1;
+    if (handmade != NULL)
+    {
+        for (k = 0; k < ARRAY_COUNT(sGeneralSeasonSlots); k++)
+        {
+            slot = sGeneralSeasonSlots[k];
+            if (slot < palStart || slot >= palStart + palCount)
+                continue;
+            CpuCopy16(&handmade[k][1], &gPlttBufferUnfaded[slot * 16 + 1], 15 * sizeof(u16));
+            if (alsoFaded)
+                CpuCopy16(&handmade[k][1], &gPlttBufferFaded[slot * 16 + 1], 15 * sizeof(u16));
+        }
+    }
     if (mode == FOLIAGE_NONE)
         return;
     for (slot = palStart; slot < palStart + palCount; slot++)
     {
+        if (handmade != NULL && (slot == 1 || slot == 2 || slot == 3 || slot == 5))
+            continue;
         for (c = 1; c < 16; c++)
         {
             u16 *col = &gPlttBufferUnfaded[slot * 16 + c];
