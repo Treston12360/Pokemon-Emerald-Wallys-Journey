@@ -6,7 +6,7 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 
 - Repo: `Treston12360/Pokemon-Emerald-Wallys-Journey`, branch `wally-journey-development`.
 - Base: pokeemerald-expansion **1.17.2**.
-- The last ROM sent to the owner was **0.9.2** (rows 1–18 below).
+- The last ROM sent to the owner was **0.9.3** (rows 1–18 below, including the one-time EV reset).
 
 ## Owner rules (always)
 
@@ -94,7 +94,7 @@ All the screens below were recoloured to Emerald green, palette only.
 | 14 | Mid-battle evolution | shachar700 / Zetraphes | keeps stat stages/effects; B cancels for the rest of that battle |
 | 15 | Overworld character shadows | Pawkkie | already built into expansion 1.17 (`OW_OBJECT_VANILLA_SHADOWS FALSE`), nothing to port |
 | 16 | Vol's HGSS-style start menu, green | vol8 `start_menu_1`, HashtagMarky's expansion port | Pokédex icon asks Pokédex/DexNav; Pike/Pyramid/link rooms keep the old menu |
-| 17 | Stat Points (EV allocator), green | Bivurnum `ev-allocator` on TAH's stat editor | no battle EVs; 10 points per level to Lv51; Party → Stat Points; old saves: all EVs reset to 0 once on Continue (not in 0.9.2 yet) |
+| 17 | Stat Points (EV allocator), green | Bivurnum `ev-allocator` on TAH's stat editor | no battle EVs; 10 points per level to Lv51; Party → Stat Points; old saves: all EVs reset to 0 once on Continue (in 0.9.3) |
 | 18 | BW move names coloured by effectiveness, green text-box line | ours | green/blue/red names (needs the foe species seen; expansion marks "seen" at the END of the first battle); box keeps type colour; red line + move-box marks → green. In 0.9.2 |
 
 ## IN PROGRESS
