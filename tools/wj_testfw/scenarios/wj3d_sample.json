@@ -1,0 +1,122 @@
+[
+{
+"name": "route111",
+"map": "MAP_ROUTE111",
+"x": 18,
+"y": 52,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "route119",
+"map": "MAP_ROUTE119",
+"x": 34,
+"y": 121,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "safari_zone_north",
+"map": "MAP_SAFARI_ZONE_NORTH",
+"x": 9,
+"y": 9,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "route113",
+"map": "MAP_ROUTE113",
+"x": 25,
+"y": 10,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "petalburg_woods",
+"map": "MAP_PETALBURG_WOODS",
+"x": 7,
+"y": 29,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "mt_pyre_summit",
+"map": "MAP_MT_PYRE_SUMMIT",
+"x": 36,
+"y": 24,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "jagged_pass",
+"map": "MAP_JAGGED_PASS",
+"x": 9,
+"y": 24,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "route121",
+"map": "MAP_ROUTE121",
+"x": 69,
+"y": 9,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+}
+]

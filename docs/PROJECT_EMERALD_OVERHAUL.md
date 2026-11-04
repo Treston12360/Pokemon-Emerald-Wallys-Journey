@@ -6,7 +6,7 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 
 - Repo: `Treston12360/Pokemon-Emerald-Wallys-Journey`, branch `wally-journey-development`.
 - Base: pokeemerald-expansion **1.17.2**.
-- The last ROM sent to the owner was **0.9.5** (rows 1–20 below).
+- The last ROM sent to the owner was **0.10.0** (rows 1–21 below).
 
 ## Owner rules (always)
 
@@ -95,6 +95,7 @@ All the screens below were recoloured to Emerald green, palette only.
 | 15 | Overworld character shadows | Pawkkie | already built into expansion 1.17 (`OW_OBJECT_VANILLA_SHADOWS FALSE`), nothing to port |
 | 16 | Vol's HGSS-style start menu, green | vol8 `start_menu_1`, HashtagMarky's expansion port | Pokédex icon asks Pokédex/DexNav; Pike/Pyramid/link rooms keep the old menu |
 | 17 | Stat Points (EV allocator), green | Bivurnum `ev-allocator` on TAH's stat editor | no battle EVs; 10 points per level to Lv51; Party → Stat Points; old saves: all EVs reset to 0 once on Continue (in 0.9.3) |
+| 21 | 3D battle backgrounds: every outdoor wild-battle map (27 maps: Routes 101-104, 110-121, 123, Petalburg Woods, Jagged Pass, Mt. Pyre outside + summit, Safari Zone x6) | Emerald 3DS | Route 111 backdrop is desert-only (`environment.txt`); summit fog starts Misty Terrain, whose pink background shows until it ends (engine design). In 0.10.0 |
 | 20 | 3D battle backgrounds: Routes 101, 102, 103, 104 | Emerald 3DS (Zallax and contributors) | owner approved the Route 104 look ("continue"); seasons + day/night apply. Pipeline in `tools/wj3d/README.md`. In 0.9.5 |
 | 19 | Save screen frames fixed | ours | `Vol_SelectedFunc_Save` used freed menu data; exit now reloads message box/frame gfx. In 0.9.4 |
 | 18 | BW move names coloured by effectiveness, green text-box line | ours | green/blue/red names (needs the foe species seen; expansion marks "seen" at the END of the first battle); box keeps type colour; red line + move-box marks → green. In 0.9.2 |
@@ -107,12 +108,15 @@ All the screens below were recoloured to Emerald green, palette only.
   - Still to do: add the **Cleffa** entry to `gen_2_families.h`, then build and test a Ditto transform in battle.
   - Then merge into `wally-journey-development`.
 
-## ▶ NEXT TASK: 3D battle backgrounds, more maps
+## ▶ NEXT TASK: 3D battle backgrounds for the rest (caves, water, towns/gyms)
 
-Routes 101–104 are done (0.9.5). The pipeline works end to end: read `tools/wj3d/README.md` ("Working
-pipeline"). Each map is about 40 minutes of unattended emulation. Needs the owner's clean Emerald ROM
-(SHA-1 f3ae0881…) attached each session. Next batch: the other grass routes (110, 111 grass, 112, 113,
-114, 115, 116, 117, 118, 119, 120, 121, 123), then towns. Gyms/Elite Four need trainer battles (later).
+All 27 outdoor wild-battle maps are done (0.10.0). A capture is now ~2-3 minutes (OpenGL), so a whole batch
+runs in one background job: `tools/wj3d/routes.txt` + `capture_route.sh`, then `convert_all.sh` with
+`shadow_modes.sh`. Still to do, roughly in order:
+1. **Caves** (environment CAVE): extend `WJ3D_GetBackdrop` to allow CAVE, add cave floors to `grass.py`'s tiles.
+2. **Surf battles** (WATER / POND): needs a surfing save (badges + HM Surf) in the pret capture build.
+3. **Trainer-only places** (towns PLAIN, Gyms, Elite Four): needs trainer battles in the 3DS game.
+The owner's clean ROM must be attached each session (never commit it: the repo is public).
 
 ## OWNER ORDER (2026-11-04)
 
