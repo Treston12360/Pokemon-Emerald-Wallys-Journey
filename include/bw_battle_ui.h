@@ -78,6 +78,7 @@ enum BWBattleUICursorMode BattleUI_GetCursorMode(void);
 
 void BattleUI_DisplayMoveBox(enum BattlerId);
 const u8 *BattleUI_GetTypeEffectivenessSymbol(enum BattlerId, enum Move); // needs to be defined in src/battle_controller_player.c
+u32 BattleUI_GetMoveEffectivenessColor(enum BattlerId, enum Move); // Wally's Journey, src/battle_controller_player.c
 
 u32 BattleUI_LoadSpriteSheet(enum BWBattleUISpriteGraphicsType, u32);
 u32 BattleUI_LoadSpritePalette(enum BWBattleUISpritePaletteType, u32);

@@ -1090,7 +1090,15 @@ static void BattleUI_DisplayNormalMoveBox(enum BattlerId battler, struct ChooseM
             u32 x = TILE_TO_PIXELS(1);
             u32 fontId = GetFontIdToFit(gDisplayedStringBattle, FONT_SMALL, 0, TILE_TO_PIXELS(9));
 
-            BattleUI_AddTextPrinter(windowId, fontId, x, 4, BUI_TXTCLR_MOVE_BOX, gDisplayedStringBattle);
+            // Wally's Journey: name coloured by effectiveness (green / blue / red), the box keeps its type colour.
+            // The colours go in the box palette's unused slots 5-7.
+            static const u16 sWJEffectColors[] = {RGB(12, 28, 12), RGB(13, 20, 31), RGB(31, 11, 11)};
+            u32 effColor = B_SHOW_EFFECTIVENESS ? BattleUI_GetMoveEffectivenessColor(battler, moveId) : 0;
+            LoadPalette(sWJEffectColors, BG_PLTT_ID(10 + i) + 5, PLTT_SIZEOF(3));
+            union TextColor nameClr = sBWBattleUI_TextColors[BUI_TXTCLR_MOVE_BOX];
+            if (effColor != 0)
+                nameClr.foreground = 4 + effColor;
+            AddTextPrinterParameterized6(windowId, fontId, x, 4, 0, 0, nameClr, TEXT_SKIP_DRAW, gDisplayedStringBattle);
 
             // pp
             if (gBattleResources->bufferA[battler][2] != TRUE)

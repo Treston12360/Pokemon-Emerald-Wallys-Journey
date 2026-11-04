@@ -2684,6 +2684,20 @@ const u8 *BattleUI_GetTypeEffectivenessSymbol(enum BattlerId battler, enum Move 
         return sBWSuperEffectiveIcon;
     return sBWEffectiveIcon;
 }
+
+// Wally's Journey: the move name's colour in the BW move box, as before the BW UI:
+// 1 = super effective (green), 2 = not very effective (blue), 3 = no effect (red), 0 = normal/unknown
+u32 BattleUI_GetMoveEffectivenessColor(enum BattlerId battler, enum Move move)
+{
+    const u8 *symbol = BattleUI_GetTypeEffectivenessSymbol(battler, move);
+    if (symbol == sBWSuperEffectiveIcon)
+        return 1;
+    if (symbol == sBWNotVeryEffectiveIcon)
+        return 2;
+    if (symbol == sBWImmuneIcon)
+        return 3;
+    return 0;
+}
 // end bwBattleUI
 
 static void MoveSelectionDisplayMoveEffectiveness(u32 foeEffectiveness, enum BattlerId battler)

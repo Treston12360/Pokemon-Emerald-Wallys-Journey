@@ -73,7 +73,7 @@ void WJTest_ApplyState(void)
 #endif
     CalculatePlayerPartyCount();
 #ifdef WJ_DEXDEMO
-    { u32 sp; for (sp = 1; sp <= 386; sp++) { GetSetPokedexFlag(SpeciesToNationalPokedexNum(sp), FLAG_SET_SEEN); if (sp % 3 != 0) GetSetPokedexFlag(SpeciesToNationalPokedexNum(sp), FLAG_SET_CAUGHT); } }
+    { u32 sp; for (sp = 1; sp < NUM_SPECIES; sp++) { if (!IsSpeciesEnabled(sp) || !SpeciesToNationalPokedexNum(sp)) continue; GetSetPokedexFlag(SpeciesToNationalPokedexNum(sp), FLAG_SET_SEEN); if (sp <= 386 && sp % 3 != 0) GetSetPokedexFlag(SpeciesToNationalPokedexNum(sp), FLAG_SET_CAUGHT); } }
 #endif
     AddBagItem(ITEM_MAX_REPEL, 99);
     { static const u16 hm[] = {ITEM_HM_CUT, ITEM_HM_FLASH, ITEM_HM_ROCK_SMASH, ITEM_HM_STRENGTH, ITEM_HM_SURF, ITEM_HM_FLY, ITEM_HM_DIVE, ITEM_HM_WATERFALL, ITEM_Z_POWER_RING, ITEM_MEGA_RING};
