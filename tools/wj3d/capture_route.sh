@@ -46,7 +46,7 @@ SD=$W/auto/$NAME/sd/Azahar/sdmc/3ds/emerald3ds
 rm -rf $W/auto/$NAME/sd && mkdir -p $SD && cp ${PAK:-$W/blank2.pak} $SD/emerald3ds.pak && head -c 131072 v.sav > $SD/emerald3ds.sav
 printf "voxel=1\nvoxel_battle=1\n" > $SD/settings.txt; touch $SD/debug.txt
 mkdir -p shots
-{ echo 1200; for i in $(seq 16); do printf "10 A\n90\n"; done; echo "shot shots/ow";
+{ echo 1200; for i in $(seq 16); do printf "10 A\n90\n"; done; for i in $(seq 10); do printf "10 B\n60\n"; done; echo "shot shots/ow";
   for i in $(seq 1 30); do printf "14 d\n6\n14 u\n6\n"; done;
   for i in $(seq 1 4); do printf "120\nshot shots/c$i\n"; done
   printf "10 A\n200\nshot shots/c5\n10 A\n200\nshot shots/c6\n"; } > cap.txt
