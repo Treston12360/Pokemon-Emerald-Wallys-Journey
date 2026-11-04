@@ -1,0 +1,107 @@
+[
+{
+"name": "route104",
+"map": "MAP_ROUTE104",
+"x": 19,
+"y": 15,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "dewford_town",
+"map": "MAP_DEWFORD_TOWN",
+"x": 14,
+"y": 8,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "lilycove_city",
+"map": "MAP_LILYCOVE_CITY",
+"x": 70,
+"y": 9,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "route110",
+"map": "MAP_ROUTE110",
+"x": 10,
+"y": 23,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "route119",
+"map": "MAP_ROUTE119",
+"x": 17,
+"y": 104,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "meteor_falls_1f_1r",
+"map": "MAP_METEOR_FALLS_1F_1R",
+"x": 14,
+"y": 6,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "pacifidlog_town",
+"map": "MAP_PACIFIDLOG_TOWN",
+"x": 12,
+"y": 19,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+}
+]
