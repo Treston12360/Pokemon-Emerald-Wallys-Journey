@@ -104,6 +104,16 @@ All the screens below were recoloured to Emerald green, palette only.
   - Still to do: add the **Cleffa** entry to `gen_2_families.h`, then build and test a Ditto transform in battle.
   - Then merge into `wally-journey-development`.
 
+## OWNER PRIORITIES (2026-11-03, these come first)
+
+1. Seasons, day/night: polish and check more maps.
+2. BW screens: party, summary and battle.
+3. Sword/Shield screens, including the chat/message boxes.
+4. Capitalization: decapitalize all text, showing the owner a sample first.
+5. **DexNav must stay reachable.** If Vol's start menu goes in, DexNav needs a slot. Port an existing icon from another start-menu art set; don't draw one.
+
+Other items wait until these are done.
+
 ## TO DO, in suggested priority order
 
 1. **Pre-release checks for what's DONE** (these block 0.9.0):
