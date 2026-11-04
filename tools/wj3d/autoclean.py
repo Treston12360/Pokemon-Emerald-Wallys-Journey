@@ -11,7 +11,13 @@ mask[:] = 0
 for i in range(1, n):
     if stats[i, cv2.CC_STAT_AREA] >= 200:
         mask[lab == i] = 255
-cv2.ellipse(mask, (272, 121), (34, 10), 0, 0, 360, 255, -1)   # foe drop shadow
+# foe drop shadow. On tall grass: copy the same rows from further left (same depth, so grass lines
+# up). On plain ground (env SHADOW=blur): inpaint, which leaves smooth ground.
+import os
+if os.environ.get('SHADOW') == 'blur':
+    cv2.ellipse(mask, (272, 121), (34, 10), 0, 0, 360, 255, -1)
+else:
+    im[108:134, 234:310] = im[108:134, 234 - 84:310 - 84]
 mask = cv2.dilate(mask, np.ones((5, 5), np.uint8))
 # Bars in the upper half (not covered by our own health boxes in game): copy the strip just
 # above, so leaves / grass continue instead of blurring.

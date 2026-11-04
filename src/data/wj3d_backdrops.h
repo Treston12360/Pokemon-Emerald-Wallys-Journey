@@ -4,6 +4,12 @@
 static const u32 sWJ3D_Route101_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/route101/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_Route101_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/route101/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_Route101_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/route101/palette.pal", ".gbapal");
+static const u32 sWJ3D_Route102_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/route102/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_Route102_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/route102/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_Route102_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/route102/palette.pal", ".gbapal");
+static const u32 sWJ3D_Route103_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/route103/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_Route103_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/route103/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_Route103_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/route103/palette.pal", ".gbapal");
 static const u32 sWJ3D_Route104_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/route104/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_Route104_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/route104/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_Route104_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/route104/palette.pal", ".gbapal");
@@ -11,5 +17,7 @@ static const u16 sWJ3D_Route104_Pal[] = INCGFX_U16("graphics/battle_environment/
 static const struct WJ3DBackdrop sWJ3DBackdrops[] =
 {
     {MAP_GROUP(MAP_ROUTE101), MAP_NUM(MAP_ROUTE101), sWJ3D_Route101_Tiles, sWJ3D_Route101_Map, sWJ3D_Route101_Pal},
+    {MAP_GROUP(MAP_ROUTE102), MAP_NUM(MAP_ROUTE102), sWJ3D_Route102_Tiles, sWJ3D_Route102_Map, sWJ3D_Route102_Pal},
+    {MAP_GROUP(MAP_ROUTE103), MAP_NUM(MAP_ROUTE103), sWJ3D_Route103_Tiles, sWJ3D_Route103_Map, sWJ3D_Route103_Pal},
     {MAP_GROUP(MAP_ROUTE104), MAP_NUM(MAP_ROUTE104), sWJ3D_Route104_Tiles, sWJ3D_Route104_Map, sWJ3D_Route104_Pal},
 };
