@@ -51,6 +51,26 @@ struct WJ3DBackdrop
 };
 #include "data/wj3d_backdrops.h"
 
+// Gym / Elite Four / Champion / team hideout rooms: their battles use these special environments.
+// A map's plain (any-environment) backdrop covers them, so a captured Gym shows its own room.
+static bool32 WJ3D_IsTrainerRoomEnvironment(u32 environment)
+{
+    switch (environment)
+    {
+    case BATTLE_ENVIRONMENT_GYM:
+    case BATTLE_ENVIRONMENT_LEADER:
+    case BATTLE_ENVIRONMENT_CHAMPION:
+    case BATTLE_ENVIRONMENT_SIDNEY:
+    case BATTLE_ENVIRONMENT_PHOEBE:
+    case BATTLE_ENVIRONMENT_GLACIA:
+    case BATTLE_ENVIRONMENT_DRAKE:
+    case BATTLE_ENVIRONMENT_MAGMA:
+    case BATTLE_ENVIRONMENT_AQUA:
+        return TRUE;
+    }
+    return FALSE;
+}
+
 static bool32 WJ3D_EnvironmentMatches(u32 rowEnvironment, u32 environment)
 {
     bool32 water = (environment == BATTLE_ENVIRONMENT_WATER || environment == BATTLE_ENVIRONMENT_POND);
@@ -74,7 +94,8 @@ static const struct WJ3DBackdrop *WJ3D_GetBackdrop(u32 environment)
     if (environment != BATTLE_ENVIRONMENT_GRASS && environment != BATTLE_ENVIRONMENT_LONG_GRASS
      && environment != BATTLE_ENVIRONMENT_PLAIN && environment != BATTLE_ENVIRONMENT_SAND
      && environment != BATTLE_ENVIRONMENT_CAVE && environment != BATTLE_ENVIRONMENT_BUILDING
-     && environment != BATTLE_ENVIRONMENT_WATER && environment != BATTLE_ENVIRONMENT_POND)
+     && environment != BATTLE_ENVIRONMENT_WATER && environment != BATTLE_ENVIRONMENT_POND
+     && !WJ3D_IsTrainerRoomEnvironment(environment))
         return NULL;
     for (i = 0; i < ARRAY_COUNT(sWJ3DBackdrops); i++)
     {
