@@ -11,6 +11,10 @@ gText_PutItemInPocket::
 gText_PlayerFoundOneItem::
 	.string "{PLAYER} found one {STR_VAR_2}!$"
 
+gText_BagFullSentToPC::
+	.string "The Bag is full, so the {STR_VAR_2}\n"
+	.string "went to the PC's item storage.$"
+
 gText_TooBadBagIsFull::
 	.string "Too bad!\n"
 	.string "The Bag is full…$"

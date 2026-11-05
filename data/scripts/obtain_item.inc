@@ -68,7 +68,19 @@ EventScript_ContinueObtainedItem:
 	return
 
 EventScript_NoRoomForItem::
+	@ Wally's Journey: a full Bag sends the item to the PC instead
+	addpcitem ITEMID, AMOUNT
+	goto_if_eq VAR_RESULT, TRUE, EventScript_ObtainedItemSentToPC
 	setvar VAR_RESULT, FALSE
+	return
+
+EventScript_ObtainedItemSentToPC::
+	playfanfare MUS_OBTAIN_ITEM
+	message gText_ObtainedTheItem
+	waitmessage
+	waitfanfare
+	msgbox gText_BagFullSentToPC, MSGBOX_DEFAULT
+	setvar VAR_RESULT, TRUE
 	return
 
 EventScript_PlayFanfareObtainedItem::
@@ -167,9 +179,21 @@ EventScript_FoundItemMessage::
 	return
 
 EventScript_NoRoomToPickUpItem::
+	addpcitem VAR_0x8004, VAR_0x8005
+	goto_if_eq VAR_RESULT, TRUE, EventScript_PickedUpItemSentToPC
 	msgbox gText_ObtainedTheItem, MSGBOX_DEFAULT
 	msgbox gText_TooBadBagIsFull, MSGBOX_DEFAULT
 	setvar VAR_RESULT, FALSE
+	return
+
+EventScript_PickedUpItemSentToPC::
+	removeobject VAR_LAST_TALKED
+	playfanfare MUS_OBTAIN_ITEM
+	message gText_ObtainedTheItem
+	waitmessage
+	waitfanfare
+	msgbox gText_BagFullSentToPC, MSGBOX_DEFAULT
+	setvar VAR_RESULT, TRUE
 	return
 
 EventScript_HiddenItemScript::
@@ -232,6 +256,20 @@ EventScript_PutHiddenItemInPocket::
 	end
 
 EventScript_NoRoomForHiddenItem::
+	addpcitem VAR_0x8005, VAR_0x8009
+	goto_if_ne VAR_RESULT, TRUE, EventScript_NoRoomForHiddenItemNoPC
+	callnative Script_ClearDowsingColor
+	playfanfare MUS_OBTAIN_ITEM
+	message gText_PlayerFoundOneItem
+	waitmessage
+	waitfanfare
+	msgbox gText_BagFullSentToPC, MSGBOX_DEFAULT
+	special SetHiddenItemFlag
+	callnative Script_UpdateDowseState
+	releaseall
+	end
+
+EventScript_NoRoomForHiddenItemNoPC::
 	msgbox gText_PlayerFoundOneItem, MSGBOX_DEFAULT
 	msgbox gText_TooBadBagIsFull, MSGBOX_DEFAULT
 	setvar VAR_RESULT, 0
