@@ -6,7 +6,7 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 
 - Repo: `Treston12360/Pokemon-Emerald-Wallys-Journey`, branch `wally-journey-development`.
 - Base: pokeemerald-expansion **1.17.2**.
-- The last ROM sent to the owner was **0.13.0** (rows 1–25 below).
+- The last ROM sent to the owner was **0.14.0** (rows 1–26 below).
 
 ## Owner rules (always)
 
@@ -95,6 +95,7 @@ All the screens below were recoloured to Emerald green, palette only.
 | 15 | Overworld character shadows | Pawkkie | already built into expansion 1.17 (`OW_OBJECT_VANILLA_SHADOWS FALSE`), nothing to port |
 | 16 | Vol's HGSS-style start menu, green | vol8 `start_menu_1`, HashtagMarky's expansion port | Pokédex icon asks Pokédex/DexNav; Pike/Pyramid/link rooms keep the old menu |
 | 17 | Stat Points (EV allocator), green | Bivurnum `ev-allocator` on TAH's stat editor | no battle EVs; 10 points per level to Lv51; Party → Stat Points; old saves: all EVs reset to 0 once on Continue (in 0.9.3) |
+| 26 | Ditto face sprites: a transformed Ditto keeps its face (Bulbasaur line, Cleffa line, Growlithe, Arcanine, Doduo, Dodrio) | AsparagusEduardo | `P_DITTO_SPRITES`; only the species with art; only real Ditto (Mew etc. using Transform look normal). Tested both sides (our Ditto → Growlithe back, wild Ditto → Arcanine front). In 0.14.0 |
 | 25 | Fix: level-scaled trainers whose Pokémon evolve (Norman's Vigoroth → Slaking) hit an "illegal ability" assertion (test builds stop; release silently skipped it) | ours | `wally_journey.c` keeps the old ability only when the evolution has it, else keeps the slot. In 0.13.0 |
 | 24 | 3D battle backgrounds in all 8 Gyms (+ Lavaridge/Sootopolis B1F reuse 1F), Sidney, Glacia, Drake and the Champion room | Emerald 3DS | `capture_trainer.sh` + `gyms.txt`: talks to the Leader/E4 member in the 3DS game. Covers Leader, Gym trainer, double (Tate & Liza), E4 and Champion battles. Not done: Phoebe's room (the 3DS port freezes before her battle) — stock background. In 0.13.0 |
 | 23 | 3D battle backgrounds for surf battles (50 maps: every route/town/cave with surfing encounters; folders `<map>__water`) | Emerald 3DS | `wj3d_gen_table.py` makes `__water` folders WATER/POND-only rows; plain rows never apply on water. Skipped: Abandoned Ship hidden-floor corridors (the 3DS port draws its water white). The lookup also accepts Gym / Leader / Elite Four / Champion / hideout environments now, for the coming Gym captures (no rows yet). In 0.12.0 |
@@ -106,11 +107,7 @@ All the screens below were recoloured to Emerald green, palette only.
 
 ## IN PROGRESS
 
-- **Ditto face sprites** (AsparagusEduardo), on branch **`wip/ditto-face`** (does not build yet).
-  - Code hooks are done: a `gLoadDittoFacePic` flag in `decompress.c`, set by the battle sprite loaders.
-  - Gen 1 species entries are added.
-  - Still to do: add the **Cleffa** entry to `gen_2_families.h`, then build and test a Ditto transform in battle.
-  - Then merge into `wally-journey-development`.
+- **Pokédex in Emerald green:** mockup sent 2026-11-04 (branch `wip/dex-green`, palette-only: reds → green hue 140). Waiting for the owner's OK; then merge.
 
 ## ▶ NEXT TASK: 3D battle backgrounds for the rest (water, towns/gyms)
 

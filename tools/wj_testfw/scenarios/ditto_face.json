@@ -1,0 +1,1 @@
+[{"name":"ditto_back","map":"MAP_FIERY_PATH","x":7,"y":31,"flags":["FLAG_SYS_POKEMON_GET"],"party":[["DITTO",30]]},{"name":"ditto_front","map":"MAP_ROUTE101","x":13,"y":12,"flags":["FLAG_SYS_POKEMON_GET"],"party":[["GROWLITHE",40]]}]
