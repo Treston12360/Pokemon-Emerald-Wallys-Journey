@@ -634,3 +634,4 @@ These are **wishlist items, not claims of implementation**. Adapt the design pri
 | 2026-11-05 | "I don't want the old tall grass background to be used at all" | Route 120 (also tall grass, also a zoomed capture) now has its own overlook; Faraway Island tall grass (and Mew) uses the Route 119 overlook. Released in 0.17.3 |
 | 2026-11-05 | "Do it in that order" (borrowed backdrops, check untested ones, PokéNav skip + overflow storage, Frontier review) | See overhaul row 38. Released in 0.17.4. Frontier review: findings sent to the owner for a decision |
 | 2026-11-05 | Frontier review: owner picked "Modern items + replace vitamins" | Training goods replace vitamins at the BP counter, 6 modern hold items added, vitamin streak prizes replaced. Released in 0.17.5 |
+| 2026-11-05 | Bug: learning a move from the Move Relearner / tutor froze | The pick-a-Pokémon PC screen started on an empty box slot (A did nothing); it now starts on the party. Released in 0.17.6 |

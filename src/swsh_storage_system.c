@@ -5881,7 +5881,9 @@ static void SpriteCB_Arrow(struct Sprite *sprite)
 
 static void InitCursor(void)
 {
-    if (sStorage->boxOption != OPTION_DEPOSIT)
+    // Wally's Journey: when an NPC asks you to pick a Pokémon (move tutor, relearner, Day Care...)
+    // start on your party's first Pokémon, not on an empty box slot where A does nothing
+    if (sStorage->boxOption != OPTION_DEPOSIT && sStorage->boxOption != OPTION_SELECT_MON)
         sCursorArea = CURSOR_AREA_IN_BOX;
     else
         sCursorArea = CURSOR_AREA_IN_PARTY;
