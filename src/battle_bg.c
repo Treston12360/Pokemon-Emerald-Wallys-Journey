@@ -88,7 +88,11 @@ static const struct WJ3DBackdrop *WJ3D_GetBackdrop(u32 environment)
     if (!WJ_3D_BATTLE_BACKGROUNDS || ARRAY_COUNT(sWJ3DBackdrops) == 0 || WJ_ClassicGfx(WJGFX_3D_BACKGROUNDS))
         return NULL;
     if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK
-                          | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_LEGENDARY | BATTLE_TYPE_SECRET_BASE))
+                          | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_SECRET_BASE))
+        return NULL;
+    // Legendary battles keep their own backgrounds, except in tall grass (Mew on Faraway Island),
+    // where the owner wants the tall-grass overlook and never Emerald's old tall-grass picture.
+    if ((gBattleTypeFlags & BATTLE_TYPE_LEGENDARY) && environment != BATTLE_ENVIRONMENT_LONG_GRASS)
         return NULL;
     // Land, caves, indoor wild-battle places (Mt. Pyre's inside, New Mauville) and surfing. Gyms and
     // other special backgrounds keep the stock ones. Only maps with a captured backdrop are affected.
@@ -106,6 +110,18 @@ static const struct WJ3DBackdrop *WJ3D_GetBackdrop(u32 environment)
          && sWJ3DBackdrops[i].mapNum == gSaveBlock1Ptr->location.mapNum
          && WJ3D_EnvironmentMatches(sWJ3DBackdrops[i].environment, environment))
             return &sWJ3DBackdrops[i];
+    }
+    // Tall grass anywhere else (e.g. Faraway Island) uses the Route 119 tall-grass overlook too.
+    if (environment == BATTLE_ENVIRONMENT_LONG_GRASS)
+    {
+        for (i = 0; i < ARRAY_COUNT(sWJ3DBackdrops); i++)
+        {
+            if (sWJ3DBackdrops[i].tiles != NULL
+             && sWJ3DBackdrops[i].mapGroup == MAP_GROUP(MAP_ROUTE119)
+             && sWJ3DBackdrops[i].mapNum == MAP_NUM(MAP_ROUTE119)
+             && sWJ3DBackdrops[i].environment == WJ3D_ANY_ENVIRONMENT)
+                return &sWJ3DBackdrops[i];
+        }
     }
     return NULL;
 }
