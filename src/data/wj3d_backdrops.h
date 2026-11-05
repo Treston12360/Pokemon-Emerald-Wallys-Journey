@@ -115,6 +115,9 @@ static const u16 sWJ3D_MagmaHideout3f1r_Pal[] = INCGFX_U16("graphics/battle_envi
 static const u32 sWJ3D_MagmaHideout3f2r_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/magma_hideout_3f_2r/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_MagmaHideout3f2r_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/magma_hideout_3f_2r/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_MagmaHideout3f2r_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/magma_hideout_3f_2r/palette.pal", ".gbapal");
+static const u32 sWJ3D_MagmaHideout3f3r_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/magma_hideout_3f_3r/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_MagmaHideout3f3r_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/magma_hideout_3f_3r/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_MagmaHideout3f3r_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/magma_hideout_3f_3r/palette.pal", ".gbapal");
 static const u32 sWJ3D_MagmaHideout4f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/magma_hideout_4f/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_MagmaHideout4f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/magma_hideout_4f/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_MagmaHideout4f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/magma_hideout_4f/palette.pal", ".gbapal");
@@ -558,6 +561,7 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_MAGMA_HIDEOUT_2F_3R), MAP_NUM(MAP_MAGMA_HIDEOUT_2F_3R), sWJ3D_MagmaHideout2f3r_Tiles, sWJ3D_MagmaHideout2f3r_Map, sWJ3D_MagmaHideout2f3r_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MAGMA_HIDEOUT_3F_1R), MAP_NUM(MAP_MAGMA_HIDEOUT_3F_1R), sWJ3D_MagmaHideout3f1r_Tiles, sWJ3D_MagmaHideout3f1r_Map, sWJ3D_MagmaHideout3f1r_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MAGMA_HIDEOUT_3F_2R), MAP_NUM(MAP_MAGMA_HIDEOUT_3F_2R), sWJ3D_MagmaHideout3f2r_Tiles, sWJ3D_MagmaHideout3f2r_Map, sWJ3D_MagmaHideout3f2r_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_MAGMA_HIDEOUT_3F_3R), MAP_NUM(MAP_MAGMA_HIDEOUT_3F_3R), sWJ3D_MagmaHideout3f3r_Tiles, sWJ3D_MagmaHideout3f3r_Map, sWJ3D_MagmaHideout3f3r_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MAGMA_HIDEOUT_4F), MAP_NUM(MAP_MAGMA_HIDEOUT_4F), sWJ3D_MagmaHideout4f_Tiles, sWJ3D_MagmaHideout4f_Map, sWJ3D_MagmaHideout4f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MAUVILLE_CITY_GYM), MAP_NUM(MAP_MAUVILLE_CITY_GYM), sWJ3D_MauvilleCityGym_Tiles, sWJ3D_MauvilleCityGym_Map, sWJ3D_MauvilleCityGym_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_METEOR_FALLS_1F_1R), MAP_NUM(MAP_METEOR_FALLS_1F_1R), sWJ3D_MeteorFalls1f1r_Tiles, sWJ3D_MeteorFalls1f1r_Map, sWJ3D_MeteorFalls1f1r_Pal, WJ3D_ANY_ENVIRONMENT},
