@@ -697,14 +697,93 @@ static void MainMenu_InitWindows(void) // Init Text Windows
 //
 //      Mugshot Functions
 //
+// Wally's Journey: with an outfit on, the portrait is the outfit's trainer picture zoomed 2x on
+// the head and shoulders (a 32x32 cut shown with the hardware's affine scaling), in its colours.
+#define TAG_WJ_PORTRAIT 30020
+static EWRAM_DATA u8 *sWJPortraitGfx = NULL;
+
+static const struct OamData sOamData_WJPortrait =
+{
+    .affineMode = ST_OAM_AFFINE_DOUBLE,
+    .size = SPRITE_SIZE(32x32),
+    .shape = SPRITE_SHAPE(32x32),
+    .priority = 0,
+};
+static const union AffineAnimCmd sAffineAnim_WJPortrait[] =
+{
+    AFFINEANIMCMD_FRAME(0x200, 0x200, 0, 0),
+    AFFINEANIMCMD_END,
+};
+static const union AffineAnimCmd *const sAffineAnims_WJPortrait[] = {sAffineAnim_WJPortrait};
+static const struct SpriteTemplate sSpriteTemplate_WJPortrait =
+{
+    .tileTag = TAG_WJ_PORTRAIT,
+    .paletteTag = TAG_WJ_PORTRAIT,
+    .oam = &sOamData_WJPortrait,
+    .anims = gDummySpriteAnimTable,
+    .affineAnims = sAffineAnims_WJPortrait,
+    .callback = SpriteCallbackDummy,
+};
+
+static u32 PicPixel(const u8 *pic, u32 x, u32 y) // 64x64 4bpp, 8x8 tiles row-major
+{
+    u8 b = pic[((y / 8) * 8 + x / 8) * 32 + (y % 8) * 4 + (x % 8) / 2];
+    return (x & 1) ? (b >> 4) : (b & 0xF);
+}
+
+static bool32 CreateOutfitPortrait(void)
+{
+    u8 *pic;
+    u32 x, y, top = 64, left = 64, right = 0, x0, y0;
+    struct SpriteSheet sheet;
+    struct SpritePalette pal;
+
+    WJ_OutfitRefresh();
+    pic = Alloc(0x800);
+    sWJPortraitGfx = AllocZeroed(16 * 32);
+    if (pic == NULL || sWJPortraitGfx == NULL)
+    {
+        TRY_FREE_AND_SET_NULL(pic);
+        TRY_FREE_AND_SET_NULL(sWJPortraitGfx);
+        return FALSE;
+    }
+    DecompressDataWithHeaderWram(gTrainerPicInfo[TRAINER_PIC_WJ_PLAYER].frontPic->imageData, pic);
+    for (y = 0; y < 64 && top == 64; y++)
+        for (x = 0; x < 64; x++)
+            if (PicPixel(pic, x, y)) { top = y; break; }
+    if (top == 64)
+        top = 0;
+    for (y = top; y < top + 24 && y < 64; y++) // the head's width sets the centre
+        for (x = 0; x < 64; x++)
+            if (PicPixel(pic, x, y)) { if (x < left) left = x; if (x > right) right = x; }
+    x0 = (left <= right) ? (left + right) / 2 : 32;
+    x0 = (x0 < 16) ? 0 : (x0 - 16 > 32 ? 32 : x0 - 16);
+    y0 = (top > 1) ? top - 2 : 0;
+    if (y0 > 32)
+        y0 = 32;
+    for (y = 0; y < 32; y++)
+        for (x = 0; x < 32; x++)
+        {
+            u32 c = PicPixel(pic, x0 + x, y0 + y);
+            sWJPortraitGfx[((y / 8) * 4 + x / 8) * 32 + (y % 8) * 4 + (x % 8) / 2] |= (x & 1) ? (c << 4) : c;
+        }
+    Free(pic);
+    sheet.data = sWJPortraitGfx;
+    sheet.size = 16 * 32;
+    sheet.tag = TAG_WJ_PORTRAIT;
+    LoadSpriteSheet(&sheet);
+    pal.data = gWJPlayerFrontPal;
+    pal.tag = TAG_WJ_PORTRAIT;
+    LoadSpritePalette(&pal);
+    sMainMenuDataPtr->mugshotSpriteId = CreateSprite(&sSpriteTemplate_WJPortrait, 48, 56, 0);
+    return TRUE;
+}
+
 static void CreateMugshot()
 {
     // Wally's Journey: with an outfit on, show the outfit's trainer picture in its colours
-    if (WJ_OutfitActive())
+    if (WJ_OutfitActive() && CreateOutfitPortrait())
     {
-        WJ_OutfitRefresh();
-        sMainMenuDataPtr->mugshotSpriteId = CreateTrainerPicSprite(TRAINER_PIC_WJ_PLAYER, TRUE, 48, 56, 14, TAG_NONE);
-        gSprites[sMainMenuDataPtr->mugshotSpriteId].oam.priority = 0;
         sMainMenuDataPtr->mugshotIsTrainerPic = TRUE;
         return;
     }
@@ -719,7 +798,12 @@ static void CreateMugshot()
 static void DestroyMugshot()
 {
     if (sMainMenuDataPtr->mugshotIsTrainerPic)
-        FreeAndDestroyTrainerPicSprite(sMainMenuDataPtr->mugshotSpriteId);
+    {
+        DestroySprite(&gSprites[sMainMenuDataPtr->mugshotSpriteId]);
+        FreeSpriteTilesByTag(TAG_WJ_PORTRAIT);
+        FreeSpritePaletteByTag(TAG_WJ_PORTRAIT);
+        TRY_FREE_AND_SET_NULL(sWJPortraitGfx);
+    }
     else
         DestroySprite(&gSprites[sMainMenuDataPtr->mugshotSpriteId]);
     sMainMenuDataPtr->mugshotSpriteId = SPRITE_NONE;
