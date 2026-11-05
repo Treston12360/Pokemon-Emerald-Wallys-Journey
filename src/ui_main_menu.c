@@ -43,6 +43,9 @@
 #include "mystery_event_menu.h"
 #include "mystery_gift_menu.h"
 #include "link.h"
+#include "trainer_pokemon_sprites.h"
+#include "wj_outfit.h"
+#include "constants/trainers.h"
 
 /*
  * 
@@ -56,6 +59,7 @@ struct MainMenuResources
     u16 iconBoxSpriteIds[6];
     u16 iconMonSpriteIds[6];
     u16 mugshotSpriteId;
+    bool8 mugshotIsTrainerPic;
     u8 sSelectedOption;
 };
 
@@ -695,6 +699,16 @@ static void MainMenu_InitWindows(void) // Init Text Windows
 //
 static void CreateMugshot()
 {
+    // Wally's Journey: with an outfit on, show the outfit's trainer picture in its colours
+    if (WJ_OutfitActive())
+    {
+        WJ_OutfitRefresh();
+        sMainMenuDataPtr->mugshotSpriteId = CreateTrainerPicSprite(TRAINER_PIC_WJ_PLAYER, TRUE, 48, 56, 14, TAG_NONE);
+        gSprites[sMainMenuDataPtr->mugshotSpriteId].oam.priority = 0;
+        sMainMenuDataPtr->mugshotIsTrainerPic = TRUE;
+        return;
+    }
+    sMainMenuDataPtr->mugshotIsTrainerPic = FALSE;
     sMainMenuDataPtr->mugshotSpriteId = CreateSprite(&sSpriteTemplate_Mugshot, 48, 56, 1);
     gSprites[sMainMenuDataPtr->mugshotSpriteId].invisible = FALSE;
     StartSpriteAnim(&gSprites[sMainMenuDataPtr->mugshotSpriteId], 0);
@@ -704,7 +718,10 @@ static void CreateMugshot()
 
 static void DestroyMugshot()
 {
-    DestroySprite(&gSprites[sMainMenuDataPtr->mugshotSpriteId]);
+    if (sMainMenuDataPtr->mugshotIsTrainerPic)
+        FreeAndDestroyTrainerPicSprite(sMainMenuDataPtr->mugshotSpriteId);
+    else
+        DestroySprite(&gSprites[sMainMenuDataPtr->mugshotSpriteId]);
     sMainMenuDataPtr->mugshotSpriteId = SPRITE_NONE;
 }
 
