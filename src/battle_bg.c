@@ -81,6 +81,7 @@ static bool32 WJ3D_EnvironmentMatches(u32 rowEnvironment, u32 environment)
     return rowEnvironment == environment;
 }
 
+static u8 GetBattleEnvironmentOverride(void);
 static const struct WJ3DBackdrop *WJ3D_GetBackdrop(u32 environment)
 {
     u32 i;
@@ -106,6 +107,13 @@ static const struct WJ3DBackdrop *WJ3D_GetBackdrop(u32 environment)
             return &sWJ3DBackdrops[i];
     }
     return NULL;
+}
+
+// TRUE when this battle shows a 3D backdrop. Its tiles use BG palettes 2-4 (the stock
+// backgrounds only 1-3), so screen-dimming move animations must include palette 4.
+bool32 WJ3D_IsBackdropShown(void)
+{
+    return WJ3D_GetBackdrop(GetBattleEnvironmentOverride()) != NULL;
 }
 
 static void WJ3D_LoadBackdropPalette(const struct WJ3DBackdrop *bd)

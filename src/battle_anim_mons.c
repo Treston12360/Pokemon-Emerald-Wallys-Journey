@@ -1,6 +1,7 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_anim.h"
+#include "battle_bg.h"
 #include "battle_interface.h"
 #include "bg.h"
 #include "contest.h"
@@ -1340,7 +1341,7 @@ u32 GetBattlePalettesMask(bool8 battleBackground, bool8 attacker, bool8 target, 
     if (battleBackground)
     {
         if (!IsContest())
-            selectedPalettes = 0xe; // Palettes 1, 2, and 3
+            selectedPalettes = WJ3D_IsBackdropShown() ? 0x1e : 0xe; // Palettes 1, 2, and 3 (+4 for a 3D backdrop)
         else
             selectedPalettes = 1 << GetBattleBgPaletteNum();
     }

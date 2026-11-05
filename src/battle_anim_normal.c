@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle_anim.h"
+#include "battle_bg.h"
 #include "battle_anim_internal.h"
 #include "palette.h"
 #include "random.h"
@@ -601,7 +602,7 @@ void AnimTask_BlendColorCycleExclude(u8 taskId)
     }
 
     if (cmd->unk0 == 1)
-        selectedPalettes |= 0xE;
+        selectedPalettes |= WJ3D_IsBackdropShown() ? 0x1E : 0xE; // +palette 4 for a 3D backdrop
 
     gTasks[taskId].tPalSelectorHi = selectedPalettes >> 16;
     gTasks[taskId].tPalSelectorLo = selectedPalettes & 0xFF;
