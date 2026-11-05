@@ -6,6 +6,7 @@
 #include "field_camera.h"
 #include "field_control_avatar.h"
 #include "field_effect.h"
+#include "wally_journey.h"
 #include "field_effect_helpers.h"
 #include "field_player_avatar.h"
 #include "field_screen_effect.h"
@@ -871,6 +872,8 @@ void FieldEffectScript_LoadFadedPalette(u8 **script)
 {
     struct SpritePalette *palette = (struct SpritePalette *)FieldEffectScript_ReadWord(script);
     u32 paletteSlot = LoadSpritePalette(palette);
+    if (palette->tag == FLDEFF_PAL_TAG_GENERAL_1)
+        WallyJourney_SeasonalGrassSpritePalette(paletteSlot); // grass matches the season
     (*script) += 4;
     SetPaletteColorMapType(paletteSlot + 16, T1_READ_8(*script));
     (*script)++;
@@ -880,6 +883,8 @@ void FieldEffectScript_LoadFadedPalette(u8 **script)
 void FieldEffect_LoadFadedPalette(struct SpritePalette *palette, enum ColorMapType colorMap)
 {
     u32 paletteSlot = LoadSpritePalette(palette);
+    if (palette->tag == FLDEFF_PAL_TAG_GENERAL_1)
+        WallyJourney_SeasonalGrassSpritePalette(paletteSlot); // grass matches the season
     SetPaletteColorMapType(paletteSlot + 16, colorMap);
     UpdateSpritePaletteWithWeather(paletteSlot, TRUE);
 }

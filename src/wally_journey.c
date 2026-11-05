@@ -2579,3 +2579,18 @@ void WallyJourney_SanitizeParty(void)
         CalculateMonStats(mon);
     }
 }
+
+// The grass that rustles when you walk through it (field effect palette "general 1") shares its
+// greens with the General tileset's palette 2 (colours 1-3 and 12-15). Copy the map's current,
+// seasonal versions of those colours into the sprite palette so the grass matches the season.
+void WallyJourney_SeasonalGrassSpritePalette(u32 spritePalSlot)
+{
+    static const u8 sShared[] = {1, 2, 3, 12, 13, 14, 15};
+    u32 i;
+    if (spritePalSlot >= 16)
+        return;
+    if (gMapHeader.mapLayout == NULL || gMapHeader.mapLayout->primaryTileset != &gTileset_General)
+        return;
+    for (i = 0; i < ARRAY_COUNT(sShared); i++)
+        gPlttBufferUnfaded[OBJ_PLTT_ID(spritePalSlot) + sShared[i]] = gPlttBufferUnfaded[BG_PLTT_ID(2) + sShared[i]];
+}

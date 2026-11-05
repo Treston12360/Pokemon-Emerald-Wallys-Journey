@@ -70,6 +70,7 @@ void WallyJourney_UpdateFallingLeaves(void);
 bool32 WallyJourney_IsHiddenItemWaitingForBracelet(u16 item);
 void WallyJourney_UpdateMegaStoneSparkles(void);
 void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFaded, bool32 isPrimary);
+void WallyJourney_SeasonalGrassSpritePalette(u32 spritePalSlot);
 bool32 WallyJourney_PrimaryFoliageStale(void);
 struct ObjectEventTemplate;
 bool32 WallyJourney_IsNpcAway(const struct ObjectEventTemplate *template);
