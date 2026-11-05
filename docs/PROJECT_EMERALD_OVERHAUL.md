@@ -6,7 +6,7 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 
 - Repo: `Treston12360/Pokemon-Emerald-Wallys-Journey`, branch `wally-journey-development`.
 - Base: pokeemerald-expansion **1.17.2**.
-- The last ROM sent to the owner was **0.12.0** (rows 1–23 below).
+- The last ROM sent to the owner was **0.13.0** (rows 1–25 below).
 
 ## Owner rules (always)
 
@@ -95,6 +95,8 @@ All the screens below were recoloured to Emerald green, palette only.
 | 15 | Overworld character shadows | Pawkkie | already built into expansion 1.17 (`OW_OBJECT_VANILLA_SHADOWS FALSE`), nothing to port |
 | 16 | Vol's HGSS-style start menu, green | vol8 `start_menu_1`, HashtagMarky's expansion port | Pokédex icon asks Pokédex/DexNav; Pike/Pyramid/link rooms keep the old menu |
 | 17 | Stat Points (EV allocator), green | Bivurnum `ev-allocator` on TAH's stat editor | no battle EVs; 10 points per level to Lv51; Party → Stat Points; old saves: all EVs reset to 0 once on Continue (in 0.9.3) |
+| 25 | Fix: level-scaled trainers whose Pokémon evolve (Norman's Vigoroth → Slaking) hit an "illegal ability" assertion (test builds stop; release silently skipped it) | ours | `wally_journey.c` keeps the old ability only when the evolution has it, else keeps the slot. In 0.13.0 |
+| 24 | 3D battle backgrounds in all 8 Gyms (+ Lavaridge/Sootopolis B1F reuse 1F), Sidney, Glacia, Drake and the Champion room | Emerald 3DS | `capture_trainer.sh` + `gyms.txt`: talks to the Leader/E4 member in the 3DS game. Covers Leader, Gym trainer, double (Tate & Liza), E4 and Champion battles. Not done: Phoebe's room (the 3DS port freezes before her battle) — stock background. In 0.13.0 |
 | 23 | 3D battle backgrounds for surf battles (50 maps: every route/town/cave with surfing encounters; folders `<map>__water`) | Emerald 3DS | `wj3d_gen_table.py` makes `__water` folders WATER/POND-only rows; plain rows never apply on water. Skipped: Abandoned Ship hidden-floor corridors (the 3DS port draws its water white). The lookup also accepts Gym / Leader / Elite Four / Champion / hideout environments now, for the coming Gym captures (no rows yet). In 0.12.0 |
 | 22 | 3D battle backgrounds in caves and indoor wild-battle places (50 maps: Granite Cave, Meteor Falls, Victory Road, Mt. Pyre inside, Magma Hideout, Seafloor Cavern, Shoal Cave, Sky Pillar, Mirage Tower, New Mauville, Fiery Path, Rusturf Tunnel, Desert Underpass, Cave of Origin, Altering/Artisan Cave) | Emerald 3DS | lookup now allows CAVE and BUILDING environments (per-map rows only). Not done: Granite Cave Steven's room, Mirage Tower 4F, Seafloor Cavern rooms 2 and 8 (tiny rooms; the capture gets stuck in a dialogue) — stock background there. Caves' far edges show the 3DS port's fog-grey void. In 0.11.0 |
 | 21 | 3D battle backgrounds: every outdoor wild-battle map (27 maps: Routes 101-104, 110-121, 123, Petalburg Woods, Jagged Pass, Mt. Pyre outside + summit, Safari Zone x6) | Emerald 3DS | Route 111 backdrop is desert-only (`environment.txt`); summit fog starts Misty Terrain, whose pink background shows until it ends (engine design). In 0.10.0 |
@@ -117,9 +119,8 @@ runs in one background job: `tools/wj3d/routes.txt` + `capture_route.sh`, then `
 `shadow_modes.sh`. Still to do, roughly in order:
 1. ~~Caves~~ done in 0.11.0 (`caves.txt`, ENC=08,0b,06,25). Left: Steven's room, Mirage Tower 4F, Seafloor rooms 2/8 (need the objects hidden in the pret capture build).
 2. ~~Surf battles~~ done in 0.12.0 (`water.txt`, spots must be water in vanilla and ours; warping onto water auto-surfs).
-3. **Gyms / Elite Four / Champion** (next): `capture_trainer.sh` + `gyms.txt` (player one tile below the
-   Leader/E4 member, trainer flag cleared via WJ_EXTRA, talks with A, B advances text). Untested yet. Then copy
-   the 1F folder to Lavaridge B1F / Sootopolis B1F. Towns have no land encounters (surf done).
+3. ~~Gyms / Elite Four / Champion~~ done in 0.13.0 except Phoebe (3DS port freezes in her room).
+4. Left (small): Phoebe, Steven's room, Mirage Tower 4F, Seafloor rooms 2/8, Abandoned Ship hidden corridors (water), Aqua Hideout / trainer-only indoor places.
 The owner's clean ROM must be attached each session (never commit it: the repo is public).
 
 ## OWNER ORDER (2026-11-04)

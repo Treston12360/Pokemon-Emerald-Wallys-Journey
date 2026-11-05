@@ -25,12 +25,30 @@ static const u16 sWJ3D_DesertUnderpass_Pal[] = INCGFX_U16("graphics/battle_envir
 static const u32 sWJ3D_DewfordTownWater_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/dewford_town__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_DewfordTownWater_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/dewford_town__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_DewfordTownWater_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/dewford_town__water/palette.pal", ".gbapal");
+static const u32 sWJ3D_DewfordTownGym_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/dewford_town_gym/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_DewfordTownGym_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/dewford_town_gym/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_DewfordTownGym_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/dewford_town_gym/palette.pal", ".gbapal");
 static const u32 sWJ3D_EverGrandeCityWater_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_EverGrandeCityWater_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_EverGrandeCityWater_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/ever_grande_city__water/palette.pal", ".gbapal");
+static const u32 sWJ3D_EverGrandeCityChampionsRoom_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_champions_room/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_EverGrandeCityChampionsRoom_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_champions_room/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_EverGrandeCityChampionsRoom_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/ever_grande_city_champions_room/palette.pal", ".gbapal");
+static const u32 sWJ3D_EverGrandeCityDrakesRoom_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_drakes_room/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_EverGrandeCityDrakesRoom_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_drakes_room/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_EverGrandeCityDrakesRoom_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/ever_grande_city_drakes_room/palette.pal", ".gbapal");
+static const u32 sWJ3D_EverGrandeCityGlaciasRoom_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_glacias_room/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_EverGrandeCityGlaciasRoom_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_glacias_room/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_EverGrandeCityGlaciasRoom_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/ever_grande_city_glacias_room/palette.pal", ".gbapal");
+static const u32 sWJ3D_EverGrandeCitySidneysRoom_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_sidneys_room/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_EverGrandeCitySidneysRoom_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_sidneys_room/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_EverGrandeCitySidneysRoom_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/ever_grande_city_sidneys_room/palette.pal", ".gbapal");
 static const u32 sWJ3D_FieryPath_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/fiery_path/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_FieryPath_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/fiery_path/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_FieryPath_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/fiery_path/palette.pal", ".gbapal");
+static const u32 sWJ3D_FortreeCityGym_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/fortree_city_gym/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_FortreeCityGym_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/fortree_city_gym/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_FortreeCityGym_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/fortree_city_gym/palette.pal", ".gbapal");
 static const u32 sWJ3D_GraniteCave1f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/granite_cave_1f/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_GraniteCave1f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/granite_cave_1f/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_GraniteCave1f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/granite_cave_1f/palette.pal", ".gbapal");
@@ -43,6 +61,12 @@ static const u16 sWJ3D_GraniteCaveB2f_Pal[] = INCGFX_U16("graphics/battle_enviro
 static const u32 sWJ3D_JaggedPass_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/jagged_pass/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_JaggedPass_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/jagged_pass/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_JaggedPass_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/jagged_pass/palette.pal", ".gbapal");
+static const u32 sWJ3D_LavaridgeTownGym1f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/lavaridge_town_gym_1f/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_LavaridgeTownGym1f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/lavaridge_town_gym_1f/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_LavaridgeTownGym1f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/lavaridge_town_gym_1f/palette.pal", ".gbapal");
+static const u32 sWJ3D_LavaridgeTownGymB1f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/lavaridge_town_gym_b1f/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_LavaridgeTownGymB1f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/lavaridge_town_gym_b1f/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_LavaridgeTownGymB1f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/lavaridge_town_gym_b1f/palette.pal", ".gbapal");
 static const u32 sWJ3D_LilycoveCityWater_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/lilycove_city__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_LilycoveCityWater_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/lilycove_city__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_LilycoveCityWater_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/lilycove_city__water/palette.pal", ".gbapal");
@@ -67,6 +91,9 @@ static const u16 sWJ3D_MagmaHideout3f2r_Pal[] = INCGFX_U16("graphics/battle_envi
 static const u32 sWJ3D_MagmaHideout4f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/magma_hideout_4f/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_MagmaHideout4f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/magma_hideout_4f/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_MagmaHideout4f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/magma_hideout_4f/palette.pal", ".gbapal");
+static const u32 sWJ3D_MauvilleCityGym_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/mauville_city_gym/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_MauvilleCityGym_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/mauville_city_gym/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_MauvilleCityGym_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/mauville_city_gym/palette.pal", ".gbapal");
 static const u32 sWJ3D_MeteorFalls1f1r_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/meteor_falls_1f_1r/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_MeteorFalls1f1r_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/meteor_falls_1f_1r/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_MeteorFalls1f1r_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/meteor_falls_1f_1r/palette.pal", ".gbapal");
@@ -103,6 +130,9 @@ static const u16 sWJ3D_MirageTower3f_Pal[] = INCGFX_U16("graphics/battle_environ
 static const u32 sWJ3D_MossdeepCityWater_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/mossdeep_city__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_MossdeepCityWater_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/mossdeep_city__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_MossdeepCityWater_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/mossdeep_city__water/palette.pal", ".gbapal");
+static const u32 sWJ3D_MossdeepCityGym_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/mossdeep_city_gym/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_MossdeepCityGym_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/mossdeep_city_gym/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_MossdeepCityGym_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/mossdeep_city_gym/palette.pal", ".gbapal");
 static const u32 sWJ3D_MtPyre1f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/mt_pyre_1f/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_MtPyre1f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/mt_pyre_1f/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_MtPyre1f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/mt_pyre_1f/palette.pal", ".gbapal");
@@ -139,6 +169,9 @@ static const u16 sWJ3D_PacifidlogTownWater_Pal[] = INCGFX_U16("graphics/battle_e
 static const u32 sWJ3D_PetalburgCityWater_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/petalburg_city__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_PetalburgCityWater_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/petalburg_city__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_PetalburgCityWater_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/petalburg_city__water/palette.pal", ".gbapal");
+static const u32 sWJ3D_PetalburgCityGym_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/petalburg_city_gym/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_PetalburgCityGym_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/petalburg_city_gym/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_PetalburgCityGym_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/petalburg_city_gym/palette.pal", ".gbapal");
 static const u32 sWJ3D_PetalburgWoods_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/petalburg_woods/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_PetalburgWoods_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/petalburg_woods/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_PetalburgWoods_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/petalburg_woods/palette.pal", ".gbapal");
@@ -283,6 +316,9 @@ static const u16 sWJ3D_Route133Water_Pal[] = INCGFX_U16("graphics/battle_environ
 static const u32 sWJ3D_Route134Water_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/route134__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_Route134Water_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/route134__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_Route134Water_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/route134__water/palette.pal", ".gbapal");
+static const u32 sWJ3D_RustboroCityGym_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/rustboro_city_gym/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_RustboroCityGym_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/rustboro_city_gym/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_RustboroCityGym_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/rustboro_city_gym/palette.pal", ".gbapal");
 static const u32 sWJ3D_RusturfTunnel_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/rusturf_tunnel/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_RusturfTunnel_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/rusturf_tunnel/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_RusturfTunnel_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/rusturf_tunnel/palette.pal", ".gbapal");
@@ -370,6 +406,12 @@ static const u16 sWJ3D_SlateportCityWater_Pal[] = INCGFX_U16("graphics/battle_en
 static const u32 sWJ3D_SootopolisCityWater_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/sootopolis_city__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_SootopolisCityWater_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/sootopolis_city__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_SootopolisCityWater_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/sootopolis_city__water/palette.pal", ".gbapal");
+static const u32 sWJ3D_SootopolisCityGym1f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/sootopolis_city_gym_1f/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_SootopolisCityGym1f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/sootopolis_city_gym_1f/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_SootopolisCityGym1f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/sootopolis_city_gym_1f/palette.pal", ".gbapal");
+static const u32 sWJ3D_SootopolisCityGymB1f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/sootopolis_city_gym_b1f/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_SootopolisCityGymB1f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/sootopolis_city_gym_b1f/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_SootopolisCityGymB1f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/sootopolis_city_gym_b1f/palette.pal", ".gbapal");
 static const u32 sWJ3D_VictoryRoad1f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/victory_road_1f/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_VictoryRoad1f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/victory_road_1f/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_VictoryRoad1f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/victory_road_1f/palette.pal", ".gbapal");
@@ -393,12 +435,20 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_CAVE_OF_ORIGIN_ENTRANCE), MAP_NUM(MAP_CAVE_OF_ORIGIN_ENTRANCE), sWJ3D_CaveOfOriginEntrance_Tiles, sWJ3D_CaveOfOriginEntrance_Map, sWJ3D_CaveOfOriginEntrance_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_DESERT_UNDERPASS), MAP_NUM(MAP_DESERT_UNDERPASS), sWJ3D_DesertUnderpass_Tiles, sWJ3D_DesertUnderpass_Map, sWJ3D_DesertUnderpass_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_DEWFORD_TOWN), MAP_NUM(MAP_DEWFORD_TOWN), sWJ3D_DewfordTownWater_Tiles, sWJ3D_DewfordTownWater_Map, sWJ3D_DewfordTownWater_Pal, WJ3D_WATER_ENVIRONMENTS},
+    {MAP_GROUP(MAP_DEWFORD_TOWN_GYM), MAP_NUM(MAP_DEWFORD_TOWN_GYM), sWJ3D_DewfordTownGym_Tiles, sWJ3D_DewfordTownGym_Map, sWJ3D_DewfordTownGym_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_EVER_GRANDE_CITY), MAP_NUM(MAP_EVER_GRANDE_CITY), sWJ3D_EverGrandeCityWater_Tiles, sWJ3D_EverGrandeCityWater_Map, sWJ3D_EverGrandeCityWater_Pal, WJ3D_WATER_ENVIRONMENTS},
+    {MAP_GROUP(MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM), MAP_NUM(MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM), sWJ3D_EverGrandeCityChampionsRoom_Tiles, sWJ3D_EverGrandeCityChampionsRoom_Map, sWJ3D_EverGrandeCityChampionsRoom_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_EVER_GRANDE_CITY_DRAKES_ROOM), MAP_NUM(MAP_EVER_GRANDE_CITY_DRAKES_ROOM), sWJ3D_EverGrandeCityDrakesRoom_Tiles, sWJ3D_EverGrandeCityDrakesRoom_Map, sWJ3D_EverGrandeCityDrakesRoom_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_EVER_GRANDE_CITY_GLACIAS_ROOM), MAP_NUM(MAP_EVER_GRANDE_CITY_GLACIAS_ROOM), sWJ3D_EverGrandeCityGlaciasRoom_Tiles, sWJ3D_EverGrandeCityGlaciasRoom_Map, sWJ3D_EverGrandeCityGlaciasRoom_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_EVER_GRANDE_CITY_SIDNEYS_ROOM), MAP_NUM(MAP_EVER_GRANDE_CITY_SIDNEYS_ROOM), sWJ3D_EverGrandeCitySidneysRoom_Tiles, sWJ3D_EverGrandeCitySidneysRoom_Map, sWJ3D_EverGrandeCitySidneysRoom_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_FIERY_PATH), MAP_NUM(MAP_FIERY_PATH), sWJ3D_FieryPath_Tiles, sWJ3D_FieryPath_Map, sWJ3D_FieryPath_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_FORTREE_CITY_GYM), MAP_NUM(MAP_FORTREE_CITY_GYM), sWJ3D_FortreeCityGym_Tiles, sWJ3D_FortreeCityGym_Map, sWJ3D_FortreeCityGym_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_GRANITE_CAVE_1F), MAP_NUM(MAP_GRANITE_CAVE_1F), sWJ3D_GraniteCave1f_Tiles, sWJ3D_GraniteCave1f_Map, sWJ3D_GraniteCave1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_GRANITE_CAVE_B1F), MAP_NUM(MAP_GRANITE_CAVE_B1F), sWJ3D_GraniteCaveB1f_Tiles, sWJ3D_GraniteCaveB1f_Map, sWJ3D_GraniteCaveB1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_GRANITE_CAVE_B2F), MAP_NUM(MAP_GRANITE_CAVE_B2F), sWJ3D_GraniteCaveB2f_Tiles, sWJ3D_GraniteCaveB2f_Map, sWJ3D_GraniteCaveB2f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_JAGGED_PASS), MAP_NUM(MAP_JAGGED_PASS), sWJ3D_JaggedPass_Tiles, sWJ3D_JaggedPass_Map, sWJ3D_JaggedPass_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_LAVARIDGE_TOWN_GYM_1F), MAP_NUM(MAP_LAVARIDGE_TOWN_GYM_1F), sWJ3D_LavaridgeTownGym1f_Tiles, sWJ3D_LavaridgeTownGym1f_Map, sWJ3D_LavaridgeTownGym1f_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_LAVARIDGE_TOWN_GYM_B1F), MAP_NUM(MAP_LAVARIDGE_TOWN_GYM_B1F), sWJ3D_LavaridgeTownGymB1f_Tiles, sWJ3D_LavaridgeTownGymB1f_Map, sWJ3D_LavaridgeTownGymB1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_LILYCOVE_CITY), MAP_NUM(MAP_LILYCOVE_CITY), sWJ3D_LilycoveCityWater_Tiles, sWJ3D_LilycoveCityWater_Map, sWJ3D_LilycoveCityWater_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_MAGMA_HIDEOUT_1F), MAP_NUM(MAP_MAGMA_HIDEOUT_1F), sWJ3D_MagmaHideout1f_Tiles, sWJ3D_MagmaHideout1f_Map, sWJ3D_MagmaHideout1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MAGMA_HIDEOUT_2F_1R), MAP_NUM(MAP_MAGMA_HIDEOUT_2F_1R), sWJ3D_MagmaHideout2f1r_Tiles, sWJ3D_MagmaHideout2f1r_Map, sWJ3D_MagmaHideout2f1r_Pal, WJ3D_ANY_ENVIRONMENT},
@@ -407,6 +457,7 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_MAGMA_HIDEOUT_3F_1R), MAP_NUM(MAP_MAGMA_HIDEOUT_3F_1R), sWJ3D_MagmaHideout3f1r_Tiles, sWJ3D_MagmaHideout3f1r_Map, sWJ3D_MagmaHideout3f1r_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MAGMA_HIDEOUT_3F_2R), MAP_NUM(MAP_MAGMA_HIDEOUT_3F_2R), sWJ3D_MagmaHideout3f2r_Tiles, sWJ3D_MagmaHideout3f2r_Map, sWJ3D_MagmaHideout3f2r_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MAGMA_HIDEOUT_4F), MAP_NUM(MAP_MAGMA_HIDEOUT_4F), sWJ3D_MagmaHideout4f_Tiles, sWJ3D_MagmaHideout4f_Map, sWJ3D_MagmaHideout4f_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_MAUVILLE_CITY_GYM), MAP_NUM(MAP_MAUVILLE_CITY_GYM), sWJ3D_MauvilleCityGym_Tiles, sWJ3D_MauvilleCityGym_Map, sWJ3D_MauvilleCityGym_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_METEOR_FALLS_1F_1R), MAP_NUM(MAP_METEOR_FALLS_1F_1R), sWJ3D_MeteorFalls1f1r_Tiles, sWJ3D_MeteorFalls1f1r_Map, sWJ3D_MeteorFalls1f1r_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_METEOR_FALLS_1F_1R), MAP_NUM(MAP_METEOR_FALLS_1F_1R), sWJ3D_MeteorFalls1f1rWater_Tiles, sWJ3D_MeteorFalls1f1rWater_Map, sWJ3D_MeteorFalls1f1rWater_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_METEOR_FALLS_1F_2R), MAP_NUM(MAP_METEOR_FALLS_1F_2R), sWJ3D_MeteorFalls1f2r_Tiles, sWJ3D_MeteorFalls1f2r_Map, sWJ3D_MeteorFalls1f2r_Pal, WJ3D_ANY_ENVIRONMENT},
@@ -419,6 +470,7 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_MIRAGE_TOWER_2F), MAP_NUM(MAP_MIRAGE_TOWER_2F), sWJ3D_MirageTower2f_Tiles, sWJ3D_MirageTower2f_Map, sWJ3D_MirageTower2f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MIRAGE_TOWER_3F), MAP_NUM(MAP_MIRAGE_TOWER_3F), sWJ3D_MirageTower3f_Tiles, sWJ3D_MirageTower3f_Map, sWJ3D_MirageTower3f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MOSSDEEP_CITY), MAP_NUM(MAP_MOSSDEEP_CITY), sWJ3D_MossdeepCityWater_Tiles, sWJ3D_MossdeepCityWater_Map, sWJ3D_MossdeepCityWater_Pal, WJ3D_WATER_ENVIRONMENTS},
+    {MAP_GROUP(MAP_MOSSDEEP_CITY_GYM), MAP_NUM(MAP_MOSSDEEP_CITY_GYM), sWJ3D_MossdeepCityGym_Tiles, sWJ3D_MossdeepCityGym_Map, sWJ3D_MossdeepCityGym_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MT_PYRE_1F), MAP_NUM(MAP_MT_PYRE_1F), sWJ3D_MtPyre1f_Tiles, sWJ3D_MtPyre1f_Map, sWJ3D_MtPyre1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MT_PYRE_2F), MAP_NUM(MAP_MT_PYRE_2F), sWJ3D_MtPyre2f_Tiles, sWJ3D_MtPyre2f_Map, sWJ3D_MtPyre2f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MT_PYRE_3F), MAP_NUM(MAP_MT_PYRE_3F), sWJ3D_MtPyre3f_Tiles, sWJ3D_MtPyre3f_Map, sWJ3D_MtPyre3f_Pal, WJ3D_ANY_ENVIRONMENT},
@@ -431,6 +483,7 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_NEW_MAUVILLE_INSIDE), MAP_NUM(MAP_NEW_MAUVILLE_INSIDE), sWJ3D_NewMauvilleInside_Tiles, sWJ3D_NewMauvilleInside_Map, sWJ3D_NewMauvilleInside_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_PACIFIDLOG_TOWN), MAP_NUM(MAP_PACIFIDLOG_TOWN), sWJ3D_PacifidlogTownWater_Tiles, sWJ3D_PacifidlogTownWater_Map, sWJ3D_PacifidlogTownWater_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_PETALBURG_CITY), MAP_NUM(MAP_PETALBURG_CITY), sWJ3D_PetalburgCityWater_Tiles, sWJ3D_PetalburgCityWater_Map, sWJ3D_PetalburgCityWater_Pal, WJ3D_WATER_ENVIRONMENTS},
+    {MAP_GROUP(MAP_PETALBURG_CITY_GYM), MAP_NUM(MAP_PETALBURG_CITY_GYM), sWJ3D_PetalburgCityGym_Tiles, sWJ3D_PetalburgCityGym_Map, sWJ3D_PetalburgCityGym_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_PETALBURG_WOODS), MAP_NUM(MAP_PETALBURG_WOODS), sWJ3D_PetalburgWoods_Tiles, sWJ3D_PetalburgWoods_Map, sWJ3D_PetalburgWoods_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_ROUTE101), MAP_NUM(MAP_ROUTE101), sWJ3D_Route101_Tiles, sWJ3D_Route101_Map, sWJ3D_Route101_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_ROUTE102), MAP_NUM(MAP_ROUTE102), sWJ3D_Route102_Tiles, sWJ3D_Route102_Map, sWJ3D_Route102_Pal, WJ3D_ANY_ENVIRONMENT},
@@ -479,6 +532,7 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_ROUTE132), MAP_NUM(MAP_ROUTE132), sWJ3D_Route132Water_Tiles, sWJ3D_Route132Water_Map, sWJ3D_Route132Water_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_ROUTE133), MAP_NUM(MAP_ROUTE133), sWJ3D_Route133Water_Tiles, sWJ3D_Route133Water_Map, sWJ3D_Route133Water_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_ROUTE134), MAP_NUM(MAP_ROUTE134), sWJ3D_Route134Water_Tiles, sWJ3D_Route134Water_Map, sWJ3D_Route134Water_Pal, WJ3D_WATER_ENVIRONMENTS},
+    {MAP_GROUP(MAP_RUSTBORO_CITY_GYM), MAP_NUM(MAP_RUSTBORO_CITY_GYM), sWJ3D_RustboroCityGym_Tiles, sWJ3D_RustboroCityGym_Map, sWJ3D_RustboroCityGym_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_RUSTURF_TUNNEL), MAP_NUM(MAP_RUSTURF_TUNNEL), sWJ3D_RusturfTunnel_Tiles, sWJ3D_RusturfTunnel_Map, sWJ3D_RusturfTunnel_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SAFARI_ZONE_NORTH), MAP_NUM(MAP_SAFARI_ZONE_NORTH), sWJ3D_SafariZoneNorth_Tiles, sWJ3D_SafariZoneNorth_Map, sWJ3D_SafariZoneNorth_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SAFARI_ZONE_NORTHEAST), MAP_NUM(MAP_SAFARI_ZONE_NORTHEAST), sWJ3D_SafariZoneNortheast_Tiles, sWJ3D_SafariZoneNortheast_Map, sWJ3D_SafariZoneNortheast_Pal, WJ3D_ANY_ENVIRONMENT},
@@ -508,6 +562,8 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_SKY_PILLAR_5F), MAP_NUM(MAP_SKY_PILLAR_5F), sWJ3D_SkyPillar5f_Tiles, sWJ3D_SkyPillar5f_Map, sWJ3D_SkyPillar5f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SLATEPORT_CITY), MAP_NUM(MAP_SLATEPORT_CITY), sWJ3D_SlateportCityWater_Tiles, sWJ3D_SlateportCityWater_Map, sWJ3D_SlateportCityWater_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_SOOTOPOLIS_CITY), MAP_NUM(MAP_SOOTOPOLIS_CITY), sWJ3D_SootopolisCityWater_Tiles, sWJ3D_SootopolisCityWater_Map, sWJ3D_SootopolisCityWater_Pal, WJ3D_WATER_ENVIRONMENTS},
+    {MAP_GROUP(MAP_SOOTOPOLIS_CITY_GYM_1F), MAP_NUM(MAP_SOOTOPOLIS_CITY_GYM_1F), sWJ3D_SootopolisCityGym1f_Tiles, sWJ3D_SootopolisCityGym1f_Map, sWJ3D_SootopolisCityGym1f_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_SOOTOPOLIS_CITY_GYM_B1F), MAP_NUM(MAP_SOOTOPOLIS_CITY_GYM_B1F), sWJ3D_SootopolisCityGymB1f_Tiles, sWJ3D_SootopolisCityGymB1f_Map, sWJ3D_SootopolisCityGymB1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_VICTORY_ROAD_1F), MAP_NUM(MAP_VICTORY_ROAD_1F), sWJ3D_VictoryRoad1f_Tiles, sWJ3D_VictoryRoad1f_Map, sWJ3D_VictoryRoad1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_VICTORY_ROAD_B1F), MAP_NUM(MAP_VICTORY_ROAD_B1F), sWJ3D_VictoryRoadB1f_Tiles, sWJ3D_VictoryRoadB1f_Map, sWJ3D_VictoryRoadB1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_VICTORY_ROAD_B2F), MAP_NUM(MAP_VICTORY_ROAD_B2F), sWJ3D_VictoryRoadB2f_Tiles, sWJ3D_VictoryRoadB2f_Map, sWJ3D_VictoryRoadB2f_Pal, WJ3D_ANY_ENVIRONMENT},

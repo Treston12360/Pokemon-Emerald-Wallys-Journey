@@ -53,7 +53,7 @@ rm -rf $W/auto/$NAME/sd && mkdir -p $SD && cp ${PAK:-$W/blank2.pak} $SD/emerald3
 printf "voxel=1\nvoxel_battle=1\n" > $SD/settings.txt; touch $SD/debug.txt
 mkdir -p shots
 { echo 1200; for i in $(seq 16); do printf "10 A\n90\n"; done; for i in $(seq 10); do printf "10 B\n60\n"; done; echo "shot shots/ow";
-  printf "10 u\n60\n10 A\n120\n"; for i in $(seq 1 14); do printf "10 B\n150\n"; done
+  printf "10 u\n60\n10 A\n120\n"; for i in $(seq 1 ${BPRESSES:-30}); do printf "10 B\n150\n"; done
   for i in $(seq 1 6); do printf "200\nshot shots/c$i\n"; done; } > cap.txt
 cd $W/auto/$NAME && FE_GL=1 FE_GFX=OpenGL timeout 3300 /home/claude/tools-src/azahar_fe /home/claude/dl/azahar/azahar_libretro.so ${GAME3DSX:-/home/claude/dl/em3ds/payload/Emerald3DS.3dsx} cap.txt $W/sys sd > cap.log 2>&1
 echo "$NAME capture rc=$? shots=$(ls shots | wc -l)"

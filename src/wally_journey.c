@@ -966,8 +966,19 @@ void WallyJourney_ScaleImportantParty(struct Pokemon *party, u16 trainerId)
             u8 nickname[POKEMON_NAME_LENGTH + 1];
             GetMonData(mon, MON_DATA_NICKNAME, nickname);
             SetMonData(mon, MON_DATA_SPECIES, &newSpecies);
-            // keep the ability when the evolution has it (Adaptability Corphish -> Crawdaunt)
-            SetCorrectAbilityNum(mon, newSpecies, ability);
+            // keep the ability when the evolution has it (Adaptability Corphish -> Crawdaunt);
+            // otherwise keep the ability slot (Vital Spirit Vigoroth -> Truant Slaking)
+            {
+                u32 k;
+                for (k = 0; k < ARRAY_COUNT(gSpeciesInfo[newSpecies].abilities); k++)
+                {
+                    if (gSpeciesInfo[newSpecies].abilities[k] == ability)
+                    {
+                        SetMonData(mon, MON_DATA_ABILITY_NUM, &k);
+                        break;
+                    }
+                }
+            }
             if (StringCompare(nickname, GetSpeciesName(species)) == 0)
                 SetMonData(mon, MON_DATA_NICKNAME, GetSpeciesName(newSpecies));
         }

@@ -1,0 +1,8 @@
+[
+{"name":"rustboro_leader","map":"MAP_RUSTBORO_CITY_GYM","x":5,"y":3,"flags":["FLAG_SYS_POKEMON_GET"],"party":[["SWAMPERT",40]]},
+{"name":"rustboro_trainer","map":"MAP_RUSTBORO_CITY_GYM","x":5,"y":14,"flags":["FLAG_SYS_POKEMON_GET"],"party":[["SWAMPERT",40]]},
+{"name":"petalburg","map":"MAP_PETALBURG_CITY_GYM","x":4,"y":3,"flags":["FLAG_SYS_POKEMON_GET"],"vars":[["VAR_PETALBURG_GYM_STATE",6]],"party":[["SWAMPERT",40]]},
+{"name":"sidney","map":"MAP_EVER_GRANDE_CITY_SIDNEYS_ROOM","x":6,"y":6,"flags":["FLAG_SYS_POKEMON_GET"],"vars":[["VAR_ELITE_4_STATE",1]],"party":[["SWAMPERT",40]]},
+{"name":"mossdeep","map":"MAP_MOSSDEEP_CITY_GYM","x":23,"y":8,"flags":["FLAG_SYS_POKEMON_GET"],"party":[["SWAMPERT",40],["PELIPPER",40]]},
+{"name":"champion","map":"MAP_EVER_GRANDE_CITY_HALL4","x":5,"y":3,"flags":["FLAG_SYS_POKEMON_GET"],"party":[["SWAMPERT",40]]}
+]
