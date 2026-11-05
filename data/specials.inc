@@ -662,3 +662,4 @@ gSpecials::
 	def_special WallyJourney_WallySurfBlobBelow
 	def_special WallyJourney_WallySurfMount
 	def_special WallyJourney_WallySurfEnd
+	def_special StartGacha

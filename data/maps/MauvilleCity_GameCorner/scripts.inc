@@ -779,3 +779,67 @@ MauvilleCity_GameCorner_Text_CantPlayWithNoCoinCase:
 	.string "You can't play if you don't have\n"
 	.string "a Coin Case.$"
 
+
+@ Gacha machines (agsmgmaster64 gacha-expansion). Not placed on the map yet: waiting for the owner.
+MauvilleCity_GameCorner_EventScript_Gacha_Basic::
+	lockall
+	checkitem ITEM_COIN_CASE
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NoCoinCase
+	setvar VAR_0x8004, 1
+	call MauvilleCity_GameCorner_EventScript_GachaCommon
+	releaseall
+	end
+
+MauvilleCity_GameCorner_EventScript_GachaCommon::
+	playbgm MUS_RG_CINNABAR, FALSE
+	special StartGacha
+	waitstate
+	savebgm MUS_DUMMY
+	fadedefaultbgm
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, MauvilleCity_GameCorner_EventScript_RecieveGachaMonParty
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, MauvilleCity_GameCorner_EventScript_RecieveGachaMonPC
+MauvilleCity_GameCorner_EventScript_GachaEnd:
+	return
+
+MauvilleCity_GameCorner_EventScript_RecieveGachaMonParty:
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MauvilleCity_GameCorner_EventScript_GachaEnd
+	call Common_EventScript_GetGiftMonPartySlot
+	call Common_EventScript_NameReceivedPartyMon
+	goto MauvilleCity_GameCorner_EventScript_GachaEnd
+
+MauvilleCity_GameCorner_EventScript_RecieveGachaMonPC:
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MauvilleCity_GameCorner_EventScript_TransferGachaMonToPC
+	call Common_EventScript_NameReceivedBoxMon
+MauvilleCity_GameCorner_EventScript_TransferGachaMonToPC:
+	call Common_EventScript_TransferredToPC
+	goto MauvilleCity_GameCorner_EventScript_GachaEnd
+
+MauvilleCity_GameCorner_EventScript_Gacha_Great::
+	lockall
+	checkitem ITEM_COIN_CASE
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NoCoinCase
+	setvar VAR_0x8004, 2
+	call MauvilleCity_GameCorner_EventScript_GachaCommon
+	releaseall
+	end
+	
+MauvilleCity_GameCorner_EventScript_Gacha_Ultra::
+	lockall
+	checkitem ITEM_COIN_CASE
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NoCoinCase
+	setvar VAR_0x8004, 3
+	call MauvilleCity_GameCorner_EventScript_GachaCommon
+	releaseall
+	end
+	
+MauvilleCity_GameCorner_EventScript_Gacha_Master::
+	lockall
+	checkitem ITEM_COIN_CASE
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NoCoinCase
+	setvar VAR_0x8004, 4
+	call MauvilleCity_GameCorner_EventScript_GachaCommon
+	releaseall
+	end
+

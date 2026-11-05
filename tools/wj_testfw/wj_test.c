@@ -18,6 +18,7 @@
 #include "constants/opponents.h"
 #include "daycare.h"
 #include "safari_zone.h"
+#include "coins.h"
 #include "random.h"
 
 struct WJTestScenario {
