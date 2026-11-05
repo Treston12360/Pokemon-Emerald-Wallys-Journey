@@ -843,3 +843,19 @@ MauvilleCity_GameCorner_EventScript_Gacha_Master::
 	releaseall
 	end
 
+
+MauvilleCity_GameCorner_EventScript_Gachalady::
+	lock
+	faceplayer
+	msgbox MauvilleCity_GameCorner_Text_Gachalady, MSGBOX_DEFAULT
+	release
+	end
+
+MauvilleCity_GameCorner_Text_Gachalady:
+	.string "Those are the Lottery Machines!\n"
+	.string "Bet your coins and win a Pokémon.\p"
+	.string "Orange is Basic, then Great, Ultra\n"
+	.string "and the purple Master machine.\l"
+	.string "Pricier machines have rarer prizes.\p"
+	.string "The more you bet, the better your\n"
+	.string "chance of a Pokémon you don't have!$"
