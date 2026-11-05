@@ -26,7 +26,7 @@ mask = cv2.dilate(mask, np.ones((5, 5), np.uint8))
 n2, lab2, st2, _ = cv2.connectedComponentsWithStats(np.all(im == (255, 255, 222), axis=-1).astype(np.uint8))
 for i in range(1, n2):
     x, y, w, h, area = st2[i]
-    if area >= 200 and y < 100:
+    if area >= 200 and y < 100 and os.environ.get("BARS") != "inpaint":
         x0, y0, x1, y1 = x - 2, y - 2, x + w + 2, y + h + 2
         hh = y1 - y0
         im[y0:y1, x0:x1] = im[y0 - hh:y1 - hh, x0:x1]

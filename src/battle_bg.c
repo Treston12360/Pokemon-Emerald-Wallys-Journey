@@ -96,6 +96,7 @@ static const struct WJ3DBackdrop *WJ3D_GetBackdrop(u32 environment)
      && environment != BATTLE_ENVIRONMENT_PLAIN && environment != BATTLE_ENVIRONMENT_SAND
      && environment != BATTLE_ENVIRONMENT_CAVE && environment != BATTLE_ENVIRONMENT_BUILDING
      && environment != BATTLE_ENVIRONMENT_WATER && environment != BATTLE_ENVIRONMENT_POND
+     && environment != BATTLE_ENVIRONMENT_UNDERWATER
      && !WJ3D_IsTrainerRoomEnvironment(environment))
         return NULL;
     for (i = 0; i < ARRAY_COUNT(sWJ3DBackdrops); i++)

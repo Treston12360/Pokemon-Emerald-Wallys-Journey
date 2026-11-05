@@ -82,6 +82,9 @@ static const u16 sWJ3D_GraniteCaveB1f_Pal[] = INCGFX_U16("graphics/battle_enviro
 static const u32 sWJ3D_GraniteCaveB2f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/granite_cave_b2f/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_GraniteCaveB2f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/granite_cave_b2f/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_GraniteCaveB2f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/granite_cave_b2f/palette.pal", ".gbapal");
+static const u32 sWJ3D_GraniteCaveStevensRoom_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/granite_cave_stevens_room/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_GraniteCaveStevensRoom_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/granite_cave_stevens_room/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_GraniteCaveStevensRoom_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/granite_cave_stevens_room/palette.pal", ".gbapal");
 static const u32 sWJ3D_JaggedPass_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/jagged_pass/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_JaggedPass_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/jagged_pass/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_JaggedPass_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/jagged_pass/palette.pal", ".gbapal");
@@ -154,6 +157,9 @@ static const u16 sWJ3D_MirageTower2f_Pal[] = INCGFX_U16("graphics/battle_environ
 static const u32 sWJ3D_MirageTower3f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/mirage_tower_3f/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_MirageTower3f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/mirage_tower_3f/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_MirageTower3f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/mirage_tower_3f/palette.pal", ".gbapal");
+static const u32 sWJ3D_MirageTower4f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/mirage_tower_4f/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_MirageTower4f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/mirage_tower_4f/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_MirageTower4f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/mirage_tower_4f/palette.pal", ".gbapal");
 static const u32 sWJ3D_MossdeepCityWater_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/mossdeep_city__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_MossdeepCityWater_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/mossdeep_city__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_MossdeepCityWater_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/mossdeep_city__water/palette.pal", ".gbapal");
@@ -517,6 +523,7 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_GRANITE_CAVE_1F), MAP_NUM(MAP_GRANITE_CAVE_1F), sWJ3D_GraniteCave1f_Tiles, sWJ3D_GraniteCave1f_Map, sWJ3D_GraniteCave1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_GRANITE_CAVE_B1F), MAP_NUM(MAP_GRANITE_CAVE_B1F), sWJ3D_GraniteCaveB1f_Tiles, sWJ3D_GraniteCaveB1f_Map, sWJ3D_GraniteCaveB1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_GRANITE_CAVE_B2F), MAP_NUM(MAP_GRANITE_CAVE_B2F), sWJ3D_GraniteCaveB2f_Tiles, sWJ3D_GraniteCaveB2f_Map, sWJ3D_GraniteCaveB2f_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_GRANITE_CAVE_STEVENS_ROOM), MAP_NUM(MAP_GRANITE_CAVE_STEVENS_ROOM), sWJ3D_GraniteCaveStevensRoom_Tiles, sWJ3D_GraniteCaveStevensRoom_Map, sWJ3D_GraniteCaveStevensRoom_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_JAGGED_PASS), MAP_NUM(MAP_JAGGED_PASS), sWJ3D_JaggedPass_Tiles, sWJ3D_JaggedPass_Map, sWJ3D_JaggedPass_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_LAVARIDGE_TOWN_GYM_1F), MAP_NUM(MAP_LAVARIDGE_TOWN_GYM_1F), sWJ3D_LavaridgeTownGym1f_Tiles, sWJ3D_LavaridgeTownGym1f_Map, sWJ3D_LavaridgeTownGym1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_LAVARIDGE_TOWN_GYM_B1F), MAP_NUM(MAP_LAVARIDGE_TOWN_GYM_B1F), sWJ3D_LavaridgeTownGymB1f_Tiles, sWJ3D_LavaridgeTownGymB1f_Map, sWJ3D_LavaridgeTownGymB1f_Pal, WJ3D_ANY_ENVIRONMENT},
@@ -541,6 +548,7 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_MIRAGE_TOWER_1F), MAP_NUM(MAP_MIRAGE_TOWER_1F), sWJ3D_MirageTower1f_Tiles, sWJ3D_MirageTower1f_Map, sWJ3D_MirageTower1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MIRAGE_TOWER_2F), MAP_NUM(MAP_MIRAGE_TOWER_2F), sWJ3D_MirageTower2f_Tiles, sWJ3D_MirageTower2f_Map, sWJ3D_MirageTower2f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MIRAGE_TOWER_3F), MAP_NUM(MAP_MIRAGE_TOWER_3F), sWJ3D_MirageTower3f_Tiles, sWJ3D_MirageTower3f_Map, sWJ3D_MirageTower3f_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_MIRAGE_TOWER_4F), MAP_NUM(MAP_MIRAGE_TOWER_4F), sWJ3D_MirageTower4f_Tiles, sWJ3D_MirageTower4f_Map, sWJ3D_MirageTower4f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MOSSDEEP_CITY), MAP_NUM(MAP_MOSSDEEP_CITY), sWJ3D_MossdeepCityWater_Tiles, sWJ3D_MossdeepCityWater_Map, sWJ3D_MossdeepCityWater_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_MOSSDEEP_CITY_GYM), MAP_NUM(MAP_MOSSDEEP_CITY_GYM), sWJ3D_MossdeepCityGym_Tiles, sWJ3D_MossdeepCityGym_Map, sWJ3D_MossdeepCityGym_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_MT_CHIMNEY), MAP_NUM(MAP_MT_CHIMNEY), sWJ3D_MtChimney_Tiles, sWJ3D_MtChimney_Map, sWJ3D_MtChimney_Pal, WJ3D_ANY_ENVIRONMENT},
