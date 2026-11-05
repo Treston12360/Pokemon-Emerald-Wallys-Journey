@@ -13,6 +13,7 @@
 #include "graphics.h"
 #include "strings.h"
 #include "frontier_pass.h"
+#include "wj_outfit.h"
 #include "international_string_util.h"
 #include "palette.h"
 #include "window.h"
@@ -1623,6 +1624,7 @@ static void InitFrontierMapSprites(void)
 {
     struct SpriteTemplate sprite;
     u8 spriteId;
+    bool32 isOutfitHead = FALSE;
     u8 id;
     s16 x = 0, y;
 
@@ -1682,9 +1684,25 @@ static void InitFrontierMapSprites(void)
             }
         }
 
-        LoadCompressedSpriteSheet(sHeadsSpriteSheet);
         sprite = sSpriteTemplate_PlayerHead;
         sprite.paletteTag = gSaveBlock2Ptr->playerGender + TAG_HEAD_MALE; // TAG_HEAD_FEMALE if gender is FEMALE
+        {
+            // Wally's Journey: the player's outfit head (frame 0), in the outfit's colours
+            const u8 *gfx;
+            const u16 *pal;
+            if (WJ_OutfitMapHead(&gfx, &pal))
+            {
+                struct SpriteSheet sheet = {gfx, 0x80, TAG_HEAD_MALE};
+                LoadSpriteSheet(&sheet);
+                sprite.paletteTag = TAG_HEAD_MALE;
+                LoadPalette(pal, OBJ_PLTT_ID(IndexOfSpritePaletteTag(TAG_HEAD_MALE)), PLTT_SIZE_4BPP);
+                isOutfitHead = TRUE;
+            }
+            else
+            {
+                LoadCompressedSpriteSheet(sHeadsSpriteSheet);
+            }
+        }
         if (id != 0)
         {
             spriteId = CreateSprite(&sprite, x, y, 0);
@@ -1698,7 +1716,7 @@ static void InitFrontierMapSprites(void)
 
         sMapData->playerHeadSprite = &gSprites[spriteId];
         sMapData->playerHeadSprite->oam.priority = 0;
-        if (gSaveBlock2Ptr->playerGender != MALE)
+        if (gSaveBlock2Ptr->playerGender != MALE && !isOutfitHead)
             StartSpriteAnim(sMapData->playerHeadSprite, 1);
     }
 }

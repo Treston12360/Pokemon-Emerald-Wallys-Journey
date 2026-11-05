@@ -262,6 +262,53 @@ const struct ObjectEventGraphicsInfo *WJ_OutfitGraphicsInfo(u16 graphicsId)
     return WJ_GetOutfitGfxInfo(gSaveBlock3Ptr->wjOutfit, slot);
 }
 
+// Town Map / Frontier Pass head: 16x16 cut from the outfit's facing-down walking frame (2x4 tiles in
+// sprite order), in the outfit's colours.
+static EWRAM_DATA u8 sWJMapHeadGfx[4 * 32] = {0};
+bool32 WJ_OutfitMapHead(const u8 **gfx, const u16 **pal)
+{
+    const struct ObjectEventGraphicsInfo *info;
+    if (!WJ_OutfitActive())
+        return FALSE;
+    info = WJ_GetOutfitGfxInfo(gSaveBlock3Ptr->wjOutfit, WJ_OUTFIT_GFX_NORMAL);
+    if (info == NULL || info->images == NULL)
+        return FALSE;
+    {
+        // The walking frame has empty rows above the head: crop the 16 rows starting just above it.
+        const u8 *src = info->images[0].data;
+        u32 x, y, start = 0;
+        for (y = 0; y < 32 && start == 0; y++)
+        {
+            for (x = 0; x < 16; x++)
+            {
+                u8 b = src[((y / 8) * 2 + x / 8) * 32 + (y % 8) * 4 + (x % 8) / 2];
+                if ((x & 1) ? (b >> 4) : (b & 0xF))
+                {
+                    start = (y > 0) ? y - 1 : 0;
+                    break;
+                }
+            }
+        }
+        if (start > 16)
+            start = 16;
+        memset(sWJMapHeadGfx, 0, sizeof(sWJMapHeadGfx));
+        for (y = 0; y < 16; y++)
+        {
+            for (x = 0; x < 16; x++)
+            {
+                u32 sy = y + start;
+                u8 b = src[((sy / 8) * 2 + x / 8) * 32 + (sy % 8) * 4 + (x % 8) / 2];
+                u8 c = (x & 1) ? (b >> 4) : (b & 0xF);
+                u8 *dst = &sWJMapHeadGfx[((y / 8) * 2 + x / 8) * 32 + (y % 8) * 4 + (x % 8) / 2];
+                *dst |= (x & 1) ? (c << 4) : c;
+            }
+        }
+    }
+    *gfx = sWJMapHeadGfx;
+    *pal = gWJPlayerOwPal;
+    return TRUE;
+}
+
 // ---------------------------------------------------------------------------------------
 // Outfit menu (Outfit Case key item). The player's own sprite on the map is the preview.
 

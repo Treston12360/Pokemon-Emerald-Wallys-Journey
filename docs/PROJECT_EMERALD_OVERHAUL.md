@@ -6,7 +6,7 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 
 - Repo: `Treston12360/Pokemon-Emerald-Wallys-Journey`, branch `wally-journey-development`.
 - Base: pokeemerald-expansion **1.17.2**.
-- The last ROM sent to the owner was **0.15.0** (rows 1–29 below).
+- The last ROM sent to the owner was **0.15.1** (rows 1–30 below).
 
 ## Owner rules (always)
 
@@ -95,6 +95,7 @@ All the screens below were recoloured to Emerald green, palette only.
 | 15 | Overworld character shadows | Pawkkie | already built into expansion 1.17 (`OW_OBJECT_VANILLA_SHADOWS FALSE`), nothing to port |
 | 16 | Vol's HGSS-style start menu, green | vol8 `start_menu_1`, HashtagMarky's expansion port | Pokédex icon asks Pokédex/DexNav; Pike/Pyramid/link rooms keep the old menu |
 | 17 | Stat Points (EV allocator), green | Bivurnum `ev-allocator` on TAH's stat editor | no battle EVs; 10 points per level to Lv51; Party → Stat Points; old saves: all EVs reset to 0 once on Continue (in 0.9.3) |
+| 30 | Outfit faces: the Town Map (PokéNav / Fly map) and Frontier Pass map show the outfit's head in its colours; the Hall of Fame shows the outfit's front picture | ours (owner picked this over Mudskip's outfit system) | `WJ_OutfitMapHead` crops 16x16 from the facing-down walking frame, starting just above the first drawn row. Tested Hilbert + red/blue on both maps. Hall of Fame not reached in a test (same `TRAINER_PIC_WJ_PLAYER` path as the Trainer Card). Link battles still send Brendan/May (would need a link-protocol change). In 0.15.1 |
 | 29 | Gacha / Lottery Machines: 4 machines (Basic orange, Great blue, Ultra yellow, Master purple; min bets 50/250/1000/4500 coins) on the Mauville Game Corner's top wall where the 3 plants were, plus a lady (3,4) who explains them; the girl who stood there moved to (4,3) | agsmgmaster64 `gacha-expansion` | owner: "Add all 4 as they are" (Master can give legendaries). Machine art = their metatiles 0x280-0x28b copied as our 0x260-0x267 (their palette 11). Prizes level with badges, capped at the level cap. Gacha music not ported (it needs song renumbering); the script plays the Cinnabar theme as theirs does. Tested Basic (Wooper) and Master (Vaporeon) from the map. Test-only note: warping straight from New Game into an indoor map shows magenta at (4,1..3) — the truck intro's exit-light metatiles, never seen in real play. In 0.15.0 |
 | 28 | Fix: mid-battle evolution ran out of memory when going back to the battle ("out of memory, 13288 bytes" stop in test builds; release builds would glitch/crash) | ours | the evolution now frees the battle anim buffers first (`CloseMainBattleScreen`, like opening the Bag); the reshow allocates them again. Tested: right-hand Marshtomp evolves mid double battle and the battle goes on. In 0.14.2 |
 | 27 | Pokédex in Emerald green (HGSS Pokédex palettes: reds → green hue 140; type colours and map unchanged) | ours | owner approved the mockup as is ("Perfect looks good"). In 0.14.1 |
@@ -150,7 +151,7 @@ The owner picked this order: 1 DexNav check (done), 3 start menu colours (done),
    - **Downloads that work from a session (2026-11-04):** Emerald 3DS `https://github.com/ZallaxDev/pokeemerald-3Ds-dualscreen/releases/download/v0.5.0/Emerald3DS-WebPayload.zip`; Azahar core from Azahar's own release `https://github.com/azahar-emu/azahar/releases/download/2126.2/azahar-libretro-linux-x86_64-2126.2.zip` (buildbot.libretro.com may be blocked). The harness needs mGBA **0.10.5** (the master branch crashes it). Still needs the owner's clean Emerald ROM each session.
    - **Status (2026-11-04):** game side is in: `WJ_3D_BATTLE_BACKGROUNDS`, `src/data/wj3d_backdrops.h` (empty table = stock backgrounds everywhere), hook in `battle_bg.c` (land environments, ordinary battles only; season recolour + day/night tint applied). Converter `tools/wj3d_backdrop.py` (3DS frame → 3 palettes / ≤511 tiles / top 14 tile rows; tested on an old capture). **Blocker:** clean captures. Tools and findings are in `tools/wj3d/README.md` (read it first).
 4. ~~Reports~~ done 2026-11-04. Owner: Outfits → keep ours and add the outfit's face to the Town Map, Frontier Pass,
-   Hall of Fame (link battles can't carry it without a link-protocol change). Gacha → added (row 29).
+   Hall of Fame — done (row 30). Gacha → added (row 29).
 5. **New main menu with mugshot** (Archie & Mudskip, pret wiki; vanilla): port and recolour green.
 
 ## Source branches (all public GitHub)

@@ -15,6 +15,7 @@ extern u32 gWJPlayerFrontPicBuf[];
 extern u32 gWJPlayerBackPicBuf[];
 
 bool32 WJ_OutfitActive(void);
+bool32 WJ_OutfitMapHead(const u8 **gfx, const u16 **pal);
 u32 WJ_OutfitId(void);
 void WJ_OutfitRefresh(void);
 void WJ_OutfitOnNewGame(void);

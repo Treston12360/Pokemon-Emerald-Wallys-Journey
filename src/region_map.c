@@ -21,6 +21,7 @@
 #include "fldeff.h"
 #include "regions.h"
 #include "region_map.h"
+#include "wj_outfit.h"
 #include "decompress.h"
 #include "constants/region_map_sections.h"
 #include "heal_location.h"
@@ -1758,6 +1759,16 @@ void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag)
     {
         sheet.data = sRegionMapPlayerIcon_RedGfx;
         palette.data = sRegionMapPlayerIcon_RedPal;
+    }
+    {
+        // Wally's Journey: the player's outfit head
+        const u8 *gfx;
+        const u16 *pal;
+        if (WJ_OutfitMapHead(&gfx, &pal))
+        {
+            sheet.data = gfx;
+            palette.data = pal;
+        }
     }
     LoadSpriteSheet(&sheet);
     LoadSpritePalette(&palette);

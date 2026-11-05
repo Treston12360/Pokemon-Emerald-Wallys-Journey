@@ -20,6 +20,8 @@
 #include "safari_zone.h"
 #include "coins.h"
 #include "random.h"
+#include "wj_outfit.h"
+#include "constants/wj_outfits.h"
 
 struct WJTestScenario {
     u8 group, num; s16 x, y;
