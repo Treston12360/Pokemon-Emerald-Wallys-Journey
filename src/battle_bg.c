@@ -1961,7 +1961,9 @@ bool8 LoadChosenBattleElement(u8 caseId)
 
 void DrawTerrainTypeBattleBackground(void)
 {
-    if (gFieldTimers.terrain != B_TERRAIN_NONE)
+    // A 3D backdrop stays up through terrains (overworld fog → Misty Terrain, storms → Electric
+    // Terrain), instead of being swapped for the stock terrain picture.
+    if (gFieldTimers.terrain != B_TERRAIN_NONE && !WJ3D_IsBackdropShown())
         LoadMoveBg(gBattleTerrainInfo[gFieldTimers.terrain].battleBackground);
     else
         DrawMainBattleBackground();
