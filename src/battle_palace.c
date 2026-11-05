@@ -42,12 +42,13 @@ static void (*const sBattlePalaceFunctions[])(void) =
 
 static const u16 sBattlePalaceEarlyPrizes[] =
 {
-    ITEM_HP_UP,
-    ITEM_PROTEIN,
-    ITEM_IRON,
-    ITEM_CALCIUM,
-    ITEM_CARBOS,
-    ITEM_ZINC
+    // Wally's Journey: vitamins do nothing with Stat Points
+    ITEM_RARE_CANDY,
+    ITEM_PP_UP,
+    ITEM_BOTTLE_CAP,
+    ITEM_EXP_CANDY_L,
+    ITEM_PP_UP,
+    ITEM_RARE_CANDY,
 };
 
 static const u16 sBattlePalaceLatePrizes[] =

@@ -23,14 +23,21 @@ static const u16 sFrontierExchangeCorner_Decor2[] =
     ITEM_LIST_END
 };
 
+// Wally's Journey: vitamins do nothing with Stat Points, so this clerk sells training goods instead
 static const enum Item sFrontierExchangeCorner_Vitamins[] =
 {
-    ITEM_PROTEIN,
-    ITEM_CALCIUM,
-    ITEM_IRON,
-    ITEM_ZINC,
-    ITEM_CARBOS,
-    ITEM_HP_UP,
+    ITEM_RARE_CANDY,
+    ITEM_PP_UP,
+    ITEM_PP_MAX,
+    ITEM_BOTTLE_CAP,
+    ITEM_GOLD_BOTTLE_CAP,
+    ITEM_ABILITY_PATCH,
+    ITEM_EVIOLITE,
+    ITEM_WEAKNESS_POLICY,
+    ITEM_EXPERT_BELT,
+    ITEM_LIGHT_CLAY,
+    ITEM_HEAVY_DUTY_BOOTS,
+    ITEM_AIR_BALLOON,
     ITEM_LIST_END
 };
 
@@ -45,6 +52,12 @@ static const enum Item sFrontierExchangeCorner_HoldItems[] =
     ITEM_KINGS_ROCK,
     ITEM_FOCUS_BAND,
     ITEM_SCOPE_LENS,
+    ITEM_LIFE_ORB,
+    ITEM_CHOICE_SPECS,
+    ITEM_CHOICE_SCARF,
+    ITEM_FOCUS_SASH,
+    ITEM_ASSAULT_VEST,
+    ITEM_ROCKY_HELMET,
     ITEM_LIST_END
 };
 
@@ -75,12 +88,18 @@ static const u8 *const sFrontierExchangeCorner_Decor2Descriptions[] =
 
 static const u8 *const sFrontierExchangeCorner_VitaminsDescriptions[] =
 {
-    BattleFrontier_ExchangeServiceCorner_Text_ProteinDesc,
-    BattleFrontier_ExchangeServiceCorner_Text_CalciumDesc,
-    BattleFrontier_ExchangeServiceCorner_Text_IronDesc,
-    BattleFrontier_ExchangeServiceCorner_Text_ZincDesc,
-    BattleFrontier_ExchangeServiceCorner_Text_CarbosDesc,
-    BattleFrontier_ExchangeServiceCorner_Text_HPUpDesc,
+    COMPOUND_STRING("Raises the level of one Pokémon\nby one."),
+    COMPOUND_STRING("Raises the max PP of one move\na little."),
+    COMPOUND_STRING("Raises the max PP of one move\nas far as it goes."),
+    COMPOUND_STRING("Hyper Training: maxes one of a\nPokémon's IVs."),
+    COMPOUND_STRING("Hyper Training: maxes all of a\nPokémon's IVs."),
+    COMPOUND_STRING("Switches a Pokémon to any of\nits other Abilities."),
+    COMPOUND_STRING("Raises Defense and Sp. Def of a\nPokémon that can still evolve."),
+    COMPOUND_STRING("Sharply raises Attack and Sp. Atk\nwhen hit super effectively."),
+    COMPOUND_STRING("Powers up super effective\nmoves a little."),
+    COMPOUND_STRING("Makes Reflect, Light Screen and\nAurora Veil last longer."),
+    COMPOUND_STRING("Protects the holder from\nentry hazards."),
+    COMPOUND_STRING("The holder floats over Ground\nmoves until it is hit."),
     gText_Exit
 };
 
@@ -95,5 +114,11 @@ static const u8 *const sFrontierExchangeCorner_HoldItemsDescriptions[] =
     BattleFrontier_ExchangeServiceCorner_Text_KingsRockDesc,
     BattleFrontier_ExchangeServiceCorner_Text_FocusBandDesc,
     BattleFrontier_ExchangeServiceCorner_Text_ScopeLensDesc,
+    COMPOUND_STRING("Powers up moves, but the holder\nloses a little HP with each hit."),
+    COMPOUND_STRING("Boosts Sp. Atk, but only one\nmove can be used."),
+    COMPOUND_STRING("Boosts Speed, but only one\nmove can be used."),
+    COMPOUND_STRING("Survives one hit that would KO\nthe holder from full HP."),
+    COMPOUND_STRING("Raises Sp. Def, but the holder\ncan only use attacking moves."),
+    COMPOUND_STRING("Hurts attackers that make\ncontact with the holder."),
     gText_Exit
 };

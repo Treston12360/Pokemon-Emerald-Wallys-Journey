@@ -2406,17 +2406,17 @@ void ShowScrollableMultichoice(void)
         break;
     case SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR:
         task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
-        task->tNumItems = 7;
-        task->tLeft = 14;
+        task->tNumItems = 13; // Wally's Journey: 12 training goods + Exit
+        task->tLeft = 13;
         task->tTop = 1;
-        task->tWidth = 15;
+        task->tWidth = 16; // one tile wider for "Heavy-Duty Boots"
         task->tHeight = 12;
         task->tKeepOpenAfterSelect = FALSE;
         task->tTaskId = taskId;
         break;
     case SCROLL_MULTI_BF_EXCHANGE_CORNER_HOLD_ITEM_VENDOR:
         task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
-        task->tNumItems = 10;
+        task->tNumItems = 16; // Wally's Journey: 15 hold items + Exit
         task->tLeft = 14;
         task->tTop = 1;
         task->tWidth = 15;
@@ -2561,12 +2561,18 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
     },
     [SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR] =
     {
-        COMPOUND_STRING("Protein{CLEAR_TO 100}1BP"),
-        COMPOUND_STRING("Calcium{CLEAR_TO 100}1BP"),
-        COMPOUND_STRING("Iron{CLEAR_TO 100}1BP"),
-        COMPOUND_STRING("Zinc{CLEAR_TO 100}1BP"),
-        COMPOUND_STRING("Carbos{CLEAR_TO 100}1BP"),
-        COMPOUND_STRING("HP Up{CLEAR_TO 100}1BP"),
+        COMPOUND_STRING("Rare Candy{CLEAR_TO 104}4BP"),
+        COMPOUND_STRING("PP Up{CLEAR_TO 104}8BP"),
+        COMPOUND_STRING("PP Max{CLEAR_TO 104}16BP"),
+        COMPOUND_STRING("Bottle Cap{CLEAR_TO 104}24BP"),
+        COMPOUND_STRING("Gold Bottle Cap{CLEAR_TO 104}64BP"),
+        COMPOUND_STRING("Ability Patch{CLEAR_TO 104}64BP"),
+        COMPOUND_STRING("Eviolite{CLEAR_TO 104}48BP"),
+        COMPOUND_STRING("Weakness Policy{CLEAR_TO 104}48BP"),
+        COMPOUND_STRING("Expert Belt{CLEAR_TO 104}48BP"),
+        COMPOUND_STRING("Light Clay{CLEAR_TO 104}32BP"),
+        COMPOUND_STRING("Heavy-Duty Boots{CLEAR_TO 104}48BP"),
+        COMPOUND_STRING("Air Balloon{CLEAR_TO 104}32BP"),
         gText_Exit
     },
     [SCROLL_MULTI_BF_EXCHANGE_CORNER_HOLD_ITEM_VENDOR] =
@@ -2580,6 +2586,12 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         COMPOUND_STRING("King's Rock{CLEAR_TO 94}64BP"),
         COMPOUND_STRING("Focus Band{CLEAR_TO 94}64BP"),
         COMPOUND_STRING("Scope Lens{CLEAR_TO 94}64BP"),
+        COMPOUND_STRING("Life Orb{CLEAR_TO 94}64BP"),
+        COMPOUND_STRING("Choice Specs{CLEAR_TO 94}64BP"),
+        COMPOUND_STRING("Choice Scarf{CLEAR_TO 94}64BP"),
+        COMPOUND_STRING("Focus Sash{CLEAR_TO 94}48BP"),
+        COMPOUND_STRING("Assault Vest{CLEAR_TO 94}64BP"),
+        COMPOUND_STRING("Rocky Helmet{CLEAR_TO 94}48BP"),
         gText_Exit
     },
     [SCROLL_MULTI_BERRY_POWDER_VENDOR] =
