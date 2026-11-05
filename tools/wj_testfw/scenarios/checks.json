@@ -1,0 +1,120 @@
+[
+{
+"name": "double_evo",
+"map": "MAP_ROUTE104",
+"x": 27,
+"y": 16,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+],
+[
+"MARSHTOMP",
+35
+]
+],
+"weak": true,
+"almost": true,
+"extra": "{ u32 k; SetMonMoveSlot(&gPlayerParty[1], MOVE_WATER_GUN, 0); for (k = 1; k < MAX_MON_MOVES; k++) SetMonMoveSlot(&gPlayerParty[1], MOVE_NONE, k); }"
+},
+{
+"name": "mega",
+"map": "MAP_RUSTBORO_CITY_GYM",
+"x": 5,
+"y": 14,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+],
+"extra": "{ u16 it = ITEM_SWAMPERTITE; SetMonData(&gPlayerParty[0], MON_DATA_HELD_ITEM, &it); }"
+},
+{
+"name": "zmove",
+"map": "MAP_RUSTBORO_CITY_GYM",
+"x": 5,
+"y": 14,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+],
+"extra": "{ u16 it = ITEM_WATERIUM_Z; SetMonData(&gPlayerParty[0], MON_DATA_HELD_ITEM, &it); }"
+},
+{
+"name": "safari",
+"map": "MAP_SAFARI_ZONE_SOUTH",
+"x": 22,
+"y": 31,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+],
+"extra": "EnterSafariMode();"
+},
+{
+"name": "bag300",
+"map": "MAP_ROUTE101",
+"x": 13,
+"y": 12,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+],
+"extra": "{ u32 id, n = 0; for (id = 1; id < ITEMS_COUNT && n < 300; id++) if (GetItemPocket(id) == POCKET_ITEMS && AddBagItem(id, 1)) n++; }"
+},
+{
+"name": "egg",
+"map": "MAP_ROUTE101",
+"x": 10,
+"y": 10,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+],
+"extra": "{ struct Pokemon egg; CreateEgg(&egg, SPECIES_TORCHIC, FALSE); gPlayerParty[1] = egg; CalculatePlayerPartyCount(); }"
+},
+{
+"name": "regi",
+"map": "MAP_DESERT_RUINS",
+"x": 8,
+"y": 8,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+],
+"extra": "FlagClear(FLAG_HIDE_REGIROCK);"
+}
+]

@@ -6,7 +6,7 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 
 - Repo: `Treston12360/Pokemon-Emerald-Wallys-Journey`, branch `wally-journey-development`.
 - Base: pokeemerald-expansion **1.17.2**.
-- The last ROM sent to the owner was **0.14.1** (rows 1–27 below).
+- The last ROM sent to the owner was **0.14.2** (rows 1–28 below).
 
 ## Owner rules (always)
 
@@ -95,6 +95,7 @@ All the screens below were recoloured to Emerald green, palette only.
 | 15 | Overworld character shadows | Pawkkie | already built into expansion 1.17 (`OW_OBJECT_VANILLA_SHADOWS FALSE`), nothing to port |
 | 16 | Vol's HGSS-style start menu, green | vol8 `start_menu_1`, HashtagMarky's expansion port | Pokédex icon asks Pokédex/DexNav; Pike/Pyramid/link rooms keep the old menu |
 | 17 | Stat Points (EV allocator), green | Bivurnum `ev-allocator` on TAH's stat editor | no battle EVs; 10 points per level to Lv51; Party → Stat Points; old saves: all EVs reset to 0 once on Continue (in 0.9.3) |
+| 28 | Fix: mid-battle evolution ran out of memory when going back to the battle ("out of memory, 13288 bytes" stop in test builds; release builds would glitch/crash) | ours | the evolution now frees the battle anim buffers first (`CloseMainBattleScreen`, like opening the Bag); the reshow allocates them again. Tested: right-hand Marshtomp evolves mid double battle and the battle goes on. In 0.14.2 |
 | 27 | Pokédex in Emerald green (HGSS Pokédex palettes: reds → green hue 140; type colours and map unchanged) | ours | owner approved the mockup as is ("Perfect looks good"). In 0.14.1 |
 | 26 | Ditto face sprites: a transformed Ditto keeps its face (Bulbasaur line, Cleffa line, Growlithe, Arcanine, Doduo, Dodrio) | AsparagusEduardo | `P_DITTO_SPRITES`; only the species with art; only real Ditto (Mew etc. using Transform look normal). Tested both sides (our Ditto → Growlithe back, wild Ditto → Arcanine front). In 0.14.0 |
 | 25 | Fix: level-scaled trainers whose Pokémon evolve (Norman's Vigoroth → Slaking) hit an "illegal ability" assertion (test builds stop; release silently skipped it) | ours | `wally_journey.c` keeps the old ability only when the evolution has it, else keeps the slot. In 0.13.0 |
@@ -130,12 +131,11 @@ The owner picked this order: 1 DexNav check (done), 3 start menu colours (done),
 
 ## TO DO, in suggested priority order
 
-1. **Checks still not done** (do before the overhaul is called finished):
-   - **Battle UI:** a double battle (BW UI + mid-battle evo of the right Pokémon), a trainer battle with Mega/Z triggers, the Safari Zone.
-   - **Bag:** the Bag used in battle, the Battle Pyramid bag, and a pocket with more than 255 stacks.
-   - **Summary:** an Egg's summary page.
-   - **Transitions:** watch one Regi transition with R held. Battle transitions are fast-forwarded unless R is held.
-   - **New text:** the Sword/Shield PC menu and bag use mixed-case words ("Store", "Summary"); the decapitalize task will settle this.
+1. ~~Checks~~ all done 2026-11-04 (test fw `scenarios/checks.json`, per-scenario `"extra"` C setup):
+   double battle + mid-battle evo of the right Pokémon (found and fixed row 28), Mega and Z-Move in a trainer battle,
+   Safari Zone (BW UI: Ball / Pokéblock / Go Near / Run), Bag in battle and back, Battle Pyramid bag (own items,
+   "Pyramid" pocket, Use/Give/Toss), a 300-stack Items pocket scrolled to the end, an Egg's summary, Regirock's
+   transition (full with R held, fast-forwarded otherwise), PC menus (consistent mixed case).
 2. **Owner decisions needed:** none open right now.
 3. **3D battle backgrounds** (the biggest remaining job). Plan:
    - Capture backdrops from Emerald 3DS v0.5.0 in its 3D BATTLE mode (Azahar libretro core).

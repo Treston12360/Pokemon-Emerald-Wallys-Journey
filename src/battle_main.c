@@ -14,6 +14,7 @@
 #include "battle_pyramid.h"
 #include "battle_scripts.h"
 #include "battle_setup.h"
+#include "battle_util2.h"
 #include "battle_tower.h"
 #include "battle_z_move.h"
 #include "battle_gimmick.h"
@@ -3845,7 +3846,7 @@ static void Task_BeginBattleEvolutionScene(u8 taskId)
     {
         u8 partyId = gTasks[taskId].tBattlerPosition;
         u16 species = gTasks[taskId].tSpeciesToEvolveInto;
-        FreeAllWindowBuffers();
+        CloseMainBattleScreen(); // frees the battle anim buffers too, like opening the Bag (the reshow re-allocates them)
         gCB2_AfterEvolution = CB2_SetUpReshowBattleScreenAfterEvolution;
         sBattleEnvironmentBackup = gBattleEnvironment;
         DestroyTask(taskId);

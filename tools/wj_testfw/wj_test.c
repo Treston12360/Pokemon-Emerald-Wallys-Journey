@@ -14,6 +14,11 @@
 #include "constants/vars.h"
 #include "constants/maps.h"
 #include "constants/moves.h"
+#include "constants/trainers.h"
+#include "constants/opponents.h"
+#include "daycare.h"
+#include "safari_zone.h"
+#include "random.h"
 
 struct WJTestScenario {
     u8 group, num; s16 x, y;
@@ -78,6 +83,9 @@ void WJTest_ApplyState(void)
     AddBagItem(ITEM_MAX_REPEL, 99);
     { static const u16 hm[] = {ITEM_HM_CUT, ITEM_HM_FLASH, ITEM_HM_ROCK_SMASH, ITEM_HM_STRENGTH, ITEM_HM_SURF, ITEM_HM_FLY, ITEM_HM_DIVE, ITEM_HM_WATERFALL, ITEM_Z_POWER_RING, ITEM_MEGA_RING};
       for (i = 0; i < ARRAY_COUNT(hm); i++) AddBagItem(hm[i], 1); }
+#ifdef WJ_HAS_EXTRA
+    WJTest_ScenarioExtra(ScenarioIndex());
+#endif
 }
 
 void WJTest_RecordEnemy(void)
