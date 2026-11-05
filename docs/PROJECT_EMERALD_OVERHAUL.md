@@ -6,7 +6,7 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 
 - Repo: `Treston12360/Pokemon-Emerald-Wallys-Journey`, branch `wally-journey-development`.
 - Base: pokeemerald-expansion **1.17.2**.
-- The last ROM sent to the owner was **0.14.0** (rows 1–26 below).
+- The last ROM sent to the owner was **0.14.1** (rows 1–27 below).
 
 ## Owner rules (always)
 
@@ -95,6 +95,7 @@ All the screens below were recoloured to Emerald green, palette only.
 | 15 | Overworld character shadows | Pawkkie | already built into expansion 1.17 (`OW_OBJECT_VANILLA_SHADOWS FALSE`), nothing to port |
 | 16 | Vol's HGSS-style start menu, green | vol8 `start_menu_1`, HashtagMarky's expansion port | Pokédex icon asks Pokédex/DexNav; Pike/Pyramid/link rooms keep the old menu |
 | 17 | Stat Points (EV allocator), green | Bivurnum `ev-allocator` on TAH's stat editor | no battle EVs; 10 points per level to Lv51; Party → Stat Points; old saves: all EVs reset to 0 once on Continue (in 0.9.3) |
+| 27 | Pokédex in Emerald green (HGSS Pokédex palettes: reds → green hue 140; type colours and map unchanged) | ours | owner approved the mockup as is ("Perfect looks good"). In 0.14.1 |
 | 26 | Ditto face sprites: a transformed Ditto keeps its face (Bulbasaur line, Cleffa line, Growlithe, Arcanine, Doduo, Dodrio) | AsparagusEduardo | `P_DITTO_SPRITES`; only the species with art; only real Ditto (Mew etc. using Transform look normal). Tested both sides (our Ditto → Growlithe back, wild Ditto → Arcanine front). In 0.14.0 |
 | 25 | Fix: level-scaled trainers whose Pokémon evolve (Norman's Vigoroth → Slaking) hit an "illegal ability" assertion (test builds stop; release silently skipped it) | ours | `wally_journey.c` keeps the old ability only when the evolution has it, else keeps the slot. In 0.13.0 |
 | 24 | 3D battle backgrounds in all 8 Gyms (+ Lavaridge/Sootopolis B1F reuse 1F), Sidney, Glacia, Drake and the Champion room | Emerald 3DS | `capture_trainer.sh` + `gyms.txt`: talks to the Leader/E4 member in the 3DS game. Covers Leader, Gym trainer, double (Tate & Liza), E4 and Champion battles. Not done: Phoebe's room (the 3DS port freezes before her battle) — stock background. In 0.13.0 |
@@ -106,8 +107,6 @@ All the screens below were recoloured to Emerald green, palette only.
 | 18 | BW move names coloured by effectiveness, green text-box line | ours | green/blue/red names (needs the foe species seen; expansion marks "seen" at the END of the first battle); box keeps type colour; red line + move-box marks → green. In 0.9.2 |
 
 ## IN PROGRESS
-
-- **Pokédex in Emerald green:** mockup sent 2026-11-04 (branch `wip/dex-green`, palette-only: reds → green hue 140). Waiting for the owner's OK; then merge.
 
 ## ▶ NEXT TASK: 3D battle backgrounds for the rest (water, towns/gyms)
 
@@ -126,7 +125,7 @@ The owner picked this order: 1 DexNav check (done), 3 start menu colours (done),
 
 **New from the owner (2026-11-04), add to the order after the 3D backgrounds unless told otherwise:**
 - ~~Save screen looks glitched~~ fixed in 0.9.4 (row 19).
-- **Pokédex in Emerald green.** We use the HGSS-style Pokédex (`POKEDEX_PLUS_HGSS`, `HGSS_DECAPPED`). Palette-only recolour (red/blue UI → Emerald greens; keep type colours), mockup first, owner approval before applying.
+- ~~**Pokédex in Emerald green.**~~ done in 0.14.1 (row 27). We use the HGSS-style Pokédex (`POKEDEX_PLUS_HGSS`, `HGSS_DECAPPED`). Palette-only recolour (red/blue UI → Emerald greens; keep type colours), mockup first, owner approval before applying.
 - **Battle menu size:** owner felt the BW action buttons look big / cut off at the bottom. That is the original art (the lower buttons' bottom edge is off-screen by design). Shrinking needs new art (not allowed). Owner decided (2026-11-04): **leave them as they are.**
 
 ## TO DO, in suggested priority order
