@@ -367,6 +367,9 @@ static const u16 sWJ3D_Route128Water_Pal[] = INCGFX_U16("graphics/battle_environ
 static const u32 sWJ3D_Route129Water_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/route129__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_Route129Water_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/route129__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_Route129Water_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/route129__water/palette.pal", ".gbapal");
+static const u32 sWJ3D_Route130_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/route130/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_Route130_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/route130/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_Route130_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/route130/palette.pal", ".gbapal");
 static const u32 sWJ3D_Route130Water_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/route130__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_Route130Water_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/route130__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_Route130Water_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/route130__water/palette.pal", ".gbapal");
@@ -382,6 +385,9 @@ static const u16 sWJ3D_Route133Water_Pal[] = INCGFX_U16("graphics/battle_environ
 static const u32 sWJ3D_Route134Water_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/route134__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_Route134Water_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/route134__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_Route134Water_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/route134__water/palette.pal", ".gbapal");
+static const u32 sWJ3D_RustboroCity_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/rustboro_city/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_RustboroCity_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/rustboro_city/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_RustboroCity_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/rustboro_city/palette.pal", ".gbapal");
 static const u32 sWJ3D_RustboroCityGym_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/rustboro_city_gym/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_RustboroCityGym_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/rustboro_city_gym/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_RustboroCityGym_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/rustboro_city_gym/palette.pal", ".gbapal");
@@ -421,6 +427,9 @@ static const u16 sWJ3D_SeafloorCavernEntranceWater_Pal[] = INCGFX_U16("graphics/
 static const u32 sWJ3D_SeafloorCavernRoom1_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room1/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_SeafloorCavernRoom1_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room1/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_SeafloorCavernRoom1_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/seafloor_cavern_room1/palette.pal", ".gbapal");
+static const u32 sWJ3D_SeafloorCavernRoom2_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room2/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_SeafloorCavernRoom2_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room2/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_SeafloorCavernRoom2_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/seafloor_cavern_room2/palette.pal", ".gbapal");
 static const u32 sWJ3D_SeafloorCavernRoom3_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room3/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_SeafloorCavernRoom3_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room3/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_SeafloorCavernRoom3_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/seafloor_cavern_room3/palette.pal", ".gbapal");
@@ -442,6 +451,12 @@ static const u16 sWJ3D_SeafloorCavernRoom7_Pal[] = INCGFX_U16("graphics/battle_e
 static const u32 sWJ3D_SeafloorCavernRoom7Water_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room7__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_SeafloorCavernRoom7Water_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room7__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_SeafloorCavernRoom7Water_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/seafloor_cavern_room7__water/palette.pal", ".gbapal");
+static const u32 sWJ3D_SeafloorCavernRoom8_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room8/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_SeafloorCavernRoom8_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room8/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_SeafloorCavernRoom8_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/seafloor_cavern_room8/palette.pal", ".gbapal");
+static const u32 sWJ3D_SeafloorCavernRoom9_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room9/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_SeafloorCavernRoom9_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/seafloor_cavern_room9/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_SeafloorCavernRoom9_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/seafloor_cavern_room9/palette.pal", ".gbapal");
 static const u32 sWJ3D_ShoalCaveLowTideEntranceRoom_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/shoal_cave_low_tide_entrance_room/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_ShoalCaveLowTideEntranceRoom_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/shoal_cave_low_tide_entrance_room/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_ShoalCaveLowTideEntranceRoom_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/shoal_cave_low_tide_entrance_room/palette.pal", ".gbapal");
@@ -469,6 +484,9 @@ static const u16 sWJ3D_SkyPillar5f_Pal[] = INCGFX_U16("graphics/battle_environme
 static const u32 sWJ3D_SlateportCityWater_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/slateport_city__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_SlateportCityWater_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/slateport_city__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_SlateportCityWater_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/slateport_city__water/palette.pal", ".gbapal");
+static const u32 sWJ3D_SlateportCityOceanicMuseum2f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/slateport_city_oceanic_museum_2f/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_SlateportCityOceanicMuseum2f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/slateport_city_oceanic_museum_2f/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_SlateportCityOceanicMuseum2f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/slateport_city_oceanic_museum_2f/palette.pal", ".gbapal");
 static const u32 sWJ3D_SootopolisCityWater_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/sootopolis_city__water/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_SootopolisCityWater_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/sootopolis_city__water/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_SootopolisCityWater_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/sootopolis_city__water/palette.pal", ".gbapal");
@@ -481,6 +499,12 @@ static const u16 sWJ3D_SootopolisCityGymB1f_Pal[] = INCGFX_U16("graphics/battle_
 static const u32 sWJ3D_SsTidalRooms_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/ss_tidal_rooms/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_SsTidalRooms_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/ss_tidal_rooms/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_SsTidalRooms_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/ss_tidal_rooms/palette.pal", ".gbapal");
+static const u32 sWJ3D_UnderwaterRoute124_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/underwater_route124/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_UnderwaterRoute124_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/underwater_route124/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_UnderwaterRoute124_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/underwater_route124/palette.pal", ".gbapal");
+static const u32 sWJ3D_UnderwaterRoute126_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/underwater_route126/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_UnderwaterRoute126_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/underwater_route126/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_UnderwaterRoute126_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/underwater_route126/palette.pal", ".gbapal");
 static const u32 sWJ3D_VictoryRoad1f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/victory_road_1f/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_VictoryRoad1f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/victory_road_1f/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_VictoryRoad1f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/victory_road_1f/palette.pal", ".gbapal");
@@ -618,11 +642,13 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_ROUTE127), MAP_NUM(MAP_ROUTE127), sWJ3D_Route127Water_Tiles, sWJ3D_Route127Water_Map, sWJ3D_Route127Water_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_ROUTE128), MAP_NUM(MAP_ROUTE128), sWJ3D_Route128Water_Tiles, sWJ3D_Route128Water_Map, sWJ3D_Route128Water_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_ROUTE129), MAP_NUM(MAP_ROUTE129), sWJ3D_Route129Water_Tiles, sWJ3D_Route129Water_Map, sWJ3D_Route129Water_Pal, WJ3D_WATER_ENVIRONMENTS},
+    {MAP_GROUP(MAP_ROUTE130), MAP_NUM(MAP_ROUTE130), sWJ3D_Route130_Tiles, sWJ3D_Route130_Map, sWJ3D_Route130_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_ROUTE130), MAP_NUM(MAP_ROUTE130), sWJ3D_Route130Water_Tiles, sWJ3D_Route130Water_Map, sWJ3D_Route130Water_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_ROUTE131), MAP_NUM(MAP_ROUTE131), sWJ3D_Route131Water_Tiles, sWJ3D_Route131Water_Map, sWJ3D_Route131Water_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_ROUTE132), MAP_NUM(MAP_ROUTE132), sWJ3D_Route132Water_Tiles, sWJ3D_Route132Water_Map, sWJ3D_Route132Water_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_ROUTE133), MAP_NUM(MAP_ROUTE133), sWJ3D_Route133Water_Tiles, sWJ3D_Route133Water_Map, sWJ3D_Route133Water_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_ROUTE134), MAP_NUM(MAP_ROUTE134), sWJ3D_Route134Water_Tiles, sWJ3D_Route134Water_Map, sWJ3D_Route134Water_Pal, WJ3D_WATER_ENVIRONMENTS},
+    {MAP_GROUP(MAP_RUSTBORO_CITY), MAP_NUM(MAP_RUSTBORO_CITY), sWJ3D_RustboroCity_Tiles, sWJ3D_RustboroCity_Map, sWJ3D_RustboroCity_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_RUSTBORO_CITY_GYM), MAP_NUM(MAP_RUSTBORO_CITY_GYM), sWJ3D_RustboroCityGym_Tiles, sWJ3D_RustboroCityGym_Map, sWJ3D_RustboroCityGym_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_RUSTURF_TUNNEL), MAP_NUM(MAP_RUSTURF_TUNNEL), sWJ3D_RusturfTunnel_Tiles, sWJ3D_RusturfTunnel_Map, sWJ3D_RusturfTunnel_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SAFARI_ZONE_NORTH), MAP_NUM(MAP_SAFARI_ZONE_NORTH), sWJ3D_SafariZoneNorth_Tiles, sWJ3D_SafariZoneNorth_Map, sWJ3D_SafariZoneNorth_Pal, WJ3D_ANY_ENVIRONMENT},
@@ -636,6 +662,7 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_SAFARI_ZONE_SOUTHWEST), MAP_NUM(MAP_SAFARI_ZONE_SOUTHWEST), sWJ3D_SafariZoneSouthwestWater_Tiles, sWJ3D_SafariZoneSouthwestWater_Map, sWJ3D_SafariZoneSouthwestWater_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ENTRANCE), MAP_NUM(MAP_SEAFLOOR_CAVERN_ENTRANCE), sWJ3D_SeafloorCavernEntranceWater_Tiles, sWJ3D_SeafloorCavernEntranceWater_Map, sWJ3D_SeafloorCavernEntranceWater_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ROOM1), MAP_NUM(MAP_SEAFLOOR_CAVERN_ROOM1), sWJ3D_SeafloorCavernRoom1_Tiles, sWJ3D_SeafloorCavernRoom1_Map, sWJ3D_SeafloorCavernRoom1_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ROOM2), MAP_NUM(MAP_SEAFLOOR_CAVERN_ROOM2), sWJ3D_SeafloorCavernRoom2_Tiles, sWJ3D_SeafloorCavernRoom2_Map, sWJ3D_SeafloorCavernRoom2_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ROOM3), MAP_NUM(MAP_SEAFLOOR_CAVERN_ROOM3), sWJ3D_SeafloorCavernRoom3_Tiles, sWJ3D_SeafloorCavernRoom3_Map, sWJ3D_SeafloorCavernRoom3_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ROOM4), MAP_NUM(MAP_SEAFLOOR_CAVERN_ROOM4), sWJ3D_SeafloorCavernRoom4_Tiles, sWJ3D_SeafloorCavernRoom4_Map, sWJ3D_SeafloorCavernRoom4_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ROOM5), MAP_NUM(MAP_SEAFLOOR_CAVERN_ROOM5), sWJ3D_SeafloorCavernRoom5_Tiles, sWJ3D_SeafloorCavernRoom5_Map, sWJ3D_SeafloorCavernRoom5_Pal, WJ3D_ANY_ENVIRONMENT},
@@ -643,6 +670,8 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ROOM6), MAP_NUM(MAP_SEAFLOOR_CAVERN_ROOM6), sWJ3D_SeafloorCavernRoom6Water_Tiles, sWJ3D_SeafloorCavernRoom6Water_Map, sWJ3D_SeafloorCavernRoom6Water_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ROOM7), MAP_NUM(MAP_SEAFLOOR_CAVERN_ROOM7), sWJ3D_SeafloorCavernRoom7_Tiles, sWJ3D_SeafloorCavernRoom7_Map, sWJ3D_SeafloorCavernRoom7_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ROOM7), MAP_NUM(MAP_SEAFLOOR_CAVERN_ROOM7), sWJ3D_SeafloorCavernRoom7Water_Tiles, sWJ3D_SeafloorCavernRoom7Water_Map, sWJ3D_SeafloorCavernRoom7Water_Pal, WJ3D_WATER_ENVIRONMENTS},
+    {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ROOM8), MAP_NUM(MAP_SEAFLOOR_CAVERN_ROOM8), sWJ3D_SeafloorCavernRoom8_Tiles, sWJ3D_SeafloorCavernRoom8_Map, sWJ3D_SeafloorCavernRoom8_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_SEAFLOOR_CAVERN_ROOM9), MAP_NUM(MAP_SEAFLOOR_CAVERN_ROOM9), sWJ3D_SeafloorCavernRoom9_Tiles, sWJ3D_SeafloorCavernRoom9_Map, sWJ3D_SeafloorCavernRoom9_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM), MAP_NUM(MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM), sWJ3D_ShoalCaveLowTideEntranceRoom_Tiles, sWJ3D_ShoalCaveLowTideEntranceRoom_Map, sWJ3D_ShoalCaveLowTideEntranceRoom_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SHOAL_CAVE_LOW_TIDE_ICE_ROOM), MAP_NUM(MAP_SHOAL_CAVE_LOW_TIDE_ICE_ROOM), sWJ3D_ShoalCaveLowTideIceRoom_Tiles, sWJ3D_ShoalCaveLowTideIceRoom_Map, sWJ3D_ShoalCaveLowTideIceRoom_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM), MAP_NUM(MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM), sWJ3D_ShoalCaveLowTideInnerRoom_Tiles, sWJ3D_ShoalCaveLowTideInnerRoom_Map, sWJ3D_ShoalCaveLowTideInnerRoom_Pal, WJ3D_ANY_ENVIRONMENT},
@@ -652,10 +681,13 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_SKY_PILLAR_3F), MAP_NUM(MAP_SKY_PILLAR_3F), sWJ3D_SkyPillar3f_Tiles, sWJ3D_SkyPillar3f_Map, sWJ3D_SkyPillar3f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SKY_PILLAR_5F), MAP_NUM(MAP_SKY_PILLAR_5F), sWJ3D_SkyPillar5f_Tiles, sWJ3D_SkyPillar5f_Map, sWJ3D_SkyPillar5f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SLATEPORT_CITY), MAP_NUM(MAP_SLATEPORT_CITY), sWJ3D_SlateportCityWater_Tiles, sWJ3D_SlateportCityWater_Map, sWJ3D_SlateportCityWater_Pal, WJ3D_WATER_ENVIRONMENTS},
+    {MAP_GROUP(MAP_SLATEPORT_CITY_OCEANIC_MUSEUM_2F), MAP_NUM(MAP_SLATEPORT_CITY_OCEANIC_MUSEUM_2F), sWJ3D_SlateportCityOceanicMuseum2f_Tiles, sWJ3D_SlateportCityOceanicMuseum2f_Map, sWJ3D_SlateportCityOceanicMuseum2f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SOOTOPOLIS_CITY), MAP_NUM(MAP_SOOTOPOLIS_CITY), sWJ3D_SootopolisCityWater_Tiles, sWJ3D_SootopolisCityWater_Map, sWJ3D_SootopolisCityWater_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_SOOTOPOLIS_CITY_GYM_1F), MAP_NUM(MAP_SOOTOPOLIS_CITY_GYM_1F), sWJ3D_SootopolisCityGym1f_Tiles, sWJ3D_SootopolisCityGym1f_Map, sWJ3D_SootopolisCityGym1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SOOTOPOLIS_CITY_GYM_B1F), MAP_NUM(MAP_SOOTOPOLIS_CITY_GYM_B1F), sWJ3D_SootopolisCityGymB1f_Tiles, sWJ3D_SootopolisCityGymB1f_Map, sWJ3D_SootopolisCityGymB1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_SS_TIDAL_ROOMS), MAP_NUM(MAP_SS_TIDAL_ROOMS), sWJ3D_SsTidalRooms_Tiles, sWJ3D_SsTidalRooms_Map, sWJ3D_SsTidalRooms_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_UNDERWATER_ROUTE124), MAP_NUM(MAP_UNDERWATER_ROUTE124), sWJ3D_UnderwaterRoute124_Tiles, sWJ3D_UnderwaterRoute124_Map, sWJ3D_UnderwaterRoute124_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_UNDERWATER_ROUTE126), MAP_NUM(MAP_UNDERWATER_ROUTE126), sWJ3D_UnderwaterRoute126_Tiles, sWJ3D_UnderwaterRoute126_Map, sWJ3D_UnderwaterRoute126_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_VICTORY_ROAD_1F), MAP_NUM(MAP_VICTORY_ROAD_1F), sWJ3D_VictoryRoad1f_Tiles, sWJ3D_VictoryRoad1f_Map, sWJ3D_VictoryRoad1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_VICTORY_ROAD_B1F), MAP_NUM(MAP_VICTORY_ROAD_B1F), sWJ3D_VictoryRoadB1f_Tiles, sWJ3D_VictoryRoadB1f_Map, sWJ3D_VictoryRoadB1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_VICTORY_ROAD_B2F), MAP_NUM(MAP_VICTORY_ROAD_B2F), sWJ3D_VictoryRoadB2f_Tiles, sWJ3D_VictoryRoadB2f_Map, sWJ3D_VictoryRoadB2f_Pal, WJ3D_ANY_ENVIRONMENT},
