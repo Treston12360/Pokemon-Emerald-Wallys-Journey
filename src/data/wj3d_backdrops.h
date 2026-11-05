@@ -7,6 +7,9 @@ static const u16 sWJ3D_AbandonedShipCorridors1f_Pal[] = INCGFX_U16("graphics/bat
 static const u32 sWJ3D_AbandonedShipCorridorsB1f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/abandoned_ship_corridors_b1f/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_AbandonedShipCorridorsB1f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/abandoned_ship_corridors_b1f/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_AbandonedShipCorridorsB1f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/abandoned_ship_corridors_b1f/palette.pal", ".gbapal");
+static const u32 sWJ3D_AbandonedShipHiddenFloorCorridorsWater_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/abandoned_ship_hidden_floor_corridors__water/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_AbandonedShipHiddenFloorCorridorsWater_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/abandoned_ship_hidden_floor_corridors__water/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_AbandonedShipHiddenFloorCorridorsWater_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/abandoned_ship_hidden_floor_corridors__water/palette.pal", ".gbapal");
 static const u32 sWJ3D_AbandonedShipRooms21f_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/abandoned_ship_rooms2_1f/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_AbandonedShipRooms21f_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/abandoned_ship_rooms2_1f/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_AbandonedShipRooms21f_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/abandoned_ship_rooms2_1f/palette.pal", ".gbapal");
@@ -58,6 +61,9 @@ static const u16 sWJ3D_EverGrandeCityDrakesRoom_Pal[] = INCGFX_U16("graphics/bat
 static const u32 sWJ3D_EverGrandeCityGlaciasRoom_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_glacias_room/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_EverGrandeCityGlaciasRoom_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_glacias_room/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_EverGrandeCityGlaciasRoom_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/ever_grande_city_glacias_room/palette.pal", ".gbapal");
+static const u32 sWJ3D_EverGrandeCityPhoebesRoom_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_phoebes_room/tiles.png", ".4bpp.smol");
+static const u32 sWJ3D_EverGrandeCityPhoebesRoom_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_phoebes_room/tilemap.bin", ".smolTM");
+static const u16 sWJ3D_EverGrandeCityPhoebesRoom_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/ever_grande_city_phoebes_room/palette.pal", ".gbapal");
 static const u32 sWJ3D_EverGrandeCitySidneysRoom_Tiles[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_sidneys_room/tiles.png", ".4bpp.smol");
 static const u32 sWJ3D_EverGrandeCitySidneysRoom_Map[] = INCGFX_U32("graphics/battle_environment/wj3d/ever_grande_city_sidneys_room/tilemap.bin", ".smolTM");
 static const u16 sWJ3D_EverGrandeCitySidneysRoom_Pal[] = INCGFX_U16("graphics/battle_environment/wj3d/ever_grande_city_sidneys_room/palette.pal", ".gbapal");
@@ -486,6 +492,7 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
 {
     {MAP_GROUP(MAP_ABANDONED_SHIP_CORRIDORS_1F), MAP_NUM(MAP_ABANDONED_SHIP_CORRIDORS_1F), sWJ3D_AbandonedShipCorridors1f_Tiles, sWJ3D_AbandonedShipCorridors1f_Map, sWJ3D_AbandonedShipCorridors1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_ABANDONED_SHIP_CORRIDORS_B1F), MAP_NUM(MAP_ABANDONED_SHIP_CORRIDORS_B1F), sWJ3D_AbandonedShipCorridorsB1f_Tiles, sWJ3D_AbandonedShipCorridorsB1f_Map, sWJ3D_AbandonedShipCorridorsB1f_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS), MAP_NUM(MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS), sWJ3D_AbandonedShipHiddenFloorCorridorsWater_Tiles, sWJ3D_AbandonedShipHiddenFloorCorridorsWater_Map, sWJ3D_AbandonedShipHiddenFloorCorridorsWater_Pal, WJ3D_WATER_ENVIRONMENTS},
     {MAP_GROUP(MAP_ABANDONED_SHIP_ROOMS2_1F), MAP_NUM(MAP_ABANDONED_SHIP_ROOMS2_1F), sWJ3D_AbandonedShipRooms21f_Tiles, sWJ3D_AbandonedShipRooms21f_Map, sWJ3D_AbandonedShipRooms21f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_ABANDONED_SHIP_ROOMS_1F), MAP_NUM(MAP_ABANDONED_SHIP_ROOMS_1F), sWJ3D_AbandonedShipRooms1f_Tiles, sWJ3D_AbandonedShipRooms1f_Map, sWJ3D_AbandonedShipRooms1f_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_ABANDONED_SHIP_ROOMS_B1F), MAP_NUM(MAP_ABANDONED_SHIP_ROOMS_B1F), sWJ3D_AbandonedShipRoomsB1fWater_Tiles, sWJ3D_AbandonedShipRoomsB1fWater_Map, sWJ3D_AbandonedShipRoomsB1fWater_Pal, WJ3D_WATER_ENVIRONMENTS},
@@ -503,6 +510,7 @@ static const struct WJ3DBackdrop sWJ3DBackdrops[] =
     {MAP_GROUP(MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM), MAP_NUM(MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM), sWJ3D_EverGrandeCityChampionsRoom_Tiles, sWJ3D_EverGrandeCityChampionsRoom_Map, sWJ3D_EverGrandeCityChampionsRoom_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_EVER_GRANDE_CITY_DRAKES_ROOM), MAP_NUM(MAP_EVER_GRANDE_CITY_DRAKES_ROOM), sWJ3D_EverGrandeCityDrakesRoom_Tiles, sWJ3D_EverGrandeCityDrakesRoom_Map, sWJ3D_EverGrandeCityDrakesRoom_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_EVER_GRANDE_CITY_GLACIAS_ROOM), MAP_NUM(MAP_EVER_GRANDE_CITY_GLACIAS_ROOM), sWJ3D_EverGrandeCityGlaciasRoom_Tiles, sWJ3D_EverGrandeCityGlaciasRoom_Map, sWJ3D_EverGrandeCityGlaciasRoom_Pal, WJ3D_ANY_ENVIRONMENT},
+    {MAP_GROUP(MAP_EVER_GRANDE_CITY_PHOEBES_ROOM), MAP_NUM(MAP_EVER_GRANDE_CITY_PHOEBES_ROOM), sWJ3D_EverGrandeCityPhoebesRoom_Tiles, sWJ3D_EverGrandeCityPhoebesRoom_Map, sWJ3D_EverGrandeCityPhoebesRoom_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_EVER_GRANDE_CITY_SIDNEYS_ROOM), MAP_NUM(MAP_EVER_GRANDE_CITY_SIDNEYS_ROOM), sWJ3D_EverGrandeCitySidneysRoom_Tiles, sWJ3D_EverGrandeCitySidneysRoom_Map, sWJ3D_EverGrandeCitySidneysRoom_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_FIERY_PATH), MAP_NUM(MAP_FIERY_PATH), sWJ3D_FieryPath_Tiles, sWJ3D_FieryPath_Map, sWJ3D_FieryPath_Pal, WJ3D_ANY_ENVIRONMENT},
     {MAP_GROUP(MAP_FORTREE_CITY_GYM), MAP_NUM(MAP_FORTREE_CITY_GYM), sWJ3D_FortreeCityGym_Tiles, sWJ3D_FortreeCityGym_Map, sWJ3D_FortreeCityGym_Pal, WJ3D_ANY_ENVIRONMENT},
