@@ -1,0 +1,107 @@
+[
+{
+"name": "route124",
+"map": "MAP_ROUTE124",
+"x": 22,
+"y": 10,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "slateport_city",
+"map": "MAP_SLATEPORT_CITY",
+"x": 36,
+"y": 10,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "sootopolis_city",
+"map": "MAP_SOOTOPOLIS_CITY",
+"x": 26,
+"y": 40,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "ever_grande_city",
+"map": "MAP_EVER_GRANDE_CITY",
+"x": 21,
+"y": 57,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "safari_zone_southeast",
+"map": "MAP_SAFARI_ZONE_SOUTHEAST",
+"x": 25,
+"y": 26,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "seafloor_cavern_entrance",
+"map": "MAP_SEAFLOOR_CAVERN_ENTRANCE",
+"x": 10,
+"y": 14,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+},
+{
+"name": "route128",
+"map": "MAP_ROUTE128",
+"x": 25,
+"y": 12,
+"flags": [
+"FLAG_SYS_POKEMON_GET"
+],
+"party": [
+[
+"SWAMPERT",
+40
+]
+]
+}
+]
