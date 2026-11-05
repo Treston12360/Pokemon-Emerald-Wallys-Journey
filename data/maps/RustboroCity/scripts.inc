@@ -75,6 +75,13 @@ RustboroCity_EventScript_PleaseSelectPokenav::
 
 RustboroCity_EventScript_MatchCallTutorial::
 	setflag FLAG_ADDED_MATCH_CALL_TO_POKENAV
+	@ Wally's Journey: the PokéNav walkthrough can be skipped
+	goto_if_set FLAG_TEMP_1, RustboroCity_EventScript_MatchCallTutorialSelect
+	msgbox RustboroCity_Text_WantMatchCallWalkthrough, MSGBOX_YESNO
+	closemessage
+	goto_if_eq VAR_RESULT, NO, RustboroCity_EventScript_MatchCallTutorialSkipped
+	setflag FLAG_TEMP_1
+RustboroCity_EventScript_MatchCallTutorialSelect::
 	special ScriptMenu_CreateStartMenuForPokenavTutorial
 	switch VAR_RESULT
 	case 0, RustboroCity_EventScript_PleaseSelectPokenav
@@ -87,6 +94,7 @@ RustboroCity_EventScript_MatchCallTutorial::
 	case MULTI_B_PRESSED, RustboroCity_EventScript_PleaseSelectPokenav
 	special OpenPokenavForTutorial
 	delay 20
+RustboroCity_EventScript_MatchCallTutorialSkipped::
 	msgbox RustboroCity_Text_IdBetterGetBackToWork, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_RUSTBORO_SCIENTIST, RustboroCity_Movement_ScientistLeave
@@ -1309,6 +1317,10 @@ RustboroCity_Text_AddedMatchCallPleaseCallMrStone:
 	.string "be registered in your PokéNav.\p"
 	.string "Test it out.\n"
 	.string "Please give our President a call.$"
+
+RustboroCity_Text_WantMatchCallWalkthrough:
+	.string "Want me to walk you through\n"
+	.string "the PokéNav's Match Call?$"
 
 RustboroCity_Text_PleaseSelectPokenav:
 	.string "Please select the PokéNav.$"
