@@ -299,6 +299,10 @@ struct SaveBlock3
     // (0 = not met yet). Indexed by the save slot in src/data/wj_trainer_scaling.h.
     u8 wjScaleMagic;
     u8 wjScaleLock[48];
+    // Wally's Journey: Options → each new graphic can go back to Emerald's ("Classic").
+    // One bit per WJGFX_* feature, set = Classic. Magic unset = everything New.
+    u8 wjGfxMagic;
+    u16 wjClassicGfx;
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "text.h"
 #include "text_window.h"
 #include "window.h"
@@ -98,7 +99,10 @@ const struct TilesPal *GetWindowFrameTilesPal(u8 id)
 
 void LoadMessageBoxGfx(u8 windowId, u16 destOffset, u8 palOffset)
 {
-    LoadBgTiles(GetWindowAttribute(windowId, WINDOW_BG), gMessageBox_Gfx, 0x320, destOffset);
+    if (WJ_ClassicGfx(WJGFX_TEXT_BOX))
+        LoadBgTiles(GetWindowAttribute(windowId, WINDOW_BG), gMessageBoxClassic_Gfx, 0x1C0, destOffset);
+    else
+        LoadBgTiles(GetWindowAttribute(windowId, WINDOW_BG), gMessageBox_Gfx, 0x320, destOffset);
     LoadPalette(GetOverworldTextboxPalettePtr(), palOffset, PLTT_SIZE_4BPP);
 }
 
@@ -204,6 +208,8 @@ const u16 *GetTextWindowPalette(u8 id)
 
 const u16 *GetOverworldTextboxPalettePtr(void)
 {
+    if (WJ_ClassicGfx(WJGFX_TEXT_BOX))
+        return gMessageBoxClassic_Pal;
     return gMessageBox_Pal;
 }
 

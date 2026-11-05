@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "malloc.h"
 #include "bg.h"
 #include "data.h"
@@ -1622,7 +1623,7 @@ static void Task_PCMainMenu(u8 taskId)
 
 void ShowPokemonStorageSystemPC(void)
 {
-    if (SWSH_STORAGE_SYSTEM)
+    if (SWSH_STORAGE_SYSTEM && !WJ_ClassicGfx(WJGFX_PC))
     {
         ShowPokemonStorageSystemPC_SwSh();
         return;
@@ -6977,7 +6978,7 @@ static void ReshowDisplayMon(void)
 
 void SetMonFormPSS(struct BoxPokemon *boxMon, enum FormChanges method)
 {
-    if (SWSH_STORAGE_SYSTEM)
+    if (SWSH_STORAGE_SYSTEM && !WJ_ClassicGfx(WJGFX_PC))
     {
         SetMonFormPSS_SwSh(boxMon, method);
         return;
@@ -6989,7 +6990,7 @@ void SetMonFormPSS(struct BoxPokemon *boxMon, enum FormChanges method)
 
 void SetMonFormPSS_ItemHold(struct BoxPokemon *boxMon)
 {
-    if (SWSH_STORAGE_SYSTEM)
+    if (SWSH_STORAGE_SYSTEM && !WJ_ClassicGfx(WJGFX_PC))
     {
         SetMonFormPSS_ItemHold_SwSh(boxMon);
         return;
@@ -10065,7 +10066,7 @@ static void TilemapUtil_Draw(u8 id)
 
 void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
 {
-    if (SWSH_STORAGE_SYSTEM)
+    if (SWSH_STORAGE_SYSTEM && !WJ_ClassicGfx(WJGFX_PC))
     {
         UpdateSpeciesSpritePSS_SwSh(boxMon);
         return;
@@ -10106,7 +10107,7 @@ void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
 
 void ChooseMonFromStorage(void)
 {
-    if (SWSH_STORAGE_SYSTEM)
+    if (SWSH_STORAGE_SYSTEM && !WJ_ClassicGfx(WJGFX_PC))
     {
         ChooseMonFromStorage_SwSh();
         return;

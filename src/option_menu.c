@@ -32,6 +32,7 @@
 #define tWildMonsOff data[11]
 #define tNuzlocke data[12]
 #define tLevelCap data[13]
+#define tClassicGfx data[14] // Wally's Journey: one bit per WJGFX_* feature, set = Classic
 
 enum
 {
@@ -48,6 +49,8 @@ enum
     MENUITEM_WILDMONS,
     MENUITEM_NUZLOCKE,
     MENUITEM_LEVELCAP,
+    MENUITEM_GFX_FIRST, // Wally's Journey: New / Classic graphics, one row per WJGFX_* feature
+    MENUITEM_GFX_LAST = MENUITEM_GFX_FIRST + WJGFX_COUNT - 1,
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
 };
@@ -101,6 +104,7 @@ static void ExpMode_DrawChoices(u8 selection);
 static void ZMoves_DrawChoices(u8 selection);
 static void WildMons_DrawChoices(u8 selection);
 static void OnOff_DrawChoices(u8 selection, u8 y);
+static void Gfx_DrawChoices(u8 classic, u8 y);
 static void RedrawVisibleOptions(u8 taskId);
 static u8 Cycle_ProcessInput(u8 selection, u8 count);
 static void Speed_DrawChoices(u8 selection, u8 y, bool32 battle);
@@ -132,6 +136,8 @@ static const u8 gText_Speed1x[]            = _("{COLOR GREEN}{SHADOW LIGHT_GREEN
 static const u8 gText_Speed2x[]            = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}2x");
 static const u8 gText_Speed3x[]            = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}3x");
 static const u8 gText_Speed4x[]            = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}4x");
+static const u8 gText_GfxNew[]             = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}New");
+static const u8 gText_GfxClassic[]         = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Classic");
 
 static const u16 sOptionMenuText_Pal[] = INCGFX_U16("graphics/interface/option_menu_text.pal", ".gbapal");
 // note: this is only used in the Japanese release
@@ -152,6 +158,17 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_WILDMONS]    = COMPOUND_STRING("See Wild Mons"),
     [MENUITEM_NUZLOCKE]    = COMPOUND_STRING("Nuzlocke"),
     [MENUITEM_LEVELCAP]    = COMPOUND_STRING("Level Cap"),
+    [MENUITEM_GFX_FIRST + WJGFX_3D_BACKGROUNDS] = COMPOUND_STRING("Battle BG"),
+    [MENUITEM_GFX_FIRST + WJGFX_BATTLE_SCREEN]  = COMPOUND_STRING("Battle Screen"),
+    [MENUITEM_GFX_FIRST + WJGFX_SUMMARY]        = COMPOUND_STRING("Summary"),
+    [MENUITEM_GFX_FIRST + WJGFX_PARTY]          = COMPOUND_STRING("Party Menu"),
+    [MENUITEM_GFX_FIRST + WJGFX_BAG]            = COMPOUND_STRING("Bag"),
+    [MENUITEM_GFX_FIRST + WJGFX_PC]             = COMPOUND_STRING("PC Boxes"),
+    [MENUITEM_GFX_FIRST + WJGFX_TEXT_BOX]       = COMPOUND_STRING("Text Box"),
+    [MENUITEM_GFX_FIRST + WJGFX_START_MENU]     = COMPOUND_STRING("Start Menu"),
+    [MENUITEM_GFX_FIRST + WJGFX_MAIN_MENU]      = COMPOUND_STRING("Main Menu"),
+    [MENUITEM_GFX_FIRST + WJGFX_POKEDEX]        = COMPOUND_STRING("Pokédex"),
+    [MENUITEM_GFX_FIRST + WJGFX_DITTO]          = COMPOUND_STRING("Ditto Faces"),
     [MENUITEM_CANCEL]      = COMPOUND_STRING("Cancel"),
 };
 
@@ -311,6 +328,7 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].tNuzlocke = FlagGet(FLAG_WALLY_NUZLOCKE);
         gTasks[taskId].tLevelCap = FlagGet(FLAG_WALLY_LEVEL_CAP);
 #endif
+        gTasks[taskId].tClassicGfx = WJ_GetClassicGfxMask();
         gTasks[taskId].tGameSpeed = WallyJourney_GetOverworldSpeed() % WALLY_OW_SPEED_COUNT;
         gTasks[taskId].tBattleSpeed = WallyJourney_GetBattleSpeed() % WALLY_BATTLE_SPEED_COUNT;
         gTasks[taskId].tTextSpeed = gSaveBlock2Ptr->optionsTextSpeed;
@@ -456,6 +474,17 @@ static void Task_OptionMenuProcessInput(u8 taskId)
                 Speed_DrawChoices(gTasks[taskId].tBattleSpeed, YPOS_BATTLESPEED, TRUE);
             break;
         default:
+            if (gTasks[taskId].tMenuSelection >= MENUITEM_GFX_FIRST && gTasks[taskId].tMenuSelection <= MENUITEM_GFX_LAST)
+            {
+                u32 bit = gTasks[taskId].tMenuSelection - MENUITEM_GFX_FIRST;
+                if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
+                {
+                    gTasks[taskId].tClassicGfx ^= (1 << bit);
+                    sArrowPressed = TRUE;
+                    Gfx_DrawChoices((gTasks[taskId].tClassicGfx >> bit) & 1, ITEM_Y(gTasks[taskId].tMenuSelection));
+                }
+                break;
+            }
             return;
         }
 
@@ -499,6 +528,7 @@ static void Task_OptionMenuSave(u8 taskId)
         FlagClear(FLAG_WALLY_LEVEL_CAP);
 #endif
     WallyJourney_SetSpeeds(gTasks[taskId].tGameSpeed, gTasks[taskId].tBattleSpeed);
+    WJ_SetClassicGfxMask((u16)gTasks[taskId].tClassicGfx);
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
     gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -830,6 +860,13 @@ static void WildMons_DrawChoices(u8 selection)
 
 // NUZLOCKE / LEVEL CAP (owner request 2026-10-29): stored as "on" so a new game starts with them OFF.
 // Value 1 = ON, 0 = OFF; OFF is drawn on the right like the other toggles' second choice.
+// Wally's Journey: graphics rows. New = this hack's graphics, Classic = Emerald's.
+static void Gfx_DrawChoices(u8 classic, u8 y)
+{
+    DrawOptionMenuChoice(gText_GfxNew, 104, y, classic == 0);
+    DrawOptionMenuChoice(gText_GfxClassic, GetStringRightAlignXOffset(FONT_NORMAL, gText_GfxClassic, 198), y, classic == 1);
+}
+
 static void OnOff_DrawChoices(u8 selection, u8 y)
 {
     DrawOptionMenuChoice(gText_BattleSceneOn, 104, y, selection == 1);
@@ -861,6 +898,12 @@ static void RedrawVisibleOptions(u8 taskId)
     if (ITEM_VISIBLE(MENUITEM_WILDMONS))    WildMons_DrawChoices(tWildMonsOff);
     if (ITEM_VISIBLE(MENUITEM_NUZLOCKE))    OnOff_DrawChoices(tNuzlocke, YPOS_NUZLOCKE);
     if (ITEM_VISIBLE(MENUITEM_LEVELCAP))    OnOff_DrawChoices(tLevelCap, YPOS_LEVELCAP);
+    {
+        u32 i;
+        for (i = MENUITEM_GFX_FIRST; i <= MENUITEM_GFX_LAST; i++)
+            if (ITEM_VISIBLE(i))
+                Gfx_DrawChoices(((u16)tClassicGfx >> (i - MENUITEM_GFX_FIRST)) & 1, ITEM_Y(i));
+    }
     HighlightOptionMenuItem(sel);
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }

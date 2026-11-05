@@ -1,4 +1,6 @@
 #include "global.h"
+#include "wally_journey.h"
+#include "wj_classic_bag.h"
 #include "ui_stat_editor.h"
 #include "item_menu.h"
 #include "battle.h"
@@ -1482,6 +1484,11 @@ static EWRAM_DATA struct BagFusionState *sBagFusionState = NULL;
 
 void ResetBagScrollPositions(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_ResetBagScrollPositions();
+        return;
+    }
     gBagPosition.pocket = POCKET_ITEMS;
     memset(gBagPosition.cursorPosition, 0, sizeof(gBagPosition.cursorPosition));
     memset(gBagPosition.scrollPosition, 0, sizeof(gBagPosition.scrollPosition));
@@ -1489,11 +1496,21 @@ void ResetBagScrollPositions(void)
 
 void CB2_BagMenuFromStartMenu(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_CB2_BagMenuFromStartMenu();
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_FIELD, POCKETS_COUNT, CB2_ReturnToFieldWithOpenMenu);
 }
 
 void CB2_BagMenuFromBattle(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_CB2_BagMenuFromBattle();
+        return;
+    }
     if (CurrentBattlePyramidLocation() == PYRAMID_LOCATION_NONE)
         GoToBagMenu(ITEMMENULOCATION_BATTLE, POCKETS_COUNT, CB2_SetUpReshowBattleScreenAfterMenu2);
     else
@@ -1503,38 +1520,73 @@ void CB2_BagMenuFromBattle(void)
 // Choosing berry to plant
 void CB2_ChooseBerry(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_CB2_ChooseBerry();
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_BERRY_TREE, POCKET_BERRIES, CB2_ReturnToFieldContinueScript);
 }
 
 // Choosing mulch to use
 void CB2_ChooseMulch(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_CB2_ChooseMulch();
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_BERRY_TREE_MULCH, POCKET_ITEMS, CB2_ReturnToFieldContinueScript);
 }
 
 // Choosing berry for Berry Blender or Berry Crush
 void ChooseBerryForMachine(MainCallback exitCallback)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_ChooseBerryForMachine(exitCallback);
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_BERRY_BLENDER_CRUSH, POCKET_BERRIES, exitCallback);
 }
 
 void CB2_ChooseBall(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_CB2_ChooseBall();
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_RAIDEND, POCKET_POKE_BALLS, CB2_SetUpReshowBattleScreenAfterMenu2);
 }
 
 void CB2_GoToSellMenu(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_CB2_GoToSellMenu();
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_SHOP, POCKETS_COUNT, CB2_ExitSellMenu);
 }
 
 void CB2_GoToItemDepositMenu(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_CB2_GoToItemDepositMenu();
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_ITEMPC, POCKETS_COUNT, CB2_PlayerPCExitBagMenu);
 }
 
 void ApprenticeOpenBagMenu(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_ApprenticeOpenBagMenu();
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_APPRENTICE, POCKETS_COUNT, CB2_ApprenticeExitBagMenu);
     gSpecialVar_0x8005 = ITEM_NONE;
     gSpecialVar_Result = FALSE;
@@ -1542,18 +1594,33 @@ void ApprenticeOpenBagMenu(void)
 
 void FavorLadyOpenBagMenu(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_FavorLadyOpenBagMenu();
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_FAVOR_LADY, POCKETS_COUNT, CB2_FavorLadyExitBagMenu);
     gSpecialVar_Result = FALSE;
 }
 
 void QuizLadyOpenBagMenu(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_QuizLadyOpenBagMenu();
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_QUIZ_LADY, POCKETS_COUNT, CB2_QuizLadyExitBagMenu);
     gSpecialVar_Result = FALSE;
 }
 
 void GoToBagMenu(u8 location, u8 pocket, MainCallback exitCallback)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_GoToBagMenu(location, pocket, exitCallback);
+        return;
+    }
     gBagMenu = AllocZeroed(sizeof(*gBagMenu));
     if (gBagMenu == NULL)
     {
@@ -1608,6 +1675,11 @@ void GoToBagMenu(u8 location, u8 pocket, MainCallback exitCallback)
 
 void CB2_BagMenuRun(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_CB2_BagMenuRun();
+        return;
+    }
     RunTasks();
     AdvanceComfyAnimations();
     AnimateSprites();
@@ -1618,6 +1690,11 @@ void CB2_BagMenuRun(void)
 
 void VBlankCB_BagMenuRun(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_VBlankCB_BagMenuRun();
+        return;
+    }
     LoadOam();
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
@@ -2925,6 +3002,11 @@ static void CreatePocketScrollArrowPair(void)
 
 void BagDestroyPocketScrollArrowPair(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_BagDestroyPocketScrollArrowPair();
+        return;
+    }
     u8 i;
 
     for (i = 0; i < 2; i++)
@@ -2974,6 +3056,11 @@ static void FreeBagMenu(void)
 
 void Task_FadeAndCloseBagMenu(u8 taskId)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_Task_FadeAndCloseBagMenu(taskId);
+        return;
+    }
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
     gTasks[taskId].func = Task_CloseBagMenu;
 }
@@ -3021,6 +3108,11 @@ static void Task_CloseBagMenu(u8 taskId)
 
 void UpdatePocketItemList(enum Pocket pocketId)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_UpdatePocketItemList(pocketId);
+        return;
+    }
 #if SWSH_BAG_BATTLE_POCKETS
     if ((u32)pocketId >= BATTLE_POCKETS_END)
         return; // shouldn't even get here
@@ -3081,6 +3173,11 @@ static void UpdatePocketItemLists(void)
 
 void UpdatePocketListPosition(u8 pocketId)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_UpdatePocketListPosition(pocketId);
+        return;
+    }
     BagList_SeekTo(pocketId, GetItemListPosition(pocketId));
 }
 
@@ -3102,11 +3199,18 @@ static void InitPocketListPositions(void)
 
 u16 GetItemListPosition(u8 pocketId)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+        return Classic_GetItemListPosition(pocketId);
     return gBagPosition.scrollPosition[pocketId] + gBagPosition.cursorPosition[pocketId];
 }
 
 void DisplayItemMessage(u8 taskId, u8 fontId, const u8 *str, TaskFunc callback)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_DisplayItemMessage(taskId, fontId, str, callback);
+        return;
+    }
     s16 *data = gTasks[taskId].data;
 
     tMsgWindowId = AddItemMessageWindow(ITEMWIN_MESSAGE);
@@ -3127,6 +3231,11 @@ static void BagList_Rebuild(void)
 
 void CloseItemMessage(u8 taskId)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_CloseItemMessage(taskId);
+        return;
+    }
     RemoveItemMessageWindow(ITEMWIN_MESSAGE);
     BagList_Rebuild();
     ReturnToItemList(taskId);
@@ -4014,6 +4123,11 @@ static void ItemMenu_UseInBattle(u8 taskId)
 
 void CB2_ReturnToBagMenuPocket(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_CB2_ReturnToBagMenuPocket();
+        return;
+    }
     GoToBagMenu(ITEMMENULOCATION_LAST, POCKETS_COUNT, NULL);
 }
 
@@ -4054,6 +4168,8 @@ static void Task_ItemContext_GiveToPC(u8 taskId)
 
 bool8 UseRegisteredKeyItemOnField(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+        return Classic_UseRegisteredKeyItemOnField();
     u8 taskId;
 
     if (InUnionRoom() == TRUE || CurrentBattlePyramidLocation() != PYRAMID_LOCATION_NONE || InBattlePike() || InMultiPartnerRoom() == TRUE)
@@ -4328,6 +4444,11 @@ static void RestoreBagAfterWallyTutorial(void)
 
 void DoWallyTutorialBagMenu(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_DoWallyTutorialBagMenu();
+        return;
+    }
     PrepareBagForWallyTutorial();
     AddBagItem(ITEM_POTION, 1);
     AddBagItem(ITEM_POKE_BALL, 1);
@@ -4336,6 +4457,11 @@ void DoWallyTutorialBagMenu(void)
 
 void InitOldManBag(void)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_InitOldManBag();
+        return;
+    }
     PrepareBagForWallyTutorial();
     AddBagItem(ITEM_POTION, 1);
     AddBagItem(ITEM_POKE_BALL, 1);
@@ -4515,6 +4641,11 @@ static void RemoveItemMessageWindow(u8 windowType)
 
 void BagMenu_YesNo(u8 taskId, u8 windowType, const struct YesNoFuncTable *funcTable)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_BagMenu_YesNo(taskId, windowType, funcTable);
+        return;
+    }
     CreateYesNoMenuWithCallbacks(taskId, &sContextMenuWindowTemplates[windowType], BAG_BASE_STD_BORDER, 0, 2, 1, 14, funcTable);
 }
 
@@ -5092,6 +5223,11 @@ static void Task_SortFinish(u8 taskId)
 
 void SortItemsInBag(struct BagPocket *pocket, enum BagSortOptions type)
 {
+    if (WJ_ClassicGfx(WJGFX_BAG))
+    {
+        Classic_SortItemsInBag(pocket, type);
+        return;
+    }
     switch (type)
     {
     case SORT_ALPHABETICALLY:

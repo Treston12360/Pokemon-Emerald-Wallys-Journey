@@ -86,6 +86,17 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
 // Each layout array has an array for each of the 6 party slots
 // The array for each slot has the sprite coords of its various sprites in the following order
 // Pokémon icon (x, y), held item (x, y), status condition (x, y), menu Poké Ball (x, y)
+// Options → Party Menu: Classic keeps Emerald's single layout coordinates
+static const u8 sPartyMenuSpriteCoordsClassicSingle[PARTY_SIZE][4 * 2] =
+{
+    { 16,  40,  20,  50,  50,  52,  16,  34},
+    {104,  18, 108,  28, 136,  27, 102,  25},
+    {104,  42, 108,  52, 136,  51, 102,  49},
+    {104,  66, 108,  76, 136,  75, 102,  73},
+    {104,  90, 108, 100, 136,  99, 102,  97},
+    {104, 114, 108, 124, 136, 123, 102, 121},
+};
+
 static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
 {
     [PARTY_LAYOUT_SINGLE] =

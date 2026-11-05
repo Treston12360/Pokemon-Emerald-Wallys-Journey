@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "malloc.h"
 #include "battle.h"
 #include "battle_anim.h"
@@ -134,6 +135,10 @@ enum {
     ACTIONS_ROTOM_CATALOG,
     ACTIONS_ZYGARDE_CUBE,
 };
+
+// Options → Party Menu (New = Gen 5 style single layout, Classic = Emerald)
+#define PARTY_CLASSIC      (WJ_ClassicGfx(WJGFX_PARTY))
+#define PARTY_GEN5_SINGLE  (gPartyMenu.layout == PARTY_LAYOUT_SINGLE && !PARTY_CLASSIC)
 
 enum {
     TAG_POKEBALL = 1200,
@@ -904,19 +909,19 @@ static bool8 AllocPartyMenuBgGfx(void)
     switch (sPartyMenuInternal->data[0])
     {
     case 0:
-        sPartyBgGfxTilemap = malloc_and_decompress(gPartyMenuBg_Gfx, &sizeout);
+        sPartyBgGfxTilemap = malloc_and_decompress(PARTY_CLASSIC ? gPartyMenuBgClassic_Gfx : gPartyMenuBg_Gfx, &sizeout);
         LoadBgTiles(1, sPartyBgGfxTilemap, sizeout, 0);
         sPartyMenuInternal->data[0]++;
         break;
     case 1:
         if (!IsDma3ManagerBusyWithBgCopy())
         {
-            DecompressDataWithHeaderWram(gPartyMenuBg_Tilemap, sPartyBgTilemapBuffer);
+            DecompressDataWithHeaderWram(PARTY_CLASSIC ? gPartyMenuBgClassic_Tilemap : gPartyMenuBg_Tilemap, sPartyBgTilemapBuffer);
             sPartyMenuInternal->data[0]++;
         }
         break;
     case 2:
-        LoadPalette(gPartyMenuBg_Pal, BG_PLTT_ID(0), 11 * PLTT_SIZE_4BPP);
+        LoadPalette(PARTY_CLASSIC ? gPartyMenuBgClassic_Pal : gPartyMenuBg_Pal, BG_PLTT_ID(0), 11 * PLTT_SIZE_4BPP);
         CpuCopy16(gPlttBufferUnfaded, sPartyMenuInternal->palBuffer, 11 * PLTT_SIZE_4BPP);
         sPartyMenuInternal->data[0]++;
         break;
@@ -979,9 +984,11 @@ static void LoadPartyMenuBoxes(enum PartyMenuLayout layout)
     for (i = 0; i < PARTY_SIZE; i++)
     {
         sPartyMenuBoxes[i].infoRects = &sPartyBoxInfoRects[PARTY_BOX_RIGHT_COLUMN];
-        if (layout == PARTY_LAYOUT_SINGLE)  //Custom party menu
+        if (layout == PARTY_LAYOUT_SINGLE && !PARTY_CLASSIC)  //Custom party menu
             sPartyMenuBoxes[i].infoRects = &sPartyBoxInfoRects[PARTY_BOX_EQUAL_COLUMN]; //
         sPartyMenuBoxes[i].spriteCoords = sPartyMenuSpriteCoords[layout][i];
+        if (layout == PARTY_LAYOUT_SINGLE && PARTY_CLASSIC)
+            sPartyMenuBoxes[i].spriteCoords = sPartyMenuSpriteCoordsClassicSingle[i];
         sPartyMenuBoxes[i].windowId = i;
         sPartyMenuBoxes[i].monSpriteId = SPRITE_NONE;
         sPartyMenuBoxes[i].itemSpriteId = SPRITE_NONE;
@@ -990,7 +997,7 @@ static void LoadPartyMenuBoxes(enum PartyMenuLayout layout)
     }
 
     // The first party mon goes in the left column
-    if (layout != PARTY_LAYOUT_SINGLE) //Custom party menu
+    if (layout != PARTY_LAYOUT_SINGLE || PARTY_CLASSIC) //Custom party menu
         sPartyMenuBoxes[0].infoRects = &sPartyBoxInfoRects[PARTY_BOX_LEFT_COLUMN];
 
     if (layout == PARTY_LAYOUT_MULTI_SHOWCASE)
@@ -1838,7 +1845,7 @@ static void UpdatePartySelectionSingleLayout(s8 *slotPtr, s8 movementDir)
 
     // Gen 5 style party menu (ported from TeamAquasHideout's gen5ish_party_menu):
     // six equal boxes in two columns, so up/down move by two and left/right inside a row.
-    if (gPartyMenu.layout == PARTY_LAYOUT_SINGLE)
+    if (PARTY_GEN5_SINGLE)
     {
         s32 count = gPartiesCount[partyTrainer];
         switch (movementDir)
@@ -2421,7 +2428,10 @@ static void InitPartyMenuWindows(enum PartyMenuLayout layout)
         InitWindows(sMultiPartyMenuWindowTemplate);
         break;
     case PARTY_LAYOUT_SINGLE: // Gen 5 style party menu
-        InitWindows(sSinglePartyMenuWindowTemplate_Equal);
+        if (PARTY_CLASSIC)
+            InitWindows(sSinglePartyMenuWindowTemplate);
+        else
+            InitWindows(sSinglePartyMenuWindowTemplate_Equal);
         break;
     default: // Full-party multibattle menus
         InitWindows(sSinglePartyMenuWindowTemplate);
@@ -2453,7 +2463,7 @@ static void CreateCancelConfirmWindows(bool8 chooseHalf)
     {
         if (chooseHalf == TRUE)
         {
-            if (gPartyMenu.layout == PARTY_LAYOUT_SINGLE)
+            if (PARTY_GEN5_SINGLE)
                 confirmWindowId = AddWindow(&sConfirmButtonWindowTemplate_equal);
             else
                 confirmWindowId = AddWindow(&sConfirmButtonWindowTemplate);
@@ -2465,7 +2475,7 @@ static void CreateCancelConfirmWindows(bool8 chooseHalf)
             cancelWindowId = AddWindow(&sMultiCancelButtonWindowTemplate);
             offset = 0;
         }
-        else if (gPartyMenu.layout == PARTY_LAYOUT_SINGLE)
+        else if (PARTY_GEN5_SINGLE)
         {
             cancelWindowId = AddWindow(&sCancelButtonWindowTemplate_equal);
             offset = 3;
@@ -2544,7 +2554,7 @@ static void BlitBitmapToPartyWindow_RightColumn(u8 windowId, u8 x, u8 y, u8 widt
 
 static void DrawEmptySlot(u8 windowId)
 {
-    if (gPartyMenu.layout == PARTY_LAYOUT_SINGLE) //Custom party menu
+    if (PARTY_GEN5_SINGLE) //Custom party menu
         BlitBitmapToPartyWindow(windowId, sEqualEmptySlotTileNums, 14, 0, 0, 14, 5);//
     else
         BlitBitmapToPartyWindow(windowId, sSlotTilemap_WideEmpty, 18, 0, 0, 18, 3);
@@ -2662,7 +2672,7 @@ static void DisplayPartyPokemonBarDetailToFit(u8 windowId, const u8 *str, u8 col
 
 static void DisplayPartyPokemonBarDetail2(u8 windowId, const u8 *str, u8 color, const u8 *align)
 {
-    if (gPartyMenu.layout != PARTY_LAYOUT_SINGLE)
+    if (!PARTY_GEN5_SINGLE)
     {
         DisplayPartyPokemonBarDetail(windowId, str, color, align);
         return;
@@ -2688,6 +2698,18 @@ static void DisplayPartyPokemonLevelCheck(struct Pokemon *mon, struct PartyMenuB
 {
     if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE)
     {
+        if (PARTY_CLASSIC)
+        {
+            u8 ailment = GetMonAilment(mon);
+            if (ailment == AILMENT_NONE || ailment == AILMENT_PKRS)
+            {
+                if (c != 0)
+                    menuBox->infoRects->blitFunc(menuBox->windowId, menuBox->infoRects->dimensions[4] >> 3, (menuBox->infoRects->dimensions[5] >> 3) + 1, menuBox->infoRects->dimensions[6] >> 3, menuBox->infoRects->dimensions[7] >> 3, FALSE);
+                if (c != 2)
+                    DisplayPartyPokemonLevel(GetMonData(mon, MON_DATA_LEVEL), menuBox);
+            }
+            return;
+        }
         if (c != 0)
             menuBox->infoRects->blitFunc(menuBox->windowId, menuBox->infoRects->dimensions[4] >> 3, (menuBox->infoRects->dimensions[5] >> 3), (menuBox->infoRects->dimensions[6] >> 3) + 8, (menuBox->infoRects->dimensions[7] >> 3) + 4, FALSE);
         if (c != 2)
@@ -2839,9 +2861,12 @@ static void DisplayPartyPokemonDescriptionText(u8 stringID, struct PartyMenuBox 
 {
     if (c)
     {
-        int width = ((menuBox->infoRects->descTextLeft % 8) + menuBox->infoRects->descTextWidth + 7) / 8 - 1;
-        int height = ((menuBox->infoRects->descTextTop % 8) + menuBox->infoRects->descTextHeight + 7) / 8 - 1;
-        menuBox->infoRects->blitFunc(menuBox->windowId, menuBox->infoRects->descTextLeft >> 3, (menuBox->infoRects->descTextTop >> 3)+1, width, height, TRUE);
+        int width = ((menuBox->infoRects->descTextLeft % 8) + menuBox->infoRects->descTextWidth + 7) / 8;
+        int height = ((menuBox->infoRects->descTextTop % 8) + menuBox->infoRects->descTextHeight + 7) / 8;
+        if (PARTY_CLASSIC)
+            menuBox->infoRects->blitFunc(menuBox->windowId, menuBox->infoRects->descTextLeft >> 3, menuBox->infoRects->descTextTop >> 3, width, height, TRUE);
+        else
+            menuBox->infoRects->blitFunc(menuBox->windowId, menuBox->infoRects->descTextLeft >> 3, (menuBox->infoRects->descTextTop >> 3)+1, width - 1, height - 1, TRUE);
     }
     if (c != 2)
         AddTextPrinterParameterized3(menuBox->windowId, FONT_NORMAL, menuBox->infoRects->descTextLeft, menuBox->infoRects->descTextTop, sFontColorTable[0], 0, sDescriptionStringTable[stringID]);
@@ -3349,7 +3374,7 @@ static void SwitchSelectedMons(u8 taskId)
         tSlot1Height = GetWindowAttribute(windowIds[0], WINDOW_HEIGHT);
         tSlot1BaseBlock = GetWindowAttribute(windowIds[0], WINDOW_BASE_BLOCK);  //Custom party menu
         tSlot1Offset = 0;
-        if (gPartyMenu.layout == PARTY_LAYOUT_SINGLE && (tSlot1BaseBlock == 0x63 || tSlot1BaseBlock == 0xEF || tSlot1BaseBlock == 0x17B))  //Custom party menu
+        if (PARTY_GEN5_SINGLE && (tSlot1BaseBlock == 0x63 || tSlot1BaseBlock == 0xEF || tSlot1BaseBlock == 0x17B))  //Custom party menu
             tSlot1SlideDir = -1;
         else if (tSlot1Width == 10) //
             tSlot1SlideDir = -1;
@@ -3362,7 +3387,7 @@ static void SwitchSelectedMons(u8 taskId)
         tSlot2Height = GetWindowAttribute(windowIds[1], WINDOW_HEIGHT);
         tSlot2BaseBlock = GetWindowAttribute(windowIds[1], WINDOW_BASE_BLOCK);  //Custom party menu
         tSlot2Offset = 0;
-        if (gPartyMenu.layout == PARTY_LAYOUT_SINGLE && (tSlot2BaseBlock == 0x63 || tSlot2BaseBlock == 0xEF || tSlot2BaseBlock == 0x17B)) //Custom party menu
+        if (PARTY_GEN5_SINGLE && (tSlot2BaseBlock == 0x63 || tSlot2BaseBlock == 0xEF || tSlot2BaseBlock == 0x17B)) //Custom party menu
             tSlot2SlideDir = -1;
         else if (tSlot2Width == 10)//
             tSlot2SlideDir = -1;
@@ -3465,7 +3490,8 @@ static void Task_SlideSelectedSlotsOffscreen(u8 taskId)
     slidingSlotPositions[1] = tSlot2Left + tSlot2Offset;
 
     // Both slots have slid offscreen
-    if ((slidingSlotPositions[0] > 25 && slidingSlotPositions[1] > 25) && count > 25)  //Custom party menu 33 before
+    if (PARTY_CLASSIC ? (slidingSlotPositions[0] > 33 && slidingSlotPositions[1] > 33)
+                      : ((slidingSlotPositions[0] > 25 && slidingSlotPositions[1] > 25) && count > 25))  //Custom party menu 33 before
     {
         tSlot1SlideDir *= -1;
         tSlot2SlideDir *= -1;
@@ -4570,11 +4596,11 @@ static void AnimateSelectedPartyIcon(u8 spriteId, u8 animNum)
         if (gSprites[spriteId].x == 16)
         {
             gSprites[spriteId].x2 = 0;
-            gSprites[spriteId].y2 = 0;
+            gSprites[spriteId].y2 = PARTY_CLASSIC ? -4 : 0;
         }
         else
         {
-            gSprites[spriteId].x2 = 0;
+            gSprites[spriteId].x2 = PARTY_CLASSIC ? -4 : 0;
             gSprites[spriteId].y2 = 0;
         }
         gSprites[spriteId].callback = SpriteCB_UpdatePartyMonIcon;
@@ -4609,7 +4635,7 @@ static void CreatePartyMonHeldItemSprite(struct Pokemon *mon, struct PartyMenuBo
 {
     if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE)
     {
-        menuBox->itemSpriteId = CreateSprite(&sSpriteTemplate_HeldItem, menuBox->spriteCoords[2] + 4, menuBox->spriteCoords[3], 0);
+        menuBox->itemSpriteId = CreateSprite(&sSpriteTemplate_HeldItem, menuBox->spriteCoords[2] + (PARTY_CLASSIC ? 0 : 4), menuBox->spriteCoords[3], 0);
         UpdatePartyMonHeldItemSprite(mon, menuBox);
     }
 }
@@ -4618,7 +4644,7 @@ static void CreatePartyMonHeldItemSpriteParameterized(enum Species species, enum
 {
     if (species != SPECIES_NONE)
     {
-        menuBox->itemSpriteId = CreateSprite(&sSpriteTemplate_HeldItem, menuBox->spriteCoords[2] + 4, menuBox->spriteCoords[3], 0);
+        menuBox->itemSpriteId = CreateSprite(&sSpriteTemplate_HeldItem, menuBox->spriteCoords[2] + (PARTY_CLASSIC ? 0 : 4), menuBox->spriteCoords[3], 0);
         gSprites[menuBox->itemSpriteId].oam.priority = 0;
         ShowOrHideHeldItemSprite(item, menuBox);
     }
@@ -4711,7 +4737,7 @@ static void CreatePartyMonPokeballSprite(struct Pokemon *mon, struct PartyMenuBo
     if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE)
     {
         menuBox->pokeballSpriteId = CreateSprite(&sSpriteTemplate_MenuPokeball, menuBox->spriteCoords[6], menuBox->spriteCoords[7], 8);
-        gSprites[menuBox->pokeballSpriteId].invisible = TRUE;
+        gSprites[menuBox->pokeballSpriteId].invisible = !PARTY_CLASSIC;
     }
 }
 
@@ -4721,7 +4747,7 @@ static void CreatePartyMonPokeballSpriteParameterized(enum Species species, stru
     {
         menuBox->pokeballSpriteId = CreateSprite(&sSpriteTemplate_MenuPokeball, menuBox->spriteCoords[6], menuBox->spriteCoords[7], 8);
         gSprites[menuBox->pokeballSpriteId].oam.priority = 0;
-        gSprites[menuBox->pokeballSpriteId].invisible = TRUE;
+        gSprites[menuBox->pokeballSpriteId].invisible = !PARTY_CLASSIC;
     }
 }
 
@@ -4729,7 +4755,7 @@ static void CreatePartyMonPokeballSpriteParameterized(enum Species species, stru
 static u8 CreatePokeballButtonSprite(u8 x, u8 y)
 {
     u8 spriteId = CreateSprite(&sSpriteTemplate_MenuPokeball, x, y, 8);
-    gSprites[spriteId].invisible = TRUE;
+    gSprites[spriteId].invisible = !PARTY_CLASSIC;
     gSprites[spriteId].oam.priority = 2;
     return spriteId;
 }
@@ -5067,7 +5093,7 @@ void ItemUseCB_Medicine(u8 taskId, TaskFunc task)
             PlaySE(SE_GLASS_FLUTE);
         }
         SetPartyMonAilmentGfx(mon, &sPartyMenuBoxes[gPartyMenu.slotId]);
-        //if (gSprites[sPartyMenuBoxes[gPartyMenu.slotId].statusSpriteId].invisible)
+        if (!PARTY_CLASSIC || gSprites[sPartyMenuBoxes[gPartyMenu.slotId].statusSpriteId].invisible)
         DisplayPartyPokemonLevelCheck(mon, &sPartyMenuBoxes[gPartyMenu.slotId], 1);
         if (canHeal == TRUE)
         {
@@ -6087,7 +6113,7 @@ void ItemUseCB_RareCandy(u8 taskId, TaskFunc task)
 static void UpdateMonDisplayInfoAfterRareCandy(u8 slot, struct Pokemon *mon)
 {
     SetPartyMonAilmentGfx(mon, &sPartyMenuBoxes[slot]);
-    //if (gSprites[sPartyMenuBoxes[slot].statusSpriteId].invisible)
+    if (!PARTY_CLASSIC || gSprites[sPartyMenuBoxes[slot].statusSpriteId].invisible)
     DisplayPartyPokemonLevelCheck(mon, &sPartyMenuBoxes[slot], 1);
     DisplayPartyPokemonHPCheck(mon, &sPartyMenuBoxes[slot], 1);
     DisplayPartyPokemonMaxHPCheck(mon, &sPartyMenuBoxes[slot], 1);
@@ -6365,7 +6391,7 @@ static void UseSacredAsh(u8 taskId)
 
     PlaySE(SE_USE_ITEM);
     SetPartyMonAilmentGfx(mon, &sPartyMenuBoxes[gPartyMenu.slotId]);
-    //if (gSprites[sPartyMenuBoxes[gPartyMenu.slotId].statusSpriteId].invisible)
+    if (!PARTY_CLASSIC || gSprites[sPartyMenuBoxes[gPartyMenu.slotId].statusSpriteId].invisible)
     DisplayPartyPokemonLevelCheck(mon, &sPartyMenuBoxes[gPartyMenu.slotId], 1);
     AnimatePartySlot(sPartyMenuInternal->tLastSlotUsed, 0);
     AnimatePartySlot(gPartyMenu.slotId, 1);

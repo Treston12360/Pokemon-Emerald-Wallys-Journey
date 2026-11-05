@@ -120,7 +120,7 @@ struct BagMenu
 {
     MainCallback newScreenCallback;
 #if SWSH_BAG_MENU
-    u8 bg0TilemapBuffer[BG_SCREEN_SIZE];
+    union { u8 bg0TilemapBuffer[BG_SCREEN_SIZE]; u8 tilemapBuffer[BG_SCREEN_SIZE]; }; // tilemapBuffer = Emerald's bag
     u8 mainTilemapBuffer[BG_SCREEN_SIZE];
     u8 scrollingBgTilemapBuffer[BG_SCREEN_SIZE];
 #else

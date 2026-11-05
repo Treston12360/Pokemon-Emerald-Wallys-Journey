@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "battle.h"
 #include "battle_controllers.h"
 #include "battle_ai_main.h"
@@ -657,7 +658,7 @@ void BattleLoadMonSpriteGfx(struct Pokemon *mon, enum BattlerId battler)
     }
 
     position = GetBattlerPosition(battler);
-    gLoadDittoFacePic = (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE
+    gLoadDittoFacePic = (!WJ_ClassicGfx(WJGFX_DITTO) && gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE
                       && GetMonData(mon, MON_DATA_SPECIES) == SPECIES_DITTO);
     HandleLoadSpecialPokePic(!IsOnPlayerSide(battler),
                              gMonSpritesGfxPtr->spritesGfx[position],
@@ -954,7 +955,7 @@ void HandleSpeciesGfxDataChange(enum BattlerId battlerAtk, enum BattlerId battle
             personalityValue = GetMonData(monAtk, MON_DATA_PERSONALITY);
             isShiny = GetMonData(monAtk, MON_DATA_IS_SHINY);
         }
-        gLoadDittoFacePic = (changeType == SPECIES_GFX_CHANGE_TRANSFORM
+        gLoadDittoFacePic = (!WJ_ClassicGfx(WJGFX_DITTO) && changeType == SPECIES_GFX_CHANGE_TRANSFORM
                           && GetMonData(GetBattlerMon(battlerAtk), MON_DATA_SPECIES) == SPECIES_DITTO);
         HandleLoadSpecialPokePic(!IsOnPlayerSide(battlerAtk),
                                  gMonSpritesGfxPtr->spritesGfx[position],

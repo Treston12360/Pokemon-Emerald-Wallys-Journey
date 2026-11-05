@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "battle.h"
 #include "battle_anim.h"
 #include "battle_bg.h"
@@ -2039,7 +2040,7 @@ u8 CreateAdditionalMonSpriteForMoveAnim(enum Species species, bool32 isBackpic, 
 
     if (gMonSpritesGfxPtr != NULL && gMonSpritesGfxPtr->buffer == NULL)
         gMonSpritesGfxPtr->buffer = AllocZeroed(MON_PIC_SIZE * MAX_MON_PIC_FRAMES);
-    gLoadDittoFacePic = (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE
+    gLoadDittoFacePic = (!WJ_ClassicGfx(WJGFX_DITTO) && gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE
                       && GetMonData(GetBattlerMon(battler), MON_DATA_SPECIES) == SPECIES_DITTO);
     if (!isBackpic)
     {

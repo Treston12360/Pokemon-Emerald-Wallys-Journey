@@ -1,6 +1,7 @@
 #include "option_menu.h"
 #include "vol_start_menu.h"
 #include "global.h"
+#include "wally_journey.h"
 #include "battle_pike.h"
 #include "battle_pyramid.h"
 #include "battle_pyramid_bag.h"
@@ -1015,7 +1016,8 @@ static void Vol_SelectedFunc_Pokedex(void)
 bool32 Vol_StartMenu_ShouldUse(void)
 {
     // places where the old menu has entries Vol's menu doesn't (Retire, Pyramid Bag, link options)
-    return !IsOverworldLinkActive()
+    return !WJ_ClassicGfx(WJGFX_START_MENU) // Options → Start Menu: Classic
+        && !IsOverworldLinkActive()
         && !InUnionRoom()
         && !InBattlePike()
         && CurrentBattlePyramidLocation() == PYRAMID_LOCATION_NONE

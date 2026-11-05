@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "battle.h"
 #include "blit.h"
 #include "dynamic_placeholder_text_util.h"
@@ -1330,6 +1331,11 @@ void TextPrinterDrawDownArrow(struct TextPrinter *textPrinter)
         {
             u16 arrowX = (gWindows[textPrinter->printerTemplate.windowId].window.width * 8) - 8;
             u16 arrowY = (gWindows[textPrinter->printerTemplate.windowId].window.height * 8) - 16;
+            if (WJ_ClassicGfx(WJGFX_TEXT_BOX)) // Emerald puts the arrow after the text
+            {
+                arrowX = textPrinter->printerTemplate.currentX;
+                arrowY = textPrinter->printerTemplate.currentY;
+            }
 
             FillWindowPixelRect(
                 textPrinter->printerTemplate.windowId,
@@ -1374,6 +1380,11 @@ void TextPrinterClearDownArrow(struct TextPrinter *textPrinter)
     u16 arrowX = (gWindows[textPrinter->printerTemplate.windowId].window.width * 8) - 8;
     u16 arrowY = (gWindows[textPrinter->printerTemplate.windowId].window.height * 8) - 16;
 
+    if (WJ_ClassicGfx(WJGFX_TEXT_BOX))
+    {
+        arrowX = textPrinter->printerTemplate.currentX;
+        arrowY = textPrinter->printerTemplate.currentY;
+    }
     FillWindowPixelRect(
         textPrinter->printerTemplate.windowId,
         textPrinter->printerTemplate.color.background << 4 | textPrinter->printerTemplate.color.background,

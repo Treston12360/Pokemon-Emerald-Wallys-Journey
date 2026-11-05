@@ -87,4 +87,25 @@ void WallyJourney_SetSpeeds(u32 overworld, u32 battle);
 u32 WallyJourney_OverworldExtraIterations(void);
 u32 WallyJourney_BattleExtraIterations(void);
 u16 WallyJourney_GetPartyMonLevel(void);
+
+// Options → graphics: New (Wally's Journey) or Classic (Emerald) per feature.
+enum
+{
+    WJGFX_3D_BACKGROUNDS,
+    WJGFX_BATTLE_SCREEN,
+    WJGFX_SUMMARY,
+    WJGFX_PARTY,
+    WJGFX_BAG,
+    WJGFX_PC,
+    WJGFX_TEXT_BOX,
+    WJGFX_START_MENU,
+    WJGFX_MAIN_MENU,
+    WJGFX_POKEDEX,
+    WJGFX_DITTO,
+    WJGFX_COUNT
+};
+bool32 WJ_ClassicGfx(u32 feature);
+u32 WJ_GetClassicGfxMask(void);
+void WJ_SetClassicGfxMask(u32 mask);
+
 #endif

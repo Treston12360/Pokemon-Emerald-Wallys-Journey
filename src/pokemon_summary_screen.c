@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "main.h"
 #include "battle.h"
 #include "battle_anim.h"
@@ -1192,7 +1193,7 @@ u32 GetAdjustedIvData(struct Pokemon *mon, u32 stat)
 
 void ShowPokemonSummaryScreen(u8 mode, void *mons, u8 monIndex, u8 maxMonIndex, void (*callback)(void))
 {
-    if (BW_SUMMARY_SCREEN) // Wally's Journey: Gen 5 style summary screen (RavePossum) for every caller
+    if (BW_SUMMARY_SCREEN && !WJ_ClassicGfx(WJGFX_SUMMARY)) // Wally's Journey: Gen 5 style summary screen (RavePossum) for every caller
     {
         ShowPokemonSummaryScreen_BW(mode, mons, monIndex, maxMonIndex, callback);
         return;
@@ -1264,7 +1265,7 @@ void ShowPokemonSummaryScreen(u8 mode, void *mons, u8 monIndex, u8 maxMonIndex, 
 
 void ShowSelectMovePokemonSummaryScreen(struct Pokemon *mons, u8 monIndex, void (*callback)(void), u16 newMove)
 {
-    if (BW_SUMMARY_SCREEN)
+    if (BW_SUMMARY_SCREEN && !WJ_ClassicGfx(WJGFX_SUMMARY))
     {
         ShowSelectMovePokemonSummaryScreen_BW(mons, monIndex, gPartiesCount[B_TRAINER_PLAYER] - 1, callback, newMove);
         return;
@@ -2768,7 +2769,7 @@ static void Task_HandleInputCantForgetHMsMoves(u8 taskId)
 
 u8 GetMoveSlotToReplace(void)
 {
-    if (BW_SUMMARY_SCREEN)
+    if (BW_SUMMARY_SCREEN && !WJ_ClassicGfx(WJGFX_SUMMARY))
         return GetMoveSlotToReplace_BW();
     else
         return sMoveSlotToReplace;
@@ -4582,7 +4583,7 @@ static void SpriteCB_Pokemon(struct Sprite *sprite)
 // Normally destroys itself but it can be interrupted before the animation starts
 void SummaryScreen_SetAnimDelayTaskId(u8 taskId)
 {
-    if (BW_SUMMARY_SCREEN)
+    if (BW_SUMMARY_SCREEN && !WJ_ClassicGfx(WJGFX_SUMMARY))
         SummaryScreen_SetAnimDelayTaskId_BW(taskId);
     else
         sAnimDelayTaskId = taskId;

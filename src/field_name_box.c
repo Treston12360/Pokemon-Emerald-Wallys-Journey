@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "main.h"
 #include "menu.h"
 #include "bg.h"
@@ -21,7 +22,11 @@ static EWRAM_INIT u8 sNameboxWindowId = WINDOW_NONE;
 EWRAM_DATA const u8 *gSpeakerName = NULL;
 
 static const u32 sNameBoxDefaultGfx[] = INCGFX_U32("graphics/text_window/name_box.png", ".4bpp");
+static const u32 sNameBoxClassicGfx[] = INCGFX_U32("graphics/text_window/classic/name_box.png", ".4bpp"); // Options → Text Box: Classic
 static const u32 sNameBoxPokenavGfx[] = INCGFX_U32("graphics/pokenav/name_box.png", ".4bpp");
+
+// Options → Text Box: Classic draws Emerald's 2-row tag (Pokénav keeps its own art in the 2-row layout too)
+#define NAMEBOX_CLASSIC (WJ_ClassicGfx(WJGFX_TEXT_BOX) || IsMatchCallTaskActive())
 
 static void DestroyNameboxFrame(void);
 static void WindowFunc_DrawNamebox(u32, u32, u32, u32, u32, u32, u32);
@@ -64,10 +69,10 @@ void PrepareNamebox(u32 tileNum)
     struct WindowTemplate template =
     {
         .bg = 0,
-        .tilemapLeft = 3,
-        .tilemapTop = 12,
+        .tilemapLeft = NAMEBOX_CLASSIC ? 2 : 3,
+        .tilemapTop = NAMEBOX_CLASSIC ? 13 : 12,
         .width = winWidth,
-        .height = OW_NAME_BOX_DEFAULT_HEIGHT,
+        .height = NAMEBOX_CLASSIC ? 2 : OW_NAME_BOX_DEFAULT_HEIGHT,
         .paletteNum = matchCall ? 14 : DLG_WINDOW_PALETTE_NUM,
         .baseBlock = tileNum,
     };
@@ -84,7 +89,16 @@ void PrepareNamebox(u32 tileNum)
     }
 
     union TextColor savedTextColors = SaveTextColors();
-    AddTextPrinterParameterized3(sNameboxWindowId, fontId, strX, 5, colors, 0, strbuf);
+    if (NAMEBOX_CLASSIC)
+    {
+        if (!matchCall)
+            colors[2] = 2;
+        AddTextPrinterParameterized3(sNameboxWindowId, fontId, strX, 0, colors, TEXT_SKIP_DRAW, strbuf);
+    }
+    else
+    {
+        AddTextPrinterParameterized3(sNameboxWindowId, fontId, strX, 5, colors, 0, strbuf);
+    }
     RestoreTextColors(savedTextColors);
     Free(strbuf);
 }
@@ -125,6 +139,8 @@ static const u32 *GetNameboxGraphics(void)
 {
     if (IsMatchCallTaskActive())
         return sNameBoxPokenavGfx;
+    if (WJ_ClassicGfx(WJGFX_TEXT_BOX))
+        return sNameBoxClassicGfx;
     else
         return sNameBoxDefaultGfx;
 }
@@ -134,6 +150,15 @@ void FillNamebox(void)
     u32 winSize = GetNameboxWidth();
     const u32 *gfx = GetNameboxGraphics();
 
+    if (NAMEBOX_CLASSIC)
+    {
+        for (u32 i = 0; i < winSize; i++)
+        {
+            CopyToWindowPixelBuffer(sNameboxWindowId, &gfx[8 * 1], TILE_SIZE_4BPP, i);
+            CopyToWindowPixelBuffer(sNameboxWindowId, &gfx[8 * 4], TILE_SIZE_4BPP, i + winSize);
+        }
+        return;
+    }
     for (u32 i = 0; i < winSize; i++)
     {
         #define TILE(x) (8 * (x))
@@ -148,7 +173,7 @@ void DrawNamebox(u32 windowId, u32 tileNum, bool32 copyToVram)
 {
     // manual instead of using CallWindowFunction for extra tileNum param
     struct WindowTemplate *w = &gWindows[windowId].window;
-    u32 size = TILE_OFFSET_4BPP(NAME_BOX_BASE_TILES_TOTAL);
+    u32 size = TILE_OFFSET_4BPP(NAMEBOX_CLASSIC ? 6 : NAME_BOX_BASE_TILES_TOTAL);
 
     LoadBgTiles(GetWindowAttribute(sNameboxWindowId, WINDOW_BG), GetNameboxGraphics(), size, tileNum);
     WindowFunc_DrawNamebox(w->bg, w->tilemapLeft, w->tilemapTop, w->width, w->height, w->paletteNum, tileNum);
@@ -167,6 +192,14 @@ void ClearNamebox(u32 windowId, bool32 copyToVram)
 
 static void WindowFunc_DrawNamebox(u32 bg, u32 L, u32 T, u32 w, u32 h, u32 p, u32 tileNum)
 {
+    if (NAMEBOX_CLASSIC) // Emerald-style tag: 1 tile caps, 2 rows
+    {
+        FillBgTilemapBufferRect(bg, tileNum,     L - 1, T,     1, 1, p);
+        FillBgTilemapBufferRect(bg, tileNum + 3, L - 1, T + 1, 1, 1, p);
+        FillBgTilemapBufferRect(bg, tileNum + 2, L + w, T,     1, 1, p);
+        FillBgTilemapBufferRect(bg, tileNum + 5, L + w, T + 1, 1, 1, p);
+        return;
+    }
     // left edge (2 tiles wide, at L-2 and L-1)
     FillBgTilemapBufferRect(bg, tileNum + 0,  L - 2, T,     1, 1, p);
     FillBgTilemapBufferRect(bg, tileNum + 1,  L - 1, T,     1, 1, p);
@@ -186,6 +219,11 @@ static void WindowFunc_DrawNamebox(u32 bg, u32 L, u32 T, u32 w, u32 h, u32 p, u3
 
 static void WindowFunc_ClearNamebox(u8 bg, u8 L, u8 T, u8 w, u8 h, u8 p)
 {
+    if (NAMEBOX_CLASSIC)
+    {
+        FillBgTilemapBufferRect(bg, 0, L - 1, T, w + 2, h, 0);
+        return;
+    }
     FillBgTilemapBufferRect(bg, 0, L - 2, T, w + 4, h, 0); // clear window + 2 tiles on each side
 }
 

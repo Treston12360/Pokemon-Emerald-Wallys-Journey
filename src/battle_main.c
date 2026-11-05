@@ -85,6 +85,7 @@
 
 extern const struct BgTemplate gBattleBgTemplates[];
 extern const struct WindowTemplate *const gBattleWindowTemplates[];
+const struct WindowTemplate *GetBattleWindowTemplates(u32 windowsType);
 
 static void CB2_InitBattleInternal(void);
 static void CB2_PreInitMultiBattle(void);
@@ -2400,7 +2401,7 @@ static void TryCorrectShedinjaLanguage(struct Pokemon *mon)
 
 u32 GetBattleWindowTemplatePixelWidth(u32 windowsType, u32 tableId)
 {
-    return gBattleWindowTemplates[windowsType][tableId].width * 8;
+    return GetBattleWindowTemplates(windowsType)[tableId].width * 8;
 }
 
 #define sBattler            data[0]

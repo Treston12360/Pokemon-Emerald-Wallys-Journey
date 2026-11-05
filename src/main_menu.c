@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "trainer_pokemon_sprites.h"
 #include "bg.h"
 #include "constants/rgb.h"
@@ -596,12 +597,20 @@ static u32 InitMainMenu(bool8 returningFromOptionsMenu)
     DmaFill16(3, 0, (void *)(PLTT + 2), PLTT_SIZE - 2);
 
     ResetPaletteFade();
-    //LoadPalette(sMainMenuBgPal, BG_PLTT_ID(0), PLTT_SIZE_4BPP);
+    if (WJ_ClassicGfx(WJGFX_MAIN_MENU)) // the new menu loads its own palettes
+        LoadPalette(sMainMenuBgPal, BG_PLTT_ID(0), PLTT_SIZE_4BPP);
     LoadPalette(sMainMenuTextPal, BG_PLTT_ID(15), PLTT_SIZE_4BPP);
     ScanlineEffect_Stop();
     ResetTasks();
     ResetSpriteData();
     FreeAllSpritePalettes();
+    if (WJ_ClassicGfx(WJGFX_MAIN_MENU))
+    {
+        if (returningFromOptionsMenu)
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 0x10, 0, RGB_BLACK); // fade to black
+        else
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 0x10, 0, RGB_WHITEALPHA); // fade to white
+    }
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sMainMenuBgTemplates, ARRAY_COUNT(sMainMenuBgTemplates));
     ChangeBgX(0, 0, BG_COORD_SET);
@@ -760,8 +769,11 @@ static void Task_DisplayMainMenu(u8 taskId)
     s16 *data = gTasks[taskId].data;
     u16 palette;
 
-    gTasks[taskId].func = Task_OpenMainMenu;
-    return;
+    if (!WJ_ClassicGfx(WJGFX_MAIN_MENU)) // Options → Main Menu: New = Archie & Mudskip's menu
+    {
+        gTasks[taskId].func = Task_OpenMainMenu;
+        return;
+    }
 
     if (!gPaletteFade.active)
     {
@@ -1404,9 +1416,18 @@ static void Task_NewGameBirchSpeech_WaitToShowBirch(u8 taskId)
         gSprites[spriteId].y = 60;
         gSprites[spriteId].invisible = FALSE;
         gSprites[spriteId].oam.objMode = ST_OAM_OBJ_BLEND;
-        NewGameBirchSpeech_StartFadeInTarget1OutTarget2(taskId, 0);
-        NewGameBirchSpeech_StartFadePlatformOut(taskId, 0);
-        gTasks[taskId].tTimer = 0;
+        if (WJ_ClassicGfx(WJGFX_MAIN_MENU)) // Emerald's slower fade-in after its own menu
+        {
+            NewGameBirchSpeech_StartFadeInTarget1OutTarget2(taskId, 10);
+            NewGameBirchSpeech_StartFadePlatformOut(taskId, 20);
+            gTasks[taskId].tTimer = 80;
+        }
+        else
+        {
+            NewGameBirchSpeech_StartFadeInTarget1OutTarget2(taskId, 0);
+            NewGameBirchSpeech_StartFadePlatformOut(taskId, 0);
+            gTasks[taskId].tTimer = 0;
+        }
         gTasks[taskId].func = Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome;
     }
 }

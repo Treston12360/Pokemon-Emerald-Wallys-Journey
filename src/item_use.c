@@ -142,9 +142,10 @@ static void SetUpItemUseCallback(u8 taskId)
     {
         bool8 inPyramid = (CurrentBattlePyramidLocation() != PYRAMID_LOCATION_NONE);
 #if SWSH_BAG_IN_BAG_USE
-        bool8 useInline = !inPyramid;
+        bool8 useInline = !inPyramid && !WJ_ClassicGfx(WJGFX_BAG); // Options → Bag: Classic uses the party menu
 #if SWSH_BAG_PYRAMID_ACTION
-        useInline = TRUE;
+        if (inPyramid)
+            useInline = TRUE;
 #endif
         if (useInline && (type == (ITEM_USE_PARTY_MENU - 1) || type == (ITEM_USE_PARTY_MENU_MOVES - 1)))
         {
@@ -1224,9 +1225,10 @@ static void ItemUseInBattle_ShowPartyMenu(u8 taskId)
 {
     bool8 inPyramid = (CurrentBattlePyramidLocation() != PYRAMID_LOCATION_NONE);
 #if SWSH_BAG_IN_BATTLE_USE
-    bool8 useInline = !inPyramid;
+    bool8 useInline = !inPyramid && !WJ_ClassicGfx(WJGFX_BAG); // Options → Bag: Classic uses the party menu
 #if SWSH_BAG_PYRAMID_ACTION
-    useInline = TRUE;
+    if (inPyramid)
+        useInline = TRUE;
 #endif
     if (useInline)
     {

@@ -2594,3 +2594,32 @@ void WallyJourney_SeasonalGrassSpritePalette(u32 spritePalSlot)
     for (i = 0; i < ARRAY_COUNT(sShared); i++)
         gPlttBufferUnfaded[OBJ_PLTT_ID(spritePalSlot) + sShared[i]] = gPlttBufferUnfaded[BG_PLTT_ID(2) + sShared[i]];
 }
+
+#define WJ_GFX_MAGIC 0xA5
+
+bool32 WJ_ClassicGfx(u32 feature)
+{
+    if (gSaveBlock3Ptr == NULL || gSaveBlock3Ptr->wjGfxMagic != WJ_GFX_MAGIC)
+        return FALSE;
+    return (gSaveBlock3Ptr->wjClassicGfx >> feature) & 1;
+}
+
+u32 WJ_GetClassicGfxMask(void)
+{
+    if (gSaveBlock3Ptr->wjGfxMagic != WJ_GFX_MAGIC)
+        return 0;
+    return gSaveBlock3Ptr->wjClassicGfx;
+}
+
+void WJ_SetClassicGfxMask(u32 mask)
+{
+    gSaveBlock3Ptr->wjGfxMagic = WJ_GFX_MAGIC;
+    gSaveBlock3Ptr->wjClassicGfx = mask & ((1 << WJGFX_COUNT) - 1);
+}
+
+
+// Options → Battle Screen (New = mudskip's Black/White battle UI)
+int WJ_BwBattleUi(void)
+{
+    return !WJ_ClassicGfx(WJGFX_BATTLE_SCREEN);
+}

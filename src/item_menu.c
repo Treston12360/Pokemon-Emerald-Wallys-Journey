@@ -1,3 +1,34 @@
+// Wally's Journey: Options → Bag can switch back to Emerald's bag, so this file is always
+// built with its public functions renamed Classic_* (swsh_item_menu.c dispatches to them).
+#define ResetBagScrollPositions Classic_ResetBagScrollPositions
+#define CB2_BagMenuFromStartMenu Classic_CB2_BagMenuFromStartMenu
+#define CB2_BagMenuFromBattle Classic_CB2_BagMenuFromBattle
+#define CB2_ChooseBerry Classic_CB2_ChooseBerry
+#define CB2_ChooseMulch Classic_CB2_ChooseMulch
+#define ChooseBerryForMachine Classic_ChooseBerryForMachine
+#define CB2_ChooseBall Classic_CB2_ChooseBall
+#define CB2_GoToSellMenu Classic_CB2_GoToSellMenu
+#define CB2_GoToItemDepositMenu Classic_CB2_GoToItemDepositMenu
+#define ApprenticeOpenBagMenu Classic_ApprenticeOpenBagMenu
+#define FavorLadyOpenBagMenu Classic_FavorLadyOpenBagMenu
+#define QuizLadyOpenBagMenu Classic_QuizLadyOpenBagMenu
+#define GoToBagMenu Classic_GoToBagMenu
+#define CB2_BagMenuRun Classic_CB2_BagMenuRun
+#define VBlankCB_BagMenuRun Classic_VBlankCB_BagMenuRun
+#define BagDestroyPocketScrollArrowPair Classic_BagDestroyPocketScrollArrowPair
+#define Task_FadeAndCloseBagMenu Classic_Task_FadeAndCloseBagMenu
+#define UpdatePocketItemList Classic_UpdatePocketItemList
+#define UpdatePocketListPosition Classic_UpdatePocketListPosition
+#define GetItemListPosition Classic_GetItemListPosition
+#define DisplayItemMessage Classic_DisplayItemMessage
+#define CloseItemMessage Classic_CloseItemMessage
+#define CB2_ReturnToBagMenuPocket Classic_CB2_ReturnToBagMenuPocket
+#define UseRegisteredKeyItemOnField Classic_UseRegisteredKeyItemOnField
+#define DoWallyTutorialBagMenu Classic_DoWallyTutorialBagMenu
+#define InitOldManBag Classic_InitOldManBag
+#define BagMenu_YesNo Classic_BagMenu_YesNo
+#define SortItemsInBag Classic_SortItemsInBag
+#define WJ_CLASSIC_BAG_TU
 #include "global.h"
 #include "wally_bag.h"
 #include "item_menu.h"
@@ -52,7 +83,7 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 
-#if !SWSH_BAG_MENU
+#if TRUE // classic bag, always built
 
 #define TAG_POCKET_SCROLL_ARROW 110
 #define TAG_BAG_SCROLL_ARROW    111
@@ -579,11 +610,11 @@ static const struct WindowTemplate sContextMenuWindowTemplates[] =
     },
 };
 
-EWRAM_DATA struct BagMenu *gBagMenu = 0;
-EWRAM_DATA struct BagPosition gBagPosition = {0};
+// (shared with swsh_item_menu.c) EWRAM_DATA struct BagMenu *gBagMenu = 0;
+// (shared with swsh_item_menu.c) EWRAM_DATA struct BagPosition gBagPosition = {0};
 static EWRAM_DATA struct ListBuffer1 *sListBuffer1 = 0;
 static EWRAM_DATA struct ListBuffer2 *sListBuffer2 = 0;
-EWRAM_DATA enum Item gSpecialVar_ItemId = 0;
+// (shared with swsh_item_menu.c) EWRAM_DATA enum Item gSpecialVar_ItemId = 0;
 static EWRAM_DATA struct TempWallyBag *sTempWallyBag = 0;
 
 void ResetBagScrollPositions(void)
@@ -660,6 +691,8 @@ void QuizLadyOpenBagMenu(void)
 
 void GoToBagMenu(u8 location, u8 pocket, MainCallback exitCallback)
 {
+    if (gBagPosition.pocket >= POCKETS_COUNT) // left on a Sword/Shield battle pocket
+        gBagPosition.pocket = POCKET_ITEMS;
     gBagMenu = AllocZeroed(sizeof(*gBagMenu));
     if (gBagMenu == NULL)
     {
@@ -3045,4 +3078,4 @@ static s32 CompareItemsByIndex(enum Pocket pocketId, struct ItemSlot item1, stru
     return 0; // Cannot have multiple stacks of indexed items
 }
 
-#endif // !SWSH_BAG_MENU
+#endif // classic bag

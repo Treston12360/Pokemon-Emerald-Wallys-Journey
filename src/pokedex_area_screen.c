@@ -1,4 +1,5 @@
 #include "global.h"
+#include "wally_journey.h"
 #include "bg.h"
 #include "decompress.h"
 #include "event_data.h"
@@ -825,7 +826,7 @@ static void Task_ShowPokedexAreaScreen(u8 taskId)
                 ShowAreaUnknownLabel();
             DoScheduledBgTilemapCopiesToVram();
         }
-        if (POKEDEX_PLUS_HGSS)
+        if ((POKEDEX_PLUS_HGSS && !WJ_ClassicGfx(WJGFX_POKEDEX)))
             LoadHGSSScreenSelectBarSubmenu();
         ShowBg(2);
         ShowBg(3); // TryShowPokedexAreaMap will have done this already
