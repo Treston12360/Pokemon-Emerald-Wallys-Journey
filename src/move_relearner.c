@@ -935,7 +935,7 @@ static u32 GetRelearnerLevelUpMoves(struct BoxPokemon *mon, u16 *moves)
                     alreadyInList = TRUE;
             }
             if (!alreadyInList)
-                moves[numMoves++] = learnset[i].move;
+                if (numMoves < MAX_RELEARNER_MOVES) moves[numMoves++] = learnset[i].move; // WJ: never overflow the list
         }
 
         species = (P_PRE_EVO_MOVES ? GetSpeciesPreEvolution(species) : SPECIES_NONE);
@@ -958,7 +958,7 @@ static u32 GetRelearnerEggMoves(struct BoxPokemon *mon, u16 *moves)
 
     for (u32 i = 0; eggMoves[i] != MOVE_UNAVAILABLE; i++)
     {
-        if (!BoxMonKnowsMove(mon, eggMoves[i]))
+        if (numMoves < MAX_RELEARNER_MOVES && !BoxMonKnowsMove(mon, eggMoves[i]))
             moves[numMoves++] = eggMoves[i];
     }
 
@@ -984,7 +984,7 @@ static u32 GetRelearnerTMMoves(struct BoxPokemon *mon, u16 *moves)
         if (!CanLearnTeachableMove(species, move))
             continue;
 
-        if (!BoxMonKnowsMove(mon, move))
+        if (numMoves < MAX_RELEARNER_MOVES && !BoxMonKnowsMove(mon, move))
             moves[numMoves++] = move;
     }
 
@@ -1003,7 +1003,7 @@ static u32 GetRelearnerTutorMoves(struct BoxPokemon *mon, u16 *moves)
         if (!CanLearnTeachableMove(species, move))
             continue;
 
-        if (!BoxMonKnowsMove(mon, move))
+        if (numMoves < MAX_RELEARNER_MOVES && !BoxMonKnowsMove(mon, move))
             moves[numMoves++] = move;
     }
 
