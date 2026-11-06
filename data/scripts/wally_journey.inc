@@ -599,12 +599,16 @@ WallyJourney_EventScript_SootopolisGymDoor::
 WallyJourney_EventScript_StevenStopsAtGym::
 	lockall
 	setvar VAR_WALLY_RIVAL_PENDING, 0
-	applymovement LOCALID_SOOTOPOLIS_STEVEN, Common_Movement_FacePlayer
+	@ Steven hurries up to the Gym door from the south, so the player sees him arrive
+	clearflag FLAG_HIDE_SOOTOPOLIS_CITY_STEVEN
+	addobject LOCALID_SOOTOPOLIS_STEVEN
+	setobjectxy LOCALID_SOOTOPOLIS_STEVEN, 31, 38
+	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
+	waitmovement 0
+	applymovement LOCALID_SOOTOPOLIS_STEVEN, WallyJourney_Movement_StevenToGymDoor
 	waitmovement 0
 	playse SE_PIN
 	applymovement LOCALID_SOOTOPOLIS_STEVEN, Common_Movement_ExclamationMark
-	waitmovement 0
-	applymovement LOCALID_PLAYER, Common_Movement_FaceLeft
 	waitmovement 0
 	msgbox WallyJourney_Text_StevenFollowMe, MSGBOX_DEFAULT
 	closemessage
@@ -615,6 +619,13 @@ WallyJourney_EventScript_StevenStopsAtGym::
 	waitstate
 	releaseall
 	end
+
+WallyJourney_Movement_StevenToGymDoor:
+	walk_fast_up
+	walk_fast_up
+	walk_fast_up
+	walk_fast_up
+	step_end
 
 WallyJourney_EventScript_JuansHouseBroadcast::
 	lockall

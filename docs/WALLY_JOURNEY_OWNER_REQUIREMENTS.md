@@ -450,7 +450,7 @@ Still to build: Wally story/rival battles/Champion arc, gym leader HM scenes, up
 - **How it plays (unskippable):** Wallace, standing at the Gym door after Rayquaza, tells the player he must fly back to Ever Grande for a title match against "someone I've been keeping an eye on," then leaves. When the player steps onto the tile in front of the Gym door, Steven stops them ("I've been looking for you, you'll want to see this, follow me"), the screen fades, and they are in **Juan's house** (SootopolisCity_House7; its Pokéfan NPC removed). Juan is watching the TV, calls the player over, and they watch the narrated final turn: Mega Gardevoir vs. Milotic, Wally becomes Champion. The Gym is on its own island, so the trip is a fade rather than a walk.
 - **Mentor chain:** Juan taught Wallace; Wallace guided (not trained) Wally; Steven guided the player. Juan: Wallace must have seen something special in Wally, the thing Juan once saw in Wallace. Steven: "…like I saw in you." Juan then returns to his Gym to wait for the player.
 - **Wally timeline:** Lilycove (badge 6) and Mossdeep (badge 7, he has 8 and heads for the Elite Four) stay challenger fights; Wallace has been showing up at his battles. Sootopolis (badge 8), Victory Road, PokéNav and the Champion room all speak as Champion Wally.
-- **Status:** code-in and builds; not yet emulator-verified.
+- **Status:** emulator-verified 2026-11-05 (owner re-confirmed: Steven takes you to the TV after beating Juan). Fixed: Steven was standing off-screen when he "stopped" the player; he now hurries up to the Gym door. Released in 0.17.8.
 
 ## Emerald Legacy-inspired polish wishlist — owner-approved (2026-10-17)
 
@@ -635,3 +635,4 @@ These are **wishlist items, not claims of implementation**. Adapt the design pri
 | 2026-11-05 | "Do it in that order" (borrowed backdrops, check untested ones, PokéNav skip + overflow storage, Frontier review) | See overhaul row 38. Released in 0.17.4. Frontier review: findings sent to the owner for a decision |
 | 2026-11-05 | Frontier review: owner picked "Modern items + replace vitamins" | Training goods replace vitamins at the BP counter, 6 modern hold items added, vitamin streak prizes replaced. Released in 0.17.5 |
 | 2026-11-05 | Bug: learning a move from the Move Relearner / tutor froze | The pick-a-Pokémon PC screen started on an empty box slot (A did nothing); it now starts on the party. Released in 0.17.6 |
+| 2026-11-05 | Wally TV scene: "Steven takes you to the TV after Sootopolis after beating Juan" | Already built that way; played through in the emulator (Steven at the Gym door → Juan's house → broadcast → Juan and Steven's lines). Fixed Steven being off-screen at the door. Released in 0.17.8 |
