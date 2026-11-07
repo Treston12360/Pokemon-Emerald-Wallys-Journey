@@ -1218,6 +1218,11 @@ static const union AffineAnimCmd *const sAffineAnims_ReleaseMon[] =
 
 #include "data/wallpapers.h"
 
+// Wally's Journey: set just before CreateMonIconSprite so the icon uses the shiny palette
+static EWRAM_DATA bool8 sWJNextIconShiny = FALSE;
+static EWRAM_DATA u32 sWJBoxShinyMask = 0;
+
+
 static const u16 sUnusedColor = RGB(26, 29, 8);
 
 static const struct SpriteSheet sSpriteSheet_Arrow = {sArrow_Gfx, sizeof(sArrow_Gfx), GFXTAG_ARROW};
@@ -4461,6 +4466,7 @@ static void CreateMovingMonIcon(void)
     u8 priority = GetMonIconPriorityByCursorPos();
     bool32 isEgg = GetMonData(&sStorage->movingMon, MON_DATA_IS_EGG);
 
+    sWJNextIconShiny = GetMonData(&sStorage->movingMon, MON_DATA_IS_SHINY);
     sStorage->movingMonSprite = CreateMonIconSprite(species, personality, 0, 0, priority, 7, isEgg);
     sStorage->movingMonSprite->callback = SpriteCB_HeldMon;
 }
@@ -4496,6 +4502,7 @@ static void InitBoxMonSprites(u8 boxId)
             if (species != SPECIES_NONE)
             {
                 personality = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_PERSONALITY);
+                sWJNextIconShiny = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_IS_SHINY);
                 sStorage->boxMonsSprites[count] = CreateMonIconSprite(species, personality, 8 * (3 * j) + 100, 8 * (3 * i) + 44, 2, 19 - j, isEgg);
 
                 if (ShouldBoxmonSpriteBeTransparent(boxId, boxPosition))
@@ -4522,6 +4529,7 @@ static void CreateBoxMonIconAtPos(u8 boxPosition)
         s16 y = 8 * (3 * (boxPosition / IN_BOX_COLUMNS)) + 44;
         u32 personality = GetCurrentBoxMonData(boxPosition, MON_DATA_PERSONALITY);
 
+        sWJNextIconShiny = GetCurrentBoxMonData(boxPosition, MON_DATA_IS_SHINY);
         sStorage->boxMonsSprites[boxPosition] = CreateMonIconSprite(species, personality, x, y, 2, 19 - (boxPosition % IN_BOX_COLUMNS), isEgg);
         if (ShouldBoxmonSpriteBeTransparent(StorageGetCurrentBox(), boxPosition))
             sStorage->boxMonsSprites[boxPosition]->oam.objMode = ST_OAM_OBJ_BLEND;
@@ -4617,6 +4625,7 @@ static u8 CreateBoxMonIconsInColumn(u8 column, u16 distance, s16 speed)
     {
         if (sStorage->boxSpecies[boxPosition] != SPECIES_NONE)
         {
+            sWJNextIconShiny = (sWJBoxShinyMask >> boxPosition) & 1;
             sStorage->boxMonsSprites[boxPosition] = CreateMonIconSprite(sStorage->boxSpecies[boxPosition],
                                                                         sStorage->boxPersonalities[boxPosition],
                                                                         x, y, 2, subpriority,
@@ -4725,6 +4734,10 @@ static void GetIncomingBoxMonData(u8 boxId)
             sStorage->boxIsEgg[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_IS_EGG);
             if (sStorage->boxSpecies[boxPosition] != SPECIES_NONE)
                 sStorage->boxPersonalities[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_PERSONALITY);
+                if (GetBoxMonDataAt(boxId, boxPosition, MON_DATA_IS_SHINY))
+                    sWJBoxShinyMask |= 1u << boxPosition;
+                else
+                    sWJBoxShinyMask &= ~(1u << boxPosition);
             boxPosition++;
         }
     }
@@ -4756,9 +4769,9 @@ static void  CreatePartyMonSprite(u8 partyPosition, bool8 visible)
     u32 personality = GetMonData(partyPokemon, MON_DATA_PERSONALITY);
 
     if (partyPosition == 0)
-        sStorage->partySprites[0] = CreateMonIconSprite(species, personality, 104, 64, 1, 12, isEgg);
+        sStorage->partySprites[0] = (sWJNextIconShiny = GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_IS_SHINY), CreateMonIconSprite(species, personality, 104, 64, 1, 12, isEgg));
     else
-        sStorage->partySprites[partyPosition] = CreateMonIconSprite(species, personality, 152,  8 * (3 * (partyPosition - 1)) + 16, 1, 12, isEgg);
+        sStorage->partySprites[partyPosition] = (sWJNextIconShiny = GetMonData(&gParties[B_TRAINER_PLAYER][partyPosition], MON_DATA_IS_SHINY), CreateMonIconSprite(species, personality, 152,  8 * (3 * (partyPosition - 1)) + 16, 1, 12, isEgg));
 
     struct Sprite *partySprite = sStorage->partySprites[partyPosition];
 
@@ -4788,7 +4801,7 @@ static void CreatePartyMonsSprites(bool8 visible)
     bool32 isEgg = GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_IS_EGG);
     u32 personality = GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_PERSONALITY);
 
-    sStorage->partySprites[0] = CreateMonIconSprite(species, personality, 104, 64, 1, 12, isEgg);
+    sStorage->partySprites[0] = (sWJNextIconShiny = GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_IS_SHINY), CreateMonIconSprite(species, personality, 104, 64, 1, 12, isEgg));
     count = 1;
     for (i = 1; i < PARTY_SIZE; i++)
     {
@@ -4797,7 +4810,7 @@ static void CreatePartyMonsSprites(bool8 visible)
         if (species != SPECIES_NONE)
         {
             personality = GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_PERSONALITY);
-            sStorage->partySprites[i] = CreateMonIconSprite(species, personality, 152,  8 * (3 * (i - 1)) + 16, 1, 12, isEgg);
+            sStorage->partySprites[i] = (sWJNextIconShiny = GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_IS_SHINY), CreateMonIconSprite(species, personality, 152,  8 * (3 * (i - 1)) + 16, 1, 12, isEgg));
             count++;
         }
         else
@@ -5205,6 +5218,10 @@ static void RemoveSpeciesFromIconList(enum Species species, enum SpeciesIconType
 
 static struct Sprite *CreateMonIconSprite(enum Species species, u32 personality, s16 x, s16 y, u8 oamPriority, u8 subpriority, bool32 isEgg)
 {
+    bool32 wjShiny = sWJNextIconShiny;
+    u32 wjPersonality = personality;
+    enum Species wjSpecies = species;
+    sWJNextIconShiny = FALSE;
     u16 tileNum;
     u8 spriteId;
     struct SpriteTemplate template = sSpriteTemplate_MonIcon;
@@ -5251,12 +5268,14 @@ static struct Sprite *CreateMonIconSprite(enum Species species, u32 personality,
     gSprites[spriteId].oam.priority = oamPriority;
     gSprites[spriteId].data[0] = species;
     gSprites[spriteId].data[1] = iconType;
+    WJ_SetIconShiny(&gSprites[spriteId], wjSpecies, wjPersonality, wjShiny, isEgg);
 
     return &gSprites[spriteId];
 }
 
 static void DestroyBoxMonIcon(struct Sprite *sprite)
 {
+    WJ_ReleaseShinyIcon(sprite);
     RemoveSpeciesFromIconList(sprite->data[0], sprite->data[1]);
     DestroySprite(sprite);
 }

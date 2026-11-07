@@ -4549,6 +4549,8 @@ static void CreatePartyMonIconSprite(struct Pokemon *mon, struct PartyMenuBox *m
     enum Species species = GetMonData(mon, MON_DATA_SPECIES);
     bool32 isEgg = GetMonData(mon, MON_DATA_IS_EGG);
     CreatePartyMonIconSpriteParameterized(species, GetMonData(mon, MON_DATA_PERSONALITY), isEgg, menuBox, 1);
+    if (species != SPECIES_NONE)
+        WJ_SetIconShiny(&gSprites[menuBox->monSpriteId], species, GetMonData(mon, MON_DATA_PERSONALITY), GetMonData(mon, MON_DATA_IS_SHINY), isEgg);
     UpdatePartyMonHPBar(menuBox->monSpriteId, mon);
 }
 

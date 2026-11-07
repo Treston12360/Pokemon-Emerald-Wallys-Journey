@@ -165,6 +165,10 @@ static void ClearSearchParameterBoxText(void);
 // const rom data
 #include "data/pokemon/pokedex_orders.h"
 
+// Wally's Journey: Select on a Pokédex entry flips between normal and shiny colours
+EWRAM_DATA bool8 gWJDexShiny = FALSE;
+static u32 GetPokedexMonPersonality(enum Species species);
+
 static const struct OamData sOamData_ScrollBar =
 {
     .y = DISPLAY_HEIGHT,
@@ -1452,6 +1456,7 @@ void CB2_OpenPokedex(void)
         DmaClearLarge16(3, (void *)VRAM, VRAM_SIZE, 0x1000);
         DmaClear32(3, OAM, OAM_SIZE);
         DmaClear16(3, PLTT, PLTT_SIZE);
+        gWJDexShiny = FALSE; // each visit starts with normal colours
         gMain.state = 1;
         break;
     case 1:
@@ -3361,6 +3366,16 @@ void Task_HandleInfoScreenInput(u8 taskId)
         return;
     }
 
+    if (JOY_NEW(SELECT_BUTTON))
+    {
+        enum Species species = NationalPokedexNumToSpeciesForm(sPokedexListItem->dexNum);
+        u8 pal = gSprites[gTasks[taskId].tMonSpriteId].oam.paletteNum;
+        gWJDexShiny ^= 1;
+        LoadPalette(GetMonSpritePalFromSpeciesAndPersonality(species, gWJDexShiny, GetPokedexMonPersonality(species)), OBJ_PLTT_ID(pal), PLTT_SIZE_4BPP);
+        PlaySE(gWJDexShiny ? SE_SHINY : SE_SELECT);
+        return;
+    }
+
     if (TryHandleInfoScreenInput_HGSS(taskId))
         return;
 
@@ -4881,7 +4896,7 @@ static u32 GetPokedexMonPersonality(enum Species species)
 u16 CreateMonSpriteFromNationalDexNumber(enum NationalDexOrder nationalNum, s16 x, s16 y, u16 paletteSlot)
 {
     enum Species species = NationalPokedexNumToSpeciesForm(nationalNum);
-    return CreateMonPicSprite(species, FALSE, GetPokedexMonPersonality(species), TRUE, x, y, paletteSlot, TAG_NONE);
+    return CreateMonPicSprite(species, gWJDexShiny, GetPokedexMonPersonality(species), TRUE, x, y, paletteSlot, TAG_NONE);
 }
 
 u16 GetPokemonScaleFromNationalDexNumber(u16 nationalNum)

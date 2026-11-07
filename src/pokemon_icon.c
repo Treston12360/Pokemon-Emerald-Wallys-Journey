@@ -302,6 +302,104 @@ void LoadMonIconPalettePersonality(enum Species species, u32 personality)
         LoadSpritePalette(&gMonIconPaletteTable[palIndex]);
 }
 
+// Wally's Journey: shiny party/PC icons. Icons share 6 palettes, so a shiny icon gets its
+// own palette made at runtime: each icon colour is matched to the nearest colour of the
+// Pokémon's normal palette and swapped for the same entry of its shiny palette.
+#define WJ_SHINY_ICON_TAG_BASE 0xE000
+#define WJ_SHINY_ICON_TAG_END  0xF000
+
+u8 WJ_LoadShinyIconPalette(enum Species species, u32 personality)
+{
+    u32 i, j, palIndex, tag;
+    bool32 female = FALSE;
+    const u16 *icon, *normal, *shiny;
+    u16 out[16];
+    struct SpritePalette pal;
+    u8 slot;
+
+    species = SanitizeSpeciesId(species);
+#if P_GENDER_DIFFERENCES
+    if (gSpeciesInfo[species].iconSpriteFemale != NULL && IsPersonalityFemale(species, personality))
+        female = TRUE;
+#endif
+    palIndex = female ? gSpeciesInfo[species].iconPalIndexFemale : gSpeciesInfo[species].iconPalIndex;
+    tag = WJ_SHINY_ICON_TAG_BASE + species + (female ? 0x800 : 0);
+    slot = IndexOfSpritePaletteTag(tag);
+    if (slot != 0xFF)
+        return slot;
+
+    icon = gMonIconPalettes[palIndex];
+    normal = GetMonSpritePalFromSpeciesAndPersonality(species, FALSE, personality);
+    shiny = GetMonSpritePalFromSpeciesAndPersonality(species, TRUE, personality);
+    if (normal == NULL || shiny == NULL)
+        return 0xFF;
+    out[0] = icon[0];
+    for (i = 1; i < 16; i++)
+    {
+        s32 r = icon[i] & 0x1F, g = (icon[i] >> 5) & 0x1F, b = (icon[i] >> 10) & 0x1F;
+        s32 bestDist = 0x7FFFFFFF, best = -1;
+        for (j = 1; j < 16; j++)
+        {
+            s32 dr = r - (normal[j] & 0x1F), dg = g - ((normal[j] >> 5) & 0x1F), db = b - ((normal[j] >> 10) & 0x1F);
+            s32 d = dr * dr + dg * dg + db * db;
+            if (d < bestDist)
+            {
+                bestDist = d;
+                best = j;
+            }
+        }
+        if (best < 0 || bestDist > 300)
+        {
+            out[i] = icon[i]; // a colour the Pokémon doesn't have (outline, eye shine...)
+            continue;
+        }
+        // shiny colour, keeping only the icon's brightness difference (not its hue)
+        {
+            s32 lum = (r + g + b - (normal[best] & 0x1F) - ((normal[best] >> 5) & 0x1F) - ((normal[best] >> 10) & 0x1F)) / 3;
+            r = (shiny[best] & 0x1F) + lum;
+            g = ((shiny[best] >> 5) & 0x1F) + lum;
+            b = ((shiny[best] >> 10) & 0x1F) + lum;
+        }
+        r = r < 0 ? 0 : (r > 31 ? 31 : r);
+        g = g < 0 ? 0 : (g > 31 ? 31 : g);
+        b = b < 0 ? 0 : (b > 31 ? 31 : b);
+        out[i] = r | (g << 5) | (b << 10);
+    }
+    pal.data = out;
+    pal.tag = tag;
+    return LoadSpritePalette(&pal);
+}
+
+// Give an icon sprite its shiny palette (does nothing for eggs, non-shinies or when no palette is free)
+void WJ_SetIconShiny(struct Sprite *sprite, enum Species species, u32 personality, bool32 isShiny, bool32 isEgg)
+{
+    u8 slot;
+    if (sprite == NULL || !isShiny || isEgg)
+        return;
+    slot = WJ_LoadShinyIconPalette(species, personality);
+    if (slot != 0xFF)
+        sprite->oam.paletteNum = slot;
+}
+
+// Call before destroying an icon: frees its shiny palette once no other sprite uses it
+void WJ_ReleaseShinyIcon(struct Sprite *sprite)
+{
+    u32 i, tag;
+    u8 slot;
+    if (sprite == NULL)
+        return;
+    slot = sprite->oam.paletteNum;
+    tag = GetSpritePaletteTagByPaletteNum(slot);
+    if (tag < WJ_SHINY_ICON_TAG_BASE || tag >= WJ_SHINY_ICON_TAG_END)
+        return;
+    for (i = 0; i < MAX_SPRITES; i++)
+    {
+        if (&gSprites[i] != sprite && gSprites[i].inUse && gSprites[i].oam.paletteNum == slot)
+            return;
+    }
+    FreeSpritePaletteByTag(tag);
+}
+
 void FreeMonIconPalettes(void)
 {
     u8 i;
