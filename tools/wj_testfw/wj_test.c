@@ -73,7 +73,7 @@ void WJTest_ApplyState(void)
         { u32 sp = s->party[i][0], lv = s->party[i][1];
           u32 exp = gExperienceTables[gSpeciesInfo[sp].growthRate][lv + 1] - 1;
           SetMonData(&gPlayerParty[i], MON_DATA_EXP, &exp);
-          SetMonMoveSlot(&gPlayerParty[i], MOVE_SURF, 0); }
+          SetMonMoveSlot(&gPlayerParty[i], MOVE_THUNDERBOLT, 0); }
 #endif
     }
 #ifdef WJ_ALMOST
