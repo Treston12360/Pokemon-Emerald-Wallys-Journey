@@ -567,7 +567,7 @@ static enum Species WallyJourney_RollRareVisitor(u32 area, enum Species species)
          && v->mapGroup == gSaveBlock1Ptr->location.mapGroup
          && v->mapNum == gSaveBlock1Ptr->location.mapNum)
         {
-            top += v->chance;
+            top += WallyJourney_CatchComboWeight(v->species, v->chance); // catch bonus applies to rare visitors too
             if (roll < top)
                 return v->species;
         }

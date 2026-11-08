@@ -444,7 +444,7 @@ u32 WallyJourney_GetShinySeenSpecies(u16 *out, u32 max)
 //   ...and so on: +3 shiny rolls and +x0.5 weight per 10 more (100 caught: 26 rolls, x5).
 // The count is stored per species up to 255, where it stops (x13, 74 rolls).
 // The encounter boost raises that species' weight in an area's table (so rarer Pokemon still
-// appear); rare visitors aren't affected.
+// appear), and multiplies a rare visitor's own chance the same way (owner, 2026-11-08).
 // ---------------------------------------------------------------------------
 EWRAM_DATA u16 gWJShinyRollSpecies = 0; // species being rolled for shininess (wild only), else 0
 
