@@ -828,11 +828,16 @@ static const union AnimCmd sSpriteAnim_CategoryStatus[] =
     ANIMCMD_END
 };
 
+// Wally's Journey: indexed by the move's category. Expansion's categories start at
+// DAMAGE_CATEGORY_NONE = 0, so the old [0..2] table was one off: physical moves showed the
+// special icon, special moves the status icon, and status moves (Growl...) read past the end of
+// the table and froze the release build in the summary / move-learn screen.
 static const union AnimCmd *const sSpriteAnimTable_CategoryIcons[] =
 {
-    [CATEGORY_ICON_PHYSICAL] = sSpriteAnim_CategoryPhysical,
-    [CATEGORY_ICON_SPECIAL] = sSpriteAnim_CategorySpecial,
-    [CATEGORY_ICON_STATUS] = sSpriteAnim_CategoryStatus,
+    [DAMAGE_CATEGORY_NONE]     = sSpriteAnim_CategoryStatus,
+    [DAMAGE_CATEGORY_PHYSICAL] = sSpriteAnim_CategoryPhysical,
+    [DAMAGE_CATEGORY_SPECIAL]  = sSpriteAnim_CategorySpecial,
+    [DAMAGE_CATEGORY_STATUS]   = sSpriteAnim_CategoryStatus,
 };
 
 static const struct SpriteTemplate sSpriteTemplate_CategoryIcons =

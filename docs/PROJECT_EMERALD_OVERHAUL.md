@@ -8,6 +8,10 @@ The handoff file for the big UI/visuals update. To pick the work up, tell an AI:
 - Base: pokeemerald-expansion **1.17.2**.
 - The last ROM sent to the owner was **0.16.1** (rows 1–32 below).
 
+## Testing note (2026-11-08)
+
+Freeze reports must be tested on the **release** build (`make release`): the summary-screen freeze (status moves like Growl) only happened there. Test builds have a different memory layout and hid it.
+
 ## Owner rules (always)
 
 **Talking to the owner**
