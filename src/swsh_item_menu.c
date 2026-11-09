@@ -5768,8 +5768,12 @@ static void BagMenu_CreatePanelMonIcon(u8 slot, s16 x2)
 static void BagMenu_LoadPanelMonIconPalette(u8 slot)
 {
     u16 colors[PLTT_SIZE_4BPP / sizeof(u16)];
+    struct Pokemon *mon = BagMenu_GetPanelMon(slot);
 
     CpuCopy16(gMonIconPaletteTable[gBagMenu->partyMonIconPalIndex[slot]].data, colors, sizeof(colors));
+    // Wally's Journey: shiny party icons in the bag too
+    if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE && !GetMonData(mon, MON_DATA_IS_EGG) && GetMonData(mon, MON_DATA_IS_SHINY))
+        WJ_BuildShinyIconPalette(GetMonData(mon, MON_DATA_SPECIES), GetMonData(mon, MON_DATA_PERSONALITY), colors);
     if (gBagMenu->partyMonIconDimmed & (1 << slot))
     {
         u16 bgColor = gPlttBufferUnfaded[BG_PLTT_ID(gBagMenu->partySlotBgPal[slot]) + PARTY_SLOT_BG_COLOR];

@@ -308,14 +308,12 @@ void LoadMonIconPalettePersonality(enum Species species, u32 personality)
 #define WJ_SHINY_ICON_TAG_BASE 0xE000
 #define WJ_SHINY_ICON_TAG_END  0xF000
 
-u8 WJ_LoadShinyIconPalette(enum Species species, u32 personality)
+// Fills out[16] with the shiny version of this Pokémon's icon palette; FALSE if it has none.
+bool32 WJ_BuildShinyIconPalette(enum Species species, u32 personality, u16 *out)
 {
-    u32 i, j, palIndex, tag;
+    u32 i, j, palIndex;
     bool32 female = FALSE;
     const u16 *icon, *normal, *shiny;
-    u16 out[16];
-    struct SpritePalette pal;
-    u8 slot;
 
     species = SanitizeSpeciesId(species);
 #if P_GENDER_DIFFERENCES
@@ -323,16 +321,11 @@ u8 WJ_LoadShinyIconPalette(enum Species species, u32 personality)
         female = TRUE;
 #endif
     palIndex = female ? gSpeciesInfo[species].iconPalIndexFemale : gSpeciesInfo[species].iconPalIndex;
-    tag = WJ_SHINY_ICON_TAG_BASE + species + (female ? 0x800 : 0);
-    slot = IndexOfSpritePaletteTag(tag);
-    if (slot != 0xFF)
-        return slot;
-
     icon = gMonIconPalettes[palIndex];
     normal = GetMonSpritePalFromSpeciesAndPersonality(species, FALSE, personality);
     shiny = GetMonSpritePalFromSpeciesAndPersonality(species, TRUE, personality);
     if (normal == NULL || shiny == NULL)
-        return 0xFF;
+        return FALSE;
     out[0] = icon[0];
     for (i = 1; i < 16; i++)
     {
@@ -365,6 +358,28 @@ u8 WJ_LoadShinyIconPalette(enum Species species, u32 personality)
         b = b < 0 ? 0 : (b > 31 ? 31 : b);
         out[i] = r | (g << 5) | (b << 10);
     }
+    return TRUE;
+}
+
+u8 WJ_LoadShinyIconPalette(enum Species species, u32 personality)
+{
+    u16 out[16];
+    struct SpritePalette pal;
+    u32 tag;
+    bool32 female = FALSE;
+    u8 slot;
+
+    species = SanitizeSpeciesId(species);
+#if P_GENDER_DIFFERENCES
+    if (gSpeciesInfo[species].iconSpriteFemale != NULL && IsPersonalityFemale(species, personality))
+        female = TRUE;
+#endif
+    tag = WJ_SHINY_ICON_TAG_BASE + species + (female ? 0x800 : 0);
+    slot = IndexOfSpritePaletteTag(tag);
+    if (slot != 0xFF)
+        return slot;
+    if (!WJ_BuildShinyIconPalette(species, personality, out))
+        return 0xFF;
     pal.data = out;
     pal.tag = tag;
     return LoadSpritePalette(&pal);

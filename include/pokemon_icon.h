@@ -23,6 +23,7 @@ enum Species GetIconSpeciesNoPersonality(enum Species species);
 void LoadMonIconPalettes(void);
 void LoadMonIconPalette(enum Species species);
 void FreeMonIconPalettes(void);
+bool32 WJ_BuildShinyIconPalette(enum Species species, u32 personality, u16 *out);
 u8 WJ_LoadShinyIconPalette(enum Species species, u32 personality);
 void WJ_SetIconShiny(struct Sprite *sprite, enum Species species, u32 personality, bool32 isShiny, bool32 isEgg);
 void WJ_ReleaseShinyIcon(struct Sprite *sprite);
