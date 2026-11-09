@@ -1,1 +1,1 @@
-[{"name": "ball", "map": "MAP_ROUTE102", "x": 4, "y": 4, "flags": ["FLAG_SYS_POKEMON_GET"], "party": [["SWAMPERT", 40], ["GARDEVOIR", 36]]}]
+[{"name": "ball", "almost": true, "map": "MAP_ROUTE102", "x": 4, "y": 4, "flags": ["FLAG_SYS_POKEMON_GET"], "party": [["SWAMPERT", 40], ["GARDEVOIR", 36]]}]

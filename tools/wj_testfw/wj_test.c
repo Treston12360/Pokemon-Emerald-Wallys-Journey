@@ -79,6 +79,7 @@ void WJTest_ApplyState(void)
 #ifdef WJ_ALMOST
     AddBagItem(ITEM_RARE_CANDY, 5);
     AddBagItem(ITEM_EXP_ALL, 1);
+    AddBagItem(ITEM_POKE_BALL, 20);
 #endif
     CalculatePlayerPartyCount();
 #ifdef WJ_DEXDEMO

@@ -1,6 +1,7 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_anim.h"
+#include "battle_bg.h"
 #include "battle_controllers.h"
 #include "battle_interface.h"
 #include "decompress.h"
@@ -1970,6 +1971,12 @@ static void DestroyBallOpenAnimationParticle(struct Sprite *sprite)
 u8 LaunchBallFadeMonTask(bool8 unfadeLater, u8 spritePalNum, u32 selectedPalettes, enum PokeBall ballId)
 {
     u8 taskId;
+
+    // Wally's Journey: the white flash when a ball opens (send-out, catch) fades the battle
+    // background's palettes 1-3 (callers pass 14). A 3D backdrop also uses palette 4, which stayed
+    // unfaded and left the ground in colour while the rest went white.
+    if ((selectedPalettes & 0xE) == 0xE && WJ3D_IsBackdropShown())
+        selectedPalettes |= 0x10;
 
     taskId = CreateTask(Task_FadeMon_ToBallColor, 5);
     gTasks[taskId].tBallId = ballId;
