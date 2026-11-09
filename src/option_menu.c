@@ -33,6 +33,7 @@
 #define tNuzlocke data[12]
 #define tLevelCap data[13]
 #define tClassicGfx data[14] // Wally's Journey: one bit per WJGFX_* feature, set = Classic
+#define tQuickCatch data[15] // Wally's Journey: Quick Catch on/off
 
 enum
 {
@@ -49,6 +50,7 @@ enum
     MENUITEM_WILDMONS,
     MENUITEM_NUZLOCKE,
     MENUITEM_LEVELCAP,
+    MENUITEM_QUICKCATCH,
     MENUITEM_GFX_FIRST, // Wally's Journey: New / Classic graphics, one row per WJGFX_* feature
     MENUITEM_GFX_LAST = MENUITEM_GFX_FIRST + WJGFX_COUNT - 1,
     MENUITEM_CANCEL,
@@ -78,6 +80,7 @@ enum
 #define YPOS_WILDMONS     ITEM_Y(MENUITEM_WILDMONS)
 #define YPOS_NUZLOCKE     ITEM_Y(MENUITEM_NUZLOCKE)
 #define YPOS_LEVELCAP     ITEM_Y(MENUITEM_LEVELCAP)
+#define YPOS_QUICKCATCH   ITEM_Y(MENUITEM_QUICKCATCH)
 
 static void Task_OptionMenuFadeIn(u8 taskId);
 static void Task_OptionMenuProcessInput(u8 taskId);
@@ -158,6 +161,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_WILDMONS]    = COMPOUND_STRING("See Wild Mons"),
     [MENUITEM_NUZLOCKE]    = COMPOUND_STRING("Nuzlocke"),
     [MENUITEM_LEVELCAP]    = COMPOUND_STRING("Level Cap"),
+    [MENUITEM_QUICKCATCH]  = COMPOUND_STRING("Quick Catch"),
     [MENUITEM_GFX_FIRST + WJGFX_3D_BACKGROUNDS] = COMPOUND_STRING("Battle BG"),
     [MENUITEM_GFX_FIRST + WJGFX_BATTLE_SCREEN]  = COMPOUND_STRING("Battle Screen"),
     [MENUITEM_GFX_FIRST + WJGFX_SUMMARY]        = COMPOUND_STRING("Summary"),
@@ -321,12 +325,14 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].tWildMonsOff = 0;
         gTasks[taskId].tNuzlocke = 0;
         gTasks[taskId].tLevelCap = 0;
+        gTasks[taskId].tQuickCatch = 0;
 #else
         gTasks[taskId].tExpAll = FlagGet(FLAG_WALLY_EXP_ALL_MODE);
         gTasks[taskId].tZMovesOff = FlagGet(FLAG_WALLY_Z_MOVES_OFF);
         gTasks[taskId].tWildMonsOff = FlagGet(FLAG_WALLY_OWE_OFF);
         gTasks[taskId].tNuzlocke = FlagGet(FLAG_WALLY_NUZLOCKE);
         gTasks[taskId].tLevelCap = FlagGet(FLAG_WALLY_LEVEL_CAP);
+        gTasks[taskId].tQuickCatch = FlagGet(FLAG_WALLY_QUICK_CATCH);
 #endif
         gTasks[taskId].tClassicGfx = WJ_GetClassicGfxMask();
         gTasks[taskId].tGameSpeed = WallyJourney_GetOverworldSpeed() % WALLY_OW_SPEED_COUNT;
@@ -461,6 +467,12 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             if (previousOption != gTasks[taskId].tLevelCap)
                 OnOff_DrawChoices(gTasks[taskId].tLevelCap, YPOS_LEVELCAP);
             break;
+        case MENUITEM_QUICKCATCH:
+            previousOption = gTasks[taskId].tQuickCatch;
+            gTasks[taskId].tQuickCatch = Toggle_ProcessInput(gTasks[taskId].tQuickCatch);
+            if (previousOption != gTasks[taskId].tQuickCatch)
+                OnOff_DrawChoices(gTasks[taskId].tQuickCatch, YPOS_QUICKCATCH);
+            break;
         case MENUITEM_GAMESPEED:
             previousOption = gTasks[taskId].tGameSpeed;
             gTasks[taskId].tGameSpeed = Cycle_ProcessInput(gTasks[taskId].tGameSpeed, WALLY_OW_SPEED_COUNT);
@@ -526,6 +538,10 @@ static void Task_OptionMenuSave(u8 taskId)
         FlagSet(FLAG_WALLY_LEVEL_CAP);
     else
         FlagClear(FLAG_WALLY_LEVEL_CAP);
+    if (gTasks[taskId].tQuickCatch)
+        FlagSet(FLAG_WALLY_QUICK_CATCH);
+    else
+        FlagClear(FLAG_WALLY_QUICK_CATCH);
 #endif
     WallyJourney_SetSpeeds(gTasks[taskId].tGameSpeed, gTasks[taskId].tBattleSpeed);
     WJ_SetClassicGfxMask((u16)gTasks[taskId].tClassicGfx);
@@ -898,6 +914,7 @@ static void RedrawVisibleOptions(u8 taskId)
     if (ITEM_VISIBLE(MENUITEM_WILDMONS))    WildMons_DrawChoices(tWildMonsOff);
     if (ITEM_VISIBLE(MENUITEM_NUZLOCKE))    OnOff_DrawChoices(tNuzlocke, YPOS_NUZLOCKE);
     if (ITEM_VISIBLE(MENUITEM_LEVELCAP))    OnOff_DrawChoices(tLevelCap, YPOS_LEVELCAP);
+    if (ITEM_VISIBLE(MENUITEM_QUICKCATCH))  OnOff_DrawChoices(tQuickCatch, YPOS_QUICKCATCH);
     {
         u32 i;
         for (i = MENUITEM_GFX_FIRST; i <= MENUITEM_GFX_LAST; i++)

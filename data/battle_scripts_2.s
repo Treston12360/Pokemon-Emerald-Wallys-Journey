@@ -185,6 +185,7 @@ BattleScript_SafariBallThrow::
 BattleScript_SuccessBallThrow::
 	setbyte sMON_CAUGHT, TRUE
 	incrementgamestat GAME_STAT_POKEMON_CAPTURES
+	jumpifbyte CMP_NOT_EQUAL, gWJQuickCatchOn, 0, BattleScript_WJQuickCatch
 	printstring STRINGID_GOTCHAPKMNCAUGHTPLAYER
 	jumpifbyte CMP_NOT_EQUAL, sEXP_CATCH, TRUE, BattleScript_TryPrintCaughtMonInfo
 	setbyte sGIVEEXP_STATE, 0
@@ -211,6 +212,24 @@ BattleScript_GiveCaughtMonEnd::
 BattleScript_SuccessBallThrowEnd::
 	setbyte gBattleOutcome, B_OUTCOME_CAUGHT
 	finishturn
+
+@ Wally's Journey (owner 2026-11-09): Quick Catch option. No button presses: no Pokédex
+@ page, no nickname, no "send to party?" question, no "sent to the PC" message. The
+@ Pokédex is still filled in and the Pokémon goes to the party, or the PC if it's full.
+BattleScript_WJQuickCatch::
+	printstring STRINGID_WJ_GOTCHA_QUICK
+	waitmessage B_WAIT_TIME_LONG
+	jumpifbyte CMP_NOT_EQUAL, sEXP_CATCH, TRUE, BattleScript_WJQuickCatchGive
+	setbyte sGIVEEXP_STATE, 0
+	getexp BS_TARGET
+	sethword gBattle_BG2_X, 0
+BattleScript_WJQuickCatchGive:
+	jumpifbattletype BATTLE_TYPE_RECORDED, BattleScript_GiveCaughtMonEnd
+	trysetcaughtmondexflags BattleScript_WJQuickCatchGive2
+BattleScript_WJQuickCatchGive2:
+	setbyte gBattleCommunication, 0
+	givecaughtmon BattleScript_SuccessBallThrowEnd
+	goto BattleScript_SuccessBallThrowEnd
 
 BattleScript_WallyBallThrow::
 	printstring STRINGID_GOTCHAPKMNCAUGHTWALLY

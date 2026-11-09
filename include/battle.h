@@ -997,6 +997,10 @@ struct QueuedStatBoost
 }; /* size = 8 */
 
 // All battle variables are declared in battle_main.c
+// Wally's Journey (owner 2026-11-09): quick run with L in wild battles, and the Quick Catch option.
+extern u8 gWJQuickRun;      // 0 none, 1 L pressed during a message (run at the next action choice), 2 running
+extern u8 gWJQuickCatchOn;  // copy of FLAG_WALLY_QUICK_CATCH for the battle scripts
+bool32 WJ_QuickRunAllowed(void);
 extern u16 gBattle_BG0_X;
 extern u16 gBattle_BG0_Y;
 extern u16 gBattle_BG1_X;

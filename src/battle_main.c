@@ -2789,9 +2789,27 @@ static void ClearSetBScriptingStruct(void)
     gBattleScripting.specialTrainerBattleType = specialBattleType;
 }
 
+EWRAM_DATA u8 gWJQuickRun = 0;
+EWRAM_DATA u8 gWJQuickCatchOn = 0;
+
+// L-to-run works in wild battles only, and not when L is used as A.
+bool32 WJ_QuickRunAllowed(void)
+{
+    return gMain.inBattle
+        && !(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED | BATTLE_TYPE_FIRST_BATTLE))
+        && gSaveBlock2Ptr->optionsButtonMode != OPTIONS_BUTTON_MODE_L_EQUALS_A;
+}
+
 static void BattleStartClearSetData(void)
 {
     s32 i;
+
+    gWJQuickRun = 0;
+#if !IS_FRLG
+    gWJQuickCatchOn = FlagGet(FLAG_WALLY_QUICK_CATCH);
+#else
+    gWJQuickCatchOn = 0;
+#endif
 
     TurnValuesCleanUp(FALSE);
     memset(&gSpecialStatuses, 0, sizeof(gSpecialStatuses));

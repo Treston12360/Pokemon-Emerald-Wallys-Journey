@@ -1416,6 +1416,18 @@ void SetResultWithButtonPress(bool32 *result)
         *result = TRUE;
         PlaySE(SE_SELECT);
     }
+    // Wally's Journey (owner 2026-11-09): in a wild battle L also moves the text on and
+    // runs at the next action choice; once running, messages don't wait for a button.
+    else if (gWJQuickRun == 2 && gMain.inBattle)
+    {
+        *result = TRUE;
+    }
+    else if (JOY_NEW(L_BUTTON) && WJ_QuickRunAllowed())
+    {
+        *result = TRUE;
+        gWJQuickRun = 1;
+        PlaySE(SE_SELECT);
+    }
 }
 
 bool32 TextPrinterWaitWithDownArrow(struct TextPrinter *textPrinter)

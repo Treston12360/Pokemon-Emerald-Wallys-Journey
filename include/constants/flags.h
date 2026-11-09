@@ -86,7 +86,7 @@
 #define FLAG_WALLY_BEAT_CAMERON    0x40 // Wally's Journey: won the second title defense, against CAMERON (right after TRESTON)
 #define FLAG_WALLY_ALL_STARTER_STONES 0x41 // Wally's Journey: got all three starter Mega Stones from Steven
 #define FLAG_WALLY_EVS_RESET   0x42 // Wally's Journey: one-time EV reset for Stat Points done (set on new games)
-#define FLAG_UNUSED_0x043    0x43 // Unused Flag
+#define FLAG_WALLY_QUICK_CATCH 0x43 // Wally's Journey: Options menu QUICK CATCH ON (set) vs OFF (clear)
 #define FLAG_UNUSED_0x044    0x44 // Unused Flag
 #define FLAG_UNUSED_0x045    0x45 // Unused Flag
 #define FLAG_UNUSED_0x046    0x46 // Unused Flag
