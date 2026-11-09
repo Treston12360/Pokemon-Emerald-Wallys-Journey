@@ -274,6 +274,7 @@ extern bool8 gAffineAnimsDisabled;
 void ResetSpriteData(void);
 void AnimateSprites(void);
 void BuildOamBuffer(void);
+u32 CountFreeSprites(void);
 u32 CreateSprite(const struct SpriteTemplate *template, s16 x, s16 y, u32 subpriority);
 u32 CreateSpriteUnchecked(const struct SpriteTemplate *template, s16 x, s16 y, u32 subpriority);
 u32 CreateSpriteAtEnd(const struct SpriteTemplate *template, s16 x, s16 y, u32 subpriority);

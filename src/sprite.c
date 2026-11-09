@@ -431,6 +431,16 @@ static void SortSprites(u32 *spritePriorities, s32 n)
     InsertionSort(spritePriorities, n);
 }
 
+// Wally's Journey: how many sprite slots are free (lets cosmetic effects leave room)
+u32 CountFreeSprites(void)
+{
+    u32 i, count = 0;
+    for (i = 0; i < MAX_SPRITES; i++)
+        if (!gSprites[i].inUse)
+            count++;
+    return count;
+}
+
 u32 CreateSprite(const struct SpriteTemplate *template, s16 x, s16 y, u32 subpriority)
 {
     u32 spriteId = CreateSpriteUnchecked(template, x, y, subpriority);
