@@ -903,9 +903,10 @@ static u16 WJ_EvolveForLevel(u16 species, u32 level)
 }
 
 // Wally's Journey (owner 2026-11-08): Gabby & Ty are farmed for money and EXP. Every
-// battle (all six of their teams) is at the player's highest level (never below the
-// team's own level), with perfect IVs, full EVs, good natures and strong movesets.
-// They give a quarter of the EXP and 40 x level money (battle_script_commands.c).
+// battle (all six of their teams) is 2 levels below the player's highest level (never
+// below the team's own level), with 28 IVs in every stat, full EVs, good natures and
+// strong movesets (no Protect). They give a quarter of the EXP and 20 x level money
+// (battle_script_commands.c).
 bool32 WallyJourney_IsReporterTrainer(u16 trainerId)
 {
     return trainerId >= TRAINER_GABBY_AND_TY_1 && trainerId <= TRAINER_GABBY_AND_TY_6;
@@ -923,10 +924,10 @@ struct WJReporterBuild
 static const struct WJReporterBuild sWJReporterBuilds[] =
 {
     { {SPECIES_MAGNEMITE, SPECIES_MAGNETON, SPECIES_MAGNEZONE},
-      {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_PROTECT},
+      {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_NONE},
       NATURE_MODEST, ABILITY_STURDY, {252, 0, 4, 0, 252, 0} },
     { {SPECIES_WHISMUR, SPECIES_LOUDRED, SPECIES_EXPLOUD},
-      {MOVE_HYPER_VOICE, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_PROTECT},
+      {MOVE_HYPER_VOICE, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_NONE},
       NATURE_MODEST, ABILITY_SCRAPPY, {4, 0, 0, 252, 252, 0} },
 };
 
@@ -944,11 +945,13 @@ void WallyJourney_ScaleReporterParty(struct Pokemon *party, u16 trainerId)
         struct Pokemon *mon = &party[i];
         u16 species = GetMonData(mon, MON_DATA_SPECIES);
         u32 level = GetMonData(mon, MON_DATA_LEVEL);
-        u32 iv = MAX_PER_STAT_IVS, exp;
+        u32 iv = 28, exp;
         u8 nature;
         const struct WJReporterBuild *build = NULL;
 
-        target = top > level ? top : level;
+        target = top > 2 ? top - 2 : 1;
+        if (target < level)
+            target = level;
         if (target > MAX_LEVEL)
             target = MAX_LEVEL;
         species = WJ_EvolveForLevel(species, target);
@@ -976,7 +979,7 @@ void WallyJourney_ScaleReporterParty(struct Pokemon *party, u16 trainerId)
             for (j = 0; j < MAX_MON_MOVES; j++)
             {
                 u16 move = build->moves[j];
-                u8 pp = GetMovePP(move);
+                u8 pp = move == MOVE_NONE ? 0 : GetMovePP(move);
                 SetMonData(mon, MON_DATA_MOVE1 + j, &move);
                 SetMonData(mon, MON_DATA_PP1 + j, &pp);
             }

@@ -374,7 +374,9 @@ static const union TextColor sBWBattleUI_TextColors[NUM_BUI_TXTCLRS] =
     },
     [BUI_TXTCLR_ABOX_1] =
     {
-        .foreground = 4,
+        // Wally's Journey (owner 2026-11-08): FIGHT! bright green over emerald
+        // (was red over index 2, which turned green when the red line was recoloured).
+        .foreground = 11,
         .accent = 2,
         .shadow = 9,
     },
@@ -386,8 +388,10 @@ static const union TextColor sBWBattleUI_TextColors[NUM_BUI_TXTCLRS] =
     },
     [BUI_TXTCLR_ABOX_3] =
     {
-        .foreground = 11,
-        .accent = 10,
+        // Wally's Journey (owner 2026-11-08): POKéMON in red (index 4, the old FIGHT! red;
+        // no second red is free in this palette: index 6 is the battle prompt text)
+        .foreground = 4,
+        .accent = 4,
         .shadow = 9,
     },
     [BUI_TXTCLR_ABOX_4] =
