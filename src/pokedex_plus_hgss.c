@@ -1585,7 +1585,8 @@ void Task_DisplayCaughtMonDexPageHGSS(u8 taskId)
     case 4:
     {
         u32 personality = ((u16)gTasks[taskId].tPersonalityHi << 16) | (u16)gTasks[taskId].tPersonalityLo;
-        const u16 *paletteData = GetMonSpritePalFromSpeciesAndPersonality(species, FALSE, personality);
+        // Wally's Journey: a shiny catch shows in its shiny colours (data[13] = isShiny, set by DisplayCaughtMonDexPage)
+        const u16 *paletteData = GetMonSpritePalFromSpeciesAndPersonality(species, gTasks[taskId].data[13] != 0, personality);
 
         spriteId = Pokedex_CreateCaughtMonSprite(species, MON_PAGE_X, MON_PAGE_Y);
         LoadPalette(paletteData, OBJ_PLTT_ID(gSprites[spriteId].oam.paletteNum), PLTT_SIZE_4BPP);

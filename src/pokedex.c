@@ -4070,7 +4070,7 @@ static void Task_DisplayCaughtMonDexPage(u8 taskId)
         // We're using a different mon sprite creation method, because we don't have enough memory to safely use CreateMonPicSprite.
         spriteId = Pokedex_CreateCaughtMonSprite(species, MON_PAGE_X, MON_PAGE_Y);
         gTasks[taskId].tMonSpriteId = spriteId;
-        LoadDexMonPalette(taskId, FALSE);
+        LoadDexMonPalette(taskId, gTasks[taskId].tIsShiny); // Wally's Journey: shiny catches look shiny
         gSprites[spriteId].oam.priority = 0;
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0x10, 0, RGB_BLACK);
         SetVBlankCallback(gPokedexVBlankCB);

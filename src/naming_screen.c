@@ -1426,6 +1426,22 @@ static void NamingScreen_CreateMonIcon(void)
     LoadMonIconPalettes();
     spriteId = CreateMonIcon(sNamingScreen->monSpecies, SpriteCallbackDummy, 56, 40, 0, sNamingScreen->monPersonality);
     gSprites[spriteId].oam.priority = 3;
+    // Wally's Journey: shiny colours for a shiny Pokémon being (re)named. The naming screen only
+    // gets species + personality, so find the matching Pokémon (just caught = enemy party).
+    {
+        u32 i;
+        bool32 shiny = FALSE;
+        for (i = 0; i < PARTY_SIZE && !shiny; i++)
+        {
+            if (GetMonData(&gEnemyParty[i], MON_DATA_SPECIES) == sNamingScreen->monSpecies
+             && GetMonData(&gEnemyParty[i], MON_DATA_PERSONALITY) == sNamingScreen->monPersonality)
+                shiny = GetMonData(&gEnemyParty[i], MON_DATA_IS_SHINY);
+            else if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == sNamingScreen->monSpecies
+             && GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY) == sNamingScreen->monPersonality)
+                shiny = GetMonData(&gPlayerParty[i], MON_DATA_IS_SHINY);
+        }
+        WJ_SetIconShiny(&gSprites[spriteId], sNamingScreen->monSpecies, sNamingScreen->monPersonality, shiny, FALSE);
+    }
 }
 
 static void NamingScreen_CreateWaldaDadIcon(void)
