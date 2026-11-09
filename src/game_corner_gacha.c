@@ -2744,6 +2744,58 @@ static void CalculatePullOdds(void)
         sGacha->newMonOdds = 100;
 }
 
+// Wally's Journey (owner 2026-11-08): the wager starts at the machine's price, Up/Down
+// change it by 1 and Right/Left by 10, all of them repeating while held.
+static u16 Gacha_MinWager(void)
+{
+    switch (sGacha->GachaId)
+    {
+    default:
+    case GACHA_BASIC:  return GACHA_BASIC_MIN_WAGER;
+    case GACHA_GREAT:  return GACHA_GREAT_MIN_WAGER;
+    case GACHA_ULTRA:  return GACHA_ULTRA_MIN_WAGER;
+    case GACHA_MASTER: return GACHA_MASTER_MIN_WAGER;
+    }
+}
+
+static void Gacha_SetWager(s32 wager, bool32 playSound)
+{
+    s32 maxWager = GetCoins();
+
+    if (maxWager > 9999)
+        maxWager = 9999;
+    if (wager > maxWager)
+        wager = maxWager;
+    if (wager < 0)
+        wager = 0;
+    if (wager == sGacha->wager && playSound)
+    {
+        PlaySE(SE_FAILURE);
+        return;
+    }
+    sGacha->wager = wager;
+    if (playSound)
+        PlaySE(SE_SELECT);
+
+    StartSpriteAnimIfDifferent(&gSprites[sGacha->ArrowsSpriteId], (sGacha->wager == 0) ? 1 : 0);
+    SetPlayerDigits(sGacha->wager);
+
+    ResetMessage();
+    if (sGacha->wager >= Gacha_MinWager() && sGacha->canGiveMon)
+    {
+        CalculatePullOdds();
+        sGacha->canBetWager = TRUE;
+        gSprites[sGacha->CTAspriteId].animNum = 1; // On
+    }
+    else
+    {
+        sGacha->newMonOdds = 0;
+        sGacha->canBetWager = FALSE;
+        gSprites[sGacha->CTAspriteId].animNum = 0; // Off
+    }
+    ShowMessage();
+}
+
 static void AButton(void)
 {
     if (sGacha->canBetWager)
@@ -2769,7 +2821,7 @@ static void UpdateCursorPosition(s16 x)
         sGacha->cursorPosition = 0; // Thousands
 }
 
-static void UpdateWagerDigit(int direction)
+static void UNUSED UpdateWagerDigit(int direction)
 {
     u8 place;
     u16 oldWager;
@@ -2873,7 +2925,7 @@ static void UpdateWagerDigit(int direction)
     }
 }
 
-static void MoveCursor(int direction)
+static void UNUSED MoveCursor(int direction)
 {
     struct Sprite *cursorSprite = &gSprites[sGacha->ArrowsSpriteId];
     int curX = cursorSprite->x;
@@ -2924,21 +2976,21 @@ static void HandleInput(void)
         gSpecialVar_Result = MON_CANT_GIVE;
         sGacha->state = GACHA_STATE_START_EXIT;
     }
-    else if (JOY_NEW(DPAD_UP))
+    else if (JOY_REPEAT(DPAD_UP))
     {
-        MoveCursor(0);
+        Gacha_SetWager(sGacha->wager + 1, TRUE);
     }
-    else if (JOY_NEW(DPAD_RIGHT))
+    else if (JOY_REPEAT(DPAD_DOWN))
     {
-        MoveCursor(1);
+        Gacha_SetWager(sGacha->wager - 1, TRUE);
     }
-    else if (JOY_NEW(DPAD_DOWN))
+    else if (JOY_REPEAT(DPAD_RIGHT))
     {
-        MoveCursor(2);
+        Gacha_SetWager(sGacha->wager + 10, TRUE);
     }
-    else if (JOY_NEW(DPAD_LEFT))
+    else if (JOY_REPEAT(DPAD_LEFT))
     {
-        MoveCursor(3);
+        Gacha_SetWager(sGacha->wager - 10, TRUE);
     }
 }
 
@@ -3042,6 +3094,7 @@ static void GachaMain(u8 taskId)
     {
     case GACHA_STATE_INIT:
         if (!gPaletteFade.active) {
+            Gacha_SetWager(Gacha_MinWager(), FALSE); // start at the machine's price
             sGacha->state = GACHA_STATE_PROCESS_INPUT;
         }
         break;

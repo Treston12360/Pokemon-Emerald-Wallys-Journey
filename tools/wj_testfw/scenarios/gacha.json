@@ -1,0 +1,2 @@
+[{"name": "gacha", "map": "MAP_MAUVILLE_CITY_GAME_CORNER", "x": 5, "y": 3, "flags": ["FLAG_SYS_POKEMON_GET", "FLAG_SYS_POKEDEX_GET"], "party": [["MUDKIP", 20]],
+  "extra": "AddBagItem(ITEM_COIN_CASE, 1); SetCoins(9000);"}]

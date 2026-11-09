@@ -388,10 +388,10 @@ static const union TextColor sBWBattleUI_TextColors[NUM_BUI_TXTCLRS] =
     },
     [BUI_TXTCLR_ABOX_3] =
     {
-        // Wally's Journey (owner 2026-11-08): POKéMON in red (index 4, the old FIGHT! red;
-        // no second red is free in this palette: index 6 is the battle prompt text)
+        // Wally's Journey (owner 2026-11-08): POKéMON in red, light red (4) over deep red (10).
+        // Index 10 was POKéMON's old green and nothing else in the battle UI uses it.
         .foreground = 4,
-        .accent = 4,
+        .accent = 10,
         .shadow = 9,
     },
     [BUI_TXTCLR_ABOX_4] =
