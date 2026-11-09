@@ -905,7 +905,7 @@ static u16 WJ_EvolveForLevel(u16 species, u32 level)
 // Wally's Journey (owner 2026-11-08): Gabby & Ty are farmed for money and EXP. Every
 // battle (all six of their teams) is 2 levels below the player's highest level (never
 // below the team's own level), with 28 IVs in every stat, full EVs, good natures and
-// strong movesets (no Protect). They give a quarter of the EXP and 20 x level money
+// strong movesets (4 attacks, no Protect). They give a quarter of the EXP and 20 x level money
 // (battle_script_commands.c).
 bool32 WallyJourney_IsReporterTrainer(u16 trainerId)
 {
@@ -924,10 +924,10 @@ struct WJReporterBuild
 static const struct WJReporterBuild sWJReporterBuilds[] =
 {
     { {SPECIES_MAGNEMITE, SPECIES_MAGNETON, SPECIES_MAGNEZONE},
-      {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_NONE},
+      {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_TRI_ATTACK},
       NATURE_MODEST, ABILITY_STURDY, {252, 0, 4, 0, 252, 0} },
     { {SPECIES_WHISMUR, SPECIES_LOUDRED, SPECIES_EXPLOUD},
-      {MOVE_HYPER_VOICE, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_NONE},
+      {MOVE_HYPER_VOICE, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_ICE_BEAM},
       NATURE_MODEST, ABILITY_SCRAPPY, {4, 0, 0, 252, 252, 0} },
 };
 
