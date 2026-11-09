@@ -4714,6 +4714,7 @@ static void PutMonIconOnLvlUpBanner(void)
     u8 spriteId;
     struct SpriteSheet iconSheet;
     struct SpritePalette iconPalSheet;
+    u16 shinyIconPal[16];
 
     struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gBattleStruct->expGetterMonId];
     enum Species species = GetMonData(mon, MON_DATA_SPECIES);
@@ -4725,6 +4726,9 @@ static void PutMonIconOnLvlUpBanner(void)
 
     iconPalSheet.data = GetValidMonIconPalettePtr(species);
     iconPalSheet.tag = TAG_LVLUP_BANNER_MON_ICON;
+    // Wally's Journey: shiny colours on the level-up banner icon
+    if (GetMonData(mon, MON_DATA_IS_SHINY) && WJ_BuildShinyIconPalette(species, personality, shinyIconPal))
+        iconPalSheet.data = shinyIconPal;
 
     LoadSpriteSheet(&iconSheet);
     LoadSpritePalette(&iconPalSheet);

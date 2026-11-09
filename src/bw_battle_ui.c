@@ -818,7 +818,10 @@ static void SpriteCB_BattleUICursor(struct Sprite *sprite)
 
 static void SpriteCB_GimmickTrigger(struct Sprite *sprite)
 {
-    BattleUI_PlayVerticalSlideAnim(sprite->sGT_Hide, &sprite->y2, TILE_TO_PIXELS(-3), -12);
+    bool32 res = BattleUI_PlayVerticalSlideAnim(sprite->sGT_Hide, &sprite->y2, TILE_TO_PIXELS(-3), -12);
+    // Wally's Journey: once tucked away, hide it so it can't show over the text box
+    // (the level-up stats window changes layer priorities and the icon peeked through)
+    sprite->invisible = (sprite->sGT_Hide && res);
 }
 
 static void SpriteCB_MoveInfoTrigger(struct Sprite *sprite)
