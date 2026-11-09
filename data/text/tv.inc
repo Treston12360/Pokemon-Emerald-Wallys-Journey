@@ -2700,13 +2700,13 @@ GabbyAndTy_Text_GabbyPreFirstBattle:
 	.string "Gabby: Oh! We've just spotted a tough-\n"
 	.string "looking Trainer here of all places!\p"
 	.string "Okay, roll camera!\n"
-	.string "Let's get this interview.$"
+	.string "Let's get this on film.$"
 
 GabbyAndTy_Text_GabbyIntro:
 	.string "Gabby: Oh! You're {PLAYER}! Hi!\n"
 	.string "Do you remember us from last time?\p"
 	.string "Can you show us how much stronger\n"
-	.string "you've become? Okay, cue interview!$"
+	.string "you've become? Okay, roll camera!$"
 
 GabbyAndTy_Text_GabbyDefeatFirstTime:
 	.string "Gabby: My eyes didn't lie!\n"

@@ -55,7 +55,7 @@ const struct ItemInfo gItemsInfo[] =
     [ITEM_POKE_BALL] =
     {
         .name = ITEM_NAME("Poké Ball"),
-        .price = 200,
+        .price = 150, // Wally's Journey: 50 cheaper (owner 2026-11-08)
         .description = COMPOUND_STRING(
             "A tool used for\n"
             "catching wild\n"

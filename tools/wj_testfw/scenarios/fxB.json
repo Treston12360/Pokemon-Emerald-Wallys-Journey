@@ -1,0 +1,1 @@
+[{"name": "fxB", "map": "MAP_ROUTE102", "x": 4, "y": 4, "flags": ["FLAG_SYS_POKEMON_GET", "FLAG_SYS_POKEDEX_GET"], "party": [["MAGIKARP", 3]], "extra": "SetMonMoveSlot(&gPlayerParty[0], MOVE_HAZE, 0); SetMonMoveSlot(&gPlayerParty[0], MOVE_GROWTH, 1); SetMonMoveSlot(&gPlayerParty[0], MOVE_TRICK_ROOM, 2); SetMonMoveSlot(&gPlayerParty[0], MOVE_SWORDS_DANCE, 3);"}]

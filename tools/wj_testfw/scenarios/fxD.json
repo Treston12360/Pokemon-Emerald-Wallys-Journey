@@ -1,0 +1,1 @@
+[{"name": "fxD", "map": "MAP_ROUTE102", "x": 4, "y": 4, "flags": ["FLAG_SYS_POKEMON_GET", "FLAG_SYS_POKEDEX_GET"], "party": [["MAGIKARP", 3]], "extra": "SetMonMoveSlot(&gPlayerParty[0], MOVE_DRACO_METEOR, 0); SetMonMoveSlot(&gPlayerParty[0], MOVE_SHADOW_BALL, 1); SetMonMoveSlot(&gPlayerParty[0], MOVE_ICE_BEAM, 2); SetMonMoveSlot(&gPlayerParty[0], MOVE_DARK_PULSE, 3);"}]

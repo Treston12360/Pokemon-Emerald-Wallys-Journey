@@ -891,6 +891,11 @@ static void TakeGabbyAndTyOffTheAir(void)
 // See gabby_and_ty.inc for details
 u8 GabbyAndTyGetBattleNum(void)
 {
+    // Wally's Journey (owner 2026-11-08): once they've been beaten on all three routes
+    // (111, 118, 120), they stay on Route 111 with their final team, and talking to them
+    // starts a rematch (data/scripts/gabby_and_ty.inc).
+    if (gSaveBlock1Ptr->gabbyAndTyData.battleNum >= 3)
+        return 6;
     if (gSaveBlock1Ptr->gabbyAndTyData.battleNum > 5)
         return (gSaveBlock1Ptr->gabbyAndTyData.battleNum % 3) + 6;
 

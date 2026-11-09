@@ -902,6 +902,98 @@ static u16 WJ_EvolveForLevel(u16 species, u32 level)
     return species;
 }
 
+// Wally's Journey (owner 2026-11-08): Gabby & Ty are farmed for money and EXP. Every
+// battle (all six of their teams) is at the player's highest level (never below the
+// team's own level), with perfect IVs, full EVs, good natures and strong movesets.
+// They give a quarter of the EXP and 40 x level money (battle_script_commands.c).
+bool32 WallyJourney_IsReporterTrainer(u16 trainerId)
+{
+    return trainerId >= TRAINER_GABBY_AND_TY_1 && trainerId <= TRAINER_GABBY_AND_TY_6;
+}
+
+struct WJReporterBuild
+{
+    u16 species[3];   // the evolution line; the build is used for any of them
+    u16 moves[MAX_MON_MOVES];
+    u8 nature;
+    u16 ability;
+    u8 evs[NUM_STATS]; // HP, Atk, Def, Spe, SpA, SpD
+};
+
+static const struct WJReporterBuild sWJReporterBuilds[] =
+{
+    { {SPECIES_MAGNEMITE, SPECIES_MAGNETON, SPECIES_MAGNEZONE},
+      {MOVE_THUNDERBOLT, MOVE_FLASH_CANNON, MOVE_VOLT_SWITCH, MOVE_PROTECT},
+      NATURE_MODEST, ABILITY_STURDY, {252, 0, 4, 0, 252, 0} },
+    { {SPECIES_WHISMUR, SPECIES_LOUDRED, SPECIES_EXPLOUD},
+      {MOVE_HYPER_VOICE, MOVE_FIRE_BLAST, MOVE_FOCUS_BLAST, MOVE_PROTECT},
+      NATURE_MODEST, ABILITY_SCRAPPY, {4, 0, 0, 252, 252, 0} },
+};
+
+void WallyJourney_ScaleReporterParty(struct Pokemon *party, u16 trainerId)
+{
+#if !IS_FRLG
+    u32 i, j, k, n, target, top;
+    if (!WallyJourney_IsReporterTrainer(trainerId))
+        return;
+    top = WJ_PlayerTopLevel();
+    for (n = 0; n < PARTY_SIZE && GetMonData(&party[n], MON_DATA_SPECIES) != SPECIES_NONE; n++)
+        ;
+    for (i = 0; i < n; i++)
+    {
+        struct Pokemon *mon = &party[i];
+        u16 species = GetMonData(mon, MON_DATA_SPECIES);
+        u32 level = GetMonData(mon, MON_DATA_LEVEL);
+        u32 iv = MAX_PER_STAT_IVS, exp;
+        u8 nature;
+        const struct WJReporterBuild *build = NULL;
+
+        target = top > level ? top : level;
+        if (target > MAX_LEVEL)
+            target = MAX_LEVEL;
+        species = WJ_EvolveForLevel(species, target);
+        SetMonData(mon, MON_DATA_SPECIES, &species);
+        SetMonData(mon, MON_DATA_NICKNAME, GetSpeciesName(species));
+        exp = gExperienceTables[gSpeciesInfo[species].growthRate][target];
+        SetMonData(mon, MON_DATA_EXP, &exp);
+        SetMonData(mon, MON_DATA_LEVEL, &target);
+        for (j = 0; j < NUM_STATS; j++)
+            SetMonData(mon, MON_DATA_HP_IV + j, &iv);
+
+        for (j = 0; j < ARRAY_COUNT(sWJReporterBuilds) && build == NULL; j++)
+            for (k = 0; k < 3; k++)
+                if (sWJReporterBuilds[j].species[k] == species)
+                    build = &sWJReporterBuilds[j];
+        if (build != NULL)
+        {
+            for (j = 0; j < NUM_STATS; j++)
+            {
+                u8 ev = build->evs[j];
+                SetMonData(mon, MON_DATA_HP_EV + j, &ev);
+            }
+            nature = build->nature;
+            SetMonData(mon, MON_DATA_HIDDEN_NATURE, &nature);
+            for (j = 0; j < MAX_MON_MOVES; j++)
+            {
+                u16 move = build->moves[j];
+                u8 pp = GetMovePP(move);
+                SetMonData(mon, MON_DATA_MOVE1 + j, &move);
+                SetMonData(mon, MON_DATA_PP1 + j, &pp);
+            }
+            for (k = 0; k < NUM_ABILITY_SLOTS; k++)
+            {
+                if (gSpeciesInfo[species].abilities[k] == build->ability)
+                {
+                    SetMonData(mon, MON_DATA_ABILITY_NUM, &k);
+                    break;
+                }
+            }
+        }
+        CalculateMonStats(mon);
+    }
+#endif
+}
+
 void WallyJourney_ScaleImportantParty(struct Pokemon *party, u16 trainerId)
 {
 #if !IS_FRLG

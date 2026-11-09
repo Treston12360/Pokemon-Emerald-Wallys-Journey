@@ -2347,6 +2347,7 @@ static void CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
         CreateNPCTrainerPartyFromTrainer(party, GetTrainerStructFromId(trainerNum));
         WallyJourney_ScaleLeaderParty(party, trainerNum); // growing Gym Leader rematches
         WallyJourney_ScaleImportantParty(party, trainerNum); // first-encounter scaling
+        WallyJourney_ScaleReporterParty(party, trainerNum); // Gabby & Ty: player's level, perfect builds
         return;
     }
 

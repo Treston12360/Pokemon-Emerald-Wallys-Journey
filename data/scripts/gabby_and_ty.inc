@@ -18,10 +18,22 @@ GabbyAndTy_EventScript_UpdateLocation::
 	case 3, GabbyAndTy_EventScript_MoveForBattle4
 	case 4, GabbyAndTy_EventScript_MoveForBattle5
 	case 5, GabbyAndTy_EventScript_MoveForBattle6
-	case 6, GabbyAndTy_EventScript_MoveForBattle7
-	case 7, GabbyAndTy_EventScript_MoveForBattle8
-	case 8, GabbyAndTy_EventScript_MoveForBattle9
+	case 6, GabbyAndTy_EventScript_SettleAtRoute111
+	case 7, GabbyAndTy_EventScript_SettleAtRoute111
+	case 8, GabbyAndTy_EventScript_SettleAtRoute111
 	end
+
+@ Wally's Journey: after all three routes they stay on Route 111 (final team, rematch by talking).
+GabbyAndTy_EventScript_SettleAtRoute111::
+	call GabbyAndTy_EventScript_ShowAtRoute111_3
+	call GabbyAndTy_EventScript_HideAtRoute111_1
+	call GabbyAndTy_EventScript_HideAtRoute111_2
+	call GabbyAndTy_EventScript_HideAtRoute118_1
+	call GabbyAndTy_EventScript_HideAtRoute118_2
+	call GabbyAndTy_EventScript_HideAtRoute118_3
+	call GabbyAndTy_EventScript_HideAtRoute120_1
+	call GabbyAndTy_EventScript_HideAtRoute120_2
+	return
 
 GabbyAndTy_EventScript_MoveForBattle1::
 	call GabbyAndTy_EventScript_ShowAtRoute111_1
@@ -192,26 +204,26 @@ GabbyAndTy_EventScript_TyBattle5::
 	end
 
 GabbyAndTy_EventScript_GabbyBattle6::
+	cleartrainerflag TRAINER_GABBY_AND_TY_6  @ Wally's Journey: talking to them always starts a rematch
 	trainerbattle_double TRAINER_GABBY_AND_TY_6, GabbyAndTy_Text_GabbyIntro, GabbyAndTy_Text_GabbyDefeat, GabbyAndTy_Text_GabbyNotEnoughMons, GabbyAndTy_EventScript_RequestInterview
 	msgbox GabbyAndTy_Text_KeepingAnEyeOutForYou, MSGBOX_DEFAULT
 	release
 	end
 
 GabbyAndTy_EventScript_TyBattle6::
+	cleartrainerflag TRAINER_GABBY_AND_TY_6  @ Wally's Journey: talking to them always starts a rematch
 	trainerbattle_double TRAINER_GABBY_AND_TY_6, GabbyAndTy_Text_TyIntro, GabbyAndTy_Text_TyDefeat, GabbyAndTy_Text_TyNotEnoughMons, GabbyAndTy_EventScript_RequestInterview
 	msgbox GabbyAndTy_Text_TyPostBattle, MSGBOX_DEFAULT
 	release
 	end
 
 GabbyAndTy_EventScript_FirstInterview::
+	@ Wally's Journey (owner 2026-11-08): no interview after the battle, so they can be rebattled
+	@ straight away. GabbyAndTyBeforeInterview still runs: it counts the battle (moves them on).
 	special GabbyAndTyBeforeInterview
-	special GetGabbyAndTyLocalIds
-	call_if_eq VAR_FACING, DIR_NORTH, GabbyAndTy_EventScript_FacePlayerNorth
-	call_if_eq VAR_FACING, DIR_SOUTH, GabbyAndTy_EventScript_FacePlayerSouth
-	call_if_eq VAR_FACING, DIR_EAST, GabbyAndTy_EventScript_FacePlayerEast
-	goto_if_set FLAG_TEMP_SKIP_GABBY_INTERVIEW, GabbyAndTy_EventScript_KeepingAnEyeOutForYou
-	msgbox GabbyAndTy_Text_WhoAreYouInterview, MSGBOX_YESNO
-	goto GabbyAndTy_EventScript_Interview
+	@ ...and the player's party is silently healed after every battle (owner 2026-11-08).
+	special HealPlayerParty
+	release
 	end
 
 GabbyAndTy_EventScript_FacePlayerNorth::
@@ -232,22 +244,12 @@ GabbyAndTy_EventScript_FacePlayerEast::
 	return
 
 GabbyAndTy_EventScript_RequestInterview::
+	@ Wally's Journey (owner 2026-11-08): no interview after the battle, so they can be rebattled
+	@ straight away. GabbyAndTyBeforeInterview still runs: it counts the battle (moves them on).
 	special GabbyAndTyBeforeInterview
-	special GetGabbyAndTyLocalIds
-	call_if_eq VAR_FACING, DIR_NORTH, GabbyAndTy_EventScript_FacePlayerNorth
-	call_if_eq VAR_FACING, DIR_SOUTH, GabbyAndTy_EventScript_FacePlayerSouth
-	call_if_eq VAR_FACING, DIR_EAST, GabbyAndTy_EventScript_FacePlayerEast
-	goto_if_set FLAG_TEMP_SKIP_GABBY_INTERVIEW, GabbyAndTy_EventScript_KeepingAnEyeOutForYou
-	specialvar VAR_RESULT, GabbyAndTyGetLastQuote
-	goto_if_eq VAR_RESULT, 0, GabbyAndTy_EventScript_DidntInterviewLastTime
-	msgbox GabbyAndTy_Text_QuoteFromLastInterview, MSGBOX_DEFAULT
-	specialvar VAR_RESULT, GabbyAndTyGetLastBattleTrivia
-	switch VAR_RESULT
-	case 0, GabbyAndTy_EventScript_RequestInterviewNoTrivia
-	case 1, GabbyAndTy_EventScript_RequestInterviewShortBattle
-	case 2, GabbyAndTy_EventScript_RequestInterviewThrewBall
-	case 3, GabbyAndTy_EventScript_RequestInterviewUsedItems
-	case 4, GabbyAndTy_EventScript_RequestInterviewLostAMon
+	@ ...and the player's party is silently healed after every battle (owner 2026-11-08).
+	special HealPlayerParty
+	release
 	end
 
 GabbyAndTy_Movement_WalkInPlaceDown:

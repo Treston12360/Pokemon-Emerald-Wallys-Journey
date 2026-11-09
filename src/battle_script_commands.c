@@ -2218,6 +2218,9 @@ static void Cmd_getexp(void)
             // Wally's Journey: repeatable Gym Leader rematches give a quarter of the EXP.
             if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && WallyJourney_IsLeaderRematchTrainer(TRAINER_BATTLE_PARAM.opponentA))
                 calculatedExp /= 4;
+            // Wally's Journey: Gabby & Ty (repeatable, scaled) also give a quarter (owner 2026-11-08).
+            else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && WallyJourney_IsReporterTrainer(TRAINER_BATTLE_PARAM.opponentA))
+                calculatedExp /= 4;
 
             if (WallyJourney_IsExpAllMode())
             {
@@ -4072,6 +4075,14 @@ static u32 GetTrainerMoneyToGive(u16 trainerId)
         if (party == NULL)
             return 20;
         lastMonLevel = party[GetTrainerPartySizeFromId(trainerId) - 1].lvl;
+        // Wally's Journey: Gabby & Ty scale to the player, so pay by their real level:
+        // 40 x level, then half of that (owner 2026-11-08) = 20 x level
+        // (800 at Lv40, 2,000 at Lv100; the Amulet Coin still doubles it).
+        if (WallyJourney_IsReporterTrainer(trainerId))
+        {
+            u32 lv = GetMonData(&gEnemyParty[0], MON_DATA_LEVEL);
+            return 20 * lv * gBattleStruct->moneyMultiplier;
+        }
         trainerMoney = gTrainerClasses[GetTrainerClassFromId(trainerId)].money ?: 5;
 
         if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
