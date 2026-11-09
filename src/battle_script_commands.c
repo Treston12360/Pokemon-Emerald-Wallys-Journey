@@ -4076,12 +4076,12 @@ static u32 GetTrainerMoneyToGive(u16 trainerId)
             return 20;
         lastMonLevel = party[GetTrainerPartySizeFromId(trainerId) - 1].lvl;
         // Wally's Journey: Gabby & Ty scale to the player, so pay by their real level:
-        // 40 x level, then half of that (owner 2026-11-08) = 20 x level
-        // (800 at Lv40, 2,000 at Lv100; the Amulet Coin still doubles it).
+        // 40 x level (owner 2026-11-08, back to full after trying 75% and 50%):
+        // 1,600 at Lv40, 4,000 at Lv100; the Amulet Coin still doubles it.
         if (WallyJourney_IsReporterTrainer(trainerId))
         {
             u32 lv = GetMonData(&gEnemyParty[0], MON_DATA_LEVEL);
-            return 20 * lv * gBattleStruct->moneyMultiplier;
+            return 40 * lv * gBattleStruct->moneyMultiplier;
         }
         trainerMoney = gTrainerClasses[GetTrainerClassFromId(trainerId)].money ?: 5;
 
