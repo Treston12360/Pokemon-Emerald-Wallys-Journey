@@ -8,5 +8,5 @@ It is the authoritative, versioned record of the owner's requests and correction
 
 In case of disagreement with historical design notes, the owner's most recent requirement (and the authoritative requirements document, once updated) wins.
 
-## PC version (.exe)
-The PC port lives on branch `pc-port`. Read `docs/PROJECT_PC_PORT.md` there before working on it (plan, owner requests, rules, build and test).
+## Project Deluxe (this branch)
+Read `docs/PROJECT_PC_PORT.md` before doing anything on this branch: plan, owner requests, rules, build and test.
