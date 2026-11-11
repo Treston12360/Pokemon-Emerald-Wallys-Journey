@@ -53,7 +53,15 @@ endif
 else
 DEFS += -DWINDOWS32=1
 SDL_CFLAGS := -I$(SDL_DIR)/include -I$(SDL_DIR)/include/SDL2 -idirafter tools/pc/win_include -mno-ms-bitfields -mno-align-double
-SDL_LIBS   := -L$(SDL_DIR)/lib -lmingw32 -lSDL2main -lSDL2_image -lSDL2 -lwinmm -limm32 -lversion -lsetupapi -lole32 -loleaut32 -lcomdlg32 -lxinput -mwindows -static-libgcc
+ifeq ($(LLVM_MINGW),1)
+# llvm-mingw (clang) toolchain with static SDL2 built from source: no DLLs next to the .exe.
+# clang has no -mno-align-double; include/gba/types.h keeps u64/s64 4-byte aligned instead.
+SDL_CFLAGS := $(filter-out -mno-align-double,$(SDL_CFLAGS)) -Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types -Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=return-type
+endif
+SDL_LIBS   := -L$(SDL_DIR)/lib -lmingw32 -lSDL2main -lSDL2_image -lSDL2 -lwinmm -limm32 -lversion -lsetupapi -lole32 -loleaut32 -lcomdlg32 -lxinput9_1_0 -mwindows -static-libgcc
+ifeq ($(LLVM_MINGW),1)
+SDL_LIBS   += -lgdi32 -luser32 -lshell32 -luuid -ladvapi32 -lcfgmgr32 -static -Wl,--allow-multiple-definition
+endif
 endif
 
 CPPFLAGS := -iquote include -Wno-trigraphs -std=gnu17 $(DEFS)
@@ -108,6 +116,21 @@ $(OBJ_DIR)/src/%.o: src/%.c
 	@rm -f $(OBJ_DIR)/src/$*.i
 	$(CC) $(CFLAGS) -x cpp-output -c $(OBJ_DIR)/src/$*.pp.i -o $@
 
+ifeq ($(WIN)$(LLVM_MINGW),11)
+# llvm-mingw: assemble the data with GNU as (Linux objects) and convert them to COFF;
+# LLVM's assembler does not accept all of the game's GNU-as macros.
+$(OBJ_DIR)/data/%.o: build/pc-linux32/data/%.o
+	objcopy -I elf32-i386 -O pe-i386 --strip-unneeded --prefix-symbol _ $< $@
+	python3 tools/pc/coff_fixrel.py $< $@
+
+$(OBJ_DIR)/midi/%.o: build/pc-linux32/midi/%.o
+	objcopy -I elf32-i386 -O pe-i386 --strip-unneeded --prefix-symbol _ $< $@
+	python3 tools/pc/coff_fixrel.py $< $@
+
+LINUX_MIDI_OBJS := $(patsubst sound/songs/midi/%.s,build/pc-linux32/midi/%.o,$(MID_SRCS))
+$(LINUX_MIDI_OBJS): $(MID_SRCS)
+	$(MAKE) -f Makefile.pc WIN=0 MUSL=1 $(LINUX_MIDI_OBJS)
+else
 $(OBJ_DIR)/data/%.o: data/%.s
 	$(PREPROC) -s $< charmap.txt | $(CC) -E -x assembler-with-cpp $(CPPFLAGS) -I include - | $(PREPROC) -ie $< charmap.txt | $(ASMCONV) | $(AS) $(ASFLAGS) -o $@ 2>&1 | { grep -E 'Error' || true; }; test -s $@
 	@$(FIX_US)
@@ -115,6 +138,7 @@ $(OBJ_DIR)/data/%.o: data/%.s
 $(OBJ_DIR)/midi/%.o: sound/songs/midi/%.s
 	$(ASMCONV) < $< | $(AS) $(ASFLAGS) -o $@
 	@$(FIX_US)
+endif
 
 ifeq ($(WIN),1)
 $(LINUX_DATA_OBJS): $(DATA_SRCS)

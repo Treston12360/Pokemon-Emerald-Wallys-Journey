@@ -1,8 +1,10 @@
 # Project: Wally's Journey as a PC program (.exe)
 
-**Branch:** `pc-port` (based on 0.18.19). Read this whole file before working on the PC version.
-**Status (2026-11-11):** alpha 3 sent to the owner. Step 1 (PC settings) is done. Step 2 (widescreen): test pictures sent to the owner;
-**waiting for him to pick a view size** (A/B/C/D below) before the renderer is built in.
+**Branch:** `deluxe` (PC work started on `pc-port`) (based on 0.18.19). Read this whole file before working on the PC version.
+**Status (2026-11-11):** alpha 4 (wide view) sent to the owner as `WallysJourney.exe`. Steps 1 (PC settings) and
+2 (widescreen) are done. **Next: step 3 (smooth high frame rate).** The alpha 4 .exe could not be run before sending
+(no Wine in that container), so the owner's first report on it matters: if it does not start, look at the
+Windows-only build steps under "Build environment" first.
 
 ## What the owner asked for (2026-11-11, in his words where possible)
 - "a .exe file at the end of it with all those cool features that normally come with recomps":
@@ -22,7 +24,7 @@
 
 ## Plan (owner's order)
 1. **PC settings screen** — DONE (alpha 3). Rows at the bottom of Options, PC build only, stored in `WallysJourney.cfg`.
-2. **Widescreen and zoom** — NEXT. Draw the overworld from map data so more of the world shows at the
+2. **Widescreen and zoom** — DONE (alpha 4), see "Wide view (step 2) as built" below. Draw the overworld from map data so more of the world shows at the
    sides (the gen1recomp approach). Load object events further out so nothing pops in at the edges.
    Battle screens, menus and text boxes need centring or their own handling. Emerald-PC-Engine has design
    docs for a "native overworld renderer" / "native world neighborhood" (docs/NATIVE_OVERWORLD_RENDERER_*.md,
@@ -43,9 +45,8 @@
      the normal 240x160 picture (centred) for battles, menus, text boxes and anything unsupported. Emerald's backup
      map grid has a 7-metatile apron (8 east), enough terrain for A/B/C (C adds 72x28 px per side); D (120 px per side)
      needs a connection resolver past the apron. NPC spawn range is 2 tiles past the GBA screen: C/D need it widened.
-   - **Build environment note (2026-11-11):** a fresh Claude cloud container could not install gcc-multilib / 32-bit
-     SDL2 (Ubuntu package servers blocked, only GitHub reachable), so the PC build can't be compiled there. Use a
-     container/PC that has them, or bring the toolchain from GitHub releases (e.g. llvm-mingw for the Windows build).
+   - **Owner's answer:** "Do whatever you think will look the best". Chosen: C (384x216) outdoors, B (320x180)
+     indoors (small rooms show less black), NPCs loaded further out, weather repeated into the margins.
 3. **Smooth high frame rate** — game logic stays at 60 updates/s (so nothing breaks); extra frames are
    drawn in between on 120/144/240 Hz monitors. Walking + camera first, then sprites, menus, battle
    animations. Line-by-line effects (water ripple, some battle intros) stay at 60. Needs step 2's renderer.
@@ -54,6 +55,35 @@
 5. **Full check against the ROM** — go system by system (trainer/gym battles, every menu, gacha, contests,
    Battle Frontier, cutscenes, 3D backgrounds in every area, seasons/weather, sound), plus the owner's playtesting.
    Then a stable release. Estimate 15–30 h.
+
+## Wide view (step 2) as built
+- `src/platform/wide_view.c` draws each frame. Three modes: FIELD (normal overworld: 384x216 outdoors, 320x180 for
+  MAP_TYPE_INDOOR/SECRET_BASE), CENTER (battle transitions, `CB2_OverworldBasic` scenes: GBA picture in the middle,
+  black margins), GBA (battles, menus, everything else: normal 240x160, pillarboxed).
+- FIELD mode draws BG1-3 for the margins from the RAM tilemap ring where it covers the spot and from the map grid /
+  connections / border outside it, BG0 (text, start menu) only in the GBA rectangle, sprites from `gSprites` with
+  full coordinates (so NPCs and overworld mons show in the margins), weather sprites repeated (fog/ash/sandstorm
+  every 320x256, rain/snow every 240x160). Windows (WIN0/1, used by WJ in the overworld) take the nearest edge
+  pixel's setting outside the GBA rectangle, so dark caves stay dark in the margins.
+- NPC spawn/despawn range widened on PC only (`WJ_VIEW_PAD_*`, `WJ_SPAWN_PAD_*`, `WJ_SPAWN_OK` in
+  `event_object_movement.h`; extra-range NPCs load only while more than 4 object event slots are free).
+- Window size setting now steps in 320x180 units; `widescreen=0` in `WallysJourney.cfg` turns it off (no Options
+  row yet: ask the owner before adding one, it changes the Options screen).
+- Test aids: `WJPC_NOWIDE=1`, `WJPC_WVDEBUG=1`, `WJPC_FORCE_WEATHER=<id>` (3 rain, 4 snow, 6 fog, 7 ash, 8 sandstorm).
+- Also fixed: Pokémon Center freeze on PC (wireless "wait for VBlank" spin in main.c never ended;
+  `WJPC_WIRELESS_VBLANK_WAIT`). It was in the earlier alphas too.
+
+## Build environment (no apt / only GitHub reachable)
+- Linux: `make -f Makefile.pc MUSL=1` builds a static 32-bit binary with clang + musl 1.2.5 (kraj/musl, built with
+  clang into /opt/xtc/i686-musl; PAGE_SIZE defines removed from its limits.h; libgcc = compiler-rt builtins from
+  llvm-project 18.1.3) + SDL2 2.30.9 / SDL2_image 2.8.2 built static.
+- Windows: `make -f Makefile.pc WIN=1 LLVM_MINGW=1 SDL_DIR=/opt/xtc/i686-mingw` with llvm-mingw built from its
+  scripts (i686 only, msvcrt) and SDL2/SDL2_image built static, so the .exe needs no DLLs next to it. Needs the
+  Linux build first: clang's assembler can't read the game's asm, so the Linux ELF data/midi objects are converted
+  with `objcopy -O pe-i386` and `tools/pc/coff_fixrel.py` repairs their relocation types. clang has no
+  `-mno-align-double`, so `include/gba/types.h` keeps u64/s64 4-byte aligned for this build (save struct sizes
+  checked identical to the Linux build). XInput now links `xinput9_1_0` (ships with Windows) instead of `xinput1_3`.
+- If a machine has gcc-multilib + 32-bit SDL2 and mingw-w64 + Wine, the original commands still work.
 
 ## Rules (same as the main project, plus PC ones)
 - **The GBA ROM must not change.** Every change to shared code is behind `#ifdef PORTABLE` (C) or
@@ -110,7 +140,7 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
 - `tools/pc/harness2script.py` converts the mGBA harness scripts.
 - Random-input crash hunts: a script of random button presses from the friend's save for ~50k frames;
   run several seeds after every change. Run under gdb for backtraces.
-- Windows .exe is tested under Wine (`wine32:i386`), with `WINEDEBUG=-all`.
+- Windows .exe is tested under Wine (`wine32:i386`), with `WINEDEBUG=-all` when Wine is available (alpha 4 was not).
 - Tested so far: intro, new game (Birch, naming), title, main menu, friend's save, overworld, start menu,
   party menu, Options incl. PC rows, wild battle (moves, EXP, back to map), saving, PC save back into mGBA.
 - Not tested yet: real-time sound/controllers on a real Windows PC (owner), trainer/gym battles, long play.
@@ -118,3 +148,5 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
 ## Owner feedback log
 - alpha 1: crashed at Birch's "This world is widely inhabited by..." (fixed alpha 2); Space made it do
   "weird stuff" (fast-forward stutter, fixed alpha 2).
+- step 2 test pictures: owner said "Do whatever you think will look the best and download whatever tools you think
+  is necessary to finish". Alpha 4 (wide view) sent with 9 screenshots from the real PC build.

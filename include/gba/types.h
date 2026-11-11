@@ -7,11 +7,20 @@
 typedef uint8_t   u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
+#if defined(PORTABLE) && defined(_WIN32) && defined(__clang__)
+// clang's Windows target puts 64-bit values on 8-byte boundaries; the GBA (and gcc with
+// -mno-align-double) use 4. Keep the GBA layout so structs and saves match.
+typedef uint64_t u64 __attribute__((aligned(4)));
+typedef int64_t  s64 __attribute__((aligned(4)));
+#else
 typedef uint64_t u64;
+#endif
 typedef int8_t    s8;
 typedef int16_t  s16;
 typedef int32_t  s32;
+#if !(defined(PORTABLE) && defined(_WIN32) && defined(__clang__))
 typedef int64_t  s64;
+#endif
 
 typedef volatile u8   vu8;
 typedef volatile u16 vu16;
