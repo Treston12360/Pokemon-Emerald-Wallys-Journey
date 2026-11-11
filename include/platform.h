@@ -12,6 +12,8 @@ u8 Platform_GetBorderBackgroundCount(void);
 u8 Platform_GetBorderBackground(void);
 void Platform_SetBorderBackground(u8 selection);
 
+#define FF_SPEED_COUNT 10
+
 enum PlatformSetting
 {
     PLATFORM_SETTING_FULLSCREEN,
@@ -20,7 +22,7 @@ enum PlatformSetting
     PLATFORM_SETTING_VSYNC,
     PLATFORM_SETTING_BORDER,
     PLATFORM_SETTING_VOLUME,
-    PLATFORM_SETTING_FF_SPEED, // 0 = 2x, 1 = 3x, 2 = 5x, 3 = Max
+    PLATFORM_SETTING_FF_SPEED, // 0 = 2x, 1 = 4x, ... 9 = 20x (FF_SPEED_COUNT steps of 2x)
     PLATFORM_SETTING_FF_TOGGLE, // 0 = hold the button, 1 = press once to turn on/off
     // Controller button for each game button (enum PadButton).
     PLATFORM_SETTING_PAD_A,

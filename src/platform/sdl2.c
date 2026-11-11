@@ -619,7 +619,7 @@ static void ReadConfigFile(void)
             sPlatformSettings[PLATFORM_SETTING_BORDER] = value != 0;
         else if (sscanf(line, "volume=%u", &value) == 1 && value <= 10)
             sPlatformSettings[PLATFORM_SETTING_VOLUME] = value;
-        else if (sscanf(line, "fastForward=%u", &value) == 1 && value <= 3)
+        else if (sscanf(line, "fastForward=%u", &value) == 1 && value < FF_SPEED_COUNT)
             sPlatformSettings[PLATFORM_SETTING_FF_SPEED] = value;
         else if (sscanf(line, "widescreen=%u", &value) == 1)
             WideView_SetEnabled(value != 0);
@@ -1285,11 +1285,11 @@ u16 GetXInputKeys()
 // Main thread, every loop: turn fast forward on/off from the key, the controller and the mode.
 static void ApplyFastForward(void)
 {
-    static const double sFfScales[] = {2.0, 3.0, 5.0, 100.0};
     bool on = sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]
             ? SDL_AtomicGet(&sFfToggled) != 0
             : (SDL_AtomicGet(&sFfKeyHeld) || SDL_AtomicGet(&sFfPadHeld));
-    double scale = on ? sFfScales[sPlatformSettings[PLATFORM_SETTING_FF_SPEED] % 4] : 1.0;
+    // Fast forward speed: 2x, 4x, 6x ... 20x.
+    double scale = on ? 2.0 * (sPlatformSettings[PLATFORM_SETTING_FF_SPEED] % FF_SPEED_COUNT + 1) : 1.0;
 
     if (on != speedUp || scale != timeScale)
     {

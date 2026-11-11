@@ -1,7 +1,7 @@
 # Project: Wally's Journey as a PC program (.exe)
 
 **Branch:** `deluxe` (PC work started on `pc-port`) (based on 0.18.19). Read this whole file before working on the PC version.
-**Status (2026-11-11):** alpha 4e (wide view) sent to the owner as `WallysJourney.exe`, tested under Wine 10
+**Status (2026-11-11):** alpha 4f (wide view) sent to the owner as `WallysJourney.exe`, tested under Wine 10
 (Kron4ek WoW64 build from GitHub releases + Xvfb). Steps 1 (PC settings) and 2 (widescreen) are done.
 **Next: step 3 (smooth high frame rate).**
 
@@ -28,6 +28,8 @@
   Back Start LS RS None >`, `Widescreen < On/Off >`. Defaults: pad B = B (was X in the old port), fast forward = RT,
   controller fast forward uses the chosen speed (was fixed 5x). Code: `option_menu.c` (sPcRows/sPcRowPos pages,
   PcMenu_*), `platform.h`, `sdl2.c` (ApplyFastForward, XInput mapping, cfg keys padA.. / fastForwardToggle).
+- 2026-11-11 owner: "The max is way too fast, add in intervals of 2x to max speed of 20x". Alpha 4f: Fast forward
+  `< 2x 4x ... 20x >` (FF_SPEED_COUNT = 10, value v = (v+1)*2x; Max/100x removed), row stops at both ends.
 
 ## Plan (owner's order)
 1. **PC settings screen** — DONE (alpha 3). Rows at the bottom of Options, PC build only, stored in `WallysJourney.cfg`.

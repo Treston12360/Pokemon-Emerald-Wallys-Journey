@@ -1098,7 +1098,7 @@ static const u8 sPcRowSetting[] =
 };
 #define PAD_MAX (PAD_BUTTON_COUNT - 1)
 static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static const u8 sPcRowMax[] = {6, 1, 1, 10, 3, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1};
+static const u8 sPcRowMax[] = {6, 1, 1, 10, FF_SPEED_COUNT - 1, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1};
 
 static void PcOption_ProcessInput(u8 item)
 {
@@ -1106,8 +1106,8 @@ static void PcOption_ProcessInput(u8 item)
     s32 value = Platform_GetSetting(sPcRowSetting[row]);
     s32 old = value;
 
-    // Volume stops at 0 and 10; the other rows wrap around.
-    bool32 wrap = (item != MENUITEM_PC_VOLUME);
+    // Volume (0..10) and fast forward speed (2x..20x) stop at their ends; the other rows wrap around.
+    bool32 wrap = (item != MENUITEM_PC_VOLUME && item != MENUITEM_PC_FFSPEED);
     if (JOY_REPEAT(DPAD_RIGHT))
         value = (value < sPcRowMax[row]) ? value + 1 : (wrap ? sPcRowMin[row] : value);
     else if (JOY_REPEAT(DPAD_LEFT))
@@ -1123,7 +1123,6 @@ static void PcOption_ProcessInput(u8 item)
 
 static void PcOption_Draw(u8 item)
 {
-    static const u8 sFfNames[][4] = {_("2x"), _("3x"), _("5x"), _("Max")};
     static const u8 sPadNames[PAD_BUTTON_COUNT][6] = {
         [PAD_BUTTON_A] = _("A"), [PAD_BUTTON_B] = _("B"), [PAD_BUTTON_X] = _("X"), [PAD_BUTTON_Y] = _("Y"),
         [PAD_BUTTON_LB] = _("LB"), [PAD_BUTTON_RB] = _("RB"), [PAD_BUTTON_LT] = _("LT"), [PAD_BUTTON_RT] = _("RT"),
@@ -1154,8 +1153,10 @@ static void PcOption_Draw(u8 item)
     case MENUITEM_PC_VOLUME:
         ConvertIntToDecimalStringN(end, value, STR_CONV_MODE_LEFT_ALIGN, 2);
         break;
-    case MENUITEM_PC_FFSPEED:
-        StringCopy(end, sFfNames[value % 4]);
+    case MENUITEM_PC_FFSPEED: // 2x, 4x ... 20x
+        end = ConvertIntToDecimalStringN(end, 2 * (value % FF_SPEED_COUNT + 1), STR_CONV_MODE_LEFT_ALIGN, 2);
+        *end++ = CHAR_x;
+        *end = EOS;
         break;
     case MENUITEM_PC_FFTOGGLE:
         StringCopy(end, value ? COMPOUND_STRING("Toggle") : COMPOUND_STRING("Hold"));
