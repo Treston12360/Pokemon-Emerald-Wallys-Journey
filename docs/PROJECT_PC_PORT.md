@@ -1,10 +1,9 @@
 # Project: Wally's Journey as a PC program (.exe)
 
 **Branch:** `deluxe` (PC work started on `pc-port`) (based on 0.18.19). Read this whole file before working on the PC version.
-**Status (2026-11-11):** alpha 4 (wide view) sent to the owner as `WallysJourney.exe`. Steps 1 (PC settings) and
-2 (widescreen) are done. **Next: step 3 (smooth high frame rate).** The alpha 4 .exe could not be run before sending
-(no Wine in that container), so the owner's first report on it matters: if it does not start, look at the
-Windows-only build steps under "Build environment" first.
+**Status (2026-11-11):** alpha 4b (wide view) sent to the owner as `WallysJourney.exe`, tested under Wine 10
+(Kron4ek WoW64 build from GitHub releases + Xvfb). Steps 1 (PC settings) and 2 (widescreen) are done.
+**Next: step 3 (smooth high frame rate).**
 
 ## What the owner asked for (2026-11-11, in his words where possible)
 - "a .exe file at the end of it with all those cool features that normally come with recomps":
@@ -83,6 +82,12 @@ Windows-only build steps under "Build environment" first.
   with `objcopy -O pe-i386` and `tools/pc/coff_fixrel.py` repairs their relocation types. clang has no
   `-mno-align-double`, so `include/gba/types.h` keeps u64/s64 4-byte aligned for this build (save struct sizes
   checked identical to the Linux build). XInput now links `xinput9_1_0` (ships with Windows) instead of `xinput1_3`.
+  Use **mingw-w64 v12.0.0** with LLVM 18: mingw-w64 master's msvcrt.def uses `==` aliases that LLVM 18's dlltool
+  turns into self-loops (`atexit` jumped to itself, so alpha 4 hung before opening its window).
+  `coff_fixrel.py` rebuilds every relocation from the ELF one (objcopy dropped section symbols, so pointers
+  into the same section, e.g. the map group tables, were wrong and loading a save crashed).
+- Wine for testing: `curl -L` the Kron4ek/Wine-Builds `wine-10.0-amd64-wow64.tar.xz` release (runs 32-bit .exe with
+  no 32-bit Linux libraries), `WINEDLLOVERRIDES="mscoree,mshtml="` to skip Mono/Gecko, run under `xvfb-run`.
 - If a machine has gcc-multilib + 32-bit SDL2 and mingw-w64 + Wine, the original commands still work.
 
 ## Rules (same as the main project, plus PC ones)
@@ -144,9 +149,15 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
 - Tested so far: intro, new game (Birch, naming), title, main menu, friend's save, overworld, start menu,
   party menu, Options incl. PC rows, wild battle (moves, EXP, back to map), saving, PC save back into mGBA.
 - Not tested yet: real-time sound/controllers on a real Windows PC (owner), trainer/gym battles, long play.
+- Random-input hunts from a Rustboro save (3000 presses, seeds 1-5, 7, 11-13) found three PC-only crashes, all
+  in every earlier alpha, now guarded behind PORTABLE: Pokédex list asks for dex number 0, HGSS dex sprite id 0xFFFF,
+  window id 255 when saving. Watch out: `src/window.c` has asserts that print `__LINE__`, so adding lines above
+  line ~60 there changes the GBA ROM.
 
 ## Owner feedback log
 - alpha 1: crashed at Birch's "This world is widely inhabited by..." (fixed alpha 2); Space made it do
   "weird stuff" (fast-forward stutter, fixed alpha 2).
 - step 2 test pictures: owner said "Do whatever you think will look the best and download whatever tools you think
   is necessary to finish". Alpha 4 (wide view) sent with 9 screenshots from the real PC build.
+- alpha 4: "it's open on my pc but not showing anywhere other than the task manager" (CRT atexit loop, fixed in 4b
+  together with the map pointer and the three crashes above).

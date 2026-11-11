@@ -1,13 +1,5 @@
 #include "global.h"
 #include "window.h"
-
-// PC only: a window id of WINDOW_NONE (255) indexes far past gWindows. The GBA reads/writes junk
-// there and carries on; on PC it crashes. Ignore such calls on PC (the GBA build is unchanged).
-#ifdef PORTABLE
-#define WJPC_WINDOW_GUARD(id, ret) if ((id) >= WINDOWS_MAX) ret
-#else
-#define WJPC_WINDOW_GUARD(id, ret)
-#endif
 #include "malloc.h"
 #include "bg.h"
 #include "blit.h"
@@ -250,6 +242,14 @@ int AddWindowWithoutTileMap(const struct WindowTemplate *template)
 
     return win;
 }
+
+// PC only: a window id of WINDOW_NONE (255) indexes far past gWindows. The GBA reads/writes junk
+// there and carries on; on PC it crashes. Ignore such calls on PC (the GBA build is unchanged).
+#ifdef PORTABLE
+#define WJPC_WINDOW_GUARD(id, ret) if ((id) >= WINDOWS_MAX) ret
+#else
+#define WJPC_WINDOW_GUARD(id, ret)
+#endif
 
 void RemoveWindow(u32 windowId)
 {
