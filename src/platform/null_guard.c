@@ -3,10 +3,10 @@
 // On the GBA, reading through a NULL pointer just reads the BIOS, so the game
 // has many harmless bugs where a callback runs one frame after its data was
 // freed (VBlank callbacks, sprite callbacks, tasks). On PC those reads crash.
-// Calls made through PcGuard_* catch a fault on the first 64 KB of memory (a
-// read or write through a NULL struct pointer), skip the rest of that one
-// callback, and log it once so it can be fixed properly. Any other crash is
-// left alone.
+// Calls made through PcGuard_* catch any bad memory access (a read or write
+// through a NULL or junk pointer, as the GBA reads junk there), skip the rest of
+// that one callback, and log it once (also to WallysJourney_errors.txt) so it can
+// be fixed properly. On Windows, any other crash writes WallysJourney_crash.txt.
 #include <stdio.h>
 #include <stdint.h>
 #ifdef _WIN32
@@ -14,6 +14,7 @@
 #endif
 #include "global.h"
 #include "platform/null_guard.h"
+#include "main.h"
 
 #ifdef _WIN32
 #else
@@ -24,9 +25,11 @@
 #include <string.h>
 #endif
 
-#define LOW_ADDR_LIMIT 0x10000
-
+// Any bad memory access (or integer divide by zero) inside a guarded callback is skipped:
+// the GBA never faults on a read or write, it reads junk / ignores the write and carries on.
 static __thread void **tGuardBuf;
+static __thread uintptr_t tFaultAddr;
+static __thread unsigned tFaultCode;
 
 #define MAX_LOGGED 64
 static const void *sLogged[MAX_LOGGED];
@@ -35,32 +38,101 @@ static int sLoggedCount;
 static void LogOnce(const void *fn)
 {
     int i;
+    FILE *f;
     for (i = 0; i < sLoggedCount; i++)
         if (sLogged[i] == fn)
             return;
     if (sLoggedCount < MAX_LOGGED)
         sLogged[sLoggedCount++] = fn;
-    fprintf(stderr, "WJPC: skipped a NULL read in callback %p (harmless on GBA)\n", fn);
+    fprintf(stderr, "WJPC: skipped a bad memory access in callback %p (code %x, address %p; harmless on GBA)\n",
+            fn, tFaultCode, (void *)tFaultAddr);
     fflush(stderr);
+    // Also keep a file next to the game so the owner can send it.
+    f = fopen("WallysJourney_errors.txt", "a");
+    if (f != NULL)
+    {
+#ifdef _WIN32
+        fprintf(f, "skipped: callback %p (exe+%lx), code %x, address %p, callback2 exe+%lx\n", fn,
+                (unsigned long)((uintptr_t)fn - (uintptr_t)GetModuleHandleA(NULL)), tFaultCode, (void *)tFaultAddr,
+                (unsigned long)((uintptr_t)gMain.callback2 - (uintptr_t)GetModuleHandleA(NULL)));
+#else
+        fprintf(f, "skipped: callback %p, code %x, address %p, callback2 %p\n", fn, tFaultCode,
+                (void *)tFaultAddr, (void *)gMain.callback2);
+#endif
+        fclose(f);
+    }
 }
 
 #ifdef _WIN32
 static LONG CALLBACK Handler(EXCEPTION_POINTERS *info)
 {
-    if (info->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION
-     && tGuardBuf != NULL
-     && info->ExceptionRecord->NumberParameters >= 2
-     && info->ExceptionRecord->ExceptionInformation[1] < LOW_ADDR_LIMIT)
+    DWORD code = info->ExceptionRecord->ExceptionCode;
+    if (tGuardBuf != NULL
+     && (code == EXCEPTION_ACCESS_VIOLATION || code == EXCEPTION_INT_DIVIDE_BY_ZERO
+      || code == EXCEPTION_INT_OVERFLOW || code == EXCEPTION_ILLEGAL_INSTRUCTION
+      || code == EXCEPTION_ARRAY_BOUNDS_EXCEEDED || code == EXCEPTION_IN_PAGE_ERROR))
     {
+        tFaultCode = code;
+        tFaultAddr = info->ExceptionRecord->NumberParameters >= 2
+                   ? info->ExceptionRecord->ExceptionInformation[1]
+                   : (uintptr_t)info->ExceptionRecord->ExceptionAddress;
         __builtin_longjmp(tGuardBuf, 1);
     }
     return EXCEPTION_CONTINUE_SEARCH;
 }
+
+// A crash nothing caught: write WallysJourney_crash.txt (so the owner can send it) and say so.
+static LONG WINAPI CrashReport(EXCEPTION_POINTERS *info)
+{
+    uintptr_t base = (uintptr_t)GetModuleHandleA(NULL);
+    uintptr_t at = (uintptr_t)info->ExceptionRecord->ExceptionAddress;
+    FILE *f = fopen("WallysJourney_crash.txt", "w");
+    if (f != NULL)
+    {
+        fprintf(f, "Wally's Journey PC crash report\n");
+        fprintf(f, "code %lx at %p (exe+%lx)\n", (unsigned long)info->ExceptionRecord->ExceptionCode,
+                (void *)at, (unsigned long)(at - base));
+        if (info->ExceptionRecord->NumberParameters >= 2)
+            fprintf(f, "access %lu to %p\n", (unsigned long)info->ExceptionRecord->ExceptionInformation[0],
+                    (void *)info->ExceptionRecord->ExceptionInformation[1]);
+        fprintf(f, "callback1 exe+%lx callback2 exe+%lx\n",
+                (unsigned long)((uintptr_t)gMain.callback1 - base), (unsigned long)((uintptr_t)gMain.callback2 - base));
+#ifdef _X86_
+        {
+            // Return addresses on the stack, for finding the caller.
+            uintptr_t *sp = (uintptr_t *)info->ContextRecord->Esp;
+            int i, n = 0;
+            fprintf(f, "eip exe+%lx ebp %lx\nstack:", (unsigned long)(info->ContextRecord->Eip - base),
+                    (unsigned long)info->ContextRecord->Ebp);
+            for (i = 0; i < 2048 && n < 40; i++)
+            {
+                MEMORY_BASIC_INFORMATION mbi;
+                if (i % 1024 == 0 && VirtualQuery(sp + i, &mbi, sizeof(mbi)) == 0)
+                    break;
+                if (sp[i] > base && sp[i] < base + 0x2000000)
+                {
+                    fprintf(f, " exe+%lx", (unsigned long)(sp[i] - base));
+                    n++;
+                }
+            }
+            fprintf(f, "\n");
+        }
+#endif
+        fclose(f);
+    }
+    MessageBoxA(NULL, "Wally's Journey crashed.\n\nA file called WallysJourney_crash.txt was saved next to the game. "
+                      "Please send it so the crash can be fixed.", "Wally's Journey", MB_OK | MB_ICONERROR);
+    return EXCEPTION_EXECUTE_HANDLER;
+}
 #else
 static void Handler(int sig, siginfo_t *si, void *ctx)
 {
-    if (tGuardBuf != NULL && (uintptr_t)si->si_addr < LOW_ADDR_LIMIT)
+    if (tGuardBuf != NULL)
+    {
+        tFaultCode = sig;
+        tFaultAddr = (uintptr_t)si->si_addr;
         __builtin_longjmp(tGuardBuf, 1);
+    }
     // Not ours: report where, then crash normally.
     {
         fprintf(stderr, "WJPC: crash, bad address %p\n", si->si_addr);
@@ -78,6 +150,7 @@ void PcGuard_Init(void)
 {
 #ifdef _WIN32
     AddVectoredExceptionHandler(1, Handler);
+    SetUnhandledExceptionFilter(CrashReport);
 #else
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
@@ -85,6 +158,7 @@ void PcGuard_Init(void)
     sa.sa_flags = SA_SIGINFO | SA_NODEFER;
     sigaction(SIGSEGV, &sa, NULL);
     sigaction(SIGBUS, &sa, NULL);
+    sigaction(SIGFPE, &sa, NULL);
 #endif
 }
 

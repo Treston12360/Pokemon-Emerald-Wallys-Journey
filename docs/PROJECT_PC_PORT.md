@@ -1,7 +1,7 @@
 # Project: Wally's Journey as a PC program (.exe)
 
 **Branch:** `deluxe` (PC work started on `pc-port`) (based on 0.18.19). Read this whole file before working on the PC version.
-**Status (2026-11-11):** alpha 4b (wide view) sent to the owner as `WallysJourney.exe`, tested under Wine 10
+**Status (2026-11-11):** alpha 4c (wide view) sent to the owner as `WallysJourney.exe`, tested under Wine 10
 (Kron4ek WoW64 build from GitHub releases + Xvfb). Steps 1 (PC settings) and 2 (widescreen) are done.
 **Next: step 3 (smooth high frame rate).**
 
@@ -161,3 +161,10 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   is necessary to finish". Alpha 4 (wide view) sent with 9 screenshots from the real PC build.
 - alpha 4: "it's open on my pc but not showing anywhere other than the task manager" (CRT atexit loop, fixed in 4b
   together with the map pointer and the three crashes above).
+- alpha 4b: "It crashes once I hit to play. Speakers and controller work". Could not reproduce under Wine
+  (real-time run with key presses from a helper .exe, SDL disk audio, from a save, new game, fullscreen and 6x
+  configs). Alpha 4c: `null_guard.c` now skips ANY bad memory access / divide by zero inside guarded calls (was:
+  only the first 64 KB), main callbacks are guarded too (`WJPC_CALL_MAIN_CALLBACK` in main.h), the wide view
+  falls back to the normal picture if it faults, skips are logged to `WallysJourney_errors.txt`, and an
+  unhandled crash on Windows writes `WallysJourney_crash.txt` (exe-relative addresses: look them up with
+  `i686-w64-mingw32-nm -n` on the unstripped exe from the same commit) and shows a message box.

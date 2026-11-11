@@ -1244,12 +1244,25 @@ u16 Platform_GetKeyInput(void)
     return keyboardKeys;
 }
 
+static uint16_t *sVDrawImage;
+static void DrawFrameGuarded(void)
+{
+    WideView_DrawFrame(sVDrawImage, &sFrameInfo);
+}
+
 void VDraw(SDL_Texture *texture)
 {
     static uint16_t gbaImage[WIDE_VIEW_MAX_W * WIDE_VIEW_MAX_H];
     static uint32_t image[WIDE_VIEW_MAX_W * WIDE_VIEW_MAX_H];
 
-    WideView_DrawFrame(gbaImage, &sFrameInfo);
+    sVDrawImage = gbaImage;
+    if (!PcGuard_Call0(DrawFrameGuarded))
+    {
+        // The wide view hit a bad memory access: fall back to the normal picture for good.
+        WideView_SetEnabled(FALSE);
+        sVDrawImage = gbaImage;
+        PcGuard_Call0(DrawFrameGuarded);
+    }
     for (int i = 0; i < sFrameInfo.width * sFrameInfo.height; i++)
     {
         uint16_t color = gbaImage[i];

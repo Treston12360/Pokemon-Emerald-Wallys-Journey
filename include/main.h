@@ -81,4 +81,12 @@ u16 GetGeneratedTrainerIdLower(void);
 #define WJPC_WIRELESS_VBLANK_WAIT()
 #endif
 
+// The main callbacks: on PC a bad memory access inside them is skipped like the GBA would
+// (see src/platform/null_guard.c).
+#ifdef PORTABLE
+#define WJPC_CALL_MAIN_CALLBACK(cb) PcGuard_Call0(cb)
+#else
+#define WJPC_CALL_MAIN_CALLBACK(cb) cb()
+#endif
+
 #endif // GUARD_MAIN_H

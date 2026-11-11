@@ -201,10 +201,10 @@ static void InitMainCallbacks(void)
 static void CallCallbacks(void)
 {
     if (gMain.callback1)
-        gMain.callback1();
+        WJPC_CALL_MAIN_CALLBACK(gMain.callback1);
 
     if (gMain.callback2)
-        gMain.callback2();
+        WJPC_CALL_MAIN_CALLBACK(gMain.callback2);
 }
 
 void SetMainCallback2(MainCallback callback)
