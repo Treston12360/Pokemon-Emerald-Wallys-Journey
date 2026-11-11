@@ -1,0 +1,113 @@
+# PC build of Wally's Journey (SDL2, 32-bit).
+# Run the normal GBA build first (make release) so every generated file exists.
+#
+#   make -f Makefile.pc            -> Linux 32-bit  (wallys-journey)
+#   make -f Makefile.pc WIN=1      -> Windows 32-bit (WallysJourney.exe)
+
+WIN ?= 0
+DINFO ?= 0
+
+SHELL := bash -o pipefail
+
+ifeq ($(WIN),1)
+PREFIX  := i686-w64-mingw32-
+OBJ_DIR := build/pc-win32
+TARGET  := WallysJourney.exe
+SDL_DIR ?= build/pc-deps/SDL2/i686-w64-mingw32
+else
+PREFIX  :=
+OBJ_DIR := build/pc-linux32
+TARGET  := wallys-journey
+endif
+
+ifeq ($(WIN),1)
+# PE/COFF has no mergeable string sections: drop the compound-string section hack.
+SECTION_SED := 's/__attribute__\(\(section\("\.rodata\.compound_string[^)]*\)\)\)//g'
+else
+SECTION_SED := 's/%progbits,([0-9]+) @/@progbits,\1 \#/g'
+endif
+
+CC      := $(PREFIX)gcc
+AS      := $(PREFIX)as
+OBJCOPY := $(PREFIX)objcopy
+WINDRES := $(PREFIX)windres
+PREPROC := tools/preproc/preproc
+ASMCONV := python3 tools/pc/asmconv.py
+ASSETS  := build/assets
+
+DEFS := -DPORTABLE -DNONMATCHING -DUBFIX -DMODERN=1 -DTESTING=0 -DEMERALD -DRELEASE \
+        -DPLATFORM_SDL2 -DRENDERER_EASY_DRAW
+ifeq ($(WIN),0)
+DEFS += -DNATIVE_LINUX -DLINUX64=0
+SDL_CFLAGS := -I/usr/include/SDL2 -idirafter /usr/include/x86_64-linux-gnu -D_REENTRANT
+SDL_LIBS   := /usr/lib/i386-linux-gnu/libSDL2-2.0.so.0 /usr/lib/i386-linux-gnu/libSDL2_image-2.0.so.0 -lm
+else
+DEFS += -DWINDOWS32=1
+SDL_CFLAGS := -I$(SDL_DIR)/include -I$(SDL_DIR)/include/SDL2 -idirafter tools/pc/win_include -mno-ms-bitfields
+SDL_LIBS   := -L$(SDL_DIR)/lib -lmingw32 -lSDL2main -lSDL2_image -lSDL2 -lwinmm -limm32 -lversion -lsetupapi -lole32 -loleaut32 -lcomdlg32 -lxinput -mwindows -static-libgcc
+endif
+
+CPPFLAGS := -iquote include -Wno-trigraphs -std=gnu17 $(DEFS)
+CFLAGS   := -m32 -std=gnu17 -funsigned-char -fno-strict-aliasing -fwrapv -fcommon \
+            -w -fno-pie $(SDL_CFLAGS)
+ifeq ($(DINFO),1)
+CFLAGS += -g -O0
+else
+CFLAGS += -O2 -g
+endif
+ASFLAGS := --32 -I include -I . -I sound --defsym PORTABLE_ASM=1
+ifeq ($(WIN),1)
+ASFLAGS += --defsym PORTABLE_WIN=1
+endif
+
+# ---- sources -------------------------------------------------------------
+GBA_ONLY_C := src/platform/win32.c src/platform/gba_fast_draw.c src/platform/nostd.c src/multiboot.c
+C_SRCS := $(filter-out $(GBA_ONLY_C), $(wildcard src/*.c src/battle_transition/*.c src/platform/*.c))
+C_OBJS := $(patsubst src/%.c,$(OBJ_DIR)/src/%.o,$(C_SRCS))
+
+DATA_SRCS := $(wildcard data/*.s)
+DATA_OBJS := $(patsubst data/%.s,$(OBJ_DIR)/data/%.o,$(DATA_SRCS))
+
+MID_SRCS := $(wildcard sound/songs/midi/*.s)
+MID_OBJS := $(patsubst sound/songs/midi/%.s,$(OBJ_DIR)/midi/%.o,$(MID_SRCS))
+
+OBJS := $(C_OBJS) $(DATA_OBJS) $(MID_OBJS)
+ifeq ($(WIN),1)
+OBJS += $(OBJ_DIR)/icon.o
+# 32-bit Windows C symbols carry a leading underscore; give asm data objects the same.
+FIX_US = $(OBJCOPY) --prefix-symbol _ $@
+else
+FIX_US = true
+endif
+
+$(shell mkdir -p $(sort $(dir $(OBJS))))
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) -m32 $(OBJS) $(SDL_LIBS) -o $@
+
+$(OBJ_DIR)/src/%.o: src/%.c
+	@$(CC) -E $(CPPFLAGS) $(SDL_CFLAGS) -m32 -MMD -MF $(OBJ_DIR)/src/$*.d -MT $@ $< -o $(OBJ_DIR)/src/$*.i
+	@$(PREPROC) -i -g $(ASSETS) $< charmap.txt < $(OBJ_DIR)/src/$*.i | sed -E $(SECTION_SED) | python3 tools/pc/align4.py > $(OBJ_DIR)/src/$*.pp.i
+	@rm -f $(OBJ_DIR)/src/$*.i
+	$(CC) $(CFLAGS) -x cpp-output -c $(OBJ_DIR)/src/$*.pp.i -o $@
+
+$(OBJ_DIR)/data/%.o: data/%.s
+	$(PREPROC) -s $< charmap.txt | $(CC) -E -x assembler-with-cpp $(CPPFLAGS) -I include - | $(PREPROC) -ie $< charmap.txt | $(ASMCONV) | $(AS) $(ASFLAGS) -o $@ 2>/dev/null
+	@$(FIX_US)
+
+$(OBJ_DIR)/midi/%.o: sound/songs/midi/%.s
+	$(ASMCONV) < $< | $(AS) $(ASFLAGS) -o $@
+	@$(FIX_US)
+
+$(OBJ_DIR)/icon.o: resources/pokemon_emerald.rc resources/pokemon_emerald.ico
+	$(WINDRES) $< -O coff -o $@
+
+-include $(C_OBJS:.o=.d)
+
+clean:
+	rm -rf $(OBJ_DIR) $(TARGET)
+
+.PHONY: all clean
+.SECONDARY:

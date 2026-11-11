@@ -1,3 +1,4 @@
+#ifndef PORTABLE // PC build uses src/platform/agb_flash_pc.c
 #include "gba/gba.h"
 #include "gba/flash_internal.h"
 
@@ -275,3 +276,5 @@ u32 ProgramFlashSectorAndVerify(u16 sectorNum, u8 *src)
 
     return result;
 }
+
+#endif // PORTABLE

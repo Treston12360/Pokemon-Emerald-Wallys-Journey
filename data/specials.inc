@@ -5,7 +5,7 @@
 	.if \requests_effects == 0
 		.4byte \ptr
 	.else
-		.4byte \ptr + ROM_SIZE
+		effect_ptr \ptr
 	.endif
 .endif
 .set SPECIAL_WAITSTATE_\ptr, \waitstate

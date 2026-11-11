@@ -1,3 +1,4 @@
+#ifndef PORTABLE // PC build uses src/platform/m4a_tables_pc.c
 #include "gba/m4a_internal.h"
 
 // Some of these functions have different signatures, so we need to make this
@@ -305,3 +306,5 @@ const XcmdFunc gXcmdTable[] =
     ply_xwait,
     ply_xcmd_0D,
 };
+
+#endif // PORTABLE

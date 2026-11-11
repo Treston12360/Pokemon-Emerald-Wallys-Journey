@@ -1,3 +1,4 @@
+#ifndef PORTABLE // PC build uses src/platform/m4a_pc.c
 #include "global.h"
 #include "gba/m4a_internal.h"
 #include "global.h"
@@ -1654,3 +1655,5 @@ void SetPokemonCryPriority(u8 val)
 {
     gPokemonCrySong.priority = val;
 }
+
+#endif // PORTABLE

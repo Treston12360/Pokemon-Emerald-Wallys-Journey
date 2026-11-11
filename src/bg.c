@@ -482,6 +482,13 @@ bool32 IsDma3ManagerBusyWithBgCopy(void)
 {
     int i;
 
+#ifdef PORTABLE
+    // On the GBA the VBlank interrupt drains the DMA queue even while code
+    // spins in a loop waiting for it. The PC build only runs VBlank between
+    // frames, so drain it here instead.
+    ProcessDma3Requests();
+#endif
+
     for (i = 0; i < 0x80; i++)
     {
         u8 div = i / 0x20;

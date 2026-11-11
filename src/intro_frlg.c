@@ -972,6 +972,7 @@ bool8 SetUpCopyrightScreenFrlg(void)
             gMain.state++;
             if (sGcmb.gcmb_field_2 != 0)
             {
+#ifndef PORTABLE
                 if (sGcmb.gcmb_field_2 == 2)
                 {
                     if (*(u32 *)(EWRAM_START + 0xAC) == COLOSSEUM_GAME_CODE)
@@ -981,6 +982,7 @@ bool8 SetUpCopyrightScreenFrlg(void)
                     }
                     GameCubeMultiBoot_ExecuteProgram(&sGcmb);
                 }
+#endif
             }
             else
             {

@@ -32,6 +32,24 @@
 	.set ROM,      0x8000000
 	.set ROM_SIZE, 0x2000000
 
+	@ A pointer to a function that calls Script_RequestEffects. The GBA build
+	@ tags it by pointing into ROM mirror 1; the PC build can't tag pointers,
+	@ so it keeps a separate list of them instead (see script.c).
+	.macro effect_ptr ptr:req
+	.ifdef PORTABLE_ASM
+	.4byte \ptr
+	.ifdef PORTABLE_WIN
+	.pushsection .rdata$wj_effect_b,"dr"
+	.else
+	.pushsection wj_effect_funcs,"a"
+	.endif
+	.4byte \ptr
+	.popsection
+	.else
+	.4byte \ptr + ROM_SIZE
+	.endif
+	.endm
+
 	.set SOUND_INFO_PTR, 0x3007FF0
 	.set INTR_CHECK,     0x3007FF8
 	.set INTR_VECTOR,    0x3007FFC

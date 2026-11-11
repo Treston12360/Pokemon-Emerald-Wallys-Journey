@@ -1,4 +1,5 @@
 #include "global.h"
+#include "platform.h"
 #include "crt0.h"
 #include "malloc.h"
 #include "link.h"
@@ -100,7 +101,9 @@ void AgbMain(void)
     InitIntrHandlers();
     m4aSoundInit();
     EnableVCountIntrAtLine150();
+#ifndef PORTABLE
     InitRFU();
+#endif
     RtcInit();
     CheckForFlashMemory();
     InitMainCallbacks();
@@ -115,8 +118,10 @@ void AgbMain(void)
 
     gSoftResetDisabled = FALSE;
 
+#ifndef PORTABLE
     if (gFlashMemoryPresent != TRUE)
         SetMainCallback2(CB2_FlashNotDetectedScreen);
+#endif
 
     gLinkTransferringData = FALSE;
 
@@ -268,7 +273,11 @@ void InitKeys(void)
 
 static void ReadKeys(void)
 {
+#ifndef PORTABLE
     u16 keyInput = REG_KEYINPUT ^ KEYS_MASK;
+#else
+    u16 keyInput = Platform_GetKeyInput();
+#endif
     gMain.newKeysRaw = keyInput & ~gMain.heldKeysRaw;
     gMain.newKeys = gMain.newKeysRaw;
     gMain.newAndRepeatedKeys = gMain.newKeysRaw;

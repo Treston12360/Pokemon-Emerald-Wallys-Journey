@@ -615,8 +615,33 @@ struct ScriptEffectContext *gScriptEffectContext = NULL;
 static bool32 Script_IsEffectInstrumentedCommand(ScrCmdFunc func)
 {
     // In ROM mirror 1.
-    return (((uintptr_t)func) & 0xE000000) == 0xA000000;
+    return SCRIPT_FUNC_IS_INSTRUMENTED(func);
 }
+
+#ifdef PORTABLE
+#ifdef _WIN32
+__attribute__((section(".rdata$wj_effect_a"))) static const u32 sEffectFuncsStart[1] = {0};
+__attribute__((section(".rdata$wj_effect_c"))) static const u32 sEffectFuncsStop[1] = {0};
+#define EFFECT_FUNCS_BEGIN (sEffectFuncsStart + 1)
+#define EFFECT_FUNCS_END   (sEffectFuncsStop)
+#else
+extern const u32 __start_wj_effect_funcs[];
+extern const u32 __stop_wj_effect_funcs[];
+#define EFFECT_FUNCS_BEGIN __start_wj_effect_funcs
+#define EFFECT_FUNCS_END   __stop_wj_effect_funcs
+#endif
+
+bool32 Script_PcIsInstrumented(const void *func)
+{
+    const u32 *p;
+    for (p = EFFECT_FUNCS_BEGIN; p < EFFECT_FUNCS_END; p++)
+    {
+        if (*p == (u32)(uintptr_t)func)
+            return TRUE;
+    }
+    return FALSE;
+}
+#endif
 
 /* 'setjmp' and 'longjmp' cause link errors, so we use
  * '__builtin_setjmp' and '__builtin_longjmp' instead.
@@ -719,8 +744,13 @@ bool32 Script_MatchesCallNative(const u8 *script, void *funcPtr, bool32 requestE
         return FALSE;
     u32 callnativeFunc = (((((script[4] << 8) + script[3]) << 8) + script[2]) << 8) + script[1];
     u32 targetFunc = (u32)funcPtr;
+#ifdef PORTABLE
+    if (requestEffects && !Script_PcIsInstrumented(funcPtr))
+        return FALSE;
+#else
     if (requestEffects)
         targetFunc |= 0xA000000;
+#endif
     if (callnativeFunc == targetFunc)
         return TRUE;
     return FALSE;

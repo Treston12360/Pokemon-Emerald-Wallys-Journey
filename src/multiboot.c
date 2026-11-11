@@ -436,6 +436,9 @@ static int MultiBootHandShake(struct MultiBootParam *mp)
 #undef must_data
 }
 
+#ifdef PORTABLE
+static void MultiBootWaitCycles(u32 cycles) { }
+#else
 NAKED
 static void MultiBootWaitCycles(u32 cycles)
 {
@@ -454,6 +457,7 @@ MultiBootWaitCyclesLoop:\n\
     bgt  MultiBootWaitCyclesLoop\n\
     bx   lr\n");
 }
+#endif
 
 static void MultiBootWaitSendDone(void)
 {

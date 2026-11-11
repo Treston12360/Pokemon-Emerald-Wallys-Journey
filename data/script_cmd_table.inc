@@ -8,7 +8,7 @@
 	.if \requests_effects == 0
 	.4byte \value
 	.else
-	.4byte \value + ROM_SIZE
+	effect_ptr \value
 	.endif
 	.else
 	enum \constant

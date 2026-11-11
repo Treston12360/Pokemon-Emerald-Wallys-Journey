@@ -275,7 +275,7 @@
 	.if \requests_effects == 0
 	.4byte \func
 	.else
-	.4byte \func + ROM_SIZE
+	effect_ptr \func
 	.endif
 	.if \waitstate
 	waitstate implicit=1
@@ -288,7 +288,7 @@
 	.if \requests_effects == 0
 	.4byte \func
 	.else
-	.4byte \func + ROM_SIZE
+	effect_ptr \func
 	.endif
 	.endm
 

@@ -3,6 +3,14 @@
 
 #include <string.h>
 #include <limits.h>
+#ifdef PORTABLE
+#include <stdio.h>
+#ifndef NO_STD_LIB_ENABLED
+#define DBGPRINTF(...) printf(__VA_ARGS__)
+#else
+#define DBGPRINTF(...)
+#endif
+#endif
 #include "config/general.h" // we need to define config before gba headers as print stuff needs the functions nulled before defines.
 #include "gba/gba.h"
 #include "assertf.h"
@@ -32,7 +40,11 @@
 
 // to help in decompiling
 #define asm_unified(x) asm(".syntax unified\n" x "\n.syntax divided")
+#ifdef PORTABLE
+#define NAKED
+#else
 #define NAKED __attribute__((naked))
+#endif
 
 #if MODERN
 #define asm __asm__
@@ -96,6 +108,23 @@
 // the wrap is implemented using a bit mask: (a + 1) & (n - 1), which is slightly faster.
 // This is intended to be used when 'n' is known at compile time.
 #define INCREMENT_OR_WRAP(a, n) ((IS_POW_OF_TWO(n)) ? (((a) + 1) & ((n) - 1)) : (((a) + 1) >= (n) ? 0 : ((a) + 1)))
+
+// 32-bit shifts by 32 or more give 0 on the GBA (ARM) but wrap on x86.
+// Use these where the game relies on the ARM result.
+#ifdef PORTABLE
+#define ARM_LSL32(x, n) ((u32)(n) >= 32 ? 0u : (u32)(x) << (n))
+#define ARM_LSR32(x, n) ((u32)(n) >= 32 ? 0u : (u32)(x) >> (n))
+#else
+#define ARM_LSL32(x, n) ((x) << (n))
+#define ARM_LSR32(x, n) ((x) >> (n))
+#endif
+
+// Used in cases where modulo by 0 can occur in the retail version.
+#ifdef UBFIX
+#define SAFE_MOD(a, b) ((b) ? (a) % (b) : 0)
+#else
+#define SAFE_MOD(a, b) ((a) % (b))
+#endif
 
 // Extracts the upper 16 bits of a 32-bit number
 #define HIHALF(n) (((n) & 0xFFFF0000) >> 16)

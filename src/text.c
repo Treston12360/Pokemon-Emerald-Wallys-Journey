@@ -821,8 +821,8 @@ static u32 OffsetCurrGlyph(u32 shiftWidth)
     {
         for (u32 i = 0; i < 8; i++)
         {
-            gCurGlyph.gfxBufferTop[i] = gCurGlyph.gfxBufferTop[i] >> (4 * shiftWidth);
-            gCurGlyph.gfxBufferBottom[i] = gCurGlyph.gfxBufferBottom[i] >> (4 * shiftWidth);
+            gCurGlyph.gfxBufferTop[i] = ARM_LSR32(gCurGlyph.gfxBufferTop[i], 4 * shiftWidth);
+            gCurGlyph.gfxBufferBottom[i] = ARM_LSR32(gCurGlyph.gfxBufferBottom[i], 4 * shiftWidth);
         }
     }
     else
@@ -854,7 +854,7 @@ inline static void GLYPH_COPY(u8 *windowTiles, u32 widthOffset, u32 x0, u32 y0, 
     if (width <= 0)
         return;
 
-    u32 widthMask = (1 << (width * 4)) - 1;
+    u32 widthMask = ARM_LSL32(1, width * 4) - 1;
 
     u32 shift0 = (x0 % 8) * 4, shift8 = 32 - shift0;
 
@@ -871,8 +871,8 @@ inline static void GLYPH_COPY(u8 *windowTiles, u32 widthOffset, u32 x0, u32 y0, 
         mask = mask & 0x11111111;
         mask = mask * 0xF;
 
-        u32 pixels0 = pixels << shift0, pixels8 = pixels >> shift8;
-        u32 mask0 = mask << shift0, mask8 = mask >> shift8;
+        u32 pixels0 = pixels << shift0, pixels8 = ARM_LSR32(pixels, shift8);
+        u32 mask0 = mask << shift0, mask8 = ARM_LSR32(mask, shift8);
 
         u32 *alignedWindowTiles = (u32 *)((u8 *)alignedWindowTilesX + ((y / 8) * widthOffset) + ((y % 8) * 4));
 

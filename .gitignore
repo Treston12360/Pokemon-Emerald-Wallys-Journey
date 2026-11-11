@@ -68,3 +68,7 @@ __pycache__
 .map_version
 .porydaw/
 tools/wj_testfw/orig/
+
+# PC build
+/wallys-journey
+/WallysJourney.exe

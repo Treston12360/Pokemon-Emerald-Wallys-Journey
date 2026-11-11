@@ -190,26 +190,35 @@ static inline bool32 Script_IsAnalyzingEffects(void)
             Script_RequestWriteVar_Internal(varId); \
     })
 
+// GBA: instrumented function pointers are tagged by pointing into ROM mirror 1.
+// PC: they are listed in a table built by the effect_ptr asm macro.
+#ifdef PORTABLE
+bool32 Script_PcIsInstrumented(const void *func);
+#define SCRIPT_FUNC_IS_INSTRUMENTED(f) Script_PcIsInstrumented((const void *)(f))
+#else
+#define SCRIPT_FUNC_IS_INSTRUMENTED(f) ((((uintptr_t)(f)) & 0xE000000) == 0xA000000)
+#endif
+
 static inline void Script_CheckEffectInstrumentedSpecial(u32 specialId)
 {
     typedef u16 (*SpecialFunc)(void);
     extern const SpecialFunc gSpecials[];
     // In ROM mirror 1.
-    if (Script_IsAnalyzingEffects() && (((uintptr_t)gSpecials[specialId]) & 0xE000000) != 0xA000000)
+    if (Script_IsAnalyzingEffects() && !SCRIPT_FUNC_IS_INSTRUMENTED(gSpecials[specialId]))
         Script_GotoBreak_Internal();
 }
 
 static inline void Script_CheckEffectInstrumentedGotoNative(bool8 (*func)(void))
 {
     // In ROM mirror 1.
-    if (Script_IsAnalyzingEffects() && (((uintptr_t)func) & 0xE000000) != 0xA000000)
+    if (Script_IsAnalyzingEffects() && !SCRIPT_FUNC_IS_INSTRUMENTED(func))
         Script_GotoBreak_Internal();
 }
 
 static inline void Script_CheckEffectInstrumentedCallNative(void (*func)(struct ScriptContext *))
 {
     // In ROM mirror 1.
-    if (Script_IsAnalyzingEffects() && (((uintptr_t)func) & 0xE000000) != 0xA000000)
+    if (Script_IsAnalyzingEffects() && !SCRIPT_FUNC_IS_INSTRUMENTED(func))
         Script_GotoBreak_Internal();
 }
 

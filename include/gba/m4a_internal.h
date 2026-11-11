@@ -1,3 +1,6 @@
+#ifdef PORTABLE
+#include "platform/m4a_internal_pc.h"
+#else
 #ifndef GUARD_GBA_M4A_INTERNAL_H
 #define GUARD_GBA_M4A_INTERNAL_H
 
@@ -497,3 +500,4 @@ void ply_xwait(struct MusicPlayerInfo *, struct MusicPlayerTrack *);
 void ply_xcmd_0D(struct MusicPlayerInfo *, struct MusicPlayerTrack *);
 
 #endif // GUARD_GBA_M4A_INTERNAL_H
+#endif // PORTABLE
