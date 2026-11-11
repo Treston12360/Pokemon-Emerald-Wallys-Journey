@@ -55,6 +55,30 @@ enum PadButton
     PAD_BUTTON_COUNT,
 };
 
+// Keyboard keys for each game button (PC Settings > Keyboard).
+enum KeyBind
+{
+    KEYBIND_UP,
+    KEYBIND_DOWN,
+    KEYBIND_LEFT,
+    KEYBIND_RIGHT,
+    KEYBIND_A,
+    KEYBIND_B,
+    KEYBIND_START,
+    KEYBIND_SELECT,
+    KEYBIND_L,
+    KEYBIND_R,
+    KEYBIND_FAST_FORWARD,
+    KEYBIND_COUNT,
+};
+
+// Settings menu: the next key pressed is given to `bind` (Esc cancels). A key already used by
+// another button swaps with it.
+void Platform_StartKeyCapture(u8 bind);
+bool8 Platform_IsCapturingKey(void);
+// Name of the key on `bind`, in the game's text encoding (EOS-terminated, at most size-1 chars).
+void Platform_GetKeyBindName(u8 bind, u8 *dst, u32 size);
+
 u8 Platform_GetSetting(enum PlatformSetting setting);
 void Platform_SetSetting(enum PlatformSetting setting, u8 value);
 void Platform_GetStatus(struct SiiRtcInfo *rtc);

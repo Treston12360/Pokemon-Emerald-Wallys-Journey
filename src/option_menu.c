@@ -76,10 +76,14 @@ enum
     MENUITEM_PC_PAD_FF,
     MENUITEM_PC_WIDESCREEN,
     MENUITEM_PC_LAST = MENUITEM_PC_WIDESCREEN,
+    // Keyboard keys (enum KeyBind order): A opens "Press a key".
+    MENUITEM_PC_KEY_FIRST,
+    MENUITEM_PC_KEY_LAST = MENUITEM_PC_KEY_FIRST + KEYBIND_COUNT - 1,
     // Rows of the top Settings page: each opens one section.
     MENUITEM_PC_SECTION_GAMEPLAY,
     MENUITEM_PC_SECTION_SPEED,
     MENUITEM_PC_SECTION_CONTROLS,
+    MENUITEM_PC_SECTION_KEYBOARD,
     MENUITEM_PC_SECTION_AUDIO,
     MENUITEM_PC_SECTION_VIDEO,
 #endif
@@ -161,6 +165,7 @@ static void PcOption_Draw(u8 item);
 static bool32 PcMenu_HandleNavigation(u8 taskId);
 static void PcMenu_SetPage(u8 page);
 static void PcSection_Draw(u8 item);
+static void PcKey_Draw(u8 item);
 #endif
 
 EWRAM_DATA static bool8 sArrowPressed = FALSE;
@@ -241,7 +246,19 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_PC_WIDESCREEN] = COMPOUND_STRING("Widescreen"),
     [MENUITEM_PC_SECTION_GAMEPLAY] = COMPOUND_STRING("Gameplay"),
     [MENUITEM_PC_SECTION_SPEED]    = COMPOUND_STRING("Speed & Looks"),
-    [MENUITEM_PC_SECTION_CONTROLS] = COMPOUND_STRING("Controls"),
+    [MENUITEM_PC_SECTION_CONTROLS] = COMPOUND_STRING("Controller"),
+    [MENUITEM_PC_SECTION_KEYBOARD] = COMPOUND_STRING("Keyboard"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_UP]     = COMPOUND_STRING("Key Up"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_DOWN]   = COMPOUND_STRING("Key Down"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_LEFT]   = COMPOUND_STRING("Key Left"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_RIGHT]  = COMPOUND_STRING("Key Right"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_A]      = COMPOUND_STRING("Key A"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_B]      = COMPOUND_STRING("Key B"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_START]  = COMPOUND_STRING("Key Start"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_SELECT] = COMPOUND_STRING("Key Select"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_L]      = COMPOUND_STRING("Key L"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_R]      = COMPOUND_STRING("Key R"),
+    [MENUITEM_PC_KEY_FIRST + KEYBIND_FAST_FORWARD] = COMPOUND_STRING("Key fast fwd"),
     [MENUITEM_PC_SECTION_AUDIO]    = COMPOUND_STRING("Audio"),
     [MENUITEM_PC_SECTION_VIDEO]    = COMPOUND_STRING("Video"),
 #endif
@@ -1040,6 +1057,9 @@ static void RedrawVisibleOptions(u8 taskId)
         for (i = MENUITEM_PC_SECTION_GAMEPLAY; i <= MENUITEM_PC_SECTION_VIDEO; i++)
             if (ITEM_VISIBLE(i))
                 PcSection_Draw(i);
+        for (i = MENUITEM_PC_KEY_FIRST; i <= MENUITEM_PC_KEY_LAST; i++)
+            if (ITEM_VISIBLE(i))
+                PcKey_Draw(i);
     }
 #endif
     HighlightOptionMenuItem(sel);
@@ -1220,6 +1240,10 @@ static void PcMenu_SetPage(u8 page)
     case MENUITEM_PC_SECTION_CONTROLS:
         PcMenu_AddRows(sPcSectionControls, ARRAY_COUNT(sPcSectionControls));
         break;
+    case MENUITEM_PC_SECTION_KEYBOARD:
+        for (i = MENUITEM_PC_KEY_FIRST; i <= MENUITEM_PC_KEY_LAST; i++)
+            PcMenu_AddRow(i);
+        break;
     case MENUITEM_PC_SECTION_AUDIO:
         PcMenu_AddRows(sPcSectionAudio, ARRAY_COUNT(sPcSectionAudio));
         break;
@@ -1243,11 +1267,32 @@ static void PcMenu_OpenPage(u8 taskId, u8 page, u8 selection)
 // up/down move within the page. Returns TRUE when the input was used here.
 static bool32 PcMenu_HandleNavigation(u8 taskId)
 {
+    static bool8 sWaitingForKey;
     u8 sel = gTasks[taskId].tMenuSelection;
     u8 item = sPcRows[sel];
 
+    // "Press a key": nothing else happens until a key is pressed (Esc cancels).
+    if (Platform_IsCapturingKey())
+        return TRUE;
+    if (sWaitingForKey)
+    {
+        sWaitingForKey = FALSE;
+        PlaySE(SE_SELECT);
+        RedrawVisibleOptions(taskId); // a key taken from another button swaps, so redraw all rows
+        return TRUE;
+    }
+
     if (JOY_NEW(A_BUTTON))
     {
+        if (item >= MENUITEM_PC_KEY_FIRST && item <= MENUITEM_PC_KEY_LAST)
+        {
+            PlaySE(SE_SELECT);
+            sWaitingForKey = TRUE;
+            Platform_StartKeyCapture(item - MENUITEM_PC_KEY_FIRST);
+            PcKey_Draw(item);
+            CopyWindowToVram(WIN_OPTIONS, COPYWIN_GFX);
+            return TRUE;
+        }
         if (item >= MENUITEM_PC_SECTION_GAMEPLAY && item <= MENUITEM_PC_SECTION_VIDEO)
         {
             PlaySE(SE_SELECT);
@@ -1291,7 +1336,8 @@ static void PcSection_Draw(u8 item)
     static const u8 *const sNotes[] = {
         COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Battle, rules"),
         COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Fast fwd, art"),
-        COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Buttons, pad"),
+        COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Pad buttons"),
+        COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Keys"),
         COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Sound, volume"),
         COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Window, size"),
     };
@@ -1299,5 +1345,25 @@ static void PcSection_Draw(u8 item)
     FillWindowPixelRect(WIN_OPTIONS, PIXEL_FILL(1), 104, y, 96, 16);
     AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, sNotes[item - MENUITEM_PC_SECTION_GAMEPLAY], 104, y + 1, TEXT_SKIP_DRAW, NULL);
     DrawOptionMenuChoice(gText_ArrowRight, 190, y, 0);
+}
+// Keyboard rows: the key's name, or "Press a key" while waiting for one.
+static void PcKey_Draw(u8 item)
+{
+    u8 text[24];
+    u8 y = ITEM_Y(item);
+
+    FillWindowPixelRect(WIN_OPTIONS, PIXEL_FILL(1), 104, y, 96, 16);
+    if (Platform_IsCapturingKey() && sPcRows[gTasks[FindTaskIdByFunc(Task_OptionMenuProcessInput)].tMenuSelection] == item)
+    {
+        AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL,
+            COMPOUND_STRING("{COLOR RED}{SHADOW LIGHT_RED}Press a key"), 104, y + 1, TEXT_SKIP_DRAW, NULL);
+        return;
+    }
+    // Same colour prefix as the other choices, then the key name.
+    memcpy(text, gText_Speed1x, 6);
+    text[2] = TEXT_COLOR_RED;
+    text[5] = TEXT_COLOR_LIGHT_RED;
+    Platform_GetKeyBindName(item - MENUITEM_PC_KEY_FIRST, text + 6, sizeof(text) - 6);
+    AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, text, 104, y + 1, TEXT_SKIP_DRAW, NULL);
 }
 #endif

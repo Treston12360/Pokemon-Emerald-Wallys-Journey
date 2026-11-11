@@ -20,7 +20,9 @@
 #include <SDL2/SDL_image.h>
 #endif
 
+#include <string.h>
 #include "global.h"
+#include "constants/characters.h"
 #include "platform/null_guard.h"
 #include "platform/wide_view.h"
 #include "platform.h"
@@ -86,6 +88,19 @@ static u8 sPlatformSettings[PLATFORM_SETTING_COUNT] = {
 static SDL_atomic_t sFfKeyHeld, sFfPadHeld, sFfToggled;
 static void ApplyFastForward(void);
 static const char *const sPadSettingNames[] = {"padA", "padB", "padStart", "padSelect", "padL", "padR", "padFastForward"};
+static SDL_Keycode sKeyMap[KEYBIND_COUNT] = {
+    [KEYBIND_UP] = SDLK_UP, [KEYBIND_DOWN] = SDLK_DOWN, [KEYBIND_LEFT] = SDLK_LEFT, [KEYBIND_RIGHT] = SDLK_RIGHT,
+    [KEYBIND_A] = SDLK_z, [KEYBIND_B] = SDLK_x, [KEYBIND_START] = SDLK_RETURN, [KEYBIND_SELECT] = SDLK_BACKSLASH,
+    [KEYBIND_L] = SDLK_a, [KEYBIND_R] = SDLK_s, [KEYBIND_FAST_FORWARD] = SDLK_SPACE,
+};
+static const u16 sKeyBindButtons[KEYBIND_COUNT] = {
+    DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT, A_BUTTON, B_BUTTON, START_BUTTON, SELECT_BUTTON, L_BUTTON, R_BUTTON, 0,
+};
+static const char *const sKeyBindNames[KEYBIND_COUNT] = {
+    "keyUp", "keyDown", "keyLeft", "keyRight", "keyA", "keyB", "keyStart", "keySelect", "keyL", "keyR", "keyFastForward",
+};
+static SDL_atomic_t sKeyCapture = {-1};
+static void CaptureKey(SDL_Keycode key);
 #ifdef __ANDROID__
 static SDL_GameController *androidController;
 #endif
@@ -198,6 +213,14 @@ static bool TestStep(void)
         if (!strcmp(cmd, "shot"))
         {
             TestWriteShot(arg1);
+            continue;
+        }
+        if (!strcmp(cmd, "typekey"))
+        {
+            // "typekey NAME": a keyboard key press for the Settings "Press a key" rows (SDL key name).
+            SDL_Keycode key = SDL_GetKeyFromName(arg1);
+            if (SDL_AtomicGet(&sKeyCapture) >= 0)
+                CaptureKey(key);
             continue;
         }
         if (!strcmp(cmd, "quit"))
@@ -623,6 +646,18 @@ static void ReadConfigFile(void)
             sPlatformSettings[PLATFORM_SETTING_FF_SPEED] = value;
         else if (sscanf(line, "widescreen=%u", &value) == 1)
             WideView_SetEnabled(value != 0);
+        else if (strncmp(line, "key", 3) == 0)
+        {
+            int i;
+            for (i = 0; i < KEYBIND_COUNT; i++)
+            {
+                char name[32];
+                int key;
+                SDL_snprintf(name, sizeof(name), "%s=%%d", sKeyBindNames[i]);
+                if (sscanf(line, name, &key) == 1)
+                    sKeyMap[i] = key;
+            }
+        }
         else if (sscanf(line, "fastForwardToggle=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE] = value != 0;
         else
@@ -657,6 +692,8 @@ static void StoreConfigFile(void)
     fprintf(configFile, "fastForward=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_SPEED]);
     fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
     fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
+    for (int i = 0; i < KEYBIND_COUNT; i++)
+        fprintf(configFile, "%s=%d\n", sKeyBindNames[i], (int)sKeyMap[i]);
     for (int i = 0; i < 7; i++)
         fprintf(configFile, "%s=%u\n", sPadSettingNames[i], sPlatformSettings[PLATFORM_SETTING_PAD_A + i]);
     fclose(configFile);
@@ -1103,6 +1140,100 @@ static u16 ControllerButtonMask(Uint8 button)
 }
 #endif
 
+// ---- Keyboard keys (Settings > Keyboard) ------------------------------------------
+
+static void HandleBoundKey(SDL_Keycode key, bool8 down, bool8 repeat)
+{
+    int i;
+    for (i = 0; i < KEYBIND_COUNT; i++)
+    {
+        if (sKeyMap[i] != key)
+            continue;
+        if (i == KEYBIND_FAST_FORWARD)
+        {
+            // Toggle mode: each press (not key repeat) turns fast forward on or off.
+            if (down && !repeat && sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE])
+                SDL_AtomicSet(&sFfToggled, !SDL_AtomicGet(&sFfToggled));
+            SDL_AtomicSet(&sFfKeyHeld, down);
+        }
+        else if (down)
+            keyboardKeys |= sKeyBindButtons[i];
+        else
+            keyboardKeys &= ~sKeyBindButtons[i];
+    }
+}
+
+static void CaptureKey(SDL_Keycode key)
+{
+    int bind = SDL_AtomicGet(&sKeyCapture);
+    int i;
+    if (key != SDLK_ESCAPE && key != SDLK_F11)
+    {
+        for (i = 0; i < KEYBIND_COUNT; i++)
+            if (i != bind && sKeyMap[i] == key)
+                sKeyMap[i] = sKeyMap[bind]; // the other button takes this button's old key
+        sKeyMap[bind] = key;
+        StoreConfigFile();
+    }
+    keyboardKeys = 0;
+    SDL_AtomicSet(&sFfKeyHeld, 0);
+    SDL_AtomicSet(&sKeyCapture, -1);
+}
+
+void Platform_StartKeyCapture(u8 bind)
+{
+    if (bind < KEYBIND_COUNT)
+        SDL_AtomicSet(&sKeyCapture, bind);
+}
+
+bool8 Platform_IsCapturingKey(void)
+{
+    return SDL_AtomicGet(&sKeyCapture) >= 0;
+}
+
+// Key names come from SDL in ASCII; turn them into the game's text encoding.
+void Platform_GetKeyBindName(u8 bind, u8 *dst, u32 size)
+{
+    static const struct { char c; const char *name; } sSymbols[] = {
+        {'\\', "Backslash"}, {'[', "L bracket"}, {']', "R bracket"}, {';', "Semicolon"}, {'\'', "Quote"},
+        {'`', "Backquote"}, {'=', "Equals"}, {'+', "Plus"}, {'*', "Star"}, {'#', "Hash"}, {'<', "Less"}, {'>', "Greater"},
+        {'_', "Underscore"}, {'^', "Caret"}, {'$', "Dollar"}, {'@', "At"}, {'|', "Bar"}, {'~', "Tilde"},
+    };
+    const char *name = (bind < KEYBIND_COUNT) ? SDL_GetKeyName(sKeyMap[bind]) : "";
+    u32 n = 0;
+    if (name[0] != '\0' && name[1] == '\0')
+    {
+        u32 i;
+        for (i = 0; i < ARRAY_COUNT(sSymbols); i++)
+            if (sSymbols[i].c == name[0])
+                name = sSymbols[i].name;
+    }
+    if (name[0] == '\0')
+        name = "None";
+    for (; *name != '\0' && n + 1 < size; name++)
+    {
+        char c = *name;
+        u8 out;
+        if (c >= 'A' && c <= 'Z')      out = CHAR_A + (c - 'A');
+        else if (c >= 'a' && c <= 'z') out = CHAR_a + (c - 'a');
+        else if (c >= '0' && c <= '9') out = CHAR_0 + (c - '0');
+        else if (c == ' ')             out = CHAR_SPACE;
+        else if (c == '-')             out = CHAR_HYPHEN;
+        else if (c == '.')             out = CHAR_PERIOD;
+        else if (c == ',')             out = CHAR_COMMA;
+        else if (c == '/')             out = CHAR_SLASH;
+        else if (c == '!')             out = CHAR_EXCL_MARK;
+        else if (c == '?')             out = CHAR_QUESTION_MARK;
+        else if (c == '&')             out = CHAR_AMPERSAND;
+        else if (c == '(')             out = CHAR_LEFT_PAREN;
+        else if (c == ')')             out = CHAR_RIGHT_PAREN;
+        else if (c == '%')             out = CHAR_PERCENT;
+        else                           out = CHAR_QUESTION_MARK;
+        dst[n++] = out;
+    }
+    dst[n] = EOS;
+}
+
 void ProcessEvents(void)
 {
     SDL_Event event;
@@ -1151,36 +1282,18 @@ void ProcessEvents(void)
             break;
 #endif
         case SDL_KEYUP:
-            switch (event.key.keysym.sym)
-            {
-            HANDLE_KEYUP(A_BUTTON)
-            HANDLE_KEYUP(B_BUTTON)
-            HANDLE_KEYUP(START_BUTTON)
-            HANDLE_KEYUP(SELECT_BUTTON)
-            HANDLE_KEYUP(L_BUTTON)
-            HANDLE_KEYUP(R_BUTTON)
-            HANDLE_KEYUP(DPAD_UP)
-            HANDLE_KEYUP(DPAD_DOWN)
-            HANDLE_KEYUP(DPAD_LEFT)
-            HANDLE_KEYUP(DPAD_RIGHT)
-            case SDLK_SPACE:
-                SDL_AtomicSet(&sFfKeyHeld, 0);
-                break;
-            }
+            if (SDL_AtomicGet(&sKeyCapture) < 0)
+                HandleBoundKey(event.key.keysym.sym, FALSE, event.key.repeat);
             break;
         case SDL_KEYDOWN:
+            if (SDL_AtomicGet(&sKeyCapture) >= 0)
+            {
+                CaptureKey(event.key.keysym.sym);
+                break;
+            }
+            HandleBoundKey(event.key.keysym.sym, TRUE, event.key.repeat);
             switch (event.key.keysym.sym)
             {
-            HANDLE_KEYDOWN(A_BUTTON)
-            HANDLE_KEYDOWN(B_BUTTON)
-            HANDLE_KEYDOWN(START_BUTTON)
-            HANDLE_KEYDOWN(SELECT_BUTTON)
-            HANDLE_KEYDOWN(L_BUTTON)
-            HANDLE_KEYDOWN(R_BUTTON)
-            HANDLE_KEYDOWN(DPAD_UP)
-            HANDLE_KEYDOWN(DPAD_DOWN)
-            HANDLE_KEYDOWN(DPAD_LEFT)
-            HANDLE_KEYDOWN(DPAD_RIGHT)
             case SDLK_F11:
             {
                 // F11: toggle fullscreen
@@ -1198,12 +1311,6 @@ void ProcessEvents(void)
                 {
                     paused = !paused;
                 }
-                break;
-            case SDLK_SPACE:
-                // Toggle mode: each press (not key repeat) turns fast forward on or off.
-                if (sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE] && !event.key.repeat)
-                    SDL_AtomicSet(&sFfToggled, !SDL_AtomicGet(&sFfToggled));
-                SDL_AtomicSet(&sFfKeyHeld, 1);
                 break;
             }
             break;

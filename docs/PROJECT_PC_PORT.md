@@ -182,3 +182,8 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   black screen". Save is in New Mauville; its on-load script runs `special DrawWholeMapView` before the overworld
   tilemap buffers are allocated (NULL on GBA = harmless writes to low memory). Fixed in 4d:
   `WJPC_RETURN_IF_NO_TILEMAP_BUFFERS()` (overworld.h) in `DrawMetatile`. Tested with his save + cfg under Wine.
+- 2026-11-11 owner: "The controller mapping works good". Asked, in order: 1. keyboard keys in settings, 2. smooth frame
+  rate in Video settings, 3. 4K, 4. fix the bad reads; "Send me small videos or pictures ... keep me updated".
+  1 done: Settings sections are now Gameplay / Speed & Looks / Controller / Keyboard / Audio / Video. Keyboard rows
+  Key Up..Key fast fwd: A = "Press a key" (Esc cancels, a key used elsewhere swaps), cfg `keyUp=<SDL keycode>` ...
+  Test script command `typekey NAME`. Checked under Wine with real key presses (W bound to Up walks).
