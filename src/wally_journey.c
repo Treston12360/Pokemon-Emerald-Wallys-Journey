@@ -911,7 +911,7 @@ static u16 WJ_EvolveForLevel(u16 species, u32 level)
 // a little wild training), from tools/important_trainer_levels.py ("you top" at each gym):
 // index = badges owned. 0: Route 103 rival; 1 Roxanne; 2 Brawly; 3 Wattson; 4 Flannery;
 // 5 Norman; 6 Winona; 7 Tate & Liza; 8 Juan.
-static const u8 sWJExpectedTopAtBadge[9] = {5, 16, 18, 23, 30, 32, 37, 48, 52};
+static const u8 sWJExpectedTopAtBadge[9] = {5, 16, 18, 23, 31, 32, 38, 48, 53};
 
 bool32 WallyJourney_IsReporterTrainer(u16 trainerId)
 {

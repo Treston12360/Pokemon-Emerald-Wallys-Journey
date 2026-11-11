@@ -74,7 +74,9 @@ FIGHTS = [
     ('Wally Champion', ['TRAINER_WALLY_CHAMPION'], WALLY),
 ]
 FIGHT_OF = {t: n for n, f in enumerate(FIGHTS) for t in f[1]}
-def BY_LOWEST(n): return FIGHTS[n][0].startswith('Wally')
+# Wally (owner 2026-11-03) and the Gym Leaders (owner 2026-11-11): the minimum and margin
+# apply to the lowest Pokemon, so the whole team is at least the player's top + margin.
+def BY_LOWEST(n): return FIGHTS[n][0].startswith('Wally') or FIGHTS[n][2] == GYM and FIGHTS[n][1][0].endswith('_1')
 SIM_ID = {n: f[1][0] for n, f in enumerate(FIGHTS)}          # the team the sim fights
 LEAGUE = ['TRAINER_SIDNEY', 'TRAINER_PHOEBE', 'TRAINER_GLACIA', 'TRAINER_DRAKE', 'TRAINER_WALLY_CHAMPION']
 
