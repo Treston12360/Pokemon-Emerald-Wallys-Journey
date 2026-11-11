@@ -1301,6 +1301,20 @@ void Platform_SetStatus(struct SiiRtcInfo *rtc)
 
 static void UpdateInternalClock(void)
 {
+#ifdef _WIN32
+    // Ask Windows for the local time: msvcrt's localtime() trusts a TZ variable when one is set,
+    // which can be wrong (e.g. "America/Chicago" is read as UTC).
+    SYSTEMTIME st;
+    GetLocalTime(&st);
+    internalClock.year = BinToBcd(st.wYear % 100);
+    internalClock.month = BinToBcd(st.wMonth);
+    internalClock.day = BinToBcd(st.wDay);
+    internalClock.dayOfWeek = BinToBcd(st.wDayOfWeek);
+    internalClock.hour = BinToBcd(st.wHour);
+    internalClock.minute = BinToBcd(st.wMinute);
+    internalClock.second = BinToBcd(st.wSecond);
+    return;
+#endif
     time_t rawTime = time(NULL);
     struct tm *time = localtime(&rawTime);
 

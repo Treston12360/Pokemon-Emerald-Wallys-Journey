@@ -4510,6 +4510,12 @@ s8 GetSetPokedexFlag(enum NationalDexOrder nationalDexNo, u8 caseID)
     index = nationalDexNo / 8;
     bit = nationalDexNo % 8;
     mask = 1 << bit;
+#ifdef PORTABLE
+    // The regional dex list asks for dex number 0 (one past its end). The GBA reads junk from an
+    // unused address there; on PC that address doesn't exist and the game crashes.
+    if (index >= NUM_DEX_FLAG_BYTES)
+        return 0;
+#endif
 
     switch (caseID)
     {

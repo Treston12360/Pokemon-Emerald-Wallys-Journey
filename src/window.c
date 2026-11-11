@@ -1,5 +1,13 @@
 #include "global.h"
 #include "window.h"
+
+// PC only: a window id of WINDOW_NONE (255) indexes far past gWindows. The GBA reads/writes junk
+// there and carries on; on PC it crashes. Ignore such calls on PC (the GBA build is unchanged).
+#ifdef PORTABLE
+#define WJPC_WINDOW_GUARD(id, ret) if ((id) >= WINDOWS_MAX) ret
+#else
+#define WJPC_WINDOW_GUARD(id, ret)
+#endif
 #include "malloc.h"
 #include "bg.h"
 #include "blit.h"
@@ -245,6 +253,7 @@ int AddWindowWithoutTileMap(const struct WindowTemplate *template)
 
 void RemoveWindow(u32 windowId)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     u32 bgLayer = gWindows[windowId].window.bg;
 
     if (gWindowTileAutoAllocEnabled == TRUE)
@@ -307,6 +316,7 @@ void FreeAllWindowBuffers(void)
 
 void CopyWindowToVram(u32 windowId, u32 mode)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Window windowLocal = gWindows[windowId];
     u16 windowSize = 32 * (windowLocal.window.width * windowLocal.window.height);
 
@@ -327,6 +337,7 @@ void CopyWindowToVram(u32 windowId, u32 mode)
 
 void CopyWindowRectToVram(u32 windowId, u32 mode, u32 x, u32 y, u32 w, u32 h)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Window windowLocal;
     int rectSize;
     int rectPos;
@@ -360,6 +371,7 @@ void CopyWindowRectToVram(u32 windowId, u32 mode, u32 x, u32 y, u32 w, u32 h)
 
 void PutWindowTilemap(u32 windowId)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Window windowLocal = gWindows[windowId];
 
     WriteSequenceToBgTilemapBuffer(
@@ -375,6 +387,7 @@ void PutWindowTilemap(u32 windowId)
 
 void PutWindowRectTilemapOverridePalette(u32 windowId, u8 x, u8 y, u8 width, u8 height, u8 palette)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Window windowLocal = gWindows[windowId];
     u16 currentRow = windowLocal.window.baseBlock + (y * windowLocal.window.width) + x + GetBgAttribute(windowLocal.window.bg, BG_ATTR_BASETILE);
     int i;
@@ -398,6 +411,7 @@ void PutWindowRectTilemapOverridePalette(u32 windowId, u8 x, u8 y, u8 width, u8 
 // Fills a window with transparent tiles.
 void ClearWindowTilemap(u32 windowId)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Window windowLocal = gWindows[windowId];
 
     FillBgTilemapBufferRect(
@@ -412,6 +426,7 @@ void ClearWindowTilemap(u32 windowId)
 
 void PutWindowRectTilemap(u32 windowId, u8 x, u8 y, u8 width, u8 height)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Window windowLocal = gWindows[windowId];
     u16 currentRow = windowLocal.window.baseBlock + (y * windowLocal.window.width) + x + GetBgAttribute(windowLocal.window.bg, BG_ATTR_BASETILE);
     int i;
@@ -439,6 +454,7 @@ void BlitBitmapToWindow(u32 windowId, const u8 *pixels, u16 x, u16 y, u16 width,
 
 void BlitBitmapRectToWindow(u32 windowId, const u8 *pixels, u16 srcX, u16 srcY, u16 srcWidth, int srcHeight, u16 destX, u16 destY, u16 rectWidth, u16 rectHeight)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Bitmap sourceRect;
     struct Bitmap destRect;
 
@@ -471,6 +487,7 @@ static void UNUSED BlitBitmapRectToWindowWithColorKey(u32 windowId, const u8 *pi
 
 void FillWindowPixelRect(u32 windowId, u8 fillValue, u16 x, u16 y, u16 width, u16 height)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Bitmap pixelRect;
 
     pixelRect.pixels = gWindows[windowId].tileData;
@@ -482,6 +499,7 @@ void FillWindowPixelRect(u32 windowId, u8 fillValue, u16 x, u16 y, u16 width, u1
 
 void CopyToWindowPixelBuffer(u32 windowId, const void *src, u16 size, u16 tileOffset)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     if (size != 0)
         CpuCopy16(src, gWindows[windowId].tileData + (32 * tileOffset), size);
     else
@@ -491,6 +509,7 @@ void CopyToWindowPixelBuffer(u32 windowId, const void *src, u16 size, u16 tileOf
 // Sets all pixels within the window to the fillValue color.
 void FillWindowPixelBuffer(u32 windowId, u8 fillValue)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     int fillSize = gWindows[windowId].window.width * gWindows[windowId].window.height;
     CpuFastFill8(fillValue, gWindows[windowId].tileData, 32 * fillSize);
 }
@@ -519,6 +538,7 @@ void FillWindowPixelBuffer(u32 windowId, u8 fillValue)
 
 void ScrollWindow(u32 windowId, u8 direction, u8 distance, u8 fillValue)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct WindowTemplate window = gWindows[windowId].window;
     u8 *tileData = gWindows[windowId].tileData;
     u32 fillValue32 = (fillValue << 24) | (fillValue << 16) | (fillValue << 8) | fillValue;
@@ -572,6 +592,7 @@ void CallWindowFunction(u32 windowId, void ( *func)(u8, u8, u8, u8, u8, u8))
 
 bool32 SetWindowAttribute(u32 windowId, u32 attributeId, u32 value)
 {
+    WJPC_WINDOW_GUARD(windowId, return 0;)
     switch (attributeId)
     {
     case WINDOW_TILEMAP_LEFT:
@@ -599,6 +620,7 @@ bool32 SetWindowAttribute(u32 windowId, u32 attributeId, u32 value)
 
 u32 GetWindowAttribute(u32 windowId, u32 attributeId)
 {
+    WJPC_WINDOW_GUARD(windowId, return 0;)
     switch (attributeId)
     {
     case WINDOW_BG:
@@ -688,6 +710,7 @@ u32 AddWindow8Bit(const struct WindowTemplate *template)
 
 void FillWindowPixelBuffer8Bit(u32 windowId, u8 fillValue)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     s32 i;
     s32 size;
 
@@ -698,6 +721,7 @@ void FillWindowPixelBuffer8Bit(u32 windowId, u8 fillValue)
 
 void FillWindowPixelRect8Bit(u32 windowId, u8 fillValue, u16 x, u16 y, u16 width, u16 height)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Bitmap pixelRect;
 
     pixelRect.pixels = gWindows[windowId].tileData;
@@ -709,6 +733,7 @@ void FillWindowPixelRect8Bit(u32 windowId, u8 fillValue, u16 x, u16 y, u16 width
 
 void BlitBitmapRectToWindow4BitTo8Bit(u32 windowId, const u8 *pixels, u16 srcX, u16 srcY, u16 srcWidth, int srcHeight, u16 destX, u16 destY, u16 rectWidth, u16 rectHeight, u8 paletteNum)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Bitmap sourceRect;
     struct Bitmap destRect;
 
@@ -725,6 +750,7 @@ void BlitBitmapRectToWindow4BitTo8Bit(u32 windowId, const u8 *pixels, u16 srcX, 
 
 void CopyWindowToVram8Bit(u32 windowId, u8 mode)
 {
+    WJPC_WINDOW_GUARD(windowId, return;)
     struct Window *window = &gWindows[windowId];
     u16 windowSize = 64 * (window->window.width * window->window.height);
 

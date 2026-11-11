@@ -1253,6 +1253,11 @@ static void CreateStatBarsBg(void) //stat bars background text
 // Hack to destroy sprites when a Pokémon data is being loaded in
 static bool32 IsMonInfoBeingLoaded(void)
 {
+#ifdef PORTABLE
+    // selectedMonSpriteId is 0xFFFF while no Pokémon sprite exists; the GBA reads junk past gSprites.
+    if (sPokedexView->selectedMonSpriteId >= MAX_SPRITES)
+        return FALSE;
+#endif
     return (gSprites[sPokedexView->selectedMonSpriteId].callback == SpriteCB_MoveMonForInfoScreen);
 }
 static void SpriteCB_StatBars(struct Sprite *sprite)
