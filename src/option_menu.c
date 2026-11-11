@@ -17,6 +17,10 @@
 #include "gba/m4a_internal.h"
 #include "event_data.h"
 #include "constants/rgb.h"
+#ifdef PORTABLE
+#include "platform.h"
+#include "string_util.h"
+#endif
 
 #define tMenuSelection data[0]
 #define tTextSpeed data[1]
@@ -53,6 +57,14 @@ enum
     MENUITEM_QUICKCATCH,
     MENUITEM_GFX_FIRST, // Wally's Journey: New / Classic graphics, one row per WJGFX_* feature
     MENUITEM_GFX_LAST = MENUITEM_GFX_FIRST + WJGFX_COUNT - 1,
+#ifdef PORTABLE
+    // PC version only: stored in the PC settings file, applied immediately.
+    MENUITEM_PC_WINDOWSIZE,
+    MENUITEM_PC_FULLSCREEN,
+    MENUITEM_PC_SHARP,
+    MENUITEM_PC_VOLUME,
+    MENUITEM_PC_FFSPEED,
+#endif
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
 };
@@ -111,6 +123,10 @@ static void Gfx_DrawChoices(u8 classic, u8 y);
 static void RedrawVisibleOptions(u8 taskId);
 static u8 Cycle_ProcessInput(u8 selection, u8 count);
 static void Speed_DrawChoices(u8 selection, u8 y, bool32 battle);
+#ifdef PORTABLE
+static void PcOption_ProcessInput(u8 item);
+static void PcOption_Draw(u8 item);
+#endif
 
 EWRAM_DATA static bool8 sArrowPressed = FALSE;
 EWRAM_DATA static u8 sTopItem = 0;
@@ -173,6 +189,13 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_GFX_FIRST + WJGFX_MAIN_MENU]      = COMPOUND_STRING("Main Menu"),
     [MENUITEM_GFX_FIRST + WJGFX_POKEDEX]        = COMPOUND_STRING("Pokédex"),
     [MENUITEM_GFX_FIRST + WJGFX_DITTO]          = COMPOUND_STRING("Ditto Faces"),
+#ifdef PORTABLE
+    [MENUITEM_PC_WINDOWSIZE] = COMPOUND_STRING("Window size"),
+    [MENUITEM_PC_FULLSCREEN] = COMPOUND_STRING("Fullscreen"),
+    [MENUITEM_PC_SHARP]      = COMPOUND_STRING("Sharp pixels"),
+    [MENUITEM_PC_VOLUME]     = COMPOUND_STRING("Volume"),
+    [MENUITEM_PC_FFSPEED]    = COMPOUND_STRING("Fast forward"),
+#endif
     [MENUITEM_CANCEL]      = COMPOUND_STRING("Cancel"),
 };
 
@@ -485,6 +508,15 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             if (previousOption != gTasks[taskId].tBattleSpeed)
                 Speed_DrawChoices(gTasks[taskId].tBattleSpeed, YPOS_BATTLESPEED, TRUE);
             break;
+#ifdef PORTABLE
+        case MENUITEM_PC_WINDOWSIZE:
+        case MENUITEM_PC_FULLSCREEN:
+        case MENUITEM_PC_SHARP:
+        case MENUITEM_PC_VOLUME:
+        case MENUITEM_PC_FFSPEED:
+            PcOption_ProcessInput(gTasks[taskId].tMenuSelection);
+            break;
+#endif
         default:
             if (gTasks[taskId].tMenuSelection >= MENUITEM_GFX_FIRST && gTasks[taskId].tMenuSelection <= MENUITEM_GFX_LAST)
             {
@@ -921,6 +953,14 @@ static void RedrawVisibleOptions(u8 taskId)
             if (ITEM_VISIBLE(i))
                 Gfx_DrawChoices(((u16)tClassicGfx >> (i - MENUITEM_GFX_FIRST)) & 1, ITEM_Y(i));
     }
+#ifdef PORTABLE
+    {
+        u32 i;
+        for (i = MENUITEM_PC_WINDOWSIZE; i <= MENUITEM_PC_FFSPEED; i++)
+            if (ITEM_VISIBLE(i))
+                PcOption_Draw(i);
+    }
+#endif
     HighlightOptionMenuItem(sel);
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }
@@ -954,3 +994,76 @@ static void Speed_DrawChoices(u8 selection, u8 y, bool32 battle)
     DrawOptionMenuChoice(gText_ArrowRight, 190, y, 0);
 }
 
+
+#ifdef PORTABLE
+// ---- PC version settings rows --------------------------------------------
+// Each row maps to a platform setting: its value range and how it is shown.
+static const u8 sPcRowSetting[] =
+{
+    [MENUITEM_PC_WINDOWSIZE - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_WINDOW_SCALE,
+    [MENUITEM_PC_FULLSCREEN - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_FULLSCREEN,
+    [MENUITEM_PC_SHARP      - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_INTEGER_SCALE,
+    [MENUITEM_PC_VOLUME     - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_VOLUME,
+    [MENUITEM_PC_FFSPEED    - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_FF_SPEED,
+};
+static const u8 sPcRowMin[] = {1, 0, 0, 0, 0};
+static const u8 sPcRowMax[] = {6, 1, 1, 10, 3};
+
+static void PcOption_ProcessInput(u8 item)
+{
+    u32 row = item - MENUITEM_PC_WINDOWSIZE;
+    s32 value = Platform_GetSetting(sPcRowSetting[row]);
+    s32 old = value;
+
+    // Volume stops at 0 and 10; the other rows wrap around.
+    bool32 wrap = (item != MENUITEM_PC_VOLUME);
+    if (JOY_REPEAT(DPAD_RIGHT))
+        value = (value < sPcRowMax[row]) ? value + 1 : (wrap ? sPcRowMin[row] : value);
+    else if (JOY_REPEAT(DPAD_LEFT))
+        value = (value > sPcRowMin[row]) ? value - 1 : (wrap ? sPcRowMax[row] : value);
+
+    if (value != old)
+    {
+        Platform_SetSetting(sPcRowSetting[row], value);
+        PcOption_Draw(item);
+        sArrowPressed = TRUE;
+    }
+}
+
+static void PcOption_Draw(u8 item)
+{
+    static const u8 sFfNames[][4] = {_("2x"), _("3x"), _("5x"), _("Max")};
+    u32 row = item - MENUITEM_PC_WINDOWSIZE;
+    u32 value = Platform_GetSetting(sPcRowSetting[row]);
+    u8 text[16];
+    u8 *end;
+    u8 y = ITEM_Y(item);
+
+    // Same green colour prefix as the other choices.
+    memcpy(text, gText_Speed1x, 6);
+    end = text + 6;
+    switch (item)
+    {
+    case MENUITEM_PC_WINDOWSIZE:
+        end = ConvertIntToDecimalStringN(end, value, STR_CONV_MODE_LEFT_ALIGN, 1);
+        *end++ = CHAR_x;
+        *end = EOS;
+        break;
+    case MENUITEM_PC_FULLSCREEN:
+    case MENUITEM_PC_SHARP:
+        StringCopy(end, (value ? gText_BattleSceneOn : gText_BattleSceneOff) + 6);
+        break;
+    case MENUITEM_PC_VOLUME:
+        ConvertIntToDecimalStringN(end, value, STR_CONV_MODE_LEFT_ALIGN, 2);
+        break;
+    case MENUITEM_PC_FFSPEED:
+        StringCopy(end, sFfNames[value % 4]);
+        break;
+    }
+
+    FillWindowPixelRect(WIN_OPTIONS, PIXEL_FILL(1), 104, y, 96, 16);
+    DrawOptionMenuChoice(gText_ArrowLeft, 104, y, 0);
+    DrawOptionMenuChoice(text, 140, y, 1);
+    DrawOptionMenuChoice(gText_ArrowRight, 190, y, 0);
+}
+#endif

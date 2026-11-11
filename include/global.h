@@ -119,6 +119,20 @@
 #define ARM_LSR32(x, n) ((x) >> (n))
 #endif
 
+// Sprite helpers that must not shift line numbers in sprite.c (its asserts
+// embed __LINE__, and the GBA ROM has to stay byte-identical).
+#ifdef PORTABLE
+struct Sprite;
+bool32 PcGuard_CallSprite(void (*fn)(struct Sprite *), struct Sprite *sprite);
+#define CALL_SPRITE_CALLBACK(s) PcGuard_CallSprite((s)->callback, (s))
+// Some tables (e.g. move category icons) have a NULL first animation; the GBA
+// reads BIOS there and carries on, the PC must skip it.
+#define SPRITE_HAS_ANIM(s) ((s)->anims != NULL && (s)->anims[(s)->animNum] != NULL)
+#else
+#define CALL_SPRITE_CALLBACK(s) (s)->callback(s)
+#define SPRITE_HAS_ANIM(s) TRUE
+#endif
+
 // Used in cases where modulo by 0 can occur in the retail version.
 #ifdef UBFIX
 #define SAFE_MOD(a, b) ((b) ? (a) % (b) : 0)

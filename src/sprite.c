@@ -1,7 +1,4 @@
 #include "global.h"
-#ifdef PORTABLE
-#include "platform/null_guard.h"
-#endif
 #include "sprite.h"
 #include "main.h"
 #include "overworld.h"
@@ -300,11 +297,7 @@ void AnimateSprites(void)
 
         if (sprite->inUse)
         {
-#ifdef PORTABLE
-            PcGuard_CallSprite(sprite->callback, sprite);
-#else
-            sprite->callback(sprite);
-#endif
+            CALL_SPRITE_CALLBACK(sprite);
 
             if (sprite->inUse)
                 AnimateSprite(sprite);
@@ -913,12 +906,7 @@ void DestroySpriteAndFreeResources(struct Sprite *sprite)
 
 void AnimateSprite(struct Sprite *sprite)
 {
-#ifdef PORTABLE
-    // Some tables (e.g. move category icons) have a NULL first animation;
-    // the GBA reads BIOS there and carries on, the PC must skip it.
-    if (sprite->anims != NULL && sprite->anims[sprite->animNum] != NULL)
-#endif
-    sAnimFuncs[sprite->animBeginning](sprite);
+    if (SPRITE_HAS_ANIM(sprite)) sAnimFuncs[sprite->animBeginning](sprite);
 
     if (!gAffineAnimsDisabled)
         sAffineAnimFuncs[sprite->affineAnimBeginning](sprite);
@@ -1444,11 +1432,7 @@ void ChangeSpriteAffineAnimIfDifferent(struct Sprite *sprite, u8 animNum)
 
 void SetSpriteSheetFrameTileNum(struct Sprite *sprite)
 {
-#ifdef PORTABLE
-    if (sprite->usingSheet && (sprite->anims == NULL || sprite->anims[sprite->animNum] == NULL))
-        return;
-#endif
-    if (sprite->usingSheet)
+    if (sprite->usingSheet && SPRITE_HAS_ANIM(sprite))
     {
         s16 tileOffset = sprite->anims[sprite->animNum][sprite->animCmdIndex].frame.imageValue;
         if (OW_GFX_COMPRESS && sprite->sheetSpan)

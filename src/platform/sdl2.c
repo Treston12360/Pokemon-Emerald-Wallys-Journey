@@ -63,7 +63,7 @@ static char sConfigPath[1024] = "WallysJourney.cfg";
 static u8 sBorderBackground;
 static bool sHasBorderBackgroundConfig;
 static u8 sBackgroundOrderVersion;
-static u8 sPlatformSettings[PLATFORM_SETTING_COUNT] = {0, 4, 0, 1, 1, 10};
+static u8 sPlatformSettings[PLATFORM_SETTING_COUNT] = {0, 4, 1, 1, 1, 10, 2};
 #ifdef __ANDROID__
 static SDL_GameController *androidController;
 #endif
@@ -81,6 +81,7 @@ static void StoreConfigFile(void);
 static void ApplyPlatformSettings(void);
 static void StoreSaveFile(void);
 static void FlushSaveIfDirty(void);
+static void ApplyChangedWindowSettings(void);
 static void CloseSaveFile(void);
 
 static void UpdateInternalClock(void);
@@ -386,6 +387,7 @@ int main(int argc, char **argv)
 
     while (isRunning)
     {
+        ApplyChangedWindowSettings();
         if (sTestScript != NULL)
         {
             while (!SDL_AtomicGet(&isFrameAvailable))
@@ -457,8 +459,11 @@ int main(int argc, char **argv)
                     }
                     else
                     {
-                        gameHeight = outputHeight * 8 / 9;
-                        gameWidth = gameHeight * 3 / 2;
+                        // Fill the window, keeping the GBA's 3:2 shape.
+                        gameWidth = outputWidth;
+                        if (gameWidth > outputHeight * 3 / 2)
+                            gameWidth = outputHeight * 3 / 2;
+                        gameHeight = gameWidth * 2 / 3;
                     }
                     SDL_Rect gameViewport = {(outputWidth - gameWidth) / 2,
                                              (outputHeight - gameHeight) / 2,
@@ -578,7 +583,7 @@ static void ReadConfigFile(void)
             sBackgroundOrderVersion = value;
         else if (sscanf(line, "fullscreen=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_FULLSCREEN] = value != 0;
-        else if (sscanf(line, "windowScale=%u", &value) == 1 && value >= 2 && value <= 5)
+        else if (sscanf(line, "windowScale=%u", &value) == 1 && value >= 1 && value <= 6)
             sPlatformSettings[PLATFORM_SETTING_WINDOW_SCALE] = value;
         else if (sscanf(line, "integerScale=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_INTEGER_SCALE] = value != 0;
@@ -588,6 +593,8 @@ static void ReadConfigFile(void)
             sPlatformSettings[PLATFORM_SETTING_BORDER] = value != 0;
         else if (sscanf(line, "volume=%u", &value) == 1 && value <= 10)
             sPlatformSettings[PLATFORM_SETTING_VOLUME] = value;
+        else if (sscanf(line, "fastForward=%u", &value) == 1 && value <= 3)
+            sPlatformSettings[PLATFORM_SETTING_FF_SPEED] = value;
     }
     fclose(configFile);
 }
@@ -606,6 +613,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "vsync=%u\n", sPlatformSettings[PLATFORM_SETTING_VSYNC]);
     fprintf(configFile, "border=%u\n", sPlatformSettings[PLATFORM_SETTING_BORDER]);
     fprintf(configFile, "volume=%u\n", sPlatformSettings[PLATFORM_SETTING_VOLUME]);
+    fprintf(configFile, "fastForward=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_SPEED]);
     fclose(configFile);
 }
 
@@ -618,7 +626,7 @@ static void ApplyPlatformSettings(void)
     if (!sPlatformSettings[PLATFORM_SETTING_FULLSCREEN])
     {
         int scale = sPlatformSettings[PLATFORM_SETTING_WINDOW_SCALE];
-        SDL_SetWindowSize(sdlWindow, 320 * scale, 180 * scale);
+        SDL_SetWindowSize(sdlWindow, DISPLAY_WIDTH * scale, DISPLAY_HEIGHT * scale);
         SDL_SetWindowPosition(sdlWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     }
 #endif
@@ -725,29 +733,26 @@ u8 Platform_GetSetting(enum PlatformSetting setting)
     return sPlatformSettings[setting];
 }
 
+// Called from the game thread (Options menu). Window changes must happen on
+// the main thread, so they are only flagged here and applied between frames.
+static SDL_atomic_t sWindowSettingsChanged;
+
 void Platform_SetSetting(enum PlatformSetting setting, u8 value)
 {
     sPlatformSettings[setting] = value;
-    if (setting == PLATFORM_SETTING_VSYNC)
-        SDL_RenderSetVSync(sdlRenderer, value);
-#if defined(NATIVE_LINUX) || defined(_WIN32)
-    else if (setting == PLATFORM_SETTING_FULLSCREEN)
-    {
-        SDL_SetWindowFullscreen(sdlWindow, value ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
-        if (!value)
-        {
-            int scale = sPlatformSettings[PLATFORM_SETTING_WINDOW_SCALE];
-            SDL_SetWindowSize(sdlWindow, 320 * scale, 180 * scale);
-            SDL_SetWindowPosition(sdlWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-        }
-    }
-    else if (setting == PLATFORM_SETTING_WINDOW_SCALE && !sPlatformSettings[PLATFORM_SETTING_FULLSCREEN])
-    {
-        SDL_SetWindowSize(sdlWindow, 320 * value, 180 * value);
-        SDL_SetWindowPosition(sdlWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-    }
-#endif
+    if (setting == PLATFORM_SETTING_VSYNC || setting == PLATFORM_SETTING_FULLSCREEN
+     || setting == PLATFORM_SETTING_WINDOW_SCALE)
+        SDL_AtomicSet(&sWindowSettingsChanged, 1);
     StoreConfigFile();
+}
+
+static void ApplyChangedWindowSettings(void)
+{
+    if (SDL_AtomicGet(&sWindowSettingsChanged))
+    {
+        SDL_AtomicSet(&sWindowSettingsChanged, 0);
+        ApplyPlatformSettings();
+    }
 }
 
 #ifdef __ANDROID__
@@ -1127,8 +1132,7 @@ void ProcessEvents(void)
             case SDLK_F11:
             {
                 // F11: toggle fullscreen
-                Uint32 isFull = SDL_GetWindowFlags(sdlWindow) & SDL_WINDOW_FULLSCREEN_DESKTOP;
-                SDL_SetWindowFullscreen(sdlWindow, isFull ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP);
+                Platform_SetSetting(PLATFORM_SETTING_FULLSCREEN, !sPlatformSettings[PLATFORM_SETTING_FULLSCREEN]);
                 break;
             }
             case SDLK_r:
@@ -1147,7 +1151,10 @@ void ProcessEvents(void)
                 if (!speedUp)
                 {
                     speedUp = true;
-                    timeScale = 5.0;
+                    {
+                        static const double sFfScales[] = {2.0, 3.0, 5.0, 100.0};
+                        timeScale = sFfScales[sPlatformSettings[PLATFORM_SETTING_FF_SPEED] % 4];
+                    }
                     SDL_PauseAudioDevice(sdlAudioDevice, 1);
                 }
                 break;
