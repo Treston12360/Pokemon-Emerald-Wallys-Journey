@@ -1,4 +1,7 @@
 #include "global.h"
+#ifdef PORTABLE
+#include "platform/null_guard.h"
+#endif
 #include "task.h"
 
 COMMON_DATA struct Task gTasks[NUM_TASKS] = {0};
@@ -115,7 +118,11 @@ void RunTasks(void)
     {
         do
         {
+#ifdef PORTABLE
+            PcGuard_CallTask(gTasks[taskId].func, taskId);
+#else
             gTasks[taskId].func(taskId);
+#endif
             taskId = gTasks[taskId].next;
         } while (taskId != TAIL_SENTINEL);
     }

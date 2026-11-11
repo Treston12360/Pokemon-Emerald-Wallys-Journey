@@ -1,5 +1,6 @@
 #ifdef RENDERER_EASY_DRAW
 #include "global.h"
+#include "platform/null_guard.h"
 #include <stdbool.h>
 #include "platform/dma.h"
 
@@ -903,7 +904,7 @@ void DrawFrame(uint16_t *pixels)
 #else
             if (REG_DISPSTAT & DISPSTAT_VCOUNT_INTR)
 #endif
-                    gIntrTable[0]();
+                    PcGuard_Call0(gIntrTable[0]);
         }
 
         // Render the backdrop color before the each individual scanline.
@@ -931,7 +932,7 @@ void DrawFrame(uint16_t *pixels)
         RunDMAs(DMA_HBLANK);
         
         if (REG_DISPSTAT & DISPSTAT_HBLANK_INTR)
-            gIntrTable[3]();
+            PcGuard_Call0(gIntrTable[3]);
 
         REG_DISPSTAT &= ~INTR_FLAG_HBLANK;
         REG_DISPSTAT &= ~INTR_FLAG_VCOUNT;

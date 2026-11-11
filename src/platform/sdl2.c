@@ -21,6 +21,7 @@
 #endif
 
 #include "global.h"
+#include "platform/null_guard.h"
 #include "platform.h"
 #include "rtc.h"
 #include "gba/defines.h"
@@ -224,6 +225,7 @@ int main(int argc, char **argv)
         SDL_free(prefPath);
     }
 #endif
+    PcGuard_Init();
     if (getenv("WJPC_SAVE"))
         SDL_snprintf(sSavePath, sizeof(sSavePath), "%s", getenv("WJPC_SAVE"));
     if (getenv("WJPC_SCRIPT"))
@@ -398,7 +400,7 @@ int main(int argc, char **argv)
             REG_DISPSTAT |= INTR_FLAG_VBLANK;
             RunDMAs(DMA_HBLANK);
             if (REG_DISPSTAT & DISPSTAT_VBLANK_INTR)
-                gIntrTable[4]();
+                PcGuard_Call0(gIntrTable[4]);
             REG_DISPSTAT &= ~INTR_FLAG_VBLANK;
             sTestFrame++;
             if (sTestFrame % 1000 == 0)
@@ -418,8 +420,11 @@ int main(int argc, char **argv)
 
             curGameTime = SDL_GetPerformanceCounter();
             double deltaTime = (double)((curGameTime - lastGameTime) / (double)SDL_GetPerformanceFrequency());
-            if (deltaTime > (dt * 5))
-                deltaTime = dt;
+            // Catch up at most a few frames after a stall (window drag, etc.).
+            // The old clamp compared against the fast-forward step, which made
+            // fast-forward stutter between 1x and 5x.
+            if (deltaTime > 0.1)
+                deltaTime = 0.1;
             lastGameTime = curGameTime;
 
             accumulator += deltaTime;
@@ -489,7 +494,7 @@ int main(int argc, char **argv)
 #else
                     if (REG_DISPSTAT & DISPSTAT_VBLANK_INTR)
 #endif
-                        gIntrTable[4]();
+                        PcGuard_Call0(gIntrTable[4]);
                     REG_DISPSTAT &= ~INTR_FLAG_VBLANK;
 
                     FlushSaveIfDirty();
@@ -687,6 +692,10 @@ void Platform_QueueAudio(float *audioBuffer, s32 samplesPerFrame)
         float volume = sPlatformSettings[PLATFORM_SETTING_VOLUME] / 10.0f;
         for (int i = 0; i < floatCount; i++)
             adjustedAudio[i] = audioBuffer[i] * volume;
+        // Fast-forward: drop the sound instead of piling it up. Normal speed:
+        // never let more than ~1/4 s queue up, so sound stays in sync.
+        if (speedUp || SDL_GetQueuedAudioSize(sdlAudioDevice) > 42060 * 2 * sizeof(float) / 4)
+            return;
         if (SDL_QueueAudio(sdlAudioDevice, adjustedAudio, samplesPerFrame) < 0)
             SDL_Log("Failed to queue audio: %s", SDL_GetError());
     }

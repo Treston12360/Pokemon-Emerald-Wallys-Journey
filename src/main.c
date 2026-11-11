@@ -1,5 +1,8 @@
 #include "global.h"
 #include "platform.h"
+#ifdef PORTABLE
+#include "platform/null_guard.h"
+#endif
 #include "crt0.h"
 #include "malloc.h"
 #include "link.h"
@@ -371,7 +374,11 @@ static void VBlankIntr(void)
         (*gTrainerHillVBlankCounter)++;
 
     if (gMain.vblankCallback)
+#ifdef PORTABLE
+        PcGuard_Call0(gMain.vblankCallback);
+#else
         gMain.vblankCallback();
+#endif
 
     gMain.vblankCounter2++;
 
@@ -400,7 +407,11 @@ void InitFlashTimer(void)
 static void HBlankIntr(void)
 {
     if (gMain.hblankCallback)
+#ifdef PORTABLE
+        PcGuard_Call0(gMain.hblankCallback);
+#else
         gMain.hblankCallback();
+#endif
 
     INTR_CHECK |= INTR_FLAG_HBLANK;
     gMain.intrCheck |= INTR_FLAG_HBLANK;
@@ -409,7 +420,11 @@ static void HBlankIntr(void)
 static void VCountIntr(void)
 {
     if (gMain.vcountCallback)
+#ifdef PORTABLE
+        PcGuard_Call0(gMain.vcountCallback);
+#else
         gMain.vcountCallback();
+#endif
 
     m4aSoundVSync();
     INTR_CHECK |= INTR_FLAG_VCOUNT;

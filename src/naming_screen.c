@@ -821,6 +821,10 @@ static void StartPageSwapAnim(void)
 
 static void Task_HandlePageSwapAnim(u8 taskId)
 {
+#ifdef PORTABLE
+    if (sNamingScreen == NULL) // runs once more after the screen is freed (harmless on GBA)
+        return;
+#endif
     while (sPageSwapAnimStateFuncs[gTasks[taskId].tState](&gTasks[taskId]) != 0);
 }
 
@@ -934,6 +938,10 @@ static void TryStartButtonFlash(u8 button, bool8 keepFlashing, bool8 interruptCu
 
 static void Task_UpdateButtonFlash(u8 taskId)
 {
+#ifdef PORTABLE
+    if (sNamingScreen == NULL) // runs once more after the screen is freed (harmless on GBA)
+        return;
+#endif
     struct Task *task = &gTasks[taskId];
 
     if (task->tButtonId == BUTTON_COUNT || !task->tAllowFlash)
@@ -1022,6 +1030,10 @@ static void StartButtonFlash(struct Task *task, u8 button, bool8 keepFlashing)
 
 static void SpriteCB_Cursor(struct Sprite *sprite)
 {
+#ifdef PORTABLE
+    if (sNamingScreen == NULL) // runs once more after the screen is freed (harmless on GBA)
+        return;
+#endif
     if (sprite->animEnded)
         StartSpriteAnim(sprite, 0);
 
@@ -1064,6 +1076,10 @@ static void SpriteCB_Cursor(struct Sprite *sprite)
 
 static void SpriteCB_InputArrow(struct Sprite *sprite)
 {
+#ifdef PORTABLE
+    if (sNamingScreen == NULL) // runs once more after the screen is freed (harmless on GBA)
+        return;
+#endif
     const s16 x[] = {0, -4, -2, -1};
 
     if (sprite->sDelay == 0 || --sprite->sDelay == 0)
@@ -1083,6 +1099,10 @@ static void SpriteCB_InputArrow(struct Sprite *sprite)
 
 static void SpriteCB_Underscore(struct Sprite *sprite)
 {
+#ifdef PORTABLE
+    if (sNamingScreen == NULL) // runs once more after the screen is freed (harmless on GBA)
+        return;
+#endif
     const s16 y[] = {2, 3, 2, 1};
     u8 pos;
 
@@ -1261,6 +1281,10 @@ static u8 (*const sPageSwapSpriteFuncs[])(struct Sprite *) =
 
 static void SpriteCB_PageSwap(struct Sprite *sprite)
 {
+#ifdef PORTABLE
+    if (sNamingScreen == NULL) // runs once more after the screen is freed (harmless on GBA)
+        return;
+#endif
     while (sPageSwapSpriteFuncs[sprite->sState](sprite));
 }
 
@@ -2105,6 +2129,10 @@ static void SetVBlank(void)
 
 static void VBlankCB_NamingScreen(void)
 {
+#ifdef PORTABLE
+    if (sNamingScreen == NULL)
+        return;
+#endif
     LoadOam();
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
