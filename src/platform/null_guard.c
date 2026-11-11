@@ -9,11 +9,13 @@
 // left alone.
 #include <stdio.h>
 #include <stdint.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 #include "global.h"
 #include "platform/null_guard.h"
 
 #ifdef _WIN32
-#include <windows.h>
 #else
 #include <signal.h>
 #include <execinfo.h>
