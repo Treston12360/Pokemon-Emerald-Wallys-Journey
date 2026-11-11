@@ -1048,6 +1048,12 @@ bool8 IsBattleTransitionDone(void)
     if (gTasks[taskId].tTransitionDone)
     {
         DestroyTask(taskId);
+#ifdef PORTABLE
+        // The transition's VBlank/HBlank callbacks would run once more and
+        // read the freed data (harmless on GBA, a crash on PC).
+        SetVBlankCallback(NULL);
+        SetHBlankCallback(NULL);
+#endif
         FREE_AND_SET_NULL(sTransitionData);
         return TRUE;
     }

@@ -166,6 +166,14 @@ void ShuffleN(void *data, size_t n, size_t size)
     LOOP_RANDOM_END;
 }
 
+#if defined(PORTABLE) && defined(_WIN32)
+// Windows (PE) has no weak aliases; the PC build never runs the test runner,
+// so plain forwarding functions do the same job.
+u32 RandomUniform(enum RandomTag tag, u32 lo, u32 hi) { return RandomUniformDefault(tag, lo, hi); }
+u32 RandomUniformExcept(enum RandomTag tag, u32 lo, u32 hi, bool32 (*reject)(u32)) { return RandomUniformExceptDefault(tag, lo, hi, reject); }
+u32 RandomWeightedArray(enum RandomTag tag, u32 sum, u32 n, const u16 *weights) { return RandomWeightedArrayDefault(tag, sum, n, weights); }
+const void *RandomElementArray(enum RandomTag tag, const void *array, size_t size, size_t count) { return RandomElementArrayDefault(tag, array, size, count); }
+#else
 __attribute__((weak, alias("RandomUniformDefault")))
 u32 RandomUniform(enum RandomTag tag, u32 lo, u32 hi);
 
@@ -177,6 +185,7 @@ u32 RandomWeightedArray(enum RandomTag tag, u32 sum, u32 n, const u16 *weights);
 
 __attribute__((weak, alias("RandomElementArrayDefault")))
 const void *RandomElementArray(enum RandomTag tag, const void *array, size_t size, size_t count);
+#endif
 
 u32 RandomUniformDefault(enum RandomTag tag, u32 lo, u32 hi)
 {

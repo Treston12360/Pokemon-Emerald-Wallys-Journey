@@ -1,2 +1,4 @@
 #pragma once
-#include <malloc.h>
+#ifndef alloca
+#define alloca __builtin_alloca
+#endif

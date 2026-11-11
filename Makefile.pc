@@ -32,7 +32,7 @@ AS      := $(PREFIX)as
 OBJCOPY := $(PREFIX)objcopy
 WINDRES := $(PREFIX)windres
 PREPROC := tools/preproc/preproc
-ASMCONV := python3 tools/pc/asmconv.py
+ASMCONV := python3 tools/pc/asmconv.py $(if $(filter 1,$(WIN)),--coff)
 ASSETS  := build/assets
 
 DEFS := -DPORTABLE -DNONMATCHING -DUBFIX -DMODERN=1 -DTESTING=0 -DEMERALD -DRELEASE \
@@ -43,7 +43,7 @@ SDL_CFLAGS := -I/usr/include/SDL2 -idirafter /usr/include/x86_64-linux-gnu -D_RE
 SDL_LIBS   := /usr/lib/i386-linux-gnu/libSDL2-2.0.so.0 /usr/lib/i386-linux-gnu/libSDL2_image-2.0.so.0 -lm
 else
 DEFS += -DWINDOWS32=1
-SDL_CFLAGS := -I$(SDL_DIR)/include -I$(SDL_DIR)/include/SDL2 -idirafter tools/pc/win_include -mno-ms-bitfields
+SDL_CFLAGS := -I$(SDL_DIR)/include -I$(SDL_DIR)/include/SDL2 -idirafter tools/pc/win_include -mno-ms-bitfields -mno-align-double
 SDL_LIBS   := -L$(SDL_DIR)/lib -lmingw32 -lSDL2main -lSDL2_image -lSDL2 -lwinmm -limm32 -lversion -lsetupapi -lole32 -loleaut32 -lcomdlg32 -lxinput -mwindows -static-libgcc
 endif
 
@@ -71,7 +71,13 @@ DATA_OBJS := $(patsubst data/%.s,$(OBJ_DIR)/data/%.o,$(DATA_SRCS))
 MID_SRCS := $(wildcard sound/songs/midi/*.s)
 MID_OBJS := $(patsubst sound/songs/midi/%.s,$(OBJ_DIR)/midi/%.o,$(MID_SRCS))
 
-OBJS := $(C_OBJS) $(DATA_OBJS) $(MID_OBJS)
+# Functions tagged with the asm effect_ptr macro, as a C table. Always read
+# from the Linux (ELF) data objects, which keep them in their own section.
+LINUX_DATA_OBJS := $(patsubst data/%.s,build/pc-linux32/data/%.o,$(DATA_SRCS))
+EFFECT_C := $(OBJ_DIR)/gen/effect_funcs.c
+EFFECT_O := $(OBJ_DIR)/gen/effect_funcs.o
+
+OBJS := $(C_OBJS) $(DATA_OBJS) $(MID_OBJS) $(EFFECT_O)
 ifeq ($(WIN),1)
 OBJS += $(OBJ_DIR)/icon.o
 # 32-bit Windows C symbols carry a leading underscore; give asm data objects the same.
@@ -94,12 +100,25 @@ $(OBJ_DIR)/src/%.o: src/%.c
 	$(CC) $(CFLAGS) -x cpp-output -c $(OBJ_DIR)/src/$*.pp.i -o $@
 
 $(OBJ_DIR)/data/%.o: data/%.s
-	$(PREPROC) -s $< charmap.txt | $(CC) -E -x assembler-with-cpp $(CPPFLAGS) -I include - | $(PREPROC) -ie $< charmap.txt | $(ASMCONV) | $(AS) $(ASFLAGS) -o $@ 2>/dev/null
+	$(PREPROC) -s $< charmap.txt | $(CC) -E -x assembler-with-cpp $(CPPFLAGS) -I include - | $(PREPROC) -ie $< charmap.txt | $(ASMCONV) | $(AS) $(ASFLAGS) -o $@ 2>&1 | { grep -E 'Error' || true; }; test -s $@
 	@$(FIX_US)
 
 $(OBJ_DIR)/midi/%.o: sound/songs/midi/%.s
 	$(ASMCONV) < $< | $(AS) $(ASFLAGS) -o $@
 	@$(FIX_US)
+
+ifeq ($(WIN),1)
+$(LINUX_DATA_OBJS): $(DATA_SRCS)
+	$(MAKE) -f Makefile.pc WIN=0 linux-data
+endif
+
+linux-data: $(LINUX_DATA_OBJS)
+
+$(EFFECT_C): $(LINUX_DATA_OBJS) tools/pc/effect_funcs.sh
+	tools/pc/effect_funcs.sh $@ $(LINUX_DATA_OBJS)
+
+$(EFFECT_O): $(EFFECT_C)
+	$(CC) -m32 -O2 -c $< -o $@
 
 $(OBJ_DIR)/icon.o: resources/pokemon_emerald.rc resources/pokemon_emerald.ico
 	$(WINDRES) $< -O coff -o $@
@@ -109,5 +128,5 @@ $(OBJ_DIR)/icon.o: resources/pokemon_emerald.rc resources/pokemon_emerald.ico
 clean:
 	rm -rf $(OBJ_DIR) $(TARGET)
 
-.PHONY: all clean
+.PHONY: all clean linux-data
 .SECONDARY:

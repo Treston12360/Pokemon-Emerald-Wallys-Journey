@@ -42,6 +42,23 @@ def strip_comment(line):
     return ''.join(out)
 
 
+COFF = '--coff' in sys.argv
+SECTION = re.compile(r'^(\s*)\.section\s+([^,\s]+)\s*(?:,\s*"([^"]*)")?(?:\s*,.*)?$')
+
+
+def coff_fixups(line):
+    # PE/COFF: no .size/.type, and section flags use a different alphabet.
+    line = re.sub(r'\.(size|type)\s+[^;]*', '', line)
+    m = SECTION.match(line)
+    if m:
+        flags = m.group(3)
+        if flags is None:
+            return f'{m.group(1)}.section {m.group(2)}'
+        f = 'xr' if 'x' in flags else ('dw' if 'w' in flags else 'dr')
+        return f'{m.group(1)}.section {m.group(2)},"{f}"'
+    return line
+
+
 def convert(line):
     line = strip_comment(line.rstrip('\n'))
     if DROP.match(line):
@@ -54,6 +71,8 @@ def convert(line):
     line = re.sub(r'(^|\s)\.word\b', r'\1.int', line)
     line = re.sub(r'(^|\s)\.2byte\b', r'\1.short', line)
     line = re.sub(r'(^|\s)\.hword\b', r'\1.short', line)
+    if COFF:
+        line = coff_fixups(line)
     return line
 
 

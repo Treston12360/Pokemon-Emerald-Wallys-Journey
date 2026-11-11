@@ -34,17 +34,17 @@
 
 	@ A pointer to a function that calls Script_RequestEffects. The GBA build
 	@ tags it by pointing into ROM mirror 1; the PC build can't tag pointers,
-	@ so it keeps a separate list of them instead (see script.c).
+	@ so it keeps a separate list of them instead (see
+	@ tools/pc/effect_funcs.sh and script.c).
 	.macro effect_ptr ptr:req
 	.ifdef PORTABLE_ASM
 	.4byte \ptr
-	.ifdef PORTABLE_WIN
-	.pushsection .rdata$wj_effect_b,"dr"
-	.else
+	.ifndef PORTABLE_WIN
+	@ Collected by tools/pc/effect_funcs.sh into a C table.
 	.pushsection wj_effect_funcs,"a"
-	.endif
 	.4byte \ptr
 	.popsection
+	.endif
 	.else
 	.4byte \ptr + ROM_SIZE
 	.endif

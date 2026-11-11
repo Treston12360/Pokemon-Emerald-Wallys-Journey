@@ -57,8 +57,8 @@ double timeScale = 1.0;
 struct SiiRtcInfo internalClock;
 
 static FILE *sSaveFile = NULL;
-static char sSavePath[1024] = "pokeemerald.sav";
-static char sConfigPath[1024] = "pokeemerald.cfg";
+static char sSavePath[1024] = "WallysJourney.sav";
+static char sConfigPath[1024] = "WallysJourney.cfg";
 static u8 sBorderBackground;
 static bool sHasBorderBackgroundConfig;
 static u8 sBackgroundOrderVersion;
@@ -79,6 +79,7 @@ static void ReadConfigFile(void);
 static void StoreConfigFile(void);
 static void ApplyPlatformSettings(void);
 static void StoreSaveFile(void);
+static void FlushSaveIfDirty(void);
 static void CloseSaveFile(void);
 
 static void UpdateInternalClock(void);
@@ -183,9 +184,12 @@ int main(int argc, char **argv)
 {
     // Open an output console on Windows
 #ifdef _WIN32
-    AllocConsole() ;
-    AttachConsole( GetCurrentProcessId() ) ;
-    freopen( "CON", "w", stdout ) ;
+    if (getenv("WJPC_CONSOLE") || getenv("WJPC_SCRIPT"))
+    {
+        AllocConsole() ;
+        AttachConsole( GetCurrentProcessId() ) ;
+        freopen( "CON", "w", stdout ) ;
+    }
 #endif
 
 #ifdef __ANDROID__
@@ -231,7 +235,7 @@ int main(int argc, char **argv)
     SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight");
 #endif
 #if defined(NATIVE_LINUX) || defined(_WIN32)
-    sdlWindow = SDL_CreateWindow("Pokemon Emerald", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    sdlWindow = SDL_CreateWindow("Pokemon Wally's Journey", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 #else
     sdlWindow = SDL_CreateWindow("pokeemerald", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DISPLAY_WIDTH * videoScale, DISPLAY_HEIGHT * videoScale, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 #endif
@@ -402,6 +406,7 @@ int main(int argc, char **argv)
                 printf("frame %u\n", sTestFrame);
                 fflush(stdout);
             }
+            FlushSaveIfDirty();
             SDL_SemPost(vBlankSemaphore);
             continue;
         }
@@ -487,7 +492,8 @@ int main(int argc, char **argv)
                         gIntrTable[4]();
                     REG_DISPSTAT &= ~INTR_FLAG_VBLANK;
 
-                    SDL_SemPost(vBlankSemaphore);
+                    FlushSaveIfDirty();
+            SDL_SemPost(vBlankSemaphore);
 
                     accumulator -= dt;
                 }
@@ -619,6 +625,18 @@ static void StoreSaveFile()
     {
         fseek(sSaveFile, 0, SEEK_SET);
         fwrite(FLASH_BASE, 1, sizeof(FLASH_BASE), sSaveFile);
+        fflush(sSaveFile);
+    }
+}
+
+// Called between frames, while the game thread is waiting for VBlank.
+extern bool8 gWjFlashDirty;
+static void FlushSaveIfDirty(void)
+{
+    if (gWjFlashDirty)
+    {
+        gWjFlashDirty = FALSE;
+        StoreSaveFile();
     }
 }
 
@@ -651,6 +669,17 @@ void Platform_ReadFlash(u16 sectorNum, u32 offset, u8 *dest, u32 size)
 
 void Platform_QueueAudio(float *audioBuffer, s32 samplesPerFrame)
 {
+    // Test mode: WJPC_AUDIO_DUMP=file writes the raw mixer output (f32 stereo).
+    static FILE *sAudioDump;
+    static bool sAudioDumpChecked;
+    if (!sAudioDumpChecked)
+    {
+        sAudioDumpChecked = true;
+        if (getenv("WJPC_AUDIO_DUMP"))
+            sAudioDump = fopen(getenv("WJPC_AUDIO_DUMP"), "wb");
+    }
+    if (sAudioDump)
+        fwrite(audioBuffer, 1, samplesPerFrame, sAudioDump);
     if (sdlAudioDevice != 0)
     {
         int floatCount = samplesPerFrame / sizeof(float);
@@ -1086,6 +1115,13 @@ void ProcessEvents(void)
             HANDLE_KEYDOWN(DPAD_DOWN)
             HANDLE_KEYDOWN(DPAD_LEFT)
             HANDLE_KEYDOWN(DPAD_RIGHT)
+            case SDLK_F11:
+            {
+                // F11: toggle fullscreen
+                Uint32 isFull = SDL_GetWindowFlags(sdlWindow) & SDL_WINDOW_FULLSCREEN_DESKTOP;
+                SDL_SetWindowFullscreen(sdlWindow, isFull ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP);
+                break;
+            }
             case SDLK_r:
                 if (event.key.keysym.mod & (KMOD_LCTRL | KMOD_RCTRL))
                 {
