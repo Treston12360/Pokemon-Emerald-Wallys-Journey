@@ -1106,8 +1106,8 @@ static void PcOption_ProcessInput(u8 item)
     s32 value = Platform_GetSetting(sPcRowSetting[row]);
     s32 old = value;
 
-    // Volume (0..10) and fast forward speed (2x..20x) stop at their ends; the other rows wrap around.
-    bool32 wrap = (item != MENUITEM_PC_VOLUME && item != MENUITEM_PC_FFSPEED);
+    // Volume stops at 0 and 10; the other rows (fast forward 20x -> 2x too, owner request) wrap around.
+    bool32 wrap = (item != MENUITEM_PC_VOLUME);
     if (JOY_REPEAT(DPAD_RIGHT))
         value = (value < sPcRowMax[row]) ? value + 1 : (wrap ? sPcRowMin[row] : value);
     else if (JOY_REPEAT(DPAD_LEFT))
