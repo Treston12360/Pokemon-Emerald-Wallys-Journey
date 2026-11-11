@@ -67,6 +67,13 @@ extern struct LinkPlayerObjectEvent gLinkPlayerObjectEvents[4];
 extern u16 *gOverworldTilemapBuffer_Bg2;
 extern u16 *gOverworldTilemapBuffer_Bg1;
 extern u16 *gOverworldTilemapBuffer_Bg3;
+// A map's on-load script can redraw metatiles before the tilemap buffers exist (e.g. continuing
+// a save). The GBA writes those into unused low memory; on PC skip them (GBA unchanged).
+#ifdef PORTABLE
+#define WJPC_RETURN_IF_NO_TILEMAP_BUFFERS() if (gOverworldTilemapBuffer_Bg1 == NULL || gOverworldTilemapBuffer_Bg2 == NULL || gOverworldTilemapBuffer_Bg3 == NULL) return
+#else
+#define WJPC_RETURN_IF_NO_TILEMAP_BUFFERS()
+#endif
 extern u16 gHeldKeyCodeToSend;
 extern void (*gFieldCallback)(void);
 extern bool8 (*gFieldCallback2)(void);

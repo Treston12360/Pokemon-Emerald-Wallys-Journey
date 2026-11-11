@@ -244,6 +244,7 @@ static void DrawMetatileAt(const struct MapLayout *mapLayout, u16 offset, int x,
 
 static void DrawMetatile(s32 metatileLayerType, const u16 *tiles, u16 offset)
 {
+    WJPC_RETURN_IF_NO_TILEMAP_BUFFERS();
     switch (metatileLayerType)
     {
     case METATILE_LAYER_TYPE_SPLIT:

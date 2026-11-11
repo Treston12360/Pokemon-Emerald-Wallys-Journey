@@ -1,7 +1,7 @@
 # Project: Wally's Journey as a PC program (.exe)
 
 **Branch:** `deluxe` (PC work started on `pc-port`) (based on 0.18.19). Read this whole file before working on the PC version.
-**Status (2026-11-11):** alpha 4c (wide view) sent to the owner as `WallysJourney.exe`, tested under Wine 10
+**Status (2026-11-11):** alpha 4d (wide view) sent to the owner as `WallysJourney.exe`, tested under Wine 10
 (Kron4ek WoW64 build from GitHub releases + Xvfb). Steps 1 (PC settings) and 2 (widescreen) are done.
 **Next: step 3 (smooth high frame rate).**
 
@@ -168,3 +168,7 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   falls back to the normal picture if it faults, skips are logged to `WallysJourney_errors.txt`, and an
   unhandled crash on Windows writes `WallysJourney_crash.txt` (exe-relative addresses: look them up with
   `i686-w64-mingw32-nm -n` on the unstripped exe from the same commit) and shows a message box.
+- alpha 4c: owner sent WallysJourney_errors.txt + his save: "Once I hit continue save from my save file. It goes to a
+  black screen". Save is in New Mauville; its on-load script runs `special DrawWholeMapView` before the overworld
+  tilemap buffers are allocated (NULL on GBA = harmless writes to low memory). Fixed in 4d:
+  `WJPC_RETURN_IF_NO_TILEMAP_BUFFERS()` (overworld.h) in `DrawMetatile`. Tested with his save + cfg under Wine.
