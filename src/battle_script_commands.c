@@ -2218,9 +2218,9 @@ static void Cmd_getexp(void)
             // Wally's Journey: repeatable Gym Leader rematches give a quarter of the EXP.
             if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && WallyJourney_IsLeaderRematchTrainer(TRAINER_BATTLE_PARAM.opponentA))
                 calculatedExp /= 4;
-            // Wally's Journey: Gabby & Ty (repeatable, scaled) also give a quarter (owner 2026-11-08).
+            // Wally's Journey: Gabby & Ty (repeatable, scaled) give 5% (owner 2026-11-11; was a quarter).
             else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && WallyJourney_IsReporterTrainer(TRAINER_BATTLE_PARAM.opponentA))
-                calculatedExp /= 4;
+                calculatedExp = max(1, calculatedExp * 5 / 100);
 
             if (WallyJourney_IsExpAllMode())
             {

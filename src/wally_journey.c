@@ -903,9 +903,8 @@ static u16 WJ_EvolveForLevel(u16 species, u32 level)
 }
 
 // Wally's Journey (owner 2026-11-08): Gabby & Ty are farmed for money and EXP. Every
-// battle (all six of their teams) is 2 levels below the player's highest level (never
-// below the team's own level), with 20 IVs in every stat, full EVs, good natures and
-// strong movesets (4 attacks, no Protect). They give a quarter of the EXP and 40 x level money
+// battle (all six of their teams) is 2 levels below the player's highest party level, with 20 IVs in every stat, full EVs, good natures and
+// strong movesets (4 attacks, no Protect). They give 5% of the EXP and 40 x level money
 // (battle_script_commands.c).
 bool32 WallyJourney_IsReporterTrainer(u16 trainerId)
 {
@@ -949,11 +948,15 @@ void WallyJourney_ScaleReporterParty(struct Pokemon *party, u16 trainerId)
         u8 nature;
         const struct WJReporterBuild *build = NULL;
 
+        // Only the player's highest party level counts (owner 2026-11-11): no floor at
+        // the team's own level, so a low team meets low reporters. Start from the first
+        // stage and evolve to what fits that level.
+        (void)level;
         target = top > 2 ? top - 2 : 1;
-        if (target < level)
-            target = level;
         if (target > MAX_LEVEL)
             target = MAX_LEVEL;
+        while (GetSpeciesPreEvolution(species) != SPECIES_NONE)
+            species = GetSpeciesPreEvolution(species);
         species = WJ_EvolveForLevel(species, target);
         SetMonData(mon, MON_DATA_SPECIES, &species);
         SetMonData(mon, MON_DATA_NICKNAME, GetSpeciesName(species));
