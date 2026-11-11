@@ -40,6 +40,13 @@ SDL_Thread *mainLoopThread;
 SDL_Window *sdlWindow;
 SDL_Renderer *sdlRenderer;
 SDL_Texture *sdlTexture;
+SDL_Texture *sdlOverlayTexture; // smooth motion: text layer drawn over the sliding map
+#define SMOOTH_M WIDE_VIEW_SMOOTH_MARGIN
+#define TEX_W (WIDE_VIEW_MAX_W + 2 * SMOOTH_M)
+#define TEX_H (WIDE_VIEW_MAX_H + 2 * SMOOTH_M)
+// Camera (world pixels) of the last two game frames, for smooth motion.
+static int sPrevCamX, sPrevCamY, sCurCamX, sCurCamY;
+static bool sCamMoveValid;
 #if defined(NATIVE_LINUX) || defined(_WIN32)
 #define MAX_BORDER_BACKGROUNDS 15
 SDL_Texture *sdlBackgroundTextures[MAX_BORDER_BACKGROUNDS];
@@ -141,7 +148,8 @@ static u16 sTestKeys;
 static int sTestHold;
 static u32 sTestFrame;
 static u16 *sTestLastGbaImage;
-static u16 sTestGbaImage[WIDE_VIEW_MAX_W * WIDE_VIEW_MAX_H];
+static u16 sTestGbaImage[(WIDE_VIEW_MAX_W + 2 * WIDE_VIEW_SMOOTH_MARGIN) * (WIDE_VIEW_MAX_H + 2 * WIDE_VIEW_SMOOTH_MARGIN)];
+static u16 sTestOverlay[(WIDE_VIEW_MAX_W + 2 * WIDE_VIEW_SMOOTH_MARGIN) * (WIDE_VIEW_MAX_H + 2 * WIDE_VIEW_SMOOTH_MARGIN)];
 static struct WideViewFrame sTestFrameInfo = {DISPLAY_WIDTH, DISPLAY_HEIGHT, WIDE_VIEW_GBA};
 
 static u16 TestKeyMask(const char *keys)
@@ -171,10 +179,12 @@ static void TestWriteShot(const char *path)
     FILE *f = fopen(path, "wb");
     if (f == NULL)
         return;
+    int m = sTestFrameInfo.margin, stride = sTestFrameInfo.width + 2 * m;
     fprintf(f, "P6\n%d %d\n255\n", sTestFrameInfo.width, sTestFrameInfo.height);
     for (int i = 0; i < sTestFrameInfo.width * sTestFrameInfo.height; i++)
     {
-        u16 c = sTestGbaImage[i];
+        int idx = (i / sTestFrameInfo.width + m) * stride + i % sTestFrameInfo.width + m;
+        u16 c = (m > 0 && (sTestOverlay[idx] & 0x8000)) ? sTestOverlay[idx] : sTestGbaImage[idx];
         u8 rgb[3] = {(c & 0x1F) << 3, ((c >> 5) & 0x1F) << 3, ((c >> 10) & 0x1F) << 3};
         fwrite(rgb, 1, 3, f);
     }
@@ -215,6 +225,22 @@ static bool TestStep(void)
             TestWriteShot(arg1);
             continue;
         }
+        if (!strcmp(cmd, "smoothshot"))
+        {
+            // Test of smooth motion (WJPC_SMOOTH_TEST=1): raw map + text layers and the camera.
+            FILE *f = fopen(arg1, "wb");
+            if (f != NULL)
+            {
+                int m = sTestFrameInfo.margin;
+                int hdr[5] = {sTestFrameInfo.width, sTestFrameInfo.height, m, sTestFrameInfo.camX, sTestFrameInfo.camY};
+                int count = (sTestFrameInfo.width + 2 * m) * (sTestFrameInfo.height + 2 * m);
+                fwrite(hdr, sizeof(hdr), 1, f);
+                fwrite(sTestGbaImage, 2, count, f);
+                fwrite(sTestOverlay, 2, count, f);
+                fclose(f);
+            }
+            continue;
+        }
         if (!strcmp(cmd, "typekey"))
         {
             // "typekey NAME": a keyboard key press for the Settings "Press a key" rows (SDL key name).
@@ -227,6 +253,89 @@ static bool TestStep(void)
             return false;
     }
     return false;
+}
+
+static bool sDrewFrame;
+static void DrawScreen(double t)
+{
+    SDL_RenderClear(sdlRenderer);
+#if defined(NATIVE_LINUX) || defined(_WIN32)
+    u8 backgroundOption = Platform_GetBorderBackground();
+    if (backgroundOption < sBorderBackgroundCount
+     && sdlBackgroundTextures[backgroundOption] != NULL)
+        SDL_RenderCopy(sdlRenderer, sdlBackgroundTextures[backgroundOption], NULL, NULL);
+    int outputWidth;
+    int outputHeight;
+    SDL_GetRendererOutputSize(sdlRenderer, &outputWidth, &outputHeight);
+    int gameHeight;
+    int gameWidth;
+    int srcW = sFrameInfo.width, srcH = sFrameInfo.height;
+    if (sPlatformSettings[PLATFORM_SETTING_INTEGER_SCALE])
+    {
+        int scale = outputWidth / srcW;
+        if (outputHeight / srcH < scale)
+            scale = outputHeight / srcH;
+        if (scale < 1)
+            scale = 1;
+        gameWidth = srcW * scale;
+        gameHeight = srcH * scale;
+    }
+    else
+    {
+        // Fill the window, keeping the picture's shape.
+        gameWidth = outputWidth;
+        if (gameWidth > outputHeight * srcW / srcH)
+            gameWidth = outputHeight * srcW / srcH;
+        gameHeight = gameWidth * srcH / srcW;
+    }
+    SDL_Rect gameViewport = {(outputWidth - gameWidth) / 2,
+                             (outputHeight - gameHeight) / 2,
+                             gameWidth, gameHeight};
+    if (sFrameInfo.margin > 0)
+    {
+        // Smooth motion: the map texture is bigger by `margin` on every side. Slide it by the part
+        // of the last camera step that hasn't been shown yet, then put the text layer on top, still.
+        int m = sFrameInfo.margin;
+        float sx = (float)gameWidth / srcW, sy = (float)gameHeight / srcH;
+        float shiftX = 0, shiftY = 0;
+        if (sCamMoveValid && sPlatformSettings[PLATFORM_SETTING_SMOOTH])
+        {
+            shiftX = (float)((1.0 - t) * (sCurCamX - sPrevCamX));
+            shiftY = (float)((1.0 - t) * (sCurCamY - sPrevCamY));
+        }
+        SDL_Rect fullSource = {0, 0, srcW + 2 * m, srcH + 2 * m};
+        SDL_FRect mapDest = {gameViewport.x + (shiftX - m) * sx, gameViewport.y + (shiftY - m) * sy,
+                             (srcW + 2 * m) * sx, (srcH + 2 * m) * sy};
+        SDL_FRect textDest = {gameViewport.x - m * sx, gameViewport.y - m * sy, (srcW + 2 * m) * sx, (srcH + 2 * m) * sy};
+        SDL_RenderSetClipRect(sdlRenderer, &gameViewport);
+        SDL_RenderCopyF(sdlRenderer, sdlTexture, &fullSource, &mapDest);
+        SDL_RenderCopyF(sdlRenderer, sdlOverlayTexture, &fullSource, &textDest);
+        SDL_RenderSetClipRect(sdlRenderer, NULL);
+    }
+    else
+    {
+        SDL_Rect gameSource = {0, 0, srcW, srcH};
+        SDL_RenderCopy(sdlRenderer, sdlTexture, &gameSource, &gameViewport);
+    }
+    if (sFrameInfo.mode == WIDE_VIEW_GBA && sPlatformSettings[PLATFORM_SETTING_BORDER] && sdlBorderTexture != NULL)
+    {
+        SDL_Rect borderSource = {141, 18, 1000, 683};
+        int innerWidth = gameViewport.w - 2;
+        int innerHeight = gameViewport.h - 2;
+        SDL_Rect borderViewport = {
+            gameViewport.x + 1 - innerWidth * 19 / 961,
+            gameViewport.y + 1 - innerHeight * 20 / 643,
+            innerWidth * 1000 / 961,
+            innerHeight * 683 / 643
+        };
+        SDL_RenderCopy(sdlRenderer, sdlBorderTexture, &borderSource, &borderViewport);
+    }
+#else
+    SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, NULL);
+#endif
+#ifdef __ANDROID__
+    SDL_RenderPresent(sdlRenderer);
+#endif
 }
 
 int main(int argc, char **argv)
@@ -389,13 +498,16 @@ int main(int argc, char **argv)
     sdlTexture = SDL_CreateTexture(sdlRenderer,
                                    SDL_PIXELFORMAT_ARGB8888,
                                    SDL_TEXTUREACCESS_STREAMING,
-                                   WIDE_VIEW_MAX_W, WIDE_VIEW_MAX_H);
+                                   TEX_W, TEX_H);
     if (sdlTexture == NULL)
     {
         DBGPRINTF("Texture could not be created! SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
     SDL_SetTextureBlendMode(sdlTexture, SDL_BLENDMODE_NONE);
+    sdlOverlayTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, TEX_W, TEX_H);
+    if (sdlOverlayTexture != NULL)
+        SDL_SetTextureBlendMode(sdlOverlayTexture, SDL_BLENDMODE_BLEND);
 
     simTime = curGameTime = lastGameTime = SDL_GetPerformanceCounter();
 
@@ -442,7 +554,9 @@ int main(int argc, char **argv)
             if (!TestStep())
                 break;
             keyboardKeys = sTestKeys;
+            WideView_SetSmooth(getenv("WJPC_SMOOTH_TEST") ? sTestOverlay : NULL, WIDE_VIEW_SMOOTH_MARGIN);
             WideView_DrawFrame(sTestGbaImage, &sTestFrameInfo);
+            WideView_SetSmooth(NULL, 0);
             REG_VCOUNT = 161;
             SDL_AtomicSet(&isFrameAvailable, 0);
             REG_DISPSTAT |= INTR_FLAG_VBLANK;
@@ -483,60 +597,7 @@ int main(int argc, char **argv)
                 if (SDL_AtomicGet(&isFrameAvailable))
                 {
                     VDraw(sdlTexture);
-                    SDL_RenderClear(sdlRenderer);
-#if defined(NATIVE_LINUX) || defined(_WIN32)
-                    u8 backgroundOption = Platform_GetBorderBackground();
-                    if (backgroundOption < sBorderBackgroundCount
-                     && sdlBackgroundTextures[backgroundOption] != NULL)
-                        SDL_RenderCopy(sdlRenderer, sdlBackgroundTextures[backgroundOption], NULL, NULL);
-                    int outputWidth;
-                    int outputHeight;
-                    SDL_GetRendererOutputSize(sdlRenderer, &outputWidth, &outputHeight);
-                    int gameHeight;
-                    int gameWidth;
-                    int srcW = sFrameInfo.width, srcH = sFrameInfo.height;
-                    if (sPlatformSettings[PLATFORM_SETTING_INTEGER_SCALE])
-                    {
-                        int scale = outputWidth / srcW;
-                        if (outputHeight / srcH < scale)
-                            scale = outputHeight / srcH;
-                        if (scale < 1)
-                            scale = 1;
-                        gameWidth = srcW * scale;
-                        gameHeight = srcH * scale;
-                    }
-                    else
-                    {
-                        // Fill the window, keeping the picture's shape.
-                        gameWidth = outputWidth;
-                        if (gameWidth > outputHeight * srcW / srcH)
-                            gameWidth = outputHeight * srcW / srcH;
-                        gameHeight = gameWidth * srcH / srcW;
-                    }
-                    SDL_Rect gameViewport = {(outputWidth - gameWidth) / 2,
-                                             (outputHeight - gameHeight) / 2,
-                                             gameWidth, gameHeight};
-                    SDL_Rect gameSource = {0, 0, srcW, srcH};
-                    SDL_RenderCopy(sdlRenderer, sdlTexture, &gameSource, &gameViewport);
-                    if (sFrameInfo.mode == WIDE_VIEW_GBA && sPlatformSettings[PLATFORM_SETTING_BORDER] && sdlBorderTexture != NULL)
-                    {
-                        SDL_Rect borderSource = {141, 18, 1000, 683};
-                        int innerWidth = gameViewport.w - 2;
-                        int innerHeight = gameViewport.h - 2;
-                        SDL_Rect borderViewport = {
-                            gameViewport.x + 1 - innerWidth * 19 / 961,
-                            gameViewport.y + 1 - innerHeight * 20 / 643,
-                            innerWidth * 1000 / 961,
-                            innerHeight * 683 / 643
-                        };
-                        SDL_RenderCopy(sdlRenderer, sdlBorderTexture, &borderSource, &borderViewport);
-                    }
-#else
-                    SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, NULL);
-#endif
-#ifdef __ANDROID__
-                    SDL_RenderPresent(sdlRenderer);
-#endif
+                    sDrewFrame = true;
                     SDL_AtomicSet(&isFrameAvailable, 0);
 
                     REG_DISPSTAT |= INTR_FLAG_VBLANK;
@@ -560,6 +621,13 @@ int main(int argc, char **argv)
         }
 
 #ifndef __ANDROID__
+        // Draw every loop (every monitor refresh with vsync). With smooth motion the map is slid
+        // part of the way between the last two game frames.
+        if (sDrewFrame)
+        {
+            double t = paused ? 1.0 : accumulator / (fixedTimestep / timeScale);
+            DrawScreen(t < 0 ? 0 : t > 1 ? 1 : t);
+        }
         SDL_RenderPresent(sdlRenderer);
 #endif
     }
@@ -658,6 +726,8 @@ static void ReadConfigFile(void)
                     sKeyMap[i] = key;
             }
         }
+        else if (sscanf(line, "smooth=%u", &value) == 1)
+            sPlatformSettings[PLATFORM_SETTING_SMOOTH] = value != 0;
         else if (sscanf(line, "fastForwardToggle=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE] = value != 0;
         else
@@ -692,6 +762,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "fastForward=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_SPEED]);
     fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
     fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
+    fprintf(configFile, "smooth=%u\n", sPlatformSettings[PLATFORM_SETTING_SMOOTH]);
     for (int i = 0; i < KEYBIND_COUNT; i++)
         fprintf(configFile, "%s=%d\n", sKeyBindNames[i], (int)sKeyMap[i]);
     for (int i = 0; i < 7; i++)
@@ -1431,11 +1502,24 @@ static void DrawFrameGuarded(void)
     WideView_DrawFrame(sVDrawImage, &sFrameInfo);
 }
 
+static inline uint32_t ToArgb(uint16_t color)
+{
+    uint32_t r = (color & 0x1F) * 255 / 31;
+    uint32_t g = ((color >> 5) & 0x1F) * 255 / 31;
+    uint32_t b = ((color >> 10) & 0x1F) * 255 / 31;
+    return 0xFF000000 | (r << 16) | (g << 8) | b;
+}
+
 void VDraw(SDL_Texture *texture)
 {
-    static uint16_t gbaImage[WIDE_VIEW_MAX_W * WIDE_VIEW_MAX_H];
-    static uint32_t image[WIDE_VIEW_MAX_W * WIDE_VIEW_MAX_H];
+    static uint16_t gbaImage[TEX_W * TEX_H];
+    static uint32_t image[TEX_W * TEX_H];
+    static uint16_t overlay[TEX_W * TEX_H];
+    static uint32_t overlayImage[TEX_W * TEX_H];
+    bool smooth = sPlatformSettings[PLATFORM_SETTING_SMOOTH] && sTestScript == NULL && sdlOverlayTexture != NULL;
+    int prevW = sFrameInfo.width, prevH = sFrameInfo.height, prevMargin = sFrameInfo.margin;
 
+    WideView_SetSmooth(smooth ? overlay : NULL, SMOOTH_M);
     sVDrawImage = gbaImage;
     if (!PcGuard_Call0(DrawFrameGuarded))
     {
@@ -1444,16 +1528,31 @@ void VDraw(SDL_Texture *texture)
         sVDrawImage = gbaImage;
         PcGuard_Call0(DrawFrameGuarded);
     }
-    for (int i = 0; i < sFrameInfo.width * sFrameInfo.height; i++)
+    WideView_SetSmooth(NULL, 0);
+
+    int fullW = sFrameInfo.width + 2 * sFrameInfo.margin, fullH = sFrameInfo.height + 2 * sFrameInfo.margin;
+    for (int i = 0; i < fullW * fullH; i++)
+        image[i] = ToArgb(gbaImage[i]);
+    SDL_Rect area = {0, 0, fullW, fullH};
+    SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32));
+    if (sFrameInfo.margin > 0)
     {
-        uint16_t color = gbaImage[i];
-        uint32_t r = (color & 0x1F) * 255 / 31;
-        uint32_t g = ((color >> 5) & 0x1F) * 255 / 31;
-        uint32_t b = ((color >> 10) & 0x1F) * 255 / 31;
-        image[i] = 0xFF000000 | (r << 16) | (g << 8) | b;
+        for (int i = 0; i < fullW * fullH; i++)
+            overlayImage[i] = (overlay[i] & 0x8000) ? ToArgb(overlay[i]) : 0;
+        SDL_UpdateTexture(sdlOverlayTexture, &area, overlayImage, fullW * sizeof(Uint32));
+
+        // How far the camera moved since the last frame; big jumps (warps, map changes) aren't slid.
+        sPrevCamX = sCurCamX;
+        sPrevCamY = sCurCamY;
+        sCurCamX = sFrameInfo.camX;
+        sCurCamY = sFrameInfo.camY;
+        sCamMoveValid = prevMargin > 0 && prevW == sFrameInfo.width && prevH == sFrameInfo.height
+                     && abs(sCurCamX - sPrevCamX) <= SMOOTH_M && abs(sCurCamY - sPrevCamY) <= SMOOTH_M;
     }
-    SDL_Rect area = {0, 0, sFrameInfo.width, sFrameInfo.height};
-    SDL_UpdateTexture(texture, &area, image, sFrameInfo.width * sizeof(Uint32));
+    else
+    {
+        sCamMoveValid = false;
+    }
     REG_VCOUNT = 161; // prep for being in VBlank period
 }
 

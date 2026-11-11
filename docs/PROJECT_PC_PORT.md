@@ -56,7 +56,13 @@
      needs a connection resolver past the apron. NPC spawn range is 2 tiles past the GBA screen: C/D need it widened.
    - **Owner's answer:** "Do whatever you think will look the best". Chosen: C (384x216) outdoors, B (320x180)
      indoors (small rooms show less black), NPCs loaded further out, weather repeated into the margins.
-3. **Smooth high frame rate** — game logic stays at 60 updates/s (so nothing breaks); extra frames are
+3. **Smooth high frame rate** — DONE (Settings > Video > `Frame rate < 60 / Smooth >`, cfg `smooth=`). How: in the
+   field the wide view draws an 8 px bigger canvas (WIDE_VIEW_SMOOTH_MARGIN) of the map, and a separate "still" layer
+   holding BG0 (text, pop-ups) plus sprites that kept their screen place while the camera moved (player, follower) —
+   diff of two composites per scanline, no extra interrupt runs. sdl2.c draws every loop (every refresh with vsync):
+   the map texture slides by (1 - t) * camera step (t = accumulator / dt), the still layer on top. Camera jumps > 8 px
+   (warps) and non-field screens aren't slid. NPC walking is still 60 fps steps. Test: WJPC_SMOOTH_TEST=1 + script
+   `smoothshot FILE` dumps raw layers + camera. Original plan text: game logic stays at 60 updates/s (so nothing breaks); extra frames are
    drawn in between on 120/144/240 Hz monitors. Walking + camera first, then sprites, menus, battle
    animations. Line-by-line effects (water ripple, some battle intros) stay at 60. Needs step 2's renderer.
    Setting: "60 (original) / match monitor / cap". Estimate 5–15 h.

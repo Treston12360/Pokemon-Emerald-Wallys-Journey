@@ -19,9 +19,19 @@ struct WideViewFrame
     int width;
     int height;
     enum WideViewMode mode;
+    // Smooth motion (see WideView_SetSmooth): when margin > 0 the buffers are
+    // (width + 2*margin) x (height + 2*margin), the visible picture starting at (margin, margin).
+    int margin;
+    int camX, camY; // world pixel shown at the visible picture's top-left (FIELD mode)
 };
 
-// Renders the current frame. `out` must hold WIDE_VIEW_MAX_W * WIDE_VIEW_MAX_H pixels
+// Smooth motion: the overworld is drawn `margin` pixels bigger on every side, and the text
+// layer (BG0, text boxes, map name pop-ups) goes to `overlay` instead, so the map can be
+// slid between two game frames while text stays put. overlay = NULL turns it off.
+#define WIDE_VIEW_SMOOTH_MARGIN 8
+void WideView_SetSmooth(uint16_t *overlay, int margin);
+
+// Renders the current frame. `out` must hold (WIDE_VIEW_MAX_W + 2*margin) * (WIDE_VIEW_MAX_H + 2*margin) pixels
 // (BGR555). Runs the per-line VCount/HBlank work exactly like DrawFrame.
 void WideView_DrawFrame(uint16_t *out, struct WideViewFrame *frame);
 
