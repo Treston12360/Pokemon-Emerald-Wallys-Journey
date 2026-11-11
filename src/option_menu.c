@@ -64,6 +64,15 @@ enum
     MENUITEM_PC_SHARP,
     MENUITEM_PC_VOLUME,
     MENUITEM_PC_FFSPEED,
+    MENUITEM_PC_FFTOGGLE,
+    MENUITEM_PC_PAD_A,
+    MENUITEM_PC_PAD_B,
+    MENUITEM_PC_PAD_START,
+    MENUITEM_PC_PAD_SELECT,
+    MENUITEM_PC_PAD_L,
+    MENUITEM_PC_PAD_R,
+    MENUITEM_PC_PAD_FF,
+    MENUITEM_PC_LAST = MENUITEM_PC_PAD_FF,
 #endif
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
@@ -195,6 +204,14 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_PC_SHARP]      = COMPOUND_STRING("Sharp pixels"),
     [MENUITEM_PC_VOLUME]     = COMPOUND_STRING("Volume"),
     [MENUITEM_PC_FFSPEED]    = COMPOUND_STRING("Fast forward"),
+    [MENUITEM_PC_FFTOGGLE]   = COMPOUND_STRING("Fast fwd button"),
+    [MENUITEM_PC_PAD_A]      = COMPOUND_STRING("Pad A"),
+    [MENUITEM_PC_PAD_B]      = COMPOUND_STRING("Pad B"),
+    [MENUITEM_PC_PAD_START]  = COMPOUND_STRING("Pad Start"),
+    [MENUITEM_PC_PAD_SELECT] = COMPOUND_STRING("Pad Select"),
+    [MENUITEM_PC_PAD_L]      = COMPOUND_STRING("Pad L"),
+    [MENUITEM_PC_PAD_R]      = COMPOUND_STRING("Pad R"),
+    [MENUITEM_PC_PAD_FF]     = COMPOUND_STRING("Pad fast fwd"),
 #endif
     [MENUITEM_CANCEL]      = COMPOUND_STRING("Cancel"),
 };
@@ -514,6 +531,14 @@ static void Task_OptionMenuProcessInput(u8 taskId)
         case MENUITEM_PC_SHARP:
         case MENUITEM_PC_VOLUME:
         case MENUITEM_PC_FFSPEED:
+        case MENUITEM_PC_FFTOGGLE:
+        case MENUITEM_PC_PAD_A:
+        case MENUITEM_PC_PAD_B:
+        case MENUITEM_PC_PAD_START:
+        case MENUITEM_PC_PAD_SELECT:
+        case MENUITEM_PC_PAD_L:
+        case MENUITEM_PC_PAD_R:
+        case MENUITEM_PC_PAD_FF:
             PcOption_ProcessInput(gTasks[taskId].tMenuSelection);
             break;
 #endif
@@ -956,7 +981,7 @@ static void RedrawVisibleOptions(u8 taskId)
 #ifdef PORTABLE
     {
         u32 i;
-        for (i = MENUITEM_PC_WINDOWSIZE; i <= MENUITEM_PC_FFSPEED; i++)
+        for (i = MENUITEM_PC_WINDOWSIZE; i <= MENUITEM_PC_LAST; i++)
             if (ITEM_VISIBLE(i))
                 PcOption_Draw(i);
     }
@@ -1005,9 +1030,18 @@ static const u8 sPcRowSetting[] =
     [MENUITEM_PC_SHARP      - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_INTEGER_SCALE,
     [MENUITEM_PC_VOLUME     - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_VOLUME,
     [MENUITEM_PC_FFSPEED    - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_FF_SPEED,
+    [MENUITEM_PC_FFTOGGLE   - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_FF_TOGGLE,
+    [MENUITEM_PC_PAD_A      - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_A,
+    [MENUITEM_PC_PAD_B      - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_B,
+    [MENUITEM_PC_PAD_START  - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_START,
+    [MENUITEM_PC_PAD_SELECT - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_SELECT,
+    [MENUITEM_PC_PAD_L      - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_L,
+    [MENUITEM_PC_PAD_R      - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_R,
+    [MENUITEM_PC_PAD_FF     - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_FF,
 };
-static const u8 sPcRowMin[] = {1, 0, 0, 0, 0};
-static const u8 sPcRowMax[] = {6, 1, 1, 10, 3};
+#define PAD_MAX (PAD_BUTTON_COUNT - 1)
+static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static const u8 sPcRowMax[] = {6, 1, 1, 10, 3, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX};
 
 static void PcOption_ProcessInput(u8 item)
 {
@@ -1033,6 +1067,12 @@ static void PcOption_ProcessInput(u8 item)
 static void PcOption_Draw(u8 item)
 {
     static const u8 sFfNames[][4] = {_("2x"), _("3x"), _("5x"), _("Max")};
+    static const u8 sPadNames[PAD_BUTTON_COUNT][6] = {
+        [PAD_BUTTON_A] = _("A"), [PAD_BUTTON_B] = _("B"), [PAD_BUTTON_X] = _("X"), [PAD_BUTTON_Y] = _("Y"),
+        [PAD_BUTTON_LB] = _("LB"), [PAD_BUTTON_RB] = _("RB"), [PAD_BUTTON_LT] = _("LT"), [PAD_BUTTON_RT] = _("RT"),
+        [PAD_BUTTON_BACK] = _("Back"), [PAD_BUTTON_START] = _("Start"),
+        [PAD_BUTTON_LSTICK] = _("LS"), [PAD_BUTTON_RSTICK] = _("RS"), [PAD_BUTTON_NONE] = _("None"),
+    };
     u32 row = item - MENUITEM_PC_WINDOWSIZE;
     u32 value = Platform_GetSetting(sPcRowSetting[row]);
     u8 text[16];
@@ -1058,6 +1098,12 @@ static void PcOption_Draw(u8 item)
         break;
     case MENUITEM_PC_FFSPEED:
         StringCopy(end, sFfNames[value % 4]);
+        break;
+    case MENUITEM_PC_FFTOGGLE:
+        StringCopy(end, value ? COMPOUND_STRING("Toggle") : COMPOUND_STRING("Hold"));
+        break;
+    default: // controller buttons
+        StringCopy(end, sPadNames[value % PAD_BUTTON_COUNT]);
         break;
     }
 

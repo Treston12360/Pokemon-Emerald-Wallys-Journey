@@ -1610,6 +1610,11 @@ void SetPokemonCryProgress(u32 val)
 
 bool32 IsPokemonCryPlaying(struct MusicPlayerInfo *mplayInfo)
 {
+#ifdef PORTABLE
+    // The expansion intro asks before any cry has started (NULL); the GBA reads junk there.
+    if (mplayInfo == NULL || mplayInfo->tracks == NULL)
+        return FALSE;
+#endif
     struct MusicPlayerTrack *track = mplayInfo->tracks;
 
     if (track->chan && track->chan->track == track)

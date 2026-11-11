@@ -64,7 +64,28 @@ static char sConfigPath[1024] = "WallysJourney.cfg";
 static u8 sBorderBackground;
 static bool sHasBorderBackgroundConfig;
 static u8 sBackgroundOrderVersion;
-static u8 sPlatformSettings[PLATFORM_SETTING_COUNT] = {0, 4, 1, 1, 1, 10, 2};
+static u8 sPlatformSettings[PLATFORM_SETTING_COUNT] = {
+    [PLATFORM_SETTING_FULLSCREEN] = 0,
+    [PLATFORM_SETTING_WINDOW_SCALE] = 4,
+    [PLATFORM_SETTING_INTEGER_SCALE] = 1,
+    [PLATFORM_SETTING_VSYNC] = 1,
+    [PLATFORM_SETTING_BORDER] = 1,
+    [PLATFORM_SETTING_VOLUME] = 10,
+    [PLATFORM_SETTING_FF_SPEED] = 2,
+    [PLATFORM_SETTING_FF_TOGGLE] = 0,
+    [PLATFORM_SETTING_PAD_A] = PAD_BUTTON_A,
+    [PLATFORM_SETTING_PAD_B] = PAD_BUTTON_B,
+    [PLATFORM_SETTING_PAD_START] = PAD_BUTTON_START,
+    [PLATFORM_SETTING_PAD_SELECT] = PAD_BUTTON_BACK,
+    [PLATFORM_SETTING_PAD_L] = PAD_BUTTON_LB,
+    [PLATFORM_SETTING_PAD_R] = PAD_BUTTON_RB,
+    [PLATFORM_SETTING_PAD_FF] = PAD_BUTTON_RT,
+};
+
+// Fast forward: the keyboard key (Space) and the controller button are both read here.
+static SDL_atomic_t sFfKeyHeld, sFfPadHeld, sFfToggled;
+static void ApplyFastForward(void);
+static const char *const sPadSettingNames[] = {"padA", "padB", "padStart", "padSelect", "padL", "padR", "padFastForward"};
 #ifdef __ANDROID__
 static SDL_GameController *androidController;
 #endif
@@ -417,6 +438,7 @@ int main(int argc, char **argv)
             continue;
         }
         ProcessEvents();
+        ApplyFastForward();
 
         if (!paused)
         {
@@ -601,6 +623,19 @@ static void ReadConfigFile(void)
             sPlatformSettings[PLATFORM_SETTING_FF_SPEED] = value;
         else if (sscanf(line, "widescreen=%u", &value) == 1)
             WideView_SetEnabled(value != 0);
+        else if (sscanf(line, "fastForwardToggle=%u", &value) == 1)
+            sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE] = value != 0;
+        else
+        {
+            int i;
+            for (i = 0; i < 7; i++)
+            {
+                char name[32];
+                SDL_snprintf(name, sizeof(name), "%s=%%u", sPadSettingNames[i]);
+                if (sscanf(line, name, &value) == 1 && value < PAD_BUTTON_COUNT)
+                    sPlatformSettings[PLATFORM_SETTING_PAD_A + i] = value;
+            }
+        }
     }
     fclose(configFile);
 }
@@ -621,6 +656,9 @@ static void StoreConfigFile(void)
     fprintf(configFile, "volume=%u\n", sPlatformSettings[PLATFORM_SETTING_VOLUME]);
     fprintf(configFile, "fastForward=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_SPEED]);
     fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
+    fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
+    for (int i = 0; i < 7; i++)
+        fprintf(configFile, "%s=%u\n", sPadSettingNames[i], sPlatformSettings[PLATFORM_SETTING_PAD_A + i]);
     fclose(configFile);
 }
 
@@ -751,6 +789,8 @@ static SDL_atomic_t sWindowSettingsChanged;
 void Platform_SetSetting(enum PlatformSetting setting, u8 value)
 {
     sPlatformSettings[setting] = value;
+    if (setting == PLATFORM_SETTING_FF_TOGGLE)
+        SDL_AtomicSet(&sFfToggled, 0);
     if (setting == PLATFORM_SETTING_VSYNC || setting == PLATFORM_SETTING_FULLSCREEN
      || setting == PLATFORM_SETTING_WINDOW_SCALE)
         SDL_AtomicSet(&sWindowSettingsChanged, 1);
@@ -1117,13 +1157,7 @@ void ProcessEvents(void)
             HANDLE_KEYUP(DPAD_LEFT)
             HANDLE_KEYUP(DPAD_RIGHT)
             case SDLK_SPACE:
-                if (speedUp)
-                {
-                    speedUp = false;
-                    timeScale = 1.0;
-                    SDL_ClearQueuedAudio(sdlAudioDevice);
-                    SDL_PauseAudioDevice(sdlAudioDevice, 0);
-                }
+                SDL_AtomicSet(&sFfKeyHeld, 0);
                 break;
             }
             break;
@@ -1159,15 +1193,10 @@ void ProcessEvents(void)
                 }
                 break;
             case SDLK_SPACE:
-                if (!speedUp)
-                {
-                    speedUp = true;
-                    {
-                        static const double sFfScales[] = {2.0, 3.0, 5.0, 100.0};
-                        timeScale = sFfScales[sPlatformSettings[PLATFORM_SETTING_FF_SPEED] % 4];
-                    }
-                    SDL_PauseAudioDevice(sdlAudioDevice, 1);
-                }
+                // Toggle mode: each press (not key repeat) turns fast forward on or off.
+                if (sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE] && !event.key.repeat)
+                    SDL_AtomicSet(&sFfToggled, !SDL_AtomicGet(&sFfToggled));
+                SDL_AtomicSet(&sFfKeyHeld, 1);
                 break;
             }
             break;
@@ -1187,17 +1216,44 @@ u16 GetXInputKeys()
 
     if (dwResult == ERROR_SUCCESS)
     {
-        /* A */      xinputKeys |= (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) >> 12;
-        /* B */      xinputKeys |= (state.Gamepad.wButtons & XINPUT_GAMEPAD_X) >> 13;
-        /* Start */  xinputKeys |= (state.Gamepad.wButtons & XINPUT_GAMEPAD_START) >> 1;
-        /* Select */ xinputKeys |= (state.Gamepad.wButtons & XINPUT_GAMEPAD_BACK) >> 3;
-        /* L */      xinputKeys |= (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) << 1;
-        /* R */      xinputKeys |= (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) >> 1;
-        /* Up */     xinputKeys |= (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) << 6;
-        /* Down */   xinputKeys |= (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) << 6;
-        /* Left */   xinputKeys |= (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) << 3;
-        /* Right */  xinputKeys |= (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) << 1;
+        static const WORD sPadMasks[PAD_BUTTON_COUNT] = {
+            [PAD_BUTTON_A] = XINPUT_GAMEPAD_A,
+            [PAD_BUTTON_B] = XINPUT_GAMEPAD_B,
+            [PAD_BUTTON_X] = XINPUT_GAMEPAD_X,
+            [PAD_BUTTON_Y] = XINPUT_GAMEPAD_Y,
+            [PAD_BUTTON_LB] = XINPUT_GAMEPAD_LEFT_SHOULDER,
+            [PAD_BUTTON_RB] = XINPUT_GAMEPAD_RIGHT_SHOULDER,
+            [PAD_BUTTON_BACK] = XINPUT_GAMEPAD_BACK,
+            [PAD_BUTTON_START] = XINPUT_GAMEPAD_START,
+            [PAD_BUTTON_LSTICK] = XINPUT_GAMEPAD_LEFT_THUMB,
+            [PAD_BUTTON_RSTICK] = XINPUT_GAMEPAD_RIGHT_THUMB,
+        };
+        static const u16 sGameButtons[] = {A_BUTTON, B_BUTTON, START_BUTTON, SELECT_BUTTON, L_BUTTON, R_BUTTON};
+        bool8 pressed[PAD_BUTTON_COUNT];
+        int i;
+        for (i = 0; i < PAD_BUTTON_COUNT; i++)
+            pressed[i] = (sPadMasks[i] != 0 && (state.Gamepad.wButtons & sPadMasks[i]) != 0);
+        pressed[PAD_BUTTON_LT] = state.Gamepad.bLeftTrigger > 0x80;
+        pressed[PAD_BUTTON_RT] = state.Gamepad.bRightTrigger > 0x80;
+        pressed[PAD_BUTTON_NONE] = FALSE;
+        for (i = 0; i < 6; i++)
+            if (pressed[sPlatformSettings[PLATFORM_SETTING_PAD_A + i] % PAD_BUTTON_COUNT])
+                xinputKeys |= sGameButtons[i];
+        /* D-pad */
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)    xinputKeys |= DPAD_UP;
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)  xinputKeys |= DPAD_DOWN;
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)  xinputKeys |= DPAD_LEFT;
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) xinputKeys |= DPAD_RIGHT;
 
+        /* Fast forward button */
+        {
+            static bool8 sWasHeld;
+            bool8 held = pressed[sPlatformSettings[PLATFORM_SETTING_PAD_FF] % PAD_BUTTON_COUNT];
+            if (held && !sWasHeld && sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE])
+                SDL_AtomicSet(&sFfToggled, !SDL_AtomicGet(&sFfToggled));
+            sWasHeld = held;
+            SDL_AtomicSet(&sFfPadHeld, held);
+        }
 
         /* Control Stick */
         float xAxis = (float)state.Gamepad.sThumbLX / (float)SHRT_MAX;
@@ -1209,28 +1265,39 @@ u16 GetXInputKeys()
         if (yAxis >  STICK_THRESHOLD) xinputKeys |= DPAD_UP;
 
 
-        /* Speedup */
-        // Note: 'speedup' variable is only (un)set on keyboard input
-        double oldTimeScale = timeScale;
-        timeScale = (state.Gamepad.bRightTrigger > 0x80 || speedUp) ? 5.0 : 1.0;
-
-        if (oldTimeScale != timeScale)
-        {
-            if (timeScale > 1.0)
-            {
-                SDL_PauseAudioDevice(sdlAudioDevice, 1);
-            }
-            else
-            {
-                SDL_ClearQueuedAudio(sdlAudioDevice);
-                SDL_PauseAudioDevice(sdlAudioDevice, 0);
-            }
-        }
+    }
+    else
+    {
+        SDL_AtomicSet(&sFfPadHeld, 0);
     }
 
     return xinputKeys;
 }
 #endif // _WIN32
+
+// Main thread, every loop: turn fast forward on/off from the key, the controller and the mode.
+static void ApplyFastForward(void)
+{
+    static const double sFfScales[] = {2.0, 3.0, 5.0, 100.0};
+    bool on = sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]
+            ? SDL_AtomicGet(&sFfToggled) != 0
+            : (SDL_AtomicGet(&sFfKeyHeld) || SDL_AtomicGet(&sFfPadHeld));
+    double scale = on ? sFfScales[sPlatformSettings[PLATFORM_SETTING_FF_SPEED] % 4] : 1.0;
+
+    if (on != speedUp || scale != timeScale)
+    {
+        bool wasOn = speedUp;
+        speedUp = on;
+        timeScale = scale;
+        if (on && !wasOn)
+            SDL_PauseAudioDevice(sdlAudioDevice, 1);
+        else if (!on && wasOn)
+        {
+            SDL_ClearQueuedAudio(sdlAudioDevice);
+            SDL_PauseAudioDevice(sdlAudioDevice, 0);
+        }
+    }
+}
 
 u16 Platform_GetKeyInput(void)
 {
