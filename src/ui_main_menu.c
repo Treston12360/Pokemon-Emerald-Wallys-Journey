@@ -906,6 +906,12 @@ static void CreatePartyMonIcons()
 #endif
 
         gSprites[sMainMenuDataPtr->iconMonSpriteIds[i]].oam.priority = 0;
+        // Wally's Journey: shiny party icons on the Continue screen
+        WJ_SetIconShiny(&gSprites[sMainMenuDataPtr->iconMonSpriteIds[i]],
+                        GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG),
+                        GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY),
+                        GetMonData(&gPlayerParty[i], MON_DATA_IS_SHINY),
+                        GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG));
 
         if (GetHPEggCyclePercent(i) == 0)
         {
@@ -920,6 +926,8 @@ static void DestroyMonIcons()
     u8 i = 0;
     for(i = 0; i < 6; i++)
     {
+        if (sMainMenuDataPtr->iconMonSpriteIds[i] < MAX_SPRITES)
+            WJ_ReleaseShinyIcon(&gSprites[sMainMenuDataPtr->iconMonSpriteIds[i]]);
         DestroySprite(&gSprites[sMainMenuDataPtr->iconMonSpriteIds[i]]);
         sMainMenuDataPtr->iconMonSpriteIds[i] = SPRITE_NONE;
     }
