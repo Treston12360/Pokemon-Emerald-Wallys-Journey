@@ -18,7 +18,9 @@
 #ifdef _WIN32
 #else
 #include <signal.h>
+#ifdef __GLIBC__
 #include <execinfo.h>
+#endif
 #include <string.h>
 #endif
 
@@ -61,10 +63,12 @@ static void Handler(int sig, siginfo_t *si, void *ctx)
         __builtin_longjmp(tGuardBuf, 1);
     // Not ours: report where, then crash normally.
     {
+        fprintf(stderr, "WJPC: crash, bad address %p\n", si->si_addr);
+#ifdef __GLIBC__
         void *frames[32];
         int n = backtrace(frames, 32);
-        fprintf(stderr, "WJPC: crash, bad address %p\n", si->si_addr);
         backtrace_symbols_fd(frames, n, 2);
+#endif
     }
     signal(sig, SIG_DFL);
 }

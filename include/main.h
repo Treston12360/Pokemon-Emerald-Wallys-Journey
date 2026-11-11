@@ -73,4 +73,12 @@ void StartTimer1(void);
 void SeedRngAndSetTrainerId(void);
 u16 GetGeneratedTrainerIdLower(void);
 
+// The wireless-adapter wait in WaitForVBlank() spins until the VBlank interrupt sets a flag.
+// On PC the interrupt only runs between frames, so the spin has to hand the frame over.
+#ifdef PORTABLE
+#define WJPC_WIRELESS_VBLANK_WAIT() VBlankIntrWait()
+#else
+#define WJPC_WIRELESS_VBLANK_WAIT()
+#endif
+
 #endif // GUARD_MAIN_H

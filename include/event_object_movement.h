@@ -563,4 +563,22 @@ u8 MovementType_OverworldWildEncounter_Despawn_Step8(struct ObjectEvent *objectE
 u8 MovementType_OverworldWildEncounter_Despawn_Step10(struct ObjectEvent *objectEvent, struct Sprite *sprite);
 u8 MovementType_OverworldWildEncounter_Despawn_Step11(struct ObjectEvent *objectEvent, struct Sprite *sprite);
 
+// Wide view on PC: NPCs load and stay visible further out so nothing pops in at the
+// edges of the wider screen. On GBA these are 0 / TRUE and the code is unchanged.
+#ifdef PORTABLE
+extern s16 gWjPcViewPadX, gWjPcViewPadY, gWjPcSpawnPadX, gWjPcSpawnPadY;
+bool32 WJPC_SpawnOk(s16 x, s16 y);
+#define WJ_VIEW_PAD_X gWjPcViewPadX
+#define WJ_VIEW_PAD_Y gWjPcViewPadY
+#define WJ_SPAWN_PAD_X gWjPcSpawnPadX
+#define WJ_SPAWN_PAD_Y gWjPcSpawnPadY
+#define WJ_SPAWN_OK(x, y) WJPC_SpawnOk(x, y)
+#else
+#define WJ_VIEW_PAD_X 0
+#define WJ_VIEW_PAD_Y 0
+#define WJ_SPAWN_PAD_X 0
+#define WJ_SPAWN_PAD_Y 0
+#define WJ_SPAWN_OK(x, y) TRUE
+#endif
+
 #endif //GUARD_EVENT_OBJECT_MOVEMENT_H

@@ -39,8 +39,17 @@ DEFS := -DPORTABLE -DNONMATCHING -DUBFIX -DMODERN=1 -DTESTING=0 -DEMERALD -DRELE
         -DPLATFORM_SDL2 -DRENDERER_EASY_DRAW
 ifeq ($(WIN),0)
 DEFS += -DNATIVE_LINUX -DLINUX64=0
+ifeq ($(MUSL),1)
+# Static 32-bit Linux build with clang + a musl sysroot (no gcc-multilib needed).
+# Set up by tools/pc/setup_musl_toolchain.sh (musl, compiler-rt builtins, SDL2, SDL2_image from source).
+XTC ?= /opt/xtc
+CC := clang --target=i686-linux-musl --sysroot=$(XTC)/i686-musl -isystem $(XTC)/i686-musl/include
+SDL_CFLAGS := -I$(XTC)/i686-musl/include/SDL2 -D_REENTRANT -Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types -Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=return-type
+SDL_LIBS   := -static -fuse-ld=lld -Wl,--allow-multiple-definition -L$(XTC)/i686-musl/lib -L$(XTC)/i686-musl/lib/fakegcc -lSDL2_image -lSDL2 -lm -lpthread
+else
 SDL_CFLAGS := -I/usr/include/SDL2 -idirafter /usr/include/x86_64-linux-gnu -D_REENTRANT
 SDL_LIBS   := /usr/lib/i386-linux-gnu/libSDL2-2.0.so.0 /usr/lib/i386-linux-gnu/libSDL2_image-2.0.so.0 -lm
+endif
 else
 DEFS += -DWINDOWS32=1
 SDL_CFLAGS := -I$(SDL_DIR)/include -I$(SDL_DIR)/include/SDL2 -idirafter tools/pc/win_include -mno-ms-bitfields -mno-align-double

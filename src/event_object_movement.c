@@ -2866,10 +2866,10 @@ void TrySpawnLightSprites(s16 camX, s16 camY)
 {
     u32 i;
     u8 objectCount;
-    s16 left = gSaveBlock1Ptr->pos.x - 2;
-    s16 right = gSaveBlock1Ptr->pos.x + MAP_OFFSET_W + 2;
-    s16 top = gSaveBlock1Ptr->pos.y;
-    s16 bottom = gSaveBlock1Ptr->pos.y + MAP_OFFSET_H + 2;
+    s16 left = gSaveBlock1Ptr->pos.x - 2 - WJ_SPAWN_PAD_X;
+    s16 right = gSaveBlock1Ptr->pos.x + MAP_OFFSET_W + 2 + WJ_SPAWN_PAD_X;
+    s16 top = gSaveBlock1Ptr->pos.y - WJ_SPAWN_PAD_Y;
+    s16 bottom = gSaveBlock1Ptr->pos.y + MAP_OFFSET_H + 2 + WJ_SPAWN_PAD_Y;
     if (gMapHeader.events == NULL)
         return;
 
@@ -2900,10 +2900,10 @@ void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
 
     if (gMapHeader.events != NULL)
     {
-        s16 left = gSaveBlock1Ptr->pos.x - 2;
-        s16 right = gSaveBlock1Ptr->pos.x + MAP_OFFSET_W + 2;
-        s16 top = gSaveBlock1Ptr->pos.y;
-        s16 bottom = gSaveBlock1Ptr->pos.y + MAP_OFFSET_H + 2;
+        s16 left = gSaveBlock1Ptr->pos.x - 2 - WJ_SPAWN_PAD_X;
+        s16 right = gSaveBlock1Ptr->pos.x + MAP_OFFSET_W + 2 + WJ_SPAWN_PAD_X;
+        s16 top = gSaveBlock1Ptr->pos.y - WJ_SPAWN_PAD_Y;
+        s16 bottom = gSaveBlock1Ptr->pos.y + MAP_OFFSET_H + 2 + WJ_SPAWN_PAD_Y;
 
         if (CurrentBattlePyramidLocation() != PYRAMID_LOCATION_NONE)
             objectCount = GetNumBattlePyramidObjectEvents();
@@ -2918,7 +2918,7 @@ void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
             s16 npcX = template->x + MAP_OFFSET;
             s16 npcY = template->y + MAP_OFFSET;
 
-            if (top <= npcY && bottom >= npcY && left <= npcX && right >= npcX && !FlagGet(template->flagId))
+            if (top <= npcY && bottom >= npcY && left <= npcX && right >= npcX && !FlagGet(template->flagId) && WJ_SPAWN_OK(npcX, npcY))
             {
                 if (template->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE)
                     SpawnLightSprite(npcX, npcY, cameraX, cameraY, template->trainerRange_berryTreeId); // light sprite instead
@@ -2963,10 +2963,10 @@ void RemoveObjectEventsOutsideView(void)
 
 static void RemoveObjectEventIfOutsideView(struct ObjectEvent *objectEvent)
 {
-    s16 left =   gSaveBlock1Ptr->pos.x - 2;
-    s16 right =  gSaveBlock1Ptr->pos.x + 17;
-    s16 top =    gSaveBlock1Ptr->pos.y;
-    s16 bottom = gSaveBlock1Ptr->pos.y + 16;
+    s16 left =   gSaveBlock1Ptr->pos.x - 2 - WJ_SPAWN_PAD_X;
+    s16 right =  gSaveBlock1Ptr->pos.x + 17 + WJ_SPAWN_PAD_X;
+    s16 top =    gSaveBlock1Ptr->pos.y - WJ_SPAWN_PAD_Y;
+    s16 bottom = gSaveBlock1Ptr->pos.y + 16 + WJ_SPAWN_PAD_Y;
 
     if (objectEvent->currentCoords.x >= left && objectEvent->currentCoords.x <= right
      && objectEvent->currentCoords.y >= top && objectEvent->currentCoords.y <= bottom)
@@ -9602,10 +9602,10 @@ static void UpdateObjectEventOffscreen(struct ObjectEvent *objectEvent, struct S
     if (objectEvent->graphicsId == OBJ_EVENT_GFX_SS_ANNE)
         minX = -32;
 
-    if (x >= DISPLAY_WIDTH + 16 || x2 < minX)
+    if (x >= DISPLAY_WIDTH + 16 + WJ_VIEW_PAD_X || x2 < minX - WJ_VIEW_PAD_X)
         objectEvent->offScreen = TRUE;
 
-    if (y >= DISPLAY_HEIGHT + 16 || y2 < -16)
+    if (y >= DISPLAY_HEIGHT + 16 + WJ_VIEW_PAD_Y || y2 < -16 - WJ_VIEW_PAD_Y)
         objectEvent->offScreen = TRUE;
 }
 
@@ -10972,9 +10972,9 @@ void UpdateObjectEventSpriteInvisibility(struct Sprite *sprite, bool8 invisible)
     x2 = x - (sprite->centerToCornerVecX >> 1);
     y2 = y - (sprite->centerToCornerVecY >> 1);
 
-    if ((s16)x >= DISPLAY_WIDTH + 16 || x2 < -16)
+    if ((s16)x >= DISPLAY_WIDTH + 16 + WJ_VIEW_PAD_X || x2 < -16 - WJ_VIEW_PAD_X)
         sprite->invisible = TRUE;
-    if ((s16)y >= DISPLAY_HEIGHT + 16 || y2 < -16)
+    if ((s16)y >= DISPLAY_HEIGHT + 16 + WJ_VIEW_PAD_Y || y2 < -16 - WJ_VIEW_PAD_Y)
         sprite->invisible = TRUE;
 }
 

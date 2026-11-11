@@ -566,3 +566,13 @@ static void CameraPanningCB_PanAhead(void)
     }
     */
 }
+
+#ifdef PORTABLE
+// PC wide view: where the 32x32 BG ring starts (tile units), so the renderer can
+// line the map up with the ring the game draws.
+void WJPC_GetFieldCameraRing(u8 *xTile, u8 *yTile)
+{
+    *xTile = sFieldCameraOffset.xTileOffset;
+    *yTile = sFieldCameraOffset.yTileOffset;
+}
+#endif

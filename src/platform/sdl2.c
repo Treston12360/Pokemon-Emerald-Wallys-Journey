@@ -22,6 +22,7 @@
 
 #include "global.h"
 #include "platform/null_guard.h"
+#include "platform/wide_view.h"
 #include "platform.h"
 #include "rtc.h"
 #include "gba/defines.h"
@@ -93,6 +94,7 @@ static void DrawTouchControls(void);
 
 
 static u16 keyboardKeys;
+static struct WideViewFrame sFrameInfo = {DISPLAY_WIDTH, DISPLAY_HEIGHT, WIDE_VIEW_GBA};
 
 // ---- Wally's Journey PC test mode -----------------------------------------
 // WJPC_SCRIPT=file runs the game as fast as possible, frame by frame, driven
@@ -103,7 +105,8 @@ static u16 sTestKeys;
 static int sTestHold;
 static u32 sTestFrame;
 static u16 *sTestLastGbaImage;
-static u16 sTestGbaImage[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+static u16 sTestGbaImage[WIDE_VIEW_MAX_W * WIDE_VIEW_MAX_H];
+static struct WideViewFrame sTestFrameInfo = {DISPLAY_WIDTH, DISPLAY_HEIGHT, WIDE_VIEW_GBA};
 
 static u16 TestKeyMask(const char *keys)
 {
@@ -132,8 +135,8 @@ static void TestWriteShot(const char *path)
     FILE *f = fopen(path, "wb");
     if (f == NULL)
         return;
-    fprintf(f, "P6\n%d %d\n255\n", DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
+    fprintf(f, "P6\n%d %d\n255\n", sTestFrameInfo.width, sTestFrameInfo.height);
+    for (int i = 0; i < sTestFrameInfo.width * sTestFrameInfo.height; i++)
     {
         u16 c = sTestGbaImage[i];
         u8 rgb[3] = {(c & 0x1F) << 3, ((c >> 5) & 0x1F) << 3, ((c >> 10) & 0x1F) << 3};
@@ -342,7 +345,7 @@ int main(int argc, char **argv)
     sdlTexture = SDL_CreateTexture(sdlRenderer,
                                    SDL_PIXELFORMAT_ARGB8888,
                                    SDL_TEXTUREACCESS_STREAMING,
-                                   DISPLAY_WIDTH, DISPLAY_HEIGHT);
+                                   WIDE_VIEW_MAX_W, WIDE_VIEW_MAX_H);
     if (sdlTexture == NULL)
     {
         DBGPRINTF("Texture could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -395,8 +398,7 @@ int main(int argc, char **argv)
             if (!TestStep())
                 break;
             keyboardKeys = sTestKeys;
-            memset(sTestGbaImage, 0, sizeof(sTestGbaImage));
-            DrawFrame(sTestGbaImage);
+            WideView_DrawFrame(sTestGbaImage, &sTestFrameInfo);
             REG_VCOUNT = 161;
             SDL_AtomicSet(&isFrameAvailable, 0);
             REG_DISPSTAT |= INTR_FLAG_VBLANK;
@@ -447,29 +449,31 @@ int main(int argc, char **argv)
                     SDL_GetRendererOutputSize(sdlRenderer, &outputWidth, &outputHeight);
                     int gameHeight;
                     int gameWidth;
+                    int srcW = sFrameInfo.width, srcH = sFrameInfo.height;
                     if (sPlatformSettings[PLATFORM_SETTING_INTEGER_SCALE])
                     {
-                        int scale = outputWidth / DISPLAY_WIDTH;
-                        if (outputHeight / DISPLAY_HEIGHT < scale)
-                            scale = outputHeight / DISPLAY_HEIGHT;
+                        int scale = outputWidth / srcW;
+                        if (outputHeight / srcH < scale)
+                            scale = outputHeight / srcH;
                         if (scale < 1)
                             scale = 1;
-                        gameWidth = DISPLAY_WIDTH * scale;
-                        gameHeight = DISPLAY_HEIGHT * scale;
+                        gameWidth = srcW * scale;
+                        gameHeight = srcH * scale;
                     }
                     else
                     {
-                        // Fill the window, keeping the GBA's 3:2 shape.
+                        // Fill the window, keeping the picture's shape.
                         gameWidth = outputWidth;
-                        if (gameWidth > outputHeight * 3 / 2)
-                            gameWidth = outputHeight * 3 / 2;
-                        gameHeight = gameWidth * 2 / 3;
+                        if (gameWidth > outputHeight * srcW / srcH)
+                            gameWidth = outputHeight * srcW / srcH;
+                        gameHeight = gameWidth * srcH / srcW;
                     }
                     SDL_Rect gameViewport = {(outputWidth - gameWidth) / 2,
                                              (outputHeight - gameHeight) / 2,
                                              gameWidth, gameHeight};
-                    SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, &gameViewport);
-                    if (sPlatformSettings[PLATFORM_SETTING_BORDER] && sdlBorderTexture != NULL)
+                    SDL_Rect gameSource = {0, 0, srcW, srcH};
+                    SDL_RenderCopy(sdlRenderer, sdlTexture, &gameSource, &gameViewport);
+                    if (sFrameInfo.mode == WIDE_VIEW_GBA && sPlatformSettings[PLATFORM_SETTING_BORDER] && sdlBorderTexture != NULL)
                     {
                         SDL_Rect borderSource = {141, 18, 1000, 683};
                         int innerWidth = gameViewport.w - 2;
@@ -595,6 +599,8 @@ static void ReadConfigFile(void)
             sPlatformSettings[PLATFORM_SETTING_VOLUME] = value;
         else if (sscanf(line, "fastForward=%u", &value) == 1 && value <= 3)
             sPlatformSettings[PLATFORM_SETTING_FF_SPEED] = value;
+        else if (sscanf(line, "widescreen=%u", &value) == 1)
+            WideView_SetEnabled(value != 0);
     }
     fclose(configFile);
 }
@@ -614,6 +620,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "border=%u\n", sPlatformSettings[PLATFORM_SETTING_BORDER]);
     fprintf(configFile, "volume=%u\n", sPlatformSettings[PLATFORM_SETTING_VOLUME]);
     fprintf(configFile, "fastForward=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_SPEED]);
+    fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
     fclose(configFile);
 }
 
@@ -626,7 +633,11 @@ static void ApplyPlatformSettings(void)
     if (!sPlatformSettings[PLATFORM_SETTING_FULLSCREEN])
     {
         int scale = sPlatformSettings[PLATFORM_SETTING_WINDOW_SCALE];
-        SDL_SetWindowSize(sdlWindow, DISPLAY_WIDTH * scale, DISPLAY_HEIGHT * scale);
+        // Wide view: the window is 16:9 (1x = 320x180 ... 6x = 1920x1080).
+        if (WideView_IsEnabled())
+            SDL_SetWindowSize(sdlWindow, 320 * scale, 180 * scale);
+        else
+            SDL_SetWindowSize(sdlWindow, DISPLAY_WIDTH * scale, DISPLAY_HEIGHT * scale);
         SDL_SetWindowPosition(sdlWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     }
 #endif
@@ -1235,12 +1246,11 @@ u16 Platform_GetKeyInput(void)
 
 void VDraw(SDL_Texture *texture)
 {
-    static uint16_t gbaImage[DISPLAY_WIDTH * DISPLAY_HEIGHT];
-    static uint32_t image[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+    static uint16_t gbaImage[WIDE_VIEW_MAX_W * WIDE_VIEW_MAX_H];
+    static uint32_t image[WIDE_VIEW_MAX_W * WIDE_VIEW_MAX_H];
 
-    memset(gbaImage, 0, sizeof(gbaImage));
-    DrawFrame(gbaImage);
-    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
+    WideView_DrawFrame(gbaImage, &sFrameInfo);
+    for (int i = 0; i < sFrameInfo.width * sFrameInfo.height; i++)
     {
         uint16_t color = gbaImage[i];
         uint32_t r = (color & 0x1F) * 255 / 31;
@@ -1248,7 +1258,8 @@ void VDraw(SDL_Texture *texture)
         uint32_t b = ((color >> 10) & 0x1F) * 255 / 31;
         image[i] = 0xFF000000 | (r << 16) | (g << 8) | b;
     }
-    SDL_UpdateTexture(texture, NULL, image, DISPLAY_WIDTH * sizeof(Uint32));
+    SDL_Rect area = {0, 0, sFrameInfo.width, sFrameInfo.height};
+    SDL_UpdateTexture(texture, &area, image, sFrameInfo.width * sizeof(Uint32));
     REG_VCOUNT = 161; // prep for being in VBlank period
 }
 

@@ -452,7 +452,7 @@ static void WaitForVBlank(void)
         // Desynchronization may occur if wireless adapter is connected
         // and we call VBlankIntrWait();
         while (!(gMain.intrCheck & INTR_FLAG_VBLANK))
-            ;
+            WJPC_WIRELESS_VBLANK_WAIT();
     }
     else
     {
