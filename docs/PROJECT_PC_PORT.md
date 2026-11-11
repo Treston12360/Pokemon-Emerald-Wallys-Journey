@@ -1,7 +1,8 @@
 # Project: Wally's Journey as a PC program (.exe)
 
 **Branch:** `pc-port` (based on 0.18.19). Read this whole file before working on the PC version.
-**Status (2026-11-11):** alpha 3 sent to the owner. Steps 1 (PC settings) of the plan below is done; step 2 (widescreen) is next.
+**Status (2026-11-11):** alpha 3 sent to the owner. Step 1 (PC settings) is done. Step 2 (widescreen): test pictures sent to the owner;
+**waiting for him to pick a view size** (A/B/C/D below) before the renderer is built in.
 
 ## What the owner asked for (2026-11-11, in his words where possible)
 - "a .exe file at the end of it with all those cool features that normally come with recomps":
@@ -27,6 +28,24 @@
    docs for a "native overworld renderer" / "native world neighborhood" (docs/NATIVE_OVERWORLD_RENDERER_*.md,
    R11EF_NATIVE_WORLD_NEIGHBORHOOD_*.md) worth reading first. Show the owner test pictures before building it in.
    Estimate 10–20 h.
+   - **Test pictures (2026-11-11), sent to the owner:** Rustboro, Petalburg, Fortree, Oldale Pokémon Center, each at
+     Original 240x160, A 288x162 (same zoom, sides only), B 320x180 (6x on 1080p, 12x on 4K), C 384x216 (5x/10x),
+     D 480x270 (4x/8x). They are mockups stitched from 15 real GBA captures per scene with the camera moved
+     ±8 tiles sideways and ±4 up/down (`tools/pc/widescreen_mockup/capture.py` + `compose.py`; the capture run
+     temporarily turned off WJ live/seasonal weather with `// WSMOCK` lines in wally_journey.c so every shot has
+     clear skies, then restored the file). Small doubled-NPC glitches in them are from the stitching.
+   - **Questions put to the owner:** which size (A–D); whether small rooms (they show lots of black at C/D)
+     should zoom in automatically indoors; that people further away must be loaded earlier for C/D (gameplay-adjacent,
+     see the Emerald-PC-Engine renderer doc §9 "Object-loading limitations") and weather/fog must be stretched.
+   - **Design notes from the Emerald-PC-Engine docs (read 2026-11-11):** don't paste the GBA picture into the middle
+     and draw margins around it (seams); render the whole view natively from live state (BG ring + backup map grid +
+     connections/border, current VRAM/palettes, a sprite command list taken before off-screen culling); fall back to
+     the normal 240x160 picture (centred) for battles, menus, text boxes and anything unsupported. Emerald's backup
+     map grid has a 7-metatile apron (8 east), enough terrain for A/B/C (C adds 72x28 px per side); D (120 px per side)
+     needs a connection resolver past the apron. NPC spawn range is 2 tiles past the GBA screen: C/D need it widened.
+   - **Build environment note (2026-11-11):** a fresh Claude cloud container could not install gcc-multilib / 32-bit
+     SDL2 (Ubuntu package servers blocked, only GitHub reachable), so the PC build can't be compiled there. Use a
+     container/PC that has them, or bring the toolchain from GitHub releases (e.g. llvm-mingw for the Windows build).
 3. **Smooth high frame rate** — game logic stays at 60 updates/s (so nothing breaks); extra frames are
    drawn in between on 120/144/240 Hz monitors. Walking + camera first, then sprites, menus, battle
    animations. Line-by-line effects (water ripple, some battle intros) stay at 60. Needs step 2's renderer.
