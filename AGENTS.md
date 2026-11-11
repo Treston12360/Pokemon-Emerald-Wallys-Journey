@@ -7,6 +7,3 @@ Before planning, editing, or reporting on Pokémon Emerald: Wally's Journey, rea
 It is the authoritative, versioned record of the owner's requests and corrections. Update it whenever the owner changes or adds a requirement. Do not treat static checker presence as a completed or playable feature. Keep the project a GBA ROM hack and validate changes with compilation and emulator tests.
 
 In case of disagreement with historical design notes, the owner's most recent requirement (and the authoritative requirements document, once updated) wins.
-
-## PC version (.exe)
-The PC port lives on branch `pc-port`. Read `docs/PROJECT_PC_PORT.md` there before working on it (plan, owner requests, rules, build and test).
