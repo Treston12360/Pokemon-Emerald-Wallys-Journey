@@ -30,6 +30,7 @@ enum PlatformSetting
     PLATFORM_SETTING_PAD_L,
     PLATFORM_SETTING_PAD_R,
     PLATFORM_SETTING_PAD_FF,
+    PLATFORM_SETTING_WIDESCREEN, // kept by the wide view (platform/wide_view.c), not in the array
     PLATFORM_SETTING_COUNT,
 };
 

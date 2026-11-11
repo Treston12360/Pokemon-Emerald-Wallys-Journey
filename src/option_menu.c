@@ -20,6 +20,8 @@
 #ifdef PORTABLE
 #include "platform.h"
 #include "string_util.h"
+#include "sound.h"
+#include "constants/songs.h"
 #endif
 
 #define tMenuSelection data[0]
@@ -72,7 +74,14 @@ enum
     MENUITEM_PC_PAD_L,
     MENUITEM_PC_PAD_R,
     MENUITEM_PC_PAD_FF,
-    MENUITEM_PC_LAST = MENUITEM_PC_PAD_FF,
+    MENUITEM_PC_WIDESCREEN,
+    MENUITEM_PC_LAST = MENUITEM_PC_WIDESCREEN,
+    // Rows of the top Settings page: each opens one section.
+    MENUITEM_PC_SECTION_GAMEPLAY,
+    MENUITEM_PC_SECTION_SPEED,
+    MENUITEM_PC_SECTION_CONTROLS,
+    MENUITEM_PC_SECTION_AUDIO,
+    MENUITEM_PC_SECTION_VIDEO,
 #endif
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
@@ -86,8 +95,22 @@ enum
 
 // Wally's Journey: the list now has more rows than fit on screen, so it scrolls.
 #define VISIBLE_ITEMS     7
+#ifdef PORTABLE
+// PC: the Settings menu is split into sections. sPcRows lists the rows of the page on screen,
+// sPcRowPos[item] is an item's place on that page (PC_ROW_NONE = not on this page).
+#define PC_ROW_NONE 0xFF
+static u8 sPcRows[32];
+static u8 sPcRowCount;
+static u8 sPcRowPos[MENUITEM_COUNT];
+static u8 sPcPage; // 0 = section list, else MENUITEM_PC_SECTION_* that is open
+#define ITEM_Y(item)      ((sPcRowPos[item] - sTopItem) * 16)
+#define ITEM_VISIBLE(item) (sPcRowPos[item] != PC_ROW_NONE && sPcRowPos[item] >= sTopItem && sPcRowPos[item] < sTopItem + VISIBLE_ITEMS)
+#define SEL_ITEM(taskId)  (sPcRows[gTasks[taskId].tMenuSelection])
+#else
 #define ITEM_Y(item)      (((item) - sTopItem) * 16)
 #define ITEM_VISIBLE(item) ((item) >= sTopItem && (item) < sTopItem + VISIBLE_ITEMS)
+#define SEL_ITEM(taskId)  (gTasks[taskId].tMenuSelection)
+#endif
 #define YPOS_TEXTSPEED    ITEM_Y(MENUITEM_TEXTSPEED)
 #define YPOS_BATTLESCENE  ITEM_Y(MENUITEM_BATTLESCENE)
 #define YPOS_BATTLESTYLE  ITEM_Y(MENUITEM_BATTLESTYLE)
@@ -135,6 +158,9 @@ static void Speed_DrawChoices(u8 selection, u8 y, bool32 battle);
 #ifdef PORTABLE
 static void PcOption_ProcessInput(u8 item);
 static void PcOption_Draw(u8 item);
+static bool32 PcMenu_HandleNavigation(u8 taskId);
+static void PcMenu_SetPage(u8 page);
+static void PcSection_Draw(u8 item);
 #endif
 
 EWRAM_DATA static bool8 sArrowPressed = FALSE;
@@ -212,6 +238,12 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_PC_PAD_L]      = COMPOUND_STRING("Pad L"),
     [MENUITEM_PC_PAD_R]      = COMPOUND_STRING("Pad R"),
     [MENUITEM_PC_PAD_FF]     = COMPOUND_STRING("Pad fast fwd"),
+    [MENUITEM_PC_WIDESCREEN] = COMPOUND_STRING("Widescreen"),
+    [MENUITEM_PC_SECTION_GAMEPLAY] = COMPOUND_STRING("Gameplay"),
+    [MENUITEM_PC_SECTION_SPEED]    = COMPOUND_STRING("Speed & Looks"),
+    [MENUITEM_PC_SECTION_CONTROLS] = COMPOUND_STRING("Controls"),
+    [MENUITEM_PC_SECTION_AUDIO]    = COMPOUND_STRING("Audio"),
+    [MENUITEM_PC_SECTION_VIDEO]    = COMPOUND_STRING("Video"),
 #endif
     [MENUITEM_CANCEL]      = COMPOUND_STRING("Cancel"),
 };
@@ -345,6 +377,9 @@ void CB2_InitOptionMenu(void)
         gMain.state++;
         break;
     case 8:
+#ifdef PORTABLE
+        PcMenu_SetPage(0);
+#endif
         PutWindowTilemap(WIN_OPTIONS);
         DrawOptionMenuTexts();
         gMain.state++;
@@ -358,6 +393,10 @@ void CB2_InitOptionMenu(void)
 
         gTasks[taskId].tMenuSelection = 0;
         sTopItem = 0;
+#ifdef PORTABLE
+        PcMenu_SetPage(0);
+        DrawHeaderText();
+#endif
 #if IS_FRLG
         // These options store their flags only in Emerald's save flag table.
         gTasks[taskId].tExpAll = 0;
@@ -404,6 +443,10 @@ static void Task_OptionMenuFadeIn(u8 taskId)
 
 static void Task_OptionMenuProcessInput(u8 taskId)
 {
+#ifdef PORTABLE
+    if (PcMenu_HandleNavigation(taskId))
+        return;
+#endif
     if (JOY_NEW(A_BUTTON))
     {
         if (gTasks[taskId].tMenuSelection == MENUITEM_CANCEL)
@@ -433,7 +476,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
     {
         u8 previousOption;
 
-        switch (gTasks[taskId].tMenuSelection)
+        switch (SEL_ITEM(taskId))
         {
         case MENUITEM_TEXTSPEED:
             previousOption = gTasks[taskId].tTextSpeed;
@@ -539,18 +582,19 @@ static void Task_OptionMenuProcessInput(u8 taskId)
         case MENUITEM_PC_PAD_L:
         case MENUITEM_PC_PAD_R:
         case MENUITEM_PC_PAD_FF:
-            PcOption_ProcessInput(gTasks[taskId].tMenuSelection);
+        case MENUITEM_PC_WIDESCREEN:
+            PcOption_ProcessInput(SEL_ITEM(taskId));
             break;
 #endif
         default:
-            if (gTasks[taskId].tMenuSelection >= MENUITEM_GFX_FIRST && gTasks[taskId].tMenuSelection <= MENUITEM_GFX_LAST)
+            if (SEL_ITEM(taskId) >= MENUITEM_GFX_FIRST && SEL_ITEM(taskId) <= MENUITEM_GFX_LAST)
             {
-                u32 bit = gTasks[taskId].tMenuSelection - MENUITEM_GFX_FIRST;
+                u32 bit = SEL_ITEM(taskId) - MENUITEM_GFX_FIRST;
                 if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
                 {
                     gTasks[taskId].tClassicGfx ^= (1 << bit);
                     sArrowPressed = TRUE;
-                    Gfx_DrawChoices((gTasks[taskId].tClassicGfx >> bit) & 1, ITEM_Y(gTasks[taskId].tMenuSelection));
+                    Gfx_DrawChoices((gTasks[taskId].tClassicGfx >> bit) & 1, ITEM_Y(SEL_ITEM(taskId)));
                 }
                 break;
             }
@@ -848,7 +892,11 @@ static void ButtonMode_DrawChoices(u8 selection)
 static void DrawHeaderText(void)
 {
     FillWindowPixelBuffer(WIN_HEADER, PIXEL_FILL(1));
+#ifdef PORTABLE
+    AddTextPrinterParameterized(WIN_HEADER, FONT_NORMAL, sPcPage ? sOptionMenuItemsNames[sPcPage] : COMPOUND_STRING("Settings"), 8, 1, TEXT_SKIP_DRAW, NULL);
+#else
     AddTextPrinterParameterized(WIN_HEADER, FONT_NORMAL, gText_Option, 8, 1, TEXT_SKIP_DRAW, NULL);
+#endif
     CopyWindowToVram(WIN_HEADER, COPYWIN_FULL);
 }
 
@@ -857,8 +905,13 @@ static void DrawOptionMenuTexts(void)
     u8 i;
 
     FillWindowPixelBuffer(WIN_OPTIONS, PIXEL_FILL(1));
+#ifdef PORTABLE
+    for (i = sTopItem; i < sPcRowCount && i < sTopItem + VISIBLE_ITEMS; i++)
+        AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, sOptionMenuItemsNames[sPcRows[i]], 8, (i - sTopItem) * 16 + 1, TEXT_SKIP_DRAW, NULL);
+#else
     for (i = sTopItem; i < MENUITEM_COUNT && i < sTopItem + VISIBLE_ITEMS; i++)
         AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, sOptionMenuItemsNames[i], 8, ITEM_Y(i) + 1, TEXT_SKIP_DRAW, NULL);
+#endif
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }
 
@@ -984,6 +1037,9 @@ static void RedrawVisibleOptions(u8 taskId)
         for (i = MENUITEM_PC_WINDOWSIZE; i <= MENUITEM_PC_LAST; i++)
             if (ITEM_VISIBLE(i))
                 PcOption_Draw(i);
+        for (i = MENUITEM_PC_SECTION_GAMEPLAY; i <= MENUITEM_PC_SECTION_VIDEO; i++)
+            if (ITEM_VISIBLE(i))
+                PcSection_Draw(i);
     }
 #endif
     HighlightOptionMenuItem(sel);
@@ -1038,10 +1094,11 @@ static const u8 sPcRowSetting[] =
     [MENUITEM_PC_PAD_L      - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_L,
     [MENUITEM_PC_PAD_R      - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_R,
     [MENUITEM_PC_PAD_FF     - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_FF,
+    [MENUITEM_PC_WIDESCREEN - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_WIDESCREEN,
 };
 #define PAD_MAX (PAD_BUTTON_COUNT - 1)
-static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static const u8 sPcRowMax[] = {6, 1, 1, 10, 3, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX};
+static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static const u8 sPcRowMax[] = {6, 1, 1, 10, 3, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1};
 
 static void PcOption_ProcessInput(u8 item)
 {
@@ -1091,6 +1148,7 @@ static void PcOption_Draw(u8 item)
         break;
     case MENUITEM_PC_FULLSCREEN:
     case MENUITEM_PC_SHARP:
+    case MENUITEM_PC_WIDESCREEN:
         StringCopy(end, (value ? gText_BattleSceneOn : gText_BattleSceneOff) + 6);
         break;
     case MENUITEM_PC_VOLUME:
@@ -1110,6 +1168,135 @@ static void PcOption_Draw(u8 item)
     FillWindowPixelRect(WIN_OPTIONS, PIXEL_FILL(1), 104, y, 96, 16);
     DrawOptionMenuChoice(gText_ArrowLeft, 104, y, 0);
     DrawOptionMenuChoice(text, 140, y, 1);
+    DrawOptionMenuChoice(gText_ArrowRight, 190, y, 0);
+}
+// ---- PC Settings sections ---------------------------------------------------
+static const u8 sPcSectionGameplay[] = {MENUITEM_TEXTSPEED, MENUITEM_BATTLESCENE, MENUITEM_BATTLESTYLE, MENUITEM_EXPMODE,
+    MENUITEM_ZMOVES, MENUITEM_WILDMONS, MENUITEM_NUZLOCKE, MENUITEM_LEVELCAP, MENUITEM_QUICKCATCH};
+static const u8 sPcSectionControls[] = {MENUITEM_BUTTONMODE, MENUITEM_PC_PAD_A, MENUITEM_PC_PAD_B, MENUITEM_PC_PAD_START,
+    MENUITEM_PC_PAD_SELECT, MENUITEM_PC_PAD_L, MENUITEM_PC_PAD_R, MENUITEM_PC_PAD_FF};
+static const u8 sPcSectionAudio[] = {MENUITEM_SOUND, MENUITEM_PC_VOLUME};
+static const u8 sPcSectionVideo[] = {MENUITEM_PC_WINDOWSIZE, MENUITEM_PC_FULLSCREEN, MENUITEM_PC_SHARP, MENUITEM_PC_WIDESCREEN};
+
+static void PcMenu_AddRow(u8 item)
+{
+    sPcRowPos[item] = sPcRowCount;
+    sPcRows[sPcRowCount++] = item;
+}
+
+static void PcMenu_AddRows(const u8 *items, u32 count)
+{
+    u32 i;
+    for (i = 0; i < count; i++)
+        PcMenu_AddRow(items[i]);
+}
+
+static void PcMenu_SetPage(u8 page)
+{
+    u32 i;
+    sPcPage = page;
+    sPcRowCount = 0;
+    for (i = 0; i < MENUITEM_COUNT; i++)
+        sPcRowPos[i] = PC_ROW_NONE;
+    switch (page)
+    {
+    case 0:
+        for (i = MENUITEM_PC_SECTION_GAMEPLAY; i <= MENUITEM_PC_SECTION_VIDEO; i++)
+            PcMenu_AddRow(i);
+        break;
+    case MENUITEM_PC_SECTION_GAMEPLAY:
+        PcMenu_AddRows(sPcSectionGameplay, ARRAY_COUNT(sPcSectionGameplay));
+        break;
+    case MENUITEM_PC_SECTION_SPEED:
+        PcMenu_AddRow(MENUITEM_GAMESPEED);
+        PcMenu_AddRow(MENUITEM_BATTLESPEED);
+        PcMenu_AddRow(MENUITEM_PC_FFSPEED);
+        PcMenu_AddRow(MENUITEM_PC_FFTOGGLE);
+        PcMenu_AddRow(MENUITEM_FRAMETYPE);
+        for (i = MENUITEM_GFX_FIRST; i <= MENUITEM_GFX_LAST; i++)
+            PcMenu_AddRow(i);
+        break;
+    case MENUITEM_PC_SECTION_CONTROLS:
+        PcMenu_AddRows(sPcSectionControls, ARRAY_COUNT(sPcSectionControls));
+        break;
+    case MENUITEM_PC_SECTION_AUDIO:
+        PcMenu_AddRows(sPcSectionAudio, ARRAY_COUNT(sPcSectionAudio));
+        break;
+    case MENUITEM_PC_SECTION_VIDEO:
+        PcMenu_AddRows(sPcSectionVideo, ARRAY_COUNT(sPcSectionVideo));
+        break;
+    }
+    PcMenu_AddRow(MENUITEM_CANCEL);
+}
+
+static void PcMenu_OpenPage(u8 taskId, u8 page, u8 selection)
+{
+    PcMenu_SetPage(page);
+    gTasks[taskId].tMenuSelection = selection;
+    sTopItem = 0;
+    DrawHeaderText();
+    RedrawVisibleOptions(taskId);
+}
+
+// A opens a section (or leaves with Cancel), B goes back to the section list (or leaves),
+// up/down move within the page. Returns TRUE when the input was used here.
+static bool32 PcMenu_HandleNavigation(u8 taskId)
+{
+    u8 sel = gTasks[taskId].tMenuSelection;
+    u8 item = sPcRows[sel];
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        if (item >= MENUITEM_PC_SECTION_GAMEPLAY && item <= MENUITEM_PC_SECTION_VIDEO)
+        {
+            PlaySE(SE_SELECT);
+            PcMenu_OpenPage(taskId, item, 0);
+        }
+        else if (item == MENUITEM_CANCEL)
+        {
+            if (sPcPage != 0)
+                PcMenu_OpenPage(taskId, 0, sPcPage - MENUITEM_PC_SECTION_GAMEPLAY);
+            else
+                gTasks[taskId].func = Task_OptionMenuSave;
+        }
+        return TRUE;
+    }
+    if (JOY_NEW(B_BUTTON))
+    {
+        if (sPcPage != 0)
+            PcMenu_OpenPage(taskId, 0, sPcPage - MENUITEM_PC_SECTION_GAMEPLAY);
+        else
+            gTasks[taskId].func = Task_OptionMenuSave;
+        return TRUE;
+    }
+    if (JOY_NEW(DPAD_UP))
+    {
+        gTasks[taskId].tMenuSelection = (sel > 0) ? sel - 1 : sPcRowCount - 1;
+        RedrawVisibleOptions(taskId);
+        return TRUE;
+    }
+    if (JOY_NEW(DPAD_DOWN))
+    {
+        gTasks[taskId].tMenuSelection = (sel + 1 < sPcRowCount) ? sel + 1 : 0;
+        RedrawVisibleOptions(taskId);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// Section list rows: a short note of what is inside, and an arrow.
+static void PcSection_Draw(u8 item)
+{
+    static const u8 *const sNotes[] = {
+        COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Battle, rules"),
+        COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Fast fwd, art"),
+        COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Buttons, pad"),
+        COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Sound, volume"),
+        COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Window, size"),
+    };
+    u8 y = ITEM_Y(item);
+    FillWindowPixelRect(WIN_OPTIONS, PIXEL_FILL(1), 104, y, 96, 16);
+    AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, sNotes[item - MENUITEM_PC_SECTION_GAMEPLAY], 104, y + 1, TEXT_SKIP_DRAW, NULL);
     DrawOptionMenuChoice(gText_ArrowRight, 190, y, 0);
 }
 #endif

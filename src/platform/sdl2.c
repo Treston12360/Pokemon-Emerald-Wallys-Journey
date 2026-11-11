@@ -779,6 +779,8 @@ void Platform_SetBorderBackground(u8 selection)
 
 u8 Platform_GetSetting(enum PlatformSetting setting)
 {
+    if (setting == PLATFORM_SETTING_WIDESCREEN)
+        return WideView_IsEnabled();
     return sPlatformSettings[setting];
 }
 
@@ -789,6 +791,11 @@ static SDL_atomic_t sWindowSettingsChanged;
 void Platform_SetSetting(enum PlatformSetting setting, u8 value)
 {
     sPlatformSettings[setting] = value;
+    if (setting == PLATFORM_SETTING_WIDESCREEN)
+    {
+        WideView_SetEnabled(value != 0);
+        SDL_AtomicSet(&sWindowSettingsChanged, 1); // window shape follows (16:9 or 3:2)
+    }
     if (setting == PLATFORM_SETTING_FF_TOGGLE)
         SDL_AtomicSet(&sFfToggled, 0);
     if (setting == PLATFORM_SETTING_VSYNC || setting == PLATFORM_SETTING_FULLSCREEN
