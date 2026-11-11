@@ -904,9 +904,15 @@ static u16 WJ_EvolveForLevel(u16 species, u32 level)
 
 // Wally's Journey (owner 2026-11-08): Gabby & Ty are farmed for money and EXP. Every
 // battle (all six of their teams) is 2 levels below the player's highest party level (never below
-// the team's own level), with 20 IVs in every stat, full EVs, good natures and
+// the expected level for the player's badges, minus 2), with 20 IVs in every stat, full EVs, good natures and
 // strong movesets (4 attacks, no Protect). They give 5% of the EXP and 40 x level money
 // (battle_script_commands.c).
+// Expected highest party level of a player who beat every trainer before each gym (and did
+// a little wild training), from tools/important_trainer_levels.py ("you top" at each gym):
+// index = badges owned. 0: Route 103 rival; 1 Roxanne; 2 Brawly; 3 Wattson; 4 Flannery;
+// 5 Norman; 6 Winona; 7 Tate & Liza; 8 Juan.
+static const u8 sWJExpectedTopAtBadge[9] = {5, 16, 18, 23, 30, 32, 37, 48, 52};
+
 bool32 WallyJourney_IsReporterTrainer(u16 trainerId)
 {
     return trainerId >= TRAINER_GABBY_AND_TY_1 && trainerId <= TRAINER_GABBY_AND_TY_6;
@@ -949,12 +955,18 @@ void WallyJourney_ScaleReporterParty(struct Pokemon *party, u16 trainerId)
         u8 nature;
         const struct WJReporterBuild *build = NULL;
 
-        // Only the player's highest party level counts, never the PC boxes. The team's own
-        // level stays as a minimum (owner 2026-11-11: the minimum is on purpose, so an
-        // under-levelled team can't skip ahead, same as the gym leaders and scaling trainers).
+        // Only the player's highest party level counts, never the PC boxes. Minimum (owner
+        // 2026-11-11, same idea as the gym leaders): the level a player would have after
+        // beating every trainer up to the latest badge, with a little wild training, minus
+        // the reporters' 2. So skipping trainers doesn't make them easier.
+        (void)level;
         target = top > 2 ? top - 2 : 1;
-        if (target < level)
-            target = level;
+        {
+            u32 badges = CountBadges();
+            u32 floor = sWJExpectedTopAtBadge[badges > 8 ? 8 : badges] - 2;
+            if (target < floor)
+                target = floor;
+        }
         if (target > MAX_LEVEL)
             target = MAX_LEVEL;
         while (GetSpeciesPreEvolution(species) != SPECIES_NONE)
