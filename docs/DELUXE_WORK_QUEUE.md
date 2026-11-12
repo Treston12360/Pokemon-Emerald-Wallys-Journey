@@ -15,7 +15,7 @@ Status key: TODO = not started, WIP = started (see notes), ASK = needs the owner
 
 ## Open items
 
-### DLX-1 Lavaridge gym in 3D looks flat (ASK - fixed in session 019khs4X's data, owner to confirm)
+### DLX-1 Lavaridge gym in 3D looks flat (DONE - owner 2026-11-12: "DLX-1 looks good"; ship the regenerated data, see note)
 Status 2026-11-12 13:40 (session 019khs4X): the owner was shown the fixed gym (picture) and then reported only
 the folded sign (DLX-19) - treat the model as accepted. The working voxel data with the fix is NOT in git
 (voxel/ is not in the repo); whoever builds a release must regenerate buildings.bin/relief.bin with the
@@ -67,15 +67,15 @@ to have: apply the per-line BG offsets the transition writes to the wide field r
 Test: save `/home/claude/keep/owner_brawly.sav`-style save (any save), script `trainerbattle 774` (Brawly) or
 walk into grass; `winshot` frames during the transition (`WJPC_SCRIPT`, see "How to build and test").
 
-### DLX-5 3D battle backgrounds + settings option (ASK wording, show pictures)
+### DLX-5 3D battle backgrounds + settings option (TODO - owner 2026-11-12: "you can choose the wording")
 Emerald 3DS builds 3D arenas from the battle background art (`src/platform/voxel3d/voxel_arena.c`,
 already copied). Owner wants it as its own on/off option in settings. See also `docs/PROJECT_NEW_3D_BGS.md`.
 
-### DLX-6 In-game options for the 3D overworld (ASK wording)
+### DLX-6 In-game options for the 3D overworld (TODO - owner 2026-11-12: "you can choose the wording")
 3D is on today only with `world3d=1` in `WallysJourney.cfg` or `WJPC_3D=1` ("Play in 3D.bat").
 Proposed menu line "3D World: On/Off" - get the owner's OK on wording first.
 
-### DLX-8 3D: chunky people (ASK, show a test picture first)
+### DLX-8 3D: chunky people (ASK - owner 2026-11-12: show an example before deciding to implement)
 Owner asked for trainers/NPCs to look 3D like the houses: extrude each sprite frame into blocks.
 Make one test picture, owner decides.
 
@@ -136,7 +136,7 @@ still blank zoomed out.
 ### DLX-13 Other empty map corners (TODO)
 Find and fix corners like Dewford's (zoomed out shows bare filler). Show pictures.
 
-### DLX-14 Sprite colour / graphics memory limits (ASK - plan first)
+### DLX-14 Sprite colour / graphics memory limits (TODO - owner 2026-11-12: "was supposed to be no limit on sprites color and graphics memory")
 Present a plan to raise the sprite palette and sprite VRAM limits before coding.
 
 ### DLX-15 Test on real Windows hardware (TODO, owner)
