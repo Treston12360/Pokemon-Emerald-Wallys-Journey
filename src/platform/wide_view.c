@@ -77,8 +77,30 @@ static bool IsIndoorMap(void)
     return gMapHeader.mapType == MAP_TYPE_INDOOR || gMapHeader.mapType == MAP_TYPE_SECRET_BASE;
 }
 
+// Size asked for by the display code (zoom / screen shape); 0 = the built-in sizes.
+static int sReqW, sReqH;
+
+void WideView_SetViewSize(int w, int h)
+{
+    sReqW = w;
+    sReqH = h;
+}
+
+bool WideView_IsIndoorMap(void)
+{
+    return IsIndoorMap();
+}
+
 static void GetViewSize(int *w, int *h)
 {
+    if (sReqW > 0 && sReqH > 0)
+    {
+        *w = sReqW < DISPLAY_WIDTH ? DISPLAY_WIDTH : sReqW > MAX_W ? MAX_W : sReqW;
+        *h = sReqH < DISPLAY_HEIGHT ? DISPLAY_HEIGHT : sReqH > MAX_H ? MAX_H : sReqH;
+        *w &= ~1;
+        *h &= ~1;
+        return;
+    }
     if (IsIndoorMap())
     {
         *w = 320;
@@ -259,12 +281,14 @@ struct WideSprite
     s16 matrix[4];
     bool marginOnly;    // a repeated weather sprite: only drawn outside the GBA screen
     bool withCamera;    // smooth motion: stays put on screen while the camera moves (player, follower)
+    bool ui;            // screen-space sprite (start menu, HM picture...): drawn on the UI layer
 };
 
 static struct WideSprite sWideSprites[512];
 static int sWideSpriteCount;
 
 static bool sAddingWithCamera; // set while BuildWideSprites adds a sprite that moves with the camera
+static bool sAddingUi;         // set while BuildWideSprites adds a screen-space (UI) sprite
 
 static void AddWideSprite(const struct OamData *oam, s32 x, s32 y, bool marginOnly)
 {
@@ -277,6 +301,7 @@ static void AddWideSprite(const struct OamData *oam, s32 x, s32 y, bool marginOn
     ws->y = y;
     ws->marginOnly = marginOnly;
     ws->withCamera = sAddingWithCamera;
+    ws->ui = sAddingUi;
     if (oam->affineMode & ST_OAM_AFFINE_ON_MASK)
     {
         ws->matrix[0] = gOamMatrices[oam->matrixNum].a;
@@ -408,14 +433,21 @@ static void BuildWideSprites(void)
         // With the camera: a map sprite that kept its screen place while the camera moved.
         // Screen-space sprites that aren't weather (rare in the field) count too.
         {
+            // Compare positions without x2/y2: the surf blob and the player bob up and down
+            // while they follow the camera, and must not slide with the map.
             int idx = keys[i] & 0xFF;
             bool sameSprite = sLastSpriteTemplate[idx] == sprite->template;
+            s32 bx = (s16)(x - sprite->x2), by = (s16)(y - sprite->y2);
+            sAddingUi = false;
             if (sprite->coordOffsetEnabled)
-                sAddingWithCamera = sCameraMoved && sameSprite && sLastSpriteX[idx] == x && sLastSpriteY[idx] == y;
+                sAddingWithCamera = sCameraMoved && sameSprite && sLastSpriteX[idx] == bx && sLastSpriteY[idx] == by;
             else
+            {
                 sAddingWithCamera = !GetWeatherRepeat(sprite, &px, &py);
-            sLastSpriteX[idx] = x;
-            sLastSpriteY[idx] = y;
+                sAddingUi = sAddingWithCamera;
+            }
+            sLastSpriteX[idx] = bx;
+            sLastSpriteY[idx] = by;
             sLastSpriteTemplate[idx] = sprite->template;
         }
 
@@ -442,6 +474,7 @@ static void BuildWideSprites(void)
         }
     }
     sAddingWithCamera = false;
+    sAddingUi = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -464,6 +497,7 @@ struct WideLine
     uint16_t layers[4][LINE_W];
     uint16_t spriteLayers[4][LINE_W];
     uint16_t mapSpriteLayers[4][LINE_W]; // smooth motion: sprites that slide with the map only
+    uint16_t worldSpriteLayers[4][LINE_W]; // UI layer on: every sprite except the UI ones
     uint16_t winMask[LINE_W];
     char prioritySortedBgs[4][4];
     char prioritySortedBgsCount[4];
@@ -473,6 +507,13 @@ static int sW, sH, sOX, sOY;   // canvas size and where the GBA screen sits in i
 static uint16_t *sSmoothOverlay; // smooth motion: where BG0 goes (NULL = normal drawing)
 static int sSmoothMargin;
 static uint16_t *sOverlayLine;   // this scanline's row of sSmoothOverlay
+static uint16_t *sUiOverlay;     // UI layer: BG0 (text boxes, menus) + screen-space sprites (NULL = off)
+static uint16_t *sUiLine;        // this scanline's row of sUiOverlay
+
+void WideView_SetUiOverlay(uint16_t *overlay)
+{
+    sUiOverlay = overlay;
+}
 
 void WideView_SetSmooth(uint16_t *overlay, int margin)
 {
@@ -674,7 +715,8 @@ static void DrawWideSprites(struct WideLine *line, int vy, bool windowsEnabled)
         bool is8bpp = oam->bpp & 1;
         bool semiTransparent = oam->objMode == 1, objWin = oam->objMode == 2;
         uint16_t *pixels = line->spriteLayers[oam->priority];
-        uint16_t *mapPixels = (sOverlayLine != NULL && !ws->withCamera) ? line->mapSpriteLayers[oam->priority] : NULL;
+        uint16_t *mapPixels = (sOverlayLine != NULL && !ws->withCamera && !ws->ui) ? line->mapSpriteLayers[oam->priority] : NULL;
+        uint16_t *worldPixels = (sUiLine != NULL && !ws->ui) ? line->worldSpriteLayers[oam->priority] : NULL;
 
         for (int localX = -halfW; localX < halfW; localX++)
         {
@@ -728,6 +770,8 @@ static void DrawWideSprites(struct WideLine *line, int vy, bool windowsEnabled)
             pixels[gx] = color | (1 << 15);
             if (mapPixels != NULL)
                 mapPixels[gx] = color | (1 << 15);
+            if (worldPixels != NULL)
+                worldPixels[gx] = color | (1 << 15);
         }
     }
 }
@@ -748,7 +792,7 @@ static bool WinHorz(uint16_t reg, int gx)
     return gx >= left && gx < right;
 }
 
-static void CompositeLine(struct WideLine *linePtr, uint16_t *pixels, bool windowsEnabled, unsigned int blendMode, bool withBg0);
+static void CompositeLine(struct WideLine *linePtr, uint16_t *pixels, bool windowsEnabled, unsigned int blendMode, bool withBg0, uint16_t (*spriteSrc)[LINE_W]);
 
 static void DrawWideScanline(uint16_t *pixels, int vy)
 {
@@ -761,6 +805,8 @@ static void DrawWideScanline(uint16_t *pixels, int vy)
     memset(line.spriteLayers, 0, sizeof(line.spriteLayers));
     if (sOverlayLine != NULL)
         memset(line.mapSpriteLayers, 0, sizeof(line.mapSpriteLayers));
+    if (sUiLine != NULL)
+        memset(line.worldSpriteLayers, 0, sizeof(line.worldSpriteLayers));
     memset(line.winMask, 0, sizeof(line.winMask));
     memset(line.prioritySortedBgsCount, 0, sizeof(line.prioritySortedBgsCount));
 
@@ -811,23 +857,49 @@ static void DrawWideScanline(uint16_t *pixels, int vy)
     if (REG_DISPCNT & DISPCNT_OBJ_ON)
         DrawWideSprites(&line, vy, windowsEnabled);
 
+    if (sUiLine != NULL)
+    {
+        // UI layer: the world (map + every non-UI sprite, no BG0) goes to `pixels` (or is split
+        // further for smooth motion below); wherever BG0 or UI sprites change the result, the
+        // full picture goes to the UI layer, which the display code scales on its own.
+        static uint16_t full[LINE_W], world[LINE_W];
+        memcpy(full, pixels, sW * sizeof(uint16_t));
+        memcpy(world, pixels, sW * sizeof(uint16_t));
+        CompositeLine(&line, full, windowsEnabled, blendMode, true, line.spriteLayers);
+        CompositeLine(&line, world, windowsEnabled, blendMode, false, line.worldSpriteLayers);
+        for (int x = 0; x < sW; x++)
+            if (full[x] != world[x])
+                sUiLine[x] = full[x] | 0x8000;
+        if (sOverlayLine != NULL)
+        {
+            CompositeLine(&line, pixels, windowsEnabled, blendMode, false, line.mapSpriteLayers);
+            for (int x = 0; x < sW; x++)
+                if (world[x] != pixels[x])
+                    sOverlayLine[x] = world[x] | 0x8000;
+        }
+        else
+        {
+            memcpy(pixels, world, sW * sizeof(uint16_t));
+        }
+        return;
+    }
     if (sOverlayLine != NULL)
     {
         // Smooth motion: the map picture (no BG0, no sprites that move with the camera) goes to
         // `pixels`; wherever those change the result, the full picture goes to the overlay.
         static uint16_t full[LINE_W];
         memcpy(full, pixels, sW * sizeof(uint16_t));
-        CompositeLine(&line, full, windowsEnabled, blendMode, true);
-        CompositeLine(&line, pixels, windowsEnabled, blendMode, false);
+        CompositeLine(&line, full, windowsEnabled, blendMode, true, line.spriteLayers);
+        CompositeLine(&line, pixels, windowsEnabled, blendMode, false, line.mapSpriteLayers);
         for (int x = 0; x < sW; x++)
             if (full[x] != pixels[x])
                 sOverlayLine[x] = full[x] | 0x8000;
         return;
     }
-    CompositeLine(&line, pixels, windowsEnabled, blendMode, true);
+    CompositeLine(&line, pixels, windowsEnabled, blendMode, true, line.spriteLayers);
 }
 
-static void CompositeLine(struct WideLine *linePtr, uint16_t *pixels, bool windowsEnabled, unsigned int blendMode, bool withBg0)
+static void CompositeLine(struct WideLine *linePtr, uint16_t *pixels, bool windowsEnabled, unsigned int blendMode, bool withBg0, uint16_t (*spriteSrc)[LINE_W])
 {
 #define line (*linePtr)
     for (int prnum = 3; prnum >= 0; prnum--)
@@ -866,7 +938,7 @@ static void CompositeLine(struct WideLine *linePtr, uint16_t *pixels, bool windo
                 pixels[x] = color;
             }
         }
-        uint16_t *src = withBg0 ? line.spriteLayers[prnum] : line.mapSpriteLayers[prnum];
+        uint16_t *src = spriteSrc[prnum];
         for (int x = 0; x < sW; x++)
         {
             if (getAlphaBit(src[x]))
@@ -922,8 +994,14 @@ static void DrawFieldFrame(uint16_t *out)
             sOverlayLine = &sSmoothOverlay[vy * sW];
             memset(sOverlayLine, 0, sW * sizeof(uint16_t));
         }
+        if (sUiOverlay != NULL)
+        {
+            sUiLine = &sUiOverlay[vy * sW];
+            memset(sUiLine, 0, sW * sizeof(uint16_t));
+        }
         DrawWideScanline(pixels, vy);
         sOverlayLine = NULL;
+        sUiLine = NULL;
 
         if (gbaLine)
         {
@@ -948,6 +1026,7 @@ void WideView_DrawFrame(uint16_t *out, struct WideViewFrame *frame)
     frame->mode = mode;
     frame->margin = 0;
     frame->camX = frame->camY = 0;
+    frame->gbaX = frame->gbaY = 0;
 
     if (mode == WIDE_VIEW_GBA)
     {
@@ -1008,6 +1087,8 @@ void WideView_DrawFrame(uint16_t *out, struct WideViewFrame *frame)
         sOX += sSmoothMargin;
         sOY += sSmoothMargin;
     }
+    frame->gbaX = sOX;
+    frame->gbaY = sOY;
     BuildWideSprites();
     DrawFieldFrame(out);
 }

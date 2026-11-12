@@ -4,8 +4,8 @@
 // PC wide view (PC port plan step 2). The overworld is drawn on a bigger virtual
 // screen; everything else (battles, menus) stays the original 240x160 picture.
 
-#define WIDE_VIEW_MAX_W 384
-#define WIDE_VIEW_MAX_H 216
+#define WIDE_VIEW_MAX_W 640
+#define WIDE_VIEW_MAX_H 360
 
 enum WideViewMode
 {
@@ -23,7 +23,17 @@ struct WideViewFrame
     // (width + 2*margin) x (height + 2*margin), the visible picture starting at (margin, margin).
     int margin;
     int camX, camY; // world pixel shown at the visible picture's top-left (FIELD mode)
+    int gbaX, gbaY; // FIELD mode: where the GBA screen sits in the buffers (margin included)
 };
+
+// Zoom / screen shape: the display code asks for a view size (0, 0 = built-in sizes).
+void WideView_SetViewSize(int w, int h);
+bool WideView_IsIndoorMap(void);
+
+// UI layer: when set (same size as the frame buffers), BG0 (text boxes, menus, the map name
+// pop-up) and screen-space sprites (start menu, HM picture) go here instead of into the frame,
+// so the display code can draw them at their own scale. NULL = off.
+void WideView_SetUiOverlay(uint16_t *overlay);
 
 // Smooth motion: the overworld is drawn `margin` pixels bigger on every side, and the text
 // layer (BG0, text boxes, map name pop-ups) goes to `overlay` instead, so the map can be

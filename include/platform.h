@@ -22,7 +22,7 @@ enum PlatformSetting
 {
     PLATFORM_SETTING_FULLSCREEN,
     PLATFORM_SETTING_WINDOW_SCALE,
-    PLATFORM_SETTING_INTEGER_SCALE,
+    PLATFORM_SETTING_INTEGER_SCALE, // mGBA "Force integer scaling"
     PLATFORM_SETTING_VSYNC,
     PLATFORM_SETTING_BORDER,
     PLATFORM_SETTING_VOLUME,
@@ -39,6 +39,12 @@ enum PlatformSetting
     PLATFORM_SETTING_WIDESCREEN, // kept by the wide view (platform/wide_view.c), not in the array
     PLATFORM_SETTING_SMOOTH,     // frames drawn per second: index into gPlatformFrameRates (0 = 60, the original)
     PLATFORM_SETTING_FILTER,     // screen filter: 0 = off, 1 = scanlines, 2 = LCD grid
+    PLATFORM_SETTING_ZOOM,       // overworld zoom level, index into the view heights in sdl2.c (3 = normal)
+    PLATFORM_SETTING_SMOOTHING,  // mGBA "Bilinear filtering"
+    PLATFORM_SETTING_LOCK_ASPECT, // mGBA "Lock aspect ratio" (off = stretch to the whole screen)
+    PLATFORM_SETTING_INTERFRAME, // mGBA "Interframe blending" (mix each frame with the one before)
+    PLATFORM_SETTING_LOCK_FRAME, // mGBA "Lock frame size" (window can't be resized by dragging)
+    PLATFORM_SETTING_RESOLUTION, // 0 = monitor/window, 1 = 720p, 2 = 1080p, 3 = 1440p, 4 = 4K
     PLATFORM_SETTING_COUNT,
 };
 

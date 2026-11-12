@@ -42,6 +42,7 @@ SDL_Window *sdlWindow;
 SDL_Renderer *sdlRenderer;
 SDL_Texture *sdlTexture;
 SDL_Texture *sdlOverlayTexture; // smooth motion: text layer drawn over the sliding map
+SDL_Texture *sdlUiTexture;      // UI layer (text boxes, menus, map name pop-up), drawn at its own scale
 #define SMOOTH_M WIDE_VIEW_SMOOTH_MARGIN
 #define TEX_W (WIDE_VIEW_MAX_W + 2 * SMOOTH_M)
 #define TEX_H (WIDE_VIEW_MAX_H + 2 * SMOOTH_M)
@@ -90,6 +91,12 @@ static u8 sPlatformSettings[PLATFORM_SETTING_COUNT] = {
     [PLATFORM_SETTING_PAD_L] = PAD_BUTTON_LB,
     [PLATFORM_SETTING_PAD_R] = PAD_BUTTON_RB,
     [PLATFORM_SETTING_PAD_FF] = PAD_BUTTON_RT,
+    [PLATFORM_SETTING_ZOOM] = 4,
+    [PLATFORM_SETTING_SMOOTHING] = 0,
+    [PLATFORM_SETTING_RESOLUTION] = 0,
+    [PLATFORM_SETTING_LOCK_ASPECT] = 1,
+    [PLATFORM_SETTING_INTERFRAME] = 0,
+    [PLATFORM_SETTING_LOCK_FRAME] = 0,
 };
 
 // Fast forward: the keyboard key (Space) and the controller button are both read here.
@@ -178,6 +185,7 @@ static u16 TestKeyMask(const char *keys)
     return mask;
 }
 
+static char sTestWinShot[512];
 static void TestWriteShot(const char *path)
 {
     FILE *f = fopen(path, "wb");
@@ -223,6 +231,22 @@ static bool TestStep(void)
             sTestKeys = TestKeyMask(arg1);
             sTestHold = (n > 0 ? n : 1) - 1;
             return true;
+        }
+        if (!strcmp(cmd, "winshot"))
+        {
+            SDL_snprintf(sTestWinShot, sizeof(sTestWinShot), "%s", arg1);
+            continue;
+        }
+        if (!strcmp(cmd, "set"))
+        {
+            // set SETTING VALUE (test aid), e.g. "set zoom 2"
+            static const char *const names[] = {"zoom", "lockAspect", "integer", "bilinear", "resolution", "interframe"};
+            static const u8 ids[] = {PLATFORM_SETTING_ZOOM, PLATFORM_SETTING_LOCK_ASPECT, PLATFORM_SETTING_INTEGER_SCALE,
+                                     PLATFORM_SETTING_SMOOTHING, PLATFORM_SETTING_RESOLUTION, PLATFORM_SETTING_INTERFRAME};
+            for (size_t k = 0; k < ARRAY_COUNT(names); k++)
+                if (!strcmp(arg1, names[k]))
+                    sPlatformSettings[ids[k]] = n;
+            continue;
         }
         if (!strcmp(cmd, "shot"))
         {
@@ -385,43 +409,167 @@ static bool PrepareGameTarget(int w, int h, int k)
     return true;
 }
 
-static void DrawScreen(double t)
+// ---- Zoom (overworld, like gen1recomp) ----------------------------------------------
+// Each zoom level is how many world pixels tall the view should be. The map is always a whole
+// number of screen pixels per game pixel (sharp) and always fills the screen edge to edge: the
+// view is made as big as the screen holds at that size. Keys - and =, or the mouse wheel.
+static const u16 sZoomHeights[] = {120, 144, 162, 180, 216, 240, 270, 324};
+#define ZOOM_COUNT ARRAY_COUNT(sZoomHeights)
+static int sFieldZ = 1, sFieldViewW = DISPLAY_WIDTH, sFieldViewH = DISPLAY_HEIGHT;
+
+static void ComputeFieldView(int outW, int outH)
 {
-    SDL_RenderClear(sdlRenderer);
+    int level = sPlatformSettings[PLATFORM_SETTING_ZOOM] % ZOOM_COUNT;
+    int target, k;
+    if (WideView_IsIndoorMap() && level > 0)
+        level--; // rooms are small: one step closer
+    target = sZoomHeights[level];
+    k = (outH + target / 2) / target;
+    if (k < 1)
+        k = 1;
+    while ((outW + k - 1) / k > WIDE_VIEW_MAX_W || (outH + k - 1) / k > WIDE_VIEW_MAX_H)
+        k++;
+    sFieldZ = k;
+    sFieldViewW = (outW + k - 1) / k;
+    sFieldViewH = (outH + k - 1) / k;
+}
+
+static void ZoomStep(int delta)
+{
+    int z = (int)sPlatformSettings[PLATFORM_SETTING_ZOOM] + delta;
+    if (z < 0)
+        z = 0;
+    if (z >= (int)ZOOM_COUNT)
+        z = ZOOM_COUNT - 1;
+    Platform_SetSetting(PLATFORM_SETTING_ZOOM, z);
+}
+
+static const int sResolutions[][2] = {{0, 0}, {1280, 720}, {1920, 1080}, {2560, 1440}, {3840, 2160}};
+#define RESOLUTION_COUNT ARRAY_COUNT(sResolutions)
+static SDL_Texture *sResTarget;
+static int sResTargetW, sResTargetH;
+static SDL_Texture *sOuterTarget; // where the scene ends up (NULL = the window)
+
+// Size the scene is drawn at: the window, or the chosen resolution.
+static void GetSceneSize(int *w, int *h)
+{
+    int r = sPlatformSettings[PLATFORM_SETTING_RESOLUTION] % RESOLUTION_COUNT;
+    if (r != 0)
+    {
+        *w = sResolutions[r][0];
+        *h = sResolutions[r][1];
+        return;
+    }
+    SDL_GetRendererOutputSize(sdlRenderer, w, h);
+}
+
+extern u8 GetMapNamePopUpWindowId(void);
+
+// Overworld: the map at the zoom scale, edge to edge; the UI layer (text boxes, menus) at the
+// biggest whole size the GBA screen fits, bottom-centred like on the GBA; the map name pop-up
+// always in the top-left corner of the screen.
+static void DrawFieldScene(double t, int outW, int outH)
+{
+    int z = sFieldZ, m = sFrameInfo.margin;
+    int cw = sFrameInfo.width, ch = sFrameInfo.height;
+    float shiftX = 0, shiftY = 0;
+    if (m > 0 && sCamMoveValid && sPlatformSettings[PLATFORM_SETTING_SMOOTH])
+    {
+        shiftX = (float)((1.0 - t) * (sCurCamX - sPrevCamX));
+        shiftY = (float)((1.0 - t) * (sCurCamY - sPrevCamY));
+    }
+    float baseX = outW / 2.0f - (cw / 2.0f + m) * z, baseY = outH / 2.0f - (ch / 2.0f + m) * z;
+    SDL_Rect full = {0, 0, cw + 2 * m, ch + 2 * m};
+    SDL_FRect mapDest = {baseX + shiftX * z, baseY + shiftY * z, (float)full.w * z, (float)full.h * z};
+    SDL_FRect stillDest = {baseX, baseY, (float)full.w * z, (float)full.h * z};
+    SDL_SetTextureScaleMode(sdlTexture, SDL_ScaleModeNearest);
+    SDL_RenderCopyF(sdlRenderer, sdlTexture, &full, &mapDest);
+    if (m > 0)
+    {
+        SDL_SetTextureScaleMode(sdlOverlayTexture, SDL_ScaleModeNearest);
+        SDL_RenderCopyF(sdlRenderer, sdlOverlayTexture, &full, &stillDest);
+    }
+    if (sdlUiTexture != NULL)
+    {
+        int s = outW / DISPLAY_WIDTH;
+        if (outH / DISPLAY_HEIGHT < s)
+            s = outH / DISPLAY_HEIGHT;
+        if (s < 1)
+            s = 1;
+        int ux = (outW - DISPLAY_WIDTH * s) / 2, uy = outH - DISPLAY_HEIGHT * s;
+        int band = 0;
+        if (GetMapNamePopUpWindowId() != 0xFF)
+        {
+            // Map name pop-up: the top 5 tile rows of the UI go to the screen's top-left corner.
+            band = 40;
+            SDL_Rect src = {sFrameInfo.gbaX, sFrameInfo.gbaY, DISPLAY_WIDTH, band};
+            SDL_Rect dst = {0, 0, DISPLAY_WIDTH * s, band * s};
+            SDL_RenderCopy(sdlRenderer, sdlUiTexture, &src, &dst);
+        }
+        SDL_Rect src = {sFrameInfo.gbaX, sFrameInfo.gbaY + band, DISPLAY_WIDTH, DISPLAY_HEIGHT - band};
+        SDL_Rect dst = {ux, uy + band * s, DISPLAY_WIDTH * s, (DISPLAY_HEIGHT - band) * s};
+        SDL_RenderCopy(sdlRenderer, sdlUiTexture, &src, &dst);
+    }
+}
+
+static void DrawScene(double t, int outputWidth, int outputHeight)
+{
 #if defined(NATIVE_LINUX) || defined(_WIN32)
+    if (sFrameInfo.mode == WIDE_VIEW_FIELD)
+    {
+        DrawFieldScene(t, outputWidth, outputHeight);
+        return;
+    }
     u8 backgroundOption = Platform_GetBorderBackground();
     if (backgroundOption < sBorderBackgroundCount
      && sdlBackgroundTextures[backgroundOption] != NULL)
         SDL_RenderCopy(sdlRenderer, sdlBackgroundTextures[backgroundOption], NULL, NULL);
-    int outputWidth;
-    int outputHeight;
-    SDL_GetRendererOutputSize(sdlRenderer, &outputWidth, &outputHeight);
     int gameHeight;
     int gameWidth;
+    int srcX = 0, srcY = 0;
     int srcW = sFrameInfo.width, srcH = sFrameInfo.height;
-    if (sPlatformSettings[PLATFORM_SETTING_INTEGER_SCALE])
+    bool integer = sPlatformSettings[PLATFORM_SETTING_INTEGER_SCALE];
+    bool lockAspect = sPlatformSettings[PLATFORM_SETTING_LOCK_ASPECT];
+    if (sFrameInfo.mode == WIDE_VIEW_CENTER)
     {
-        int scale = outputWidth / srcW;
-        if (outputHeight / srcH < scale)
-            scale = outputHeight / srcH;
-        if (scale < 1)
-            scale = 1;
-        gameWidth = srcW * scale;
-        gameHeight = srcH * scale;
+        // Transitions: just the GBA picture in the middle of the canvas.
+        srcX = (srcW - DISPLAY_WIDTH) / 2;
+        srcY = (srcH - DISPLAY_HEIGHT) / 2;
+        srcW = DISPLAY_WIDTH;
+        srcH = DISPLAY_HEIGHT;
     }
-    else
+    // Same rules as mGBA: "Lock aspect ratio" keeps the shape (off = stretch each way to the
+    // screen); "Force integer scaling" rounds the size down to whole steps.
+    if (lockAspect)
     {
-        // Fill the window, keeping the picture's shape.
         gameWidth = outputWidth;
         if (gameWidth > outputHeight * srcW / srcH)
             gameWidth = outputHeight * srcW / srcH;
         gameHeight = gameWidth * srcH / srcW;
+        if (integer)
+        {
+            int scale = gameWidth / srcW;
+            if (scale < 1)
+                scale = 1;
+            gameWidth = srcW * scale;
+            gameHeight = srcH * scale;
+        }
+    }
+    else
+    {
+        gameWidth = outputWidth;
+        gameHeight = outputHeight;
+        if (integer)
+        {
+            gameWidth = srcW * (outputWidth / srcW > 0 ? outputWidth / srcW : 1);
+            gameHeight = srcH * (outputHeight / srcH > 0 ? outputHeight / srcH : 1);
+        }
     }
     SDL_Rect gameViewport = {(outputWidth - gameWidth) / 2,
                              (outputHeight - gameHeight) / 2,
                              gameWidth, gameHeight};
-    // Clean scaling (and 4K): draw the game at a whole-number size first (sharp pixels), add the
-    // screen filter, then stretch only that last bit to the window with smoothing.
+    // Draw the game at a whole-number size first (sharp pixels), add the screen filter, then
+    // stretch only that last bit to the screen (smoothed only with Bilinear filtering on).
     SDL_Rect finalViewport = gameViewport;
     bool useTarget = sGameTargetOk;
     if (useTarget)
@@ -441,44 +589,23 @@ static void DrawScreen(double t)
             gameViewport = (SDL_Rect){0, 0, srcW * k, srcH * k};
         }
     }
-    if (sFrameInfo.margin > 0)
     {
-        // Smooth motion: the map texture is bigger by `margin` on every side. Slide it by the part
-        // of the last camera step that hasn't been shown yet, then put the text layer on top, still.
-        int m = sFrameInfo.margin;
-        float sx = (float)gameViewport.w / srcW, sy = (float)gameViewport.h / srcH;
-        float shiftX = 0, shiftY = 0;
-        if (sCamMoveValid && sPlatformSettings[PLATFORM_SETTING_SMOOTH])
-        {
-            shiftX = (float)((1.0 - t) * (sCurCamX - sPrevCamX));
-            shiftY = (float)((1.0 - t) * (sCurCamY - sPrevCamY));
-        }
-        SDL_Rect fullSource = {0, 0, srcW + 2 * m, srcH + 2 * m};
-        SDL_FRect mapDest = {gameViewport.x + (shiftX - m) * sx, gameViewport.y + (shiftY - m) * sy,
-                             (srcW + 2 * m) * sx, (srcH + 2 * m) * sy};
-        SDL_FRect textDest = {gameViewport.x - m * sx, gameViewport.y - m * sy, (srcW + 2 * m) * sx, (srcH + 2 * m) * sy};
-        SDL_RenderSetClipRect(sdlRenderer, &gameViewport);
-        SDL_RenderCopyF(sdlRenderer, sdlTexture, &fullSource, &mapDest);
-        SDL_RenderCopyF(sdlRenderer, sdlOverlayTexture, &fullSource, &textDest);
-        SDL_RenderSetClipRect(sdlRenderer, NULL);
-    }
-    else
-    {
-        SDL_Rect gameSource = {0, 0, srcW, srcH};
+        SDL_Rect gameSource = {srcX, srcY, srcW, srcH};
+        SDL_SetTextureScaleMode(sdlTexture, SDL_ScaleModeNearest);
         SDL_RenderCopy(sdlRenderer, sdlTexture, &gameSource, &gameViewport);
     }
     if (useTarget)
     {
         if (sPlatformSettings[PLATFORM_SETTING_FILTER] && sFilterTexture != NULL)
             SDL_RenderCopy(sdlRenderer, sFilterTexture, NULL, &gameViewport);
-        SDL_SetRenderTarget(sdlRenderer, NULL);
+        SDL_SetRenderTarget(sdlRenderer, sOuterTarget);
         gameViewport = finalViewport;
-        // Whole-number size: copy as is; otherwise smooth only the last stretch.
-        SDL_SetTextureScaleMode(sGameTarget, (gameViewport.w % srcW == 0 && gameViewport.h % srcH == 0)
+        bool whole = gameViewport.w % srcW == 0 && gameViewport.h % srcH == 0;
+        SDL_SetTextureScaleMode(sGameTarget, (whole || !sPlatformSettings[PLATFORM_SETTING_SMOOTHING])
                                              ? SDL_ScaleModeNearest : SDL_ScaleModeLinear);
         SDL_RenderCopy(sdlRenderer, sGameTarget, NULL, &gameViewport);
     }
-    if (sFrameInfo.mode == WIDE_VIEW_GBA && sPlatformSettings[PLATFORM_SETTING_BORDER] && sdlBorderTexture != NULL)
+    if (sFrameInfo.mode == WIDE_VIEW_GBA && lockAspect && sPlatformSettings[PLATFORM_SETTING_BORDER] && sdlBorderTexture != NULL)
     {
         SDL_Rect borderSource = {141, 18, 1000, 683};
         int innerWidth = gameViewport.w - 2;
@@ -494,6 +621,49 @@ static void DrawScreen(double t)
 #else
     SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, NULL);
 #endif
+}
+
+static void DrawScreen(double t)
+{
+    int winW, winH, w, h;
+    SDL_GetRendererOutputSize(sdlRenderer, &winW, &winH);
+    GetSceneSize(&w, &h);
+    SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 255);
+    sOuterTarget = NULL;
+    if (w != winW || h != winH)
+    {
+        // Resolution setting: draw the scene at that size, then fit it to the window.
+        if (sResTarget == NULL || sResTargetW != w || sResTargetH != h)
+        {
+            if (sResTarget != NULL)
+                SDL_DestroyTexture(sResTarget);
+            sResTarget = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, w, h);
+            sResTargetW = w;
+            sResTargetH = h;
+        }
+        if (sResTarget != NULL)
+        {
+            sOuterTarget = sResTarget;
+            SDL_SetRenderTarget(sdlRenderer, sResTarget);
+            SDL_RenderClear(sdlRenderer);
+            DrawScene(t, w, h);
+            SDL_SetRenderTarget(sdlRenderer, NULL);
+            sOuterTarget = NULL;
+            SDL_RenderClear(sdlRenderer);
+            int fw = winW, fh = winW * h / w;
+            if (fh > winH)
+            {
+                fh = winH;
+                fw = winH * w / h;
+            }
+            SDL_Rect dst = {(winW - fw) / 2, (winH - fh) / 2, fw, fh};
+            SDL_SetTextureScaleMode(sResTarget, SDL_ScaleModeLinear);
+            SDL_RenderCopy(sdlRenderer, sResTarget, NULL, &dst);
+            return;
+        }
+    }
+    SDL_RenderClear(sdlRenderer);
+    DrawScene(t, winW, winH);
 #ifdef __ANDROID__
     SDL_RenderPresent(sdlRenderer);
 #endif
@@ -658,6 +828,13 @@ int main(int argc, char **argv)
     SDL_RenderSetIntegerScale(sdlRenderer, SDL_TRUE);
 #endif
     ApplyPlatformSettings();
+    if (getenv("WJPC_WINDOW"))
+    {
+        // Test aid: WJPC_WINDOW=1920x1080 stands in for a fullscreen monitor.
+        int ww = 0, wh = 0;
+        if (sscanf(getenv("WJPC_WINDOW"), "%dx%d", &ww, &wh) == 2)
+            SDL_SetWindowSize(sdlWindow, ww, wh);
+    }
 
     sdlTexture = SDL_CreateTexture(sdlRenderer,
                                    SDL_PIXELFORMAT_ARGB8888,
@@ -672,6 +849,12 @@ int main(int argc, char **argv)
     sdlOverlayTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, TEX_W, TEX_H);
     if (sdlOverlayTexture != NULL)
         SDL_SetTextureBlendMode(sdlOverlayTexture, SDL_BLENDMODE_BLEND);
+    sdlUiTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, TEX_W, TEX_H);
+    if (sdlUiTexture != NULL)
+    {
+        SDL_SetTextureBlendMode(sdlUiTexture, SDL_BLENDMODE_BLEND);
+        SDL_SetTextureScaleMode(sdlUiTexture, SDL_ScaleModeNearest);
+    }
 
     simTime = curGameTime = lastGameTime = SDL_GetPerformanceCounter();
 
@@ -723,9 +906,37 @@ int main(int argc, char **argv)
                 gRngValue.c = sTestLockValue[2]; gRngValue.ctr = sTestLockValue[3];
             }
             keyboardKeys = sTestKeys;
+            if (sTestWinShot[0] != '\0' || getenv("WJPC_TEST_WINDOW"))
+            {
+                // Test aid: draw exactly like a normal frame (zoom, UI layer, screen options),
+                // and with "winshot FILE" save the whole window.
+                VDraw(sdlTexture);
+                if (sTestWinShot[0] != '\0')
+                {
+                    int ww, wh;
+                    DrawScreen(1.0);
+                    SDL_GetRendererOutputSize(sdlRenderer, &ww, &wh);
+                    uint8_t *px = malloc((size_t)ww * wh * 3);
+                    if (px != NULL && SDL_RenderReadPixels(sdlRenderer, NULL, SDL_PIXELFORMAT_RGB24, px, ww * 3) == 0)
+                    {
+                        FILE *f = fopen(sTestWinShot, "wb");
+                        if (f != NULL)
+                        {
+                            fprintf(f, "P6\n%d %d\n255\n", ww, wh);
+                            fwrite(px, 1, (size_t)ww * wh * 3, f);
+                            fclose(f);
+                        }
+                    }
+                    free(px);
+                    sTestWinShot[0] = '\0';
+                }
+            }
+            else
+            {
             WideView_SetSmooth(getenv("WJPC_SMOOTH_TEST") ? sTestOverlay : NULL, WIDE_VIEW_SMOOTH_MARGIN);
             WideView_DrawFrame(sTestGbaImage, &sTestFrameInfo);
             WideView_SetSmooth(NULL, 0);
+            }
             REG_VCOUNT = 161;
             SDL_AtomicSet(&isFrameAvailable, 0);
             REG_DISPSTAT |= INTR_FLAG_VBLANK;
@@ -934,6 +1145,18 @@ static void ReadConfigFile(void)
                     sKeyMap[i] = key;
             }
         }
+        else if (sscanf(line, "zoom=%u", &value) == 1 && value < ZOOM_COUNT)
+            sPlatformSettings[PLATFORM_SETTING_ZOOM] = value;
+        else if (sscanf(line, "bilinear=%u", &value) == 1)
+            sPlatformSettings[PLATFORM_SETTING_SMOOTHING] = value != 0;
+        else if (sscanf(line, "resolution=%u", &value) == 1 && value < RESOLUTION_COUNT)
+            sPlatformSettings[PLATFORM_SETTING_RESOLUTION] = value;
+        else if (sscanf(line, "lockAspect=%u", &value) == 1)
+            sPlatformSettings[PLATFORM_SETTING_LOCK_ASPECT] = value != 0;
+        else if (sscanf(line, "interframe=%u", &value) == 1)
+            sPlatformSettings[PLATFORM_SETTING_INTERFRAME] = value != 0;
+        else if (sscanf(line, "lockFrameSize=%u", &value) == 1)
+            sPlatformSettings[PLATFORM_SETTING_LOCK_FRAME] = value != 0;
         else if (sscanf(line, "filter=%u", &value) == 1 && value <= 2)
             sPlatformSettings[PLATFORM_SETTING_FILTER] = value;
         else if (sscanf(line, "frameRate=%u", &value) == 1)
@@ -988,6 +1211,12 @@ static void StoreConfigFile(void)
     fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
     fprintf(configFile, "frameRate=%u\n", gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT]);
     fprintf(configFile, "filter=%u\n", sPlatformSettings[PLATFORM_SETTING_FILTER]);
+    fprintf(configFile, "zoom=%u\n", sPlatformSettings[PLATFORM_SETTING_ZOOM]);
+    fprintf(configFile, "bilinear=%u\n", sPlatformSettings[PLATFORM_SETTING_SMOOTHING]);
+    fprintf(configFile, "resolution=%u\n", sPlatformSettings[PLATFORM_SETTING_RESOLUTION]);
+    fprintf(configFile, "lockAspect=%u\n", sPlatformSettings[PLATFORM_SETTING_LOCK_ASPECT]);
+    fprintf(configFile, "interframe=%u\n", sPlatformSettings[PLATFORM_SETTING_INTERFRAME]);
+    fprintf(configFile, "lockFrameSize=%u\n", sPlatformSettings[PLATFORM_SETTING_LOCK_FRAME]);
     for (int i = 0; i < KEYBIND_COUNT; i++)
         fprintf(configFile, "%s=%d\n", sKeyBindNames[i], (int)sKeyMap[i]);
     for (int i = 0; i < 7; i++)
@@ -999,6 +1228,8 @@ static void ApplyPlatformSettings(void)
 {
     SDL_RenderSetVSync(sdlRenderer, sPlatformSettings[PLATFORM_SETTING_VSYNC]);
 #if defined(NATIVE_LINUX) || defined(_WIN32)
+    // mGBA "Lock frame size": the window can't be resized by dragging its edges.
+    SDL_SetWindowResizable(sdlWindow, sPlatformSettings[PLATFORM_SETTING_LOCK_FRAME] ? SDL_FALSE : SDL_TRUE);
     SDL_SetWindowFullscreen(sdlWindow, sPlatformSettings[PLATFORM_SETTING_FULLSCREEN]
                                       ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     if (!sPlatformSettings[PLATFORM_SETTING_FULLSCREEN])
@@ -1135,7 +1366,7 @@ void Platform_SetSetting(enum PlatformSetting setting, u8 value)
     if (setting == PLATFORM_SETTING_FF_TOGGLE)
         SDL_AtomicSet(&sFfToggled, 0);
     if (setting == PLATFORM_SETTING_VSYNC || setting == PLATFORM_SETTING_FULLSCREEN
-     || setting == PLATFORM_SETTING_WINDOW_SCALE)
+     || setting == PLATFORM_SETTING_WINDOW_SCALE || setting == PLATFORM_SETTING_LOCK_FRAME)
         SDL_AtomicSet(&sWindowSettingsChanged, 1);
     StoreConfigFile();
 }
@@ -1584,6 +1815,10 @@ void ProcessEvents(void)
             if (SDL_AtomicGet(&sKeyCapture) < 0)
                 HandleBoundKey(event.key.keysym.sym, FALSE, event.key.repeat);
             break;
+        case SDL_MOUSEWHEEL:
+            if (event.wheel.y != 0)
+                ZoomStep(event.wheel.y > 0 ? -1 : +1);
+            break;
         case SDL_KEYDOWN:
             if (SDL_AtomicGet(&sKeyCapture) >= 0)
             {
@@ -1593,6 +1828,14 @@ void ProcessEvents(void)
             HandleBoundKey(event.key.keysym.sym, TRUE, event.key.repeat);
             switch (event.key.keysym.sym)
             {
+            case SDLK_MINUS:
+            case SDLK_KP_MINUS:
+                ZoomStep(+1); // zoom out: see more
+                break;
+            case SDLK_EQUALS:
+            case SDLK_KP_PLUS:
+                ZoomStep(-1); // zoom in
+                break;
             case SDLK_F11:
             {
                 // F11: toggle fullscreen
@@ -1760,10 +2003,23 @@ void VDraw(SDL_Texture *texture)
     static uint32_t image[TEX_W * TEX_H];
     static uint16_t overlay[TEX_W * TEX_H];
     static uint32_t overlayImage[TEX_W * TEX_H];
+    static uint16_t uiLayer[TEX_W * TEX_H];
+    static uint32_t uiImage[TEX_W * TEX_H];
+    static uint32_t lastImage[TEX_W * TEX_H];
+    static int lastW, lastH;
     bool smooth = sPlatformSettings[PLATFORM_SETTING_SMOOTH] && sTestScript == NULL && sdlOverlayTexture != NULL;
     int prevW = sFrameInfo.width, prevH = sFrameInfo.height, prevMargin = sFrameInfo.margin;
 
+    {
+        // Zoom: ask for a view that fills the screen at a whole number of screen pixels per
+        // game pixel (worked out on the main thread, which owns the window).
+        int sw, sh;
+        GetSceneSize(&sw, &sh);
+        ComputeFieldView(sw, sh);
+        WideView_SetViewSize(sFieldViewW, sFieldViewH);
+    }
     WideView_SetSmooth(smooth ? overlay : NULL, SMOOTH_M);
+    WideView_SetUiOverlay(sdlUiTexture != NULL ? uiLayer : NULL);
     sVDrawImage = gbaImage;
     if (!PcGuard_Call0(DrawFrameGuarded))
     {
@@ -1773,12 +2029,35 @@ void VDraw(SDL_Texture *texture)
         PcGuard_Call0(DrawFrameGuarded);
     }
     WideView_SetSmooth(NULL, 0);
+    WideView_SetUiOverlay(NULL);
 
     int fullW = sFrameInfo.width + 2 * sFrameInfo.margin, fullH = sFrameInfo.height + 2 * sFrameInfo.margin;
     for (int i = 0; i < fullW * fullH; i++)
         image[i] = ToArgb(gbaImage[i]);
+    if (sPlatformSettings[PLATFORM_SETTING_INTERFRAME] && lastW == fullW && lastH == fullH)
+    {
+        // Interframe blending (as in mGBA): mix with the previous frame, for effects that flicker.
+        for (int i = 0; i < fullW * fullH; i++)
+        {
+            uint32_t a = image[i], b = lastImage[i];
+            lastImage[i] = a;
+            image[i] = 0xFF000000 | ((((a & 0xFEFEFE) >> 1) + ((b & 0xFEFEFE) >> 1)) & 0xFFFFFF);
+        }
+    }
+    else
+    {
+        memcpy(lastImage, image, fullW * fullH * sizeof(uint32_t));
+    }
+    lastW = fullW;
+    lastH = fullH;
     SDL_Rect area = {0, 0, fullW, fullH};
     SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32));
+    if (sFrameInfo.mode == WIDE_VIEW_FIELD && sdlUiTexture != NULL)
+    {
+        for (int i = 0; i < fullW * fullH; i++)
+            uiImage[i] = (uiLayer[i] & 0x8000) ? ToArgb(uiLayer[i]) : 0;
+        SDL_UpdateTexture(sdlUiTexture, &area, uiImage, fullW * sizeof(Uint32));
+    }
     if (sFrameInfo.margin > 0)
     {
         for (int i = 0; i < fullW * fullH; i++)
