@@ -215,6 +215,13 @@ Input must be of the form (upper << lower) where upper can be up to 7, lower up 
  *
  * Because 'cond' must be known at compile-time, this is rarely useful
  * outside macros. */
+#ifdef PORTABLE
+// PC build (clang): the trick below folds the load from NULL to "constant", so the branch was taken
+// for every value; e.g. RandomPercentage(tag, 0) became a 50% roll. Same meaning, written plainly:
+// true only when `cond` is known at compile time and is true.
+#define if_comptime(cond) if (__builtin_constant_p(cond) && (cond))
+#else
 #define if_comptime(cond) if (__builtin_constant_p((cond) ? 0 : *(int *)0))
+#endif
 
 #endif

@@ -1,7 +1,7 @@
 # Project: Wally's Journey as a PC program (.exe)
 
 **Branch:** `deluxe` (PC work started on `pc-port`) (based on 0.18.19). Read this whole file before working on the PC version.
-**Status (2026-11-11):** alpha 5 sent to the owner (`WallysJourney.exe`), tested under Wine 10 (Kron4ek WoW64 build
+**Status (2026-11-11):** alpha 5b sent to the owner (`WallysJourney.exe`), tested under Wine 10 (Kron4ek WoW64 build
 from GitHub releases + Xvfb). Steps 1-4 are done (PC settings, widescreen, frame rate 60-240, 4K) plus keyboard keys,
 controller mapping (owner confirmed it works) and the bad-read fixes. **Next: step 5, the full check against the ROM.**
 
@@ -211,3 +211,14 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   x/0 = INT_MAX/INT_MIN/0 by sign (unsigned 0xFFFFFFFF/0) and x%0 = 0 and carries on; null_guard.c now emulates a
   faulting 32-bit DIV/IDIV that way (Windows vectored handler / Linux SIGFPE: decode F7 /6,/7 length, set EAX/EDX,
   continue) instead of skipping the callback (which could freeze a battle animation). Script test `divzero FILE`.
+- Owner: "Go ahead and start full check. Send me updates in either a video or pictures and tell me what's been
+  found and then the fix". Tool: `tools/pc/compare/compare.py` + `steps/*.txt` (mGBA harness_cmp with poke32 /
+  lockrng, PC test commands setrng / lockrng / peekrng; fixed clock WJPC_RTC_EPOCH (local time on both); VBlank
+  AdvanceRandom off on both (WJPC_NO_VBLANK_RNG / NOP-patched test ROM copy) because the GBA adds a roll on lag
+  frames; "lock on" = same RNG state every frame so the same action gets the same numbers; burst shots
+  matched to the closest frame; 1-step colour differences counted as "rounding" (mGBA blends with 8-bit channels,
+  the GBA and the PC with 5-bit)).
+  Found 1: clang miscompiled `if_comptime` (metaprogram.h): `__builtin_constant_p(cond ? 0 : *(int *)0)` is
+  true for clang, so every RandomPercentage(tag, t) was a 50% roll on PC since alpha 4 (first clang build).
+  Measured with script `pcttest`: 0%:4980/10000 before, 0 after; 30%: 4983 -> 3061. PC-only fix in
+  metaprogram.h. Sent as alpha 5b.

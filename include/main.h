@@ -81,6 +81,17 @@ u16 GetGeneratedTrainerIdLower(void);
 #define WJPC_WIRELESS_VBLANK_WAIT()
 #endif
 
+// Once-per-VBlank random roll. PC test mode can turn it off (WJPC_NO_VBLANK_RNG) to compare game
+// logic with the GBA exactly; the GBA gets extra rolls on frames where it lags.
+#ifdef PORTABLE
+bool8 WJPC_NoVBlankRandom(void);
+bool8 WJPC_LockRandom(void);
+// WJPC_RNG_LOCK (test): reseed every VBlank, so a game action gets the same numbers on GBA and PC.
+#define WJPC_ADVANCE_RANDOM() do { if (WJPC_LockRandom()) SeedRng(0x55); else if (!WJPC_NoVBlankRandom()) AdvanceRandom(); } while (0)
+#else
+#define WJPC_ADVANCE_RANDOM() AdvanceRandom()
+#endif
+
 // The main callbacks: on PC a bad memory access inside them is skipped like the GBA would
 // (see src/platform/null_guard.c).
 #ifdef PORTABLE

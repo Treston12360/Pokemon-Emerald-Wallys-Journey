@@ -26,6 +26,7 @@
 #include "platform/null_guard.h"
 #include "platform/wide_view.h"
 #include "platform.h"
+#include "random.h"
 #include "rtc.h"
 #include "gba/defines.h"
 #include "gba/m4a_internal.h"
@@ -149,6 +150,8 @@ static u16 sTestKeys;
 static int sTestHold;
 static u32 sTestFrame;
 static u16 *sTestLastGbaImage;
+static bool sTestLockRng;
+static u32 sTestLockValue[4] = {0x12345678, 0x9ABCDEF0, 0x0F1E2D3C, 1};
 static u16 sTestGbaImage[(WIDE_VIEW_MAX_W + 2 * WIDE_VIEW_SMOOTH_MARGIN) * (WIDE_VIEW_MAX_H + 2 * WIDE_VIEW_SMOOTH_MARGIN)];
 static u16 sTestOverlay[(WIDE_VIEW_MAX_W + 2 * WIDE_VIEW_SMOOTH_MARGIN) * (WIDE_VIEW_MAX_H + 2 * WIDE_VIEW_SMOOTH_MARGIN)];
 static struct WideViewFrame sTestFrameInfo = {DISPLAY_WIDTH, DISPLAY_HEIGHT, WIDE_VIEW_GBA};
@@ -238,6 +241,62 @@ static bool TestStep(void)
                 fwrite(hdr, sizeof(hdr), 1, f);
                 fwrite(sTestGbaImage, 2, count, f);
                 fwrite(sTestOverlay, 2, count, f);
+                fclose(f);
+            }
+            continue;
+        }
+        if (!strcmp(cmd, "setrng") || !strcmp(cmd, "setrng2"))
+        {
+            // Test (GBA vs PC comparison): "setrng a b c ctr" in hex, same state as the GBA run.
+            unsigned int v[4] = {0};
+            if (sscanf(line, "%*s %x %x %x %x", &v[0], &v[1], &v[2], &v[3]) == 4)
+            {
+                rng_value_t *r = !strcmp(cmd, "setrng") ? &gRngValue : &gRng2Value;
+                r->a = v[0]; r->b = v[1]; r->c = v[2]; r->ctr = v[3];
+            }
+            continue;
+        }
+        if (!strcmp(cmd, "lockrng"))
+        {
+            // Test (GBA vs PC comparison): "lockrng 1" = same random state at the start of every frame.
+            sTestLockRng = atoi(arg1) != 0;
+            {
+                unsigned int v[4];
+                if (sscanf(line, "%*s %*s %x %x %x %x", &v[0], &v[1], &v[2], &v[3]) == 4)
+                    for (int j = 0; j < 4; j++)
+                        sTestLockValue[j] = v[j];
+            }
+            continue;
+        }
+        if (!strcmp(cmd, "peekrng"))
+        {
+            // Test (GBA vs PC comparison): log the random-number state with a label.
+            FILE *f = fopen("rng.log", "a");
+            if (f != NULL)
+            {
+                fprintf(f, "%s %08X %08X %08X %08X frame %u\n", arg1, (unsigned)gRngValue.a, (unsigned)gRngValue.b,
+                        (unsigned)gRngValue.c, (unsigned)gRngValue.ctr, sTestFrame);
+                fclose(f);
+            }
+            continue;
+        }
+        if (!strcmp(cmd, "pcttest"))
+        {
+            // Test: RandomPercentage(t) must be true about t% of the time (10000 rolls each).
+            FILE *f = fopen(arg1, "w");
+            int c0 = 0, c10 = 0, c30 = 0, c50 = 0, c90 = 0, c100 = 0;
+            for (int i = 0; i < 10000; i++)
+            {
+                c0 += RandomPercentage(RNG_NONE, 0);
+                c10 += RandomPercentage(RNG_NONE, 10);
+                c30 += RandomPercentage(RNG_NONE, 30);
+                c50 += RandomPercentage(RNG_NONE, 50);
+                c90 += RandomPercentage(RNG_NONE, 90);
+                c100 += RandomPercentage(RNG_NONE, 100);
+            }
+            if (f != NULL)
+            {
+                fprintf(f, "0%%:%d 10%%:%d 30%%:%d 50%%:%d 90%%:%d 100%%:%d (of 10000)\n", c0, c10, c30, c50, c90, c100);
                 fclose(f);
             }
             continue;
@@ -658,6 +717,11 @@ int main(int argc, char **argv)
                 SDL_Delay(0);
             if (!TestStep())
                 break;
+            if (sTestLockRng)
+            {
+                gRngValue.a = sTestLockValue[0]; gRngValue.b = sTestLockValue[1];
+                gRngValue.c = sTestLockValue[2]; gRngValue.ctr = sTestLockValue[3];
+            }
             keyboardKeys = sTestKeys;
             WideView_SetSmooth(getenv("WJPC_SMOOTH_TEST") ? sTestOverlay : NULL, WIDE_VIEW_SMOOTH_MARGIN);
             WideView_DrawFrame(sTestGbaImage, &sTestFrameInfo);
@@ -1648,6 +1712,22 @@ static void ApplyFastForward(void)
     }
 }
 
+bool8 WJPC_LockRandom(void)
+{
+    static int sLock = -1;
+    if (sLock < 0)
+        sLock = getenv("WJPC_RNG_LOCK") != NULL;
+    return sLock;
+}
+
+bool8 WJPC_NoVBlankRandom(void)
+{
+    static int sNo = -1;
+    if (sNo < 0)
+        sNo = getenv("WJPC_NO_VBLANK_RNG") != NULL;
+    return sNo;
+}
+
 u16 Platform_GetKeyInput(void)
 {
 #ifdef _WIN32
@@ -1758,6 +1838,20 @@ void Platform_SetStatus(struct SiiRtcInfo *rtc)
 
 static void UpdateInternalClock(void)
 {
+    if (getenv("WJPC_RTC_EPOCH"))
+    {
+        // Test (GBA vs PC comparison): a fixed clock, like the mGBA harness (local time).
+        time_t fixedTime = (time_t)atoll(getenv("WJPC_RTC_EPOCH"));
+        struct tm *tm = localtime(&fixedTime);
+        internalClock.year = BinToBcd(tm->tm_year - 100);
+        internalClock.month = BinToBcd(tm->tm_mon + 1);
+        internalClock.day = BinToBcd(tm->tm_mday);
+        internalClock.dayOfWeek = BinToBcd(tm->tm_wday);
+        internalClock.hour = BinToBcd(tm->tm_hour);
+        internalClock.minute = BinToBcd(tm->tm_min);
+        internalClock.second = BinToBcd(tm->tm_sec);
+        return;
+    }
 #ifdef _WIN32
     // Ask Windows for the local time: msvcrt's localtime() trusts a TZ variable when one is set,
     // which can be wrong (e.g. "America/Chicago" is read as UTC).

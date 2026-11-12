@@ -1,0 +1,66 @@
+# Owner's save (New Mauville): walk into a wild battle (random), then lock the random state and
+# compare: two turns of moves, then the bag in battle, Poke Balls pocket, throw a ball.
+1300
+5 A
+150
+5 A
+150
+5 A
+400
+5 A
+500
+5 A
+60
+5 A
+60
+5 B
+60
+lock on 00000000 00000000 00000000 00000000
+60 D
+60 L
+60 R
+60 L
+60 R
+60 L
+60 R
+300
+shot encounter 60
+5 A
+200
+shot battle_menu 30
+5 A
+40
+5 A
+120
+shot t1_a 4
+120
+shot t1_b 4
+120
+shot t1_c 4
+120
+shot t1_d 4
+200
+shot t1_end 30
+5 A
+40
+5 A
+240
+shot t2_a 4
+240
+shot t2_b 4
+200
+shot t2_end 30
+5 R
+20
+5 A
+120
+shot bag 30
+5 R
+30
+shot bag_r1 10
+5 R
+30
+shot bag_r2 10
+5 R
+30
+shot bag_r3 10

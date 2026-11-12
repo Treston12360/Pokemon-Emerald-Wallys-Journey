@@ -1,0 +1,94 @@
+# Owner's save (New Mauville): continue, walk into a wild battle, fight, open bag, throw a ball.
+1300
+5 A
+150
+5 A
+150
+5 A
+400
+5 A
+500
+5 A
+60
+5 A
+60
+5 B
+60
+sync
+shot field
+60 D
+60 L
+60 R
+60 L
+60 R
+60 L
+60 R
+300
+shot encounter 60
+5 A
+200
+shot battle_menu 60
+5 A
+40
+shot move_menu
+5 A
+20
+shot t00 4
+20
+shot t01 4
+20
+shot t02 4
+20
+shot t03 4
+20
+shot t04 4
+20
+shot t05 4
+20
+shot t06 4
+20
+shot t07 4
+20
+shot t08 4
+20
+shot t09 4
+20
+shot t10 4
+20
+shot t11 4
+20
+shot t12 4
+20
+shot t13 4
+20
+shot t14 4
+20
+shot t15 4
+20
+shot t16 4
+20
+shot t17 4
+20
+shot t18 4
+20
+shot t19 4
+20
+shot t20 4
+20
+shot t21 4
+20
+shot t22 4
+20
+shot t23 4
+20
+shot t24 4
+20
+shot t25 4
+20
+shot t26 4
+20
+shot t27 4
+20
+shot t28 4
+20
+shot t29 4
