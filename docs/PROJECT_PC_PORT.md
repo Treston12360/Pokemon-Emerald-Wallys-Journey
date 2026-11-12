@@ -1,5 +1,54 @@
 # Project: Wally's Journey as a PC program (.exe)
 
+## START HERE: handoff for a new chat (2026-11-12)
+Read this section, then the rest of the file. Repo `Treston12360/Pokemon-Emerald-Wallys-Journey`, PC branch `deluxe`.
+Another Claude session may also push to `deluxe`: always `git pull --rebase` before pushing.
+
+**Done since alpha 5b (all on `deluxe`, GBA ROM still 21f006ad...):**
+- Overworld fills the screen edge to edge at any window size; **zoom** like gen1recomp (keys `-` `=`, mouse wheel,
+  Settings > Video > Zoom 1-8): whole-number scale, zooming out shows more map. Indoors zooms one step closer.
+- **UI layer**: text boxes, menus and the start menu are drawn separately at the biggest whole GBA size that fits
+  (they don't grow with zoom), bottom-centred. Start menu open -> UI slides flush right. Map name banner -> always
+  top-left. HM "Pokémon shows itself" banner -> runs edge to edge (BG0 drawn wide while FLDEFF_FIELD_MOVE_SHOW_MON).
+- **mGBA screen options** (owner-approved wording) in Settings > Video: Lock aspect ratio, Integer scaling, Bilinear
+  filter, Interframe blend, Lock frame size, Resolution (Monitor/720p/1080p/1440p/4K), Zoom.
+- Frame rate default = steady 60 like gen1recomp (fixed 60 logic, no in-between frames); Smooth 120-240 still optional.
+- Surf blur at high frame rate fixed (surf blob classified by base position).
+- NPCs load one tile before they scroll into view (fewer pop-ins).
+- Test-script commands added: `winshot FILE`, `set NAME VALUE` (zoom, lockAspect, integer, bilinear, resolution,
+  interframe, framerate), `warp G N X Y`, `surfon` (real Surf from the shore, face water first), `fieldmove`;
+  env `WJPC_WINDOW=WxH`.
+- Code: `src/platform/sdl2.c` (DrawFieldScene, DrawScene, DrawScreen, ComputeFieldView, test commands),
+  `src/platform/wide_view.c` (UI/overlay split per scanline), `src/option_menu.c` (Video rows).
+
+**Owner decision 2026-11-12 (changes an old rule):** PC saves no longer have to go back into mGBA. mGBA saves must
+still **load on PC** (or convert). With that, he wants the GBA limits gone on PC, "without doing weird shit":
+NPCs, sprites, colour palettes.
+
+**In progress:** branch `deluxe-limits-wip` (one commit, NOT built/tested yet, do not merge blind):
+`OBJECT_EVENTS_COUNT` 64 on PC, `SAVED_OBJECT_EVENTS_COUNT` 16 for the SaveBlock1 array, Save/LoadObjectEvents copy
+only 16, extra slots cleared on load (`WJPC_CLEAR_EXTRA_OBJECT_EVENTS`). Slots fill lowest-first, so the player and
+nearby NPCs land in the saved 16. Still to check: the player/follower must never sit in slot >= 16 when saving; arrays
+sized by OBJECT_EVENTS_COUNT (script_movement.c, trainer_see.c, rotating_tile_puzzle.c, shop.c, LockedAnim localIds)
+are fine but check loops that assume 16; `WJPC_SpawnOk` free-slot rule in wide_view.c.
+
+**Next, in order:**
+1. **Fast forward (owner: "laggy and all music stops")**: sdl2.c ApplyFastForward pauses the audio device and
+   Platform_QueueAudio drops sound while `speedUp`. Owner wants speed-up with music playing at normal speed.
+   Idea: keep queuing audio but only every Nth game frame's samples (N = speed), or resample; check the lag
+   (VDraw every game frame at 20x; skip drawing frames that won't be shown).
+2. Finish and test the NPC limit (above), then sprites: `MAX_SPRITES` 64 -> e.g. 256 on PC (wide_view draws from
+   gSprites, keys use & 0xFF so max 255; OAM buffer is 128). Then OBJ tile VRAM (32 KB) and OBJ palettes (16, the
+   4-bit oam.paletteNum) need PC-side room. Playtest trainers spotting, followers, cutscenes, Wally's Ralts catch.
+3. New alpha .exe: `make -f Makefile.pc WIN=1`, strip, zip with SDL2.dll + SDL2_image.dll (from
+   build/pc-deps/SDL2/i686-w64-mingw32/bin), smoke-test in Wine (`xvfb-run -a wine WallysJourney.exe`), send.
+4. Step 5 full check against the ROM.
+
+**Owner (Treston) wants:** plain English, honest feedback, show him pictures, approve any new wording/visual change
+first. No new hand-drawn art. Never send his email anywhere. Commits end with the Co-Authored-By / Claude-Session lines.
+The old `pc-port` branch on GitHub is his to delete (the proxy refused).
+
+
 **Branch:** `deluxe` (PC work started on `pc-port`) (based on 0.18.19). Read this whole file before working on the PC version.
 **Status (2026-11-11):** alpha 5b sent to the owner (`WallysJourney.exe`), tested under Wine 10 (Kron4ek WoW64 build
 from GitHub releases + Xvfb). Steps 1-4 are done (PC settings, widescreen, frame rate 60-240, 4K) plus keyboard keys,
@@ -124,7 +173,7 @@ controller mapping (owner confirmed it works) and the bad-read fixes. **Next: st
 - Owner rules from the main project still apply: plain language, call out mistakes, new/changed dialogue and
   any visual change must be shown to and approved by the owner first, no new hand-drawn art (recolours OK),
   test on release builds, never send the owner's email anywhere.
-- Saves must stay importable both ways (PC <-> mGBA). The save file is the raw 128 KB flash image.
+- mGBA saves must load on PC (owner 2026-11-12: PC saves no longer need to go back to mGBA). The save file is the raw 128 KB flash image.
 
 ## Building
 Run the normal GBA build first (`make release`) so all generated files exist, then:
