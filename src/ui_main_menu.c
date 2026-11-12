@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "global.h"
 #include "ui_main_menu.h"
 #include "strings.h"
@@ -913,6 +915,11 @@ static void CreatePartyMonIcons()
                         GetMonData(&gPlayerParty[i], MON_DATA_IS_SHINY),
                         GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG));
 
+#ifdef PORTABLE
+        if (getenv("WJPC_ICONLOG"))
+            printf("icon %d species %d shiny %d pal %d\n", i, (int)GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG),
+                   (int)GetMonData(&gPlayerParty[i], MON_DATA_IS_SHINY), gSprites[sMainMenuDataPtr->iconMonSpriteIds[i]].oam.paletteNum);
+#endif
         if (GetHPEggCyclePercent(i) == 0)
         {
             gSprites[sMainMenuDataPtr->iconMonSpriteIds[i]].callback = SpriteCallbackDummy;

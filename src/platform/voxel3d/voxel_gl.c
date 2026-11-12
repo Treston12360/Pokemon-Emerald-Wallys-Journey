@@ -580,7 +580,10 @@ static void BuildInstance(InstanceMesh *m, const VoxelMapInstance *inst, Atlas *
             // In the map's own frame: crossing a border moves the maps, not their meshes.
             VoxelBuilder_SetOrigin(&b, inst->originX, inst->originY);
             b.base = VoxelRelief_Base(inst);
-            VoxelBuilder_SetStretch(&b, inst);
+            if (getenv("WJPC_3D_NOSTRETCH") == NULL)
+                VoxelBuilder_SetStretch(&b, inst);
+            if (getenv("WJPC_3D_LOGBASE") && x0 == inst->originX && y0 == inst->originY)
+                Voxel3D_Log("[3D] %d:%d base %.2f stretch %.2f from %.2f to %.2f", inst->mapGroup, inst->mapNum, b.base, b.stretchAdd, b.stretchFrom, b.stretchTo);
             b.lighting = !inst->indoor;
             b.lightingRefine = true;
             VoxelMesh_BeginWindow(x0 - 1, y0 - VOXEL_CHUNK_MARGIN_NORTH, x1 + 1, y1 + 1);
@@ -593,7 +596,12 @@ static void BuildInstance(InstanceMesh *m, const VoxelMapInstance *inst, Atlas *
             AppendChunk(&b, terrainEnd, treeEnd);
             uncovered += b.uncovered;
             for (unsigned s = 0; s < b.staticCount && m->staticCount < MAX_INST_STATICS; s++)
+            {
+                if (getenv("WJPC_3D_LOGBASE"))
+                    Voxel3D_Log("[3D] %d:%d static model %u at %.1f %.2f %.1f size %.1f x %.1f top %.2f", inst->mapGroup, inst->mapNum,
+                                b.statics[s].pageModel, b.statics[s].x, b.statics[s].y, b.statics[s].z, b.statics[s].w, b.statics[s].d, b.statics[s].top);
                 m->statics[m->staticCount++] = b.statics[s];
+            }
         }
     // Terrain split by atlas page (u = 2 * page + u in page).
     for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
