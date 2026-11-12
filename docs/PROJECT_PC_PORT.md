@@ -248,5 +248,9 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   name sign, and random-walking NPCs a step apart after a map change (GBA lag frames during the map load).
 - Full check, Battle Frontier / contest / Safari (fullcheck3.json, fullcheck4.json): Battle Factory Lv50 (rent
   three, battle) identical; Lilycove Normal Cool contest identical (audience members are picked at random during
-  the hall's map load, so a few look different); Safari Zone entrance, paying, entering and leaving identical. Not
-  reached yet: a Safari wild battle (step file walks to the exit attendant, needs a better path to grass).
+  the hall's map load, so a few look different); Safari Zone entrance, paying, entering and leaving identical. Safari wild
+  battle (Oddish, Safari Ball, caught, Pokédex entry, nickname) identical too.
+- Lesson (Safari): the GBA lags 9 frames loading the Safari Zone map. Timers that run every game frame (grass
+  ripples, overworld-encounter spawns, wandering NPCs) start a few frames apart, so the random numbers drift even
+  after a sync. Checked with per-frame random states plus the GBA's own play-time counter (game frames) against
+  hardware frames. For tests after a big map load, hold the random state with "lock on" while walking.

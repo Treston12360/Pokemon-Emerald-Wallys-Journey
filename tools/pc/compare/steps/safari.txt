@@ -1,4 +1,4 @@
-# Test save (scenarios/fullcheck4.json): Safari Zone entrance with a Pokeblock Case. Pay, go in, walk in the grass, throw Safari Balls.
+# Test save (scenarios/fullcheck4.json): Safari Zone entrance with a Pokeblock Case. Pay, go in, walk in the grass, throw Safari Balls. After the map load the random state is held (lock) while walking: the GBA lags 9 frames loading the Safari map, which shifts ripple/spawn timers.
 1300
 5 A
 150
@@ -74,579 +74,160 @@ sync
 120
 shot in8 1
 sync
-64 U
+5 A
+120
+sync
+5 A
+120
+sync
+5 A
+120
+sync
+5 A
+120
+sync
+5 A
+120
+sync
+5 A
+120
+200
+shot inside 4
+lock on 00000000 00000000 00000000 00000000
+28 D
+40
+108 L
+40
+60 U
+40
+shot grass 4
+28 L
 30
-sync
-64 U
+28 R
 30
-sync
-64 U
-30
-sync
-64 U
-30
-shot walked 4
-sync
-96 L
-30
-shot left 4
-sync
-48 D
-40
-sync
-48 U
-40
-shot s1 1
-sync
-5 A
-150
-shot s1a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s2 1
-sync
-5 A
-150
-shot s2a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s3 1
-sync
-5 A
-150
-shot s3a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s4 1
-sync
-5 A
-150
-shot s4a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s5 1
-sync
-5 A
-150
-shot s5a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s6 1
-sync
-5 A
-150
-shot s6a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s7 1
-sync
-5 A
-150
-shot s7a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s8 1
-sync
-5 A
-150
-shot s8a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s9 1
-sync
-5 A
-150
-shot s9a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s10 1
-sync
-5 A
-150
-shot s10a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s11 1
-sync
-5 A
-150
-shot s11a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s12 1
-sync
-5 A
-150
-shot s12a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s13 1
-sync
-5 A
-150
-shot s13a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s14 1
-sync
-5 A
-150
-shot s14a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s15 1
-sync
-5 A
-150
-shot s15a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s16 1
-sync
-5 A
-150
-shot s16a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s17 1
-sync
-5 A
-150
-shot s17a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s18 1
-sync
-5 A
-150
-shot s18a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s19 1
-sync
-5 A
-150
-shot s19a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s20 1
-sync
-5 A
-150
-shot s20a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s21 1
-sync
-5 A
-150
-shot s21a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s22 1
-sync
-5 A
-150
-shot s22a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s23 1
-sync
-5 A
-150
-shot s23a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s24 1
-sync
-5 A
-150
-shot s24a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s25 1
-sync
-5 A
-150
-shot s25a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s26 1
-sync
-5 A
-150
-shot s26a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s27 1
-sync
-5 A
-150
-shot s27a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s28 1
-sync
-5 A
-150
-shot s28a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s29 1
-sync
-5 A
-150
-shot s29a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s30 1
-sync
-5 A
-150
-shot s30a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s31 1
-sync
-5 A
-150
-shot s31a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s32 1
-sync
-5 A
-150
-shot s32a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s33 1
-sync
-5 A
-150
-shot s33a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s34 1
-sync
-5 A
-150
-shot s34a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s35 1
-sync
-5 A
-150
-shot s35a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s36 1
-sync
-5 A
-150
-shot s36a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s37 1
-sync
-5 A
-150
-shot s37a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s38 1
-sync
-5 A
-150
-shot s38a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s39 1
-sync
-5 A
-150
-shot s39a 1
-sync
-5 A
-150
-sync
-48 D
-40
-sync
-48 U
-40
-shot s40 1
-sync
-5 A
-150
-shot s40a 1
-sync
-5 A
-150
+400
+shot enc 2
+5 B
+60
+5 B
+60
+5 A
+200
+shot b1 1
+5 A
+200
+shot b2 1
+5 A
+200
+shot b3 1
+5 A
+200
+shot b4 1
+5 A
+200
+shot b5 1
+5 A
+200
+shot b6 1
+5 A
+200
+shot b7 1
+5 A
+200
+shot b8 1
+5 A
+200
+shot b9 1
+5 A
+200
+shot b10 1
+5 A
+200
+shot b11 1
+5 A
+200
+shot b12 1
+5 A
+200
+shot b13 1
+5 A
+200
+shot b14 1
+5 A
+200
+shot b15 1
+5 A
+200
+shot b16 1
+5 A
+200
+shot b17 1
+5 A
+200
+shot b18 1
+5 A
+200
+shot b19 1
+5 A
+200
+shot b20 1
+5 A
+200
+shot b21 1
+5 A
+200
+shot b22 1
+5 A
+200
+shot b23 1
+5 A
+200
+shot b24 1
+5 A
+200
+shot b25 1
+5 A
+200
+shot b26 1
+5 A
+200
+shot b27 1
+5 A
+200
+shot b28 1
+5 A
+200
+shot b29 1
+5 A
+200
+shot b30 1
+5 A
+200
+shot b31 1
+5 A
+200
+shot b32 1
+5 A
+200
+shot b33 1
+5 A
+200
+shot b34 1
+5 A
+200
+shot b35 1
+5 A
+200
+shot b36 1
+5 A
+200
+shot b37 1
+5 A
+200
+shot b38 1
+5 A
+200
+shot b39 1
+5 A
+200
+shot b40 1
