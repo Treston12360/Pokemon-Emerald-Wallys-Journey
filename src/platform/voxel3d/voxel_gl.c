@@ -346,6 +346,14 @@ static VoxelAtlasJob sAtlasJob;
 static uint16_t *sAtlasStaging;
 static uint32_t sFrame;
 
+static bool AtlasReady(const VoxelMapInstance *inst)
+{
+    for (int i = 0; i < MAX_ATLASES; i++)
+        if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset)
+            return true;
+    return false;
+}
+
 static Atlas *GetAtlas(const VoxelMapInstance *inst)
 {
     Atlas *slot = NULL;
@@ -569,7 +577,8 @@ static void BuildInstance(InstanceMesh *m, const VoxelMapInstance *inst, Atlas *
             b.statics = sChunkStatics;
             b.staticCapacity = ARRAY_COUNT(sChunkStatics);
             VoxelBuilder_SetAtlas(&b, &atlas->map);
-            VoxelBuilder_SetOrigin(&b, 0, 0);
+            // In the map's own frame: crossing a border moves the maps, not their meshes.
+            VoxelBuilder_SetOrigin(&b, inst->originX, inst->originY);
             b.base = VoxelRelief_Base(inst);
             VoxelBuilder_SetStretch(&b, inst);
             b.lighting = !inst->indoor;
@@ -937,6 +946,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
 
     SaveGl(&saved);
 
+    bool builtThisFrame = false;
     // Maps: build what is new, forget what is gone.
     for (int i = 0; i < MAX_INSTANCES; i++)
         sInstanceMeshes[i].keep = false;
@@ -945,18 +955,36 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         const VoxelMapInstance *inst = VoxelWorld_Instance(i);
         InstanceMesh *m = FindInstanceMesh(inst);
         Atlas *atlas;
-        uint32_t sig = VoxelBuildings_LiveSignature(inst) ^ (uint32_t)inst->originX * 7919u ^ (uint32_t)inst->originY * 104729u;
+        uint32_t sig = VoxelBuildings_LiveSignature(inst);
 
         if (m == NULL)
             continue;
+        // One map's mesh (or tile sheet) a frame besides the player's own: building them all
+        // on the frame a border is crossed was a stutter. An old mesh stays up meanwhile.
+        if (i != 0 && builtThisFrame && (!m->used || m->signature != sig || !AtlasReady(inst)))
+        {
+            if (m->used)
+            {
+                m->keep = true;
+                m->originX = inst->originX;
+                m->originY = inst->originY;
+            }
+            continue;
+        }
         atlas = GetAtlas(inst);
         if (atlas == NULL)
             continue;
-        if (!m->used || m->signature != sig || m->atlas != atlas || m->originX != inst->originX || m->originY != inst->originY)
+        if (!m->used || m->signature != sig || m->atlas != atlas)
         {
+            builtThisFrame = i != 0;
             if (m->used)
                 InstanceFree(m);
-            BuildInstance(m, inst, atlas);
+            {
+                Uint64 t0 = SDL_GetPerformanceCounter();
+                BuildInstance(m, inst, atlas);
+                Voxel3D_Log("[3D] build %d:%d took %.1f ms", inst->mapGroup, inst->mapNum,
+                            (SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency());
+            }
             m->used = true;
             m->mapGroup = inst->mapGroup;
             m->mapNum = inst->mapNum;
@@ -964,6 +992,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             m->originY = inst->originY;
             m->signature = sig;
         }
+        m->originX = inst->originX;
+        m->originY = inst->originY;
         m->keep = true;
     }
     for (int i = 0; i < MAX_INSTANCES; i++)
@@ -991,7 +1021,9 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         Atlas *atlas0 = GetAtlas(inst0);
         if (atlas0 != NULL && !inst0->indoor && (abs(cx - sBeltX) >= CHUNK * 2 || abs(cy - sBeltY) >= CHUNK * 2 || atlas0 != sBeltAtlas))
         {
+            Uint64 t0 = SDL_GetPerformanceCounter();
             BuildBelt(inst0, atlas0, cx, cy);
+            Voxel3D_Log("[3D] belt took %.1f ms", (SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency());
             sBeltX = cx;
             sBeltY = cy;
         }
@@ -1107,20 +1139,20 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         if (!m->used)
             continue;
         for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
-            MeshDraw(&m->terrain[p], m->atlas->tex[p], 0, 0, 0);
-        MeshDraw(&m->trees, sTreeTex, 0, 0, 0);
+            MeshDraw(&m->terrain[p], m->atlas->tex[p], (float)m->originX, 0, (float)m->originY);
+        MeshDraw(&m->trees, sTreeTex, (float)m->originX, 0, (float)m->originY);
         if (m->buildingPage >= 0)
         {
             GLuint page = BuildingPage(m->buildingPage);
             if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
                 Voxel3D_Log("[3D]   map %d:%d buildings page %d tex %u, %u chunk verts, %u statics, first model %p", m->mapGroup, m->mapNum, m->buildingPage, page, m->buildings.count, m->staticCount, m->staticCount ? (const void *)StaticModel(m->statics[0].pageModel, m->statics[0].lit) : NULL);
-            MeshDraw(&m->buildings, page, 0, 0, 0);
+            MeshDraw(&m->buildings, page, (float)m->originX, 0, (float)m->originY);
             for (unsigned s = 0; s < m->staticCount; s++)
             {
                 const VoxelStaticDraw *d = &m->statics[s];
                 const Mesh *mesh = StaticModel(d->pageModel, d->lit);
                 if (mesh != NULL)
-                    MeshDraw(mesh, page, d->x, d->y, d->z);
+                    MeshDraw(mesh, page, d->x + (float)m->originX, d->y, d->z + (float)m->originY);
             }
         }
     }
