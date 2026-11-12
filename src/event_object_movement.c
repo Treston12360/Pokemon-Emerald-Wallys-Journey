@@ -2199,7 +2199,7 @@ static u32 LoadDynamicFollowerPalette(enum Species species, bool32 shiny, bool32
             palTag += OBJ_EVENT_MON_FEMALE;
     #endif
         // palette already loaded
-        if ((paletteNum = IndexOfSpritePaletteTag(palTag)) < 16)
+        if ((paletteNum = IndexOfSpritePaletteTag(palTag)) < OBJ_PALETTE_COUNT)
             return paletteNum;
         spritePalette.tag = palTag;
     #if P_GENDER_DIFFERENCES
@@ -2228,7 +2228,7 @@ static u32 LoadDynamicFollowerPalette(enum Species species, bool32 shiny, bool32
         // so that palette tags do not overlap
         const u16 *palette = GetMonSpritePalFromSpecies(species, shiny, female); //ETODO
         // palette already loaded
-        if ((paletteNum = IndexOfSpritePaletteTag(species)) < 16)
+        if ((paletteNum = IndexOfSpritePaletteTag(species)) < OBJ_PALETTE_COUNT)
             return paletteNum;
         // Use matching front sprite's normal/shiny palettes
         // Load compressed palette
@@ -2824,7 +2824,7 @@ static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
     template = gFieldEffectLightTemplates[lightType];
     LoadSpriteSheetByTemplate(template, 0, 0);
     sprite = &gSprites[CreateSprite(template, 0, 0, 0)];
-    if (lightType == 0 && (i = IndexOfSpritePaletteTag(template->paletteTag + 1)) < 16)
+    if (lightType == 0 && (i = IndexOfSpritePaletteTag(template->paletteTag + 1)) < OBJ_PALETTE_COUNT)
         sprite->oam.paletteNum = i;
     else
         UpdateSpritePaletteByTemplate(template, sprite);

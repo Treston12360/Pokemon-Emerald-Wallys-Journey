@@ -139,11 +139,22 @@ still blank zoomed out.
 ### DLX-13 Other empty map corners (TODO)
 Find and fix corners like Dewford's (zoomed out shows bare filler). Show pictures.
 
-### DLX-14 Sprite colour / graphics memory limits (TODO - owner 2026-11-12: "was supposed to be no limit on sprites color and graphics memory")
+### DLX-14 Sprite colour / graphics memory limits (Done on PC - session 014PwRDj, 2026-11-12)
 Owner 2026-11-12: "Because we are a native windows code now we have no limitations and are allowed to change
 the rom however we want as long as the original .sav files are compatible or at the least importable" -> PC build:
 no sprite palette / sprite VRAM limits.
-Present a plan to raise the sprite palette and sprite VRAM limits before coding.
+Done (PC build only; the GBA keeps its hardware limits): 64 sprite palettes (was 16) and 4096 sprite tiles / 128 KB
+(was 1024 / 32 KB). `OBJ_PALETTE_COUNT`, `OBJ_PLTT_EXTRA_SIZE`, `VRAM_SIZE`, `OBJ_VRAM0_SIZE`, `TOTAL_OBJ_TILE_COUNT`
+(include/gba/defines.h); `struct OamData` on PC has tileNum:12 / paletteNum:6 (12 bytes, `OAM_SIZE` 128*12).
+The extra palettes sit right after the GBA's 16 in PLTT / gPlttBuffer*, the extra tiles right after OBJ VRAM,
+so the renderers and OBJ_PLTT_ID(n) just work. Allocators hand out the extra room only once the GBA's is full.
+Fades/blends/tints/time of day/weather (palette.c, field_weather.c, overworld.c): the extra palettes follow
+any effect that covers every GBA sprite palette; per-palette masks (`1 << (16 + n)`) cannot name them (only
+matters on screens that never fill 16). Fixed `< 16` / `> 16` "found" checks (event_object_movement.c,
+battle_transition/intro.c, field_weather_effect.c, LoadCustomWeatherSpritePalette, seasonal grass).
+Test aid: `WJPC_TEST_EXTRA_FIRST=1` puts every sprite in the extra room. Checked: Slateport, Route 119 (autumn
+grass, rain), warp fades, a trainer battle: pixel-identical to a normal run (only falling leaves, which move
+differently every run anyway); 3D Slateport the same.
 
 ### DLX-15 Test on real Windows hardware (TODO, owner)
 3D builds were tested in Linux and Wine only. Owner tests `alpha8c` on his PC.

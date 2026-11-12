@@ -7,6 +7,9 @@
 #include "text.h"
 #include "battle_anim.h"
 #include "test/test.h"
+#ifdef PORTABLE
+extern char *getenv(const char *name);
+#endif
 
 #define MAX_SPRITE_COPY_REQUESTS 64
 
@@ -253,7 +256,7 @@ const struct OamDimensions gOamDimensions[3][4] =
 static u16 sSpriteTileRangeTags[MAX_SPRITES];
 static u16 sSpriteTileRanges[MAX_SPRITES][2];
 static struct AffineAnimState sAffineAnimStates[OAM_MATRIX_COUNT];
-static u16 sSpritePaletteTags[16];
+static u16 sSpritePaletteTags[OBJ_PALETTE_COUNT];
 
 // iwram common
 COMMON_DATA u32 gOamMatrixAllocBitmap = 0;
@@ -267,7 +270,7 @@ EWRAM_DATA static struct SpriteCopyRequest sSpriteCopyRequests[MAX_SPRITE_COPY_R
 EWRAM_DATA u8 gOamLimit = 0;
 static EWRAM_DATA u8 sOamDummyIndex = 0;
 EWRAM_DATA u16 gReservedSpriteTileCount = 0;
-EWRAM_DATA static u8 sSpriteTileAllocBitmap[128] = {0};
+EWRAM_DATA static u8 sSpriteTileAllocBitmap[TOTAL_OBJ_TILE_COUNT / 8] = {0};
 EWRAM_DATA s16 gSpriteCoordOffsetX = 0;
 EWRAM_DATA s16 gSpriteCoordOffsetY = 0;
 EWRAM_DATA struct OamMatrix gOamMatrices[OAM_MATRIX_COUNT] = {0};
@@ -659,6 +662,26 @@ void CalcCenterToCornerVec(struct Sprite *sprite, u8 shape, u8 size, u8 affineMo
     sprite->centerToCornerVecY = y;
 }
 
+#ifdef PORTABLE
+// Test aid (DLX-14): WJPC_TEST_EXTRA_FIRST=1 puts every new sprite palette and sprite picture in the PC's
+// extra room (palettes 16+, tiles 1024+), so screenshots can be compared with a normal run.
+static bool32 TestExtraFirst(void)
+{
+    static int on = -1;
+    if (on < 0)
+    {
+        const char *v = getenv("WJPC_TEST_EXTRA_FIRST");
+        on = v != NULL && v[0] == '1';
+    }
+    return on;
+}
+#define FIRST_FREE_TILE() (TestExtraFirst() ? max(gReservedSpriteTileCount, 1024) : gReservedSpriteTileCount)
+#define FIRST_FREE_PALETTE(tag) ((tag) == TAG_NONE && TestExtraFirst() ? max(gReservedSpritePaletteCount, 16) : gReservedSpritePaletteCount)
+#else
+#define FIRST_FREE_TILE() gReservedSpriteTileCount
+#define FIRST_FREE_PALETTE(tag) gReservedSpritePaletteCount
+#endif
+
 s16 AllocSpriteTiles(u16 tileCount)
 {
     u16 i;
@@ -674,7 +697,7 @@ s16 AllocSpriteTiles(u16 tileCount)
         return 0;
     }
 
-    i = gReservedSpriteTileCount;
+    i = FIRST_FREE_TILE();
 
     for (;;)
     {
@@ -720,7 +743,7 @@ bool32 CanAllocSpriteTiles(u16 tileCount)
     if (tileCount == 0)
         return TRUE;
 
-    i = gReservedSpriteTileCount;
+    i = FIRST_FREE_TILE();
 
     for (;;)
     {
@@ -752,7 +775,7 @@ bool32 CanAllocSpriteTiles(u16 tileCount)
 
 u8 SpriteTileAllocBitmapOp(u16 bit, u8 op)
 {
-    u8 index = bit / 8;
+    u16 index = bit / 8;
     u8 shift = bit % 8;
     u8 val = bit % 8;
     u8 retVal = 0;
@@ -1642,7 +1665,7 @@ void FreeAllSpritePalettes(void)
 {
     u32 i;
     gReservedSpritePaletteCount = 0;
-    for (i = 0; i < 16; i++)
+    for (i = 0; i < OBJ_PALETTE_COUNT; i++)
         sSpritePaletteTags[i] = TAG_NONE;
 }
 
@@ -1725,7 +1748,7 @@ u32 AllocSpritePalette(u16 tag)
 u32 IndexOfSpritePaletteTag(u16 tag)
 {
     u32 i;
-    for (i = gReservedSpritePaletteCount; i < 16; i++)
+    for (i = FIRST_FREE_PALETTE(tag); i < OBJ_PALETTE_COUNT; i++)
         if (sSpritePaletteTags[i] == tag)
             return i;
 
@@ -1734,6 +1757,8 @@ u32 IndexOfSpritePaletteTag(u16 tag)
 
 u16 GetSpritePaletteTagByPaletteNum(u8 paletteNum)
 {
+    if (paletteNum >= OBJ_PALETTE_COUNT)
+        return TAG_NONE;
     return sSpritePaletteTags[paletteNum];
 }
 

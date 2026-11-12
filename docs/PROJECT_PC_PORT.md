@@ -55,9 +55,8 @@ follower's slot number is saved), other people lowest free below 14, else slot 1
 Tested: mGBA saves (truck, Slateport) load and play. NOT yet tested: a PC save -> reload round trip with this branch
 (test script hit the Bag: this save's start menu order differs), a scene that really needs more than 16 people
 (WJ_SPAWN_PAD keeps the count low today; the extra slots only matter if the spawn ring is widened), cutscenes,
-trainers spotting. OBJ tile VRAM and OBJ palettes are NOT started: both are bitfields in OamData
-(tileNum:10, paletteNum:4), so raising them needs a PC-side sprite tile/palette store the wide view reads instead
-of VRAM; design first.
+trainers spotting. OBJ tile VRAM and OBJ palettes: DONE 2026-11-12 (DLX-14, see docs/DELUXE_WORK_QUEUE.md):
+PC has 64 sprite palettes and 4096 sprite tiles; OamData on PC is tileNum:12 / paletteNum:6.
 
 **Update 2026-11-12 (later):** PC save -> reload round trip passes (PC save also still opens in mGBA). Crowd test:
 Slateport market at 4K max zoom-out loads 22 people (old build drops part of the Team Aqua line). Random-input hunt

@@ -1907,6 +1907,10 @@ void UpdatePalettesWithTime(u32 palettes)
         return;
     u32 i;
     u32 mask = 1 << 16;
+    // PC (DLX-14): extra sprite palettes follow a request that covers every GBA sprite palette.
+    if (OBJ_PALETTE_COUNT > 16 && (palettes & PALETTES_OBJECTS) == PALETTES_OBJECTS)
+        for (i = 16; i < OBJ_PALETTE_COUNT; i++)
+            UpdateSpritePaletteWithTime(i);
     if (palettes >= (1 << 16))
         for (i = 0; i < 16; i++, mask <<= 1)
         {

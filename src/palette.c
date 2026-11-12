@@ -27,11 +27,22 @@ static u32 UpdateHardwarePaletteFade(void);
 static void UpdateBlendRegisters(void);
 static bool32 IsSoftwarePaletteFadeFinishing(void);
 static void Task_BlendPalettesGradually(u8 taskId);
+static void TimeMixPalettes_Internal(u32 palettes, u16 *src, u16 *dst, struct BlendSettings *blend0, struct BlendSettings *blend1, u16 weight0);
 
 // palette buffers require alignment with agbcc because
 // unaligned word reads are issued in BlendPalette otherwise
 ALIGNED(4) EWRAM_DATA u16 gPlttBufferUnfaded[PLTT_BUFFER_SIZE] = {0};
 ALIGNED(4) EWRAM_DATA u16 gPlttBufferFaded[PLTT_BUFFER_SIZE] = {0};
+
+// Wally's Journey PC (DLX-14): sprite palettes 16..OBJ_PALETTE_COUNT-1 have no bit in the 32-bit palette masks.
+// They follow any fade/blend/tint that covers every GBA sprite palette (fade to black, weather, time of day);
+// a fade aimed at particular palettes leaves them alone. On the GBA build there are none.
+#define EXTRA_OBJ_PALS_FOLLOW(mask) (OBJ_PALETTE_COUNT > 16 && ((mask) & PALETTES_OBJECTS) == PALETTES_OBJECTS)
+#define FOR_EACH_EXTRA_OBJ_PAL(offset) for (u32 offset = OBJ_PLTT_ID(16); offset < OBJ_PLTT_ID(OBJ_PALETTE_COUNT); offset += 16)
+static bool32 IsPlttBuffer(const u16 *buf)
+{
+    return buf == gPlttBufferUnfaded || buf == gPlttBufferFaded;
+}
 EWRAM_DATA struct PaletteFadeControl gPaletteFade = {0};
 static EWRAM_DATA u32 sPlttBufferTransferPending = 0;
 
@@ -255,7 +266,16 @@ static u8 UpdateTimeOfDayPaletteFade(void)
 
     src = gPlttBufferUnfaded;
     dst = gPlttBufferFaded;
+    // Extra sprite palettes: copied through, then time-blended like the GBA's own when the fade covers them.
+    FOR_EACH_EXTRA_OBJ_PAL(off)
+        CpuFastCopy(src + off, dst + off, 32);
     TimeMixPalettes(timePalettes, src, dst, gPaletteFade.bld0, gPaletteFade.bld1, gPaletteFade.weight);
+    if (!EXTRA_OBJ_PALS_FOLLOW(timePalettes) && EXTRA_OBJ_PALS_FOLLOW(gPaletteFadeSelectedPalettes))
+    {
+        FOR_EACH_EXTRA_OBJ_PAL(off)
+            if (!IS_BLEND_IMMUNE_TAG(GetSpritePaletteTagByPaletteNum(off / 16 - 16)))
+                TimeMixPalettes_Internal(1, src + off, dst + off, gPaletteFade.bld0, gPaletteFade.bld1, gPaletteFade.weight);
+    }
 
     // palettes that were not blended above must be copied through
     if ((copyPalettes = ~timePalettes))
@@ -343,6 +363,9 @@ static u32 UpdateNormalPaletteFade_Alternate(void)
         selectedPalettes >>= 1;
         paletteOffset += 16;
     }
+    if (gPaletteFade.objPaletteToggle && EXTRA_OBJ_PALS_FOLLOW(gPaletteFadeSelectedPalettes))
+        FOR_EACH_EXTRA_OBJ_PAL(off)
+            BlendPalette(off, 16, gPaletteFade.y, gPaletteFade.blendColor);
 
     gPaletteFade.objPaletteToggle ^= 1;
 
@@ -413,8 +436,9 @@ static u32 UpdateNormalPaletteFade_Simultaneous(void)
         selectedPalettes >>= 1;
         paletteOffset += 16;
     }
-
-    
+    if (EXTRA_OBJ_PALS_FOLLOW(gPaletteFadeSelectedPalettes))
+        FOR_EACH_EXTRA_OBJ_PAL(off)
+            BlendPalette(off, 16, gPaletteFade.y, gPaletteFade.blendColor);
 
     if (gPaletteFade.y == gPaletteFade.targetY)
     {
@@ -465,6 +489,11 @@ void InvertPlttBuffer(u32 selectedPalettes)
 {
     u16 paletteOffset = 0;
 
+    if (EXTRA_OBJ_PALS_FOLLOW(selectedPalettes))
+        FOR_EACH_EXTRA_OBJ_PAL(off)
+            for (u32 i = 0; i < 16; i++)
+                gPlttBufferFaded[off + i] = ~gPlttBufferFaded[off + i];
+
     while (selectedPalettes)
     {
         if (selectedPalettes & 1)
@@ -481,6 +510,16 @@ void InvertPlttBuffer(u32 selectedPalettes)
 void TintPlttBuffer(u32 selectedPalettes, s8 r, s8 g, s8 b)
 {
     u16 paletteOffset = 0;
+
+    if (EXTRA_OBJ_PALS_FOLLOW(selectedPalettes))
+        FOR_EACH_EXTRA_OBJ_PAL(off)
+            for (u32 i = 0; i < 16; i++)
+            {
+                struct PlttData *data = (struct PlttData *)&gPlttBufferFaded[off + i];
+                data->r += r;
+                data->g += g;
+                data->b += b;
+            }
 
     while (selectedPalettes)
     {
@@ -503,6 +542,10 @@ void TintPlttBuffer(u32 selectedPalettes, s8 r, s8 g, s8 b)
 void UnfadePlttBuffer(u32 selectedPalettes)
 {
     u16 paletteOffset = 0;
+
+    if (EXTRA_OBJ_PALS_FOLLOW(selectedPalettes))
+        FOR_EACH_EXTRA_OBJ_PAL(off)
+            CpuFastCopy(&gPlttBufferUnfaded[off], &gPlttBufferFaded[off], 32);
 
     while (selectedPalettes)
     {
@@ -851,7 +894,16 @@ static bool32 IsSoftwarePaletteFadeFinishing(void)
 }
 
 // optimized based on lucktyphlosion's BlendPalettesFine
+static void BlendPalettesFine_Internal(u32 palettes, u16 *src, u16 *dst, u32 coeff, u32 color);
 void BlendPalettesFine(u32 palettes, u16 *src, u16 *dst, u32 coeff, u32 color)
+{
+    if (EXTRA_OBJ_PALS_FOLLOW(palettes) && IsPlttBuffer(src) && IsPlttBuffer(dst))
+        FOR_EACH_EXTRA_OBJ_PAL(off)
+            BlendPalettesFine_Internal(1, src + off, dst + off, coeff, color);
+    BlendPalettesFine_Internal(palettes, src, dst, coeff, color);
+}
+
+static void BlendPalettesFine_Internal(u32 palettes, u16 *src, u16 *dst, u32 coeff, u32 color)
 {
     s32 newR, newG, newB;
 
@@ -1054,6 +1106,10 @@ static void TimeMixPalettes_Internal(u32 palettes, u16 *src, u16 *dst, struct Bl
 
 void TimeMixPalettes(u32 palettes, u16 *src, u16 *dst, struct BlendSettings *blend0, struct BlendSettings *blend1, u16 weight0)
 {
+    if (EXTRA_OBJ_PALS_FOLLOW(palettes) && IsPlttBuffer(src) && IsPlttBuffer(dst))
+        FOR_EACH_EXTRA_OBJ_PAL(off)
+            if (!IS_BLEND_IMMUNE_TAG(GetSpritePaletteTagByPaletteNum(off / 16 - 16)))
+                TimeMixPalettes_Internal(1, src + off, dst + off, blend0, blend1, weight0);
     TimeMixPalettes_Internal(palettes, src, dst, blend0, blend1, weight0);
     WallyJourney_ApplyNightLights(palettes, dst); // Wally's Journey: lit windows at night
 

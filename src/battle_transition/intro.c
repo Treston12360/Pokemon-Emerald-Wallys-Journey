@@ -72,13 +72,13 @@ bool8 Intro_FadeToGray(struct Task *task)
         // Save BLDCNT and turn off targets temporarily
         task->tBldCntSaved = GetGpuReg(REG_OFFSET_BLDCNT);
         SetGpuReg(REG_OFFSET_BLDCNT, task->tBldCntSaved & ~BLDCNT_TGT2_BG_ALL);
-        if (paletteNum < 16)
+        if (paletteNum < OBJ_PALETTE_COUNT)
             gPlttBufferFaded[index] = RGB(11, 11, 11);
     }
-    if (paletteNum < 16)
+    if (paletteNum < OBJ_PALETTE_COUNT)
         task->tShadowColor = gPlttBufferFaded[index];
     BlendPalettes(PALETTES_ALL, task->tBlend, RGB(11, 11, 11));
-    if (paletteNum < 16)
+    if (paletteNum < OBJ_PALETTE_COUNT)
         gPlttBufferFaded[index] = task->tShadowColor;
 
     return FALSE;
@@ -95,7 +95,7 @@ bool8 Intro_FadeFromGray(struct Task *task)
 
         // Restore BLDCNT
         SetGpuReg(REG_OFFSET_BLDCNT, task->tBldCntSaved);
-        if (paletteNum < 16)
+        if (paletteNum < OBJ_PALETTE_COUNT)
         {
             u16 index = OBJ_PLTT_ID(paletteNum) + SHADOW_COLOR_INDEX;
             gPlttBufferFaded[index] = task->tShadowColor;

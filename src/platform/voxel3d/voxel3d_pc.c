@@ -57,13 +57,13 @@ unsigned CtrVideo_ObjTile(unsigned base, unsigned x, unsigned y, unsigned width,
     unsigned units = color256 ? 2 : 1;
     if (color256)
         base &= ~1u;
-    return (base + y * (mapping1d ? width / 8 * units : 32) + x * units) & 1023;
+    return (base + y * (mapping1d ? width / 8 * units : 32) + x * units) & (TOTAL_OBJ_TILE_COUNT - 1);
 }
 
 const uint16_t *CtrVideo_ExtPalette(unsigned index)
 {
     // OBJ palettes as shown (fades included): the second half of palette RAM.
-    return (const uint16_t *)(PLTT + 0x200) + 16 * (index & 15);
+    return (const uint16_t *)(PLTT + 0x200) + 16 * (index & (OBJ_PALETTE_COUNT - 1));
 }
 
 bool CtrVideo_InBattle(void)

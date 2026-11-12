@@ -2699,7 +2699,7 @@ void WallyJourney_SeasonalGrassSpritePalette(u32 spritePalSlot)
 {
     static const u8 sShared[] = {1, 2, 3, 12, 13, 14, 15};
     u32 i;
-    if (spritePalSlot >= 16)
+    if (spritePalSlot >= OBJ_PALETTE_COUNT)
         return;
     if (gMapHeader.mapLayout == NULL || gMapHeader.mapLayout->primaryTileset != &gTileset_General)
         return;

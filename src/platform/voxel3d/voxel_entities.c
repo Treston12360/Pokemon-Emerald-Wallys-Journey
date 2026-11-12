@@ -301,7 +301,7 @@ static u32 GatherSource(const struct Sprite *sprite, int w, int h, bool color256
             unsigned offset = tile * 32;
 
             /* OBJ character data is the last 32 KiB of the 96 KiB VRAM bank. */
-            if (offset + bytesPerTile > 0x8000)
+            if (offset + bytesPerTile > OBJ_VRAM0_SIZE)
                 offset = 0;
             memcpy(dest + written, vram + offset, bytesPerTile);
             written += bytesPerTile;

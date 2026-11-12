@@ -1356,7 +1356,7 @@ u8 UpdateShadowColor(u16 color)
     u8 paletteNum = IndexOfSpritePaletteTag(TAG_WEATHER_START);
     u16 ALIGNED(4) tempBuffer[16];
     u16 blendedColor;
-    if (paletteNum < 16)
+    if (paletteNum < OBJ_PALETTE_COUNT)
     {
         u16 index = OBJ_PLTT_ID(paletteNum) + SHADOW_COLOR_INDEX;
         gPlttBufferUnfaded[index] = gPlttBufferFaded[index] = color;

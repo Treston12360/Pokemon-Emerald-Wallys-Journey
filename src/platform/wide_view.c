@@ -830,13 +830,13 @@ static void DrawWideSprites(struct WideLine *line, int vy, bool windowsEnabled)
             uint16_t *palette = (uint16_t *)(PLTT + 0x200);
             if (!is8bpp)
             {
-                pixel = tiledata[((block + oam->tileNum) * 32 + (texY % 8) * 4 + (texX % 8) / 2) & 0x7FFF];
+                pixel = tiledata[((block + oam->tileNum) * 32 + (texY % 8) * 4 + (texX % 8) / 2) & (OBJ_VRAM0_SIZE - 1)];
                 pixel = (texX & 1) ? pixel >> 4 : pixel & 0xF;
                 palette += oam->paletteNum * 16;
             }
             else
             {
-                pixel = tiledata[((block * 2 + oam->tileNum) * 32 + (texY % 8) * 8 + texX % 8) & 0x7FFF];
+                pixel = tiledata[((block * 2 + oam->tileNum) * 32 + (texY % 8) * 8 + texX % 8) & (OBJ_VRAM0_SIZE - 1)];
             }
             if (!pixel)
                 continue;

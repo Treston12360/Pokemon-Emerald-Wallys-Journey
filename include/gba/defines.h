@@ -49,7 +49,17 @@
 #define BG_PLTT_SIZE  0x200
 #define OBJ_PLTT      (PLTT + BG_PLTT_SIZE)
 #define OBJ_PLTT_SIZE 0x200
-#define PLTT_SIZE     (BG_PLTT_SIZE + OBJ_PLTT_SIZE)
+#ifdef PORTABLE
+// Wally's Journey PC (DLX-14): no GBA limit on sprite colours. Sprite palettes 16..OBJ_PALETTE_COUNT-1
+// live right after the GBA's 16, so OBJ_PLTT_ID(n) / PLTT + 0x200 + n * 32 work for all of them. The
+// allocator hands them out only once the GBA's 16 are full. OBJ_PLTT_SIZE stays the GBA's (asset sizes).
+#define OBJ_PALETTE_COUNT    64
+#define OBJ_PLTT_EXTRA_SIZE  ((OBJ_PALETTE_COUNT - 16) * 0x20)
+#else
+#define OBJ_PALETTE_COUNT    16
+#define OBJ_PLTT_EXTRA_SIZE  0
+#endif
+#define PLTT_SIZE     (BG_PLTT_SIZE + OBJ_PLTT_SIZE + OBJ_PLTT_EXTRA_SIZE)
 
 #ifndef PORTABLE
 #define SOUND_INFO_PTR (*(struct SoundInfo **)0x3007FF0)
@@ -83,7 +93,11 @@ extern unsigned char PLTT[PLTT_SIZE] __attribute__ ((aligned (4)));
 
 #define BG_PLTT       PLTT
 
+#ifdef PORTABLE
+#define VRAM_SIZE 0x30000 // PC (DLX-14): sprite tiles 0x10000-0x2FFFF (4096 tiles instead of 1024)
+#else
 #define VRAM_SIZE 0x18000
+#endif
 #ifndef PORTABLE
 #define VRAM      0x6000000
 #else
@@ -105,13 +119,21 @@ extern unsigned char VRAM_[VRAM_SIZE] __attribute__ ((aligned (4)));
 
 // text-mode BG
 #define OBJ_VRAM0      (VRAM + 0x10000)
+#ifdef PORTABLE
+#define OBJ_VRAM0_SIZE 0x20000
+#else
 #define OBJ_VRAM0_SIZE 0x8000
+#endif
 
 // bitmap-mode BG
 #define OBJ_VRAM1      (VRAM + 0x14000)
 #define OBJ_VRAM1_SIZE 0x4000
 
+#ifdef PORTABLE
+#define OAM_SIZE (128 * 12) // PC: struct OamData is 12 bytes (wider tileNum / paletteNum, see types.h)
+#else
 #define OAM_SIZE 0x400
+#endif
 #ifndef PORTABLE
 #define OAM      0x7000000
 #else
@@ -141,7 +163,7 @@ extern unsigned char OAM[OAM_SIZE] __attribute__ ((aligned (4)));
 #define TILE_OFFSET_4BPP(n) ((n) * TILE_SIZE_4BPP)
 #define TILE_OFFSET_8BPP(n) ((n) * TILE_SIZE_8BPP)
 
-#define TOTAL_OBJ_TILE_COUNT 1024
+#define TOTAL_OBJ_TILE_COUNT (OBJ_VRAM0_SIZE / 0x20) // 1024 on the GBA, 4096 on PC
 
 #define PLTT_SIZEOF(n) ((n) * sizeof(u16))
 #define PLTT_SIZE_4BPP PLTT_SIZEOF(16)
