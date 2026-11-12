@@ -87,10 +87,14 @@ sync
 30
 shot walked 4
 sync
-64 L
+96 L
+30
+shot left 4
+sync
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s1 1
 sync
@@ -101,10 +105,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s2 1
 sync
@@ -115,10 +119,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s3 1
 sync
@@ -129,10 +133,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s4 1
 sync
@@ -143,10 +147,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s5 1
 sync
@@ -157,10 +161,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s6 1
 sync
@@ -171,10 +175,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s7 1
 sync
@@ -185,10 +189,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s8 1
 sync
@@ -199,10 +203,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s9 1
 sync
@@ -213,10 +217,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s10 1
 sync
@@ -227,10 +231,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s11 1
 sync
@@ -241,10 +245,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s12 1
 sync
@@ -255,10 +259,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s13 1
 sync
@@ -269,10 +273,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s14 1
 sync
@@ -283,10 +287,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s15 1
 sync
@@ -297,10 +301,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s16 1
 sync
@@ -311,10 +315,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s17 1
 sync
@@ -325,10 +329,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s18 1
 sync
@@ -339,10 +343,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s19 1
 sync
@@ -353,10 +357,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s20 1
 sync
@@ -367,10 +371,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s21 1
 sync
@@ -381,10 +385,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s22 1
 sync
@@ -395,10 +399,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s23 1
 sync
@@ -409,10 +413,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s24 1
 sync
@@ -423,10 +427,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s25 1
 sync
@@ -437,10 +441,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s26 1
 sync
@@ -451,10 +455,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s27 1
 sync
@@ -465,10 +469,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s28 1
 sync
@@ -479,10 +483,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s29 1
 sync
@@ -493,10 +497,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s30 1
 sync
@@ -507,10 +511,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s31 1
 sync
@@ -521,10 +525,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s32 1
 sync
@@ -535,10 +539,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s33 1
 sync
@@ -549,10 +553,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s34 1
 sync
@@ -563,10 +567,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s35 1
 sync
@@ -577,10 +581,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s36 1
 sync
@@ -591,10 +595,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s37 1
 sync
@@ -605,10 +609,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s38 1
 sync
@@ -619,10 +623,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s39 1
 sync
@@ -633,10 +637,10 @@ sync
 5 A
 150
 sync
-64 L
+48 D
 40
 sync
-64 R
+48 U
 40
 shot s40 1
 sync

@@ -246,3 +246,7 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
 - Full check, maps (scenarios/fullcheck2.json): Twins double battle (Route 104), Mauville -> Route 110 and
   Route 113 -> Fallarbor map connections, Route 119 walk. All match; differences are only water ripples, the map
   name sign, and random-walking NPCs a step apart after a map change (GBA lag frames during the map load).
+- Full check, Battle Frontier / contest / Safari (fullcheck3.json, fullcheck4.json): Battle Factory Lv50 (rent
+  three, battle) identical; Lilycove Normal Cool contest identical (audience members are picked at random during
+  the hall's map load, so a few look different); Safari Zone entrance, paying, entering and leaving identical. Not
+  reached yet: a Safari wild battle (step file walks to the exit attendant, needs a better path to grass).
