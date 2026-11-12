@@ -32,6 +32,15 @@ nearby NPCs land in the saved 16. Still to check: the player/follower must never
 sized by OBJECT_EVENTS_COUNT (script_movement.c, trainer_see.c, rotating_tile_puzzle.c, shop.c, LockedAnim localIds)
 are fine but check loops that assume 16; `WJPC_SpawnOk` free-slot rule in wide_view.c.
 
+**RULE CHANGE 2026-11-12 (owner):** the GBA ROM does NOT have to stay byte-identical any more ("we can change whatever
+we want as long as we can import our old GBA .savs", "no longer bound to GBA limits"). Hard rule now: old GBA/mGBA saves
+must load. Still ask before visual/wording changes. Owner also wants to be consulted before any frame-rate change.
+Map pop-in fix (wide_view.c: connections 4 maps deep, nearest-map filler) is on `deluxe`. Branch `dewford-corner` widens
+Route 106 to 90 columns so the corner NE of Dewford is real map (waiting for owner OK). NOTE Makefile.pc does not notice
+changed map .bin files: delete build/pc-linux32/data/maps.o (and pc-win32) and run make twice.
+Asked, not started: battle transition played across the zoomed-out view (like gen1recomp: effect applied to the whole
+wide frame); neighbour maps' NPCs; per-map tilesets for neighbours; lighting; 3D.
+
 **DONE 2026-11-12, fast forward (on `deluxe`, commit 51a4b697):** only the last game frame of each batch is drawn
 (`WideView_SkipFrame` runs the per-line interrupts without drawing); the sound engine runs only as often as the sound
 card needs (`Platform_SoundFrameDue` / `Platform_SoundFrameSkipped`), so music keeps normal speed and pitch. Measured
