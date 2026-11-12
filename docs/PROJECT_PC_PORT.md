@@ -70,7 +70,10 @@
    drawn in between on 120/144/240 Hz monitors. Walking + camera first, then sprites, menus, battle
    animations. Line-by-line effects (water ripple, some battle intros) stay at 60. Needs step 2's renderer.
    Setting: "60 (original) / match monitor / cap". Estimate 5–15 h.
-4. **4K** — clean upscaling + optional filters. (High-res replacement art would be new art; ask the owner first.) 2–4 h.
+4. **4K** — DONE: per-monitor DPI aware (SDL_HINT_WINDOWS_DPI_AWARENESS permonitorv2 + ALLOW_HIGHDPI), Window size up
+   to 12x (shrunk to fit the screen), game drawn to a render target at a whole-number scale then stretched with linear
+   filtering only when the size doesn't divide evenly, `Screen filter < Off / Scanlines / LCD >` (cfg `filter=`).
+   Checked under Wine with Xvfb at 3840x2160 fullscreen. Original plan: clean upscaling + optional filters. (High-res replacement art would be new art; ask the owner first.) 2–4 h.
 5. **Full check against the ROM** — go system by system (trainer/gym battles, every menu, gacha, contests,
    Battle Frontier, cutscenes, 3D backgrounds in every area, seasons/weather, sound), plus the owner's playtesting.
    Then a stable release. Estimate 15–30 h.
