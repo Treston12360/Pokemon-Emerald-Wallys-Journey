@@ -128,3 +128,40 @@ So people are plain matte surfaces lit by the same sun and sky light as the worl
 ## Tools note
 Parser: UAssetAPI built from source (+ Newtonsoft.Json, stub zstd), Longvinter 5.7.2 mappings with the
 removals listed at the top. Lives only in the session workspace (/home/claude/ue), not in the repo.
+
+### Global state Gamma runs in (MPC_GlobalEnvironment, set by the sky blueprint)
+Material Parameter Collection layout (cb1): [0]=(WindIntensity 1.2, WindAngle 0.2, WindSpeed 1, SwaySpeed),
+[1]=(SwayDamping, SwayLean, DayLength, NightLength), [2]=(DayStartTime, CurrentTime, DayCycleProgress,
+OrbitOrientation), [3]=(OrbitInclination, Overcast, RainStrength, RainWetness), [4]=(RainPuddles,
+WeatherWindMult, WeatherAtmosphereMix, WeatherCloudFadeout), vectors: SunLightRotation, SunLightDirection,
+MoonLightRotation, MoonLightDirection, OvercastColor (0.485,0.571,1.0), ...
+All sky/fog shaders use phase t = frac(DayCycleProgress) and blend Day -> Sunset -> Night -> Sunrise -> Day
+across t = 0..1 in quarters (p0 = sat(4t), p1 = sat(4t-1), p2 = sat(4t-2), p3 = max(4t-3,0)).
+Gamma's level stores DayCycleProgress = 1.0 -> t = 0 -> pure DAY everywhere; weather Clear -> mix 0, overcast 0.
+
+### Sky dome (M_StylizedSky + MI_StylizedSky_Dreamy) - day result
+  h  = dome UV.y; noise = HorizonNoise.r at uv*(2, 8)
+  h' = h + noise * 0.03 * saturate((h - 0.6) / 0.3)
+  sky = SkyAtlas[row 15 (Dreamy day)] at x = 1 - h'   (gradient: docs/gamma/sky_day_gradient_256.csv,
+        256 RGB values read from the baked atlas; 2.0 white at the horizon band, ~(0.64,0.82,0.81) at 0.25,
+        (0.03,0.34,0.49) at 0.4, deep blue (0.0,0.115,0.573) at the top)
+  * Sky Brightness 1.0; stars/nebula off by day (Star Brightness Day 0).
+  + background clouds: BGCloud tex scrolled (speed -0.0004), tint (0.368,0.537,1.0) * strength 0.5, saturated.
+  Saturation 1 (no change), overcast 0.
+
+### Distance haze (M_StylizedFogPP post-process + MI_StylizedFogPP_Classic) - day result
+  d    = scene depth;  f = saturate((d - 10) / (40000 - 10))
+  dir  = normalized (pixel - camera);  h = min((1 - dir.z)^4, 1)   (= 1 for any downward view)
+  amt  = saturate(f^1.0 * 0.5) * h
+  sun  = saturate(1 - 0.4 * (dot(SunDir, normalize(camera - pixel)) - 0.5))      (Sunward 0.8)
+  amt  = min(sun, amt)
+  out  = lerp(scene, (0.2, 0.467, 1.0), amt)           (hue shift 0)
+       + 3D fog: two 3D-noise samples at camera - dir*3000 and *5700, scale 1/12000 and 1.9/12000,
+         drifting with wind (0.03*Time along the wind angle), mixed by 0.25, * strength * colour
+         (0.120,0.198,0.356); strength default 0.2 (the blueprint may change it at runtime)
+       + sun glow: SunMoon atlas row 2 at noon = (0,0,0) -> no glow at Gamma's fixed time; moon glow 0 by day.
+
+### Clouds on the dome (MI_StylizedClouds_Classic) - parameters (shader math not needed for our top-down view)
+4 layers: speeds 2.0/1.4/1.4/1.4 x -0.0004, vertical stretch 3.33, offsets -0.141/-0.208/-0.18/-0.08,
+strength 1.2 (layer 2: 1.5, layer 4: 1.3), flow offsets 30/100/60, highlight threshold 0.6 falloff 3 strength 4,
+noise speed 0.7 strength 3; colour from Atlas_Clouds row 0 by day (0.12,0.30,0.64) -> (0.68,0.78,1.0).
