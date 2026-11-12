@@ -1,0 +1,93 @@
+# Boot, title, Continue, dismiss the season message; then look around.
+300
+shot boot300
+1000
+shot title 90
+5 A
+150
+5 A
+150
+5 A
+400
+shot mainmenu 60
+5 A
+500
+shot field_msg
+5 A
+60
+5 A
+60
+5 B
+60
+shot field
+sync
+5 S
+5 S
+40
+shot startmenu
+# first entry (Pokedex)
+5 A
+150
+shot menu1 8
+5 D
+30
+shot menu1_down 8
+5 A
+120
+shot menu1_open 8
+5 B
+120
+5 B
+150
+5 B
+150
+shot back1 8
+5 S
+40
+5 D
+20
+5 A
+150
+shot menu2 8
+5 A
+30
+shot menu2_sel 8
+5 A
+150
+shot menu2_open 8
+5 R
+120
+shot menu2_r 8
+5 B
+150
+5 B
+150
+5 B
+150
+5 S
+40
+5 D
+20
+5 D
+20
+5 A
+150
+shot menu3 8
+5 R
+60
+shot menu3_r 8
+5 B
+150
+5 S
+40
+5 U
+20
+5 U
+20
+5 U
+20
+5 A
+150
+shot menu_up3 8
+5 B
+150

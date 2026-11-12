@@ -226,3 +226,6 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
 - Full check, found by a clang warning scan: Battle Factory swap screen reads color 37 of the 16-color
   `sPokeballGray_Pal` (past the end) in 3 places. The GBA ROM has 0 there; PC read whatever came next in
   memory, so a fade could use a wrong color. PC now uses 0 (`POKEBALL_GRAY_PAL_37`). Release SHA unchanged.
+- Full check, menus (owner save): Start menu, Pokédex, DexNav, Bag, party, Summary (4 pages), Options all match the
+  GBA. Only differences are animation timing (bag swirl, cursor blink, Summary grid that scrolls 1 px every 4 frames).
+- Full check, catching: wild battle, two turns, Poké Ball from the bag, catch, nickname screen: identical on both.

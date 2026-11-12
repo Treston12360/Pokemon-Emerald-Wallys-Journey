@@ -1,0 +1,83 @@
+# Owner save: wild battle, two turns, then throw a Poke Ball from the bag and compare the catch.
+1300
+5 A
+150
+5 A
+150
+5 A
+400
+5 A
+500
+5 A
+60
+5 A
+60
+5 B
+60
+lock on 00000000 00000000 00000000 00000000
+60 D
+60 L
+60 R
+60 L
+60 R
+60 L
+60 R
+300
+shot encounter 60
+5 A
+200
+shot battle_menu 30
+5 A
+40
+5 A
+120
+shot t1_a 4
+120
+shot t1_b 4
+120
+shot t1_c 4
+120
+shot t1_d 4
+200
+shot t1_end 30
+5 A
+40
+5 A
+240
+shot t2_a 4
+240
+shot t2_b 4
+200
+shot t2_end 30
+5 R
+20
+5 A
+120
+5 R
+40
+shot balls 10
+5 A
+40
+shot ball_menu 6
+5 A
+120
+shot throw1 4
+120
+shot throw2 4
+150
+shot throw3 4
+150
+shot throw4 4
+200
+shot result1 4
+300
+shot result2 10
+5 A
+200
+shot result3 10
+5 A
+200
+shot result4 10
+5 A
+300
+shot result5 10

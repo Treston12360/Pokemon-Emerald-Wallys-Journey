@@ -1,0 +1,79 @@
+# Boot, title, Continue, dismiss the season message; then look around.
+300
+shot boot300
+1000
+shot title 90
+5 A
+150
+5 A
+150
+5 A
+400
+shot mainmenu 60
+5 A
+500
+shot field_msg
+5 A
+60
+5 A
+60
+5 B
+60
+shot field
+sync
+5 S
+# Start menu -> Pokemon (3rd entry)
+5 S
+40
+5 D
+20
+5 D
+20
+5 A
+150
+shot party 8
+5 D
+20
+shot party_2 8
+5 U
+20
+5 A
+40
+shot party_sub 8
+5 A
+150
+shot sum1 8
+5 R
+60
+shot sum2 8
+5 R
+60
+shot sum3 8
+5 R
+60
+shot sum4 8
+5 D
+60
+shot sum_next 8
+5 B
+150
+5 B
+40
+5 B
+150
+# Option (8th entry = up 1 from top wraps)
+5 S
+40
+5 U
+20
+5 A
+150
+shot options 8
+5 A
+60
+shot options_open 8
+5 B
+60
+5 B
+150
+shot back 8
