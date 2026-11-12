@@ -30,5 +30,6 @@ void ReloadSave(void)
         Sav2_ClearSetDefault();
     SetPokemonCryStereo(gSaveBlock2Ptr->optionsSound);
     InitHeap(gHeap, HEAP_SIZE);
+    ForgetTextPrintersAfterHeapReset();
     SetMainCallback2(CB2_ContinueSavedGame);
 }
