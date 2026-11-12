@@ -92,7 +92,13 @@ enum Language
 // capacities of various saveblock objects
 #define DAYCARE_MON_COUNT 2
 #define POKEBLOCKS_COUNT 40
+// The save keeps 16 object events (as on the GBA, so mGBA saves load); the PC build has more live slots.
+#define SAVED_OBJECT_EVENTS_COUNT 16
+#ifdef PORTABLE
+#define OBJECT_EVENTS_COUNT 64
+#else
 #define OBJECT_EVENTS_COUNT 16
+#endif
 #define MAIL_COUNT (10 + PARTY_SIZE)
 #define SECRET_BASES_COUNT 20
 #define POKE_NEWS_COUNT 16

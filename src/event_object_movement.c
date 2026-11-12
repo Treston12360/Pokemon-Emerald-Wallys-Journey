@@ -1682,7 +1682,7 @@ static u32 GetAvailableObjectEventId(u16 localId, u8 mapNum, u8 mapGroup)
     }
     if (availableId == OBJECT_EVENTS_COUNT && !IS_LOCALID_GENERATED_OWE(localId))
          return TryAndDespawnOldestGeneratedOWE_ToFreeObject();
-    return availableId;
+    return WJPC_PICK_OBJECT_EVENT_SLOT(availableId, localId);
 }
 
 void RemoveObjectEvent(struct ObjectEvent *objectEvent)

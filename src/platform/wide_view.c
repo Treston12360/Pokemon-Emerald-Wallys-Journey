@@ -287,7 +287,7 @@ struct WideSprite
     bool ui;            // screen-space sprite (start menu, HM picture...): drawn on the UI layer
 };
 
-static struct WideSprite sWideSprites[512];
+static struct WideSprite sWideSprites[1024];
 static int sWideSpriteCount;
 
 static bool sAddingWithCamera; // set while BuildWideSprites adds a sprite that moves with the camera

@@ -2,7 +2,14 @@
 #define GUARD_SPRITE_H
 
 #define OAM_MATRIX_COUNT 32
+#ifdef PORTABLE
+// PC: more sprite slots (the GBA has 64). Kept at 128 so sprite ids still fit the game's 7-bit
+// fields and the 8-bit sort keys; the GBA's 128 hardware OAM entries are only used for
+// non-overworld screens, the wide view draws the overworld straight from gSprites.
+#define MAX_SPRITES 128
+#else
 #define MAX_SPRITES 64
+#endif
 #define SPRITE_NONE 0xFF
 #define TAG_NONE 0xFFFF
 

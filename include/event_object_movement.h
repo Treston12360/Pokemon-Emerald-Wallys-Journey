@@ -573,12 +573,16 @@ bool32 WJPC_SpawnOk(s16 x, s16 y);
 #define WJ_SPAWN_PAD_X gWjPcSpawnPadX
 #define WJ_SPAWN_PAD_Y gWjPcSpawnPadY
 #define WJ_SPAWN_OK(x, y) WJPC_SpawnOk(x, y)
+// PC has more object-event slots than the save keeps (SAVED_OBJECT_EVENTS_COUNT); see wj_limits.c.
+u32 WJPC_PickObjectEventSlot(u32 firstFree, u16 localId);
+#define WJPC_PICK_OBJECT_EVENT_SLOT(firstFree, localId) WJPC_PickObjectEventSlot(firstFree, localId)
 #else
 #define WJ_VIEW_PAD_X 0
 #define WJ_VIEW_PAD_Y 0
 #define WJ_SPAWN_PAD_X 0
 #define WJ_SPAWN_PAD_Y 0
 #define WJ_SPAWN_OK(x, y) TRUE
+#define WJPC_PICK_OBJECT_EVENT_SLOT(firstFree, localId) (firstFree)
 #endif
 
 #endif //GUARD_EVENT_OBJECT_MOVEMENT_H

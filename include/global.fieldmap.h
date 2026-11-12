@@ -439,6 +439,12 @@ struct Camera
 };
 
 extern struct ObjectEvent gObjectEvents[OBJECT_EVENTS_COUNT];
+#ifdef PORTABLE
+// PC: live object-event slots past the saved 16 start empty after loading (their NPCs reload from the map).
+#define WJPC_CLEAR_EXTRA_OBJECT_EVENTS() memset(&gObjectEvents[SAVED_OBJECT_EVENTS_COUNT], 0, sizeof(gObjectEvents) - SAVED_OBJECT_EVENTS_COUNT * sizeof(gObjectEvents[0]))
+#else
+#define WJPC_CLEAR_EXTRA_OBJECT_EVENTS() do {} while (0)
+#endif
 extern u8 gSelectedObjectEvent;
 extern struct MapHeader gMapHeader;
 extern struct PlayerAvatar gPlayerAvatar;

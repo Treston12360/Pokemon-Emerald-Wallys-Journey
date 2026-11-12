@@ -32,11 +32,25 @@ nearby NPCs land in the saved 16. Still to check: the player/follower must never
 sized by OBJECT_EVENTS_COUNT (script_movement.c, trainer_see.c, rotating_tile_puzzle.c, shop.c, LockedAnim localIds)
 are fine but check loops that assume 16; `WJPC_SpawnOk` free-slot rule in wide_view.c.
 
+**DONE 2026-11-12, fast forward (on `deluxe`, commit 51a4b697):** only the last game frame of each batch is drawn
+(`WideView_SkipFrame` runs the per-line interrupts without drawing); the sound engine runs only as often as the sound
+card needs (`Platform_SoundFrameDue` / `Platform_SoundFrameSkipped`), so music keeps normal speed and pitch. Measured
+under Xvfb at 20x: 60 fps shown, 1200 game frames/s (before: 2 fps, 240/s, silent). Same game state with/without
+skipped drawing. Script command `ff N`. Not yet tried on a real Windows PC by the owner.
+
+**Limits, branch `deluxe-limits` (built, ROM SHA unchanged, partly tested):** the WIP commit's code plus:
+`MAX_SPRITES` 128 on PC (keeps 7-bit sprite-id fields and 8-bit sort keys valid), wide view sprite list 1024,
+`src/platform/wj_limits.c` `WJPC_PickObjectEventSlot`: player / follower / NPC follower only in slots 0-15 (the NPC
+follower's slot number is saved), other people lowest free below 14, else slot 16+. Script command `objcount LABEL`.
+Tested: mGBA saves (truck, Slateport) load and play. NOT yet tested: a PC save -> reload round trip with this branch
+(test script hit the Bag: this save's start menu order differs), a scene that really needs more than 16 people
+(WJ_SPAWN_PAD keeps the count low today; the extra slots only matter if the spawn ring is widened), cutscenes,
+trainers spotting. OBJ tile VRAM and OBJ palettes are NOT started: both are bitfields in OamData
+(tileNum:10, paletteNum:4), so raising them needs a PC-side sprite tile/palette store the wide view reads instead
+of VRAM; design first.
+
 **Next, in order:**
-1. **Fast forward (owner: "laggy and all music stops")**: sdl2.c ApplyFastForward pauses the audio device and
-   Platform_QueueAudio drops sound while `speedUp`. Owner wants speed-up with music playing at normal speed.
-   Idea: keep queuing audio but only every Nth game frame's samples (N = speed), or resample; check the lag
-   (VDraw every game frame at 20x; skip drawing frames that won't be shown).
+1. Finish testing `deluxe-limits` (above), merge, then tiles/palettes.
 2. Finish and test the NPC limit (above), then sprites: `MAX_SPRITES` 64 -> e.g. 256 on PC (wide_view draws from
    gSprites, keys use & 0xFF so max 255; OAM buffer is 128). Then OBJ tile VRAM (32 KB) and OBJ palettes (16, the
    4-bit oam.paletteNum) need PC-side room. Playtest trainers spotting, followers, cutscenes, Wally's Ralts catch.

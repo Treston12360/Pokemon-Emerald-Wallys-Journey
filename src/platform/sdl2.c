@@ -23,6 +23,8 @@
 #include <string.h>
 #include "global.h"
 #include "constants/characters.h"
+#include "constants/event_objects.h"
+#include "sprite.h"
 #include "platform/null_guard.h"
 #include "platform/wide_view.h"
 #include "platform.h"
@@ -239,6 +241,28 @@ static bool TestStep(void)
             sTestKeys = TestKeyMask(arg1);
             sTestHold = (n > 0 ? n : 1) - 1;
             return true;
+        }
+        if (!strcmp(cmd, "objcount"))
+        {
+            // objcount LABEL (test aid): people and sprites in use, and the highest slots used.
+            int objs = 0, hiObj = -1, sprs = 0, hiSpr = -1, saved = 0, pl = -1;
+            for (int i = 0; i < OBJECT_EVENTS_COUNT; i++)
+                if (gObjectEvents[i].active)
+                {
+                    objs++; hiObj = i;
+                    if (i < SAVED_OBJECT_EVENTS_COUNT) saved++;
+                    if (gObjectEvents[i].localId == OBJ_EVENT_ID_PLAYER || gObjectEvents[i].localId == OBJ_EVENT_ID_FOLLOWER) pl = pl < i ? i : pl;
+                }
+            for (int i = 0; i < MAX_SPRITES; i++)
+                if (gSprites[i].inUse) { sprs++; hiSpr = i; }
+            FILE *f = fopen("objcount.log", "a");
+            if (f != NULL)
+            {
+                fprintf(f, "%s frame %u objects %d (in saved 16: %d, highest slot %d, player/follower max slot %d) sprites %d (highest %d)\n",
+                        arg1, sTestFrame, objs, saved, hiObj, pl, sprs, hiSpr);
+                fclose(f);
+            }
+            continue;
         }
         if (!strcmp(cmd, "ff"))
         {
