@@ -552,6 +552,7 @@ static void BuildInstance(InstanceMesh *m, const VoxelMapInstance *inst, Atlas *
 
     if (chunkVerts == NULL)
         chunkVerts = malloc(CHUNK_VERTS * sizeof(VoxelVertex));
+    unsigned uncovered = 0;
     sTerrainCount = sTreeCount = sBuildCount = 0;
     m->staticCount = 0;
     for (int y0 = inst->originY; y0 < inst->originY + inst->height; y0 += CHUNK)
@@ -581,6 +582,7 @@ static void BuildInstance(InstanceMesh *m, const VoxelMapInstance *inst, Atlas *
             treeEnd = b.count;
             VoxelBuildings_EmitInstance(&b, inst, x0, y0, x1, y1);
             AppendChunk(&b, terrainEnd, treeEnd);
+            uncovered += b.uncovered;
             for (unsigned s = 0; s < b.staticCount && m->staticCount < MAX_INST_STATICS; s++)
                 m->statics[m->staticCount++] = b.statics[s];
         }
@@ -609,6 +611,7 @@ static void BuildInstance(InstanceMesh *m, const VoxelMapInstance *inst, Atlas *
     MeshSet(&m->buildings, sBuildBuf, sBuildCount, GL_STATIC_DRAW);
     m->buildingPage = VoxelBuildings_PageOf(inst);
     m->atlas = atlas;
+    Voxel3D_Log("[3D] %d:%d layout %d origin %d,%d sign(10,10)=%d sign(11,16)=%d", inst->mapGroup, inst->mapNum, inst->layoutId, inst->originX, inst->originY, VoxelSign_IsCell(inst, inst->originX + 10, inst->originY + 10), VoxelSign_IsCell(inst, inst->originX + 11, inst->originY + 16));
     Voxel3D_Log("[3D] built %d:%d (%dx%d): %u ground, %u tree, %u model vertices, %u big models",
                 inst->mapGroup, inst->mapNum, inst->width, inst->height, sTerrainCount, sTreeCount, sBuildCount,
                 m->staticCount);

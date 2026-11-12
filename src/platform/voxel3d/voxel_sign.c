@@ -1,3 +1,4 @@
+#include "port_log.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,7 +24,7 @@ typedef struct
     uint16_t head[16];  /* the sign's part drawn in the cell north of it */
     uint16_t headGround;
     uint16_t ground;    /* the metatile the sign's own cell is laid with */
-} SignRecord;
+} __attribute__((packed)) SignRecord; /* PC: 74 bytes as in signposts.bin; align4.py skips packed structs */
 
 static SignRecord *sIndex;
 static unsigned sCount;
@@ -47,22 +48,26 @@ static bool LoadMasks(void)
     if (!file) return false;
     if (fread(header, 1, sizeof(header), file) != sizeof(header)
         || memcmp(header, SIGN_MAGIC, 4) != 0) {
+        PORT_LOG("SIGNS bad header %.4s\n", (const char *)header);
         fclose(file);
         return false;
     }
     sCount = (unsigned)header[4] | ((unsigned)header[5] << 8)
            | ((unsigned)header[6] << 16) | ((unsigned)header[7] << 24);
     if (sCount == 0 || sCount > 65535u) {
+        PORT_LOG("SIGNS bad count %u\n", sCount);
         fclose(file);
         return false;
     }
     sIndex = malloc((size_t)sCount * sizeof(*sIndex));
     if (!sIndex || fread(sIndex, sizeof(*sIndex), sCount, file) != sCount) {
+        PORT_LOG("SIGNS read failed, %u records of %u bytes\n", sCount, (unsigned)sizeof(*sIndex));
         free(sIndex); sIndex = NULL; sCount = 0;
         fclose(file);
         return false;
     }
     fclose(file);
+    PORT_LOG("SIGNS loaded %u, first layout %u\n", sCount, sIndex[0].layout);
     return true;
 }
 

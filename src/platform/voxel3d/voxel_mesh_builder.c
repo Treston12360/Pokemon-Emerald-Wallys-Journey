@@ -9,6 +9,7 @@
  * a cell can be built without building its neighbours first.
  */
 
+#include "port_log.h"
 #include <math.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -2067,7 +2068,13 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                  * (the cell south of it without one) */
                 if (sign && VoxelSign_Ground(inst, x, y, &art)
                  && !MetatileUV(builder, art, &u0, &v0, &u1, &v1))
-                    art = -1;
+                {
+                    /* Wally's Journey PC: the recorded ground isn't in this tileset;
+                     * lay the ground of the cell south of the sign instead. */
+                    art = VoxelWorld_GetMetatileId(x, y + 1);
+                    if (!MetatileUV(builder, art, &u0, &v0, &u1, &v1))
+                        art = -1;
+                }
                 /* and the cell north of a sign whose head is drawn in it
                  * (a gym sign's round top): the ground under the head, as
                  * on a map with no relief - its drawing laid on the relief
