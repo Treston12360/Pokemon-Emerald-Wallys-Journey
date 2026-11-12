@@ -1,9 +1,9 @@
 # Project: Wally's Journey as a PC program (.exe)
 
 **Branch:** `deluxe` (PC work started on `pc-port`) (based on 0.18.19). Read this whole file before working on the PC version.
-**Status (2026-11-11):** alpha 5 (wide view) sent to the owner as `WallysJourney.exe`, tested under Wine 10
-(Kron4ek WoW64 build from GitHub releases + Xvfb). Steps 1 (PC settings) and 2 (widescreen) are done.
-**Next: step 3 (smooth high frame rate).**
+**Status (2026-11-11):** alpha 5 sent to the owner (`WallysJourney.exe`), tested under Wine 10 (Kron4ek WoW64 build
+from GitHub releases + Xvfb). Steps 1-4 are done (PC settings, widescreen, frame rate 60-240, 4K) plus keyboard keys,
+controller mapping (owner confirmed it works) and the bad-read fixes. **Next: step 5, the full check against the ROM.**
 
 ## What the owner asked for (2026-11-11, in his words where possible)
 - "a .exe file at the end of it with all those cool features that normally come with recomps":
