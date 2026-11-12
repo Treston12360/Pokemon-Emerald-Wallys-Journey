@@ -58,6 +58,19 @@ SDL_Texture *sdlUiTexture;      // UI layer (text boxes, menus, map name pop-up)
 // into this texture during the frame, under the UI layer, in place of the flat map.
 #include "../platform/voxel3d/voxel_gl.h"
 static bool s3DWanted, s3DReady, s3DFrame;
+// DLX-6: 3D can be turned on and off in Settings. The renderer is OpenGL whenever the 3D data is there
+// (s3DAvailable), and the 3D world loads the first time it is wanted (s3DInitTried), so no restart.
+static bool s3DAvailable, s3DInitTried;
+static char s3DDir[600];
+static void Try3DInit(void)
+{
+    if (!s3DWanted || s3DReady || s3DInitTried || !s3DAvailable)
+        return;
+    s3DInitTried = true;
+    s3DReady = Voxel3D_Init(s3DDir);
+    if (!s3DReady)
+        fprintf(stderr, "3D world unavailable (OpenGL or %s missing): drawing the map flat\n", s3DDir);
+}
 static SDL_Texture *sdl3DTexture, *sdl3DTransTexture;
 static bool s3DTransition;
 static int s3DW, s3DH;
@@ -920,7 +933,26 @@ int main(int argc, char **argv)
 #else
     if (getenv("WJPC_3D") != NULL)
         s3DWanted = atoi(getenv("WJPC_3D")) != 0;
-    if (s3DWanted)
+    {
+        // The 3D models (voxel/*.bin, *.rgba5551) live in a "voxel" folder next to the game.
+        const char *env = getenv("WJPC_VOXEL_DIR");
+        char probe[640];
+        FILE *f;
+        if (env != NULL)
+            snprintf(s3DDir, sizeof(s3DDir), "%s", env);
+        else
+        {
+            char *base = SDL_GetBasePath();
+            snprintf(s3DDir, sizeof(s3DDir), "%svoxel", base != NULL ? base : "");
+            SDL_free(base);
+        }
+        snprintf(probe, sizeof(probe), "%s/regions.bin", s3DDir);
+        f = fopen(probe, "rb");
+        s3DAvailable = f != NULL;
+        if (f != NULL)
+            fclose(f);
+    }
+    if (s3DAvailable || s3DWanted)
         SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl"); // the 3D world draws with OpenGL in the same context
     sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_PRESENTVSYNC);
 #endif
@@ -929,23 +961,13 @@ int main(int argc, char **argv)
         DBGPRINTF("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
-    if (s3DWanted)
+    if (s3DAvailable)
     {
-        // The 3D models (voxel/*.bin, *.rgba5551) live in a "voxel" folder next to the game.
-        char dir[600];
-        const char *env = getenv("WJPC_VOXEL_DIR");
-        if (env != NULL)
-            snprintf(dir, sizeof(dir), "%s", env);
-        else
-        {
-            char *base = SDL_GetBasePath();
-            snprintf(dir, sizeof(dir), "%svoxel", base != NULL ? base : "");
-            SDL_free(base);
-        }
-        s3DReady = Voxel3D_Init(dir);
-        if (!s3DReady)
-            fprintf(stderr, "3D world unavailable (OpenGL or %s missing): drawing the map flat\n", dir);
+        SDL_RendererInfo info;
+        if (SDL_GetRendererInfo(sdlRenderer, &info) != 0 || strncmp(info.name, "opengl", 6) != 0)
+            s3DAvailable = false; // no OpenGL here: 3D can't be drawn
     }
+    Try3DInit();
 
     SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 255);
     SDL_RenderClear(sdlRenderer);
@@ -1571,10 +1593,17 @@ void Platform_SetBorderBackground(u8 selection)
     StoreConfigFile();
 }
 
+bool8 Platform_Is3DAvailable(void)
+{
+    return s3DAvailable && !(s3DInitTried && !s3DReady);
+}
+
 u8 Platform_GetSetting(enum PlatformSetting setting)
 {
     if (setting == PLATFORM_SETTING_WIDESCREEN)
         return WideView_IsEnabled();
+    if (setting == PLATFORM_SETTING_WORLD3D)
+        return s3DWanted && Platform_Is3DAvailable();
     return sPlatformSettings[setting];
 }
 
@@ -1584,6 +1613,13 @@ static SDL_atomic_t sWindowSettingsChanged;
 
 void Platform_SetSetting(enum PlatformSetting setting, u8 value)
 {
+    if (setting == PLATFORM_SETTING_WORLD3D)
+    {
+        if (Platform_Is3DAvailable())
+            s3DWanted = value != 0; // drawn (and loaded, the first time) from the next frame
+        StoreConfigFile();
+        return;
+    }
     sPlatformSettings[setting] = value;
     if (setting == PLATFORM_SETTING_WIDESCREEN)
     {
@@ -2310,7 +2346,7 @@ void VDraw(SDL_Texture *texture)
     SDL_Rect area = {0, 0, fullW, fullH};
     SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32));
     s3DFrame = false;
-    s3DTransition = s3DReady && sFrameInfo.mode != WIDE_VIEW_FIELD && WideView_BattleTransitionOnField();
+    s3DTransition = s3DReady && s3DWanted && sFrameInfo.mode != WIDE_VIEW_FIELD && WideView_BattleTransitionOnField();
     if (s3DTransition)
     {
         // A battle transition over the 3D world: what the GBA picture draws from the map (its
@@ -2346,7 +2382,9 @@ void VDraw(SDL_Texture *texture)
         if (sdl3DTransTexture != NULL)
             SDL_UpdateTexture(sdl3DTransTexture, NULL, sTransImage, DISPLAY_WIDTH * sizeof(uint32_t));
     }
-    if (s3DReady && (sFrameInfo.mode == WIDE_VIEW_FIELD || s3DTransition))
+    if (s3DWanted && !s3DReady)
+        Try3DInit(); // turned on in Settings
+    if (s3DReady && s3DWanted && (sFrameInfo.mode == WIDE_VIEW_FIELD || s3DTransition))
     {
         // The 3D world, while the game thread still waits on this frame.
         int w, h;

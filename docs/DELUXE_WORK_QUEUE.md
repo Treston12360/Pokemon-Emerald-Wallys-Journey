@@ -67,13 +67,18 @@ to have: apply the per-line BG offsets the transition writes to the wide field r
 Test: save `/home/claude/keep/owner_brawly.sav`-style save (any save), script `trainerbattle 774` (Brawly) or
 walk into grass; `winshot` frames during the transition (`WJPC_SCRIPT`, see "How to build and test").
 
-### DLX-5 3D battle backgrounds + settings option (TODO - owner 2026-11-12: "you can choose the wording")
+### DLX-5 3D battle backgrounds + settings option (WIP - session 014PwRDj; owner: "you can choose the wording")
+NOTE 2026-11-12: nothing to copy - only `voxel_battle.h` (Emerald 3DS header) exists; no battle code here or in
+pokeemerald-multiplatform. Build it: voxel world from a low battle camera behind the battle (in place of BG3).
 Emerald 3DS builds 3D arenas from the battle background art (`src/platform/voxel3d/voxel_arena.c`,
 already copied). Owner wants it as its own on/off option in settings. See also `docs/PROJECT_NEW_3D_BGS.md`.
 
-### DLX-6 In-game options for the 3D overworld (TODO - owner 2026-11-12: "you can choose the wording")
-3D is on today only with `world3d=1` in `WallysJourney.cfg` or `WJPC_3D=1` ("Play in 3D.bat").
-Proposed menu line "3D World: On/Off" - get the owner's OK on wording first.
+### DLX-6 In-game options for the 3D overworld (Done - session 014PwRDj, 2026-11-12; owner: "you can choose the wording")
+Settings > Video > "3D World" On/Off (last row). Takes effect at once, no restart: the renderer is OpenGL whenever
+`voxel/regions.bin` is next to the game, and the 3D data loads the first time 3D is turned on (`Try3DInit`,
+sdl2.c). Saved as `world3d=` in WallysJourney.cfg (the "Play in 3D.bat" `WJPC_3D` still overrides it at start).
+Shows "N/A" when the voxel folder or OpenGL is missing. `PLATFORM_SETTING_WORLD3D`, `Platform_Is3DAvailable()`.
+Tested in Wine: Off -> On (3D at once) -> walk -> Off (2D at once); video sent.
 
 ### DLX-8 3D: chunky people (ASK - owner 2026-11-12: show an example before deciding to implement)
 Owner asked for trainers/NPCs to look 3D like the houses: extrude each sprite frame into blocks.

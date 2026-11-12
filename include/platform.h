@@ -45,6 +45,7 @@ enum PlatformSetting
     PLATFORM_SETTING_INTERFRAME, // mGBA "Interframe blending" (mix each frame with the one before)
     PLATFORM_SETTING_LOCK_FRAME, // mGBA "Lock frame size" (window can't be resized by dragging)
     PLATFORM_SETTING_RESOLUTION, // 0 = monitor/window, 1 = 720p, 2 = 1080p, 3 = 1440p, 4 = 4K
+    PLATFORM_SETTING_WORLD3D,    // 3D overworld on/off ("world3d" in the cfg); kept by sdl2.c, not in the array
     PLATFORM_SETTING_COUNT,
 };
 
@@ -92,6 +93,7 @@ bool8 Platform_IsCapturingKey(void);
 void Platform_GetKeyBindName(u8 bind, u8 *dst, u32 size);
 
 u8 Platform_GetSetting(enum PlatformSetting setting);
+bool8 Platform_Is3DAvailable(void); // the 3D data (voxel folder) and OpenGL are there
 void Platform_SetSetting(enum PlatformSetting setting, u8 value);
 void Platform_GetStatus(struct SiiRtcInfo *rtc);
 void Platform_SetStatus(struct SiiRtcInfo *rtc);
