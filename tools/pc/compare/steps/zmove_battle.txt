@@ -1,0 +1,176 @@
+# Test save (scenarios/fullcheck5.json): Rustboro Gym, next to a trainer. Swampert holding Waterium Z (Z-Move). In the move menu START turns the Mega/Z trigger on. sync before each press.
+1300
+5 A
+150
+5 A
+150
+5 A
+400
+shot mainmenu 30
+5 A
+500
+shot field_msg
+5 A
+60
+5 A
+60
+5 B
+60
+shot field
+sync
+5 U
+300
+shot spotted 4
+sync
+5 A
+200
+sync
+5 A
+200
+sync
+5 A
+200
+sync
+5 A
+200
+sync
+5 A
+200
+sync
+5 A
+200
+1500
+shot menu 8
+sync
+5 A
+90
+shot moves 8
+5 S
+60
+shot trigger 8
+sync
+5 A
+60
+shot t1 1
+60
+shot t2 1
+60
+shot t3 1
+60
+shot t4 1
+60
+shot t5 1
+60
+shot t6 1
+60
+shot t7 1
+60
+shot t8 1
+60
+shot t9 1
+60
+shot t10 1
+60
+shot t11 1
+60
+shot t12 1
+60
+shot t13 1
+60
+shot t14 1
+60
+shot t15 1
+60
+shot t16 1
+60
+shot t17 1
+60
+shot t18 1
+60
+shot t19 1
+60
+shot t20 1
+60
+shot t21 1
+60
+shot t22 1
+60
+shot t23 1
+60
+shot t24 1
+60
+shot t25 1
+60
+shot t26 1
+60
+shot t27 1
+60
+shot t28 1
+60
+shot t29 1
+60
+shot t30 1
+sync
+5 A
+200
+shot a1 1
+sync
+5 A
+200
+shot a2 1
+sync
+5 A
+200
+shot a3 1
+sync
+5 A
+200
+shot a4 1
+sync
+5 A
+200
+shot a5 1
+sync
+5 A
+200
+shot a6 1
+sync
+5 A
+200
+shot a7 1
+sync
+5 A
+200
+shot a8 1
+sync
+5 A
+200
+shot a9 1
+sync
+5 A
+200
+shot a10 1
+sync
+5 A
+200
+shot a11 1
+sync
+5 A
+200
+shot a12 1
+sync
+5 A
+200
+shot a13 1
+sync
+5 A
+200
+shot a14 1
+sync
+5 A
+200
+shot a15 1
+sync
+5 A
+200
+shot a16 1

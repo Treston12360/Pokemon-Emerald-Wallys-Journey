@@ -1,0 +1,286 @@
+# Test save (scenarios/fullcheck5.json #2): Route 102, Treecko one EXP point from Lv18 (+ a Lv2 Treecko). Wild battle in the grass, level up, learn a move. Random state held (lock) while walking.
+1300
+5 A
+150
+5 A
+150
+5 A
+400
+shot mainmenu 30
+5 A
+500
+shot field_msg
+5 A
+60
+5 A
+60
+5 B
+60
+shot field
+lock on 00000000 00000000 00000000 00000000
+20 L
+30
+20 R
+30
+20 L
+30
+20 R
+30
+20 L
+30
+20 R
+30
+20 L
+30
+20 R
+30
+20 L
+30
+20 R
+30
+20 L
+30
+20 R
+30
+shot enc 4
+lock off
+sync
+5 A
+150
+shot a1 1
+sync
+5 A
+150
+shot a2 1
+sync
+5 A
+150
+shot a3 1
+sync
+5 A
+150
+shot a4 1
+sync
+5 A
+150
+shot a5 1
+sync
+5 A
+150
+shot a6 1
+sync
+5 A
+150
+shot a7 1
+sync
+5 A
+150
+shot a8 1
+sync
+5 A
+150
+shot a9 1
+sync
+5 A
+150
+shot a10 1
+sync
+5 A
+150
+shot a11 1
+sync
+5 A
+150
+shot a12 1
+sync
+5 A
+150
+shot a13 1
+sync
+5 A
+150
+shot a14 1
+sync
+5 A
+150
+shot a15 1
+sync
+5 A
+150
+shot a16 1
+sync
+5 A
+150
+shot a17 1
+sync
+5 A
+150
+shot a18 1
+sync
+5 A
+150
+shot a19 1
+sync
+5 A
+150
+shot a20 1
+sync
+5 A
+150
+shot a21 1
+sync
+5 A
+150
+shot a22 1
+sync
+5 A
+150
+shot a23 1
+sync
+5 A
+150
+shot a24 1
+sync
+5 A
+150
+shot a25 1
+sync
+5 A
+150
+shot a26 1
+sync
+5 A
+150
+shot a27 1
+sync
+5 A
+150
+shot a28 1
+sync
+5 A
+150
+shot a29 1
+sync
+5 A
+150
+shot a30 1
+sync
+5 A
+150
+shot a31 1
+sync
+5 A
+150
+shot a32 1
+sync
+5 A
+150
+shot a33 1
+sync
+5 A
+150
+shot a34 1
+sync
+5 A
+150
+shot a35 1
+sync
+5 A
+150
+shot a36 1
+sync
+5 A
+150
+shot a37 1
+sync
+5 A
+150
+shot a38 1
+sync
+5 A
+150
+shot a39 1
+sync
+5 A
+150
+shot a40 1
+sync
+5 A
+150
+shot a41 1
+sync
+5 A
+150
+shot a42 1
+sync
+5 A
+150
+shot a43 1
+sync
+5 A
+150
+shot a44 1
+sync
+5 A
+150
+shot a45 1
+sync
+5 A
+150
+shot a46 1
+sync
+5 A
+150
+shot a47 1
+sync
+5 A
+150
+shot a48 1
+sync
+5 A
+150
+shot a49 1
+sync
+5 A
+150
+shot a50 1
+sync
+5 A
+150
+shot a51 1
+sync
+5 A
+150
+shot a52 1
+sync
+5 A
+150
+shot a53 1
+sync
+5 A
+150
+shot a54 1
+sync
+5 A
+150
+shot a55 1
+sync
+5 A
+150
+shot a56 1
+sync
+5 A
+150
+shot a57 1
+sync
+5 A
+150
+shot a58 1
+sync
+5 A
+150
+shot a59 1
+sync
+5 A
+150
+shot a60 1

@@ -21,8 +21,10 @@ EPOCH = 1793404800  # fixed clock on both sides (2026-10-31 00:00 UTC, shown in 
 BURST = 24
 RNG = (0x12345678, 0x9ABCDEF0, 0x0F1E2D3C, 0x00000001)
 
+ELF = os.path.join(REPO, 'pokeemerald-release.elf')
+
 def gba_addr(sym):
-    out = subprocess.run(['arm-none-eabi-nm', os.path.join(REPO, 'pokeemerald-release.elf')], capture_output=True, text=True).stdout
+    out = subprocess.run(['arm-none-eabi-nm', ELF], capture_output=True, text=True).stdout
     for l in out.splitlines():
         p = l.split()
         if len(p) == 3 and p[2] == sym:
@@ -30,13 +32,17 @@ def gba_addr(sym):
     sys.exit('no symbol ' + sym)
 
 def main():
+    global ELF
     ap = argparse.ArgumentParser()
     ap.add_argument('steps'); ap.add_argument('save'); ap.add_argument('out')
     ap.add_argument('--rom', default=os.path.join(REPO, 'pokeemerald-release.gba'))
     ap.add_argument('--pc', default=os.path.join(REPO, 'wallys-journey'))
     ap.add_argument('--harness', default='/home/claude/tools-src/harness_cmp')
+    ap.add_argument('--epoch', type=int, default=EPOCH, help='clock (Unix seconds, shown in local time) on both sides')
     ap.add_argument('--vblank-lock', dest='lock', action='store_true', help='reseed RNG every VBlank (patched ROM)')
+    ap.add_argument('--elf', default=ELF, help='symbols of --rom (a frozen copy lets test ROMs be built meanwhile)')
     a = ap.parse_args()
+    ELF = a.elf
     out = os.path.abspath(a.out)
     shutil.rmtree(out, ignore_errors=True)
     os.makedirs(out + '/gba'); os.makedirs(out + '/pc')
@@ -86,7 +92,7 @@ def main():
     # Exact logic comparison: no once-per-VBlank random roll on either side (the GBA gets extra rolls
     # on frames where it lags, the PC never lags). GBA: a test copy of the ROM with that call removed.
     rom = os.path.abspath(a.rom)
-    dis = subprocess.run(['arm-none-eabi-objdump', '-d', os.path.join(REPO, 'pokeemerald-release.elf'),
+    dis = subprocess.run(['arm-none-eabi-objdump', '-d', ELF,
                           '--start-address=0x%x' % gba_addr('VBlankIntr'), '--stop-address=0x%x' % (gba_addr('VBlankIntr') + 0x400)],
                          capture_output=True, text=True).stdout
     calls = [l for l in dis.splitlines() if '<Random32>' in l and '\tbl\t' in l]
@@ -107,11 +113,11 @@ def main():
         data[off:off + 4] = b'\xc0\x46\xc0\x46'  # two Thumb NOPs
     rom = out + '/test_no_vblank_rng.gba'
     open(rom, 'wb').write(data)
-    hr = subprocess.run([a.harness, rom, 'gba.txt', str(EPOCH), 'gba/g.sav'], cwd=out, env=env,
+    hr = subprocess.run([a.harness, rom, 'gba.txt', str(a.epoch), 'gba/g.sav'], cwd=out, env=env,
                         stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, errors='replace', timeout=1800)
     gpeeks = [l for l in hr.stderr.splitlines() if l.startswith('PEEK')]
     penv = dict(env, SDL_VIDEODRIVER='dummy', SDL_AUDIODRIVER='dummy', WJPC_SCRIPT=out + '/pc.txt', WJPC_SAVE='g.sav',
-                WJPC_NOWIDE='1', WJPC_RTC_EPOCH=str(EPOCH), WJPC_NO_VBLANK_RNG='1', **({'WJPC_RNG_LOCK': '1'} if a.lock else {}))
+                WJPC_NOWIDE='1', WJPC_RTC_EPOCH=str(a.epoch), WJPC_NO_VBLANK_RNG='1', **({'WJPC_RNG_LOCK': '1'} if a.lock else {}))
     r = subprocess.run(['timeout', '-s', 'KILL', '1800', a.pc], cwd=out + '/pc', env=penv, capture_output=True, text=True, errors='replace')
     skipped = sorted(set(l for l in (r.stdout + r.stderr).splitlines() if 'WJPC: skipped' in l or 'crash' in l))
 
