@@ -15,7 +15,13 @@ Status key: TODO = not started, WIP = started (see notes), ASK = needs the owner
 
 ## Open items
 
-### DLX-1 Lavaridge gym in 3D looks flat (WIP - fix made, waiting on owner's OK)
+### DLX-1 Lavaridge gym in 3D looks flat (ASK - fixed in session 019khs4X's data, owner to confirm)
+Status 2026-11-12 13:40 (session 019khs4X): the owner was shown the fixed gym (picture) and then reported only
+the folded sign (DLX-19) - treat the model as accepted. The working voxel data with the fix is NOT in git
+(voxel/ is not in the repo); whoever builds a release must regenerate buildings.bin/relief.bin with the
+`lavaridge_gym_exterior` spec line below added to Emerald 3DS's `voxel_building_specs.py`:
+`{"name":"lavaridge_gym_exterior","layout":"LAYOUT_LAVARIDGE_TOWN","rect":(2,11,6,5),"match_rows":(0,4),"ground":[GRASS],"parts":gym,"exact":GYM_EXACT}`
+(insert before the `dewford_gym_exterior` entry; also remove the `sand_bath` spec).
 Fix: Emerald 3DS had no exterior model for Lavaridge's gym. Added spec `lavaridge_gym_exterior`
 (rect (2, 11, 6, 5), `parts: gym`, `match_rows (0, 4)`, ground GRASS) before `dewford_gym_exterior` in
 `voxel_building_specs.py`, regenerated `buildings.bin` and `relief.bin`. Picture sent 2026-11-12.
@@ -34,13 +40,6 @@ The 3D model comes from Emerald 3DS's generator (`gym()` in `voxel_building_spec
 vs `warp 0 11 ...`) and to Emerald 3DS screenshots; find why Lavaridge's is drawn flatter (wrong model
 picked, art differs from vanilla so the model did not match, or the roof is drawn as ground).
 
-### DLX-2 Continue screen: shiny Pokemon icons (ASK - works in current builds; which build did the owner see?)
-Checked 2026-11-12 (session 014PwRDj): shiny icons on the Continue screen were added in 979563a0 (0.18.15, Nov 10)
-and are in `deluxe` and `deluxe-3d`. Tested owner's save (shiny Breloom) and a test save with six different shinies
-(scenario tools/wj_testfw/scenarios/shiny6.json): GBA (mGBA) and PC identical, all shiny; PC window in 2D and 3D
-too. Waiting for the owner to say which build/save showed normal colours.
-On the title screen's Continue/save summary, party icons of shiny Pokemon must use their shiny colours.
-
 ### DLX-3 Smooth battles and menus (TODO, approved "option 1")
 In-between frames so battles and menus feel high frame rate, like the overworld's smooth mode.
 
@@ -58,37 +57,32 @@ already copied). Owner wants it as its own on/off option in settings. See also `
 3D is on today only with `world3d=1` in `WallysJourney.cfg` or `WJPC_3D=1` ("Play in 3D.bat").
 Proposed menu line "3D World: On/Off" - get the owner's OK on wording first.
 
-### DLX-7 3D: edge scenery rebuild cost (Done - session 014PwRDj, 2026-11-12)
-`BuildBelt` in `src/platform/voxel3d/voxel_gl.c` took ~5-12 ms every 2 chunks walked.
-Done: the belt is now 8x8 pieces kept in a cache (`BeltChunk`, 256 slots). Walking builds only the
-new pieces, at most 10 a frame, and puts the belt together on a frame of its own (one-pass page sort).
-New map / new world digest / new atlas still build it all at once, as before. Checked in Wine (software
-GL): worst frame from ~8 ms to ~2 ms typical (3-6 ms peaks); 73 step-built belts compared byte for byte
-with a full rebuild: all identical. Nothing on screen changes. Test aid: `WJPC_TEST_WINDOW=1` makes a
-`WJPC_SCRIPT` run draw the 3D view every frame (otherwise it only draws on `winshot`).
-
 ### DLX-8 3D: chunky people (ASK, show a test picture first)
 Owner asked for trainers/NPCs to look 3D like the houses: extrude each sprite frame into blocks.
 Make one test picture, owner decides.
 
-### DLX-9 Lighting like Gamma Emerald (WIP)
-2026-11-12: the owner got Gamma Emerald's unpacked files from its developer (Unreal Engine 5 project,
-"Gamma-Pak-Recovery" archive, 51 parts). Study how its lighting is set up (sun, sky, day/night,
-post-process) and recreate the look in our OpenGL 3D view (`voxel_gl.c` shader, `voxel_lighting.c`).
-Do not copy their assets. Show the owner before/after pictures.
-Findings (2026-11-12, from the level files; values are binary, only the setup was read):
-- One shared level (`MAP_Hoenn_Persistant`) holds the outdoor lighting for every town: a sun
-  (directional light), a sky light (ambient from the sky), exponential height fog and a post-process volume.
-- The sky is a stylized-sky kit (SoStylized `BP_StylizedSky`: "Dreamy" sky colours, cartoon clouds, a moon,
-  **cloud shadows drifting over the ground** via a light function, a stylized fog post-process) plus weather
-  presets (clear, light rain, distant thunderstorm).
-- Colour grading by LUTs (Chameleon pack: day-to-night, moonlight, candle light).
-- Towns (Littleroot, Dewford) add point/spot lights and animated **god-ray planes**; caves switch lighting
-  with a trigger (`BP_CaveLightTrigger`). Sprites use a lit sprite material, so people get the sun's light too.
-Exact numbers now read: see `docs/GAMMA_LIGHTING_VALUES.md` (sun, sky light, fog, cloud shadows, sky).
-Plan for our view (needs owner's OK on pictures): sun shading per face (warm top, cooler sides), sky-tinted
-ambient, distance fog in the sky colour, drifting cloud shadows (our own noise texture), a light colour
-grade, day/night from the game clock, darker caves. Each as a separate on/off so the owner can compare.
+### DLX-9 Lighting like Gamma Emerald (WIP - session 019khs4X; owner approved going ahead)
+The owner got Gamma Emerald's files from its developer, who said we may use them (including textures) for
+this project. Everything read from them is in `docs/GAMMA_LIGHTING_VALUES.md` (exact numbers and shader math;
+how they were read is at the top of that file). Program file `PokemonEmerald-Win64-Shipping.exe` (owner's PC,
+connected folder `gamma-emerald-ea-windows`) settled: auto-exposure "extend luminance range" default 0,
+exposure bias default 1.0 -> Gamma's screen multiplier 0.36; GI (Lumen) default 0 = Gamma has NO bounce light;
+blur kernels capped at 32 samples (r.Filter.LoopMode 0) so every bloom stage is 31 texels of its level.
+Built (commit on deluxe-3d, off by default, turn on with `WJPC_3D_GAMMALIGHT=1`), all in `voxel_gl.c` +
+`voxel_lighting.c`: Gamma's sun direction/colour/intensity (bake keeps only sun visibility + contact,
+`gVoxelGammaLight`), sky light from Gamma's cubemap as SH, haze formula, cloud shadows with Gamma's two
+textures (`voxel/gamma_clouds.bin` = T_NoisePuddles + T_NoiseRough, 1024x1024 8-bit each, NOT in git),
+half-float scene + screen pass: 6-stage bloom (UE BloomSetup, threshold 0.4, intensity 6, UE default tints),
+depth of field with Gamma's lens, saturation 1.25 in AP1, UE FilmToneMap (slope 1, toe 0.3, shoulder 1).
+Decision (owner: "whatever looks best"): exposure 2.06 instead of Gamma's 0.36, because GBA art is drawn
+fully lit; 2.06 returns sunlit ground to its own colours through the same curve.
+Open:
+- 3D: faint vertical light streaks over buildings in Littleroot with the mode on (also with bloom off,
+  reflections off, shadows off) - find the cause (suspect depth-of-field gather or the depth texture).
+- 2D mode: only an offline preview exists (`gamma2d.py`, session workspace) - apply the same chain to the
+  2D field in `sdl2.c`/wide view (ground lit flat: sun x 0.643 x clouds + sky(up)).
+- Not yet built: light rays (god-ray planes, math in the doc), dark caves/gyms trigger (colour gain 0.49,
+  vignette 3/2), lamps. Show the owner pictures before turning anything on by default.
 
 ### DLX-10 Encore: cursor on the forced move (ASK)
 Offered: while Encored, the move cursor jumps to the locked move. No new wording.
@@ -110,8 +104,7 @@ Present a plan to raise the sprite palette and sprite VRAM limits before coding.
 3D builds were tested in Linux and Wine only. Owner tests `alpha8c` on his PC.
 
 ### DLX-16 Merge `deluxe-3d` into `deluxe` (TODO, after owner OK on 3D)
-Includes the Hex crash fix (`src/battle_util.c`), which should reach `deluxe` regardless (cherry-pick
-commit "Fix freeze: Hex on a statused target...").
+The Hex crash fix is already on `deluxe` too (applied separately). Merge everything else after the owner OKs 3D.
 
 ### DLX-17 3D: a ground texture draws wrong in Slateport and many other places (TODO)
 Owner report 2026-11-12. Find the metatile(s) (compare 2D and 3D at the same spot) and fix.
@@ -135,6 +128,11 @@ the door still leads into Lavaridge's gym.
   3D under Xvfb needs `+extension GLX`.
 
 ## Done (2026-11-12)
+- DLX-2 Continue screen shiny icons: already worked (979563a0); verified by two sessions with the owner's
+  save and a six-shiny save, picture sent. Reopen only if the owner sees it again (ask which build).
+- DLX-7 Edge scenery belt built piece by piece (a0360473, session 014PwRDj): worst frame ~8 ms -> ~2 ms.
+- Heap text-printer crash on map load/reload (f89e68f6); shake-animation pointer crash; contest move
+  background overrun; empty party icon slots (session 014PwRDj).
 - Fast forward to 20x with music; NPC/sprite limits raised; pop-in fix; Dewford corner; text-box holes.
 - 3D overworld in the PC game (Emerald 3DS voxel code + our OpenGL backend): tiles, buildings, signs,
   trees, cliffs, shadows, zoom, battle transitions in 3D, no rebuild stutter at borders, Lavaridge

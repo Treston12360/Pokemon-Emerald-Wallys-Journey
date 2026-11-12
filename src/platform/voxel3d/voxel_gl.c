@@ -82,6 +82,7 @@ void Voxel3D_Log(const char *fmt, ...);
     X(void, glUniform2f, (GLint, GLfloat, GLfloat)) \
     X(void, glUniform3f, (GLint, GLfloat, GLfloat, GLfloat)) \
     X(void, glUniform3fv, (GLint, GLsizei, const GLfloat *)) \
+    X(void, glUniform1fv, (GLint, GLsizei, const GLfloat *)) \
     X(void, glUniform4f, (GLint, GLfloat, GLfloat, GLfloat, GLfloat)) \
     X(void, glGenBuffers, (GLsizei, GLuint *)) \
     X(void, glDeleteBuffers, (GLsizei, const GLuint *)) \
@@ -249,10 +250,11 @@ static const char *sFragmentSrc =
     "  return mix(mix(hash(i), hash(i+vec2(1,0)), f.x), mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y); }\n"
     "float fbm(vec2 p) { float a = 0.5, s = 0.0; for (int k = 0; k < 4; k++) { s += a * vnoise(p); p *= 2.03; a *= 0.5; } return s / 0.9375; }\n"
     // M_SunCloudShadows_LF1 with Gamma's numbers; the two noise textures are stand-ins (theirs are art assets)
+    "uniform sampler2D cloudTex, roughTex;\n"
     "float clouds(vec3 w) {\n"
     "  vec2 P = vec2(-w.z, w.x) * 64.0;\n" // Gamma X (north), Y (east), in cm
-    "  float nn = fbm((P / 888.25 + time * vec2(-0.0010, -0.0007)) * 4.0);\n"
-    "  float cc = fbm((P + nn * 40.0) / 5000.0 * 4.0 + time * vec2(-0.0021, -0.0030) * 4.0);\n"
+    "  float nn = texture2D(roughTex, P / 888.25 + time * vec2(-0.0010, -0.0007)).r;\n"
+    "  float cc = texture2D(cloudTex, (P + nn * 40.0) / 5000.0 + time * vec2(-0.0021, -0.0030)).r;\n"
     "  return 1.0 - clamp((cc - 0.164) * 3.8417, 0.0, 1.0) * 0.75;\n"
     "}\n"
     "void main() {\n"
@@ -292,6 +294,7 @@ static const char *sFragmentSrc =
  * Our axes: x east, y up, z south. Gamma's camera looks along Unreal +X (screen up = north here), so
  * Unreal (X, Y, Z) maps to ours as (east = Y, up = Z, south = -X). */
 static uint32_t sFrame;
+static GLuint sCloudTex[2];
 static const float sGammaSh[9][3] = {
     {0.38100f, 0.88990f, 1.51087f}, {0.05944f, 0.15420f, 0.27341f}, {-0.02007f, -0.03913f, -0.03543f},
     {-0.01342f, -0.02757f, -0.04645f}, {-0.00478f, -0.00471f, -0.00461f}, {-0.01140f, -0.01572f, -0.01706f},
@@ -312,6 +315,16 @@ static void GammaLightUniforms(void)
     wj_glUniform3fv(sUniSh, 9, &sGammaSh[0][0]);
     wj_glUniform1f(sUniSat, 1.25f); /* camera colour saturation */
     wj_glUniform1f(sUniTime, (float)sFrame / 60.0f);
+    if (sCloudTex[0] != 0)
+    {
+        wj_glUniform1i(wj_glGetUniformLocation(sProgram, "cloudTex"), 6);
+        wj_glUniform1i(wj_glGetUniformLocation(sProgram, "roughTex"), 7);
+        wj_glActiveTexture(GL_TEXTURE0 + 6);
+        wj_glBindTexture(GL_TEXTURE_2D, sCloudTex[0]);
+        wj_glActiveTexture(GL_TEXTURE0 + 7);
+        wj_glBindTexture(GL_TEXTURE_2D, sCloudTex[1]);
+        wj_glActiveTexture(GL_TEXTURE0);
+    }
     wj_glUniform1f(sUniExposure, getenv("WJPC_3D_EXPOSURE") ? (float)atof(getenv("WJPC_3D_EXPOSURE")) : 1.0f);
 }
 
@@ -976,6 +989,10 @@ FILE *Voxel3D_OpenData(const char *path)
  * focused on the player), exposure locked at 1, saturation 1.25 (camera) in AP1, and UE's filmic curve
  * (slope 1, toe 0.3, shoulder 1, black clip 0, white clip 0) - the ACES-based FilmToneMap. */
 
+/* Gamma's camera gives 2^1 x 0.18 / 1 = 0.36; our GBA art is drawn fully lit, so the multiplier is the one
+ * that returns sunlit ground to its own colours (fitted through this exact curve): 2.06. */
+static float sExposure = 2.06f;
+static GLuint sBlurFbo[6], sBlurTex[6];
 static GLuint sPostProg, sQuadVbo, sHdrFbo, sHdrTex, sHdrDepth, sBloomFbo[7], sBloomTex[7];
 static int sHdrW, sHdrH, sBloomW[7], sBloomH[7];
 static GLint sPU_mode, sPU_src, sPU_src2, sPU_depth, sPU_texel, sPU_dir, sPU_radius, sPU_misc, sPU_fade, sPU_tints, sPU_coc;
@@ -989,7 +1006,8 @@ static const char *sPostVs =
 static const char *sPostFs =
     "#version 120\n"
     "uniform float mode;\n"          // 0 bright pass, 1 blur, 2 final
-    "uniform sampler2D src, src2, depthTex;\n"
+    "uniform sampler2D src, src2, depthTex, b1, b2, b3, b4, b5;\n"
+    "uniform float tint[6];\n"
     "uniform vec2 texel, dir;\n"
     "uniform float radius;\n"
     "uniform vec4 misc;\n"           // x exposure, y saturation, z bloom intensity, w threshold
@@ -1039,7 +1057,7 @@ static const char *sPostFs =
     "void main() {\n"
     "  if (mode < 0.5) {\n" // bright pass (UE BloomSetup): colour * saturate((lum*exposure - threshold) * 0.5)
     "    vec3 c = texture2D(src, uv).rgb;\n"
-    "    float l = dot(c, vec3(0.3, 0.59, 0.11)) * misc.x;\n"
+    "    float l = dot(c, vec3(0.212639, 0.715169, 0.072192)) * misc.x;\n"
     "    gl_FragColor = vec4(c * clamp((l - misc.w) * 0.5, 0.0, 1.0), 1.0); return;\n"
     "  }\n"
     "  if (mode < 1.5) {\n" // separable gaussian, radius in texels
@@ -1058,7 +1076,8 @@ static const char *sPostFs =
     "    float wt = (Dn < D - 1.0) ? clamp(rn - rr + 1.0, 0.0, 1.0) : 1.0;\n"
     "    c += texture2D(src, uv + o).rgb * wt; wsum += wt; }\n"
     "  c /= max(wsum, 1e-4);\n"
-    "  c += texture2D(src2, uv).rgb * misc.z;\n"
+    "  c += (texture2D(src2, uv).rgb * tint[0] + texture2D(b1, uv).rgb * tint[1] + texture2D(b2, uv).rgb * tint[2]\n"
+    "       + texture2D(b3, uv).rgb * tint[3] + texture2D(b4, uv).rgb * tint[4] + texture2D(b5, uv).rgb * tint[5]) * misc.z;\n"
     "  c *= misc.x;\n"
     "  vec3 ap = sRGB_2_AP1 * c;\n"
     "  ap = max(mix(vec3(dot(ap, AP1_Y)), ap, misc.y), 0.0);\n"
@@ -1133,13 +1152,21 @@ static bool PostBeginScene(int w, int h)
         MakeTarget(&sHdrDepth, w, h, 0x1902, GL_UNSIGNED_INT, 0);
         for (int i = 0; i < 7; i++)
         {
-            sBloomW[i] = w >> (i + 2) > 1 ? w >> (i + 2) : 1;
-            sBloomH[i] = h >> (i + 2) > 1 ? h >> (i + 2) : 1;
+            sBloomW[i] = w >> (i + 1) > 1 ? w >> (i + 1) : 1;
+            sBloomH[i] = h >> (i + 1) > 1 ? h >> (i + 1) : 1;
             MakeTarget(&sBloomTex[i], sBloomW[i], sBloomH[i], GL_RGBA, 0x140B, 0);
             if (sBloomFbo[i] == 0)
                 wj_glGenFramebuffers(1, &sBloomFbo[i]);
             wj_glBindFramebuffer(GL_FRAMEBUFFER, sBloomFbo[i]);
             wj_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sBloomTex[i], 0);
+            if (i < 6)
+            {
+                MakeTarget(&sBlurTex[i], sBloomW[i], sBloomH[i], GL_RGBA, 0x140B, 0);
+                if (sBlurFbo[i] == 0)
+                    wj_glGenFramebuffers(1, &sBlurFbo[i]);
+                wj_glBindFramebuffer(GL_FRAMEBUFFER, sBlurFbo[i]);
+                wj_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sBlurTex[i], 0);
+            }
         }
         if (sHdrFbo == 0)
             wj_glGenFramebuffers(1, &sHdrFbo);
@@ -1181,15 +1208,13 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
 {
     /* UE default bloom tints; sizes are % of screen width x BloomSizeScale (Gamma: 4..128 x 15). */
     static const float tint[6] = {0.3465f, 0.138f, 0.1176f, 0.066f, 0.066f, 0.061f};
-    static const float size[6] = {4, 8, 16, 32, 64, 128};
-    GLuint scratch = sBloomTex[6];
     wj_glDisable(GL_DEPTH_TEST);
     wj_glDisable(GL_BLEND);
     wj_glUseProgram(sPostProg);
     wj_glUniform1i(sPU_src, 0);
     wj_glUniform1i(sPU_src2, 1);
     wj_glUniform1i(sPU_depth, 2);
-    wj_glUniform4f(sPU_misc, 1.0f, 1.25f, 6.0f, 0.4f);
+    wj_glUniform4f(sPU_misc, sExposure, 1.25f, 6.0f, 0.4f);
     /* bright pass at 1/4 size into level 0 */
     wj_glBindFramebuffer(GL_FRAMEBUFFER, sBloomFbo[0]);
     wj_glViewport(0, 0, sBloomW[0], sBloomH[0]);
@@ -1197,28 +1222,28 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
     wj_glBindTexture(GL_TEXTURE_2D, sHdrTex);
     wj_glUniform1f(sPU_mode, 0.0f);
     PostQuad();
-    /* One combined glow: each stage's gaussian (radius = size*scale % of width, half-width kernel) weighted
-     * by its tint, accumulated into level 1 at 1/8 size. Blurring is done on the 1/4-size bright pass. */
+    /* Six stages at 1/2 .. 1/64 size (bloom stage k on downsample k). Gamma's sizes (4..128 x 15 % of the
+     * width) are far beyond the 32-sample limit (r.Filter.LoopMode 0, read from the game's program), so
+     * every stage's radius is clamped to 31 texels of its own resolution. */
     {
-        float total = 0.0f;
-        for (int i = 0; i < 6; i++)
-            total += tint[i];
-        /* Gaussians this wide (>= 30% of the screen) are smooth: approximate their weighted sum by one
-         * blur at the tint-weighted mean radius, scaled by the summed tint. */
-        float meanR = 0.0f;
-        for (int i = 0; i < 6; i++)
-            meanR += tint[i] / total * (size[i] * 15.0f * 0.01f * 0.5f);
-        float rpx = meanR * sBloomW[0];
-        int lv = 0;
-        while (lv < 5 && rpx / (float)(1 << lv) > 24.0f)
-            lv++;
-        /* downsample chain to level lv */
-        for (int i = 1; i <= lv; i++)
+        for (int i = 1; i < 6; i++)
             PostBlur(sBloomFbo[i], sBloomTex[i - 1], sBloomW[i], sBloomH[i], 0.0f, 0.0f, 0.0f);
-        PostBlur(sBloomFbo[6], sBloomTex[lv], sBloomW[lv], sBloomH[lv], 1.0f, 0.0f, rpx / (float)(1 << lv));
-        PostBlur(sBloomFbo[lv], scratch, sBloomW[lv], sBloomH[lv], 0.0f, 1.0f, rpx / (float)(1 << lv));
+        for (int i = 0; i < 6; i++)
+        {
+            PostBlur(sBlurFbo[i], sBloomTex[i], sBloomW[i], sBloomH[i], 1.0f, 0.0f, 31.0f);
+            PostBlur(sBloomFbo[i], sBlurTex[i], sBloomW[i], sBloomH[i], 0.0f, 1.0f, 31.0f);
+        }
+        int lv = 0;
         wj_glUseProgram(sPostProg);
-        wj_glUniform4f(sPU_misc, 1.0f, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f : 6.0f * total, 0.4f);
+        wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f : 6.0f, 0.4f);
+        wj_glUniform1fv(wj_glGetUniformLocation(sPostProg, "tint"), 6, tint);
+        for (int i = 1; i < 6; i++)
+        {
+            char nm[4] = {'b', (char)('0' + i), 0, 0};
+            wj_glUniform1i(wj_glGetUniformLocation(sPostProg, nm), 2 + i);
+            wj_glActiveTexture(GL_TEXTURE2 + i);
+            wj_glBindTexture(GL_TEXTURE_2D, sBloomTex[i]);
+        }
         /* final */
         wj_glBindFramebuffer(GL_FRAMEBUFFER, outFbo);
         wj_glViewport(0, 0, w, h);
@@ -1258,6 +1283,25 @@ bool Voxel3D_Init(const char *dataDir)
         /* Gamma's sun: 40 degrees up, behind the viewer and slightly right, as (-DX, 1, -DZ). */
         gVoxelGammaLight = 1;
         VoxelLighting_SetSun(-0.2718f, -1.1604f, 1.0f, 0x6A33u);
+        {   /* Gamma's cloud-shadow textures (T_NoisePuddles, T_NoiseRough), 1024x1024 greyscale each */
+            FILE *cf = Voxel3D_OpenData("voxel/gamma_clouds.bin");
+            unsigned char *px = malloc(2u * 1024 * 1024);
+            if (cf != NULL && px != NULL && fread(px, 1, 2u * 1024 * 1024, cf) == 2u * 1024 * 1024)
+                for (int t = 0; t < 2; t++)
+                {
+                    wj_glGenTextures(1, &sCloudTex[t]);
+                    wj_glBindTexture(GL_TEXTURE_2D, sCloudTex[t]);
+                    wj_glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+                    wj_glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1024, 1024, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, px + t * 1024 * 1024);
+                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                }
+            if (cf != NULL)
+                fclose(cf);
+            free(px);
+        }
     }
     // The voxel modules open "voxel/...": run from the folder that holds it.
     VoxelRegions_Init();
@@ -1636,7 +1680,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         }
         if (gVoxelGammaLight)
         {   /* backdrop in linear light, so the screen pass returns it unchanged in look */
-            r = r * r; g = g * g; b = b * b;
+            r = r * r / sExposure; g = g * g / sExposure; b = b * b / sExposure;
         }
         wj_glClearColor(r, g, b, 1.0f);
     }
