@@ -558,7 +558,8 @@ static void DrawFieldScene(double t, int outW, int outH)
     if (s3DFrame)
     {
         // The 3D world fills the screen; the UI layer goes over it below.
-        SDL_RenderCopy(sdlRenderer, sdl3DTexture, NULL, NULL);
+        SDL_Rect whole = {0, 0, outW, outH};
+        SDL_RenderCopy(sdlRenderer, sdl3DTexture, NULL, &whole);
     }
     else
     {
@@ -2256,7 +2257,13 @@ void VDraw(SDL_Texture *texture)
             SDL_RenderFlush(sdlRenderer);
             id = Voxel3D_TextureId(sdl3DTexture);
             if (id != 0)
+            {
+                SDL_Texture *was = SDL_GetRenderTarget(sdlRenderer);
                 s3DFrame = Voxel3D_Render(id, w, h);
+                // SDL caches its GL state: switching targets makes it send viewport and target again.
+                SDL_SetRenderTarget(sdlRenderer, sdl3DTexture);
+                SDL_SetRenderTarget(sdlRenderer, was);
+            }
         }
     }
     if (sFrameInfo.mode == WIDE_VIEW_FIELD && sdlUiTexture != NULL)

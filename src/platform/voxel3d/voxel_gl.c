@@ -55,6 +55,7 @@ void Voxel3D_Log(const char *fmt, ...);
     X(void, glDepthFunc, (GLenum)) \
     X(void, glDepthMask, (GLboolean)) \
     X(void, glBlendFunc, (GLenum, GLenum)) \
+    X(void, glBlendFuncSeparate, (GLenum, GLenum, GLenum, GLenum)) \
     X(void, glDrawArrays, (GLenum, GLint, GLsizei)) \
     X(void, glGetIntegerv, (GLenum, GLint *)) \
     X(void, glGetFloatv, (GLenum, GLfloat *)) \
@@ -188,7 +189,7 @@ static GLuint UploadTiled(GLuint tex, const uint16_t *tiled, unsigned w, unsigne
 // Shader: texture x the vertex's shade, alpha tested; a palette fade and distance haze on top.
 
 static GLuint sProgram;
-static GLint sUniAlphaMin, sUniMvp, sUniOrigin, sUniTex, sUniFade, sUniFog, sUniFogColor, sUniCam;
+static GLint sUniMode, sUniAlphaMin, sUniMvp, sUniOrigin, sUniTex, sUniFade, sUniFog, sUniFogColor, sUniCam;
 
 static const char *sVertexSrc =
     "#version 120\n"
@@ -214,6 +215,8 @@ static const char *sFragmentSrc =
     "#version 120\n"
     "uniform sampler2D tex;\n"
     "uniform float alphaMin;\n"
+    "uniform float mode;\n" // 0 solid, 1 shadow (shade = darkness), 2 reflection (half see-through)
+
     "uniform vec4 fade;\n"
     "uniform vec2 fog;\n"
     "uniform vec3 fogColor;\n"
@@ -228,6 +231,8 @@ static const char *sFragmentSrc =
     "  rgb = mix(rgb, fogColor, f * f);\n"
     "  rgb = mix(rgb, fade.rgb, fade.a);\n"
     "  gl_FragColor = vec4(rgb, 1.0);\n"
+    "  if (mode > 0.5 && mode < 1.5) gl_FragColor = vec4(0.0, 0.0, 0.0, vShade);\n"
+    "  if (mode > 1.5) gl_FragColor = vec4(c.rgb, 0.45);\n"
     "  if (alphaMin < -5.0) gl_FragColor = vec4(fract(vUv.x * 32.0), fract(vUv.y * 16.0), 0.0, 1.0);\n"
     "}\n";
 
@@ -276,6 +281,7 @@ static bool MakeProgram(void)
     sUniFade = wj_glGetUniformLocation(sProgram, "fade");
     sUniFog = wj_glGetUniformLocation(sProgram, "fog");
     sUniFogColor = wj_glGetUniformLocation(sProgram, "fogColor");
+    sUniMode = wj_glGetUniformLocation(sProgram, "mode");
     sUniCam = wj_glGetUniformLocation(sProgram, "cam");
     sUniAlphaMin = wj_glGetUniformLocation(sProgram, "alphaMin");
     return true;
@@ -793,7 +799,7 @@ static void Multiply(float *out, const float *a, const float *b)
 
 typedef struct
 {
-    GLint fbo, program, buffer, texture, active, viewport[4];
+    GLint fbo, program, buffer, texture, active, viewport[4], blend4[4];
     GLboolean depth, blend, cull, scissor;
     GLfloat clear[4];
 } SavedGl;
@@ -807,6 +813,10 @@ static void SaveGl(SavedGl *s)
     wj_glActiveTexture(GL_TEXTURE0);
     wj_glGetIntegerv(GL_TEXTURE_BINDING_2D, &s->texture);
     wj_glGetIntegerv(GL_VIEWPORT, s->viewport);
+    wj_glGetIntegerv(0x80C9 /* GL_BLEND_SRC_RGB */, &s->blend4[0]);
+    wj_glGetIntegerv(0x80C8 /* GL_BLEND_DST_RGB */, &s->blend4[1]);
+    wj_glGetIntegerv(0x80CB /* GL_BLEND_SRC_ALPHA */, &s->blend4[2]);
+    wj_glGetIntegerv(0x80CA /* GL_BLEND_DST_ALPHA */, &s->blend4[3]);
     wj_glGetFloatv(GL_COLOR_CLEAR_VALUE, s->clear);
     s->depth = wj_glIsEnabled(GL_DEPTH_TEST);
     s->blend = wj_glIsEnabled(GL_BLEND);
@@ -839,6 +849,7 @@ static void RestoreGl(const SavedGl *s)
     (s->cull ? wj_glEnable : wj_glDisable)(GL_CULL_FACE);
     (s->scissor ? wj_glEnable : wj_glDisable)(GL_SCISSOR_TEST);
     wj_glDepthMask(GL_TRUE);
+    wj_glBlendFuncSeparate(s->blend4[0], s->blend4[1], s->blend4[2], s->blend4[3]);
 }
 
 // ---------------------------------------------------------------------------
@@ -1044,6 +1055,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     wj_glDisable(GL_SCISSOR_TEST);
     wj_glUseProgram(sProgram);
     wj_glUniform1i(sUniTex, 0);
+    wj_glUniform1f(sUniMode, 0.0f);
     wj_glUniform1f(sUniAlphaMin, getenv("WJPC_3D_UV") ? -10.0f : getenv("WJPC_3D_NOALPHA") ? -1.0f : 0.5f);
     wj_glActiveTexture(GL_TEXTURE0);
     wj_glEnableVertexAttribArray(0);
@@ -1098,8 +1110,17 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     }
 
     // Shadows and reflections under the cards, then the cards.
+    // As on the 3DS: blended, without writing depth.
+    wj_glEnable(GL_BLEND);
+    wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    wj_glDepthMask(GL_FALSE);
+    wj_glUniform1f(sUniMode, 2.0f);
     MeshDraw(&sReflectMesh, sSpriteTex, 0, 0, 0);
+    wj_glUniform1f(sUniMode, 1.0f);
     MeshDraw(&sShadowMesh, sSpriteTex, 0, 0, 0);
+    wj_glDepthMask(GL_TRUE);
+    wj_glDisable(GL_BLEND);
+    wj_glUniform1f(sUniMode, 0.0f);
     MeshDraw(&sSpriteMesh, sSpriteTex, 0, 0, 0);
 
     if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
@@ -1108,6 +1129,15 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         GLint tw = 0, th = 0, target = 0;
         wj_glReadPixels(w / 2, h / 2, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, px);
         Voxel3D_Log("[3D]   centre pixel %u %u %u, GL error 0x%x", px[0], px[1], px[2], wj_glGetError());
+        if (getenv("WJPC_VOXEL_DUMP") != NULL)
+        {
+            unsigned char *all = malloc((size_t)w * h * 3);
+            FILE *f = fopen("fbo.ppm", "wb");
+            wj_glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            wj_glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, all);
+            if (f) { fprintf(f, "P6 %d %d 255\n", w, h); fwrite(all, 1, (size_t)w * h * 3, f); fclose(f); }
+            free(all);
+        }
     }
     RestoreGl(&saved);
     return true;
