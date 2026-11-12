@@ -17,7 +17,7 @@ static void ScriptMovement_UnfreezeActiveObjects(u8 taskId);
 static void ScriptMovement_MoveObjects(u8 taskId);
 static void ScriptMovement_TakeStep(u8 taskId, u8 moveScrId, u8 objEventId, const u8 *movementScript);
 
-static EWRAM_DATA const u8 *sMovementScripts[OBJECT_EVENTS_COUNT] = {0};
+static EWRAM_DATA const u8 *sMovementScripts[SCRIPT_MOVEMENT_SLOTS] = {0};
 
 bool8 ScriptMovement_StartObjectMovementScript(u8 localId, u8 mapNum, u8 mapGroup, const u8 *movementScript)
 {
@@ -40,7 +40,7 @@ bool8 ScriptMovement_IsObjectMovementFinished(u8 localId, u8 mapNum, u8 mapGroup
         return TRUE;
     taskId = GetMoveObjectsTaskId();
     moveScrId = GetMovementScriptIdFromObjectEventId(taskId, objEventId);
-    if (moveScrId == OBJECT_EVENTS_COUNT)
+    if (moveScrId == SCRIPT_MOVEMENT_SLOTS)
         return TRUE;
     return IsMovementScriptFinished(taskId, moveScrId);
 }
@@ -52,7 +52,7 @@ bool32 ScriptMovement_IsAllObjectMovementFinished(void)
     {
         u32 finishedMovements = gTasks[taskId].data[0];
         const u8 *objEventIds = (u8 *)&gTasks[taskId].data[1];
-        for (u32 i = 0; i < OBJECT_EVENTS_COUNT; i++)
+        for (u32 i = 0; i < SCRIPT_MOVEMENT_SLOTS; i++)
         {
             if (objEventIds[i] != 0xFF && !(finishedMovements & (1 << i)))
                 return FALSE;
@@ -94,7 +94,7 @@ static bool8 ScriptMovement_TryAddNewMovement(u8 taskId, u8 objEventId, const u8
     u8 moveScrId;
 
     moveScrId = GetMovementScriptIdFromObjectEventId(taskId, objEventId);
-    if (moveScrId != OBJECT_EVENTS_COUNT)
+    if (moveScrId != SCRIPT_MOVEMENT_SLOTS)
     {
         if (IsMovementScriptFinished(taskId, moveScrId) == 0)
         {
@@ -107,7 +107,7 @@ static bool8 ScriptMovement_TryAddNewMovement(u8 taskId, u8 objEventId, const u8
         }
     }
     moveScrId = GetMovementScriptIdFromObjectEventId(taskId, LOCALID_PLAYER);
-    if (moveScrId == OBJECT_EVENTS_COUNT)
+    if (moveScrId == SCRIPT_MOVEMENT_SLOTS)
     {
         return TRUE;
     }
@@ -124,12 +124,12 @@ static u8 GetMovementScriptIdFromObjectEventId(u8 taskId, u8 objEventId)
     u8 i;
 
     moveScriptId = (u8 *)&gTasks[taskId].data[1];
-    for (i = 0; i < OBJECT_EVENTS_COUNT; i++, moveScriptId++)
+    for (i = 0; i < SCRIPT_MOVEMENT_SLOTS; i++, moveScriptId++)
     {
         if (*moveScriptId == objEventId)
             return i;
     }
-    return OBJECT_EVENTS_COUNT;
+    return SCRIPT_MOVEMENT_SLOTS;
 }
 
 static void LoadObjectEventIdPtrFromMovementScript(u8 taskId, u8 moveScrId, u8 **pObjEventId)
@@ -202,7 +202,7 @@ static void ScriptMovement_UnfreezeActiveObjects(u8 taskId)
     u8 i;
 
     pObjEventId = (u8 *)&gTasks[taskId].data[1];
-    for (i = 0; i < OBJECT_EVENTS_COUNT; i++, pObjEventId++)
+    for (i = 0; i < SCRIPT_MOVEMENT_SLOTS; i++, pObjEventId++)
     {
         if (*pObjEventId != 0xFF)
             UnfreezeObjectEvent(&gObjectEvents[*pObjEventId]);
@@ -214,7 +214,7 @@ static void ScriptMovement_MoveObjects(u8 taskId)
     u8 i;
     u8 objEventId;
 
-    for (i = 0; i < OBJECT_EVENTS_COUNT; i++)
+    for (i = 0; i < SCRIPT_MOVEMENT_SLOTS; i++)
     {
         LoadObjectEventIdFromMovementScript(taskId, i, &objEventId);
         if (objEventId != 0xFF)
