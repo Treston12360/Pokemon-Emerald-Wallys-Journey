@@ -123,7 +123,10 @@ Lavaridge gym data (DLX-1), the Hex fix, DLX-7, or the lighting. Build a new Win
 `make -f Makefile.pc WIN=1`, regenerated voxel data (DLX-1 note), `gamma_clouds.bin`, and a second .bat with
 `WJPC_3D_GAMMALIGHT=1` so the owner can compare.
 
-### DLX-10 Encore: cursor on the forced move (ASK)
+### DLX-10 Encore: cursor on the forced move (Done - session 014PwRDj; owner 2026-11-12: "Yes, jump to the move")
+Done: `InitMoveSelectionsVarsAndStrings` (battle_controller_player.c) puts the cursor on `encoredMovePos` while
+Encored (GBA and PC). Tested on PC: cursor moved to slot 2, B, Fight -> back on the Encored move; without Encore
+it stays on slot 2.
 Offered: while Encored, the move cursor jumps to the locked move. No new wording.
 
 ### DLX-11 Trainer spotting with many people loaded (TODO)
@@ -137,6 +140,9 @@ still blank zoomed out.
 Find and fix corners like Dewford's (zoomed out shows bare filler). Show pictures.
 
 ### DLX-14 Sprite colour / graphics memory limits (TODO - owner 2026-11-12: "was supposed to be no limit on sprites color and graphics memory")
+Owner 2026-11-12: "Because we are a native windows code now we have no limitations and are allowed to change
+the rom however we want as long as the original .sav files are compatible or at the least importable" -> PC build:
+no sprite palette / sprite VRAM limits.
 Present a plan to raise the sprite palette and sprite VRAM limits before coding.
 
 ### DLX-15 Test on real Windows hardware (TODO, owner)

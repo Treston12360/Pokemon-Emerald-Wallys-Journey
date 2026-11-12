@@ -2354,6 +2354,13 @@ void PlayerHandleChooseMove(enum BattlerId battler)
 
 void InitMoveSelectionsVarsAndStrings(enum BattlerId battler)
 {
+    // Wally's Journey (DLX-10): while Encored, open the move menu on the locked move.
+    {
+        u32 encored = gBattleMons[battler].volatiles.encoredMove;
+        u32 pos = gBattleMons[battler].volatiles.encoredMovePos;
+        if (encored != MOVE_NONE && pos < MAX_MON_MOVES && gBattleMons[battler].moves[pos] == encored)
+            gMoveSelectionCursor[battler] = pos;
+    }
     LoadTypeIcons(battler);
 
     // start bwBattleUI
