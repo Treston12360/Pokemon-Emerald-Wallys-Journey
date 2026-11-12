@@ -49,8 +49,16 @@ trainers spotting. OBJ tile VRAM and OBJ palettes are NOT started: both are bitf
 (tileNum:10, paletteNum:4), so raising them needs a PC-side sprite tile/palette store the wide view reads instead
 of VRAM; design first.
 
+**Update 2026-11-12 (later):** PC save -> reload round trip passes (PC save also still opens in mGBA). Crowd test:
+Slateport market at 4K max zoom-out loads 22 people (old build drops part of the Team Aqua line). Random-input hunt
+found `script_movement.c` reading past its task data with 64 slots -> fixed (`SCRIPT_MOVEMENT_SLOTS` 16, both builds,
+ROM SHA unchanged); five 2500-press hunts after the fix: no skipped reads, up to 30 people. Merged into `deluxe`.
+Alpha 6 .exe (fast forward + limits) built with Ubuntu mingw-w64 gcc + official SDL2 2.30.9 / SDL2_image 2.8.2 MinGW
+packages (DLLs next to the exe), tested under Wine 10 Xvfb: 20x = 60 fps, 1200 game frames/s, no silence.
+Still untested: trainers spotting with extra people loaded (warp test spots in WJ's Route 110 didn't match the map).
+
 **Next, in order:**
-1. Finish testing `deluxe-limits` (above), merge, then tiles/palettes.
+1. Owner tries alpha 6. Then OBJ tiles/palettes (design first: OamData tileNum:10 / paletteNum:4).
 2. Finish and test the NPC limit (above), then sprites: `MAX_SPRITES` 64 -> e.g. 256 on PC (wide_view draws from
    gSprites, keys use & 0xFF so max 255; OAM buffer is 128). Then OBJ tile VRAM (32 KB) and OBJ palettes (16, the
    4-bit oam.paletteNum) need PC-side room. Playtest trainers spotting, followers, cutscenes, Wally's Ralts catch.
