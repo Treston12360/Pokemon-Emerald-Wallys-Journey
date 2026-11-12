@@ -80,7 +80,13 @@ enum
     MENUITEM_PC_WIDESCREEN,
     MENUITEM_PC_SMOOTH,
     MENUITEM_PC_FILTER,
-    MENUITEM_PC_LAST = MENUITEM_PC_FILTER,
+    MENUITEM_PC_LOCKASPECT,
+    MENUITEM_PC_BILINEAR,
+    MENUITEM_PC_INTERFRAME,
+    MENUITEM_PC_LOCKFRAME,
+    MENUITEM_PC_RESOLUTION,
+    MENUITEM_PC_ZOOM,
+    MENUITEM_PC_LAST = MENUITEM_PC_ZOOM,
     // Keyboard keys (enum KeyBind order): A opens "Press a key".
     MENUITEM_PC_KEY_FIRST,
     MENUITEM_PC_KEY_LAST = MENUITEM_PC_KEY_FIRST + KEYBIND_COUNT - 1,
@@ -241,7 +247,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 #ifdef PORTABLE
     [MENUITEM_PC_WINDOWSIZE] = COMPOUND_STRING("Window size"),
     [MENUITEM_PC_FULLSCREEN] = COMPOUND_STRING("Fullscreen"),
-    [MENUITEM_PC_SHARP]      = COMPOUND_STRING("Sharp pixels"),
+    [MENUITEM_PC_SHARP]      = COMPOUND_STRING("Integer scaling"),
     [MENUITEM_PC_VOLUME]     = COMPOUND_STRING("Volume"),
     [MENUITEM_PC_FFSPEED]    = COMPOUND_STRING("Fast forward"),
     [MENUITEM_PC_FFTOGGLE]   = COMPOUND_STRING("Fast fwd button"),
@@ -255,6 +261,12 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_PC_WIDESCREEN] = COMPOUND_STRING("Widescreen"),
     [MENUITEM_PC_SMOOTH]     = COMPOUND_STRING("Frame rate"),
     [MENUITEM_PC_FILTER]     = COMPOUND_STRING("Screen filter"),
+    [MENUITEM_PC_LOCKASPECT] = COMPOUND_STRING("Lock aspect ratio"),
+    [MENUITEM_PC_BILINEAR]   = COMPOUND_STRING("Bilinear filter"),
+    [MENUITEM_PC_INTERFRAME] = COMPOUND_STRING("Interframe blend"),
+    [MENUITEM_PC_LOCKFRAME]  = COMPOUND_STRING("Lock frame size"),
+    [MENUITEM_PC_RESOLUTION] = COMPOUND_STRING("Resolution"),
+    [MENUITEM_PC_ZOOM]       = COMPOUND_STRING("Zoom"),
     [MENUITEM_PC_SECTION_GAMEPLAY] = COMPOUND_STRING("Gameplay"),
     [MENUITEM_PC_SECTION_SPEED]    = COMPOUND_STRING("Speed & Looks"),
     [MENUITEM_PC_SECTION_CONTROLS] = COMPOUND_STRING("Controller"),
@@ -614,6 +626,12 @@ static void Task_OptionMenuProcessInput(u8 taskId)
         case MENUITEM_PC_WIDESCREEN:
         case MENUITEM_PC_SMOOTH:
         case MENUITEM_PC_FILTER:
+        case MENUITEM_PC_LOCKASPECT:
+        case MENUITEM_PC_BILINEAR:
+        case MENUITEM_PC_INTERFRAME:
+        case MENUITEM_PC_LOCKFRAME:
+        case MENUITEM_PC_RESOLUTION:
+        case MENUITEM_PC_ZOOM:
             PcOption_ProcessInput(SEL_ITEM(taskId));
             break;
 #endif
@@ -1133,10 +1151,18 @@ static const u8 sPcRowSetting[] =
     [MENUITEM_PC_WIDESCREEN - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_WIDESCREEN,
     [MENUITEM_PC_SMOOTH     - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_SMOOTH,
     [MENUITEM_PC_FILTER     - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_FILTER,
+    [MENUITEM_PC_LOCKASPECT - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_LOCK_ASPECT,
+    [MENUITEM_PC_BILINEAR   - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_SMOOTHING,
+    [MENUITEM_PC_INTERFRAME - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_INTERFRAME,
+    [MENUITEM_PC_LOCKFRAME  - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_LOCK_FRAME,
+    [MENUITEM_PC_RESOLUTION - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_RESOLUTION,
+    [MENUITEM_PC_ZOOM       - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_ZOOM,
 };
 #define PAD_MAX (PAD_BUTTON_COUNT - 1)
-static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static const u8 sPcRowMax[] = {12, 1, 1, 10, FF_SPEED_COUNT - 1, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1, FRAME_RATE_COUNT - 1, 2};
+static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                               0, 0, 0, 0, 0, 0};
+static const u8 sPcRowMax[] = {12, 1, 1, 10, FF_SPEED_COUNT - 1, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1, FRAME_RATE_COUNT - 1, 2,
+                               1, 1, 1, 1, 4, 7}; // lock aspect, bilinear, interframe, lock frame, resolution, zoom
 
 static void PcOption_ProcessInput(u8 item)
 {
@@ -1186,6 +1212,10 @@ static void PcOption_Draw(u8 item)
     case MENUITEM_PC_FULLSCREEN:
     case MENUITEM_PC_SHARP:
     case MENUITEM_PC_WIDESCREEN:
+    case MENUITEM_PC_LOCKASPECT:
+    case MENUITEM_PC_BILINEAR:
+    case MENUITEM_PC_INTERFRAME:
+    case MENUITEM_PC_LOCKFRAME:
         StringCopy(end, (value ? gText_BattleSceneOn : gText_BattleSceneOff) + 6);
         break;
     case MENUITEM_PC_VOLUME:
@@ -1203,6 +1233,15 @@ static void PcOption_Draw(u8 item)
         // Frames drawn per second; above 60 the extra ones are smooth in-between frames.
         end = ConvertIntToDecimalStringN(end, gPlatformFrameRates[value % FRAME_RATE_COUNT], STR_CONV_MODE_LEFT_ALIGN, 3);
         StringCopy(end, COMPOUND_STRING(" fps"));
+        break;
+    case MENUITEM_PC_RESOLUTION:
+    {
+        static const u8 sResNames[][8] = {_("Monitor"), _("720p"), _("1080p"), _("1440p"), _("4K")};
+        StringCopy(end, sResNames[value % 5]);
+        break;
+    }
+    case MENUITEM_PC_ZOOM: // shown 1 ... 8
+        ConvertIntToDecimalStringN(end, value + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
         break;
     case MENUITEM_PC_FILTER:
         StringCopy(end, value == 1 ? COMPOUND_STRING("Scanlines") : value == 2 ? COMPOUND_STRING("LCD") : COMPOUND_STRING("Off"));
@@ -1223,7 +1262,9 @@ static const u8 sPcSectionGameplay[] = {MENUITEM_TEXTSPEED, MENUITEM_BATTLESCENE
 static const u8 sPcSectionControls[] = {MENUITEM_BUTTONMODE, MENUITEM_PC_PAD_A, MENUITEM_PC_PAD_B, MENUITEM_PC_PAD_START,
     MENUITEM_PC_PAD_SELECT, MENUITEM_PC_PAD_L, MENUITEM_PC_PAD_R, MENUITEM_PC_PAD_FF};
 static const u8 sPcSectionAudio[] = {MENUITEM_SOUND, MENUITEM_PC_VOLUME};
-static const u8 sPcSectionVideo[] = {MENUITEM_PC_WINDOWSIZE, MENUITEM_PC_FULLSCREEN, MENUITEM_PC_SHARP, MENUITEM_PC_WIDESCREEN, MENUITEM_PC_SMOOTH, MENUITEM_PC_FILTER};
+static const u8 sPcSectionVideo[] = {MENUITEM_PC_WINDOWSIZE, MENUITEM_PC_FULLSCREEN, MENUITEM_PC_RESOLUTION, MENUITEM_PC_ZOOM,
+    MENUITEM_PC_LOCKASPECT, MENUITEM_PC_SHARP, MENUITEM_PC_BILINEAR, MENUITEM_PC_INTERFRAME, MENUITEM_PC_LOCKFRAME,
+    MENUITEM_PC_WIDESCREEN, MENUITEM_PC_SMOOTH, MENUITEM_PC_FILTER};
 
 static void PcMenu_AddRow(u8 item)
 {
