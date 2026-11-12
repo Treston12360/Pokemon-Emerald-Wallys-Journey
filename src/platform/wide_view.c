@@ -295,6 +295,12 @@ static u16 GetNearestBorderMetatile(s32 gx, s32 gy)
     return l->border[((lx + MAP_OFFSET + 1) & 1) + ((ly + MAP_OFFSET + 1) & 1) * 2] & MAPGRID_METATILE_ID_MASK;
 }
 
+// For the 3D view (voxel3d_pc.c): the filler metatile at map grid (gx, gy), same rule as above.
+u16 WideView_NearestBorderMetatile(s32 gx, s32 gy)
+{
+    return GetNearestBorderMetatile(gx, gy);
+}
+
 // Tile entry of BG `bg` (1-3) at grid tile (tx, ty) (8x8 units, map grid coords * 2).
 static u16 GetMapTileEntry(int bg, s32 tx, s32 ty)
 {

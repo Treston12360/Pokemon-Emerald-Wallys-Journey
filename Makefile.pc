@@ -79,7 +79,7 @@ endif
 
 # ---- sources -------------------------------------------------------------
 GBA_ONLY_C := src/platform/win32.c src/platform/gba_fast_draw.c src/platform/nostd.c src/multiboot.c
-C_SRCS := $(filter-out $(GBA_ONLY_C), $(wildcard src/*.c src/battle_transition/*.c src/platform/*.c))
+C_SRCS := $(filter-out $(GBA_ONLY_C), $(wildcard src/*.c src/battle_transition/*.c src/platform/*.c src/platform/voxel3d/*.c))
 C_OBJS := $(patsubst src/%.c,$(OBJ_DIR)/src/%.o,$(C_SRCS))
 
 DATA_SRCS := $(wildcard data/*.s)
@@ -109,6 +109,10 @@ all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CC) -m32 $(OBJS) $(SDL_LIBS) -o $@
+
+# The 3D overworld: Emerald 3DS's voxel modules (CC BY-NC-SA 4.0, src/platform/voxel3d/NOTICE.md)
+# with PC stand-ins for their console headers.
+$(OBJ_DIR)/src/platform/voxel3d/%.o: CPPFLAGS += -iquote src/platform/voxel3d -iquote src/platform/voxel3d/compat -DVOXEL_HOST_FILES -DCTR_VOXEL_LIGHTING=1
 
 $(OBJ_DIR)/src/%.o: src/%.c
 	@$(CC) -E $(CPPFLAGS) $(SDL_CFLAGS) -m32 -MMD -MF $(OBJ_DIR)/src/$*.d -MT $@ $< -o $(OBJ_DIR)/src/$*.i

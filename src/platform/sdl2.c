@@ -52,6 +52,12 @@ SDL_Renderer *sdlRenderer;
 SDL_Texture *sdlTexture;
 SDL_Texture *sdlOverlayTexture; // smooth motion: text layer drawn over the sliding map
 SDL_Texture *sdlUiTexture;      // UI layer (text boxes, menus, map name pop-up), drawn at its own scale
+// The 3D overworld (src/platform/voxel3d, "world3d=1" in WallysJourney.cfg or WJPC_3D=1): drawn
+// into this texture during the frame, under the UI layer, in place of the flat map.
+#include "../platform/voxel3d/voxel_gl.h"
+static bool s3DWanted, s3DReady, s3DFrame;
+static SDL_Texture *sdl3DTexture;
+static int s3DW, s3DH;
 #define SMOOTH_M WIDE_VIEW_SMOOTH_MARGIN
 #define TEX_W (WIDE_VIEW_MAX_W + 2 * SMOOTH_M)
 #define TEX_H (WIDE_VIEW_MAX_H + 2 * SMOOTH_M)
@@ -549,12 +555,20 @@ static void DrawFieldScene(double t, int outW, int outH)
     SDL_Rect full = {0, 0, cw + 2 * m, ch + 2 * m};
     SDL_FRect mapDest = {baseX + shiftX * z, baseY + shiftY * z, (float)full.w * z, (float)full.h * z};
     SDL_FRect stillDest = {baseX, baseY, (float)full.w * z, (float)full.h * z};
+    if (s3DFrame)
+    {
+        // The 3D world fills the screen; the UI layer goes over it below.
+        SDL_RenderCopy(sdlRenderer, sdl3DTexture, NULL, NULL);
+    }
+    else
+    {
     SDL_SetTextureScaleMode(sdlTexture, SDL_ScaleModeNearest);
     SDL_RenderCopyF(sdlRenderer, sdlTexture, &full, &mapDest);
     if (m > 0)
     {
         SDL_SetTextureScaleMode(sdlOverlayTexture, SDL_ScaleModeNearest);
         SDL_RenderCopyF(sdlRenderer, sdlOverlayTexture, &full, &stillDest);
+    }
     }
     if (sdlUiTexture != NULL)
     {
@@ -831,12 +845,33 @@ int main(int argc, char **argv)
 #ifdef __ANDROID__
     sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED);
 #else
+    if (getenv("WJPC_3D") != NULL)
+        s3DWanted = atoi(getenv("WJPC_3D")) != 0;
+    if (s3DWanted)
+        SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl"); // the 3D world draws with OpenGL in the same context
     sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_PRESENTVSYNC);
 #endif
     if (sdlRenderer == NULL)
     {
         DBGPRINTF("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         return 1;
+    }
+    if (s3DWanted)
+    {
+        // The 3D models (voxel/*.bin, *.rgba5551) live in a "voxel" folder next to the game.
+        char dir[600];
+        const char *env = getenv("WJPC_VOXEL_DIR");
+        if (env != NULL)
+            snprintf(dir, sizeof(dir), "%s", env);
+        else
+        {
+            char *base = SDL_GetBasePath();
+            snprintf(dir, sizeof(dir), "%svoxel", base != NULL ? base : "");
+            SDL_free(base);
+        }
+        s3DReady = Voxel3D_Init(dir);
+        if (!s3DReady)
+            fprintf(stderr, "3D world unavailable (OpenGL or %s missing): drawing the map flat\n", dir);
     }
 
     SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 255);
@@ -1247,6 +1282,8 @@ static void ReadConfigFile(void)
             sPlatformSettings[PLATFORM_SETTING_VOLUME] = value;
         else if (sscanf(line, "fastForward=%u", &value) == 1 && value < FF_SPEED_COUNT)
             sPlatformSettings[PLATFORM_SETTING_FF_SPEED] = value;
+        else if (sscanf(line, "world3d=%u", &value) == 1)
+            s3DWanted = value != 0;
         else if (sscanf(line, "widescreen=%u", &value) == 1)
             WideView_SetEnabled(value != 0);
         else if (strncmp(line, "key", 3) == 0)
@@ -1324,6 +1361,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "volume=%u\n", sPlatformSettings[PLATFORM_SETTING_VOLUME]);
     fprintf(configFile, "fastForward=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_SPEED]);
     fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
+    fprintf(configFile, "world3d=%u\n", s3DWanted ? 1 : 0);
     fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
     fprintf(configFile, "frameRate=%u\n", gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT]);
     fprintf(configFile, "filter=%u\n", sPlatformSettings[PLATFORM_SETTING_FILTER]);
@@ -2198,6 +2236,29 @@ void VDraw(SDL_Texture *texture)
     lastH = fullH;
     SDL_Rect area = {0, 0, fullW, fullH};
     SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32));
+    s3DFrame = false;
+    if (s3DReady && sFrameInfo.mode == WIDE_VIEW_FIELD)
+    {
+        // The 3D world, while the game thread still waits on this frame.
+        int w, h;
+        GetSceneSize(&w, &h);
+        if (sdl3DTexture == NULL || s3DW != w || s3DH != h)
+        {
+            if (sdl3DTexture != NULL)
+                SDL_DestroyTexture(sdl3DTexture);
+            sdl3DTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, w, h);
+            s3DW = w;
+            s3DH = h;
+        }
+        if (sdl3DTexture != NULL)
+        {
+            unsigned id;
+            SDL_RenderFlush(sdlRenderer);
+            id = Voxel3D_TextureId(sdl3DTexture);
+            if (id != 0)
+                s3DFrame = Voxel3D_Render(id, w, h);
+        }
+    }
     if (sFrameInfo.mode == WIDE_VIEW_FIELD && sdlUiTexture != NULL)
     {
         for (int i = 0; i < fullW * fullH; i++)
