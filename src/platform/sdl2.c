@@ -160,6 +160,7 @@ static struct WideViewFrame sFrameInfo = {DISPLAY_WIDTH, DISPLAY_HEIGHT, WIDE_VI
 // by a script:  "wait N" | "press KEYS N" | "shot PATH" | "quit"
 // KEYS: A B S(start) s(select) U D L R l r
 static FILE *sTestScript;
+static unsigned int sTestFfSpeed; // test script "ff N": fast forward without a clock (0/1 = off)
 static u16 sTestKeys;
 static int sTestHold;
 static u32 sTestFrame;
@@ -238,6 +239,13 @@ static bool TestStep(void)
             sTestKeys = TestKeyMask(arg1);
             sTestHold = (n > 0 ? n : 1) - 1;
             return true;
+        }
+        if (!strcmp(cmd, "ff"))
+        {
+            // ff N (test aid): fast forward N times, as the real loop does it: only every Nth
+            // frame is drawn and the sound engine runs once every N frames. "ff 0" = off.
+            sTestFfSpeed = atoi(arg1);
+            continue;
         }
         if (!strcmp(cmd, "winshot"))
         {
@@ -990,6 +998,10 @@ int main(int argc, char **argv)
                     sTestWinShot[0] = '\0';
                 }
             }
+            else if (sTestFfSpeed > 1 && sTestFrame % sTestFfSpeed != 0)
+            {
+                WideView_SkipFrame();
+            }
             else
             {
             WideView_SetSmooth(getenv("WJPC_SMOOTH_TEST") ? sTestOverlay : NULL, WIDE_VIEW_SMOOTH_MARGIN);
@@ -1031,12 +1043,28 @@ int main(int argc, char **argv)
 
             accumulator += deltaTime;
 
+            Uint64 batchStart = SDL_GetPerformanceCounter();
             while (accumulator >= dt)
             {
                 if (SDL_AtomicGet(&isFrameAvailable))
                 {
-                    VDraw(sdlTexture);
-                    sDrewFrame = true;
+                    // Fast forward runs several game frames per picture. Only the last one of the
+                    // batch is drawn (drawing is most of the work); the others just keep the
+                    // per-line timing going. If this PC can't reach the chosen speed, stop after
+                    // about one screen refresh, show that frame and forget the backlog, so the
+                    // picture stays smooth and the game runs as fast as the PC manages.
+                    bool lastOfBatch = accumulator - dt < dt;
+                    bool outOfTime = speedUp && (SDL_GetPerformanceCounter() - batchStart) * 1000 / SDL_GetPerformanceFrequency() >= 14;
+                    if (!speedUp || lastOfBatch || outOfTime)
+                    {
+                        VDraw(sdlTexture);
+                        sDrewFrame = true;
+                    }
+                    else
+                    {
+                        WideView_SkipFrame();
+                        REG_VCOUNT = 161;
+                    }
                     sGameFramesCounted++;
                     SDL_AtomicSet(&isFrameAvailable, 0);
 
@@ -1056,6 +1084,11 @@ int main(int argc, char **argv)
             SDL_SemPost(vBlankSemaphore);
 
                     accumulator -= dt;
+                    if (outOfTime)
+                    {
+                        accumulator = 0;
+                        break;
+                    }
                 }
             }
         }
@@ -1375,9 +1408,9 @@ void Platform_QueueAudio(float *audioBuffer, s32 samplesPerFrame)
         float volume = sPlatformSettings[PLATFORM_SETTING_VOLUME] / 10.0f;
         for (int i = 0; i < floatCount; i++)
             adjustedAudio[i] = audioBuffer[i] * volume;
-        // Fast-forward: drop the sound instead of piling it up. Normal speed:
-        // never let more than ~1/4 s queue up, so sound stays in sync.
-        if (speedUp || SDL_GetQueuedAudioSize(sdlAudioDevice) > 42060 * 2 * sizeof(float) / 4)
+        // Never let more than ~1/4 s queue up, so sound stays in sync. (Fast forward no longer
+        // drops sound: the sound engine itself only runs at normal speed, see Platform_SoundFrameDue.)
+        if (SDL_GetQueuedAudioSize(sdlAudioDevice) > 42060 * 2 * sizeof(float) / 4)
             return;
         if (SDL_QueueAudio(sdlAudioDevice, adjustedAudio, samplesPerFrame) < 0)
             SDL_Log("Failed to queue audio: %s", SDL_GetError());
@@ -2001,17 +2034,47 @@ static void ApplyFastForward(void)
 
     if (on != speedUp || scale != timeScale)
     {
-        bool wasOn = speedUp;
+        // The sound keeps playing: the game runs faster, the sound engine stays at normal speed.
         speedUp = on;
         timeScale = scale;
-        if (on && !wasOn)
-            SDL_PauseAudioDevice(sdlAudioDevice, 1);
-        else if (!on && wasOn)
-        {
-            SDL_ClearQueuedAudio(sdlAudioDevice);
-            SDL_PauseAudioDevice(sdlAudioDevice, 0);
-        }
     }
+}
+
+// Fast forward keeps the music at its normal speed and pitch: the game runs N frames in the time
+// of one, but the sound engine (sequencer + mixer) only runs often enough to keep the sound card
+// fed in real time. Called once per game frame by m4aSoundMain; m4aSoundVSync asks
+// Platform_SoundFrameSkipped whether that frame made any sound.
+static bool sSoundFrameSkipped;
+static unsigned int sTestFfFrame;
+
+bool8 Platform_SoundFrameDue(void)
+{
+    bool due = true;
+
+    if (sTestScript != NULL)
+    {
+        // Scripts run without a clock: exactly one sound frame every N game frames.
+        if (sTestFfSpeed > 1 && !getenv("WJPC_FF_NOSOUNDGATE"))
+            due = (sTestFfFrame++ % sTestFfSpeed) == 0;
+    }
+    else if (speedUp && sdlAudioDevice != 0)
+    {
+        // Real time: make a sound frame only while less than ~50 ms is waiting to be played.
+        due = SDL_GetQueuedAudioSize(sdlAudioDevice) < 2048 * 2 * sizeof(float);
+    }
+    else if (speedUp)
+    {
+        // No sound card: one sound frame every N game frames.
+        unsigned int n = (unsigned int)(timeScale + 0.5);
+        due = n < 2 || (sTestFfFrame++ % n) == 0;
+    }
+    sSoundFrameSkipped = !due;
+    return due;
+}
+
+bool8 Platform_SoundFrameSkipped(void)
+{
+    return sSoundFrameSkipped;
 }
 
 bool8 WJPC_LockRandom(void)

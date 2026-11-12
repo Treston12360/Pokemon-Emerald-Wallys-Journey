@@ -751,7 +751,9 @@ void m4aSoundVSync(void)
 {
     struct SoundMixerState *mixer = (struct SoundMixerState *)SOUND_INFO_PTR;
 #ifdef PORTABLE
-    if(mixer->lockStatus-PLAYER_UNLOCKED <= 1)
+    extern bool8 Platform_SoundFrameSkipped(void);
+    // Fast forward: no new sound was made for this game frame, nothing to send.
+    if(mixer->lockStatus-PLAYER_UNLOCKED <= 1 && !Platform_SoundFrameSkipped())
     {
         s32 samplesPerFrame = mixer->samplesPerFrame * 2;
         float *m4aBuffer = mixer->outBuffer;

@@ -1022,6 +1022,28 @@ static void DrawFieldFrame(uint16_t *out)
     }
 }
 
+// A game frame that is not shown (fast forward): no drawing, but the per-line work the game
+// hangs on a frame still runs (line-count interrupt = sound, HBlank copies and HBlank interrupt).
+void WideView_SkipFrame(void)
+{
+    for (int gl = 0; gl < DISPLAY_HEIGHT; gl++)
+    {
+        REG_VCOUNT = gl;
+        if (((REG_DISPSTAT >> 8) & 0xFF) == REG_VCOUNT)
+        {
+            REG_DISPSTAT |= INTR_FLAG_VCOUNT;
+            if (REG_DISPSTAT & DISPSTAT_VCOUNT_INTR)
+                PcGuard_Call0(gIntrTable[0]);
+        }
+        REG_DISPSTAT |= INTR_FLAG_HBLANK;
+        RunDMAs(DMA_HBLANK);
+        if (REG_DISPSTAT & DISPSTAT_HBLANK_INTR)
+            PcGuard_Call0(gIntrTable[3]);
+        REG_DISPSTAT &= ~INTR_FLAG_HBLANK;
+        REG_DISPSTAT &= ~INTR_FLAG_VCOUNT;
+    }
+}
+
 void WideView_DrawFrame(uint16_t *out, struct WideViewFrame *frame)
 {
     static uint16_t gba[DISPLAY_WIDTH * DISPLAY_HEIGHT];

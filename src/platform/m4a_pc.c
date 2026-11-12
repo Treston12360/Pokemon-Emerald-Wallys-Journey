@@ -120,7 +120,10 @@ void m4aSoundMain(void)
 #ifndef PORTABLE
     SoundMain();
 #else
-    RunMixerFrame();
+    // Fast forward: the sound engine stays at normal speed (see sdl2.c).
+    extern bool8 Platform_SoundFrameDue(void);
+    if (Platform_SoundFrameDue())
+        RunMixerFrame();
 #endif
 }
 

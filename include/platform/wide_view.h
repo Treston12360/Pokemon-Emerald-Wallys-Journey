@@ -44,6 +44,8 @@ void WideView_SetSmooth(uint16_t *overlay, int margin);
 // Renders the current frame. `out` must hold (WIDE_VIEW_MAX_W + 2*margin) * (WIDE_VIEW_MAX_H + 2*margin) pixels
 // (BGR555). Runs the per-line VCount/HBlank work exactly like DrawFrame.
 void WideView_DrawFrame(uint16_t *out, struct WideViewFrame *frame);
+// Run a game frame's per-line timing without drawing it (fast forward).
+void WideView_SkipFrame(void);
 
 void WideView_SetEnabled(bool enabled);
 bool WideView_IsEnabled(void);
