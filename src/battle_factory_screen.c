@@ -259,6 +259,13 @@ static struct FactorySwapScreen *sFactorySwapScreen;
 COMMON_DATA u8 (*gFactorySelect_CurrentOptionFunc)(void) = NULL;
 
 static const u16 sPokeballGray_Pal[]         = INCGFX_U16("graphics/battle_frontier/factory_screen/pokeball_gray.pal", ".gbapal");
+// Original Emerald reads color 37 of this 16-color palette (past its end). The GBA ROM has 0 there;
+// on PC the memory after it is something else, so use the GBA's value.
+#ifdef PORTABLE
+#define POKEBALL_GRAY_PAL_37 0
+#else
+#define POKEBALL_GRAY_PAL_37 sPokeballGray_Pal[37]
+#endif
 static const u16 sPokeballSelected_Pal[]     = INCGFX_U16("graphics/battle_frontier/factory_screen/pokeball_selected.pal", ".gbapal");
 static const u16 sInterface_Pal[]            = INCGFX_U16("graphics/battle_frontier/factory_screen/interface.pal", ".gbapal"); // Arrow, menu/action highlights, action box, etc
 static const u8 sPokeball_Gfx[]              = INCGFX_U8("graphics/battle_frontier/factory_screen/pokeball.png", ".4bpp"); // Unused, gPokeballSelection_Gfx used instead
@@ -2971,7 +2978,7 @@ static void Swap_Task_ScreenInfoTransitionOut(u8 taskId)
         gTasks[taskId].tState++;
         break;
     case 2:
-        BeginNormalPaletteFade(1 << PALNUM_FADE_TEXT, 0, 0, 16, sPokeballGray_Pal[37]);
+        BeginNormalPaletteFade(1 << PALNUM_FADE_TEXT, 0, 0, 16, POKEBALL_GRAY_PAL_37);
         gTasks[taskId].tState++;
         break;
     case 3:
@@ -3092,14 +3099,14 @@ static void Swap_Task_ScreenInfoTransitionIn(u8 taskId)
         if (gTasks[taskId].tSlideFinishedPkmn == TRUE
          && gTasks[taskId].tSlideFinishedCancel == TRUE)
         {
-            gPlttBufferFaded[BG_PLTT_ID(PALNUM_FADE_TEXT) + 2] = sPokeballGray_Pal[37];
+            gPlttBufferFaded[BG_PLTT_ID(PALNUM_FADE_TEXT) + 2] = POKEBALL_GRAY_PAL_37;
             Swap_PrintActionStrings();
             PutWindowTilemap(SWAP_WIN_ACTION_FADE);
             gTasks[taskId].tState++;
         }
         break;
     case 3:
-        BeginNormalPaletteFade(1 << PALNUM_FADE_TEXT, 0, 16, 0, sPokeballGray_Pal[37]);
+        BeginNormalPaletteFade(1 << PALNUM_FADE_TEXT, 0, 16, 0, POKEBALL_GRAY_PAL_37);
         gTasks[taskId].tState++;
         break;
     case 4:

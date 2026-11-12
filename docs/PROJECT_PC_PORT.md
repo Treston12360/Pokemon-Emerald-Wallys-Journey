@@ -222,3 +222,7 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   true for clang, so every RandomPercentage(tag, t) was a 50% roll on PC since alpha 4 (first clang build).
   Measured with script `pcttest`: 0%:4980/10000 before, 0 after; 30%: 4983 -> 3061. PC-only fix in
   metaprogram.h. Sent as alpha 5b.
+
+- Full check, found by a clang warning scan: Battle Factory swap screen reads color 37 of the 16-color
+  `sPokeballGray_Pal` (past the end) in 3 places. The GBA ROM has 0 there; PC read whatever came next in
+  memory, so a fade could use a wrong color. PC now uses 0 (`POKEBALL_GRAY_PAL_37`). Release SHA unchanged.
