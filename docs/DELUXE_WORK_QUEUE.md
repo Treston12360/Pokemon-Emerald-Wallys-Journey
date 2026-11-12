@@ -197,9 +197,18 @@ Owner: "just load everything so nothing has to pop in". Preload connected maps' 
 trees ahead of the border (map meshes are already built one a frame; the edge scenery rebuild is
 DLX-7). People on neighbouring maps should already be drawn.
 
-### DLX-19 3D: Lavaridge gym sign folded in half; check the gym door (TODO)
+### DLX-19 3D: Lavaridge gym sign folded in half; check the gym door (PART DONE - session 014PwRDj, 2026-11-12)
 The new gym model (DLX-1) shows the sign bent. The model is visual only, but confirm in game that
 the door still leads into Lavaridge's gym.
+- Door: checked in 3D (Wine): walking up from (5,17) enters Lavaridge Gym 1F (Flannery). OK.
+- Sign: cannot be reproduced here - the bent sign is in session 019khs4X's gym model, whose data is not in git.
+  Needs that session (or its data + spec) to fix the model.
+- Tried to regenerate 3D data from our tree (3ds_port, not in git): regions/signposts OK; relief OK after a guard in
+  voxel_terraces._lay_rough; buildings OK after guards (71 models skipped, 4 unplaced; missing tileset anim
+  .4bpp made with gbagfx). Result: our layouts are right (Slateport, Lavaridge match 2D) but NO buildings are
+  drawn (shadows only) and magenta faces appear - the generated buildings.bin does not draw with our loader.
+  Found on the way (committed): MAX_PAGES 512 -> 1024 (our-tree data has 564 pages); season reload re-uploads
+  building pages into the same texture (meshes keep the handle).
 
 ## How to build and test (short)
 - Linux: `make -f Makefile.pc -j3`; Windows: `make -f Makefile.pc WIN=1`.

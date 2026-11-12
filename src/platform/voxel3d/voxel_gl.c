@@ -530,18 +530,26 @@ static Atlas *GetAtlas(const VoxelMapInstance *inst)
 // ---------------------------------------------------------------------------
 // Building pages and the big static models.
 
-#define MAX_PAGES 512
+#define MAX_PAGES 1024 // data generated from our own maps has more than 512 pages
 static GLuint sPageTex[MAX_PAGES];
 static uint16_t *sPageScratch;
 static size_t sPageScratchSize;
 
+static GLuint LoadBuildingPage(int page, bool reload);
 static GLuint BuildingPage(int page)
+{
+    return LoadBuildingPage(page, false);
+}
+
+// reload: read the page again into the texture it already has (DLX-17: season change), so meshes that keep
+// its handle stay right.
+static GLuint LoadBuildingPage(int page, bool reload)
 {
     unsigned w, h, th;
 
     if (page < 0 || page >= MAX_PAGES)
         return 0;
-    if (sPageTex[page] != 0)
+    if (sPageTex[page] != 0 && !reload)
         return sPageTex[page];
     if (!VoxelBuildings_PageSize((unsigned)page, &w, &h, &th))
         return 0;
@@ -556,7 +564,7 @@ static GLuint BuildingPage(int page)
     if (!VoxelBuildings_ReadPage((unsigned)page, 0, w * h, sPageScratch))
         return 0;
     VoxelWorld_SeasonTexels(sPageScratch, (size_t)w * h); // DLX-17 (after ReadPage's grading)
-    sPageTex[page] = UploadTiled(0, sPageScratch, w, th);
+    sPageTex[page] = UploadTiled(sPageTex[page], sPageScratch, w, th);
     return sPageTex[page];
 }
 
@@ -1491,10 +1499,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 LoadTrees();
             for (int p = 0; p < MAX_PAGES; p++)
                 if (sPageTex[p] != 0)
-                {
-                    wj_glDeleteTextures(1, &sPageTex[p]);
-                    sPageTex[p] = 0;
-                }
+                    LoadBuildingPage(p, true); // same texture, new colours
             sTexSeason = season;
         }
     }
