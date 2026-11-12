@@ -34,7 +34,7 @@ The 3D model comes from Emerald 3DS's generator (`gym()` in `voxel_building_spec
 vs `warp 0 11 ...`) and to Emerald 3DS screenshots; find why Lavaridge's is drawn flatter (wrong model
 picked, art differs from vanilla so the model did not match, or the roof is drawn as ground).
 
-### DLX-2 Continue screen: shiny Pokemon icons (TODO, `deluxe` too)
+### DLX-2 Continue screen: shiny Pokemon icons (WIP - session 014PwRDj, 2026-11-12 10:35, `deluxe` too)
 On the title screen's Continue/save summary, party icons of shiny Pokemon must use their shiny colours.
 
 ### DLX-3 Smooth battles and menus (TODO, approved "option 1")
