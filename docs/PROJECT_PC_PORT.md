@@ -1,6 +1,7 @@
 # Project: Wally's Journey as a PC program (.exe)
 
 ## START HERE: handoff for a new chat (2026-11-12)
+**Open work list: `docs/DELUXE_WORK_QUEUE.md` (items DLX-1 ... DLX-16).**
 Read this section, then the rest of the file. Repo `Treston12360/Pokemon-Emerald-Wallys-Journey`, PC branch `deluxe`.
 Another Claude session may also push to `deluxe`: always `git pull --rebase` before pushing.
 
