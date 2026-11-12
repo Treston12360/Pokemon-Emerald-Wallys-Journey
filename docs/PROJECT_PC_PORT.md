@@ -1,7 +1,7 @@
 # Project: Wally's Journey as a PC program (.exe)
 
 **Branch:** `deluxe` (PC work started on `pc-port`) (based on 0.18.19). Read this whole file before working on the PC version.
-**Status (2026-11-11):** alpha 4g (wide view) sent to the owner as `WallysJourney.exe`, tested under Wine 10
+**Status (2026-11-11):** alpha 5 (wide view) sent to the owner as `WallysJourney.exe`, tested under Wine 10
 (Kron4ek WoW64 build from GitHub releases + Xvfb). Steps 1 (PC settings) and 2 (widescreen) are done.
 **Next: step 3 (smooth high frame rate).**
 
