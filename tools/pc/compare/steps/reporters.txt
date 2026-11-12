@@ -1,0 +1,624 @@
+# Test save (wj_testfw scenarios/rep42.json): Lv42 Groudon on Route 111 below Gabby & Ty (Lv40 team). Battle them and read the EXP message.
+1300
+5 A
+150
+5 A
+150
+5 A
+400
+shot mainmenu 30
+5 A
+500
+shot field_msg
+5 A
+60
+5 A
+60
+5 B
+60
+shot field
+sync
+5 U
+60
+5 U
+60
+5 A
+55
+shot e1 1
+5 A
+55
+shot e2 1
+5 A
+55
+shot e3 1
+5 A
+55
+shot e4 1
+5 A
+55
+shot e5 1
+5 A
+55
+shot e6 1
+5 A
+55
+shot e7 1
+5 A
+55
+shot e8 1
+5 A
+55
+shot e9 1
+5 A
+55
+shot e10 1
+5 A
+55
+shot e11 1
+5 A
+55
+shot e12 1
+5 A
+55
+shot e13 1
+5 A
+55
+shot e14 1
+5 A
+55
+shot e15 1
+5 A
+55
+shot e16 1
+5 A
+55
+shot e17 1
+5 A
+55
+shot e18 1
+5 A
+55
+shot e19 1
+5 A
+55
+shot e20 1
+5 A
+55
+shot e21 1
+5 A
+55
+shot e22 1
+5 A
+55
+shot e23 1
+5 A
+55
+shot e24 1
+5 A
+55
+shot e25 1
+5 A
+55
+shot e26 1
+5 A
+55
+shot e27 1
+5 A
+55
+shot e28 1
+5 A
+55
+shot e29 1
+5 A
+55
+shot e30 1
+5 A
+55
+shot e31 1
+5 A
+55
+shot e32 1
+5 A
+55
+shot e33 1
+5 A
+55
+shot e34 1
+5 A
+55
+shot e35 1
+5 A
+55
+shot e36 1
+5 A
+55
+shot e37 1
+5 A
+55
+shot e38 1
+5 A
+55
+shot e39 1
+5 A
+55
+shot e40 1
+5 A
+55
+shot e41 1
+5 A
+55
+shot e42 1
+5 A
+55
+shot e43 1
+5 A
+55
+shot e44 1
+5 A
+55
+shot e45 1
+5 A
+55
+shot e46 1
+5 A
+55
+shot e47 1
+5 A
+55
+shot e48 1
+5 A
+55
+shot e49 1
+5 A
+55
+shot e50 1
+5 A
+55
+shot e51 1
+5 A
+55
+shot e52 1
+5 A
+55
+shot e53 1
+5 A
+55
+shot e54 1
+5 A
+55
+shot e55 1
+5 A
+55
+shot e56 1
+5 A
+55
+shot e57 1
+5 A
+55
+shot e58 1
+5 A
+55
+shot e59 1
+5 A
+55
+shot e60 1
+5 A
+55
+shot e61 1
+5 A
+55
+shot e62 1
+5 A
+55
+shot e63 1
+5 A
+55
+shot e64 1
+5 A
+55
+shot e65 1
+5 A
+55
+shot e66 1
+5 A
+55
+shot e67 1
+5 A
+55
+shot e68 1
+5 A
+55
+shot e69 1
+5 A
+55
+shot e70 1
+5 A
+55
+shot e71 1
+5 A
+55
+shot e72 1
+5 A
+55
+shot e73 1
+5 A
+55
+shot e74 1
+5 A
+55
+shot e75 1
+5 A
+55
+shot e76 1
+5 A
+55
+shot e77 1
+5 A
+55
+shot e78 1
+5 A
+55
+shot e79 1
+5 A
+55
+shot e80 1
+5 A
+55
+shot e81 1
+5 A
+55
+shot e82 1
+5 A
+55
+shot e83 1
+5 A
+55
+shot e84 1
+5 A
+55
+shot e85 1
+5 A
+55
+shot e86 1
+5 A
+55
+shot e87 1
+5 A
+55
+shot e88 1
+5 A
+55
+shot e89 1
+5 A
+55
+shot e90 1
+5 A
+55
+shot e91 1
+5 A
+55
+shot e92 1
+5 A
+55
+shot e93 1
+5 A
+55
+shot e94 1
+5 A
+55
+shot e95 1
+5 A
+55
+shot e96 1
+5 A
+55
+shot e97 1
+5 A
+55
+shot e98 1
+5 A
+55
+shot e99 1
+5 A
+55
+shot e100 1
+5 A
+55
+shot e101 1
+5 A
+55
+shot e102 1
+5 A
+55
+shot e103 1
+5 A
+55
+shot e104 1
+5 A
+55
+shot e105 1
+5 A
+55
+shot e106 1
+5 A
+55
+shot e107 1
+5 A
+55
+shot e108 1
+5 A
+55
+shot e109 1
+5 A
+55
+shot e110 1
+5 A
+55
+shot e111 1
+5 A
+55
+shot e112 1
+5 A
+55
+shot e113 1
+5 A
+55
+shot e114 1
+5 A
+55
+shot e115 1
+5 A
+55
+shot e116 1
+5 A
+55
+shot e117 1
+5 A
+55
+shot e118 1
+5 A
+55
+shot e119 1
+5 A
+55
+shot e120 1
+5 A
+55
+shot e121 1
+5 A
+55
+shot e122 1
+5 A
+55
+shot e123 1
+5 A
+55
+shot e124 1
+5 A
+55
+shot e125 1
+5 A
+55
+shot e126 1
+5 A
+55
+shot e127 1
+5 A
+55
+shot e128 1
+5 A
+55
+shot e129 1
+5 A
+55
+shot e130 1
+5 A
+55
+shot e131 1
+5 A
+55
+shot e132 1
+5 A
+55
+shot e133 1
+5 A
+55
+shot e134 1
+5 A
+55
+shot e135 1
+5 A
+55
+shot e136 1
+5 A
+55
+shot e137 1
+5 A
+55
+shot e138 1
+5 A
+55
+shot e139 1
+5 A
+55
+shot e140 1
+5 A
+55
+shot e141 1
+5 A
+55
+shot e142 1
+5 A
+55
+shot e143 1
+5 A
+55
+shot e144 1
+5 A
+55
+shot e145 1
+5 A
+55
+shot e146 1
+5 A
+55
+shot e147 1
+5 A
+55
+shot e148 1
+5 A
+55
+shot e149 1
+5 A
+55
+shot e150 1
+5 A
+55
+shot e151 1
+5 A
+55
+shot e152 1
+5 A
+55
+shot e153 1
+5 A
+55
+shot e154 1
+5 A
+55
+shot e155 1
+5 A
+55
+shot e156 1
+5 A
+55
+shot e157 1
+5 A
+55
+shot e158 1
+5 A
+55
+shot e159 1
+5 A
+55
+shot e160 1
+5 A
+55
+shot e161 1
+5 A
+55
+shot e162 1
+5 A
+55
+shot e163 1
+5 A
+55
+shot e164 1
+5 A
+55
+shot e165 1
+5 A
+55
+shot e166 1
+5 A
+55
+shot e167 1
+5 A
+55
+shot e168 1
+5 A
+55
+shot e169 1
+5 A
+55
+shot e170 1
+5 A
+55
+shot e171 1
+5 A
+55
+shot e172 1
+5 A
+55
+shot e173 1
+5 A
+55
+shot e174 1
+5 A
+55
+shot e175 1
+5 A
+55
+shot e176 1
+5 A
+55
+shot e177 1
+5 A
+55
+shot e178 1
+5 A
+55
+shot e179 1
+5 A
+55
+shot e180 1
+5 A
+55
+shot e181 1
+5 A
+55
+shot e182 1
+5 A
+55
+shot e183 1
+5 A
+55
+shot e184 1
+5 A
+55
+shot e185 1
+5 A
+55
+shot e186 1
+5 A
+55
+shot e187 1
+5 A
+55
+shot e188 1
+5 A
+55
+shot e189 1
+5 A
+55
+shot e190 1
+5 A
+55
+shot e191 1
+5 A
+55
+shot e192 1
+5 A
+55
+shot e193 1
+5 A
+55
+shot e194 1
+5 A
+55
+shot e195 1
+5 A
+55
+shot e196 1
+5 A
+55
+shot e197 1
+5 A
+55
+shot e198 1
+5 A
+55
+shot e199 1
+5 A
+55
+shot e200 1

@@ -240,3 +240,6 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   graphics work spans more than one frame), so a per-frame lock resets the RNG in the middle of the GBA's work
   and makes false differences. Use "sync" right before each input instead, with long waits (steps/gym_battle.txt).
 - Game Corner: the left gacha spot shows a tall magenta column on BOTH GBA and PC (not a port bug; told the owner).
+- Owner asked (2026-11-11) whether the reporters (Gabby & Ty) give too little EXP on PC. Checked on both
+  (scenarios/rep42.json, steps/reporters.txt): Lv40 Magnezone + Exploud vs Lv42 Groudon/Kyogre gave 102 and 93 EXP
+  each and ₽1600 on BOTH. Low EXP is the 5% rule the owner asked for on 2026-11-11 (main branch), not a PC bug.
