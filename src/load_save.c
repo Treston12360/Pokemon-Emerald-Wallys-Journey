@@ -1,4 +1,5 @@
 #include "global.h"
+#include "text.h"
 #include "wally_bag.h"
 #include "malloc.h"
 #include "berry_powder.h"
@@ -131,6 +132,7 @@ void MoveSaveBlocks_ResetHeap(void)
 
     // heap was destroyed in the copying process, so reset it
     InitHeap(gHeap, HEAP_SIZE);
+    ForgetTextPrintersAfterHeapReset();
 
     // restore interrupt functions
     gMain.hblankCallback = hblankCB;

@@ -425,6 +425,14 @@ bool32 IsPlayerTextSpeedInstant(void)
     return GetPlayerTextSpeed() == OPTIONS_TEXT_SPEED_INSTANT;
 }
 
+// The printers live in the heap (Alloc). When the heap is wiped (MoveSaveBlocks_ResetHeap on every map load,
+// ReloadSave), any printer still in the list is gone with it: forget the list, or the next map's
+// DeactivateAllTextPrinters walks freed memory (garbage writes on the GBA, a crash on PC).
+void ForgetTextPrintersAfterHeapReset(void)
+{
+    sFirstTextPrinter = NULL;
+}
+
 void DeactivateAllTextPrinters(void)
 {
     struct TextPrinter *currentPrinter = sFirstTextPrinter;

@@ -199,6 +199,7 @@ extern bool8 gDisableTextPrinters;
 extern struct TextGlyph gCurGlyph;
 
 void DeactivateAllTextPrinters(void);
+void ForgetTextPrintersAfterHeapReset(void);
 void DeactivateSingleTextPrinter(u32 id, enum TextPrinterType type);
 u16 AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 speed, TextPrinterCallback callback);
 u16 AddSpriteTextPrinterParameterized(u8 spriteId, u8 fontId, const u8 *str, u8 x, u8 y, u8 speed, TextPrinterCallback callback);

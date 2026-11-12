@@ -374,3 +374,9 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
 - --pc-only sweep after merging the other session's work (64 objects / 128 sprites, zoom, UI layer): all 18 step
   files clean after the fixes above. Frozen GBA reference rebuilt (/home/claude/frozen) because Route 106 changed
   the ROM (owner rule change 2026-11-12).
+- FOUND + FIXED (both builds, GBA ROM changes - allowed since 2026-11-12): text printers are allocated in the heap
+  (text.c AllocateTextPrinter), but every map load wipes the heap (MoveSaveBlocks_ResetHeap) without forgetting
+  the printer list. A message still on screen during a warp left sFirstTextPrinter pointing into overwritten
+  memory; the next map's DeactivateAllTextPrinters walked it (PC crash in CB2_LoadMap2, GBA writes to garbage
+  addresses). Now ForgetTextPrintersAfterHeapReset() after InitHeap in MoveSaveBlocks_ResetHeap and ReloadSave.
+  Found with a warp test script (test warp while a message was open); normal scripts close messages first.
