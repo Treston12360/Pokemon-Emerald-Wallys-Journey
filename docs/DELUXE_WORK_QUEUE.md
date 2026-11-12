@@ -20,6 +20,14 @@ Fix: Emerald 3DS had no exterior model for Lavaridge's gym. Added spec `lavaridg
 (rect (2, 11, 6, 5), `parts: gym`, `match_rows (0, 4)`, ground GRASS) before `dewford_gym_exterior` in
 `voxel_building_specs.py`, regenerated `buildings.bin` and `relief.bin`. Picture sent 2026-11-12.
 Not in a build yet.
+Second session (2026-11-12): the fix above lives only in the first session's workspace (spec + regenerated
+.bin files are not in the repo, and the voxel data folder is not in the repo either). Rebuilt from scratch here:
+`voxel/*.bin` from Emerald 3DS's own builder on a vanilla Emerald ROM (vtree.build_tree + the generators; trees.rgba5551
+from the .3dsx RomFS). With that standard data, deluxe-3d already draws Lavaridge's gym as a full 3D gym, identical
+to Dewford's (picture sent). So the flat gym comes from data generated against our own tree, where WJ's Lavaridge
+art (metatiles 29F/2A7 in the gym's east column) no longer matches the generic `gym` spec. Running the generators
+on our tree also skips the Cycling Road and all interiors (art differs) - needs a decision on which data the
+release ships. Owner asked which build showed the flat gym.
 Owner: "it should look like how the gym looked in Dewford in 3D", and like Emerald 3DS's.
 The 3D model comes from Emerald 3DS's generator (`gym()` in `voxel_building_specs.py`, built by
 `gen_voxel_buildings.py`). Compare Lavaridge's gym to Dewford's in game (`WJPC_3D=1`, `warp 0 12 8 16`
