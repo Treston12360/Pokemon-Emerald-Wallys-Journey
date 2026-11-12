@@ -54,3 +54,45 @@ verified by tracing every property read (values line up with their override flag
 ## Town lights
 - Littleroot: two spot lights (moving truck), intensity 4 candela, colour 255,241,141, cone 8-36 degrees.
 - Dewford: street lamps and a campfire (point lights; brightness lives in the lamp blueprints, not read yet).
+
+## Caves and dark rooms (BP_CaveLightTrigger, BP_BrawlyLightTrigger)
+- Walking into the trigger box blends in a post-process: colour gain 0.49 (screen at ~half brightness)
+  and vignette (dark edges) 3.0 in caves, 2.0 in Brawly's gym. Sharpen override on (default value).
+
+## Lamps and indoor light
+- Street lamp: point light 128 above the lamp base, intensity 2500 (default units), radius 771,
+  colour 255,181,112 (warm orange), no shadows.
+- Campfire: point light 45 up, intensity 2 candela, radius 379, colour 255,160,0.
+- Interior window light (rect light): 512 x 336, intensity 125 candela, colour 255,218,142 (same warm
+  tone as the outdoor fill light).
+- Fake glow cards (no real light, a glowing sprite): colour 1.0,0.61,0.0, opacity 0.23, fades out
+  near 0.24 and beyond 1024. Glowing variant: colour 1.0,0.64,0.24, glow 4.5.
+
+## Sky colour curves (x = position from horizon (0) to top of sky (1); value = colour)
+Dreamy sky, day:   R 0.18->2.0 0.24->0.67 0.35->0.11 0.49->0.02 0.70->0.03 1->0.0
+                   G 0.18->2.0 0.24->0.85 0.35->0.45 0.49->0.21 0.70->0.13 1->0.11
+                   B 0.18->2.0 0.24->0.84 0.35->0.50 0.49->0.57 0.70->0.63 1->0.57
+  (white glow at the horizon, pale cyan band, deep blue overhead)
+Dreamy sunset:     R 0->0.91 0.10->25 0.13->4.0 0.26->0.16 0.35->0.0 1->0.04
+                   G 0->0.70 0.10->0.0 0.13->0.75 0.26->0.02 0.35->0.03 1->0.05
+                   B 0->0.47 0.10->0.0 0.13->0.0 0.26->0.42 0.35->0.69 1->0.13
+Dreamy night:      R 0.06->0.49 0.20->0.08 0.27->0.02 1->0.02; G 0.57,0.11,0.05,0.02; B 0.65,0.17,0.11,0.03
+Dreamy sunrise:    R 0.05->5.0 0.17->0.96 0.23->0.60 0.35->0.06 0.62->0.04 1->0.06
+                   G 1.58,0.14,0.60,0.39,0.36,0.09; B 0.90,0.0,0.0,0.21,0.51,0.22 (same x positions)
+Dreamy moonset:    R 0.19->1.0 0.29->0.06 0.37->0.01 0.64->0.04; G 1.0,0.31,0.15,0.13; B 1.0,0.35,0.34,0.27
+Clouds day (x = height in cloud): R 0->0.12 0.11->0.24 0.99->0.68; G 0.30,0.42,0.78; B 0.64,0.65,1.0
+Clouds sunset: R 0.07,0.36,0.96; G 0.06,0.11,0.62; B 0.17,0.20,0.61 (x 0, 0.20, 1)
+Clouds night:  R 0.01,0.03,0.07; G 0.03,0.09,0.24; B 0.06,0.19,0.50 (x 0, 0.23, 1)
+Clouds sunrise: R 0.10,0.25,0.98; G 0.09,0.16,0.60; B 0.19,0.14,0.34 (x 0.05, 0.19, 1)
+Sun colour over the day (x = time of day 0..1): R 0.02->0.88 0.20->0.82 0.60->0.78 0.91->0.97 0.98->2.0
+  G 0.82,0.64,0.77,0.51,0.35; B 0.26,0.52,0.76,0.27,0.30 (warm at both ends, near white at midday).
+Sun glow curve and moon colour curve: also read (in the parsed files; see tools note).
+
+## Not read (and not needed to match the look)
+- God-ray planes in Littleroot/Dewford: their values are inside a base material's node graph, not as
+  settings. Recreate by eye (soft animated light shafts).
+- Lit sprite material for people: base material graph; behaviour = sprites take the sun and fill light.
+
+## Tools note
+Parser: UAssetAPI built from source (+ Newtonsoft.Json, stub zstd), Longvinter 5.7.2 mappings with the
+removals listed at the top. Lives only in the session workspace (/home/claude/ue), not in the repo.
