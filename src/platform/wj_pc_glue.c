@@ -74,6 +74,12 @@ void BitUnPack(const void *src, void *dest, const void *paramsVoid)
 
 // Test aid (sdl2.c "enemymoves"): a battler's live moves, full PP.
 #include "battle.h"
+void WJPC_TestSetBattlerHp(int battler, int hp)
+{
+    if (battler >= 0 && battler < MAX_BATTLERS_COUNT)
+        gBattleMons[battler].hp = hp;
+}
+
 void WJPC_TestSetBattlerMoves(int battler, const int *moves)
 {
     for (int k = 0; k < MAX_MON_MOVES; k++)

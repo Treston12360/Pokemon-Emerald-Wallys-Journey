@@ -32,6 +32,11 @@ bool VoxelBattle_GameInBattle(void);
 /* A link battle, whose intro shows its VS frame on BG1 and BG2. */
 bool VoxelBattle_IsLink(void);
 
+/* PC (DLX-5): where the battle's stage is, as an offset in tiles from the player: the spot near the
+ * player (within 8 tiles) with the fewest blocked tiles (buildings, trees, cliffs) in the battle
+ * camera's view, near ones counting most. */
+void VoxelBattle_PickStage(float *dx, float *dz, float *ground);
+
 /*
  * Chooses where the battle stands: the point of the world the battle camera
  * looks at (world tiles) and the height of the ground there. Searched near

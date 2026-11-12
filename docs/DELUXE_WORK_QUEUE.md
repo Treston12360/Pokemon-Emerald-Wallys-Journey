@@ -67,11 +67,18 @@ to have: apply the per-line BG offsets the transition writes to the wide field r
 Test: save `/home/claude/keep/owner_brawly.sav`-style save (any save), script `trainerbattle 774` (Brawly) or
 walk into grass; `winshot` frames during the transition (`WJPC_SCRIPT`, see "How to build and test").
 
-### DLX-5 3D battle backgrounds + settings option (WIP - session 014PwRDj; owner: "you can choose the wording")
-NOTE 2026-11-12: nothing to copy - only `voxel_battle.h` (Emerald 3DS header) exists; no battle code here or in
-pokeemerald-multiplatform. Build it: voxel world from a low battle camera behind the battle (in place of BG3).
-Emerald 3DS builds 3D arenas from the battle background art (`src/platform/voxel3d/voxel_arena.c`,
-already copied). Owner wants it as its own on/off option in settings. See also `docs/PROJECT_NEW_3D_BGS.md`.
+### DLX-5 3D battle backgrounds + settings option (Done, first version - session 014PwRDj, 2026-11-12)
+Owner: "you can choose the wording". Settings > Video > "3D Battles" On/Off (`battle3d=` in the cfg, default On;
+independent of "3D World"). In a battle the 3D world is drawn behind the battle: sdl2.c draws `sdl3DTexture` (3:2)
+then the GBA picture with BG3 and the backdrop left transparent (`gPcPixelSource` 0/4; brightness fades kept as
+in the 3D transition). voxel_gl.c `Voxel3D_SetBattle`: Emerald 3DS's battle camera (VOXEL_BATTLE_PITCH 30,
+DISTANCE 7, FOV 35, voxel_battle.h), no overworld people; the field camera is saved and put back after.
+Stage: `VoxelBattle_PickStage` (voxel_world.c) scores spots within 8 tiles of the player: fewest blocked tiles,
+water (unless surfing) and height changes in the camera's view, near ones most; picked once per battle.
+Palette fades: `VoxelWorld_ScreenFade` on PC fits the fade of BG palettes 2-4 in battles (3DS logic).
+Checked in Wine: Slateport, Route 119, Route 104, Lilycove, Route 110, Fortree; intro, move, win -> field camera
+back as before. Not yet: contact shadows under the battlers (`VoxelBattle_Shadows`), camera always faces north,
+link/contest/frontier facilities untested. Test aid: `battlerhp BATTLER HP` script command.
 
 ### DLX-6 In-game options for the 3D overworld (Done - session 014PwRDj, 2026-11-12; owner: "you can choose the wording")
 Settings > Video > "3D World" On/Off (last row). Takes effect at once, no restart: the renderer is OpenGL whenever

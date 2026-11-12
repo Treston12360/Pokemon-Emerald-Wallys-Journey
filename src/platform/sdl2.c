@@ -57,14 +57,18 @@ SDL_Texture *sdlUiTexture;      // UI layer (text boxes, menus, map name pop-up)
 // The 3D overworld (src/platform/voxel3d, "world3d=1" in WallysJourney.cfg or WJPC_3D=1): drawn
 // into this texture during the frame, under the UI layer, in place of the flat map.
 #include "../platform/voxel3d/voxel_gl.h"
+#include "../platform/voxel3d/voxel_battle.h"
 static bool s3DWanted, s3DReady, s3DFrame;
 // DLX-6: 3D can be turned on and off in Settings. The renderer is OpenGL whenever the 3D data is there
 // (s3DAvailable), and the 3D world loads the first time it is wanted (s3DInitTried), so no restart.
 static bool s3DAvailable, s3DInitTried;
+// DLX-5: 3D battle scenery (Settings "3D Battles"); s3DBattleFrame: this frame is a 3D battle.
+static bool s3DBattleWanted = true, s3DBattleFrame;
+static SDL_Texture *sdl3DBattleTexture;
 static char s3DDir[600];
 static void Try3DInit(void)
 {
-    if (!s3DWanted || s3DReady || s3DInitTried || !s3DAvailable)
+    if (!(s3DWanted || s3DBattleWanted) || s3DReady || s3DInitTried || !s3DAvailable)
         return;
     s3DInitTried = true;
     s3DReady = Voxel3D_Init(s3DDir);
@@ -343,6 +347,15 @@ static bool TestStep(void)
                 extern void WJPC_TestSetBattlerMoves(int battler, const int *moves);
                 WJPC_TestSetBattlerMoves(1, m);
             }
+            continue;
+        }
+        if (!strcmp(cmd, "battlerhp"))
+        {
+            // battlerhp BATTLER HP (test aid): the HP of a Pokemon already in battle (1 = the foe).
+            extern void WJPC_TestSetBattlerHp(int battler, int hp);
+            int hp = 0;
+            sscanf(line, "%*s %*s %d", &hp);
+            WJPC_TestSetBattlerHp(atoi(arg1), hp);
             continue;
         }
         if (!strcmp(cmd, "partyswap") || !strcmp(cmd, "enemyswap"))
@@ -782,8 +795,18 @@ static void DrawScene(double t, int outputWidth, int outputHeight)
     }
     {
         SDL_Rect gameSource = {srcX, srcY, srcW, srcH};
+        if (s3DBattleFrame && s3DFrame)
+        {
+            // DLX-5: the 3D world, then the battle without its scenery on top.
+            SDL_RenderCopy(sdlRenderer, sdl3DTexture, NULL, &gameViewport);
+            SDL_SetTextureScaleMode(sdl3DBattleTexture, SDL_ScaleModeNearest);
+            SDL_RenderCopy(sdlRenderer, sdl3DBattleTexture, &gameSource, &gameViewport);
+        }
+        else
+        {
         SDL_SetTextureScaleMode(sdlTexture, SDL_ScaleModeNearest);
         SDL_RenderCopy(sdlRenderer, sdlTexture, &gameSource, &gameViewport);
+        }
     }
     if (useTarget)
     {
@@ -1379,6 +1402,8 @@ static void ReadConfigFile(void)
             sPlatformSettings[PLATFORM_SETTING_FF_SPEED] = value;
         else if (sscanf(line, "world3d=%u", &value) == 1)
             s3DWanted = value != 0;
+        else if (sscanf(line, "battle3d=%u", &value) == 1)
+            s3DBattleWanted = value != 0;
         else if (sscanf(line, "widescreen=%u", &value) == 1)
             WideView_SetEnabled(value != 0);
         else if (strncmp(line, "key", 3) == 0)
@@ -1457,6 +1482,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "fastForward=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_SPEED]);
     fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
     fprintf(configFile, "world3d=%u\n", s3DWanted ? 1 : 0);
+    fprintf(configFile, "battle3d=%u\n", s3DBattleWanted ? 1 : 0);
     fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
     fprintf(configFile, "frameRate=%u\n", gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT]);
     fprintf(configFile, "filter=%u\n", sPlatformSettings[PLATFORM_SETTING_FILTER]);
@@ -1604,6 +1630,8 @@ u8 Platform_GetSetting(enum PlatformSetting setting)
         return WideView_IsEnabled();
     if (setting == PLATFORM_SETTING_WORLD3D)
         return s3DWanted && Platform_Is3DAvailable();
+    if (setting == PLATFORM_SETTING_BATTLE3D)
+        return s3DBattleWanted && Platform_Is3DAvailable();
     return sPlatformSettings[setting];
 }
 
@@ -1613,6 +1641,13 @@ static SDL_atomic_t sWindowSettingsChanged;
 
 void Platform_SetSetting(enum PlatformSetting setting, u8 value)
 {
+    if (setting == PLATFORM_SETTING_BATTLE3D)
+    {
+        if (Platform_Is3DAvailable())
+            s3DBattleWanted = value != 0;
+        StoreConfigFile();
+        return;
+    }
     if (setting == PLATFORM_SETTING_WORLD3D)
     {
         if (Platform_Is3DAvailable())
@@ -2382,13 +2417,52 @@ void VDraw(SDL_Texture *texture)
         if (sdl3DTransTexture != NULL)
             SDL_UpdateTexture(sdl3DTransTexture, NULL, sTransImage, DISPLAY_WIDTH * sizeof(uint32_t));
     }
-    if (s3DWanted && !s3DReady)
+    if ((s3DWanted || s3DBattleWanted) && !s3DReady)
         Try3DInit(); // turned on in Settings
-    if (s3DReady && s3DWanted && (sFrameInfo.mode == WIDE_VIEW_FIELD || s3DTransition))
+    // DLX-5: a battle over the 3D world. The battle's own picture goes on top, with its scenery (BG3) and
+    // backdrop left out, so the world shows there.
+    s3DBattleFrame = false;
+    {
+        bool battle = s3DReady && s3DBattleWanted && !s3DTransition && VoxelBattle_GameInBattle()
+                   && sFrameInfo.mode != WIDE_VIEW_FIELD
+                   && sFrameInfo.width == DISPLAY_WIDTH && sFrameInfo.height == DISPLAY_HEIGHT;
+        Voxel3D_SetBattle(battle);
+        if (battle)
+        {
+            extern u8 gPcPixelSource[];
+            extern s8 gPcPixelFade[];
+            static uint32_t sBattleImage[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+            if (sdl3DBattleTexture == NULL)
+            {
+                sdl3DBattleTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
+                                                       DISPLAY_WIDTH, DISPLAY_HEIGHT);
+                if (sdl3DBattleTexture != NULL)
+                    SDL_SetTextureBlendMode(sdl3DBattleTexture, SDL_BLENDMODE_BLEND);
+            }
+            for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
+            {
+                u8 src = gPcPixelSource[i];
+                if (src == 0 || src == 4)
+                {
+                    int f = gPcPixelFade[i];
+                    sBattleImage[i] = f > 0 ? ((uint32_t)(f * 255 / 16) << 24) | 0xFFFFFF
+                                    : f < 0 ? ((uint32_t)(-f * 255 / 16) << 24) : 0;
+                }
+                else
+                    sBattleImage[i] = ToArgb(gbaImage[i]);
+            }
+            if (sdl3DBattleTexture != NULL)
+                SDL_UpdateTexture(sdl3DBattleTexture, NULL, sBattleImage, DISPLAY_WIDTH * sizeof(uint32_t));
+            s3DBattleFrame = sdl3DBattleTexture != NULL;
+        }
+    }
+    if (s3DReady && ((s3DWanted && (sFrameInfo.mode == WIDE_VIEW_FIELD || s3DTransition)) || s3DBattleFrame))
     {
         // The 3D world, while the game thread still waits on this frame.
         int w, h;
         GetSceneSize(&w, &h);
+        if (s3DBattleFrame)
+            w = h * DISPLAY_WIDTH / DISPLAY_HEIGHT; // the battle picture's shape
         if (sdl3DTexture == NULL || s3DW != w || s3DH != h)
         {
             if (sdl3DTexture != NULL)

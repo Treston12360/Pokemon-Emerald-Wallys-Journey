@@ -9,11 +9,13 @@
  * directly, because the linker only kept stubs where the graphics used to be.
  */
 
+#include <math.h>
 #include "port_log.h"
 void DecompressDataWithHeaderWram(const unsigned int *src, void *dest);
 unsigned int GetDecompressedDataSize(const unsigned int *ptr);
 #include "global.h"
 #include "main.h"
+#include "palette.h"
 #include "overworld.h"
 #include "event_data.h"
 #include "time_events.h"
@@ -266,6 +268,67 @@ bool VoxelWorld_IsMapAvailable(void)
     if (gBackupMapLayout.map == NULL)
         return false;
     return gMain.callback2 == CB2_Overworld || gMain.callback2 == CB2_OverworldBasic;
+}
+
+bool VoxelBattle_GameInBattle(void)
+{
+    return gMain.inBattle;
+}
+
+// The 3D ground's height at a map cell (MAP_OFFSET coordinates).
+static float StageLift(int x, int y)
+{
+    float ox = sInstanceCount > 0 ? (float)sInstances[0].originX : 0.0f;
+    float oz = sInstanceCount > 0 ? (float)sInstances[0].originY : 0.0f;
+    return VoxelRelief_LiftAt(x - MAP_OFFSET + ox + 0.5f, y - MAP_OFFSET + oz + 0.5f);
+}
+
+void VoxelBattle_PickStage(float *dx, float *dz, float *ground)
+{
+    const struct ObjectEvent *player = &gObjectEvents[gPlayerAvatar.objectEventId];
+    int px = player->currentCoords.x, py = player->currentCoords.y;
+    int bestX = 0, bestY = 0;
+    int best = 0x7FFFFFFF;
+    bool surfing = TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING | PLAYER_AVATAR_FLAG_UNDERWATER) != 0;
+
+    for (int oy = -8; oy <= 6; oy++)
+        for (int ox = -8; ox <= 8; ox++)
+        {
+            int tx = px + ox, ty = py + oy;
+            int score = 2 * (ox < 0 ? -ox : ox) + 2 * (oy < 0 ? -oy : oy);
+            int stageElev = MapGridGetElevationAt(tx, ty);
+            float stageLift;
+            // The stage itself: open ground (or water, for a battle started on it).
+            if (MapGridGetCollisionAt(tx, ty) != 0
+             || MetatileBehavior_IsSurfableWaterOrUnderwater(MapGridGetMetatileBehaviorAt(tx, ty)) != surfing)
+                continue;
+            stageLift = StageLift(tx, ty);
+            // The view: the ground ahead of the stage (north, up to 7 tiles) and back to the camera (5).
+            // Blocked tiles, water (on land) and a change of height count; near ones most.
+            for (int y = ty - 7; y <= ty + 5 && score < best; y++)
+                for (int x = tx - 5; x <= tx + 5; x++)
+                {
+                    int w = (y >= ty - 2) ? 6 : (x >= tx - 3 && x <= tx + 3) ? 2 : 1;
+                    u8 elev = MapGridGetElevationAt(x, y);
+                    if (MapGridGetCollisionAt(x, y) != 0)
+                        score += w;
+                    else if (!surfing && MetatileBehavior_IsSurfableWaterOrUnderwater(MapGridGetMetatileBehaviorAt(x, y)))
+                        score += w;
+                    else if (elev != stageElev && elev != 0 && elev != 15 && stageElev != 0 && stageElev != 15)
+                        score += w;
+                    else if (y >= ty - 2 && fabsf(StageLift(x, y) - stageLift) > 0.4f)
+                        score += w; // a drop or rise in the 3D ground (cliff edges, terraces)
+                }
+            if (score < best)
+            {
+                best = score;
+                bestX = ox;
+                bestY = oy;
+            }
+        }
+    *dx = (float)bestX;
+    *dz = (float)bestY;
+    *ground = StageLift(px + bestX, py + bestY);
 }
 
 bool VoxelWorld_IsBattleMapAvailable(void)
@@ -1112,6 +1175,20 @@ bool VoxelWorld_ScreenFade(float *amount, float rgb[3])
 {
     *amount = 0.0f;
     rgb[0] = rgb[1] = rgb[2] = 0.0f;
+#if !defined(PLATFORM_3DS)
+    /* PC (DLX-5): in a battle the world stands in for the scenery and fades as its palettes do
+     * (BG 2-4, LoadBattleTerrainGfx). The field's fades are drawn over the 3D view instead. */
+    if (gMain.inBattle)
+    {
+        const u16 *shown = (const u16 *)PLTT + BG_PLTT_ID(2), *unfaded = gPlttBufferUnfaded + BG_PLTT_ID(2);
+        if (memcmp(shown, unfaded, 3 * 16 * sizeof(u16)) == 0)
+            return false;
+        FadeFit(shown, unfaded, 3 * 16, amount, rgb);
+        if (*amount < 1.0f / 32.0f)
+            *amount = 0.0f;
+        return *amount > 0.0f;
+    }
+#endif
 #ifdef PLATFORM_3DS
     {
         bool fading = gPaletteFade.active || gPaletteFade.y != 0

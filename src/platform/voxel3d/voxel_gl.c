@@ -943,6 +943,16 @@ static bool sInited, sFailed;
 static GLuint sTreeTex;
 static VoxelCamera sCamera;
 static bool sCameraValid;
+// DLX-5: the battle scenery. The field camera is kept aside while a battle is drawn and put back after.
+#include "voxel_battle.h"
+static bool sBattleMode, sBattleCamOn;
+static VoxelCamera sFieldCamera;
+static float sStageDX, sStageDZ, sStageGround;
+
+void Voxel3D_SetBattle(bool on)
+{
+    sBattleMode = on;
+}
 static int sLastGroup = -1, sLastNum = -1;
 static uint32_t sLastDigest;
 static GLuint sFbo, sDepth;
@@ -1557,7 +1567,29 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     // Camera follows the player.
     VoxelWorld_GetPlayerWorldCoords(&playerX, &playerZ);
     VoxelEntities_GetPlayerWorldPos(&smoothX, &smoothZ);
-    if (!sCameraValid)
+    if (sBattleMode)
+    {
+        // Battle: a low camera on the spot the battle started, looking on past it (Emerald 3DS's angles).
+        if (!sBattleCamOn)
+        {
+            sFieldCamera = sCamera;
+            sBattleCamOn = true;
+            VoxelBattle_PickStage(&sStageDX, &sStageDZ, &sStageGround); // once per battle
+            Voxel3D_Log("[3D] battle stage at %+.0f,%+.0f from the player", sStageDX, sStageDZ);
+        }
+        sCamera.fov = VOXEL_BATTLE_FOV;
+        VoxelCamera_Frame(&sCamera, smoothX + sStageDX, smoothZ + sStageDZ, sStageGround,
+                          VOXEL_BATTLE_PITCH, VOXEL_BATTLE_DISTANCE);
+    }
+    else if (sBattleCamOn)
+    {
+        sCamera = sFieldCamera;
+        sBattleCamOn = false;
+        sCameraValid = false;
+    }
+    if (sBattleMode)
+        ;
+    else if (!sCameraValid)
     {
         VoxelCamera_SetGround(&sCamera, VoxelEntities_PlayerGround(), 1);
         VoxelCamera_Snap(&sCamera, smoothX, smoothZ);
@@ -1617,7 +1649,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         VoxelBuilder_SetOrigin(&shadows, 0, 0);
         VoxelBuilder_Init(&reflections, sReflectVerts, SPRITE_VERTS);
         VoxelBuilder_SetOrigin(&reflections, 0, 0);
-        VoxelEntities_Emit(&sprites, sSpriteAtlas, &sCamera, &shadows, &reflections);
+        if (!sBattleMode) // in a battle the people are not there (the battle draws its own)
+            VoxelEntities_Emit(&sprites, sSpriteAtlas, &sCamera, &shadows, &reflections);
         sSpriteTex = UploadTiled(sSpriteTex, sSpriteAtlas, VOXEL_SPRITE_ATLAS_W, VOXEL_SPRITE_ATLAS_H);
         MeshSet(&sSpriteMesh, sSpriteVerts, sprites.count, GL_STREAM_DRAW);
         MeshSet(&sShadowMesh, sShadowVerts, shadows.count, GL_STREAM_DRAW);

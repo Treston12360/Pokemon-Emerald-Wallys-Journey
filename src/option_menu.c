@@ -87,7 +87,8 @@ enum
     MENUITEM_PC_RESOLUTION,
     MENUITEM_PC_ZOOM,
     MENUITEM_PC_WORLD3D, // DLX-6
-    MENUITEM_PC_LAST = MENUITEM_PC_WORLD3D,
+    MENUITEM_PC_BATTLE3D, // DLX-5
+    MENUITEM_PC_LAST = MENUITEM_PC_BATTLE3D,
     // Keyboard keys (enum KeyBind order): A opens "Press a key".
     MENUITEM_PC_KEY_FIRST,
     MENUITEM_PC_KEY_LAST = MENUITEM_PC_KEY_FIRST + KEYBIND_COUNT - 1,
@@ -269,6 +270,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_PC_RESOLUTION] = COMPOUND_STRING("Resolution"),
     [MENUITEM_PC_ZOOM]       = COMPOUND_STRING("Zoom"),
     [MENUITEM_PC_WORLD3D]    = COMPOUND_STRING("3D World"),
+    [MENUITEM_PC_BATTLE3D]   = COMPOUND_STRING("3D Battles"),
     [MENUITEM_PC_SECTION_GAMEPLAY] = COMPOUND_STRING("Gameplay"),
     [MENUITEM_PC_SECTION_SPEED]    = COMPOUND_STRING("Speed & Looks"),
     [MENUITEM_PC_SECTION_CONTROLS] = COMPOUND_STRING("Controller"),
@@ -635,6 +637,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
         case MENUITEM_PC_RESOLUTION:
         case MENUITEM_PC_ZOOM:
         case MENUITEM_PC_WORLD3D:
+        case MENUITEM_PC_BATTLE3D:
             PcOption_ProcessInput(SEL_ITEM(taskId));
             break;
 #endif
@@ -1161,12 +1164,13 @@ static const u8 sPcRowSetting[] =
     [MENUITEM_PC_RESOLUTION - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_RESOLUTION,
     [MENUITEM_PC_ZOOM       - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_ZOOM,
     [MENUITEM_PC_WORLD3D    - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_WORLD3D,
+    [MENUITEM_PC_BATTLE3D   - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_BATTLE3D,
 };
 #define PAD_MAX (PAD_BUTTON_COUNT - 1)
 static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                               0, 0, 0, 0, 0, 0, 0};
+                               0, 0, 0, 0, 0, 0, 0, 0};
 static const u8 sPcRowMax[] = {12, 1, 1, 10, FF_SPEED_COUNT - 1, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1, FRAME_RATE_COUNT - 1, 2,
-                               1, 1, 1, 1, 4, 7, 1}; // lock aspect, bilinear, interframe, lock frame, resolution, zoom, 3D
+                               1, 1, 1, 1, 4, 7, 1, 1}; // lock aspect, bilinear, interframe, lock frame, resolution, zoom, 3D world, 3D battles
 
 static void PcOption_ProcessInput(u8 item)
 {
@@ -1245,6 +1249,7 @@ static void PcOption_Draw(u8 item)
         break;
     }
     case MENUITEM_PC_WORLD3D:
+    case MENUITEM_PC_BATTLE3D:
         if (!Platform_Is3DAvailable())
             StringCopy(end, COMPOUND_STRING("N/A")); // no 3D data folder or no OpenGL
         else
@@ -1274,7 +1279,7 @@ static const u8 sPcSectionControls[] = {MENUITEM_BUTTONMODE, MENUITEM_PC_PAD_A, 
 static const u8 sPcSectionAudio[] = {MENUITEM_SOUND, MENUITEM_PC_VOLUME};
 static const u8 sPcSectionVideo[] = {MENUITEM_PC_WINDOWSIZE, MENUITEM_PC_FULLSCREEN, MENUITEM_PC_RESOLUTION, MENUITEM_PC_ZOOM,
     MENUITEM_PC_LOCKASPECT, MENUITEM_PC_SHARP, MENUITEM_PC_BILINEAR, MENUITEM_PC_INTERFRAME, MENUITEM_PC_LOCKFRAME,
-    MENUITEM_PC_WIDESCREEN, MENUITEM_PC_SMOOTH, MENUITEM_PC_FILTER, MENUITEM_PC_WORLD3D};
+    MENUITEM_PC_WIDESCREEN, MENUITEM_PC_SMOOTH, MENUITEM_PC_FILTER, MENUITEM_PC_WORLD3D, MENUITEM_PC_BATTLE3D};
 
 static void PcMenu_AddRow(u8 item)
 {

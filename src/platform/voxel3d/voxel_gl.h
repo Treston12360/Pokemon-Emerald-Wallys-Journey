@@ -7,4 +7,6 @@ bool Voxel3D_Init(const char *dataDir);
 bool Voxel3D_Render(unsigned colorTexture, int w, int h);
 unsigned Voxel3D_TextureId(void *sdlTexture);
 void Voxel3D_SetSettings(bool on, int pitch, int zoom);
+/* DLX-5: draw the world as a battle's scenery (low battle camera on the spot the battle started, no people). */
+void Voxel3D_SetBattle(bool on);
 #endif
