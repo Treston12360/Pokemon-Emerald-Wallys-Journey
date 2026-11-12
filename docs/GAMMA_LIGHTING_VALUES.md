@@ -158,10 +158,28 @@ Gamma's level stores DayCycleProgress = 1.0 -> t = 0 -> pure DAY everywhere; wea
   out  = lerp(scene, (0.2, 0.467, 1.0), amt)           (hue shift 0)
        + 3D fog: two 3D-noise samples at camera - dir*3000 and *5700, scale 1/12000 and 1.9/12000,
          drifting with wind (0.03*Time along the wind angle), mixed by 0.25, * strength * colour
-         (0.120,0.198,0.356); strength default 0.2 (the blueprint may change it at runtime)
+         (0.120,0.198,0.356); strength from the current weather asset; Clear weather leaves it at 0 -> NO drifting fog layer in Gamma
        + sun glow: SunMoon atlas row 2 at noon = (0,0,0) -> no glow at Gamma's fixed time; moon glow 0 by day.
 
 ### Clouds on the dome (MI_StylizedClouds_Classic) - parameters (shader math not needed for our top-down view)
 4 layers: speeds 2.0/1.4/1.4/1.4 x -0.0004, vertical stretch 3.33, offsets -0.141/-0.208/-0.18/-0.08,
 strength 1.2 (layer 2: 1.5, layer 4: 1.3), flow offsets 30/100/60, highlight threshold 0.6 falloff 3 strength 4,
 noise speed 0.7 strength 3; colour from Atlas_Clouds row 0 by day (0.12,0.30,0.64) -> (0.68,0.78,1.0).
+
+### Runtime values from the sky blueprint's script (decoded Kismet bytecode of BP_StylizedSky)
+- Sun direction: OrbitOrientator yaw = Orbit Orientation + 90 = 76.82; OrbitInclinator roll = Orbit Inclination 50;
+  the light's own rotation = (pitch lerp(170,370,a), roll lerp(50,-50,a)) with day-timeline value a = 0.5
+  (stored in the level) -> pitch 270 (= -90), roll 0. Composed, the light travels along
+  (0.746, -0.175, -0.643) in Unreal axes; direction TO the sun = (-0.746, 0.175, 0.643):
+  elevation exactly 40 degrees (90 - inclination).
+- Player camera (BP_Brendan): spring arm 500 long, pitch -53.4, yaw 0, not inheriting the player's rotation,
+  FOV 100 -> the screen's "up" is Unreal +X. So the sun sits behind the viewer (toward the bottom of the
+  screen) and slightly to the right, 40 degrees up; shadows fall up-screen and slightly left.
+- Sun intensity = 1 (brightness alpha) x Sun Light Brightness 3 x multiplier 1 = 3.0.
+  Sun colour = SunColorCurve at CurrentTime/DayLength = 360/720 = 0.5 -> (0.788, 0.738, 0.700) linear
+  (matches the stored 230,223,218).
+- Sky light each update: intensity = Day Skylight Intensity 0.32 x weather multiplier 1.0;
+  colour = Day Skylight Color (1.0, 0.701, 0.271) (overcast 0, no lightning flash).
+- Height fog each update: density = Day Volumetric Density 0.02, albedo = Day Volumetric Color
+  (1.0, 0.596, 0.090), height falloff 0.3 (weather mix 0).
+- 3D fog strength comes from the weather asset; DA_Weather_Clear (and the class default) = 0.
