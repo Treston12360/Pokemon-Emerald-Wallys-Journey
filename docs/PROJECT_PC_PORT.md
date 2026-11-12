@@ -254,3 +254,8 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   ripples, overworld-encounter spawns, wandering NPCs) start a few frames apart, so the random numbers drift even
   after a sync. Checked with per-frame random states plus the GBA's own play-time counter (game frames) against
   hardware frames. For tests after a big map load, hold the random state with "lock on" while walking.
+- Owner request (2026-11-12): Settings > Reload save (first page, PC only). A asks "Sure? Press A", the second A
+  fades out and calls ReloadSave() (src/reload_save.c, the game's own link-error recovery: reloads flash and
+  CB2_ContinueSavedGame). B/up/down cancel; "No save yet" when there is none. Owner saw a preview video first and
+  approved. Tested: reload returns to the last save; save -> walk -> reload returns to the NEW save; Windows (Wine)
+  build too. Sent as alpha 5d.
