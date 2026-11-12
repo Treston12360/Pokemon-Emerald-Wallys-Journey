@@ -33,7 +33,8 @@ enum PlatformSetting
     PLATFORM_SETTING_PAD_R,
     PLATFORM_SETTING_PAD_FF,
     PLATFORM_SETTING_WIDESCREEN, // kept by the wide view (platform/wide_view.c), not in the array
-    PLATFORM_SETTING_SMOOTH,     // 0 = 60 fps (original), 1 = smooth: extra in-between frames on fast monitors
+    PLATFORM_SETTING_SMOOTH,     // frames drawn per second: 0 = 60 (original), 1 = 120, 2 = 180, 3 = 240 (smooth)
+    PLATFORM_SETTING_FILTER,     // screen filter: 0 = off, 1 = scanlines, 2 = LCD grid
     PLATFORM_SETTING_COUNT,
 };
 

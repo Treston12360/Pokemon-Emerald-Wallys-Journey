@@ -256,6 +256,60 @@ static bool TestStep(void)
 }
 
 static bool sDrewFrame;
+static int sGameFramesCounted; // test aid (WJPC_FPS_LOG)
+
+// ---- Clean scaling / 4K / screen filters ------------------------------------------
+static SDL_Texture *sGameTarget;   // the game at a whole-number size
+static SDL_Texture *sFilterTexture; // scanlines / LCD grid for that size
+static int sGameTargetW, sGameTargetH, sFilterKind = -1, sFilterScale;
+static bool sGameTargetOk;
+
+static bool PrepareGameTarget(int w, int h, int k)
+{
+    int filter = sPlatformSettings[PLATFORM_SETTING_FILTER];
+    if (sGameTarget == NULL || w != sGameTargetW || h != sGameTargetH)
+    {
+        if (sGameTarget != NULL)
+            SDL_DestroyTexture(sGameTarget);
+        sGameTarget = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, w, h);
+        if (sGameTarget == NULL)
+        {
+            sGameTargetOk = false; // no render targets here: draw straight to the window
+            return false;
+        }
+        sGameTargetW = w;
+        sGameTargetH = h;
+        sFilterKind = -1;
+    }
+    if (filter && (filter != sFilterKind || k != sFilterScale || sFilterTexture == NULL))
+    {
+        // One game pixel is k x k screen pixels: darken its last row (scanlines), or its last
+        // row and column (LCD grid). Only drawn when a pixel is at least 3 screen pixels.
+        uint32_t *pixels = malloc((size_t)w * h * 4);
+        if (sFilterTexture != NULL)
+            SDL_DestroyTexture(sFilterTexture);
+        sFilterTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, w, h);
+        if (pixels != NULL && sFilterTexture != NULL)
+        {
+            int line = k >= 6 ? 2 : 1;
+            for (int y = 0; y < h; y++)
+                for (int x = 0; x < w; x++)
+                {
+                    bool row = k >= 3 && (y % k) >= k - line;
+                    bool col = k >= 3 && filter == 2 && (x % k) >= k - line;
+                    uint32_t a = row ? (filter == 1 ? 110 : 70) : col ? 70 : 0;
+                    pixels[y * w + x] = a << 24;
+                }
+            SDL_UpdateTexture(sFilterTexture, NULL, pixels, w * 4);
+            SDL_SetTextureBlendMode(sFilterTexture, SDL_BLENDMODE_BLEND);
+        }
+        free(pixels);
+        sFilterKind = filter;
+        sFilterScale = k;
+    }
+    return true;
+}
+
 static void DrawScreen(double t)
 {
     SDL_RenderClear(sdlRenderer);
@@ -291,12 +345,33 @@ static void DrawScreen(double t)
     SDL_Rect gameViewport = {(outputWidth - gameWidth) / 2,
                              (outputHeight - gameHeight) / 2,
                              gameWidth, gameHeight};
+    // Clean scaling (and 4K): draw the game at a whole-number size first (sharp pixels), add the
+    // screen filter, then stretch only that last bit to the window with smoothing.
+    SDL_Rect finalViewport = gameViewport;
+    bool useTarget = sGameTargetOk;
+    if (useTarget)
+    {
+        int k = (gameWidth + srcW - 1) / srcW;
+        if ((gameHeight + srcH - 1) / srcH > k)
+            k = (gameHeight + srcH - 1) / srcH;
+        if (k < 1)
+            k = 1;
+        if (!PrepareGameTarget(srcW * k, srcH * k, k))
+            useTarget = false;
+        else
+        {
+            SDL_SetRenderTarget(sdlRenderer, sGameTarget);
+            SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 255);
+            SDL_RenderClear(sdlRenderer);
+            gameViewport = (SDL_Rect){0, 0, srcW * k, srcH * k};
+        }
+    }
     if (sFrameInfo.margin > 0)
     {
         // Smooth motion: the map texture is bigger by `margin` on every side. Slide it by the part
         // of the last camera step that hasn't been shown yet, then put the text layer on top, still.
         int m = sFrameInfo.margin;
-        float sx = (float)gameWidth / srcW, sy = (float)gameHeight / srcH;
+        float sx = (float)gameViewport.w / srcW, sy = (float)gameViewport.h / srcH;
         float shiftX = 0, shiftY = 0;
         if (sCamMoveValid && sPlatformSettings[PLATFORM_SETTING_SMOOTH])
         {
@@ -316,6 +391,17 @@ static void DrawScreen(double t)
     {
         SDL_Rect gameSource = {0, 0, srcW, srcH};
         SDL_RenderCopy(sdlRenderer, sdlTexture, &gameSource, &gameViewport);
+    }
+    if (useTarget)
+    {
+        if (sPlatformSettings[PLATFORM_SETTING_FILTER] && sFilterTexture != NULL)
+            SDL_RenderCopy(sdlRenderer, sFilterTexture, NULL, &gameViewport);
+        SDL_SetRenderTarget(sdlRenderer, NULL);
+        gameViewport = finalViewport;
+        // Whole-number size: copy as is; otherwise smooth only the last stretch.
+        SDL_SetTextureScaleMode(sGameTarget, (gameViewport.w % srcW == 0 && gameViewport.h % srcH == 0)
+                                             ? SDL_ScaleModeNearest : SDL_ScaleModeLinear);
+        SDL_RenderCopy(sdlRenderer, sGameTarget, NULL, &gameViewport);
     }
     if (sFrameInfo.mode == WIDE_VIEW_GBA && sPlatformSettings[PLATFORM_SETTING_BORDER] && sdlBorderTexture != NULL)
     {
@@ -355,6 +441,8 @@ int main(int argc, char **argv)
     SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "0");
     SDL_SetHint(SDL_HINT_MOUSE_TOUCH_EVENTS, "0");
 #endif
+    // 4K screens: tell Windows the game scales itself, so it isn't stretched (blurry) at 150%/200%.
+    SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS, "permonitorv2");
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO
 #ifdef __ANDROID__
                 | SDL_INIT_GAMECONTROLLER
@@ -394,7 +482,7 @@ int main(int argc, char **argv)
     SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight");
 #endif
 #if defined(NATIVE_LINUX) || defined(_WIN32)
-    sdlWindow = SDL_CreateWindow("Pokemon Wally's Journey", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    sdlWindow = SDL_CreateWindow("Pokemon Wally's Journey", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 #else
     sdlWindow = SDL_CreateWindow("pokeemerald", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DISPLAY_WIDTH * videoScale, DISPLAY_HEIGHT * videoScale, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 #endif
@@ -418,6 +506,7 @@ int main(int argc, char **argv)
     SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 255);
     SDL_RenderClear(sdlRenderer);
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
+    sGameTargetOk = SDL_RenderTargetSupported(sdlRenderer);
 
     for (int i = 1; i < 15; i++)
     {
@@ -598,6 +687,7 @@ int main(int argc, char **argv)
                 {
                     VDraw(sdlTexture);
                     sDrewFrame = true;
+                    sGameFramesCounted++;
                     SDL_AtomicSet(&isFrameAvailable, 0);
 
                     REG_DISPSTAT |= INTR_FLAG_VBLANK;
@@ -629,6 +719,44 @@ int main(int argc, char **argv)
             DrawScreen(t < 0 ? 0 : t > 1 ? 1 : t);
         }
         SDL_RenderPresent(sdlRenderer);
+        // Frame rate 60/120/180/240: don't draw faster than chosen (with vsync the monitor may cap it lower).
+        {
+            static Uint64 lastPresent;
+            Uint64 freq = SDL_GetPerformanceFrequency();
+            Uint64 period = freq / (60 * (sPlatformSettings[PLATFORM_SETTING_SMOOTH] + 1));
+            Uint64 now = SDL_GetPerformanceCounter();
+            if (lastPresent != 0 && now - lastPresent < period)
+            {
+                Uint64 waitMs = (period - (now - lastPresent)) * 1000 / freq;
+                if (waitMs > 1)
+                    SDL_Delay((Uint32)(waitMs - 1));
+                while (SDL_GetPerformanceCounter() - lastPresent < period)
+                    ;
+            }
+            lastPresent = SDL_GetPerformanceCounter();
+        }
+        if (getenv("WJPC_FPS_LOG"))
+        {
+            // Test aid: WJPC_FPS_LOG=file gets the frames drawn each second.
+            static Uint64 fpsStart;
+            static int fpsCount;
+            Uint64 now = SDL_GetPerformanceCounter();
+            fpsCount++;
+            if (fpsStart == 0)
+                fpsStart = now;
+            else if (now - fpsStart >= SDL_GetPerformanceFrequency())
+            {
+                FILE *f = fopen(getenv("WJPC_FPS_LOG"), "a");
+                if (f != NULL)
+                {
+                    fprintf(f, "fps %d game %d\n", fpsCount, sGameFramesCounted);
+                    fclose(f);
+                }
+                fpsCount = 0;
+                sGameFramesCounted = 0;
+                fpsStart = now;
+            }
+        }
 #endif
     }
 
@@ -700,7 +828,7 @@ static void ReadConfigFile(void)
             sBackgroundOrderVersion = value;
         else if (sscanf(line, "fullscreen=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_FULLSCREEN] = value != 0;
-        else if (sscanf(line, "windowScale=%u", &value) == 1 && value >= 1 && value <= 6)
+        else if (sscanf(line, "windowScale=%u", &value) == 1 && value >= 1 && value <= 12)
             sPlatformSettings[PLATFORM_SETTING_WINDOW_SCALE] = value;
         else if (sscanf(line, "integerScale=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_INTEGER_SCALE] = value != 0;
@@ -726,8 +854,10 @@ static void ReadConfigFile(void)
                     sKeyMap[i] = key;
             }
         }
+        else if (sscanf(line, "filter=%u", &value) == 1 && value <= 2)
+            sPlatformSettings[PLATFORM_SETTING_FILTER] = value;
         else if (sscanf(line, "smooth=%u", &value) == 1)
-            sPlatformSettings[PLATFORM_SETTING_SMOOTH] = value != 0;
+            sPlatformSettings[PLATFORM_SETTING_SMOOTH] = value <= 3 ? value : 3;
         else if (sscanf(line, "fastForwardToggle=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE] = value != 0;
         else
@@ -763,6 +893,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
     fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
     fprintf(configFile, "smooth=%u\n", sPlatformSettings[PLATFORM_SETTING_SMOOTH]);
+    fprintf(configFile, "filter=%u\n", sPlatformSettings[PLATFORM_SETTING_FILTER]);
     for (int i = 0; i < KEYBIND_COUNT; i++)
         fprintf(configFile, "%s=%d\n", sKeyBindNames[i], (int)sKeyMap[i]);
     for (int i = 0; i < 7; i++)
@@ -779,11 +910,14 @@ static void ApplyPlatformSettings(void)
     if (!sPlatformSettings[PLATFORM_SETTING_FULLSCREEN])
     {
         int scale = sPlatformSettings[PLATFORM_SETTING_WINDOW_SCALE];
-        // Wide view: the window is 16:9 (1x = 320x180 ... 6x = 1920x1080).
-        if (WideView_IsEnabled())
-            SDL_SetWindowSize(sdlWindow, 320 * scale, 180 * scale);
-        else
-            SDL_SetWindowSize(sdlWindow, DISPLAY_WIDTH * scale, DISPLAY_HEIGHT * scale);
+        int baseW = WideView_IsEnabled() ? 320 : DISPLAY_WIDTH, baseH = WideView_IsEnabled() ? 180 : DISPLAY_HEIGHT;
+        SDL_Rect usable;
+        // Wide view: the window is 16:9 (1x = 320x180 ... 6x = 1920x1080 ... 12x = 3840x2160, 4K).
+        // A size bigger than the screen is shrunk to the biggest that fits.
+        if (SDL_GetDisplayUsableBounds(SDL_GetWindowDisplayIndex(sdlWindow), &usable) == 0)
+            while (scale > 1 && (baseW * scale > usable.w || baseH * scale > usable.h))
+                scale--;
+        SDL_SetWindowSize(sdlWindow, baseW * scale, baseH * scale);
         SDL_SetWindowPosition(sdlWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     }
 #endif

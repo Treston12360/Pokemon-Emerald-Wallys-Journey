@@ -76,7 +76,8 @@ enum
     MENUITEM_PC_PAD_FF,
     MENUITEM_PC_WIDESCREEN,
     MENUITEM_PC_SMOOTH,
-    MENUITEM_PC_LAST = MENUITEM_PC_SMOOTH,
+    MENUITEM_PC_FILTER,
+    MENUITEM_PC_LAST = MENUITEM_PC_FILTER,
     // Keyboard keys (enum KeyBind order): A opens "Press a key".
     MENUITEM_PC_KEY_FIRST,
     MENUITEM_PC_KEY_LAST = MENUITEM_PC_KEY_FIRST + KEYBIND_COUNT - 1,
@@ -246,6 +247,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_PC_PAD_FF]     = COMPOUND_STRING("Pad fast fwd"),
     [MENUITEM_PC_WIDESCREEN] = COMPOUND_STRING("Widescreen"),
     [MENUITEM_PC_SMOOTH]     = COMPOUND_STRING("Frame rate"),
+    [MENUITEM_PC_FILTER]     = COMPOUND_STRING("Screen filter"),
     [MENUITEM_PC_SECTION_GAMEPLAY] = COMPOUND_STRING("Gameplay"),
     [MENUITEM_PC_SECTION_SPEED]    = COMPOUND_STRING("Speed & Looks"),
     [MENUITEM_PC_SECTION_CONTROLS] = COMPOUND_STRING("Controller"),
@@ -603,6 +605,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
         case MENUITEM_PC_PAD_FF:
         case MENUITEM_PC_WIDESCREEN:
         case MENUITEM_PC_SMOOTH:
+        case MENUITEM_PC_FILTER:
             PcOption_ProcessInput(SEL_ITEM(taskId));
             break;
 #endif
@@ -1119,10 +1122,11 @@ static const u8 sPcRowSetting[] =
     [MENUITEM_PC_PAD_FF     - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_PAD_FF,
     [MENUITEM_PC_WIDESCREEN - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_WIDESCREEN,
     [MENUITEM_PC_SMOOTH     - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_SMOOTH,
+    [MENUITEM_PC_FILTER     - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_FILTER,
 };
 #define PAD_MAX (PAD_BUTTON_COUNT - 1)
-static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static const u8 sPcRowMax[] = {6, 1, 1, 10, FF_SPEED_COUNT - 1, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1, 1};
+static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static const u8 sPcRowMax[] = {12, 1, 1, 10, FF_SPEED_COUNT - 1, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1, 3, 2};
 
 static void PcOption_ProcessInput(u8 item)
 {
@@ -1165,7 +1169,7 @@ static void PcOption_Draw(u8 item)
     switch (item)
     {
     case MENUITEM_PC_WINDOWSIZE:
-        end = ConvertIntToDecimalStringN(end, value, STR_CONV_MODE_LEFT_ALIGN, 1);
+        end = ConvertIntToDecimalStringN(end, value, STR_CONV_MODE_LEFT_ALIGN, 2);
         *end++ = CHAR_x;
         *end = EOS;
         break;
@@ -1186,7 +1190,12 @@ static void PcOption_Draw(u8 item)
         StringCopy(end, value ? COMPOUND_STRING("Toggle") : COMPOUND_STRING("Hold"));
         break;
     case MENUITEM_PC_SMOOTH:
-        StringCopy(end, value ? COMPOUND_STRING("Smooth") : COMPOUND_STRING("60"));
+        // Frames drawn per second; above 60 the extra ones are smooth in-between frames.
+        end = ConvertIntToDecimalStringN(end, 60 * (value % 4 + 1), STR_CONV_MODE_LEFT_ALIGN, 3);
+        StringCopy(end, COMPOUND_STRING(" fps"));
+        break;
+    case MENUITEM_PC_FILTER:
+        StringCopy(end, value == 1 ? COMPOUND_STRING("Scanlines") : value == 2 ? COMPOUND_STRING("LCD") : COMPOUND_STRING("Off"));
         break;
     default: // controller buttons
         StringCopy(end, sPadNames[value % PAD_BUTTON_COUNT]);
@@ -1204,7 +1213,7 @@ static const u8 sPcSectionGameplay[] = {MENUITEM_TEXTSPEED, MENUITEM_BATTLESCENE
 static const u8 sPcSectionControls[] = {MENUITEM_BUTTONMODE, MENUITEM_PC_PAD_A, MENUITEM_PC_PAD_B, MENUITEM_PC_PAD_START,
     MENUITEM_PC_PAD_SELECT, MENUITEM_PC_PAD_L, MENUITEM_PC_PAD_R, MENUITEM_PC_PAD_FF};
 static const u8 sPcSectionAudio[] = {MENUITEM_SOUND, MENUITEM_PC_VOLUME};
-static const u8 sPcSectionVideo[] = {MENUITEM_PC_WINDOWSIZE, MENUITEM_PC_FULLSCREEN, MENUITEM_PC_SHARP, MENUITEM_PC_WIDESCREEN, MENUITEM_PC_SMOOTH};
+static const u8 sPcSectionVideo[] = {MENUITEM_PC_WINDOWSIZE, MENUITEM_PC_FULLSCREEN, MENUITEM_PC_SHARP, MENUITEM_PC_WIDESCREEN, MENUITEM_PC_SMOOTH, MENUITEM_PC_FILTER};
 
 static void PcMenu_AddRow(u8 item)
 {
