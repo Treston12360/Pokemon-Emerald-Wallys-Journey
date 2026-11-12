@@ -15,7 +15,11 @@ Status key: TODO = not started, WIP = started (see notes), ASK = needs the owner
 
 ## Open items
 
-### DLX-1 Lavaridge gym in 3D looks flat (TODO, visual - show pictures)
+### DLX-1 Lavaridge gym in 3D looks flat (WIP - fix made, waiting on owner's OK)
+Fix: Emerald 3DS had no exterior model for Lavaridge's gym. Added spec `lavaridge_gym_exterior`
+(rect (2, 11, 6, 5), `parts: gym`, `match_rows (0, 4)`, ground GRASS) before `dewford_gym_exterior` in
+`voxel_building_specs.py`, regenerated `buildings.bin` and `relief.bin`. Picture sent 2026-11-12.
+Not in a build yet.
 Owner: "it should look like how the gym looked in Dewford in 3D", and like Emerald 3DS's.
 The 3D model comes from Emerald 3DS's generator (`gym()` in `voxel_building_specs.py`, built by
 `gen_voxel_buildings.py`). Compare Lavaridge's gym to Dewford's in game (`WJPC_3D=1`, `warp 0 12 8 16`
