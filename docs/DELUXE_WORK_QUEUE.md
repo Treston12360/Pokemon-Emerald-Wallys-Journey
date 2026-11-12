@@ -71,6 +71,18 @@ Make one test picture, owner decides.
 "Gamma-Pak-Recovery" archive, 51 parts). Study how its lighting is set up (sun, sky, day/night,
 post-process) and recreate the look in our OpenGL 3D view (`voxel_gl.c` shader, `voxel_lighting.c`).
 Do not copy their assets. Show the owner before/after pictures.
+Findings (2026-11-12, from the level files; values are binary, only the setup was read):
+- One shared level (`MAP_Hoenn_Persistant`) holds the outdoor lighting for every town: a sun
+  (directional light), a sky light (ambient from the sky), exponential height fog and a post-process volume.
+- The sky is a stylized-sky kit (SoStylized `BP_StylizedSky`: "Dreamy" sky colours, cartoon clouds, a moon,
+  **cloud shadows drifting over the ground** via a light function, a stylized fog post-process) plus weather
+  presets (clear, light rain, distant thunderstorm).
+- Colour grading by LUTs (Chameleon pack: day-to-night, moonlight, candle light).
+- Towns (Littleroot, Dewford) add point/spot lights and animated **god-ray planes**; caves switch lighting
+  with a trigger (`BP_CaveLightTrigger`). Sprites use a lit sprite material, so people get the sun's light too.
+Plan for our view (needs owner's OK on pictures): sun shading per face (warm top, cooler sides), sky-tinted
+ambient, distance fog in the sky colour, drifting cloud shadows (our own noise texture), a light colour
+grade, day/night from the game clock, darker caves. Each as a separate on/off so the owner can compare.
 
 ### DLX-10 Encore: cursor on the forced move (ASK)
 Offered: while Encored, the move cursor jumps to the locked move. No new wording.
