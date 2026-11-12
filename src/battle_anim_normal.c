@@ -937,6 +937,13 @@ void AnimTask_TintPalettes(u8 taskId)
 #define sType          data[5]
 #define sShakePtrLo    data[6]
 #define sShakePtrHi    data[7]
+// The address of the shaken value is split over two s16 fields. Rebuilt with a signed low half, it breaks
+// when bit 15 is set: never on the GBA (IWRAM offsets are below 0x8000), but possible on PC.
+#ifdef PORTABLE
+#define SHAKE_PTR(sprite) ((u16 *)((u16)(sprite)->sShakePtrLo | ((u32)(u16)(sprite)->sShakePtrHi << 16)))
+#else
+#define SHAKE_PTR(sprite) ((u16 *)((sprite)->sShakePtrLo | ((sprite)->sShakePtrHi << 16)))
+#endif
 
 static void AnimShakeMonOrBattlePlatforms(struct Sprite *sprite)
 {
@@ -964,7 +971,7 @@ static void AnimShakeMonOrBattlePlatforms(struct Sprite *sprite)
         break;
     }
 
-    sprite->sOriginalValue = *(u16 *)(sprite->sShakePtrLo | (sprite->sShakePtrHi << 16));
+    sprite->sOriginalValue = *SHAKE_PTR(sprite);
     sprite->sType = cmd->type;
     if (sprite->sType == SHAKE_MON_X || sprite->sType == SHAKE_MON_Y)
         AnimShakeMonOrBattlePlatforms_UpdateCoordOffsetEnabled();
@@ -984,13 +991,13 @@ static void AnimShakeMonOrBattlePlatforms_Step(struct Sprite *sprite)
         else
         {
             sprite->sShakeTimer = sprite->sShakeDuration;
-            *(u16 *)(sprite->sShakePtrLo | (sprite->sShakePtrHi << 16)) += sprite->sShakeVelocity;
+            *SHAKE_PTR(sprite) += sprite->sShakeVelocity;
             sprite->sShakeVelocity = -sprite->sShakeVelocity;
         }
     }
     else
     {
-        *(u16 *)(sprite->sShakePtrLo | (sprite->sShakePtrHi << 16)) = sprite->sOriginalValue;
+        *SHAKE_PTR(sprite) = sprite->sOriginalValue;
         if (sprite->sType == SHAKE_MON_X || sprite->sType == SHAKE_MON_Y)
         {
             for (enum BattlerId i = 0; i < gBattlersCount; i++)

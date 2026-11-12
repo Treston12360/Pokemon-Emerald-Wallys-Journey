@@ -361,3 +361,10 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   change, the memory after gSprites looked "in use" and it crashed (guard skipped it). PC now skips empty slots.
 - compare.py --pc-only: runs only the PC side of a step file and prints WallysJourney_errors.txt (fast sweep for
   crashes the guard hides). Run it over all step files after big PC changes (limits, layout).
+- FOUND + FIXED: battle_anim_normal.c AnimShakeMonOrBattlePlatforms rebuilt the shaken value's address from two
+  s16 sprite fields with a signed low half (0xFFFFxxxx when bit 15 is set). Never on the GBA (IWRAM offsets <
+  0x8000); on PC it depends on where the linker puts gBattle_BG3_X / gSpriteCoordOffsetX (seen in one build: the
+  guard skipped the shake). PC now uses SHAKE_PTR with an unsigned low half (like pokemon_animation.c's ANIM_SPRITE).
+- --pc-only sweep after merging the other session's work (64 objects / 128 sprites, zoom, UI layer): all 18 step
+  files clean after the fixes above. Frozen GBA reference rebuilt (/home/claude/frozen) because Route 106 changed
+  the ROM (owner rule change 2026-11-12).
