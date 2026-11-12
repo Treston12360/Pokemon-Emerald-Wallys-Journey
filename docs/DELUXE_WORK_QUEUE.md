@@ -58,9 +58,14 @@ already copied). Owner wants it as its own on/off option in settings. See also `
 3D is on today only with `world3d=1` in `WallysJourney.cfg` or `WJPC_3D=1` ("Play in 3D.bat").
 Proposed menu line "3D World: On/Off" - get the owner's OK on wording first.
 
-### DLX-7 3D: edge scenery rebuild cost (WIP - session 014PwRDj, 2026-11-12 11:15)
-`BuildBelt` in `src/platform/voxel3d/voxel_gl.c` takes ~12 ms every 2 chunks walked. Spread it over
-frames or build it incrementally. Map meshes are already one per frame.
+### DLX-7 3D: edge scenery rebuild cost (Done - session 014PwRDj, 2026-11-12)
+`BuildBelt` in `src/platform/voxel3d/voxel_gl.c` took ~5-12 ms every 2 chunks walked.
+Done: the belt is now 8x8 pieces kept in a cache (`BeltChunk`, 256 slots). Walking builds only the
+new pieces, at most 10 a frame, and puts the belt together on a frame of its own (one-pass page sort).
+New map / new world digest / new atlas still build it all at once, as before. Checked in Wine (software
+GL): worst frame from ~8 ms to ~2 ms typical (3-6 ms peaks); 73 step-built belts compared byte for byte
+with a full rebuild: all identical. Nothing on screen changes. Test aid: `WJPC_TEST_WINDOW=1` makes a
+`WJPC_SCRIPT` run draw the 3D view every frame (otherwise it only draws on `winshot`).
 
 ### DLX-8 3D: chunky people (ASK, show a test picture first)
 Owner asked for trainers/NPCs to look 3D like the houses: extrude each sprite frame into blocks.

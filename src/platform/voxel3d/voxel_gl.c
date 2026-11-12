@@ -639,61 +639,193 @@ static void BuildInstance(InstanceMesh *m, const VoxelMapInstance *inst, Atlas *
 
 static Mesh sBeltTerrain[VOXEL_ATLAS_PAGES], sBeltTrees;
 static Atlas *sBeltAtlas;
-static int sBeltX = 0x7FFFFFFF, sBeltY, sBeltGroup, sBeltNum;
+static int sBeltX = 0x7FFFFFFF, sBeltY;
 #define BELT_RADIUS 40
 
-static void BuildBelt(const VoxelMapInstance *inst0, Atlas *atlas, int cx, int cy)
+// The belt is made of CHUNK x CHUNK pieces in world cells (origin 0,0), so a piece is the same wherever the
+// player stands. Pieces are kept in a cache: walking on only builds the new ones, a few a frame, and the
+// belt swaps to the new position once all its pieces are ready (DLX-7: no 5-12 ms hitch every 2 chunks).
+// The cache is emptied when what a piece depends on changes: the map (its border, base and lighting),
+// the atlas or the world (VoxelWorld_LiveDigest); those still build the whole belt at once, as before.
+typedef struct
+{
+    int x0, y0;
+    VoxelVertex *v;
+    unsigned terrainN, treeN, cap, lastUse;
+    bool valid;
+} BeltChunk;
+
+#define BELT_CACHE 256
+#define BELT_CHUNKS_PER_FRAME 10
+static BeltChunk sBeltCache[BELT_CACHE];
+static unsigned sBeltUse;
+static int sBeltWantX = 0x7FFFFFFF, sBeltWantY;
+
+static void BeltCache_Flush(void)
+{
+    for (int i = 0; i < BELT_CACHE; i++)
+        sBeltCache[i].valid = false;
+    sBeltWantX = 0x7FFFFFFF;
+}
+
+static BeltChunk *BeltCache_Find(int x0, int y0)
+{
+    for (int i = 0; i < BELT_CACHE; i++)
+        if (sBeltCache[i].valid && sBeltCache[i].x0 == x0 && sBeltCache[i].y0 == y0)
+            return &sBeltCache[i];
+    return NULL;
+}
+
+static bool InBeltWindow(int x0, int y0, int cx, int cy)
+{
+    return x0 >= cx - BELT_RADIUS && x0 < cx + BELT_RADIUS && y0 >= cy - BELT_RADIUS && y0 < cy + BELT_RADIUS;
+}
+
+// Emit one piece and keep it. Its slot: a free one, else the least recently used piece outside the window.
+static void BeltCache_Build(const VoxelMapInstance *inst0, Atlas *atlas, int x0, int y0, int cx, int cy)
 {
     static VoxelVertex *chunkVerts;
     VoxelBuilder b;
+    BeltChunk *slot = NULL;
+    unsigned terrainEnd;
 
+    for (int i = 0; i < BELT_CACHE; i++)
+    {
+        BeltChunk *c = &sBeltCache[i];
+        if (!c->valid)
+        {
+            slot = c;
+            break;
+        }
+        if (!InBeltWindow(c->x0, c->y0, cx, cy) && (slot == NULL || c->lastUse < slot->lastUse))
+            slot = c;
+    }
+    if (slot == NULL)
+        return; // cannot happen: the window holds 100 pieces, the cache 256
     if (chunkVerts == NULL)
         chunkVerts = malloc(CHUNK_VERTS * sizeof(VoxelVertex));
-    sTerrainCount = sTreeCount = sBuildCount = 0;
+    VoxelBuilder_Init(&b, chunkVerts, CHUNK_VERTS);
+    VoxelBuilder_SetAtlas(&b, &atlas->map);
+    VoxelBuilder_SetOrigin(&b, 0, 0);
+    b.base = VoxelRelief_Base(inst0);
+    b.lighting = !inst0->indoor;
+    b.lightingRefine = false;
+    VoxelMesh_BeginWindow(x0 - 1, y0 - VOXEL_CHUNK_MARGIN_NORTH, x0 + CHUNK + 1, y0 + CHUNK + 1);
+    for (int y = y0; y < y0 + CHUNK; y++)
+        for (int x = x0; x < x0 + CHUNK; x++)
+            VoxelMesh_EmitBorder(&b, x, y, x + 1, y + 1);
+    terrainEnd = b.count;
+    for (int y = y0; y < y0 + CHUNK; y++)
+        for (int x = x0; x < x0 + CHUNK; x++)
+            VoxelTree_EmitBorder(&b, x, y, x + 1, y + 1);
+    if (slot->cap < b.count)
+    {
+        free(slot->v);
+        slot->cap = b.count;
+        slot->v = malloc(b.count * sizeof(VoxelVertex));
+    }
+    if (b.count != 0)
+        memcpy(slot->v, b.vertices, b.count * sizeof(VoxelVertex));
+    slot->x0 = x0;
+    slot->y0 = y0;
+    slot->terrainN = terrainEnd;
+    slot->treeN = b.count - terrainEnd;
+    slot->lastUse = sBeltUse;
+    slot->valid = true;
+}
+
+// Build up to `budget` missing pieces of the window round (cx, cy) (budget < 0: all of them).
+// TRUE when every piece is ready (with a budget: and none had to be built this time).
+static bool BeltBuildStep(const VoxelMapInstance *inst0, Atlas *atlas, int cx, int cy, int budget)
+{
+    bool ready = true;
+
     for (int y0 = cy - BELT_RADIUS; y0 < cy + BELT_RADIUS; y0 += CHUNK)
         for (int x0 = cx - BELT_RADIUS; x0 < cx + BELT_RADIUS; x0 += CHUNK)
         {
-            unsigned terrainEnd;
-            VoxelBuilder_Init(&b, chunkVerts, CHUNK_VERTS);
-            VoxelBuilder_SetAtlas(&b, &atlas->map);
-            VoxelBuilder_SetOrigin(&b, 0, 0);
-            b.base = VoxelRelief_Base(inst0);
-            b.lighting = !inst0->indoor;
-            b.lightingRefine = false;
-            VoxelMesh_BeginWindow(x0 - 1, y0 - VOXEL_CHUNK_MARGIN_NORTH, x0 + CHUNK + 1, y0 + CHUNK + 1);
-            for (int y = y0; y < y0 + CHUNK; y++)
-                for (int x = x0; x < x0 + CHUNK; x++)
-                    VoxelMesh_EmitBorder(&b, x, y, x + 1, y + 1);
-            terrainEnd = b.count;
-            for (int y = y0; y < y0 + CHUNK; y++)
-                for (int x = x0; x < x0 + CHUNK; x++)
-                    VoxelTree_EmitBorder(&b, x, y, x + 1, y + 1);
-            AppendChunk(&b, terrainEnd, b.count);
-        }
-    for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
-    {
-        unsigned n = 0;
-        for (unsigned i = 0; i + 2 < sTerrainCount; i += 3)
-        {
-            unsigned page = (unsigned)(sTerrainBuf[i].u * 0.5f);
-            if (page != p)
+            if (BeltCache_Find(x0, y0) != NULL)
                 continue;
-            for (int k = 0; k < 3; k++)
+            if (budget == 0)
             {
-                sSorted[n] = sTerrainBuf[i + k];
-                sSorted[n].u -= 2.0f * p;
-                n++;
+                ready = false;
+                continue;
+            }
+            BeltCache_Build(inst0, atlas, x0, y0, cx, cy);
+            if (budget > 0)
+            {
+                budget--;
+                ready = false; // put it together next frame, so building and uploading never share one
             }
         }
-        MeshSet(&sBeltTerrain[p], sSorted, n, GL_STATIC_DRAW);
+    return ready;
+}
+
+// Put the window's pieces together and upload them (all pieces must be in the cache).
+// Ground triangles go straight into their atlas page's run of sSorted (count, then place: one pass each).
+static void BeltAssemble(Atlas *atlas, int cx, int cy)
+{
+    unsigned count[VOXEL_ATLAS_PAGES] = {0}, at[VOXEL_ATLAS_PAGES], total = 0;
+
+    sTerrainCount = sTreeCount = sBuildCount = 0;
+    sBeltUse++;
+    for (int pass = 0; pass < 2; pass++)
+    {
+        if (pass == 1)
+            for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+            {
+                at[p] = total;
+                total += count[p];
+            }
+        for (int y0 = cy - BELT_RADIUS; y0 < cy + BELT_RADIUS; y0 += CHUNK)
+            for (int x0 = cx - BELT_RADIUS; x0 < cx + BELT_RADIUS; x0 += CHUNK)
+            {
+                BeltChunk *c = BeltCache_Find(x0, y0);
+                if (c == NULL)
+                    continue;
+                for (unsigned i = 0; i + 2 < c->terrainN; i += 3)
+                {
+                    unsigned page = (unsigned)(c->v[i].u * 0.5f);
+                    if (page >= VOXEL_ATLAS_PAGES)
+                        continue;
+                    if (pass == 0)
+                    {
+                        count[page] += 3;
+                        continue;
+                    }
+                    for (int k = 0; k < 3; k++)
+                    {
+                        sSorted[at[page]] = c->v[i + k];
+                        sSorted[at[page]].u -= 2.0f * page;
+                        at[page]++;
+                    }
+                }
+                if (pass == 1)
+                {
+                    c->lastUse = sBeltUse;
+                    for (unsigned i = c->terrainN; i < c->terrainN + c->treeN && sTreeCount < SCRATCH_VERTS; i++)
+                        sTreeBuf[sTreeCount++] = c->v[i];
+                }
+            }
+        if (pass == 0)
+        {
+            unsigned sum = 0;
+            for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+                sum += count[p];
+            if (sum > SCRATCH_VERTS) // far beyond any real belt; keep it safe anyway
+            {
+                memset(count, 0, sizeof(count));
+                break;
+            }
+        }
+    }
+    total = 0;
+    for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+    {
+        MeshSet(&sBeltTerrain[p], sSorted + total, count[p], GL_STATIC_DRAW);
+        total += count[p];
     }
     MeshSet(&sBeltTrees, sTreeBuf, sTreeCount, GL_STATIC_DRAW);
     sBeltAtlas = atlas;
-    Voxel3D_Log("[3D] belt slots %u %u %u %u relief belt %u", atlas->map.slotOf[621], atlas->map.slotOf[622], atlas->map.slotOf[629], atlas->map.slotOf[630], VoxelRelief_Belt(inst0));
-    Voxel3D_Log("[3D] belt trees %d part621 %d part622 %d part629 %d part630 %d", VoxelWorld_UsesTreeSprites(inst0), VoxelTree_Part(inst0->secondaryTileset, 621), VoxelTree_Part(inst0->secondaryTileset, 622), VoxelTree_Part(inst0->secondaryTileset, 629), VoxelTree_Part(inst0->secondaryTileset, 630));
-    Voxel3D_Log("[3D] belt at %d,%d: %u uncovered, border(-3,10)=%d (-4,10)=%d (-3,11)=%d (-4,11)=%d", cx, cy, b.uncovered,
-                VoxelWorld_BorderMetatile(inst0->originX - 3, inst0->originY + 10), VoxelWorld_BorderMetatile(inst0->originX - 4, inst0->originY + 10),
-                VoxelWorld_BorderMetatile(inst0->originX - 3, inst0->originY + 11), VoxelWorld_BorderMetatile(inst0->originX - 4, inst0->originY + 11));
 }
 
 // ---------------------------------------------------------------------------
@@ -1027,13 +1159,38 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     {
         int cx = ((int)floorf(playerX) / CHUNK) * CHUNK, cy = ((int)floorf(playerZ) / CHUNK) * CHUNK;
         Atlas *atlas0 = GetAtlas(inst0);
-        if (atlas0 != NULL && !inst0->indoor && (abs(cx - sBeltX) >= CHUNK * 2 || abs(cy - sBeltY) >= CHUNK * 2 || atlas0 != sBeltAtlas))
+        if (atlas0 != NULL && !inst0->indoor)
         {
             Uint64 t0 = SDL_GetPerformanceCounter();
-            BuildBelt(inst0, atlas0, cx, cy);
-            Voxel3D_Log("[3D] belt took %.1f ms", (SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency());
-            sBeltX = cx;
-            sBeltY = cy;
+            bool full = sBeltX == 0x7FFFFFFF || atlas0 != sBeltAtlas;
+
+            if (full)
+            {
+                // New map, new world or new atlas: start again and build it all now (as before).
+                BeltCache_Flush();
+                BeltBuildStep(inst0, atlas0, cx, cy, -1);
+                BeltAssemble(atlas0, cx, cy);
+                sBeltX = cx;
+                sBeltY = cy;
+            }
+            else
+            {
+                if (abs(cx - sBeltX) >= CHUNK * 2 || abs(cy - sBeltY) >= CHUNK * 2)
+                {
+                    sBeltWantX = cx;
+                    sBeltWantY = cy;
+                }
+                if (sBeltWantX != 0x7FFFFFFF && BeltBuildStep(inst0, atlas0, sBeltWantX, sBeltWantY, BELT_CHUNKS_PER_FRAME))
+                {
+                    BeltAssemble(atlas0, sBeltWantX, sBeltWantY);
+                    sBeltX = sBeltWantX;
+                    sBeltY = sBeltWantY;
+                    sBeltWantX = 0x7FFFFFFF;
+                }
+            }
+            double ms = (SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency();
+            if (ms > 0.5)
+                Voxel3D_Log("[3D] belt %s %.1f ms", full ? "full" : "step", ms);
         }
     }
 
