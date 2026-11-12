@@ -90,6 +90,8 @@ Tested in Wine: Off -> On (3D at once) -> walk -> Off (2D at once); video sent.
 ### DLX-8 3D: chunky people (ASK - owner 2026-11-12: show an example before deciding to implement)
 Owner asked for trainers/NPCs to look 3D like the houses: extrude each sprite frame into blocks.
 Make one test picture, owner decides.
+2026-11-12: mock-up sent (flat now / even-thickness blocks / rounded blocks, game camera and turned 35 degrees;
+player, Hiker, Lass, Wally). Waiting for the owner to pick one or say no.
 
 ### DLX-9 Lighting like Gamma Emerald (WIP - OWNER SAYS: GO AHEAD AND FINISH IT)
 Owner (2026-11-12): any Claude may finish DLX-9; send him before/after pictures (2D and 3D) when done.
