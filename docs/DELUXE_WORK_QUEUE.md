@@ -58,7 +58,7 @@ already copied). Owner wants it as its own on/off option in settings. See also `
 3D is on today only with `world3d=1` in `WallysJourney.cfg` or `WJPC_3D=1` ("Play in 3D.bat").
 Proposed menu line "3D World: On/Off" - get the owner's OK on wording first.
 
-### DLX-7 3D: edge scenery rebuild cost (TODO)
+### DLX-7 3D: edge scenery rebuild cost (WIP - session 014PwRDj, 2026-11-12 11:15)
 `BuildBelt` in `src/platform/voxel3d/voxel_gl.c` takes ~12 ms every 2 chunks walked. Spread it over
 frames or build it incrementally. Map meshes are already one per frame.
 
