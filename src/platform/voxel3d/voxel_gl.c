@@ -439,9 +439,10 @@ static GLuint BuildingPage(int page)
         sPageScratchSize = (size_t)w * th;
         sPageScratch = malloc(sPageScratchSize * sizeof(uint16_t));
     }
-    if (!VoxelBuildings_ReadPage((unsigned)page, 0, w * th, sPageScratch))
+    // The page is w x h; its texture is padded to th rows. ReadPage grades the colours itself.
+    memset(sPageScratch, 0, (size_t)w * th * sizeof(uint16_t));
+    if (!VoxelBuildings_ReadPage((unsigned)page, 0, w * h, sPageScratch))
         return 0;
-    VoxelGrade_Texels(sPageScratch, w * th);
     sPageTex[page] = UploadTiled(0, sPageScratch, w, th);
     return sPageTex[page];
 }
@@ -469,10 +470,21 @@ static const Mesh *StaticModel(unsigned pageModel, bool lit)
             float ox, oy, su, sv;
             if (!VoxelBuildings_StaticModel(pageModel, &v, &count, &ox, &oy, &su, &sv))
                 return NULL;
+            VoxelVertex *t = malloc((size_t)count * sizeof(VoxelVertex));
+            if (t == NULL)
+                return NULL;
+            // The model's texture place and scale, as ctr_voxel.c applies them.
+            for (unsigned k = 0; k < count; k++)
+            {
+                t[k] = v[k];
+                t[k].u = (ox + v[k].u) * su;
+                t[k].v = 1.0f - (oy + v[k].v) * sv;
+            }
             sStatics[i].used = true;
             sStatics[i].pageModel = pageModel;
             sStatics[i].lit = lit;
-            MeshSet(&sStatics[i].mesh, v, count, GL_STATIC_DRAW);
+            MeshSet(&sStatics[i].mesh, t, count, GL_STATIC_DRAW);
+            free(t);
             return &sStatics[i].mesh;
         }
     return NULL;
@@ -1092,6 +1104,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         if (m->buildingPage >= 0)
         {
             GLuint page = BuildingPage(m->buildingPage);
+            if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
+                Voxel3D_Log("[3D]   map %d:%d buildings page %d tex %u, %u chunk verts, %u statics, first model %p", m->mapGroup, m->mapNum, m->buildingPage, page, m->buildings.count, m->staticCount, m->staticCount ? (const void *)StaticModel(m->statics[0].pageModel, m->statics[0].lit) : NULL);
             MeshDraw(&m->buildings, page, 0, 0, 0);
             for (unsigned s = 0; s < m->staticCount; s++)
             {
