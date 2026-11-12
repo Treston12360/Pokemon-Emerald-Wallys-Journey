@@ -5354,6 +5354,12 @@ static bool8 ResetReleaseMonSpritePtr(void)
 
 static void SetMovingMonPriority(u8 priority)
 {
+#ifdef PORTABLE
+    // Called while no Pokemon is held (movingMonSprite is NULL). The GBA's write lands on
+    // read-only memory and does nothing; on PC skip it the same way.
+    if (sStorage->movingMonSprite == NULL)
+        return;
+#endif
     sStorage->movingMonSprite->oam.priority = priority;
 }
 

@@ -262,3 +262,10 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
 - Full check, seasons and time of day (compare.py --epoch): Mauville and Route 119 at noon in all four seasons
   (48 h each), at 23:00 and at 06:00 on both. Seasonal palettes, grass/trees, night tint and town lights match;
   only falling petals/leaves (random particles) differ.
+- FOUND + FIXED: PC Pokemon storage (swsh_storage_system.c SetMovingMonPriority) wrote to movingMonSprite while no
+  Pokemon is held (NULL). GBA: harmless write; PC: crash, the guard skipped the rest of that frame's cursor update.
+  PC now returns early. Found by the full check (pc_boxes.txt) via WallysJourney_errors.txt + gdb.
+- Full check, features: level-up move learning (two moves, forget prompts) and evolution (Treecko -> Grovyle)
+  identical; PC boxes identical. Follower talk lines are random; a per-frame timer started before the sync (GBA
+  lag after the battle) shifts them, not a bug.
+- Always check pc/WallysJourney_errors.txt after each compare run: the guard hides PC-only crashes on screen.
