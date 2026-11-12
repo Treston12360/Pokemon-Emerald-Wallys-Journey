@@ -229,3 +229,14 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
 - Full check, menus (owner save): Start menu, Pokédex, DexNav, Bag, party, Summary (4 pages), Options all match the
   GBA. Only differences are animation timing (bag swirl, cursor blink, Summary grid that scrolls 1 px every 4 frames).
 - Full check, catching: wild battle, two turns, Poké Ball from the bag, catch, nickname screen: identical on both.
+- Full check, test saves: tools/wj_testfw/scenarios/fullcheck.json (Twins on Route 104, Rustboro Gym next to
+  Roxanne, Game Corner with 9000 coins) + tools/wj_testfw/make_save.txt (new game + save via harness_build). Build
+  the test ROM with install.py on, make the saves, install.py off, rebuild and check the release SHA.
+- FOUND + FIXED (alpha 5c): Game Corner gacha soft-locked on PC after the ball dropped. game_corner_gacha.c calls
+  HandleLoadSpecialPokePic(gMonSpritesGfxPtr->spritesGfx[1]) outside battle where gMonSpritesGfxPtr is NULL; the
+  GBA writes to a dead address, PC crashed (null_guard skipped the task forever). PC now skips that call.
+- Trainer battles: the gym battle matches move for move and damage for damage when the random state is set equal
+  before each move. Lesson: do not "lock" the RNG every frame for battles. The GBA has lag frames (big AI and
+  graphics work spans more than one frame), so a per-frame lock resets the RNG in the middle of the GBA's work
+  and makes false differences. Use "sync" right before each input instead, with long waits (steps/gym_battle.txt).
+- Game Corner: the left gacha spot shows a tall magenta column on BOTH GBA and PC (not a port bug; told the owner).

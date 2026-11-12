@@ -1,0 +1,92 @@
+[
+ {
+  "name": "twins",
+  "map": "MAP_ROUTE104",
+  "x": 30,
+  "y": 16,
+  "flags": [
+   "FLAG_SYS_POKEMON_GET",
+   "FLAG_SYS_POKEDEX_GET",
+   "FLAG_RECEIVED_BIKE",
+   "FLAG_BADGE01_GET"
+  ],
+  "party": [
+   [
+    "MARSHTOMP",
+    20
+   ],
+   [
+    "TAILLOW",
+    15
+   ],
+   [
+    "RALTS",
+    12
+   ],
+   [
+    "SHROOMISH",
+    14
+   ],
+   [
+    "WINGULL",
+    13
+   ],
+   [
+    "ZIGZAGOON",
+    12
+   ]
+  ]
+ },
+ {
+  "name": "rox70",
+  "map": "MAP_RUSTBORO_CITY_GYM",
+  "x": 5,
+  "y": 3,
+  "flags": [
+   "FLAG_SYS_POKEMON_GET",
+   "FLAG_SYS_POKEDEX_GET"
+  ],
+  "party": [
+   [
+    "SWAMPERT",
+    70
+   ],
+   [
+    "ZIGZAGOON",
+    10
+   ]
+  ]
+ },
+ {
+  "name": "gacha",
+  "map": "MAP_MAUVILLE_CITY_GAME_CORNER",
+  "x": 5,
+  "y": 3,
+  "flags": [
+   "FLAG_SYS_POKEMON_GET",
+   "FLAG_SYS_POKEDEX_GET"
+  ],
+  "party": [
+   [
+    "MUDKIP",
+    20
+   ]
+  ],
+  "extra": "AddBagItem(ITEM_COIN_CASE, 1); SetCoins(9000);"
+ },
+ {
+  "name": "r104",
+  "map": "MAP_ROUTE104",
+  "x": 23,
+  "y": 60,
+  "flags": [
+   "FLAG_SYS_POKEMON_GET"
+  ],
+  "party": [
+   [
+    "SWAMPERT",
+    40
+   ]
+  ]
+ }
+]

@@ -3234,6 +3234,11 @@ static void GachaMain(u8 taskId)
             gSprites[sGacha->monSpriteId].callback = SpriteCB_Null;
             gSprites[sGacha->monSpriteId].oam.priority = 0;
             gSprites[sGacha->monSpriteId].invisible = TRUE;
+#ifdef PORTABLE
+            // gMonSpritesGfxPtr only exists during battles. On the GBA this writes the picture to a
+            // bad address that ignores it; on PC it would crash, so skip it (same result as the GBA).
+            if (gMonSpritesGfxPtr != NULL)
+#endif
             HandleLoadSpecialPokePic(TRUE,
                                         gMonSpritesGfxPtr->spritesGfx[B_POSITION_OPPONENT_LEFT],
                                         sGacha->CalculatedSpecies,
