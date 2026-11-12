@@ -191,7 +191,7 @@ static GLuint UploadTiled(GLuint tex, const uint16_t *tiled, unsigned w, unsigne
 
 static GLuint sProgram;
 static GLint sUniMode, sUniAlphaMin, sUniMvp, sUniOrigin, sUniTex, sUniFade, sUniFog, sUniFogColor, sUniCam;
-static GLint sUniGamma, sUniSunDir, sUniSunLight, sUniSkyTint, sUniSh, sUniSat, sUniExposure;
+static GLint sUniTime, sUniGamma, sUniSunDir, sUniSunLight, sUniSkyTint, sUniSh, sUniSat, sUniExposure;
 
 static const char *sVertexSrc =
     "#version 120\n"
@@ -233,6 +233,7 @@ static const char *sFragmentSrc =
     "uniform vec3 sh[9];\n"      // sky light cubemap irradiance / pi, order-2 SH, our axes (x east, y up, z south)
     "uniform float saturation;\n"
     "uniform float exposure;\n"
+    "uniform float time;\n"
     "varying vec2 vUv;\n"
     "varying float vShade;\n"
     "varying float vDist;\n"
@@ -243,6 +244,17 @@ static const char *sFragmentSrc =
     "  return sh[0] + sh[1]*n.y + sh[2]*n.z + sh[3]*n.x + sh[4]*n.x*n.y + sh[5]*n.y*n.z\n"
     "       + sh[6]*(3.0*n.z*n.z - 1.0) + sh[7]*n.x*n.z + sh[8]*(n.x*n.x - n.y*n.y);\n"
     "}\n"
+    "float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }\n"
+    "float vnoise(vec2 p) { vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);\n"
+    "  return mix(mix(hash(i), hash(i+vec2(1,0)), f.x), mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y); }\n"
+    "float fbm(vec2 p) { float a = 0.5, s = 0.0; for (int k = 0; k < 4; k++) { s += a * vnoise(p); p *= 2.03; a *= 0.5; } return s / 0.9375; }\n"
+    // M_SunCloudShadows_LF1 with Gamma's numbers; the two noise textures are stand-ins (theirs are art assets)
+    "float clouds(vec3 w) {\n"
+    "  vec2 P = vec2(-w.z, w.x) * 64.0;\n" // Gamma X (north), Y (east), in cm
+    "  float nn = fbm((P / 888.25 + time * vec2(-0.0010, -0.0007)) * 4.0);\n"
+    "  float cc = fbm((P + nn * 40.0) / 5000.0 * 4.0 + time * vec2(-0.0021, -0.0030) * 4.0);\n"
+    "  return 1.0 - clamp((cc - 0.164) * 3.8417, 0.0, 1.0) * 0.75;\n"
+    "}\n"
     "void main() {\n"
     "  vec4 c = texture2D(tex, vUv);\n"
     "  if (c.a < alphaMin) discard;\n"
@@ -251,11 +263,18 @@ static const char *sFragmentSrc =
     "    vec3 n = normalize(cross(dFdx(vWorld), dFdy(vWorld)));\n"
     "    if (dot(n, cam - vWorld) < 0.0) n = -n;\n"
     "    vec3 albedo = toLinear(c.rgb);\n"
-    "    vec3 light = sunLight * max(dot(n, sunDir), 0.0) * vShade + skyTint * max(skyIrr(n), 0.0);\n"
-    "    vec3 hdr = albedo * light * exposure;\n"
-    "    float luma = dot(hdr, vec3(0.2126, 0.7152, 0.0722));\n"
-    "    hdr = max(mix(vec3(luma), hdr, saturation), 0.0);\n"
-    "    rgb = toSrgb(hdr / (1.0 + hdr));\n" // placeholder curve until UE's own tone curve is ported
+    "    vec3 light = sunLight * max(dot(n, sunDir), 0.0) * vShade * clouds(vWorld) + skyTint * max(skyIrr(n), 0.0);\n"
+    "    rgb = albedo * light;\n"
+    // haze (M_StylizedFogPP, day): distances in Gamma units, 64 per tile
+    "    float d = length(vWorld - cam) * 64.0;\n"
+    "    float amt = clamp((d - 10.0) / 39990.0, 0.0, 1.0) * 0.5;\n"
+    "    vec3 v = normalize(cam - vWorld);\n"
+    "    amt = min(amt, clamp(1.0 - 0.4 * (dot(sunDir, v) - 0.5), 0.0, 1.0));\n"
+    "    rgb = mix(rgb, vec3(0.2, 0.467, 1.0), amt);\n"
+    "    if (mode > 1.5) { gl_FragColor = vec4(albedo * (sunLight * 0.643 + skyTint * skyIrr(vec3(0,1,0))), 0.45); return; }\n"
+    "    if (mode > 0.5) { gl_FragColor = vec4(0.0, 0.0, 0.0, vShade); return; }\n"
+    "    gl_FragColor = vec4(rgb, 1.0);\n"
+    "    return;\n"
     "  } else {\n"
     "    rgb = c.rgb * vShade;\n"
     "    float f = clamp((vDist - fog.x) / max(fog.y - fog.x, 0.001), 0.0, 1.0);\n"
@@ -272,6 +291,7 @@ static const char *sFragmentSrc =
 /* Gamma Emerald's outdoor daytime light, every number from docs/GAMMA_LIGHTING_VALUES.md.
  * Our axes: x east, y up, z south. Gamma's camera looks along Unreal +X (screen up = north here), so
  * Unreal (X, Y, Z) maps to ours as (east = Y, up = Z, south = -X). */
+static uint32_t sFrame;
 static const float sGammaSh[9][3] = {
     {0.38100f, 0.88990f, 1.51087f}, {0.05944f, 0.15420f, 0.27341f}, {-0.02007f, -0.03913f, -0.03543f},
     {-0.01342f, -0.02757f, -0.04645f}, {-0.00478f, -0.00471f, -0.00461f}, {-0.01140f, -0.01572f, -0.01706f},
@@ -291,6 +311,7 @@ static void GammaLightUniforms(void)
     wj_glUniform3f(sUniSkyTint, 1.0f * skyI, 0.701f * skyI, 0.271f * skyI);
     wj_glUniform3fv(sUniSh, 9, &sGammaSh[0][0]);
     wj_glUniform1f(sUniSat, 1.25f); /* camera colour saturation */
+    wj_glUniform1f(sUniTime, (float)sFrame / 60.0f);
     wj_glUniform1f(sUniExposure, getenv("WJPC_3D_EXPOSURE") ? (float)atof(getenv("WJPC_3D_EXPOSURE")) : 1.0f);
 }
 
@@ -343,6 +364,7 @@ static bool MakeProgram(void)
     sUniCam = wj_glGetUniformLocation(sProgram, "cam");
     sUniAlphaMin = wj_glGetUniformLocation(sProgram, "alphaMin");
     sUniGamma = wj_glGetUniformLocation(sProgram, "gammaLight");
+    sUniTime = wj_glGetUniformLocation(sProgram, "time");
     sUniSunDir = wj_glGetUniformLocation(sProgram, "sunDir");
     sUniSunLight = wj_glGetUniformLocation(sProgram, "sunLight");
     sUniSkyTint = wj_glGetUniformLocation(sProgram, "skyTint");
@@ -946,6 +968,283 @@ FILE *Voxel3D_OpenData(const char *path)
     return fopen(full, "rb");
 }
 
+
+/* ---------------------------------------------------------------------------
+ * Gamma Emerald's screen pass (docs/GAMMA_LIGHTING_VALUES.md): the scene is drawn in linear light to a
+ * half-float target, then: bloom (BP_StylizedSky post process: intensity 6, threshold 0.4, sizes 4..128 x 15,
+ * UE's default tints), depth of field (player camera: f/1.744, sensor 450, Gamma's 100-degree lens,
+ * focused on the player), exposure locked at 1, saturation 1.25 (camera) in AP1, and UE's filmic curve
+ * (slope 1, toe 0.3, shoulder 1, black clip 0, white clip 0) - the ACES-based FilmToneMap. */
+
+static GLuint sPostProg, sQuadVbo, sHdrFbo, sHdrTex, sHdrDepth, sBloomFbo[7], sBloomTex[7];
+static int sHdrW, sHdrH, sBloomW[7], sBloomH[7];
+static GLint sPU_mode, sPU_src, sPU_src2, sPU_depth, sPU_texel, sPU_dir, sPU_radius, sPU_misc, sPU_fade, sPU_tints, sPU_coc;
+
+static const char *sPostVs =
+    "#version 120\n"
+    "attribute vec2 p;\n"
+    "varying vec2 uv;\n"
+    "void main() { uv = p * 0.5 + 0.5; gl_Position = vec4(p, 0.0, 1.0); }\n";
+
+static const char *sPostFs =
+    "#version 120\n"
+    "uniform float mode;\n"          // 0 bright pass, 1 blur, 2 final
+    "uniform sampler2D src, src2, depthTex;\n"
+    "uniform vec2 texel, dir;\n"
+    "uniform float radius;\n"
+    "uniform vec4 misc;\n"           // x exposure, y saturation, z bloom intensity, w threshold
+    "uniform vec4 fade;\n"
+    "uniform vec4 coc;\n"            // x A*f/(S-f)/sensor (per mm of depth), y focus (mm), z near, w far
+    "varying vec2 uv;\n"
+    "const mat3 sRGB_2_AP1 = mat3(0.61319, 0.07021, 0.02062, 0.33951, 0.91634, 0.10957, 0.04737, 0.01345, 0.86961);\n"
+    "const mat3 AP1_2_sRGB = mat3(1.70505, -0.13026, -0.02400, -0.62179, 1.14080, -0.12897, -0.08326, -0.01055, 1.15297);\n"
+    "const mat3 sRGB_2_AP0 = mat3(0.4397010, 0.0897923, 0.0175440, 0.3829780, 0.8134230, 0.1115440, 0.1773350, 0.0967616, 0.8707040);\n"
+    "const mat3 AP0_2_AP1 = mat3(1.4514393161, -0.0765537734, 0.0083161484, -0.2365107469, 1.1762296998, -0.0060324498, -0.2149285693, -0.0996759264, 0.9977163014);\n"
+    "const vec3 AP1_Y = vec3(0.2722287168, 0.6740817658, 0.0536895174);\n"
+    "float sat3(vec3 c) { float mi = min(c.r, min(c.g, c.b)), ma = max(c.r, max(c.g, c.b)); return (max(ma, 1e-10) - max(mi, 1e-10)) / max(ma, 1e-2); }\n"
+    "float yc(vec3 c) { float ch = sqrt(max(c.b*(c.b-c.g) + c.g*(c.g-c.r) + c.r*(c.r-c.b), 0.0)); return (c.b + c.g + c.r + 1.75*ch) / 3.0; }\n"
+    "float sigmoid(float x) { float t = max(1.0 - abs(0.5*x), 0.0); return (1.0 + sign(x)*(1.0 - t*t)) * 0.5; }\n"
+    "float glow(float y, float g, float m) { if (y <= 2.0/3.0*m) return g; if (y >= 2.0*m) return 0.0; return g*(m/y - 0.5); }\n"
+    "float hue(vec3 c) { if (c.r == c.g && c.g == c.b) return 0.0; float h = degrees(atan(sqrt(3.0)*(c.g-c.b), 2.0*c.r-c.g-c.b)); return h < 0.0 ? h + 360.0 : h; }\n"
+    "vec3 film(vec3 lin) {\n"   // UE FilmToneMap, returns AP1
+    "  const float slope = 1.0, toe = 0.3, shoulder = 1.0, black = 0.0, white = 0.0;\n"
+    "  vec3 aces = sRGB_2_AP0 * lin;\n"
+    "  float s = sat3(aces);\n"
+    "  aces *= 1.0 + glow(yc(aces), 0.05 * sigmoid((s - 0.4) / 0.2), 0.08);\n"
+    "  float h = hue(aces); if (h > 180.0) h -= 360.0;\n"
+    "  float hw = smoothstep(0.0, 1.0, 1.0 - abs(2.0 * h / 135.0)); hw *= hw;\n"
+    "  aces.r += hw * s * (0.03 - aces.r) * (1.0 - 0.82);\n"
+    "  vec3 w = clamp(AP0_2_AP1 * aces, 0.0, 65504.0);\n"
+    "  w = mix(vec3(dot(w, AP1_Y)), w, 0.96);\n"
+    "  float toeScale = 1.0 + black - toe, shScale = 1.0 + white - shoulder;\n"
+    "  float bt = (0.18 + black) / toeScale - 1.0;\n"
+    "  float toeMatch = log(0.18)/log(10.0) - 0.5 * log((1.0 + bt) / (1.0 - bt)) * (toeScale / slope);\n"
+    "  float straightMatch = (1.0 - toe) / slope - toeMatch;\n"
+    "  float shMatch = shoulder / slope - straightMatch;\n"
+    "  vec3 L = log(max(w, 1e-10)) / log(10.0);\n"
+    "  vec3 st = slope * (L + straightMatch);\n"
+    "  vec3 tc = -black + (2.0 * toeScale) / (1.0 + exp((-2.0 * slope / toeScale) * (L - toeMatch)));\n"
+    "  vec3 sc = (1.0 + white) - (2.0 * shScale) / (1.0 + exp((2.0 * slope / max(shScale, 1e-6)) * (L - shMatch)));\n"
+    "  tc = mix(st, tc, vec3(lessThan(L, vec3(toeMatch))));\n"
+    "  sc = mix(st, sc, vec3(greaterThan(L, vec3(shMatch))));\n"
+    "  vec3 t = clamp((L - toeMatch) / (shMatch - toeMatch), 0.0, 1.0);\n"
+    "  if (shMatch < toeMatch) t = 1.0 - t;\n"
+    "  t = (3.0 - 2.0 * t) * t * t;\n"
+    "  vec3 tone = mix(tc, sc, t);\n"
+    "  tone = mix(vec3(dot(tone, AP1_Y)), tone, 0.93);\n"
+    "  return max(tone, 0.0);\n"
+    "}\n"
+    "vec3 toSrgb(vec3 c) { c = clamp(c, 0.0, 1.0); return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c)); }\n"
+    "float viewDepth(vec2 t) { float z = texture2D(depthTex, t).r * 2.0 - 1.0; return 2.0 * coc.z * coc.w / (coc.w + coc.z - z * (coc.w - coc.z)); }\n"
+    "void main() {\n"
+    "  if (mode < 0.5) {\n" // bright pass (UE BloomSetup): colour * saturate((lum*exposure - threshold) * 0.5)
+    "    vec3 c = texture2D(src, uv).rgb;\n"
+    "    float l = dot(c, vec3(0.3, 0.59, 0.11)) * misc.x;\n"
+    "    gl_FragColor = vec4(c * clamp((l - misc.w) * 0.5, 0.0, 1.0), 1.0); return;\n"
+    "  }\n"
+    "  if (mode < 1.5) {\n" // separable gaussian, radius in texels
+    "    vec3 a = vec3(0.0); float wsum = 0.0;\n"
+    "    for (int i = -12; i <= 12; i++) { float x = float(i) / 12.0 * radius; float wt = exp(-0.5 * (x*x) / max(radius*radius/9.0, 1e-4));\n"
+    "      a += texture2D(src, uv + dir * texel * x).rgb * wt; wsum += wt; }\n"
+    "    gl_FragColor = vec4(a / wsum, 1.0); return;\n"
+    "  }\n"
+    // final: depth of field (gather), bloom, exposure, grading, film curve
+    "  float D = viewDepth(uv) * 640.0;\n"   // tiles -> mm (64 cm a tile)
+    "  float r = min(abs(D - coc.y) / max(D, 1.0) * coc.x * 0.5, 24.0);\n" // radius in pixels
+    "  vec3 c = vec3(0.0); float wsum = 0.0;\n"
+    "  for (int i = 0; i < 24; i++) { float a = float(i) * 2.39996; float rr = sqrt((float(i) + 0.5) / 24.0) * r;\n"
+    "    vec2 o = vec2(cos(a), sin(a)) * rr * texel; float Dn = viewDepth(uv + o) * 640.0;\n"
+    "    float rn = min(abs(Dn - coc.y) / max(Dn, 1.0) * coc.x * 0.5, 24.0);\n"
+    "    float wt = (Dn < D - 1.0) ? clamp(rn - rr + 1.0, 0.0, 1.0) : 1.0;\n"
+    "    c += texture2D(src, uv + o).rgb * wt; wsum += wt; }\n"
+    "  c /= max(wsum, 1e-4);\n"
+    "  c += texture2D(src2, uv).rgb * misc.z;\n"
+    "  c *= misc.x;\n"
+    "  vec3 ap = sRGB_2_AP1 * c;\n"
+    "  ap = max(mix(vec3(dot(ap, AP1_Y)), ap, misc.y), 0.0);\n"
+    "  vec3 outc = toSrgb(AP1_2_sRGB * film(AP1_2_sRGB * ap));\n"
+    "  gl_FragColor = vec4(mix(outc, fade.rgb, fade.a), 1.0);\n"
+    "}\n";
+
+static bool PostInit(void)
+{
+    static const float quad[8] = {-1, -1, 1, -1, -1, 1, 1, 1};
+    GLuint vs, fs;
+    GLint ok = 0;
+    if (sPostProg != 0)
+        return true;
+    vs = Compile(GL_VERTEX_SHADER, sPostVs);
+    fs = Compile(GL_FRAGMENT_SHADER, sPostFs);
+    if (vs == 0 || fs == 0)
+        return false;
+    sPostProg = wj_glCreateProgram();
+    wj_glAttachShader(sPostProg, vs);
+    wj_glAttachShader(sPostProg, fs);
+    wj_glBindAttribLocation(sPostProg, 0, "p");
+    wj_glLinkProgram(sPostProg);
+    wj_glGetProgramiv(sPostProg, GL_LINK_STATUS, &ok);
+    if (!ok)
+    {
+        char log[1024];
+        wj_glGetProgramInfoLog(sPostProg, sizeof(log), NULL, log);
+        Voxel3D_Log("[3D] post link: %s", log);
+        sPostProg = 0;
+        return false;
+    }
+    sPU_mode = wj_glGetUniformLocation(sPostProg, "mode");
+    sPU_src = wj_glGetUniformLocation(sPostProg, "src");
+    sPU_src2 = wj_glGetUniformLocation(sPostProg, "src2");
+    sPU_depth = wj_glGetUniformLocation(sPostProg, "depthTex");
+    sPU_texel = wj_glGetUniformLocation(sPostProg, "texel");
+    sPU_dir = wj_glGetUniformLocation(sPostProg, "dir");
+    sPU_radius = wj_glGetUniformLocation(sPostProg, "radius");
+    sPU_misc = wj_glGetUniformLocation(sPostProg, "misc");
+    sPU_fade = wj_glGetUniformLocation(sPostProg, "fade");
+    sPU_coc = wj_glGetUniformLocation(sPostProg, "coc");
+    wj_glGenBuffers(1, &sQuadVbo);
+    wj_glBindBuffer(GL_ARRAY_BUFFER, sQuadVbo);
+    wj_glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
+    return true;
+}
+
+static GLuint MakeTarget(GLuint *tex, int w, int h, GLenum fmt, GLenum type, GLenum attach)
+{
+    GLuint fbo = 0;
+    if (*tex == 0)
+        wj_glGenTextures(1, tex);
+    wj_glBindTexture(GL_TEXTURE_2D, *tex);
+    wj_glTexImage2D(GL_TEXTURE_2D, 0, fmt == 0x1902 ? 0x81A6 /* DEPTH24 */ : 0x881A /* RGBA16F */, w, h, 0, fmt, type, NULL);
+    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, 0x812F);
+    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, 0x812F);
+    (void)attach;
+    return fbo;
+}
+
+/* Bind the half-float scene target (with a depth texture for the blur). */
+static bool PostBeginScene(int w, int h)
+{
+    if (!PostInit())
+        return false;
+    if (sHdrW != w || sHdrH != h)
+    {
+        MakeTarget(&sHdrTex, w, h, GL_RGBA, 0x140B, 0);
+        MakeTarget(&sHdrDepth, w, h, 0x1902, GL_UNSIGNED_INT, 0);
+        for (int i = 0; i < 7; i++)
+        {
+            sBloomW[i] = w >> (i + 2) > 1 ? w >> (i + 2) : 1;
+            sBloomH[i] = h >> (i + 2) > 1 ? h >> (i + 2) : 1;
+            MakeTarget(&sBloomTex[i], sBloomW[i], sBloomH[i], GL_RGBA, 0x140B, 0);
+            if (sBloomFbo[i] == 0)
+                wj_glGenFramebuffers(1, &sBloomFbo[i]);
+            wj_glBindFramebuffer(GL_FRAMEBUFFER, sBloomFbo[i]);
+            wj_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sBloomTex[i], 0);
+        }
+        if (sHdrFbo == 0)
+            wj_glGenFramebuffers(1, &sHdrFbo);
+        wj_glBindFramebuffer(GL_FRAMEBUFFER, sHdrFbo);
+        wj_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sHdrTex, 0);
+        wj_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, sHdrDepth, 0);
+        sHdrW = w;
+        sHdrH = h;
+    }
+    wj_glBindFramebuffer(GL_FRAMEBUFFER, sHdrFbo);
+    return wj_glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+}
+
+static void PostQuad(void)
+{
+    wj_glBindBuffer(GL_ARRAY_BUFFER, sQuadVbo);
+    wj_glDisableVertexAttribArray(1);
+    wj_glDisableVertexAttribArray(2);
+    wj_glEnableVertexAttribArray(0);
+    wj_glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+    wj_glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
+static void PostBlur(GLuint fbo, GLuint srcTex, int w, int h, float dx, float dy, float radius)
+{
+    wj_glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    wj_glViewport(0, 0, w, h);
+    wj_glActiveTexture(GL_TEXTURE0);
+    wj_glBindTexture(GL_TEXTURE_2D, srcTex);
+    wj_glUniform1f(sPU_mode, 1.0f);
+    wj_glUniform2f(sPU_texel, 1.0f / w, 1.0f / h);
+    wj_glUniform2f(sPU_dir, dx, dy);
+    wj_glUniform1f(sPU_radius, radius);
+    PostQuad();
+}
+
+/* Scene is in sHdrTex: bloom, then the final pass into the caller's framebuffer. */
+static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float playerDist)
+{
+    /* UE default bloom tints; sizes are % of screen width x BloomSizeScale (Gamma: 4..128 x 15). */
+    static const float tint[6] = {0.3465f, 0.138f, 0.1176f, 0.066f, 0.066f, 0.061f};
+    static const float size[6] = {4, 8, 16, 32, 64, 128};
+    GLuint scratch = sBloomTex[6];
+    wj_glDisable(GL_DEPTH_TEST);
+    wj_glDisable(GL_BLEND);
+    wj_glUseProgram(sPostProg);
+    wj_glUniform1i(sPU_src, 0);
+    wj_glUniform1i(sPU_src2, 1);
+    wj_glUniform1i(sPU_depth, 2);
+    wj_glUniform4f(sPU_misc, 1.0f, 1.25f, 6.0f, 0.4f);
+    /* bright pass at 1/4 size into level 0 */
+    wj_glBindFramebuffer(GL_FRAMEBUFFER, sBloomFbo[0]);
+    wj_glViewport(0, 0, sBloomW[0], sBloomH[0]);
+    wj_glActiveTexture(GL_TEXTURE0);
+    wj_glBindTexture(GL_TEXTURE_2D, sHdrTex);
+    wj_glUniform1f(sPU_mode, 0.0f);
+    PostQuad();
+    /* One combined glow: each stage's gaussian (radius = size*scale % of width, half-width kernel) weighted
+     * by its tint, accumulated into level 1 at 1/8 size. Blurring is done on the 1/4-size bright pass. */
+    {
+        float total = 0.0f;
+        for (int i = 0; i < 6; i++)
+            total += tint[i];
+        /* Gaussians this wide (>= 30% of the screen) are smooth: approximate their weighted sum by one
+         * blur at the tint-weighted mean radius, scaled by the summed tint. */
+        float meanR = 0.0f;
+        for (int i = 0; i < 6; i++)
+            meanR += tint[i] / total * (size[i] * 15.0f * 0.01f * 0.5f);
+        float rpx = meanR * sBloomW[0];
+        int lv = 0;
+        while (lv < 5 && rpx / (float)(1 << lv) > 24.0f)
+            lv++;
+        /* downsample chain to level lv */
+        for (int i = 1; i <= lv; i++)
+            PostBlur(sBloomFbo[i], sBloomTex[i - 1], sBloomW[i], sBloomH[i], 0.0f, 0.0f, 0.0f);
+        PostBlur(sBloomFbo[6], sBloomTex[lv], sBloomW[lv], sBloomH[lv], 1.0f, 0.0f, rpx / (float)(1 << lv));
+        PostBlur(sBloomFbo[lv], scratch, sBloomW[lv], sBloomH[lv], 0.0f, 1.0f, rpx / (float)(1 << lv));
+        wj_glUseProgram(sPostProg);
+        wj_glUniform4f(sPU_misc, 1.0f, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f : 6.0f * total, 0.4f);
+        /* final */
+        wj_glBindFramebuffer(GL_FRAMEBUFFER, outFbo);
+        wj_glViewport(0, 0, w, h);
+        wj_glActiveTexture(GL_TEXTURE2);
+        wj_glBindTexture(GL_TEXTURE_2D, sHdrDepth);
+        wj_glTexParameteri(GL_TEXTURE_2D, 0x884C /* COMPARE_MODE */, 0);
+        wj_glActiveTexture(GL_TEXTURE1);
+        wj_glBindTexture(GL_TEXTURE_2D, sBloomTex[lv]);
+        wj_glActiveTexture(GL_TEXTURE0);
+        wj_glBindTexture(GL_TEXTURE_2D, sHdrTex);
+        wj_glUniform2f(sPU_texel, 1.0f / w, 1.0f / h);
+        wj_glUniform4f(sPU_fade, fade[0], fade[1], fade[2], fade[3]);
+        {
+            /* Gamma's lens: 100-degree FOV on a 450 mm sensor -> f = 188.8 mm, f/1.744 -> A = 108.2 mm.
+             * CoC (fraction of sensor) = A f |D - S| / (D (S - f)) / 450; pixels = fraction x width. */
+            const float f = 450.0f / (2.0f * 1.19175359f), A = f / 1.7442f;
+            float S = playerDist * 640.0f;
+            float k = A * f / ((S - f) > 1.0f ? (S - f) : 1.0f) / 450.0f * (float)w;
+            wj_glUniform4f(sPU_coc, k, S, 0.5f, 400.0f);
+        }
+        wj_glUniform1f(sPU_mode, 2.0f);
+        PostQuad();
+        wj_glActiveTexture(GL_TEXTURE0);
+    }
+}
+
 bool Voxel3D_Init(const char *dataDir)
 {
     if (sInited || sFailed)
@@ -1304,6 +1603,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         return false;
     }
 
+    if (gVoxelGammaLight && !PostBeginScene(w, h))
+        gVoxelGammaLight = 0;
     wj_glViewport(0, 0, w, h);
     wj_glDepthMask(GL_TRUE);
     if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
@@ -1333,6 +1634,10 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             // Outdoors: a sky colour, not the GBA backdrop.
             r = 0.55f; g = 0.75f; b = 0.95f;
         }
+        if (gVoxelGammaLight)
+        {   /* backdrop in linear light, so the screen pass returns it unchanged in look */
+            r = r * r; g = g * g; b = b * b;
+        }
         wj_glClearColor(r, g, b, 1.0f);
     }
     wj_glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1357,7 +1662,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     Multiply(mvp, proj, view);
     wj_glUniformMatrix4fv(sUniMvp, 1, GL_FALSE, mvp);
     wj_glUniform3f(sUniCam, sCamera.x, sCamera.y, sCamera.z);
-    if (VoxelWorld_ScreenFade(&fadeAmount, fadeRgb))
+    if (VoxelWorld_ScreenFade(&fadeAmount, fadeRgb) && !gVoxelGammaLight)
         wj_glUniform4f(sUniFade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount);
     else
         wj_glUniform4f(sUniFade, 0, 0, 0, 0);
@@ -1415,6 +1720,13 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     wj_glDisable(GL_BLEND);
     wj_glUniform1f(sUniMode, 0.0f);
     MeshDraw(&sSpriteMesh, sSpriteTex, 0, 0, 0);
+
+    if (gVoxelGammaLight)
+    {
+        float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount};
+        float dx = sCamera.x - sCamera.targetX, dy = sCamera.y - sCamera.targetY, dz = sCamera.z - sCamera.targetZ;
+        PostFinish(sFbo, w, h, fd, sqrtf(dx * dx + dy * dy + dz * dz));
+    }
 
     if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
     {
