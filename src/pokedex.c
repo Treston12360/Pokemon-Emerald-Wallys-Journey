@@ -2611,6 +2611,10 @@ static void UpdateSelectedMonSpriteId(void)
     {
         u16 spriteId = sPokedexView->monSpriteIds[i];
 
+#ifdef PORTABLE
+        if (spriteId == 0xFFFF) // empty slot: the GBA reads junk past gSprites
+            continue;
+#endif
         if (gSprites[spriteId].x2 == 0 && gSprites[spriteId].y2 == 0 && spriteId != 0xFFFF)
             sPokedexView->selectedMonSpriteId = spriteId;
     }

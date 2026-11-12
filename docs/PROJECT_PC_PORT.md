@@ -200,3 +200,14 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   1 done: Settings sections are now Gameplay / Speed & Looks / Controller / Keyboard / Audio / Video. Keyboard rows
   Key Up..Key fast fwd: A = "Press a key" (Esc cancels, a key used elsewhere swaps), cfg `keyUp=<SDL keycode>` ...
   Test script command `typekey NAME`. Checked under Wine with real key presses (W bound to Up walks).
+- Owner item 4 "Fix the bad reads so there's no crashes": random-input hunts (tools: scratch hunt2.py, 2500 presses,
+  saves s0-s5, t1 and the owner's New Mauville save) found 4 spots, fixed PC-only at the source:
+  Trainer Card VBlank after sData freed (trainer_card.c), Pokédex UpdateSelectedMonSpriteId reading gSprites[0xFFFF]
+  (pokedex.c), PlayAnimation *argPtr with NULL arg (overworld weather starting a battle; WJPC_ANIM_ARG same-line macro
+  in battle_script_commands.h, that file has __LINE__ asserts), CannotUseItemsInBattle GetMonData(NULL) for items used
+  from the bag in battle (Poké Balls, X items; item_use.c uses the battler's HP). The last one could cancel a ball
+  throw on PC since 4c's guard skipped the whole item use.
+  Then the owner's save found an integer divide by zero (Spark animation, `x % 0`). The GBA build's libgcc gives
+  x/0 = INT_MAX/INT_MIN/0 by sign (unsigned 0xFFFFFFFF/0) and x%0 = 0 and carries on; null_guard.c now emulates a
+  faulting 32-bit DIV/IDIV that way (Windows vectored handler / Linux SIGFPE: decode F7 /6,/7 length, set EAX/EDX,
+  continue) instead of skipping the callback (which could freeze a battle animation). Script test `divzero FILE`.

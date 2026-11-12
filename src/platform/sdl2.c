@@ -242,6 +242,21 @@ static bool TestStep(void)
             }
             continue;
         }
+        if (!strcmp(cmd, "divzero"))
+        {
+            // Test: divide by zero must give the GBA's answers (see null_guard.c) and carry on.
+            volatile int a = 5, b = 0, c = -7;
+            volatile unsigned int u = 9, z = 0;
+            int q1 = a / b, r1 = a % b, q2 = c / b;
+            unsigned int q3 = u / z, r3 = u % z;
+            FILE *f = fopen(arg1, "w");
+            if (f != NULL)
+            {
+                fprintf(f, "5/0=%d 5%%0=%d -7/0=%d 9u/0=%u 9u%%0=%u\n", q1, r1, q2, q3, r3);
+                fclose(f);
+            }
+            continue;
+        }
         if (!strcmp(cmd, "typekey"))
         {
             // "typekey NAME": a keyboard key press for the Settings "Press a key" rows (SDL key name).

@@ -346,6 +346,11 @@ static void VblankCb_TrainerCard(void)
     LoadOam();
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
+#ifdef PORTABLE
+    // The card was just closed (sData freed) but this VBlank callback runs once more.
+    if (sData == NULL)
+        return;
+#endif
     BlinkTimeColon();
     if (sData->allowDMACopy)
         DmaCopy16(3, &gScanlineEffectRegBuffers[0], &gScanlineEffectRegBuffers[1], 0x140);

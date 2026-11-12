@@ -67,4 +67,12 @@ bool32 CanFireMoveThawTarget(enum Move move, enum Type moveType);
 extern void (*const gBattleScriptingCommandsTable[])(void);
 extern const struct StatFractions gAccuracyStageRatios[];
 
+// playanimation with no argument (e.g. weather from the overworld starting): the GBA reads the
+// BIOS through NULL; on PC that crashes, so use 0 there.
+#ifdef PORTABLE
+#define WJPC_ANIM_ARG(argPtr) ((argPtr) != NULL ? *(argPtr) : 0)
+#else
+#define WJPC_ANIM_ARG(argPtr) (*(argPtr))
+#endif
+
 #endif // GUARD_BATTLE_SCRIPT_COMMANDS_H

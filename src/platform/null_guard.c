@@ -7,6 +7,10 @@
 // through a NULL or junk pointer, as the GBA reads junk there), skip the rest of
 // that one callback, and log it once (also to WallysJourney_errors.txt) so it can
 // be fixed properly. On Windows, any other crash writes WallysJourney_crash.txt.
+#ifndef _WIN32
+#define _GNU_SOURCE // REG_EIP etc. in <sys/ucontext.h>
+#include <ucontext.h>
+#endif
 #include <stdio.h>
 #include <stdint.h>
 #ifdef _WIN32
@@ -63,10 +67,68 @@ static void LogOnce(const void *fn)
     }
 }
 
+// Integer divide by zero, the GBA way. This ROM's division routines (libgcc) give for x / 0 the
+// biggest number with x's sign (0 if x is 0; unsigned: 0xFFFFFFFF, or 0) and for x % 0 the value 0,
+// and the game carries on. x86 stops instead, so the faulting DIV/IDIV r/m32 is done here by hand:
+// quotient into EAX, remainder 0 into EDX, then continue after the instruction.
+// Returns the instruction length, or 0 if it isn't a 32-bit DIV/IDIV (then it's handled as a crash).
+static int EmulateDivideByZero(const uint8_t *ip, uint32_t *eax, uint32_t *edx)
+{
+    const uint8_t *p = ip;
+    int mod, reg, rm;
+    if (*p == 0x66 || *p == 0xF6)
+        return 0; // 16/8-bit forms: not used by this game's C code
+    if (*p != 0xF7)
+        return 0;
+    p++;
+    mod = *p >> 6;
+    reg = (*p >> 3) & 7;
+    rm = *p & 7;
+    p++;
+    if (reg != 6 && reg != 7) // /6 = DIV, /7 = IDIV
+        return 0;
+    if (mod != 3 && rm == 4)
+    {
+        // SIB byte; base 5 with mod 0 means a 32-bit displacement
+        if (mod == 0 && (*p & 7) == 5)
+            p += 4;
+        p++;
+    }
+    if (mod == 1)
+        p += 1;
+    else if (mod == 2 || (mod == 0 && rm == 5))
+        p += 4;
+    if (reg == 7)
+    {
+        int32_t x = (int32_t)*eax;
+        *eax = x > 0 ? 0x7FFFFFFF : x < 0 ? 0x80000000 : 0;
+    }
+    else
+    {
+        *eax = *eax != 0 ? 0xFFFFFFFF : 0;
+    }
+    *edx = 0;
+    return (int)(p - ip);
+}
+
 #ifdef _WIN32
 static LONG CALLBACK Handler(EXCEPTION_POINTERS *info)
 {
     DWORD code = info->ExceptionRecord->ExceptionCode;
+#ifdef _X86_
+    if (code == EXCEPTION_INT_DIVIDE_BY_ZERO)
+    {
+        uint32_t eax = info->ContextRecord->Eax, edx = info->ContextRecord->Edx;
+        int len = EmulateDivideByZero((const uint8_t *)info->ContextRecord->Eip, &eax, &edx);
+        if (len > 0)
+        {
+            info->ContextRecord->Eax = eax;
+            info->ContextRecord->Edx = edx;
+            info->ContextRecord->Eip += len;
+            return EXCEPTION_CONTINUE_EXECUTION;
+        }
+    }
+#endif
     if (tGuardBuf != NULL
      && (code == EXCEPTION_ACCESS_VIOLATION || code == EXCEPTION_INT_DIVIDE_BY_ZERO
       || code == EXCEPTION_INT_OVERFLOW || code == EXCEPTION_ILLEGAL_INSTRUCTION
@@ -127,6 +189,21 @@ static LONG WINAPI CrashReport(EXCEPTION_POINTERS *info)
 #else
 static void Handler(int sig, siginfo_t *si, void *ctx)
 {
+#if defined(__i386__) && defined(REG_EIP)
+    if (sig == SIGFPE && si->si_code == FPE_INTDIV)
+    {
+        ucontext_t *uc = ctx;
+        uint32_t eax = uc->uc_mcontext.gregs[REG_EAX], edx = uc->uc_mcontext.gregs[REG_EDX];
+        int len = EmulateDivideByZero((const uint8_t *)uc->uc_mcontext.gregs[REG_EIP], &eax, &edx);
+        if (len > 0)
+        {
+            uc->uc_mcontext.gregs[REG_EAX] = eax;
+            uc->uc_mcontext.gregs[REG_EDX] = edx;
+            uc->uc_mcontext.gregs[REG_EIP] += len;
+            return;
+        }
+    }
+#endif
     if (tGuardBuf != NULL)
     {
         tFaultCode = sig;

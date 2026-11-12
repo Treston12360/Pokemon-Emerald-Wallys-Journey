@@ -790,7 +790,13 @@ static void AnimSparkElectricityFlashing_Step(struct Sprite *sprite)
     sprite->y2 = Cos(sprite->data[7], sprite->data[5]);
 
     sprite->data[7] = (sprite->data[7] + sprite->data[6]) & 0xFF;
+#ifdef PORTABLE
+    // Some uses pass a flash rate of 0. The GBA's division routine gives 0 for "x % 0" and carries
+    // on; on PC dividing by zero stops the game.
+    if ((sprite->data[4] != 0 ? sprite->data[7] % sprite->data[4] : 0) == 0)
+#else
     if (sprite->data[7] % sprite->data[4] == 0)
+#endif
         sprite->invisible ^= TRUE;
 
     if (sprite->data[0]-- <= 0)

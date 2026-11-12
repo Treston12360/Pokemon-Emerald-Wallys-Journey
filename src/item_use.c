@@ -1289,7 +1289,13 @@ bool32 CannotUseItemsInBattle(enum Item itemId, struct Pokemon *mon)
     bool8 cannotUse = FALSE;
     const u8* failStr = NULL;
     u32 i, battlerTarget;
+#ifdef PORTABLE
+    // Items used straight from the bag in battle (Poké Balls, X items) pass no Pokémon; the GBA
+    // reads junk HP through NULL (and the PC would crash): use the HP of the Pokémon in battle.
+    u16 hp = (mon != NULL) ? GetMonData(mon, MON_DATA_HP) : gBattleMons[gBattlerInMenuId].hp;
+#else
     u16 hp = GetMonData(mon, MON_DATA_HP);
+#endif
 
     if (gPartyMenu.slotId == 0)
         battlerTarget = B_POSITION_PLAYER_LEFT;
