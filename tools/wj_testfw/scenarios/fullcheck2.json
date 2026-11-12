@@ -1,0 +1,99 @@
+[
+ {
+  "name": "twins",
+  "map": "MAP_ROUTE104",
+  "x": 29,
+  "y": 16,
+  "flags": [
+   "FLAG_SYS_POKEMON_GET",
+   "FLAG_SYS_POKEDEX_GET",
+   "FLAG_BADGE01_GET"
+  ],
+  "party": [
+   [
+    "MARSHTOMP",
+    20
+   ],
+   [
+    "TAILLOW",
+    15
+   ],
+   [
+    "RALTS",
+    12
+   ]
+  ],
+  "extra": "VarSet(VAR_REPEL_STEP_COUNT, 200);"
+ },
+ {
+  "name": "mauville_to_110",
+  "map": "MAP_MAUVILLE_CITY",
+  "x": 16,
+  "y": 14,
+  "flags": [
+   "FLAG_SYS_POKEMON_GET",
+   "FLAG_SYS_POKEDEX_GET",
+   "FLAG_BADGE01_GET",
+   "FLAG_BADGE02_GET"
+  ],
+  "party": [
+   [
+    "SWAMPERT",
+    40
+   ],
+   [
+    "GARDEVOIR",
+    36
+   ]
+  ]
+ },
+ {
+  "name": "r113_to_fallarbor",
+  "map": "MAP_ROUTE113",
+  "x": 4,
+  "y": 10,
+  "flags": [
+   "FLAG_SYS_POKEMON_GET",
+   "FLAG_SYS_POKEDEX_GET",
+   "FLAG_BADGE01_GET",
+   "FLAG_BADGE02_GET",
+   "FLAG_BADGE03_GET"
+  ],
+  "party": [
+   [
+    "SWAMPERT",
+    40
+   ],
+   [
+    "GARDEVOIR",
+    36
+   ]
+  ]
+ },
+ {
+  "name": "r119_grass",
+  "map": "MAP_ROUTE119",
+  "x": 28,
+  "y": 100,
+  "flags": [
+   "FLAG_SYS_POKEMON_GET",
+   "FLAG_SYS_POKEDEX_GET",
+   "FLAG_BADGE01_GET",
+   "FLAG_BADGE02_GET",
+   "FLAG_BADGE03_GET",
+   "FLAG_BADGE04_GET",
+   "FLAG_BADGE05_GET"
+  ],
+  "party": [
+   [
+    "SWAMPERT",
+    45
+   ],
+   [
+    "GARDEVOIR",
+    40
+   ]
+  ],
+  "extra": "VarSet(VAR_REPEL_STEP_COUNT, 200);"
+ }
+]

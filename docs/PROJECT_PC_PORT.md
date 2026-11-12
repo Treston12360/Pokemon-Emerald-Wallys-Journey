@@ -243,3 +243,6 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
 - Owner asked (2026-11-11) whether the reporters (Gabby & Ty) give too little EXP on PC. Checked on both
   (scenarios/rep42.json, steps/reporters.txt): Lv40 Magnezone + Exploud vs Lv42 Groudon/Kyogre gave 102 and 93 EXP
   each and ₽1600 on BOTH. Low EXP is the 5% rule the owner asked for on 2026-11-11 (main branch), not a PC bug.
+- Full check, maps (scenarios/fullcheck2.json): Twins double battle (Route 104), Mauville -> Route 110 and
+  Route 113 -> Fallarbor map connections, Route 119 walk. All match; differences are only water ripples, the map
+  name sign, and random-walking NPCs a step apart after a map change (GBA lag frames during the map load).
