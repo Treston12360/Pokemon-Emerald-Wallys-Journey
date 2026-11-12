@@ -542,6 +542,29 @@ static void DrawFieldScene(double t, int outW, int outH)
             SDL_Rect dst = {0, 0, DISPLAY_WIDTH * s, band * s};
             SDL_RenderCopy(sdlRenderer, sdlUiTexture, &src, &dst);
         }
+        if (FieldEffectActiveListContains(FLDEFF_FIELD_MOVE_SHOW_MON))
+        {
+            // HM "Pokémon shows itself" banner: its rows run the whole width of the screen.
+            int top = (REG_WIN0V >> 8) & 0xFF, bottom = REG_WIN0V & 0xFF;
+            if (bottom > DISPLAY_HEIGHT || bottom < top)
+                bottom = DISPLAY_HEIGHT;
+            int extra = (outW - DISPLAY_WIDTH * s + s - 1) / s / 2 + 1;
+            if (extra > sFrameInfo.gbaX)
+                extra = sFrameInfo.gbaX;
+            SDL_Rect bsrc = {sFrameInfo.gbaX - extra, sFrameInfo.gbaY + top, DISPLAY_WIDTH + 2 * extra, bottom - top};
+            SDL_Rect bdst = {ux - extra * s, uy + top * s, bsrc.w * s, bsrc.h * s};
+            SDL_RenderCopy(sdlRenderer, sdlUiTexture, &bsrc, &bdst);
+            if (bdst.x > 0)
+            {
+                // Zoomed far out: past the drawn picture, carry on its edge column.
+                SDL_Rect es = {bsrc.x, bsrc.y, 1, bsrc.h}, ed = {0, bdst.y, bdst.x, bdst.h};
+                SDL_RenderCopy(sdlRenderer, sdlUiTexture, &es, &ed);
+                es.x = bsrc.x + bsrc.w - 1;
+                ed.x = bdst.x + bdst.w;
+                ed.w = outW - ed.x;
+                SDL_RenderCopy(sdlRenderer, sdlUiTexture, &es, &ed);
+            }
+        }
         SDL_Rect src = {sFrameInfo.gbaX, sFrameInfo.gbaY + band, DISPLAY_WIDTH, DISPLAY_HEIGHT - band};
         SDL_Rect dst = {ux, uy + band * s, DISPLAY_WIDTH * s, (DISPLAY_HEIGHT - band) * s};
         SDL_RenderCopy(sdlRenderer, sdlUiTexture, &src, &dst);

@@ -13,6 +13,8 @@
 // the middle of the wide canvas with black around it, so the zoom does not jump.
 #if defined(PORTABLE) && defined(RENDERER_EASY_DRAW)
 #include "global.h"
+#include "field_effect.h"
+#include "constants/field_effects.h"
 #include <stdbool.h>
 extern char *getenv(const char *);
 extern int printf(const char *, ...);
@@ -606,10 +608,14 @@ static void RenderVramBgLine(uint16_t control, uint16_t hoffs, uint16_t voffs, i
         return;
     hoffs &= 0x1FF;
     voffs &= 0x1FF;
-    for (unsigned int x = 0; x < DISPLAY_WIDTH; x++)
+    // The HM "Pokémon shows itself" banner (BG0) carries on across the whole wide screen.
+    int xFrom = 0, xTo = DISPLAY_WIDTH;
+    if (FieldEffectActiveListContains(FLDEFF_FIELD_MOVE_SHOW_MON))
+        xFrom = -sOX, xTo = sW - sOX;
+    for (int x = xFrom; x < xTo; x++)
     {
         uint16_t *bgmap = (uint16_t *)BG_SCREEN_ADDR(screenBase);
-        unsigned int xx = (x + hoffs) & 0x1FF, yy = (gl + voffs) & 0x1FF;
+        unsigned int xx = (unsigned int)(x + hoffs) & 0x1FF, yy = (gl + voffs) & 0x1FF;
         if (xx > 255 && mapWpx > 256)
             bgmap += 0x400;
         if (yy > 255 && mapHpx > 256)
