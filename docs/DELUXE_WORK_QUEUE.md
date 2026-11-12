@@ -66,9 +66,11 @@ frames or build it incrementally. Map meshes are already one per frame.
 Owner asked for trainers/NPCs to look 3D like the houses: extrude each sprite frame into blocks.
 Make one test picture, owner decides.
 
-### DLX-9 Lighting like Gamma Emerald (ASK)
-Gamma Emerald's data is encrypted; we will not break it. Owner to send screenshots, or approve designing
-it from Emerald 3DS's lighting (`voxel_lighting.c`).
+### DLX-9 Lighting like Gamma Emerald (WIP)
+2026-11-12: the owner got Gamma Emerald's unpacked files from its developer (Unreal Engine 5 project,
+"Gamma-Pak-Recovery" archive, 51 parts). Study how its lighting is set up (sun, sky, day/night,
+post-process) and recreate the look in our OpenGL 3D view (`voxel_gl.c` shader, `voxel_lighting.c`).
+Do not copy their assets. Show the owner before/after pictures.
 
 ### DLX-10 Encore: cursor on the forced move (ASK)
 Offered: while Encored, the move cursor jumps to the locked move. No new wording.
@@ -92,6 +94,18 @@ Present a plan to raise the sprite palette and sprite VRAM limits before coding.
 ### DLX-16 Merge `deluxe-3d` into `deluxe` (TODO, after owner OK on 3D)
 Includes the Hex crash fix (`src/battle_util.c`), which should reach `deluxe` regardless (cherry-pick
 commit "Fix freeze: Hex on a statused target...").
+
+### DLX-17 3D: a ground texture draws wrong in Slateport and many other places (TODO)
+Owner report 2026-11-12. Find the metatile(s) (compare 2D and 3D at the same spot) and fix.
+
+### DLX-18 3D: route switching still a little jarring; no pop-in at all (TODO)
+Owner: "just load everything so nothing has to pop in". Preload connected maps' meshes, people and
+trees ahead of the border (map meshes are already built one a frame; the edge scenery rebuild is
+DLX-7). People on neighbouring maps should already be drawn.
+
+### DLX-19 3D: Lavaridge gym sign folded in half; check the gym door (TODO)
+The new gym model (DLX-1) shows the sign bent. The model is visual only, but confirm in game that
+the door still leads into Lavaridge's gym.
 
 ## How to build and test (short)
 - Linux: `make -f Makefile.pc -j3`; Windows: `make -f Makefile.pc WIN=1`.
