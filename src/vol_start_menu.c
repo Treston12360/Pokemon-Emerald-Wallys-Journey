@@ -1260,3 +1260,11 @@ static void Task_Vol_StartMenu_WaitSaveGame(u8 taskId)
         DestroyTask(taskId);
     }
 }
+
+#ifdef PORTABLE
+// PC build: the start menu is open (the screen draws it against the right edge).
+bool32 Vol_StartMenu_IsOpen(void)
+{
+    return sVol_StartMenu != NULL || GetStartMenuWindowId() != WINDOW_NONE;
+}
+#endif

@@ -464,6 +464,7 @@ static void GetSceneSize(int *w, int *h)
 }
 
 extern u8 GetMapNamePopUpWindowId(void);
+extern bool32 Vol_StartMenu_IsOpen(void);
 
 // Overworld: the map at the zoom scale, edge to edge; the UI layer (text boxes, menus) at the
 // biggest whole size the GBA screen fits, bottom-centred like on the GBA; the map name pop-up
@@ -496,7 +497,8 @@ static void DrawFieldScene(double t, int outW, int outH)
             s = outH / DISPLAY_HEIGHT;
         if (s < 1)
             s = 1;
-        int ux = (outW - DISPLAY_WIDTH * s) / 2, uy = outH - DISPLAY_HEIGHT * s;
+        // Start menu open: the UI slides right so the menu is flush with the screen's right edge.
+        int ux = Vol_StartMenu_IsOpen() ? outW - DISPLAY_WIDTH * s : (outW - DISPLAY_WIDTH * s) / 2, uy = outH - DISPLAY_HEIGHT * s;
         int band = 0;
         if (GetMapNamePopUpWindowId() != 0xFF)
         {
