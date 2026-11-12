@@ -34,7 +34,11 @@ The 3D model comes from Emerald 3DS's generator (`gym()` in `voxel_building_spec
 vs `warp 0 11 ...`) and to Emerald 3DS screenshots; find why Lavaridge's is drawn flatter (wrong model
 picked, art differs from vanilla so the model did not match, or the roof is drawn as ground).
 
-### DLX-2 Continue screen: shiny Pokemon icons (WIP - session 014PwRDj, 2026-11-12 10:35, `deluxe` too)
+### DLX-2 Continue screen: shiny Pokemon icons (ASK - works in current builds; which build did the owner see?)
+Checked 2026-11-12 (session 014PwRDj): shiny icons on the Continue screen were added in 979563a0 (0.18.15, Nov 10)
+and are in `deluxe` and `deluxe-3d`. Tested owner's save (shiny Breloom) and a test save with six different shinies
+(scenario tools/wj_testfw/scenarios/shiny6.json): GBA (mGBA) and PC identical, all shiny; PC window in 2D and 3D
+too. Waiting for the owner to say which build/save showed normal colours.
 On the title screen's Continue/save summary, party icons of shiny Pokemon must use their shiny colours.
 
 ### DLX-3 Smooth battles and menus (TODO, approved "option 1")

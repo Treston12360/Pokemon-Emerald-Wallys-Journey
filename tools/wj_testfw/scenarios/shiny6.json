@@ -1,0 +1,1 @@
+[{"name": "shiny6", "map": "MAP_LITTLEROOT_TOWN", "x": 10, "y": 10, "flags": ["FLAG_SYS_POKEMON_GET", "FLAG_SYS_POKEDEX_GET"], "party": [["GARDEVOIR", 40], ["BRELOOM", 40], ["SWAMPERT", 40], ["ALTARIA", 40], ["MANECTRIC", 40], ["AGGRON", 40]], "extra": "{ u8 i; bool8 t = TRUE; for (i = 0; i < 6; i++) SetMonData(&gPlayerParty[i], MON_DATA_IS_SHINY, &t); }"}]
