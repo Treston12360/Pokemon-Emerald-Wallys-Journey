@@ -2717,7 +2717,9 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             /* Laid as drawn it meets the map at its own height: the map's
              * faces close every step there, and a wall of the belt's would
              * stand in the same place as the cave's north wall. */
-            if (drawn || (!south && !east && !west))
+            /* Wally's Journey PC: the wider view sees between a drawn belt's
+             * rows of tops, so it keeps its faces too. */
+            if (!south && !east && !west)
                 continue;
             for (int h = 0; h < (int)courses; ++h)
             {

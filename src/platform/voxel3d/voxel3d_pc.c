@@ -101,11 +101,12 @@ u32 GetMapClosedEdges(void)
 
 const u16 *MapGridGetCameraBorderAt(int x, int y, u8 *index)
 {
-    static u16 sBorder;
-
-    sBorder = WideView_NearestBorderMetatile(x + MAP_OFFSET, y + MAP_OFFSET);
-    *index = 0;
-    return &sBorder;
+    // As the 3DS: the current map's own 2x2 border. (The 2D wide view's nearest-map filler mixes in
+    // other maps' borders, whose metatiles mean other art on this map's tilesets.)
+    if (gMapHeader.mapLayout == NULL || gMapHeader.mapLayout->border == NULL)
+        return NULL;
+    *index = (u8)(((y & 1) << 1) | (x & 1));
+    return gMapHeader.mapLayout->border;
 }
 
 u8 GetSpriteExtPalette(const struct Sprite *sprite)

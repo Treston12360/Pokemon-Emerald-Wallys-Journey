@@ -22,6 +22,7 @@
 
 #include <string.h>
 #include "global.h"
+#include "battle_setup.h"
 #include "constants/characters.h"
 #include "constants/event_objects.h"
 #include "sprite.h"
@@ -303,6 +304,31 @@ static bool TestStep(void)
                 SetWarpDestination(g, m, WARP_ID_NONE, x, y);
                 DoWarp();
             }
+            continue;
+        }
+        if (!strcmp(cmd, "partyswap") || !strcmp(cmd, "enemyswap"))
+        {
+            // partyswap A B / enemyswap A B (test aid): swap two party slots.
+            struct Pokemon *party = !strcmp(cmd, "partyswap") ? gPlayerParty : gEnemyParty;
+            int a = atoi(arg1), b2 = 0;
+            struct Pokemon tmp;
+            sscanf(line, "%*s %*s %d", &b2);
+            if (a >= 0 && a < PARTY_SIZE && b2 >= 0 && b2 < PARTY_SIZE)
+            {
+                tmp = party[a];
+                party[a] = party[b2];
+                party[b2] = tmp;
+            }
+            continue;
+        }
+        if (!strcmp(cmd, "trainerbattle"))
+        {
+            // trainerbattle ID (test aid): start that trainer's battle from the field, as a script would.
+            memset(&gTrainerBattleParameter, 0, sizeof(gTrainerBattleParameter));
+            gTrainerBattleParameter.params.opponentA = (u16)atoi(arg1);
+            gTrainerBattleParameter.params.opponentB = 0;
+            gNoOfApproachingTrainers = 0;
+            BattleSetup_StartTrainerBattle();
             continue;
         }
         if (!strcmp(cmd, "surfon"))
@@ -2259,6 +2285,14 @@ void VDraw(SDL_Texture *texture)
             if (id != 0)
             {
                 SDL_Texture *was = SDL_GetRenderTarget(sdlRenderer);
+                {
+                    // The zoom setting moves the 3D camera: the 2D view's height in GBA pixels
+                    // against the 3DS's ~160 at its 100%.
+                    int level = sPlatformSettings[PLATFORM_SETTING_ZOOM] % ZOOM_COUNT;
+                    if (WideView_IsIndoorMap() && level > 0)
+                        level--;
+                    Voxel3D_SetSettings(true, 0, 100 * 160 / sZoomHeights[level]);
+                }
                 s3DFrame = Voxel3D_Render(id, w, h);
                 // SDL caches its GL state: switching targets makes it send viewport and target again.
                 SDL_SetRenderTarget(sdlRenderer, sdl3DTexture);

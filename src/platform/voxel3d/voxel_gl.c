@@ -672,6 +672,11 @@ static void BuildBelt(const VoxelMapInstance *inst0, Atlas *atlas, int cx, int c
     }
     MeshSet(&sBeltTrees, sTreeBuf, sTreeCount, GL_STATIC_DRAW);
     sBeltAtlas = atlas;
+    Voxel3D_Log("[3D] belt slots %u %u %u %u relief belt %u", atlas->map.slotOf[621], atlas->map.slotOf[622], atlas->map.slotOf[629], atlas->map.slotOf[630], VoxelRelief_Belt(inst0));
+    Voxel3D_Log("[3D] belt trees %d part621 %d part622 %d part629 %d part630 %d", VoxelWorld_UsesTreeSprites(inst0), VoxelTree_Part(inst0->secondaryTileset, 621), VoxelTree_Part(inst0->secondaryTileset, 622), VoxelTree_Part(inst0->secondaryTileset, 629), VoxelTree_Part(inst0->secondaryTileset, 630));
+    Voxel3D_Log("[3D] belt at %d,%d: %u uncovered, border(-3,10)=%d (-4,10)=%d (-3,11)=%d (-4,11)=%d", cx, cy, b.uncovered,
+                VoxelWorld_BorderMetatile(inst0->originX - 3, inst0->originY + 10), VoxelWorld_BorderMetatile(inst0->originX - 4, inst0->originY + 10),
+                VoxelWorld_BorderMetatile(inst0->originX - 3, inst0->originY + 11), VoxelWorld_BorderMetatile(inst0->originX - 4, inst0->originY + 11));
 }
 
 // ---------------------------------------------------------------------------
@@ -1132,9 +1137,11 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     wj_glDepthMask(GL_FALSE);
     wj_glUniform1f(sUniMode, 2.0f);
-    MeshDraw(&sReflectMesh, sSpriteTex, 0, 0, 0);
+    if (getenv("WJPC_3D_NOREFLECT") == NULL)
+        MeshDraw(&sReflectMesh, sSpriteTex, 0, 0, 0);
     wj_glUniform1f(sUniMode, 1.0f);
-    MeshDraw(&sShadowMesh, sSpriteTex, 0, 0, 0);
+    if (getenv("WJPC_3D_NOSHADOW") == NULL)
+        MeshDraw(&sShadowMesh, sSpriteTex, 0, 0, 0);
     wj_glDepthMask(GL_TRUE);
     wj_glDisable(GL_BLEND);
     wj_glUniform1f(sUniMode, 0.0f);
