@@ -14,6 +14,10 @@ void Platform_SetBorderBackground(u8 selection);
 
 #define FF_SPEED_COUNT 10
 
+// Frame rate choices (frames drawn per second; the game itself always runs at 60).
+#define FRAME_RATE_COUNT 6
+extern const u16 gPlatformFrameRates[FRAME_RATE_COUNT];
+
 enum PlatformSetting
 {
     PLATFORM_SETTING_FULLSCREEN,
@@ -33,7 +37,7 @@ enum PlatformSetting
     PLATFORM_SETTING_PAD_R,
     PLATFORM_SETTING_PAD_FF,
     PLATFORM_SETTING_WIDESCREEN, // kept by the wide view (platform/wide_view.c), not in the array
-    PLATFORM_SETTING_SMOOTH,     // frames drawn per second: 0 = 60 (original), 1 = 120, 2 = 180, 3 = 240 (smooth)
+    PLATFORM_SETTING_SMOOTH,     // frames drawn per second: index into gPlatformFrameRates (0 = 60, the original)
     PLATFORM_SETTING_FILTER,     // screen filter: 0 = off, 1 = scanlines, 2 = LCD grid
     PLATFORM_SETTING_COUNT,
 };

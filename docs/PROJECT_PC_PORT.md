@@ -57,7 +57,8 @@
    - **Owner's answer:** "Do whatever you think will look the best". Chosen: C (384x216) outdoors, B (320x180)
      indoors (small rooms show less black), NPCs loaded further out, weather repeated into the margins.
 3. **Smooth high frame rate** — DONE. Owner then asked for "60 fps to 120 fps 180 fps and 240 fps ... in the options":
-   Settings > Video > `Frame rate < 60 / 120 / 180 / 240 fps >` (cfg `smooth=0..3`); the draw loop is capped at that
+   Settings > Video > `Frame rate < 60 / 120 / 144 / 165 / 180 / 240 fps >` (owner added 144 and 165; cfg `frameRate=<fps>`,
+   old `smooth=0..3` still read); the draw loop is capped at that
    rate (vsync may cap lower); game logic stays 60 updates/s (measured under Wine with WJPC_FPS_LOG=file:
    "fps 240 game 60"). Above 60 the extra frames are the smooth in-between frames below. How: in the
    field the wide view draws an 8 px bigger canvas (WIDE_VIEW_SMOOTH_MARGIN) of the map, and a separate "still" layer

@@ -1126,7 +1126,7 @@ static const u8 sPcRowSetting[] =
 };
 #define PAD_MAX (PAD_BUTTON_COUNT - 1)
 static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static const u8 sPcRowMax[] = {12, 1, 1, 10, FF_SPEED_COUNT - 1, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1, 3, 2};
+static const u8 sPcRowMax[] = {12, 1, 1, 10, FF_SPEED_COUNT - 1, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1, FRAME_RATE_COUNT - 1, 2};
 
 static void PcOption_ProcessInput(u8 item)
 {
@@ -1191,7 +1191,7 @@ static void PcOption_Draw(u8 item)
         break;
     case MENUITEM_PC_SMOOTH:
         // Frames drawn per second; above 60 the extra ones are smooth in-between frames.
-        end = ConvertIntToDecimalStringN(end, 60 * (value % 4 + 1), STR_CONV_MODE_LEFT_ALIGN, 3);
+        end = ConvertIntToDecimalStringN(end, gPlatformFrameRates[value % FRAME_RATE_COUNT], STR_CONV_MODE_LEFT_ALIGN, 3);
         StringCopy(end, COMPOUND_STRING(" fps"));
         break;
     case MENUITEM_PC_FILTER:

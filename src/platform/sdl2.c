@@ -94,6 +94,7 @@ static u8 sPlatformSettings[PLATFORM_SETTING_COUNT] = {
 // Fast forward: the keyboard key (Space) and the controller button are both read here.
 static SDL_atomic_t sFfKeyHeld, sFfPadHeld, sFfToggled;
 static void ApplyFastForward(void);
+const u16 gPlatformFrameRates[FRAME_RATE_COUNT] = {60, 120, 144, 165, 180, 240};
 static const char *const sPadSettingNames[] = {"padA", "padB", "padStart", "padSelect", "padL", "padR", "padFastForward"};
 static SDL_Keycode sKeyMap[KEYBIND_COUNT] = {
     [KEYBIND_UP] = SDLK_UP, [KEYBIND_DOWN] = SDLK_DOWN, [KEYBIND_LEFT] = SDLK_LEFT, [KEYBIND_RIGHT] = SDLK_RIGHT,
@@ -723,7 +724,7 @@ int main(int argc, char **argv)
         {
             static Uint64 lastPresent;
             Uint64 freq = SDL_GetPerformanceFrequency();
-            Uint64 period = freq / (60 * (sPlatformSettings[PLATFORM_SETTING_SMOOTH] + 1));
+            Uint64 period = freq / gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT];
             Uint64 now = SDL_GetPerformanceCounter();
             if (lastPresent != 0 && now - lastPresent < period)
             {
@@ -856,8 +857,22 @@ static void ReadConfigFile(void)
         }
         else if (sscanf(line, "filter=%u", &value) == 1 && value <= 2)
             sPlatformSettings[PLATFORM_SETTING_FILTER] = value;
+        else if (sscanf(line, "frameRate=%u", &value) == 1)
+        {
+            // Stored as frames per second, so adding choices later doesn't change what was picked.
+            sPlatformSettings[PLATFORM_SETTING_SMOOTH] = 0;
+            for (int i = 0; i < FRAME_RATE_COUNT; i++)
+                if (gPlatformFrameRates[i] == value)
+                    sPlatformSettings[PLATFORM_SETTING_SMOOTH] = i;
+        }
         else if (sscanf(line, "smooth=%u", &value) == 1)
-            sPlatformSettings[PLATFORM_SETTING_SMOOTH] = value <= 3 ? value : 3;
+        {
+            // Older settings file: 0..3 = 60/120/180/240.
+            static const u16 sOld[] = {60, 120, 180, 240};
+            for (int i = 0; i < FRAME_RATE_COUNT; i++)
+                if (value <= 3 && gPlatformFrameRates[i] == sOld[value])
+                    sPlatformSettings[PLATFORM_SETTING_SMOOTH] = i;
+        }
         else if (sscanf(line, "fastForwardToggle=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE] = value != 0;
         else
@@ -892,7 +907,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "fastForward=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_SPEED]);
     fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
     fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
-    fprintf(configFile, "smooth=%u\n", sPlatformSettings[PLATFORM_SETTING_SMOOTH]);
+    fprintf(configFile, "frameRate=%u\n", gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT]);
     fprintf(configFile, "filter=%u\n", sPlatformSettings[PLATFORM_SETTING_FILTER]);
     for (int i = 0; i < KEYBIND_COUNT; i++)
         fprintf(configFile, "%s=%d\n", sKeyBindNames[i], (int)sKeyMap[i]);
