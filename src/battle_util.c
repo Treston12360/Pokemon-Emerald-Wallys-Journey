@@ -6306,7 +6306,8 @@ static inline u32 CalcMoveBasePower(struct DamageContext *ctx)
     case EFFECT_DOUBLE_POWER_ON_ARG_STATUS:
         // Comatose targets treated as if asleep
         if ((gBattleMons[battlerDef].status1 | (STATUS1_SLEEP * (ctx->abilities[ctx->battlerDef] == ABILITY_COMATOSE))) & GetMoveEffectArg_Status(move)
-         && !((GetMoveAdditionalEffectById(move, 0)->moveEffect == MOVE_EFFECT_REMOVE_STATUS) && DoesSubstituteBlockMove(battlerAtk, battlerDef, move)))
+         && !(GetMoveAdditionalEffectCount(move) > 0 // Hex has none: reading one read address 0 (a crash on PC)
+              && (GetMoveAdditionalEffectById(move, 0)->moveEffect == MOVE_EFFECT_REMOVE_STATUS) && DoesSubstituteBlockMove(battlerAtk, battlerDef, move)))
             basePower *= 2;
         break;
     case EFFECT_POWER_BASED_ON_TARGET_HP:
