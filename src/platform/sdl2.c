@@ -308,6 +308,30 @@ static bool TestStep(void)
             }
             continue;
         }
+        if (!strcmp(cmd, "enemyhp"))
+        {
+            // enemyhp SLOT HP (test aid): set an enemy party member's HP (0 = fainted).
+            int slot = atoi(arg1), hp = 0;
+            sscanf(line, "%*s %*s %d", &hp);
+            if (slot >= 0 && slot < PARTY_SIZE)
+                SetMonData(&gEnemyParty[slot], MON_DATA_HP, &hp);
+            continue;
+        }
+        if (!strcmp(cmd, "enemymoves"))
+        {
+            // enemymoves SLOT M1 M2 M3 M4 (test aid): set an enemy party member's moves (with full PP).
+            int slot = atoi(arg1), m[4] = {0};
+            sscanf(line, "%*s %*s %d %d %d %d", &m[0], &m[1], &m[2], &m[3]);
+            if (slot >= 0 && slot < PARTY_SIZE)
+                for (int k = 0; k < 4; k++)
+                    SetMonMoveSlot(&gEnemyParty[slot], m[k], k);
+            // and the opposing battler's live copy, if one is out (battler 1)
+            {
+                extern void WJPC_TestSetBattlerMoves(int battler, const int *moves);
+                WJPC_TestSetBattlerMoves(1, m);
+            }
+            continue;
+        }
         if (!strcmp(cmd, "partyswap") || !strcmp(cmd, "enemyswap"))
         {
             // partyswap A B / enemyswap A B (test aid): swap two party slots.
