@@ -151,8 +151,9 @@ static void UpdatePads(int w, int h)
     }
     gWjPcViewPadX = (w - DISPLAY_WIDTH) / 2;
     gWjPcViewPadY = (h - DISPLAY_HEIGHT) / 2;
-    gWjPcSpawnPadX = (gWjPcViewPadX + 15) / 16;
-    gWjPcSpawnPadY = (gWjPcViewPadY + 15) / 16;
+    // One tile more than the visible edge: NPCs load before they scroll into view, not as they do.
+    gWjPcSpawnPadX = (gWjPcViewPadX + 15) / 16 + 1;
+    gWjPcSpawnPadY = (gWjPcViewPadY + 15) / 16 + 1;
 }
 
 // ---------------------------------------------------------------------------

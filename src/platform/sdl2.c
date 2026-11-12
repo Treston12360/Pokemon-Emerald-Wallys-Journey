@@ -34,6 +34,13 @@
 #include "gba/flash_internal.h"
 #include "platform/dma.h"
 #include "platform/framedraw.h"
+#include "overworld.h"
+#include "field_screen_effect.h"
+#include "field_player_avatar.h"
+#include "field_effect.h"
+#include "constants/field_effects.h"
+#include "constants/event_objects.h"
+#include "script.h"
 
 extern void (*const gIntrTable[])(void);
 
@@ -240,12 +247,39 @@ static bool TestStep(void)
         if (!strcmp(cmd, "set"))
         {
             // set SETTING VALUE (test aid), e.g. "set zoom 2"
-            static const char *const names[] = {"zoom", "lockAspect", "integer", "bilinear", "resolution", "interframe"};
+            static const char *const names[] = {"zoom", "lockAspect", "integer", "bilinear", "resolution", "interframe", "framerate"};
             static const u8 ids[] = {PLATFORM_SETTING_ZOOM, PLATFORM_SETTING_LOCK_ASPECT, PLATFORM_SETTING_INTEGER_SCALE,
-                                     PLATFORM_SETTING_SMOOTHING, PLATFORM_SETTING_RESOLUTION, PLATFORM_SETTING_INTERFRAME};
+                                     PLATFORM_SETTING_SMOOTHING, PLATFORM_SETTING_RESOLUTION, PLATFORM_SETTING_INTERFRAME,
+                                     PLATFORM_SETTING_SMOOTH};
             for (size_t k = 0; k < ARRAY_COUNT(names); k++)
                 if (!strcmp(arg1, names[k]))
                     sPlatformSettings[ids[k]] = n;
+            continue;
+        }
+        if (!strcmp(cmd, "warp"))
+        {
+            // warp GROUP NUM X Y (test aid)
+            int g, m, x, y;
+            if (sscanf(line, "%*s %d %d %d %d", &g, &m, &x, &y) == 4)
+            {
+                SetWarpDestination(g, m, WARP_ID_NONE, x, y);
+                DoWarp();
+            }
+            continue;
+        }
+        if (!strcmp(cmd, "surfon"))
+        {
+            // Surf from the shore, as the HM does (test aid; face the water first).
+            gFieldEffectArguments[0] = 0;
+            LockPlayerFieldControls();
+            FieldEffectStart(FLDEFF_USE_SURF);
+            continue;
+        }
+        if (!strcmp(cmd, "fieldmove"))
+        {
+            // The HM "Pokémon shows itself" animation for party slot 0 (test aid).
+            gFieldEffectArguments[0] = 0;
+            FieldEffectStart(FLDEFF_FIELD_MOVE_SHOW_MON_INIT);
             continue;
         }
         if (!strcmp(cmd, "shot"))
