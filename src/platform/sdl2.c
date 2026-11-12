@@ -23,6 +23,7 @@
 #include <string.h>
 #include "global.h"
 #include "battle_setup.h"
+#include "battle_transition.h"
 #include "constants/characters.h"
 #include "constants/event_objects.h"
 #include "sprite.h"
@@ -57,7 +58,8 @@ SDL_Texture *sdlUiTexture;      // UI layer (text boxes, menus, map name pop-up)
 // into this texture during the frame, under the UI layer, in place of the flat map.
 #include "../platform/voxel3d/voxel_gl.h"
 static bool s3DWanted, s3DReady, s3DFrame;
-static SDL_Texture *sdl3DTexture;
+static SDL_Texture *sdl3DTexture, *sdl3DTransTexture;
+static bool s3DTransition;
 static int s3DW, s3DH;
 #define SMOOTH_M WIDE_VIEW_SMOOTH_MARGIN
 #define TEX_W (WIDE_VIEW_MAX_W + 2 * SMOOTH_M)
@@ -647,6 +649,26 @@ static void DrawFieldScene(double t, int outW, int outH)
 static void DrawScene(double t, int outputWidth, int outputHeight)
 {
 #if defined(NATIVE_LINUX) || defined(_WIN32)
+    if (s3DTransition && s3DFrame)
+    {
+        // A battle transition over the 3D world: the GBA screen's picture covers the screen
+        // (cropped top and bottom, as the screen is wider than the GBA's).
+        SDL_Rect whole = {0, 0, outputWidth, outputHeight};
+        int h = outputWidth * DISPLAY_HEIGHT / DISPLAY_WIDTH, w = outputWidth;
+        if (h < outputHeight)
+        {
+            h = outputHeight;
+            w = outputHeight * DISPLAY_WIDTH / DISPLAY_HEIGHT;
+        }
+        SDL_Rect cover = {(outputWidth - w) / 2, (outputHeight - h) / 2, w, h};
+        SDL_RenderCopy(sdlRenderer, sdl3DTexture, NULL, &whole);
+        if (sdl3DTransTexture != NULL)
+        {
+            SDL_SetTextureScaleMode(sdl3DTransTexture, SDL_ScaleModeNearest);
+            SDL_RenderCopy(sdlRenderer, sdl3DTransTexture, NULL, &cover);
+        }
+        return;
+    }
     if (sFrameInfo.mode == WIDE_VIEW_FIELD)
     {
         DrawFieldScene(t, outputWidth, outputHeight);
@@ -2264,7 +2286,43 @@ void VDraw(SDL_Texture *texture)
     SDL_Rect area = {0, 0, fullW, fullH};
     SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32));
     s3DFrame = false;
-    if (s3DReady && sFrameInfo.mode == WIDE_VIEW_FIELD)
+    s3DTransition = s3DReady && sFrameInfo.mode != WIDE_VIEW_FIELD && WideView_BattleTransitionOnField();
+    if (s3DTransition)
+    {
+        // A battle transition over the 3D world: what the GBA picture draws from the map (its
+        // BGs and sprites) is left to the 3D view, with the fade it has; the rest (the wipes'
+        // black, the transition's own graphics on BG0) goes over it.
+        extern u8 gPcPixelSource[];
+        extern s8 gPcPixelFade[];
+        static uint32_t sTransImage[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+        int ox = sFrameInfo.mode == WIDE_VIEW_GBA ? 0 : (sFrameInfo.width - DISPLAY_WIDTH) / 2;
+        int oy = sFrameInfo.mode == WIDE_VIEW_GBA ? 0 : (sFrameInfo.height - DISPLAY_HEIGHT) / 2;
+        int stride = sFrameInfo.width;
+        if (sdl3DTransTexture == NULL)
+        {
+            sdl3DTransTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
+                                                  DISPLAY_WIDTH, DISPLAY_HEIGHT);
+            if (sdl3DTransTexture != NULL)
+                SDL_SetTextureBlendMode(sdl3DTransTexture, SDL_BLENDMODE_BLEND);
+        }
+        for (int y = 0; y < DISPLAY_HEIGHT; y++)
+            for (int x = 0; x < DISPLAY_WIDTH; x++)
+            {
+                int i = y * DISPLAY_WIDTH + x;
+                u8 src = gPcPixelSource[i];
+                if (src == 2 || src == 3 || src == 4 || src == 5)
+                {
+                    int f = gPcPixelFade[i];
+                    sTransImage[i] = f > 0 ? ((uint32_t)(f * 255 / 16) << 24) | 0xFFFFFF
+                                   : f < 0 ? ((uint32_t)(-f * 255 / 16) << 24) : 0;
+                }
+                else
+                    sTransImage[i] = ToArgb(gbaImage[(y + oy) * stride + x + ox]);
+            }
+        if (sdl3DTransTexture != NULL)
+            SDL_UpdateTexture(sdl3DTransTexture, NULL, sTransImage, DISPLAY_WIDTH * sizeof(uint32_t));
+    }
+    if (s3DReady && (sFrameInfo.mode == WIDE_VIEW_FIELD || s3DTransition))
     {
         // The 3D world, while the game thread still waits on this frame.
         int w, h;

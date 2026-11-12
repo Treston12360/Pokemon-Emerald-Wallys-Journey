@@ -45,6 +45,7 @@ void WideView_SetSmooth(uint16_t *overlay, int margin);
 // (BGR555). Runs the per-line VCount/HBlank work exactly like DrawFrame.
 void WideView_DrawFrame(uint16_t *out, struct WideViewFrame *frame);
 // Run a game frame's per-line timing without drawing it (fast forward).
+bool32 WideView_BattleTransitionOnField(void);
 void WideView_SkipFrame(void);
 
 void WideView_SetEnabled(bool enabled);

@@ -1145,6 +1145,14 @@ void WideView_SkipFrame(void)
     }
 }
 
+// A battle transition running over the field (the 3D view draws the field under it).
+bool32 WideView_BattleTransitionOnField(void)
+{
+    // BattleTransition_StartOnField runs the field on CB2_OverworldBasic while it plays.
+    return (gMain.callback2 == CB2_Overworld || gMain.callback2 == CB2_OverworldBasic)
+        && gMapHeader.mapLayout != NULL && IsOverworldBgSetup();
+}
+
 void WideView_DrawFrame(uint16_t *out, struct WideViewFrame *frame)
 {
     static uint16_t gba[DISPLAY_WIDTH * DISPLAY_HEIGHT];

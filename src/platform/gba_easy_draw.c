@@ -670,6 +670,13 @@ static void DrawSprites(struct scanlineData* scanline, uint16_t vcount, bool win
     }
 }
 
+// Where each pixel of the last DrawFrame came from (3D view, battle transitions): 0 backdrop,
+// 1-4 BG0-3, 5 a sprite, 6 a priority-0 sprite; and the brightness effect on it (+EVY lighter, -EVY darker, 0 none).
+u8 gPcPixelSource[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+s8 gPcPixelFade[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+static u8 *sSourceRow;
+static s8 *sFadeRow;
+
 static void DrawScanline(uint16_t *pixels, uint16_t vcount)
 {
     unsigned int mode = REG_DISPCNT & 3;
@@ -835,9 +842,18 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
                             continue;
                     }
                     
+                    sSourceRow[xpos] = 1 + bgnum;
+                    sFadeRow[xpos] = 0;
                     //blending code
                     if (blendMode != 0 && REG_BLDCNT & (1 << bgnum) && winEffectEnable)
                     {
+                        if (blendMode == 2 || blendMode == 3)
+                        {
+                            int evy = REG_BLDY & 0x1F;
+                            if (evy > 16)
+                                evy = 16;
+                            sFadeRow[xpos] = (s8)(blendMode == 2 ? evy : -evy);
+                        }
                         uint16_t targetA = color;
                         uint16_t targetB = 0;
                         char isSpriteBlendingEnabled;
@@ -876,6 +892,8 @@ static void DrawScanline(uint16_t *pixels, uint16_t vcount)
                         continue;
                 //draw the pixel
                 pixels[xpos] = src[xpos];
+                sSourceRow[xpos] = prnum == 0 ? 6 : 5; // 6: a sprite over everything (a transition's)
+                sFadeRow[xpos] = 0;
             }
         }
     }
@@ -925,6 +943,10 @@ void DrawFrame(uint16_t *pixels)
         }
 
         memsetu16(&pixels[i * DISPLAY_WIDTH], backdropColor, DISPLAY_WIDTH);
+        sSourceRow = &gPcPixelSource[i * DISPLAY_WIDTH];
+        sFadeRow = &gPcPixelFade[i * DISPLAY_WIDTH];
+        memset(sSourceRow, 0, DISPLAY_WIDTH);
+        memset(sFadeRow, 0, DISPLAY_WIDTH);
         DrawScanline(&pixels[i * DISPLAY_WIDTH], i);
         
         REG_DISPSTAT |= INTR_FLAG_HBLANK;
