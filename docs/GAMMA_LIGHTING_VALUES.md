@@ -88,10 +88,42 @@ Sun colour over the day (x = time of day 0..1): R 0.02->0.88 0.20->0.82 0.60->0.
   G 0.82,0.64,0.77,0.51,0.35; B 0.26,0.52,0.76,0.27,0.30 (warm at both ends, near white at midday).
 Sun glow curve and moon colour curve: also read (in the parsed files; see tools note).
 
-## Not read (and not needed to match the look)
-- God-ray planes in Littleroot/Dewford: their values are inside a base material's node graph, not as
-  settings. Recreate by eye (soft animated light shafts).
-- Lit sprite material for people: base material graph; behaviour = sprites take the sun and fill light.
+## Exact material math (decoded from the game's compiled shaders)
+Method: shaders come from ShaderArchive-PokemonEmerald-PCD3D_SM5 (Oodle-compressed DXBC, decompressed with
+pyooz, disassembled with D3DDisassemble under Wine). Each material's cooked data names its shader map
+(SHA hash) and holds a "preshader" program that fills the Material constant buffer (cb2) from its
+parameters; decoded with docs-side tool notes below, parameter names resolved through the frozen name
+patch table. Every number below is read, none estimated.
+
+### Light rays (M_GodRay_MASTER, instance M_GodRay_Animated; Additive, Unlit, two-sided)
+Values: Color (1.0, 0.845, 0.460) x Brightness 1.0; FadeDistance 512; Random 1.032; Width 361.8;
+Length 799 (Width/Length shape the ray mesh in the vertex shader: SplineThicken).
+Pixel math (per pixel):
+  noise  = NoiseTex.r at (uv.x, uv.y*0.01 + (Time + Random)*0.1)            [T_TilingNoise02_M, scrolls up]
+  mask   = MaskTex.r at uv                                                   [T_GodRay_Mask01]
+  soft   = saturate((SceneDepth - PixelDepth) * 0.0025) * mask              [fades where it meets geometry, 400 units]
+  N      = surface normal; V = direction to camera
+  edge   = (1 - |N.V|^10)^8   (0 when |N.V| is ~0) ...  rays vanish when seen edge-on
+  near   = 1 - saturate((1 - PixelDepth/FadeDistance) * 1.3333)            [fades out within 512 of the camera]
+  alpha  = saturate(edge * soft * near * noise)
+  out.rgb = max(Color*Brightness, 0) * alpha * fog transmittance, added to the screen.
+
+### Cloud shadows (M_SunCloudShadows_LF1, light function on the sun)
+Buffer: speedA = (SpeedY, SpeedX) * WindSpeed * -0.003 = (-0.0021, -0.0030)
+        speedB = (SpeedX, SpeedY) * -0.002 = (-0.0010, -0.0007)
+  P  = position (for a directional light function: world position in light space / LightFunctionScale;
+       the sun keeps the engine default scale)
+  n  = DistortionTex.r at (P.xy / 888.25 + Time * speedB)                    [T_NoisePuddles]
+  c  = CloudTex.r      at ((P.xy + n*40) / 5000 + Time * speedA)
+  light = 1 - saturate((c - 0.164) * 3.8417) * 0.75     (1 = full sun, 0.25 = darkest shadow)
+  then blended toward 1 by the engine's light-function fade with distance; output sqrt(mean(rgb)).
+
+### People / sprites (BR_DefaultLitSpriteMaterial; Masked, two-sided, Default Lit)
+  base     = saturate(SpriteTex.rgb * vertexColor.rgb)
+  discard if SpriteTex.a * vertexColor.a < 0.3333
+  emissive = SpriteTex.rgb * base * Emissive  (Emissive = 0 -> none)
+  Metallic 0, Roughness 1.0, Specular engine default 0.5, normal = flat normal map (sprite plane).
+So people are plain matte surfaces lit by the same sun and sky light as the world.
 
 ## Tools note
 Parser: UAssetAPI built from source (+ Newtonsoft.Json, stub zstd), Longvinter 5.7.2 mappings with the
