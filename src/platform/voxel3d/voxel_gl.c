@@ -81,6 +81,7 @@ void Voxel3D_Log(const char *fmt, ...);
     X(void, glUniform1f, (GLint, GLfloat)) \
     X(void, glUniform2f, (GLint, GLfloat, GLfloat)) \
     X(void, glUniform3f, (GLint, GLfloat, GLfloat, GLfloat)) \
+    X(void, glUniform3fv, (GLint, GLsizei, const GLfloat *)) \
     X(void, glUniform4f, (GLint, GLfloat, GLfloat, GLfloat, GLfloat)) \
     X(void, glGenBuffers, (GLsizei, GLuint *)) \
     X(void, glDeleteBuffers, (GLsizei, const GLuint *)) \
@@ -190,6 +191,7 @@ static GLuint UploadTiled(GLuint tex, const uint16_t *tiled, unsigned w, unsigne
 
 static GLuint sProgram;
 static GLint sUniMode, sUniAlphaMin, sUniMvp, sUniOrigin, sUniTex, sUniFade, sUniFog, sUniFogColor, sUniCam;
+static GLint sUniGamma, sUniSunDir, sUniSunLight, sUniSkyTint, sUniSh, sUniSat, sUniExposure;
 
 static const char *sVertexSrc =
     "#version 120\n"
@@ -202,8 +204,10 @@ static const char *sVertexSrc =
     "varying vec2 vUv;\n"
     "varying float vShade;\n"
     "varying float vDist;\n"
+    "varying vec3 vWorld;\n"
     "void main() {\n"
     "  vec3 p = pos + origin;\n"
+    "  vWorld = p;\n"
     "  vUv = vec2(uv.x, 1.0 - uv.y);\n" // PICA textures count v from the bottom row
 
     "  vShade = shade;\n"
@@ -220,21 +224,75 @@ static const char *sFragmentSrc =
     "uniform vec4 fade;\n"
     "uniform vec2 fog;\n"
     "uniform vec3 fogColor;\n"
+    "uniform vec3 cam;\n"
+    "uniform float gammaLight;\n"
+    // Gamma Emerald lighting, values from docs/GAMMA_LIGHTING_VALUES.md (all read from its files)
+    "uniform vec3 sunDir;\n"     // towards the sun
+    "uniform vec3 sunLight;\n"   // colour x intensity / pi
+    "uniform vec3 skyTint;\n"    // sky light colour x intensity
+    "uniform vec3 sh[9];\n"      // sky light cubemap irradiance / pi, order-2 SH, our axes (x east, y up, z south)
+    "uniform float saturation;\n"
+    "uniform float exposure;\n"
     "varying vec2 vUv;\n"
     "varying float vShade;\n"
     "varying float vDist;\n"
+    "varying vec3 vWorld;\n"
+    "vec3 toLinear(vec3 c) { return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c)); }\n"
+    "vec3 toSrgb(vec3 c) { c = max(c, 0.0); return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c)); }\n"
+    "vec3 skyIrr(vec3 n) {\n"
+    "  return sh[0] + sh[1]*n.y + sh[2]*n.z + sh[3]*n.x + sh[4]*n.x*n.y + sh[5]*n.y*n.z\n"
+    "       + sh[6]*(3.0*n.z*n.z - 1.0) + sh[7]*n.x*n.z + sh[8]*(n.x*n.x - n.y*n.y);\n"
+    "}\n"
     "void main() {\n"
     "  vec4 c = texture2D(tex, vUv);\n"
     "  if (c.a < alphaMin) discard;\n"
-    "  vec3 rgb = c.rgb * vShade;\n"
-    "  float f = clamp((vDist - fog.x) / max(fog.y - fog.x, 0.001), 0.0, 1.0);\n"
-    "  rgb = mix(rgb, fogColor, f * f);\n"
+    "  vec3 rgb;\n"
+    "  if (gammaLight > 0.5) {\n"
+    "    vec3 n = normalize(cross(dFdx(vWorld), dFdy(vWorld)));\n"
+    "    if (dot(n, cam - vWorld) < 0.0) n = -n;\n"
+    "    vec3 albedo = toLinear(c.rgb);\n"
+    "    vec3 light = sunLight * max(dot(n, sunDir), 0.0) * vShade + skyTint * max(skyIrr(n), 0.0);\n"
+    "    vec3 hdr = albedo * light * exposure;\n"
+    "    float luma = dot(hdr, vec3(0.2126, 0.7152, 0.0722));\n"
+    "    hdr = max(mix(vec3(luma), hdr, saturation), 0.0);\n"
+    "    rgb = toSrgb(hdr / (1.0 + hdr));\n" // placeholder curve until UE's own tone curve is ported
+    "  } else {\n"
+    "    rgb = c.rgb * vShade;\n"
+    "    float f = clamp((vDist - fog.x) / max(fog.y - fog.x, 0.001), 0.0, 1.0);\n"
+    "    rgb = mix(rgb, fogColor, f * f);\n"
+    "  }\n"
     "  rgb = mix(rgb, fade.rgb, fade.a);\n"
     "  gl_FragColor = vec4(rgb, 1.0);\n"
     "  if (mode > 0.5 && mode < 1.5) gl_FragColor = vec4(0.0, 0.0, 0.0, vShade);\n"
     "  if (mode > 1.5) gl_FragColor = vec4(c.rgb, 0.45);\n"
     "  if (alphaMin < -5.0) gl_FragColor = vec4(fract(vUv.x * 32.0), fract(vUv.y * 16.0), 0.0, 1.0);\n"
     "}\n";
+
+
+/* Gamma Emerald's outdoor daytime light, every number from docs/GAMMA_LIGHTING_VALUES.md.
+ * Our axes: x east, y up, z south. Gamma's camera looks along Unreal +X (screen up = north here), so
+ * Unreal (X, Y, Z) maps to ours as (east = Y, up = Z, south = -X). */
+static const float sGammaSh[9][3] = {
+    {0.38100f, 0.88990f, 1.51087f}, {0.05944f, 0.15420f, 0.27341f}, {-0.02007f, -0.03913f, -0.03543f},
+    {-0.01342f, -0.02757f, -0.04645f}, {-0.00478f, -0.00471f, -0.00461f}, {-0.01140f, -0.01572f, -0.01706f},
+    {0.00710f, 0.02091f, 0.02727f}, {-0.00126f, -0.00245f, -0.00232f}, {0.00685f, 0.02464f, 0.03052f},
+};
+
+static void GammaLightUniforms(void)
+{
+    const float pi = 3.14159265f;
+    float sunI = 3.0f / pi;         /* sun 3 lux, Lambert */
+    float skyI = 0.32f;             /* sky light intensity */
+    wj_glUniform1f(sUniGamma, gVoxelGammaLight ? 1.0f : 0.0f);
+    if (!gVoxelGammaLight)
+        return;
+    wj_glUniform3f(sUniSunDir, 0.1747f, 0.6428f, 0.7459f);
+    wj_glUniform3f(sUniSunLight, 0.788f * sunI, 0.738f * sunI, 0.700f * sunI);
+    wj_glUniform3f(sUniSkyTint, 1.0f * skyI, 0.701f * skyI, 0.271f * skyI);
+    wj_glUniform3fv(sUniSh, 9, &sGammaSh[0][0]);
+    wj_glUniform1f(sUniSat, 1.25f); /* camera colour saturation */
+    wj_glUniform1f(sUniExposure, getenv("WJPC_3D_EXPOSURE") ? (float)atof(getenv("WJPC_3D_EXPOSURE")) : 1.0f);
+}
 
 static GLuint Compile(GLenum type, const char *src)
 {
@@ -284,6 +342,13 @@ static bool MakeProgram(void)
     sUniMode = wj_glGetUniformLocation(sProgram, "mode");
     sUniCam = wj_glGetUniformLocation(sProgram, "cam");
     sUniAlphaMin = wj_glGetUniformLocation(sProgram, "alphaMin");
+    sUniGamma = wj_glGetUniformLocation(sProgram, "gammaLight");
+    sUniSunDir = wj_glGetUniformLocation(sProgram, "sunDir");
+    sUniSunLight = wj_glGetUniformLocation(sProgram, "sunLight");
+    sUniSkyTint = wj_glGetUniformLocation(sProgram, "skyTint");
+    sUniSh = wj_glGetUniformLocation(sProgram, "sh");
+    sUniSat = wj_glGetUniformLocation(sProgram, "saturation");
+    sUniExposure = wj_glGetUniformLocation(sProgram, "exposure");
     return true;
 }
 
@@ -889,6 +954,12 @@ bool Voxel3D_Init(const char *dataDir)
     snprintf(sDataDir, sizeof(sDataDir), "%s", dataDir);
     if (!LoadGl() || !MakeProgram())
         return false;
+    if (getenv("WJPC_3D_GAMMALIGHT") != NULL && atoi(getenv("WJPC_3D_GAMMALIGHT")) != 0)
+    {
+        /* Gamma's sun: 40 degrees up, behind the viewer and slightly right, as (-DX, 1, -DZ). */
+        gVoxelGammaLight = 1;
+        VoxelLighting_SetSun(-0.2718f, -1.1604f, 1.0f, 0x6A33u);
+    }
     // The voxel modules open "voxel/...": run from the folder that holds it.
     VoxelRegions_Init();
     VoxelRelief_Init();
@@ -1296,6 +1367,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     else
         wj_glUniform2f(sUniFog, sFogNear, sFogFar);
     wj_glUniform3f(sUniFogColor, 0.55f, 0.75f, 0.95f);
+    GammaLightUniforms();
 
     // Ground, trees and models of every map.
     for (int i = 0; i < MAX_INSTANCES; i++)

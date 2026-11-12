@@ -17,6 +17,10 @@ typedef struct
     uint32_t key;
 } VoxelSun;
 extern VoxelSun gVoxelSun;
+/* Gamma Emerald lighting (docs/GAMMA_LIGHTING_VALUES.md): the bake keeps only sun visibility
+ * and contact; facing, sun and sky colour are applied per pixel by the shader. */
+extern int gVoxelGammaLight;
+#define VOXEL_FACE_SHADE(x) (gVoxelGammaLight ? 1.0f : (x))
 #define VOXEL_SUN_DX (gVoxelSun.dx)
 #define VOXEL_SUN_DZ (gVoxelSun.dz)
 #define VOXEL_LIGHT_REACH 8

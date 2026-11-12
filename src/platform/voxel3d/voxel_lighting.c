@@ -67,6 +67,7 @@ static uint8_t sSampleNext[SAMPLE_SETS];
 static uint32_t sGeneration;
 static uint32_t sSampleGeneration;
 VoxelSun gVoxelSun = {0.85f, 0.55f, 1.0f, 0};
+int gVoxelGammaLight = 0;
 static float sAmbient = VOXEL_AMBIENT;
 static float sStepInverseX = 4.0f / 0.85f, sStepInverseZ = 4.0f / 0.55f;
 static unsigned sRays;
@@ -285,7 +286,7 @@ bool VoxelLighting_SetSun(float dx, float dz, float strength, uint32_t key)
      && gVoxelSun.strength == strength && gVoxelSun.key == key)
         return false;
     gVoxelSun = (VoxelSun){dx, dz, strength, key};
-    sAmbient = 1.0f - (1.0f - VOXEL_AMBIENT) * strength;
+    sAmbient = gVoxelGammaLight ? 0.0f : 1.0f - (1.0f - VOXEL_AMBIENT) * strength;
     sStepInverseX = fabsf(dx) > 0.0001f ? 4.0f / dx : 0.0f;
     sStepInverseZ = fabsf(dz) > 0.0001f ? 4.0f / dz : 0.0f;
     ResetSamples();
@@ -1086,6 +1087,8 @@ float VoxelLighting_Face(float nx, float ny, float nz)
     facing = (ny - VOXEL_SUN_DX * nx - VOXEL_SUN_DZ * nz) / length;
     if (facing <= 0.0f)
         return sAmbient;
+    if (gVoxelGammaLight)
+        return 1.0f;
     if (facing >= 1.0f)
         return 1.0f;
     return sAmbient + (1.0f - sAmbient) * facing;
@@ -1413,12 +1416,12 @@ void VoxelLighting_Tri(VoxelBuilder *builder, const VoxelVertex *a,
  * is its outside - the models are not wound consistently - and the sun then
  * says how lit that side is.
  */
-#define MODEL_SHADE_WEST 0.80f
-#define MODEL_SHADE_EAST 0.72f
-#define MODEL_SHADE_BACK 0.66f
+#define MODEL_SHADE_WEST VOXEL_FACE_SHADE(0.80f)
+#define MODEL_SHADE_EAST VOXEL_FACE_SHADE(0.72f)
+#define MODEL_SHADE_BACK VOXEL_FACE_SHADE(0.66f)
 /* A face wound with its outside first (a rock's back, turned every way):
  * its normal is its winding's, no side's rule (voxel_building.py SHADE_WOUND). */
-#define MODEL_SHADE_WOUND 0.90f
+#define MODEL_SHADE_WOUND VOXEL_FACE_SHADE(0.90f)
 
 void VoxelLighting_ModelTri(VoxelBuilder *builder, const VoxelVertex *a,
                             const VoxelVertex *b, const VoxelVertex *c, float drawnShade)

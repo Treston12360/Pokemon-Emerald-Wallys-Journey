@@ -29,11 +29,11 @@
  * ordering is what matters: a lit top, a bright south face towards the camera,
  * a dark north face away from it.
  */
-#define SHADE_TOP   1.00f
-#define SHADE_SOUTH 0.60f
-#define SHADE_NORTH 0.50f
-#define SHADE_WEST  0.65f
-#define SHADE_EAST  0.55f
+#define SHADE_TOP VOXEL_FACE_SHADE(1.00f)
+#define SHADE_SOUTH VOXEL_FACE_SHADE(0.60f)
+#define SHADE_NORTH VOXEL_FACE_SHADE(0.50f)
+#define SHADE_WEST VOXEL_FACE_SHADE(0.65f)
+#define SHADE_EAST VOXEL_FACE_SHADE(0.55f)
 
 /*
  * Solid furniture parts barely vary with facing. The shades above are meant
@@ -42,10 +42,10 @@
  * television into a hole in the floor. Enough variation to read as a box, no
  * more.
  */
-#define SOLID_LIT   1.00f
-#define SOLID_FRONT 0.94f
-#define SOLID_BACK  0.88f
-#define SOLID_SIDE  0.91f
+#define SOLID_LIT VOXEL_FACE_SHADE(1.00f)
+#define SOLID_FRONT VOXEL_FACE_SHADE(0.94f)
+#define SOLID_BACK VOXEL_FACE_SHADE(0.88f)
+#define SOLID_SIDE VOXEL_FACE_SHADE(0.91f)
 
 static int sWindowX0, sWindowY0, sWindowW, sWindowH;
 
