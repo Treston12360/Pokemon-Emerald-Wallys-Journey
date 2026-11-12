@@ -202,7 +202,7 @@ void SaveObjectEvents(void)
     int i;
     u16 graphicsId;
 
-    for (i = 0; i < OBJECT_EVENTS_COUNT; i++)
+    for (i = 0; i < SAVED_OBJECT_EVENTS_COUNT; i++)
     {
         gSaveBlock1Ptr->objectEvents[i] = gObjectEvents[i];
         // Swap graphicsId bytes when saving and loading
@@ -222,7 +222,7 @@ void LoadObjectEvents(void)
     int i;
     u16 graphicsId;
 
-    for (i = 0; i < OBJECT_EVENTS_COUNT; i++)
+    WJPC_CLEAR_EXTRA_OBJECT_EVENTS(); for (i = 0; i < SAVED_OBJECT_EVENTS_COUNT; i++)
     {
         gObjectEvents[i] = gSaveBlock1Ptr->objectEvents[i];
         // Swap graphicsId bytes when saving and loading
