@@ -955,9 +955,23 @@ static void DrawWideScanline(uint16_t *pixels, int vy)
         memcpy(world, pixels, sW * sizeof(uint16_t));
         CompositeLine(&line, full, windowsEnabled, blendMode, true, line.spriteLayers);
         CompositeLine(&line, world, windowsEnabled, blendMode, false, line.worldSpriteLayers);
+        // A pixel belongs to the UI layer where BG0 or a UI sprite draws on it, even when it comes
+        // out the same colour as the map under it (a white text box over the white floor dots of a
+        // Pokémon Center): comparing colours alone left holes there, and through them showed
+        // whatever lies behind the enlarged UI layer on screen (black outside the room).
+        bool bg0On = isbgEnabled(0);
         for (int x = 0; x < sW; x++)
-            if (full[x] != world[x])
+        {
+            bool ui = full[x] != world[x];
+            if (!ui && bg0On && getAlphaBit(line.layers[0][x]) && (!windowsEnabled || (line.winMask[x] & 1)))
+                ui = true;
+            for (int p = 0; p < 4 && !ui; p++)
+                if (getAlphaBit(line.spriteLayers[p][x]) && !getAlphaBit(line.worldSpriteLayers[p][x])
+                    && (!windowsEnabled || (line.winMask[x] & WINMASK_OBJ)))
+                    ui = true;
+            if (ui)
                 sUiLine[x] = full[x] | 0x8000;
+        }
         if (sOverlayLine != NULL)
         {
             CompositeLine(&line, pixels, windowsEnabled, blendMode, false, line.mapSpriteLayers);
