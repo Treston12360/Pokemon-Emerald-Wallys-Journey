@@ -259,3 +259,6 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   CB2_ContinueSavedGame). B/up/down cancel; "No save yet" when there is none. Owner saw a preview video first and
   approved. Tested: reload returns to the last save; save -> walk -> reload returns to the NEW save; Windows (Wine)
   build too. Sent as alpha 5d.
+- Full check, seasons and time of day (compare.py --epoch): Mauville and Route 119 at noon in all four seasons
+  (48 h each), at 23:00 and at 06:00 on both. Seasonal palettes, grass/trees, night tint and town lights match;
+  only falling petals/leaves (random particles) differ.

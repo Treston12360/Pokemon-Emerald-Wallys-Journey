@@ -2,8 +2,8 @@
  {
   "name": "mega",
   "map": "MAP_RUSTBORO_CITY_GYM",
-  "x": 5,
-  "y": 14,
+  "x": 6,
+  "y": 15,
   "flags": [
    "FLAG_SYS_POKEMON_GET"
   ],
@@ -18,8 +18,8 @@
  {
   "name": "zmove",
   "map": "MAP_RUSTBORO_CITY_GYM",
-  "x": 5,
-  "y": 14,
+  "x": 6,
+  "y": 15,
   "flags": [
    "FLAG_SYS_POKEMON_GET"
   ],

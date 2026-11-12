@@ -1,4 +1,4 @@
-# Test save (scenarios/fullcheck5.json): Rustboro Gym, next to a trainer. Swampert holding Swampertite (Mega Evolution). In the move menu START turns the Mega/Z trigger on. sync before each press.
+# Test save (scenarios/fullcheck5.json): Rustboro Gym, one step right of the trainer's line of sight (walk left). Swampert holding Swampertite (Mega Evolution). In the move menu START turns the Mega/Z trigger on. sync before each press.
 1300
 5 A
 150
@@ -18,7 +18,7 @@ shot field_msg
 60
 shot field
 sync
-5 U
+20 L
 300
 shot spotted 4
 sync
