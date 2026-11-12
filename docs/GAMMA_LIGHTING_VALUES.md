@@ -6,7 +6,9 @@ These are settings (numbers), not assets. We recreate the look in our OpenGL 3D 
 How they were read: UAssetAPI (built from source, NuGet is blocked here) with the public Longvinter UE 5.7.2
 mappings, corrected to 5.6 by removing `LightComponent.PreviewShadowMapChannel`, `LightComponent.DiffuseScale`
 and `MaterialInstance.UserSceneTextureOverrides` (each verified: the exports then parse exactly).
-Post-process volume settings (tone/bloom/LUT) did not parse yet (PostProcessSettings schema differs) - TODO.
+Post-process: also remove `PostProcessSettings.bOverride_BloomGaussianIntensity`, `...BloomConvolutionIntensity`
+(both the override and the value) and `PostProcessVolume.VolumeGuid` / `PostProcessComponent.VolumeGuid`;
+verified by tracing every property read (values line up with their override flags).
 
 ## The setup (shared level MAP_Hoenn_Persistant, actor BP_StylizedSky, "SoStylized" sky kit)
 - Time of day: Start/Current Time 360 (fixed at "day", Day Cycle Progress 1.0, IsDay true).
@@ -37,3 +39,18 @@ Post-process volume settings (tone/bloom/LUT) did not parse yet (PostProcessSett
 ## Sky (MI_StylizedSky_Dreamy)
 - Brightness 1.0, horizontal noise 0.3 (x2, y8). Background clouds tint 0.37, 0.54, 1.0, strength 0.5.
 - Clouds (MI_StylizedClouds_Classic): 4 layers, highlight strength 4, speed 2.
+
+## Screen look (post-process) - only settings with their override switched on are used
+- Player camera (BP_Brendan): field of view 100. Colour saturation 1.25 (all channels).
+  Depth of field on: focus distance 450, f-stop 1.74, sensor width 450, aspect 0.60 -> strong background
+  blur (tilt-shift "miniature" look). (Camera also stores colour gain 1.5 and exposure 2.0, but their
+  overrides are off, so they are not used.)
+- Global post-process volume (unbound, priority 1): colour saturation R1.20 G1.19 B1.12 (vivid, slightly warm);
+  auto exposure locked: min = max brightness 1.0 (no eye adaptation); motion blur 0 (off).
+  Its blendables are the wild-battle transition and speed-line effects, not lighting.
+- Sky actor post-process: the stylized fog material above (MI_StylizedFogPP_Classic), weight 1.
+- Project settings: anti-aliasing off (crisp pixels), post-process quality 2, shadow quality 3.
+
+## Town lights
+- Littleroot: two spot lights (moving truck), intensity 4 candela, colour 255,241,141, cone 8-36 degrees.
+- Dewford: street lamps and a campfire (point lights; brightness lives in the lamp blueprints, not read yet).
