@@ -43,11 +43,29 @@ picked, art differs from vanilla so the model did not match, or the roof is draw
 ### DLX-3 Smooth battles and menus (TODO, approved "option 1")
 In-between frames so battles and menus feel high frame rate, like the overworld's smooth mode.
 
-### DLX-4 Battle transitions on the zoomed-out 2D view (WIP)
-Approved: play the transition across the wide view instead of zooming back to the GBA screen.
-The 3D version is done (`gPcPixelSource`/`gPcPixelFade` in `gba_easy_draw.c`, composited in `sdl2.c`
-`s3DTransition`). Do the same over the 2D wide field. Wavy/ripple transitions do not distort yet
-(3D or 2D). Show pictures before merging.
+### DLX-4 Battle transitions on the zoomed-out 2D view (TODO - OWNER SAYS: GO AHEAD AND FINISH IT)
+Owner (2026-11-12): any Claude may finish DLX-4 without asking first; send him pictures/a short clip when done.
+Problem: in 2D with the zoomed-out "wide view", when a trainer/wild battle starts the screen snaps back to the
+small GBA picture and plays the transition there. Wanted: the transition plays over the wide field instead.
+How the 3D version already does it (copy this approach):
+- `src/platform/gba_easy_draw.c` records, for every GBA pixel, which layer drew it in `gPcPixelSource[240*160]`
+  (0 backdrop, 1-4 BG0-3, 5 sprite, 6 priority-0 sprite) and the brightness fade in `gPcPixelFade[]`
+  (BLDY, blend modes 2/3: + = to white, - = to black, 0..16).
+- `src/platform/sdl2.c` (search `s3DTransition`): when `WideView_BattleTransitionOnField()` is true and the
+  frame is not in field mode, it builds a 240x160 ARGB overlay: pixels drawn by BG1-3 / normal sprites
+  (sources 2-5, i.e. the map) become transparent carrying only the fade as black/white alpha; everything
+  else (the wipe's black, the transition's BG0 graphics) is the opaque GBA pixel. `DrawScene` then draws
+  the 3D picture full screen and the overlay "cover"-scaled on top.
+- `WideView_BattleTransitionOnField()` (`src/platform/wide_view.c`) = callback2 is CB2_Overworld/
+  CB2_OverworldBasic, a layout is loaded and `IsOverworldBgSetup()`.
+For 2D: during the same condition keep drawing the wide field (`DrawFieldScene`, `sFrameInfo.mode ==
+WIDE_VIEW_FIELD` path) instead of switching to the GBA framing, then draw the same overlay on top. Two choices
+to make (pick what looks right, show the owner): (a) overlay only over the GBA-sized centre at field scale and
+extend the wipe's black/fade outward to the screen edges, or (b) scale the overlay to cover the whole screen
+like 3D. Wavy/ripple transitions (they scroll BG lines) do not distort the wide field yet, in 3D or 2D - nice
+to have: apply the per-line BG offsets the transition writes to the wide field rows.
+Test: save `/home/claude/keep/owner_brawly.sav`-style save (any save), script `trainerbattle 774` (Brawly) or
+walk into grass; `winshot` frames during the transition (`WJPC_SCRIPT`, see "How to build and test").
 
 ### DLX-5 3D battle backgrounds + settings option (ASK wording, show pictures)
 Emerald 3DS builds 3D arenas from the battle background art (`src/platform/voxel3d/voxel_arena.c`,
@@ -61,7 +79,10 @@ Proposed menu line "3D World: On/Off" - get the owner's OK on wording first.
 Owner asked for trainers/NPCs to look 3D like the houses: extrude each sprite frame into blocks.
 Make one test picture, owner decides.
 
-### DLX-9 Lighting like Gamma Emerald (WIP - session 019khs4X; owner approved going ahead)
+### DLX-9 Lighting like Gamma Emerald (WIP - OWNER SAYS: GO AHEAD AND FINISH IT)
+Owner (2026-11-12): any Claude may finish DLX-9; send him before/after pictures (2D and 3D) when done.
+Tools and data to redo any reading: `tools/gamma_lighting/README.md`; cloud textures `docs/gamma/gamma_clouds.bin`
+(copy into the game's `voxel/` folder).
 The owner got Gamma Emerald's files from its developer, who said we may use them (including textures) for
 this project. Everything read from them is in `docs/GAMMA_LIGHTING_VALUES.md` (exact numbers and shader math;
 how they were read is at the top of that file). Program file `PokemonEmerald-Win64-Shipping.exe` (owner's PC,
@@ -71,18 +92,36 @@ blur kernels capped at 32 samples (r.Filter.LoopMode 0) so every bloom stage is 
 Built (commit on deluxe-3d, off by default, turn on with `WJPC_3D_GAMMALIGHT=1`), all in `voxel_gl.c` +
 `voxel_lighting.c`: Gamma's sun direction/colour/intensity (bake keeps only sun visibility + contact,
 `gVoxelGammaLight`), sky light from Gamma's cubemap as SH, haze formula, cloud shadows with Gamma's two
-textures (`voxel/gamma_clouds.bin` = T_NoisePuddles + T_NoiseRough, 1024x1024 8-bit each, NOT in git),
+textures (`voxel/gamma_clouds.bin` = T_NoisePuddles + T_NoiseRough, 1024x1024 8-bit each; copy of it in
+`docs/gamma/`),
 half-float scene + screen pass: 6-stage bloom (UE BloomSetup, threshold 0.4, intensity 6, UE default tints),
 depth of field with Gamma's lens, saturation 1.25 in AP1, UE FilmToneMap (slope 1, toe 0.3, shoulder 1).
 Decision (owner: "whatever looks best"): exposure 2.06 instead of Gamma's 0.36, because GBA art is drawn
 fully lit; 2.06 returns sunlit ground to its own colours through the same curve.
+Constants already in code (do not re-derive): sun dir to-sun (east 0.1747, up 0.6428, south 0.7459), sun
+colour (0.788,0.738,0.700) x 3/pi, sky tint (1.0,0.701,0.271) x 0.32, SH table `sGammaSh`, exposure `sExposure`.
 Open:
 - 3D: faint vertical light streaks over buildings in Littleroot with the mode on (also with bloom off,
   reflections off, shadows off) - find the cause (suspect depth-of-field gather or the depth texture).
-- 2D mode: only an offline preview exists (`gamma2d.py`, session workspace) - apply the same chain to the
-  2D field in `sdl2.c`/wide view (ground lit flat: sun x 0.643 x clouds + sky(up)).
+- 2D mode: only an offline preview exists (`tools/gamma_lighting/gamma2d.py`; owner liked it). Build it in
+  the 2D renderer (`sdl2.c` field/wide view, GL or software): per screen pixel, colour = linear(GBA colour) x
+  (sun x 0.6428 x clouds(world pos) + sky(up)), + bloom, x 2.06, saturation 1.25 in AP1, UE film curve, sRGB.
+  World position = map pixel / 16 tiles x 64 cm (Gamma X = north = up the map, Y = east). Clouds scroll with
+  game time; they must stay fixed to the map while the camera moves. Indoors: no sun/clouds (see caves).
+  Same on/off switch as 3D (`WJPC_3D_GAMMALIGHT`, later a menu option - ask the owner for wording).
 - Not yet built: light rays (god-ray planes, math in the doc), dark caves/gyms trigger (colour gain 0.49,
   vignette 3/2), lamps. Show the owner pictures before turning anything on by default.
+
+### DLX-20 3D: black person-shaped silhouette on the ground in Littleroot (TODO)
+Seen in every 3D screenshot of Littleroot north of the player's house (before and after the lighting work): an
+all-black sprite-shaped card standing on the grass. Probably a person/object whose sprite frame or palette
+is not loaded for the 3D card. Find which object event it is and fix.
+
+### DLX-21 Next owner test package (TODO)
+Last package sent was `alpha8c-3d-test.zip` (exe + DLLs + `voxel/` + "Play in 3D.bat"). It does NOT have the
+Lavaridge gym data (DLX-1), the Hex fix, DLX-7, or the lighting. Build a new Windows package with
+`make -f Makefile.pc WIN=1`, regenerated voxel data (DLX-1 note), `gamma_clouds.bin`, and a second .bat with
+`WJPC_3D_GAMMALIGHT=1` so the owner can compare.
 
 ### DLX-10 Encore: cursor on the forced move (ASK)
 Offered: while Encored, the move cursor jumps to the locked move. No new wording.
