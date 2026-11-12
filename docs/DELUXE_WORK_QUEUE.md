@@ -85,6 +85,7 @@ Findings (2026-11-12, from the level files; values are binary, only the setup wa
 - Colour grading by LUTs (Chameleon pack: day-to-night, moonlight, candle light).
 - Towns (Littleroot, Dewford) add point/spot lights and animated **god-ray planes**; caves switch lighting
   with a trigger (`BP_CaveLightTrigger`). Sprites use a lit sprite material, so people get the sun's light too.
+Exact numbers now read: see `docs/GAMMA_LIGHTING_VALUES.md` (sun, sky light, fog, cloud shadows, sky).
 Plan for our view (needs owner's OK on pictures): sun shading per face (warm top, cooler sides), sky-tinted
 ambient, distance fog in the sky colour, drifting cloud shadows (our own noise texture), a light colour
 grade, day/night from the game clock, darker caves. Each as a separate on/off so the owner can compare.
