@@ -9,6 +9,7 @@
 #include "test/test.h"
 #ifdef PORTABLE
 extern char *getenv(const char *name);
+extern int puts(const char *s);
 #endif
 
 #define MAX_SPRITE_COPY_REQUESTS 64
@@ -675,11 +676,38 @@ static bool32 TestExtraFirst(void)
     }
     return on;
 }
+// Test aid: WJPC_TEST_GBA_LIMITS=1 puts the GBA's caps back (16 palettes, 1024 tiles) to show the difference.
+static bool32 TestGbaLimits(void)
+{
+    static int on = -1;
+    if (on < 0)
+    {
+        const char *v = getenv("WJPC_TEST_GBA_LIMITS");
+        on = v != NULL && v[0] == '1';
+    }
+    return on;
+}
+#define TILE_LIMIT() (TestGbaLimits() ? 1024 : TOTAL_OBJ_TILE_COUNT)
+#define PALETTE_LIMIT() (TestGbaLimits() ? 16 : OBJ_PALETTE_COUNT)
 #define FIRST_FREE_TILE() (TestExtraFirst() ? max(gReservedSpriteTileCount, 1024) : gReservedSpriteTileCount)
-#define FIRST_FREE_PALETTE(tag) ((tag) == TAG_NONE && TestExtraFirst() ? max(gReservedSpritePaletteCount, 16) : gReservedSpritePaletteCount)
+// Test aid: WJPC_TEST_CROWD=N acts as if N sprite palettes were already taken by other sprites (a crowded scene).
+static u32 TestCrowd(void)
+{
+    static int n = -1;
+    if (n < 0)
+    {
+        const char *v = getenv("WJPC_TEST_CROWD");
+        n = v != NULL ? (v[0] - '0') * (v[1] ? 10 : 1) + (v[1] ? v[1] - '0' : 0) : 0;
+    }
+    return n;
+}
+#define FIRST_FREE_PALETTE(tag) ((tag) == TAG_NONE && TestExtraFirst() ? max(gReservedSpritePaletteCount, 16) \
+                               : (tag) == TAG_NONE ? max(gReservedSpritePaletteCount, TestCrowd()) : gReservedSpritePaletteCount)
 #else
 #define FIRST_FREE_TILE() gReservedSpriteTileCount
 #define FIRST_FREE_PALETTE(tag) gReservedSpritePaletteCount
+#define TILE_LIMIT() TOTAL_OBJ_TILE_COUNT
+#define PALETTE_LIMIT() OBJ_PALETTE_COUNT
 #endif
 
 s16 AllocSpriteTiles(u16 tileCount)
@@ -705,7 +733,7 @@ s16 AllocSpriteTiles(u16 tileCount)
         {
             i++;
 
-            if (i == TOTAL_OBJ_TILE_COUNT)
+            if (i >= TILE_LIMIT())
                 return -1;
         }
 
@@ -716,7 +744,7 @@ s16 AllocSpriteTiles(u16 tileCount)
         {
             i++;
 
-            if (i == TOTAL_OBJ_TILE_COUNT)
+            if (i >= TILE_LIMIT())
                 return -1;
 
             if (!SPRITE_TILE_IS_ALLOCATED(i))
@@ -731,6 +759,20 @@ s16 AllocSpriteTiles(u16 tileCount)
 
     for (i = start; i < tileCount + start; i++)
         ALLOC_SPRITE_TILE(i);
+#ifdef PORTABLE
+    {
+        static u32 sMaxTile = 1023;
+        if (start + tileCount - 1 > sMaxTile && getenv("WJPC_TEST_PAL_LOG"))
+        {
+            static const char digits[] = "0123456789";
+            u32 t = start + tileCount - 1;
+            char msg[40] = "[sprites] tile in use: ";
+            msg[23] = digits[t / 1000 % 10]; msg[24] = digits[t / 100 % 10]; msg[25] = digits[t / 10 % 10]; msg[26] = digits[t % 10]; msg[27] = 0;
+            puts(msg);
+            sMaxTile = t;
+        }
+    }
+#endif
 
     return start;
 }
@@ -750,7 +792,7 @@ bool32 CanAllocSpriteTiles(u16 tileCount)
         while (SPRITE_TILE_IS_ALLOCATED(i))
         {
             i++;
-            if (i == TOTAL_OBJ_TILE_COUNT)
+            if (i >= TILE_LIMIT())
                 return FALSE;
         }
 
@@ -759,7 +801,7 @@ bool32 CanAllocSpriteTiles(u16 tileCount)
         while (numTilesFound != tileCount)
         {
             i++;
-            if (i == TOTAL_OBJ_TILE_COUNT)
+            if (i >= TILE_LIMIT())
                 return FALSE;
 
             if (!SPRITE_TILE_IS_ALLOCATED(i))
@@ -1699,6 +1741,19 @@ u32 LoadSpritePalette(const struct SpritePalette *palette)
 
     sSpritePaletteTags[index] = palette->tag;
     DoLoadSpritePalette(palette->data, PLTT_ID(index));
+#ifdef PORTABLE
+    {
+        static u32 sMaxLogged = 15;
+        if (index > sMaxLogged && getenv("WJPC_TEST_PAL_LOG"))
+        {
+            static const char digits[] = "0123456789";
+            char msg[48] = "[sprites] palette slot in use: ";
+            msg[31] = digits[index / 10]; msg[32] = digits[index % 10]; msg[33] = 0;
+            puts(msg);
+            sMaxLogged = index;
+        }
+    }
+#endif
     return index;
 }
 
@@ -1748,9 +1803,13 @@ u32 AllocSpritePalette(u16 tag)
 u32 IndexOfSpritePaletteTag(u16 tag)
 {
     u32 i;
-    for (i = FIRST_FREE_PALETTE(tag); i < OBJ_PALETTE_COUNT; i++)
+    for (i = FIRST_FREE_PALETTE(tag); i < PALETTE_LIMIT(); i++)
         if (sSpritePaletteTags[i] == tag)
             return i;
+#ifdef PORTABLE
+    if (tag == TAG_NONE && getenv("WJPC_TEST_PAL_LOG"))
+        puts("[sprites] no free sprite palette");
+#endif
 
     return 0xFF;
 }

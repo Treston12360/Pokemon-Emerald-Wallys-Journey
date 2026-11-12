@@ -152,7 +152,10 @@ Fades/blends/tints/time of day/weather (palette.c, field_weather.c, overworld.c)
 any effect that covers every GBA sprite palette; per-palette masks (`1 << (16 + n)`) cannot name them (only
 matters on screens that never fill 16). Fixed `< 16` / `> 16` "found" checks (event_object_movement.c,
 battle_transition/intro.c, field_weather_effect.c, LoadCustomWeatherSpritePalette, seasonal grass).
-Test aid: `WJPC_TEST_EXTRA_FIRST=1` puts every sprite in the extra room. Checked: Slateport, Route 119 (autumn
+Test aid: `WJPC_TEST_EXTRA_FIRST=1` puts every sprite in the extra room. `WJPC_TEST_GBA_LIMITS=1` puts the GBA caps back;
+`WJPC_TEST_CROWD=N` acts as if N palettes were taken (crowded scene); `WJPC_TEST_PAL_LOG=1` prints when slots >15 /
+tiles >1023 are used or none is free. Normal play on Slateport/Lilycove/Routes 104/110/119 (zoomed out) stays under
+16 palettes and 1024 tiles today; the demo (crowd 13, Slateport) loses the autumn leaves with GBA caps, not on PC. Checked: Slateport, Route 119 (autumn
 grass, rain), warp fades, a trainer battle: pixel-identical to a normal run (only falling leaves, which move
 differently every run anyway); 3D Slateport the same.
 
