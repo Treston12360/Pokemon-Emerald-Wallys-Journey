@@ -68,7 +68,7 @@ Test: save `/home/claude/keep/owner_brawly.sav`-style save (any save), script `t
 walk into grass; `winshot` frames during the transition (`WJPC_SCRIPT`, see "How to build and test").
 
 ### DLX-5 3D battle backgrounds + settings option (Done, first version - session 014PwRDj, 2026-11-12)
-Owner: "you can choose the wording". Settings > Video > "3D Battles" On/Off (`battle3d=` in the cfg, default On;
+Owner: "you can choose the wording". Settings > Video > "3D Battles" On/Off (`battle3d=` in the cfg, default On - owner 2026-11-12: "Starts on";
 independent of "3D World"). In a battle the 3D world is drawn behind the battle: sdl2.c draws `sdl3DTexture` (3:2)
 then the GBA picture with BG3 and the backdrop left transparent (`gPcPixelSource` 0/4; brightness fades kept as
 in the 3D transition). voxel_gl.c `Voxel3D_SetBattle`: Emerald 3DS's battle camera (VOXEL_BATTLE_PITCH 30,
