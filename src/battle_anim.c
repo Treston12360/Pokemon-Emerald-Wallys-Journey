@@ -1767,7 +1767,16 @@ void LoadMoveBg(u16 bgId)
 {
     if (IsContest())
     {
+#ifdef PORTABLE
+        // The next two lines touch 0x800 bytes (32x32 tiles), but some tilemaps are smaller
+        // (Psychic: 0x500). On the GBA the overrun corrupts the next heap block without a visible
+        // effect (the extra rows are off-screen); on PC it crashed in Free(). Allocate enough.
+        u32 tilemapSize = GetDecompressedDataSize(gBattleAnimBackgroundTable[bgId].tilemap);
+        void *decompressionBuffer = AllocZeroed(tilemapSize > 0x800 ? tilemapSize : 0x800);
+        DecompressDataWithHeaderWram(gBattleAnimBackgroundTable[bgId].tilemap, decompressionBuffer);
+#else
         void *decompressionBuffer = malloc_and_decompress(gBattleAnimBackgroundTable[bgId].tilemap, NULL);
+#endif
         RelocateBattleBgPal(GetBattleBgPaletteNum(), decompressionBuffer, 0x100, FALSE);
         DmaCopy32(3, decompressionBuffer, (void *)BG_SCREEN_ADDR(26), 0x800);
         Free(decompressionBuffer);

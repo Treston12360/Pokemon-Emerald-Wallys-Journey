@@ -340,3 +340,10 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   identical; PC boxes identical. Follower talk lines are random; a per-frame timer started before the sync (GBA
   lag after the battle) shifts them, not a bug.
 - Always check pc/WallysJourney_errors.txt after each compare run: the guard hides PC-only crashes on screen.
+- FOUND + FIXED (PC) / REPORTED (GBA): contests. LoadMoveBg (battle_anim.c, contest branch) runs
+  RelocateBattleBgPal + DmaCopy32 over 0x800 bytes of a malloc'd tilemap that can be smaller (Psychic: 0x500).
+  The 0x300-byte overrun corrupts the next heap block on the GBA too (silent; Free() then writes through a garbage
+  pointer). PC crashed in Free(); PC now allocates max(size, 0x800) zeroed (extra rows are off-screen, so it looks
+  the same). A GBA fix would change the ROM: owner decides.
+- Mega Evolution (Swampertite + Mega Ring) works on both. Trainer AI switch decisions are taken at turn start,
+  before the test's sync, so the first-turn order can differ (GBA lag drift), not a bug.
