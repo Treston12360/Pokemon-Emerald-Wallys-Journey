@@ -39,6 +39,7 @@ def main():
     ap.add_argument('--pc', default=os.path.join(REPO, 'wallys-journey'))
     ap.add_argument('--harness', default='/home/claude/tools-src/harness_cmp')
     ap.add_argument('--epoch', type=int, default=EPOCH, help='clock (Unix seconds, shown in local time) on both sides')
+    ap.add_argument('--pc-only', action='store_true', help='only run the PC side and report errors the guard skipped (fast sweep)')
     ap.add_argument('--vblank-lock', dest='lock', action='store_true', help='reseed RNG every VBlank (patched ROM)')
     ap.add_argument('--elf', default=ELF, help='symbols of --rom (a frozen copy lets test ROMs be built meanwhile)')
     a = ap.parse_args()
@@ -113,6 +114,13 @@ def main():
         data[off:off + 4] = b'\xc0\x46\xc0\x46'  # two Thumb NOPs
     rom = out + '/test_no_vblank_rng.gba'
     open(rom, 'wb').write(data)
+    if a.pc_only:
+        penv = dict(env, SDL_VIDEODRIVER='dummy', SDL_AUDIODRIVER='dummy', WJPC_SCRIPT=out + '/pc.txt', WJPC_SAVE='g.sav',
+                    WJPC_NOWIDE='1', WJPC_RTC_EPOCH=str(a.epoch), WJPC_NO_VBLANK_RNG='1')
+        r = subprocess.run(['timeout', '-s', 'KILL', '1800', a.pc], cwd=out + '/pc', env=penv, capture_output=True, text=True, errors='replace')
+        errs = open(out + '/pc/WallysJourney_errors.txt').read() if os.path.exists(out + '/pc/WallysJourney_errors.txt') else ''
+        print('pc exit', r.returncode, '| errors:', errs.strip() or 'none')
+        return
     hr = subprocess.run([a.harness, rom, 'gba.txt', str(a.epoch), 'gba/g.sav'], cwd=out, env=env,
                         stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, errors='replace', timeout=1800)
     gpeeks = [l for l in hr.stderr.splitlines() if l.startswith('PEEK')]

@@ -356,3 +356,8 @@ Owner's save goes next to the .exe as `WallysJourney.sav`.
   the same). A GBA fix would change the ROM: owner decides.
 - Mega Evolution (Swampertite + Mega Ring) works on both. Trainer AI switch decisions are taken at turn start,
   before the test's sync, so the first-turn order can differ (GBA lag drift), not a bug.
+- FOUND + FIXED: Continue screen (ui_main_menu.c DestroyMonIcons) called DestroySprite(&gSprites[SPRITE_NONE])
+  for empty party slots (party < 6). Out of bounds on the GBA too, but harmless there; on PC, after the 128-sprite
+  change, the memory after gSprites looked "in use" and it crashed (guard skipped it). PC now skips empty slots.
+- compare.py --pc-only: runs only the PC side of a step file and prints WallysJourney_errors.txt (fast sweep for
+  crashes the guard hides). Run it over all step files after big PC changes (limits, layout).

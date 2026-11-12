@@ -928,6 +928,11 @@ static void DestroyMonIcons()
     {
         if (sMainMenuDataPtr->iconMonSpriteIds[i] < MAX_SPRITES)
             WJ_ReleaseShinyIcon(&gSprites[sMainMenuDataPtr->iconMonSpriteIds[i]]);
+#ifdef PORTABLE
+        // Empty party slots hold SPRITE_NONE (255): gSprites[255] is past the end of the array. The GBA
+        // finds a "not in use" sprite there by luck; on PC the memory after gSprites can look in use.
+        if (sMainMenuDataPtr->iconMonSpriteIds[i] < MAX_SPRITES)
+#endif
         DestroySprite(&gSprites[sMainMenuDataPtr->iconMonSpriteIds[i]]);
         sMainMenuDataPtr->iconMonSpriteIds[i] = SPRITE_NONE;
     }
