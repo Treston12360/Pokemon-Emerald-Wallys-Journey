@@ -1,4 +1,4 @@
-# Test save (scenarios/fullcheck3.json): Battle Factory lobby in front of the singles attendant; take the Lv50 challenge, rent the first three, battle.  A every 150 frames with sync before each (GBA lag frames).
+# Test save (scenarios/fullcheck3.json #0): Battle Factory Lv50 singles: take the challenge, rent three, battle by pressing A. sync before each press (GBA lag frames).
 1300
 5 A
 150
@@ -141,561 +141,600 @@ sync
 shot a30 1
 sync
 5 A
+60
+sync
+5 D
+60
+shot rent1_menu 1
+sync
+5 A
+145
+shot rent1 1
+sync
+5 R
+60
+sync
+5 A
+60
+sync
+5 D
+60
+shot rent2_menu 1
+sync
+5 A
+145
+shot rent2 1
+sync
+5 R
+60
+sync
+5 A
+60
+sync
+5 D
+60
+shot rent3_menu 1
+sync
+5 A
+145
+shot rent3 1
+sync
+5 A
 145
-shot a31 1
+shot b1 1
 sync
 5 A
 145
-shot a32 1
+shot b2 1
 sync
 5 A
 145
-shot a33 1
+shot b3 1
 sync
 5 A
 145
-shot a34 1
+shot b4 1
 sync
 5 A
 145
-shot a35 1
+shot b5 1
 sync
 5 A
 145
-shot a36 1
+shot b6 1
 sync
 5 A
 145
-shot a37 1
+shot b7 1
 sync
 5 A
 145
-shot a38 1
+shot b8 1
 sync
 5 A
 145
-shot a39 1
+shot b9 1
 sync
 5 A
 145
-shot a40 1
+shot b10 1
 sync
 5 A
 145
-shot a41 1
+shot b11 1
 sync
 5 A
 145
-shot a42 1
+shot b12 1
 sync
 5 A
 145
-shot a43 1
+shot b13 1
 sync
 5 A
 145
-shot a44 1
+shot b14 1
 sync
 5 A
 145
-shot a45 1
+shot b15 1
 sync
 5 A
 145
-shot a46 1
+shot b16 1
 sync
 5 A
 145
-shot a47 1
+shot b17 1
 sync
 5 A
 145
-shot a48 1
+shot b18 1
 sync
 5 A
 145
-shot a49 1
+shot b19 1
 sync
 5 A
 145
-shot a50 1
+shot b20 1
 sync
 5 A
 145
-shot a51 1
+shot b21 1
 sync
 5 A
 145
-shot a52 1
+shot b22 1
 sync
 5 A
 145
-shot a53 1
+shot b23 1
 sync
 5 A
 145
-shot a54 1
+shot b24 1
 sync
 5 A
 145
-shot a55 1
+shot b25 1
 sync
 5 A
 145
-shot a56 1
+shot b26 1
 sync
 5 A
 145
-shot a57 1
+shot b27 1
 sync
 5 A
 145
-shot a58 1
+shot b28 1
 sync
 5 A
 145
-shot a59 1
+shot b29 1
 sync
 5 A
 145
-shot a60 1
+shot b30 1
 sync
 5 A
 145
-shot a61 1
+shot b31 1
 sync
 5 A
 145
-shot a62 1
+shot b32 1
 sync
 5 A
 145
-shot a63 1
+shot b33 1
 sync
 5 A
 145
-shot a64 1
+shot b34 1
 sync
 5 A
 145
-shot a65 1
+shot b35 1
 sync
 5 A
 145
-shot a66 1
+shot b36 1
 sync
 5 A
 145
-shot a67 1
+shot b37 1
 sync
 5 A
 145
-shot a68 1
+shot b38 1
 sync
 5 A
 145
-shot a69 1
+shot b39 1
 sync
 5 A
 145
-shot a70 1
+shot b40 1
 sync
 5 A
 145
-shot a71 1
+shot b41 1
 sync
 5 A
 145
-shot a72 1
+shot b42 1
 sync
 5 A
 145
-shot a73 1
+shot b43 1
 sync
 5 A
 145
-shot a74 1
+shot b44 1
 sync
 5 A
 145
-shot a75 1
+shot b45 1
 sync
 5 A
 145
-shot a76 1
+shot b46 1
 sync
 5 A
 145
-shot a77 1
+shot b47 1
 sync
 5 A
 145
-shot a78 1
+shot b48 1
 sync
 5 A
 145
-shot a79 1
+shot b49 1
 sync
 5 A
 145
-shot a80 1
+shot b50 1
 sync
 5 A
 145
-shot a81 1
+shot b51 1
 sync
 5 A
 145
-shot a82 1
+shot b52 1
 sync
 5 A
 145
-shot a83 1
+shot b53 1
 sync
 5 A
 145
-shot a84 1
+shot b54 1
 sync
 5 A
 145
-shot a85 1
+shot b55 1
 sync
 5 A
 145
-shot a86 1
+shot b56 1
 sync
 5 A
 145
-shot a87 1
+shot b57 1
 sync
 5 A
 145
-shot a88 1
+shot b58 1
 sync
 5 A
 145
-shot a89 1
+shot b59 1
 sync
 5 A
 145
-shot a90 1
+shot b60 1
 sync
 5 A
 145
-shot a91 1
+shot b61 1
 sync
 5 A
 145
-shot a92 1
+shot b62 1
 sync
 5 A
 145
-shot a93 1
+shot b63 1
 sync
 5 A
 145
-shot a94 1
+shot b64 1
 sync
 5 A
 145
-shot a95 1
+shot b65 1
 sync
 5 A
 145
-shot a96 1
+shot b66 1
 sync
 5 A
 145
-shot a97 1
+shot b67 1
 sync
 5 A
 145
-shot a98 1
+shot b68 1
 sync
 5 A
 145
-shot a99 1
+shot b69 1
 sync
 5 A
 145
-shot a100 1
+shot b70 1
 sync
 5 A
 145
-shot a101 1
+shot b71 1
 sync
 5 A
 145
-shot a102 1
+shot b72 1
 sync
 5 A
 145
-shot a103 1
+shot b73 1
 sync
 5 A
 145
-shot a104 1
+shot b74 1
 sync
 5 A
 145
-shot a105 1
+shot b75 1
 sync
 5 A
 145
-shot a106 1
+shot b76 1
 sync
 5 A
 145
-shot a107 1
+shot b77 1
 sync
 5 A
 145
-shot a108 1
+shot b78 1
 sync
 5 A
 145
-shot a109 1
+shot b79 1
 sync
 5 A
 145
-shot a110 1
+shot b80 1
 sync
 5 A
 145
-shot a111 1
+shot b81 1
 sync
 5 A
 145
-shot a112 1
+shot b82 1
 sync
 5 A
 145
-shot a113 1
+shot b83 1
 sync
 5 A
 145
-shot a114 1
+shot b84 1
 sync
 5 A
 145
-shot a115 1
+shot b85 1
 sync
 5 A
 145
-shot a116 1
+shot b86 1
 sync
 5 A
 145
-shot a117 1
+shot b87 1
 sync
 5 A
 145
-shot a118 1
+shot b88 1
 sync
 5 A
 145
-shot a119 1
+shot b89 1
 sync
 5 A
 145
-shot a120 1
+shot b90 1
 sync
 5 A
 145
-shot a121 1
+shot b91 1
 sync
 5 A
 145
-shot a122 1
+shot b92 1
 sync
 5 A
 145
-shot a123 1
+shot b93 1
 sync
 5 A
 145
-shot a124 1
+shot b94 1
 sync
 5 A
 145
-shot a125 1
+shot b95 1
 sync
 5 A
 145
-shot a126 1
+shot b96 1
 sync
 5 A
 145
-shot a127 1
+shot b97 1
 sync
 5 A
 145
-shot a128 1
+shot b98 1
 sync
 5 A
 145
-shot a129 1
+shot b99 1
 sync
 5 A
 145
-shot a130 1
+shot b100 1
 sync
 5 A
 145
-shot a131 1
+shot b101 1
 sync
 5 A
 145
-shot a132 1
+shot b102 1
 sync
 5 A
 145
-shot a133 1
+shot b103 1
 sync
 5 A
 145
-shot a134 1
+shot b104 1
 sync
 5 A
 145
-shot a135 1
+shot b105 1
 sync
 5 A
 145
-shot a136 1
+shot b106 1
 sync
 5 A
 145
-shot a137 1
+shot b107 1
 sync
 5 A
 145
-shot a138 1
+shot b108 1
 sync
 5 A
 145
-shot a139 1
+shot b109 1
 sync
 5 A
 145
-shot a140 1
+shot b110 1
 sync
 5 A
 145
-shot a141 1
+shot b111 1
 sync
 5 A
 145
-shot a142 1
+shot b112 1
 sync
 5 A
 145
-shot a143 1
+shot b113 1
 sync
 5 A
 145
-shot a144 1
+shot b114 1
 sync
 5 A
 145
-shot a145 1
+shot b115 1
 sync
 5 A
 145
-shot a146 1
+shot b116 1
 sync
 5 A
 145
-shot a147 1
+shot b117 1
 sync
 5 A
 145
-shot a148 1
+shot b118 1
 sync
 5 A
 145
-shot a149 1
+shot b119 1
 sync
 5 A
 145
-shot a150 1
+shot b120 1
 sync
 5 A
 145
-shot a151 1
+shot b121 1
 sync
 5 A
 145
-shot a152 1
+shot b122 1
 sync
 5 A
 145
-shot a153 1
+shot b123 1
 sync
 5 A
 145
-shot a154 1
+shot b124 1
 sync
 5 A
 145
-shot a155 1
+shot b125 1
 sync
 5 A
 145
-shot a156 1
+shot b126 1
 sync
 5 A
 145
-shot a157 1
+shot b127 1
 sync
 5 A
 145
-shot a158 1
+shot b128 1
 sync
 5 A
 145
-shot a159 1
+shot b129 1
 sync
 5 A
 145
-shot a160 1
+shot b130 1
 sync
 5 A
 145
-shot a161 1
+shot b131 1
 sync
 5 A
 145
-shot a162 1
+shot b132 1
 sync
 5 A
 145
-shot a163 1
+shot b133 1
 sync
 5 A
 145
-shot a164 1
+shot b134 1
 sync
 5 A
 145
-shot a165 1
+shot b135 1
 sync
 5 A
 145
-shot a166 1
+shot b136 1
 sync
 5 A
 145
-shot a167 1
+shot b137 1
 sync
 5 A
 145
-shot a168 1
+shot b138 1
 sync
 5 A
 145
-shot a169 1
+shot b139 1
 sync
 5 A
 145
-shot a170 1
+shot b140 1
