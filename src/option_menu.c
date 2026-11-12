@@ -22,6 +22,9 @@
 #include "string_util.h"
 #include "sound.h"
 #include "constants/songs.h"
+#include "reload_save.h"
+#include "save.h"
+#include "m4a.h"
 #endif
 
 #define tMenuSelection data[0]
@@ -88,6 +91,7 @@ enum
     MENUITEM_PC_SECTION_KEYBOARD,
     MENUITEM_PC_SECTION_AUDIO,
     MENUITEM_PC_SECTION_VIDEO,
+    MENUITEM_PC_RELOAD, // top page: reload the last save (A twice)
 #endif
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
@@ -167,6 +171,9 @@ static void PcOption_Draw(u8 item);
 static bool32 PcMenu_HandleNavigation(u8 taskId);
 static void PcMenu_SetPage(u8 page);
 static void PcSection_Draw(u8 item);
+static void PcReload_Draw(void);
+static void Task_PcReloadFadeOut(u8 taskId);
+static bool8 sPcReloadConfirm; // "Reload save": the first A asks, the second A reloads
 static void PcKey_Draw(u8 item);
 #endif
 
@@ -265,6 +272,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_PC_KEY_FIRST + KEYBIND_FAST_FORWARD] = COMPOUND_STRING("Key fast fwd"),
     [MENUITEM_PC_SECTION_AUDIO]    = COMPOUND_STRING("Audio"),
     [MENUITEM_PC_SECTION_VIDEO]    = COMPOUND_STRING("Video"),
+    [MENUITEM_PC_RELOAD]           = COMPOUND_STRING("Reload save"),
 #endif
     [MENUITEM_CANCEL]      = COMPOUND_STRING("Cancel"),
 };
@@ -1063,6 +1071,8 @@ static void RedrawVisibleOptions(u8 taskId)
         for (i = MENUITEM_PC_SECTION_GAMEPLAY; i <= MENUITEM_PC_SECTION_VIDEO; i++)
             if (ITEM_VISIBLE(i))
                 PcSection_Draw(i);
+        if (ITEM_VISIBLE(MENUITEM_PC_RELOAD))
+            PcReload_Draw();
         for (i = MENUITEM_PC_KEY_FIRST; i <= MENUITEM_PC_KEY_LAST; i++)
             if (ITEM_VISIBLE(i))
                 PcKey_Draw(i);
@@ -1240,6 +1250,7 @@ static void PcMenu_SetPage(u8 page)
     case 0:
         for (i = MENUITEM_PC_SECTION_GAMEPLAY; i <= MENUITEM_PC_SECTION_VIDEO; i++)
             PcMenu_AddRow(i);
+        PcMenu_AddRow(MENUITEM_PC_RELOAD);
         break;
     case MENUITEM_PC_SECTION_GAMEPLAY:
         PcMenu_AddRows(sPcSectionGameplay, ARRAY_COUNT(sPcSectionGameplay));
@@ -1296,6 +1307,39 @@ static bool32 PcMenu_HandleNavigation(u8 taskId)
         PlaySE(SE_SELECT);
         RedrawVisibleOptions(taskId); // a key taken from another button swaps, so redraw all rows
         return TRUE;
+    }
+
+    if (item == MENUITEM_PC_RELOAD && JOY_NEW(A_BUTTON))
+    {
+        if (gSaveFileStatus != SAVE_STATUS_OK)
+        {
+            PlaySE(SE_FAILURE);
+        }
+        else if (!sPcReloadConfirm)
+        {
+            PlaySE(SE_SELECT);
+            sPcReloadConfirm = TRUE;
+            PcReload_Draw();
+            CopyWindowToVram(WIN_OPTIONS, COPYWIN_GFX);
+        }
+        else
+        {
+            // Nothing is saved: settings changed in this visit and progress since the last save are dropped.
+            sPcReloadConfirm = FALSE;
+            PlaySE(SE_SELECT);
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+            gTasks[taskId].func = Task_PcReloadFadeOut;
+        }
+        return TRUE;
+    }
+    if (sPcReloadConfirm && (JOY_NEW(B_BUTTON) || JOY_NEW(DPAD_UP) || JOY_NEW(DPAD_DOWN)))
+    {
+        // Any other button cancels the question.
+        sPcReloadConfirm = FALSE;
+        PcReload_Draw();
+        CopyWindowToVram(WIN_OPTIONS, COPYWIN_GFX);
+        if (JOY_NEW(B_BUTTON))
+            return TRUE;
     }
 
     if (JOY_NEW(A_BUTTON))
@@ -1362,6 +1406,36 @@ static void PcSection_Draw(u8 item)
     AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, sNotes[item - MENUITEM_PC_SECTION_GAMEPLAY], 104, y + 1, TEXT_SKIP_DRAW, NULL);
     DrawOptionMenuChoice(gText_ArrowRight, 190, y, 0);
 }
+// "Reload save" row: what it does, or the question after the first A.
+static void PcReload_Draw(void)
+{
+    u8 y = ITEM_Y(MENUITEM_PC_RELOAD);
+    const u8 *note;
+
+    if (gSaveFileStatus != SAVE_STATUS_OK)
+        note = COMPOUND_STRING("{COLOR DARK_GRAY}{SHADOW LIGHT_GRAY}No save yet");
+    else if (sPcReloadConfirm)
+        note = COMPOUND_STRING("{COLOR RED}{SHADOW LIGHT_RED}Sure? Press A");
+    else
+        note = COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Last save");
+    FillWindowPixelRect(WIN_OPTIONS, PIXEL_FILL(1), 104, y, 96, 16);
+    AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, note, 104, y + 1, TEXT_SKIP_DRAW, NULL);
+}
+
+// After the fade: throw away everything since the last save and continue from it,
+// the same way the game recovers from a link error (ReloadSave).
+static void Task_PcReloadFadeOut(u8 taskId)
+{
+    if (!gPaletteFade.active)
+    {
+        DestroyTask(taskId);
+        FreeAllWindowBuffers();
+        m4aMPlayAllStop();
+        gMain.state = 0;
+        ReloadSave();
+    }
+}
+
 // Keyboard rows: the key's name, or "Press a key" while waiting for one.
 static void PcKey_Draw(u8 item)
 {
