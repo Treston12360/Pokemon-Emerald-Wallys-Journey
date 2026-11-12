@@ -16,6 +16,7 @@ unsigned int GetDecompressedDataSize(const unsigned int *ptr);
 #include "global.h"
 #include "main.h"
 #include "palette.h"
+#include "wally_journey.h"
 #include "overworld.h"
 #include "event_data.h"
 #include "time_events.h"
@@ -146,13 +147,71 @@ const uint16_t *Voxel_ResolveAttributes(const void *tilesetPtr)
     return resolved;
 }
 
+/* Wally's Journey (DLX-17): the tilesets' colours as the game shows them this season (autumn leaves,
+ * winter, spring blossom), not as stored; kept for the last few tilesets. */
 const uint16_t *Voxel_ResolvePalettes(const void *tilesetPtr)
 {
+    static struct { const void *tileset; u32 key; u16 colors[16 * 16]; } sSeasonal[12];
+    static unsigned sNext;
     const struct Tileset *tileset = tilesetPtr;
+    const u16 *raw;
+    u32 key;
 
     if (tileset == NULL || tileset->palettes == NULL)
         return NULL;
-    return (const uint16_t *)Port_ResolveAssetPointer(tileset->palettes);
+    raw = (const u16 *)Port_ResolveAssetPointer(tileset->palettes);
+    key = WallyJourney_FoliageKey();
+    for (unsigned i = 0; i < ARRAY_COUNT(sSeasonal); i++)
+        if (sSeasonal[i].tileset == tilesetPtr && sSeasonal[i].key == key)
+            return sSeasonal[i].colors;
+    {
+        unsigned i = sNext++ % ARRAY_COUNT(sSeasonal);
+        WallyJourney_SeasonalTilesetPalettes(raw, sSeasonal[i].colors, !tileset->isSecondary);
+        sSeasonal[i].tileset = tilesetPtr;
+        sSeasonal[i].key = key;
+        return sSeasonal[i].colors;
+    }
+}
+
+uint32_t VoxelWorld_SeasonKey(void)
+{
+    return WallyJourney_FoliageKey();
+}
+
+/* DLX-17: recolour baked 3D texels (trees, building models; RGBA5551) for the season. A lookup over all
+ * 32768 colours: the General tileset's own colours become its seasonal ones exactly (the hand-made
+ * palettes), anything else goes through the season formula. Rebuilt when the season key changes. */
+void VoxelWorld_SeasonTexels(uint16_t *texels, size_t count)
+{
+    static u16 *sLut;
+    static u32 sLutKey;
+    u32 key = WallyJourney_FoliageKey();
+
+    if ((key & 0xF) == 1 && !(key & 0x100)) /* FOLIAGE_NONE and no hand-made palettes: nothing to do */
+        return;
+    if (sLut == NULL)
+        sLut = malloc(32768 * sizeof(u16));
+    if (sLut == NULL)
+        return;
+    if (sLutKey != key)
+    {
+        const u16 *raw = (const u16 *)Port_ResolveAssetPointer(gTileset_General.palettes);
+        const u16 *seasonal = Voxel_ResolvePalettes(&gTileset_General);
+        for (u32 c = 0; c < 32768; c++)
+            sLut[c] = WallyJourney_SeasonalColorNow(c);
+        if (raw != NULL && seasonal != NULL)
+            for (u32 i = 0; i < 16 * NUM_PALS_TOTAL; i++)
+                if (i % 16 != 0)
+                    sLut[raw[i] & 0x7FFF] = seasonal[i] & 0x7FFF;
+        sLutKey = key;
+    }
+    for (size_t i = 0; i < count; i++)
+    {
+        u16 t = texels[i];
+        u16 c = ((t >> 11) & 31) | (((t >> 6) & 31) << 5) | (((t >> 1) & 31) << 10);
+        u16 n = sLut[c];
+        texels[i] = (u16)(((n & 31) << 11) | (((n >> 5) & 31) << 6) | (((n >> 10) & 31) << 1) | (t & 1));
+    }
 }
 
 unsigned Voxel_MetatileCount(const void *tilesetPtr, unsigned limit)

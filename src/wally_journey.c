@@ -1754,6 +1754,41 @@ void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFa
     }
 }
 
+#ifdef PORTABLE
+u32 WallyJourney_FoliageKey(void)
+{
+    return (CurrentFoliageMode() + 1) | (WallyJourney_GetSeason() << 4) | ((GeneralSeasonPalettes() != NULL) << 8);
+}
+
+u16 WallyJourney_SeasonalColorNow(u16 color)
+{
+    u32 mode = CurrentFoliageMode();
+    return mode == FOLIAGE_NONE ? color : SeasonalColor(color, mode, 0);
+}
+
+// Same as WallyJourney_ApplySeasonalFoliage, on a tileset's own 16 x 16 palette table (slot-indexed).
+void WallyJourney_SeasonalTilesetPalettes(const u16 *src, u16 *dst, bool32 isPrimary)
+{
+    u32 mode = CurrentFoliageMode();
+    u32 slot, c, k;
+    const u16 (*handmade)[16] = isPrimary ? GeneralSeasonPalettes() : NULL;
+
+    CpuCopy16(src, dst, 16 * 16 * sizeof(u16));
+    if (handmade != NULL)
+        for (k = 0; k < ARRAY_COUNT(sGeneralSeasonSlots); k++)
+            CpuCopy16(&handmade[k][1], &dst[sGeneralSeasonSlots[k] * 16 + 1], 15 * sizeof(u16));
+    if (mode == FOLIAGE_NONE)
+        return;
+    for (slot = 0; slot < NUM_PALS_TOTAL; slot++)
+    {
+        if (handmade != NULL && (slot == 1 || slot == 2 || slot == 3 || slot == 5))
+            continue;
+        for (c = 1; c < 16; c++)
+            dst[slot * 16 + c] = SeasonalColor(dst[slot * 16 + c], mode, slot);
+    }
+}
+#endif
+
 // TRUE when the primary tileset palette was coloured for a different
 // season/place than the map just entered through a connection.
 bool32 WallyJourney_PrimaryFoliageStale(void)

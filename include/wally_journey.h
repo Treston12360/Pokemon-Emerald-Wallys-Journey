@@ -73,6 +73,13 @@ bool32 WallyJourney_IsHiddenItemWaitingForBracelet(u16 item);
 void WallyJourney_UpdateMegaStoneSparkles(void);
 void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFaded, bool32 isPrimary);
 void WallyJourney_SeasonalGrassSpritePalette(u32 spritePalSlot);
+#ifdef PORTABLE
+// PC 3D (DLX-17): the season recolouring for a whole tileset palette table (the 3D view bakes its
+// textures from the tilesets), and a key that changes whenever that recolouring would.
+u32 WallyJourney_FoliageKey(void);
+void WallyJourney_SeasonalTilesetPalettes(const u16 *src, u16 *dst, bool32 isPrimary);
+u16 WallyJourney_SeasonalColorNow(u16 color); // the formula alone (tilesets other than General)
+#endif
 bool32 WallyJourney_PrimaryFoliageStale(void);
 struct ObjectEventTemplate;
 bool32 WallyJourney_IsNpcAway(const struct ObjectEventTemplate *template);

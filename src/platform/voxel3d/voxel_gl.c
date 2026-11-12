@@ -438,6 +438,7 @@ typedef struct
     GLuint tex[VOXEL_ATLAS_PAGES];
     unsigned pages;
     uint32_t lastUse;
+    uint32_t season; // VoxelWorld_SeasonKey() it was baked for (DLX-17)
     bool valid;
 } Atlas;
 
@@ -449,7 +450,8 @@ static uint32_t sFrame;
 static bool AtlasReady(const VoxelMapInstance *inst)
 {
     for (int i = 0; i < MAX_ATLASES; i++)
-        if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset)
+        if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset
+            && sAtlases[i].season == VoxelWorld_SeasonKey())
             return true;
     return false;
 }
@@ -459,7 +461,8 @@ static Atlas *GetAtlas(const VoxelMapInstance *inst)
     Atlas *slot = NULL;
 
     for (int i = 0; i < MAX_ATLASES; i++)
-        if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset)
+        if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset
+            && sAtlases[i].season == VoxelWorld_SeasonKey())
         {
             sAtlases[i].lastUse = sFrame;
             return &sAtlases[i];
@@ -517,6 +520,7 @@ static Atlas *GetAtlas(const VoxelMapInstance *inst)
     }
     slot->map = sAtlasJob.map;
     slot->primary = inst->primaryTileset;
+    slot->season = VoxelWorld_SeasonKey();
     slot->secondary = inst->secondaryTileset;
     slot->valid = true;
     slot->lastUse = sFrame;
@@ -551,6 +555,7 @@ static GLuint BuildingPage(int page)
     memset(sPageScratch, 0, (size_t)w * th * sizeof(uint16_t));
     if (!VoxelBuildings_ReadPage((unsigned)page, 0, w * h, sPageScratch))
         return 0;
+    VoxelWorld_SeasonTexels(sPageScratch, (size_t)w * h); // DLX-17 (after ReadPage's grading)
     sPageTex[page] = UploadTiled(0, sPageScratch, w, th);
     return sPageTex[page];
 }
@@ -975,8 +980,9 @@ static bool LoadTrees(void)
     }
     n = fread(texels, 1, VOXEL_TREE_TEXTURE_DIM * VOXEL_TREE_TEXTURE_DIM * sizeof(uint16_t), f);
     fclose(f);
+    VoxelWorld_SeasonTexels(texels, VOXEL_TREE_TEXTURE_DIM * VOXEL_TREE_TEXTURE_DIM); // DLX-17
     VoxelGrade_Texels(texels, VOXEL_TREE_TEXTURE_DIM * VOXEL_TREE_TEXTURE_DIM);
-    sTreeTex = UploadTiled(0, texels, VOXEL_TREE_TEXTURE_DIM, VOXEL_TREE_TEXTURE_DIM);
+    sTreeTex = UploadTiled(sTreeTex, texels, VOXEL_TREE_TEXTURE_DIM, VOXEL_TREE_TEXTURE_DIM);
     free(texels);
     return n == VOXEL_TREE_TEXTURE_DIM * VOXEL_TREE_TEXTURE_DIM * sizeof(uint16_t);
 }
@@ -1474,6 +1480,24 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     uint32_t digest;
     float proj[16], view[16], mvp[16];
     float fadeAmount = 0.0f, fadeRgb[3] = {0, 0, 0};
+
+    // DLX-17: the trees' and building models' baked textures follow the season too; reload them when it changes.
+    {
+        static uint32_t sTexSeason = 0xFFFFFFFFu;
+        uint32_t season = VoxelWorld_SeasonKey();
+        if (season != sTexSeason)
+        {
+            if (sTreeTex != 0)
+                LoadTrees();
+            for (int p = 0; p < MAX_PAGES; p++)
+                if (sPageTex[p] != 0)
+                {
+                    wj_glDeleteTextures(1, &sPageTex[p]);
+                    sPageTex[p] = 0;
+                }
+            sTexSeason = season;
+        }
+    }
     uint16_t backdrop;
 
     if (!sInited)

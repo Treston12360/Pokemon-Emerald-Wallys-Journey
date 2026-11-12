@@ -190,6 +190,10 @@ const uint16_t *Voxel_ResolveMap(const void *layout);
 const uint16_t *Voxel_ResolveMetatiles(const void *tileset);
 const uint16_t *Voxel_ResolveAttributes(const void *tileset);
 const uint16_t *Voxel_ResolvePalettes(const void *tileset);
+/* Changes when the season colouring of the tilesets does (textures baked before are stale). DLX-17. */
+uint32_t VoxelWorld_SeasonKey(void);
+/* Recolour baked RGBA5551 texels (trees, building models) for the season (DLX-17). */
+void VoxelWorld_SeasonTexels(uint16_t *texels, size_t count);
 /* Number of metatiles the tileset's metatile asset actually contains. */
 unsigned Voxel_MetatileCount(const void *tileset, unsigned limit);
 

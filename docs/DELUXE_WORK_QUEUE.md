@@ -179,8 +179,18 @@ differently every run anyway); 3D Slateport the same.
 ### DLX-16 Merge `deluxe-3d` into `deluxe` (TODO, after owner OK on 3D)
 The Hex crash fix is already on `deluxe` too (applied separately). Merge everything else after the owner OKs 3D.
 
-### DLX-17 3D: a ground texture draws wrong in Slateport and many other places (TODO)
-Owner report 2026-11-12. Find the metatile(s) (compare 2D and 3D at the same spot) and fix.
+### DLX-17 3D: a ground texture draws wrong in Slateport and many other places (Done - session 014PwRDj, 2026-11-12)
+Found: the 3D view ignored Wally's Journey's seasons. 2D recolours the tilesets as a map loads
+(`WallyJourney_ApplySeasonalFoliage`: hand-made General palettes + `SeasonalColor`); 3D baked its textures from
+the tilesets' stored palettes, so it was always summer (green grass/trees in autumn, pale paths).
+Owner: "Choose the live, season adjusted ones." Fix: `Voxel_ResolvePalettes` returns season-coloured copies
+(`WallyJourney_SeasonalTilesetPalettes`), atlases carry the season key (`VoxelWorld_SeasonKey`) and rebake when
+it changes; trees (`trees.rgba5551`) and building-model pages are recoloured with `VoxelWorld_SeasonTexels`
+(General's own colours -> its hand-made seasonal ones, the rest by the season formula) and reload on a change.
+Checked in Wine (autumn): Slateport ground/trees/bushes and Route 119 grass/trees match the 2D colours.
+Note: my Wine test folder uses 3D data generated from vanilla Emerald (vanilla layouts); the generators fail on our
+tree in buildings (IndexError in voxel_building._cell_image, frontier_arch) and relief - see DLX-1 (which data
+ships). `reuse_everywhere` now skips a layout it cannot read (3ds_port copy only, not in git).
 
 ### DLX-18 3D: route switching still a little jarring; no pop-in at all (TODO)
 Owner: "just load everything so nothing has to pop in". Preload connected maps' meshes, people and
