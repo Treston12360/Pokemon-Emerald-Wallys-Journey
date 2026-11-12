@@ -164,59 +164,135 @@ static void UpdatePads(int w, int h)
 static s32 sPosX, sPosY;      // gSaveBlock1Ptr->pos (map grid coords of the BG ring's first metatile)
 static u8 sRingX, sRingY;     // where that metatile sits in the 32x32 ring (tile units)
 
+// Maps around the current one, found by following connections outwards (neighbours, their
+// neighbours...), each with where its top-left sits in the current map's coordinates. The GBA only
+// ever needs direct neighbours; a zoomed-out view sees further (from Route 107, the route north of
+// Dewford is a neighbour of a neighbour and used to pop in on crossing the map edge).
+#define NEAR_MAPS_MAX 24
+#define NEAR_MAPS_DEPTH 4
+struct NearMap
+{
+    const struct MapLayout *layout;
+    u8 group, num, depth;
+    s32 x, y;
+};
+static struct NearMap sNearMaps[NEAR_MAPS_MAX];
+static int sNearMapCount;
+static const struct MapLayout *sNearMapsFor;
+static u8 sNearMapsGroup, sNearMapsNum;
+
+static void BuildNearMaps(void)
+{
+    const struct MapLayout *cur = gMapHeader.mapLayout;
+    int head = 0;
+
+    if (cur == sNearMapsFor && sNearMapsGroup == gSaveBlock1Ptr->location.mapGroup && sNearMapsNum == gSaveBlock1Ptr->location.mapNum)
+        return;
+    sNearMapsFor = cur;
+    sNearMapsGroup = gSaveBlock1Ptr->location.mapGroup;
+    sNearMapsNum = gSaveBlock1Ptr->location.mapNum;
+    sNearMapCount = 0;
+    if (cur == NULL)
+        return;
+    sNearMaps[0] = (struct NearMap){cur, sNearMapsGroup, sNearMapsNum, 0, 0, 0};
+    sNearMapCount = 1;
+    while (head < sNearMapCount)
+    {
+        struct NearMap m = sNearMaps[head++];
+        const struct MapHeader *hdr = head == 1 ? &gMapHeader : Overworld_GetMapHeaderByGroupAndId(m.group, m.num);
+        const struct MapConnections *conns = hdr != NULL ? hdr->connections : NULL;
+
+        if (m.depth >= NEAR_MAPS_DEPTH || conns == NULL || conns->connections == NULL)
+            continue;
+        for (s32 i = 0; i < conns->count && sNearMapCount < NEAR_MAPS_MAX; i++)
+        {
+            const struct MapConnection *c = &conns->connections[i];
+            const struct MapHeader *h2 = Overworld_GetMapHeaderByGroupAndId(c->mapGroup, c->mapNum);
+            const struct MapLayout *l;
+            s32 x, y;
+            bool seen = false;
+
+            if (h2 == NULL || (l = h2->mapLayout) == NULL || l->map == NULL)
+                continue;
+            switch (c->direction)
+            {
+            case CONNECTION_NORTH: x = m.x + c->offset; y = m.y - l->height; break;
+            case CONNECTION_SOUTH: x = m.x + c->offset; y = m.y + m.layout->height; break;
+            case CONNECTION_WEST:  x = m.x - l->width; y = m.y + c->offset; break;
+            case CONNECTION_EAST:  x = m.x + m.layout->width; y = m.y + c->offset; break;
+            default: continue;
+            }
+            for (int k = 0; k < sNearMapCount; k++)
+                if (sNearMaps[k].group == c->mapGroup && sNearMaps[k].num == c->mapNum)
+                    seen = true;
+            if (seen)
+                continue;
+            sNearMaps[sNearMapCount++] = (struct NearMap){l, c->mapGroup, c->mapNum, m.depth + 1, x, y};
+        }
+    }
+}
+
 static bool GetConnectedMetatile(s32 gx, s32 gy, u16 *outId)
 {
-    const struct MapConnections *conns = gMapHeader.connections;
-    const struct MapLayout *cur = gMapHeader.mapLayout;
     s32 x = gx - MAP_OFFSET, y = gy - MAP_OFFSET;
-    s32 i;
 
-    if (conns == NULL || conns->connections == NULL)
-        return false;
-    for (i = 0; i < conns->count; i++)
+    BuildNearMaps();
+    // Nearest maps first (the list is in order of distance), the current map itself excluded.
+    for (int i = 1; i < sNearMapCount; i++)
     {
-        const struct MapConnection *c = &conns->connections[i];
-        const struct MapHeader *hdr = Overworld_GetMapHeaderByGroupAndId(c->mapGroup, c->mapNum);
-        const struct MapLayout *l;
-        s32 lx, ly;
+        const struct NearMap *m = &sNearMaps[i];
+        s32 lx = x - m->x, ly = y - m->y;
 
-        if (hdr == NULL || (l = hdr->mapLayout) == NULL || l->map == NULL)
+        if (lx < 0 || ly < 0 || lx >= m->layout->width || ly >= m->layout->height)
             continue;
-        switch (c->direction)
-        {
-        case CONNECTION_NORTH:
-            if (y >= 0)
-                continue;
-            lx = x - c->offset;
-            ly = y + l->height;
-            break;
-        case CONNECTION_SOUTH:
-            if (y < cur->height)
-                continue;
-            lx = x - c->offset;
-            ly = y - cur->height;
-            break;
-        case CONNECTION_WEST:
-            if (x >= 0)
-                continue;
-            lx = x + l->width;
-            ly = y - c->offset;
-            break;
-        case CONNECTION_EAST:
-            if (x < cur->width)
-                continue;
-            lx = x - cur->width;
-            ly = y - c->offset;
-            break;
-        default:
-            continue;
-        }
-        if (lx < 0 || ly < 0 || lx >= l->width || ly >= l->height)
-            continue;
-        *outId = l->map[lx + ly * l->width] & MAPGRID_METATILE_ID_MASK;
+        *outId = m->layout->map[lx + ly * m->layout->width] & MAPGRID_METATILE_ID_MASK;
         return true;
     }
     return false;
+}
+
+// Filler ("border") tile where there is no map at all. The GBA uses the current map's filler, so
+// zoomed out it flipped (e.g. water <-> trees) on crossing a map edge. Here each spot takes the
+// filler of the map nearest to it, whichever map the player is on.
+static u16 GetNearestBorderMetatile(s32 gx, s32 gy)
+{
+    s32 x = gx - MAP_OFFSET, y = gy - MAP_OFFSET;
+    const struct NearMap *best = NULL;
+    s32 bestDist = 0x7FFFFFFF;
+    const struct MapLayout *l;
+    s32 lx, ly;
+
+    BuildNearMaps();
+    for (int i = 0; i < sNearMapCount; i++)
+    {
+        const struct NearMap *m = &sNearMaps[i];
+        s32 dx = x < m->x ? m->x - x : x >= m->x + m->layout->width ? x - (m->x + m->layout->width - 1) : 0;
+        s32 dy = y < m->y ? m->y - y : y >= m->y + m->layout->height ? y - (m->y + m->layout->height - 1) : 0;
+        // A map straight above/below this spot wins over one to the side, and that over a diagonal
+        // one, so filler areas meet in straight lines instead of staircases.
+        s32 d = (dx == 0 ? dy : dy == 0 ? 0x10000 + dx : 0x20000 + (dx > dy ? dx : dy));
+
+        // Ties go to the lower map id, so the answer doesn't depend on the map the player is on.
+        if (d < bestDist || (d == bestDist && (m->group << 8 | m->num) < (best->group << 8 | best->num)))
+        {
+            bestDist = d;
+            best = m;
+        }
+    }
+    if (best == NULL || best->layout->border == NULL)
+        return MapGridGetMetatileIdAt(gx, gy);
+    l = best->layout;
+    lx = x - best->x;
+    ly = y - best->y;
+    if (l->isFrlg && l->borderWidth != 0 && l->borderHeight != 0)
+    {
+        s32 xp = (lx + 8 * l->borderWidth) % l->borderWidth, yp = (ly + 8 * l->borderHeight) % l->borderHeight;
+        if (xp < 0) xp += l->borderWidth;
+        if (yp < 0) yp += l->borderHeight;
+        return l->border[xp + yp * l->borderWidth] & MAPGRID_METATILE_ID_MASK;
+    }
+    // Same pattern the game gives that map when the player is on it (GetBorderBlockAt).
+    return l->border[((lx + MAP_OFFSET + 1) & 1) + ((ly + MAP_OFFSET + 1) & 1) * 2] & MAPGRID_METATILE_ID_MASK;
 }
 
 // Tile entry of BG `bg` (1-3) at grid tile (tx, ty) (8x8 units, map grid coords * 2).
@@ -230,8 +306,12 @@ static u16 GetMapTileEntry(int bg, s32 tx, s32 ty)
     u16 metatileId;
     u32 layerType;
 
-    // The part the game has drawn itself: use its ring (includes door animations).
-    if (rx >= 0 && rx < 15 && ry >= 0 && ry < 15)
+    bool inCurrentMap = mx >= MAP_OFFSET && my >= MAP_OFFSET && mx < MAP_OFFSET + layout->width && my < MAP_OFFSET + layout->height;
+
+    // The part the game has drawn itself: use its ring (includes door animations). Only inside the
+    // current map: past its edge the game only knows direct neighbours and its own filler, which
+    // would leave a patch around the player that disagrees with the wider view.
+    if (inCurrentMap && rx >= 0 && rx < 15 && ry >= 0 && ry < 15)
     {
         u32 x = (sRingX + 2 * rx + (tx & 1)) & 31;
         u32 y = (sRingY + 2 * ry + (ty & 1)) & 31;
@@ -239,10 +319,11 @@ static u16 GetMapTileEntry(int bg, s32 tx, s32 ty)
         return buf[y * 32 + x];
     }
 
-    if (mx < 0 || my < 0 || mx >= gBackupMapLayout.width || my >= gBackupMapLayout.height)
+    if (!inCurrentMap)
     {
+        // Outside the current map: the maps around it, else filler.
         if (!GetConnectedMetatile(mx, my, &metatileId))
-            metatileId = MapGridGetMetatileIdAt(mx, my);
+            metatileId = GetNearestBorderMetatile(mx, my);
     }
     else
     {
