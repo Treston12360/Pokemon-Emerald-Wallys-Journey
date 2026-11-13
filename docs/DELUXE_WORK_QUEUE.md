@@ -328,7 +328,12 @@ row 9 bits 3..13, row 10 bits 2..14, rows 11..15 bits 1..15 (read from the 2D pi
 sign like Dewford's (picture sent). The patched file is in the alpha10 package's voxel/ folder; whoever
 regenerates signposts.bin must re-apply it (or teach the sign generator about signs on a building's edge).
 
-### DLX-22 3D: thin seam lines between tiles (TODO, owner report 2026-11-13)
+### DLX-22 3D: thin seam lines between tiles (FIX IN - owner to check on his GPU, 2026-11-13 session 019khs4X)
+Not reproducible here (Mesa software GL is pixel-exact; tried 2560x1440 and walking). Ported Emerald 3DS's rule
+(ctr_voxel.c GPU vertex format + Quantise): static meshes' positions rounded to 1/512 tile from the whole-tile
+origin, half up, so shared edges land on exactly the same place (voxel_gl.c MeshSetQuantised). Our atlas already
+matches 3DS (1/32-texel v inset). Our coordinates are small (camera ~7-30 tiles from the map corner), so the 3DS
+anchor-matrix fix is not needed. If lines remain on the owner's GPU, next step: get a picture at the same spot.
 Black lines in Granite Cave and right outside it, and inside the Pokémon Center; light lines across water on Route 118 / sea routes. Pictures: 82dd3767, 38db5a80, ce8fe2a3, fd24e386, 7e0beffa (Pokémon Center), 1d0a3e73/945abb13 (Route 118 water). Images in `docs/dlx_reports/2026-11-13/`.
 
 ### DLX-23 Indoor glow too strong (Pokémon Center and houses) (TODO, owner report 2026-11-13)

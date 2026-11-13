@@ -458,6 +458,44 @@ static void MeshSet(Mesh *m, const VoxelVertex *v, unsigned count, GLenum usage)
     m->count = count;
 }
 
+/*
+ * DLX-22, ported from Emerald 3DS (ctr_voxel.c, GPU vertex format + Quantise): positions go to the GPU in 1/512
+ * tile, measured from the draw's origin (always a whole tile), rounded half up, never half away from zero, "so two
+ * chunks quantise a shared edge to exactly the same place". Raw builder floats let vertices that should meet differ
+ * in the last bit, and real GPUs showed the background through as thin dark or light lines (Granite Cave, the sea).
+ * Kept as floats: k/512 is exact for any position a map can have.
+ */
+#define VOXEL_POS_SCALE 512.0f
+static float QuantisePos(float value)
+{
+    return floorf(value * VOXEL_POS_SCALE + 0.5f) / VOXEL_POS_SCALE;
+}
+
+static void MeshSetQuantised(Mesh *m, const VoxelVertex *v, unsigned count, GLenum usage)
+{
+    static VoxelVertex *buf;
+    static unsigned cap;
+    if (count > cap)
+    {
+        VoxelVertex *grown = realloc(buf, (size_t)count * sizeof(VoxelVertex));
+        if (grown == NULL)
+        {
+            MeshSet(m, v, count, usage);
+            return;
+        }
+        buf = grown;
+        cap = count;
+    }
+    for (unsigned i = 0; i < count; i++)
+    {
+        buf[i] = v[i];
+        buf[i].x = QuantisePos(v[i].x);
+        buf[i].y = QuantisePos(v[i].y);
+        buf[i].z = QuantisePos(v[i].z);
+    }
+    MeshSet(m, buf, count, usage);
+}
+
 static void MeshFree(Mesh *m)
 {
     if (m->vbo != 0)
@@ -756,7 +794,7 @@ static const Mesh *StaticModel(unsigned pageModel, bool lit)
             sStatics[i].used = true;
             sStatics[i].pageModel = pageModel;
             sStatics[i].lit = lit;
-            MeshSet(&sStatics[i].mesh, t, count, GL_STATIC_DRAW);
+            MeshSetQuantised(&sStatics[i].mesh, t, count, GL_STATIC_DRAW);
             free(t);
             return &sStatics[i].mesh;
         }
@@ -981,12 +1019,12 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
             }
         }
         if (n != 0)
-            MeshSet(&m->terrain[p], sSorted, n, GL_STATIC_DRAW);
+            MeshSetQuantised(&m->terrain[p], sSorted, n, GL_STATIC_DRAW);
         else
             MeshFree(&m->terrain[p]);
     }
-    MeshSet(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
-    MeshSet(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
+    MeshSetQuantised(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
+    MeshSetQuantised(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
     memcpy(m->statics, pb->statics, pb->staticCount * sizeof(VoxelStaticDraw));
     m->staticCount = pb->staticCount;
     m->buildingPage = VoxelBuildings_PageOf(inst);
@@ -1202,10 +1240,10 @@ static void BeltAssemble(Atlas *atlas, int cx, int cy)
     total = 0;
     for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
     {
-        MeshSet(&sBeltTerrain[p], sSorted + total, count[p], GL_STATIC_DRAW);
+        MeshSetQuantised(&sBeltTerrain[p], sSorted + total, count[p], GL_STATIC_DRAW);
         total += count[p];
     }
-    MeshSet(&sBeltTrees, sTreeBuf, sTreeCount, GL_STATIC_DRAW);
+    MeshSetQuantised(&sBeltTrees, sTreeBuf, sTreeCount, GL_STATIC_DRAW);
     sBeltAtlas = atlas;
 }
 
