@@ -421,7 +421,16 @@ static const struct ForeignTiles *GetForeignTiles(const struct MapLayout *l)
         f->shownFrame = 0xFFFFFFFF;
     }
     f->lastUse = sWideFrameNo;
-    key = WallyJourney_FoliageKey();
+    {
+        // Once a frame: this runs for every tile drawn, and the season reads the clock.
+        static u32 sKeyFrame = 0xFFFFFFFF, sKey;
+        if (sKeyFrame != sWideFrameNo)
+        {
+            sKey = WallyJourney_FoliageKey();
+            sKeyFrame = sWideFrameNo;
+        }
+        key = sKey;
+    }
     if (f->seasonKey != key)
     {
         WallyJourney_SeasonalTilesetPalettes((const u16 *)f->tileset->palettes, f->raw, FALSE);
