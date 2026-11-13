@@ -359,8 +359,12 @@ Grey squares: NOT a bug - the 2D game draws the same grey shallow-water tiles (R
 around rocks/ship). Lines: reproduced here (Route 108, warp 0 23 20 10, not GPU-only). Not Gamma/bloom/DOF, not
 models, not trees, not atlas bleeding (u inset tried: no change). Long lines at the top go away with the edge belt
 hidden (debug env WJPC_3D_SKIP=8; 1 terrain, 2 trees, 4 models); the brackets near rocks come from map terrain.
-Restoring 3DS's belt face rule (drawn cells keep no faces) did not remove them. Next: dump the belt/terrain
-triangles under one line and see which emitter makes them; then find 3DS's handling of that case.
+Restoring 3DS's belt face rule did not remove them; nor did turning off span merging (T-junctions).
+FOUND (geometry dump, WJPC_DUMP_BELT/WJPC_DUMP_MVP + WJPC_3D_GDEBUG=5 grid view): the lines are the sky showing
+through steps between belt water cells. BorderWaterLevel (identical to Emerald 3DS) gives each belt column the level
+of the map's nearest edge cell (-0.625, -0.562, -0.5, -0.438 here), each cell flat, nothing closing the small step.
+3DS has the same steps; its narrow view rarely shows the belt. Not covered by the reference -> ASKED OWNER how to
+close them (3DS's own method for map/belt seams is a skirt wall: "the seam is a low wall and never a gap").
 Grey/transparent squares under rocks and other objects, and long light lines on the sea (Route 118 and others). Picture: fd24e386. Images in `docs/dlx_reports/2026-11-13/`.
 
 ### DLX-27 3D: the ship on the sea renders wrong / partly flat (TODO, owner report 2026-11-13)

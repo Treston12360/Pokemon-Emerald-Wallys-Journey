@@ -292,6 +292,7 @@ static const char *sFragmentSrc =
     "    vec3 light = sunLight * max(dot(n, sunDir), 0.0) * vShade * clouds(vWorld) + skyTint * max(skyIrr(n), 0.0);\n"
     "    rgb = albedo * light;\n"
     "    if (gammaLight > 1.5 && gammaLight < 2.5) { gl_FragColor = vec4(vec3(vShade) * 0.1, 1.0); return; }\n"
+    "    if (gammaLight > 4.5) { vec2 f = fract(vWorld.xz / 8.0); vec2 g = fract(vWorld.xz); gl_FragColor = vec4(min(f.x, f.y) < 0.015 ? 0.1 : 0.0, min(g.x, g.y) < 0.03 ? 0.03 : 0.0, 0.02, 1.0); return; }\n"
     "    if (gammaLight > 3.5) { gl_FragColor = vec4(vec3(clouds(vWorld)) * 0.1, 1.0); return; }\n"
     "    if (gammaLight > 2.5) { gl_FragColor = vec4(n * 0.5 + 0.5, 1.0); return; }\n"
     // haze (M_StylizedFogPP, day): distances in Gamma units, 64 per tile
@@ -1241,6 +1242,15 @@ static void BeltAssemble(Atlas *atlas, int cx, int cy)
     for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
     {
         MeshSetQuantised(&sBeltTerrain[p], sSorted + total, count[p], GL_STATIC_DRAW);
+        if (getenv("WJPC_DUMP_BELT"))
+        {
+            FILE *f = fopen(getenv("WJPC_DUMP_BELT"), p == 0 ? "wb" : "ab");
+            if (f != NULL)
+            {
+                fwrite(sSorted + total, sizeof(VoxelVertex), count[p], f);
+                fclose(f);
+            }
+        }
         total += count[p];
     }
     MeshSetQuantised(&sBeltTrees, sTreeBuf, sTreeCount, GL_STATIC_DRAW);
@@ -2373,6 +2383,17 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     LookAt(view, sCamera.x, sCamera.y, sCamera.z, sCamera.targetX, sCamera.targetY, sCamera.targetZ);
     Multiply(mvp, proj, view);
     memcpy(sFieldMvp, mvp, sizeof(sFieldMvp));
+    if (getenv("WJPC_DUMP_MVP"))
+    {
+        FILE *f = fopen(getenv("WJPC_DUMP_MVP"), "wb");
+        if (f != NULL)
+        {
+            float extra[4] = {(float)sBeltShiftX, (float)sBeltShiftZ, (float)w, (float)h};
+            fwrite(mvp, sizeof(float), 16, f);
+            fwrite(extra, sizeof(float), 4, f);
+            fclose(f);
+        }
+    }
     sHaveFieldMvp = !sBattleMode;
     wj_glUniformMatrix4fv(sUniMvp, 1, GL_FALSE, mvp);
     wj_glUniform3f(sUniCam, sCamera.x, sCamera.y, sCamera.z);
