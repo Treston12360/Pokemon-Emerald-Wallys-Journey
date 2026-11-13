@@ -216,6 +216,22 @@ No tea, no item gates.
 2. **First playable slice:** arrive in Vermilion → meet Oak and Varnell → Mt. Moon assignment.
 3. Then chapter by chapter, simulator check after each.
 
+## 8b. More owner decisions (2026-11-13)
+
+- **Music:** normal FireRed/LeafGreen music. A Varnell theme later.
+- **Varnell's look:** on hold.
+- **Hoopa:** nobody knows Hoopa is causing the displacements until the reveal. Its rings are the hidden
+  cause of the "anomalies". No cold open that shows it.
+- **Travel:** Kanto opens after the first Champion Wally win. The player **can** go back to Hoenn, but
+  everything that would break the level curve — Champion defenses and the rest of that ladder — stays
+  locked until Kanto's story is beaten. (Gym Leader rematch tier 3, the final rival and Steven are in the
+  simulated pre-Kanto curve already; owner to confirm whether they stay open.)
+- **Research item: Pokémon Crossroads-style travel.** Owner wants to look into flying between regions with
+  the overworld visible. Crossroads is a GBA Emerald hack on pokeemerald-expansion, built on StrangeQuark94's
+  multi-region pokeemerald fork. Its public thread describes region flags, region-aware Fly and seamless
+  region transitions; it doesn't say the source is public. To do: find out exactly how its travel looks and
+  works (and whether code is available and allowed) before designing ours.
+
 ## 9. Still open (owner to decide)
 
 - When Hoopa is taken (cold open?).
