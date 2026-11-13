@@ -351,7 +351,11 @@ Code: field_effect.c, wide_view.c BuildWideSprites, sdl2.c Pc_MachineSpriteSpot,
 Voxel3D_ProjectPictureTile (note: our field is drawn upside down, so NDC y points down).
 During healing the balls float above the wall instead of on the machine. Picture: 0fd2c32c. Images in `docs/dlx_reports/2026-11-13/`.
 
-### DLX-25 3D: Dewford pop-in when switching routes (TODO, owner report 2026-11-13)
+### DLX-25 3D: Dewford pop-in when switching routes (DONE 2026-11-13, session 019khs4X - owner to confirm)
+Cause: the belt (area past the maps) used the CURRENT map's 2x2 border (voxel3d_pc.c MapGridGetCameraBorderAt, as
+Emerald 3DS). Dewford/Route 106 border = trees (0x243), Route 107 = sea (0x170), so crossing swapped them.
+Owner chose 'nearest map's border': VoxelWorld_BorderMetatile now uses the nearest loaded map on the same tile
+sets (phase from that map's origin). Vertex caps: logged when full ('[3D] builder full'); 12 maps visited, none hit.
 Trees at the outside edges of the map change when crossing into the next route. Pictures: 72382506, f63f2bd1, d88db846, d32e7b46, ee23a2c6. Images in `docs/dlx_reports/2026-11-13/`.
 
 ### DLX-26 3D: water routes show grey squares and lines (WIP 2026-11-13, session 019khs4X)

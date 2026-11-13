@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 /*
  * CPU geometry for the voxel overworld. See voxel_mesh_builder.h.
@@ -138,6 +139,8 @@ void VoxelBuilder_Tri(VoxelBuilder *builder, const VoxelVertex *a,
 {
     if (builder->count + 3 > builder->capacity)
     {
+        if (builder->dropped == 0)
+            fprintf(stderr, "[3D] builder full: capacity %u vertices, triangles dropped\n", builder->capacity);
         ++builder->dropped;
         return;
     }
@@ -167,6 +170,8 @@ void VoxelBuilder_Quad(VoxelBuilder *builder, const VoxelVertex *a, const VoxelV
     /* Whole or not at all: half a quad is a sliver along its diagonal. */
     if (builder->count + 6 > builder->capacity)
     {
+        if (builder->dropped == 0)
+            fprintf(stderr, "[3D] builder full: capacity %u vertices, quads dropped\n", builder->capacity);
         builder->dropped += 2;
         return;
     }

@@ -1596,6 +1596,40 @@ int VoxelWorld_BorderMetatile(int worldX, int worldY)
         return fill;
     source = MapGridGetCameraBorderAt(worldX - sInstances[0].originX,
                                       worldY - sInstances[0].originY, &index);
+    /*
+     * DLX-25 (Wally's Journey PC, owner's choice 2026-11-13): the nearest map's border, not the current map's,
+     * so the belt stays the same across a crossing (Dewford's trees used to turn into Route 107's sea when you
+     * crossed). Only maps on the current map's tile sets: another pair's metatile ids mean other art here.
+     * Phase from that map's own origin, as the 2D game tiles it.
+     */
+    {
+        const VoxelMapInstance *best = NULL;
+        int bestD = 0x7FFFFFFF;
+
+        for (unsigned i = 0; i < sInstanceCount; ++i)
+        {
+            const VoxelMapInstance *m = &sInstances[i];
+            int dx, dy, d;
+
+            if (m->layout == NULL || m->indoor || m->primaryTileset != sInstances[0].primaryTileset
+             || m->secondaryTileset != sInstances[0].secondaryTileset
+             || ((const struct MapLayout *)m->layout)->border == NULL)
+                continue;
+            dx = worldX < m->originX ? m->originX - worldX : worldX >= m->originX + m->width ? worldX - (m->originX + m->width - 1) : 0;
+            dy = worldY < m->originY ? m->originY - worldY : worldY >= m->originY + m->height ? worldY - (m->originY + m->height - 1) : 0;
+            d = dx > dy ? dx : dy;
+            if (d < bestD || (d == bestD && i == 0))
+            {
+                bestD = d;
+                best = m;
+            }
+        }
+        if (best != NULL && best != &sInstances[0])
+        {
+            source = ((const struct MapLayout *)best->layout)->border;
+            index = (u8)((((worldY - best->originY) & 1) << 1) | ((worldX - best->originX) & 1));
+        }
+    }
     if (source == NULL)
         return -1;
     if (!MemoGet(&sBorderMemo, source, &resolved))
