@@ -2655,6 +2655,37 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
     }
 }
 
+/*
+ * DLX-26 (Wally's Journey PC, owner-approved 2026-11-13): BorderWaterLevel gives each belt column the level of the
+ * map's nearest edge cell, so two belt water cells side by side can stand a little apart, and with nothing between
+ * them the clear colour showed through as a thin light line across the sea (the wide view sees far more of the belt
+ * than the 3DS's). Closed as 3DS closes its other seams - "a low wall and never a gap onto the clear colour" - by a
+ * skirt of the cell's own drawing from its edge to the neighbour's. East and south only, so each edge once.
+ */
+static void BeltWaterSkirts(VoxelBuilder *b, int x, int y, float wx, float wz, float level, float shift,
+                            float u0, float v0, float u1, float v1)
+{
+    float nl, ns;
+
+    if (BorderAt(x + 1, y) && BorderWaterLevel(x + 1, y, &nl, &ns) && (nl != level || ns != shift))
+    {
+        float ex = wx + 1.0f;
+        VoxelBuilder_Quad(b,
+            &(VoxelVertex){ex, level, wz + shift, u0, v0, SHADE_TOP},
+            &(VoxelVertex){ex, level, wz + shift + 1.0f, u0, v1, SHADE_TOP},
+            &(VoxelVertex){ex, nl, wz + ns + 1.0f, u1, v1, SHADE_TOP},
+            &(VoxelVertex){ex, nl, wz + ns, u1, v0, SHADE_TOP});
+    }
+    if (BorderAt(x, y + 1) && BorderWaterLevel(x, y + 1, &nl, &ns) && (nl != level || ns != shift))
+    {
+        VoxelBuilder_Quad(b,
+            &(VoxelVertex){wx, level, wz + shift + 1.0f, u0, v0, SHADE_TOP},
+            &(VoxelVertex){wx + 1.0f, level, wz + shift + 1.0f, u1, v0, SHADE_TOP},
+            &(VoxelVertex){wx + 1.0f, nl, wz + 1.0f + ns, u1, v1, SHADE_TOP},
+            &(VoxelVertex){wx, nl, wz + 1.0f + ns, u0, v1, SHADE_TOP});
+    }
+}
+
 void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     float u0, v0, u1, v1;
@@ -2688,8 +2719,11 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             {
                 /* flat, and no faces: the map's own edge closes any step */
                 if (MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+                {
                     VoxelMesh_Top(builder, wx, wz + shift, level, 0.0f,
                                   u0, v0, u1, v1, SHADE_TOP);
+                    BeltWaterSkirts(builder, x, y, wx, wz, level, shift, u0, v0, u1, v1);
+                }
                 continue;
             }
             {
