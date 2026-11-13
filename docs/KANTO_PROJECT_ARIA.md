@@ -29,8 +29,11 @@ a reveal or a choice, not just a gym.
 ## 2. Aria and Varnell (the emotional core)
 
 - Aria died years ago, **caught in a Rocket attack** — wrong place, wrong time. Random and senseless,
-  which is exactly why Varnell can't accept it. (Suggested: during the Silph Co. takeover, while
-  visiting him at work. This ties the Saffron chapter to her. Owner to confirm.)
+  which is exactly why Varnell can't accept it. **Decided 2026-11-13: during the Silph Co. takeover,
+  while visiting him at work.**
+- **Rule for every clue: it only makes sense looking back.** Nothing may give the twist away early.
+- At Saffron (ch. 6) Varnell goes quiet, won't enter Silph, and sends the player alone. It reads as a
+  scientist protecting his career; after the reveal it's a father who can't walk into the place she died.
 - Varnell is not a cartoon villain. He's kind, brilliant and genuinely helpful to the player for most
   of the game. He **knowingly** risks the world to get her back.
 - ARIA is built to fold space and time open far enough to pull Aria back from the moment before she died.
@@ -38,7 +41,7 @@ a reveal or a choice, not just a gym.
 
 ### How the name hides in plain sight
 "Project ARIA" is said all game and sounds like any acronym. Clues the player can miss:
-- A child's drawing in his office signed "aria" in lowercase.
+- A child's drawing in his office signed "aria" in lowercase — a girl holding a **Clefairy** (pays off the Lavender ghost).
 - Staff: "The Director won't let anyone else touch ARIA's settings."
 - The holding bay terminal: "Good night, Aria."
 - Mr. Fuji at Pokémon Tower mentions a grieving father who visits a grave "with no Pokémon name on it."
@@ -55,7 +58,7 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 1 | **The Professor's friend** | Oak, in Pallet/Viridian, introduces Varnell — warm, funny, grateful for a Champion's help. First assignment: survey Mt. Moon. Blue appears, refuses to battle, tells you to go home. | — |
 | 2 | **Mt. Moon** | The "meteorite anomaly" is the first tear. Closing it with Varnell's device feels heroic. (It's really feeding ARIA.) Fossils kept. | Brock (Pewter) |
 | 3 | **Cerulean** | A displaced person, pulled from another time, lashes out. First sign the tears hurt people. | Misty |
-| 4 | **Lavender** | The ghost: an echo from the tear near the graves, not Marowak. Varnell's "calibration lens" assignment (= Silph Scope) reveals it. Mr. Fuji's clue about the grieving father. Poké Flute. | — |
+| 4 | **Lavender** | The ghost: an echo of a lost **Clefairy** searching the tower and crying (Aria's Pokémon; the player doesn't know). Not Marowak. Varnell's "calibration lens" assignment (= Silph Scope) reveals it. Mr. Fuji's clue about the grieving father. Poké Flute. | — |
 | 5 | **Celadon / Snorlax** | Snorlax ×2 woken with the flute. Varnell's staff start acting cagey. | Erika |
 | 6 | **Saffron quarantine** | An ARIA containment machine malfunctions inside Silph Co.; the building warps (Silph's teleport maze). City sealed by Jenny and Silph security until you're cleared. You clear it; Master Ball. **Blue turns** — he saw the machine's markings and starts suspecting Varnell. | Sabrina |
 | 7 | **Fuchsia** | Blue shares what he's found, coldly. Safari side quest. | Koga's successor / Janine (owner to pick) |
@@ -138,10 +141,8 @@ No tea, no item gates.
 
 ## 9. Still open (owner to decide)
 
-- Where exactly Aria died (suggested: Silph Co. takeover).
 - Fuchsia leader: Koga or Janine.
 - When Hoopa is taken (cold open?).
-- The ghost: an unknown displaced echo, or connected to Aria (stronger, but gives the motive away early).
 - Kanto Elite Four lineup (Lorelei/Bruno/Agatha/Lance, or successors).
 - Varnell's Pokémon team.
 - Sevii Islands later?
