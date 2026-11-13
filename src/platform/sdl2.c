@@ -29,6 +29,7 @@
 #include "sprite.h"
 #include "platform/null_guard.h"
 #include "platform/wide_view.h"
+#include "platform/gamma2d.h"
 #include "platform.h"
 #include "random.h"
 #include "rtc.h"
@@ -66,6 +67,7 @@ static bool s3DAvailable, s3DInitTried;
 static bool s3DBattleWanted = true, s3DBattleFrame;
 static SDL_Texture *sdl3DBattleTexture;
 static char s3DDir[600];
+static bool sGamma2D; // DLX-9: Gamma lighting on the 2D overworld (WJPC_3D_GAMMALIGHT=1)
 static void Try3DInit(void)
 {
     if (!(s3DWanted || s3DBattleWanted) || s3DReady || s3DInitTried || !s3DAvailable)
@@ -956,6 +958,7 @@ int main(int argc, char **argv)
 #else
     if (getenv("WJPC_3D") != NULL)
         s3DWanted = atoi(getenv("WJPC_3D")) != 0;
+    sGamma2D = getenv("WJPC_3D_GAMMALIGHT") != NULL && atoi(getenv("WJPC_3D_GAMMALIGHT")) != 0;
     {
         // The 3D models (voxel/*.bin, *.rgba5551) live in a "voxel" folder next to the game.
         const char *env = getenv("WJPC_VOXEL_DIR");
@@ -2364,6 +2367,30 @@ void VDraw(SDL_Texture *texture)
     WideView_SetUiOverlay(NULL);
 
     int fullW = sFrameInfo.width + 2 * sFrameInfo.margin, fullH = sFrameInfo.height + 2 * sFrameInfo.margin;
+    if (sGamma2D && sFrameInfo.mode == WIDE_VIEW_FIELD && !WideView_IsIndoorMap() && !(s3DReady && s3DWanted))
+    {
+        // DLX-9: Gamma Emerald's daylight on the 2D overworld (same switch as 3D's)
+        static unsigned frames;
+        Uint64 t0 = SDL_GetPerformanceCounter();
+        Gamma2D_Apply(image, gbaImage, fullW, fullH, sFrameInfo.camX - sFrameInfo.margin,
+                      sFrameInfo.camY - sFrameInfo.margin, frames++, s3DDir);
+        if (getenv("WJPC_GAMMA2D_TIME") != NULL)
+        {
+            static double total;
+            total += (double)(SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency();
+            if (frames % 120 == 0)
+            {
+                FILE *tf = fopen(getenv("WJPC_GAMMA2D_TIME"), "a");
+                if (tf != NULL)
+                {
+                    fprintf(tf, "[gamma2d] %dx%d %.2f ms/frame\n", fullW, fullH, total / 120.0);
+                    fclose(tf);
+                }
+                total = 0;
+            }
+        }
+    }
+    else
     for (int i = 0; i < fullW * fullH; i++)
         image[i] = ToArgb(gbaImage[i]);
     if (sPlatformSettings[PLATFORM_SETTING_INTERFRAME] && lastW == fullW && lastH == fullH)
