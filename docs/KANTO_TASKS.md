@@ -6,6 +6,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 ## Rules for every session (people and AIs)
 
 1. Read first, in order: `docs/KANTO_PROJECT_ARIA.md` (story + design, every owner decision),
+   `docs/kanto_mockups/README.md` (mockups, test harness, Crossroads references),
    `docs/PROJECT_PC_PORT.md` (build/test), `docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md` (owner rules).
 2. Work on branch **`kanto-port`**. More than one person/AI works on this: `git fetch` and rebase before every
    push, and push small commits often.
