@@ -886,7 +886,7 @@ static bool FindDoors(VoxelDoor doors[VOXEL_DOORS], uint16_t *atlas)
             {
                 unsigned palette, index = VoxelSlots_DoorPixel(tiles, palettes, px, py, &palette);
                 uint16_t bgr15 = index == 0 ? primary[0]
-                               : palette < NUM_PALS_IN_PRIMARY ? primary[palette * 16u + index]
+                               : palette < Voxel_PrimaryPals(inst->primaryTileset) ? primary[palette * 16u + index]
                                : secondary[palette * 16u + index];
 
                 texel = VoxelGrade_RGBA5551(bgr15);

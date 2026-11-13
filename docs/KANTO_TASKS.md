@@ -29,13 +29,25 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       real ids at `KANTO_FLAGS_START` (0x1000) kept in the new PC-only save block `SaveBlockPC` (no size limit,
       stored after the 128 KB GBA image in the .sav — old GBA saves load with Kanto clear); Celadon Game Corner
       coin checks written without spaces for the PC assembler. GBA data build and Windows/Linux PC build link.
-- [ ] **K2. Tilesets load.** WIP with K3 (Claude session 014PwRDj, 2026-11-13). FRLG primary tilesets are 640 tiles / 640 metatiles / 7 palettes; Emerald's are
-      512 / 512 / 6. The engine must handle both in one game (`include/fieldmap.h` has both sizes; see how
-      Crossroads loads them).
-- [ ] **K3. Warp into Pallet Town works** — WIP: Pallet Town (37 0) and Viridian City (37 1) load and draw in 2D
-      with NPCs (2026-11-13). Still to check: the rest of the list below and 3D. (test script: `warp 37 0 10 10`; today it crashes because
-      `gMapGroups` has no group 37). Then check Viridian, Vermilion, Mt. Moon, Pokémon Tower, Silph Co.,
-      a route with grass, a building — 2D and 3D. Verify only; no need to show the owner.
+- [x] **K2. Tilesets load.** Done 2026-11-13 (Claude session 014PwRDj). 2D needed nothing: the engine already
+      takes the split from `mapLayout->isFrlg` (`fieldmap.c`), and the zoomed-out view asks the same functions.
+      The 3D view had Emerald's split (512 metatiles / 512 tiles / 6 palettes) and 16-bit attributes fixed in:
+      now `Voxel_IsFrlg` / `Voxel_PrimaryMetatiles` / `Voxel_PrimaryTiles` / `Voxel_PrimaryPals` (`voxel_world.c`,
+      a tile set is noted as Kanto's when a map using it is placed) are used by `voxel_world.c`, `voxel_atlas.c`
+      (`AtlasSource.split*`) and the door picture in `voxel_entities.c`; Kanto's 32-bit attributes are handed on
+      in Emerald's 16-bit form.
+- [x] **K3. Warp into Pallet Town works.** Done 2026-11-13 (sessions 019khs4X + 014PwRDj). Checked by test script
+      (`warp G N X Y`, pictures looked at), 2D: Pallet, Viridian, Pewter, Cerulean, Lavender, Vermilion, Celadon,
+      Fuchsia, Cinnabar, Saffron, Indigo Plateau, Routes 1 and 22, Viridian Forest, Mt. Moon 1F, Rock Tunnel 1F
+      (dark, needs Flash, as FRLG), Seafoam 1F, Pokémon Tower 1F, Silph Co. 1F, the player's house, Viridian
+      Pokémon Center — all load with the right tiles and people, no crash. 3D: Pallet, Viridian, Vermilion,
+      Celadon, Route 1, Mt. Moon, Seafoam, Pokémon Tower, Silph Co., the Pokémon Center draw with the right
+      tiles, **flat** (no building, tree or height data for Kanto yet: that is K7).
+      Seen on the way: FRLG's own story scripts still fire (Bill talks on arriving in Cerulean) — S0.
+      **Build note:** after `make release` regenerates the map data, the PC build does not notice
+      (`Makefile.pc` has `.SECONDARY`): delete `build/pc-linux32/data/*.o`, `build/pc-win32/data/*.o` and the
+      exe, run `make -f Makefile.pc WIN=0 linux-data -j8` on its own first (run under `-j16` from the Windows
+      build it races), then the Windows build. Symptom of stale data: crash in `Overworld_GetMapHeaderByGroupAndId`.
 - [ ] **K4. Flags, vars and save space.** Kanto story flags must not collide with Emerald's (Crossroads moved
       FRLG flags out of the trainer-flag range). NO save-size limits (Windows game, see AGENTS.md "NO LIMITS"):
       give Kanto its own save section, as big as needed. **Old GBA saves must still import.**

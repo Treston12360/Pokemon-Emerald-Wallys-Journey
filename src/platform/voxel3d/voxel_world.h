@@ -199,6 +199,13 @@ uint32_t VoxelWorld_SeasonKey(void);
 void VoxelWorld_SeasonTexels(uint16_t *texels, size_t count);
 /* Number of metatiles the tileset's metatile asset actually contains. */
 unsigned Voxel_MetatileCount(const void *tileset, unsigned limit);
+/* Project ARIA (K2): Kanto's tile sets are FireRed's, which split a map's pair differently: the primary
+ * holds 640 tiles, 640 metatiles and 7 palettes (Emerald: 512, 512, 6), and their attributes are 32-bit.
+ * These answer for either tile set of a pair; a tile set is known as Kanto's once a map using it was seen. */
+bool Voxel_IsFrlg(const void *tileset);
+unsigned Voxel_PrimaryMetatiles(const void *tileset);
+unsigned Voxel_PrimaryTiles(const void *tileset);
+unsigned Voxel_PrimaryPals(const void *tileset);
 
 /*
  * Marks, in a 1024-entry table, every metatile id referenced by the instances

@@ -95,6 +95,8 @@ struct AtlasSource
     const uint16_t *primaryMetatiles, *secondaryMetatiles;
     const uint16_t *primaryPalettes, *secondaryPalettes;
     unsigned primaryCount, secondaryCount;
+    /* Where the secondary tile set's metatiles, tiles and palettes start (Kanto's differ: SourceSplits). */
+    unsigned splitMetatiles, splitTiles, splitPals;
     /* Every colour a metatile entry can name, already converted to the
      * texture format, and whether it is black in the source. Index 0 of each
      * palette is the opaque backdrop layer 0 draws with. */
@@ -102,9 +104,19 @@ struct AtlasSource
     bool black[16][16];
 };
 
+/* Project ARIA (K2): the pair's split points, from its primary tile set; then the metatile counts. */
+static void SourceSplits(struct AtlasSource *src, const void *primary, const void *secondary)
+{
+    src->splitMetatiles = Voxel_PrimaryMetatiles(primary);
+    src->splitTiles = Voxel_PrimaryTiles(primary);
+    src->splitPals = Voxel_PrimaryPals(primary);
+    src->primaryCount = Voxel_MetatileCount(primary, src->splitMetatiles);
+    src->secondaryCount = Voxel_MetatileCount(secondary, NUM_METATILES_TOTAL - src->splitMetatiles);
+}
+
 static uint16_t LookupColor(const struct AtlasSource *src, unsigned paletteId, unsigned colorIdx)
 {
-    const uint16_t *palette = paletteId < NUM_PALS_IN_PRIMARY
+    const uint16_t *palette = paletteId < src->splitPals
                             ? src->primaryPalettes : src->secondaryPalettes;
 
     if (palette == NULL)
@@ -144,7 +156,7 @@ static void InitMorton(void)
 /* The metatile's entry table, or NULL if this id has no composable data. */
 static const uint16_t *MetatileEntries(const struct AtlasSource *src, unsigned m)
 {
-    if (m < NUM_METATILES_IN_PRIMARY)
+    if (m < src->splitMetatiles)
     {
         if (src->primaryMetatiles == NULL || m >= src->primaryCount)
             return NULL;
@@ -152,7 +164,7 @@ static const uint16_t *MetatileEntries(const struct AtlasSource *src, unsigned m
     }
     else
     {
-        unsigned local = m - NUM_METATILES_IN_PRIMARY;
+        unsigned local = m - src->splitMetatiles;
 
         if (src->secondaryMetatiles == NULL || local >= src->secondaryCount)
             return NULL;
@@ -177,7 +189,8 @@ static const struct Tileset *TilesetOf(unsigned layoutId, unsigned metatile)
 
     if (layout == NULL)
         return NULL;
-    return metatile < NUM_METATILES_IN_PRIMARY ? layout->primaryTileset : layout->secondaryTileset;
+    return metatile < (layout->isFrlg ? NUM_METATILES_IN_PRIMARY_FRLG : NUM_METATILES_IN_PRIMARY)
+         ? layout->primaryTileset : layout->secondaryTileset;
 }
 
 /* A cut tile (voxel_relief.h): its metatile and the rows of its background. */
@@ -201,7 +214,7 @@ static bool CutSourceOf(const struct Tileset *primary, const struct Tileset *sec
     if (i >= VOXEL_CUTS || !VoxelRelief_CutVariant(i, &layoutId, metatile, cut))
         return false;
     return sCutTileset[i] != NULL
-        && sCutTileset[i] == (*metatile < NUM_METATILES_IN_PRIMARY ? primary : secondary);
+        && sCutTileset[i] == (*metatile < Voxel_PrimaryMetatiles(primary) ? primary : secondary);
 }
 
 static bool AtlasSourceOf(const struct Tileset *primary, const struct Tileset *secondary,
@@ -233,7 +246,7 @@ static bool AtlasSourceOf(const struct Tileset *primary, const struct Tileset *s
                 continue;
             layout = Port_GetMapLayoutById((u16)layoutId);
             if (layout != NULL)
-                sVariantTileset[k] = m < NUM_METATILES_IN_PRIMARY
+                sVariantTileset[k] = m < (layout->isFrlg ? NUM_METATILES_IN_PRIMARY_FRLG : NUM_METATILES_IN_PRIMARY)
                                    ? layout->primaryTileset : layout->secondaryTileset;
         }
         /* only once the file is read: an atlas composed before it would
@@ -244,7 +257,7 @@ static bool AtlasSourceOf(const struct Tileset *primary, const struct Tileset *s
     if (i >= VOXEL_VARIANTS || !VoxelBuildings_Variant(i, &layoutId, metatile, hidden))
         return false;
     return sVariantTileset[i] != NULL
-        && sVariantTileset[i] == (*metatile < NUM_METATILES_IN_PRIMARY ? primary : secondary);
+        && sVariantTileset[i] == (*metatile < Voxel_PrimaryMetatiles(primary) ? primary : secondary);
 }
 
 /*
@@ -264,11 +277,11 @@ static void ComposeTile(const struct AtlasSource *src, uint16_t entry, unsigned 
     uint16_t texels[16];
     unsigned used = 0;
 
-    if (tileId < TILES_PER_TILESET)
+    if (tileId < src->splitTiles)
         tile = src->primaryTiles != NULL ? src->primaryTiles + tileId * 32 : NULL;
     else
         tile = src->secondaryTiles != NULL
-             ? src->secondaryTiles + (tileId - TILES_PER_TILESET) * 32 : NULL;
+             ? src->secondaryTiles + (tileId - src->splitTiles) * 32 : NULL;
     if (tile == NULL)
     {
         *black = false;
@@ -528,9 +541,7 @@ static void JobSource(const VoxelAtlasJob *job, struct AtlasSource *src)
     src->secondaryMetatiles = Voxel_ResolveMetatiles(job->secondary);
     src->primaryPalettes = Voxel_ResolvePalettes(job->primary);
     src->secondaryPalettes = Voxel_ResolvePalettes(job->secondary);
-    src->primaryCount = Voxel_MetatileCount(job->primary, NUM_METATILES_IN_PRIMARY);
-    src->secondaryCount = Voxel_MetatileCount(job->secondary,
-                                              NUM_METATILES_TOTAL - NUM_METATILES_IN_PRIMARY);
+    SourceSplits(src, job->primary, job->secondary);
 }
 
 void VoxelAtlas_JobCancel(VoxelAtlasJob *job)
@@ -745,14 +756,12 @@ unsigned VoxelAtlas_RefreshAnimatedPageRows(const VoxelMapInstance *inst, const 
     /* The game has already applied TransferTilesetAnimsBuffer to logical GBA
      * VRAM. Both tilesets occupy the first 0x8000 bytes in 4bpp order. */
     src.primaryTiles = liveTiles;
-    src.secondaryTiles = liveTiles + TILES_PER_TILESET * 32;
+    src.secondaryTiles = liveTiles + Voxel_PrimaryTiles(inst->primaryTileset) * 32;
     src.primaryMetatiles = Voxel_ResolveMetatiles(inst->primaryTileset);
     src.secondaryMetatiles = Voxel_ResolveMetatiles(inst->secondaryTileset);
     src.primaryPalettes = Voxel_ResolvePalettes(inst->primaryTileset);
     src.secondaryPalettes = Voxel_ResolvePalettes(inst->secondaryTileset);
-    src.primaryCount = Voxel_MetatileCount(inst->primaryTileset, NUM_METATILES_IN_PRIMARY);
-    src.secondaryCount = Voxel_MetatileCount(inst->secondaryTileset,
-                                             NUM_METATILES_TOTAL - NUM_METATILES_IN_PRIMARY);
+    SourceSplits(&src, inst->primaryTileset, inst->secondaryTileset);
     BuildColorTable(&src);
     InitMorton();
     voidBits = VoidBits(inst->primaryTileset, inst->secondaryTileset, true);
@@ -895,9 +904,9 @@ void VoxelAnim_Again(VoxelAnimPass *pass)
 }
 
 /* Whether an entry is drawn from the pair's own tiles or palettes. */
-static bool AnimOwnEntry(uint16_t entry)
+static bool AnimOwnEntry(const void *primary, uint16_t entry)
 {
-    return (entry & 0x3FF) >= TILES_PER_TILESET || ((entry >> 12) & 0xF) >= NUM_PALS_IN_PRIMARY;
+    return (entry & 0x3FF) >= Voxel_PrimaryTiles(primary) || ((entry >> 12) & 0xF) >= Voxel_PrimaryPals(primary);
 }
 
 /* The block of a quadrant, found among the pass's or added: its index + 1,
@@ -908,7 +917,7 @@ static unsigned AnimBlockOf(VoxelAnimPass *pass, unsigned pair, uint16_t lower, 
     unsigned flags = hide ? ANIM_HIDE : 0;
     unsigned h;
 
-    if (!AnimOwnEntry(lower) && (hide || !AnimOwnEntry(upper)))
+    if (!AnimOwnEntry(pass->primary[pair], lower) && (hide || !AnimOwnEntry(pass->primary[pair], upper)))
         flags |= ANIM_ANY;
     if (hide)
         upper = 0;
@@ -1103,7 +1112,7 @@ static void AnimFillGaps(VoxelAnimPass *pass, unsigned pair, unsigned first, con
             {
                 unsigned t = 0;
 
-                while (t < NUM_TILES_PER_METATILE && (entries[t] & 0x3FF) < TILES_PER_TILESET)
+                while (t < NUM_TILES_PER_METATILE && (entries[t] & 0x3FF) < src->splitTiles)
                     ++t;
                 if (t < NUM_TILES_PER_METATILE)
                     break;
@@ -1140,9 +1149,7 @@ bool VoxelAnim_AddAtlas(VoxelAnimPass *pass, unsigned pair, const VoxelMapInstan
     memset(&src, 0, sizeof(src));
     src.primaryMetatiles = Voxel_ResolveMetatiles(tilesets->primaryTileset);
     src.secondaryMetatiles = Voxel_ResolveMetatiles(tilesets->secondaryTileset);
-    src.primaryCount = Voxel_MetatileCount(tilesets->primaryTileset, NUM_METATILES_IN_PRIMARY);
-    src.secondaryCount = Voxel_MetatileCount(tilesets->secondaryTileset,
-                                             NUM_METATILES_TOTAL - NUM_METATILES_IN_PRIMARY);
+    SourceSplits(&src, tilesets->primaryTileset, tilesets->secondaryTileset);
     for (unsigned m = 0; m < VOXEL_METATILE_IDS && !pass->full; ++m)
     {
         const uint16_t *entries;
@@ -1161,7 +1168,7 @@ bool VoxelAnim_AddAtlas(VoxelAnimPass *pass, unsigned pair, const VoxelMapInstan
         {
             unsigned tile = entries[t] & 0x3FF;
 
-            if (shared && tile >= TILES_PER_TILESET)
+            if (shared && tile >= src.splitTiles)
             {
                 /* drawn with secondary tiles BG VRAM does not hold */
                 affected = false;
@@ -1191,14 +1198,12 @@ static void AnimSource(const VoxelAnimPass *pass, unsigned pair, const uint8_t *
     /* The game has already applied TransferTilesetAnimsBuffer to logical GBA
      * VRAM. Both tilesets occupy the first 0x8000 bytes in 4bpp order. */
     src->primaryTiles = liveTiles;
-    src->secondaryTiles = pass->shared[pair] ? NULL : liveTiles + TILES_PER_TILESET * 32;
+    src->secondaryTiles = pass->shared[pair] ? NULL : liveTiles + Voxel_PrimaryTiles(pass->primary[pair]) * 32;
     src->primaryMetatiles = Voxel_ResolveMetatiles(pass->primary[pair]);
     src->secondaryMetatiles = Voxel_ResolveMetatiles(pass->secondary[pair]);
     src->primaryPalettes = Voxel_ResolvePalettes(pass->primary[pair]);
     src->secondaryPalettes = Voxel_ResolvePalettes(pass->secondary[pair]);
-    src->primaryCount = Voxel_MetatileCount(pass->primary[pair], NUM_METATILES_IN_PRIMARY);
-    src->secondaryCount = Voxel_MetatileCount(pass->secondary[pair],
-                                              NUM_METATILES_TOTAL - NUM_METATILES_IN_PRIMARY);
+    SourceSplits(src, pass->primary[pair], pass->secondary[pair]);
     BuildColorTable(src);
 }
 

@@ -214,6 +214,39 @@ void VoxelWorld_SeasonTexels(uint16_t *texels, size_t count)
     }
 }
 
+/* Project ARIA (K2): the tile sets of Kanto's maps, noted as maps are placed (see voxel_world.h). */
+static const void *sFrlgTilesets[192];
+static unsigned sFrlgTilesetCount;
+
+bool Voxel_IsFrlg(const void *tileset)
+{
+    for (unsigned i = 0; i < sFrlgTilesetCount; ++i)
+        if (sFrlgTilesets[i] == tileset)
+            return true;
+    return false;
+}
+
+static void NoteFrlg(const void *tileset)
+{
+    if (tileset != NULL && !Voxel_IsFrlg(tileset) && sFrlgTilesetCount < ARRAY_COUNT(sFrlgTilesets))
+        sFrlgTilesets[sFrlgTilesetCount++] = tileset;
+}
+
+unsigned Voxel_PrimaryMetatiles(const void *tileset)
+{
+    return Voxel_IsFrlg(tileset) ? NUM_METATILES_IN_PRIMARY_FRLG : NUM_METATILES_IN_PRIMARY;
+}
+
+unsigned Voxel_PrimaryTiles(const void *tileset)
+{
+    return Voxel_IsFrlg(tileset) ? NUM_TILES_IN_PRIMARY_FRLG : NUM_TILES_IN_PRIMARY;
+}
+
+unsigned Voxel_PrimaryPals(const void *tileset)
+{
+    return Voxel_IsFrlg(tileset) ? NUM_PALS_IN_PRIMARY_FRLG : NUM_PALS_IN_PRIMARY;
+}
+
 unsigned Voxel_MetatileCount(const void *tilesetPtr, unsigned limit)
 {
     const struct Tileset *tileset = tilesetPtr;
@@ -460,6 +493,11 @@ static void FillInstance(VoxelMapInstance *inst, const struct MapHeader *header,
     inst->header = header;
     inst->layout = layout;
     inst->primaryTileset = layout->primaryTileset;
+    if (layout->isFrlg)
+    {
+        NoteFrlg(layout->primaryTileset);
+        NoteFrlg(layout->secondaryTileset);
+    }
     inst->secondaryTileset = layout->secondaryTileset;
     inst->layoutId = layoutId;
     inst->headerLayoutId = header->mapLayoutId;
@@ -828,11 +866,12 @@ unsigned VoxelWorld_GetCollision(int worldX, int worldY)
 static u16 GetMetatileAttribute(const VoxelMapInstance *inst, int metatileId)
 {
     const uint16_t *attributes;
-    unsigned index;
+    unsigned index, split;
 
     if (inst == NULL)
         return 0;
-    if (metatileId < NUM_METATILES_IN_PRIMARY)
+    split = Voxel_PrimaryMetatiles(inst->primaryTileset);
+    if (metatileId < (int)split)
     {
         attributes = Voxel_ResolveAttributes(inst->primaryTileset);
         index = (unsigned)metatileId;
@@ -840,9 +879,20 @@ static u16 GetMetatileAttribute(const VoxelMapInstance *inst, int metatileId)
     else
     {
         attributes = Voxel_ResolveAttributes(inst->secondaryTileset);
-        index = (unsigned)metatileId - NUM_METATILES_IN_PRIMARY;
+        index = (unsigned)metatileId - split;
     }
-    return attributes != NULL ? attributes[index] : 0;
+    if (attributes == NULL)
+        return 0;
+    if (Voxel_IsFrlg(inst->primaryTileset))
+    {
+        /* Kanto's are 32-bit with the fields elsewhere; handed on in Emerald's 16-bit form (behaviour in
+         * the low byte, layer type in bits 12-15), which is what the callers unpack. */
+        u32 attr = ((const u32 *)attributes)[index];
+
+        return (u16)(ExtractMetatileAttribute(attr, METATILE_ATTRIBUTE_BEHAVIOR, TRUE) & 0xFF)
+             | (u16)(ExtractMetatileAttribute(attr, METATILE_ATTRIBUTE_LAYER_TYPE, TRUE) << 12);
+    }
+    return attributes[index];
 }
 
 unsigned VoxelWorld_GetMetatileBehavior(int worldX, int worldY)
@@ -919,12 +969,13 @@ bool VoxelWorld_UnderGroundMask(int worldX, int worldY, uint16_t rows[16])
         memcpy(rows, sCache[slot].rows, sizeof(sCache[slot].rows));
         return true;
     }
-    entries = metatileId < NUM_METATILES_IN_PRIMARY
+    entries = metatileId < (int)Voxel_PrimaryMetatiles(inst->primaryTileset)
             ? Voxel_ResolveMetatiles(inst->primaryTileset)
             : Voxel_ResolveMetatiles(inst->secondaryTileset);
     if (entries == NULL)
         return false;
-    entries += (metatileId % NUM_METATILES_IN_PRIMARY) * NUM_TILES_PER_METATILE;
+    entries += (metatileId < (int)Voxel_PrimaryMetatiles(inst->primaryTileset)
+                ? metatileId : metatileId - (int)Voxel_PrimaryMetatiles(inst->primaryTileset)) * NUM_TILES_PER_METATILE;
     memset(rows, 0, 16 * sizeof(rows[0]));
     if (UNPACK_LAYER_TYPE(GetMetatileAttribute(inst, metatileId)) != METATILE_LAYER_TYPE_NORMAL)
         for (unsigned q = 0; q < 4; ++q)
@@ -1448,7 +1499,7 @@ void VoxelWorld_MarkUsedMetatiles(const void *primaryTileset, const void *second
         if (border == NULL)
             continue;
         for (unsigned t = 0; t < 4; ++t)
-            secondary |= (border[t] & MAPGRID_METATILE_ID_MASK) >= NUM_METATILES_IN_PRIMARY;
+            secondary |= (border[t] & MAPGRID_METATILE_ID_MASK) >= Voxel_PrimaryMetatiles(primaryTileset);
         if (secondary && inst->secondaryTileset != secondaryTileset)
             continue;
         for (unsigned t = 0; t < 4; ++t)
