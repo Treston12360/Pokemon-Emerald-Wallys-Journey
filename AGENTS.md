@@ -17,6 +17,14 @@ If you are asked to **"continue Project ARIA"** (or anything about Kanto, Varnel
 and tick tasks off in `docs/KANTO_TASKS.md` in the same push as the work. Story and every owner decision are in
 `docs/KANTO_PROJECT_ARIA.md`.
 
+## No story spoilers in chat (owner rule, 2026-11-13)
+One of the people working on this game does not want Project ARIA's story spoiled. In anything you write or
+show to the person you are working for — replies, summaries, pictures, file captions — say nothing of the
+Kanto plot: who anyone is, what happens, twists, endings, lines of dialogue. Talk about the work instead
+("chapter 2's script is in", "the lab map loads"). The only exception is a person who is discussing the story
+with you themselves (the story's writer). Story questions never go to the chat: write them into
+`docs/KANTO_STORY_QUESTIONS.md` and push; the writer answers there.
+
 ## No guessing, ever (owner rule, 2026-11-13)
 Port exactly how the reference does it (Emerald 3DS source for 3D, Gamma's files for lighting, FRLG/Crossroads code for Kanto). If the reference doesn't cover it, ask the owner. Never invent a fix, a value or a design.
 

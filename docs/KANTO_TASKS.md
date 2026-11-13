@@ -17,7 +17,9 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 5. Owner rules: the game is the Windows .exe — no GBA ROM is made or tested any more (AGENTS.md); old GBA saves
    must still import; show the owner pictures and ask before new wording or visual
    changes; no new hand-drawn art (recolours OK); the level curve must be checked with the simulator.
-6. New decisions from the owner go into `docs/KANTO_PROJECT_ARIA.md` right away.
+6. **No story spoilers in chat** (AGENTS.md): one of the owners does not want the story spoiled. Report work
+   without plot details; put story questions in `docs/KANTO_STORY_QUESTIONS.md`, not in the chat.
+   New decisions from the owner go into `docs/KANTO_PROJECT_ARIA.md` right away.
 7. Credit: the Kanto-in-Emerald port follows Pokémon Crossroads (github.com/eonlynx/pokecrossroads,
    Beta 1.4, permission from eonlynx). Read their code for each step; don't copy files wholesale — we are
    on pokeemerald-expansion 1.17.2, they are on a newer snapshot.
