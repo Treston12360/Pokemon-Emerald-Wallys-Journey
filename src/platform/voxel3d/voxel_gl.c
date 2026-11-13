@@ -192,7 +192,7 @@ static GLuint UploadTiled(GLuint tex, const uint16_t *tiled, unsigned w, unsigne
 
 static GLuint sProgram;
 static GLint sUniMode, sUniAlphaMin, sUniMvp, sUniOrigin, sUniTex, sUniFade, sUniFog, sUniFogColor, sUniCam;
-static GLint sUniTime, sUniGamma, sUniSunDir, sUniSunLight, sUniSkyTint, sUniSh, sUniSat, sUniExposure;
+static GLint sUniChunky, sUniAtlasTexel, sUniTime, sUniGamma, sUniSunDir, sUniSunLight, sUniSkyTint, sUniSh, sUniSat, sUniExposure;
 
 static const char *sVertexSrc =
     "#version 120\n"
@@ -257,9 +257,24 @@ static const char *sFragmentSrc =
     "  float cc = texture2D(cloudTex, (P + nn * 40.0) / 5000.0 + time * vec2(-0.0021, -0.0030)).r;\n"
     "  return 1.0 - clamp((cc - 0.164) * 3.8417, 0.0, 1.0) * 0.75;\n"
     "}\n"
+    // DLX-8 chunky people: the card is drawn as stacked slices; a slice keeps a pixel only where the
+    // sprite is thick enough there (1 = even blocks, 2 = rounded: thicker away from the row's edges)
+    "uniform vec3 chunky;\n" // x mode, y slice depth in sprite pixels (signed), z unused
+    "uniform vec2 atlasTexel;\n"
     "void main() {\n"
     "  vec4 c = texture2D(tex, vUv);\n"
     "  if (c.a < alphaMin) discard;\n"
+    "  if (chunky.x > 0.5) {\n"
+    "    float half_ = 2.0;\n"
+    "    if (chunky.x > 1.5) {\n"
+    "      float e = 4.0;\n"
+    "      for (int k = 1; k <= 4; k++) {\n"
+    "        if (texture2D(tex, vUv + vec2(float(k), 0.0) * atlasTexel).a < 0.5 || texture2D(tex, vUv - vec2(float(k), 0.0) * atlasTexel).a < 0.5) { e = min(e, float(k) - 1.0); }\n"
+    "      }\n"
+    "      half_ = (1.0 + 2.0 * e) * 0.5;\n"
+    "    }\n"
+    "    if (abs(chunky.y) > half_) discard;\n"
+    "  }\n"
     "  vec3 rgb;\n"
     "  if (gammaLight > 0.5) {\n"
     "    vec3 n = normalize(cross(dFdx(vWorld), dFdy(vWorld)));\n"
@@ -378,6 +393,8 @@ static bool MakeProgram(void)
     sUniAlphaMin = wj_glGetUniformLocation(sProgram, "alphaMin");
     sUniGamma = wj_glGetUniformLocation(sProgram, "gammaLight");
     sUniTime = wj_glGetUniformLocation(sProgram, "time");
+    sUniChunky = wj_glGetUniformLocation(sProgram, "chunky");
+    sUniAtlasTexel = wj_glGetUniformLocation(sProgram, "atlasTexel");
     sUniSunDir = wj_glGetUniformLocation(sProgram, "sunDir");
     sUniSunLight = wj_glGetUniformLocation(sProgram, "sunLight");
     sUniSkyTint = wj_glGetUniformLocation(sProgram, "skyTint");
@@ -2078,7 +2095,29 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     wj_glDepthMask(GL_TRUE);
     wj_glDisable(GL_BLEND);
     wj_glUniform1f(sUniMode, 0.0f);
-    MeshDraw(&sSpriteMesh, sSpriteTex, 0, 0, 0);
+    {
+        int chunky = getenv("WJPC_3D_CHUNKY") ? atoi(getenv("WJPC_3D_CHUNKY")) : 0;
+        if (chunky > 0)
+        {
+            /* Slices from the back to the front, half a sprite pixel apart, along the camera's horizontal
+             * direction (cards face the camera). Sprite pixel = 1/16 tile. Back slices a little darker so
+             * the sides read. */
+            float dx = sCamera.x - sCamera.targetX, dz = sCamera.z - sCamera.targetZ;
+            float len = sqrtf(dx * dx + dz * dz);
+            dx /= len > 0.0f ? len : 1.0f;
+            dz /= len > 0.0f ? len : 1.0f;
+            wj_glUniform2f(sUniAtlasTexel, 1.0f / VOXEL_SPRITE_ATLAS_W, 1.0f / VOXEL_SPRITE_ATLAS_H);
+            for (int k = -8; k <= 8; k++)
+            {
+                float d = k * 0.5f; /* sprite pixels */
+                wj_glUniform3f(sUniChunky, (float)chunky, d, 0.0f);
+                MeshDraw(&sSpriteMesh, sSpriteTex, dx * d / 16.0f, 0, dz * d / 16.0f);
+            }
+            wj_glUniform3f(sUniChunky, 0.0f, 0.0f, 0.0f);
+        }
+        else
+            MeshDraw(&sSpriteMesh, sSpriteTex, 0, 0, 0);
+    }
 
     if (gVoxelGammaLight)
     {
