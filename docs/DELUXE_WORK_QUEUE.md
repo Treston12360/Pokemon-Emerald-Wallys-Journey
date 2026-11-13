@@ -160,6 +160,13 @@ and resolution only take effect that way, and only with WJPC_TEST_WINDOW=1, whic
 ### DLX-12 Pop-in: people on neighbouring maps; maps with a different tile set (WIP - session 014PwRDj)
 2D wide view: people on connected maps are not drawn; about 70 map links use another tile set and are
 still blank zoomed out.
+Tile sets DONE (2026-11-12): a neighbour with another secondary tile set was drawn with the current map's tiles
+(wrong pictures, e.g. Lavaridge cones where Route 113's ash is). wide_view.c now keeps the neighbour's own tiles
+(decompressed) and colours (season-adjusted, then moved like the current map's colours this frame: a per-channel
+line fitted from stored to shown colours, so time of day, weather and fades follow) and draws its tiles/palettes
+from them (`GetForeignTiles`, `sEntryForeign`); its layer types come from its own attributes. Checked Route 112 ->
+113 (ash) against standing on Route 113: same. Test aid: WJPC_TEST_NO_FOREIGN=1 draws neighbours as before.
+People on neighbouring maps: still TODO.
 
 ### DLX-13 Other empty map corners (TODO)
 Find and fix corners like Dewford's (zoomed out shows bare filler). Show pictures.

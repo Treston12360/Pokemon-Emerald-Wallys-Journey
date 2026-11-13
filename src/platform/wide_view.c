@@ -16,6 +16,9 @@
 #include "field_effect.h"
 #include "constants/field_effects.h"
 #include <stdbool.h>
+extern void *calloc(size_t count, size_t size);
+extern void free(void *ptr);
+#include <string.h>
 extern char *getenv(const char *);
 extern int printf(const char *, ...);
 extern int atoi(const char *);
@@ -29,6 +32,9 @@ extern int atoi(const char *);
 #include "platform/dma.h"
 #include "platform/null_guard.h"
 #include "platform/wide_view.h"
+#include "decompress.h"
+#include "wally_journey.h"
+#include "palette.h"
 
 extern void DrawFrame(uint16_t *pixels);
 extern bool32 WallyJourney_IsBattleTransitionRunning(void);
@@ -232,7 +238,7 @@ static void BuildNearMaps(void)
     }
 }
 
-static bool GetConnectedMetatile(s32 gx, s32 gy, u16 *outId)
+static bool GetConnectedMetatile(s32 gx, s32 gy, u16 *outId, const struct MapLayout **outLayout)
 {
     s32 x = gx - MAP_OFFSET, y = gy - MAP_OFFSET;
 
@@ -246,6 +252,7 @@ static bool GetConnectedMetatile(s32 gx, s32 gy, u16 *outId)
         if (lx < 0 || ly < 0 || lx >= m->layout->width || ly >= m->layout->height)
             continue;
         *outId = m->layout->map[lx + ly * m->layout->width] & MAPGRID_METATILE_ID_MASK;
+        *outLayout = m->layout;
         return true;
     }
     return false;
@@ -254,7 +261,14 @@ static bool GetConnectedMetatile(s32 gx, s32 gy, u16 *outId)
 // Filler ("border") tile where there is no map at all. The GBA uses the current map's filler, so
 // zoomed out it flipped (e.g. water <-> trees) on crossing a map edge. Here each spot takes the
 // filler of the map nearest to it, whichever map the player is on.
+static u16 GetNearestBorderMetatileFrom(s32 gx, s32 gy, const struct MapLayout **outLayout);
 static u16 GetNearestBorderMetatile(s32 gx, s32 gy)
+{
+    const struct MapLayout *unused;
+    return GetNearestBorderMetatileFrom(gx, gy, &unused);
+}
+
+static u16 GetNearestBorderMetatileFrom(s32 gx, s32 gy, const struct MapLayout **outLayout)
 {
     s32 x = gx - MAP_OFFSET, y = gy - MAP_OFFSET;
     const struct NearMap *best = NULL;
@@ -279,9 +293,11 @@ static u16 GetNearestBorderMetatile(s32 gx, s32 gy)
             best = m;
         }
     }
+    *outLayout = gMapHeader.mapLayout;
     if (best == NULL || best->layout->border == NULL)
         return MapGridGetMetatileIdAt(gx, gy);
     l = best->layout;
+    *outLayout = l;
     lx = x - best->x;
     ly = y - best->y;
     if (l->isFrlg && l->borderWidth != 0 && l->borderHeight != 0)
@@ -301,16 +317,147 @@ u16 WideView_NearestBorderMetatile(s32 gx, s32 gy)
     return GetNearestBorderMetatile(gx, gy);
 }
 
+// DLX-12: a neighbouring map with another secondary tile set (about 70 map links) is drawn with its own
+// tiles and colours, not the current map's (which made its own metatiles come out as the wrong pictures).
+// Its graphics are kept here; its colours are the tile set's own, season-adjusted like the game does, then
+// moved the way the current map's colours are moved this frame (time of day, weather, fades): a per-channel
+// line fitted from the current map's stored colours to the ones on screen.
+#define FOREIGN_MAX 6
+struct ForeignTiles
+{
+    const struct Tileset *tileset;
+    u32 firstTile, firstPal;   // tile numbers / palette slots from here on are this tile set's
+    u8 *tiles;
+    u16 raw[16 * 16];
+    u16 shown[16 * 16];
+    u32 seasonKey, shownFrame, lastUse;
+};
+static struct ForeignTiles sForeign[FOREIGN_MAX];
+static const struct ForeignTiles *sEntryForeign; // set by GetMapTileEntry for the entry it returns
+static u32 sWideFrameNo, sFitFrame;
+static s32 sFitA[3], sFitB[3]; // shown = (a * stored) / 256 + b, per channel
+
+static void FitPaletteShift(void)
+{
+    const u16 *stored = gPlttBufferUnfaded, *shown = (const u16 *)PLTT;
+    s64 n = 0, sx[3] = {0}, sy[3] = {0}, sxx[3] = {0}, sxy[3] = {0};
+
+    if (sFitFrame == sWideFrameNo)
+        return;
+    sFitFrame = sWideFrameNo;
+    for (u32 i = 0; i < NUM_PALS_TOTAL * 16; i++)
+    {
+        if (i % 16 == 0)
+            continue;
+        for (int c = 0; c < 3; c++)
+        {
+            s32 x = (stored[i] >> (5 * c)) & 31, y = (shown[i] >> (5 * c)) & 31;
+            sx[c] += x; sy[c] += y; sxx[c] += x * x; sxy[c] += x * y;
+        }
+        n++;
+    }
+    for (int c = 0; c < 3; c++)
+    {
+        s64 var = n * sxx[c] - sx[c] * sx[c];
+        if (n == 0 || var <= 0)
+        {
+            sFitA[c] = 256;
+            sFitB[c] = 0;
+            continue;
+        }
+        sFitA[c] = (s32)((n * sxy[c] - sx[c] * sy[c]) * 256 / var);
+        sFitB[c] = (s32)((sy[c] * 256 - (s64)sFitA[c] * sx[c]) / (256 * n));
+    }
+}
+
+static const struct ForeignTiles *GetForeignTiles(const struct MapLayout *l)
+{
+    const struct MapLayout *cur = gMapHeader.mapLayout;
+    struct ForeignTiles *f = NULL;
+    u32 key;
+
+    static int sOff = -1;
+    if (sOff < 0)
+        sOff = getenv("WJPC_TEST_NO_FOREIGN") != NULL; // test aid: draw neighbours as before, to compare
+    if (sOff || l == NULL || cur == NULL || l->secondaryTileset == cur->secondaryTileset || l->secondaryTileset == NULL
+     || l->primaryTileset != cur->primaryTileset)
+        return NULL;
+    for (int i = 0; i < FOREIGN_MAX; i++)
+        if (sForeign[i].tileset == l->secondaryTileset)
+            f = &sForeign[i];
+    if (f == NULL)
+    {
+        const struct Tileset *ts = l->secondaryTileset;
+        u32 firstTile = GetNumTilesInPrimary(l);
+        u32 bytes = (NUM_TILES_TOTAL - firstTile) * 32;
+
+        f = &sForeign[0];
+        for (int i = 1; i < FOREIGN_MAX; i++)
+            if (sForeign[i].lastUse < f->lastUse)
+                f = &sForeign[i];
+        if (ts->isCompressed)
+        {
+            u32 size = GetDecompressedDataSize(ts->tiles);
+            if (size > bytes)
+                bytes = size;
+        }
+        free(f->tiles);
+        f->tiles = calloc(1, bytes);
+        if (f->tiles == NULL)
+        {
+            f->tileset = NULL;
+            return NULL;
+        }
+        if (ts->isCompressed)
+            DecompressDataWithHeaderWram(ts->tiles, f->tiles);
+        else
+            memcpy(f->tiles, ts->tiles, (NUM_TILES_TOTAL - firstTile) * 32);
+        f->tileset = ts;
+        f->firstTile = firstTile;
+        f->firstPal = GetNumPalsInPrimary(l);
+        f->seasonKey = 0xFFFFFFFF;
+        f->shownFrame = 0xFFFFFFFF;
+    }
+    f->lastUse = sWideFrameNo;
+    key = WallyJourney_FoliageKey();
+    if (f->seasonKey != key)
+    {
+        WallyJourney_SeasonalTilesetPalettes((const u16 *)f->tileset->palettes, f->raw, FALSE);
+        f->seasonKey = key;
+        f->shownFrame = 0xFFFFFFFF;
+    }
+    if (f->shownFrame != sWideFrameNo)
+    {
+        FitPaletteShift();
+        for (u32 i = 0; i < 16 * 16; i++)
+        {
+            u16 col = 0;
+            for (int c = 0; c < 3; c++)
+            {
+                s32 v = (((f->raw[i] >> (5 * c)) & 31) * sFitA[c]) / 256 + sFitB[c];
+                col |= (u16)((v < 0 ? 0 : v > 31 ? 31 : v) << (5 * c));
+            }
+            f->shown[i] = col;
+        }
+        f->shownFrame = sWideFrameNo;
+    }
+    return f;
+}
+
 // Tile entry of BG `bg` (1-3) at grid tile (tx, ty) (8x8 units, map grid coords * 2).
+// sEntryForeign: the neighbour's own tile set the entry belongs to, or NULL (the current map's).
 static u16 GetMapTileEntry(int bg, s32 tx, s32 ty)
 {
     s32 mx = tx >> 1, my = ty >> 1;          // arithmetic shift: floor for negatives
     s32 rx = mx - sPosX, ry = my - sPosY;
     u32 q = (tx & 1) + 2 * (ty & 1);
     const struct MapLayout *layout = gMapHeader.mapLayout;
+    const struct MapLayout *from = layout; // the map the metatile belongs to
     const u16 *tiles;
     u16 metatileId;
     u32 layerType;
+
+    sEntryForeign = NULL;
 
     bool inCurrentMap = mx >= MAP_OFFSET && my >= MAP_OFFSET && mx < MAP_OFFSET + layout->width && my < MAP_OFFSET + layout->height;
 
@@ -328,8 +475,11 @@ static u16 GetMapTileEntry(int bg, s32 tx, s32 ty)
     if (!inCurrentMap)
     {
         // Outside the current map: the maps around it, else filler.
-        if (!GetConnectedMetatile(mx, my, &metatileId))
-            metatileId = GetNearestBorderMetatile(mx, my);
+        if (!GetConnectedMetatile(mx, my, &metatileId, &from))
+            metatileId = GetNearestBorderMetatileFrom(mx, my, &from);
+        sEntryForeign = GetForeignTiles(from);
+        if (sEntryForeign == NULL)
+            from = layout; // same tile sets (or none to draw with): as before
     }
     else
     {
@@ -337,15 +487,25 @@ static u16 GetMapTileEntry(int bg, s32 tx, s32 ty)
     }
     if (metatileId > NUM_METATILES_TOTAL)
         metatileId = 0;
-    layerType = GetAttributeByMetatileIdAndMapLayout(metatileId, METATILE_ATTRIBUTE_LAYER_TYPE, layout->isFrlg);
-    if (metatileId < GetNumMetatilesInPrimary(layout))
+    if (from == layout)
+        layerType = GetAttributeByMetatileIdAndMapLayout(metatileId, METATILE_ATTRIBUTE_LAYER_TYPE, layout->isFrlg);
+    bool inPrimary = metatileId < GetNumMetatilesInPrimary(from);
+    if (inPrimary)
     {
-        tiles = layout->primaryTileset->metatiles;
+        tiles = from->primaryTileset->metatiles;
     }
     else
     {
-        tiles = layout->secondaryTileset->metatiles;
-        metatileId -= GetNumMetatilesInPrimary(layout);
+        tiles = from->secondaryTileset->metatiles;
+        metatileId -= GetNumMetatilesInPrimary(from);
+    }
+    if (from != layout)
+    {
+        // The neighbour's own attributes, same as the game would read there.
+        const struct Tileset *ts = inPrimary ? from->primaryTileset : from->secondaryTileset;
+        u32 attr = from->isFrlg ? ((const u32 *)ts->metatileAttributes)[metatileId]
+                                : ((const u16 *)ts->metatileAttributes)[metatileId];
+        layerType = ExtractMetatileAttribute(attr, METATILE_ATTRIBUTE_LAYER_TYPE, from->isFrlg);
     }
     tiles += metatileId * NUM_TILES_PER_METATILE;
 
@@ -744,6 +904,7 @@ static void RenderMapBgLine(int bg, uint16_t control, uint16_t hoffs, uint16_t v
     s32 wx0 = sPosX * 16 + dx - sOX;
     s32 lastTx = 0x7FFFFFFF;
     uint16_t entry = 0;
+    const struct ForeignTiles *foreign = NULL;
 
     for (int x = 0; x < sW; x++)
     {
@@ -752,15 +913,21 @@ static void RenderMapBgLine(int bg, uint16_t control, uint16_t hoffs, uint16_t v
         if (tx != lastTx)
         {
             entry = GetMapTileEntry(bg, tx, ty);
+            foreign = sEntryForeign;
             lastTx = tx;
         }
         unsigned int tileX = wx & 7, tileY = wy & 7;
         if (entry & (1 << 10)) tileX = 7 - tileX;
         if (entry & (1 << 11)) tileY = 7 - tileY;
-        uint8_t pixel = bgtiles[(entry & 0x3FF) * 32 + tileY * 4 + tileX / 2];
+        u32 tileNum = entry & 0x3FF, palNum = (entry >> 12) & 0xF;
+        const uint8_t *tile = foreign != NULL && tileNum >= foreign->firstTile
+                            ? foreign->tiles + (tileNum - foreign->firstTile) * 32
+                            : bgtiles + tileNum * 32;
+        uint8_t pixel = tile[tileY * 4 + tileX / 2];
         pixel = (tileX & 1) ? pixel >> 4 : pixel & 0xF;
         if (pixel)
-            out[x] = pal[16 * ((entry >> 12) & 0xF) + pixel] | 0x8000;
+            out[x] = (foreign != NULL && palNum >= foreign->firstPal ? foreign->shown[16 * palNum + pixel]
+                                                                     : pal[16 * palNum + pixel]) | 0x8000;
     }
 }
 
@@ -1161,6 +1328,7 @@ void WideView_DrawFrame(uint16_t *out, struct WideViewFrame *frame)
 
     GetViewSize(&w, &h);
     UpdatePads(w, h);
+    sWideFrameNo++;
     frame->mode = mode;
     frame->margin = 0;
     frame->camX = frame->camY = 0;
