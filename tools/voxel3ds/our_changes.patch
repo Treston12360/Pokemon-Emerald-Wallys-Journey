@@ -31,8 +31,8 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/gen_voxel_relief.py b/3ds_port/scri
          cut = cut_cells(lid, roles_layout, h) if drawn else []
 diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/scripts/voxel_building_specs.py
 --- a/3ds_port/scripts/voxel_building_specs.py	2026-11-12 05:40:19.869405517 -0600
-+++ b/3ds_port/scripts/voxel_building_specs.py	2026-11-13 13:56:49.681011637 -0600
-@@ -3522,6 +3522,36 @@
++++ b/3ds_port/scripts/voxel_building_specs.py	2026-11-13 17:54:25.861587899 -0600
+@@ -3522,6 +3522,139 @@
  ]
  
  
@@ -41,27 +41,130 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
 +# models, every other room drawing it tile for tile gets too (gen_voxel_buildings.reuse_pieces).
 +
 +def dewford_hall():
++    # (its chairs, case, TV, cupboard, chest and the east room's table come from House1/House2/the house
++    # with the bed, tile for tile)
 +    fl = GENERIC_FLOOR
-+    wl = GENERIC_WALL + fl
-+    return (house_chair("chair_e", (90, 64, 94, 80), (81, 68, 90, 80), fl)
-+            + house_chair("chair_w", (18, 80, 22, 96), (22, 84, 31, 96), fl)
-+            + house_chair("chair2_w", (194, 48, 198, 64), (198, 52, 207, 64), fl)
-+            + house_chair("chair2_e", (252, 48, 256, 64), (243, 52, 252, 64), fl) + [
-+        piece("table", [(34, 64, 78, 96)], 9, leave=fl, solid=True),
-+        piece("table2", [(210, 32, 240, 64)], 7, leave=fl, solid=True),
-+        piece("shelf", [(0, 16, 16, 40)], 16, leave=wl, back=32),
-+        piece("case", [(16, 12, 48, 40)], 20, leave=wl, back=32),
-+        piece("heater", [(144, 13, 160, 39)], 19, leave=wl, back=32),
++    return [
++        piece("table", [(34, 64, 78, 95)], 9, leave=fl, solid=True),
 +        # the wall between the two rooms, and the low wall round the bath (Rustboro's flats' partition
 +        # and divider)
 +        piece("partition", [(160, 0, 176, 111)], 27, solid=True),
 +        piece("divider", [(209, 75, 272, 111)], 24, solid=True, leave=fl),
 +        piece("bath", [(226, 104, 256, 128)], 12, leave=fl, solid=True),
-+        piece("drawers", [(256, 97, 272, 121)], 16, leave=fl, solid=True),
++    ]
++
++
++def house3_room():
++    # tatami like Mr. Briney's: a low table on four short legs (his), and the flat square cushions round
++    # it, a few pixels thick; House4 draws the same tile for tile
++    mat = tuple(c for c in BRINEY_FLOOR if c != "414a6a")
++    return [
++        piece("table", [(64, 51, 96, 80)], 7, leave=mat, solid=True, legs=3),
++        piece("cushion_nw", [(49, 51, 63, 64)], 3, leave=mat, solid=True),
++        piece("cushion_ne", [(97, 51, 111, 64)], 3, leave=mat, solid=True),
++        piece("cushion_sw", [(49, 67, 63, 80)], 3, leave=mat, solid=True),
++        piece("cushion_se", [(97, 67, 111, 80)], 3, leave=mat, solid=True),
++    ]
++
++
++PACIFIDLOG_FLOOR = ("bdb431", "ded552", "9c9410", "7bb4bd", "acdee6")   # the planks, the rug
++PACIFIDLOG_WALL = ("bd8b31", "deac52", "ffeed5")
++
++
++def pacifidlog_room():
++    # House2's kitchen (cupboard, sink against the wall, fridge), Mr. Briney's jars, and a table with a
++    # wooden chair either end of it (House1's chairs: the back a slab on the outer side)
++    fl = PACIFIDLOG_FLOOR
++    wl = PACIFIDLOG_WALL + fl
++    return (house_chair("chair_nw", (49, 64, 53, 80), (53, 68, 63, 80), fl)
++            + house_chair("chair_sw", (49, 80, 53, 96), (53, 84, 63, 96), fl)
++            + house_chair("chair_ne", (108, 64, 112, 80), (97, 68, 108, 80), fl)
++            + house_chair("chair_se", (108, 80, 112, 96), (97, 84, 108, 96), fl) + [
++        piece("table", [(65, 65, 95, 96)], 7, leave=fl, solid=True, legs=4),
++        piece("cupboard", [(16, 16, 32, 40)], 16, leave=wl, back=32, side="plain"),
++        piece("shelf", [(33, 11, 56, 40)], 21, leave=wl, back=32),
++        piece("sink", [(96, 23, 128, 40)], 8, leave=wl, against=32, side="plain"),
++        piece("fridge", [(128, 10, 144, 40)], 24, leave=wl, back=32, side="plain"),
 +    ])
 +
 +
++def stevens_room():
++    # a long table (Dewford hall's, longer) and two glass cases on legs against the east wall
++    fl = GENERIC_FLOOR
++    return [
++        piece("table", [(66, 48, 128, 79)], 8, leave=fl, solid=True, legs=4),
++        piece("case_n", [(160, 51, 176, 79)], 16, leave=fl, solid=True, legs=13, side="plain"),
++        piece("case_s", [(160, 83, 176, 111)], 16, leave=fl, solid=True, legs=13, side="plain"),
++    ]
++
++
++def tables(*rects, height=9):
++    # House2's table (28 wide, a cell and three quarters deep, 9 tall on its four legs) and the rooms that
++    # draw it, or Dewford's hall's longer one, in their own tiles: one piece each
++    def build():
++        fl = FLAT_FLOOR + GENERIC_FLOOR + ("ffcd8b", "bdbda4", "73738b", "f68b62")
++        return [piece("table%s" % ("" if k == 0 else "_%d" % k), [r], height, leave=fl, solid=True)
++                for k, r in enumerate(rects)]
++    return build
++
++
++def flat1_2f_room():
++    # the long table, and a bed like Brendan's (its head a board behind the mattress)
++    return tables((34, 64, 78, 95))() + [
++        piece("bed", [(140, 80, 164, 104)], 7, leave=FLAT_FLOOR, solid=True),
++    ]
++
++
++def low_tables(*rects, jars=()):
++    # House3's low table on tatami (Mr. Briney's), where the cushions round it change its tiles;
++    # and Mr. Briney's jars
++    def build():
++        mat = tuple(c for c in BRINEY_FLOOR if c != "414a6a")
++        return ([piece("low_table%s" % ("" if k == 0 else "_%d" % k), [r], 7, leave=mat, solid=True, legs=3)
++                 for k, r in enumerate(rects)]
++                + [piece("jar_%d" % k, [r], 7, leave=mat, round="lathe") for k, r in enumerate(jars)])
++    return build
++
++
++def wandas_room():
++    # the wall between the rooms (Dewford's hall's, Rustboro's flats' partition) and a bed like Brendan's
++    return [
++        piece("partition", [(192, 0, 208, 95)], 27, solid=True),
++        piece("bed", [(238, 32, 260, 59)], 7, leave=FLAT_FLOOR + GENERIC_FLOOR, solid=True, legs=3),
++    ]
++
++
++def fossil_room():
++    # House1's glass case and a bookcase, standing a little out from the back wall
++    mat = tuple(c for c in BRINEY_FLOOR if c != "414a6a") + ("d5c54a", "ac8b39", "bdbda4")
++    return [
++        piece("case", [(80, 36, 112, 64)], 20, leave=mat, back=56),
++        piece("bookcase", [(112, 26, 144, 52)], 18, leave=mat, back=44),
++    ]
++
++
++def fortree_room():
++    # the tree's trunk the house is built round, standing up through the room from its roots
++    return [piece("trunk", [(48, 0, 80, 66)], 50, round="lathe", legs=False)]
++
++
 +PLAIN_FURNITURE = {
++    "LAYOUT_FORTREE_CITY_HOUSE1": fortree_room,
++    "LAYOUT_FORTREE_CITY_HOUSE2": fortree_room,
++    "LAYOUT_VERDANTURF_TOWN_WANDAS_HOUSE": wandas_room,
++    "LAYOUT_ROUTE114_FOSSIL_MANIACS_HOUSE": fossil_room,
++    "LAYOUT_HOUSE4": low_tables((114, 67, 146, 96), jars=((49, 33, 63, 47), (67, 33, 81, 47))),
++    "LAYOUT_LILYCOVE_CITY_COVE_LILY_MOTEL_1F": low_tables((130, 67, 162, 96)),
++    "LAYOUT_LILYCOVE_CITY_COVE_LILY_MOTEL_2F": low_tables((34, 51, 66, 80), (130, 99, 162, 128)),
++    "LAYOUT_RUSTBORO_CITY_HOUSE": tables((82, 64, 110, 95)),
++    "LAYOUT_RUSTBORO_CITY_HOUSE1": lambda: [piece("table", [(50, 64, 94, 95)], 9, leave=FLAT_FLOOR + ("ffcd8b",), solid=True, legs=5)],
++    "LAYOUT_RUSTBORO_CITY_FLAT1_1F": tables((18, 64, 46, 95)),
++    "LAYOUT_RUSTBORO_CITY_FLAT1_2F": flat1_2f_room,
++    "LAYOUT_RUSTBORO_CITY_FLAT2_2F": tables((194, 48, 222, 79)),
++    "LAYOUT_SOOTOPOLIS_CITY_HOUSE1": tables((51, 49, 77, 79)),
++    "LAYOUT_MOSSDEEP_CITY_STEVENS_HOUSE": stevens_room,
++    "LAYOUT_PACIFIDLOG_TOWN_HOUSE1": pacifidlog_room,
++    "LAYOUT_HOUSE3": house3_room,
 +    "LAYOUT_DEWFORD_TOWN_HALL": dewford_hall,
 +}
 +
@@ -69,7 +172,21 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
  def plain_room(width, height, plain_x, sides):
      w, h = width * 16, height * 16
      side = (plain_x * 16, 0, plain_x * 16 + 16, 32)
-@@ -5934,6 +5964,17 @@
+@@ -3632,7 +3765,12 @@
+ 
+ def school_room():
+     side = (176, 8, 192, 36)
+-    return [
++    # Wally's Journey PC: the pupils' desks and the teacher's, on their legs (House2's table, small)
++    fl = ("a4a494", "c5c5bd", "dedede", "cd8b62", "f6b483", "eea46a")
++    desks = [piece("desk_%d_%d" % (x, y), [(x, y, x + 14, y + 13)], 6, leave=fl, solid=True)
++             for x in (17, 49, 129, 161) for y in (82, 114, 146)]
++    return desks + [
++        piece("teacher_desk", [(81, 58, 111, 79)], 8, leave=fl, solid=True),
+         piece("wall", [(0, 8, 192, 36)], 28, fill=16, foot=36, side=side),
+         piece("side_w", [], 28, side=side, walls=[((0, 176), (0, 36))]),
+         piece("side_e", [], 28, side=side, walls=[((192, 36), (192, 176))]),
+@@ -5934,6 +6072,17 @@
          "exact": kit_house_exact(80),
      },
      {
@@ -87,7 +204,7 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
          "name": "dewford_gym_exterior",
          "layout": "LAYOUT_DEWFORD_TOWN",
          "rect": (5, 13, 6, 5),
-@@ -6434,16 +6475,7 @@
+@@ -6434,16 +6583,7 @@
          # the real depth raises the roof behind the antenna (behind: True)
          "exact": [(3, 55, 62, 78), (10, 29, 54, 55), (32, 2, 57, 18, True)],
      },
@@ -105,7 +222,7 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
      {
          # Route 113's glass workshop: Fallarbor's house with a roof of glass
          # (the trees' crowns overlap its top row)
-@@ -7740,7 +7772,8 @@
+@@ -7740,7 +7880,8 @@
      {
          "name": layout[len("LAYOUT_"):].lower(),
          "interior": {"layout": layout, "ground": [ground],
@@ -114,4 +231,14 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
 +                                         + plain_room(width, height, plain_x, sides))},
      }
      for layout, width, height, ground, plain_x, sides in PLAIN_ROOMS
+ ] + [
+@@ -7754,7 +7895,8 @@
+     {
+         "name": layout[len("LAYOUT_"):].lower(),
+         "interior": {"layout": layout, "ground": [ground],
+-                     "pieces": own_shell(stair_room(width, height, plain_x, doors, *extra))},
++                     "pieces": own_shell(PLAIN_FURNITURE.get(layout, list)()
++                                         + stair_room(width, height, plain_x, doors, *extra))},
+     }
+     for layout, width, height, ground, plain_x, doors, *extra in STAIR_ROOMS
  ] + [
