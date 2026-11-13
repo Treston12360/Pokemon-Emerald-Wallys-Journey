@@ -335,8 +335,8 @@ Black lines in Granite Cave and right outside it, and inside the Pokémon Center
 Bright bloom on walls/edges indoors. Owner: 'the glow in the pokemon center is too strong', 'weird glow inside of houses as well'. Pictures: b5ceb537, 0fd2c32c, 7e0beffa.
 WIP 2026-11-13 (session 019khs4X): cause = our interiors are drawn unlit at full colour, then the outdoor bloom
 makes them glow. Emerald 3DS turns bloom off indoors (ctr_voxel.c BaseLightFor). Gamma keeps the global bloom but
-lights interiors with six rect lights (values in GAMMA_LIGHTING_VALUES.md 'Interiors'). Hook WJPC_3D_INDOOR_BLOOM in
-voxel_gl.c (default unchanged). Next: read whether Gamma's sun reaches interiors + interior materials, then port. Images in `docs/dlx_reports/2026-11-13/`.
+lights interiors with six rect lights (values in GAMMA_LIGHTING_VALUES.md 'Interiors'). Owner approved the 3DS rule (2026-11-13): indoor bloom now 0 by default
+(WJPC_3D_INDOOR_BLOOM overrides). Full Gamma interior lighting (rect lights + glow maps) = DLX-23b, later. Next: read whether Gamma's sun reaches interiors + interior materials, then port. Images in `docs/dlx_reports/2026-11-13/`.
 
 ### DLX-24 3D: heal-machine Poké Balls drawn in the wrong spot (TODO, owner report 2026-11-13)
 During healing the balls float above the wall instead of on the machine. Picture: 0fd2c32c. Images in `docs/dlx_reports/2026-11-13/`.

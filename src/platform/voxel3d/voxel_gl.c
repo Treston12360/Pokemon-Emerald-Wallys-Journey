@@ -1383,7 +1383,7 @@ static bool sIndoorNow;
 static float IndoorBloomScale(void)
 {
     const char *e = getenv("WJPC_3D_INDOOR_BLOOM");
-    return e != NULL ? (float)atof(e) : 1.0f;
+    return e != NULL ? (float)atof(e) : 0.0f; /* Emerald 3DS: no bloom indoors (ctr_voxel.c BaseLightFor) */
 }
 static GLuint sBlurFbo[6], sBlurTex[6];
 static GLuint sPostProg, sQuadVbo, sHdrFbo, sHdrTex, sHdrDepth, sBloomFbo[7], sBloomTex[7];
