@@ -173,8 +173,14 @@ WJPC_GHOST_TILES 512 / WJPC_GHOST_PALETTES 8; palette tag ^0x4000 so real sprite
 layer, fade and tint like everyone else; the real ones take over on crossing. Checked: Dewford north edge shows
 Route 106's two Fishermen, same look as standing on Route 106. Test aid: WJPC_TEST_NO_GHOSTS=1.
 
-### DLX-13 Other empty map corners (WIP - session 014PwRDj)
+### DLX-13 Other empty map corners (Done - session 014PwRDj, 2026-11-12: none left)
 Find and fix corners like Dewford's (zoomed out shows bare filler). Show pictures.
+Checked by script: every connected map group (15 groups: Hoenn 49 maps, Kanto, islands...) laid out by its
+connections; a Dewford-type corner (maps continue past the corner on both sides, the diagonal covered by none)
+exists nowhere now (Dewford's was fixed by widening Route 106 to 90 columns). The three open corners (above
+Fallarbor between Routes 114 and 113, Route 108 south-east, Dewford south-east) were looked at zoomed out:
+forest and sea continue naturally (picture sent). The light squares in Route 108's water are the map's own
+shallow-water metatiles (175/176/17D/17E, General tile set), same with or without DLX-12.
 
 ### DLX-14 Sprite colour / graphics memory limits (Done on PC - session 014PwRDj, 2026-11-12)
 Owner 2026-11-12: "Because we are a native windows code now we have no limitations and are allowed to change
