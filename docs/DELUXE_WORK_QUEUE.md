@@ -139,7 +139,7 @@ Seen in every 3D screenshot of Littleroot north of the player's house (before an
 all-black sprite-shaped card standing on the grass. Probably a person/object whose sprite frame or palette
 is not loaded for the 3D card. Find which object event it is and fix.
 
-### DLX-21 Next owner test package (TODO)
+### DLX-21 Next owner test package (Done 2026-11-13: alpha9-3d sent - exe, SDL2 DLLs, regenerated voxel/ with gamma_clouds.bin, bats: 3D, 3D+Gamma lighting, 3D+Gamma+chunky test)
 Last package sent was `alpha8c-3d-test.zip` (exe + DLLs + `voxel/` + "Play in 3D.bat"). It does NOT have the
 Lavaridge gym data (DLX-1), the Hex fix, DLX-7, or the lighting. Build a new Windows package with
 `make -f Makefile.pc WIN=1`, regenerated voxel data (DLX-1 note), `gamma_clouds.bin`, and a second .bat with
