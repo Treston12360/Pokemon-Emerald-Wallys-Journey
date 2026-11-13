@@ -61,6 +61,7 @@ void Voxel3D_Log(const char *fmt, ...);
     X(void, glGetFloatv, (GLenum, GLfloat *)) \
     X(void, glPixelStorei, (GLenum, GLint)) \
     X(void, glReadPixels, (GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, void *)) \
+    X(void, glCopyTexSubImage2D, (GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei)) \
     X(GLenum, glGetError, (void)) \
     X(void, glActiveTexture, (GLenum)) \
     X(GLuint, glCreateShader, (GLenum)) \
@@ -1169,13 +1170,107 @@ static VoxelCamera sCamera;
 static bool sCameraValid;
 // DLX-5: the battle scenery. The field camera is kept aside while a battle is drawn and put back after.
 #include "voxel_battle.h"
-static bool sBattleMode, sBattleCamOn;
-static VoxelCamera sFieldCamera;
-static float sStageDX, sStageDZ, sStageGround;
+static bool sBattleMode;
 
 void Voxel3D_SetBattle(bool on)
 {
     sBattleMode = on;
+}
+
+/*
+ * Emerald 3DS's battle camera (ctr_voxel.c, "The 3D battle"), as it is there: the stage searched a slice a
+ * frame (voxel_battle.c), then the glide from where the field left the camera - a crane, a dolly zoom, a
+ * rush in, a push and a short quake on landing - while the intro would slide the scenery in; BG3's scroll
+ * (a move shaking the scenery) moves it. The effects drawn over it come from sBattle.intro.
+ */
+#define CTR_GAME_WIDTH 400
+#define CTR_GAME_HEIGHT 240
+#define CTR_BATTLE_ZOOM 1.4f
+#define VOXEL_BATTLE_GLIDE_FRAMES 100u
+#define VOXEL_BATTLE_TRAVEL 0.78f
+#define VOXEL_BATTLE_CRANE 16.0f
+#define VOXEL_BATTLE_CRANE_MAX 75.0f
+#define VOXEL_BATTLE_VERTIGO 0.40f
+#define VOXEL_BATTLE_PUNCH 0.16f
+#define VOXEL_BATTLE_QUAKE 0.07f
+#define VOXEL_BATTLE_BARS_IN 18.0f
+#define VOXEL_BATTLE_INTRO_WAIT 150u
+#define VOXEL_BATTLE_STAGE_CELLS 32u
+#define VOXEL_BATTLE_STAGE_SPOTS 8u
+
+static struct
+{
+    bool on, begun, chosen, sliding, glided;
+    uint32_t frames, glide;
+    VoxelCamera field;
+    float targetX, targetZ, ground;
+    float shakeX, shakeY;
+    Voxel3DBattleIntro intro;
+} sBattle;
+
+void Voxel3D_SetBattleFrame(bool introSliding, float shakeX, float shakeY)
+{
+    sBattle.sliding = introSliding;
+    sBattle.shakeX = shakeX;
+    sBattle.shakeY = shakeY;
+}
+
+void Voxel3D_BattleIntro(Voxel3DBattleIntro *intro)
+{
+    static const Voxel3DBattleIntro none;
+    *intro = sBattle.on ? sBattle.intro : none;
+}
+
+static float BClamp(float v, float lo, float hi) { return v < lo ? lo : v > hi ? hi : v; }
+static float BSmooth(float t) { t = BClamp(t, 0.0f, 1.0f); return t * t * (3.0f - 2.0f * t); }
+static float BSmoother(float t) { t = BClamp(t, 0.0f, 1.0f); return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f); }
+
+static void BattleCamera(void)
+{
+    const float degrees = 3.14159265f / 180.0f;
+    const VoxelCamera *from = &sBattle.field;
+    float u, p, q, t, arc, fov, punch, quake, k, x, z, ground, pitch, distance;
+    Voxel3DBattleIntro *intro = &sBattle.intro;
+
+    if (sBattle.sliding || sBattle.frames >= VOXEL_BATTLE_INTRO_WAIT)
+        sBattle.glided = true;
+    ++sBattle.frames;
+    if (sBattle.chosen && sBattle.glided && sBattle.glide < VOXEL_BATTLE_GLIDE_FRAMES)
+        ++sBattle.glide;
+    u = (float)sBattle.glide / (float)VOXEL_BATTLE_GLIDE_FRAMES;
+    p = BClamp(u / VOXEL_BATTLE_TRAVEL, 0.0f, 1.0f);
+    q = BClamp((u - VOXEL_BATTLE_TRAVEL) / (1.0f - VOXEL_BATTLE_TRAVEL), 0.0f, 1.0f);
+    t = BSmoother(p);
+    arc = p > 0.0f && p < 1.0f ? sinf(p * 3.14159265f) : 0.0f;
+    x = from->targetX + (sBattle.targetX - from->targetX) * t;
+    z = from->targetZ + (sBattle.targetZ - from->targetZ) * t;
+    ground = from->ground + (sBattle.ground - from->ground) * t;
+    pitch = from->pitch + (VOXEL_BATTLE_PITCH - from->pitch) * t;
+    distance = from->distance + (VOXEL_BATTLE_DISTANCE - from->distance) * t;
+    pitch += VOXEL_BATTLE_CRANE * arc;
+    if (pitch > VOXEL_BATTLE_CRANE_MAX && pitch > from->pitch)
+        pitch = from->pitch > VOXEL_BATTLE_CRANE_MAX ? from->pitch : VOXEL_BATTLE_CRANE_MAX;
+    fov = from->fov * (1.0f - VOXEL_BATTLE_VERTIGO * arc * arc);
+    if (arc > 0.0f)
+        distance *= tanf(from->fov * 0.5f * degrees) / tanf(fov * 0.5f * degrees);
+    else
+        fov = from->fov;
+    punch = q > 0.0f && q < 1.0f ? expf(-6.0f * q) * sinf(3.0f * 3.14159265f * q) : 0.0f;
+    quake = q > 0.0f && q < 1.0f ? VOXEL_BATTLE_QUAKE * expf(-7.0f * q) : 0.0f;
+    distance *= 1.0f - VOXEL_BATTLE_PUNCH * punch;
+    x += quake * sinf((float)sBattle.glide * 2.7f);
+    z += quake * cosf((float)sBattle.glide * 3.9f);
+    sCamera.fov = fov;
+
+    intro->flight = arc;
+    intro->speed = p > 0.0f && p < 1.0f ? 16.0f * p * p * (1.0f - p) * (1.0f - p) : 0.0f;
+    intro->impact = q > 0.0f && q < 1.0f ? expf(-5.0f * q) * (1.0f - q) : 0.0f;
+    intro->bars = BSmooth((float)sBattle.frames / VOXEL_BATTLE_BARS_IN) * (1.0f - BSmooth((q - 0.35f) / 0.65f));
+    intro->time = (float)sBattle.frames;
+    k = CTR_BATTLE_ZOOM * 2.0f * distance * tanf(sCamera.fov * 0.5f * degrees) / (float)CTR_GAME_HEIGHT;
+    x += sBattle.shakeX * k;
+    z += sBattle.shakeY * k / sinf(pitch * degrees);
+    VoxelCamera_Frame(&sCamera, x, z, ground, pitch, distance);
 }
 static int sLastGroup = -1, sLastNum = -1;
 static uint32_t sLastDigest;
@@ -1718,6 +1813,7 @@ static bool MeshAtlasOk(const InstanceMesh *m)
 
 static float sFogNear = 40.0f, sFogFar = 90.0f;
 
+static void BattleZoomBlur(int w, int h);
 bool Voxel3D_Render(unsigned colorTexture, int w, int h)
 {
     SavedGl saved;
@@ -1881,23 +1977,34 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     VoxelEntities_GetPlayerWorldPos(&smoothX, &smoothZ);
     if (sBattleMode)
     {
-        // Battle: a low camera on the spot the battle started, looking on past it (Emerald 3DS's angles).
-        if (!sBattleCamOn)
+        // Battle (Emerald 3DS): the camera kept from the field, the stage searched, then the glide.
+        if (!sBattle.on)
         {
-            sFieldCamera = sCamera;
-            sBattleCamOn = true;
-            VoxelBattle_PickStage(&sStageDX, &sStageDZ, &sStageGround); // once per battle
-            Voxel3D_Log("[3D] battle stage at %+.0f,%+.0f from the player", sStageDX, sStageDZ);
+            memset(&sBattle, 0, sizeof(sBattle));
+            sBattle.on = true;
+            if (!sCameraValid)
+            {
+                // a battle on a map the field never drew: the field camera placed on the player
+                VoxelCamera_SetGround(&sCamera, VoxelEntities_PlayerGround(), 1);
+                VoxelCamera_Snap(&sCamera, playerX, playerZ);
+                sCameraValid = true;
+            }
+            sBattle.field = sCamera;
         }
-        sCamera.fov = VOXEL_BATTLE_FOV;
-        VoxelCamera_Frame(&sCamera, smoothX + sStageDX, smoothZ + sStageDZ, sStageGround,
-                          VOXEL_BATTLE_PITCH, VOXEL_BATTLE_DISTANCE);
+        if (!sBattle.chosen)
+        {
+            if (!sBattle.begun)
+                VoxelBattle_BeginStage();
+            sBattle.begun = true;
+            sBattle.chosen = VoxelBattle_StepStage(VOXEL_BATTLE_STAGE_CELLS, VOXEL_BATTLE_STAGE_SPOTS,
+                                                   &sBattle.targetX, &sBattle.targetZ, &sBattle.ground);
+        }
+        BattleCamera();
     }
-    else if (sBattleCamOn)
+    else if (sBattle.on)
     {
-        sCamera = sFieldCamera;
-        sBattleCamOn = false;
-        sCameraValid = false;
+        sBattle.on = false;
+        sCamera = sBattle.field;
     }
     if (sBattleMode)
         ;
@@ -2071,6 +2178,21 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     wj_glEnableVertexAttribArray(1);
     wj_glEnableVertexAttribArray(2);
 
+    if (sBattle.on)
+    {
+        // Emerald 3DS's battle view is its 400x240 top screen with the GBA picture on it at 1.4x, the
+        // picture's (120, 112) on (200, 192); this draws the part of it the GBA picture covers.
+        float l = (200.0f + (0.0f - 120.0f) * CTR_BATTLE_ZOOM - 200.0f) / 200.0f;
+        float r = (200.0f + (240.0f - 120.0f) * CTR_BATTLE_ZOOM - 200.0f) / 200.0f;
+        float tp = (120.0f - (192.0f + (0.0f - 112.0f) * CTR_BATTLE_ZOOM)) / 120.0f;
+        float bt = (120.0f - (192.0f + (160.0f - 112.0f) * CTR_BATTLE_ZOOM)) / 120.0f;
+        Perspective(proj, sCamera.fov, (float)CTR_GAME_WIDTH / (float)CTR_GAME_HEIGHT, 0.5f, 400.0f);
+        proj[0] *= 2.0f / (r - l);
+        proj[8] += (r + l) / (r - l);
+        proj[5] *= 2.0f / (tp - bt);
+        proj[9] += (tp + bt) / (tp - bt);
+    }
+    else
     Perspective(proj, sCamera.fov, (float)w / (float)h, 0.5f, 400.0f);
     // SDL shows render targets as they are stored: draw upside down so it comes out right.
     proj[1] = -proj[1]; proj[5] = -proj[5]; proj[9] = -proj[9]; proj[13] = -proj[13];
@@ -2165,6 +2287,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         float dx = sCamera.x - sCamera.targetX, dy = sCamera.y - sCamera.targetY, dz = sCamera.z - sCamera.targetZ;
         PostFinish(sFbo, w, h, fd, sqrtf(dx * dx + dy * dy + dz * dz));
     }
+    if (sBattle.on)
+        BattleZoomBlur(w, h);
 
     if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
     {
@@ -2184,6 +2308,88 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     }
     RestoreGl(&saved);
     return true;
+}
+
+/*
+ * Emerald 3DS's BattleIntroBlur: while the camera travels, two copies of the world magnified about the
+ * 3DS screen's middle (where the camera looks), see-through - 1 + 0.035 s at 0.50 s, 1 + 0.080 s at 0.32 s
+ * (s = the intro's speed), linear filtered - over the world, under everything else.
+ */
+static GLuint sZoomProg, sZoomTex, sZoomVbo;
+static int sZoomW, sZoomH;
+static void BattleZoomBlur(int w, int h)
+{
+    Voxel3DBattleIntro intro;
+    float s;
+    Voxel3D_BattleIntro(&intro);
+    s = intro.speed;
+    if (s < 0.04f)
+        return;
+    if (sZoomProg == 0)
+    {
+        static const char *vs = "#version 120\nattribute vec2 p;\nvarying vec2 uv;\n"
+                                "void main() { uv = p * 0.5 + 0.5; gl_Position = vec4(p, 0.0, 1.0); }\n";
+        static const char *fs = "#version 120\nuniform sampler2D src;\nuniform vec2 centre;\nuniform float scale, alpha;\n"
+                                "varying vec2 uv;\n"
+                                "void main() { vec2 t = centre + (uv - centre) / scale;\n"
+                                "  gl_FragColor = vec4(texture2D(src, t).rgb, alpha); }\n";
+        static const float quad[8] = {-1, -1, 1, -1, -1, 1, 1, 1};
+        GLuint v = Compile(GL_VERTEX_SHADER, vs), f = Compile(GL_FRAGMENT_SHADER, fs);
+        GLint ok = 0;
+        if (v == 0 || f == 0)
+            return;
+        sZoomProg = wj_glCreateProgram();
+        wj_glAttachShader(sZoomProg, v);
+        wj_glAttachShader(sZoomProg, f);
+        wj_glBindAttribLocation(sZoomProg, 0, "p");
+        wj_glLinkProgram(sZoomProg);
+        wj_glGetProgramiv(sZoomProg, GL_LINK_STATUS, &ok);
+        if (!ok)
+        {
+            sZoomProg = 0;
+            return;
+        }
+        wj_glGenBuffers(1, &sZoomVbo);
+        wj_glBindBuffer(GL_ARRAY_BUFFER, sZoomVbo);
+        wj_glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
+    }
+    if (sZoomTex == 0 || sZoomW != w || sZoomH != h)
+    {
+        if (sZoomTex == 0)
+            wj_glGenTextures(1, &sZoomTex);
+        wj_glBindTexture(GL_TEXTURE_2D, sZoomTex);
+        wj_glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+        wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        sZoomW = w;
+        sZoomH = h;
+    }
+    wj_glBindFramebuffer(GL_FRAMEBUFFER, sFbo);
+    wj_glActiveTexture(GL_TEXTURE0);
+    wj_glBindTexture(GL_TEXTURE_2D, sZoomTex);
+    wj_glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, w, h);
+    wj_glViewport(0, 0, w, h);
+    wj_glDisable(GL_DEPTH_TEST);
+    wj_glDisable(GL_CULL_FACE);
+    wj_glEnable(GL_BLEND);
+    wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    wj_glUseProgram(sZoomProg);
+    wj_glUniform1i(wj_glGetUniformLocation(sZoomProg, "src"), 0);
+    /* the 3DS screen's middle (200, 120) is GBA (120, 60.57); the picture is stored top row first here */
+    wj_glUniform2f(wj_glGetUniformLocation(sZoomProg, "centre"), 0.5f, (112.0f + (120.0f - 192.0f) / 1.4f) / 160.0f);
+    wj_glBindBuffer(GL_ARRAY_BUFFER, sZoomVbo);
+    wj_glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    wj_glEnableVertexAttribArray(0);
+    wj_glDisableVertexAttribArray(1);
+    wj_glDisableVertexAttribArray(2);
+    wj_glUniform1f(wj_glGetUniformLocation(sZoomProg, "scale"), 1.0f + 0.035f * s);
+    wj_glUniform1f(wj_glGetUniformLocation(sZoomProg, "alpha"), 0.50f * s);
+    wj_glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    wj_glUniform1f(wj_glGetUniformLocation(sZoomProg, "scale"), 1.0f + 0.080f * s);
+    wj_glUniform1f(wj_glGetUniformLocation(sZoomProg, "alpha"), 0.32f * s);
+    wj_glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 // The GL name of an SDL texture (SDL's OpenGL renderer).

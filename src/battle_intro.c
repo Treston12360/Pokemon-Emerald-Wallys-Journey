@@ -57,6 +57,17 @@ void HandleIntroSlide(u8 environment)
     gTasks[taskId].data[6] = 0;
 }
 
+#ifdef PORTABLE
+// DLX-5 (as Emerald 3DS): whether the scenery is still sliding in. The 3D battle draws the world in its
+// place and has the camera glide in instead; BG1/BG2 hold the scenery's entry picture meanwhile.
+bool8 PcBattleIntro_Sliding(void)
+{
+    return FuncIsActiveTask(BattleIntroSlide1) || FuncIsActiveTask(BattleIntroSlide2)
+        || FuncIsActiveTask(BattleIntroSlide3) || FuncIsActiveTask(BattleIntroSlideLink)
+        || FuncIsActiveTask(BattleIntroSlidePartner);
+}
+#endif
+
 static void BattleIntroSlideEnd(u8 taskId)
 {
     DestroyTask(taskId);

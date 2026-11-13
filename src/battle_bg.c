@@ -1591,8 +1591,27 @@ void LoadBattleMenuWindowGfx(void)
     }
 }
 
+#ifdef PORTABLE
+// DLX-5 (as Emerald 3DS): the 3D battle draws the world in place of the scenery on BG3; a move's background
+// loaded into BG3 (LoadMoveBg) is shown whole instead, so the renderer asks which one BG3 holds.
+static bool8 sPcMoveBgShown;
+
+bool8 PcBattleBg_MoveBgShown(void)
+{
+    return sPcMoveBgShown;
+}
+
+void PcBattleBg_SetMoveBgShown(bool8 shown)
+{
+    sPcMoveBgShown = shown;
+}
+#endif
+
 void DrawMainBattleBackground(void)
 {
+#ifdef PORTABLE
+    sPcMoveBgShown = FALSE;
+#endif
     LoadBattleEnvironmentGfx(GetBattleEnvironmentOverride());
 }
 
@@ -1952,6 +1971,9 @@ bool8 LoadChosenBattleElement(u8 caseId)
             DecompressDataWithHeaderVram(gBattleEnvironmentInfo[GetBattleEnvironmentOverride()].background.tileset, (void *)(BG_CHAR_ADDR(2)));
         break;
     case 4:
+#ifdef PORTABLE
+        sPcMoveBgShown = FALSE;
+#endif
         if (WJ3D_GetBackdrop(GetBattleEnvironmentOverride()))
             DecompressDataWithHeaderVram(WJ3D_GetBackdrop(GetBattleEnvironmentOverride())->tilemap, (void *)(BG_SCREEN_ADDR(26)));
         else

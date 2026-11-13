@@ -95,6 +95,9 @@ static void Task_PanFromInitialToTarget(u8 taskId);
 static void Task_LoopAndPlaySE(u8 taskId);
 static void Task_WaitAndPlaySE(u8 taskId);
 static void LoadDefaultBg(void);
+#ifdef PORTABLE
+void PcBattleBg_SetMoveBgShown(bool8 shown); // battle_bg.c
+#endif
 
 EWRAM_DATA static const u8 *sBattleAnimScriptPtr = NULL;
 EWRAM_DATA static const u8 *sBattleAnimScriptRetAddr[MAX_ANIM_CALL_DEPTH] = {0};
@@ -1785,6 +1788,9 @@ void LoadMoveBg(u16 bgId)
     }
     else
     {
+#ifdef PORTABLE
+        PcBattleBg_SetMoveBgShown(TRUE); // DLX-5: BG3 holds a move's background, not the scenery
+#endif
         DecompressDataWithHeaderVram(gBattleAnimBackgroundTable[bgId].tilemap, (void *)BG_SCREEN_ADDR(26));
         DecompressDataWithHeaderVram(gBattleAnimBackgroundTable[bgId].image, (void *)BG_CHAR_ADDR(2));
         LoadPalette(gBattleAnimBackgroundTable[bgId].palette, BG_PLTT_ID(2), PLTT_SIZE_4BPP);

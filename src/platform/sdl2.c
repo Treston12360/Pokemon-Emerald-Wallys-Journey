@@ -2363,6 +2363,157 @@ u16 Platform_GetKeyInput(void)
     return keyboardKeys;
 }
 
+
+static inline uint32_t ToArgb(uint16_t color);
+// ---- DLX-5: the 3D battle's picture over the world (Emerald 3DS, 3ds_video.c) ----
+static bool sBattleShow;          // the world is the scenery this frame
+static unsigned sBattleLayers;    // pixel sources the world stands in for (gPcPixelSource numbering)
+
+// The battle's own picture with the world's layers see-through (carrying their brightness fade: BG3's
+// brightness is the world's).
+static void BuildBattleOverlay(const uint16_t *pic, uint32_t *out)
+{
+    extern u8 gPcPixelSource[];
+    extern s8 gPcPixelFade[];
+    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
+    {
+        u8 src = gPcPixelSource[i];
+        if (src < 8 && (sBattleLayers & (1u << src)))
+        {
+            int f = gPcPixelFade[i];
+            out[i] = f > 0 ? ((uint32_t)(f * 255 / 16) << 24) | 0xFFFFFF : f < 0 ? ((uint32_t)(-f * 255 / 16) << 24) : 0;
+        }
+        else
+            out[i] = ToArgb(pic[i]);
+    }
+}
+
+// A colour with alpha laid over the see-through part of the overlay only (what is over the world, under the
+// battle's own picture): the world's colour there is under it, so the two blend as A over B.
+static inline void UnderBattle(uint32_t *px, float r, float g, float b, float a)
+{
+    uint32_t d = *px;
+    float da = (d >> 24) / 255.0f;
+    if (da >= 0.999f || a <= 0.0f)
+        return; // the battle's own pixel
+    {
+        float dr = ((d >> 16) & 255) / 255.0f, dg = ((d >> 8) & 255) / 255.0f, db = (d & 255) / 255.0f;
+        float oa = a + da * (1.0f - a);
+        float orr = (r * a + dr * da * (1.0f - a)) / oa, og = (g * a + dg * da * (1.0f - a)) / oa, ob = (b * a + db * da * (1.0f - a)) / oa;
+        *px = ((uint32_t)(oa * 255.0f + 0.5f) << 24) | ((uint32_t)(orr * 255.0f + 0.5f) << 16)
+            | ((uint32_t)(og * 255.0f + 0.5f) << 8) | (uint32_t)(ob * 255.0f + 0.5f);
+    }
+}
+
+// 3DS top-screen point -> GBA pixel (the GBA picture lies on it at 1.4x, its (120, 112) on (200, 192)).
+static float BattleGbaX(float sx) { return 120.0f + (sx - 200.0f) / 1.4f; }
+static float BattleGbaY(float sy) { return 112.0f + (sy - 192.0f) / 1.4f; }
+
+// A rectangle of the 3DS screen with a colour at each corner (C2D_DrawRectangle), laid under the battle.
+static void BattleRect(uint32_t *img, float x, float y, float w, float h, const float c[4][4])
+{
+    float gx0 = BattleGbaX(x), gy0 = BattleGbaY(y), gx1 = BattleGbaX(x + w), gy1 = BattleGbaY(y + h);
+    for (int py = (int)floorf(gy0); py < (int)ceilf(gy1); py++)
+        for (int px = (int)floorf(gx0); px < (int)ceilf(gx1); px++)
+        {
+            if (px < 0 || py < 0 || px >= DISPLAY_WIDTH || py >= DISPLAY_HEIGHT)
+                continue;
+            float u = ((px + 0.5f) - gx0) / (gx1 - gx0), v = ((py + 0.5f) - gy0) / (gy1 - gy0);
+            if (u < 0 || u > 1 || v < 0 || v > 1)
+                continue;
+            float k[4];
+            for (int ch = 0; ch < 4; ch++)
+                k[ch] = (c[0][ch] * (1 - u) + c[1][ch] * u) * (1 - v) + (c[2][ch] * (1 - u) + c[3][ch] * u) * v;
+            UnderBattle(&img[py * DISPLAY_WIDTH + px], k[0], k[1], k[2], k[3]);
+        }
+}
+
+static void BattleEffects(uint32_t *img)
+{
+    Voxel3DBattleIntro intro;
+    bool shown = !(REG_DISPCNT & 0x80);
+
+    Voxel3D_BattleIntro(&intro);
+    if (shown)
+    {
+        // BattleWorldShadows: a soft shadow on the ground under each battler, the world's dark blue
+        // (8, 20, 40), 0.5 x d^1.5 from the middle (d = 1 - r^2), stretched to rx, ry GBA pixels.
+        VoxelBattleShadow shadows[4];
+        unsigned count = VoxelBattle_Shadows(shadows, 4);
+        for (unsigned n = 0; n < count; n++)
+            for (int py = (int)(shadows[n].y - shadows[n].ry); py <= (int)(shadows[n].y + shadows[n].ry); py++)
+                for (int px = (int)(shadows[n].x - shadows[n].rx); px <= (int)(shadows[n].x + shadows[n].rx); px++)
+                {
+                    if (px < 0 || py < 0 || px >= DISPLAY_WIDTH || py >= DISPLAY_HEIGHT)
+                        continue;
+                    float u = (px + 0.5f - shadows[n].x) / shadows[n].rx, v = (py + 0.5f - shadows[n].y) / shadows[n].ry;
+                    float d = 1.0f - (u * u + v * v);
+                    if (d > 0.0f)
+                        UnderBattle(&img[py * DISPLAY_WIDTH + px], 8 / 255.0f, 20 / 255.0f, 40 / 255.0f, 0.5f * d * sqrtf(d));
+                }
+        // BattleIntroAtmosphere: speed lines while it travels, a dark indigo vignette as high as it climbs.
+        {
+            const float w = 400.0f, bottom = 80.0f + 112.0f; // BATTLE_INTRO_FLOOR: CTR_BATTLE_Y + BATTLE_BAND_TOP
+            float shade = fmaxf(0.60f * intro.flight, 0.30f * intro.bars);
+            if (intro.speed > 0.04f)
+                for (unsigned i = 0; i < 12u; ++i)
+                {
+                    uint32_t hh = (i + 1) * 2654435761u;
+                    float y = 6.0f + (float)((hh >> 8) % (unsigned)(bottom - 12.0f));
+                    float length = 70.0f + (float)((hh >> 16) % 110u);
+                    float pace = 26.0f + (float)((hh >> 20) % 18u);
+                    float x = w - fmodf(intro.time * pace + (float)(hh % 400u), w + length);
+                    float alpha = intro.speed * (0.35f + 0.35f * (float)((hh >> 4) & 3) / 3.0f);
+                    float c[4][4] = {{225 / 255.0f, 236 / 255.0f, 1, alpha}, {225 / 255.0f, 236 / 255.0f, 1, 0},
+                                     {225 / 255.0f, 236 / 255.0f, 1, alpha}, {225 / 255.0f, 236 / 255.0f, 1, 0}};
+                    if (fabsf(y - bottom * 0.55f) < 24.0f)
+                        y = y < bottom * 0.55f ? y - 24.0f : y + 24.0f;
+                    BattleRect(img, x, y, length, (hh & 16) ? 2.0f : 1.0f, c);
+                }
+            if (shade > 0.01f)
+            {
+                float a = fminf(shade, 1.0f) * 230.0f / 255.0f, r = 8 / 255.0f, g = 6 / 255.0f, b = 34 / 255.0f;
+                float band = 64.0f, side = 96.0f, low = bottom;
+                float top[4][4] = {{r, g, b, a}, {r, g, b, a}, {r, g, b, 0}, {r, g, b, 0}};
+                float bot[4][4] = {{r, g, b, 0}, {r, g, b, 0}, {r, g, b, a}, {r, g, b, a}};
+                float lef[4][4] = {{r, g, b, a}, {r, g, b, 0}, {r, g, b, a}, {r, g, b, 0}};
+                float rig[4][4] = {{r, g, b, 0}, {r, g, b, a}, {r, g, b, 0}, {r, g, b, a}};
+                BattleRect(img, 0, 0, w, band, top);
+                BattleRect(img, 0, low - band, w, band, bot);
+                BattleRect(img, 0, 0, side, low, lef);
+                BattleRect(img, w - side, 0, side, low, rig);
+            }
+        }
+        // BattleIntroFlash: the landing's flash over the world.
+        if (intro.impact > 0.01f)
+        {
+            float a = fminf(intro.impact, 1.0f) * 170.0f / 255.0f;
+            for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
+                UnderBattle(&img[i], 1.0f, 250 / 255.0f, 235 / 255.0f, a);
+        }
+        // BattleIntroBars: over everything. On the 3DS they sit on its screen's top and bottom edges; here on
+        // this picture's (each 22 3DS pixels closed, a 10-pixel soft edge: /1.4 in GBA pixels).
+        if (intro.bars > 0.01f)
+        {
+            float bar = 22.0f / 1.4f * intro.bars, edge = 10.0f / 1.4f * intro.bars;
+            for (int py = 0; py < DISPLAY_HEIGHT; py++)
+            {
+                float yy = py + 0.5f, d = fminf(yy, DISPLAY_HEIGHT - yy), a;
+                a = d < bar ? 1.0f : d < bar + edge ? 1.0f - (d - bar) / edge : 0.0f;
+                if (a <= 0.0f)
+                    continue;
+                for (int px = 0; px < DISPLAY_WIDTH; px++)
+                {
+                    uint32_t c = img[px + py * DISPLAY_WIDTH];
+                    float ca = (c >> 24) / 255.0f, oa = a + ca * (1 - a);
+                    float rr = (((c >> 16) & 255) * ca * (1 - a)) / oa, gg = (((c >> 8) & 255) * ca * (1 - a)) / oa, bb = ((c & 255) * ca * (1 - a)) / oa;
+                    img[px + py * DISPLAY_WIDTH] = ((uint32_t)(oa * 255 + 0.5f) << 24) | ((uint32_t)rr << 16) | ((uint32_t)gg << 8) | (uint32_t)bb;
+                }
+            }
+        }
+    }
+}
+
 static uint16_t *sVDrawImage;
 static void DrawFrameGuarded(void)
 {
@@ -2561,18 +2712,27 @@ void VDraw(SDL_Texture *texture)
     }
     if ((s3DWanted || s3DBattleWanted) && !s3DReady)
         Try3DInit(); // turned on in Settings
-    // DLX-5: a battle over the 3D world. The battle's own picture goes on top, with its scenery (BG3) and
-    // backdrop left out, so the world shows there.
+    // DLX-5: a battle over the 3D world, as Emerald 3DS does it (3ds_video.c): the world is the battle's
+    // scenery (BG3) while BG3 is on and holds the scenery (not a move's background); while the intro slides
+    // the scenery in, BG1/BG2 (its entry picture) are the world's too (not in a link battle). Where the
+    // windows hide BG3 (the intro's curtain) the backdrop shows, as on the GBA. The battle's own picture
+    // goes on top; the world's shadows, the entrance effects and the cinema bars go in with it.
     s3DBattleFrame = false;
+    sBattleShow = false;
     {
+        extern bool8 PcBattleIntro_Sliding(void);
+        extern bool8 PcBattleBg_MoveBgShown(void);
         bool battle = s3DReady && s3DBattleWanted && !s3DTransition && VoxelBattle_GameInBattle()
                    && sFrameInfo.mode != WIDE_VIEW_FIELD
                    && sFrameInfo.width == DISPLAY_WIDTH && sFrameInfo.height == DISPLAY_HEIGHT;
         Voxel3D_SetBattle(battle);
         if (battle)
         {
-            extern u8 gPcPixelSource[];
-            extern s8 gPcPixelFade[];
+            bool sliding = PcBattleIntro_Sliding() != 0, moveBg = PcBattleBg_MoveBgShown() != 0;
+            Voxel3D_SetBattleFrame(sliding, sliding || moveBg ? 0.0f : (float)((int)((REG_BG3HOFS + 128) & 255) - 128),
+                                   sliding || moveBg ? 0.0f : (float)((int)((REG_BG3VOFS + 128) & 255) - 128));
+            sBattleShow = !moveBg && (REG_DISPCNT & 0x800) && !(REG_DISPCNT & 0x80);
+            sBattleLayers = (1u << 4) | (sliding && !VoxelBattle_IsLink() ? (1u << 2) | (1u << 3) : 0u);
             if (sdl3DBattleTexture == NULL)
             {
                 sdl3DBattleTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
@@ -2580,20 +2740,8 @@ void VDraw(SDL_Texture *texture)
                 if (sdl3DBattleTexture != NULL)
                     SDL_SetTextureBlendMode(sdl3DBattleTexture, SDL_BLENDMODE_BLEND);
             }
-            for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
-            {
-                u8 src = gPcPixelSource[i];
-                if (src == 0 || src == 4)
-                {
-                    int f = gPcPixelFade[i];
-                    sBattleImage[i] = f > 0 ? ((uint32_t)(f * 255 / 16) << 24) | 0xFFFFFF
-                                    : f < 0 ? ((uint32_t)(-f * 255 / 16) << 24) : 0;
-                }
-                else
-                    sBattleImage[i] = ToArgb(gbaImage[i]);
-            }
-            if (sdl3DBattleTexture != NULL)
-                SDL_UpdateTexture(sdl3DBattleTexture, NULL, sBattleImage, DISPLAY_WIDTH * sizeof(uint32_t));
+            BuildBattleOverlay(gbaImage, sBattleImage);
+            // the world is drawn (and its camera moves) every battle frame, shown only when it is the scenery
             s3DBattleFrame = sdl3DBattleTexture != NULL;
         }
     }
@@ -2634,6 +2782,14 @@ void VDraw(SDL_Texture *texture)
                 SDL_SetRenderTarget(sdlRenderer, was);
             }
         }
+    }
+    if (s3DBattleFrame)
+    {
+        BattleEffects(sBattleImage);
+        if (!sBattleShow)
+            s3DBattleFrame = false; // a move's background, BG3 off or a blank screen: the 2D battle, whole
+        else
+            SDL_UpdateTexture(sdl3DBattleTexture, NULL, sBattleImage, DISPLAY_WIDTH * sizeof(uint32_t));
     }
     if (sFrameInfo.mode == WIDE_VIEW_FIELD && sdlUiTexture != NULL)
     {
@@ -2724,17 +2880,8 @@ void VDraw(SDL_Texture *texture)
                 DrawFramePlain(pic);
                 if (s3DBattleFrame)
                 {
-                    // as the battle overlay is made: the scenery and backdrop see-through
-                    extern u8 gPcPixelSource[];
-                    extern s8 gPcPixelFade[];
-                    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
-                    {
-                        u8 src = gPcPixelSource[i];
-                        int fd = gPcPixelFade[i];
-                        sInterpImage[k - 1][i] = (src == 0 || src == 4)
-                            ? (fd > 0 ? ((uint32_t)(fd * 255 / 16) << 24) | 0xFFFFFF : fd < 0 ? ((uint32_t)(-fd * 255 / 16) << 24) : 0)
-                            : ToArgb(pic[i]);
-                    }
+                    BuildBattleOverlay(pic, sInterpImage[k - 1]);
+                    BattleEffects(sInterpImage[k - 1]);
                 }
                 else
                     for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
