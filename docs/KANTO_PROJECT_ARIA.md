@@ -44,9 +44,13 @@ a reveal or a choice, not just a gym.
   his test of whether the dead leave a trace the rift can reach. The player doesn't know this.
 - **Report-back scene (owner, 2026-11-13):** Blue is there when the player reports to Varnell. Blue (who
   never knew her name) mentions it in passing:
-  > Blue: "It was weird. It kept saying... 'Aria.'"
+  > Blue: "It was weird. It kept saying 'Aria.' Like the project. Maybe the tears pulled it in like the
+  > other Pokémon that shouldn't be here... and it's reacting to the machine somehow?"
   > Varnell: "......"
-  > Varnell: "Echoes tend to repeat fragments. Good work, both of you. That's all for today."
+  > Varnell: "...Possibly. The tower's readings were high. Echoes tend to latch onto strong signals.
+  > Good work, both of you."
+  Blue honestly thinks the ghost means *the project* (he never knew her name). Varnell lies by agreeing —
+  he uses Blue's mistake as cover. This doubles as a red herring that points players at the machine, not a person.
   Exactly one beat of silence, then he recovers. Longer or emotional reactions would tip off sharp players.
 - For most of the game Varnell seems kind, brilliant and genuinely helpful. **That's a mask.**
 - Underneath he's twisted: he knows folding space-time could destroy the world and **doesn't care.**
