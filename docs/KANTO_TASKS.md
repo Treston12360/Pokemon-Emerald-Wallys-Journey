@@ -34,8 +34,8 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       `gMapGroups` has no group 37). Then check Viridian, Vermilion, Mt. Moon, Pokémon Tower, Silph Co.,
       a route with grass, a building — 2D and 3D. Verify only; no need to show the owner.
 - [ ] **K4. Flags, vars and save space.** Kanto story flags must not collide with Emerald's (Crossroads moved
-      FRLG flags out of the trainer-flag range 0x500..0xB55). Save must stay within 32 flash sectors **and old
-      GBA saves must still import.**
+      FRLG flags out of the trainer-flag range). NO save-size limits (Windows game, see AGENTS.md "NO LIMITS"):
+      give Kanto its own save section, as big as needed. **Old GBA saves must still import.**
 - [ ] **K5. Kanto scripts, specials, object events, heal locations, wild encounters, trainers work.**
 - [ ] **K6. Region-aware Fly and region map** (Fly map can switch Hoenn/Kanto; normal Fly animation; no
       key item — owner decision).

@@ -22,6 +22,8 @@ Another Claude session may also push to `deluxe`: always `git pull --rebase` bef
 - Code: `src/platform/sdl2.c` (DrawFieldScene, DrawScene, DrawScreen, ComputeFieldView, test commands),
   `src/platform/wide_view.c` (UI/overlay split per scanline), `src/option_menu.c` (Video rows).
 
+**NO LIMITS (owner, 2026-11-13, final):** one game (Wally's Journey + Project ARIA), native Windows. No GBA or 3DS limits of any kind — save size, flags, sectors, VRAM, palettes, sprites, budgets. Only hard rule: old GBA saves import. See AGENTS.md "NO LIMITS".
+
 **Owner decision 2026-11-12 (changes an old rule):** PC saves no longer have to go back into mGBA. mGBA saves must
 still **load on PC** (or convert). With that, he wants the GBA limits gone on PC, "without doing weird shit":
 NPCs, sprites, colour palettes.
