@@ -292,6 +292,7 @@ static const char *sFragmentSrc =
     "    vec3 light = sunLight * max(dot(n, sunDir), 0.0) * vShade * clouds(vWorld) + skyTint * max(skyIrr(n), 0.0);\n"
     "    rgb = albedo * light;\n"
     "    if (gammaLight > 1.5 && gammaLight < 2.5) { gl_FragColor = vec4(vec3(vShade) * 0.1, 1.0); return; }\n"
+    "    if (gammaLight > 4.5) { vec2 f = fract(vWorld.xz / 8.0); vec2 g = fract(vWorld.xz); gl_FragColor = vec4(min(f.x, f.y) < 0.015 ? 0.1 : 0.0, min(g.x, g.y) < 0.03 ? 0.03 : 0.0, 0.02, 1.0); return; }\n"
     "    if (gammaLight > 3.5) { gl_FragColor = vec4(vec3(clouds(vWorld)) * 0.1, 1.0); return; }\n"
     "    if (gammaLight > 2.5) { gl_FragColor = vec4(n * 0.5 + 0.5, 1.0); return; }\n"
     // haze (M_StylizedFogPP, day): distances in Gamma units, 64 per tile
@@ -456,6 +457,44 @@ static void MeshSet(Mesh *m, const VoxelVertex *v, unsigned count, GLenum usage)
     wj_glBindBuffer(GL_ARRAY_BUFFER, m->vbo);
     wj_glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)count * sizeof(VoxelVertex), v, usage);
     m->count = count;
+}
+
+/*
+ * DLX-22, ported from Emerald 3DS (ctr_voxel.c, GPU vertex format + Quantise): positions go to the GPU in 1/512
+ * tile, measured from the draw's origin (always a whole tile), rounded half up, never half away from zero, "so two
+ * chunks quantise a shared edge to exactly the same place". Raw builder floats let vertices that should meet differ
+ * in the last bit, and real GPUs showed the background through as thin dark or light lines (Granite Cave, the sea).
+ * Kept as floats: k/512 is exact for any position a map can have.
+ */
+#define VOXEL_POS_SCALE 512.0f
+static float QuantisePos(float value)
+{
+    return floorf(value * VOXEL_POS_SCALE + 0.5f) / VOXEL_POS_SCALE;
+}
+
+static void MeshSetQuantised(Mesh *m, const VoxelVertex *v, unsigned count, GLenum usage)
+{
+    static VoxelVertex *buf;
+    static unsigned cap;
+    if (count > cap)
+    {
+        VoxelVertex *grown = realloc(buf, (size_t)count * sizeof(VoxelVertex));
+        if (grown == NULL)
+        {
+            MeshSet(m, v, count, usage);
+            return;
+        }
+        buf = grown;
+        cap = count;
+    }
+    for (unsigned i = 0; i < count; i++)
+    {
+        buf[i] = v[i];
+        buf[i].x = QuantisePos(v[i].x);
+        buf[i].y = QuantisePos(v[i].y);
+        buf[i].z = QuantisePos(v[i].z);
+    }
+    MeshSet(m, buf, count, usage);
 }
 
 static void MeshFree(Mesh *m)
@@ -756,7 +795,7 @@ static const Mesh *StaticModel(unsigned pageModel, bool lit)
             sStatics[i].used = true;
             sStatics[i].pageModel = pageModel;
             sStatics[i].lit = lit;
-            MeshSet(&sStatics[i].mesh, t, count, GL_STATIC_DRAW);
+            MeshSetQuantised(&sStatics[i].mesh, t, count, GL_STATIC_DRAW);
             free(t);
             return &sStatics[i].mesh;
         }
@@ -981,12 +1020,26 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
             }
         }
         if (n != 0)
-            MeshSet(&m->terrain[p], sSorted, n, GL_STATIC_DRAW);
+        {
+            MeshSetQuantised(&m->terrain[p], sSorted, n, GL_STATIC_DRAW);
+            if (getenv("WJPC_DUMP_TERRAIN") && inst->mapGroup == atoi(getenv("WJPC_DUMP_TERRAIN")) / 100
+             && inst->mapNum == atoi(getenv("WJPC_DUMP_TERRAIN")) % 100)
+            {
+                char name[256];
+                FILE *f;
+                snprintf(name, sizeof(name), "%s.%u", getenv("WJPC_DUMP_TERRAIN_FILE") ? getenv("WJPC_DUMP_TERRAIN_FILE") : "terrain.bin", p);
+                if ((f = fopen(name, "wb")) != NULL)
+                {
+                    fwrite(sSorted, sizeof(VoxelVertex), n, f);
+                    fclose(f);
+                }
+            }
+        }
         else
             MeshFree(&m->terrain[p]);
     }
-    MeshSet(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
-    MeshSet(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
+    MeshSetQuantised(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
+    MeshSetQuantised(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
     memcpy(m->statics, pb->statics, pb->staticCount * sizeof(VoxelStaticDraw));
     m->staticCount = pb->staticCount;
     m->buildingPage = VoxelBuildings_PageOf(inst);
@@ -1202,10 +1255,19 @@ static void BeltAssemble(Atlas *atlas, int cx, int cy)
     total = 0;
     for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
     {
-        MeshSet(&sBeltTerrain[p], sSorted + total, count[p], GL_STATIC_DRAW);
+        MeshSetQuantised(&sBeltTerrain[p], sSorted + total, count[p], GL_STATIC_DRAW);
+        if (getenv("WJPC_DUMP_BELT"))
+        {
+            FILE *f = fopen(getenv("WJPC_DUMP_BELT"), p == 0 ? "wb" : "ab");
+            if (f != NULL)
+            {
+                fwrite(sSorted + total, sizeof(VoxelVertex), count[p], f);
+                fclose(f);
+            }
+        }
         total += count[p];
     }
-    MeshSet(&sBeltTrees, sTreeBuf, sTreeCount, GL_STATIC_DRAW);
+    MeshSetQuantised(&sBeltTrees, sTreeBuf, sTreeCount, GL_STATIC_DRAW);
     sBeltAtlas = atlas;
 }
 
@@ -1378,6 +1440,13 @@ FILE *Voxel3D_OpenData(const char *path)
 /* Gamma's camera gives 2^1 x 0.18 / 1 = 0.36; our GBA art is drawn fully lit, so the multiplier is the one
  * that returns sunlit ground to its own colours (fitted through this exact curve): 2.06. */
 static float sExposure = 2.06f;
+/* DLX-23: indoors the room is unlit (full colour), so outdoor bloom makes every white wall glow. */
+static bool sIndoorNow;
+static float IndoorBloomScale(void)
+{
+    const char *e = getenv("WJPC_3D_INDOOR_BLOOM");
+    return e != NULL ? (float)atof(e) : 0.0f; /* Emerald 3DS: no bloom indoors (ctr_voxel.c BaseLightFor) */
+}
 static GLuint sBlurFbo[6], sBlurTex[6];
 static GLuint sPostProg, sQuadVbo, sHdrFbo, sHdrTex, sHdrDepth, sBloomFbo[7], sBloomTex[7];
 static int sHdrW, sHdrH, sBloomW[7], sBloomH[7];
@@ -1637,7 +1706,7 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
         }
         int lv = 0;
         wj_glUseProgram(sPostProg);
-        wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f : 6.0f, 0.4f);
+        wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f : 6.0f * (sIndoorNow ? IndoorBloomScale() : 1.0f), 0.4f);
         wj_glUniform1fv(wj_glGetUniformLocation(sPostProg, "tint"), 6, tint);
         {
             /* Gamma: engine default vignette 0.4; Granite Cave gain 0.49 + vignette 3, Brawly's gym 0.49 + 2 */
@@ -1762,6 +1831,39 @@ static void Multiply(float *out, const float *a, const float *b)
             r[c * 4 + rr] = a[0 * 4 + rr] * b[c * 4 + 0] + a[1 * 4 + rr] * b[c * 4 + 1]
                           + a[2 * 4 + rr] * b[c * 4 + 2] + a[3 * 4 + rr] * b[c * 4 + 3];
     memcpy(out, r, sizeof(r));
+}
+
+
+/*
+ * DLX-24, ported from Emerald 3DS (ctr_voxel.c CtrVoxel_ProjectPictureTile + 3ds_video.c PlaceScreenObject):
+ * the healing machine's balls and monitors are placed by hand on the 240x160 picture around the player (the
+ * player's tile centre at GBA (120, 80)), so they go where the map's machine is: the tile (tileX, tileY) from
+ * the player, a tile up in the air, seen by this frame's camera. Out: 0..1 across and down the 3D picture.
+ */
+static float sFieldMvp[16];
+static bool sHaveFieldMvp;
+bool Voxel3D_ProjectPictureTile(float tileX, float tileY, float *outX, float *outY)
+{
+    float px, pz, wx, wy, wz, cx, cy, cw;
+    if (!sHaveFieldMvp)
+        return false;
+    VoxelEntities_GetPlayerWorldPos(&px, &pz);
+    wx = px + 0.5f + tileX;
+    wy = sCamera.ground + 1.0f;   /* "A tile up in the air: seen from above, what stands a tile high is a
+                                   * tile further up the picture than the floor under it." */
+    wz = pz + 0.5f + tileY + 1.0f;
+    cx = sFieldMvp[0] * wx + sFieldMvp[4] * wy + sFieldMvp[8] * wz + sFieldMvp[12];
+    cy = sFieldMvp[1] * wx + sFieldMvp[5] * wy + sFieldMvp[9] * wz + sFieldMvp[13];
+    cw = sFieldMvp[3] * wx + sFieldMvp[7] * wy + sFieldMvp[11] * wz + sFieldMvp[15];
+    if (cw <= 1e-4f)
+        return false;
+    *outX = (cx / cw) * 0.5f + 0.5f;
+    /* The field is drawn upside down (SDL shows render targets as stored), so NDC y already points down. */
+    *outY = 0.5f + (cy / cw) * 0.5f;
+    if (getenv("WJPC_DEBUG_MACHINE"))
+        fprintf(stderr, "machine tile %.2f %.2f player %.2f %.2f ground %.2f cam target %.2f %.2f %.2f -> %.3f %.3f\n",
+                tileX, tileY, px, pz, sCamera.ground, sCamera.targetX, sCamera.targetY, sCamera.targetZ, *outX, *outY);
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -2294,12 +2396,26 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     proj[1] = -proj[1]; proj[5] = -proj[5]; proj[9] = -proj[9]; proj[13] = -proj[13];
     LookAt(view, sCamera.x, sCamera.y, sCamera.z, sCamera.targetX, sCamera.targetY, sCamera.targetZ);
     Multiply(mvp, proj, view);
+    memcpy(sFieldMvp, mvp, sizeof(sFieldMvp));
+    if (getenv("WJPC_DUMP_MVP"))
+    {
+        FILE *f = fopen(getenv("WJPC_DUMP_MVP"), "wb");
+        if (f != NULL)
+        {
+            float extra[4] = {(float)sBeltShiftX, (float)sBeltShiftZ, (float)w, (float)h};
+            fwrite(mvp, sizeof(float), 16, f);
+            fwrite(extra, sizeof(float), 4, f);
+            fclose(f);
+        }
+    }
+    sHaveFieldMvp = !sBattleMode;
     wj_glUniformMatrix4fv(sUniMvp, 1, GL_FALSE, mvp);
     wj_glUniform3f(sUniCam, sCamera.x, sCamera.y, sCamera.z);
     if (VoxelWorld_ScreenFade(&fadeAmount, fadeRgb) && !gVoxelGammaLight)
         wj_glUniform4f(sUniFade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount);
     else
         wj_glUniform4f(sUniFade, 0, 0, 0, 0);
+    sIndoorNow = inst0->indoor;
     // Haze, outdoors only: starts well past the player, the sky's colour.
     if (inst0->indoor || inst0->underground)
         wj_glUniform2f(sUniFog, 1.0e6f, 2.0e6f);
@@ -2322,10 +2438,12 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         InstanceMesh *m = &sInstanceMeshes[i];
         if (!m->used || !m->shown)
             continue;
-        for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+        int skip = getenv("WJPC_3D_SKIP") ? atoi(getenv("WJPC_3D_SKIP")) : 0; /* debug: 1 terrain 2 trees 4 models */
+        for (unsigned p = 0; p < VOXEL_ATLAS_PAGES && !(skip & 1); p++)
             MeshDraw(&m->terrain[p], m->atlas->tex[p], (float)m->originX, 0, (float)m->originY);
-        MeshDraw(&m->trees, sTreeTex, (float)m->originX, 0, (float)m->originY);
-        if (m->buildingPage >= 0)
+        if (!(skip & 2))
+            MeshDraw(&m->trees, sTreeTex, (float)m->originX, 0, (float)m->originY);
+        if (m->buildingPage >= 0 && !(skip & 4))
         {
             GLuint page = BuildingPage(m->buildingPage);
             if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
@@ -2340,7 +2458,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             }
         }
     }
-    if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground)
+    if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground && !(getenv("WJPC_3D_SKIP") && (atoi(getenv("WJPC_3D_SKIP")) & 8)))
     {
         for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
             MeshDraw(&sBeltTerrain[p], sBeltAtlas->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);

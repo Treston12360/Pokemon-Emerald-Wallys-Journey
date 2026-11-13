@@ -809,6 +809,9 @@ static void AddNeighbourPeople(void)
     }
 }
 
+bool8 FieldEffect_IsMachineSprite(const struct Sprite *sprite); // field_effect.c
+bool Pc_MachineSpriteSpot(int x, int y, int w, int h, int *outX, int *outY); // sdl2.c
+
 static void BuildWideSprites(void)
 {
     u64 keys[MAX_SPRITES];
@@ -885,6 +888,17 @@ static void BuildWideSprites(void)
         }
         else
         {
+            // DLX-24: the healing machine's balls/monitors go where the machine is in the 3D view (Emerald 3DS).
+            if (!sprite->coordOffsetEnabled && FieldEffect_IsMachineSprite(sprite))
+            {
+                int w = gOamDimensions[oam.shape][oam.size].width, h = gOamDimensions[oam.shape][oam.size].height;
+                int nx, ny;
+                if (Pc_MachineSpriteSpot(x, y, w, h, &nx, &ny))
+                {
+                    x = nx;
+                    y = ny;
+                }
+            }
             AddSpriteOam(sprite, &oam, x, y, false);
         }
     }

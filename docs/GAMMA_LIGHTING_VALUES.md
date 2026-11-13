@@ -183,3 +183,27 @@ noise speed 0.7 strength 3; colour from Atlas_Clouds row 0 by day (0.12,0.30,0.6
 - Height fog each update: density = Day Volumetric Density 0.02, albedo = Day Volumetric Color
   (1.0, 0.596, 0.090), height falloff 0.3 (weather mix 0).
 - 3D fog strength comes from the weather asset; DA_Weather_Clear (and the class default) = 0.
+
+## Interiors (read 2026-11-13 from MAPS/INTERIORS/MAP_Pokecenter_Inside.umap, full archive)
+
+The complete Gamma archive (uploads `Gamma-Pak-Recovery_part01..10.rar`) has every interior map: Pokémon
+Centers (MAPS/INTERIORS/MAP_Pokecenter_Inside*, Hoenn/MAP_Pokecenter_Inside_<town>), Marts, houses, gyms,
+Granite Cave, Devon Corp, etc. Earlier notes only used the 3 outdoor maps that had been unpacked.
+Unpack with `7z x part01.rar 'Gamma-Pak-Recovery/Extracted/PokemonEmerald/Content/MAPS/*' -r` (needs the .uexp
+halves from the later parts). Reader: UAssetAPI with the corrections above (tool: ~/ue/dump2).
+
+- **No post-process volume in the Pokémon Center level**: it streams into the persistent level
+  (LevelStreamingVolume), so it uses the same global post-process/bloom as outdoors (intensity 6, threshold 0.4).
+- **Six movable rect lights**, all pointing straight down (pitch -90):
+  | Light | Size (cm) | Intensity (cd) | Colour | Height (UE units) |
+  |---|---|---|---|---|
+  | 0 | 1000 x 1000 | 52.09 | 255,245,229 | 491 |
+  | 5 | 1000 x 1000 | 52.09 | 255,245,229 | 491 |
+  | 3 | 1000 x 1000 | 15.0 | 255,245,229 | 499 |
+  | 4 | 1000 x 1000 | 15.0 | 255,245,229 | 499 |
+  | 1 | 20 x 20, barn door 33.8 deg / 200 | 12.66 | 255,206,162 | 588 |
+  | 2 | 20 x 20, barn door 28.8 deg / 200 | 10.0 | 255,206,162 | 588 |
+  Positions (X,Y): 0 (-29454,146464), 5 (-29454,147166), 3 (-28790,146534), 4 (-28790,147080),
+  1 (-28806,146788), 2 (-29387,146788).
+- Not yet read: whether the sun (directional light) also reaches the interior (lighting channels / roof), and the
+  interior materials. Needed before porting; see DLX-23.

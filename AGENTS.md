@@ -16,3 +16,6 @@ If you are asked to **"continue Project ARIA"** (or anything about Kanto, Varnel
 `docs/KANTO_TASKS.md` first and follow its rules — work on branch `kanto-port`, take the first unchecked task,
 and tick tasks off in `docs/KANTO_TASKS.md` in the same push as the work. Story and every owner decision are in
 `docs/KANTO_PROJECT_ARIA.md`.
+
+## No guessing, ever (owner rule, 2026-11-13)
+Port exactly how the reference does it (Emerald 3DS source for 3D, Gamma's files for lighting, FRLG/Crossroads code for Kanto). If the reference doesn't cover it, ask the owner. Never invent a fix, a value or a design.

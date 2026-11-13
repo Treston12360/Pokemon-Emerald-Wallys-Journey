@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 /*
  * CPU geometry for the voxel overworld. See voxel_mesh_builder.h.
  *
@@ -137,6 +139,8 @@ void VoxelBuilder_Tri(VoxelBuilder *builder, const VoxelVertex *a,
 {
     if (builder->count + 3 > builder->capacity)
     {
+        if (builder->dropped == 0)
+            fprintf(stderr, "[3D] builder full: capacity %u vertices, triangles dropped\n", builder->capacity);
         ++builder->dropped;
         return;
     }
@@ -166,6 +170,8 @@ void VoxelBuilder_Quad(VoxelBuilder *builder, const VoxelVertex *a, const VoxelV
     /* Whole or not at all: half a quad is a sliver along its diagonal. */
     if (builder->count + 6 > builder->capacity)
     {
+        if (builder->dropped == 0)
+            fprintf(stderr, "[3D] builder full: capacity %u vertices, quads dropped\n", builder->capacity);
         builder->dropped += 2;
         return;
     }
@@ -1987,6 +1993,74 @@ static void EmitTreeStep(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
         EmitCliffWalls(b, inst, x, y, relief, VoxelRelief_Depth(inst, x, y), wall, -1, y, sides, false);
 }
 
+/*
+ * DLX-26 (Wally's Journey PC, owner-approved 2026-11-13, the same skirt rule as BeltWaterSkirts): a model's cell
+ * (a boulder at sea) is laid flat at its centre's height (above: "a sea ramp under a rock ... still laid flat"),
+ * while the cells round it follow the relief point by point; where the sea slopes (Route 108) their edges missed by
+ * a pixel or so and the clear colour showed as a light bracket round the rock. Each edge of the flat cell is joined
+ * to the neighbour's real edge (SeamEdge) wherever they differ, with the cell's own drawing.
+ */
+static void ModelFlatSkirts(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    static const int kDir[4][2] = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+    const unsigned n = VOXEL_RELIEF_SIDE;
+    const float last = (float)(VOXEL_RELIEF_SIDE - 1);
+    float h = VoxelRelief_CellLift(inst, x, y), z = VoxelRelief_CellShift(inst, x, y);
+    float theirH[VOXEL_RELIEF_SIDE], theirZ[VOXEL_RELIEF_SIDE];
+    float u0, v0, u1, v1;
+    bool uv = false;
+
+    if (getenv("WJPC_NO_MODEL_SKIRTS"))
+        return;
+    for (int d = 0; d < 4; ++d)
+    {
+        int nx = x + kDir[d][0], ny = y + kDir[d][1];
+        bool differs = false;
+
+        if (VoxelWorld_GetInstanceAt(nx, ny) != inst || VoxelRelief_Cell(inst, nx, ny) == NULL)
+            continue;
+        SeamEdge(inst, nx, ny, d ^ 1, theirH, theirZ, NULL);
+        for (unsigned k = 0; k < n; ++k)
+            differs = differs || fabsf(theirH[k] / 16.0f - h) > 0.001f || fabsf(theirZ[k] - z) > 0.001f;
+        if (!differs)
+            continue;
+        if (!uv)
+        {
+            /* a lookup only: a model cell's own art missing from the atlas must not hold the map back */
+            unsigned uncovered = b->uncovered;
+            uv = VoxelMesh_TileUV(b, nx, ny, &u0, &v0, &u1, &v1);
+            b->uncovered = uncovered;
+            if (!uv)
+                continue;
+        }
+        for (unsigned k = 0; k + 1 < n; ++k)
+        {
+            float ka = k / last, kb = (k + 1) / last;
+            float xa, xb, za, zb, xA, xB, zA, zB;
+
+            if (d < 2) /* north, south edge: along x */
+            {
+                float e = d == 0 ? 0.0f : 1.0f;
+                xa = xA = x + ka; xb = xB = x + kb;
+                za = y + e + z; zb = za;
+                zA = y + e + theirZ[k]; zB = y + e + theirZ[k + 1];
+            }
+            else /* west, east edge: along z */
+            {
+                float e = d == 2 ? 0.0f : 1.0f;
+                xa = xb = xA = xB = x + e;
+                za = y + ka + z; zb = y + kb + z;
+                zA = y + ka + theirZ[k]; zB = y + kb + theirZ[k + 1];
+            }
+            VoxelBuilder_Quad(b,
+                &(VoxelVertex){xa, h, za, u0, v0, SHADE_TOP},
+                &(VoxelVertex){xb, h, zb, u1, v0, SHADE_TOP},
+                &(VoxelVertex){xB, theirH[k + 1] / 16.0f, zB, u1, v1, SHADE_TOP},
+                &(VoxelVertex){xA, theirH[k] / 16.0f, zA, u0, v1, SHADE_TOP});
+        }
+    }
+}
+
 /* One row of the ground pass over [x0,x1), already clipped to the instance. */
 void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst,
                              int x0, int x1, int y)
@@ -2042,7 +2116,10 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                     hi = relief[i] > hi ? relief[i] : hi;
                 }
                 if (!(modelTop > 0.0f && modelTop < 1.0f && hi - lo == 16))
+                {
                     relief = NULL;
+                    ModelFlatSkirts(builder, inst, x, y);
+                }
             }
             if (relief != NULL)
             {
@@ -2655,6 +2732,37 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
     }
 }
 
+/*
+ * DLX-26 (Wally's Journey PC, owner-approved 2026-11-13): BorderWaterLevel gives each belt column the level of the
+ * map's nearest edge cell, so two belt water cells side by side can stand a little apart, and with nothing between
+ * them the clear colour showed through as a thin light line across the sea (the wide view sees far more of the belt
+ * than the 3DS's). Closed as 3DS closes its other seams - "a low wall and never a gap onto the clear colour" - by a
+ * skirt of the cell's own drawing from its edge to the neighbour's. East and south only, so each edge once.
+ */
+static void BeltWaterSkirts(VoxelBuilder *b, int x, int y, float wx, float wz, float level, float shift,
+                            float u0, float v0, float u1, float v1)
+{
+    float nl, ns;
+
+    if (BorderAt(x + 1, y) && BorderWaterLevel(x + 1, y, &nl, &ns) && (nl != level || ns != shift))
+    {
+        float ex = wx + 1.0f;
+        VoxelBuilder_Quad(b,
+            &(VoxelVertex){ex, level, wz + shift, u0, v0, SHADE_TOP},
+            &(VoxelVertex){ex, level, wz + shift + 1.0f, u0, v1, SHADE_TOP},
+            &(VoxelVertex){ex, nl, wz + ns + 1.0f, u1, v1, SHADE_TOP},
+            &(VoxelVertex){ex, nl, wz + ns, u1, v0, SHADE_TOP});
+    }
+    if (BorderAt(x, y + 1) && BorderWaterLevel(x, y + 1, &nl, &ns) && (nl != level || ns != shift))
+    {
+        VoxelBuilder_Quad(b,
+            &(VoxelVertex){wx, level, wz + shift + 1.0f, u0, v0, SHADE_TOP},
+            &(VoxelVertex){wx + 1.0f, level, wz + shift + 1.0f, u1, v0, SHADE_TOP},
+            &(VoxelVertex){wx + 1.0f, nl, wz + 1.0f + ns, u1, v1, SHADE_TOP},
+            &(VoxelVertex){wx, nl, wz + 1.0f + ns, u0, v1, SHADE_TOP});
+    }
+}
+
 void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     float u0, v0, u1, v1;
@@ -2688,8 +2796,11 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             {
                 /* flat, and no faces: the map's own edge closes any step */
                 if (MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+                {
                     VoxelMesh_Top(builder, wx, wz + shift, level, 0.0f,
                                   u0, v0, u1, v1, SHADE_TOP);
+                    BeltWaterSkirts(builder, x, y, wx, wz, level, shift, u0, v0, u1, v1);
+                }
                 continue;
             }
             {

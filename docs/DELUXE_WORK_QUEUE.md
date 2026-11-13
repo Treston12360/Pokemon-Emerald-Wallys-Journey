@@ -11,6 +11,13 @@ Before starting any item:
    **Show the owner pictures and ask before any new wording or visual change.** Be direct; no guessing.
 4. When an item is done, tick it here (move it to "Done" with the date and commit) in the same push.
 
+**NO GUESSING, EVER (owner, 2026-11-13).** Every 3D fix must come from how Emerald 3DS does it: find the exact
+handling in its renderer (`3ds_port/src/3ds_video.c`, 13k lines, in the Emerald 3DS source the owner provided) and port
+that code. Gamma-only effects (lighting, glow) must use values read from Gamma's files
+(`docs/GAMMA_LIGHTING_VALUES.md`). If neither source covers it, ask the owner and show options; never invent a fix
+or a number. Earlier sessions rewrote much of the 3DS renderer instead of porting it; that is where the seams,
+water lines and other polish bugs came from.
+
 Status key: TODO = not started, WIP = started (see notes), ASK = needs the owner's answer first.
 
 ## Open items
@@ -320,6 +327,67 @@ no head, so the sign's top (drawn in the gym wall's cell above) stayed painted o
 row 9 bits 3..13, row 10 bits 2..14, rows 11..15 bits 1..15 (read from the 2D picture). Result: one standing
 sign like Dewford's (picture sent). The patched file is in the alpha10 package's voxel/ folder; whoever
 regenerates signposts.bin must re-apply it (or teach the sign generator about signs on a building's edge).
+
+### DLX-22 3D: thin seam lines between tiles (FIX IN - owner to check on his GPU, 2026-11-13 session 019khs4X)
+Not reproducible here (Mesa software GL is pixel-exact; tried 2560x1440 and walking). Ported Emerald 3DS's rule
+(ctr_voxel.c GPU vertex format + Quantise): static meshes' positions rounded to 1/512 tile from the whole-tile
+origin, half up, so shared edges land on exactly the same place (voxel_gl.c MeshSetQuantised). Our atlas already
+matches 3DS (1/32-texel v inset). Our coordinates are small (camera ~7-30 tiles from the map corner), so the 3DS
+anchor-matrix fix is not needed. If lines remain on the owner's GPU, next step: get a picture at the same spot.
+Black lines in Granite Cave and right outside it, and inside the Pokémon Center; light lines across water on Route 118 / sea routes. Pictures: 82dd3767, 38db5a80, ce8fe2a3, fd24e386, 7e0beffa (Pokémon Center), 1d0a3e73/945abb13 (Route 118 water). Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-23 Indoor glow too strong (Pokémon Center and houses) (TODO, owner report 2026-11-13)
+Bright bloom on walls/edges indoors. Owner: 'the glow in the pokemon center is too strong', 'weird glow inside of houses as well'. Pictures: b5ceb537, 0fd2c32c, 7e0beffa.
+WIP 2026-11-13 (session 019khs4X): cause = our interiors are drawn unlit at full colour, then the outdoor bloom
+makes them glow. Emerald 3DS turns bloom off indoors (ctr_voxel.c BaseLightFor). Gamma keeps the global bloom but
+lights interiors with six rect lights (values in GAMMA_LIGHTING_VALUES.md 'Interiors'). Owner approved the 3DS rule (2026-11-13): indoor bloom now 0 by default
+(WJPC_3D_INDOOR_BLOOM overrides). Full Gamma interior lighting (rect lights + glow maps) = DLX-23b, later. Next: read whether Gamma's sun reaches interiors + interior materials, then port. Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-24 3D: heal-machine Poké Balls drawn in the wrong spot (DONE 2026-11-13, session 019khs4X - owner to confirm)
+Fix ported from Emerald 3DS (0005-port-hooks.patch FieldEffect_IsMachineSprite; 3ds_video.c PlaceScreenObject;
+ctr_voxel.c CtrVoxel_ProjectPictureTile): the machine's balls/monitors (and the Hall of Fame monitors) are placed
+by hand around the player on the GBA picture, so in 3D they are projected to the machine's tile one tile up.
+Code: field_effect.c, wide_view.c BuildWideSprites, sdl2.c Pc_MachineSpriteSpot, voxel_gl.c
+Voxel3D_ProjectPictureTile (note: our field is drawn upside down, so NDC y points down).
+During healing the balls float above the wall instead of on the machine. Picture: 0fd2c32c. Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-25 3D: Dewford pop-in when switching routes (DONE 2026-11-13, session 019khs4X - owner to confirm)
+Cause: the belt (area past the maps) used the CURRENT map's 2x2 border (voxel3d_pc.c MapGridGetCameraBorderAt, as
+Emerald 3DS). Dewford/Route 106 border = trees (0x243), Route 107 = sea (0x170), so crossing swapped them.
+Owner chose 'nearest map's border': VoxelWorld_BorderMetatile now uses the nearest loaded map on the same tile
+sets (phase from that map's origin). Vertex caps: logged when full ('[3D] builder full'); 12 maps visited, none hit.
+Trees at the outside edges of the map change when crossing into the next route. Pictures: 72382506, f63f2bd1, d88db846, d32e7b46, ee23a2c6. Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-26 3D: water routes show grey squares and lines (WIP 2026-11-13, session 019khs4X)
+Grey squares: NOT a bug - the 2D game draws the same grey shallow-water tiles (Route 108 metatiles 0x1ad-0x1bf
+around rocks/ship). Lines: reproduced here (Route 108, warp 0 23 20 10, not GPU-only). Not Gamma/bloom/DOF, not
+models, not trees, not atlas bleeding (u inset tried: no change). Long lines at the top go away with the edge belt
+hidden (debug env WJPC_3D_SKIP=8; 1 terrain, 2 trees, 4 models); the brackets near rocks come from map terrain.
+Restoring 3DS's belt face rule did not remove them; nor did turning off span merging (T-junctions).
+FOUND (geometry dump, WJPC_DUMP_BELT/WJPC_DUMP_MVP + WJPC_3D_GDEBUG=5 grid view): the lines are the sky showing
+through steps between belt water cells. BorderWaterLevel (identical to Emerald 3DS) gives each belt column the level
+of the map's nearest edge cell (-0.625, -0.562, -0.5, -0.438 here), each cell flat, nothing closing the small step.
+3DS has the same steps; its narrow view rarely shows the belt. Not covered by the reference -> ASKED OWNER how to
+close them (3DS's own method for map/belt seams is a skirt wall: "the seam is a low wall and never a gap").
+OWNER CHOSE SKIRT WALLS. DONE for the belt (BeltWaterSkirts, voxel_mesh_builder.c): long sea lines gone.
+ROCK BRACKETS DONE 2026-11-13: a model's cell (boulder at sea) is laid flat at its centre while the sloped sea
+round it follows the relief; ModelFlatSkirts joins each edge to the neighbour's real edge (owner's skirt rule).
+Bright brackets gone; faint dark outlines of the tiny walls remain when seen edge-on.
+REGRESSION FIXED: commit 'Debug: WJPC_DUMP_TERRAIN' (same day) put a block between an if and its else in
+voxel_gl.c BuildFinish, so every map's terrain was freed after building (3D ground missing) - braces added.
+(Old note:) small light brackets beside some rocks at sea, inside the map. Dump (WJPC_DUMP_TERRAIN=23): Route 108
+cell (27,13) relief water at -0.562 (z shifted -1/16) beside cell (28,13) flat at -0.5. A water-to-water inner
+skirt (InnerWaterSkirts, tried, reverted) did not catch it - only 28 pairs flagged, none here, so (27,13) is likely
+not classified VOXEL_SHAPE_WATER - and it blanked the map's terrain (cause not found). Next: Classify (27,13),
+then close that step with the owner's skirt rule.
+Grey/transparent squares under rocks and other objects, and long light lines on the sea (Route 118 and others). Picture: fd24e386. Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-27 3D: the ship on the sea renders wrong / partly flat (CHECKED, owner report 2026-11-13)
+Picture: fa34c54f, fd24e386. Checked against the 3DS reference: our ship is the 3DS `abandoned_ship` model (hull 8 high, cabin 15, landing stage) exactly. 3DS VOXEL_STATUS.md itself rates Route 108 and the deck 🟧 ("Flat: the deck shows none of its levels" — raising them is unfinished terrain work there too). Changing it is new design: waiting on the owner. Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-28 3D: furniture and half walls flat inside houses (and odd lines) (CHECKED, owner report 2026-11-13)
+Checked against the 3DS reference: 3DS VOXEL_STATUS.md lists 46 interiors as "Walls only; the furniture is still flat on the floor" and Pokémon Center 1F "The glass table and stools still to review". Ours matches the reference's unfinished state. Raising furniture is new design: waiting on the owner.
+Chairs and tables look flat, half walls show lines. Pictures: f1550854 (Silph-style railings), 7e0beffa (house). Images in `docs/dlx_reports/2026-11-13/`.
 
 ## How to build and test (short)
 - Linux: `make -f Makefile.pc -j3`; Windows: `make -f Makefile.pc WIN=1`.
