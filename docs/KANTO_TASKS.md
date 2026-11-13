@@ -48,7 +48,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       (`Makefile.pc` has `.SECONDARY`): delete `build/pc-linux32/data/*.o`, `build/pc-win32/data/*.o` and the
       exe, run `make -f Makefile.pc WIN=0 linux-data -j8` on its own first (run under `-j16` from the Windows
       build it races), then the Windows build. Symptom of stale data: crash in `Overworld_GetMapHeaderByGroupAndId`.
-- [ ] **K4. Flags, vars and save space.** Kanto story flags must not collide with Emerald's (Crossroads moved
+- [ ] **K4. Flags, vars and save space.** WIP (Claude session 014PwRDj, 2026-11-13). Kanto story flags must not collide with Emerald's (Crossroads moved
       FRLG flags out of the trainer-flag range). NO save-size limits (Windows game, see AGENTS.md "NO LIMITS"):
       give Kanto its own save section, as big as needed. **Old GBA saves must still import.**
 - [ ] **K5. Kanto scripts, specials, object events, heal locations, wild encounters, trainers work.**
