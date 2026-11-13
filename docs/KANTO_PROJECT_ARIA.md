@@ -258,8 +258,16 @@ No tea, no item gates.
   cause of the "anomalies". No cold open that shows it.
 - **Travel:** Kanto opens after the first Champion Wally win. The player **can** go back to Hoenn, but
   everything that would break the level curve — Champion defenses and the rest of that ladder — stays
-  locked until Kanto's story is beaten. (Gym Leader rematch tier 3, the final rival and Steven are in the
-  simulated pre-Kanto curve already; owner to confirm whether they stay open.)
+  locked until Kanto's story is beaten.
+- **Hoenn post-game before Kanto (owner, 2026-11-13):**
+  - May/Brendan's post-game lab battle is **removed**; they appear only as Champion-defense challengers.
+    (The Elite Four rematch unlock currently requires that fight — drop the requirement.)
+  - **Steven is lowered to about Wally's strength** (mid-60s) and stays open.
+  - Gym Leader rematches stay open; they already give a quarter EXP (anti-farming). Owner to confirm
+    quarter vs 5%.
+  - **Repeat Elite Four runs after the first win give 5% EXP**, like Gabby & Ty. Nothing can be farmed.
+  - Re-run `tools/exp_curve_full.py` with these rules (it currently counts rematches at full EXP, so the
+    real pre-Kanto level is a little under 60).
 - **Research item: Pokémon Crossroads-style travel.** Owner wants to look into flying between regions with
   the overworld visible. Crossroads is a GBA Emerald hack on pokeemerald-expansion, built on StrangeQuark94's
   multi-region pokeemerald fork. Its public thread describes region flags, region-aware Fly and seamless
