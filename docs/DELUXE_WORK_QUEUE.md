@@ -11,6 +11,13 @@ Before starting any item:
    **Show the owner pictures and ask before any new wording or visual change.** Be direct; no guessing.
 4. When an item is done, tick it here (move it to "Done" with the date and commit) in the same push.
 
+**NO GUESSING, EVER (owner, 2026-11-13).** Every 3D fix must come from how Emerald 3DS does it: find the exact
+handling in its renderer (`3ds_port/src/3ds_video.c`, 13k lines, in the Emerald 3DS source the owner provided) and port
+that code. Gamma-only effects (lighting, glow) must use values read from Gamma's files
+(`docs/GAMMA_LIGHTING_VALUES.md`). If neither source covers it, ask the owner and show options; never invent a fix
+or a number. Earlier sessions rewrote much of the 3DS renderer instead of porting it; that is where the seams,
+water lines and other polish bugs came from.
+
 Status key: TODO = not started, WIP = started (see notes), ASK = needs the owner's answer first.
 
 ## Open items
