@@ -40,10 +40,17 @@ The 3D model comes from Emerald 3DS's generator (`gym()` in `voxel_building_spec
 vs `warp 0 11 ...`) and to Emerald 3DS screenshots; find why Lavaridge's is drawn flatter (wrong model
 picked, art differs from vanilla so the model did not match, or the roof is drawn as ground).
 
-### DLX-3 Smooth battles and menus (TODO, approved "option 1")
+### DLX-3 Smooth battles and menus (DONE 2026-11-13, session 019khs4X)
 In-between frames so battles and menus feel high frame rate, like the overworld's smooth mode.
+Done (fdf25c34): sdl2.c end of VDraw. With Frame rate 120+ (Settings), GBA-screen frames (battles, menus,
+also the 3D-battle overlay) get (rate/60 - 1) in-between pictures: sprites in the same OAM slot with the same
+picture/shape/size that moved 1..16 px, and BG0-3 H/V scroll that moved 1..16 px, are put part of the way and the
+frame is redrawn with gba_easy_draw.c DrawFramePlain (no interrupts/DMA); DrawScreen(t) shows them before the
+frame. Frames whose registers change between lines (HBlank/VCount effects, HBlank DMA: gPcFrameHadLineEffects,
+e.g. the battle intro slide) are left alone. Test aids: WJPC_TEST_INTERP=N (force N steps), WJPC_WINSHOT_T=t,
+WJPC_NO_INTERP=1. Checked: send-out sparkles, party balls, healthbox bob drawn half way (pictures).
 
-### DLX-4 Battle transitions on the zoomed-out 2D view (TODO - OWNER SAYS: GO AHEAD AND FINISH IT)
+### DLX-4 Battle transitions on the zoomed-out 2D view (DONE 2026-11-13, session 019khs4X; owner sent pictures + clip)
 Owner (2026-11-12): any Claude may finish DLX-4 without asking first; send him pictures/a short clip when done.
 Problem: in 2D with the zoomed-out "wide view", when a trainer/wild battle starts the screen snaps back to the
 small GBA picture and plays the transition there. Wanted: the transition plays over the wide field instead.
@@ -64,6 +71,12 @@ to make (pick what looks right, show the owner): (a) overlay only over the GBA-s
 extend the wipe's black/fade outward to the screen edges, or (b) scale the overlay to cover the whole screen
 like 3D. Wavy/ripple transitions (they scroll BG lines) do not distort the wide field yet, in 3D or 2D - nice
 to have: apply the per-line BG offsets the transition writes to the wide field rows.
+Done (5b... see git log "DLX-4"): option (b). sdl2.c: s2DTransition = no 3D, last frame was the field, now
+not field and WideView_BattleTransitionOnField(). The map texture keeps the last field picture (sLastField /
+sFieldImage); palette fades/flashes of the transition are carried to it by a per-channel line fitted from the field
+picture to the GBA picture's map pixels; the overlay (as 3D) is drawn cover-scaled on top; the UI layer is hidden.
+WJPC_OLD_2D_TRANSITION=1 = old behaviour. Note: test scripts must set WJPC_TEST_WINDOW=1 to see it (otherwise
+frames between winshots are not drawn and there is no "last field picture").
 Test: save `/home/claude/keep/owner_brawly.sav`-style save (any save), script `trainerbattle 774` (Brawly) or
 walk into grass; `winshot` frames during the transition (`WJPC_SCRIPT`, see "How to build and test").
 
@@ -93,7 +106,7 @@ Make one test picture, owner decides.
 2026-11-12: mock-up sent (flat now / even-thickness blocks / rounded blocks, game camera and turned 35 degrees;
 player, Hiker, Lass, Wally). Waiting for the owner to pick one or say no.
 
-### DLX-9 Lighting like Gamma Emerald (WIP - OWNER SAYS: GO AHEAD AND FINISH IT)
+### DLX-9 Lighting like Gamma Emerald (DONE except lamps, 2026-11-13, session 019khs4X)
 Owner (2026-11-12): any Claude may finish DLX-9; send him before/after pictures (2D and 3D) when done.
 Tools and data to redo any reading: `tools/gamma_lighting/README.md`; cloud textures `docs/gamma/gamma_clouds.bin`
 (copy into the game's `voxel/` folder).
@@ -125,8 +138,27 @@ Open:
   Same on/off switch as 3D (`WJPC_3D_GAMMALIGHT`, later a menu option - ask the owner for wording).
 - Not yet built: light rays (god-ray planes, math in the doc), dark caves/gyms trigger (colour gain 0.49,
   vignette 3/2), lamps. Show the owner pictures before turning anything on by default.
+DONE 2026-11-13 (session 019khs4X, pictures sent):
+- 3D streaks: cause = cloud shadow looked up at (x,z) ignoring height, so walls/roofs repeated one ground sample
+  upward. Fix: project along the sun (a directional light function is in light space) - voxel_gl.c clouds().
+  Also: no gamma_clouds.bin -> a black 1x1 texture is bound (it used to read whatever was on unit 6/7).
+  Debug aids: WJPC_3D_GDEBUG=2 (vShade), 3 (normals), 4 (cloud term); WJPC_3D_NODOF=1.
+- 2D: src/platform/gamma2d.c (+ include/platform/gamma2d.h), called from sdl2.c on the field picture when
+  WJPC_3D_GAMMALIGHT=1 and 3D is off. Same light as 3D seen from above, UE bloom pyramid (half size, 6 stages,
+  31/3 sigma per level, tints), exposure 2.06, AP1 saturation 1.25, film curve via a 48^3 table. Threaded (SDL
+  threads, up to 3 workers); ~6 ms/frame at 426x240 on a slow 2-core VM. WJPC_GAMMA2D_TIME=file logs timing.
+- Vignette: read from Gamma's compiled tonemap shaders (global shader archive, VS 3670_f0 + PS 3584_f3):
+  p = (sx, sy*H/W) * sqrt2/sqrt(1+(H/W)^2), mask = 1/(|p*I|^2+1)^2. Engine default I = 0.4 (FPostProcessSettings
+  ctor stores 0.4 at offset 0x5C0 = VignetteIntensity, offset read from its reflection params in the exe).
+  Applied in 2D and 3D. Unverified link: that the C++ passes the setting to the shader unscaled.
+- Caves: BP_CaveLightTrigger (only placed in Granite Cave) and BP_BrawlyLightTrigger: gain 0.49, vignette 3 / 2.
+  WideView_GammaRoom(): Granite Cave 1F/B1F/B2F/Steven's room = 1, Dewford gym = 2. 2D and 3D.
+- Light rays: Gamma has the material but NO ray actors placed in any of its maps (Littleroot, Dewford, the
+  persistent map were read) - nothing to copy.
+- NOT DONE: lamps (Dewford street lamps/campfire point lights: positions in MAP_Dewford, BP_StreetLamp values in
+  the doc). Needs UE point-light units -> our scale worked out exactly before building.
 
-### DLX-20 3D: black person-shaped silhouette on the ground in Littleroot (NOT REPRODUCED - session 014PwRDj, 2026-11-12)
+### DLX-20 3D: black person-shaped silhouette on the ground in Littleroot (RESOLVED - test-script artifact, see below)
 
 **RESOLVED 2026-11-13: not a game bug.** The silhouette was the player, drawn black because the test script warped while still on the title screen, so the save never loaded and the player graphics were never set up. It shows in plain 2D too. Fix for test scripts: `wait 500`, `press START 5`, `wait 200`, `press A 5`, `wait 200`, `press A 5`, `wait 400`, then `warp`. With that, the player draws correctly in 2D and 3D.
 Tried in Wine with the 3D data from vanilla Emerald: late-game save (go.sav) and an early-game Littleroot save
@@ -139,7 +171,7 @@ Seen in every 3D screenshot of Littleroot north of the player's house (before an
 all-black sprite-shaped card standing on the grass. Probably a person/object whose sprite frame or palette
 is not loaded for the 3D card. Find which object event it is and fix.
 
-### DLX-21 Next owner test package (Done 2026-11-13: alpha9-3d sent - exe, SDL2 DLLs, regenerated voxel/ with gamma_clouds.bin, bats: 3D, 3D+Gamma lighting, 3D+Gamma+chunky test)
+### DLX-21 Next owner test package (Done 2026-11-13: alpha10-3d sent after DLX-3/4/9/19; alpha9-3d sent - exe, SDL2 DLLs, regenerated voxel/ with gamma_clouds.bin, bats: 3D, 3D+Gamma lighting, 3D+Gamma+chunky test)
 Last package sent was `alpha8c-3d-test.zip` (exe + DLLs + `voxel/` + "Play in 3D.bat"). It does NOT have the
 Lavaridge gym data (DLX-1), the Hex fix, DLX-7, or the lighting. Build a new Windows package with
 `make -f Makefile.pc WIN=1`, regenerated voxel data (DLX-1 note), `gamma_clouds.bin`, and a second .bat with
@@ -245,7 +277,7 @@ DLX-7). People on neighbouring maps should already be drawn.
   WJPC_3D_BUILD_MS=N sets the budget; WJPC_3D_OLD_CROSSING=1 the old snap; WJPC_TEST_NO_GHOSTS=1 no stand-ins.
 - GBA ROM unchanged (PC code only).
 
-### DLX-19 3D: Lavaridge gym sign folded in half; check the gym door (PART DONE - session 014PwRDj, 2026-11-12)
+### DLX-19 3D: Lavaridge gym sign folded in half; check the gym door (DONE 2026-11-13, session 019khs4X)
 The new gym model (DLX-1) shows the sign bent. The model is visual only, but confirm in game that
 the door still leads into Lavaridge's gym.
 - Door: checked in 3D (Wine): walking up from (5,17) enters Lavaridge Gym 1F (Flannery). OK.
@@ -257,6 +289,12 @@ the door still leads into Lavaridge's gym.
   drawn (shadows only) and magenta faces appear - the generated buildings.bin does not draw with our loader.
   Found on the way (committed): MAX_PAGES 512 -> 1024 (our-tree data has 564 pages); season reload re-uploads
   building pages into the same texture (meshes keep the handle).
+
+DLX-19 sign fix (data, not code): the sign record at Lavaridge (layout 13) cell (7,15) in voxel/signposts.bin had
+no head, so the sign's top (drawn in the gym wall's cell above) stayed painted on the wall. Patched its head mask:
+row 9 bits 3..13, row 10 bits 2..14, rows 11..15 bits 1..15 (read from the 2D picture). Result: one standing
+sign like Dewford's (picture sent). The patched file is in the alpha10 package's voxel/ folder; whoever
+regenerates signposts.bin must re-apply it (or teach the sign generator about signs on a building's edge).
 
 ## How to build and test (short)
 - Linux: `make -f Makefile.pc -j3`; Windows: `make -f Makefile.pc WIN=1`.
