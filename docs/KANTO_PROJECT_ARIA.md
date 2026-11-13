@@ -18,7 +18,7 @@ a reveal or a choice, not just a gym.
 | Villain | **Dr. Elias Varnell.** His daughter **Aria** was killed as a bystander in a Rocket attack. |
 | The machine | **Project ARIA** — "Anomalous Rift Integration Array". Named after his daughter; the player only learns this at the reveal. |
 | Legendaries | Hoopa (taken first), Dialga, Palkia, Giratina, held in containment machines. |
-| Varnell's ending | **Lost to the rift.** Giratina drags him into the Distortion World. Tragic, not redeemed. |
+| Varnell's ending | **Lost to the rift, by choice.** He glimpses Aria in Giratina's Distortion World and jumps in. Whether he survives is left **ambiguous.** Not redeemed. |
 | Wally | **Small cameos only.** He sees the player off at the Hoenn harbour: "show Kanto what Hoenn is made of" — the reason the player takes the Kanto gym challenge. |
 | Blue | Former Champion, now the 8th leader (Viridian). Part of the investigation alongside Oak (his grandfather) and Varnell (the man who rebuilt him). Cold to the player at first — see §2b. Respect earned slowly. Not a jerk, no quippy banter. |
 | Kanto League | HGSS lineup: Will, Koga, Bruno, Karen; **Lance** is Kanto Champion (Koga's move to the E4 is why Janine runs Fuchsia). |
@@ -50,13 +50,15 @@ a reveal or a choice, not just a gym.
 - The holding bay terminal: "Good night, Aria."
 - Mr. Fuji at Pokémon Tower mentions a grieving father who visits a grave "with no Pokémon name on it."
 
-**Mid-game photo (owner, 2026-11-13):** the player finds a photo of a little girl holding a Clefairy.
-Sharp players will work out she's his daughter and the Lavender Clefairy was hers — but that only tells
-them he's grieving, not what he's building. **The early photo carries no name**, so it can't be linked to
-"Project ARIA" ahead of time (owner may override).
+**Mid-game photo + the Clefairy (owner, 2026-11-13):** the player finds an unlabelled photo of a little
+girl holding a Clefairy. In Lavender Tower the Clefairy echo calls out "Aria". Only players who put the
+photo and the Clefairy together realise Aria is his daughter — most won't.
+**Built-in misdirection:** even players who do will assume he simply named the project after her out of
+love, to honour her while fixing the anomalies. Nothing tells them he's trying to *bring her back*. Their
+"solved it" guess hides the real twist.
 
-**Reveal:** her name — on the back of the photo or in his journal: *Aria, age 7*. The player realises the
-project was named after her the whole time, and that the machine exists to bring her back.
+**Reveal:** the machine exists to bring her back, and he never cared what it cost. For players who missed
+the clues, it's also the moment they learn Aria was his daughter and the project carried her name all along.
 
 ## 2b. Blue and Varnell
 
@@ -99,7 +101,7 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 1 | **The Professor's friend** | Oak, in Pallet/Viridian, introduces Varnell — warm, funny, grateful for a Champion's help. First assignment: survey Mt. Moon. Blue appears, refuses to battle, tells you to go home. | — |
 | 2 | **Mt. Moon** | The "meteorite anomaly" is the first tear. Closing it with Varnell's device feels heroic. (It's really feeding ARIA.) Fossils kept. | Brock (Pewter) |
 | 3 | **Cerulean** | A displaced person, pulled from another time, lashes out. First sign the tears hurt people. | Misty |
-| 4 | **Lavender** | The ghost: an echo of a lost **Clefairy** searching the tower and crying (Aria's Pokémon; the player doesn't know). Not Marowak. Varnell's "calibration lens" assignment (= Silph Scope) reveals it. Mr. Fuji's clue about the grieving father. Poké Flute. | — |
+| 4 | **Lavender** | The ghost: an echo of a lost **Clefairy** searching the tower and crying out **"Aria"** (Aria's Pokémon; the player doesn't know who Aria is). Not Marowak. Varnell's "calibration lens" assignment (= Silph Scope) reveals it. Mr. Fuji's clue about the grieving father. Poké Flute. | — |
 | 5 | **Celadon / Snorlax** | Snorlax ×2 woken with the flute. Varnell's staff start acting cagey. | Erika |
 | 6 | **Saffron quarantine** | An ARIA containment machine malfunctions inside Silph Co.; the building warps (Silph's teleport maze). City sealed by Jenny and Silph security until you're cleared. You clear it; Master Ball. **Blue turns** — he saw the machine's markings and starts suspecting Varnell. | Sabrina |
 | 7 | **Fuchsia** | Blue shares what he's found, coldly. Safari side quest. | Janine |
@@ -108,7 +110,7 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 10 | **Cinnabar** | Eruption warnings; the island is closed. The Mansion's old diaries mention spatial experiments. Varnell's people evacuate the last machine part. | — |
 | 11 | **Viridian** | Blue's gym opens. The battle is the end of his arc: he's finally on your side. | Blue |
 | 12 | **Victory Road / Elite Four** | Kanto League, **HGSS lineup: Will, Koga, Bruno, Karen, then Champion Lance.** Badge guards check Kanto badges only. | E4 + Lance |
-| 13 | **The ARIA chamber** | Holding bay (mockups exist): Dialga, Palkia, Giratina sealed. ARIA fires; the room goes Red Alert. Varnell's final battle. Giratina breaks containment and **drags Varnell into the rift.** | Varnell |
+| 13 | **The ARIA chamber** | Holding bay (mockups exist): Dialga, Palkia, Giratina sealed. ARIA fires; the room goes Red Alert. Varnell's final battle. Giratina breaks containment and tears open the Distortion World; Varnell **sees Aria inside for a moment and jumps in.** The rift closes. His fate is never confirmed. | Varnell |
 | 14 | **Aftermath** | Oak's grief. Blue's thanks. A last echo of a little girl's voice in the empty chamber. Ship home to Hoenn. | — |
 
 Open: which chapter Hoopa is first taken in (suggest before ch. 1, shown in a cold open).
