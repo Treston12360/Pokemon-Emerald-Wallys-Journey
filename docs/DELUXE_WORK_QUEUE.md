@@ -127,6 +127,8 @@ Open:
   vignette 3/2), lamps. Show the owner pictures before turning anything on by default.
 
 ### DLX-20 3D: black person-shaped silhouette on the ground in Littleroot (NOT REPRODUCED - session 014PwRDj, 2026-11-12)
+
+**RESOLVED 2026-11-13: not a game bug.** The silhouette was the player, drawn black because the test script warped while still on the title screen, so the save never loaded and the player graphics were never set up. It shows in plain 2D too. Fix for test scripts: `wait 500`, `press START 5`, `wait 200`, `press A 5`, `wait 200`, `press A 5`, `wait 400`, then `warp`. With that, the player draws correctly in 2D and 3D.
 Tried in Wine with the 3D data from vanilla Emerald: late-game save (go.sav) and an early-game Littleroot save
 (trucks, Mom, Birch; wj_testfw scenario MAP_LITTLEROOT_TOWN 7,10 + FLAG_SYS_POKEMON_GET + FLAG_SYS_POKEDEX_GET),
 2D and 3D, around and north of the player's house: no black figure. Most likely it is in the data generated from
