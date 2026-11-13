@@ -365,6 +365,24 @@ static bool TestStep(void)
             }
             continue;
         }
+        if (!strcmp(cmd, "state"))
+        {
+            // state WHAT ID [VALUE] (test aid, Project ARIA K4): read or write game state; state.log gets what it
+            // is after. WHAT: var, flag, trainer (a trainer's "defeated" flag). No VALUE: only read.
+            // "state save 0": save the game as the Save menu does.
+            extern int WJPC_TestState(const char *what, int id, int set, int value);
+            char what[32] = "";
+            int id = 0, value = 0;
+            int got = sscanf(line, "%*s %31s %i %i", what, &id, &value);
+            FILE *f = fopen("state.log", "a"); // (a Windows program has no console to print to)
+            int now = WJPC_TestState(what, id, got >= 3, value);
+            if (f != NULL)
+            {
+                fprintf(f, "state %s 0x%X = %d\n", what, id, now);
+                fclose(f);
+            }
+            continue;
+        }
         if (!strcmp(cmd, "battlerhp"))
         {
             // battlerhp BATTLER HP (test aid): the HP of a Pokemon already in battle (1 = the foe).

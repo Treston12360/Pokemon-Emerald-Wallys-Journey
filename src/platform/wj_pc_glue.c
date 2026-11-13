@@ -74,6 +74,39 @@ void BitUnPack(const void *src, void *dest, const void *paramsVoid)
 
 // Test aid (sdl2.c "enemymoves"): a battler's live moves, full PP.
 #include "battle.h"
+#include "event_data.h"
+#include "battle_setup.h"
+#include "save.h"
+// Test aid (sdl2.c "state"): game state read or written from a test script.
+int WJPC_TestState(const char *what, int id, int set, int value)
+{
+    if (!strcmp(what, "var"))
+    {
+        if (set)
+            VarSet(id, value);
+        return VarGet(id);
+    }
+    if (!strcmp(what, "flag"))
+    {
+        if (set && value)
+            FlagSet(id);
+        else if (set)
+            FlagClear(id);
+        return FlagGet(id);
+    }
+    if (!strcmp(what, "trainer"))
+    {
+        if (set && value)
+            SetTrainerFlag(id);
+        else if (set)
+            ClearTrainerFlag(id);
+        return HasTrainerBeenFought(id);
+    }
+    if (!strcmp(what, "save"))
+        return TrySavingData(SAVE_NORMAL);
+    return -1;
+}
+
 void WJPC_TestSetBattlerHp(int battler, int hp)
 {
     if (battler >= 0 && battler < MAX_BATTLERS_COUNT)

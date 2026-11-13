@@ -360,6 +360,8 @@ struct SaveBlockPC
     u32 size;
 #if !IS_FRLG
     u8 kantoFlags[KANTO_FLAGS_COUNT / 8]; // Project ARIA: FRLG flags, KANTO_FLAGS_START..
+    u16 kantoVars[KANTO_VARS_COUNT];      // K4: FRLG vars, KANTO_VARS_START.. (constants/vars_frlg.h)
+    u8 kantoTrainerFlags[KANTO_TRAINERS_COUNT / 8]; // K4: Kanto trainers defeated (constants/opponents_frlg.h)
 #endif
 };
 extern struct SaveBlockPC gSaveBlockPC;

@@ -1124,10 +1124,15 @@ static u8 *WJ_ExtraTrainerByte(u16 trainerId, u8 *bit)
 static bool32 TrainerFlagGet(u16 trainerId)
 {
 #if !IS_FRLG
+    if (trainerId >= KANTO_TRAINERS_START) // Project ARIA (K4): Kanto's are in the PC save block
+    {
+        u32 n = trainerId - KANTO_TRAINERS_START;
+        return n < KANTO_TRAINERS_COUNT && (gSaveBlockPC.kantoTrainerFlags[n / 8] & (1 << (n % 8))) != 0;
+    }
     if (trainerId >= WJ_EXTRA_TRAINERS_START)
     {
         u8 bit;
-        if (trainerId >= TRAINERS_COUNT)
+        if (trainerId >= TRAINERS_COUNT_EMERALD)
             return FALSE;
         return (*WJ_ExtraTrainerByte(trainerId, &bit) & bit) != 0;
     }
@@ -1138,10 +1143,21 @@ static bool32 TrainerFlagGet(u16 trainerId)
 static void TrainerFlagWrite(u16 trainerId, bool32 set)
 {
 #if !IS_FRLG
+    if (trainerId >= KANTO_TRAINERS_START) // Project ARIA (K4)
+    {
+        u32 n = trainerId - KANTO_TRAINERS_START;
+        if (n >= KANTO_TRAINERS_COUNT)
+            return;
+        if (set)
+            gSaveBlockPC.kantoTrainerFlags[n / 8] |= 1 << (n % 8);
+        else
+            gSaveBlockPC.kantoTrainerFlags[n / 8] &= ~(1 << (n % 8));
+        return;
+    }
     if (trainerId >= WJ_EXTRA_TRAINERS_START)
     {
         u8 bit, *byte;
-        if (trainerId >= TRAINERS_COUNT)
+        if (trainerId >= TRAINERS_COUNT_EMERALD)
             return;
         byte = WJ_ExtraTrainerByte(trainerId, &bit);
         if (set)

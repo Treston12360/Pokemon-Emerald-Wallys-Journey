@@ -48,9 +48,23 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       (`Makefile.pc` has `.SECONDARY`): delete `build/pc-linux32/data/*.o`, `build/pc-win32/data/*.o` and the
       exe, run `make -f Makefile.pc WIN=0 linux-data -j8` on its own first (run under `-j16` from the Windows
       build it races), then the Windows build. Symptom of stale data: crash in `Overworld_GetMapHeaderByGroupAndId`.
-- [ ] **K4. Flags, vars and save space.** WIP (Claude session 014PwRDj, 2026-11-13). Kanto story flags must not collide with Emerald's (Crossroads moved
-      FRLG flags out of the trainer-flag range). NO save-size limits (Windows game, see AGENTS.md "NO LIMITS"):
-      give Kanto its own save section, as big as needed. **Old GBA saves must still import.**
+- [x] **K4. Flags, vars and save space.** Done 2026-11-13 (Claude session 014PwRDj; flags were K1's). Kanto has its
+      own numbers and its own room in the PC save block (`struct SaveBlockPC`, `include/global.h`; grows at the end):
+      - **Flags** `KANTO_FLAGS_START` 0x1000 (768) -> `kantoFlags` (K1).
+      - **Vars**: FireRed's vars sat on Emerald's numbers (both from 0x4020). The 211 FireRed-only ones are now
+        `KANTO_VAR(0x40NN)` = 0x5000 + NN (`include/constants/vars_frlg.h`) -> `kantoVars[256]`
+        (`GetVarPointer`); names Emerald also has stay Emerald's var. The script macros that tell a var from a
+        number (`setvar` warning, `copyvar`, `compare`, `asm/macros/event.inc`) know the Kanto range.
+      - **Trainers**: FireRed's ids 1-623 were Hoenn trainers' ids. Now `KANTO_TRAINER(n)` = 2048 + n
+        (`include/constants/opponents_frlg.h`), `TRAINERS_COUNT` 2816, both `.party` files in `gTrainers`
+        (`src/data.c`), "defeated" flags -> `kantoTrainerFlags` (`battle_setup.c` TrainerFlagGet/Write).
+      - These constants pass through the script assembler's macros: **no spaces inside them**, and script
+        arguments need their commas (one FRLG script had none).
+      - Checked with the new test-script command `state WHAT ID [VALUE]` (var / flag / trainer / save; answers
+        in `state.log`): an old GBA-size save loads with Kanto all clear; writing Kanto var 0x5050, flag 0x1003
+        and trainer 2362 leaves Emerald's var 0x4050 and trainer 314 alone; after saving (file grows by the PC
+        block) and loading again all of them are still set. `trainerbattle 2362` is Leader Brock with his
+        FireRed team.
 - [ ] **K5. Kanto scripts, specials, object events, heal locations, wild encounters, trainers work.**
 - [ ] **K6. Region-aware Fly and region map** (Fly map can switch Hoenn/Kanto; normal Fly animation; no
       key item — owner decision).

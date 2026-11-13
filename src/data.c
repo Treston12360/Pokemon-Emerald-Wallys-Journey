@@ -228,14 +228,20 @@ const union AnimCmd *const gAnims_Trainer[] ={
 };
 
 #if !TESTING
+// Project ARIA (K4): Hoenn's trainers and Kanto's (at KANTO_TRAINERS_START) in one table. Both files
+// start with a TRAINER_NONE placeholder; Hoenn's, included last, is the one kept.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverride-init"
 const struct Trainer gTrainers[DIFFICULTY_COUNT][TRAINERS_COUNT] =
 {
 #if IS_FRLG
 #include "data/trainers_frlg.h"
 #else
+#include "data/trainers_frlg.h"
 #include "data/trainers.h"
 #endif
 };
+#pragma GCC diagnostic pop
 #endif
 
 #include "data/trainer_approach_music.h"

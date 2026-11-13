@@ -164,6 +164,12 @@ u16 *GetVarPointer(u16 id)
 {
     if (id < VARS_START)
         return NULL;
+#if !IS_FRLG
+    else if (id >= KANTO_VARS_START && id <= KANTO_VARS_END)
+        return &gSaveBlockPC.kantoVars[id - KANTO_VARS_START]; // Project ARIA (K4)
+    else if (id > VARS_END && id < SPECIAL_VARS_START)
+        return NULL; // no such var (was a write past the end of the save's var array)
+#endif
     else if (id < SPECIAL_VARS_START)
         return &gSaveBlock1Ptr->vars[id - VARS_START];
 #if TESTING

@@ -892,8 +892,12 @@
 #define TRAINERS_COUNT                      TRAINERS_COUNT_FRLG
 #define MAX_TRAINERS_COUNT                  MAX_TRAINERS_COUNT_FRLG
 #else
-#define TRAINERS_COUNT                      TRAINERS_COUNT_EMERALD
-#define MAX_TRAINERS_COUNT                  MAX_TRAINERS_COUNT_EMERALD
+// Project ARIA (K4): Hoenn's trainers, then Kanto's (opponents_frlg.h KANTO_TRAINERS_START).
+#if KANTO_TRAINERS_START < TRAINERS_COUNT_EMERALD
+#error "Kanto trainer ids must come after Hoenn's"
+#endif
+#define TRAINERS_COUNT                      (KANTO_TRAINERS_START + KANTO_TRAINERS_COUNT)
+#define MAX_TRAINERS_COUNT                  TRAINERS_COUNT
 #endif
 #define TRAINER_PARTNER(partner)           (MAX_TRAINERS_COUNT + partner)
 
