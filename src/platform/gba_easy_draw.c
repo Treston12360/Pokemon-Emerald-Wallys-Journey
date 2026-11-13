@@ -910,6 +910,9 @@ uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count)
 // DLX-3: set when this frame's picture changed from line to line (HBlank/VCount interrupts or HBlank
 // DMA): such a frame cannot be redrawn from the end-of-frame registers, so it gets no in-between frames.
 bool gPcFrameHadLineEffects;
+// Each line's BG1 scroll as the line was drawn (the battle transitions swirl, slice and ripple the field by
+// moving its layers line by line; the 3D world is moved the same way - Emerald 3DS's TransitionBandAt).
+s16 gPcLineScrollX[DISPLAY_HEIGHT], gPcLineScrollY[DISPLAY_HEIGHT];
 
 // The display registers that shape the picture (DISPCNT and BG0CNT..BLDY, not VCOUNT/DISPSTAT).
 static u8 sLine0Regs[0x56];
@@ -1002,6 +1005,8 @@ void DrawFrame(uint16_t *pixels)
         sFadeRow = &gPcPixelFade[i * DISPLAY_WIDTH];
         memset(sSourceRow, 0, DISPLAY_WIDTH);
         memset(sFadeRow, 0, DISPLAY_WIDTH);
+        gPcLineScrollX[i] = (s16)REG_BG1HOFS;
+        gPcLineScrollY[i] = (s16)REG_BG1VOFS;
         DrawScanline(&pixels[i * DISPLAY_WIDTH], i);
         if (!gPcFrameHadLineEffects && LineEffectsOn())
             gPcFrameHadLineEffects = true;

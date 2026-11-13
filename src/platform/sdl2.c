@@ -726,7 +726,40 @@ static void DrawScene(double t, int outputWidth, int outputHeight)
             w = outputHeight * DISPLAY_WIDTH / DISPLAY_HEIGHT;
         }
         SDL_Rect cover = {(outputWidth - w) / 2, (outputHeight - h) / 2, w, h};
-        SDL_RenderCopy(sdlRenderer, sdl3DTexture, NULL, &whole);
+        {
+            // Emerald 3DS (RenderTransition / TransitionBandAt): the world moved line by line as the
+            // transition moves the field's layers (BG1's scroll against line 0's), in bands of lines that
+            // move alike; its brightness is the overlay's. Where a band moves off, the clear (black) shows.
+            extern s16 gPcLineScrollX[], gPcLineScrollY[];
+            int tw = 0, th = 0;
+            float k = (float)w / DISPLAY_WIDTH;
+            SDL_QueryTexture(sdl3DTexture, NULL, NULL, &tw, &th);
+            SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 255);
+            SDL_RenderFillRect(sdlRenderer, &whole);
+            for (int g = 0; g < DISPLAY_HEIGHT;)
+            {
+                int dx = (s16)(gPcLineScrollX[g] - gPcLineScrollX[0]), dy = (s16)(gPcLineScrollY[g] - gPcLineScrollY[0]);
+                int e = g + 1;
+                while (e < DISPLAY_HEIGHT && (s16)(gPcLineScrollX[e] - gPcLineScrollX[0]) == dx
+                       && (s16)(gPcLineScrollY[e] - gPcLineScrollY[0]) == dy)
+                    e++;
+                {
+                    int y0 = cover.y + (int)floorf(g * k), y1 = cover.y + (int)floorf(e * k);
+                    if (g == 0) y0 = 0;
+                    if (e == DISPLAY_HEIGHT) y1 = outputHeight;
+                    // the line shows the field from (x + dx, y + dy): the picture moves the other way
+                    SDL_Rect src = {(int)(dx * k), y0 + (int)(dy * k), outputWidth, y1 - y0};
+                    SDL_Rect dst = {0, y0, outputWidth, y1 - y0};
+                    if (src.x < 0) { dst.x -= src.x; dst.w += src.x; src.w += src.x; src.x = 0; }
+                    if (src.x + src.w > tw) { src.w = tw - src.x; dst.w = src.w; }
+                    if (src.y < 0) { dst.y -= src.y; dst.h += src.y; src.h += src.y; src.y = 0; }
+                    if (src.y + src.h > th) { src.h = th - src.y; dst.h = src.h; }
+                    if (src.w > 0 && src.h > 0)
+                        SDL_RenderCopy(sdlRenderer, sdl3DTexture, &src, &dst);
+                }
+                g = e;
+            }
+        }
         if (sdl3DTransTexture != NULL)
         {
             SDL_SetTextureScaleMode(sdl3DTransTexture, SDL_ScaleModeNearest);
