@@ -156,13 +156,13 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 6 | **Saffron quarantine** | An ARIA containment machine malfunctions inside Silph Co.; the building warps (Silph's teleport maze). City sealed by Jenny and Silph security until you're cleared. You clear it; Master Ball. **Blue turns** — he saw the machine's markings and starts suspecting Varnell. | Sabrina |
 | 7 | **Fuchsia** | Blue shares what he's found, coldly. Safari side quest. | Janine |
 | 8 | **Seafoam** | Boulder/current puzzle. Blaine's temporary gym is here because Cinnabar's volcano is acting up (the tears). | Blaine (in Seafoam) |
-| 8b | **Rocket Hideout (late game)** | Sealed under the Game Corner by the League; opened with the player's badge clearance. Varnell sends you for Rocket's old research on the anomalies. Clues: Rocket's logs show **they stole his research** and were in Pokémon Tower that day because of his readings; a raid report mentions "a civilian child in the tower" (no name); a recent gap where tower-raid files were taken (players assume a thief — it was Varnell's people). Ties his grief to guilt without revealing the plan. | — |
+| 8b | **Rocket Hideout (late game)** | Sealed under the Game Corner by the League; opened with the player's badge clearance. Varnell sends you for Rocket's old research on the anomalies. **What Varnell really needs: Rocket's inventory list, showing the Griseous Orb (stolen by Rocket) went into League custody after Rocket fell.** Clues: Rocket's logs show **they stole his research** and were in Pokémon Tower that day because of his readings; a raid report mentions "a civilian child in the tower" (no name); a recent gap where tower-raid files were taken (players assume a thief — it was Varnell's people). Ties his grief to guilt without revealing the plan. | — |
 | 9 | **Cinnabar** | Eruption warnings; the island is closed. The Mansion's old diaries mention spatial experiments. | — |
 | 10 | **Viridian** | Blue's gym opens — 8th badge. | Blue |
 | 10b | **The private request** | Right after the 8th badge, Varnell calls the player in **alone**: there's something sealed in the **Hall of Fame vault** that he needs. The player doesn't question why he doesn't ask Blue or Lance (they would never allow it). Some players will find it odd — that's fine. | — |
 | 11 | **Victory Road / Elite Four** | HGSS lineup: Will, Koga, Bruno, Karen, Champion Lance. Hall of Fame. After Lance leaves, the player opens the vault with their clearance and takes the **Griseous Orb**. | E4 + Lance |
 | 11b | **The call** | Varnell calls on the PokéNav — panicked, a little out of character. The player doesn't think much of it. | — |
-| 12 | **The handover → the reveal** | At his lab the player hands over the Orb. Varnell thanks them; he's "been up a week straight trying to get to the bottom of this." The Orb lets him finally pin down Giratina — he captures it then and there. Blue arrives; **the reveal** (Aria, the project, "a world without her isn't worth having"). | — |
+| 12 | **The handover → the reveal** | At his lab the player hands over the Orb; he thanks them ("up a week straight trying to get to the bottom of this"). As the player walks out, **Blue calls**: Lance just told him the player stole from the League — what's going on? Blue realises it went to Varnell: "I'll be right there." Blue arrives; together they go back in and find **a secret door that was never open before**, leading down to the holding chamber. Varnell, alone, talking to himself: "Finally... Giratina. I have every piece." Confrontation; **the reveal** (Aria, the project, "a world without her isn't worth having"). | — |
 | 13 | **The ARIA chamber — Varnell** | Holding bay, Red Alert. A **Volo-style** final battle: hard, and he uses the legendaries he captured. After losing, the Distortion World opens; he sees Aria and jumps in. Fate ambiguous. | Varnell |
 | 14 | **Aftermath** | Oak's grief. Blue's thanks. A last echo of a little girl's voice in the empty chamber. The freed legendaries can be found and **captured by the player** later. Ship home to Hoenn → title defenses unlock. | — |
 
@@ -265,6 +265,12 @@ No tea, no item gates.
   multi-region pokeemerald fork. Its public thread describes region flags, region-aware Fly and seamless
   region transitions; it doesn't say the source is public. To do: find out exactly how its travel looks and
   works (and whether code is available and allowed) before designing ours.
+
+## 8b2. Why the League has the Griseous Orb
+
+Team Rocket stole relics around the world, the Griseous Orb among them. When Rocket fell, the League
+seized everything and sealed it in the **Hall of Fame vault** — too dangerous to return or display.
+Varnell learns this from Rocket's inventory, which the player retrieves for him in the Rocket Hideout (8b).
 
 ## 8c. Phone calls
 
