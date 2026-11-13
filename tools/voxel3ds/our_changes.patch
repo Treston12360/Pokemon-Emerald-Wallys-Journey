@@ -1,0 +1,117 @@
+diff -u -r -x __pycache__ a/3ds_port/scripts/gen_voxel_buildings.py b/3ds_port/scripts/gen_voxel_buildings.py
+--- a/3ds_port/scripts/gen_voxel_buildings.py	2026-11-12 05:40:19.867423670 -0600
++++ b/3ds_port/scripts/gen_voxel_buildings.py	2026-11-12 06:11:43.789180081 -0600
+@@ -917,7 +917,10 @@
+                 or {"0", "NULL"} & {entry.get("primary_tileset"), entry.get("secondary_tileset")}
+                 or not os.path.exists(os.path.join(vb.ROOT, entry["blockdata_filepath"]))):
+             continue
+-        place_reused(vb.LayoutArt(lid), None)
++        try:
++            place_reused(vb.LayoutArt(lid), None)
++        except Exception as e:   # WJ test: a layout their reader cannot compose
++            print("WJTEST skipped layout %s: %s" % (lid, type(e).__name__))
+ 
+ 
+ # Where the diagnostic images go (a room's claims): main sets it when it
+diff -u -r -x __pycache__ a/3ds_port/scripts/gen_voxel_relief.py b/3ds_port/scripts/gen_voxel_relief.py
+--- a/3ds_port/scripts/gen_voxel_relief.py	2026-11-12 05:40:19.867423670 -0600
++++ b/3ds_port/scripts/gen_voxel_relief.py	2026-11-12 06:59:48.818457631 -0600
+@@ -4174,7 +4174,11 @@
+         l for l, b in world.items() if b and l not in layout_ids and drawn_group(l) is None)
+     variants, cuts = {}, []     # (pair, metatile, mask) -> index; (layout, x, y, index, foot)
+     for lid in layout_ids:
+-        roles_layout, h, ledges = layout_heights(lid)
++        try:
++            roles_layout, h, ledges = layout_heights(lid)
++        except IndexError:   # WJ test: a layout (FRLG tiles) their reader cannot compose
++            print("WJTEST skipped relief of %s" % lid)
++            continue
+         drawn = drawn_group(lid) is not None
+         # the cut tiles first: they level the lattice under their rock
+         cut = cut_cells(lid, roles_layout, h) if drawn else []
+diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/scripts/voxel_building_specs.py
+--- a/3ds_port/scripts/voxel_building_specs.py	2026-11-12 05:40:19.869405517 -0600
++++ b/3ds_port/scripts/voxel_building_specs.py	2026-11-13 13:56:49.681011637 -0600
+@@ -3522,6 +3522,36 @@
+ ]
+ 
+ 
++# Wally's Journey PC (owner 2026-11-13: "all houses' furniture should be 3D"): the plain rooms' furniture,
++# modelled the reference's way (piece, house_chair, the partitions of Rustboro's flats); what one room
++# models, every other room drawing it tile for tile gets too (gen_voxel_buildings.reuse_pieces).
++
++def dewford_hall():
++    fl = GENERIC_FLOOR
++    wl = GENERIC_WALL + fl
++    return (house_chair("chair_e", (90, 64, 94, 80), (81, 68, 90, 80), fl)
++            + house_chair("chair_w", (18, 80, 22, 96), (22, 84, 31, 96), fl)
++            + house_chair("chair2_w", (194, 48, 198, 64), (198, 52, 207, 64), fl)
++            + house_chair("chair2_e", (252, 48, 256, 64), (243, 52, 252, 64), fl) + [
++        piece("table", [(34, 64, 78, 96)], 9, leave=fl, solid=True),
++        piece("table2", [(210, 32, 240, 64)], 7, leave=fl, solid=True),
++        piece("shelf", [(0, 16, 16, 40)], 16, leave=wl, back=32),
++        piece("case", [(16, 12, 48, 40)], 20, leave=wl, back=32),
++        piece("heater", [(144, 13, 160, 39)], 19, leave=wl, back=32),
++        # the wall between the two rooms, and the low wall round the bath (Rustboro's flats' partition
++        # and divider)
++        piece("partition", [(160, 0, 176, 111)], 27, solid=True),
++        piece("divider", [(209, 75, 272, 111)], 24, solid=True, leave=fl),
++        piece("bath", [(226, 104, 256, 128)], 12, leave=fl, solid=True),
++        piece("drawers", [(256, 97, 272, 121)], 16, leave=fl, solid=True),
++    ])
++
++
++PLAIN_FURNITURE = {
++    "LAYOUT_DEWFORD_TOWN_HALL": dewford_hall,
++}
++
++
+ def plain_room(width, height, plain_x, sides):
+     w, h = width * 16, height * 16
+     side = (plain_x * 16, 0, plain_x * 16 + 16, 32)
+@@ -5934,6 +5964,17 @@
+         "exact": kit_house_exact(80),
+     },
+     {
++        # Wally's Journey PC: Lavaridge's gym had no model (it stood as a low block); the
++        # gym of Petalburg/Dewford, its bottom row porch and the town's grass.
++        "name": "lavaridge_gym_exterior",
++        "layout": "LAYOUT_LAVARIDGE_TOWN",
++        "rect": (2, 11, 6, 5),
++        "match_rows": (0, 4),
++        "ground": [GRASS],
++        "parts": gym,
++        "exact": GYM_EXACT,
++    },
++    {
+         "name": "dewford_gym_exterior",
+         "layout": "LAYOUT_DEWFORD_TOWN",
+         "rect": (5, 13, 6, 5),
+@@ -6434,16 +6475,7 @@
+         # the real depth raises the roof behind the antenna (behind: True)
+         "exact": [(3, 55, 62, 78), (10, 29, 54, 55), (32, 2, 57, 18, True)],
+     },
+-    {
+-        # a bather buried in Lavaridge's hot sand: a mound
+-        "name": "sand_bath",
+-        "layout": "LAYOUT_LAVARIDGE_TOWN",
+-        "rect": (3, 8, 1, 2),
+-        "ground": [0x2A8],
+-        "ground_px": True,
+-        "parts_art": small_round("sand_bath", Volume().dome(8, 20, 7.5, 7, 7), depth=32.0),
+-        "exact": [(0, 0, 16, 32)],
+-    },
++    # WJTEST: sand_bath dropped (Wally's Journey PC: smeared domes, placed from vanilla's bathers)
+     {
+         # Route 113's glass workshop: Fallarbor's house with a roof of glass
+         # (the trees' crowns overlap its top row)
+@@ -7740,7 +7772,8 @@
+     {
+         "name": layout[len("LAYOUT_"):].lower(),
+         "interior": {"layout": layout, "ground": [ground],
+-                     "pieces": own_shell(plain_room(width, height, plain_x, sides))},
++                     "pieces": own_shell(PLAIN_FURNITURE.get(layout, list)()
++                                         + plain_room(width, height, plain_x, sides))},
+     }
+     for layout, width, height, ground, plain_x, sides in PLAIN_ROOMS
+ ] + [

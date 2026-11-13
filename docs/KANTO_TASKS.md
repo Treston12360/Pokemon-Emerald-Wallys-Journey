@@ -43,6 +43,21 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 - [ ] **K6. Region-aware Fly and region map** (Fly map can switch Hoenn/Kanto; normal Fly animation; no
       key item — owner decision).
 
+- [ ] **K7. Kanto in 3D.** Kanto must work in the 3D view too (owner 2026-11-13). The 3D data is made by Emerald 3DS's
+      generators (`tools/voxel3ds/README.md`); they skip every FRLG layout today ("WJTEST skipped layout ..._FRLG:
+      IndexError" — their reader expects Emerald's 512/512 tileset split, see K2). Fix the reader for FRLG tilesets,
+      then model Kanto's buildings/rooms the 3DS way (`voxel_building_specs.py`), and check Pallet, Viridian etc.
+      in 3D. Do K2 first.
+
+## Also open on the 3D side (branch `deluxe-3d`, see docs/DELUXE_WORK_QUEUE.md)
+- **DLX-28 furniture in every house 3D** (owner 2026-11-13: "all houses furniture should be 3D"). 3DS left ~30
+  rooms "walls only" (`PLAIN_ROOMS` in `voxel_building_specs.py`). Started: `dewford_hall()` in
+  `tools/voxel3ds/our_changes.patch` — not generated or checked yet. Model each room's furniture with the
+  reference's `piece()` / `house_chair()` / partition pieces (copy House1/House2/Briney rooms), measure pixels
+  from the room's art, run `--only <room> --preview`, then regenerate and test in game.
+- **DLX-22 black lines in Granite Cave** — still there on the owner's GPU (not visible in Mesa software GL).
+  Full-width straight rows across the floor. Need a picture from the newest build.
+
 ## Phase 2 — Story (see `docs/KANTO_PROJECT_ARIA.md` chapters)
 
 - [ ] **S0. Remove FRLG's own story start** (Oak's parcel, rival intro etc.) where it conflicts.
