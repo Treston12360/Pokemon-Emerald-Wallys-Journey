@@ -2367,13 +2367,13 @@ void VDraw(SDL_Texture *texture)
     WideView_SetUiOverlay(NULL);
 
     int fullW = sFrameInfo.width + 2 * sFrameInfo.margin, fullH = sFrameInfo.height + 2 * sFrameInfo.margin;
-    if (sGamma2D && sFrameInfo.mode == WIDE_VIEW_FIELD && !WideView_IsIndoorMap() && !(s3DReady && s3DWanted))
+    if (sGamma2D && sFrameInfo.mode == WIDE_VIEW_FIELD && (!WideView_IsIndoorMap() || WideView_GammaRoom() != 0) && !(s3DReady && s3DWanted))
     {
         // DLX-9: Gamma Emerald's daylight on the 2D overworld (same switch as 3D's)
         static unsigned frames;
         Uint64 t0 = SDL_GetPerformanceCounter();
         Gamma2D_Apply(image, gbaImage, fullW, fullH, sFrameInfo.camX - sFrameInfo.margin,
-                      sFrameInfo.camY - sFrameInfo.margin, frames++, s3DDir);
+                      sFrameInfo.camY - sFrameInfo.margin, frames++, s3DDir, WideView_GammaRoom());
         if (getenv("WJPC_GAMMA2D_TIME") != NULL)
         {
             static double total;

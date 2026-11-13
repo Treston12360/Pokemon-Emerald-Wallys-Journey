@@ -29,6 +29,8 @@ struct WideViewFrame
 // Zoom / screen shape: the display code asks for a view size (0, 0 = built-in sizes).
 void WideView_SetViewSize(int w, int h);
 bool WideView_IsIndoorMap(void);
+// DLX-9: 0 = no Gamma light trigger here, 1 = Granite Cave (gain 0.49, vignette 3), 2 = Brawly's gym (vignette 2)
+int WideView_GammaRoom(void);
 
 // UI layer: when set (same size as the frame buffers), BG0 (text boxes, menus, the map name
 // pop-up) and screen-space sprites (start menu, HM picture) go here instead of into the frame,

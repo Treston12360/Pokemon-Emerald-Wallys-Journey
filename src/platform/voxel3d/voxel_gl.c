@@ -1247,6 +1247,7 @@ static const char *sPostFs =
     "uniform float radius;\n"
     "uniform vec4 misc;\n"           // x exposure, y saturation, z bloom intensity, w threshold
     "uniform vec4 fade;\n"
+    "uniform vec4 room;\n"           // x colour gain, y vignette intensity, z height/width (Gamma's triggers)\n"
     "uniform vec4 coc;\n"            // x A*f/(S-f)/sensor (per mm of depth), y focus (mm), z near, w far
     "varying vec2 uv;\n"
     "const mat3 sRGB_2_AP1 = mat3(0.61319, 0.07021, 0.02062, 0.33951, 0.91634, 0.10957, 0.04737, 0.01345, 0.86961);\n"
@@ -1314,6 +1315,10 @@ static const char *sPostFs =
     "  c += (texture2D(src2, uv).rgb * tint[0] + texture2D(b1, uv).rgb * tint[1] + texture2D(b2, uv).rgb * tint[2]\n"
     "       + texture2D(b3, uv).rgb * tint[3] + texture2D(b4, uv).rgb * tint[4] + texture2D(b5, uv).rgb * tint[5]) * misc.z;\n"
     "  c *= misc.x;\n"
+    // UE's vignette as Gamma's compiled tonemap shaders do it (see gamma2d.c), and the colour gain
+    // (uniform, so it can go before the saturation it follows in UE)
+    "  { vec2 vp = (uv * 2.0 - 1.0) * vec2(1.0, room.z) * (1.41421354 / sqrt(1.0 + room.z * room.z)) * room.y;\n"
+    "    float vt = dot(vp, vp) + 1.0; c *= room.x / (vt * vt); }\n"
     "  vec3 ap = sRGB_2_AP1 * c;\n"
     "  ap = max(mix(vec3(dot(ap, AP1_Y)), ap, misc.y), 0.0);\n"
     "  vec3 outc = toSrgb(AP1_2_sRGB * film(AP1_2_sRGB * ap));\n"
@@ -1472,6 +1477,13 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
         wj_glUseProgram(sPostProg);
         wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f : 6.0f, 0.4f);
         wj_glUniform1fv(wj_glGetUniformLocation(sPostProg, "tint"), 6, tint);
+        {
+            /* Gamma: engine default vignette 0.4; Granite Cave gain 0.49 + vignette 3, Brawly's gym 0.49 + 2 */
+            extern int WideView_GammaRoom(void);
+            int room = WideView_GammaRoom();
+            wj_glUniform4f(wj_glGetUniformLocation(sPostProg, "room"), room ? 0.49f : 1.0f,
+                           room == 1 ? 3.0f : room == 2 ? 2.0f : 0.4f, (float)h / (float)w, 0.0f);
+        }
         for (int i = 1; i < 6; i++)
         {
             char nm[4] = {'b', (char)('0' + i), 0, 0};

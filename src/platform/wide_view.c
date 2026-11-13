@@ -13,6 +13,7 @@
 // the middle of the wide canvas with black around it, so the zoom does not jump.
 #if defined(PORTABLE) && defined(RENDERER_EASY_DRAW)
 #include "global.h"
+#include "constants/map_groups.h"
 #include "field_effect.h"
 #include "constants/field_effects.h"
 #include <stdbool.h>
@@ -100,6 +101,19 @@ void WideView_SetViewSize(int w, int h)
 bool WideView_IsIndoorMap(void)
 {
     return IsIndoorMap();
+}
+
+// DLX-9: Gamma Emerald darkens two places with a post-process trigger (BP_CaveLightTrigger in Granite
+// Cave, BP_BrawlyLightTrigger in Brawly's gym): colour gain 0.49 and a vignette of 3.0 / 2.0.
+int WideView_GammaRoom(void)
+{
+    u16 map = (gSaveBlock1Ptr->location.mapGroup << 8) | gSaveBlock1Ptr->location.mapNum;
+    if (map == MAP_GRANITE_CAVE_1F || map == MAP_GRANITE_CAVE_B1F || map == MAP_GRANITE_CAVE_B2F
+     || map == MAP_GRANITE_CAVE_STEVENS_ROOM)
+        return 1;
+    if (map == MAP_DEWFORD_TOWN_GYM)
+        return 2;
+    return 0;
 }
 
 static void GetViewSize(int *w, int *h)

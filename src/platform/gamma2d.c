@@ -357,8 +357,10 @@ typedef struct
     const uint16_t *src;
     uint32_t *argb;
     const float *grid;
-    int w, gw;
+    int w, h, gw;
     float sun[3], sky[3];
+    float gain, vignette, vx, vy; // vx, vy: circle-space position per pixel (see OutRows)
+    bool clouds;
 } Job;
 
 static void LightRows(void *p, int y0, int y1)
@@ -374,7 +376,8 @@ static void LightRows(void *p, int y0, int y1)
             int gx = x >> 2;
             float fx = (x & 3) / 4.0f;
             const float *g = j->grid + gy * gw + gx;
-            float cl = (g[0] * (1 - fx) + g[1] * fx) * (1 - fy) + (g[gw] * (1 - fx) + g[gw + 1] * fx) * fy;
+            float cl = !j->clouds ? 1.0f
+                     : (g[0] * (1 - fx) + g[1] * fx) * (1 - fy) + (g[gw] * (1 - fx) + g[gw + 1] * fx) * fy;
             uint16_t c = j->src[y * w + x];
             int i = y * w + x;
             sStage[0][i] = sLinear[c & 31] * (j->sun[0] * cl + j->sky[0]);
@@ -384,12 +387,18 @@ static void LightRows(void *p, int y0, int y1)
     }
 }
 
+// UE's vignette, read from Gamma's compiled tonemap shaders: the vertex shader makes the circle-space
+// position (screen -1..1, y times height/width, all times sqrt(2)/sqrt(1 + (height/width)^2), so the
+// corners are always sqrt(2) out); the pixel shader takes p x intensity and keeps 1/(|p|^2 + 1)^2 (cos^4).
 static void OutRows(void *p, int y0, int y1)
 {
     const Job *j = p;
     for (int i = y0 * j->w; i < y1 * j->w; i++)
     {
-        float v[3] = {sStage[0][i], sStage[1][i], sStage[2][i]};
+        int x = i % j->w, y = i / j->w;
+        float px = ((x + 0.5f) * 2.0f / j->w - 1.0f) * j->vx, py = ((y + 0.5f) * 2.0f / j->h - 1.0f) * j->vy;
+        float t = (px * px + py * py) + 1.0f, k = j->gain / (t * t);
+        float v[3] = {sStage[0][i] * k, sStage[1][i] * k, sStage[2][i] * k};
         uint8_t o[3];
         Lut(v, o);
         j->argb[i] = 0xFF000000u | ((uint32_t)o[0] << 16) | ((uint32_t)o[1] << 8) | o[2];
@@ -428,7 +437,7 @@ static void UpAdd(const float *src, int sw, int sh, float *dst, int dw, int dh)
 }
 
 void Gamma2D_Apply(uint32_t *argb, const uint16_t *src, int w, int h, int worldX0, int worldY0,
-                   unsigned frame, const char *dataDir)
+                   unsigned frame, const char *dataDir, int room)
 {
     const float pi = 3.14159265f;
     float sun[3] = {0.788f * 3.0f / pi * 0.6428f, 0.738f * 3.0f / pi * 0.6428f, 0.700f * 3.0f / pi * 0.6428f};
@@ -460,7 +469,18 @@ void Gamma2D_Apply(uint32_t *argb, const uint16_t *src, int w, int h, int worldX
     for (int gy = 0; gy < gh; gy++)
         for (int gx = 0; gx < gw; gx++)
             grid[gy * gw + gx] = Cloud((float)(worldX0 + gx * 4), (float)(worldY0 + gy * 4), time);
-    Job job = {src, argb, grid, w, gw, {sun[0], sun[1], sun[2]}, {sky[0], sky[1], sky[2]}};
+    Job job = {src, argb, grid, w, h, gw, {sun[0], sun[1], sun[2]}, {sky[0], sky[1], sky[2]}};
+    {
+        // Gamma's settings: the engine default vignette 0.4 everywhere (FPostProcessSettings, read from
+        // its program); in Granite Cave gain 0.49 and vignette 3, in Brawly's gym gain 0.49 and vignette 2.
+        // Indoors there is no sun or cloud: the GBA art is drawn fully lit, so it keeps full sunlight.
+        float r = (float)h / (float)w, n = 1.41421354f / sqrtf(1.0f + r * r);
+        job.vignette = room == 1 ? 3.0f : room == 2 ? 2.0f : 0.4f;
+        job.gain = room != 0 ? 0.49f : 1.0f;
+        job.vx = n * job.vignette;
+        job.vy = r * n * job.vignette;
+        job.clouds = room == 0;
+    }
     Rows(LightRows, &job, h);
     // Bloom as UE does it: BloomSetup (Rec709 luminance x exposure - threshold, half) at half size, then
     // six stages, each half the size of the last, blurred 31 texels of its own size (r.Filter.LoopMode 0
