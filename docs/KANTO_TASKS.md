@@ -29,7 +29,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       real ids at `KANTO_FLAGS_START` (0x1000) kept in the new PC-only save block `SaveBlockPC` (no size limit,
       stored after the 128 KB GBA image in the .sav — old GBA saves load with Kanto clear); Celadon Game Corner
       coin checks written without spaces for the PC assembler. GBA data build and Windows/Linux PC build link.
-- [ ] **K2. Tilesets load.** FRLG primary tilesets are 640 tiles / 640 metatiles / 7 palettes; Emerald's are
+- [ ] **K2. Tilesets load.** WIP with K3 (Claude session 014PwRDj, 2026-11-13). FRLG primary tilesets are 640 tiles / 640 metatiles / 7 palettes; Emerald's are
       512 / 512 / 6. The engine must handle both in one game (`include/fieldmap.h` has both sizes; see how
       Crossroads loads them).
 - [ ] **K3. Warp into Pallet Town works** — WIP: Pallet Town (37 0) and Viridian City (37 1) load and draw in 2D
