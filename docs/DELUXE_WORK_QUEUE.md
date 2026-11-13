@@ -81,6 +81,18 @@ Test: save `/home/claude/keep/owner_brawly.sav`-style save (any save), script `t
 walk into grass; `winshot` frames during the transition (`WJPC_SCRIPT`, see "How to build and test").
 
 ### DLX-5 3D battle backgrounds + settings option (Done, first version - session 014PwRDj, 2026-11-12)
+REDONE 2026-11-13 (session 019khs4X, owner: "make sure they are exactly how 3DS Emerald does it"): the first
+version was a stand-in (own stage pick, fixed camera, nothing else). Now ported from Emerald 3DS: voxel_battle.c
+(stage search with its scores, battler shadows), ctr_voxel.c BattleCamera (glide: 100 frames, crane 16, dolly zoom
+0.40, push 0.16, quake 0.07, bars), 3ds_video.c RenderBattleWorld rules (world only while BG3 is on and holds the
+scenery; a move's background = 2D battle; BG1/BG2 hidden while the intro slides, not in link battles; window
+curtain shows the backdrop; BG3 scroll shakes the camera) and its effects (speed lines, indigo vignette, landing
+flash, cinema bars, zoom blur). The 3DS view (400x240, GBA picture at 1.4x, (120,112) on (200,192)) is drawn
+cropped to the GBA picture (off-axis projection in voxel_gl.c). Differences kept on purpose: the 3DS moves its
+battlers (enemy up 8, player down 2) - ours are not moved, so the stage search uses the GBA positions; the bars sit
+on our picture's edges (on the 3DS they are its screen's edges, mostly outside the GBA picture); the 3DS's own
+bloom/diorama blur and HD text box are not part of our renderer. Game hooks: PcBattleIntro_Sliding
+(battle_intro.c), PcBattleBg_MoveBgShown (battle_bg.c, set in LoadMoveBg).
 Owner: "you can choose the wording". Settings > Video > "3D Battles" On/Off (`battle3d=` in the cfg, default On - owner 2026-11-12: "Starts on";
 independent of "3D World"). In a battle the 3D world is drawn behind the battle: sdl2.c draws `sdl3DTexture` (3:2)
 then the GBA picture with BG3 and the backdrop left transparent (`gPcPixelSource` 0/4; brightness fades kept as
