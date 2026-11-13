@@ -47,6 +47,7 @@ enum PlatformSetting
     PLATFORM_SETTING_RESOLUTION, // 0 = monitor/window, 1 = 720p, 2 = 1080p, 3 = 1440p, 4 = 4K
     PLATFORM_SETTING_WORLD3D,    // 3D overworld on/off ("world3d" in the cfg); kept by sdl2.c, not in the array
     PLATFORM_SETTING_BATTLE3D,   // 3D battle scenery on/off ("battle3d" in the cfg); kept by sdl2.c (DLX-5)
+    PLATFORM_SETTING_GAMMALIGHT, // Gamma Emerald's lighting, 2D and 3D ("gammaLight" in the cfg); kept by sdl2.c (DLX-9)
     PLATFORM_SETTING_COUNT,
 };
 

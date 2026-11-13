@@ -532,6 +532,7 @@ static bool AtlasCovers(const Atlas *a, const VoxelMapInstance *inst)
 }
 
 static Atlas sAtlases[MAX_ATLASES];
+static void LoadGammaClouds(void);
 
 // The season key, asked for once a frame (it reads the clock; asked per atlas per map it was most of a frame).
 static uint32_t sSeasonKey, sSeasonFrame = 0xFFFFFFFFu;
@@ -1686,31 +1687,9 @@ bool Voxel3D_Init(const char *dataDir)
     snprintf(sDataDir, sizeof(sDataDir), "%s", dataDir);
     if (!LoadGl() || !MakeProgram())
         return false;
-    if (getenv("WJPC_3D_GAMMALIGHT") != NULL && atoi(getenv("WJPC_3D_GAMMALIGHT")) != 0)
-    {
-        /* Gamma's sun: 40 degrees up, behind the viewer and slightly right, as (-DX, 1, -DZ). */
-        gVoxelGammaLight = 1;
-        VoxelLighting_SetSun(-0.2718f, -1.1604f, 1.0f, 0x6A33u);
-        {   /* Gamma's cloud-shadow textures (T_NoisePuddles, T_NoiseRough), 1024x1024 greyscale each */
-            FILE *cf = Voxel3D_OpenData("voxel/gamma_clouds.bin");
-            unsigned char *px = malloc(2u * 1024 * 1024);
-            if (cf != NULL && px != NULL && fread(px, 1, 2u * 1024 * 1024, cf) == 2u * 1024 * 1024)
-                for (int t = 0; t < 2; t++)
-                {
-                    wj_glGenTextures(1, &sCloudTex[t]);
-                    wj_glBindTexture(GL_TEXTURE_2D, sCloudTex[t]);
-                    wj_glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-                    wj_glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1024, 1024, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, px + t * 1024 * 1024);
-                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-                }
-            if (cf != NULL)
-                fclose(cf);
-            free(px);
-        }
-    }
+    LoadGammaClouds();
+    if (getenv("WJPC_3D_GAMMALIGHT") != NULL)
+        Voxel3D_SetGammaLight(atoi(getenv("WJPC_3D_GAMMALIGHT")) != 0);
     // The voxel modules open "voxel/...": run from the folder that holds it.
     VoxelRegions_Init();
     VoxelRelief_Init();
@@ -1879,6 +1858,54 @@ static bool MeshAtlasOk(const InstanceMesh *m)
 }
 
 static float sFogNear = 40.0f, sFogFar = 90.0f;
+
+/* Gamma's cloud-shadow textures, loaded once (the lighting can be switched on at any time). */
+static void LoadGammaClouds(void)
+{
+
+        {   /* Gamma's cloud-shadow textures (T_NoisePuddles, T_NoiseRough), 1024x1024 greyscale each */
+            FILE *cf = Voxel3D_OpenData("voxel/gamma_clouds.bin");
+            unsigned char *px = malloc(2u * 1024 * 1024);
+            if (cf != NULL && px != NULL && fread(px, 1, 2u * 1024 * 1024, cf) == 2u * 1024 * 1024)
+                for (int t = 0; t < 2; t++)
+                {
+                    wj_glGenTextures(1, &sCloudTex[t]);
+                    wj_glBindTexture(GL_TEXTURE_2D, sCloudTex[t]);
+                    wj_glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+                    wj_glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1024, 1024, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, px + t * 1024 * 1024);
+                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                }
+            if (cf != NULL)
+                fclose(cf);
+            free(px);
+        }
+    }
+
+/*
+ * The Gamma lighting switch (Options: "Gamma Lighting"; WJPC_3D_GAMMALIGHT overrides). Its sun is not the
+ * plain 3D's, and the sun is baked into the ground, so every map is laid again.
+ */
+static bool sGammaWanted;
+void Voxel3D_SetGammaLight(bool on)
+{
+    if (on == sGammaWanted && (gVoxelGammaLight != 0) == on)
+        return;
+    sGammaWanted = on;
+    gVoxelGammaLight = on ? 1 : 0;
+    if (on)
+        VoxelLighting_SetSun(-0.2718f, -1.1604f, 1.0f, 0x6A33u); /* Gamma's sun: 40 degrees up, behind, a little right */
+    else
+        VoxelLighting_SetSun(0.85f, 0.55f, 1.0f, 0);
+    VoxelLighting_Reset();
+    for (int i = 0; i < MAX_INSTANCES; i++)
+        if (sInstanceMeshes[i].used)
+            InstanceFree(&sInstanceMeshes[i]);
+    BeltCache_Flush();
+    sBeltX = 0x7FFFFFFF;
+}
 
 static void BattleZoomBlur(int w, int h);
 bool Voxel3D_Render(unsigned colorTexture, int w, int h)
@@ -2196,7 +2223,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     }
 
     if (gVoxelGammaLight && !PostBeginScene(w, h))
-        gVoxelGammaLight = 0;
+        Voxel3D_SetGammaLight(false);
     wj_glViewport(0, 0, w, h);
     wj_glDepthMask(GL_TRUE);
     if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)

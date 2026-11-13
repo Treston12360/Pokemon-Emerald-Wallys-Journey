@@ -66,9 +66,9 @@ static bool s3DWanted, s3DReady, s3DFrame;
 static bool s3DAvailable, s3DInitTried;
 // DLX-5: 3D battle scenery (Settings "3D Battles"); s3DBattleFrame: this frame is a 3D battle.
 static bool s3DBattleWanted = true, s3DBattleFrame;
+static bool sGammaWanted; // DLX-9: Gamma Emerald's lighting ("gammaLight" in the cfg; Options > Gamma Lighting)
 static SDL_Texture *sdl3DBattleTexture;
 static char s3DDir[600];
-static bool sGamma2D; // DLX-9: Gamma lighting on the 2D overworld (WJPC_3D_GAMMALIGHT=1)
 static void Try3DInit(void)
 {
     if (!(s3DWanted || s3DBattleWanted) || s3DReady || s3DInitTried || !s3DAvailable)
@@ -1041,7 +1041,8 @@ int main(int argc, char **argv)
 #else
     if (getenv("WJPC_3D") != NULL)
         s3DWanted = atoi(getenv("WJPC_3D")) != 0;
-    sGamma2D = getenv("WJPC_3D_GAMMALIGHT") != NULL && atoi(getenv("WJPC_3D_GAMMALIGHT")) != 0;
+    if (getenv("WJPC_3D_GAMMALIGHT") != NULL)
+        sGammaWanted = atoi(getenv("WJPC_3D_GAMMALIGHT")) != 0;
     {
         // The 3D models (voxel/*.bin, *.rgba5551) live in a "voxel" folder next to the game.
         const char *env = getenv("WJPC_VOXEL_DIR");
@@ -1490,6 +1491,8 @@ static void ReadConfigFile(void)
             s3DWanted = value != 0;
         else if (sscanf(line, "battle3d=%u", &value) == 1)
             s3DBattleWanted = value != 0;
+        else if (sscanf(line, "gammaLight=%u", &value) == 1)
+            sGammaWanted = value != 0;
         else if (sscanf(line, "widescreen=%u", &value) == 1)
             WideView_SetEnabled(value != 0);
         else if (strncmp(line, "key", 3) == 0)
@@ -1569,6 +1572,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
     fprintf(configFile, "world3d=%u\n", s3DWanted ? 1 : 0);
     fprintf(configFile, "battle3d=%u\n", s3DBattleWanted ? 1 : 0);
+    fprintf(configFile, "gammaLight=%u\n", sGammaWanted ? 1 : 0);
     fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
     fprintf(configFile, "frameRate=%u\n", gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT]);
     fprintf(configFile, "filter=%u\n", sPlatformSettings[PLATFORM_SETTING_FILTER]);
@@ -1718,6 +1722,8 @@ u8 Platform_GetSetting(enum PlatformSetting setting)
         return s3DWanted && Platform_Is3DAvailable();
     if (setting == PLATFORM_SETTING_BATTLE3D)
         return s3DBattleWanted && Platform_Is3DAvailable();
+    if (setting == PLATFORM_SETTING_GAMMALIGHT)
+        return sGammaWanted;
     return sPlatformSettings[setting];
 }
 
@@ -1727,6 +1733,12 @@ static SDL_atomic_t sWindowSettingsChanged;
 
 void Platform_SetSetting(enum PlatformSetting setting, u8 value)
 {
+    if (setting == PLATFORM_SETTING_GAMMALIGHT)
+    {
+        sGammaWanted = value != 0; // 2D from the next frame; 3D lays its maps again (main thread, next frame)
+        StoreConfigFile();
+        return;
+    }
     if (setting == PLATFORM_SETTING_BATTLE3D)
     {
         if (Platform_Is3DAvailable())
@@ -2601,7 +2613,7 @@ void VDraw(SDL_Texture *texture)
     WideView_SetUiOverlay(NULL);
 
     int fullW = sFrameInfo.width + 2 * sFrameInfo.margin, fullH = sFrameInfo.height + 2 * sFrameInfo.margin;
-    if (sGamma2D && sFrameInfo.mode == WIDE_VIEW_FIELD && (!WideView_IsIndoorMap() || WideView_GammaRoom() != 0) && !(s3DReady && s3DWanted))
+    if (sGammaWanted && sFrameInfo.mode == WIDE_VIEW_FIELD && (!WideView_IsIndoorMap() || WideView_GammaRoom() != 0) && !(s3DReady && s3DWanted))
     {
         // DLX-9: Gamma Emerald's daylight on the 2D overworld (same switch as 3D's)
         static unsigned frames;
@@ -2810,6 +2822,7 @@ void VDraw(SDL_Texture *texture)
                         level--;
                     Voxel3D_SetSettings(true, 0, 100 * 160 / sZoomHeights[level]);
                 }
+                Voxel3D_SetGammaLight(sGammaWanted);
                 s3DFrame = Voxel3D_Render(id, w, h);
                 // SDL caches its GL state: switching targets makes it send viewport and target again.
                 SDL_SetRenderTarget(sdlRenderer, sdl3DTexture);
