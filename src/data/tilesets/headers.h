@@ -28,7 +28,7 @@ const struct Tileset gTileset_SecretBaseRedCave =
 const struct Tileset *const gTilesetPointer_SecretBase = &gTileset_SecretBase;
 const struct Tileset *const gTilesetPointer_SecretBaseRedCave = &gTileset_SecretBaseRedCave;
 
-#if !IS_FRLG
+#if 1 // Project ARIA: Emerald tilesets (was !IS_FRLG)
 
 const struct Tileset gTileset_General =
 {
@@ -842,7 +842,8 @@ const struct Tileset gTileset_UnionRoom =
     .callback = NULL,
 };
 
-#else
+#endif // !IS_FRLG
+// Project ARIA: FRLG (Kanto) tilesets are always built (as Crossroads does).
 
 // FRLG tilesets
 const struct Tileset gTileset_BuildingFrlg =
@@ -1549,4 +1550,3 @@ const struct Tileset gTileset_HallOfFame =
     .callback = NULL,
 };
 
-#endif // IS_FRLG
