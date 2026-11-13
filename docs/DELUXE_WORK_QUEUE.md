@@ -221,7 +221,7 @@ Note: my Wine test folder uses 3D data generated from vanilla Emerald (vanilla l
 tree in buildings (IndexError in voxel_building._cell_image, frontier_arch) and relief - see DLX-1 (which data
 ships). `reuse_everywhere` now skips a layout it cannot read (3ds_port copy only, not in git).
 
-### DLX-18 3D: route switching still a little jarring; no pop-in at all (TODO)
+### DLX-18 3D: route switching still a little jarring; no pop-in at all (WIP - session 014PwRDj)
 Owner: "just load everything so nothing has to pop in". Preload connected maps' meshes, people and
 trees ahead of the border (map meshes are already built one a frame; the edge scenery rebuild is
 DLX-7). People on neighbouring maps should already be drawn.
