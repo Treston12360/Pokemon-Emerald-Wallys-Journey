@@ -6,6 +6,7 @@ bool Voxel3D_Init(const char *dataDir);
 // Draws the 3D world into GL texture `colorTexture` (w x h). False: nothing drawn (not a map).
 bool Voxel3D_Render(unsigned colorTexture, int w, int h);
 unsigned Voxel3D_TextureId(void *sdlTexture);
+bool Voxel3D_ProjectPictureTile(float tileX, float tileY, float *outX, float *outY);
 void Voxel3D_SetSettings(bool on, int pitch, int zoom);
 /* DLX-5: draw the world as a battle's scenery (low battle camera on the spot the battle started, no people). */
 void Voxel3D_SetBattle(bool on);

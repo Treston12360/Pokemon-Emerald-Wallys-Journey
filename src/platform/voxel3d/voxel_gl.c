@@ -1771,6 +1771,39 @@ static void Multiply(float *out, const float *a, const float *b)
     memcpy(out, r, sizeof(r));
 }
 
+
+/*
+ * DLX-24, ported from Emerald 3DS (ctr_voxel.c CtrVoxel_ProjectPictureTile + 3ds_video.c PlaceScreenObject):
+ * the healing machine's balls and monitors are placed by hand on the 240x160 picture around the player (the
+ * player's tile centre at GBA (120, 80)), so they go where the map's machine is: the tile (tileX, tileY) from
+ * the player, a tile up in the air, seen by this frame's camera. Out: 0..1 across and down the 3D picture.
+ */
+static float sFieldMvp[16];
+static bool sHaveFieldMvp;
+bool Voxel3D_ProjectPictureTile(float tileX, float tileY, float *outX, float *outY)
+{
+    float px, pz, wx, wy, wz, cx, cy, cw;
+    if (!sHaveFieldMvp)
+        return false;
+    VoxelEntities_GetPlayerWorldPos(&px, &pz);
+    wx = px + 0.5f + tileX;
+    wy = sCamera.ground + 1.0f;   /* "A tile up in the air: seen from above, what stands a tile high is a
+                                   * tile further up the picture than the floor under it." */
+    wz = pz + 0.5f + tileY + 1.0f;
+    cx = sFieldMvp[0] * wx + sFieldMvp[4] * wy + sFieldMvp[8] * wz + sFieldMvp[12];
+    cy = sFieldMvp[1] * wx + sFieldMvp[5] * wy + sFieldMvp[9] * wz + sFieldMvp[13];
+    cw = sFieldMvp[3] * wx + sFieldMvp[7] * wy + sFieldMvp[11] * wz + sFieldMvp[15];
+    if (cw <= 1e-4f)
+        return false;
+    *outX = (cx / cw) * 0.5f + 0.5f;
+    /* The field is drawn upside down (SDL shows render targets as stored), so NDC y already points down. */
+    *outY = 0.5f + (cy / cw) * 0.5f;
+    if (getenv("WJPC_DEBUG_MACHINE"))
+        fprintf(stderr, "machine tile %.2f %.2f player %.2f %.2f ground %.2f cam target %.2f %.2f %.2f -> %.3f %.3f\n",
+                tileX, tileY, px, pz, sCamera.ground, sCamera.targetX, sCamera.targetY, sCamera.targetZ, *outX, *outY);
+    return true;
+}
+
 // ---------------------------------------------------------------------------
 // Saved GL state: SDL's renderer shares the context and expects its own back.
 
@@ -2301,6 +2334,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     proj[1] = -proj[1]; proj[5] = -proj[5]; proj[9] = -proj[9]; proj[13] = -proj[13];
     LookAt(view, sCamera.x, sCamera.y, sCamera.z, sCamera.targetX, sCamera.targetY, sCamera.targetZ);
     Multiply(mvp, proj, view);
+    memcpy(sFieldMvp, mvp, sizeof(sFieldMvp));
+    sHaveFieldMvp = !sBattleMode;
     wj_glUniformMatrix4fv(sUniMvp, 1, GL_FALSE, mvp);
     wj_glUniform3f(sUniCam, sCamera.x, sCamera.y, sCamera.z);
     if (VoxelWorld_ScreenFade(&fadeAmount, fadeRgb) && !gVoxelGammaLight)

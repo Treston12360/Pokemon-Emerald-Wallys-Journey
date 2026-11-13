@@ -79,6 +79,7 @@ static void Try3DInit(void)
         fprintf(stderr, "3D world unavailable (OpenGL or %s missing): drawing the map flat\n", s3DDir);
 }
 static SDL_Texture *sdl3DTexture, *sdl3DTransTexture;
+static int sUiPlaceX, sUiPlaceY, sUiPlaceS, sUiOutW, sUiOutH; // DLX-24: last frame's UI placement
 static bool s3DTransition;
 // DLX-4: a battle transition over the wide 2D field (no 3D): the last field picture stays in the map
 // texture and the transition's own picture goes over it, as in 3D.
@@ -708,7 +709,28 @@ static void DrawFieldScene(double t, int outW, int outH)
         SDL_Rect src = {sFrameInfo.gbaX, sFrameInfo.gbaY + band, DISPLAY_WIDTH, DISPLAY_HEIGHT - band};
         SDL_Rect dst = {ux, uy + band * s, DISPLAY_WIDTH * s, (DISPLAY_HEIGHT - band) * s};
         SDL_RenderCopy(sdlRenderer, sdlUiTexture, &src, &dst);
+        sUiPlaceX = ux;
+        sUiPlaceY = uy;
+        sUiPlaceS = s3DFrame ? s : 0;
+        sUiOutW = outW;
+        sUiOutH = outH;
     }
+}
+
+/*
+ * DLX-24 (Emerald 3DS 3ds_video.c PlaceScreenObject): a healing-machine sprite at GBA (x, y), w x h, moved to
+ * where the camera sees the machine's tile. Uses last frame's UI placement; false outside the 3D field.
+ */
+bool Pc_MachineSpriteSpot(int x, int y, int w, int h, int *outX, int *outY)
+{
+    float fx, fy;
+    if (!s3DFrame || sUiPlaceS <= 0)
+        return false;
+    if (!Voxel3D_ProjectPictureTile((x + w / 2.0f - 120.0f) / 16.0f, (y + h / 2.0f - 80.0f) / 16.0f, &fx, &fy))
+        return false;
+    *outX = (int)((fx * sUiOutW - sUiPlaceX) / sUiPlaceS - w / 2.0f);
+    *outY = (int)((fy * sUiOutH - sUiPlaceY) / sUiPlaceS - h / 2.0f);
+    return true;
 }
 
 static void DrawScene(double t, int outputWidth, int outputHeight)

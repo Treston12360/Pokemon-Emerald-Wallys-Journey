@@ -1390,6 +1390,19 @@ static void SpriteCB_PokeballGlow(struct Sprite *sprite)
     }
 }
 
+#ifdef PORTABLE
+// DLX-24 (Emerald 3DS port hook): the healing machine's balls and monitors, and the Hall of Fame's, are placed
+// by hand on the 240x160 picture around the player rather than on the map; the 3D view moves them to where the
+// machine is (platform/wide_view.c).
+bool8 FieldEffect_IsMachineSprite(const struct Sprite *sprite)
+{
+    return sprite->template == &sSpriteTemplate_PokeballGlow
+        || sprite->template == &sSpriteTemplate_PokecenterMonitor
+        || sprite->template == &sSpriteTemplate_HofMonitorBig
+        || sprite->template == &sSpriteTemplate_HofMonitorSmall;
+}
+#endif
+
 static u8 CreatePokecenterMonitorSprite(s16 x, s16 y)
 {
     u8 spriteId;

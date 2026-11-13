@@ -338,7 +338,12 @@ makes them glow. Emerald 3DS turns bloom off indoors (ctr_voxel.c BaseLightFor).
 lights interiors with six rect lights (values in GAMMA_LIGHTING_VALUES.md 'Interiors'). Owner approved the 3DS rule (2026-11-13): indoor bloom now 0 by default
 (WJPC_3D_INDOOR_BLOOM overrides). Full Gamma interior lighting (rect lights + glow maps) = DLX-23b, later. Next: read whether Gamma's sun reaches interiors + interior materials, then port. Images in `docs/dlx_reports/2026-11-13/`.
 
-### DLX-24 3D: heal-machine Poké Balls drawn in the wrong spot (TODO, owner report 2026-11-13)
+### DLX-24 3D: heal-machine Poké Balls drawn in the wrong spot (DONE 2026-11-13, session 019khs4X - owner to confirm)
+Fix ported from Emerald 3DS (0005-port-hooks.patch FieldEffect_IsMachineSprite; 3ds_video.c PlaceScreenObject;
+ctr_voxel.c CtrVoxel_ProjectPictureTile): the machine's balls/monitors (and the Hall of Fame monitors) are placed
+by hand around the player on the GBA picture, so in 3D they are projected to the machine's tile one tile up.
+Code: field_effect.c, wide_view.c BuildWideSprites, sdl2.c Pc_MachineSpriteSpot, voxel_gl.c
+Voxel3D_ProjectPictureTile (note: our field is drawn upside down, so NDC y points down).
 During healing the balls float above the wall instead of on the machine. Picture: 0fd2c32c. Images in `docs/dlx_reports/2026-11-13/`.
 
 ### DLX-25 3D: Dewford pop-in when switching routes (TODO, owner report 2026-11-13)
