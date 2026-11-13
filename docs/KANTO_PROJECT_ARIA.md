@@ -115,8 +115,9 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 
 | # | Chapter | What happens | Gym |
 |---|---|---|---|
-| 0 | **Arrival** | Ship from Hoenn to Vermilion. A news report on "spatial anomalies." Wally calls to see you off. | Lt. Surge |
-| 1 | **The Professor's friend** | Oak, in Pallet/Viridian, introduces Varnell — warm, funny, grateful for a Champion's help. First assignment: survey Mt. Moon. Blue appears, refuses to battle, tells you to go home. | — |
+| 0 | **The call** | After the Hall of Fame the player wakes up at home. Mom: Professor Birch wants to see you. Birch: Professor Oak called — the strange Pokémon anomalies have started in Kanto, and Oak wants you. Birch gives you the **S.S. Anne ticket** (Slateport → Vermilion). Wally sees you off at the harbour: "show Kanto what Hoenn is made of." | — |
+| 0b | **Arrival** | The S.S. Anne docks at Vermilion; Oak is waiting. Fade to black → Oak's lab in **Pallet Town**, where the Kanto story starts. | — |
+| 1 | **The investigation team** | In the lab: Oak, **Varnell** and **Blue**. Oak introduces Varnell — Kanto's leading, highly revered researcher — who is putting together an investigation team. Oak wants the player on it: a Champion, with first-hand experience of Hoenn's legendary crisis and how to handle it. Varnell seems impressed and warmly interested; **secretly he just wants to use the player.** Blue, already on the case, is openly irritated that they brought in an outsider. First assignment: survey Mt. Moon. | — |
 | 2 | **Mt. Moon** | The "meteorite anomaly" is the first tear. Closing it with Varnell's device feels heroic. (It's really feeding ARIA.) Fossils kept. | Brock (Pewter) |
 | 3 | **Cerulean** | A displaced person, pulled from another time, lashes out. First sign the tears hurt people. | Misty |
 | 4 | **Lavender** | The ghost: an echo of a lost **Clefairy** searching the tower and crying out **"Aria"** (Aria's Pokémon; the player doesn't know who Aria is). Not Marowak. Varnell's "calibration lens" assignment (= Silph Scope) reveals it. Mr. Fuji's clue about the grieving father. Poké Flute. | — |
