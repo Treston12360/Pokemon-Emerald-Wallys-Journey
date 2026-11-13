@@ -204,7 +204,45 @@ u16 VarGetObjectEventGraphicsId(u8 id)
     return VarGet(VAR_OBJ_GFX_ID_0 + id);
 }
 
-#define WJ_KANTO_FLAGS_MAGIC 0xA7
+struct SaveBlockPC gSaveBlockPC;
+
+void SaveBlockPC_Clear(void)
+{
+    memset(&gSaveBlockPC, 0, sizeof(gSaveBlockPC));
+    gSaveBlockPC.magic = SAVE_BLOCK_PC_MAGIC;
+    gSaveBlockPC.size = sizeof(gSaveBlockPC);
+}
+
+#ifdef PORTABLE
+bool8 Platform_ReadExtraSave(void *dest, u32 size);
+void Platform_WriteExtraSave(const void *src, u32 size);
+#endif
+
+// Called after the game saves.
+void SaveBlockPC_Write(void)
+{
+    gSaveBlockPC.magic = SAVE_BLOCK_PC_MAGIC;
+    gSaveBlockPC.size = sizeof(gSaveBlockPC);
+#ifdef PORTABLE
+    Platform_WriteExtraSave(&gSaveBlockPC, sizeof(gSaveBlockPC));
+#endif
+}
+
+// Called after the game loads. A GBA save (or an older, smaller PC block) leaves the rest clear.
+void SaveBlockPC_Read(void)
+{
+    SaveBlockPC_Clear();
+#ifdef PORTABLE
+    struct SaveBlockPC tmp;
+    memset(&tmp, 0, sizeof(tmp));
+    if (Platform_ReadExtraSave(&tmp, sizeof(tmp)) && tmp.magic == SAVE_BLOCK_PC_MAGIC && tmp.size >= 8)
+    {
+        u32 n = tmp.size < sizeof(tmp) ? tmp.size : sizeof(tmp);
+        memcpy(&gSaveBlockPC, &tmp, n);
+        gSaveBlockPC.size = sizeof(gSaveBlockPC);
+    }
+#endif
+}
 
 u8 *GetFlagPointer(u16 id)
 {
@@ -212,15 +250,7 @@ u8 *GetFlagPointer(u16 id)
         return NULL;
 #if !IS_FRLG
     else if (id >= KANTO_FLAGS_START && id <= KANTO_FLAGS_END)
-    {
-        // Project ARIA: Kanto flags live in SaveBlock3; an older save starts them all clear.
-        if (gSaveBlock1Ptr->wjKantoFlagsMagic != WJ_KANTO_FLAGS_MAGIC)
-        {
-            memset(gSaveBlock1Ptr->wjKantoFlags, 0, sizeof(gSaveBlock1Ptr->wjKantoFlags));
-            gSaveBlock1Ptr->wjKantoFlagsMagic = WJ_KANTO_FLAGS_MAGIC;
-        }
-        return &gSaveBlock1Ptr->wjKantoFlags[(id - KANTO_FLAGS_START) / 8];
-    }
+        return &gSaveBlockPC.kantoFlags[(id - KANTO_FLAGS_START) / 8]; // Project ARIA
 #endif
     else if (id < SPECIAL_FLAGS_START)
         return &gSaveBlock1Ptr->flags[id / 8];

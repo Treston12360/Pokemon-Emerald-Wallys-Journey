@@ -1656,6 +1656,28 @@ static void FlushSaveIfDirty(void)
     }
 }
 
+// Windows game: the PC-only save block (struct SaveBlockPC, no size limit) sits after the GBA flash image.
+// Layout at offset sizeof(FLASH_BASE): u32 length, then the block. A GBA .sav ends before it.
+bool8 Platform_ReadExtraSave(void *dest, u32 size)
+{
+    u32 len = 0;
+    if (sSaveFile == NULL || fseek(sSaveFile, sizeof(FLASH_BASE), SEEK_SET) != 0
+     || fread(&len, 1, 4, sSaveFile) != 4 || len == 0)
+        return FALSE;
+    if (len > size)
+        len = size;
+    return fread(dest, 1, len, sSaveFile) == len;
+}
+
+void Platform_WriteExtraSave(const void *src, u32 size)
+{
+    if (sSaveFile == NULL || fseek(sSaveFile, sizeof(FLASH_BASE), SEEK_SET) != 0)
+        return;
+    fwrite(&size, 1, 4, sSaveFile);
+    fwrite(src, 1, size, sSaveFile);
+    fflush(sSaveFile);
+}
+
 void Platform_StoreSaveFile(void)
 {
     StoreSaveFile();

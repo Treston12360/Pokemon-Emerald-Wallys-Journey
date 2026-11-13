@@ -350,6 +350,23 @@ struct SaveBlock3
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;
 
+// Windows game: data with no GBA size limit (owner rule "NO LIMITS", AGENTS.md). Stored in the .sav file
+// after the 128 KB GBA flash image, so an old GBA save simply has none (it loads as all clear).
+// Grow it freely: add fields at the END only, and old PC saves load with the new fields clear.
+#define SAVE_BLOCK_PC_MAGIC 0x43504A57 // "WJPC"
+struct SaveBlockPC
+{
+    u32 magic;
+    u32 size;
+#if !IS_FRLG
+    u8 kantoFlags[KANTO_FLAGS_COUNT / 8]; // Project ARIA: FRLG flags, KANTO_FLAGS_START..
+#endif
+};
+extern struct SaveBlockPC gSaveBlockPC;
+void SaveBlockPC_Clear(void);
+void SaveBlockPC_Write(void);
+void SaveBlockPC_Read(void);
+
 struct Pokedex
 {
     /*0x00*/ u8 order;
@@ -1286,11 +1303,6 @@ struct SaveBlock1
 #if IS_FRLG
     u8 rivalName[PLAYER_NAME_LENGTH + 1];
     struct DaycareMon route5DayCareMon;
-#else
-    // Project ARIA: FireRed/LeafGreen (Kanto) flags, KANTO_FLAGS_START.. (see constants/flags.h).
-    // In SaveBlock1's spare room at the end of sector 4; magic unset (an older save) = all clear.
-    u8 wjKantoFlagsMagic;
-    u8 wjKantoFlags[KANTO_FLAGS_COUNT / 8];
 #endif
     // sizeof: 0x3???
 };

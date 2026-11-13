@@ -767,6 +767,7 @@ u8 HandleSavingData(u8 saveType)
         break;
     }
     gTrainerHillVBlankCounter = backupVar;
+    SaveBlockPC_Write();
     return 0;
 }
 
@@ -893,6 +894,7 @@ u8 LoadGameSave(u8 saveType)
     default:
         status = TryLoadSaveSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
         CopyPartyAndObjectsFromSave();
+        SaveBlockPC_Read();
         gSaveFileStatus = status;
         gGameContinueCallback = NULL;
         break;

@@ -163,6 +163,7 @@ void ResetMenuAndMonGlobals(void)
 
 void NewGameInitData(void)
 {
+    SaveBlockPC_Clear();
 #if IS_FRLG
     u8 rivalName[PLAYER_NAME_LENGTH + 1];
 #endif
