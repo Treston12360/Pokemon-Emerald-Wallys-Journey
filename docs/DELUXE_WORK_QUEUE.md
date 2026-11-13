@@ -341,3 +341,15 @@ regenerates signposts.bin must re-apply it (or teach the sign generator about si
   trees, cliffs, shadows, zoom, battle transitions in 3D, no rebuild stutter at borders, Lavaridge
   (west side, cliffs, sand piles).
 - Hex froze the game against a statused target (PC-only crash).
+
+### 2026-11-13 owner round (session 019khs4X), alpha13-3d sent
+- Blue squares (Granite Cave floors, Slateport): an atlas built for earlier maps on the same tile sets lacked
+  later maps' metatiles; now AtlasCovers() makes it again (voxel_gl.c), meshes follow by Atlas.gen. DONE.
+- Caves (MAP_TYPE_UNDERGROUND, inst->underground): no belt plateau/walls round them, backdrop behind, no haze;
+  Gamma: no clouds in caves/indoors (Gamma's clouds are its sun's light function). DONE.
+- Cloud pattern jumping at map borders (3D): clouds use VoxelWorld_SteadyOrigin(). DONE. (2D not yet.)
+- Trees "changing a lot" in Dewford: asked the owner what exactly changes - OPEN.
+- Battle transition over the 3D world as Emerald 3DS (RenderTransition): the world moved line by line by BG1's
+  per-line scroll (gPcLineScrollX/Y from gba_easy_draw.c), in bands. DONE (2D field still not moved).
+- Gamma Lighting is a setting: Options > Settings > Video (cfg gammaLight); env WJPC_3D_GAMMALIGHT overrides. DONE.
+- Owner's next big idea: add Kanto with story sense (linked PCs after Sevii, or lower EXP in Kanto). Discussing.
