@@ -10,3 +10,9 @@ In case of disagreement with historical design notes, the owner's most recent re
 
 ## Project Deluxe (this branch)
 Read `docs/PROJECT_PC_PORT.md` before doing anything on this branch: plan, owner requests, rules, build and test.
+
+## Project ARIA (Kanto expansion)
+If you are asked to **"continue Project ARIA"** (or anything about Kanto, Varnell or ARIA): read
+`docs/KANTO_TASKS.md` first and follow its rules — work on branch `kanto-port`, take the first unchecked task,
+and tick tasks off in `docs/KANTO_TASKS.md` in the same push as the work. Story and every owner decision are in
+`docs/KANTO_PROJECT_ARIA.md`.
