@@ -297,7 +297,8 @@ static const char *sFragmentSrc =
     "    if (gammaLight > 2.5) { gl_FragColor = vec4(n * 0.5 + 0.5, 1.0); return; }\n"
     // haze (M_StylizedFogPP, day): distances in Gamma units, 64 per tile
     "    float d = length(vWorld - cam) * 64.0;\n"
-    "    float amt = clamp((d - 10.0) / 39990.0, 0.0, 1.0) * 0.5;\n"
+    /* Gamma's day haze tops out at 0.5; owner asked for it a little weaker (2026-11-13): 0.35 */
+    "    float amt = clamp((d - 10.0) / 39990.0, 0.0, 1.0) * 0.35;\n"
     "    vec3 v = normalize(cam - vWorld);\n"
     "    amt = min(amt, clamp(1.0 - 0.4 * (dot(sunDir, v) - 0.5), 0.0, 1.0));\n"
     "    rgb = mix(rgb, vec3(0.2, 0.467, 1.0), amt);\n"
