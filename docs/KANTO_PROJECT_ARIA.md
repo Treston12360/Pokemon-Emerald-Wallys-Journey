@@ -262,7 +262,7 @@ No tea, no item gates.
 - Crossroads is on expansion master from Mar–Apr 2026; we're on 1.17.2. Their own work is 22 commits by
   eonlynx and Goose touching 213 files (≈77 of them map scripts): mapjson/Makefile changes to compile
   both games' maps, tileset size handling (FRLG primary = 640 tiles/metatiles, 7 palettes vs Emerald's
-  512/512/6), FRLG flags moved out of the trainer-flag range, save layout kept within 32 flash sectors,
+  512/512/6), FRLG flags moved out of the trainer-flag range, save layout: no size limit on PC (AGENTS.md "NO LIMITS"); old GBA saves must import,
   region-aware Fly/region map, FRLG specials/scripts, object events, heal locations, wild encounters.
 - **Our extra constraint:** GBA saves must still import. Any save-layout change must keep that working.
 - Plan: port their changeset onto our 1.17.2 base piece by piece (build system → tilesets → maps compile →
