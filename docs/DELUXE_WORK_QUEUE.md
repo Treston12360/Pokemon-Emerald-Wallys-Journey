@@ -126,7 +126,7 @@ Open:
 - Not yet built: light rays (god-ray planes, math in the doc), dark caves/gyms trigger (colour gain 0.49,
   vignette 3/2), lamps. Show the owner pictures before turning anything on by default.
 
-### DLX-20 3D: black person-shaped silhouette on the ground in Littleroot (TODO)
+### DLX-20 3D: black person-shaped silhouette on the ground in Littleroot (WIP - session 014PwRDj)
 Seen in every 3D screenshot of Littleroot north of the player's house (before and after the lighting work): an
 all-black sprite-shaped card standing on the grass. Probably a person/object whose sprite frame or palette
 is not loaded for the 3D card. Find which object event it is and fix.
