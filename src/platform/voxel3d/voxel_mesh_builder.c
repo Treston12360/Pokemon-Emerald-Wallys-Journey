@@ -2535,6 +2535,46 @@ static bool BorderWaterLevel(int x, int y, float *level, float *shift)
     if (ring == NULL || ring->indoor || VoxelRelief_Belt(ring) != 0
      || !VoxelWorld_BorderIsWater(x, y))
         return false;
+    /* DLX-26 (owner's choice 2026-11-13, replaces the skirt walls): the whole belt of sea lies flat, at one
+     * level - the level most of the map's own sea lies at - so no steps (and no lines) between belt cells. */
+    if (getenv("WJPC_BELT_SEA_STEPS") == NULL)
+    {
+        static int sFlatKey = -1;
+        static float sFlatLevel, sFlatShift;
+        int key = (ring->mapGroup << 8 | ring->mapNum) ^ (ring->lift << 16);
+        if (sFlatKey != key)
+        {
+            float lv[16], sh[16];
+            int cnt[16], kinds = 0, best = -1;
+            for (int cy = ring->originY; cy < ring->originY + ring->height; ++cy)
+                for (int cx = ring->originX; cx < ring->originX + ring->width; ++cx)
+                {
+                    float l, h;
+                    int k;
+                    if (VoxelMesh_Classify(cx, cy) != VOXEL_SHAPE_WATER)
+                        continue;
+                    l = VoxelRelief_CellLift(ring, cx, cy);
+                    h = VoxelRelief_CellShift(ring, cx, cy);
+                    for (k = 0; k < kinds && (lv[k] != l || sh[k] != h); ++k)
+                        ;
+                    if (k == kinds && kinds < 16)
+                        lv[k] = l, sh[k] = h, cnt[k] = 0, kinds++;
+                    if (k < kinds)
+                        cnt[k]++;
+                }
+            sFlatLevel = 0.0f;
+            sFlatShift = 0.0f;
+            for (int k = 0; k < kinds; ++k)
+                if (best < 0 || cnt[k] > cnt[best])
+                    best = k;
+            if (best >= 0)
+                sFlatLevel = lv[best], sFlatShift = sh[best];
+            sFlatKey = key;
+        }
+        *level = sFlatLevel;
+        *shift = sFlatShift;
+        return true;
+    }
     ex = x < ring->originX ? ring->originX
        : x >= ring->originX + ring->width ? ring->originX + ring->width - 1 : x;
     ey = y < ring->originY ? ring->originY
