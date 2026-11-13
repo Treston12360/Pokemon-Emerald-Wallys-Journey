@@ -2,7 +2,9 @@
 
 **Authority:** This is the standing record of the owner's requested design for Pokémon Emerald: Wally's Journey. Read this file **before** making changes, planning work, or claiming completion. Preserve these requirements between sessions. When the owner changes a decision, update this file in the same commit. Do not silently change the design.
 
-**Project:** A playable **GBA Pokémon Emerald ROM hack**, not a Python or PC-only game. Python is allowed for offline tooling/checks, not as a replacement for the ROM. Develop on `wally-journey-development`; verify before integrating/releasing. Build and emulator playtesting are required before calling a feature complete.
+**Project (owner, 2026-11-13 — replaces the line that follows):** a **native Windows game, `WallysJourney.exe`**. No GBA ROM is made, tested or released any more, and no GBA limit applies; old GBA `.sav` files must still import. Where older rows below say "ROM", "GBA build" or "emulator test", read "the .exe" and "test in the .exe".
+
+**Project (historical, until 2026-11-12):** A playable **GBA Pokémon Emerald ROM hack**, not a Python or PC-only game. Python is allowed for offline tooling/checks, not as a replacement for the ROM. Develop on `wally-journey-development`; verify before integrating/releasing. Build and emulator playtesting are required before calling a feature complete.
 
 ## Story, characters and world
 
@@ -666,3 +668,4 @@ These are **wishlist items, not claims of implementation**. Adapt the design pri
 | 2026-11-12 | DLX-10: "Yes, jump to the move"; DLX-14: no limits on PC ("we have no limitations ... as long as the original .sav files are compatible") | DLX-10 done (both builds). DLX-14 done on PC: 64 sprite palettes, 4096 sprite tiles; GBA keeps hardware limits. Saves untouched |
 | 2026-11-12 | DLX-5: 3D Battles "Starts on" | Default On (battle3d=1) kept |
 | 2026-11-13 | "Wallysjourney + Project Aria is one game... now that it is a Windows game we are allowed to do whatever we want with no limitations as long as we can import our old saves"; "no need to ever care about any GBA limitations ever again" (also 3DS limits) | No GBA or 3DS limits of any kind (save size, flags, VRAM, budgets...). Only hard rule: old GBA saves import into the PC game; writing GBA saves back is not needed. Recorded in AGENTS.md "NO LIMITS". |
+| 2026-11-13 | "We are not making a GBA ROM anymore. The game is now a .exe game. The GitHub should explain that there are no more limitations. Focus on the .exe and not work on the GBA ROM anymore." | README, AGENTS.md, this file, PROJECT_PC_PORT.md and KANTO_TASKS.md say so. No ROM testing, no `.gba` files sent, no ROM-only code kept. `make release` only as the data-generation step of the PC build. Old GBA saves still import |

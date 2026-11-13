@@ -201,7 +201,10 @@ controller mapping (owner confirmed it works) and the bad-read fixes. **Next: st
 - If a machine has gcc-multilib + 32-bit SDL2 and mingw-w64 + Wine, the original commands still work.
 
 ## Rules (same as the main project, plus PC ones)
-- **The GBA ROM must not change.** Every change to shared code is behind `#ifdef PORTABLE` (C) or
+- **NO GBA ROM ANY MORE (owner 2026-11-13):** the game is `WallysJourney.exe`. Do not test, compare, send or
+  protect the ROM; the rule in the next bullet is history. `make release` is only the step that generates the
+  data files the PC build needs.
+- ~~**The GBA ROM must not change.**~~ (until 2026-11-12) Every change to shared code is behind `#ifdef PORTABLE` (C) or
   `.ifdef PORTABLE_ASM` (asm). After every change run `make release` and compare the SHA-1 with a build of
   the base commit (0.18.19 = `21f006adcc5d884c4992805296e171f45428c46b`).
   **Careful:** expansion asserts embed `__LINE__`, so adding lines above an assert in files like sprite.c
@@ -214,7 +217,8 @@ controller mapping (owner confirmed it works) and the bad-read fixes. **Next: st
 - mGBA saves must load on PC (owner 2026-11-12: PC saves no longer need to go back to mGBA). The save file is the raw 128 KB flash image.
 
 ## Building
-Run the normal GBA build first (`make release`) so all generated files exist, then:
+Run `make release` first — not for the ROM (no ROM is made any more), only because it generates files the PC
+build needs (map data, trainer tables, graphics). Then:
 ```
 make -f Makefile.pc            # Linux 32-bit: ./wallys-journey
 make -f Makefile.pc WIN=1      # Windows 32-bit: WallysJourney.exe

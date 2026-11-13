@@ -14,7 +14,8 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
    starting, so nobody else starts the same task.
 4. When a task is done and tested: change `[ ]` to `[x]`, add the date and commit hash, and push **in the
    same push** as the work. If you only got partway, leave it unchecked and write exactly where you stopped.
-5. Owner rules: GBA saves must still import; show the owner pictures and ask before new wording or visual
+5. Owner rules: the game is the Windows .exe — no GBA ROM is made or tested any more (AGENTS.md); old GBA saves
+   must still import; show the owner pictures and ask before new wording or visual
    changes; no new hand-drawn art (recolours OK); the level curve must be checked with the simulator.
 6. New decisions from the owner go into `docs/KANTO_PROJECT_ARIA.md` right away.
 7. Credit: the Kanto-in-Emerald port follows Pokémon Crossroads (github.com/eonlynx/pokecrossroads,
