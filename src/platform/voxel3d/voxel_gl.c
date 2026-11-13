@@ -488,8 +488,44 @@ typedef struct
     unsigned pages;
     uint32_t lastUse;
     uint32_t season; // VoxelWorld_SeasonKey() it was baked for (DLX-17)
+    uint32_t gen;    // bumped at every (re)build: meshes laid on an older one are laid again
     bool valid;
 } Atlas;
+
+static uint32_t sAtlasGen;
+
+/*
+ * An atlas is made for the maps loaded when it is made. Another map on the same tile sets later (Granite Cave's
+ * floors, a town and its routes) can use metatiles it never got - drawn as nothing, the sky through the gap
+ * (the blue squares). Emerald 3DS grows its atlas then (extendPending); here: a map whose cells use a metatile
+ * the atlas has no slot for has it made again with every loaded map's metatiles. Checked once per map and build.
+ */
+static bool AtlasCovers(const Atlas *a, const VoxelMapInstance *inst)
+{
+    static struct { const Atlas *atlas; uint32_t gen; uint16_t group, num; } seen[32];
+    static unsigned next;
+    for (unsigned i = 0; i < 32; i++)
+        if (seen[i].atlas == a && seen[i].gen == a->gen && seen[i].group == inst->mapGroup && seen[i].num == inst->mapNum)
+            return true;
+    for (int y = 0; y < inst->height; y++)
+        for (int x = 0; x < inst->width; x++)
+        {
+            int id = VoxelWorld_GetMetatileId(inst->originX + x, inst->originY + y);
+            if (VoxelWorld_UsesTreeSprites(inst))
+                id = VoxelTree_GroundMetatile(inst->secondaryTileset, id);
+            if (id >= 0 && id < VOXEL_METATILE_REAL && a->map.slotOf[id] == 0)
+            {
+                Voxel3D_Log("[3D] atlas lacks metatile %x of %d:%d: made again", id, inst->mapGroup, inst->mapNum);
+                return false;
+            }
+        }
+    seen[next].atlas = a;
+    seen[next].gen = a->gen;
+    seen[next].group = (uint16_t)inst->mapGroup;
+    seen[next].num = (uint16_t)inst->mapNum;
+    next = (next + 1) % 32;
+    return true;
+}
 
 static Atlas sAtlases[MAX_ATLASES];
 
@@ -529,6 +565,14 @@ static Atlas *FindAtlas(const VoxelMapInstance *inst)
         if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset
             && sAtlases[i].season == SeasonNow())
         {
+            if (!AtlasCovers(&sAtlases[i], inst))
+            {
+                // made again (PrepareAtlas) with every loaded map's metatiles; meshes follow by its gen
+                wj_glDeleteTextures(VOXEL_ATLAS_PAGES, sAtlases[i].tex);
+                memset(sAtlases[i].tex, 0, sizeof(sAtlases[i].tex));
+                sAtlases[i].valid = false;
+                return NULL;
+            }
             sAtlases[i].lastUse = sFrame;
             return &sAtlases[i];
         }
@@ -620,6 +664,7 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
     slot->primary = sJobPrimary;
     slot->secondary = sJobSecondary;
     slot->valid = true;
+    slot->gen = ++sAtlasGen;
     slot->lastUse = sFrame;
     return slot->primary == inst->primaryTileset && slot->secondary == inst->secondaryTileset ? slot : NULL;
 }
@@ -729,6 +774,7 @@ typedef struct
     uint32_t signature, lastUse;
     const void *primary, *secondary; // the tile sets its atlas must still hold
     Atlas *atlas;
+    uint32_t atlasGen;        // the atlas build it was laid on
     Mesh terrain[VOXEL_ATLAS_PAGES];
     Mesh trees, buildings;
     int buildingPage;
@@ -940,6 +986,7 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
     m->staticCount = pb->staticCount;
     m->buildingPage = VoxelBuildings_PageOf(inst);
     m->atlas = pb->atlas;
+    m->atlasGen = pb->atlas->gen;
     m->primary = pb->atlas->primary;
     m->secondary = pb->atlas->secondary;
     m->used = true;
@@ -968,6 +1015,7 @@ static int sBeltX = 0x7FFFFFFF, sBeltY;
 static int sBeltShiftX, sBeltShiftZ;
 static bool sBeltRedo;
 static Atlas *sBeltCacheAtlas;
+static uint32_t sBeltCacheGen;
 #define BELT_RADIUS 40
 
 // The belt is made of CHUNK x CHUNK pieces in world cells (origin 0,0), so a piece is the same wherever the
@@ -1822,7 +1870,8 @@ static InstanceMesh *MeshSlotFor(int mapGroup, int mapNum)
 // Its atlas still holds its tile sets (a slot can be taken for another pair once the map is out of sight).
 static bool MeshAtlasOk(const InstanceMesh *m)
 {
-    return m->atlas != NULL && m->atlas->valid && m->atlas->primary == m->primary && m->atlas->secondary == m->secondary;
+    return m->atlas != NULL && m->atlas->valid && m->atlas->primary == m->primary && m->atlas->secondary == m->secondary
+        && m->atlasGen == m->atlas->gen;
 }
 
 static float sFogNear = 40.0f, sFogFar = 90.0f;
@@ -2044,13 +2093,14 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             Uint64 t0 = SDL_GetPerformanceCounter();
             bool full = sBeltX == 0x7FFFFFFF || sBeltAtlas == NULL;
 
-            if (!full && atlas0 != sBeltCacheAtlas)
+            if (!full && (atlas0 != sBeltCacheAtlas || atlas0->gen != sBeltCacheGen))
             {
                 // Into a map with other tile sets: its pieces again, a few a frame, the old belt up meanwhile.
                 BeltCache_Flush();
                 sBeltRedo = true;
             }
             sBeltCacheAtlas = atlas0;
+            sBeltCacheGen = atlas0->gen;
             if (sBeltRedo && !full)
             {
                 sBeltWantX = cx;
