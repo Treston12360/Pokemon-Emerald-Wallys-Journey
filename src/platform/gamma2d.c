@@ -495,7 +495,7 @@ void Gamma2D_Apply(uint32_t *argb, const uint16_t *src, int w, int h, int worldX
         // Indoors there is no sun or cloud: the GBA art is drawn fully lit, so it keeps full sunlight.
         float r = (float)h / (float)w, n = 1.41421354f / sqrtf(1.0f + r * r);
         job.vignette = room == 1 ? 3.0f : room == 2 ? 2.0f : 0.4f;
-        job.gain = room != 0 ? 0.49f : 1.0f;
+        job.gain = room == 1 || room == 2 ? 0.49f : 1.0f;
         job.vx = n * job.vignette;
         job.vy = r * n * job.vignette;
         job.clouds = room == 0;

@@ -252,7 +252,9 @@ static const char *sFragmentSrc =
     "float fbm(vec2 p) { float a = 0.5, s = 0.0; for (int k = 0; k < 4; k++) { s += a * vnoise(p); p *= 2.03; a *= 0.5; } return s / 0.9375; }\n"
     // M_SunCloudShadows_LF1 with Gamma's numbers; the two noise textures are stand-ins (theirs are art assets)
     "uniform sampler2D cloudTex, roughTex;\n"
+    "uniform float cloudsOn;\n"
     "float clouds(vec3 w) {\n"
+    "  if (cloudsOn < 0.5) return 1.0;\n"
     // a light function on the directional light is cast along the light: every point takes the cloud
     // over the ground spot its sun ray comes from, so walls and roofs carry the ground's pattern instead of
     // repeating one ground sample all the way up (that drew vertical streaks over buildings)
@@ -1638,7 +1640,7 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
             /* Gamma: engine default vignette 0.4; Granite Cave gain 0.49 + vignette 3, Brawly's gym 0.49 + 2 */
             extern int WideView_GammaRoom(void);
             int room = WideView_GammaRoom();
-            wj_glUniform4f(wj_glGetUniformLocation(sPostProg, "room"), room ? 0.49f : 1.0f,
+            wj_glUniform4f(wj_glGetUniformLocation(sPostProg, "room"), room == 1 || room == 2 ? 0.49f : 1.0f,
                            room == 1 ? 3.0f : room == 2 ? 2.0f : 0.4f, (float)h / (float)w, 0.0f);
         }
         for (int i = 1; i < 6; i++)
@@ -2088,7 +2090,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     {
         int cx = ((int)floorf(playerX) / CHUNK) * CHUNK, cy = ((int)floorf(playerZ) / CHUNK) * CHUNK;
         Atlas *atlas0 = GetAtlas(inst0);
-        if (atlas0 != NULL && !inst0->indoor)
+        // (not in a cave either: the belt was a plateau of the cave's border tiles round it, walls and all)
+        if (atlas0 != NULL && !inst0->indoor && !inst0->underground)
         {
             Uint64 t0 = SDL_GetPerformanceCounter();
             bool full = sBeltX == 0x7FFFFFFF || sBeltAtlas == NULL;
@@ -2216,9 +2219,9 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     backdrop = *(const uint16_t *)PLTT;
     {
         float r = (backdrop & 31) / 31.0f, g = ((backdrop >> 5) & 31) / 31.0f, b = ((backdrop >> 10) & 31) / 31.0f;
-        if (!inst0->indoor)
+        if (!inst0->indoor && !inst0->underground)
         {
-            // Outdoors: a sky colour, not the GBA backdrop.
+            // Outdoors: a sky colour, not the GBA backdrop (a cave keeps its backdrop, as indoors and the 3DS).
             r = 0.55f; g = 0.75f; b = 0.95f;
         }
         if (gVoxelGammaLight)
@@ -2269,12 +2272,14 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     else
         wj_glUniform4f(sUniFade, 0, 0, 0, 0);
     // Haze, outdoors only: starts well past the player, the sky's colour.
-    if (inst0->indoor)
+    if (inst0->indoor || inst0->underground)
         wj_glUniform2f(sUniFog, 1.0e6f, 2.0e6f);
     else
         wj_glUniform2f(sUniFog, sFogNear, sFogFar);
     wj_glUniform3f(sUniFogColor, 0.55f, 0.75f, 0.95f);
     GammaLightUniforms();
+    // Gamma's cloud shadows are its sun's light function: none where the sun does not reach (indoors, caves)
+    wj_glUniform1f(wj_glGetUniformLocation(sProgram, "cloudsOn"), inst0->indoor || inst0->underground ? 0.0f : 1.0f);
 
     // Ground, trees and models of every map.
     for (int i = 0; i < MAX_INSTANCES; i++)
@@ -2300,7 +2305,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             }
         }
     }
-    if (sBeltAtlas != NULL && !inst0->indoor)
+    if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground)
     {
         for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
             MeshDraw(&sBeltTerrain[p], sBeltAtlas->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);

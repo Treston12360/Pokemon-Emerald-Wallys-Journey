@@ -113,6 +113,8 @@ int WideView_GammaRoom(void)
         return 1;
     if (map == MAP_DEWFORD_TOWN_GYM)
         return 2;
+    if (gMapHeader.mapType == MAP_TYPE_UNDERGROUND)
+        return 3; // another cave: no sun or clouds reach it, Gamma's grading otherwise as outdoors
     return 0;
 }
 
