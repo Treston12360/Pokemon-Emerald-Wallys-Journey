@@ -321,6 +321,27 @@ row 9 bits 3..13, row 10 bits 2..14, rows 11..15 bits 1..15 (read from the 2D pi
 sign like Dewford's (picture sent). The patched file is in the alpha10 package's voxel/ folder; whoever
 regenerates signposts.bin must re-apply it (or teach the sign generator about signs on a building's edge).
 
+### DLX-22 3D: thin seam lines between tiles (TODO, owner report 2026-11-13)
+Black lines in Granite Cave and right outside it, and inside the Pokémon Center; light lines across water on Route 118 / sea routes. Pictures: 82dd3767, 38db5a80, ce8fe2a3, fd24e386, 7e0beffa (Pokémon Center), 1d0a3e73/945abb13 (Route 118 water). Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-23 Indoor glow too strong (Pokémon Center and houses) (TODO, owner report 2026-11-13)
+Bright bloom on walls/edges indoors. Owner: 'the glow in the pokemon center is too strong', 'weird glow inside of houses as well'. Pictures: b5ceb537, 0fd2c32c, 7e0beffa. Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-24 3D: heal-machine Poké Balls drawn in the wrong spot (TODO, owner report 2026-11-13)
+During healing the balls float above the wall instead of on the machine. Picture: 0fd2c32c. Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-25 3D: Dewford pop-in when switching routes (TODO, owner report 2026-11-13)
+Trees at the outside edges of the map change when crossing into the next route. Pictures: 72382506, f63f2bd1, d88db846, d32e7b46, ee23a2c6. Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-26 3D: water routes show grey squares and lines (TODO, owner report 2026-11-13)
+Grey/transparent squares under rocks and other objects, and long light lines on the sea (Route 118 and others). Picture: fd24e386. Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-27 3D: the ship on the sea renders wrong / partly flat (TODO, owner report 2026-11-13)
+Picture: fa34c54f, fd24e386. Images in `docs/dlx_reports/2026-11-13/`.
+
+### DLX-28 3D: furniture and half walls flat inside houses (and odd lines) (TODO, owner report 2026-11-13)
+Chairs and tables look flat, half walls show lines. Pictures: f1550854 (Silph-style railings), 7e0beffa (house). Images in `docs/dlx_reports/2026-11-13/`.
+
 ## How to build and test (short)
 - Linux: `make -f Makefile.pc -j3`; Windows: `make -f Makefile.pc WIN=1`.
 - 3D data (`voxel/` folder next to the exe) comes from Emerald 3DS's generators run on this repo's
