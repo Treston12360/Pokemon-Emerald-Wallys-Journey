@@ -78,6 +78,25 @@ love, to honour her while fixing the anomalies. Nothing tells them he's trying t
 **Reveal:** the machine exists to bring her back, and he never cared what it cost. For players who missed
 the clues, it's also the moment they learn Aria was his daughter and the project carried her name all along.
 
+## 2a. The anomalies and the timeline (owner, 2026-11-13)
+
+- **In-story reason for every region's Pokémon living in Hoenn and Kanto:** "the anomalies" — Pokémon from
+  other regions appearing where they shouldn't. This is the canon explanation for the game's wild Pokémon.
+- Kanto follows the same Poké Ball-only rule as Hoenn.
+- Varnell is a **world-renowned** researcher; his base is in Kanto.
+- **Timeline:**
+  1. **Before the player moves to Littleroot**, Varnell caught **Hoopa in Hoenn** (Hoopa is tied to Hoenn
+     in ORAS canon) and began experimenting there. Hoopa's rings opening is why other regions' Pokémon are
+     already in Hoenn when the game starts. Nobody knows Hoopa is the cause.
+  2. The Groudon/Kyogre/Rayquaza crisis happens later, during the player's journey — not his doing. He
+     watches the player handle it.
+  3. Realising he needs more pieces, he takes Hoopa back to his Kanto lab. The rings follow Hoopa, so the
+     anomalies seem to "spread" to Kanto — that's why Oak calls the player now.
+  4. His theory builds piece by piece: **Palkia** to control space, **Dialga** to control time, and finally
+     **Giratina** — the missing piece (antimatter / the Distortion World). With space, time and antimatter
+     he believes Hoopa's portal can bring Aria back into this world. That machine is ARIA.
+- Open: how and when he gets Palkia, Dialga and Giratina (before the game, or during Kanto as story beats).
+
 ## 2b. Blue and Varnell
 
 - After losing to Red, Blue lost all his confidence. **Varnell gave him a second chance**: a research spot
