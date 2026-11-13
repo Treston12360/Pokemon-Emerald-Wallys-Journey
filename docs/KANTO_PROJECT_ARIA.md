@@ -95,7 +95,18 @@ the clues, it's also the moment they learn Aria was his daughter and the project
   4. His theory builds piece by piece: **Palkia** to control space, **Dialga** to control time, and finally
      **Giratina** — the missing piece (antimatter / the Distortion World). With space, time and antimatter
      he believes Hoopa's portal can bring Aria back into this world. That machine is ARIA.
-- Open: how and when he gets Palkia, Dialga and Giratina (before the game, or during Kanto as story beats).
+- **Captures are story beats during Kanto (owner, 2026-11-13).** The player never knows these are
+  legendaries, or that Hoopa, Palkia, Dialga or Giratina are in Kanto. Each capture causes something in
+  the story, or something the player does helps it happen. Method: **Hoopa's portals pull the legendary
+  into a containment chamber; machines wear it down until he can control and capture it** (no normal
+  ball could hold a god). That's the holding bay.
+- Draft mapping (owner to adjust):
+
+| Capture | What the player unknowingly does | What everyone sees | Chapters |
+|---|---|---|---|
+| Palkia (space) | Each tear "closed" with Varnell's device gives him a lock on where space is weakest — how the portal finds Palkia | The Silph malfunction: the building warps, Saffron quarantined. Really the wear-down chamber straining to hold Palkia | 2–6 |
+| Dialga (time) | Varnell sends the player to restart the Power Plant "to stabilise readings"; the power feeds ARIA | Time slips: clocks stop in Fuchsia, Mansion diaries look freshly written, the displaced person from another time | 7–8 |
+| Giratina (final piece) | Beating Lance opens the Indigo Plateau vault; inside is the **Griseous Orb**, key to the Distortion World. Varnell takes it | Shadows spread, the Lavender echo grows stronger, then the reveal | 12–13 |
 
 ## 2b. Blue and Varnell
 
