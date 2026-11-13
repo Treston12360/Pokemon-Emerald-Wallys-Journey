@@ -19,8 +19,8 @@ a reveal or a choice, not just a gym.
 | The machine | **Project ARIA** — "Anomalous Rift Integration Array". Named after his daughter; the player only learns this at the reveal. |
 | Legendaries | Hoopa (taken first), Dialga, Palkia, Giratina, held in containment machines. |
 | Varnell's ending | **Lost to the rift.** Giratina drags him into the Distortion World. Tragic, not redeemed. |
-| Wally | **Small cameos only** (calls / messages). Kanto is the player's story. |
-| Blue | Former Champion, now the 8th leader (Viridian). Rejects the player, investigates on his own, respect earned slowly. No quippy banter. |
+| Wally | **Small cameos only.** He sees the player off at the Hoenn harbour: "show Kanto what Hoenn is made of" — the reason the player takes the Kanto gym challenge. |
+| Blue | Former Champion, now the 8th leader (Viridian). Part of the investigation alongside Oak (his grandfather) and Varnell (the man who rebuilt him). Cold to the player at first — see §2b. Respect earned slowly. Not a jerk, no quippy banter. |
 | Kanto League | HGSS lineup: Will, Koga, Bruno, Karen; **Lance** is Kanto Champion (Koga's move to the E4 is why Janine runs Fuchsia). |
 | Red | **Optional superboss only.** No story role. Final Champion-defense challenger. |
 | Oak | Introduces Varnell. Trusts him; is shaken by the reveal. |
@@ -47,7 +47,45 @@ a reveal or a choice, not just a gym.
 - The holding bay terminal: "Good night, Aria."
 - Mr. Fuji at Pokémon Tower mentions a grieving father who visits a grave "with no Pokémon name on it."
 
-**Reveal:** the photo on Varnell's desk, labelled *Aria, age 7*. The player realises the machine is her.
+**Mid-game photo (owner, 2026-11-13):** the player finds a photo of a little girl holding a Clefairy.
+Sharp players will work out she's his daughter and the Lavender Clefairy was hers — but that only tells
+them he's grieving, not what he's building. **The early photo carries no name**, so it can't be linked to
+"Project ARIA" ahead of time (owner may override).
+
+**Reveal:** her name — on the back of the photo or in his journal: *Aria, age 7*. The player realises the
+project was named after her the whole time, and that the machine exists to bring her back.
+
+## 2b. Blue and Varnell
+
+- After losing to Red, Blue lost all his confidence. **Varnell gave him a second chance**: a research spot
+  in his lab, helping him rebuild. Blue owes him, and loves him like a mentor.
+- Blue knows only that Varnell lost a daughter to Team Rocket years ago. Varnell won't talk about it;
+  it hurts too much. **Blue never knew her name.**
+- Blue was already investigating the anomalies with Oak and Varnell when they invited the player from
+  Hoenn. He doesn't understand why — he's capable, he was already on it, and these are *his* people.
+  So he's cold, unimpressed and irritated with the player. He has his own personality; he's not a jerk.
+- Early: Blue investigates on his own. You cross paths because you're chasing the same thing; he shares
+  nothing. Over time he starts working with you.
+- **Why Varnell used the player and not Blue:**
+  - Practical: Blue knows him and the lab too well and would ask questions; a former Champion's clearance
+    gets noticed. A stranger from Hoenn won't.
+  - Human: Varnell couldn't do it to Blue. At the end Blue asks "why not me?" — "Because I couldn't do this to you."
+- Saffron: Blue recognises ARIA markings from his time in the lab and starts to doubt the man who saved him.
+- The reveal hits Blue harder than the player. Viridian is Blue choosing to stand with the player against
+  his mentor — the turning point of his arc, not just the 8th badge.
+
+## 2c. The gym challenge is clearance (the player's progress builds ARIA)
+
+- After the Rocket years the Kanto League rebuilt security: Kanto badges carry League clearance, and
+  restricted sites (tear zones, Silph's sealed floors, Seafoam station, Cinnabar's lab) open only for
+  licensed Kanto trainers. Hoenn badges don't count.
+- Wally's send-off is why the player takes the challenge; **Varnell sponsors it** (registration, trainer
+  pass) and cheers every badge.
+- Each badge opens a restricted site; each assignment sends the player into one.
+- Twist: Varnell needed a badge holder's clearance. Beating Lance is the last one and opens the
+  **Indigo Plateau's sealed vault.** The player's own wins built the machine.
+- As a registered challenger, beating Lance is a real Kanto win — which is why Kanto challengers later
+  come to the player's title defenses in Hoenn.
 
 ## 3. Story structure — chapters
 
