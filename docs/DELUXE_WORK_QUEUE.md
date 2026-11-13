@@ -365,6 +365,12 @@ through steps between belt water cells. BorderWaterLevel (identical to Emerald 3
 of the map's nearest edge cell (-0.625, -0.562, -0.5, -0.438 here), each cell flat, nothing closing the small step.
 3DS has the same steps; its narrow view rarely shows the belt. Not covered by the reference -> ASKED OWNER how to
 close them (3DS's own method for map/belt seams is a skirt wall: "the seam is a low wall and never a gap").
+OWNER CHOSE SKIRT WALLS. DONE for the belt (BeltWaterSkirts, voxel_mesh_builder.c): long sea lines gone.
+STILL OPEN: small light brackets beside some rocks at sea, inside the map. Dump (WJPC_DUMP_TERRAIN=23): Route 108
+cell (27,13) relief water at -0.562 (z shifted -1/16) beside cell (28,13) flat at -0.5. A water-to-water inner
+skirt (InnerWaterSkirts, tried, reverted) did not catch it - only 28 pairs flagged, none here, so (27,13) is likely
+not classified VOXEL_SHAPE_WATER - and it blanked the map's terrain (cause not found). Next: Classify (27,13),
+then close that step with the owner's skirt rule.
 Grey/transparent squares under rocks and other objects, and long light lines on the sea (Route 118 and others). Picture: fd24e386. Images in `docs/dlx_reports/2026-11-13/`.
 
 ### DLX-27 3D: the ship on the sea renders wrong / partly flat (TODO, owner report 2026-11-13)
