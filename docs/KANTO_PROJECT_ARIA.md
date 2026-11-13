@@ -42,8 +42,12 @@ a reveal or a choice, not just a gym.
   the tower. Varnell secretly wants to know whether, if *it* lingered, something of Aria might still be
   there and reachable. The player thinks they're calibrating a lens to study the tears; really they're
   his test of whether the dead leave a trace the rift can reach. The player doesn't know this.
-- When the player reports back, he asks something oddly specific — "Did it say anything?" It sounds like
-  scientific curiosity; it only lands after the twist.
+- **Report-back scene (owner, 2026-11-13):** Blue is there when the player reports to Varnell. Blue (who
+  never knew her name) mentions it in passing:
+  > Blue: "It was weird. It kept saying... 'Aria.'"
+  > Varnell: "......"
+  > Varnell: "Echoes tend to repeat fragments. Good work, both of you. That's all for today."
+  Exactly one beat of silence, then he recovers. Longer or emotional reactions would tip off sharp players.
 - For most of the game Varnell seems kind, brilliant and genuinely helpful. **That's a mask.**
 - Underneath he's twisted: he knows folding space-time could destroy the world and **doesn't care.**
   A world without Aria isn't a world worth being in, so the risk was worth it. No remorse, no redemption.
@@ -116,6 +120,7 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 6 | **Saffron quarantine** | An ARIA containment machine malfunctions inside Silph Co.; the building warps (Silph's teleport maze). City sealed by Jenny and Silph security until you're cleared. You clear it; Master Ball. **Blue turns** — he saw the machine's markings and starts suspecting Varnell. | Sabrina |
 | 7 | **Fuchsia** | Blue shares what he's found, coldly. Safari side quest. | Janine |
 | 8 | **Seafoam** | Boulder/current puzzle. Blaine's temporary gym is here because Cinnabar's volcano is acting up (the tears). | Blaine (in Seafoam) |
+| 8b | **Rocket Hideout (late game)** | Sealed under the Game Corner by the League; opened with the player's badge clearance. Varnell sends you for Rocket's old research on the anomalies. Clues: Rocket's logs show **they stole his research** and were in Pokémon Tower that day because of his readings; a raid report mentions "a civilian child in the tower" (no name); a recent gap where tower-raid files were taken (players assume a thief — it was Varnell's people). Ties his grief to guilt without revealing the plan. | — |
 | 9 | **The Institute** | Back at Varnell's institute (mockups exist). The office, the drawing, the photo: **the reveal.** Varnell takes Hoopa and the lab goes dark. | — |
 | 10 | **Cinnabar** | Eruption warnings; the island is closed. The Mansion's old diaries mention spatial experiments. Varnell's people evacuate the last machine part. | — |
 | 11 | **Viridian** | Blue's gym opens. The battle is the end of his arc: he's finally on your side. | Blue |
@@ -172,6 +177,21 @@ No tea, no item gates.
 - Add Kanto challengers: the Kanto Gym Leaders, Blue, the Kanto Elite Four.
 - **Red** is the final challenger, at the top of the curve (current defenses run 74–90).
 - Needs a code change: today the ladder triggers on repeat E4 runs after the Hall of Fame.
+
+## 6b. FRLG Rocket-era places (rule: Kanto remembers the Rocket years; nothing pretends FRLG didn't happen)
+
+| Place | Plan |
+|---|---|
+| Celadon Game Corner | Open as a normal Game Corner. Poster switch and stairs removed; a League seal plate where the stairs were. |
+| Rocket Hideout | Sealed until late game, then opened by badge clearance (chapter 8b). |
+| Silph Co. | ARIA malfunction chapter (ch. 6) + a memorial plaque for the takeover in the lobby. |
+| S.S. Anne | The ship the player arrives on from Hoenn (ch. 0). |
+| Pokémon Tower | Central to the story (Aria, Clefairy, Mr. Fuji). FRLG layout + a new memorial on the top floor. |
+| Pokémon Mansion | Ruined; diaries hint at spatial experiments. |
+| Power Plant | Optional dungeon; tears make the electricity act strange. |
+| Saffron Fighting Dojo | Side battle, as in FRLG. |
+| Cerulean Cave | Sealed until post-game. |
+| Route 22 rival spot | First meeting with Blue: he refuses to battle and tells you to go home. |
 
 ## 7. Assets (owner rules)
 
