@@ -23,15 +23,17 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 
 ## Phase 1 — Get Kanto into the Emerald build (port from Crossroads)
 
-- [ ] **K1. Compile Kanto maps.** WIP (Claude session 019khs4X, 2026-11-13). Done so far on `kanto-port`:
-      removed the "skip other game's maps" filters in `tools/mapjson/mapjson.cpp` (3 places, same as
-      Crossroads) and the `.if IS_FRLG` block around the Kanto scripts in `data/event_scripts.s`.
-      **Not yet built or tested.** Next: `make -C tools/mapjson`, `make release`, fix the build errors
-      (expect FRLG-only flags/vars/specials/text used by Kanto scripts), until it builds.
+- [x] **K1. Compile Kanto maps.** Done 2026-11-13 (Claude session 019khs4X). mapjson filters and the `.if IS_FRLG`
+      in `event_scripts.s` removed (as Crossroads); FRLG tilesets (`src/data/tilesets/*.h`) and FRLG object-event
+      graphics (`src/data/object_events/*.h`, palettes in `event_object_movement.c`) always built; FRLG flags given
+      real ids at `KANTO_FLAGS_START` (0x1000) kept in the new PC-only save block `SaveBlockPC` (no size limit,
+      stored after the 128 KB GBA image in the .sav — old GBA saves load with Kanto clear); Celadon Game Corner
+      coin checks written without spaces for the PC assembler. GBA data build and Windows/Linux PC build link.
 - [ ] **K2. Tilesets load.** FRLG primary tilesets are 640 tiles / 640 metatiles / 7 palettes; Emerald's are
       512 / 512 / 6. The engine must handle both in one game (`include/fieldmap.h` has both sizes; see how
       Crossroads loads them).
-- [ ] **K3. Warp into Pallet Town works** (test script: `warp 37 0 10 10`; today it crashes because
+- [ ] **K3. Warp into Pallet Town works** — WIP: Pallet Town (37 0) and Viridian City (37 1) load and draw in 2D
+      with NPCs (2026-11-13). Still to check: the rest of the list below and 3D. (test script: `warp 37 0 10 10`; today it crashes because
       `gMapGroups` has no group 37). Then check Viridian, Vermilion, Mt. Moon, Pokémon Tower, Silph Co.,
       a route with grass, a building — 2D and 3D. Verify only; no need to show the owner.
 - [ ] **K4. Flags, vars and save space.** Kanto story flags must not collide with Emerald's (Crossroads moved
