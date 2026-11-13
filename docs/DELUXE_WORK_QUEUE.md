@@ -173,7 +173,7 @@ WJPC_GHOST_TILES 512 / WJPC_GHOST_PALETTES 8; palette tag ^0x4000 so real sprite
 layer, fade and tint like everyone else; the real ones take over on crossing. Checked: Dewford north edge shows
 Route 106's two Fishermen, same look as standing on Route 106. Test aid: WJPC_TEST_NO_GHOSTS=1.
 
-### DLX-13 Other empty map corners (TODO)
+### DLX-13 Other empty map corners (WIP - session 014PwRDj)
 Find and fix corners like Dewford's (zoomed out shows bare filler). Show pictures.
 
 ### DLX-14 Sprite colour / graphics memory limits (Done on PC - session 014PwRDj, 2026-11-12)
