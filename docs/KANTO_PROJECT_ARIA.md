@@ -208,7 +208,7 @@ No tea, no item gates.
 - Leaders are veteran versions: six Pokémon, fully evolved, no early forms (Brock: **no Geodude**).
 - **Kanto's Gym Leaders, Elite Four and important trainers use Kanto Pokémon** (owner, 2026-11-13), chosen
   to fit each trainer. **"Kanto Pokémon" = any Pokémon in a family that started in Kanto**, including later
-  evolutions, Megas and regional/other forms (e.g., Brock can use Steelix because Onix is from Kanto;
+  evolutions and Megas — **but no regional forms** (no Alolan, Galarian, Hisuian or Paldean) (e.g., Brock can use Steelix because Onix is from Kanto;
   Lt. Surge can use Electivire because Electabuzz is). Build them the way the Hoenn leaders were built (see the "Important trainers" and
   "Growing Gym Leader rematches" rows in `WALLY_JOURNEY_OWNER_REQUIREMENTS.md`: proven teams, held items,
   natures/EVs from their moves, Megas only for allowed trainer types) and show the owner before adding.
