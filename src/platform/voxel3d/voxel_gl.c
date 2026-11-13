@@ -1378,6 +1378,13 @@ FILE *Voxel3D_OpenData(const char *path)
 /* Gamma's camera gives 2^1 x 0.18 / 1 = 0.36; our GBA art is drawn fully lit, so the multiplier is the one
  * that returns sunlit ground to its own colours (fitted through this exact curve): 2.06. */
 static float sExposure = 2.06f;
+/* DLX-23: indoors the room is unlit (full colour), so outdoor bloom makes every white wall glow. */
+static bool sIndoorNow;
+static float IndoorBloomScale(void)
+{
+    const char *e = getenv("WJPC_3D_INDOOR_BLOOM");
+    return e != NULL ? (float)atof(e) : 1.0f;
+}
 static GLuint sBlurFbo[6], sBlurTex[6];
 static GLuint sPostProg, sQuadVbo, sHdrFbo, sHdrTex, sHdrDepth, sBloomFbo[7], sBloomTex[7];
 static int sHdrW, sHdrH, sBloomW[7], sBloomH[7];
@@ -1637,7 +1644,7 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
         }
         int lv = 0;
         wj_glUseProgram(sPostProg);
-        wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f : 6.0f, 0.4f);
+        wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f : 6.0f * (sIndoorNow ? IndoorBloomScale() : 1.0f), 0.4f);
         wj_glUniform1fv(wj_glGetUniformLocation(sPostProg, "tint"), 6, tint);
         {
             /* Gamma: engine default vignette 0.4; Granite Cave gain 0.49 + vignette 3, Brawly's gym 0.49 + 2 */
@@ -2300,6 +2307,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         wj_glUniform4f(sUniFade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount);
     else
         wj_glUniform4f(sUniFade, 0, 0, 0, 0);
+    sIndoorNow = inst0->indoor;
     // Haze, outdoors only: starts well past the player, the sky's colour.
     if (inst0->indoor || inst0->underground)
         wj_glUniform2f(sUniFog, 1.0e6f, 2.0e6f);
