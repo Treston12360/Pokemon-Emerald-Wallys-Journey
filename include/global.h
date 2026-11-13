@@ -1286,6 +1286,11 @@ struct SaveBlock1
 #if IS_FRLG
     u8 rivalName[PLAYER_NAME_LENGTH + 1];
     struct DaycareMon route5DayCareMon;
+#else
+    // Project ARIA: FireRed/LeafGreen (Kanto) flags, KANTO_FLAGS_START.. (see constants/flags.h).
+    // In SaveBlock1's spare room at the end of sector 4; magic unset (an older save) = all clear.
+    u8 wjKantoFlagsMagic;
+    u8 wjKantoFlags[KANTO_FLAGS_COUNT / 8];
 #endif
     // sizeof: 0x3???
 };

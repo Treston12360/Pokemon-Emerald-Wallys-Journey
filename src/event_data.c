@@ -204,10 +204,24 @@ u16 VarGetObjectEventGraphicsId(u8 id)
     return VarGet(VAR_OBJ_GFX_ID_0 + id);
 }
 
+#define WJ_KANTO_FLAGS_MAGIC 0xA7
+
 u8 *GetFlagPointer(u16 id)
 {
     if (id == 0)
         return NULL;
+#if !IS_FRLG
+    else if (id >= KANTO_FLAGS_START && id <= KANTO_FLAGS_END)
+    {
+        // Project ARIA: Kanto flags live in SaveBlock3; an older save starts them all clear.
+        if (gSaveBlock1Ptr->wjKantoFlagsMagic != WJ_KANTO_FLAGS_MAGIC)
+        {
+            memset(gSaveBlock1Ptr->wjKantoFlags, 0, sizeof(gSaveBlock1Ptr->wjKantoFlags));
+            gSaveBlock1Ptr->wjKantoFlagsMagic = WJ_KANTO_FLAGS_MAGIC;
+        }
+        return &gSaveBlock1Ptr->wjKantoFlags[(id - KANTO_FLAGS_START) / 8];
+    }
+#endif
     else if (id < SPECIAL_FLAGS_START)
         return &gSaveBlock1Ptr->flags[id / 8];
 #if TESTING
