@@ -98,15 +98,16 @@ the clues, it's also the moment they learn Aria was his daughter and the project
 - **Captures are story beats during Kanto (owner, 2026-11-13).** The player never knows these are
   legendaries, or that Hoopa, Palkia, Dialga or Giratina are in Kanto. Each capture causes something in
   the story, or something the player does helps it happen. Method: **Hoopa's portals pull the legendary
-  into a containment chamber; machines wear it down until he can control and capture it** (no normal
-  ball could hold a god). That's the holding bay.
+  into a containment chamber; machines wear it down until he can catch it.** He isn't a strong enough
+  trainer to beat them normally, so he weakens them first — but he **does** capture them, and uses them
+  in his final battle. That's the holding bay.
 - Draft mapping (owner to adjust):
 
 | Capture | What the player unknowingly does | What everyone sees | Chapters |
 |---|---|---|---|
 | Palkia (space) | Each tear "closed" with Varnell's device gives him a lock on where space is weakest — how the portal finds Palkia | The Silph malfunction: the building warps, Saffron quarantined. Really the wear-down chamber straining to hold Palkia | 2–6 |
 | Dialga (time) | Varnell sends the player to restart the Power Plant "to stabilise readings"; the power feeds ARIA | Time slips: clocks stop in Fuchsia, Mansion diaries look freshly written, the displaced person from another time | 7–8 |
-| Giratina (final piece) | Beating Lance opens the Indigo Plateau vault; inside is the **Griseous Orb**, key to the Distortion World. Varnell takes it | Shadows spread, the Lavender echo grows stronger, then the reveal | 12–13 |
+| Giratina (final piece) | After the 8th badge Varnell privately asks for an item in the **Hall of Fame vault**; the player beats Lance, takes the **Griseous Orb** and hands it over — it lets him pin down Giratina | His panicked PokéNav call, the handover, then the capture and the reveal | 10b–12 |
 
 ## 2b. Blue and Varnell
 
@@ -156,12 +157,14 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 7 | **Fuchsia** | Blue shares what he's found, coldly. Safari side quest. | Janine |
 | 8 | **Seafoam** | Boulder/current puzzle. Blaine's temporary gym is here because Cinnabar's volcano is acting up (the tears). | Blaine (in Seafoam) |
 | 8b | **Rocket Hideout (late game)** | Sealed under the Game Corner by the League; opened with the player's badge clearance. Varnell sends you for Rocket's old research on the anomalies. Clues: Rocket's logs show **they stole his research** and were in Pokémon Tower that day because of his readings; a raid report mentions "a civilian child in the tower" (no name); a recent gap where tower-raid files were taken (players assume a thief — it was Varnell's people). Ties his grief to guilt without revealing the plan. | — |
-| 9 | **The Institute** | Back at Varnell's institute (mockups exist). The office, the drawing, the photo: **the reveal.** Varnell takes Hoopa and the lab goes dark. | — |
-| 10 | **Cinnabar** | Eruption warnings; the island is closed. The Mansion's old diaries mention spatial experiments. Varnell's people evacuate the last machine part. | — |
-| 11 | **Viridian** | Blue's gym opens. The battle is the end of his arc: he's finally on your side. | Blue |
-| 12 | **Victory Road / Elite Four** | Kanto League, **HGSS lineup: Will, Koga, Bruno, Karen, then Champion Lance.** Badge guards check Kanto badges only. | E4 + Lance |
-| 13 | **The ARIA chamber** | Holding bay (mockups exist): Dialga, Palkia, Giratina sealed. ARIA fires; the room goes Red Alert. Varnell's final battle. Giratina breaks containment and tears open the Distortion World; Varnell **sees Aria inside for a moment and jumps in.** The rift closes. His fate is never confirmed. | Varnell |
-| 14 | **Aftermath** | Oak's grief. Blue's thanks. A last echo of a little girl's voice in the empty chamber. Ship home to Hoenn. | — |
+| 9 | **Cinnabar** | Eruption warnings; the island is closed. The Mansion's old diaries mention spatial experiments. | — |
+| 10 | **Viridian** | Blue's gym opens — 8th badge. | Blue |
+| 10b | **The private request** | Right after the 8th badge, Varnell calls the player in **alone**: there's something sealed in the **Hall of Fame vault** that he needs. The player doesn't question why he doesn't ask Blue or Lance (they would never allow it). Some players will find it odd — that's fine. | — |
+| 11 | **Victory Road / Elite Four** | HGSS lineup: Will, Koga, Bruno, Karen, Champion Lance. Hall of Fame. After Lance leaves, the player opens the vault with their clearance and takes the **Griseous Orb**. | E4 + Lance |
+| 11b | **The call** | Varnell calls on the PokéNav — panicked, a little out of character. The player doesn't think much of it. | — |
+| 12 | **The handover → the reveal** | At his lab the player hands over the Orb. Varnell thanks them; he's "been up a week straight trying to get to the bottom of this." The Orb lets him finally pin down Giratina — he captures it then and there. Blue arrives; **the reveal** (Aria, the project, "a world without her isn't worth having"). | — |
+| 13 | **The ARIA chamber — Varnell** | Holding bay, Red Alert. A **Volo-style** final battle: hard, and he uses the legendaries he captured. After losing, the Distortion World opens; he sees Aria and jumps in. Fate ambiguous. | Varnell |
+| 14 | **Aftermath** | Oak's grief. Blue's thanks. A last echo of a little girl's voice in the empty chamber. The freed legendaries can be found and **captured by the player** later. Ship home to Hoenn → title defenses unlock. | — |
 
 Open: which chapter Hoopa is first taken in (suggest before ch. 1, shown in a cold open).
 
@@ -262,6 +265,11 @@ No tea, no item gates.
   multi-region pokeemerald fork. Its public thread describes region flags, region-aware Fly and seamless
   region transitions; it doesn't say the source is public. To do: find out exactly how its travel looks and
   works (and whether code is available and allowed) before designing ours.
+
+## 8c. Phone calls
+
+- The **PokéNav works in Kanto** (Match Call). Blue, Varnell and Oak call the player during the story.
+- **Wally calls** now and then with updates on holding the player's Champion spot while they investigate.
 
 ## 9. Still open (owner to decide)
 
