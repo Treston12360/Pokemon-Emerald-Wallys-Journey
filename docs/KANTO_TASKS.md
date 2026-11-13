@@ -79,7 +79,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       in 3D. Do K2 first.
 
 ## Also open on the 3D side (branch `deluxe-3d`, see docs/DELUXE_WORK_QUEUE.md)
-- **DLX-28 furniture in every house 3D** (owner 2026-11-13: "all houses furniture should be 3D"). 3DS left ~30
+- **DLX-28 furniture in every house 3D** WIP (Claude session 019khs4X, 2026-11-13 16:10) (owner 2026-11-13: "all houses furniture should be 3D"). 3DS left ~30
   rooms "walls only" (`PLAIN_ROOMS` in `voxel_building_specs.py`). Started: `dewford_hall()` in
   `tools/voxel3ds/our_changes.patch` — not generated or checked yet. Model each room's furniture with the
   reference's `piece()` / `house_chair()` / partition pieces (copy House1/House2/Briney rooms), measure pixels
