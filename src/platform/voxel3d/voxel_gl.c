@@ -443,52 +443,98 @@ typedef struct
 } Atlas;
 
 static Atlas sAtlases[MAX_ATLASES];
+
+// The season key, asked for once a frame (it reads the clock; asked per atlas per map it was most of a frame).
+static uint32_t sSeasonKey, sSeasonFrame = 0xFFFFFFFFu;
+static uint32_t sFrame;
+static uint32_t SeasonNow(void)
+{
+    if (sSeasonFrame != sFrame)
+    {
+        sSeasonKey = VoxelWorld_SeasonKey();
+        sSeasonFrame = sFrame;
+    }
+    return sSeasonKey;
+}
 static VoxelAtlasJob sAtlasJob;
 static uint16_t *sAtlasStaging;
-static uint32_t sFrame;
 
 static bool AtlasReady(const VoxelMapInstance *inst)
 {
     for (int i = 0; i < MAX_ATLASES; i++)
         if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset
-            && sAtlases[i].season == VoxelWorld_SeasonKey())
+            && sAtlases[i].season == SeasonNow())
             return true;
     return false;
 }
 
-static Atlas *GetAtlas(const VoxelMapInstance *inst)
-{
-    Atlas *slot = NULL;
+// DLX-18: an atlas is composed a page at a time; for a map not underfoot (`deadline` set) the work is spread
+// over frames, one job at a time, and NULL is returned until it is done. With no deadline it is finished now
+// (a job for another map's tile sets is dropped for it). The slot the job fills is invalid until then.
+static Atlas *sJobSlot;
+static const void *sJobPrimary, *sJobSecondary; // the job's own copies are cleared when it ends
 
+static Atlas *FindAtlas(const VoxelMapInstance *inst)
+{
     for (int i = 0; i < MAX_ATLASES; i++)
         if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset
-            && sAtlases[i].season == VoxelWorld_SeasonKey())
+            && sAtlases[i].season == SeasonNow())
         {
             sAtlases[i].lastUse = sFrame;
             return &sAtlases[i];
         }
-    for (int i = 0; i < MAX_ATLASES; i++)
-        if (slot == NULL || !sAtlases[i].valid || (slot->valid && sAtlases[i].lastUse < slot->lastUse))
-            slot = &sAtlases[i];
-    if (slot->valid)
+    return NULL;
+}
+
+static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
+{
+    Atlas *slot = FindAtlas(inst);
+
+    if (slot != NULL)
+        return slot;
+    if (sJobSlot != NULL && (sJobPrimary != inst->primaryTileset || sJobSecondary != inst->secondaryTileset
+                             || sJobSlot->season != SeasonNow()))
     {
-        wj_glDeleteTextures(VOXEL_ATLAS_PAGES, slot->tex);
-        memset(slot->tex, 0, sizeof(slot->tex));
+        if (deadline == 0)
+        {
+            VoxelAtlas_JobCancel(&sAtlasJob);
+            sJobSlot = NULL;
+        }
+        // else: another map's is under way; it is carried on (and this one asked for again after it)
     }
-    slot->valid = false;
-    if (sAtlasStaging == NULL)
-        sAtlasStaging = malloc(VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
-    if (!VoxelAtlas_JobBegin(&sAtlasJob, inst, sAtlasStaging, NULL))
-        return NULL;
-    slot->pages = 0;
+    if (sJobSlot == NULL)
+    {
+        for (int i = 0; i < MAX_ATLASES; i++)
+            if (slot == NULL || !sAtlases[i].valid || (slot->valid && sAtlases[i].lastUse < slot->lastUse))
+                slot = &sAtlases[i];
+        if (slot->valid)
+        {
+            wj_glDeleteTextures(VOXEL_ATLAS_PAGES, slot->tex);
+            memset(slot->tex, 0, sizeof(slot->tex));
+        }
+        slot->valid = false;
+        if (sAtlasStaging == NULL)
+            sAtlasStaging = malloc(VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
+        if (!VoxelAtlas_JobBegin(&sAtlasJob, inst, sAtlasStaging, NULL))
+            return NULL;
+        slot->pages = 0;
+        slot->season = SeasonNow();
+        sJobSlot = slot;
+        sJobPrimary = inst->primaryTileset;
+        sJobSecondary = inst->secondaryTileset;
+        Voxel3D_Log("[3D] atlas job begins for %d:%d (slot %d)", inst->mapGroup, inst->mapNum, (int)(slot - sAtlases));
+    }
+    slot = sJobSlot;
     for (;;)
     {
-        while (!VoxelAtlas_JobStep(&sAtlasJob, 4096))
-            ;
+        while (!VoxelAtlas_JobStep(&sAtlasJob, deadline != 0 ? 256 : 4096))
+            if (deadline != 0 && SDL_GetPerformanceCounter() >= deadline)
+                return NULL;
         if (!sAtlasJob.ok)
         {
             VoxelAtlas_JobCancel(&sAtlasJob);
-            Voxel3D_Log("[3D] atlas for %d:%d failed", inst->mapGroup, inst->mapNum);
+            sJobSlot = NULL;
+            Voxel3D_Log("[3D] atlas for %d:%d failed", sAtlasJob.mapGroup, sAtlasJob.mapNum);
             return NULL;
         }
         VoxelGrade_Texels(sAtlasStaging, VOXEL_ATLAS_PIXELS);
@@ -517,14 +563,21 @@ static Atlas *GetAtlas(const VoxelMapInstance *inst)
         if (!sAtlasJob.active)
             break;
         VoxelAtlas_JobNextPage(&sAtlasJob);
+        if (deadline != 0 && SDL_GetPerformanceCounter() >= deadline)
+            return NULL;
     }
+    sJobSlot = NULL;
     slot->map = sAtlasJob.map;
-    slot->primary = inst->primaryTileset;
-    slot->season = VoxelWorld_SeasonKey();
-    slot->secondary = inst->secondaryTileset;
+    slot->primary = sJobPrimary;
+    slot->secondary = sJobSecondary;
     slot->valid = true;
     slot->lastUse = sFrame;
-    return slot;
+    return slot->primary == inst->primaryTileset && slot->secondary == inst->secondaryTileset ? slot : NULL;
+}
+
+static Atlas *GetAtlas(const VoxelMapInstance *inst)
+{
+    return PrepareAtlas(inst, 0);
 }
 
 // ---------------------------------------------------------------------------
@@ -614,14 +667,18 @@ static const Mesh *StaticModel(unsigned pageModel, bool lit)
 // ---------------------------------------------------------------------------
 // The maps on screen: each one's whole geometry, built once, split by texture.
 
-#define MAX_INSTANCES 16
+// DLX-18: more slots than maps on screen; a map gone from the view keeps its mesh until the slot is
+// needed, so walking back that way finds it built.
+#define MAX_INSTANCES 32
 #define MAX_INST_STATICS 256
 
 typedef struct
 {
     bool used, keep;
-    int mapGroup, mapNum, originX, originY;
-    uint32_t signature;
+    bool shown;               // one of this frame's maps (drawn)
+    int mapGroup, mapNum, originX, originY, lift;
+    uint32_t signature, lastUse;
+    const void *primary, *secondary; // the tile sets its atlas must still hold
     Atlas *atlas;
     Mesh terrain[VOXEL_ATLAS_PAGES];
     Mesh trees, buildings;
@@ -666,68 +723,159 @@ static void AppendChunk(VoxelBuilder *b, unsigned terrainEnd, unsigned treeEnd)
 #define CHUNK 8
 #define CHUNK_VERTS 65536u
 
-static void BuildInstance(InstanceMesh *m, const VoxelMapInstance *inst, Atlas *atlas)
+// DLX-18: a map's mesh is built a chunk at a time. The player's own map is built at once when it has to be;
+// any other one over as many frames as it takes (a few ms each), its old mesh, if any, shown meanwhile.
+// Crossing into a map now never builds it: it was built while it was a neighbour.
+typedef struct
+{
+    bool active;
+    int mapGroup, mapNum, originX, originY, lift;
+    uint32_t signature;
+    Atlas *atlas;
+    int nextX, nextY;            // the next chunk, cells into the map
+    VoxelVertex *v[3];           // ground, trees, models
+    unsigned n[3], cap[3];
+    VoxelStaticDraw statics[MAX_INST_STATICS];
+    unsigned staticCount, frames;
+    double ms;
+} InstanceBuild;
+
+static InstanceBuild sBackBuild, sNowBuild;
+
+static void BuildPush(InstanceBuild *pb, int which, const VoxelVertex *v, unsigned count)
+{
+    if (count == 0)
+        return;
+    if (pb->n[which] + count > pb->cap[which])
+    {
+        unsigned cap = pb->cap[which] ? pb->cap[which] : 65536u;
+        VoxelVertex *nv;
+
+        while (cap < pb->n[which] + count)
+            cap *= 2;
+        nv = realloc(pb->v[which], cap * sizeof(VoxelVertex));
+        if (nv == NULL)
+            return;
+        pb->v[which] = nv;
+        pb->cap[which] = cap;
+    }
+    memcpy(pb->v[which] + pb->n[which], v, count * sizeof(VoxelVertex));
+    pb->n[which] += count;
+}
+
+static void BuildBegin(InstanceBuild *pb, const VoxelMapInstance *inst, Atlas *atlas, uint32_t sig)
+{
+    pb->active = true;
+    pb->mapGroup = inst->mapGroup;
+    pb->mapNum = inst->mapNum;
+    pb->originX = inst->originX;
+    pb->originY = inst->originY;
+    pb->lift = inst->lift;
+    pb->signature = sig;
+    pb->atlas = atlas;
+    pb->nextX = pb->nextY = 0;
+    pb->n[0] = pb->n[1] = pb->n[2] = 0;
+    pb->staticCount = 0;
+    pb->frames = 0;
+    pb->ms = 0.0;
+}
+
+// The same map, where it was when the build began (the chunks' world lookups use its place).
+static bool BuildIsFor(const InstanceBuild *pb, const VoxelMapInstance *inst)
+{
+    return pb->active && pb->mapGroup == inst->mapGroup && pb->mapNum == inst->mapNum
+        && pb->originX == inst->originX && pb->originY == inst->originY && pb->lift == inst->lift;
+}
+
+// Chunks until `deadline` (0: to the end), at least one. TRUE when the whole map is done.
+static bool BuildSteps(InstanceBuild *pb, const VoxelMapInstance *inst, Uint64 deadline)
 {
     static VoxelVertex *chunkVerts;
+    Uint64 t0 = SDL_GetPerformanceCounter();
+    bool first = true;
     VoxelBuilder b;
 
     if (chunkVerts == NULL)
         chunkVerts = malloc(CHUNK_VERTS * sizeof(VoxelVertex));
-    unsigned uncovered = 0;
-    sTerrainCount = sTreeCount = sBuildCount = 0;
-    m->staticCount = 0;
-    for (int y0 = inst->originY; y0 < inst->originY + inst->height; y0 += CHUNK)
-        for (int x0 = inst->originX; x0 < inst->originX + inst->width; x0 += CHUNK)
-        {
-            int x1 = x0 + CHUNK, y1 = y0 + CHUNK;
-            unsigned terrainEnd, treeEnd;
+    if (chunkVerts == NULL)
+        return true;
+    pb->frames++;
+    while (pb->nextY < inst->height)
+    {
+        int x0 = inst->originX + pb->nextX, y0 = inst->originY + pb->nextY;
+        int x1 = x0 + CHUNK, y1 = y0 + CHUNK;
+        unsigned terrainEnd, treeEnd;
 
-            if (x1 > inst->originX + inst->width)
-                x1 = inst->originX + inst->width;
-            if (y1 > inst->originY + inst->height)
-                y1 = inst->originY + inst->height;
-            VoxelBuilder_Init(&b, chunkVerts, CHUNK_VERTS);
-            b.statics = sChunkStatics;
-            b.staticCapacity = ARRAY_COUNT(sChunkStatics);
-            VoxelBuilder_SetAtlas(&b, &atlas->map);
-            // In the map's own frame: crossing a border moves the maps, not their meshes.
-            VoxelBuilder_SetOrigin(&b, inst->originX, inst->originY);
-            b.base = VoxelRelief_Base(inst);
-            if (getenv("WJPC_3D_NOSTRETCH") == NULL)
-                VoxelBuilder_SetStretch(&b, inst);
-            if (getenv("WJPC_3D_LOGBASE") && x0 == inst->originX && y0 == inst->originY)
-                Voxel3D_Log("[3D] %d:%d base %.2f stretch %.2f from %.2f to %.2f", inst->mapGroup, inst->mapNum, b.base, b.stretchAdd, b.stretchFrom, b.stretchTo);
-            b.lighting = !inst->indoor;
-            b.lightingRefine = true;
-            VoxelMesh_BeginWindow(x0 - 1, y0 - VOXEL_CHUNK_MARGIN_NORTH, x1 + 1, y1 + 1);
-            for (int y = y0; y < y1; y++)
-                VoxelMesh_EmitGroundRow(&b, inst, x0, x1, y);
-            terrainEnd = b.count;
-            VoxelTree_EmitInstance(&b, inst, x0, y0, x1, y1);
-            treeEnd = b.count;
-            VoxelBuildings_EmitInstance(&b, inst, x0, y0, x1, y1);
-            AppendChunk(&b, terrainEnd, treeEnd);
-            uncovered += b.uncovered;
-            for (unsigned s = 0; s < b.staticCount && m->staticCount < MAX_INST_STATICS; s++)
-            {
-                if (getenv("WJPC_3D_LOGBASE"))
-                    Voxel3D_Log("[3D] %d:%d static model %u at %.1f %.2f %.1f size %.1f x %.1f top %.2f", inst->mapGroup, inst->mapNum,
-                                b.statics[s].pageModel, b.statics[s].x, b.statics[s].y, b.statics[s].z, b.statics[s].w, b.statics[s].d, b.statics[s].top);
-                m->statics[m->staticCount++] = b.statics[s];
-            }
+        if (!first && deadline != 0 && SDL_GetPerformanceCounter() >= deadline)
+        {
+            pb->ms += (SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency();
+            return false;
         }
+        first = false;
+        if (x1 > inst->originX + inst->width)
+            x1 = inst->originX + inst->width;
+        if (y1 > inst->originY + inst->height)
+            y1 = inst->originY + inst->height;
+        VoxelBuilder_Init(&b, chunkVerts, CHUNK_VERTS);
+        b.statics = sChunkStatics;
+        b.staticCapacity = ARRAY_COUNT(sChunkStatics);
+        VoxelBuilder_SetAtlas(&b, &pb->atlas->map);
+        // In the map's own frame: crossing a border moves the maps, not their meshes.
+        VoxelBuilder_SetOrigin(&b, inst->originX, inst->originY);
+        b.base = VoxelRelief_Base(inst);
+        if (getenv("WJPC_3D_NOSTRETCH") == NULL)
+            VoxelBuilder_SetStretch(&b, inst);
+        if (getenv("WJPC_3D_LOGBASE") && x0 == inst->originX && y0 == inst->originY)
+            Voxel3D_Log("[3D] %d:%d base %.2f stretch %.2f from %.2f to %.2f", inst->mapGroup, inst->mapNum, b.base, b.stretchAdd, b.stretchFrom, b.stretchTo);
+        b.lighting = !inst->indoor;
+        b.lightingRefine = true;
+        VoxelMesh_BeginWindow(x0 - 1, y0 - VOXEL_CHUNK_MARGIN_NORTH, x1 + 1, y1 + 1);
+        for (int y = y0; y < y1; y++)
+            VoxelMesh_EmitGroundRow(&b, inst, x0, x1, y);
+        terrainEnd = b.count;
+        VoxelTree_EmitInstance(&b, inst, x0, y0, x1, y1);
+        treeEnd = b.count;
+        VoxelBuildings_EmitInstance(&b, inst, x0, y0, x1, y1);
+        BuildPush(pb, 0, b.vertices, terrainEnd);
+        BuildPush(pb, 1, b.vertices + terrainEnd, treeEnd - terrainEnd);
+        BuildPush(pb, 2, b.vertices + treeEnd, b.count - treeEnd);
+        for (unsigned st = 0; st < b.staticCount && pb->staticCount < MAX_INST_STATICS; st++)
+        {
+            if (getenv("WJPC_3D_LOGBASE"))
+                Voxel3D_Log("[3D] %d:%d static model %u at %.1f %.2f %.1f size %.1f x %.1f top %.2f", inst->mapGroup, inst->mapNum,
+                            b.statics[st].pageModel, b.statics[st].x, b.statics[st].y, b.statics[st].z, b.statics[st].w, b.statics[st].d, b.statics[st].top);
+            pb->statics[pb->staticCount++] = b.statics[st];
+        }
+        pb->nextX += CHUNK;
+        if (pb->nextX >= inst->width)
+        {
+            pb->nextX = 0;
+            pb->nextY += CHUNK;
+        }
+    }
+    pb->ms += (SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency();
+    return true;
+}
+
+// The finished build into `m` (freed first if it held a mesh), which is then one of this frame's maps.
+static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, InstanceMesh *m)
+{
+    unsigned ground = pb->n[0] < SCRATCH_VERTS ? pb->n[0] : SCRATCH_VERTS;
+
+    if (m->used)
+        InstanceFree(m);
     // Terrain split by atlas page (u = 2 * page + u in page).
     for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
     {
         unsigned n = 0;
-        for (unsigned i = 0; i + 2 < sTerrainCount; i += 3)
+        for (unsigned i = 0; i + 2 < ground; i += 3)
         {
-            unsigned page = (unsigned)(sTerrainBuf[i].u * 0.5f);
+            unsigned page = (unsigned)(pb->v[0][i].u * 0.5f);
             if (page != p)
                 continue;
             for (int k = 0; k < 3; k++)
             {
-                sSorted[n] = sTerrainBuf[i + k];
+                sSorted[n] = pb->v[0][i + k];
                 sSorted[n].u -= 2.0f * p;
                 n++;
             }
@@ -737,14 +885,27 @@ static void BuildInstance(InstanceMesh *m, const VoxelMapInstance *inst, Atlas *
         else
             MeshFree(&m->terrain[p]);
     }
-    MeshSet(&m->trees, sTreeBuf, sTreeCount, GL_STATIC_DRAW);
-    MeshSet(&m->buildings, sBuildBuf, sBuildCount, GL_STATIC_DRAW);
+    MeshSet(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
+    MeshSet(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
+    memcpy(m->statics, pb->statics, pb->staticCount * sizeof(VoxelStaticDraw));
+    m->staticCount = pb->staticCount;
     m->buildingPage = VoxelBuildings_PageOf(inst);
-    m->atlas = atlas;
-    Voxel3D_Log("[3D] %d:%d layout %d origin %d,%d sign(10,10)=%d sign(11,16)=%d", inst->mapGroup, inst->mapNum, inst->layoutId, inst->originX, inst->originY, VoxelSign_IsCell(inst, inst->originX + 10, inst->originY + 10), VoxelSign_IsCell(inst, inst->originX + 11, inst->originY + 16));
-    Voxel3D_Log("[3D] built %d:%d (%dx%d): %u ground, %u tree, %u model vertices, %u big models",
-                inst->mapGroup, inst->mapNum, inst->width, inst->height, sTerrainCount, sTreeCount, sBuildCount,
-                m->staticCount);
+    m->atlas = pb->atlas;
+    m->primary = pb->atlas->primary;
+    m->secondary = pb->atlas->secondary;
+    m->used = true;
+    m->shown = true;
+    m->mapGroup = inst->mapGroup;
+    m->mapNum = inst->mapNum;
+    m->originX = inst->originX;
+    m->originY = inst->originY;
+    m->lift = inst->lift;
+    m->signature = pb->signature;
+    m->lastUse = sFrame;
+    pb->active = false;
+    Voxel3D_Log("[3D] built %d:%d (%dx%d): %u ground, %u tree, %u model vertices, %u big models; %.1f ms over %u frame%s",
+                inst->mapGroup, inst->mapNum, inst->width, inst->height, pb->n[0], pb->n[1], pb->n[2],
+                m->staticCount, pb->ms, pb->frames, pb->frames == 1 ? "" : "s");
 }
 
 // ---------------------------------------------------------------------------
@@ -753,6 +914,11 @@ static void BuildInstance(InstanceMesh *m, const VoxelMapInstance *inst, Atlas *
 static Mesh sBeltTerrain[VOXEL_ATLAS_PAGES], sBeltTrees;
 static Atlas *sBeltAtlas;
 static int sBeltX = 0x7FFFFFFF, sBeltY;
+// DLX-18: after a crossing the old belt is drawn moved into the new map's coordinates until the new one is
+// ready; sBeltRedo asks for that (all pieces again, a few a frame).
+static int sBeltShiftX, sBeltShiftZ;
+static bool sBeltRedo;
+static Atlas *sBeltCacheAtlas;
 #define BELT_RADIUS 40
 
 // The belt is made of CHUNK x CHUNK pieces in world cells (origin 0,0), so a piece is the same wherever the
@@ -1461,19 +1627,36 @@ static void RestoreGl(const SavedGl *s)
 
 // ---------------------------------------------------------------------------
 
-static InstanceMesh *FindInstanceMesh(const VoxelMapInstance *inst)
+static InstanceMesh *MeshOf(int mapGroup, int mapNum)
 {
-    InstanceMesh *free = NULL;
+    for (int i = 0; i < MAX_INSTANCES; i++)
+        if (sInstanceMeshes[i].used && sInstanceMeshes[i].mapGroup == mapGroup && sInstanceMeshes[i].mapNum == mapNum)
+            return &sInstanceMeshes[i];
+    return NULL;
+}
 
+// A slot for that map's mesh: its own, a free one, or the one longest out of the view (NULL: all on screen).
+static InstanceMesh *MeshSlotFor(int mapGroup, int mapNum)
+{
+    InstanceMesh *pick = MeshOf(mapGroup, mapNum);
+
+    if (pick != NULL)
+        return pick;
     for (int i = 0; i < MAX_INSTANCES; i++)
     {
         InstanceMesh *m = &sInstanceMeshes[i];
-        if (m->used && m->mapGroup == inst->mapGroup && m->mapNum == inst->mapNum)
+        if (!m->used)
             return m;
-        if (!m->used && free == NULL)
-            free = m;
+        if (!m->shown && (pick == NULL || m->lastUse < pick->lastUse))
+            pick = m;
     }
-    return free;
+    return pick;
+}
+
+// Its atlas still holds its tile sets (a slot can be taken for another pair once the map is out of sight).
+static bool MeshAtlasOk(const InstanceMesh *m)
+{
+    return m->atlas != NULL && m->atlas->valid && m->atlas->primary == m->primary && m->atlas->secondary == m->secondary;
 }
 
 static float sFogNear = 40.0f, sFogFar = 90.0f;
@@ -1492,7 +1675,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     // DLX-17: the trees' and building models' baked textures follow the season too; reload them when it changes.
     {
         static uint32_t sTexSeason = 0xFFFFFFFFu;
-        uint32_t season = VoxelWorld_SeasonKey();
+        uint32_t season = SeasonNow();
         if (season != sTexSeason)
         {
             if (sTreeTex != 0)
@@ -1519,12 +1702,30 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     digest = VoxelWorld_LiveDigest();
     if (group != sLastGroup || num != sLastNum)
     {
+        // DLX-18: walked across a seam (the new map was on screen, its place known in last frame's
+        // coordinates): everything moves by that much, so the camera and the belt are moved with it rather
+        // than started again (a jump of the camera and a whole belt built on the step that crossed).
+        InstanceMesh *was = MeshOf(group, num);
+        bool crossed = was != NULL && was->shown && !inst0->indoor && sCameraValid && !sBattleMode
+                    && getenv("WJPC_3D_OLD_CROSSING") == NULL;
+
         VoxelBuildings_MapChanged();
         VoxelLighting_Reset();
-        sCameraValid = false;
+        if (crossed)
+        {
+            VoxelCamera_Shift(&sCamera, (float)-was->originX, (float)-was->originY);
+            sBeltShiftX -= was->originX;
+            sBeltShiftZ -= was->originY;
+            BeltCache_Flush(); // its pieces were the old map's (border, base); built again a few a frame
+            sBeltRedo = true;
+        }
+        else
+        {
+            sCameraValid = false;
+            sBeltX = 0x7FFFFFFF;
+        }
         sLastGroup = group;
         sLastNum = num;
-        sBeltX = 0x7FFFFFFF;
         VoxelEntities_Reset();
     }
     else if (digest != sLastDigest)
@@ -1533,66 +1734,91 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         for (int i = 0; i < MAX_INSTANCES; i++)
             if (sInstanceMeshes[i].used)
                 sInstanceMeshes[i].signature ^= 1; // rebuild below
+        sBackBuild.active = false;
         sBeltX = 0x7FFFFFFF;
     }
     sLastDigest = digest;
 
     SaveGl(&saved);
+    Uint64 workStart = SDL_GetPerformanceCounter();
 
-    bool builtThisFrame = false;
-    // Maps: build what is new, forget what is gone.
-    for (int i = 0; i < MAX_INSTANCES; i++)
-        sInstanceMeshes[i].keep = false;
-    for (unsigned i = 0; i < count; i++)
+    // Maps (DLX-18). The player's own is built at once if it has to be; the others in the background, a few
+    // ms a frame, nearest first, old meshes shown meanwhile. While the screen is dark (a warp's fade) the
+    // budget is a frame's worth. Meshes of maps that left the view are kept for when they come back.
     {
-        const VoxelMapInstance *inst = VoxelWorld_Instance(i);
-        InstanceMesh *m = FindInstanceMesh(inst);
-        Atlas *atlas;
-        uint32_t sig = VoxelBuildings_LiveSignature(inst);
+        Uint64 freq = SDL_GetPerformanceFrequency();
+        float dark = 0.0f, rgb[3];
+        double budget = VoxelWorld_ScreenFade(&dark, rgb) && dark >= 0.5f ? 40.0 : 3.0;
+        Uint64 deadline = SDL_GetPerformanceCounter() + (Uint64)(budget * freq / 1000.0);
+        const VoxelMapInstance *backInst = NULL;
+        bool asked = false;
 
-        if (m == NULL)
-            continue;
-        // One map's mesh (or tile sheet) a frame besides the player's own: building them all
-        // on the frame a border is crossed was a stutter. An old mesh stays up meanwhile.
-        if (i != 0 && builtThisFrame && (!m->used || m->signature != sig || !AtlasReady(inst)))
+        if (getenv("WJPC_3D_BUILD_MS") != NULL)
+            deadline = SDL_GetPerformanceCounter() + (Uint64)(atof(getenv("WJPC_3D_BUILD_MS")) * freq / 1000.0);
+        for (int i = 0; i < MAX_INSTANCES; i++)
+            sInstanceMeshes[i].shown = false;
+        for (unsigned i = 0; i < count; i++)
         {
-            if (m->used)
+            const VoxelMapInstance *inst = VoxelWorld_Instance(i);
+            InstanceMesh *m = MeshOf(inst->mapGroup, inst->mapNum);
+            uint32_t sig = VoxelBuildings_LiveSignature(inst);
+            Atlas *atlas = i == 0 ? GetAtlas(inst) : FindAtlas(inst);
+            bool stale = m == NULL || m->signature != sig || m->lift != inst->lift || atlas == NULL
+                      || m->atlas != atlas || !MeshAtlasOk(m);
+
+            if (BuildIsFor(&sBackBuild, inst))
             {
-                m->keep = true;
+                if (sBackBuild.signature != sig || (atlas != NULL && sBackBuild.atlas != atlas) || !sBackBuild.atlas->valid)
+                    sBackBuild.active = false; // what it was building for has changed
+                else
+                    backInst = inst;
+            }
+            if (i == 0 && stale && atlas != NULL)
+            {
+                // Underfoot: now. A background build of it is finished rather than begun again.
+                InstanceBuild *pb = backInst == inst ? &sBackBuild : &sNowBuild;
+
+                if (pb == &sNowBuild)
+                    BuildBegin(pb, inst, atlas, sig);
+                BuildSteps(pb, inst, 0);
+                m = MeshSlotFor(inst->mapGroup, inst->mapNum);
+                if (m != NULL)
+                    BuildFinish(pb, inst, m);
+                pb->active = false;
+                if (pb == &sBackBuild)
+                    backInst = NULL;
+            }
+            else if (stale && !sBackBuild.active && !asked)
+            {
+                // The first one in need: its tile sheet (over frames), then its mesh.
+                asked = true;
+                atlas = PrepareAtlas(inst, deadline);
+                if (atlas != NULL)
+                {
+                    BuildBegin(&sBackBuild, inst, atlas, sig);
+                    backInst = inst;
+                }
+            }
+            if (m != NULL && MeshAtlasOk(m))
+            {
+                m->shown = true;
                 m->originX = inst->originX;
                 m->originY = inst->originY;
+                m->lastUse = sFrame;
             }
-            continue;
         }
-        atlas = GetAtlas(inst);
-        if (atlas == NULL)
-            continue;
-        if (!m->used || m->signature != sig || m->atlas != atlas)
+        if (backInst == NULL)
+            sBackBuild.active = false; // its map left the view or moved: dropped
+        else if (BuildSteps(&sBackBuild, backInst, deadline))
         {
-            builtThisFrame = i != 0;
-            if (m->used)
-                InstanceFree(m);
-            {
-                Uint64 t0 = SDL_GetPerformanceCounter();
-                BuildInstance(m, inst, atlas);
-                Voxel3D_Log("[3D] build %d:%d took %.1f ms", inst->mapGroup, inst->mapNum,
-                            (SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency());
-            }
-            m->used = true;
-            m->mapGroup = inst->mapGroup;
-            m->mapNum = inst->mapNum;
-            m->originX = inst->originX;
-            m->originY = inst->originY;
-            m->signature = sig;
+            InstanceMesh *m = MeshSlotFor(backInst->mapGroup, backInst->mapNum);
+            if (m != NULL)
+                BuildFinish(&sBackBuild, backInst, m);
+            sBackBuild.active = false;
         }
-        m->originX = inst->originX;
-        m->originY = inst->originY;
-        m->keep = true;
     }
-    for (int i = 0; i < MAX_INSTANCES; i++)
-        if (sInstanceMeshes[i].used && !sInstanceMeshes[i].keep)
-            InstanceFree(&sInstanceMeshes[i]);
 
+    Uint64 workMaps = SDL_GetPerformanceCounter();
     // Camera follows the player.
     VoxelWorld_GetPlayerWorldCoords(&playerX, &playerZ);
     VoxelEntities_GetPlayerWorldPos(&smoothX, &smoothZ);
@@ -1630,6 +1856,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         VoxelCamera_Update(&sCamera, smoothX, smoothZ);
     }
 
+    Uint64 workCam = SDL_GetPerformanceCounter();
     // The belt round the maps, rebuilt when the player has moved a chunk.
     {
         int cx = ((int)floorf(playerX) / CHUNK) * CHUNK, cy = ((int)floorf(playerZ) / CHUNK) * CHUNK;
@@ -1637,8 +1864,21 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         if (atlas0 != NULL && !inst0->indoor)
         {
             Uint64 t0 = SDL_GetPerformanceCounter();
-            bool full = sBeltX == 0x7FFFFFFF || atlas0 != sBeltAtlas;
+            bool full = sBeltX == 0x7FFFFFFF || sBeltAtlas == NULL;
 
+            if (!full && atlas0 != sBeltCacheAtlas)
+            {
+                // Into a map with other tile sets: its pieces again, a few a frame, the old belt up meanwhile.
+                BeltCache_Flush();
+                sBeltRedo = true;
+            }
+            sBeltCacheAtlas = atlas0;
+            if (sBeltRedo && !full)
+            {
+                sBeltWantX = cx;
+                sBeltWantY = cy;
+                sBeltRedo = false;
+            }
             if (full)
             {
                 // New map, new world or new atlas: start again and build it all now (as before).
@@ -1647,6 +1887,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 BeltAssemble(atlas0, cx, cy);
                 sBeltX = cx;
                 sBeltY = cy;
+                sBeltShiftX = sBeltShiftZ = 0;
+                sBeltRedo = false;
             }
             else
             {
@@ -1661,6 +1903,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                     sBeltX = sBeltWantX;
                     sBeltY = sBeltWantY;
                     sBeltWantX = 0x7FFFFFFF;
+                    sBeltShiftX = sBeltShiftZ = 0;
                 }
             }
             double ms = (SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency();
@@ -1669,6 +1912,14 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         }
     }
 
+    {
+        // Test aid: frames whose map and belt work took long (the hitches DLX-18 is about).
+        double ms = (SDL_GetPerformanceCounter() - workStart) * 1000.0 / SDL_GetPerformanceFrequency();
+        if (ms > 4.0 && getenv("WJPC_VOXEL_LOG") != NULL)
+            Voxel3D_Log("[3D] slow frame %u: %.1f ms of map and belt work (maps %.1f, camera %.1f)", sFrame, ms,
+                        (workMaps - workStart) * 1000.0 / SDL_GetPerformanceFrequency(),
+                        (workCam - workMaps) * 1000.0 / SDL_GetPerformanceFrequency());
+    }
     // Sprites.
     {
         VoxelBuilder sprites, shadows, reflections;
@@ -1678,9 +1929,11 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         VoxelBuilder_SetOrigin(&shadows, 0, 0);
         VoxelBuilder_Init(&reflections, sReflectVerts, SPRITE_VERTS);
         VoxelBuilder_SetOrigin(&reflections, 0, 0);
+        unsigned changed = 0;
         if (!sBattleMode) // in a battle the people are not there (the battle draws its own)
-            VoxelEntities_Emit(&sprites, sSpriteAtlas, &sCamera, &shadows, &reflections);
-        sSpriteTex = UploadTiled(sSpriteTex, sSpriteAtlas, VOXEL_SPRITE_ATLAS_W, VOXEL_SPRITE_ATLAS_H);
+            changed = VoxelEntities_Emit(&sprites, sSpriteAtlas, &sCamera, &shadows, &reflections);
+        if (changed != 0 || sSpriteTex == 0) // 1024x512 now: not every frame when nothing in it changed
+            sSpriteTex = UploadTiled(sSpriteTex, sSpriteAtlas, VOXEL_SPRITE_ATLAS_W, VOXEL_SPRITE_ATLAS_H);
         MeshSet(&sSpriteMesh, sSpriteVerts, sprites.count, GL_STREAM_DRAW);
         MeshSet(&sShadowMesh, sShadowVerts, shadows.count, GL_STREAM_DRAW);
         MeshSet(&sReflectMesh, sReflectVerts, reflections.count, GL_STREAM_DRAW);
@@ -1784,7 +2037,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     for (int i = 0; i < MAX_INSTANCES; i++)
     {
         InstanceMesh *m = &sInstanceMeshes[i];
-        if (!m->used)
+        if (!m->used || !m->shown)
             continue;
         for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
             MeshDraw(&m->terrain[p], m->atlas->tex[p], (float)m->originX, 0, (float)m->originY);
@@ -1807,8 +2060,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     if (sBeltAtlas != NULL && !inst0->indoor)
     {
         for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
-            MeshDraw(&sBeltTerrain[p], sBeltAtlas->tex[p], 0, 0, 0);
-        MeshDraw(&sBeltTrees, sTreeTex, 0, 0, 0);
+            MeshDraw(&sBeltTerrain[p], sBeltAtlas->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
+        MeshDraw(&sBeltTrees, sTreeTex, (float)sBeltShiftX, 0, (float)sBeltShiftZ);
     }
 
     // Shadows and reflections under the cards, then the cards.

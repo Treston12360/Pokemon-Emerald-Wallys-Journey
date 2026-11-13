@@ -1159,8 +1159,22 @@ void WallyJourney_GiveWildRayquazaDragonAscent(void)
 static s32 WJ_RealClockHour(void)
 {
     struct SiiRtcInfo rtc;
+#ifdef PORTABLE
+    // PC: reading the clock can take 10 ms and more, and the views ask every frame and on every map
+    // crossing (a hitch each time). The hour is kept for about 17 seconds.
+    static s32 sHour;
+    static u32 sStamp = 0xFFFFFFFF;
+
+    if (sStamp == (gMain.vblankCounter1 >> 10))
+        return sHour;
+    sStamp = gMain.vblankCounter1 >> 10;
+    RtcGetInfo(&rtc);
+    sHour = (s32)RtcGetDayCount(&rtc) * 24 + (s32)ConvertBcdToBinary(rtc.hour);
+    return sHour;
+#else
     RtcGetInfo(&rtc);
     return (s32)RtcGetDayCount(&rtc) * 24 + (s32)ConvertBcdToBinary(rtc.hour);
+#endif
 }
 
 enum WallySeason WallyJourney_GetSeason(void)
@@ -1757,7 +1771,18 @@ void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFa
 #ifdef PORTABLE
 u32 WallyJourney_FoliageKey(void)
 {
-    return (CurrentFoliageMode() + 1) | (WallyJourney_GetSeason() << 4) | ((GeneralSeasonPalettes() != NULL) << 8);
+    // Asked for every frame by the PC's views; it reads the clock, which is slow (10 ms and more a time
+    // on some systems), so it is looked up again only every 17 seconds or so, or when the map changes.
+    static u32 sKey, sStamp = 0xFFFFFFFF;
+    u32 stamp = (gMain.vblankCounter1 >> 10) ^ (gMapHeader.mapType << 28)
+              ^ (gSaveBlock1Ptr != NULL ? (gSaveBlock1Ptr->location.mapGroup << 20) ^ (gSaveBlock1Ptr->location.mapNum << 12) : 0);
+
+    if (stamp != sStamp)
+    {
+        sKey = (CurrentFoliageMode() + 1) | (WallyJourney_GetSeason() << 4) | ((GeneralSeasonPalettes() != NULL) << 8);
+        sStamp = stamp;
+    }
+    return sKey;
 }
 
 u16 WallyJourney_SeasonalColorNow(u16 color)

@@ -2339,6 +2339,10 @@ void VDraw(SDL_Texture *texture)
     int prevW = sFrameInfo.width, prevH = sFrameInfo.height, prevMargin = sFrameInfo.margin;
 
     {
+        extern bool8 gWjPc3DField;
+        gWjPc3DField = s3DReady && s3DWanted; // DLX-18: people load as far out as the 3D view draws them
+    }
+    {
         // Zoom: ask for a view that fills the screen at a whole number of screen pixels per
         // game pixel (worked out on the main thread, which owns the window).
         int sw, sh;

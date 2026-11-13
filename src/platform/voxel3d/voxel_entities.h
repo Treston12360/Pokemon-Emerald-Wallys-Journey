@@ -30,11 +30,22 @@
  * too few: grass stepped on did not rustle and the wild ones blinked in and
  * out as they took turns.
  */
+#ifdef PLATFORM_3DS
 #define VOXEL_SPRITE_ATLAS_W    512u
 #define VOXEL_SPRITE_ATLAS_H    256u
+#define VOXEL_SPRITE_SLOTS      32u
+#else
+/* Wally's Journey PC: 128 slots (1024x512). The PC keeps 64 object events, one slot each (with 32 in all,
+ * objects 32-63 wrote past the slot tables); then 32 for the people of the neighbouring maps (DLX-18,
+ * VOXEL_STANDIN_FIRST), the rest for field effects, and the door. */
+#define VOXEL_SPRITE_ATLAS_W    1024u
+#define VOXEL_SPRITE_ATLAS_H    512u
+#define VOXEL_SPRITE_SLOTS      128u
+#define VOXEL_STANDIN_FIRST     OBJECT_EVENTS_COUNT
+#define VOXEL_STANDIN_SLOTS     32u
+#endif
 #define VOXEL_SPRITE_SLOT_DIM   64u
 #define VOXEL_SPRITE_COLUMNS    (VOXEL_SPRITE_ATLAS_W / VOXEL_SPRITE_SLOT_DIM)
-#define VOXEL_SPRITE_SLOTS      32u
 /* The last of them holds no sprite: it is the frame of a door opening or
  * closing (voxel_entities.c, EmitDoor), 32x32 at most. */
 #define VOXEL_DOOR_SLOT         (VOXEL_SPRITE_SLOTS - 1u)

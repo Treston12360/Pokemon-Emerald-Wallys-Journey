@@ -14,6 +14,9 @@
 #include "event_object_movement.h"
 #include "field_player_avatar.h"
 #include "constants/field_effects.h"
+#include "constants/event_objects.h"
+#include "event_data.h"
+#include "palette.h"
 #include "constants/event_object_movement.h"
 #include "gba/io_reg.h"
 #include "port_platform.h"
@@ -31,6 +34,15 @@
 
 /* 16 pixels of sprite is one world tile, as in the reference renderer. */
 #define VOXEL_PIXELS_PER_TILE 16.0f
+
+/* How far from the camera's aim people are drawn, tiles. The 3DS packs positions into 16 bits; the PC
+ * draws them as far as the view goes into its haze (DLX-18: at 24 they popped in walking north). The game
+ * loads them that far out too while the 3D view is on (wide_view.c UpdatePads). */
+#ifdef PLATFORM_3DS
+#define VOXEL_CARD_RANGE 24.0f
+#else
+#define VOXEL_CARD_RANGE 48.0f
+#endif
 
 /* Largest sprite this atlas can hold, 8bpp: 64*64 bytes of source tiles. */
 #define VOXEL_SPRITE_MAX_BYTES (VOXEL_SPRITE_SLOT_DIM * VOXEL_SPRITE_SLOT_DIM)
@@ -1367,7 +1379,7 @@ bool8 __attribute__((weak)) VisibleWild_IsSprite(u8 spriteId)
  * (a possible contributor to #93). Wide of the 24 tiles the cards are cut at by as much as an effect's
  * placement can differ from this estimate.
  */
-#define VOXEL_EFFECT_RANGE (24.0f + 2.0f)
+#define VOXEL_EFFECT_RANGE (VOXEL_CARD_RANGE + 2.0f)
 
 static u8 EffectPriority(const struct Sprite *sprite, unsigned id)
 {
@@ -1422,6 +1434,212 @@ static int EffectOwner(const struct Sprite *sprite, const VoxelObjectCard *objec
     }
     return best;
 }
+
+#ifdef VOXEL_STANDIN_FIRST
+/*
+ * DLX-18: the people of the neighbouring maps. The game only loads the current map's object events, so the
+ * next map's people appeared from nothing as the player crossed into it (in 3D its ground is in sight long
+ * before). They are drawn here as they start - their spot, their first facing, standing - unless a flag
+ * hides them, the same stand-ins the zoomed-out 2D view draws (wide_view.c AddNeighbourPeople); the real
+ * ones take their place on the crossing. Their colours are the 2D view's copies (tinted for the time of
+ * day and faded with the screen like any sprite's).
+ */
+extern int WideView_GhostPalette(u16 tag);
+extern const u8 gInitialMovementTypeFacingDirections[];
+
+typedef struct
+{
+    bool used;
+    u8 mapGroup, mapNum, localId;
+    u32 seen;
+} VoxelStandInKey;
+
+typedef struct
+{
+    bool drawn;
+    float worldX, worldZ, shade;
+    bool outdoor;
+} VoxelStandInCard;
+
+static VoxelStandInKey sStandInKeys[VOXEL_STANDIN_SLOTS];
+static VoxelStandInCard sStandIns[VOXEL_STANDIN_SLOTS];
+static u32 sStandInFrame;
+
+/* The real object of that template is out already (a map just left keeps its people a while). */
+static bool StandInIsLoaded(u8 localId, u8 mapNum, u8 mapGroup)
+{
+    for (unsigned i = 0; i < OBJECT_EVENTS_COUNT; ++i)
+        if (gObjectEvents[i].active && gObjectEvents[i].localId == localId
+         && gObjectEvents[i].mapNum == mapNum && gObjectEvents[i].mapGroup == mapGroup)
+            return true;
+    return false;
+}
+
+static int StandInSlot(u8 mapGroup, u8 mapNum, u8 localId)
+{
+    int free = -1;
+
+    for (unsigned k = 0; k < VOXEL_STANDIN_SLOTS; ++k)
+    {
+        VoxelStandInKey *key = &sStandInKeys[k];
+
+        if (key->used && key->mapGroup == mapGroup && key->mapNum == mapNum && key->localId == localId)
+        {
+            key->seen = sStandInFrame;
+            return (int)k;
+        }
+        if (free < 0 && (!key->used || key->seen != sStandInFrame))
+            free = (int)k;
+    }
+    if (free < 0)
+        return -1;
+    sStandInKeys[free].used = true;
+    sStandInKeys[free].mapGroup = mapGroup;
+    sStandInKeys[free].mapNum = mapNum;
+    sStandInKeys[free].localId = localId;
+    sStandInKeys[free].seen = sStandInFrame;
+    sSlots[VOXEL_STANDIN_FIRST + free].valid = false;
+    return free;
+}
+
+/* A stand-in's picture into its slot, from the graphics info itself (not VRAM). */
+static bool RefreshStandIn(unsigned index, const struct ObjectEventGraphicsInfo *info, u32 frame, bool flipX,
+                           int paletteNum, uint16_t *atlas)
+{
+    VoxelSpriteSlot *slot = &sSlots[index];
+    const struct SpriteFrameImage *image = &info->images[frame];
+    u32 size = Port_GetSpriteFrameSize(image->data, image->size);
+    const u8 *tiles = Port_PeekSpriteFramePointer(image->data, size, 0);
+    const u16 *palette = &gPlttBufferFaded[OBJ_PLTT_ID(paletteNum)];
+    int w = info->width, h = info->height;
+    u32 bytes = (u32)(w / 8) * (u32)(h / 8) * TILE_SIZE_4BPP;
+
+    if (tiles == NULL || size < bytes || bytes > VOXEL_SPRITE_MAX_BYTES
+     || !VoxelSlots_Fits((unsigned)w, (unsigned)h, false, VOXEL_SPRITE_SLOT_DIM, VOXEL_SPRITE_MAX_BYTES))
+    {
+        slot->valid = false;
+        return false;
+    }
+    if (slot->valid && slot->width == w && slot->height == h && slot->flipX == flipX
+     && slot->sourceBytes == bytes && memcmp(slot->source, tiles, bytes) == 0
+     && memcmp(slot->palette, palette, 32) == 0)
+        return false;
+    slot->valid = true;
+    slot->width = w;
+    slot->height = h;
+    slot->atlasWidth = (int)VoxelSlots_AtlasWidth((unsigned)w, VOXEL_SPRITE_SLOT_DIM);
+    slot->color256 = false;
+    slot->flipX = flipX;
+    slot->flipY = false;
+    slot->tileNum = 0xFFFF;
+    slot->paletteNum = (u16)paletteNum;
+    slot->extPalette = 0xFF;
+    slot->shape = info->oam != NULL ? info->oam->shape : 0;
+    slot->size = info->oam != NULL ? info->oam->size : 0;
+    slot->sourceBytes = bytes;
+    slot->paletteBytes = 32;
+    memcpy(slot->source, tiles, bytes);
+    memcpy(slot->palette, palette, 32);
+    DecodeSlot(slot, index, atlas);
+    /* The standing pose's feet, as an object's (StandingFootPad). */
+    slot->footPadImages = info->images;
+    slot->footPadExact = true;
+    {
+        const struct SpriteFrameImage *stand = &info->images[0];
+        u32 standSize = Port_GetSpriteFrameSize(stand->data, stand->size);
+        const u8 *standTiles = Port_PeekSpriteFramePointer(stand->data, standSize, 0);
+
+        slot->footPad = standTiles != NULL && standSize >= bytes ? FootPadOf(standTiles, w, h) : 0;
+    }
+    return true;
+}
+
+/* Finds and decodes this frame's stand-ins near the camera; their slots are all claimed. */
+static unsigned GatherStandIns(const VoxelCamera *camera, uint16_t *atlas, bool *claimed)
+{
+    static int sOff = -1;
+    unsigned updates = 0;
+
+    sStandInFrame++;
+    for (unsigned k = 0; k < VOXEL_STANDIN_SLOTS; ++k)
+    {
+        claimed[VOXEL_STANDIN_FIRST + k] = true;
+        sStandIns[k].drawn = false;
+    }
+    if (sOff < 0)
+        sOff = getenv("WJPC_TEST_NO_GHOSTS") != NULL; // test aid: as before
+    if (sOff)
+        return 0;
+    for (unsigned m = 1; m < VoxelWorld_InstanceCount(); ++m)
+    {
+        const VoxelMapInstance *inst = VoxelWorld_Instance(m);
+        const struct MapHeader *header = inst->header;
+        const struct MapEvents *ev = header != NULL ? header->events : NULL;
+
+        if (ev == NULL || ev->objectEvents == NULL || inst->indoor)
+            continue;
+        for (u32 i = 0; i < ev->objectEventCount; ++i)
+        {
+            const struct ObjectEventTemplate *t = &ev->objectEvents[i];
+            const struct ObjectEventGraphicsInfo *info;
+            float worldX = (float)(inst->originX + t->x), worldZ = (float)(inst->originY + t->y);
+            VoxelStandInCard *card;
+            int k, pal;
+            u8 dir;
+            u32 frame;
+
+            if (t->kind == OBJ_KIND_CLONE || (t->flagId != 0 && FlagGet(t->flagId)))
+                continue;
+            if (t->graphicsId == OBJ_EVENT_GFX_BERRY_TREE || t->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE
+             || (t->graphicsId & OBJ_EVENT_MON))
+                continue;
+            if (fabsf(worldX - camera->targetX) > VOXEL_CARD_RANGE
+             || fabsf(worldZ - camera->targetZ) > VOXEL_CARD_RANGE)
+                continue;
+            if (StandInIsLoaded(t->localId, (u8)inst->mapNum, (u8)inst->mapGroup))
+                continue;
+            info = GetObjectEventGraphicsInfo(t->graphicsId);
+            if (info == NULL || info->images == NULL || info->compressed)
+                continue;
+            pal = WideView_GhostPalette(info->paletteTag);
+            if (pal < 0)
+                continue;
+            k = StandInSlot((u8)inst->mapGroup, (u8)inst->mapNum, t->localId);
+            if (k < 0)
+                continue;
+            dir = t->movementType < NUM_MOVEMENT_TYPES ? gInitialMovementTypeFacingDirections[t->movementType] : DIR_SOUTH;
+            frame = info->inanimate ? 0 : dir == DIR_NORTH ? 1 : (dir == DIR_WEST || dir == DIR_EAST) ? 2 : 0;
+            if (RefreshStandIn(VOXEL_STANDIN_FIRST + (unsigned)k, info, frame, dir == DIR_EAST && !info->inanimate,
+                               pal, atlas))
+                ++updates;
+            if (!sSlots[VOXEL_STANDIN_FIRST + k].valid)
+                continue;
+            card = &sStandIns[k];
+            card->drawn = true;
+            card->worldX = worldX;
+            card->worldZ = worldZ;
+            card->shade = 1.0f;
+            card->outdoor = true;
+#if CTR_VOXEL_LIGHTING
+            {
+                float cx = worldX + 0.5f, cz = worldZ + 0.5f;
+
+                card->shade = VoxelLighting_SampleAlone(cx, VoxelRelief_LiftAt(cx, cz) + 0.75f,
+                                                        cz + VoxelRelief_ShiftAt(cx, cz));
+            }
+#endif
+        }
+    }
+    /* Keys not seen this frame free their slots for others. */
+    for (unsigned k = 0; k < VOXEL_STANDIN_SLOTS; ++k)
+        if (sStandInKeys[k].used && sStandInKeys[k].seen != sStandInFrame)
+        {
+            sStandInKeys[k].used = false;
+            sSlots[VOXEL_STANDIN_FIRST + k].valid = false;
+        }
+    return updates;
+}
+#endif
 
 unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelCamera *camera,
                             VoxelBuilder *shadows, VoxelBuilder *reflections)
@@ -1521,8 +1739,8 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
         /* Active events may be dozens of tiles beyond the camera, including
          * across map connections. They cannot appear in this view, and packing
          * them relative to the camera's tile overflows the 16-bit format. */
-        if (fabsf(worldX - camera->targetX) > 24.0f
-         || fabsf(worldZ - camera->targetZ) > 24.0f)
+        if (fabsf(worldX - camera->targetX) > VOXEL_CARD_RANGE
+         || fabsf(worldZ - camera->targetZ) > VOXEL_CARD_RANGE)
             continue;
         if (RefreshSlot(i, sprite, obj, atlas))
             ++updates;
@@ -1669,6 +1887,9 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
         ++candidateCount;
     }
 
+#ifdef VOXEL_STANDIN_FIRST
+    updates += GatherStandIns(camera, atlas, claimed);
+#endif
     /* All but the door's slot. */
     dropped = VoxelSlots_Assign(requests, candidateCount, sSlotEffect, claimed, reset,
                                 VOXEL_DOOR_SLOT, OBJECT_EVENTS_COUNT);
@@ -1763,6 +1984,27 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
         if (i == gPlayerAvatar.objectEventId && builder->count == first + 6)
             sPlayerVertexFirst = (int)first;
     }
+#ifdef VOXEL_STANDIN_FIRST
+    for (unsigned k = 0; k < VOXEL_STANDIN_SLOTS; ++k)
+    {
+        const VoxelStandInCard *card = &sStandIns[k];
+        unsigned slot = VOXEL_STANDIN_FIRST + k;
+        float dusk;
+
+        if (!card->drawn)
+            continue;
+        dusk = DoorLight(doors, card->worldX + 0.5f, card->worldZ + 0.5f);
+        if (dusk <= 0.0f)
+            continue;
+#if CTR_VOXEL_LIGHTING
+        if (shadows != NULL && card->outdoor)
+            EmitCastShadow(shadows, &sSlots[slot], slot, card->worldX, card->worldZ, rightX, rightZ,
+                           stretch, card->shade, 0.0f, 0.0f);
+#endif
+        EmitBillboard(builder, &sSlots[slot], slot, card->worldX + 0.5f, card->worldZ + 0.5f,
+                      0.0f, 0.0f, 0.0f, 0.0f, rightX, rightZ, stretch, card->shade * dusk, 1.0f);
+    }
+#endif
 
     for (unsigned e = 0; e < effectCount; ++e)
     {
@@ -1811,7 +2053,7 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
                 cx += (float)VoxelWorld_Instance(0)->originX;
                 cz += (float)VoxelWorld_Instance(0)->originY;
             }
-            if (fabsf(cx - camera->targetX) > 24.0f || fabsf(cz - camera->targetZ) > 24.0f)
+            if (fabsf(cx - camera->targetX) > VOXEL_CARD_RANGE || fabsf(cz - camera->targetZ) > VOXEL_CARD_RANGE)
                 continue;
             EmitDecal(builder, &sSlots[effect->slot], effect->slot, cx, cz, 0.0f, shade);
             continue;
@@ -1846,7 +2088,7 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
                  * its bottom edge. */
                 cz = reference->worldZ + 0.5f
                    + (base - h / 2 - (reference->base - 8)) / VOXEL_PIXELS_PER_TILE;
-                if (fabsf(cx - camera->targetX) > 24.0f || fabsf(cz - camera->targetZ) > 24.0f)
+                if (fabsf(cx - camera->targetX) > VOXEL_CARD_RANGE || fabsf(cz - camera->targetZ) > VOXEL_CARD_RANGE)
                     continue;
                 if (effect->surf)
                 {
@@ -1874,7 +2116,7 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
                 continue;
             }
             cz = reference->worldZ + 0.5f + (base - reference->base) / VOXEL_PIXELS_PER_TILE;
-            if (fabsf(cx - camera->targetX) > 24.0f || fabsf(cz - camera->targetZ) > 24.0f)
+            if (fabsf(cx - camera->targetX) > VOXEL_CARD_RANGE || fabsf(cz - camera->targetZ) > VOXEL_CARD_RANGE)
                 continue;
             EmitBillboard(builder, &sSlots[effect->slot], effect->slot, cx, cz, 0.0f, 0.0f,
                           -sprite->y2 * pixel, reference->deck, rightX, rightZ, stretch,

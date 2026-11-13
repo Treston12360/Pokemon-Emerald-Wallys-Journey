@@ -221,10 +221,27 @@ Note: my Wine test folder uses 3D data generated from vanilla Emerald (vanilla l
 tree in buildings (IndexError in voxel_building._cell_image, frontier_arch) and relief - see DLX-1 (which data
 ships). `reuse_everywhere` now skips a layout it cannot read (3ds_port copy only, not in git).
 
-### DLX-18 3D: route switching still a little jarring; no pop-in at all (WIP - session 014PwRDj)
+### DLX-18 3D: route switching still a little jarring; no pop-in at all (Done - session 014PwRDj, 2026-11-12)
 Owner: "just load everything so nothing has to pop in". Preload connected maps' meshes, people and
 trees ahead of the border (map meshes are already built one a frame; the edge scenery rebuild is
 DLX-7). People on neighbouring maps should already be drawn.
+- Map meshes and tile sheets of maps that are not underfoot are built in the background, about 3 ms a
+  frame (a frame's worth while the screen is dark), old mesh shown meanwhile; meshes of maps that left
+  the view are kept (32 slots) for when they come back. Was: one whole map a frame (15-30 ms each).
+- Crossing a seam moves the camera and the old edge scenery into the new map's coordinates instead of
+  snapping the camera and rebuilding the whole belt on that step (new belt: a few pieces a frame).
+- People: drawn up to 48 tiles from the camera's aim (was 24), and the game loads them that far out
+  while 3D is on (gWjPc3DField); the neighbouring maps' people are drawn as stand-ins (first spot and
+  facing, hidden by their flags) until the crossing loads the real ones. 2D zoomed-out stand-ins no
+  longer double a person the old map still has loaded.
+- Found and fixed on the way: (1) the PC has 64 object events but the 3D sprite sheet had 32 slots -
+  objects 32-63 wrote past the tables; now 128 slots (1024x512), uploaded only when a picture changes.
+  (2) Reading the clock for the season cost 4-20 ms (Wine) and was done every frame by the 3D and the
+  zoomed-out view, and on each crossing: the hour is now kept ~17 s on PC (WJ_RealClockHour).
+- Measured (Wine, Oldale -> Route 103): the step that crosses 4.5 ms of map/belt work (was ~13 ms plus
+  15-20 ms on each of the next frames). Test aids: WJPC_VOXEL_LOG logs "slow frame" over 4 ms;
+  WJPC_3D_BUILD_MS=N sets the budget; WJPC_3D_OLD_CROSSING=1 the old snap; WJPC_TEST_NO_GHOSTS=1 no stand-ins.
+- GBA ROM unchanged (PC code only).
 
 ### DLX-19 3D: Lavaridge gym sign folded in half; check the gym door (PART DONE - session 014PwRDj, 2026-11-12)
 The new gym model (DLX-1) shows the sign bent. The model is visual only, but confirm in game that

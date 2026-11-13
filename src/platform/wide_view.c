@@ -48,6 +48,7 @@ extern void WJPC_GetFieldCameraRing(u8 *xTile, u8 *yTile);
 static bool sEnabled = true;
 
 s16 gWjPcViewPadX, gWjPcViewPadY, gWjPcSpawnPadX, gWjPcSpawnPadY;
+bool8 gWjPc3DField; // the 3D view is on (sdl2.c): people load as far out as it draws them
 
 void WideView_SetEnabled(bool enabled)
 {
@@ -164,6 +165,15 @@ static void UpdatePads(int w, int h)
     // One tile more than the visible edge: NPCs load before they scroll into view, not as they do.
     gWjPcSpawnPadX = (gWjPcViewPadX + 15) / 16 + 1;
     gWjPcSpawnPadY = (gWjPcViewPadY + 15) / 16 + 1;
+    // DLX-18: the 3D view draws people up to 48 tiles from its aim (voxel_entities.c VOXEL_CARD_RANGE),
+    // so they load that far out: the box is 9-10 tiles across the player's sides and 7-9 up and down.
+    if (gWjPc3DField)
+    {
+        if (gWjPcSpawnPadX < 42)
+            gWjPcSpawnPadX = 42;
+        if (gWjPcSpawnPadY < 44)
+            gWjPcSpawnPadY = 44;
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -701,6 +711,22 @@ static int GhostPaletteSlot(u16 tag)
     }
 }
 
+// For the 3D view's stand-ins (voxel_entities.c): a palette slot holding that tag's colours, or -1.
+int WideView_GhostPalette(u16 tag)
+{
+    return GhostPaletteSlot(tag);
+}
+
+// The real object of that template is out already: a map just left keeps its people until out of range.
+static bool32 NeighbourPersonLoaded(u8 localId, u8 mapNum, u8 mapGroup)
+{
+    for (u32 i = 0; i < OBJECT_EVENTS_COUNT; i++)
+        if (gObjectEvents[i].active && gObjectEvents[i].localId == localId
+         && gObjectEvents[i].mapNum == mapNum && gObjectEvents[i].mapGroup == mapGroup)
+            return TRUE;
+    return FALSE;
+}
+
 static void AddNeighbourPeople(void)
 {
     u32 tileNext = TOTAL_OBJ_TILE_COUNT - WJPC_GHOST_TILES;
@@ -735,6 +761,8 @@ static void AddNeighbourPeople(void)
             if (t->graphicsId == OBJ_EVENT_GFX_BERRY_TREE || t->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE
              || (t->graphicsId & OBJ_EVENT_MON)) // a berry tree's picture is its own; a light is not a person
                 continue;
+            if (NeighbourPersonLoaded(t->localId, nm->num, nm->group))
+                continue; // drawn as itself
             SetSpritePosToMapCoords(nm->x + t->x + MAP_OFFSET, nm->y + t->y + MAP_OFFSET, &sx, &sy);
             info = GetObjectEventGraphicsInfo(t->graphicsId);
             if (info == NULL || info->images == NULL || info->oam == NULL || info->compressed)
