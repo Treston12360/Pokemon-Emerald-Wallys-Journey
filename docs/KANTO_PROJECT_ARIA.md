@@ -203,8 +203,13 @@ No tea, no item gates.
 | Kanto E4 | 73–76 | 78–80 | +3 |
 | Varnell | 76–78 | 80–82 | +3–4 |
 
-- Leaders are veteran versions: six Pokémon, fully evolved, newer species that fit their type
-  (e.g., Brock: Rhyperior, Tyranitar, Aerodactyl, Gigalith, Kabutops, Golem — **no Geodude**).
+- **The level curve is the top priority** (owner: games like the JoJo games get criticised for curves that
+  are all over the place). Check every chapter with the simulator.
+- Leaders are veteran versions: six Pokémon, fully evolved, no early forms (Brock: **no Geodude**).
+- **Kanto's Gym Leaders, Elite Four and important trainers use Kanto Pokémon** (owner, 2026-11-13), chosen
+  to fit each trainer. Build them the way the Hoenn leaders were built (see the "Important trainers" and
+  "Growing Gym Leader rematches" rows in `WALLY_JOURNEY_OWNER_REQUIREMENTS.md`: proven teams, held items,
+  natures/EVs from their moves, Megas only for allowed trainer types) and show the owner before adding.
 - Re-run the simulator on the real Kanto trainer data once it exists; adjust until each boss is 1–3 above.
 
 ## 6. Champion defenses (moved after Kanto)
@@ -263,8 +268,7 @@ No tea, no item gates.
   - May/Brendan's post-game lab battle is **removed**; they appear only as Champion-defense challengers.
     (The Elite Four rematch unlock currently requires that fight — drop the requirement.)
   - **Steven is lowered to about Wally's strength** (mid-60s) and stays open.
-  - Gym Leader rematches stay open; they already give a quarter EXP (anti-farming). Owner to confirm
-    quarter vs 5%.
+  - Gym Leader rematches stay open, cut from a quarter to **5% EXP (or none)**.
   - **Repeat Elite Four runs after the first win give 5% EXP**, like Gabby & Ty. Nothing can be farmed.
   - Re-run `tools/exp_curve_full.py` with these rules (it currently counts rematches at full EXP, so the
     real pre-Kanto level is a little under 60).
