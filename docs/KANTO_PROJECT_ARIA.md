@@ -30,11 +30,14 @@ a reveal or a choice, not just a gym.
 ## 2. Aria and Varnell (the emotional core)
 
 - Aria died years ago, **caught in a Rocket attack** — wrong place, wrong time. Random and senseless,
-  which is exactly why Varnell can't accept it. **Decided 2026-11-13: during the Silph Co. takeover,
-  while visiting him at work.**
+  which is exactly why Varnell can't accept it. **Decided 2026-11-13 (revised): in Pokémon Tower,
+  Lavender, during Team Rocket's raid in the original FRLG story.** Varnell was researching the tower's
+  unusual readings with Aria along. Rocket stole her Clefairy; she chased after it; both died in the tower.
+  This mirrors FRLG's own Marowak tragedy in the same raid. Mr. Fuji was there.
 - **Rule for every clue: it only makes sense looking back.** Nothing may give the twist away early.
-- At Saffron (ch. 6) Varnell goes quiet, won't enter Silph, and sends the player alone. It reads as a
-  scientist protecting his career; after the reveal it's a father who can't walk into the place she died.
+- At Lavender (ch. 4) Varnell won't enter Pokémon Tower and sends the player alone ("the readings need a
+  trainer's Pokémon"). In the moment it's an odd excuse; after the reveal it's a father who can't walk
+  back into the place she died.
 - For most of the game Varnell seems kind, brilliant and genuinely helpful. **That's a mask.**
 - Underneath he's twisted: he knows folding space-time could destroy the world and **doesn't care.**
   A world without Aria isn't a world worth being in, so the risk was worth it. No remorse, no redemption.
@@ -48,7 +51,8 @@ a reveal or a choice, not just a gym.
 - A child's drawing in his office signed "aria" in lowercase — a girl holding a **Clefairy** (pays off the Lavender ghost).
 - Staff: "The Director won't let anyone else touch ARIA's settings."
 - The holding bay terminal: "Good night, Aria."
-- Mr. Fuji at Pokémon Tower mentions a grieving father who visits a grave "with no Pokémon name on it."
+- Mr. Fuji (who was in the tower during the Rocket raid) mentions a grieving father who visits a grave
+  "with no Pokémon name on it."
 
 **Mid-game photo + the Clefairy (owner, 2026-11-13):** the player finds an unlabelled photo of a little
 girl holding a Clefairy. In Lavender Tower the Clefairy echo calls out "Aria". Only players who put the
