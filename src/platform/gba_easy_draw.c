@@ -907,10 +907,65 @@ uint16_t *memsetu16(uint16_t *dst, uint16_t fill, size_t count)
     }
 }
 
+// DLX-3: set when this frame's picture changed from line to line (HBlank/VCount interrupts or HBlank
+// DMA): such a frame cannot be redrawn from the end-of-frame registers, so it gets no in-between frames.
+bool gPcFrameHadLineEffects;
+
+// The display registers that shape the picture (DISPCNT and BG0CNT..BLDY, not VCOUNT/DISPSTAT).
+static u8 sLine0Regs[0x56];
+static void SnapRegs(u8 *out)
+{
+    memcpy(out, (const u8 *)&REG_DISPCNT, 4);
+    memcpy(out + 4, (const u8 *)&REG_DISPCNT + 8, 0x56 - 8);
+}
+
+static bool LineEffectsOn(void)
+{
+    // a register changed since line 0 (an HBlank or VCount handler at work), or an HBlank DMA is set up
+    u8 now[0x56];
+    SnapRegs(now);
+    if (memcmp(now, sLine0Regs, 0x56 - 4) != 0)
+        return true;
+    for (int n = 0; n < 4; n++)
+    {
+        u32 cnt = (&REG_DMA0CNT)[n * 3];
+        if (((cnt >> 16) & DMA_ENABLE) && (((cnt >> 16) & DMA_START_MASK) >> 12) == DMA_HBLANK)
+            return true;
+    }
+    return false;
+}
+
+// DLX-3: the frame again from the registers as they are now, with no interrupts or DMA (an in-between
+// picture: the caller moves sprites and BG offsets first).
+void DrawFramePlain(uint16_t *pixels)
+{
+    u16 vcount = REG_VCOUNT;
+    for (int i = 0; i < DISPLAY_HEIGHT; i++)
+    {
+        REG_VCOUNT = i;
+        unsigned int blendMode = (REG_BLDCNT >> 6) & 3;
+        uint16_t backdropColor = *(uint16_t *)PLTT;
+        if (REG_BLDCNT & BLDCNT_TGT1_BD)
+        {
+            if (blendMode == 2)
+                backdropColor = alphaBrightnessIncrease(backdropColor);
+            else if (blendMode == 3)
+                backdropColor = alphaBrightnessDecrease(backdropColor);
+        }
+        memsetu16(&pixels[i * DISPLAY_WIDTH], backdropColor, DISPLAY_WIDTH);
+        sSourceRow = &gPcPixelSource[i * DISPLAY_WIDTH];
+        sFadeRow = &gPcPixelFade[i * DISPLAY_WIDTH];
+        DrawScanline(&pixels[i * DISPLAY_WIDTH], i);
+    }
+    REG_VCOUNT = vcount;
+}
+
 void DrawFrame(uint16_t *pixels)
 {
     int i;
     int j;
+    SnapRegs(sLine0Regs);
+    gPcFrameHadLineEffects = LineEffectsOn();
     for (i = 0; i < DISPLAY_HEIGHT; i++)
     {
         REG_VCOUNT = i;
@@ -948,6 +1003,8 @@ void DrawFrame(uint16_t *pixels)
         memset(sSourceRow, 0, DISPLAY_WIDTH);
         memset(sFadeRow, 0, DISPLAY_WIDTH);
         DrawScanline(&pixels[i * DISPLAY_WIDTH], i);
+        if (!gPcFrameHadLineEffects && LineEffectsOn())
+            gPcFrameHadLineEffects = true;
         
         REG_DISPSTAT |= INTR_FLAG_HBLANK;
 

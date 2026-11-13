@@ -84,6 +84,13 @@ static bool s3DTransition;
 static bool s2DTransition;
 static struct WideViewFrame sLastField;
 static bool sHaveLastField;
+// DLX-3: in-between pictures of the GBA screen (battles, menus) and the frame they lead up to
+#define INTERP_MAX 3
+static uint32_t sInterpImage[INTERP_MAX][DISPLAY_WIDTH * DISPLAY_HEIGHT];
+static uint32_t sInterpCurrent[DISPLAY_WIDTH * DISPLAY_HEIGHT], sLastUploaded[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+static int sInterpCount, sInterpSteps, sInterpShown = -1;
+static bool sInterpBattle; // the in-between pictures are 3D-battle overlays (DLX-5), not the GBA screen
+static uint32_t sBattleImage[DISPLAY_WIDTH * DISPLAY_HEIGHT];
 static int s3DW, s3DH;
 #define SMOOTH_M WIDE_VIEW_SMOOTH_MARGIN
 #define TEX_W (WIDE_VIEW_MAX_W + 2 * SMOOTH_M)
@@ -869,6 +876,21 @@ static void DrawScene(double t, int outputWidth, int outputHeight)
 static void DrawScreen(double t)
 {
     int winW, winH, w, h;
+    if (sInterpCount > 0)
+    {
+        // DLX-3: between game frames show the in-between pictures, then the frame itself
+        int idx = (int)(t * sInterpSteps);
+        int want = idx < sInterpCount ? idx : sInterpCount;
+        if (want != sInterpShown)
+        {
+            SDL_Rect a = {0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT};
+            SDL_Texture *dst = sInterpBattle ? sdl3DBattleTexture : sdlTexture;
+            if (dst != NULL)
+                SDL_UpdateTexture(dst, &a, want < sInterpCount ? sInterpImage[want] : sInterpCurrent,
+                                  DISPLAY_WIDTH * sizeof(Uint32));
+            sInterpShown = want;
+        }
+    }
     SDL_GetRendererOutputSize(sdlRenderer, &winW, &winH);
     GetSceneSize(&w, &h);
     SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 255);
@@ -1188,7 +1210,7 @@ int main(int argc, char **argv)
                 if (sTestWinShot[0] != '\0')
                 {
                     int ww, wh;
-                    DrawScreen(1.0);
+                    DrawScreen(getenv("WJPC_WINSHOT_T") ? atof(getenv("WJPC_WINSHOT_T")) : 1.0);
                     SDL_GetRendererOutputSize(sdlRenderer, &ww, &wh);
                     uint8_t *px = malloc((size_t)ww * wh * 3);
                     if (px != NULL && SDL_RenderReadPixels(sdlRenderer, NULL, SDL_PIXELFORMAT_RGB24, px, ww * 3) == 0)
@@ -2450,6 +2472,8 @@ void VDraw(SDL_Texture *texture)
         sHaveLastField = false; // a battle, a menu: the next transition starts from a new field picture
     if (!s2DTransition)
         SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32));
+    if (fullW == DISPLAY_WIDTH && fullH == DISPLAY_HEIGHT)
+        memcpy(sLastUploaded, image, sizeof(sLastUploaded));
     else
     {
         // The transitions also fade by palette (flashes, fades to black or white): the GBA picture's map
@@ -2549,7 +2573,6 @@ void VDraw(SDL_Texture *texture)
         {
             extern u8 gPcPixelSource[];
             extern s8 gPcPixelFade[];
-            static uint32_t sBattleImage[DISPLAY_WIDTH * DISPLAY_HEIGHT];
             if (sdl3DBattleTexture == NULL)
             {
                 sdl3DBattleTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
@@ -2635,6 +2658,109 @@ void VDraw(SDL_Texture *texture)
     else
     {
         sCamMoveValid = false;
+    }
+    // DLX-3: in-between frames for battles and menus (the GBA picture), like the overworld's smooth
+    // motion. Sprites (matched by OAM slot, same picture) and BG scroll that moved a little since the
+    // last frame are drawn part of the way there; DrawScreen shows them before this frame's picture.
+    {
+        extern bool gPcFrameHadLineEffects;
+        extern void DrawFramePlain(uint16_t *pixels);
+        static unsigned char prevOam[OAM_SIZE];
+        static u16 prevOfs[8];
+        static bool havePrev;
+        volatile u16 *ofs = &REG_BG0HOFS;
+        int rate = gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT];
+        int steps = (rate + 30) / 60;
+        bool gba = sFrameInfo.mode == WIDE_VIEW_GBA && sFrameInfo.width == DISPLAY_WIDTH
+                && sFrameInfo.height == DISPLAY_HEIGHT && sFrameInfo.margin == 0;
+        bool want = gba && (sPlatformSettings[PLATFORM_SETTING_SMOOTH] || getenv("WJPC_TEST_INTERP"))
+                 && !s3DTransition && !s2DTransition && getenv("WJPC_NO_INTERP") == NULL;
+        if (getenv("WJPC_TEST_INTERP"))
+            steps = atoi(getenv("WJPC_TEST_INTERP"));
+        if (steps > INTERP_MAX + 1)
+            steps = INTERP_MAX + 1;
+        sInterpCount = 0;
+        sInterpShown = -1;
+        if (want && havePrev && steps > 1 && !gPcFrameHadLineEffects)
+        {
+            static unsigned char curOam[OAM_SIZE];
+            static uint16_t pic[DISPLAY_WIDTH * DISPLAY_HEIGHT];
+            u16 curOfs[8];
+            struct OamData *o = (struct OamData *)OAM, *po = (struct OamData *)prevOam;
+            bool moved = false;
+            memcpy(curOam, OAM, OAM_SIZE);
+            for (int i = 0; i < 8; i++)
+                curOfs[i] = ofs[i];
+            for (int k = 1; k < steps; k++)
+            {
+                float f = (float)k / steps;
+                for (int i = 0; i < OAM_SIZE / (int)sizeof(struct OamData); i++)
+                {
+                    const struct OamData *c = &((const struct OamData *)curOam)[i];
+                    if (po[i].tileNum != c->tileNum || po[i].shape != c->shape || po[i].size != c->size
+                     || po[i].affineMode != c->affineMode)
+                        continue;
+                    int dx = (int)c->x - (int)po[i].x, dy = (int)c->y - (int)po[i].y;
+                    dx = ((dx + 256) & 511) - 256;
+                    dy = ((dy + 128) & 255) - 128;
+                    if ((dx == 0 && dy == 0) || abs(dx) > 16 || abs(dy) > 16)
+                        continue;
+                    // drawn at the earlier place plus part of the move (rounded toward where it came from)
+                    o[i].x = (unsigned)((int)po[i].x + (int)(dx * f)) & 511;
+                    o[i].y = (unsigned)((int)po[i].y + (int)(dy * f)) & 255;
+                    moved = true;
+                }
+                for (int i = 0; i < 8; i++)
+                {
+                    int d = (((int)curOfs[i] - (int)prevOfs[i] + 256) & 511) - 256;
+                    if (d != 0 && abs(d) <= 16)
+                    {
+                        ofs[i] = (u16)(((int)prevOfs[i] + (int)(d * f)) & 511);
+                        moved = true;
+                    }
+                }
+                if (!moved)
+                    break;
+                DrawFramePlain(pic);
+                if (s3DBattleFrame)
+                {
+                    // as the battle overlay is made: the scenery and backdrop see-through
+                    extern u8 gPcPixelSource[];
+                    extern s8 gPcPixelFade[];
+                    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
+                    {
+                        u8 src = gPcPixelSource[i];
+                        int fd = gPcPixelFade[i];
+                        sInterpImage[k - 1][i] = (src == 0 || src == 4)
+                            ? (fd > 0 ? ((uint32_t)(fd * 255 / 16) << 24) | 0xFFFFFF : fd < 0 ? ((uint32_t)(-fd * 255 / 16) << 24) : 0)
+                            : ToArgb(pic[i]);
+                    }
+                }
+                else
+                    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
+                        sInterpImage[k - 1][i] = ToArgb(pic[i]);
+                sInterpCount = k;
+                memcpy(OAM, curOam, OAM_SIZE);
+                for (int i = 0; i < 8; i++)
+                    ofs[i] = curOfs[i];
+            }
+            memcpy(OAM, curOam, OAM_SIZE);
+            for (int i = 0; i < 8; i++)
+                ofs[i] = curOfs[i];
+            if (sInterpCount > 0)
+            {
+                sInterpSteps = steps;
+                sInterpBattle = s3DBattleFrame;
+                memcpy(sInterpCurrent, s3DBattleFrame ? sBattleImage : sLastUploaded, sizeof(sInterpCurrent));
+            }
+        }
+        havePrev = want;
+        if (want)
+        {
+            memcpy(prevOam, OAM, OAM_SIZE);
+            for (int i = 0; i < 8; i++)
+                prevOfs[i] = ofs[i];
+        }
     }
     REG_VCOUNT = 161; // prep for being in VBlank period
 }
