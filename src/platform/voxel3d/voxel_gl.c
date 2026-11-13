@@ -2403,10 +2403,12 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         InstanceMesh *m = &sInstanceMeshes[i];
         if (!m->used || !m->shown)
             continue;
-        for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+        int skip = getenv("WJPC_3D_SKIP") ? atoi(getenv("WJPC_3D_SKIP")) : 0; /* debug: 1 terrain 2 trees 4 models */
+        for (unsigned p = 0; p < VOXEL_ATLAS_PAGES && !(skip & 1); p++)
             MeshDraw(&m->terrain[p], m->atlas->tex[p], (float)m->originX, 0, (float)m->originY);
-        MeshDraw(&m->trees, sTreeTex, (float)m->originX, 0, (float)m->originY);
-        if (m->buildingPage >= 0)
+        if (!(skip & 2))
+            MeshDraw(&m->trees, sTreeTex, (float)m->originX, 0, (float)m->originY);
+        if (m->buildingPage >= 0 && !(skip & 4))
         {
             GLuint page = BuildingPage(m->buildingPage);
             if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
@@ -2421,7 +2423,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             }
         }
     }
-    if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground)
+    if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground && !(getenv("WJPC_3D_SKIP") && (atoi(getenv("WJPC_3D_SKIP")) & 8)))
     {
         for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
             MeshDraw(&sBeltTerrain[p], sBeltAtlas->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);

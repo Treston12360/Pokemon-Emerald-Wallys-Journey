@@ -354,7 +354,13 @@ During healing the balls float above the wall instead of on the machine. Picture
 ### DLX-25 3D: Dewford pop-in when switching routes (TODO, owner report 2026-11-13)
 Trees at the outside edges of the map change when crossing into the next route. Pictures: 72382506, f63f2bd1, d88db846, d32e7b46, ee23a2c6. Images in `docs/dlx_reports/2026-11-13/`.
 
-### DLX-26 3D: water routes show grey squares and lines (TODO, owner report 2026-11-13)
+### DLX-26 3D: water routes show grey squares and lines (WIP 2026-11-13, session 019khs4X)
+Grey squares: NOT a bug - the 2D game draws the same grey shallow-water tiles (Route 108 metatiles 0x1ad-0x1bf
+around rocks/ship). Lines: reproduced here (Route 108, warp 0 23 20 10, not GPU-only). Not Gamma/bloom/DOF, not
+models, not trees, not atlas bleeding (u inset tried: no change). Long lines at the top go away with the edge belt
+hidden (debug env WJPC_3D_SKIP=8; 1 terrain, 2 trees, 4 models); the brackets near rocks come from map terrain.
+Restoring 3DS's belt face rule (drawn cells keep no faces) did not remove them. Next: dump the belt/terrain
+triangles under one line and see which emitter makes them; then find 3DS's handling of that case.
 Grey/transparent squares under rocks and other objects, and long light lines on the sea (Route 118 and others). Picture: fd24e386. Images in `docs/dlx_reports/2026-11-13/`.
 
 ### DLX-27 3D: the ship on the sea renders wrong / partly flat (TODO, owner report 2026-11-13)
