@@ -691,9 +691,29 @@ static int CurrentLift(int mapGroup, int mapNum)
     return lift > LIFT_FORGET || lift < -LIFT_FORGET ? 0 : lift;
 }
 
+/*
+ * Where the world's origin (the current map's top-left) lies in one steady frame that does not jump when a
+ * connection is crossed: the new map's origin in the old layout is added. Things fixed to the ground across
+ * maps (Gamma's cloud shadows) use it. A warp starts nothing new (it is a different place anyway).
+ */
+static int sSteadyX, sSteadyY;
+
+void VoxelWorld_SteadyOrigin(int *x, int *y)
+{
+    *x = sSteadyX;
+    *y = sSteadyY;
+}
+
 void VoxelWorld_BuildInstances(void)
 {
     unsigned near;
+    for (unsigned i = 1; i < sPlacedCount; ++i)
+        if (sPlaced[i].mapGroup == gSaveBlock1Ptr->location.mapGroup && sPlaced[i].mapNum == gSaveBlock1Ptr->location.mapNum)
+        {
+            sSteadyX += sPlaced[i].originX;
+            sSteadyY += sPlaced[i].originY;
+            break;
+        }
     int lift = CurrentLift(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
 
 #ifdef PLATFORM_3DS

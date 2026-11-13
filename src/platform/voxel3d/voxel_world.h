@@ -86,6 +86,8 @@ void VoxelWorld_BeginBatch(void);
 /* The current map, its connections and theirs, and every map further along
  * within VOXEL_WORLD_REACH of it (see voxel_world.c). */
 void VoxelWorld_BuildInstances(void);
+/* The current map's origin in a frame that stays put across crossed connections (for the cloud shadows). */
+void VoxelWorld_SteadyOrigin(int *x, int *y);
 /*
  * The asset payloads the renderer reads for the maps on screen and one
  * crossing away - each layout's border, each tileset's attributes, metatiles,

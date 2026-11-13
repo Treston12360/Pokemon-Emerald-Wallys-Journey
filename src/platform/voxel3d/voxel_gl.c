@@ -253,12 +253,14 @@ static const char *sFragmentSrc =
     // M_SunCloudShadows_LF1 with Gamma's numbers; the two noise textures are stand-ins (theirs are art assets)
     "uniform sampler2D cloudTex, roughTex;\n"
     "uniform float cloudsOn;\n"
+    "uniform vec2 steady;\n" // the world origin in a frame that does not jump at a crossed connection
+
     "float clouds(vec3 w) {\n"
     "  if (cloudsOn < 0.5) return 1.0;\n"
     // a light function on the directional light is cast along the light: every point takes the cloud
     // over the ground spot its sun ray comes from, so walls and roofs carry the ground's pattern instead of
     // repeating one ground sample all the way up (that drew vertical streaks over buildings)
-    "  vec2 g = w.xz - sunDir.xz * (w.y / max(sunDir.y, 0.05));\n"
+    "  vec2 g = w.xz + steady - sunDir.xz * (w.y / max(sunDir.y, 0.05));\n"
     "  vec2 P = vec2(-g.y, g.x) * 64.0;\n" // Gamma X (north), Y (east), in cm
     "  float nn = texture2D(roughTex, P / 888.25 + time * vec2(-0.0010, -0.0007)).r;\n"
     "  float cc = texture2D(cloudTex, (P + nn * 40.0) / 5000.0 + time * vec2(-0.0021, -0.0030)).r;\n"
@@ -2280,6 +2282,12 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     GammaLightUniforms();
     // Gamma's cloud shadows are its sun's light function: none where the sun does not reach (indoors, caves)
     wj_glUniform1f(wj_glGetUniformLocation(sProgram, "cloudsOn"), inst0->indoor || inst0->underground ? 0.0f : 1.0f);
+    {
+        int sx, sy;
+        VoxelWorld_SteadyOrigin(&sx, &sy);
+        // (wrapped well inside a float's whole numbers; the pattern repeats every 5000/64*... tiles anyway)
+        wj_glUniform2f(wj_glGetUniformLocation(sProgram, "steady"), (float)(sx % 100000), (float)(sy % 100000));
+    }
 
     // Ground, trees and models of every map.
     for (int i = 0; i < MAX_INSTANCES; i++)
