@@ -157,7 +157,7 @@ Test (Linux, early-game save, 1080p scene, zoom 7, WJPC_TEST_WINDOW=1): Route 11
 Route 110 Psychic Edward spotted too. Test aid fix: script `set` now applies through Platform_SetSetting (the zoom
 and resolution only take effect that way, and only with WJPC_TEST_WINDOW=1, which draws every frame).
 
-### DLX-12 Pop-in: people on neighbouring maps; maps with a different tile set (TODO)
+### DLX-12 Pop-in: people on neighbouring maps; maps with a different tile set (WIP - session 014PwRDj)
 2D wide view: people on connected maps are not drawn; about 70 map links use another tile set and are
 still blank zoomed out.
 
