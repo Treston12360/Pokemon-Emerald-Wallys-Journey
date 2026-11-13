@@ -250,6 +250,24 @@ No tea, no item gates.
 - Varnell's sprite: an existing scientist/gentleman sprite with a new palette unless a free outside sprite
   is approved.
 
+## 7b. Getting Kanto into the Emerald build (findings 2026-11-13)
+
+- **Kanto is NOT in our build yet.** The `*_Frlg` maps are in the repo, but pokeemerald-expansion only
+  compiles them for a separate FireRed build (`tools/mapjson` skips non-Hoenn maps/layouts when building
+  Emerald). Warping to Pallet Town crashes (`gMapGroups` has no group 37).
+- **Pokémon Crossroads** (github.com/eonlynx/pokecrossroads, Beta 1.4) has solved this: Hoenn + Kanto + Sevii
+  in one Emerald build. **Permission: the owner spoke with eonlynx on Discord (2026-11-13) — anyone may use
+  it; that's why there's no licence file.** Credit Crossroads (eonlynx, justgoose/Goose; FRLG logic import
+  by cawtds; travel system by AsparagusEduardo) in our credits.
+- Crossroads is on expansion master from Mar–Apr 2026; we're on 1.17.2. Their own work is 22 commits by
+  eonlynx and Goose touching 213 files (≈77 of them map scripts): mapjson/Makefile changes to compile
+  both games' maps, tileset size handling (FRLG primary = 640 tiles/metatiles, 7 palettes vs Emerald's
+  512/512/6), FRLG flags moved out of the trainer-flag range, save layout kept within 32 flash sectors,
+  region-aware Fly/region map, FRLG specials/scripts, object events, heal locations, wild encounters.
+- **Our extra constraint:** GBA saves must still import. Any save-layout change must keep that working.
+- Plan: port their changeset onto our 1.17.2 base piece by piece (build system → tilesets → maps compile →
+  warps work → flags/vars/save → scripts), testing each step, rather than copying files wholesale.
+
 ## 8. First build steps
 
 1. **Audit** the ~420 `*_Frlg` maps and `trainers_frlg.party` already in the repo: do they load in our
