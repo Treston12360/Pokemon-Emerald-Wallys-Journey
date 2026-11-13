@@ -21,6 +21,7 @@ a reveal or a choice, not just a gym.
 | Varnell's ending | **Lost to the rift.** Giratina drags him into the Distortion World. Tragic, not redeemed. |
 | Wally | **Small cameos only** (calls / messages). Kanto is the player's story. |
 | Blue | Former Champion, now the 8th leader (Viridian). Rejects the player, investigates on his own, respect earned slowly. No quippy banter. |
+| Kanto League | HGSS lineup: Will, Koga, Bruno, Karen; **Lance** is Kanto Champion (Koga's move to the E4 is why Janine runs Fuchsia). |
 | Red | **Optional superboss only.** No story role. Final Champion-defense challenger. |
 | Oak | Introduces Varnell. Trusts him; is shaken by the reveal. |
 | Items | All Hoenn items, HMs and badges carry over. Nothing in Kanto is gated by an item. |
@@ -61,12 +62,12 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 4 | **Lavender** | The ghost: an echo of a lost **Clefairy** searching the tower and crying (Aria's Pokémon; the player doesn't know). Not Marowak. Varnell's "calibration lens" assignment (= Silph Scope) reveals it. Mr. Fuji's clue about the grieving father. Poké Flute. | — |
 | 5 | **Celadon / Snorlax** | Snorlax ×2 woken with the flute. Varnell's staff start acting cagey. | Erika |
 | 6 | **Saffron quarantine** | An ARIA containment machine malfunctions inside Silph Co.; the building warps (Silph's teleport maze). City sealed by Jenny and Silph security until you're cleared. You clear it; Master Ball. **Blue turns** — he saw the machine's markings and starts suspecting Varnell. | Sabrina |
-| 7 | **Fuchsia** | Blue shares what he's found, coldly. Safari side quest. | Koga's successor / Janine (owner to pick) |
+| 7 | **Fuchsia** | Blue shares what he's found, coldly. Safari side quest. | Janine |
 | 8 | **Seafoam** | Boulder/current puzzle. Blaine's temporary gym is here because Cinnabar's volcano is acting up (the tears). | Blaine (in Seafoam) |
 | 9 | **The Institute** | Back at Varnell's institute (mockups exist). The office, the drawing, the photo: **the reveal.** Varnell takes Hoopa and the lab goes dark. | — |
 | 10 | **Cinnabar** | Eruption warnings; the island is closed. The Mansion's old diaries mention spatial experiments. Varnell's people evacuate the last machine part. | — |
 | 11 | **Viridian** | Blue's gym opens. The battle is the end of his arc: he's finally on your side. | Blue |
-| 12 | **Victory Road / Elite Four** | Kanto League. Badge guards check Kanto badges only. | E4 |
+| 12 | **Victory Road / Elite Four** | Kanto League, **HGSS lineup: Will, Koga, Bruno, Karen, then Champion Lance.** Badge guards check Kanto badges only. | E4 + Lance |
 | 13 | **The ARIA chamber** | Holding bay (mockups exist): Dialga, Palkia, Giratina sealed. ARIA fires; the room goes Red Alert. Varnell's final battle. Giratina breaks containment and **drags Varnell into the rift.** | Varnell |
 | 14 | **Aftermath** | Oak's grief. Blue's thanks. A last echo of a little girl's voice in the empty chamber. Ship home to Hoenn. | — |
 
@@ -141,8 +142,6 @@ No tea, no item gates.
 
 ## 9. Still open (owner to decide)
 
-- Fuchsia leader: Koga or Janine.
 - When Hoopa is taken (cold open?).
-- Kanto Elite Four lineup (Lorelei/Bruno/Agatha/Lance, or successors).
 - Varnell's Pokémon team.
-- Sevii Islands later?
+- Sevii Islands: decide later.
