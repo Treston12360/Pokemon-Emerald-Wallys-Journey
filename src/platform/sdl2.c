@@ -79,6 +79,11 @@ static void Try3DInit(void)
 }
 static SDL_Texture *sdl3DTexture, *sdl3DTransTexture;
 static bool s3DTransition;
+// DLX-4: a battle transition over the wide 2D field (no 3D): the last field picture stays in the map
+// texture and the transition's own picture goes over it, as in 3D.
+static bool s2DTransition;
+static struct WideViewFrame sLastField;
+static bool sHaveLastField;
 static int s3DW, s3DH;
 #define SMOOTH_M WIDE_VIEW_SMOOTH_MARGIN
 #define TEX_W (WIDE_VIEW_MAX_W + 2 * SMOOTH_M)
@@ -651,7 +656,7 @@ static void DrawFieldScene(double t, int outW, int outH)
         SDL_RenderCopyF(sdlRenderer, sdlOverlayTexture, &full, &stillDest);
     }
     }
-    if (sdlUiTexture != NULL)
+    if (sdlUiTexture != NULL && !s2DTransition)
     {
         int s = outW / DISPLAY_WIDTH;
         if (outH / DISPLAY_HEIGHT < s)
@@ -714,6 +719,28 @@ static void DrawScene(double t, int outputWidth, int outputHeight)
         }
         SDL_Rect cover = {(outputWidth - w) / 2, (outputHeight - h) / 2, w, h};
         SDL_RenderCopy(sdlRenderer, sdl3DTexture, NULL, &whole);
+        if (sdl3DTransTexture != NULL)
+        {
+            SDL_SetTextureScaleMode(sdl3DTransTexture, SDL_ScaleModeNearest);
+            SDL_RenderCopy(sdlRenderer, sdl3DTransTexture, NULL, &cover);
+        }
+        return;
+    }
+    if (s2DTransition)
+    {
+        // DLX-4: the field as it was when the transition began, then the transition over it, covering
+        // the screen as in 3D (the map's own pixels in it are see-through, carrying only its fade).
+        struct WideViewFrame now = sFrameInfo;
+        int h = outputWidth * DISPLAY_HEIGHT / DISPLAY_WIDTH, w = outputWidth;
+        sFrameInfo = sLastField;
+        DrawFieldScene(1.0, outputWidth, outputHeight);
+        sFrameInfo = now;
+        if (h < outputHeight)
+        {
+            h = outputHeight;
+            w = outputHeight * DISPLAY_WIDTH / DISPLAY_HEIGHT;
+        }
+        SDL_Rect cover = {(outputWidth - w) / 2, (outputHeight - h) / 2, w, h};
         if (sdl3DTransTexture != NULL)
         {
             SDL_SetTextureScaleMode(sdl3DTransTexture, SDL_ScaleModeNearest);
@@ -2410,10 +2437,70 @@ void VDraw(SDL_Texture *texture)
     lastW = fullW;
     lastH = fullH;
     SDL_Rect area = {0, 0, fullW, fullH};
-    SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32));
+    s2DTransition = !(s3DReady && s3DWanted) && sHaveLastField && sFrameInfo.mode != WIDE_VIEW_FIELD
+                 && WideView_BattleTransitionOnField() && getenv("WJPC_OLD_2D_TRANSITION") == NULL;
+    static uint32_t sFieldImage[TEX_W * TEX_H]; // the field picture the transition starts from
+    if (sFrameInfo.mode == WIDE_VIEW_FIELD)
+    {
+        sLastField = sFrameInfo;
+        sHaveLastField = true;
+        memcpy(sFieldImage, image, (size_t)fullW * fullH * sizeof(uint32_t));
+    }
+    else if (!WideView_BattleTransitionOnField())
+        sHaveLastField = false; // a battle, a menu: the next transition starts from a new field picture
+    if (!s2DTransition)
+        SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32));
+    else
+    {
+        // The transitions also fade by palette (flashes, fades to black or white): the GBA picture's map
+        // pixels show it. A line per colour channel, fitted from the field picture to those pixels, is
+        // put on the whole field picture (the camera does not move during a transition).
+        extern u8 gPcPixelSource[];
+        int fw = sLastField.width + 2 * sLastField.margin, fh = sLastField.height + 2 * sLastField.margin;
+        int ox = sFrameInfo.mode == WIDE_VIEW_GBA ? 0 : (sFrameInfo.width - DISPLAY_WIDTH) / 2;
+        int oy = sFrameInfo.mode == WIDE_VIEW_GBA ? 0 : (sFrameInfo.height - DISPLAY_HEIGHT) / 2;
+        double n = 0, sx[3] = {0}, sy[3] = {0}, sxx[3] = {0}, sxy[3] = {0};
+        static float ka[3] = {1, 1, 1}, kb[3] = {0, 0, 0};
+        static uint32_t faded[TEX_W * TEX_H];
+        for (int y = 0; y < DISPLAY_HEIGHT; y += 2)
+            for (int x = 0; x < DISPLAY_WIDTH; x += 2)
+            {
+                u8 src = gPcPixelSource[y * DISPLAY_WIDTH + x];
+                int fx = sLastField.gbaX + x, fy = sLastField.gbaY + y;
+                if (src < 2 || src > 5 || fx < 0 || fy < 0 || fx >= fw || fy >= fh)
+                    continue;
+                uint32_t a = sFieldImage[fy * fw + fx], b = ToArgb(gbaImage[(y + oy) * sFrameInfo.width + x + ox]);
+                for (int c = 0; c < 3; c++)
+                {
+                    double u = (a >> (16 - 8 * c)) & 0xFF, v = (b >> (16 - 8 * c)) & 0xFF;
+                    sx[c] += u; sy[c] += v; sxx[c] += u * u; sxy[c] += u * v;
+                }
+                n++;
+            }
+        if (n >= 64)
+            for (int c = 0; c < 3; c++)
+            {
+                double var = sxx[c] - sx[c] * sx[c] / n;
+                ka[c] = var > 1e-3 * n ? (float)((sxy[c] - sx[c] * sy[c] / n) / var) : 1.0f;
+                kb[c] = (float)((sy[c] - ka[c] * sx[c]) / n);
+            }
+        for (int i = 0; i < fw * fh; i++)
+        {
+            uint32_t a = sFieldImage[i], o = 0xFF000000u;
+            for (int c = 0; c < 3; c++)
+            {
+                float v = ka[c] * (float)((a >> (16 - 8 * c)) & 0xFF) + kb[c];
+                o |= (uint32_t)(v < 0 ? 0 : v > 255 ? 255 : (int)(v + 0.5f)) << (16 - 8 * c);
+            }
+            faded[i] = o;
+        }
+        SDL_Rect fieldArea = {0, 0, fw, fh};
+        SDL_UpdateTexture(texture, &fieldArea, faded, fw * sizeof(Uint32));
+    }
+
     s3DFrame = false;
     s3DTransition = s3DReady && s3DWanted && sFrameInfo.mode != WIDE_VIEW_FIELD && WideView_BattleTransitionOnField();
-    if (s3DTransition)
+    if (s3DTransition || s2DTransition)
     {
         // A battle transition over the 3D world: what the GBA picture draws from the map (its
         // BGs and sprites) is left to the 3D view, with the fade it has; the rest (the wipes'
