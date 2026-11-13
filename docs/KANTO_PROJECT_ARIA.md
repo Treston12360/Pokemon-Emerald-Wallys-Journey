@@ -38,6 +38,12 @@ a reveal or a choice, not just a gym.
 - At Lavender (ch. 4) Varnell won't enter Pokémon Tower and sends the player alone ("the readings need a
   trainer's Pokémon"). In the moment it's an odd excuse; after the reveal it's a father who can't walk
   back into the place she died.
+- **The real purpose of the Lavender assignment (owner, 2026-11-13):** the Clefairy's spirit has stayed in
+  the tower. Varnell secretly wants to know whether, if *it* lingered, something of Aria might still be
+  there and reachable. The player thinks they're calibrating a lens to study the tears; really they're
+  his test of whether the dead leave a trace the rift can reach. The player doesn't know this.
+- When the player reports back, he asks something oddly specific — "Did it say anything?" It sounds like
+  scientific curiosity; it only lands after the twist.
 - For most of the game Varnell seems kind, brilliant and genuinely helpful. **That's a mask.**
 - Underneath he's twisted: he knows folding space-time could destroy the world and **doesn't care.**
   A world without Aria isn't a world worth being in, so the risk was worth it. No remorse, no redemption.
