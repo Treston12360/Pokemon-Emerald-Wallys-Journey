@@ -149,7 +149,7 @@ Encored (GBA and PC). Tested on PC: cursor moved to slot 2, B, Fight -> back on 
 it stays on slot 2.
 Offered: while Encored, the move cursor jumps to the locked move. No new wording.
 
-### DLX-11 Trainer spotting with many people loaded (TODO)
+### DLX-11 Trainer spotting with many people loaded (WIP - session 014PwRDj)
 Limits raised to 64 people; test that trainers still spot the player correctly with extra people.
 
 ### DLX-12 Pop-in: people on neighbouring maps; maps with a different tile set (TODO)
