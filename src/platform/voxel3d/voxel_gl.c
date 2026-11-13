@@ -252,7 +252,11 @@ static const char *sFragmentSrc =
     // M_SunCloudShadows_LF1 with Gamma's numbers; the two noise textures are stand-ins (theirs are art assets)
     "uniform sampler2D cloudTex, roughTex;\n"
     "float clouds(vec3 w) {\n"
-    "  vec2 P = vec2(-w.z, w.x) * 64.0;\n" // Gamma X (north), Y (east), in cm
+    // a light function on the directional light is cast along the light: every point takes the cloud
+    // over the ground spot its sun ray comes from, so walls and roofs carry the ground's pattern instead of
+    // repeating one ground sample all the way up (that drew vertical streaks over buildings)
+    "  vec2 g = w.xz - sunDir.xz * (w.y / max(sunDir.y, 0.05));\n"
+    "  vec2 P = vec2(-g.y, g.x) * 64.0;\n" // Gamma X (north), Y (east), in cm
     "  float nn = texture2D(roughTex, P / 888.25 + time * vec2(-0.0010, -0.0007)).r;\n"
     "  float cc = texture2D(cloudTex, (P + nn * 40.0) / 5000.0 + time * vec2(-0.0021, -0.0030)).r;\n"
     "  return 1.0 - clamp((cc - 0.164) * 3.8417, 0.0, 1.0) * 0.75;\n"
@@ -282,6 +286,9 @@ static const char *sFragmentSrc =
     "    vec3 albedo = toLinear(c.rgb);\n"
     "    vec3 light = sunLight * max(dot(n, sunDir), 0.0) * vShade * clouds(vWorld) + skyTint * max(skyIrr(n), 0.0);\n"
     "    rgb = albedo * light;\n"
+    "    if (gammaLight > 1.5 && gammaLight < 2.5) { gl_FragColor = vec4(vec3(vShade) * 0.1, 1.0); return; }\n"
+    "    if (gammaLight > 3.5) { gl_FragColor = vec4(vec3(clouds(vWorld)) * 0.1, 1.0); return; }\n"
+    "    if (gammaLight > 2.5) { gl_FragColor = vec4(n * 0.5 + 0.5, 1.0); return; }\n"
     // haze (M_StylizedFogPP, day): distances in Gamma units, 64 per tile
     "    float d = length(vWorld - cam) * 64.0;\n"
     "    float amt = clamp((d - 10.0) / 39990.0, 0.0, 1.0) * 0.5;\n"
@@ -321,7 +328,7 @@ static void GammaLightUniforms(void)
     const float pi = 3.14159265f;
     float sunI = 3.0f / pi;         /* sun 3 lux, Lambert */
     float skyI = 0.32f;             /* sky light intensity */
-    wj_glUniform1f(sUniGamma, gVoxelGammaLight ? 1.0f : 0.0f);
+    wj_glUniform1f(sUniGamma, gVoxelGammaLight ? (getenv("WJPC_3D_GDEBUG") ? (float)atof(getenv("WJPC_3D_GDEBUG")) : 1.0f) : 0.0f);
     if (!gVoxelGammaLight)
         return;
     wj_glUniform3f(sUniSunDir, 0.1747f, 0.6428f, 0.7459f);
@@ -338,6 +345,27 @@ static void GammaLightUniforms(void)
         wj_glBindTexture(GL_TEXTURE_2D, sCloudTex[0]);
         wj_glActiveTexture(GL_TEXTURE0 + 7);
         wj_glBindTexture(GL_TEXTURE_2D, sCloudTex[1]);
+        wj_glActiveTexture(GL_TEXTURE0);
+    }
+    else
+    {
+        /* no voxel/gamma_clouds.bin: a black texel (no cloud anywhere), never whatever else is bound there */
+        static GLuint none;
+        if (none == 0)
+        {
+            static const unsigned char zero[4] = {0, 0, 0, 255};
+            wj_glGenTextures(1, &none);
+            wj_glBindTexture(GL_TEXTURE_2D, none);
+            wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            wj_glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, zero);
+        }
+        wj_glUniform1i(wj_glGetUniformLocation(sProgram, "cloudTex"), 6);
+        wj_glUniform1i(wj_glGetUniformLocation(sProgram, "roughTex"), 7);
+        wj_glActiveTexture(GL_TEXTURE0 + 6);
+        wj_glBindTexture(GL_TEXTURE_2D, none);
+        wj_glActiveTexture(GL_TEXTURE0 + 7);
+        wj_glBindTexture(GL_TEXTURE_2D, none);
         wj_glActiveTexture(GL_TEXTURE0);
     }
     wj_glUniform1f(sUniExposure, getenv("WJPC_3D_EXPOSURE") ? (float)atof(getenv("WJPC_3D_EXPOSURE")) : 1.0f);
@@ -1469,7 +1497,7 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
             const float f = 450.0f / (2.0f * 1.19175359f), A = f / 1.7442f;
             float S = playerDist * 640.0f;
             float k = A * f / ((S - f) > 1.0f ? (S - f) : 1.0f) / 450.0f * (float)w;
-            wj_glUniform4f(sPU_coc, k, S, 0.5f, 400.0f);
+            wj_glUniform4f(sPU_coc, getenv("WJPC_3D_NODOF") ? 0.0f : k, S, 0.5f, 400.0f);
         }
         wj_glUniform1f(sPU_mode, 2.0f);
         PostQuad();
