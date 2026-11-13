@@ -274,7 +274,13 @@ No tea, no item gates.
   - **Repeat Elite Four runs after the first win give 5% EXP**, like Gabby & Ty. Nothing can be farmed.
   - Re-run `tools/exp_curve_full.py` with these rules (it currently counts rematches at full EXP, so the
     real pre-Kanto level is a little under 60).
-- **Research item: Pokémon Crossroads-style travel.** Owner wants to look into flying between regions with
+- **Cross-region travel (owner, 2026-11-13):** first trip by S.S. Anne (fade to black, no doors). After
+  that, **normal Fly crosses regions** (not a separate key item): the Fly map can switch between Hoenn and
+  Kanto, using the normal Fly animation. Crossroads (Beta 1.4 source checked) does this with a "Flight Call"
+  key item + a forced fly-map region; we write our own version (their repo has no licence).
+- **Stretch goal, later:** ORAS-style soaring — ride your Pokémon across the 3D map between regions.
+  Not found in Crossroads' public code; we'd build it on our 3D renderer after Kanto is playable.
+- **(Older note) Research item: Pokémon Crossroads-style travel.** Owner wants to look into flying between regions with
   the overworld visible. Crossroads is a GBA Emerald hack on pokeemerald-expansion, built on StrangeQuark94's
   multi-region pokeemerald fork. Its public thread describes region flags, region-aware Fly and seamless
   region transitions; it doesn't say the source is public. To do: find out exactly how its travel looks and
