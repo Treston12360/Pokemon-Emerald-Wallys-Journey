@@ -133,11 +133,30 @@ static void Grade(const float hdr[3], float out[3])
 {
     float c[3] = {hdr[0] * kExposure, hdr[1] * kExposure, hdr[2] * kExposure}, ap[3], s[3], t[3];
     MulM(sRGB_2_AP1, c, ap);
-    float y = ap[0] * AP1_Y[0] + ap[1] * AP1_Y[1] + ap[2] * AP1_Y[2];
-    for (int i = 0; i < 3; i++) { ap[i] = y + (ap[i] - y) * kSaturation; if (ap[i] < 0) ap[i] = 0; }
-    MulM(AP1_2_sRGB, ap, s);
-    Film(s, t);
-    MulM(AP1_2_sRGB, t, s);
+    {
+        // UE CombineLUTs as Gamma's compiled LUT shader has it: expand gamut (1.0), saturation, blue
+        // correction (0.6) round the film curve (matrices as the shader's literals)
+        static const float expand[9] = {1.37041271f, -0.3292913f, -0.06368294f, -0.08343419f, 1.09709098f, -0.01086125f,
+                                        -0.02579326f, -0.09862564f, 1.20369427f};
+        static const float blue[9] = {0.93863938f, 0.0f, 0.06136062f, 0.0f, 0.83079413f, 0.16920587f, 0.0f, 0.0f, 1.0f};
+        static const float blueInv[9] = {1.06537488f, 0.00000145f, -0.06537101f, -0.00000035f, 1.20366352f, -0.20366772f,
+                                         0.00000002f, 0.00000002f, 0.9999996f};
+        float l = ap[0] * AP1_Y[0] + ap[1] * AP1_Y[1] + ap[2] * AP1_Y[2], d2 = 0, e[3], ex;
+        for (int i = 0; i < 3; i++) { float ch = ap[i] / fmaxf(l, 1e-10f) - 1.0f; d2 += ch * ch; }
+        ex = (1.0f - exp2f(-4.0f * d2)) * (1.0f - exp2f(-4.0f * l * l));
+        MulM(expand, ap, e);
+        for (int i = 0; i < 3; i++) ap[i] += (e[i] - ap[i]) * ex;
+        float y = ap[0] * AP1_Y[0] + ap[1] * AP1_Y[1] + ap[2] * AP1_Y[2];
+        for (int i = 0; i < 3; i++) { ap[i] = y + (ap[i] - y) * kSaturation; if (ap[i] < 0) ap[i] = 0; }
+        MulM(blue, ap, e);
+        for (int i = 0; i < 3; i++) ap[i] += (e[i] - ap[i]) * 0.6f;
+        MulM(AP1_2_sRGB, ap, s);
+        Film(s, t);
+        MulM(blueInv, t, e);
+        for (int i = 0; i < 3; i++) t[i] += (e[i] - t[i]) * 0.6f;
+        MulM(AP1_2_sRGB, t, s);
+        for (int i = 0; i < 3; i++) if (s[i] < 0) s[i] = 0;
+    }
     for (int i = 0; i < 3; i++) out[i] = Lin2Srgb(s[i]);
 }
 

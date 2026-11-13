@@ -167,6 +167,19 @@ DONE 2026-11-13 (session 019khs4X, pictures sent):
   WideView_GammaRoom(): Granite Cave 1F/B1F/B2F/Steven's room = 1, Dewford gym = 2. 2D and 3D.
 - Light rays: Gamma has the material but NO ray actors placed in any of its maps (Littleroot, Dewford, the
   persistent map were read) - nothing to copy.
+- RECHECK 2026-11-13 (owner: "double check the gamma lighting"), against Gamma's files again:
+  * 3D sky light table (sGammaSh) was wrong: ~3x too strong, up-term sign flipped (3D looked washed out and
+    too blue in shade). Refitted from cube16 (irradiance/pi, 400 directions); now equals the 2D value up.
+  * Gamma's LUT shader (global CombineLUTs, e.g. 3416_f5) also does UE's ExpandGamut (1.0) and BlueCorrection
+    (0.6); its matrices are literals there and match UE's math exactly. Added in 3D and 2D. Greys unchanged,
+    so exposure 2.06 still holds.
+  * Cloud textures: instance overrides "Cloud Texture" = T_NoisePuddles; distortion = parent's T_NoiseRough
+    (code was right, doc label fixed).
+  * Checked OK: sun dir/colour/intensity, sky tint, saturation 1.25 (camera beats the volume's 1.20/1.19/1.12),
+    bloom, haze (no visible effect at our distances), vignette 0.4, cave gain/vignette, cloud maths.
+  * Known small differences: no specular (UE Default Lit, roughness 1, ~4%); the static SkyLight actor and
+    ShadowAmount 0.99 not modelled; DOF focuses on the player (Gamma: fixed 450 with a 500 arm); cave gain
+    applied before expand gamut (UE: after).
 - NOT DONE: lamps (Dewford street lamps/campfire point lights: positions in MAP_Dewford, BP_StreetLamp values in
   the doc). Needs UE point-light units -> our scale worked out exactly before building.
 

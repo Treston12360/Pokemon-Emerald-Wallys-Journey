@@ -318,10 +318,13 @@ static const char *sFragmentSrc =
  * Unreal (X, Y, Z) maps to ours as (east = Y, up = Z, south = -X). */
 static uint32_t sFrame;
 static GLuint sCloudTex[2];
+/* Gamma's sky light: irradiance / pi of its captured sky cubemap (cube16, UE axes mapped to ours), fitted by
+ * least squares to this basis over 400 directions (2026-11-13 recheck: the first table was ~3x too strong and
+ * had the up term's sign wrong; this one matches the 2D path's value straight up, 0.13/0.31/0.54). */
 static const float sGammaSh[9][3] = {
-    {0.38100f, 0.88990f, 1.51087f}, {0.05944f, 0.15420f, 0.27341f}, {-0.02007f, -0.03913f, -0.03543f},
-    {-0.01342f, -0.02757f, -0.04645f}, {-0.00478f, -0.00471f, -0.00461f}, {-0.01140f, -0.01572f, -0.01706f},
-    {0.00710f, 0.02091f, 0.02727f}, {-0.00126f, -0.00245f, -0.00232f}, {0.00685f, 0.02464f, 0.03052f},
+    {0.11698f, 0.36169f, 0.59448f}, {0.01342f, -0.03871f, -0.03525f}, {-0.00665f, -0.01860f, -0.01580f},
+    {-0.01248f, -0.02280f, -0.03298f}, {-0.00062f, 0.00374f, 0.00487f}, {-0.00539f, -0.01375f, -0.01947f},
+    {0.00176f, 0.00795f, 0.01170f}, {-0.00673f, -0.00932f, -0.00613f}, {-0.00502f, 0.00715f, 0.01298f},
 };
 
 static void GammaLightUniforms(void)
@@ -1415,8 +1418,19 @@ static const char *sPostFs =
     "  { vec2 vp = (uv * 2.0 - 1.0) * vec2(1.0, room.z) * (1.41421354 / sqrt(1.0 + room.z * room.z)) * room.y;\n"
     "    float vt = dot(vp, vp) + 1.0; c *= room.x / (vt * vt); }\n"
     "  vec3 ap = sRGB_2_AP1 * c;\n"
+    // UE CombineLUTs as Gamma's compiled LUT shader has it (its matrices are literals there): expand bright
+    // saturated colours (ExpandGamut 1.0), saturation, blue correction 0.6, film curve, blue correction undone
+    "  { float l = dot(ap, AP1_Y); vec3 ch = ap / max(l, 1e-10); float d2 = dot(ch - 1.0, ch - 1.0);\n"
+    "    float ex = (1.0 - exp2(-4.0 * d2)) * (1.0 - exp2(-4.0 * 1.0 * l * l));\n"
+    "    vec3 e = vec3(dot(vec3(1.37041271, -0.3292913, -0.06368294), ap), dot(vec3(-0.08343419, 1.09709098, -0.01086125), ap),\n"
+    "                  dot(vec3(-0.02579326, -0.09862564, 1.20369427), ap));\n"
+    "    ap = mix(ap, e, ex); }\n"
     "  ap = max(mix(vec3(dot(ap, AP1_Y)), ap, misc.y), 0.0);\n"
-    "  vec3 outc = toSrgb(AP1_2_sRGB * film(AP1_2_sRGB * ap));\n"
+    "  ap = mix(ap, vec3(dot(vec3(0.93863938, 0.0, 0.06136062), ap), dot(vec3(0.0, 0.83079413, 0.16920587), ap), ap.b), 0.6);\n"
+    "  vec3 tn = film(AP1_2_sRGB * ap);\n"
+    "  tn = mix(tn, vec3(dot(vec3(1.06537488, 0.00000145, -0.06537101), tn), dot(vec3(-0.00000035, 1.20366352, -0.20366772), tn),\n"
+    "                    dot(vec3(0.00000002, 0.00000002, 0.9999996), tn)), 0.6);\n"
+    "  vec3 outc = toSrgb(max(AP1_2_sRGB * tn, 0.0));\n"
     "  gl_FragColor = vec4(mix(outc, fade.rgb, fade.a), 1.0);\n"
     "}\n";
 

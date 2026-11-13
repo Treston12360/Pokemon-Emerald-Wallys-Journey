@@ -113,8 +113,8 @@ Buffer: speedA = (SpeedY, SpeedX) * WindSpeed * -0.003 = (-0.0021, -0.0030)
         speedB = (SpeedX, SpeedY) * -0.002 = (-0.0010, -0.0007)
   P  = position (for a directional light function: world position in light space / LightFunctionScale;
        the sun keeps the engine default scale)
-  n  = DistortionTex.r at (P.xy / 888.25 + Time * speedB)                    [T_NoisePuddles]
-  c  = CloudTex.r      at ((P.xy + n*40) / 5000 + Time * speedA)
+  n  = DistortionTex.r at (P.xy / 888.25 + Time * speedB)                    [parent default: T_NoiseRough]
+  c  = CloudTex.r      at ((P.xy + n*40) / 5000 + Time * speedA)          [instance: T_NoisePuddles]
   light = 1 - saturate((c - 0.164) * 3.8417) * 0.75     (1 = full sun, 0.25 = darkest shadow)
   then blended toward 1 by the engine's light-function fade with distance; output sqrt(mean(rgb)).
 
