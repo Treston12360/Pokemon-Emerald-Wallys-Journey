@@ -149,8 +149,13 @@ Encored (GBA and PC). Tested on PC: cursor moved to slot 2, B, Fight -> back on 
 it stays on slot 2.
 Offered: while Encored, the move cursor jumps to the locked move. No new wording.
 
-### DLX-11 Trainer spotting with many people loaded (WIP - session 014PwRDj)
+### DLX-11 Trainer spotting with many people loaded (Done - session 014PwRDj, 2026-11-12)
 Limits raised to 64 people; test that trainers still spot the player correctly with extra people.
+Code: CheckForTrainersWantingBattle loops all OBJECT_EVENTS_COUNT (64) objects; nothing sized 16 on the path.
+Test (Linux, early-game save, 1080p scene, zoom 7, WJPC_TEST_WINDOW=1): Route 116 at (28,5): 25 people active
+(slots up to 25, `objcount`), School Kid Jerry (18th object on the map, sight 4) spotted the player and walked up;
+Route 110 Psychic Edward spotted too. Test aid fix: script `set` now applies through Platform_SetSetting (the zoom
+and resolution only take effect that way, and only with WJPC_TEST_WINDOW=1, which draws every frame).
 
 ### DLX-12 Pop-in: people on neighbouring maps; maps with a different tile set (TODO)
 2D wide view: people on connected maps are not drawn; about 70 map links use another tile set and are

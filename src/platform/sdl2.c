@@ -311,7 +311,7 @@ static bool TestStep(void)
                                      PLATFORM_SETTING_SMOOTH};
             for (size_t k = 0; k < ARRAY_COUNT(names); k++)
                 if (!strcmp(arg1, names[k]))
-                    sPlatformSettings[ids[k]] = n;
+                    Platform_SetSetting(ids[k], n); // applied as the Settings menu does
             continue;
         }
         if (!strcmp(cmd, "warp"))
