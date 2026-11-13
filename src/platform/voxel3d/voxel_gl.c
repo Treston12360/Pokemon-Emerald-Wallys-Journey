@@ -1021,6 +1021,18 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
         }
         if (n != 0)
             MeshSetQuantised(&m->terrain[p], sSorted, n, GL_STATIC_DRAW);
+            if (getenv("WJPC_DUMP_TERRAIN") && inst->mapGroup == atoi(getenv("WJPC_DUMP_TERRAIN")) / 100
+             && inst->mapNum == atoi(getenv("WJPC_DUMP_TERRAIN")) % 100)
+            {
+                char name[256];
+                FILE *f;
+                snprintf(name, sizeof(name), "%s.%u", getenv("WJPC_DUMP_TERRAIN_FILE") ? getenv("WJPC_DUMP_TERRAIN_FILE") : "terrain.bin", p);
+                if ((f = fopen(name, "wb")) != NULL)
+                {
+                    fwrite(sSorted, sizeof(VoxelVertex), n, f);
+                    fclose(f);
+                }
+            }
         else
             MeshFree(&m->terrain[p]);
     }
