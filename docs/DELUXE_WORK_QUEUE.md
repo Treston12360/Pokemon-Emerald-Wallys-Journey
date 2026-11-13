@@ -126,7 +126,13 @@ Open:
 - Not yet built: light rays (god-ray planes, math in the doc), dark caves/gyms trigger (colour gain 0.49,
   vignette 3/2), lamps. Show the owner pictures before turning anything on by default.
 
-### DLX-20 3D: black person-shaped silhouette on the ground in Littleroot (WIP - session 014PwRDj)
+### DLX-20 3D: black person-shaped silhouette on the ground in Littleroot (NOT REPRODUCED - session 014PwRDj, 2026-11-12)
+Tried in Wine with the 3D data from vanilla Emerald: late-game save (go.sav) and an early-game Littleroot save
+(trucks, Mom, Birch; wj_testfw scenario MAP_LITTLEROOT_TOWN 7,10 + FLAG_SYS_POKEMON_GET + FLAG_SYS_POKEDEX_GET),
+2D and 3D, around and north of the player's house: no black figure. Most likely it is in the data generated from
+our maps (session 019khs4X / DLX-9 screenshots), e.g. a reused building piece whose texture page is missing
+(see DLX-19: our-map data drew with missing building textures here). Needs that data, or a screenshot with the
+spot, to go further.
 Seen in every 3D screenshot of Littleroot north of the player's house (before and after the lighting work): an
 all-black sprite-shaped card standing on the grass. Probably a person/object whose sprite frame or palette
 is not loaded for the 3D card. Find which object event it is and fix.
