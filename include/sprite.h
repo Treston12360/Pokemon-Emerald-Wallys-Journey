@@ -353,4 +353,12 @@ u32 GetSpriteWidth(struct Sprite *sprite);
 u32 GetSpriteHeight(struct Sprite *sprite);
 u32 CountFreePaletteSlots(void);
 
+#ifdef PORTABLE
+// PC (DLX-12): the top of the extra sprite room is kept for the wide view's people on neighbouring maps;
+// the allocators never hand it out.
+#define WJPC_GHOST_PALETTES 8
+#define WJPC_GHOST_TILES    512
+void WJPC_SetSpritePaletteTag(u8 paletteNum, u16 tag);
+#endif
+
 #endif //GUARD_SPRITE_H

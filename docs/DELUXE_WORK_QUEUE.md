@@ -157,7 +157,7 @@ Test (Linux, early-game save, 1080p scene, zoom 7, WJPC_TEST_WINDOW=1): Route 11
 Route 110 Psychic Edward spotted too. Test aid fix: script `set` now applies through Platform_SetSetting (the zoom
 and resolution only take effect that way, and only with WJPC_TEST_WINDOW=1, which draws every frame).
 
-### DLX-12 Pop-in: people on neighbouring maps; maps with a different tile set (WIP - session 014PwRDj)
+### DLX-12 Pop-in: people on neighbouring maps; maps with a different tile set (Done - session 014PwRDj, 2026-11-12)
 2D wide view: people on connected maps are not drawn; about 70 map links use another tile set and are
 still blank zoomed out.
 Tile sets DONE (2026-11-12): a neighbour with another secondary tile set was drawn with the current map's tiles
@@ -166,7 +166,12 @@ Tile sets DONE (2026-11-12): a neighbour with another secondary tile set was dra
 line fitted from stored to shown colours, so time of day, weather and fades follow) and draws its tiles/palettes
 from them (`GetForeignTiles`, `sEntryForeign`); its layer types come from its own attributes. Checked Route 112 ->
 113 (ash) against standing on Route 113: same. Test aid: WJPC_TEST_NO_FOREIGN=1 draws neighbours as before.
-People on neighbouring maps: still TODO.
+People DONE: wide_view.c `AddNeighbourPeople` draws the people of the nearby maps (sNearMaps) at their
+start spot and first facing, unless their flag hides them (berry trees, lights, follower/OW mons and clones
+skipped), with their picture and colours in room the sprite allocators leave free on PC (sprite.h
+WJPC_GHOST_TILES 512 / WJPC_GHOST_PALETTES 8; palette tag ^0x4000 so real sprites never share a slot), so they
+layer, fade and tint like everyone else; the real ones take over on crossing. Checked: Dewford north edge shows
+Route 106's two Fishermen, same look as standing on Route 106. Test aid: WJPC_TEST_NO_GHOSTS=1.
 
 ### DLX-13 Other empty map corners (TODO)
 Find and fix corners like Dewford's (zoomed out shows bare filler). Show pictures.

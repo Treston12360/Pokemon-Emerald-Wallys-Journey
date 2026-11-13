@@ -33,6 +33,8 @@ extern int atoi(const char *);
 #include "platform/null_guard.h"
 #include "platform/wide_view.h"
 #include "decompress.h"
+#include "event_data.h"
+#include "constants/event_objects.h"
 #include "wally_journey.h"
 #include "palette.h"
 
@@ -644,6 +646,116 @@ static const struct SpriteTemplate *sLastSpriteTemplate[MAX_SPRITES];
 static bool sCameraMoved;
 
 // Same order and subsprite expansion as BuildOamBuffer(), without wrapping coordinates.
+// DLX-12: people on neighbouring maps. The game only creates the current map's people, so zoomed out the
+// next map's stood empty until the player crossed into it. They are drawn here as they start (their spot,
+// their first facing), unless a flag hides them, with their pictures and colours put in the room sprite.h
+// keeps for this (so they layer, fade and tint like everyone else). The real ones replace them on crossing.
+extern const u16 *WJPC_ObjectEventPaletteData(u16 tag);
+extern const u8 gInitialMovementTypeFacingDirections[];
+static int sW, sH, sOX, sOY; // (defined below)
+struct GhostPal { u16 tag; u32 lastUse; };
+static struct GhostPal sGhostPals[WJPC_GHOST_PALETTES];
+
+static int GhostPaletteSlot(u16 tag)
+{
+    u32 first = OBJ_PALETTE_COUNT - WJPC_GHOST_PALETTES;
+    int pick = -1;
+
+    for (int i = 0; i < WJPC_GHOST_PALETTES; i++)
+        if (sGhostPals[i].tag == tag && GetSpritePaletteTagByPaletteNum(first + i) == (tag ^ 0x4000))
+        {
+            sGhostPals[i].lastUse = sWideFrameNo;
+            return first + i;
+        }
+    for (int i = 0; i < WJPC_GHOST_PALETTES; i++)
+        if (pick < 0 || sGhostPals[i].lastUse < sGhostPals[pick].lastUse
+         || GetSpritePaletteTagByPaletteNum(first + i) != (sGhostPals[i].tag ^ 0x4000))
+        {
+            pick = i;
+            if (GetSpritePaletteTagByPaletteNum(first + i) != (sGhostPals[i].tag ^ 0x4000))
+                break;
+        }
+    if (sGhostPals[pick].lastUse == sWideFrameNo && GetSpritePaletteTagByPaletteNum(first + pick) == (sGhostPals[pick].tag ^ 0x4000))
+        return -1; // all eight in use this frame
+    {
+        const u16 *data = WJPC_ObjectEventPaletteData(tag);
+        u32 slot = first + pick;
+        if (data == NULL)
+            return -1;
+        CpuCopy16(data, &gPlttBufferUnfaded[OBJ_PLTT_ID(slot)], PLTT_SIZE_4BPP);
+        CpuCopy16(data, &gPlttBufferFaded[OBJ_PLTT_ID(slot)], PLTT_SIZE_4BPP);
+        WJPC_SetSpritePaletteTag(slot, tag ^ 0x4000); // its own tag: real sprites never share this slot
+        UpdateSpritePaletteWithTime(slot);
+        sGhostPals[pick].tag = tag;
+        sGhostPals[pick].lastUse = sWideFrameNo;
+        return slot;
+    }
+}
+
+static void AddNeighbourPeople(void)
+{
+    u32 tileNext = TOTAL_OBJ_TILE_COUNT - WJPC_GHOST_TILES;
+
+    static int sOff = -1;
+    if (sOff < 0)
+        sOff = getenv("WJPC_TEST_NO_GHOSTS") != NULL; // test aid: no people on neighbouring maps, as before
+    if (sOff || GetMode() != WIDE_VIEW_FIELD)
+        return;
+    BuildNearMaps();
+    for (int m = 1; m < sNearMapCount; m++)
+    {
+        const struct NearMap *nm = &sNearMaps[m];
+        const struct MapHeader *hdr = Overworld_GetMapHeaderByGroupAndId(nm->group, nm->num);
+        const struct MapEvents *ev = hdr != NULL ? hdr->events : NULL;
+
+        if (ev == NULL || ev->objectEvents == NULL)
+            continue;
+        for (u32 i = 0; i < ev->objectEventCount; i++)
+        {
+            const struct ObjectEventTemplate *t = &ev->objectEvents[i];
+            const struct ObjectEventGraphicsInfo *info;
+            struct OamData oam;
+            u32 frame, tiles;
+            s16 sx, sy;
+            s32 x, y;
+            int pal;
+            u8 dir;
+
+            if (t->kind == OBJ_KIND_CLONE || (t->flagId != 0 && FlagGet(t->flagId)))
+                continue;
+            if (t->graphicsId == OBJ_EVENT_GFX_BERRY_TREE || t->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE
+             || (t->graphicsId & OBJ_EVENT_MON)) // a berry tree's picture is its own; a light is not a person
+                continue;
+            SetSpritePosToMapCoords(nm->x + t->x + MAP_OFFSET, nm->y + t->y + MAP_OFFSET, &sx, &sy);
+            info = GetObjectEventGraphicsInfo(t->graphicsId);
+            if (info == NULL || info->images == NULL || info->oam == NULL || info->compressed)
+                continue;
+            x = sx + 8 - info->width / 2 + gSpriteCoordOffsetX;
+            y = sy + 16 - info->height + gSpriteCoordOffsetY;
+            if (x < -sOX - 64 || x > sW - sOX + 64 || y < -sOY - 64 || y > sH - sOY + 64)
+                continue; // off the view
+            tiles = info->size / TILE_SIZE_4BPP;
+            if (tiles == 0 || tileNext + tiles > TOTAL_OBJ_TILE_COUNT)
+                continue;
+            pal = GhostPaletteSlot(info->paletteTag);
+            if (pal < 0)
+                continue;
+            // Standing frame for the way it first faces: south 0, north 1, west 2, east 2 flipped.
+            dir = t->movementType < NUM_MOVEMENT_TYPES ? gInitialMovementTypeFacingDirections[t->movementType] : DIR_SOUTH;
+            frame = info->inanimate ? 0 : dir == DIR_NORTH ? 1 : (dir == DIR_WEST || dir == DIR_EAST) ? 2 : 0;
+            memcpy((u8 *)OBJ_VRAM0 + tileNext * TILE_SIZE_4BPP, info->images[frame].data, info->size);
+            oam = *info->oam;
+            oam.tileNum = tileNext;
+            oam.paletteNum = pal;
+            oam.priority = ElevationToPriority(t->elevation);
+            oam.matrixNum = (dir == DIR_EAST && !info->inanimate) ? 8 : 0; // bit 3: horizontal flip
+            oam.affineMode = ST_OAM_AFFINE_OFF;
+            tileNext += tiles;
+            AddWideSprite(&oam, x, y, false);
+        }
+    }
+}
+
 static void BuildWideSprites(void)
 {
     u64 keys[MAX_SPRITES];
@@ -725,6 +837,7 @@ static void BuildWideSprites(void)
     }
     sAddingWithCamera = false;
     sAddingUi = false;
+    AddNeighbourPeople();
 }
 
 // ---------------------------------------------------------------------------

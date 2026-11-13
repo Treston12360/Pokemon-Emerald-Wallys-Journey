@@ -3389,6 +3389,15 @@ void PatchObjectPaletteRange(const u16 *paletteTags, u8 minSlot, u8 maxSlot)
     }
 }
 
+#ifdef PORTABLE
+// PC (DLX-12): the colours of an object event palette tag, for the wide view's people on neighbouring maps.
+const u16 *WJPC_ObjectEventPaletteData(u16 tag)
+{
+    u8 i = FindObjectEventPaletteIndexByTag(tag);
+    return i == 0xFF ? NULL : sObjectEventSpritePalettes[i].data;
+}
+#endif
+
 static u8 FindObjectEventPaletteIndexByTag(u16 tag)
 {
     u8 i;

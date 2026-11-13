@@ -687,8 +687,8 @@ static bool32 TestGbaLimits(void)
     }
     return on;
 }
-#define TILE_LIMIT() (TestGbaLimits() ? 1024 : TOTAL_OBJ_TILE_COUNT)
-#define PALETTE_LIMIT() (TestGbaLimits() ? 16 : OBJ_PALETTE_COUNT)
+#define TILE_LIMIT() (TestGbaLimits() ? 1024 : TOTAL_OBJ_TILE_COUNT - WJPC_GHOST_TILES)
+#define PALETTE_LIMIT() (TestGbaLimits() ? 16 : OBJ_PALETTE_COUNT - WJPC_GHOST_PALETTES)
 #define FIRST_FREE_TILE() (TestExtraFirst() ? max(gReservedSpriteTileCount, 1024) : gReservedSpriteTileCount)
 // Test aid: WJPC_TEST_CROWD=N acts as if N sprite palettes were already taken by other sprites (a crowded scene).
 static u32 TestCrowd(void)
@@ -1813,6 +1813,14 @@ u32 IndexOfSpritePaletteTag(u16 tag)
 
     return 0xFF;
 }
+
+#ifdef PORTABLE
+void WJPC_SetSpritePaletteTag(u8 paletteNum, u16 tag)
+{
+    if (paletteNum < OBJ_PALETTE_COUNT)
+        sSpritePaletteTags[paletteNum] = tag;
+}
+#endif
 
 u16 GetSpritePaletteTagByPaletteNum(u8 paletteNum)
 {
