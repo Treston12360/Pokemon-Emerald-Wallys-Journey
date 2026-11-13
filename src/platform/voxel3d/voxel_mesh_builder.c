@@ -1,3 +1,4 @@
+#include <stdlib.h>
 /*
  * CPU geometry for the voxel overworld. See voxel_mesh_builder.h.
  *
@@ -1987,6 +1988,74 @@ static void EmitTreeStep(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
         EmitCliffWalls(b, inst, x, y, relief, VoxelRelief_Depth(inst, x, y), wall, -1, y, sides, false);
 }
 
+/*
+ * DLX-26 (Wally's Journey PC, owner-approved 2026-11-13, the same skirt rule as BeltWaterSkirts): a model's cell
+ * (a boulder at sea) is laid flat at its centre's height (above: "a sea ramp under a rock ... still laid flat"),
+ * while the cells round it follow the relief point by point; where the sea slopes (Route 108) their edges missed by
+ * a pixel or so and the clear colour showed as a light bracket round the rock. Each edge of the flat cell is joined
+ * to the neighbour's real edge (SeamEdge) wherever they differ, with the cell's own drawing.
+ */
+static void ModelFlatSkirts(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    static const int kDir[4][2] = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+    const unsigned n = VOXEL_RELIEF_SIDE;
+    const float last = (float)(VOXEL_RELIEF_SIDE - 1);
+    float h = VoxelRelief_CellLift(inst, x, y), z = VoxelRelief_CellShift(inst, x, y);
+    float theirH[VOXEL_RELIEF_SIDE], theirZ[VOXEL_RELIEF_SIDE];
+    float u0, v0, u1, v1;
+    bool uv = false;
+
+    if (getenv("WJPC_NO_MODEL_SKIRTS"))
+        return;
+    for (int d = 0; d < 4; ++d)
+    {
+        int nx = x + kDir[d][0], ny = y + kDir[d][1];
+        bool differs = false;
+
+        if (VoxelWorld_GetInstanceAt(nx, ny) != inst || VoxelRelief_Cell(inst, nx, ny) == NULL)
+            continue;
+        SeamEdge(inst, nx, ny, d ^ 1, theirH, theirZ, NULL);
+        for (unsigned k = 0; k < n; ++k)
+            differs = differs || fabsf(theirH[k] / 16.0f - h) > 0.001f || fabsf(theirZ[k] - z) > 0.001f;
+        if (!differs)
+            continue;
+        if (!uv)
+        {
+            /* a lookup only: a model cell's own art missing from the atlas must not hold the map back */
+            unsigned uncovered = b->uncovered;
+            uv = VoxelMesh_TileUV(b, nx, ny, &u0, &v0, &u1, &v1);
+            b->uncovered = uncovered;
+            if (!uv)
+                continue;
+        }
+        for (unsigned k = 0; k + 1 < n; ++k)
+        {
+            float ka = k / last, kb = (k + 1) / last;
+            float xa, xb, za, zb, xA, xB, zA, zB;
+
+            if (d < 2) /* north, south edge: along x */
+            {
+                float e = d == 0 ? 0.0f : 1.0f;
+                xa = xA = x + ka; xb = xB = x + kb;
+                za = y + e + z; zb = za;
+                zA = y + e + theirZ[k]; zB = y + e + theirZ[k + 1];
+            }
+            else /* west, east edge: along z */
+            {
+                float e = d == 2 ? 0.0f : 1.0f;
+                xa = xb = xA = xB = x + e;
+                za = y + ka + z; zb = y + kb + z;
+                zA = y + ka + theirZ[k]; zB = y + kb + theirZ[k + 1];
+            }
+            VoxelBuilder_Quad(b,
+                &(VoxelVertex){xa, h, za, u0, v0, SHADE_TOP},
+                &(VoxelVertex){xb, h, zb, u1, v0, SHADE_TOP},
+                &(VoxelVertex){xB, theirH[k + 1] / 16.0f, zB, u1, v1, SHADE_TOP},
+                &(VoxelVertex){xA, theirH[k] / 16.0f, zA, u0, v1, SHADE_TOP});
+        }
+    }
+}
+
 /* One row of the ground pass over [x0,x1), already clipped to the instance. */
 void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst,
                              int x0, int x1, int y)
@@ -2042,7 +2111,10 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                     hi = relief[i] > hi ? relief[i] : hi;
                 }
                 if (!(modelTop > 0.0f && modelTop < 1.0f && hi - lo == 16))
+                {
                     relief = NULL;
+                    ModelFlatSkirts(builder, inst, x, y);
+                }
             }
             if (relief != NULL)
             {

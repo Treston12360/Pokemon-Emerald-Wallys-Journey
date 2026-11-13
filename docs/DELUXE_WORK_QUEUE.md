@@ -366,7 +366,12 @@ of the map's nearest edge cell (-0.625, -0.562, -0.5, -0.438 here), each cell fl
 3DS has the same steps; its narrow view rarely shows the belt. Not covered by the reference -> ASKED OWNER how to
 close them (3DS's own method for map/belt seams is a skirt wall: "the seam is a low wall and never a gap").
 OWNER CHOSE SKIRT WALLS. DONE for the belt (BeltWaterSkirts, voxel_mesh_builder.c): long sea lines gone.
-STILL OPEN: small light brackets beside some rocks at sea, inside the map. Dump (WJPC_DUMP_TERRAIN=23): Route 108
+ROCK BRACKETS DONE 2026-11-13: a model's cell (boulder at sea) is laid flat at its centre while the sloped sea
+round it follows the relief; ModelFlatSkirts joins each edge to the neighbour's real edge (owner's skirt rule).
+Bright brackets gone; faint dark outlines of the tiny walls remain when seen edge-on.
+REGRESSION FIXED: commit 'Debug: WJPC_DUMP_TERRAIN' (same day) put a block between an if and its else in
+voxel_gl.c BuildFinish, so every map's terrain was freed after building (3D ground missing) - braces added.
+(Old note:) small light brackets beside some rocks at sea, inside the map. Dump (WJPC_DUMP_TERRAIN=23): Route 108
 cell (27,13) relief water at -0.562 (z shifted -1/16) beside cell (28,13) flat at -0.5. A water-to-water inner
 skirt (InnerWaterSkirts, tried, reverted) did not catch it - only 28 pairs flagged, none here, so (27,13) is likely
 not classified VOXEL_SHAPE_WATER - and it blanked the map's terrain (cause not found). Next: Classify (27,13),
