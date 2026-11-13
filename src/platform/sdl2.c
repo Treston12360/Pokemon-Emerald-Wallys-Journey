@@ -29,6 +29,7 @@
 #include "sprite.h"
 #include "platform/null_guard.h"
 #include "platform/wide_view.h"
+#include "platform/pc_tween.h"
 #include "platform.h"
 #include "random.h"
 #include "rtc.h"
@@ -222,6 +223,7 @@ static u16 TestKeyMask(const char *keys)
 }
 
 static char sTestWinShot[512];
+static char sTestTweenShot[512]; // DLX-3 test aid
 static void TestWriteShot(const char *path)
 {
     FILE *f = fopen(path, "wb");
@@ -295,6 +297,11 @@ static bool TestStep(void)
             // ff N (test aid): fast forward N times, as the real loop does it: only every Nth
             // frame is drawn and the sound engine runs once every N frames. "ff 0" = off.
             sTestFfSpeed = atoi(arg1);
+            continue;
+        }
+        if (!strcmp(cmd, "tweenshot"))
+        {
+            SDL_snprintf(sTestTweenShot, sizeof(sTestTweenShot), "%s", arg1);
             continue;
         }
         if (!strcmp(cmd, "winshot"))
@@ -619,6 +626,53 @@ extern bool32 Vol_StartMenu_IsOpen(void);
 // Overworld: the map at the zoom scale, edge to edge; the UI layer (text boxes, menus) at the
 // biggest whole size the GBA screen fits, bottom-centred like on the GBA; the map name pop-up
 // always in the top-left corner of the screen.
+// DLX-3: in-between frames for battles and menus. With a frame rate above 60, VDraw draws each game frame
+// two to four times (pc_tween.c: sprites, scrolling, windows and colours part of the way from the last
+// frame); the screen shows them in turn until the next game frame.
+#define TWEEN_EXTRA_MAX 3
+static uint32_t *sTweenImage[TWEEN_EXTRA_MAX], *sTweenBattle[TWEEN_EXTRA_MAX];
+static const uint32_t *sTrueImage, *sTrueBattle;
+static int sTweenSteps = 1, sTweenShown = 1, sTweenW, sTweenH;
+static bool sTweenBattleOn;
+
+static int TweenStepsWanted(void)
+{
+    const char *test = getenv("WJPC_TWEEN_TEST"); // test aid: steps under a test script
+    int rate;
+
+    if (test != NULL)
+    {
+        int n = atoi(test);
+        return n < 1 ? 1 : n > TWEEN_EXTRA_MAX + 1 ? TWEEN_EXTRA_MAX + 1 : n;
+    }
+    if (sTestScript != NULL || speedUp)
+        return 1;
+    rate = gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT];
+    return rate <= 60 ? 1 : rate <= 120 ? 2 : rate <= 180 ? 3 : 4;
+}
+
+// The picture for this moment (t: 0-1 of the way to the next game frame) into the textures.
+static void TweenShow(double t)
+{
+    int j;
+
+    if (sTweenSteps <= 1)
+        return;
+    j = (int)(t * sTweenSteps) + 1;
+    if (j < 1)
+        j = 1;
+    if (j > sTweenSteps)
+        j = sTweenSteps;
+    if (j == sTweenShown)
+        return;
+    SDL_Rect area = {0, 0, sTweenW, sTweenH};
+    SDL_UpdateTexture(sdlTexture, &area, j == sTweenSteps ? sTrueImage : sTweenImage[j - 1], sTweenW * sizeof(Uint32));
+    if (sTweenBattleOn && sdl3DBattleTexture != NULL)
+        SDL_UpdateTexture(sdl3DBattleTexture, NULL, j == sTweenSteps ? sTrueBattle : sTweenBattle[j - 1],
+                          DISPLAY_WIDTH * sizeof(uint32_t));
+    sTweenShown = j;
+}
+
 static void DrawFieldScene(double t, int outW, int outH)
 {
     int z = sFieldZ, m = sFrameInfo.margin;
@@ -724,6 +778,7 @@ static void DrawScene(double t, int outputWidth, int outputHeight)
         DrawFieldScene(t, outputWidth, outputHeight);
         return;
     }
+    TweenShow(t);
     u8 backgroundOption = Platform_GetBorderBackground();
     if (backgroundOption < sBorderBackgroundCount
      && sdlBackgroundTextures[backgroundOption] != NULL)
@@ -2325,6 +2380,26 @@ static inline uint32_t ToArgb(uint16_t color)
     return 0xFF000000 | (r << 16) | (g << 8) | b;
 }
 
+// DLX-5: the battle's picture for over the 3D world: its scenery (BG3) and backdrop left out (only their fade kept).
+static void BattleOverlay(const uint16_t *gba, uint32_t *out)
+{
+    extern u8 gPcPixelSource[];
+    extern s8 gPcPixelFade[];
+
+    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
+    {
+        u8 src = gPcPixelSource[i];
+        if (src == 0 || src == 4)
+        {
+            int f = gPcPixelFade[i];
+            out[i] = f > 0 ? ((uint32_t)(f * 255 / 16) << 24) | 0xFFFFFF
+                   : f < 0 ? ((uint32_t)(-f * 255 / 16) << 24) : 0;
+        }
+        else
+            out[i] = ToArgb(gba[i]);
+    }
+}
+
 void VDraw(SDL_Texture *texture)
 {
     static uint16_t gbaImage[TEX_W * TEX_H];
@@ -2352,6 +2427,7 @@ void VDraw(SDL_Texture *texture)
     }
     WideView_SetSmooth(smooth ? overlay : NULL, SMOOTH_M);
     WideView_SetUiOverlay(sdlUiTexture != NULL ? uiLayer : NULL);
+    PcTween_BeginFrame();
     sVDrawImage = gbaImage;
     if (!PcGuard_Call0(DrawFrameGuarded))
     {
@@ -2433,8 +2509,6 @@ void VDraw(SDL_Texture *texture)
         Voxel3D_SetBattle(battle);
         if (battle)
         {
-            extern u8 gPcPixelSource[];
-            extern s8 gPcPixelFade[];
             static uint32_t sBattleImage[DISPLAY_WIDTH * DISPLAY_HEIGHT];
             if (sdl3DBattleTexture == NULL)
             {
@@ -2443,22 +2517,84 @@ void VDraw(SDL_Texture *texture)
                 if (sdl3DBattleTexture != NULL)
                     SDL_SetTextureBlendMode(sdl3DBattleTexture, SDL_BLENDMODE_BLEND);
             }
-            for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
-            {
-                u8 src = gPcPixelSource[i];
-                if (src == 0 || src == 4)
-                {
-                    int f = gPcPixelFade[i];
-                    sBattleImage[i] = f > 0 ? ((uint32_t)(f * 255 / 16) << 24) | 0xFFFFFF
-                                    : f < 0 ? ((uint32_t)(-f * 255 / 16) << 24) : 0;
-                }
-                else
-                    sBattleImage[i] = ToArgb(gbaImage[i]);
-            }
+            BattleOverlay(gbaImage, sBattleImage);
+            sTrueBattle = sBattleImage;
             if (sdl3DBattleTexture != NULL)
                 SDL_UpdateTexture(sdl3DBattleTexture, NULL, sBattleImage, DISPLAY_WIDTH * sizeof(uint32_t));
             s3DBattleFrame = sdl3DBattleTexture != NULL;
         }
+    }
+    // DLX-3: the in-between pictures of this frame (battles, menus; not the field, which slides its map).
+    sTweenSteps = sTweenShown = 1;
+    {
+        bool moved = PcTween_HasMotion();
+        int steps = TweenStepsWanted();
+
+        if (moved && steps > 1 && sFrameInfo.mode != WIDE_VIEW_FIELD && !s3DTransition
+         && !sPlatformSettings[PLATFORM_SETTING_INTERFRAME])
+        {
+            static uint16_t tweenGba[TEX_W * TEX_H];
+            struct WideViewFrame real = sFrameInfo;
+            bool ok = true;
+
+            for (int j = 1; j < steps && ok; j++)
+            {
+                if (sTweenImage[j - 1] == NULL)
+                    sTweenImage[j - 1] = malloc(TEX_W * TEX_H * sizeof(uint32_t));
+                if (sTweenBattle[j - 1] == NULL)
+                    sTweenBattle[j - 1] = malloc(DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(uint32_t));
+                if (sTweenImage[j - 1] == NULL || sTweenBattle[j - 1] == NULL)
+                {
+                    ok = false;
+                    break;
+                }
+                PcTween_Apply((float)j / (float)steps);
+                sVDrawImage = tweenGba;
+                ok = PcGuard_Call0(DrawFrameGuarded) && sFrameInfo.mode == real.mode
+                  && sFrameInfo.width == real.width && sFrameInfo.height == real.height;
+                if (ok)
+                {
+                    for (int i = 0; i < fullW * fullH; i++)
+                        sTweenImage[j - 1][i] = ToArgb(tweenGba[i]);
+                    if (s3DBattleFrame)
+                        BattleOverlay(tweenGba, sTweenBattle[j - 1]);
+                }
+            }
+            PcTween_End();
+            sFrameInfo = real;
+            if (ok)
+            {
+                sTweenSteps = sTweenShown = steps;
+                sTweenW = fullW;
+                sTweenH = fullH;
+                sTrueImage = image;
+                sTweenBattleOn = s3DBattleFrame;
+            }
+        }
+    }
+    if (sTestTweenShot[0] != '\0')
+    {
+        // Test aid "tweenshot PREFIX": this frame's pictures in order, PREFIX_1.ppm ... (the last is the real one).
+        for (int j = 1; j <= sTweenSteps; j++)
+        {
+            char name[600];
+            const uint32_t *img = j == sTweenSteps ? image : sTweenImage[j - 1];
+            FILE *f;
+            SDL_snprintf(name, sizeof(name), "%s_%d.ppm", sTestTweenShot, j);
+            f = fopen(name, "wb");
+            if (f == NULL)
+                continue;
+            fprintf(f, "P6\n%d %d\n255\n", fullW, fullH);
+            for (int i = 0; i < fullW * fullH; i++)
+            {
+                u8 rgb[3] = {(u8)(img[i] >> 16), (u8)(img[i] >> 8), (u8)img[i]};
+                fwrite(rgb, 1, 3, f);
+            }
+            fclose(f);
+        }
+        printf("tweenshot %s: %d pictures at frame %u\n", sTestTweenShot, sTweenSteps, sTestFrame);
+        fflush(stdout);
+        sTestTweenShot[0] = '\0';
     }
     if (s3DReady && ((s3DWanted && (sFrameInfo.mode == WIDE_VIEW_FIELD || s3DTransition)) || s3DBattleFrame))
     {

@@ -16,6 +16,18 @@ struct DMATransfer {
     u16 control;
 } DMAList[DMA_COUNT];
 
+static struct DMATransfer sSavedDma[2][DMA_COUNT];
+
+void Dma_SaveState(u32 slot)
+{
+    memcpy(sSavedDma[slot & 1], DMAList, sizeof(DMAList));
+}
+
+void Dma_RestoreState(u32 slot)
+{
+    memcpy(DMAList, sSavedDma[slot & 1], sizeof(DMAList));
+}
+
 void RunDMAs(u32 type)
 {
     for (int dmaNum = 0; dmaNum < DMA_COUNT; dmaNum++)

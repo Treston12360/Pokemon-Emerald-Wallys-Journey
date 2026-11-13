@@ -309,6 +309,14 @@ void AnimateSprites(void)
     }
 }
 
+#ifdef PORTABLE
+// PC (DLX-3): which sprite each OAM entry is (sprite slot + 1, and which piece of it), so the in-between
+// frames can follow a sprite from one frame to the next (src/platform/pc_tween.c). 0: not known.
+u16 gWjPcOamKey[128];          // of the entries now in OAM (copied with them, LoadOam)
+static u16 sOamKeyNext[128];   // of gMain.oamBuffer
+static u8 sOamKeySprite, sOamKeyPiece;
+#endif
+
 void BuildOamBuffer(void)
 {
     bool32 oamLoadDisabled;
@@ -387,8 +395,15 @@ void BuildOamBuffer(void)
     oamLoadDisabled = gMain.oamLoadDisabled;
     gMain.oamLoadDisabled = TRUE;
 
+#ifdef PORTABLE
+    memset(sOamKeyNext, 0, sizeof(sOamKeyNext));
+#endif
     for (i = 0, oamIndex = 0; i < toSort; i++)
     {
+#ifdef PORTABLE
+        sOamKeySprite = spritePriorities[i] & 0xFF;
+        sOamKeyPiece = 0;
+#endif
         if (AddSpriteToOamBuffer(&gSprites[spritePriorities[i] & 0xFF], &oamIndex))
             break;
     }
@@ -604,7 +619,12 @@ void ResetOamRange(u32 start, u32 end)
 void LoadOam(void)
 {
     if (!gMain.oamLoadDisabled)
+    {
         CpuCopy32(gMain.oamBuffer, (void *)OAM, sizeof(gMain.oamBuffer));
+#ifdef PORTABLE
+        memcpy(gWjPcOamKey, sOamKeyNext, sizeof(gWjPcOamKey));
+#endif
+    }
 }
 
 void ClearSpriteCopyRequests(void)
@@ -1935,6 +1955,10 @@ static bool32 AddToOamBuffer(u8 *oamIndex, const struct OamData *oam, bool32 cop
         return TRUE;
 
     gMain.oamBuffer[*oamIndex] = *oam;
+#ifdef PORTABLE
+    if (sOamKeyPiece < 127)
+        sOamKeyNext[*oamIndex] = ((sOamKeySprite + 1) << 7) | sOamKeyPiece++;
+#endif
     (*oamIndex)++;
 
     if (copyToObjWin)
