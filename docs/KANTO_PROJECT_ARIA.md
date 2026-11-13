@@ -35,8 +35,11 @@ a reveal or a choice, not just a gym.
 - **Rule for every clue: it only makes sense looking back.** Nothing may give the twist away early.
 - At Saffron (ch. 6) Varnell goes quiet, won't enter Silph, and sends the player alone. It reads as a
   scientist protecting his career; after the reveal it's a father who can't walk into the place she died.
-- Varnell is not a cartoon villain. He's kind, brilliant and genuinely helpful to the player for most
-  of the game. He **knowingly** risks the world to get her back.
+- For most of the game Varnell seems kind, brilliant and genuinely helpful. **That's a mask.**
+- Underneath he's twisted: he knows folding space-time could destroy the world and **doesn't care.**
+  A world without Aria isn't a world worth being in, so the risk was worth it. No remorse, no redemption.
+- At the revelation Blue asks: you could have destroyed everyone, cost billions of lives. Varnell's answer
+  is that a world without his daughter isn't worth having. All he cares about is a world where she's with him.
 - ARIA is built to fold space and time open far enough to pull Aria back from the moment before she died.
   The "displacements" across Kanto are its test runs leaking.
 
@@ -66,12 +69,11 @@ project was named after her the whole time, and that the machine exists to bring
   So he's cold, unimpressed and irritated with the player. He has his own personality; he's not a jerk.
 - Early: Blue investigates on his own. You cross paths because you're chasing the same thing; he shares
   nothing. Over time he starts working with you.
-- **Why Varnell used the player and not Blue:**
-  - Practical: Blue knows him and the lab too well and would ask questions; a former Champion's clearance
-    gets noticed. A stranger from Hoenn won't.
-  - Human: Varnell couldn't do it to Blue. At the end Blue asks "why not me?" — "Because I couldn't do this to you."
+- **Varnell uses Blue too, and doesn't mind.** Blue's investigation data feeds ARIA. Bringing in the player
+  is purely practical: he needs a Kanto badge holder's clearance, and Blue knows him and the lab too well
+  — Blue would notice sooner. A stranger from Hoenn won't.
 - Saffron: Blue recognises ARIA markings from his time in the lab and starts to doubt the man who saved him.
-- The reveal hits Blue harder than the player. Viridian is Blue choosing to stand with the player against
+- The reveal hits Blue harder than the player: the man who gave him a second chance was using him all along. Viridian is Blue choosing to stand with the player against
   his mentor — the turning point of his arc, not just the 8th badge.
 
 ## 2c. The gym challenge is clearance (the player's progress builds ARIA)
