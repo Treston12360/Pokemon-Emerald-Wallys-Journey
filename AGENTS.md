@@ -55,8 +55,17 @@ Windows folder, zipped: `make -f Makefile.pc WIN=1`, then `tools/pc/make_package
 file (`WallysJourney.cfg`) and save (`WallysJourney.sav`). If you regenerate the 3D data, copy it into
 `pc_data/voxel/` and commit it, so every build carries the current one.
 
+## Who am I talking to? (owner rule, 2026-11-13)
+If you don't know whether the person you're working with is **Treston** or **Brennan**, ask before saying
+anything about the Kanto story. Treston: story is fine. Brennan: no story at all.
+
+## References: `docs/REFERENCES.md`
+Where the Emerald 3DS source and Gamma Emerald's files are, and how to get them. Read the reference before
+building anything it already does.
+
 ## No guessing, ever (owner rule, 2026-11-13)
-Port exactly how the reference does it (Emerald 3DS source for 3D, Gamma's files for lighting, FRLG/Crossroads code for Kanto). If the reference doesn't cover it, ask the owner. Never invent a fix, a value or a design.
+Port exactly how the reference does it (Emerald 3DS source for 3D, Gamma's files for lighting, FRLG/Crossroads code for Kanto). If the reference doesn't cover it, or you are unsure, ask. Never invent a fix, a value or a design, and never
+pretend (never claim something works, was checked, or can't be reached when you haven't checked).
 
 ## NO GBA ROM ANY MORE — the game is the .exe (owner rule, 2026-11-13)
 "We are not making a GBA ROM anymore. The game is now a .exe game. ... Focus on the .exe and not work on the
