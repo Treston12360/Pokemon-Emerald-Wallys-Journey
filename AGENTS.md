@@ -36,8 +36,10 @@ Both projects feed the one game.
 
 Rules for every session:
 1. Find out which of the two you are working for (ask if it isn't clear) and stay in that project and branch.
-2. **Check the other project's work before you start**: `git fetch`, read its recent commits and
-   `docs/WORK_CLAIMS.md`, so you don't redo or overwrite it.
+2. **Check the shared task list before you start any task: `docs/TASKS.md`** (both projects, both branches —
+   `git fetch` first), plus `docs/WORK_CLAIMS.md`. Read the other project's finished tasks' "Affects / don't
+   revert" notes before touching those areas (e.g. Polish changes lighting → it affects Kanto too; keep it).
+   Add your task there when you start it and check it off with its "Affects" note in the same push as the work.
 3. Before editing a file both projects use (engine code in `src/` outside Kanto data, the 3D renderer
    `src/platform/voxel3d/`, `pc_data/voxel/`, save code, `include/`, `AGENTS.md`), check `docs/WORK_CLAIMS.md`.
    If the other project has claimed it, don't edit it — write what you need there and tell the person you work
