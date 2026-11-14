@@ -322,3 +322,12 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
 - Sevii Islands: decide later.
 
 - 2026-11-13 (owner): Fly between regions — the Fly map switches on the map itself (L/R), no key item.
+- 2026-11-13 (owner): **Arrival.** You land in Vermilion, Oak greets you at the dock, then a black screen takes
+  you straight to Pallet. Vermilion is **not** marked visited (no Fly there yet) — the player technically starts
+  in Pallet and reaches Vermilion later on foot.
+- 2026-11-13 (owner): **Road blocks must make sense to residents too.** Badge clearance only for places that
+  really are restricted (Silph's sealed floors, Rocket Hideout, Hall of Fame vault, Victory Road gate, Varnell's
+  sites). Roads are closed by realistic, story-caused blockers (anomaly cordons, rockslides, damaged bridge,
+  Coast Guard sea closure, Snorlax, quarantine, eruption warning) to keep the path linear for story and level
+  curve. Proposed table (owner to confirm/adjust): see chat 2026-11-13 / §4 to be rewritten.
+

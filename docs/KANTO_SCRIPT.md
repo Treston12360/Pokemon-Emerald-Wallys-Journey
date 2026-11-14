@@ -47,7 +47,7 @@ what changed. Story source: `docs/KANTO_PROJECT_ARIA.md` §3.
 > OAK: Ah! You must be {PLAYER}. Welcome to Kanto!
 > I'm Professor Oak. Birch has told me a lot about you.
 > Come, my lab is in Pallet Town. There are people you need to meet.
-> (fade to black → Oak's lab)
+> (fade to black → Oak's lab. Vermilion is NOT marked visited — no Fly there yet; owner 2026-11-13)
 
 ---
 
