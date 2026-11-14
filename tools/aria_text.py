@@ -24,9 +24,12 @@ def strings(boxes, end="$", width=None):
 
 
 def call_strings(speaker, boxes):
-    """A PokéNav call (pokenavcall): rings, 'Speaker: ...', hang-up click — Emerald's own format."""
+    """A PokéNav call (pokenavcall): rings, the message, hang-up click — Emerald's own format.
+    Pass speaker=None and put `setspeaker SP_NAME_X` before pokenavcall: the call window shows the name box
+    (owner 2026-11-14). A speaker string is only added as a 'Name: ' prefix when there's no name box."""
     out = ['\t.string "… … … … … …\\n"', '\t.string "… … … … … Beep!\\p"']
     boxes = list(boxes)
-    boxes[0] = speaker + ": " + boxes[0]
+    if speaker:
+        boxes[0] = speaker + ": " + boxes[0]
     body = strings(boxes, end="\\p", width=32)
     return "\n".join(out) + "\n" + body + '\n\t.string "… … … … … …\\n"\n\t.string "… … … … … Click!$"'

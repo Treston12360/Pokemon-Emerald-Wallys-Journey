@@ -125,6 +125,7 @@ Aria_Ch2_TearScene::
 	closemessage
 	delay 60
 	@ 2.5 Varnell calls
+	setspeaker SP_NAME_VARNELL
 	pokenavcall Aria_Ch2_Text_Varnell
 	waitmessage
 	delay 20
@@ -243,7 +244,7 @@ Aria_Ch2_Text_HeldUp::
 Aria_Ch2_Text_Varnell:: @ PokéNav call (owner 2026-11-14: Varnell talks to you through the PokéNav)
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "Varnell: {PLAYER}! My\n"
+	.string "{PLAYER}! My\n"
 	.string "instruments just went quiet.\l"
 	.string "That was you, wasn't it?\p"
 	.string "Remarkable. Truly. Do you know\n"

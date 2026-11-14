@@ -114,6 +114,7 @@ Aria_Ch3_CloseTear::
 	msgbox Aria_Ch3_Text_KiyoshiPlead, MSGBOX_DEFAULT
 	closemessage
 	@ Varnell calls
+	setspeaker SP_NAME_VARNELL
 	pokenavcall Aria_Ch3_Text_Varnell1
 	waitmessage
 	delay 20
@@ -158,6 +159,7 @@ Aria_Ch3_CloseTear::
 	closemessage
 	delay 40
 	@ 3.6 Varnell calls again
+	setspeaker SP_NAME_VARNELL
 	pokenavcall Aria_Ch3_Text_Varnell2
 	waitmessage
 	delay 20
@@ -251,7 +253,7 @@ Aria_Ch3_Text_KiyoshiPlead::
 Aria_Ch3_Text_Varnell1:: @ PokéNav call (owner 2026-11-14: Varnell talks to you through the PokéNav)
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "Varnell: {PLAYER}, I'm seeing\n"
+	.string "{PLAYER}, I'm seeing\n"
 	.string "your readings. Listen to me very\l"
 	.string "carefully.\p"
 	.string "I know what he's asking. I know\n"
@@ -297,7 +299,7 @@ Aria_Ch3_Text_BillAfter::
 Aria_Ch3_Text_Varnell2:: @ PokéNav call (owner 2026-11-14: Varnell talks to you through the PokéNav)
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "Varnell: {PLAYER}. Are you all\n"
+	.string "{PLAYER}. Are you all\n"
 	.string "right?\p"
 	.string "I'm sorry you had to be the one\n"
 	.string "to do that. I mean that.\p"
