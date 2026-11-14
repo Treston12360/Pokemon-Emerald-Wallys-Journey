@@ -448,8 +448,8 @@ home (the Volunteer House), not held in the tower.
 **4.5 Mr. Fuji, after — the Poké Flute**
 > MR. FUJI: The crying stopped. I heard it stop, all the way down here.
 > ......Thank you. I think it was waiting for someone who was never going to come.
-> Take this. It wakes even the deepest sleeper. There are two Snorlax blocking the roads south and west of
-> here — the whole region has been waiting on them.
+> Take this. An old flute. Its song wakes even the deepest sleeper.
+> I'm too old to go wandering the roads with it. You'll find a use for it, I think.
 > {PLAYER} received the POKé FLUTE!
 
 **4.6 Varnell calls (PokéNav)**
@@ -495,19 +495,29 @@ with Blue ("Like the project"); Erika; both Snorlax woken with the Poké Flute; 
 > If that echo was pulled through a tear, it may have sensed ARIA working — the one thing in Kanto that could
 > put it back where it belongs. Maybe that's what it was asking us to do.
 > VARNELL: Good work, both of you.
-> BLUE: I'm going to check the readings from Route 7. ...Later.
+> BLUE: I'm going to check the readings out on Route 16. ...Later.
 > (Blue leaves.)
 > VARNELL: ......
 > He won't tell you, so I will. When he lost to Red, he lost everything he thought he was.
 > I gave him a desk and something to do with his hands. That's all. He did the rest.
 > He's... he's the closest thing to a son I have left.
 > ...Don't tell him I said that. He'd never let me hear the end of it.
-> Erika's Gym is just down the street. And the Poké Flute Mr. Fuji gave you — the roads south of Lavender and
-> west of here have been waiting on it.
+> Erika's Gym is just down the street. Rest up before you go.
 
 **5.3 Office staff (talk) — "cagey" (clues that only make sense later)**
 > SCIENTIST: The Director won't let anyone else touch ARIA's settings. Not even me, and I built half the
 > calibration rig.
 > SCIENTIST: Shipments go out every week. Where to? ...You'd have to ask the Director.
 > SCIENTIST: Sorry, that door's staff only. — No, I don't have the key either.
+
+**5.4 Blue at the Snorlax (Route 16, west of Celadon), scripted as you walk up**
+(Owner 2026-11-14: Blue meets you at the Snorlax.)
+> BLUE: Oh, great. Not again.
+> Yeah, this happens all the time in Kanto. Unfortunately the local Snorlax love these spots for a nap —
+> right in the sun, right in the middle of the road.
+> Last time one of them parked here for a month. They had to reroute the whole Cycling Road.
+> ......You've got a Poké Flute? Where'd you get that?
+> ...Fuji. Of course. That old man gives everything away.
+> Well, go on. Play it. Just stand back when it wakes up. They're always cranky.
+> (Snorlax wakes — battle, as in FireRed.)
 
