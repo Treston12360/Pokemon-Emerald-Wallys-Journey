@@ -389,4 +389,8 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   League lines (Blue/Koga/Lance) approved.
 - 2026-11-14 (owner): no Lavender or Fuchsia early: **Snorlax back on Routes 12 and 16** until the Poké Flute.
   Lavender's other ways in (Route 8 from Saffron, the Route 7–8 underground path) stay closed (S-BLOCK).
+- 2026-11-14 (owner): **Blue meets the player near Diglett's Cave** (Vermilion, ch. 3b).
+- 2026-11-14 (owner): **Rock Tunnel's scare = the Clefairy's cry, building up.** As you go through, you randomly
+  hear a Clefairy cry, the words getting further each time: first "Ar....", later "Ari....". In Lavender (ch. 4),
+  when the ghost is revealed with Varnell's tool, it becomes a Clefairy and cries out "Aria..." *sniffle*.
 

@@ -342,3 +342,32 @@ excited and hides it. Name below is a placeholder (owner to choose). His team: o
   against the GSC data when building). Wally's Journey scaling only touches the trainers listed in `src/data/wj_trainer_scaling.h`,
   so he stays weak (team checked: Bulbapedia "Li", GSC Bellsprout 7, Bellsprout 7, Hoothoot 10).
 
+---
+
+## Chapter 3b — Vermilion, Blue, Rock Tunnel  · DRAFT (owner to approve)
+Owner 2026-11-14: the S.S. Anne has sailed; Blue near Diglett's Cave; Rock Tunnel is the only way to Lavender
+and should be scary — the Clefairy's cry building up ("Ar...." → "Ari....").
+
+**3b.1 Blue — outside Diglett's Cave (Route 11 side of Vermilion), scripted when you walk past**
+> BLUE: ......
+> Don't look at me like that. I'm not following you.
+> Something's been coming up through Diglett's Cave. Diglett are turning up in Viridian Forest, in Pewter,
+> in people's gardens. Like the ground's being pushed from somewhere underneath.
+> ...No tear down there, though. I checked. Twice.
+> You beat Misty yet? ......Huh. Fine.
+> Surge's Gym is right there. He's loud, he's tough, and he hates losing more than anyone I know.
+> You'll like him.
+> (He walks into Diglett's Cave.)
+
+**3b.2 Rock Tunnel — the cry (random, scripted on certain floor tiles, once each)**
+> (B1F, first time) ......
+> (A Pokémon's cry echoes through the dark.) ...Ar....
+> (deeper, first time) ......
+> (Closer now. It sounds like it's crying.) ...Ari....
+> (The Rift Scanner gives one weak beep. Then nothing.)
+
+**3b.3 A Hiker near the Lavender exit (talk)**
+> HIKER: You heard it too? Don't tell me you didn't. That crying.
+> I've been through this tunnel a hundred times. There's never been a Clefairy in here.
+> It's coming from the Lavender side. Same as the tower. ...I'm not going back in there.
+
