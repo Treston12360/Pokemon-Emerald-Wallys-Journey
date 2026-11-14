@@ -260,7 +260,7 @@ chapter. He's cold at first; respect builds over these meetings until you invest
 > ...Whatever. It's closed. That's what matters.
 > Did it give you anything? Before it went? A pattern, a pulse, anything?
 > ......
-> Figures. That scanner of Varnell's reads everything and tells you nothing.
+> Figures. Those scanners read everything and tell you nothing. I've been saying it for months.
 > Next time you find one, don't just slam it shut. Look at it first.
 > (He walks past you, into the mountain.)
 
