@@ -8,7 +8,7 @@ lines that fit who they are.
 
 ---
 
-## Chapter 0 — The call (Littleroot → Slateport)  · DRAFT v2 (longer)
+## Chapter 0 — The call (Littleroot → Slateport)  · APPROVED
 
 **Trigger:** first time the player wakes at home after the first Champion win (Hall of Fame done).
 
@@ -72,7 +72,7 @@ lines that fit who they are.
 
 ---
 
-## Chapter 0b — Arrival (Vermilion dock → Pallet)  · DRAFT v2
+## Chapter 0b — Arrival (Vermilion dock → Pallet)  · APPROVED
 
 **0b.1 Vermilion dock**
 > OAK: Ah! You must be {PLAYER}! Welcome to Kanto!
@@ -84,7 +84,7 @@ lines that fit who they are.
 
 ---
 
-## Chapter 1 — The investigation team (Oak's lab)  · DRAFT v2
+## Chapter 1 — The investigation team (Oak's lab)  · APPROVED
 
 **1.1 Introductions**
 > OAK: {PLAYER}, allow me to introduce Dr. Elias Varnell.
@@ -144,6 +144,6 @@ lines that fit who they are.
 - Lt. Surge stays the **3rd** Gym, as in FireRed. The arrival in Vermilion is only the dock scene; the player
   comes back to Vermilion on foot later, the same way as in FireRed.
 
-## Still open
-- Blue 1.1: keep Oak's "He hasn't had an easy few years" and Varnell's "I suppose I taught him that"?
-- Mom 0.3 mentions the player's father leaving — keep?
+- Blue's past may be hinted ("He hasn't had an easy few years", "I suppose I taught him that") — keep.
+- Mom 0.3 mentioning the father leaving — keep.
+- **Chapters 0, 0b, 1: APPROVED** (2026-11-13).
