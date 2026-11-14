@@ -90,6 +90,21 @@ bool32 WJPC_TestNoBattles(void)
     return sOn;
 }
 
+// "state learnscreen": what a TM does after the screen - the chosen slot gets the new move - then the field.
+#include "pokemon_summary_screen.h"
+#include "overworld.h"
+static u16 sTestLearnMove;
+static void TestLearnScreenDone(void)
+{
+    u8 slot = GetMoveSlotToReplace();
+    if (slot < MAX_MON_MOVES)
+    {
+        RemoveMonPPBonus(&gParties[B_TRAINER_PLAYER][0], slot);
+        SetMonMoveSlot(&gParties[B_TRAINER_PLAYER][0], sTestLearnMove, slot);
+    }
+    SetMainCallback2(CB2_ReturnToField);
+}
+
 // Test aid (sdl2.c "state"): game state read or written from a test script.
 int WJPC_TestState(const char *what, int id, int set, int value)
 {
@@ -117,6 +132,25 @@ int WJPC_TestState(const char *what, int id, int set, int value)
     }
     if (!strcmp(what, "save"))
         return TrySavingData(SAVE_NORMAL);
+    if (!strcmp(what, "setmove"))
+    {
+        // "state setmove SLOT MOVE": the first party Pokemon's move in that slot (test aid, POL-25).
+        if (set && id >= 0 && id < MAX_MON_MOVES)
+        {
+            u16 move = value;
+            SetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_MOVE1 + id, &move);
+        }
+        return GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_MOVE1 + (id & 3));
+    }
+    if (!strcmp(what, "learnscreen"))
+    {
+        // "state learnscreen MOVE": from the field, open the "which move should be forgotten?" screen for the
+        // first party Pokemon learning MOVE, as a TM or level-up does (test aid, POL-25).
+        extern void ShowSelectMovePokemonSummaryScreen(struct Pokemon *mons, u8 monIndex, void (*callback)(void), u16 newMove);
+        sTestLearnMove = id;
+        ShowSelectMovePokemonSummaryScreen(gParties[B_TRAINER_PLAYER], 0, TestLearnScreenDone, id);
+        return id;
+    }
     if (!strcmp(what, "fieldmove"))
     {
         // "state fieldmove ID": can the player use this field move here (badge + HM item)? (Project ARIA test aid)

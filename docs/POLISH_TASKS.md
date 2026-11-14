@@ -33,15 +33,19 @@ Add under each item: what was found, what was changed, files, how to test, what 
         `CB2_LoadMap`: `gMain.inBattle` is still set but the battle's heap is gone (`gBattleSpritesDataPtr`
         dangling). Normal play clears inBattle before a map load, so this should not be Brennan's crash; the test
         aid `WJPC_TEST_NO_BATTLES=1` (no wild encounters, trainers don't spot) keeps scripts out of battles.
-- [~] **POL-25 (PRIORITY). Unlearn HM moves.** "Make it to where you can unlearn an HM move." (Claude 014PwRDj, 2026-11-14)
+- [x] **POL-25 (PRIORITY). Unlearn HM moves.** "Make it to where you can unlearn an HM move." Done 2026-11-14
+      (Claude 014PwRDj); picture sent to Brennan (`docs/polish_reports/POL-25_hm_move_replaced.png`).
       - Found: the game's setting already allows it (`P_CAN_FORGET_HIDDEN_MOVE TRUE`, include/config/pokemon.h), and
         battles / evolution / the old summary screen ask `CannotForgetMove()`. But the summary screen the game
         actually uses (`src/bw_summary_screen.c`, `CanReplaceMove`) asked `IsMoveHM()` directly, so picking an HM
         move to replace still said "HM moves can't be forgotten now." Changed to `CannotForgetMove()`.
       - Safe because field HMs never need a Pokémon to know the move (owner requirements, "Quality-of-life").
-      - **Not yet tested in play** (needs a Pokémon with an HM move learning a 5th move) and no picture sent yet.
-      - Asked Brennan: the Move Deleter in Lilycove still refuses to delete the last Surf in the party
-        (`IsLastMonThatKnowsSurf`); remove that refusal too?
+      - Tested in the exe (Wine): test script `state setmove 1 57` (Surf in slot 2), `state learnscreen 85`
+        (the "which move to forget" screen for Thunderbolt, as a TM opens it), Down, A -> slot 2 is Thunderbolt.
+        Both `state` sub-commands are new test aids (`src/platform/wj_pc_glue.c`).
+      - Open question to Brennan: the Lilycove Move Deleter still refuses to delete the last Surf in the party
+        (`IsLastMonThatKnowsSurf`, vanilla rule so you can't strand yourself; not needed here since Surf works
+        without a Pokémon knowing it). Remove that refusal too? Waiting for yes/no.
 - [ ] **POL-1. People look like paper.** "People's silhouettes are still like paper. They need to be rounded out
       to look like people."
 - [ ] **POL-2. Background trees end in blue.** "The background trees go up in the sky revealing a blue background."

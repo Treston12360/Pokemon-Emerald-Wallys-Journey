@@ -43,6 +43,7 @@ How to use:
 
 | Status | Task | Date / commit | Affects / don't revert |
 |---|---|---|---|
+| [x] | POL-25 HM moves can be replaced/forgotten (summary screen ignored the setting) | 2026-11-14 | `src/bw_summary_screen.c` CanReplaceMove uses `CannotForgetMove()`; new test aids `state setmove` / `state learnscreen`, env `WJPC_TEST_NO_BATTLES` |
 | [ ] | **Brennan's 2026-11-14 fix list (POL-1..29)**: `docs/POLISH_TASKS.md` on branch `polish`. WIP (Claude 014PwRDj): POL-11 freezes in 3D, POL-14 crash after ~10 min in 3D, POL-25 unlearn HM moves first | 2026-11-14 | Will touch `src/platform/voxel3d/` (renderer), `src/platform/sdl2.c`, HM-forget checks — see WORK_CLAIMS |
 
 ## Whole-game engine tasks (either project — claim in `docs/WORK_CLAIMS.md` first; they touch shared code)
