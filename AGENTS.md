@@ -21,24 +21,37 @@ and tick tasks off in `docs/KANTO_TASKS.md` in the same push as the work. Story 
 One of the people working on this game does not want Project ARIA's story spoiled. In anything you write or
 show to the person you are working for — replies, summaries, pictures, file captions — say nothing of the
 Kanto plot: who anyone is, what happens, twists, endings, lines of dialogue. Talk about the work instead
-("chapter 2's script is in", "the lab map loads"). The only exception is the story's writer: **the repo owner (Treston) wrote the story and may discuss it
-freely** — the rule protects his friend, who works on the game but should not have the Kanto story spoiled. Story questions never go to the chat: write them into
+("chapter 2's script is in", "the lab map loads"). The only exception is the story's writer: **Treston (the repo owner) wrote the story and may discuss it
+freely. Brennan must never be told any of it** (no plot, twists, character reveals, dialogue — in chat,
+pictures, file captions or commit messages to him). Story questions never go to the chat: write them into
 `docs/KANTO_STORY_QUESTIONS.md` and push; the writer answers there.
 
-## Who works on what — never cross work or overwrite each other (owner rule, 2026-11-13)
+## Who works on what — two projects, one game; never cross work or overwrite each other (owner rule, 2026-11-13)
 Two people, each with their own Claude, work on this repo at the same time:
-- **The owner (Treston) → Project ARIA (Kanto).** Branch `kanto-port` only. Task list: `docs/KANTO_TASKS.md`.
-- **His friend → polishing the game's existing (Hoenn) features.** His own branches, not `kanto-port`.
+- **Project ARIA — Treston.** Kanto: maps, story, scripts, dialogue, trainers, Kanto 3D. Branch `kanto-port`.
+  Task list: `docs/KANTO_TASKS.md`.
+- **Project Polish — Brennan.** The existing game: Hoenn 3D, lighting, and bugs he finds. His own branches
+  (not `kanto-port`). He must not be told the Kanto story (above).
+Both projects feed the one game.
 
 Rules for every session:
-1. Find out which of the two you are working for (ask if it isn't clear) and stay in that lane and branch.
-2. Before editing a file the other lane also uses (engine code in `src/` outside Kanto data, the 3D renderer
-   `src/platform/voxel3d/`, save code, `include/`, `AGENTS.md`), check `docs/WORK_CLAIMS.md`. If the other
-   lane has claimed it, don't edit it — write what you need in that file and tell the person you work for.
-   If not, add your claim (file or area, who, date), push, then edit; remove the claim when you are done.
-3. `git fetch` and rebase before every push; never force-push; never rewrite or revert the other lane's
-   commits. If a rebase conflicts in the other lane's work, stop and ask the person you work for.
-4. Small commits, pushed often, so the other lane sees your changes early.
+1. Find out which of the two you are working for (ask if it isn't clear) and stay in that project and branch.
+2. **Check the other project's work before you start**: `git fetch`, read its recent commits and
+   `docs/WORK_CLAIMS.md`, so you don't redo or overwrite it.
+3. Before editing a file both projects use (engine code in `src/` outside Kanto data, the 3D renderer
+   `src/platform/voxel3d/`, `pc_data/voxel/`, save code, `include/`, `AGENTS.md`), check `docs/WORK_CLAIMS.md`.
+   If the other project has claimed it, don't edit it — write what you need there and tell the person you work
+   for. If not, add your claim (file or area, who, date), push, then edit; remove the claim when done.
+4. `git fetch` and rebase before every push; never force-push; never rewrite or revert the other project's
+   commits. If a rebase conflicts in the other project's work, stop and ask the person you work for.
+5. Small commits, pushed often, so the other project sees your changes early.
+
+## Builds you hand over: always the WHOLE game folder (owner rule, 2026-11-13)
+Never send a `.gba` file, and never send the `.exe` alone. Every build for Treston or Brennan is the complete
+Windows folder, zipped: `make -f Makefile.pc WIN=1`, then `tools/pc/make_package.sh NAME` (exe, SDL2 DLLs,
+`voxel/` 3D data from `pc_data/voxel/`, README, launcher). They should only have to drop in their own settings
+file (`WallysJourney.cfg`) and save (`WallysJourney.sav`). If you regenerate the 3D data, copy it into
+`pc_data/voxel/` and commit it, so every build carries the current one.
 
 ## No guessing, ever (owner rule, 2026-11-13)
 Port exactly how the reference does it (Emerald 3DS source for 3D, Gamma's files for lighting, FRLG/Crossroads code for Kanto). If the reference doesn't cover it, ask the owner. Never invent a fix, a value or a design.
