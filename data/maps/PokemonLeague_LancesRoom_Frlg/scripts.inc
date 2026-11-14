@@ -99,10 +99,7 @@ PokemonLeague_LancesRoom_Movement_WalkThroughCorridor::
 PokemonLeague_LancesRoom_EventScript_Lance::
 	lock
 	faceplayer
-	famechecker FAMECHECKER_LANCE, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
 	goto_if_set FLAG_DEFEATED_LANCE, PokemonLeague_LancesRoom_EventScript_PostBattle
-	famechecker FAMECHECKER_LANCE, 0
-	famechecker FAMECHECKER_LANCE, 1
 	call_if_unset FLAG_SYS_GAME_CLEAR, PokemonLeague_LancesRoom_EventScript_Intro
 	call_if_set FLAG_SYS_GAME_CLEAR, PokemonLeague_LancesRoom_EventScript_RematchIntro
 	setflag FLAG_TEMP_3
@@ -122,11 +119,11 @@ PokemonLeague_LancesRoom_EventScript_RematchIntro::
 	return
 
 PokemonLeague_LancesRoom_EventScript_Battle::
-	trainerbattle_no_intro TRAINER_ELITE_FOUR_LANCE, PokemonLeague_LancesRoom_Text_Defeat
+	trainerbattle_no_intro TRAINER_ELITE_FOUR_KOGA, PokemonLeague_LancesRoom_Text_Defeat
 	return
 
 PokemonLeague_LancesRoom_EventScript_Rematch::
-	trainerbattle_no_intro TRAINER_ELITE_FOUR_LANCE_2, PokemonLeague_LancesRoom_Text_Defeat
+	trainerbattle_no_intro TRAINER_ELITE_FOUR_KOGA, PokemonLeague_LancesRoom_Text_Defeat
 	return
 
 PokemonLeague_LancesRoom_EventScript_PostBattle::
@@ -164,55 +161,41 @@ PokemonLeague_LancesRoom_Movement_LanceMoveOutOfWayRight::
 	walk_in_place_faster_left
 	step_end
 
-PokemonLeague_LancesRoom_Text_Intro::
-	.string "Ah! I've heard about you,\n"
-	.string "{PLAYER}!\p"
-	.string "I lead the Elite Four.\p"
-	.string "You can call me Lance the dragon\n"
-	.string "Trainer.\p"
-	.string "You know that dragons are\n"
-	.string "mythical Pokémon.\p"
-	.string "They're hard to catch and raise,\n"
-	.string "but their powers are superior.\p"
-	.string "They're virtually indestructible.\n"
-	.string "There's no being clever with them.\p"
-	.string "Well, are you ready to lose?\p"
-	.string "Your League challenge ends with\n"
-	.string "me, {PLAYER}!{PLAY_BGM}{MUS_RG_ENCOUNTER_GYM_LEADER}$"
+PokemonLeague_LancesRoom_Text_Intro:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.2)
+	.string "Fa-ha-ha! You have come far,\n"
+	.string "traveller from Hoenn.\p"
+	.string "I am Koga of the Elite Four. Once I\n"
+	.string "ran the Fuchsia Gym. I left it to my\l"
+	.string "daughter, Janine.\p"
+	.string "You fought her, did you not? She\n"
+	.string "wrote to me about it. Three pages.\l"
+	.string "Most of them complaints.\p"
+	.string "A ninja's art is patience: poison\n"
+	.string "that works slowly, a trap that\l"
+	.string "waits.\p"
+	.string "Let us see whether a Champion can be\n"
+	.string "patient.$"
 
-PokemonLeague_LancesRoom_Text_RematchIntro::
-	.string "Ah!\n"
-	.string "So, you've returned, {PLAYER}!\p"
-	.string "I lead the Elite Four.\p"
-	.string "You can call me Lance the dragon\n"
-	.string "Trainer.\p"
-	.string "You know that dragons are\n"
-	.string "mythical Pokémon.\p"
-	.string "They're hard to catch and raise,\n"
-	.string "but their powers are superior.\p"
-	.string "They're virtually indestructible.\n"
-	.string "There's no being clever with them.\p"
-	.string "Well, are you ready to lose?\p"
-	.string "Your League challenge ends with\n"
-	.string "me, {PLAYER}!{PLAY_BGM}{MUS_RG_ENCOUNTER_GYM_LEADER}$"
+PokemonLeague_LancesRoom_Text_RematchIntro:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.2)
+	.string "Fa-ha-ha! You have come far,\n"
+	.string "traveller from Hoenn.\p"
+	.string "I am Koga of the Elite Four. Once I\n"
+	.string "ran the Fuchsia Gym. I left it to my\l"
+	.string "daughter, Janine.\p"
+	.string "You fought her, did you not? She\n"
+	.string "wrote to me about it. Three pages.\l"
+	.string "Most of them complaints.\p"
+	.string "A ninja's art is patience: poison\n"
+	.string "that works slowly, a trap that\l"
+	.string "waits.\p"
+	.string "Let us see whether a Champion can be\n"
+	.string "patient.$"
 
-PokemonLeague_LancesRoom_Text_Defeat::
-	.string "That's it!\p"
-	.string "I hate to admit it, but you are a\n"
-	.string "Pokémon master!$"
+PokemonLeague_LancesRoom_Text_Defeat:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.2)
+	.string "Hmph... Janine was right about you.\n"
+	.string "Do not tell her I said so.$"
 
-PokemonLeague_LancesRoom_Text_PostBattle::
-	.string "I still can't believe my dragons\n"
-	.string "lost to you, {PLAYER}.\p"
-	.string "You are now the Pokémon League\n"
-	.string "Champion!\p"
-	.string "…Or, you would have been, but\n"
-	.string "you have one more challenge left.\p"
-	.string "There is one more Trainer to face!\n"
-	.string "His name is…\p"
-	.string "{RIVAL}!\p"
-	.string "He beat the Elite Four before\n"
-	.string "you.\p"
-	.string "He is the real Pokémon League\n"
-	.string "Champion.$"
+PokemonLeague_LancesRoom_Text_PostBattle:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.2)
+	.string "Go. Lance is waiting. He is not a\n"
+	.string "man who likes to wait.$"
 

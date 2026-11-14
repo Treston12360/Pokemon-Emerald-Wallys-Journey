@@ -643,7 +643,10 @@
 //       only space for 25 additional trainers before trainer flag space overflows.
 //       MAX_TRAINERS_COUNT_FRLG can be increased but will take up additional saveblock space
 
-#define TRAINERS_COUNT_FRLG                      624
+#define TRAINER_LEADER_BLUE                        KANTO_TRAINER(624) // S-LEAGUE: Viridian Gym
+#define TRAINER_ELITE_FOUR_KOGA                    KANTO_TRAINER(625) // S-LEAGUE: Elite Four 4th room
+
+#define TRAINERS_COUNT_FRLG                      626
 #define MAX_TRAINERS_COUNT_FRLG                  768
 
 #endif  // GUARD_CONSTANTS_OPPONENTS_FRLG_H

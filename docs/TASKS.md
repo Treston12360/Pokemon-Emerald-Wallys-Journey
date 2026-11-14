@@ -33,6 +33,7 @@ How to use:
 | [x] | Indoor bloom off, heal balls on the machine, Dewford border fix (DLX-23/24/25) | 2026-11-13 | `voxel_gl.c`, `field_effect.c`, `wide_view.c`, `sdl2.c`, `voxel_world.c` |
 | [x] | Full-folder builds: `tools/pc/make_package.sh`, `pc_data/voxel/` in git | 2026-11-13 | Every build uses this |
 | [ ] | S0 strip FireRed's own story from Kanto maps — WIP (Claude 019khs4X, 2026-11-13). steps 1–3 done (Pallet→Pewter, all Rockets/Blue, Bill, Rocket-era blocks); log in `docs/KANTO_S0_STRIPPED.md` | 2026-11-13 | Kanto map scripts; new `SaveBlockPC.kantoMapFlagsSet` + `SaveBlockPC_InitKanto()` (`event_data.c`, `new_game.c`) runs once per save — keep |
+| [ ] | S-LEAGUE WIP (Claude 019khs4X, 2026-11-14): Blue Viridian, Koga E4, Lance Champion — committed UNBUILT/UNTESTED, dialogue DRAFT | | Kanto League maps + trainers_frlg.party (new TRAINER_LEADER_BLUE 624, TRAINER_ELITE_FOUR_KOGA 625) |
 | [ ] | S1+ story chapters (script approved for ch. 0–1) | | Ch. 0 touches Littleroot/Birch's lab/Slateport harbour scripts (Hoenn maps) — will claim first |
 | [ ] | K7 Kanto in 3D — paused (story first) | | Will regenerate `pc_data/voxel/*` — claim first |
 

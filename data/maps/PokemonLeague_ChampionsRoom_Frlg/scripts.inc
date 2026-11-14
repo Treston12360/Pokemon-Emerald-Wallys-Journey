@@ -7,9 +7,12 @@ PokemonLeague_ChampionsRoom_Frlg_MapScripts::
 PokemonLeague_ChampionsRoom_OnResume::
 	setvar VAR_0x8004, 4
 	call PokemonLeague_EventScript_DoLightingEffect
-	call_if_eq VAR_STARTER_MON, 2, PokemonLeague_ChampionsRoom_EventScript_CheckStopTriggerSquirtle
-	call_if_eq VAR_STARTER_MON, 1, PokemonLeague_ChampionsRoom_EventScript_CheckStopTriggerBulbasaur
-	call_if_eq VAR_STARTER_MON, 0, PokemonLeague_ChampionsRoom_EventScript_CheckStopTriggerCharmander
+	goto_if_defeated TRAINER_ELITE_FOUR_LANCE, PokemonLeague_ChampionsRoom_EventScript_StopSceneTriggerEnd
+	goto_if_defeated TRAINER_ELITE_FOUR_LANCE_2, PokemonLeague_ChampionsRoom_EventScript_StopSceneTriggerEnd
+	end
+
+PokemonLeague_ChampionsRoom_EventScript_StopSceneTriggerEnd::
+	setvar VAR_TEMP_1, 1
 	end
 
 PokemonLeague_ChampionsRoom_EventScript_CheckStopTriggerSquirtle::
@@ -62,31 +65,10 @@ PokemonLeague_ChampionsRoom_EventScript_EnterRoom::
 	setflag FLAG_DEFEATED_CHAMP
 	setflag FLAG_TEMP_4
 	msgbox PokemonLeague_ChampionsRoom_Text_PostBattle
-	playbgm MUS_RG_SLOW_PALLET, 0
-	addobject LOCALID_CHAMPIONS_ROOM_PROF_OAK
-	msgbox PokemonLeague_ChampionsRoom_Text_OakPlayer
 	closemessage
-	applymovement LOCALID_PLAYER, PokemonLeague_ChampionsRoom_Movement_PlayerWatchOakEnter
-	applymovement LOCALID_KANTO_CHAMPIONS_ROOM_RIVAL, PokemonLeague_ChampionsRoom_Movement_RivalWatchOakEnter
-	applymovement LOCALID_CHAMPIONS_ROOM_PROF_OAK, PokemonLeague_ChampionsRoom_Movement_OakEnter
-	waitmovement 0
-	delay 25
-	specialvar VAR_RESULT, GetStarterPokemon
-	bufferspeciesname STR_VAR_1, VAR_RESULT
-	msgbox PokemonLeague_ChampionsRoom_Text_OakCongratulations
-	applymovement LOCALID_CHAMPIONS_ROOM_PROF_OAK, Common_Movement_WalkInPlaceFasterRight
-	applymovement LOCALID_KANTO_CHAMPIONS_ROOM_RIVAL, Common_Movement_WalkInPlaceFasterLeft
-	waitmovement 0
-	msgbox PokemonLeague_ChampionsRoom_Text_OakImDisappointedRival
-	closemessage
-	applymovement LOCALID_CHAMPIONS_ROOM_PROF_OAK, Common_Movement_WalkInPlaceFasterDown
-	waitmovement 0
-	delay 20
-	msgbox PokemonLeague_ChampionsRoom_Text_OakPlayerComeWithMe
-	closemessage
-	delay 13
-	applymovement LOCALID_CHAMPIONS_ROOM_PROF_OAK, PokemonLeague_ChampionsRoom_Movement_OakExit
-	applymovement LOCALID_PLAYER, PokemonLeague_ChampionsRoom_Movement_PlayerExit
+	@ ARIA S-LEAGUE: Lance walks the player into the Hall of Fame (FireRed's Oak/rival scene removed)
+	applymovement LOCALID_KANTO_CHAMPIONS_ROOM_RIVAL, PokemonLeague_ChampionsRoom_Movement_LanceExit
+	applymovement LOCALID_PLAYER, PokemonLeague_ChampionsRoom_Movement_PlayerFollowLance
 	waitmovement 0
 	setvar VAR_TEMP_1, 1
 	warp MAP_POKEMON_LEAGUE_HALL_OF_FAME, 5, 12
@@ -100,15 +82,11 @@ PokemonLeague_ChampionsRoom_EventScript_QuestLogEnd::
 	end
 
 PokemonLeague_ChampionsRoom_EventScript_Battle::
-	call_if_eq VAR_STARTER_MON, 2, PokemonLeague_ChampionsRoom_EventScript_BattleSquirtle
-	call_if_eq VAR_STARTER_MON, 1, PokemonLeague_ChampionsRoom_EventScript_BattleBulbasaur
-	call_if_eq VAR_STARTER_MON, 0, PokemonLeague_ChampionsRoom_EventScript_BattleCharmander
+	trainerbattle_no_intro TRAINER_ELITE_FOUR_LANCE, PokemonLeague_ChampionsRoom_Text_Defeat
 	return
 
 PokemonLeague_ChampionsRoom_EventScript_Rematch::
-	call_if_eq VAR_STARTER_MON, 2, PokemonLeague_ChampionsRoom_EventScript_RematchSquirtle
-	call_if_eq VAR_STARTER_MON, 1, PokemonLeague_ChampionsRoom_EventScript_RematchBulbasaur
-	call_if_eq VAR_STARTER_MON, 0, PokemonLeague_ChampionsRoom_EventScript_RematchCharmander
+	trainerbattle_no_intro TRAINER_ELITE_FOUR_LANCE_2, PokemonLeague_ChampionsRoom_Text_Defeat
 	return
 
 PokemonLeague_ChampionsRoom_EventScript_Intro::
@@ -224,50 +202,44 @@ PokemonLeague_ChampionsRoom_Movement_RivalWatchOakEnter::
 	walk_in_place_faster_left
 	step_end
 
-PokemonLeague_ChampionsRoom_Text_Intro::
-	.string "{RIVAL}: Hey, {PLAYER}!\p"
-	.string "I was looking forward to seeing\n"
-	.string "you, {PLAYER}.\p"
-	.string "My rival should be strong to keep\n"
-	.string "me sharp.\p"
-	.string "While working on my Pokédex, I\n"
-	.string "looked all over for Pokémon.\p"
-	.string "Not only that, I assembled teams\n"
-	.string "that would beat any Pokémon type.\p"
-	.string "And now…\p"
-	.string "I'm the Pokémon League Champion!\p"
-	.string "{PLAYER}!\n"
-	.string "Do you know what that means?\p"
-	.string "I'll tell you.\p"
-	.string "I am the most powerful Trainer in\n"
-	.string "the world!$"
+PokemonLeague_ChampionsRoom_Text_Intro:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.3)
+	.string "So you're the one.\p"
+	.string "The Champion of Hoenn, here to take\n"
+	.string "Kanto's challenge. The whole League\l"
+	.string "has been talking about you.\p"
+	.string "I'm Lance. I've held this room since\n"
+	.string "Red left it empty.\p"
+	.string "Kanto's had a hard few years. Team\n"
+	.string "Rocket. Now these tears.\p"
+	.string "People need to believe the League\n"
+	.string "can still protect them. That's what\l"
+	.string "this title means to me.\p"
+	.string "So I won't go easy on you because\n"
+	.string "you're a guest.\p"
+	.string "Come at me with everything Hoenn\n"
+	.string "gave you!$"
 
-PokemonLeague_ChampionsRoom_Text_RematchIntro::
-	.string "{RIVAL}: Hey, {PLAYER}!\p"
-	.string "You came back, {PLAYER}!\n"
-	.string "Hahah, that is so great!\p"
-	.string "My rival should be strong to keep\n"
-	.string "me sharp.\p"
-	.string "While working on my Pokédex, I\n"
-	.string "looked all over for Pokémon.\p"
-	.string "Not only that, I assembled teams\n"
-	.string "that would beat any Pokémon type.\p"
-	.string "And now…\p"
-	.string "I'm the Pokémon League Champion!\p"
-	.string "{PLAYER}!\n"
-	.string "Do you know what that means?\p"
-	.string "I'll tell you.\p"
-	.string "I am the most powerful Trainer in\n"
-	.string "the world!$"
+PokemonLeague_ChampionsRoom_Text_RematchIntro:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.3)
+	.string "So you're the one.\p"
+	.string "The Champion of Hoenn, here to take\n"
+	.string "Kanto's challenge. The whole League\l"
+	.string "has been talking about you.\p"
+	.string "I'm Lance. I've held this room since\n"
+	.string "Red left it empty.\p"
+	.string "Kanto's had a hard few years. Team\n"
+	.string "Rocket. Now these tears.\p"
+	.string "People need to believe the League\n"
+	.string "can still protect them. That's what\l"
+	.string "this title means to me.\p"
+	.string "So I won't go easy on you because\n"
+	.string "you're a guest.\p"
+	.string "Come at me with everything Hoenn\n"
+	.string "gave you!$"
 
-PokemonLeague_ChampionsRoom_Text_Defeat::
-	.string "No!\n"
-	.string "That can't be!\l"
-	.string "You beat me at my best!\p"
-	.string "After all that work to become\n"
-	.string "the League Champ?\p"
-	.string "My reign is over already?\n"
-	.string "It's not fair!$"
+PokemonLeague_ChampionsRoom_Text_Defeat:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.3)
+	.string "......It's over. Ha! I can't\n"
+	.string "remember the last time I lost like\l"
+	.string "that.$"
 
 PokemonLeague_ChampionsRoom_Text_Victory::
 	.string "はーはッ！\n"
@@ -280,14 +252,10 @@ PokemonLeague_ChampionsRoom_Text_Victory::
 	.string "ほめて　つかわす！\n"
 	.string "はーッ！　はーはッはッ！$"
 
-PokemonLeague_ChampionsRoom_Text_PostBattle::
-	.string "Why?\n"
-	.string "Why did I lose?\p"
-	.string "I never made any mistakes raising\n"
-	.string "my Pokémon…\p"
-	.string "Darn it! You're the new Pokémon\n"
-	.string "League Champion!\p"
-	.string "Although I don't like to admit it…$"
+PokemonLeague_ChampionsRoom_Text_PostBattle:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.3)
+	.string "You've earned the Hall of Fame.\n"
+	.string "Kanto's, this time.\p"
+	.string "Come on. I'll walk you in.$"
 
 PokemonLeague_ChampionsRoom_Text_OakPlayer::
 	.string "Oak: {PLAYER}!$"
@@ -325,3 +293,34 @@ PokemonLeague_ChampionsRoom_Text_OakPlayerComeWithMe::
 	.string "{PLAYER}!\n"
 	.string "Come with me!$"
 
+@ ARIA S-LEAGUE: Lance (6,8) -> left, up 2, right, up 4 (FireRed Oak's exit path), then gone
+PokemonLeague_ChampionsRoom_Movement_LanceExit::
+	walk_left
+	walk_up
+	walk_up
+	walk_right
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	delay_8
+	set_invisible
+	step_end
+
+@ Player (6,9) follows two steps behind
+PokemonLeague_ChampionsRoom_Movement_PlayerFollowLance::
+	delay_16
+	delay_16
+	delay_16
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	walk_right
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	delay_8
+	set_invisible
+	step_end

@@ -2,19 +2,13 @@ ViridianCity_Gym_Frlg_MapScripts::
 	.byte 0
 
 ViridianCity_Gym_EventScript_Giovanni::
-	famechecker FAMECHECKER_GIOVANNI, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
-	trainerbattle_single TRAINER_LEADER_GIOVANNI, ViridianCity_Gym_Text_GiovanniIntro, ViridianCity_Gym_Text_GiovanniDefeat, ViridianCity_Gym_EventScript_DefeatedGiovanni, NO_MUSIC
+	trainerbattle_single TRAINER_LEADER_BLUE, ViridianCity_Gym_Text_GiovanniIntro, ViridianCity_Gym_Text_GiovanniDefeat, ViridianCity_Gym_EventScript_DefeatedGiovanni, NO_MUSIC
 	goto_if_unset FLAG_GOT_TM26_FROM_GIOVANNI, ViridianCity_Gym_EventScript_GiveTM26
 	msgbox ViridianCity_Gym_Text_GiovanniPostBattle
-	closemessage
-	fadescreen FADE_TO_BLACK
-	removeobject LOCALID_VIRIDIAN_GIOVANNI
-	fadescreen FADE_FROM_BLACK
 	release
 	end
 
 ViridianCity_Gym_EventScript_DefeatedGiovanni::
-	famechecker FAMECHECKER_GIOVANNI, 3
 	setflag FLAG_HIDE_MISC_KANTO_ROCKETS
 	setflag FLAG_DEFEATED_LEADER_GIOVANNI
 	setflag FLAG_BADGE08_GET
@@ -104,56 +98,58 @@ ViridianCity_Gym_EventScript_GymStatuePostVictory::
 	releaseall
 	end
 
-ViridianCity_Gym_Text_GiovanniIntro::
-	.string "Fwahahaha!\n"
-	.string "Welcome to my hideout!\p"
-	.string "It shall be so until I can restore\n"
-	.string "Team Rocket to its former glory.\p"
-	.string "But, you have found me again.\n"
-	.string "So be it.\l"
-	.string "This time, I'm not holding back!\p"
-	.string "Once more, you shall face\n"
-	.string "Giovanni, the greatest Trainer!{PLAY_BGM}{MUS_RG_ENCOUNTER_ROCKET}$"
+ViridianCity_Gym_Text_GiovanniIntro:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.1)
+	.string "So you made it. Seven Kanto badges.\n"
+	.string "I figured you'd quit somewhere\l"
+	.string "around Celadon.\p"
+	.string "This used to be Giovanni's Gym. Did\n"
+	.string "you know that? Team Rocket's boss,\l"
+	.string "running a League Gym.\p"
+	.string "Nobody saw it. Not the League, not\n"
+	.string "the people in this town. Not me.\p"
+	.string "When the League asked me to take it\n"
+	.string "over, I said no three times.\p"
+	.string "......\p"
+	.string "Gramps says people stop seeing\n"
+	.string "what's right in front of them when\l"
+	.string "they trust it.\p"
+	.string "I've been thinking about that a lot\n"
+	.string "lately.\p"
+	.string "Anyway. You didn't come here to\n"
+	.string "listen to me think.\p"
+	.string "I've been watching you since Mt.\n"
+	.string "Moon. You don't fight like a\l"
+	.string "tourist.\p"
+	.string "So let's see it. No holding back.\n"
+	.string "I'm not the guy who lost to Red any\l"
+	.string "more.$"
 
-ViridianCity_Gym_Text_GiovanniDefeat::
-	.string "Ha!\n"
-	.string "That was a truly intense fight.\l"
-	.string "You have won!\p"
-	.string "As proof, here is the Earthbadge!\n"
-	.string "{PAUSE_MUSIC}{PLAY_BGM}{MUS_OBTAIN_BADGE}{PAUSE 0xFE}{PAUSE 0x56}{RESUME_MUSIC}$"
+ViridianCity_Gym_Text_GiovanniDefeat:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.1)
+	.string "......Yeah. Okay. That's what Gramps\n"
+	.string "saw.\p"
+	.string "{PLAYER} received the Earth Badge\n"
+	.string "from Blue!{PAUSE_MUSIC}{PLAY_BGM}{MUS_OBTAIN_BADGE}{PAUSE 0xFE}{PAUSE 0x56}{RESUME_MUSIC}$"
 
-ViridianCity_Gym_Text_GiovanniPostBattle::
-	.string "Having lost in this fashion, \n"
-	.string "I can't face my followers.\l"
-	.string "I have betrayed their trust.\p"
-	.string "As of today, Team Rocket is\n"
-	.string "finished forever!\p"
-	.string "As for myself, I shall dedicate\n"
-	.string "my life to training again.\p"
-	.string "Let us meet again someday!\n"
-	.string "Farewell!$"
+ViridianCity_Gym_Text_GiovanniPostBattle:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.1)
+	.string "...Every door. Think about who's\n"
+	.string "been asking you to open them.\p"
+	.string "Forget it. I'm tired. Go on,\n"
+	.string "Champion.$"
 
-ViridianCity_Gym_Text_ExplainEarthBadgeTakeThis::
-	.string "The Earthbadge makes Pokémon of\n"
-	.string "any level obey without question.\p"
-	.string "It is evidence of your mastery as\n"
-	.string "a Pokémon Trainer.\p"
-	.string "With it, you can challenge the\n"
-	.string "Pokémon League.\p"
-	.string "Also, take this TM.\p"
-	.string "Consider it a gift for your Pokémon\n"
-	.string "League challenge.$"
+ViridianCity_Gym_Text_ExplainEarthBadgeTakeThis:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.1)
+	.string "Here. The Earth Badge. That's all\n"
+	.string "eight.\p"
+	.string "With all eight, the League will let\n"
+	.string "you onto Victory Road. Every door\l"
+	.string "Kanto has is open to you now.\p"
+	.string "Take this too.$"
 
 ViridianCity_Gym_Text_ReceivedTM26FromGiovanni::
 	.string "{PLAYER} received TM26\n"
-	.string "from Giovanni.$"
+	.string "from Blue.$"
 
 ViridianCity_Gym_Text_ExplainTM26::
-	.string "TM26 contains Earthquake.\p"
-	.string "It is a powerful attack that causes\n"
-	.string "a massive tremor.\p"
-	.string "I made it when I ran the Gym here,\n"
-	.string "far too long ago… $"
+	.string "TM26 contains Earthquake.$"
 
 ViridianCity_Gym_Text_YouDoNotHaveSpace::
 	.string "You do not have space for this!$"

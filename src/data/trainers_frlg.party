@@ -6985,7 +6985,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 
 === TRAINER_ELITE_FOUR_LANCE ===
 Name: LANCE
-Class: Elite Four Frlg
+Class: Champion Frlg
 Pic: Elite Four Lance Frlg
 Gender: Male
 Music: Serious
@@ -13545,7 +13545,7 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 === TRAINER_ELITE_FOUR_LANCE_2 ===
 Name: LANCE
-Class: Elite Four Frlg
+Class: Champion Frlg
 Pic: Elite Four Lance Frlg
 Gender: Male
 Music: Serious
@@ -13787,3 +13787,106 @@ IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
 Muk
 Level: 39
 IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+
+/* S-LEAGUE (owner 2026-11-14). Teams are FireRed placeholders: Blue = FireRed Champion Blue
+   (Blastoise line), Koga = his FireRed Gym team. L4 sets the real teams/levels. */
+=== TRAINER_LEADER_BLUE ===
+Name: BLUE
+Class: Leader Frlg
+Pic: Champion Rival Frlg
+Gender: Male
+Music: Serious
+Items: Full Restore / Full Restore / Full Restore / Full Restore
+Double Battle: No
+AI: Check Bad Move / Try To Faint / Check Viability
+Mugshot: Yellow
+
+Pidgeot
+Level: 59
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Aerial Ace
+- Feather Dance
+- Sand Attack
+- Whirlwind
+
+Alakazam
+Level: 57
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Psychic
+- Future Sight
+- Recover
+- Reflect
+
+Rhydon
+Level: 59
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Take Down
+- Earthquake
+- Rock Tomb
+- Scary Face
+
+Exeggutor
+Level: 59
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Giga Drain
+- Egg Bomb
+- Sleep Powder
+- Light Screen
+
+Gyarados
+Level: 61
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Hydro Pump
+- Dragon Rage
+- Bite
+- Thrash
+
+Charizard @ Sitrus Berry
+Level: 63
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Fire Blast
+- Aerial Ace
+- Slash
+- Fire Spin
+
+=== TRAINER_ELITE_FOUR_KOGA ===
+Name: KOGA
+Class: Elite Four Frlg
+Pic: Leader Koga Frlg
+Gender: Male
+Music: Serious
+Items: Hyper Potion / Hyper Potion / Full Heal
+Double Battle: No
+AI: Check Bad Move / Try To Faint / Check Viability
+
+Koffing
+Level: 37
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Self Destruct
+- Sludge
+- Smokescreen
+- Toxic
+
+Muk
+Level: 39
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Minimize
+- Sludge
+- Acid Armor
+- Toxic
+
+Koffing
+Level: 37
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Self Destruct
+- Sludge
+- Smokescreen
+- Toxic
+
+Weezing
+Level: 43
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- Sludge
+- Smokescreen
+- Toxic

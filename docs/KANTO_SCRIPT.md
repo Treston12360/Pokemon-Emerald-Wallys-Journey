@@ -147,3 +147,50 @@ lines that fit who they are.
 - Blue's past may be hinted ("He hasn't had an easy few years", "I suppose I taught him that") — keep.
 - Mom 0.3 mentioning the father leaving — keep.
 - **Chapters 0, 0b, 1: APPROVED** (2026-11-13).
+
+---
+
+## League battles (S-LEAGUE)  · DRAFT — owner to approve
+Lineup (owner 2026-11-14): Blue = Viridian Gym (8th); Janine = Fuchsia; Elite Four Lorelei, Bruno, Agatha,
+**Koga**; Champion **Lance**. Lorelei/Bruno/Agatha keep FireRed's lines until S-TALK.
+
+**L.1 Blue — Viridian Gym (ch. 10)**
+> BLUE: So you made it. Seven Kanto badges. I figured you'd quit somewhere around Celadon.
+> This used to be Giovanni's Gym. Did you know that? Team Rocket's boss, running a League Gym.
+> Nobody saw it. Not the League, not the people in this town. Not me.
+> When the League asked me to take it over, I said no three times.
+> ......
+> Gramps says people stop seeing what's right in front of them when they trust it.
+> I've been thinking about that a lot lately.
+> Anyway. You didn't come here to listen to me think.
+> I've been watching you since Mt. Moon. You don't fight like a tourist.
+> So let's see it. No holding back. I'm not the guy who lost to Red any more.
+> **(defeat)** BLUE: ......Yeah. Okay. That's what Gramps saw.
+> **(after)** BLUE: Here. The Earth Badge. That's all eight.
+> With all eight, the League will let you onto Victory Road. Every door Kanto has is open to you now.
+> ...Every door. Think about who's been asking you to open them.
+> Forget it. I'm tired. Go on, Champion.
+
+**L.2 Koga — Elite Four, 4th room**
+> KOGA: Fa-ha-ha! You have come far, traveller from Hoenn.
+> I am Koga of the Elite Four. Once I ran the Fuchsia Gym. I left it to my daughter, Janine.
+> You fought her, did you not? She wrote to me about it. Three pages. Most of them complaints.
+> A ninja's art is patience: poison that works slowly, a trap that waits.
+> Let us see whether a Champion can be patient.
+> **(defeat)** KOGA: Hmph... Janine was right about you. Do not tell her I said so.
+> **(after)** KOGA: Go. Lance is waiting. He is not a man who likes to wait.
+
+**L.3 Lance — Champion**
+> LANCE: So you're the one.
+> The Champion of Hoenn, here to take Kanto's challenge. The whole League has been talking about you.
+> I'm Lance. I've held this room since Red left it empty.
+> Kanto's had a hard few years. Team Rocket. Now these tears.
+> People need to believe the League can still protect them. That's what this title means to me.
+> So I won't go easy on you because you're a guest.
+> Come at me with everything Hoenn gave you!
+> **(defeat)** LANCE: ......It's over. Ha! I can't remember the last time I lost like that.
+> **(after)** LANCE: You've earned the Hall of Fame. Kanto's, this time.
+> Come on. I'll walk you in.
+> (Hall of Fame. Ch. 11's vault scene comes after this and is written with that chapter.)
+
+**L.4 Janine — Fuchsia Gym**: waiting on her sprite (see owner question); lines drafted with chapter 7.
