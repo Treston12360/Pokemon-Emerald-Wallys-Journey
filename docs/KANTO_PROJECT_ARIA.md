@@ -330,4 +330,13 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   sites). Roads are closed by realistic, story-caused blockers (anomaly cordons, rockslides, damaged bridge,
   Coast Guard sea closure, Snorlax, quarantine, eruption warning) to keep the path linear for story and level
   curve. Proposed table (owner to confirm/adjust): see chat 2026-11-13 / §4 to be rewritten.
+- 2026-11-13 (owner): **HMs in Kanto (replaces "nothing in Kanto is gated").** Fly works everywhere, always
+  (including flying between regions). Every other HM is given by a Kanto Gym Leader when beaten and only works
+  in Kanto with that Kanto badge (Kanto doesn't recognise Hoenn field licenses — same badge-as-license rule as
+  Hoenn). Hoenn HMs still work in Hoenn. Kanto is **linear**, not open: easier to design, story and level curve.
+- 2026-11-13 (owner): **Every person in Kanto gets new dialogue**, as Hoenn did: townsfolk, Gym Leaders (with
+  their own story), and **every trainer with their own, different lines that make sense for who they are and
+  the world** — no "random fact + battle!" filler. Use trainers and NPCs to explain and tie together things
+  FireRed left unexplained. **Longer dialogue is welcome** when it makes a scene more impactful.
+- OPEN: Lt. Surge / Vermilion Gym is missing from the chapter list (§3). Owner to place it.
 
