@@ -420,4 +420,10 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   ch. 4 report-back ("Like the project") happens there. (3) At the end: **his real facility, the old Rocket
   Warehouse on Sevii** (Orb handover, reveal). The Route 7–8 underground path does NOT need closing: Celadon
   is only reachable through Lavender while Saffron is cordoned and the Route 16 Snorlax sleeps.
+- 2026-11-14 (owner): **Blue tells the player about Varnell's loss** (scene TBD — an early Blue meeting): Varnell's
+  daughter was killed during the Rocket attacks years ago; since then he's pushed his research much further; he
+  took Blue in after Red, and they helped each other's mental health. Blue doesn't know her name (§2b).
+  **Lavender locals talk about a girl who was killed there during the Rocket attacks** (no name).
+  Note: with the Clefairy crying "Aria", sharp players may now guess the project is named after her — that's
+  the built-in misdirection (§2): they still won't guess he's trying to bring her back.
 
