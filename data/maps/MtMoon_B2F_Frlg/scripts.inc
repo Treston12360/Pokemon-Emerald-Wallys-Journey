@@ -5,6 +5,7 @@ MtMoon_B2F_Frlg_MapScripts::
 
 MtMoon_B2F_OnTransition::
 	call_if_unset FLAG_GOT_FOSSIL_FROM_MT_MOON, MtMoon_B2F_EventScript_ShowFossils
+	call Aria_Ch2_B2FOnTransition @ Project ARIA ch. 2/3
 	end
 
 MtMoon_B2F_EventScript_ShowFossils::
@@ -31,6 +32,7 @@ MtMoon_B2F_EventScript_Miguel::
 
 MtMoon_B2F_EventScript_BattleMiguel::
 	textcolor NPC_TEXT_COLOR_MALE
+	setspeaker SP_NAME_MIGUEL
 	message MtMoon_B2F_Text_MiguelIntro
 	waitmessage
 	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, 0
@@ -38,15 +40,18 @@ MtMoon_B2F_EventScript_BattleMiguel::
 	setvar VAR_LAST_TALKED, LOCALID_MIGUEL
 	trainerbattle_no_intro TRAINER_SUPER_NERD_MIGUEL, MtMoon_B2F_Text_MiguelDefeat
 	setvar VAR_MAP_SCENE_MT_MOON_B2F, 1
+	setspeaker SP_NAME_MIGUEL
 	msgbox MtMoon_B2F_Text_WellEachTakeAFossil
 	return
 
 MtMoon_B2F_EventScript_MiguelFossilPicked::
+	setspeaker SP_NAME_MIGUEL
 	msgbox MtMoon_B2F_Text_LabOnCinnabarRegeneratesFossils
 	release
 	end
 
 MtMoon_B2F_EventScript_MiguelGoPickFossil::
+	setspeaker SP_NAME_MIGUEL
 	msgbox MtMoon_B2F_Text_WellEachTakeAFossil
 	release
 	end
@@ -134,28 +139,44 @@ MtMoon_B2F_EventScript_Grunt4::
 	msgbox MtMoon_B2F_Text_Grunt4PostBattle, MSGBOX_AUTOCLOSE
 	end
 
-MtMoon_B2F_Text_MiguelIntro::
-	.string "Hey, stop!\p"
-	.string "I found these fossils!\n"
-	.string "They're both mine!$"
+MtMoon_B2F_Text_MiguelIntro:: @ ARIA ch. 2 (approved)
+	.string "Stop right there! These fossils are\n"
+	.string "mine - I mean, they're the museum's\l"
+	.string "- I mean...\p"
+	.string "Sorry. Sorry. I've been down here\n"
+	.string "two days. I haven't slept.\p"
+	.string "I came to dig. That's all. Then the\n"
+	.string "crater started glowing, and Pokémon\l"
+	.string "I've never seen started turning up\l"
+	.string "in the tunnels. Like they'd been\l"
+	.string "here forever.\p"
+	.string "I'm not leaving these fossils down\n"
+	.string "here with whatever that is. But I'm\l"
+	.string "not going near it either.\p"
+	.string "You look like you've handled worse.\n"
+	.string "Prove it, and I'll trust you with\l"
+	.string "one of them.$"
 
-MtMoon_B2F_Text_MiguelDefeat::
-	.string "Okay!\n"
-	.string "I'll share!$"
+MtMoon_B2F_Text_MiguelDefeat:: @ ARIA ch. 2 (approved)
+	.string "......Okay.$"
 
-MtMoon_B2F_Text_WellEachTakeAFossil::
-	.string "We'll each take a fossil!\n"
-	.string "No being greedy!$"
+MtMoon_B2F_Text_WellEachTakeAFossil:: @ ARIA ch. 2 (approved)
+	.string "......Okay. Okay, you're the real\n"
+	.string "thing.\p"
+	.string "Take one. Dome or Helix. The museum\n"
+	.string "in Pewter can bring it back to life.\p"
+	.string "I'll take the other one and get out\n"
+	.string "of here before the ceiling falls on\l"
+	.string "me.$"
 
 MtMoon_B2F_Text_ThenThisFossilIsMine::
 	.string "All right.\n"
 	.string "Then this fossil is mine!$"
 
-MtMoon_B2F_Text_LabOnCinnabarRegeneratesFossils::
-	.string "Far away, on Cinnabar Island,\n"
-	.string "there's a Pokémon Lab.\p"
-	.string "They do research on regenerating\n"
-	.string "fossils.$"
+MtMoon_B2F_Text_LabOnCinnabarRegeneratesFossils:: @ ARIA ch. 2 (approved)
+	.string "The museum in Pewter can bring your\n"
+	.string "fossil back to life. I'm getting out\l"
+	.string "of here.$"
 
 MtMoon_B2F_Text_Grunt1Intro::
 	.string "We, Team Rocket, shall find the\n"

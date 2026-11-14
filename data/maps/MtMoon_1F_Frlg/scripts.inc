@@ -4,6 +4,7 @@ MtMoon_1F_Frlg_MapScripts::
 
 MtMoon_1F_OnTransition::
 	setworldmapflag FLAG_WORLD_MAP_MT_MOON_1F
+	call Aria_Ch2_Mt1FOnTransition @ Project ARIA ch. 2/3
 	end
 
 MtMoon_1F_EventScript_ZubatSign::

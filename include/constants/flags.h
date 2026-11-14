@@ -2443,6 +2443,10 @@
 
 // Project ARIA story flags (Kanto flag space, 0x2F0 up; free in FireRed)
 #define FLAG_ARIA_TEAR_MT_MOON_SEALED                               (KANTO_FLAGS_START + 0x2F0)
+#define FLAG_ARIA_CH2_HIKER_TALKED                                  (KANTO_FLAGS_START + 0x2F1)
+#define FLAG_ARIA_TEAR_ROUTE25_SEALED                               (KANTO_FLAGS_START + 0x2F2)
+#define FLAG_ARIA_CH3_OFFICER_TALKED                                (KANTO_FLAGS_START + 0x2F3)
+#define FLAG_ARIA_CH3_KIYOSHI_BATTLED                               (KANTO_FLAGS_START + 0x2F4)
 
 #endif
 

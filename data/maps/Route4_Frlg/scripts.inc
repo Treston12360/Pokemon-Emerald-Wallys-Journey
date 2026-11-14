@@ -1,4 +1,5 @@
 Route4_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Aria_Ch2_Route4OnTransitionMap
 	.byte 0
 
 Route4_EventScript_Unused::
@@ -95,3 +96,7 @@ Route4_Text_PeopleLikeAndRespectBrock::
 	.string "People like and respect him.\p"
 	.string "I want to become a Gym Leader\n"
 	.string "like him.$"
+
+Aria_Ch2_Route4OnTransitionMap::
+	call Aria_Ch2_Route4OnTransition
+	end

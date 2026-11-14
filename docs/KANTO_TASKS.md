@@ -145,6 +145,8 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       (the man wasn't dressed as a Rocket in FireRed). New, non-Rocket dialogue for all of them; the man becomes
       an ordinary trainer (no recruiting, no Rocket trainer class/team). His FireRed object is still visible now
       with his Rocket script — fix in this task. Teams for the player's level.
+- [ ] **S-FOSSIL. Fossil revival in the Pewter Museum** (approved ch. 2 text: Miguel says the museum in Pewter can
+      bring the fossil back to life; FireRed did it at the Cinnabar Lab, which is closed in ARIA until ch. 9).
 - [ ] **S-BLOCK. Road blocks** from `docs/KANTO_PROJECT_ARIA.md` §4 (after the owner confirms the table).
 - [ ] **S-TALK. New dialogue for every Kanto NPC and trainer** (owner: each trainer unique and believable, Gym
       Leaders with their own story, longer is fine). Drafts go in `docs/KANTO_SCRIPT.md` for approval first.

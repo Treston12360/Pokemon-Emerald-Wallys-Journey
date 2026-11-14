@@ -118,6 +118,21 @@
       "y": 3,
       "target_local_id": "LOCALID_CERULEAN_CAVE_GUARD",
       "target_map": "MAP_CERULEAN_CITY"
+    },
+    {
+      "local_id": "LOCALID_ROUTE4_ARIA_BLUE",
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_BLUE",
+      "x": 36,
+      "y": 7,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "0x0",
+      "flag": "FLAG_TEMP_11"
     }
   ],
   "warp_events": [
@@ -144,7 +159,15 @@
     }
   ],
   "coord_events": [
-
+    {
+      "type": "trigger",
+      "x": 32,
+      "y": 6,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch2_BlueScene"
+    }
   ],
   "bg_events": [
     {
