@@ -1,5 +1,6 @@
 #include "global.h"
 #include "event_data.h"
+#include "script.h"
 #include "pokedex.h"
 
 #define SPECIAL_FLAGS_SIZE  (NUM_SPECIAL_FLAGS / 8)  // 8 flags per byte
@@ -246,6 +247,22 @@ void SaveBlockPC_Read(void)
         u32 n = tmp.size < sizeof(tmp) ? tmp.size : sizeof(tmp);
         memcpy(&gSaveBlockPC, &tmp, n);
         gSaveBlockPC.size = sizeof(gSaveBlockPC);
+    }
+#endif
+    SaveBlockPC_InitKanto();
+}
+
+// Project ARIA (S0): FireRed's maps start with some people hidden (Oak in Pallet, story NPCs...): FireRed sets
+// those flags in a new game (EventScript_ResetAllMapFlagsFrlg). Our saves get them once - a new game, or an
+// older save the first time it loads with Kanto in the game.
+void SaveBlockPC_InitKanto(void)
+{
+#if !IS_FRLG
+    extern const u8 EventScript_AriaKantoStart[];
+    if (!gSaveBlockPC.kantoMapFlagsSet)
+    {
+        RunScriptImmediately(EventScript_AriaKantoStart); // data/scripts/aria_kanto_start.inc
+        gSaveBlockPC.kantoMapFlagsSet = TRUE;
     }
 #endif
 }

@@ -12,7 +12,6 @@ PalletTown_PlayersHouse_2F_EventScript_SetRespawn::
 	return
 
 PalletTown_PlayersHouse_2F_OnWarp::
-	map_script_2 VAR_MAP_SCENE_PALLET_TOWN_PLAYERS_HOUSE_2F, 0, PalletTown_PlayersHouse_2F_FirstWarpIn
 	.2byte 0
 
 PalletTown_PlayersHouse_2F_FirstWarpIn::

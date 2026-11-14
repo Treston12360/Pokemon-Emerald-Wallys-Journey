@@ -966,12 +966,14 @@ struct SaveBlockPC
     u16 kantoVars[KANTO_VARS_COUNT];      // K4: FRLG vars, KANTO_VARS_START.. (constants/vars_frlg.h)
     u8 kantoTrainerFlags[KANTO_TRAINERS_COUNT / 8]; // K4: Kanto trainers defeated (constants/opponents_frlg.h)
     struct DaycareMon route5DayCareMon;   // K5: Route 5's day care (FireRed keeps it in SaveBlock1)
+    u8 kantoMapFlagsSet;                  // S0: FireRed's starting map flags (hidden people) set once
 #endif
 };
 extern struct SaveBlockPC gSaveBlockPC;
 void SaveBlockPC_Clear(void);
 void SaveBlockPC_Write(void);
 void SaveBlockPC_Read(void);
+void SaveBlockPC_InitKanto(void);
 
 struct DayCare
 {

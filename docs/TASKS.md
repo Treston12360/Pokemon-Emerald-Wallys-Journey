@@ -32,7 +32,7 @@ How to use:
 | [x] | Haze weaker (0.5 → 0.35), belt sea all flat (owner) | 2026-11-13 | `voxel_gl.c` haze value, `voxel_mesh_builder.c` `BorderWaterLevel` |
 | [x] | Indoor bloom off, heal balls on the machine, Dewford border fix (DLX-23/24/25) | 2026-11-13 | `voxel_gl.c`, `field_effect.c`, `wide_view.c`, `sdl2.c`, `voxel_world.c` |
 | [x] | Full-folder builds: `tools/pc/make_package.sh`, `pc_data/voxel/` in git | 2026-11-13 | Every build uses this |
-| [ ] | S0 strip FireRed's own story from Kanto maps — WIP (Claude 019khs4X, 2026-11-13) | | Kanto map scripts only |
+| [ ] | S0 strip FireRed's own story from Kanto maps — WIP (Claude 019khs4X, 2026-11-13). Pallet→Pewter done, log in `docs/KANTO_S0_STRIPPED.md` | 2026-11-13 | Kanto map scripts; new `SaveBlockPC.kantoMapFlagsSet` + `SaveBlockPC_InitKanto()` (`event_data.c`, `new_game.c`) runs once per save — keep |
 | [ ] | S1+ story chapters (script approved for ch. 0–1) | | Ch. 0 touches Littleroot/Birch's lab/Slateport harbour scripts (Hoenn maps) — will claim first |
 | [ ] | K7 Kanto in 3D — paused (story first) | | Will regenerate `pc_data/voxel/*` — claim first |
 

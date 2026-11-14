@@ -13,7 +13,6 @@ ViridianCity_Mart_EventScript_HideQuestionnaire::
 	end
 
 ViridianCity_Mart_OnFrame::
-	map_script_2 VAR_MAP_SCENE_VIRIDIAN_CITY_MART, 0, ViridianCity_Mart_EventScript_ParcelScene
 	.2byte 0
 
 ViridianCity_Mart_EventScript_ParcelScene::
