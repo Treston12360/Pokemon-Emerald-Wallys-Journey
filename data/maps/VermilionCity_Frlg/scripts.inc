@@ -23,6 +23,7 @@ VermilionCity_Movement_ExitSSAnne::
 VermilionCity_OnTransition::
 	setworldmapflag FLAG_WORLD_MAP_VERMILION_CITY
 	call_if_set FLAG_TALKED_TO_OAKS_AIDE_IN_VERMILION, VermilionCity_EventScript_HideOaksAide
+	call Aria_Ch3b_VermilionOnTransition @ Project ARIA ch. 3b
 	end
 
 VermilionCity_EventScript_HideOaksAide::

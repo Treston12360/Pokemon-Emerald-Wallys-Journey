@@ -2447,6 +2447,8 @@
 #define FLAG_ARIA_TEAR_ROUTE25_SEALED                               (KANTO_FLAGS_START + 0x2F2)
 #define FLAG_ARIA_CH3_OFFICER_TALKED                                (KANTO_FLAGS_START + 0x2F3)
 #define FLAG_ARIA_CH3_KIYOSHI_BATTLED                               (KANTO_FLAGS_START + 0x2F4)
+#define FLAG_ARIA_ROCK_TUNNEL_CRY_1                                 (KANTO_FLAGS_START + 0x2F5)
+#define FLAG_ARIA_ROCK_TUNNEL_CRY_2                                 (KANTO_FLAGS_START + 0x2F6)
 
 #endif
 

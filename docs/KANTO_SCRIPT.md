@@ -344,12 +344,11 @@ excited and hides it. Name below is a placeholder (owner to choose). His team: o
 
 ---
 
-## Chapter 3b — Vermilion, Blue, Rock Tunnel  · DRAFT (owner to approve)
+## Chapter 3b — Vermilion, Blue, Rock Tunnel  · APPROVED (owner 2026-11-14) · IN GAME
 Owner 2026-11-14: the S.S. Anne has sailed; Blue's spot in Vermilion NOT decided (3b.1 is a placeholder spot); Rock Tunnel is the only way to Lavender
 and should be scary — the Clefairy's cry building up ("Ar...." → "Ari....").
 
-**3b.1 Blue — in Vermilion (owner 2026-11-14: he tells you about Varnell's daughter here; exact spot TBD,
-draft assumes the empty dock where the S.S. Anne was)**
+**3b.1 Blue — as you walk into Vermilion from Route 6 (owner 2026-11-14)**
 > BLUE: ......Oh. It's you.
 > You closed the one out by Bill's place. I heard. ...Bill told me what happened.
 > ......

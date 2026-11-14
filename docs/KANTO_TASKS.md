@@ -121,7 +121,8 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 - [ ] **S1. Chapter 0 — the call:** Mom → Birch → S.S. Anne ticket; Wally's send-off at Slateport.
 - [ ] **S2. Chapter 0b — arrival:** S.S. Anne to Vermilion, fade to black, Oak's lab in Pallet.
 - [ ] **S3. Chapter 1 — the investigation team:** Oak, Varnell, Blue; first assignment (Mt. Moon).
-- [ ] **S-HM. Kanto HM licenses:** on Kanto maps, Cut/Surf/Strength/Rock Smash/Waterfall/Flash/Dive need the Kanto
+- [ ] **S-HM. Kanto HM licenses:** (owner 2026-11-14: Rock Tunnel needs Flash — the player must have a way to get
+      Flash from a Kanto Gym Leader before ch. 3b; Brock's badge allows Flash in FireRed.) on Kanto maps, Cut/Surf/Strength/Rock Smash/Waterfall/Flash/Dive need the Kanto
       badge from the Gym Leader who gives that HM (FireRed's badge→HM table); Fly always works; Hoenn unchanged.
 - [ ] **S-LEAGUE. Kanto League lineup** (already decided, design doc §1): Viridian Gym leader Giovanni → **Blue**
       (8th badge, ch. 10); Fuchsia → **Janine**; Elite Four (owner 2026-11-14): **Lorelei, Bruno, Agatha, Koga** (Koga in Lance's room);

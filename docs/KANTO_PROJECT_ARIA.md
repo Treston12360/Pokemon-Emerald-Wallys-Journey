@@ -428,4 +428,9 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   the built-in misdirection (§2): they still won't guess he's trying to bring her back.
 - 2026-11-14 (owner): Blue tells the player about Varnell's daughter **in Vermilion (ch. 3b)**; **Varnell explains
   Project ARIA at the first aide-spot meeting** (Route 11 gate 2F, ch. 3b). Drafts in KANTO_SCRIPT.md 3b.1/3b.1b.
+- 2026-11-14 (owner, ch. 12 order): **Lance doesn't notice the Orb is gone until after you've handed it to Varnell
+  and left his Sevii facility.** That discovery is what triggers **Blue's furious call**. Blue shows up; you go
+  back inside together and find **a new staircase down to a bottom floor**. Right before you go down, Blue says
+  there was never a lower floor — he explored this place after Rocket left and it has never been there. Going
+  down is when you see the holding chamber.
 

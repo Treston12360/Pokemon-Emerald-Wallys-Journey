@@ -1,4 +1,5 @@
 RockTunnel_B1F_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Aria_Ch3b_B1FOnTransitionMap
 	.byte 0
 
 RockTunnel_B1F_EventScript_Sofia::
@@ -136,3 +137,7 @@ RockTunnel_B1F_Text_WinstonPostBattle::
 	.string "I'm an artist, not a fighter.\n"
 	.string "I'll go home to draw.$"
 
+
+Aria_Ch3b_B1FOnTransitionMap::
+	call Aria_Ch3b_B1FOnTransition
+	end

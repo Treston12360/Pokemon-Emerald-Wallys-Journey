@@ -411,6 +411,43 @@
       "dest_warp_id": "4"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+    {
+      "type": "trigger",
+      "x": 1,
+      "y": 8,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3b_Cry1"
+    },
+    {
+      "type": "trigger",
+      "x": 2,
+      "y": 8,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3b_Cry1"
+    },
+    {
+      "type": "trigger",
+      "x": 3,
+      "y": 8,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3b_Cry1"
+    },
+    {
+      "type": "trigger",
+      "x": 4,
+      "y": 8,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3b_Cry1"
+    }
+  ],
   "bg_events": []
 }

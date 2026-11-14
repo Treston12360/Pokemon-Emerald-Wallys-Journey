@@ -4,6 +4,7 @@ RockTunnel_1F_Frlg_MapScripts::
 
 RockTunnel_1F_OnTransition::
 	setworldmapflag FLAG_WORLD_MAP_ROCK_TUNNEL_1F
+	call Aria_Ch3b_1FOnTransition @ Project ARIA ch. 3b
 	end
 
 RockTunnel_1F_EventScript_RouteSign::

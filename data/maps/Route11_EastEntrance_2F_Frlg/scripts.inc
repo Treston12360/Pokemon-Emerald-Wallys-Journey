@@ -1,6 +1,7 @@
 .equ REQUIRED_CAUGHT_MONS, 30
 
 Route11_EastEntrance_2F_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Aria_Ch3b_GateOnTransitionMap
 	.byte 0
 
 Route11_EastEntrance_2F_EventScript_LeftBinoculars::
@@ -136,3 +137,7 @@ Route11_EastEntrance_2F_Text_RockTunnelGoodRouteToLavender::
 	.string "Rock Tunnel appears to be a good\n"
 	.string "route to take.$"
 
+
+Aria_Ch3b_GateOnTransitionMap::
+	call Aria_Ch3b_GateOnTransition
+	end
