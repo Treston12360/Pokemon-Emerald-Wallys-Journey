@@ -393,7 +393,7 @@ and should be scary — the Clefairy's cry building up ("Ar...." → "Ari....").
 
 ---
 
-## Chapter 4 — Lavender: the crying in the tower  · DRAFT (owner to approve)
+## Chapter 4 — Lavender: the crying in the tower  · APPROVED (owner 2026-11-14)
 From the design doc: Aria died in Pokémon Tower during Rocket's raid, chasing the Rockets who stole her Clefairy
 (both died; Mr. Fuji was there). Varnell won't enter the tower and sends the player ("the readings need a
 trainer's Pokémon"). His "calibration lens" (does what FireRed's Silph Scope did) reveals the ghost: the
@@ -467,4 +467,47 @@ only seen the man at the grave from his window in the dark); no 'somebody's daug
 Notes for the owner: the Calibration Lens would be a new key item that does what the Silph Scope did (ghosts
 in the tower can be seen and fought). The Clefairy echo sits on the top floor where FireRed had Mr. Fuji and
 the Rockets.
+
+---
+
+## Chapter 5 — Celadon: the office, the report, Erika, Snorlax  · DRAFT (owner to approve)
+Design doc: first visit to Varnell's public office in Celadon (only reachable through Lavender); the report-back
+with Blue ("Like the project"); Erika; both Snorlax woken with the Poké Flute; Varnell's staff start acting cagey.
+
+**5.1 Varnell's office (Celadon) — first visit**
+> RECEPTIONIST: Welcome to the Varnell Research Office. ...Oh! You're the trainer from Hoenn. The Director's
+> expecting you. Go on through.
+> VARNELL: {PLAYER}! Welcome, welcome. This is the public side of my work — where the visitors come, where the
+> grant committees sit and nod.
+> The real machine is somewhere quieter. Somewhere it can't hurt anyone if something goes wrong.
+> You'll see it one day. When it's finished.
+> BLUE: ...Hey.
+> VARNELL: You know Blue, of course. He's been helping me here since — well. For a long time now.
+
+**5.2 The report-back (design doc §2, owner-approved direction)**
+> VARNELL: So. The tower. Tell me everything.
+> (......)
+> BLUE: It was weird. It kept saying "Aria." Like the project.
+> Maybe the tears pulled it in like the other Pokémon that shouldn't be here... and it's reacting to the
+> machine somehow?
+> VARNELL: ......
+> VARNELL: ...Perhaps it does know. The tower's readings were the highest we've ever recorded.
+> If that echo was pulled through a tear, it may have sensed ARIA working — the one thing in Kanto that could
+> put it back where it belongs. Maybe that's what it was asking us to do.
+> VARNELL: Good work, both of you.
+> BLUE: I'm going to check the readings from Route 7. ...Later.
+> (Blue leaves.)
+> VARNELL: ......
+> He won't tell you, so I will. When he lost to Red, he lost everything he thought he was.
+> I gave him a desk and something to do with his hands. That's all. He did the rest.
+> He's... he's the closest thing to a son I have left.
+> ...Don't tell him I said that. He'd never let me hear the end of it.
+> Erika's Gym is just down the street. And the Poké Flute Mr. Fuji gave you — the roads south of Lavender and
+> west of here have been waiting on it.
+
+**5.3 Office staff (talk) — "cagey" (clues that only make sense later)**
+> SCIENTIST: The Director won't let anyone else touch ARIA's settings. Not even me, and I built half the
+> calibration rig.
+> SCIENTIST: Shipments go out every week. Where to? ...You'd have to ask the Director.
+> SCIENTIST: Sorry, that door's staff only. — No, I don't have the key either.
 
