@@ -269,7 +269,7 @@ BattleFrontier_BattlePyramidTop_Text_BringCourageToOurBattle:
 	.string "Bring your courage to our battle!$"
 
 BattleFrontier_BattlePyramidTop_Text_BrandonFrontierPassPlease:
-	.string "Brandon: Hahahah! Grand it was!\n"
+	.string "{SPEAKER SPK_BRANDON}Hahahah! Grand it was!\n"
 	.string "Grand, yes, indeed!\p"
 	.string "Well done! You've earned recognition!\n"
 	.string "Your Frontier Pass, please!$"
@@ -283,7 +283,7 @@ BattleFrontier_BattlePyramidTop_Text_LookForwardToNextMeeting:
 	.string "I look forward to our next meeting!$"
 
 BattleFrontier_BattlePyramidTop_Text_BrandonYouveReturned:
-	.string "Brandon: …You've finally returned,\n"
+	.string "{SPEAKER SPK_BRANDON}…You've finally returned,\n"
 	.string "young explorer…\p"
 	.string "Your love of adventure seems to come\n"
 	.string "deep from within your heart…\p"
@@ -306,7 +306,7 @@ BattleFrontier_BattlePyramidTop_Text_EverythingYouHave:
 	.string "I'm braced for it all!$"
 
 BattleFrontier_BattlePyramidTop_Text_BrandonRemarkableHaveThis:
-	.string "Brandon: Hahahah!\n"
+	.string "{SPEAKER SPK_BRANDON}Hahahah!\n"
 	.string "Remarkable!\l"
 	.string "Yes, it's grand, indeed!\p"
 	.string "Young explorer!\p"

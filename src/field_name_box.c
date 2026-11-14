@@ -26,7 +26,7 @@ static EWRAM_DATA const u8 *sSpeakerBeforeText = NULL;
 static EWRAM_DATA bool8 sTextSpeakerActive = FALSE;
 
 // charmap.txt SPK_* bytes are positions in enum SpeakerNames; adding a name means adding its SPK_ line too.
-STATIC_ASSERT(SP_NAME_COUNT == 0x2D, SpeakerNamesMatchCharmapSPK);
+STATIC_ASSERT(SP_NAME_COUNT == 0x34, SpeakerNamesMatchCharmapSPK);
 
 // "{PLAYER} obtained X!" lines are the game talking, not the character. The item scripts hide the name box for
 // them and bring the character's name back afterwards (ENG-NAMEBOX).

@@ -560,7 +560,7 @@ BattleFrontier_BattleArenaBattleRoom_Text_MakeWayForGreta:
 	.string "Make way for Greta!$"
 
 BattleFrontier_BattleArenaBattleRoom_Text_GretaYoureChallenger:
-	.string "Greta: Hey!\n"
+	.string "{SPEAKER SPK_GRETA}Hey!\n"
 	.string "Howdy!\p"
 	.string "…Wait, are you the challenger?$"
 
@@ -581,7 +581,7 @@ BattleFrontier_BattleArenaBattleRoom_Text_IgniteMyPassionForBattle:
 	.string "for battle!$"
 
 BattleFrontier_BattleArenaBattleRoom_Text_GretaYoureToughAfterAll:
-	.string "Greta: Ow, wait a second!\n"
+	.string "{SPEAKER SPK_GRETA}Ow, wait a second!\n"
 	.string "You are tough after all!\p"
 	.string "I like you!\n"
 	.string "Let's see your Frontier Pass.$"
@@ -596,7 +596,7 @@ BattleFrontier_BattleArenaBattleRoom_Text_GoingToBeFunNextTime:
 	.string "I'm looking forward to it!$"
 
 BattleFrontier_BattleArenaBattleRoom_Text_GretaLookingForwardToSeeingAgain:
-	.string "Greta: Hey! Howdy!\n"
+	.string "{SPEAKER SPK_GRETA}Hey! Howdy!\n"
 	.string "You finally won your way up to me!\p"
 	.string "I was getting worried waiting for you!\n"
 	.string "I was really looking forward to seeing\l"
@@ -615,7 +615,7 @@ BattleFrontier_BattleArenaBattleRoom_Text_LetsGetThisStarted:
 	.string "Let's get this started!$"
 
 BattleFrontier_BattleArenaBattleRoom_Text_GretaBlownAway:
-	.string "Greta: Gaaah! Blown away!\n"
+	.string "{SPEAKER SPK_GRETA}Gaaah! Blown away!\n"
 	.string "Let's see your Frontier Pass!$"
 
 BattleFrontier_BattleArenaBattleRoom_Text_GutsSymbolTookGoldenShine:

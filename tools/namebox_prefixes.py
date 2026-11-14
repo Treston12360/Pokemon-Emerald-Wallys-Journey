@@ -22,7 +22,8 @@ NAMES = {
     'Briney': 'BRINEY', 'Mom': 'MOM', 'Archie': 'ARCHIE', 'Maxie': 'MAXIE', 'Wattson': 'WATTSON', 'Wallace': 'WALLACE',
     'Juan': 'JUAN', 'Roxanne': 'ROXANNE', 'Capt. Stern': 'STERN', 'Winona': 'WINONA', 'Flannery': 'FLANNERY',
     'Brawly': 'BRAWLY', 'Mr. Stone': 'MR_STONE', 'Prof. Cozmo': 'COZMO', 'Sidney': 'SIDNEY', 'Phoebe': 'PHOEBE',
-    'Glacia': 'GLACIA', 'Drake': 'DRAKE', 'Tabitha': 'TABITHA', 'Matt': 'MATT', 'Courtney': 'COURTNEY', 'Shelly': 'SHELLY',
+    'Glacia': 'GLACIA', 'Drake': 'DRAKE', 'Anabel': 'ANABEL', 'Lucy': 'LUCY', 'Tucker': 'TUCKER', 'Spenser': 'SPENSER', 'Greta': 'GRETA',
+    'Noland': 'NOLAND', 'Brandon': 'BRANDON', 'Tabitha': 'TABITHA', 'Matt': 'MATT', 'Courtney': 'COURTNEY', 'Shelly': 'SHELLY',
 }
 ALT = '|'.join(re.escape(n) for n in sorted(NAMES, key=len, reverse=True))
 PAGE_START = re.compile(r'^(\s*\.string ")(' + ALT + r'): ')

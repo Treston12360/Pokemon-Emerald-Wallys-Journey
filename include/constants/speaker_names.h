@@ -50,6 +50,14 @@ enum SpeakerNames {
     SP_NAME_COURTNEY,
     SP_NAME_SHELLY,
     SP_NAME_RIVAL,   // May or Brendan, whichever is the player's rival (for texts both rivals share)
+    // Frontier Brains (owner 2026-11-14: yes, they get the box)
+    SP_NAME_ANABEL,
+    SP_NAME_LUCY,
+    SP_NAME_TUCKER,
+    SP_NAME_SPENSER,
+    SP_NAME_GRETA,
+    SP_NAME_NOLAND,
+    SP_NAME_BRANDON,
     SP_NAME_COUNT
 };
 
