@@ -3,6 +3,7 @@
 **Spoiler file.** Owner (Treston) writes/approves everything here before it goes in the game. Status per scene:
 **DRAFT** (waiting for owner) · **APPROVED** (owner OK, not in game yet) · **IN GAME**.
 One `>` line = one text box. Owner edits win; mark what changed. Story source: `docs/KANTO_PROJECT_ARIA.md` §3.
+Owner rule (2026-11-14): **don't keep having people tell the player to rest** — it got repetitive.
 Owner rule (2026-11-14): **American spelling** (color, honor, neighbor, traveler...) — the players are American.
 Owner rule (2026-11-13): longer dialogue is welcome when it makes a scene land; every NPC and trainer gets
 lines that fit who they are.
@@ -245,7 +246,7 @@ tears** — the anomaly Pokémon are simply *there* in the wild, where they don'
 > Remarkable. Truly. Do you know how long I've spent watching these readings from behind a screen?
 > And you closed one on your first day. Samuel was right about you.
 > The data's coming through now. It's... more than I hoped. Much more.
-> Rest a little. Then head on to Cerulean. There've been reports from the city, and I don't like the sound of them.
+> When you're ready, head on to Cerulean. There've been reports from the city, and I don't like the sound of them.
 > Oh, and {PLAYER}... thank you. You have no idea how much this means to me.
 
 **2.6 Blue — on the way out of Mt. Moon (Route 4 exit), scripted**
@@ -333,7 +334,7 @@ excited and hides it. Name below is a placeholder (owner to choose). His team: o
 > Breathing. Speaking. Himself.
 > I've read every theory there is, and every one of them said it couldn't be done.
 > ...Forgive me. A man suffered tonight, and here I am talking about theories. It's been a long night.
-> Get some rest. Misty's Gym is in Cerulean, if you're ready for it. I'll be in touch.
+> Misty's Gym is in Cerulean, if you're ready for it. I'll be in touch.
 - Owner 2026-11-14 (ch. 3): Kiyoshi's last line is "It burns! IT BURNS! AHHHHH!....." **Rule for all scenes:**
   important story lines are said after a battle, back on the map — never only in the battle's defeat text
   (most players skip that).
@@ -374,7 +375,7 @@ and should be scary — the Clefairy's cry building up ("Ar...." → "Ari....").
 > Every tear you close tells ARIA a little more about where the next one will open.
 > It isn't finished. It needs parts — some I can build, some I can't. That's where I could use your help.
 > Old Rocket sites. Meteorite fragments. Things that were never meant to be found again.
-> I'll tell you more when I know what I need. For now... rest. Surge's Gym is just over there.
+> I'll tell you more when I know what I need. Surge's Gym is just over there.
 > And {PLAYER}... the road east, through Rock Tunnel. My readings from that tunnel are strange.
 > Be careful in there.
 
@@ -457,7 +458,6 @@ home (the Volunteer House), not held in the tower.
 > ......
 > I'd like to see the readings with you in person. Come to Celadon — my office is in the city. Blue will be
 > there too; he's been tracking the tower for weeks.
-> Take your time. You've earned a rest.
 
 (Then the report-back in Celadon — design doc §2, Blue: "Like the project", Varnell: "Perhaps it does know..."
 — drafted with chapter 5.)
@@ -502,7 +502,7 @@ with Blue ("Like the project"); Erika; both Snorlax woken with the Poké Flute; 
 > I gave him a desk and something to do with his hands. That's all. He did the rest.
 > He's... he's the closest thing to a son I have left.
 > ...Don't tell him I said that. He'd never let me hear the end of it.
-> Erika's Gym is just down the street. Rest up before you go.
+> Erika's Gym is just down the street.
 
 **5.3 Office staff (talk) — "cagey" (clues that only make sense later)**
 > SCIENTIST: The Director won't let anyone else touch ARIA's settings. Not even me, and I built half the

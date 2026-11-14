@@ -299,8 +299,7 @@ Aria_Ch3_Text_BillAfter::
 Aria_Ch3_Text_Varnell2:: @ PokéNav call (owner 2026-11-14: Varnell talks to you through the PokéNav)
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "{PLAYER}. Are you all\n"
-	.string "right?\p"
+	.string "{PLAYER}. Are you all right?\p"
 	.string "I'm sorry you had to be the one\n"
 	.string "to do that. I mean that.\p"
 	.string "......\p"
@@ -316,9 +315,9 @@ Aria_Ch3_Text_Varnell2:: @ PokéNav call (owner 2026-11-14: Varnell talks to you
 	.string "tonight, and here I am talking\l"
 	.string "about theories. It's been a long\l"
 	.string "night.\p"
-	.string "Get some rest. Misty's Gym is in\n"
-	.string "Cerulean, if you're ready for\l"
-	.string "it. I'll be in touch.\p"
+	.string "Misty's Gym is in Cerulean, if\n"
+	.string "you're ready for it. I'll be in\l"
+	.string "touch.\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
 
