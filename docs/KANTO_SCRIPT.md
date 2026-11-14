@@ -391,3 +391,76 @@ and should be scary — the Clefairy's cry building up ("Ar...." → "Ari....").
 > It almost sounds like... words.
 > It's coming from the Lavender side. Same as the tower. ...I'm not going back in there.
 
+---
+
+## Chapter 4 — Lavender: the crying in the tower  · DRAFT (owner to approve)
+From the design doc: Aria died in Pokémon Tower during Rocket's raid, chasing the Rockets who stole her Clefairy
+(both died; Mr. Fuji was there). Varnell won't enter the tower and sends the player ("the readings need a
+trainer's Pokémon"). His "calibration lens" (does what FireRed's Silph Scope did) reveals the ghost: the
+Clefairy, crying "Aria..." *sniffle*. Fuji's clue: a grieving father who visits a grave with no Pokémon name
+on it. Poké Flute here. Every clue must only make sense looking back. With the Rockets gone, Mr. Fuji is at
+home (the Volunteer House), not held in the tower.
+
+**4.1 Arriving in Lavender — Varnell calls (PokéNav)**
+> VARNELL: {PLAYER}, you made it through. Good. I was worried about that tunnel.
+> The readings from Pokémon Tower have been climbing all week. Whatever was crying in Rock Tunnel... I think
+> it's coming from there.
+> I've had a calibration lens sent ahead to Mr. Fuji at the Volunteer House. With it, ARIA can read what my
+> scanner can't — echoes. Things that stayed behind.
+> I'd come myself, but... the readings need a trainer's Pokémon to take them. Mine would only get in the way.
+> Fuji will explain. Be gentle in there, {PLAYER}. It's a place for the dead.
+
+**4.2 Lavender locals (talk)**
+> WOMAN (Pokémon Center): Everyone in Lavender knows someone who's buried in that tower.
+> Some people say they can hear crying up there at night. ...It's been worse lately.
+> OLD MAN (by the tower): Years ago, when Team Rocket came through, they tore that tower apart.
+> A little girl died up there. Somebody's daughter. Nobody here ever learned her name.
+> They never caught the ones who did it, either.
+> LITTLE GIRL: Mommy says not to go in the tower. She says there's a girl in there who's still looking for
+> her friend.
+
+**4.3 Mr. Fuji — the Volunteer House**
+> MR. FUJI: Ah. You must be the young trainer Dr. Varnell spoke of. Please, come in.
+> He sent this for you. A lens of some kind. He was very particular that it reach you, and no one else.
+> {PLAYER} received the CALIBRATION LENS!
+> MR. FUJI: ......
+> I was in the tower, you know. The day Team Rocket came.
+> I have spent many years since trying to give the Pokémon in this house what I couldn't give the ones I
+> lost that day.
+> There is a man who comes to the tower sometimes. Late, when no one is there.
+> He stands at a grave with no Pokémon's name on it. He never says a word. He never stays long.
+> I have never asked him whose it is. Some grief is not meant to be asked about.
+> ...Forgive an old man. Go on. Whatever is crying up there has been crying a very long time.
+
+**4.4 Pokémon Tower, top floor — the echo (scripted; the lens reveals it)**
+> (A shape at the end of the room. The air is cold.)
+> (The Calibration Lens hums.)
+> (The shape becomes a Clefairy, small and see-through, curled beside a grave.)
+> CLEFAIRY: Aria...?
+> ...Aria...
+> *sniffle*
+> (It looks up at you. For a moment it looks like it's waiting for someone else.)
+> (Then it fades, little by little, into the cold air.)
+> (The Rift Scanner reads... then goes quiet.)
+
+**4.5 Mr. Fuji, after — the Poké Flute**
+> MR. FUJI: The crying stopped. I heard it stop, all the way down here.
+> ......Thank you. I think it was waiting for someone who was never going to come.
+> Take this. It wakes even the deepest sleeper. There are two Snorlax blocking the roads south and west of
+> here — the whole region has been waiting on them.
+> {PLAYER} received the POKé FLUTE!
+
+**4.6 Varnell calls (PokéNav)**
+> VARNELL: {PLAYER}. The lens sent everything through. ...Everything.
+> ......
+> I'd like to see the readings with you in person. Come to Celadon — my office is in the city. Blue will be
+> there too; he's been tracking the tower for weeks.
+> Take your time. You've earned a rest.
+
+(Then the report-back in Celadon — design doc §2, Blue: "Like the project", Varnell: "Perhaps it does know..."
+— drafted with chapter 5.)
+
+Notes for the owner: the Calibration Lens would be a new key item that does what the Silph Scope did (ghosts
+in the tower can be seen and fought). The Clefairy echo sits on the top floor where FireRed had Mr. Fuji and
+the Rockets.
+
