@@ -2441,6 +2441,9 @@
 #define FLAG_WORLD_MAP_SEVEN_ISLAND_SEVAULT_CANYON_TANOBY_KEY       (KANTO_FLAGS_START + 0x2C8)
 #define FLAG_WORLD_MAP_BIRTH_ISLAND_EXTERIOR                        (KANTO_FLAGS_START + 0x2C9)
 
+// Project ARIA story flags (Kanto flag space, 0x2F0 up; free in FireRed)
+#define FLAG_ARIA_TEAR_MT_MOON_SEALED                               (KANTO_FLAGS_START + 0x2F0)
+
 #endif
 
 #if TESTING

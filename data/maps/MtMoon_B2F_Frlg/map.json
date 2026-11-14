@@ -172,6 +172,21 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "MtMoon_B2F_EventScript_ItemAntidote",
       "flag": "FLAG_HIDE_MT_MOON_B2F_ANTIDOTE"
+    },
+    {
+      "local_id": "LOCALID_MT_MOON_B2F_TEAR",
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ARIA_TEAR",
+      "x": 37,
+      "y": 22,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Aria_Ch2_Tear",
+      "flag": "FLAG_ARIA_TEAR_MT_MOON_SEALED"
     }
   ],
   "warp_events": [

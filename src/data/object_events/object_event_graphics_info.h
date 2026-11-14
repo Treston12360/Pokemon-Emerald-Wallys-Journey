@@ -5400,6 +5400,26 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Varnell = {
     .affineAnims = gDummySpriteAffineAnimTable,
 };
 
+// Project ARIA: a tear. 64x64 frame, the 48x48 tear sits bottom-centred: placed on a tile, it covers that
+// tile's column -1..+1 and rows -2..0 (so put the object on the bottom-middle tile of the 3x3).
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AriaTear = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_ARIA_TEAR,
+    .reflectionPaletteTag = OBJ_EVENT_PAL_TAG_NONE,
+    .size = 2048,
+    .width = 64,
+    .height = 64,
+    .paletteSlot = PALSLOT_NPC_SPECIAL,
+    .shadowSize = SHADOW_SIZE_M,
+    .inanimate = TRUE,
+    .compressed = FALSE,
+    .tracks = TRACKS_NONE,
+    .oam = &gObjectEventBaseOam_64x64,
+    .subspriteTables = sOamTables_64x64,
+    .anims = sAnimTable_Inanimate,
+    .images = sPicTable_AriaTear,
+};
+
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GentlemanFrlg = {
     .tileTag = TAG_NONE,
     .paletteTag = OBJ_EVENT_PAL_TAG_NPC_WHITE,

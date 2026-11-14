@@ -559,6 +559,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Seagallop,             OBJ_EVENT_PAL_TAG_SEAGALLOP},
 #endif // IS_FRLG
     {gObjectEventPal_Varnell,               OBJ_EVENT_PAL_TAG_VARNELL}, // Project ARIA
+    {gObjectEventPal_AriaTear,              OBJ_EVENT_PAL_TAG_ARIA_TEAR}, // Project ARIA
 #if OW_FOLLOWERS_POKEBALLS
     {gObjectEventPal_MasterBall,            OBJ_EVENT_PAL_TAG_BALL_MASTER},
     {gObjectEventPal_UltraBall,             OBJ_EVENT_PAL_TAG_BALL_ULTRA},

@@ -357,3 +357,8 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   recoloured Deoxys triangle was rejected): Emerald's cracked-floor and hole tiles recoloured — purple glowing
   cracks around a dark void, soft violet glow. Plan: a 48×48 object sprite built from those tiles (own palette),
   so it can be placed in any map and removed when sealed. (Wavy shimmer in the 3rd panel: owner to say.)
+- 2026-11-14 (owner): **Where tears go:** use spots FireRed players never really got to explore, and places that
+  need a new purpose now the Rockets are gone (old Rocket spots in Mt. Moon, the Rocket Hideout, etc.).
+  Each tear sits on open floor, is solid (3×3, you can't walk onto it — it's a sprite, not a cracked floor you
+  fall through), and gets an in-game screenshot for the owner.
+

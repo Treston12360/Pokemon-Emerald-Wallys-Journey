@@ -1,4 +1,5 @@
 MtMoon_B2F_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, Aria_Ch2_MtMoonOnLoad @ Project ARIA: the tear's 3x3 is solid
 	map_script MAP_SCRIPT_ON_TRANSITION, MtMoon_B2F_OnTransition
 	.byte 0
 
