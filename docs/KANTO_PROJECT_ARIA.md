@@ -353,4 +353,7 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   the world** — no "random fact + battle!" filler. Use trainers and NPCs to explain and tie together things
   FireRed left unexplained. **Longer dialogue is welcome** when it makes a scene more impactful.
 - 2026-11-13 (owner): Lt. Surge stays the 3rd Gym; the player reaches Vermilion on foot as in FireRed (ch. 3b).
-
+- 2026-11-14 (owner): **How a tear looks** — chosen from mock-ups (`docs/aria_tear_mockup.png`, 2nd try; the
+  recoloured Deoxys triangle was rejected): Emerald's cracked-floor and hole tiles recoloured — purple glowing
+  cracks around a dark void, soft violet glow. Plan: a 48×48 object sprite built from those tiles (own palette),
+  so it can be placed in any map and removed when sealed. (Wavy shimmer in the 3rd panel: owner to say.)
