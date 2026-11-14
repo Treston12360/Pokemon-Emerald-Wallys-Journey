@@ -5,6 +5,7 @@
 struct AudioCGB gb;
 float soundChannelPos[4];
 extern u8 gCgbMuteMask; // mp3_glue.c
+extern float gCgbGain[4]; // mp3_glue.c, POL-29 music/sound volume
 const s16 *PU1Table;
 const s16 *PU2Table;
 u32 apuFrame;
@@ -207,16 +208,16 @@ void cgb_audio_generate(u16 samplesPerFrame){
         float outputR = 0;
         if(REG_NR52 & 0x80){
             if((gb.DAC[0]) && (REG_NR52 & 0x01)){
-                if(nr51 & 0x10) outputL += gb.Vol[0] * PU1Table[(int)(soundChannelPos[0])] / 15.0f;
-                if(nr51 & 0x01) outputR += gb.Vol[0] * PU1Table[(int)(soundChannelPos[0])] / 15.0f;
+                if(nr51 & 0x10) outputL += gCgbGain[0] * gb.Vol[0] * PU1Table[(int)(soundChannelPos[0])] / 15.0f;
+                if(nr51 & 0x01) outputR += gCgbGain[0] * gb.Vol[0] * PU1Table[(int)(soundChannelPos[0])] / 15.0f;
             }
             if((gb.DAC[1]) && (REG_NR52 & 0x02)){
-                if(nr51 & 0x20) outputL += gb.Vol[1] * PU2Table[(int)(soundChannelPos[1])] / 15.0f;
-                if(nr51 & 0x02) outputR += gb.Vol[1] * PU2Table[(int)(soundChannelPos[1])] / 15.0f;
+                if(nr51 & 0x20) outputL += gCgbGain[1] * gb.Vol[1] * PU2Table[(int)(soundChannelPos[1])] / 15.0f;
+                if(nr51 & 0x02) outputR += gCgbGain[1] * gb.Vol[1] * PU2Table[(int)(soundChannelPos[1])] / 15.0f;
             }
             if((REG_NR30 & 0x80) && (REG_NR52 & 0x04)){
-                if(nr51 & 0x40) outputL += gb.Vol[2] * gb.WAVRAM[(int)(soundChannelPos[2])] / 4.0f;
-                if(nr51 & 0x04) outputR += gb.Vol[2] * gb.WAVRAM[(int)(soundChannelPos[2])] / 4.0f;
+                if(nr51 & 0x40) outputL += gCgbGain[2] * gb.Vol[2] * gb.WAVRAM[(int)(soundChannelPos[2])] / 4.0f;
+                if(nr51 & 0x04) outputR += gCgbGain[2] * gb.Vol[2] * gb.WAVRAM[(int)(soundChannelPos[2])] / 4.0f;
             }
             if((gb.DAC[3]) && (REG_NR52 & 0x08)){
                 bool32 lfsrMode = ((REG_NR43 & 0x08) == 8);
@@ -244,8 +245,8 @@ void cgb_audio_generate(u16 samplesPerFrame){
                 }
                 float sample = ch4Out;
                 if(avgDiv > 1) sample /= avgDiv;
-                if(nr51 & 0x80) outputL += gb.Vol[3] * sample / 15.0f;
-                if(nr51 & 0x08) outputR += gb.Vol[3] * sample / 15.0f;
+                if(nr51 & 0x80) outputL += gCgbGain[3] * gb.Vol[3] * sample / 15.0f;
+                if(nr51 & 0x08) outputR += gCgbGain[3] * gb.Vol[3] * sample / 15.0f;
             }
         }
         outBuffer[0] = outputL / 4.0f;

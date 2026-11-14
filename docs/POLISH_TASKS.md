@@ -85,8 +85,19 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
       not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
 - [ ] **POL-28. Petalburg Woods black lines.** "Bunch of black lines inside of petalburg woods."
-- [~] **POL-29. Separate music and gameplay volume.** (Claude 019khs4X, 2026-11-14, in work) "Add a feature in the volume setting to differentiate music
-      volume and gameplay volume incase you want to turn off music but keep gameplay audio."
+- [x] **POL-29. Separate music and gameplay volume.** "Add a feature in the volume setting to differentiate music
+      volume and gameplay volume incase you want to turn off music but keep gameplay audio." Done 2026-11-14
+      (Claude 019khs4X); picture for Brennan: `docs/polish_reports/POL-29_music_sound_volume.png`.
+      - Settings > Audio now has **Volume** (main, as before), **Music volume** and **Sound volume** (0-10 each,
+        saved as `musicVolume=` / `soundVolume=` in `WallysJourney.cfg`, default 10). Music = whatever a music
+        player is playing as a MUS_ song (background music, fanfares, MP3 replacements); sound = sound effects and
+        Pokémon cries. Music/sound volume x main Volume.
+      - Code: `include/platform.h` (2 settings), `src/platform/sdl2.c` (defaults, cfg), `src/option_menu.c` (2 rows),
+        `src/platform/mp3_glue.c` (`Audio_ChannelGain`, per-player music check, GB channel gains),
+        `src/platform/sound_mixer.c` (gain per DirectSound channel), `src/platform/cgb_audio.c` (`gCgbGain`).
+      - Tested (Linux build, audio dump): music 0 / sound 10 -> silent except the menu sounds; music 10 / sound 0
+        -> the town music with no menu sounds; both 10 -> same as before. The rows change and save (`musicVolume=7`).
+      - Not tested in the Windows exe yet (same code).
 
 - [ ] **POL-30. Backdrop changes between routes, everywhere** (Brennan, 2026-11-14, later the same day): "Also fix
       the background in every route as it is changing from one background to the other when going to and from

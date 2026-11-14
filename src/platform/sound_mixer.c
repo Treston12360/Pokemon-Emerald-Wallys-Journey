@@ -250,6 +250,18 @@ static inline void GenerateAudio(struct SoundMixerState *mixer, struct MixerSour
     s8 *current = chan->current;
     signed envR = chan->envelopeVolR;
     signed envL = chan->envelopeVolL;
+#ifdef PORTABLE
+    {
+        // POL-29: music volume / sound volume
+        extern float Audio_ChannelGain(const struct MixerSource *chan);
+        float gain = Audio_ChannelGain(chan);
+        if (gain < 1.0f)
+        {
+            envR = (signed)(envR * gain);
+            envL = (signed)(envL * gain);
+        }
+    }
+#endif
 #ifdef POKEMON_EXTENSIONS
     if (chan->type & 0x30) {
         GeneratePokemonSampleAudio(mixer, chan, current, outBuffer, samplesPerFrame, sampleRateReciprocal, samplesLeftInWav, envR, envL, loopLen);

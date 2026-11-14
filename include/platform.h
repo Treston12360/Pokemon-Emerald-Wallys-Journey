@@ -48,6 +48,8 @@ enum PlatformSetting
     PLATFORM_SETTING_WORLD3D,    // 3D overworld on/off ("world3d" in the cfg); kept by sdl2.c, not in the array
     PLATFORM_SETTING_BATTLE3D,   // 3D battle scenery on/off ("battle3d" in the cfg); kept by sdl2.c (DLX-5)
     PLATFORM_SETTING_GAMMALIGHT, // Gamma Emerald's lighting, 2D and 3D ("gammaLight" in the cfg); kept by sdl2.c (DLX-9)
+    PLATFORM_SETTING_MUSIC_VOLUME, // POL-29: music only, 0-10 ("musicVolume"); multiplied with the main Volume
+    PLATFORM_SETTING_SOUND_VOLUME, // POL-29: sound effects + cries, 0-10 ("soundVolume"); multiplied with the main Volume
     PLATFORM_SETTING_COUNT,
 };
 

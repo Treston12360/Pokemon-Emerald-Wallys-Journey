@@ -133,6 +133,8 @@ static u8 sPlatformSettings[PLATFORM_SETTING_COUNT] = {
     [PLATFORM_SETTING_VSYNC] = 1,
     [PLATFORM_SETTING_BORDER] = 1,
     [PLATFORM_SETTING_VOLUME] = 10,
+    [PLATFORM_SETTING_MUSIC_VOLUME] = 10,
+    [PLATFORM_SETTING_SOUND_VOLUME] = 10,
     [PLATFORM_SETTING_FF_SPEED] = 2,
     [PLATFORM_SETTING_FF_TOGGLE] = 0,
     [PLATFORM_SETTING_PAD_A] = PAD_BUTTON_A,
@@ -1532,6 +1534,10 @@ static void ReadConfigFile(void)
             sPlatformSettings[PLATFORM_SETTING_BORDER] = value != 0;
         else if (sscanf(line, "volume=%u", &value) == 1 && value <= 10)
             sPlatformSettings[PLATFORM_SETTING_VOLUME] = value;
+        else if (sscanf(line, "musicVolume=%u", &value) == 1 && value <= 10)
+            sPlatformSettings[PLATFORM_SETTING_MUSIC_VOLUME] = value;
+        else if (sscanf(line, "soundVolume=%u", &value) == 1 && value <= 10)
+            sPlatformSettings[PLATFORM_SETTING_SOUND_VOLUME] = value;
         else if (sscanf(line, "fastForward=%u", &value) == 1 && value < FF_SPEED_COUNT)
             sPlatformSettings[PLATFORM_SETTING_FF_SPEED] = value;
         else if (sscanf(line, "world3d=%u", &value) == 1)
@@ -1615,6 +1621,8 @@ static void StoreConfigFile(void)
     fprintf(configFile, "vsync=%u\n", sPlatformSettings[PLATFORM_SETTING_VSYNC]);
     fprintf(configFile, "border=%u\n", sPlatformSettings[PLATFORM_SETTING_BORDER]);
     fprintf(configFile, "volume=%u\n", sPlatformSettings[PLATFORM_SETTING_VOLUME]);
+    fprintf(configFile, "musicVolume=%u\n", sPlatformSettings[PLATFORM_SETTING_MUSIC_VOLUME]);
+    fprintf(configFile, "soundVolume=%u\n", sPlatformSettings[PLATFORM_SETTING_SOUND_VOLUME]);
     fprintf(configFile, "fastForward=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_SPEED]);
     fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
     fprintf(configFile, "world3d=%u\n", s3DWanted ? 1 : 0);

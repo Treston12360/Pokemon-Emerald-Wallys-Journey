@@ -9,11 +9,19 @@
 #include "sound_mixer.h"
 #include "mp3_music.h"
 #include "mp3_song_names.h"
+#include "platform.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_BGM;
 extern struct MusicPlayerTrack gMPlayTrack_BGM[10];
 
 u8 gCgbMuteMask; // read by cgb_audio_generate: bit i set = GB channel i+1 is silent
+float gCgbGain[4] = {1, 1, 1, 1}; // POL-29: music or sound volume of each GB channel this frame
+
+// POL-29 (Brennan, 2026-11-14): "differentiate music volume and gameplay volume in case you want to turn off music
+// but keep gameplay audio". A channel is music when its music player is playing a MUS_ song (background music
+// and fanfares); everything else (sound effects, cries) is sound. The main Volume still scales both, in sdl2.c.
+static float sMusicGain = 1, sSoundGain = 1;
+static bool8 sPlayerIsMusic[8];
 
 static const struct SongHeader *sLastHeader;
 static bool8 sMp3On;
@@ -27,6 +35,25 @@ static int FindSong(const struct SongHeader *header)
             return n;
     }
     return -1;
+}
+
+static bool32 IsMusicTrack(const void *track)
+{
+    const u8 *t = track;
+    u32 p;
+    for (p = 0; p < NUM_MUSIC_PLAYERS && p < ARRAY_COUNT(sPlayerIsMusic); p++)
+    {
+        const u8 *first = (const u8 *)gMPlayTable[p].track;
+        if (t >= first && t < first + gMPlayTable[p].numTracks * sizeof(struct MusicPlayerTrack))
+            return sPlayerIsMusic[p];
+    }
+    return FALSE; // cries and anything else: sound
+}
+
+// SampleMixer: volume factor for one DirectSound channel
+float Audio_ChannelGain(const struct MixerSource *chan)
+{
+    return IsMusicTrack(chan->track) ? sMusicGain : sSoundGain;
 }
 
 static bool32 IsBgmTrack(const void *track)
@@ -49,14 +76,25 @@ void Mp3Glue_BeforeMix(struct SoundMixerState *mixer)
         if (!sMp3On)
             Mp3Music_Stop();
     }
-    gCgbMuteMask = 0;
-    if (sMp3On && mixer->cgbChans != NULL)
+    sMusicGain = Platform_GetSetting(PLATFORM_SETTING_MUSIC_VOLUME) / 10.0f;
+    sSoundGain = Platform_GetSetting(PLATFORM_SETTING_SOUND_VOLUME) / 10.0f;
+    for (i = 0; i < NUM_MUSIC_PLAYERS && i < ARRAY_COUNT(sPlayerIsMusic); i++)
     {
-        for (i = 0; i < 4; i++)
-        {
-            if (IsBgmTrack(mixer->cgbChans[i].track))
-                gCgbMuteMask |= 1 << i;
-        }
+        const struct SongHeader *h = gMPlayTable[i].info->songHeader;
+        if (h == NULL)
+            sPlayerIsMusic[i] = FALSE;
+        else if (i == 0)
+            sPlayerIsMusic[i] = TRUE; // the background music player
+        else
+            sPlayerIsMusic[i] = FindSong(h) >= 0; // a MUS_ song (fanfare) on another player
+    }
+    gCgbMuteMask = 0;
+    for (i = 0; i < 4; i++)
+    {
+        const void *track = mixer->cgbChans != NULL ? mixer->cgbChans[i].track : NULL;
+        gCgbGain[i] = (track != NULL && !IsMusicTrack(track)) ? sSoundGain : sMusicGain;
+        if (sMp3On && track != NULL && IsBgmTrack(track))
+            gCgbMuteMask |= 1 << i;
     }
 }
 
@@ -92,5 +130,5 @@ void Mp3Glue_AddToFrame(float *out, s32 frames)
     }
     if (vol > 1.0f)
         vol = 1.0f;
-    Mp3Music_Mix(out, frames, 42048, vol);
+    Mp3Music_Mix(out, frames, 42048, vol * sMusicGain);
 }

@@ -89,7 +89,9 @@ enum
     MENUITEM_PC_WORLD3D, // DLX-6
     MENUITEM_PC_BATTLE3D, // DLX-5
     MENUITEM_PC_GAMMALIGHT, // DLX-9
-    MENUITEM_PC_LAST = MENUITEM_PC_GAMMALIGHT,
+    MENUITEM_PC_MUSICVOL, // POL-29
+    MENUITEM_PC_SOUNDVOL, // POL-29
+    MENUITEM_PC_LAST = MENUITEM_PC_SOUNDVOL,
     // Keyboard keys (enum KeyBind order): A opens "Press a key".
     MENUITEM_PC_KEY_FIRST,
     MENUITEM_PC_KEY_LAST = MENUITEM_PC_KEY_FIRST + KEYBIND_COUNT - 1,
@@ -252,6 +254,8 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_PC_FULLSCREEN] = COMPOUND_STRING("Fullscreen"),
     [MENUITEM_PC_SHARP]      = COMPOUND_STRING("Integer scaling"),
     [MENUITEM_PC_VOLUME]     = COMPOUND_STRING("Volume"),
+    [MENUITEM_PC_MUSICVOL]   = COMPOUND_STRING("Music volume"),
+    [MENUITEM_PC_SOUNDVOL]   = COMPOUND_STRING("Sound volume"),
     [MENUITEM_PC_FFSPEED]    = COMPOUND_STRING("Fast forward"),
     [MENUITEM_PC_FFTOGGLE]   = COMPOUND_STRING("Fast fwd button"),
     [MENUITEM_PC_PAD_A]      = COMPOUND_STRING("Pad A"),
@@ -620,6 +624,8 @@ static void Task_OptionMenuProcessInput(u8 taskId)
         case MENUITEM_PC_FULLSCREEN:
         case MENUITEM_PC_SHARP:
         case MENUITEM_PC_VOLUME:
+        case MENUITEM_PC_MUSICVOL:
+        case MENUITEM_PC_SOUNDVOL:
         case MENUITEM_PC_FFSPEED:
         case MENUITEM_PC_FFTOGGLE:
         case MENUITEM_PC_PAD_A:
@@ -1169,12 +1175,14 @@ static const u8 sPcRowSetting[] =
     [MENUITEM_PC_WORLD3D    - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_WORLD3D,
     [MENUITEM_PC_BATTLE3D   - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_BATTLE3D,
     [MENUITEM_PC_GAMMALIGHT - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_GAMMALIGHT,
+    [MENUITEM_PC_MUSICVOL   - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_MUSIC_VOLUME,
+    [MENUITEM_PC_SOUNDVOL   - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_SOUND_VOLUME,
 };
 #define PAD_MAX (PAD_BUTTON_COUNT - 1)
 static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                               0, 0, 0, 0, 0, 0, 0, 0, 0};
+                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static const u8 sPcRowMax[] = {12, 1, 1, 10, FF_SPEED_COUNT - 1, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1, FRAME_RATE_COUNT - 1, 2,
-                               1, 1, 1, 1, 4, 7, 1, 1, 1}; // lock aspect, bilinear, interframe, lock frame, resolution, zoom, 3D world, 3D battles, Gamma lighting
+                               1, 1, 1, 1, 4, 7, 1, 1, 1, 10, 10}; // lock aspect, bilinear, interframe, lock frame, resolution, zoom, 3D world, 3D battles, Gamma lighting, music volume, sound volume
 
 static void PcOption_ProcessInput(u8 item)
 {
@@ -1183,7 +1191,7 @@ static void PcOption_ProcessInput(u8 item)
     s32 old = value;
 
     // Volume stops at 0 and 10; the other rows (fast forward 20x -> 2x too, owner request) wrap around.
-    bool32 wrap = (item != MENUITEM_PC_VOLUME);
+    bool32 wrap = (item != MENUITEM_PC_VOLUME && item != MENUITEM_PC_MUSICVOL && item != MENUITEM_PC_SOUNDVOL);
     if (JOY_REPEAT(DPAD_RIGHT))
         value = (value < sPcRowMax[row]) ? value + 1 : (wrap ? sPcRowMin[row] : value);
     else if (JOY_REPEAT(DPAD_LEFT))
@@ -1231,6 +1239,8 @@ static void PcOption_Draw(u8 item)
         StringCopy(end, (value ? gText_BattleSceneOn : gText_BattleSceneOff) + 6);
         break;
     case MENUITEM_PC_VOLUME:
+    case MENUITEM_PC_MUSICVOL:
+    case MENUITEM_PC_SOUNDVOL:
         ConvertIntToDecimalStringN(end, value, STR_CONV_MODE_LEFT_ALIGN, 2);
         break;
     case MENUITEM_PC_FFSPEED: // 2x, 4x ... 20x
@@ -1283,7 +1293,7 @@ static const u8 sPcSectionGameplay[] = {MENUITEM_TEXTSPEED, MENUITEM_BATTLESCENE
     MENUITEM_ZMOVES, MENUITEM_WILDMONS, MENUITEM_NUZLOCKE, MENUITEM_LEVELCAP, MENUITEM_QUICKCATCH};
 static const u8 sPcSectionControls[] = {MENUITEM_BUTTONMODE, MENUITEM_PC_PAD_A, MENUITEM_PC_PAD_B, MENUITEM_PC_PAD_START,
     MENUITEM_PC_PAD_SELECT, MENUITEM_PC_PAD_L, MENUITEM_PC_PAD_R, MENUITEM_PC_PAD_FF};
-static const u8 sPcSectionAudio[] = {MENUITEM_SOUND, MENUITEM_PC_VOLUME};
+static const u8 sPcSectionAudio[] = {MENUITEM_SOUND, MENUITEM_PC_VOLUME, MENUITEM_PC_MUSICVOL, MENUITEM_PC_SOUNDVOL};
 static const u8 sPcSectionVideo[] = {MENUITEM_PC_WINDOWSIZE, MENUITEM_PC_FULLSCREEN, MENUITEM_PC_RESOLUTION, MENUITEM_PC_ZOOM,
     MENUITEM_PC_LOCKASPECT, MENUITEM_PC_SHARP, MENUITEM_PC_BILINEAR, MENUITEM_PC_INTERFRAME, MENUITEM_PC_LOCKFRAME,
     MENUITEM_PC_WIDESCREEN, MENUITEM_PC_SMOOTH, MENUITEM_PC_FILTER, MENUITEM_PC_WORLD3D, MENUITEM_PC_BATTLE3D, MENUITEM_PC_GAMMALIGHT};
