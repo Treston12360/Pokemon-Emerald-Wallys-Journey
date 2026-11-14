@@ -100,5 +100,11 @@ but there are **no GBA limits and no 3DS limits** of any kind: save size, flags,
 sectors, tiles, palettes, VRAM, sprites, vertex budgets, ROM size — none of them apply. Make anything as big
 as it needs to be. The ONE hard rule: old GBA saves (.sav from the ROM hack) must still import into the PC
 game. Saving back to GBA format is NOT needed. Never squeeze a feature to fit an old limit; if any doc says
-otherwise, it is wrong — fix the doc. (Porting *from* the 3DS/Gamma/FRLG references still applies: copy how
+otherwise, it is wrong — fix the doc.
+**Treston, 2026-11-13 (repeated):** "we are not limited to GBA restrictions under any circumstance. If there's ever
+a restriction, we are allowed to change it and remove the restriction." Examples of limits we may remove whenever it
+makes the game better for the update being worked on: sprite limits, colour/palette limits, space, memory, save
+size, number of PC boxes, bag size, NPC counts, tile/VRAM limits. (Examples only — not a list of changes to make.)
+If you hit a limit, the answer is to remove or raise it, not to work around it. The **only** requirement: old `.sav`
+files from the GBA days must still import into the game. (Porting *from* the 3DS/Gamma/FRLG references still applies: copy how
 they look and work, not their hardware limits.)
