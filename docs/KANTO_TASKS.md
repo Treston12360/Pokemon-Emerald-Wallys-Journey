@@ -117,10 +117,10 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 
 ## Phase 2 — Story (see `docs/KANTO_PROJECT_ARIA.md` chapters)
 
-- [ ] **S0. Remove FRLG's own story start** WIP (Claude session 019khs4X, 2026-11-13 19:25) (Oak's parcel, rival intro etc.) where it conflicts.
-- [ ] **S1. Chapter 0 — the call:** Mom → Birch → S.S. Anne ticket; Wally's send-off at Slateport.
-- [ ] **S2. Chapter 0b — arrival:** S.S. Anne to Vermilion, fade to black, Oak's lab in Pallet.
-- [ ] **S3. Chapter 1 — the investigation team:** Oak, Varnell, Blue; first assignment (Mt. Moon).
+- [x] **S0. Remove FRLG's own story start** (done 2026-11-14, steps 1-5 in `data/scripts/aria_kanto_start.inc`, log `docs/KANTO_S0_STRIPPED.md`) (Oak's parcel, rival intro etc.) where it conflicts.
+- [x] **S1. Chapter 0 — the call:** Mom → Birch → S.S. Anne ticket; Wally's send-off at Slateport.
+- [x] **S2. Chapter 0b — arrival:** S.S. Anne to Vermilion, fade to black, Oak's lab in Pallet.
+- [x] **S3. Chapter 1 — the investigation team:** Oak, Varnell, Blue; first assignment (Mt. Moon).
 - [x] **S-HM. Kanto HM licenses** (2026-11-14): Kanto badges are now their own flags (`FLAG_KANTO_BADGE01..08_GET`,
       FireRed's gym scripts set them — before this they set Hoenn's badge flags, which a post-game save already had).
       `src/field_move.c` HasBadgeForFieldMove: in Kanto maps each field move needs FireRed's badge for it (Flash Boulder,
@@ -129,7 +129,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       Old notes: (owner 2026-11-14: Rock Tunnel needs Flash — the player must have a way to get
       Flash from a Kanto Gym Leader before ch. 3b; Brock's badge allows Flash in FireRed.) on Kanto maps, Cut/Surf/Strength/Rock Smash/Waterfall/Flash/Dive need the Kanto
       badge from the Gym Leader who gives that HM (FireRed's badge→HM table); Fly always works; Hoenn unchanged.
-- [ ] **S-LEAGUE. Kanto League lineup** (already decided, design doc §1): Viridian Gym leader Giovanni → **Blue**
+- [x] **S-LEAGUE. Kanto League lineup** (already decided, design doc §1): Viridian Gym leader Giovanni → **Blue**
       (8th badge, ch. 10); Fuchsia → **Janine**; Elite Four (owner 2026-11-14): **Lorelei, Bruno, Agatha, Koga** (Koga in Lance's room);
       **Lance = Champion** in the Champion's room (replaces FireRed's Blue there). Giovanni is hidden only in the Rocket Hideout (S0 step 2); the Viridian Gym and Champion's room
       objects are untouched until this task. Mt. Moon: fossils kept (ch. 2) — Miguel's fossil scene stays.
@@ -157,7 +157,8 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 - [ ] **S-BLOCK. Road blocks** from `docs/KANTO_PROJECT_ARIA.md` §4 (after the owner confirms the table).
 - [ ] **S-TALK. New dialogue for every Kanto NPC and trainer** (owner: each trainer unique and believable, Gym
       Leaders with their own story, longer is fine). Drafts go in `docs/KANTO_SCRIPT.md` for approval first.
-- [ ] S4+. Remaining chapters, one task each, added as they're reached.
+- [x] Ch. 2, 3, 3b, 4 in game (2026-11-14). Script: `docs/KANTO_SCRIPT.md` (status per chapter).
+- [ ] Ch. 5 (Celadon office — new building, show owner a picture first), then ch. 6+.
 
 ## Phase 3 — Levels and balance
 
