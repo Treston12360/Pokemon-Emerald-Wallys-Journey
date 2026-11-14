@@ -880,7 +880,9 @@ static void SetDataFromTrainerCard(void)
     if (sData->trainerCard.battleTowerWins || sData->trainerCard.battleTowerStraightWins)
         sData->hasBattleTowerWins++;
 
-    for (i = 0, badgeFlag = FLAG_BADGE01_GET; badgeFlag < FLAG_BADGE01_GET + NUM_BADGES; badgeFlag++, i++)
+    // Project ARIA: in Kanto your own card is the Kanto (FireRed) card and shows the Kanto badges.
+    u16 firstBadge = (!sData->isLink && IN_KANTO_MAP) ? FLAG_KANTO_BADGE01_GET : FLAG_BADGE01_GET;
+    for (i = 0, badgeFlag = firstBadge; badgeFlag < firstBadge + NUM_BADGES; badgeFlag++, i++)
     {
         if (FlagGet(badgeFlag))
             sData->badgeCount[i]++;
@@ -1950,6 +1952,11 @@ static u8 GetSetCardType(void)
     }
     else
     {
+        if (!sData->isLink && IN_KANTO_MAP) // Project ARIA: Kanto card (and Kanto badges) while in Kanto
+        {
+            sData->isHoenn = FALSE;
+            return CARD_TYPE_FRLG;
+        }
         if (sData->trainerCard.version == VERSION_FIRE_RED || sData->trainerCard.version == VERSION_LEAF_GREEN)
         {
             sData->isHoenn = FALSE;
@@ -1992,8 +1999,10 @@ static void CreateTrainerCardTrainerPic(void)
     else
     {
         // Wally's Journey: your own card shows your outfit.
-        CreateTrainerCardTrainerPicSprite((WJ_OWN_HOENN_CARD && WJ_OutfitActive()) ? TRAINER_PIC_WJ_PLAYER
-                                          : FacilityClassToPicIndex(sTrainerPicFacilityClass[sData->cardType][sData->trainerCard.gender]),
+        // Project ARIA: your own Kanto card (shown in Kanto) still shows you, not Red/Leaf.
+        bool32 ownCard = !sData->isLink;
+        CreateTrainerCardTrainerPicSprite((ownCard && WJ_OutfitActive()) ? TRAINER_PIC_WJ_PLAYER
+                                          : FacilityClassToPicIndex(sTrainerPicFacilityClass[ownCard ? CARD_TYPE_EMERALD : sData->cardType][sData->trainerCard.gender]),
                     TRUE,
                     sTrainerPicOffset[sData->isHoenn][sData->trainerCard.gender][0],
                     sTrainerPicOffset[sData->isHoenn][sData->trainerCard.gender][1],
