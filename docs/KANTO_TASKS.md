@@ -94,7 +94,9 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       map → R shows Kanto (Pallet Town) → L back to Hoenn; R then A on Pallet Town flies there. Test-script command
       `flymap` opens the Fly map from the field. Not done: no on-screen hint that L/R switch (wording/visual — ask
       the owner first).
-- [ ] **K7. Kanto in 3D.** PAUSED 2026-11-13 (owner: story first, then 3D). Also done: `voxel_cells.py` reads FireRed's 32-bit attributes and 640 split (`split_for`, `read_attr16`), water lookups in relief fixes / buildings too. Done so far: the 3DS generators' map reader
+- [ ] **K7. Kanto in 3D.** Seen 2026-11-14 (Windows build, 3D): Oak's lab shows the three starter Poké Balls on the
+      table in 3D although their objects are hidden (2D is right) — check the 3D entity code honours hide flags.
+       PAUSED 2026-11-13 (owner: story first, then 3D). Also done: `voxel_cells.py` reads FireRed's 32-bit attributes and 640 split (`split_for`, `read_attr16`), water lookups in relief fixes / buildings too. Done so far: the 3DS generators' map reader
       reads FireRed layouts (`layout_version: frlg` → 640/640 split, 7 palettes, `*_frlg` tileset folders;
       `voxel_building.py` LayoutArt, `dump_region_art.py` Tilesets — in `tools/voxel3ds/our_changes.patch`); Pallet
       Town composes correctly. **Left (big):** the rest of the generators still assume 512 (`NUM_PRIMARY` in

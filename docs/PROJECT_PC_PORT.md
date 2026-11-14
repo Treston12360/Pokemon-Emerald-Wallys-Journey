@@ -75,6 +75,9 @@ Still untested: trainers spotting with extra people loaded (warp test spots in W
    4-bit oam.paletteNum) need PC-side room. Playtest trainers spotting, followers, cutscenes, Wally's Ralts catch.
 3. New alpha .exe: `make -f Makefile.pc WIN=1`, strip, zip with SDL2.dll + SDL2_image.dll (from
    build/pc-deps/SDL2/i686-w64-mingw32/bin), smoke-test in Wine (`xvfb-run -a wine WallysJourney.exe`), send.
+   If Wine says "could not load kernel32.dll" (broken ~/.wine after a container restart): make a fresh prefix,
+   `export WINEPREFIX=<scratch>/wineprefix; xvfb-run -a wineboot --init`, then run again (2026-11-14). The exe
+   honours the same WJPC_SCRIPT test scripts as the Linux build.
 4. Step 5 full check against the ROM: DONE by the other session (2026-11-11/12), see the "Full check" notes at the
    end of this file. Tools: tools/pc/compare (compare.py, steps/*.txt, --epoch, --elf, --pc-only), test saves from
    tools/wj_testfw (scenarios/fullcheck*.json + make_save.txt). PC-only bugs found and fixed: RandomPercentage 50/50
