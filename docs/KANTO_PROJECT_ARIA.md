@@ -410,4 +410,10 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   happen there). **Until then you meet him elsewhere — in the route gatehouses where FireRed's Oak aides stood**
   (bring parts, check in, sometimes Blue). The welcome-to-my-institute / "Blue is like a son to me" beats move
   to these meetings or to the Sevii arrival (owner to place).
+- 2026-11-14 (owner, final shape): **three places to meet Varnell.** (1) Until Celadon: **the FireRed aide spots**
+  (Route 2 east building, Route 10 Pokémon Center, Route 11 gate 2F; later Route 15/16 gates). (2) From Celadon
+  (ch. 4/5, only reachable through Lavender): **his public office in Celadon** — check-ins, parts, Blue; the
+  ch. 4 report-back ("Like the project") happens there. (3) At the end: **his real facility, the old Rocket
+  Warehouse on Sevii** (Orb handover, reveal). The Route 7–8 underground path does NOT need closing: Celadon
+  is only reachable through Lavender while Saffron is cordoned and the Route 16 Snorlax sleeps.
 
