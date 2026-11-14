@@ -283,6 +283,8 @@
 #define VAR_0x40FD                 KANTO_VAR(0x40FD)
 #define VAR_0x40FE                 KANTO_VAR(0x40FE)
 #define VAR_0x40FF                 KANTO_VAR(0x40FF)
+// Project ARIA story progress (data/scripts/aria_ch0.inc lists the values). Lives in the PC save block.
+#define VAR_ARIA_STORY             VAR_0x40FF
 
 #define VARS_END_FRLG              0x40FF
 #define VARS_COUNT_FRLG            (VARS_END_FRLG - VARS_START_FRLG + 1)

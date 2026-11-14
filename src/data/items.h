@@ -16133,6 +16133,39 @@ const struct ItemInfo gItemsInfo[] =
         .iconPic = gItemIcon_CoinCase,
         .iconPalette = gItemIconPalette_CoinCase,
     },
+
+    // Project ARIA (owner-approved ch. 0/1). Icons reuse Emerald's S.S. Ticket and Scanner icons (no new art).
+    [ITEM_SS_ANNE_TICKET] =
+    {
+        .name = ITEM_NAME("S.S. Anne Ticket"),
+        .description = COMPOUND_STRING(
+            "A ticket for the\n"
+            "S.S. Anne, from\n"
+            "Slateport to Kanto."),
+        .price = 0,
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .iconPic = gItemIcon_SSTicket,
+        .iconPalette = gItemIconPalette_SSTicket,
+    },
+
+    [ITEM_RIFT_SCANNER] =
+    {
+        .name = ITEM_NAME("Rift Scanner"),
+        .description = COMPOUND_STRING(
+            "Dr. Varnell's device.\n"
+            "It reads a tear in\n"
+            "space, then seals it."),
+        .price = 0,
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .iconPic = gItemIcon_Scanner,
+        .iconPalette = gItemIconPalette_Scanner,
+    },
 };
 
 #undef ITEM_NAME

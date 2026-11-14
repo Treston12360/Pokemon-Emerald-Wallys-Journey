@@ -1052,6 +1052,8 @@ enum __attribute__((packed)) Item
     ITEM_GLIMMORANITE = 873,
     ITEM_EXP_ALL = 874, // Wally's Journey: key item, replaces the Exp. Share when EXP. MODE is ALL
     ITEM_OUTFIT_CASE = 875, // Wally's Journey: key item, opens the outfit menu
+    ITEM_SS_ANNE_TICKET = 876, // Project ARIA ch. 0: Birch's ticket for the S.S. Anne (Norman's Briney ticket stays ITEM_SS_TICKET)
+    ITEM_RIFT_SCANNER = 877, // Project ARIA ch. 1: Varnell's device (name owner-approved); use is added with ch. 2
 
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,

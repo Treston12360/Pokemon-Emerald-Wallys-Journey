@@ -494,6 +494,7 @@ PlayersHouse_1F_EventScript_GetSSTicketAndSeeLatiTV::
 	closemessage
 	setvar VAR_LITTLEROOT_HOUSES_STATE_MAY, 4
 	setvar VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 4
+	call_if_eq VAR_ARIA_STORY, 0, Aria_Ch0_MomCall @ Project ARIA ch. 0 (owner: same morning, Norman first)
 	releaseall
 	end
 

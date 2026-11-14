@@ -1,0 +1,164 @@
+@ Project ARIA — chapter 0 "The call" (docs/KANTO_SCRIPT.md, APPROVED 2026-11-13). Hoenn maps, post-game only.
+@ VAR_ARIA_STORY (include/constants/vars_frlg.h, kept in the PC save block):
+@   0 = not started   1 = Mom passed on Birch's call   2 = Birch gave the S.S. Anne Ticket
+@   3 = Mom's goodbye  4 = Wally at the harbour        5 = arrived in Kanto (Pallet)   6 = ch. 1 done
+@ Nothing here runs before the first Champion win (FLAG_SYS_GAME_CLEAR) and Norman's post-game visit
+@ (VAR_LITTLEROOT_HOUSES_STATE_BRENDAN 4). Owner 2026-11-14: Norman's visit plays first, the same morning.
+
+@ House 1F OnTransition: queue a scene for the frame script (VAR_TEMP_8). Only in the PLAYER's house
+@ (Brendan's house is the rival's house for a female player, and May's for a male player).
+Aria_Ch0_BrendansHouseOnTransition::
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, Aria_Ch0_HouseOnTransition
+	return
+
+Aria_Ch0_MaysHouseOnTransition::
+	checkplayergender
+	goto_if_eq VAR_RESULT, FEMALE, Aria_Ch0_HouseOnTransition
+	return
+
+Aria_Ch0_HouseOnTransition::
+	goto_if_unset FLAG_SYS_GAME_CLEAR, Aria_Ch0_Return
+	goto_if_lt VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 4, Aria_Ch0_Return
+	call_if_eq VAR_ARIA_STORY, 0, Aria_Ch0_QueueMomCall
+	call_if_eq VAR_ARIA_STORY, 2, Aria_Ch0_QueueMomGoodbye
+Aria_Ch0_Return::
+	return
+
+Aria_Ch0_QueueMomCall::
+	setvar VAR_TEMP_8, 1
+	return
+
+Aria_Ch0_QueueMomGoodbye::
+	setvar VAR_TEMP_8, 2
+	return
+
+@ 0.1 on its own (saves that already had Norman's visit before this update)
+Aria_Ch0_MomCallScene::
+	lockall
+	setvar VAR_TEMP_8, 0
+	applymovement LOCALID_PLAYERS_HOUSE_1F_MOM, Common_Movement_FacePlayer
+	waitmovement 0
+	playse SE_PIN
+	applymovement LOCALID_PLAYERS_HOUSE_1F_MOM, Common_Movement_ExclamationMark
+	waitmovement 0
+	call Aria_Ch0_MomCall
+	releaseall
+	end
+
+@ 0.1 — also called at the end of Norman's visit (players_house.inc)
+Aria_Ch0_MomCall::
+	msgbox Aria_Ch0_Text_MomCall, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_ARIA_STORY, 1
+	return
+
+@ 0.3 Mom on the way out (after Birch)
+Aria_Ch0_MomGoodbyeScene::
+	lockall
+	setvar VAR_TEMP_8, 0
+	applymovement LOCALID_PLAYERS_HOUSE_1F_MOM, Common_Movement_FacePlayer
+	waitmovement 0
+	msgbox Aria_Ch0_Text_MomGoodbye, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_ARIA_STORY, 3
+	releaseall
+	end
+
+@ 0.2 Birch (talking to him in the lab while VAR_ARIA_STORY is 1)
+Aria_Ch0_Birch::
+	msgbox Aria_Ch0_Text_Birch1, MSGBOX_DEFAULT
+	giveitem ITEM_SS_ANNE_TICKET
+	msgbox Aria_Ch0_Text_Birch2, MSGBOX_DEFAULT
+	setvar VAR_ARIA_STORY, 2
+	release
+	end
+
+Aria_Ch0_BirchAfter::
+	msgbox Aria_Ch0_Text_BirchAfter, MSGBOX_DEFAULT
+	release
+	end
+
+Aria_Ch0_Text_MomCall:: @ 0.1
+	.string "Mom: Well, look who's up! Good\n"
+	.string "morning, Champion.\p"
+	.string "...I don't think I'll ever get tired\n"
+	.string "of saying that.\p"
+	.string "The phone hasn't stopped ringing,\n"
+	.string "you know. Reporters, neighbours,\l"
+	.string "people I haven't heard from since we\l"
+	.string "left Johto. Everybody wants to say\l"
+	.string "they know you.\p"
+	.string "Oh! One of those calls was Professor\n"
+	.string "Birch.\p"
+	.string "He asked you to come over to the lab\n"
+	.string "as soon as you're up. He said it\l"
+	.string "wasn't urgent...\p"
+	.string "But he called twice. Birch doesn't\n"
+	.string "call twice.\p"
+	.string "Go on. I'll keep breakfast warm.$"
+
+Aria_Ch0_Text_Birch1:: @ 0.2
+	.string "Prof. Birch: {PLAYER}! Sorry to drag\n"
+	.string "you over so early. Sit, sit.\p"
+	.string "You remember the Pokémon that\n"
+	.string "started turning up all over Hoenn?\l"
+	.string "The ones that had no business being\l"
+	.string "here?\p"
+	.string "I've spent months on it. Pokémon\n"
+	.string "from regions an ocean away, living\l"
+	.string "in our grass like they were born\l"
+	.string "there.\p"
+	.string "No migration, no shipments, no\n"
+	.string "explanation. They're just... here.\p"
+	.string "Last night Professor Oak called me\n"
+	.string "from Kanto.\p"
+	.string "It's started there too. And it isn't\n"
+	.string "slowing down, it's getting worse.\l"
+	.string "Whole routes changing in weeks.\p"
+	.string "Oak has a team looking into it. The\n"
+	.string "best researcher in Kanto is leading\l"
+	.string "it, apparently.\p"
+	.string "And he asked for you. By name.\p"
+	.string "He said that you've already stood in\n"
+	.string "the middle of one crisis and walked\l"
+	.string "out the other side, and he'd rather\l"
+	.string "have that on his team than another\l"
+	.string "theory.\p"
+	.string "......\p"
+	.string "I won't pretend I'm thrilled. You\n"
+	.string "only just got home.\p"
+	.string "But I'd be lying if I said I didn't\n"
+	.string "agree with him.$"
+
+Aria_Ch0_Text_Birch2:: @ 0.2
+	.string "The S.S. Anne leaves from Slateport.\n"
+	.string "Oak will meet you at the dock in\l"
+	.string "Vermilion City.\p"
+	.string "I'll talk to your mother.\n"
+	.string "...Actually, she probably already\l"
+	.string "knows. She always does.\p"
+	.string "{PLAYER}... be careful, all right?\n"
+	.string "Kanto isn't home.$"
+
+Aria_Ch0_Text_BirchAfter:: @ 0.2 repeat (not in script doc: repeats his directions)
+	.string "Prof. Birch: The S.S. Anne leaves\n"
+	.string "from Slateport. Oak will meet you at\l"
+	.string "the dock in Vermilion City.\p"
+	.string "Be careful, {PLAYER}.$"
+
+Aria_Ch0_Text_MomGoodbye:: @ 0.3
+	.string "Mom: Kanto, hm?\p"
+	.string "Your father left for somewhere far\n"
+	.string "away once, too. I spent a long time\l"
+	.string "waiting by the phone.\p"
+	.string "......\p"
+	.string "But you're not him, and this isn't\n"
+	.string "that. You're going because someone\l"
+	.string "needs help.\p"
+	.string "Call me when you get there. Every\n"
+	.string "once in a while, okay? Even just to\l"
+	.string "say you ate something.\p"
+	.string "I'm proud of you. Now go, before I\n"
+	.string "change my mind and hide your shoes.$"
+
