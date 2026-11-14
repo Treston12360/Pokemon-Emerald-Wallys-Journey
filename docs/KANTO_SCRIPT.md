@@ -345,10 +345,10 @@ excited and hides it. Name below is a placeholder (owner to choose). His team: o
 ---
 
 ## Chapter 3b — Vermilion, Blue, Rock Tunnel  · DRAFT (owner to approve)
-Owner 2026-11-14: the S.S. Anne has sailed; Blue near Diglett's Cave; Rock Tunnel is the only way to Lavender
+Owner 2026-11-14: the S.S. Anne has sailed; Blue's spot in Vermilion NOT decided (3b.1 is a placeholder spot); Rock Tunnel is the only way to Lavender
 and should be scary — the Clefairy's cry building up ("Ar...." → "Ari....").
 
-**3b.1 Blue — outside Diglett's Cave (Route 11 side of Vermilion), scripted when you walk past**
+**3b.1 Blue — in Vermilion (spot TBD by owner; draft assumes outside Diglett's Cave)**
 > BLUE: ......
 > Don't look at me like that. I'm not following you.
 > Something's been coming up through Diglett's Cave. Diglett are turning up in Viridian Forest, in Pewter,
