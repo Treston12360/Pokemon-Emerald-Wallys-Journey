@@ -200,7 +200,7 @@ Lineup (owner 2026-11-14): Blue = Viridian Gym (8th); Janine = Fuchsia; Elite Fo
 
 ---
 
-## Chapter 2 — Mt. Moon, the first tear  · DRAFT (owner to approve)
+## Chapter 2 — Mt. Moon, the first tear  · APPROVED (owner 2026-11-14)
 Beats (owner 2026-11-14: narrative-driven, scripted events; use spots FireRed left empty): the tear is on the
 old Rocket spot by the crater on B2F (in game, mechanics done). Owner 2026-11-14: **no Pokémon fall out of
 tears** — the anomaly Pokémon are simply *there* in the wild, where they don't belong.
