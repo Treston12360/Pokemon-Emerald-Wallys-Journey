@@ -44,4 +44,5 @@ How to use:
 
 Open items handed to Polish (Hoenn): DLX-22 Granite Cave black lines; Hoenn trainers' repetitive lines
 (owner: every trainer needs believable, unique dialogue — `WALLY_JOURNEY_OWNER_REQUIREMENTS.md` 2026-11-13);
+Seasons message says "Winter has arrived in Hoenn" while the player is in Kanto (seen 2026-11-14 on Route 12/Cerulean) — whole-game seasons code, needs a fix that says the right region;
 Fortree tree-trunk furniture and the Fortree decoration shop benches (DLX-28 leftovers).
