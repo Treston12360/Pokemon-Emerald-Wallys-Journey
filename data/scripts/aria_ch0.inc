@@ -49,6 +49,7 @@ Aria_Ch0_MomCallScene::
 
 @ 0.1 — also called at the end of Norman's visit (players_house.inc)
 Aria_Ch0_MomCall::
+	setspeaker SP_NAME_MOM
 	msgbox Aria_Ch0_Text_MomCall, MSGBOX_DEFAULT
 	closemessage
 	setvar VAR_ARIA_STORY, 1
@@ -60,6 +61,7 @@ Aria_Ch0_MomGoodbyeScene::
 	setvar VAR_TEMP_8, 0
 	applymovement LOCALID_PLAYERS_HOUSE_1F_MOM, Common_Movement_FacePlayer
 	waitmovement 0
+	setspeaker SP_NAME_MOM
 	msgbox Aria_Ch0_Text_MomGoodbye, MSGBOX_DEFAULT
 	closemessage
 	setvar VAR_ARIA_STORY, 3
@@ -68,20 +70,23 @@ Aria_Ch0_MomGoodbyeScene::
 
 @ 0.2 Birch (talking to him in the lab while VAR_ARIA_STORY is 1)
 Aria_Ch0_Birch::
+	setspeaker SP_NAME_BIRCH
 	msgbox Aria_Ch0_Text_Birch1, MSGBOX_DEFAULT
 	giveitem ITEM_SS_ANNE_TICKET
+	setspeaker SP_NAME_BIRCH
 	msgbox Aria_Ch0_Text_Birch2, MSGBOX_DEFAULT
 	setvar VAR_ARIA_STORY, 2
 	release
 	end
 
 Aria_Ch0_BirchAfter::
+	setspeaker SP_NAME_BIRCH
 	msgbox Aria_Ch0_Text_BirchAfter, MSGBOX_DEFAULT
 	release
 	end
 
 Aria_Ch0_Text_MomCall:: @ 0.1
-	.string "Mom: Well, look who's up! Good\n"
+	.string "Well, look who's up! Good\n"
 	.string "morning, Champion.\p"
 	.string "...I don't think I'll ever get tired\n"
 	.string "of saying that.\p"
@@ -102,7 +107,7 @@ Aria_Ch0_Text_MomCall:: @ 0.1
 	.string "Go on. I'll keep breakfast warm.$"
 
 Aria_Ch0_Text_Birch1:: @ 0.2
-	.string "Prof. Birch: {PLAYER}! Sorry to drag\n"
+	.string "{PLAYER}! Sorry to drag\n"
 	.string "you over so early.\p"
 	.string "You remember the Pokémon that\n"
 	.string "started turning up all over Hoenn?\l"
@@ -145,13 +150,13 @@ Aria_Ch0_Text_Birch2:: @ 0.2
 	.string "Kanto isn't home.$"
 
 Aria_Ch0_Text_BirchAfter:: @ 0.2 repeat (not in script doc: repeats his directions)
-	.string "Prof. Birch: The S.S. Anne leaves\n"
+	.string "The S.S. Anne leaves\n"
 	.string "from Slateport. Oak will meet you at\l"
 	.string "the dock in Vermilion City.\p"
 	.string "Be careful, {PLAYER}.$"
 
 Aria_Ch0_Text_MomGoodbye:: @ 0.3
-	.string "Mom: Kanto, hm?\p"
+	.string "Kanto, hm?\p"
 	.string "Your father left for somewhere far\n"
 	.string "away once, too. I spent a long time\l"
 	.string "waiting by the phone.\p"
@@ -184,12 +189,14 @@ Aria_Ch0_Wally::
 	lock
 	faceplayer
 	goto_if_eq VAR_ARIA_STORY, 4, Aria_Ch0_WallyAfter
+	setspeaker SP_NAME_WALLY
 	msgbox Aria_Ch0_Text_Wally, MSGBOX_DEFAULT
 	setvar VAR_ARIA_STORY, 4
 	release
 	end
 
 Aria_Ch0_WallyAfter::
+	setspeaker SP_NAME_WALLY
 	msgbox Aria_Ch0_Text_WallyAfter, MSGBOX_DEFAULT
 	release
 	end
@@ -236,6 +243,7 @@ Aria_Ch0b_OakAtDock::
 	playse SE_PIN
 	applymovement LOCALID_SSANNE_EXTERIOR_OAK, Common_Movement_ExclamationMark
 	waitmovement 0
+	setspeaker SP_NAME_OAK
 	msgbox Aria_Ch0b_Text_Oak, MSGBOX_DEFAULT
 	closemessage
 	fadescreen FADE_TO_BLACK
@@ -247,7 +255,7 @@ Aria_Ch0b_OakAtDock::
 	end
 
 Aria_Ch0_Text_Wally:: @ 0.4
-	.string "Wally: Leaving without saying\n"
+	.string "Leaving without saying\n"
 	.string "goodbye? That's cold, even for you.\p"
 	.string "Birch told me. Kanto, huh.\p"
 	.string "......\p"
@@ -280,7 +288,7 @@ Aria_Ch0_Text_Wally:: @ 0.4
 	.string "rematch.$"
 
 Aria_Ch0_Text_WallyAfter:: @ 0.4 repeat (not in script doc)
-	.string "Wally: Go on. The S.S. Anne won't\n"
+	.string "Go on. The S.S. Anne won't\n"
 	.string "wait, even for the Champion.$"
 
 Aria_Ch0_Text_Sailor:: @ 0.5
@@ -294,7 +302,7 @@ Aria_Ch0_Text_SailorNotYet:: @ 0.5 before Wally / no ticket (not in script doc)
 	.string "Boarding is by ticket only.$"
 
 Aria_Ch0b_Text_Oak:: @ 0b.1
-	.string "Oak: Ah! You must be {PLAYER}!\n"
+	.string "Ah! You must be {PLAYER}!\n"
 	.string "Welcome to Kanto!\p"
 	.string "I'm Professor Oak. Birch speaks very\n"
 	.string "highly of you. More than he does of\l"

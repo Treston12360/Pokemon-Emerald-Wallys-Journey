@@ -16,21 +16,27 @@ Aria_Ch1_Lab::
 	setvar VAR_TEMP_8, 0
 	turnobject LOCALID_PLAYER, DIR_NORTH
 	delay 30
+	setspeaker SP_NAME_OAK
 	msgbox Aria_Ch1_Text_Oak1, MSGBOX_DEFAULT
 	closemessage
 	turnobject LOCALID_PLAYER, DIR_EAST
+	setspeaker SP_NAME_VARNELL
 	msgbox Aria_Ch1_Text_Var1, MSGBOX_DEFAULT
 	closemessage
 	turnobject LOCALID_PLAYER, DIR_NORTH
+	setspeaker SP_NAME_OAK
 	msgbox Aria_Ch1_Text_Oak2, MSGBOX_DEFAULT
 	closemessage
 	turnobject LOCALID_PLAYER, DIR_WEST
+	setspeaker SP_NAME_BLUE
 	msgbox Aria_Ch1_Text_Blue1, MSGBOX_DEFAULT
 	closemessage
 	turnobject LOCALID_PLAYER, DIR_NORTH
+	setspeaker SP_NAME_OAK
 	msgbox Aria_Ch1_Text_Oak3, MSGBOX_DEFAULT
 	closemessage
 	turnobject LOCALID_PLAYER, DIR_WEST
+	setspeaker SP_NAME_BLUE
 	msgbox Aria_Ch1_Text_Blue2, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_OAKS_LAB_ARIA_BLUE, Aria_Ch1_Movement_BlueLeaves
@@ -38,14 +44,18 @@ Aria_Ch1_Lab::
 	playse SE_EXIT
 	removeobject LOCALID_OAKS_LAB_ARIA_BLUE
 	turnobject LOCALID_PLAYER, DIR_NORTH
+	setspeaker SP_NAME_OAK
 	msgbox Aria_Ch1_Text_Oak4, MSGBOX_DEFAULT
 	closemessage
 	turnobject LOCALID_PLAYER, DIR_EAST
+	setspeaker SP_NAME_VARNELL
 	msgbox Aria_Ch1_Text_Var2, MSGBOX_DEFAULT
 	giveitem ITEM_RIFT_SCANNER
+	setspeaker SP_NAME_VARNELL
 	msgbox Aria_Ch1_Text_Var3, MSGBOX_DEFAULT
 	closemessage
 	turnobject LOCALID_PLAYER, DIR_NORTH
+	setspeaker SP_NAME_OAK
 	msgbox Aria_Ch1_Text_Oak5, MSGBOX_DEFAULT
 	closemessage
 	setvar VAR_ARIA_STORY, 7
@@ -54,6 +64,7 @@ Aria_Ch1_Lab::
 
 @ Talking to Oak after ch. 1 (repeats his directions; not a script-doc line — S-TALK will write Oak's own)
 Aria_Ch1_OakAfter::
+	setspeaker SP_NAME_OAK
 	msgbox Aria_Ch1_Text_OakAfter, MSGBOX_DEFAULT
 	release
 	end
@@ -67,7 +78,7 @@ Aria_Ch1_Movement_BlueLeaves::
 	step_end
 
 Aria_Ch1_Text_Oak1::
-	.string "Oak: {PLAYER}, allow me to introduce\n"
+	.string "{PLAYER}, allow me to introduce\n"
 	.string "Dr. Elias Varnell.\p"
 	.string "If you've read anything about space-\n"
 	.string "time research in the last twenty\l"
@@ -77,7 +88,7 @@ Aria_Ch1_Text_Oak1::
 	.string "only argue.$"
 
 Aria_Ch1_Text_Var1::
-	.string "Varnell: You flatter me, Samuel. And\n"
+	.string "You flatter me, Samuel. And\n"
 	.string "you exaggerate.\p"
 	.string "{PLAYER}. It's a real pleasure.\p"
 	.string "I read every report from Hoenn.\n"
@@ -100,12 +111,12 @@ Aria_Ch1_Text_Var1::
 	.string "have you with us.$"
 
 Aria_Ch1_Text_Oak2::
-	.string "Oak: And this is my grandson, Blue.\n"
+	.string "And this is my grandson, Blue.\n"
 	.string "He's been working with Dr. Varnell\l"
 	.string "for... how long now?$"
 
 Aria_Ch1_Text_Blue1::
-	.string "Blue: ......\p"
+	.string "......\p"
 	.string "Long enough.\p"
 	.string "So this is the Champion you shipped\n"
 	.string "in from Hoenn.\p"
@@ -114,22 +125,22 @@ Aria_Ch1_Text_Blue1::
 	.string "months.$"
 
 Aria_Ch1_Text_Oak3::
-	.string "Oak: Blue, nobody is saying you\n"
+	.string "Blue, nobody is saying you\n"
 	.string "haven't-$"
 
 Aria_Ch1_Text_Blue2::
-	.string "Blue: Then why is there a stranger\n"
+	.string "Then why is there a stranger\n"
 	.string "standing in the lab?\p"
 	.string "......\p"
 	.string "Whatever. Do what you want.\p"
 	.string "Just stay out of my way, Champion.$"
 
 Aria_Ch1_Text_Oak4::
-	.string "Oak: ...Forgive him. He hasn't had\n"
+	.string "...Forgive him. He hasn't had\n"
 	.string "an easy few years.$"
 
 Aria_Ch1_Text_Var2::
-	.string "Varnell: He'll come around. Blue's a\n"
+	.string "He'll come around. Blue's a\n"
 	.string "good young man. He just doesn't like\l"
 	.string "sharing his work.\p"
 	.string "I suppose I taught him that.\p"
@@ -148,7 +159,7 @@ Aria_Ch1_Text_Var2::
 	.string "of work.$"
 
 Aria_Ch1_Text_Var3::
-	.string "Varnell: If you find a tear, point\n"
+	.string "If you find a tear, point\n"
 	.string "the scanner at it. It will read it,\l"
 	.string "and then seal it.\p"
 	.string "Every tear we close tells us a\n"
@@ -167,7 +178,7 @@ Aria_Ch1_Text_Var3::
 	.string "Consider it my thanks in advance.$"
 
 Aria_Ch1_Text_Oak5::
-	.string "Oak: Pewter City is on the way to\n"
+	.string "Pewter City is on the way to\n"
 	.string "Mt. Moon. Brock's Gym is there.\p"
 	.string "He'll give you a proper Kanto\n"
 	.string "welcome, I'm sure.\p"
@@ -175,7 +186,7 @@ Aria_Ch1_Text_Oak5::
 	.string "for coming all this way.$"
 
 Aria_Ch1_Text_OakAfter::
-	.string "Oak: Pewter City is on the way to\n"
+	.string "Pewter City is on the way to\n"
 	.string "Mt. Moon. Brock's Gym is there.\p"
 	.string "Good luck, {PLAYER}.$"
 

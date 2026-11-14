@@ -111,10 +111,12 @@ PokemonLeague_LancesRoom_EventScript_Lance::
 	end
 
 PokemonLeague_LancesRoom_EventScript_Intro::
+	setspeaker SP_NAME_KOGA
 	msgbox PokemonLeague_LancesRoom_Text_Intro
 	return
 
 PokemonLeague_LancesRoom_EventScript_RematchIntro::
+	setspeaker SP_NAME_KOGA
 	msgbox PokemonLeague_LancesRoom_Text_RematchIntro
 	return
 
@@ -127,6 +129,7 @@ PokemonLeague_LancesRoom_EventScript_Rematch::
 	return
 
 PokemonLeague_LancesRoom_EventScript_PostBattle::
+	setspeaker SP_NAME_KOGA
 	msgbox PokemonLeague_LancesRoom_Text_PostBattle
 	release
 	end
@@ -136,6 +139,7 @@ PokemonLeague_LancesRoom_EventScript_DefeatedLance::
 	special Script_TryGainNewFanFromCounterFrlg
 	setflag FLAG_DEFEATED_LANCE
 	call PokemonLeague_EventScript_OpenDoorLance
+	setspeaker SP_NAME_KOGA
 	msgbox PokemonLeague_LancesRoom_Text_PostBattle
 	closemessage
 	release

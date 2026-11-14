@@ -24,6 +24,7 @@ PokemonLeague_HallOfFame_EventScript_EnterRoom::
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
 	delay 18
+	setspeaker SP_NAME_LANCE
 	msgbox PokemonLeague_HallOfFame_Text_OakCongratulations
 	closemessage
 	applymovement LOCALID_HALL_OF_FAME_PROF_OAK, Common_Movement_WalkInPlaceFasterUp

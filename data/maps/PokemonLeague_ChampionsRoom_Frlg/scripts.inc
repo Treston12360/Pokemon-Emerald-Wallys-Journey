@@ -64,6 +64,7 @@ PokemonLeague_ChampionsRoom_EventScript_EnterRoom::
 	clearflag FLAG_TEMP_5
 	setflag FLAG_DEFEATED_CHAMP
 	setflag FLAG_TEMP_4
+	setspeaker SP_NAME_LANCE
 	msgbox PokemonLeague_ChampionsRoom_Text_PostBattle
 	closemessage
 	@ ARIA S-LEAGUE: Lance walks the player into the Hall of Fame (FireRed's Oak/rival scene removed)
@@ -90,10 +91,12 @@ PokemonLeague_ChampionsRoom_EventScript_Rematch::
 	return
 
 PokemonLeague_ChampionsRoom_EventScript_Intro::
+	setspeaker SP_NAME_LANCE
 	msgbox PokemonLeague_ChampionsRoom_Text_Intro
 	return
 
 PokemonLeague_ChampionsRoom_EventScript_RematchIntro::
+	setspeaker SP_NAME_LANCE
 	msgbox PokemonLeague_ChampionsRoom_Text_RematchIntro
 	return
 
