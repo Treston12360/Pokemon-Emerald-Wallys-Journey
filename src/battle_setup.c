@@ -1867,18 +1867,45 @@ static const u8 *ReturnEmptyStringIfNull(const u8 *string)
         return string;
 }
 
+// Owner 2026-11-14: the speaker name box is for important characters only (rivals, Gym Leaders, Elite Four,
+// Champions, team leaders and admins, story trainers), not for ordinary trainers.
+static bool32 IsNameboxTrainer(u16 trainerId)
+{
+    switch (GetTrainerClassFromId(trainerId))
+    {
+    case TRAINER_CLASS_LEADER:
+    case TRAINER_CLASS_ELITE_FOUR:
+    case TRAINER_CLASS_CHAMPION:
+    case TRAINER_CLASS_RIVAL:
+    case TRAINER_CLASS_MAGMA_LEADER:
+    case TRAINER_CLASS_AQUA_LEADER:
+    case TRAINER_CLASS_MAGMA_ADMIN:
+    case TRAINER_CLASS_AQUA_ADMIN:
+    case TRAINER_CLASS_PKMN_TRAINER_1:
+    case TRAINER_CLASS_RIVAL_EARLY_FRLG:
+    case TRAINER_CLASS_RIVAL_LATE_FRLG:
+    case TRAINER_CLASS_BOSS_FRLG:
+    case TRAINER_CLASS_LEADER_FRLG:
+    case TRAINER_CLASS_ELITE_FOUR_FRLG:
+    case TRAINER_CLASS_CHAMPION_FRLG:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 static const u8 *GetIntroSpeechOfApproachingTrainer(void)
 {
     if (gApproachingTrainerId == 0)
     {
-        if (OW_NAME_BOX_NPC_TRAINER)
+        if (OW_NAME_BOX_NPC_TRAINER && IsNameboxTrainer(TRAINER_BATTLE_PARAM.opponentA))
             gSpeakerName = GetTrainerNameFromId(TRAINER_BATTLE_PARAM.opponentA);
 
         return ReturnEmptyStringIfNull(TRAINER_BATTLE_PARAM.introTextA);
     }
     else
     {
-        if (OW_NAME_BOX_NPC_TRAINER)
+        if (OW_NAME_BOX_NPC_TRAINER && IsNameboxTrainer(TRAINER_BATTLE_PARAM.opponentB))
             gSpeakerName = GetTrainerNameFromId(TRAINER_BATTLE_PARAM.opponentB);
 
         return ReturnEmptyStringIfNull(TRAINER_BATTLE_PARAM.introTextB);
