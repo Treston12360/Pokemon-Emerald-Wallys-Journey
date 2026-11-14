@@ -1635,19 +1635,19 @@ WallyJourney_EventScript_SeasonWinter::
 	end
 
 WallyJourney_Text_SeasonSpring:
-	.string "Spring has arrived in Hoenn.\n"
+	.string "Spring has arrived in {REGION}.\n"
 	.string "Expect warm showers on the routes.$"
 
 WallyJourney_Text_SeasonSummer:
-	.string "Summer has arrived in Hoenn.\n"
+	.string "Summer has arrived in {REGION}.\n"
 	.string "Long, hot days and sudden storms.$"
 
 WallyJourney_Text_SeasonAutumn:
-	.string "Autumn has arrived in Hoenn.\n"
-	.string "The air has turned cool and grey.$"
+	.string "Autumn has arrived in {REGION}.\n"
+	.string "The air has turned cool and gray.$"
 
 WallyJourney_Text_SeasonWinter:
-	.string "Winter has arrived in Hoenn.\n"
+	.string "Winter has arrived in {REGION}.\n"
 	.string "Snow is falling in the mountains.$"
 
 

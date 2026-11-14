@@ -35,6 +35,7 @@ How to use:
 | [x] | S0 strip FireRed's own story from Kanto maps (steps 1–5) | 2026-11-14 | Kanto map scripts; `SaveBlockPC.kantoMapFlagsSet` = start steps applied (`SaveBlockPC_InitKanto`) — never edit a released step, add one |
 | [x] | S-LEAGUE (except Janine): Blue Viridian Gym, Koga E4 4th room, Lance Champion + Hall of Fame. Dialogue DRAFT (owner to approve), teams FireRed placeholders (L4). Janine waits for a sprite the owner approves | 2026-11-14 | Kanto League maps + trainers_frlg.party (new TRAINER_LEADER_BLUE 624, TRAINER_ELITE_FOUR_KOGA 625) |
 | [x] | Kanto badges + HM licences (S-HM) | 2026-11-14 | `FLAG_KANTO_BADGE0x_GET` (Kanto flag space) used by all FireRed gym scripts; `src/field_move.c` checks Kanto badges in Kanto maps only — Hoenn field moves unchanged. **Keep.** |
+| [x] | Seasons message names the region (ARIA, 2026-11-14) | 2026-11-14 | `data/scripts/wally_journey.inc` season texts use `{REGION}` (Kanto in Kanto maps, Hoenn otherwise); 'grey' -> 'gray' |
 | [ ] | Story chapters — 0, 0b, 1, 2, 3, 3b, 4 IN GAME (2026-11-14); next ch. 5 Celadon | 2026-11-14 | Ch. 0 touches Littleroot/Birch's lab/Slateport harbour scripts (Hoenn, post-game only) |
 | [ ] | K7 Kanto in 3D — paused (story first) | | Will regenerate `pc_data/voxel/*` — claim first |
 
@@ -54,5 +55,4 @@ How to use:
 
 Open items handed to Polish (Hoenn): DLX-22 Granite Cave black lines; Hoenn trainers' repetitive lines
 (owner: every trainer needs believable, unique dialogue — `WALLY_JOURNEY_OWNER_REQUIREMENTS.md` 2026-11-13);
-Seasons message says "Winter has arrived in Hoenn" while the player is in Kanto (seen 2026-11-14 on Route 12/Cerulean) — whole-game seasons code, needs a fix that says the right region;
 Fortree tree-trunk furniture and the Fortree decoration shop benches (DLX-28 leftovers).
