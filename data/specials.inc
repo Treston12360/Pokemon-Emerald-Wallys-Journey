@@ -663,3 +663,4 @@ gSpecials::
 	def_special WallyJourney_WallySurfMount
 	def_special WallyJourney_WallySurfEnd
 	def_special StartGacha
+	def_special IsInKantoMap

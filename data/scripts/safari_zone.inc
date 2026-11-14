@@ -1,29 +1,31 @@
 SafariZone_EventScript_OutOfBallsMidBattle::
-#if IS_FRLG
-	setvar VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 3
-#else
+	@ Project ARIA: both Safari Zones are in the game; which one is told by the map, not IS_FRLG
+	specialvar VAR_RESULT, IsInKantoMap
+	goto_if_eq VAR_RESULT, TRUE, SafariZone_EventScript_OutOfBallsMidBattle_Kanto
 	setvar VAR_SAFARI_ZONE_STATE, 1
-#endif
 	special ExitSafariMode
-#if IS_FRLG
-	setwarp MAP_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 4, 1
-#else
 	setwarp MAP_ROUTE121_SAFARI_ZONE_ENTRANCE, 2, 5
-#endif
+	end
+
+SafariZone_EventScript_OutOfBallsMidBattle_Kanto::
+	setvar VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 3
+	special ExitSafariMode
+	setwarp MAP_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 4, 1
 	end
 
 SafariZone_EventScript_Exit::
-#if IS_FRLG
-	setvar VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 1
-#else
+	specialvar VAR_RESULT, IsInKantoMap
+	goto_if_eq VAR_RESULT, TRUE, SafariZone_EventScript_Exit_Kanto
 	setvar VAR_SAFARI_ZONE_STATE, 1
-#endif
 	special ExitSafariMode
-#if IS_FRLG
-	warp MAP_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 4, 1
-#else
 	warp MAP_ROUTE121_SAFARI_ZONE_ENTRANCE, 2, 5
-#endif
+	waitstate
+	end
+
+SafariZone_EventScript_Exit_Kanto::
+	setvar VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 1
+	special ExitSafariMode
+	warp MAP_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 4, 1
 	waitstate
 	end
 

@@ -515,7 +515,7 @@ static const u8 *ExpandPlaceholder_Groudon(void)
 
 static const u8 *ExpandPlaceholder_Region(void)
 {
-    if (IS_FRLG)
+    if (IN_KANTO_MAP)
         return gText_Kanto;
     else
         return gText_Hoenn;

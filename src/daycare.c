@@ -1089,11 +1089,17 @@ static void _IncrementDaycareSteps(struct DayCare *daycare)
     }
 }
 
+#if IS_FRLG
+#define ROUTE5_DAYCARE_MON gSaveBlock1Ptr->route5DayCareMon
+#else
+#define ROUTE5_DAYCARE_MON gSaveBlockPC.route5DayCareMon // Project ARIA K5
+#endif
+
 void IncrementDaycareSteps(void)
 {
-#if IS_FRLG
-    if (GetBoxMonData(&gSaveBlock1Ptr->route5DayCareMon.mon, MON_DATA_SANITY_HAS_SPECIES))
-        gSaveBlock1Ptr->route5DayCareMon.steps++;
+#if 1 // Project ARIA: Route 5 day care (was IS_FRLG)
+    if (GetBoxMonData(&ROUTE5_DAYCARE_MON.mon, MON_DATA_SANITY_HAS_SPECIES))
+        ROUTE5_DAYCARE_MON.steps++;
 #endif
 
     _IncrementDaycareSteps(&gSaveBlock1Ptr->daycare);
@@ -1513,16 +1519,16 @@ static u8 ModifyBreedingScoreForOvalCharm(u8 score)
 
 void PutMonInRoute5Daycare(void)
 {
-#if IS_FRLG
+#if 1 // Project ARIA: Route 5 day care (was IS_FRLG)
     u8 monIdx = GetCursorSelectionMonId();
-    StorePokemonInDaycare(&gParties[B_TRAINER_PLAYER][monIdx], &gSaveBlock1Ptr->route5DayCareMon);
+    StorePokemonInDaycare(&gParties[B_TRAINER_PLAYER][monIdx], &ROUTE5_DAYCARE_MON);
 #endif
 }
 
 void GetCostToWithdrawRoute5DaycareMon(void)
 {
-#if IS_FRLG
-    u16 cost = PrepareDaycareCostStringForSelectedMon(&gSaveBlock1Ptr->route5DayCareMon);
+#if 1 // Project ARIA: Route 5 day care (was IS_FRLG)
+    u16 cost = PrepareDaycareCostStringForSelectedMon(&ROUTE5_DAYCARE_MON);
 #else
     u16 cost = 100;
 #endif
@@ -1531,8 +1537,8 @@ void GetCostToWithdrawRoute5DaycareMon(void)
 
 bool8 IsThereMonInRoute5Daycare(void)
 {
-#if IS_FRLG
-    if (GetBoxMonData(&gSaveBlock1Ptr->route5DayCareMon.mon, MON_DATA_SPECIES) != SPECIES_NONE)
+#if 1 // Project ARIA: Route 5 day care (was IS_FRLG)
+    if (GetBoxMonData(&ROUTE5_DAYCARE_MON.mon, MON_DATA_SPECIES) != SPECIES_NONE)
         return TRUE;
 #endif
 
@@ -1541,8 +1547,8 @@ bool8 IsThereMonInRoute5Daycare(void)
 
 u8 GetNumLevelsGainedForRoute5DaycareMon(void)
 {
-#if IS_FRLG
-    return GetNumLevelsGainedForDaycareMon(&gSaveBlock1Ptr->route5DayCareMon);
+#if 1 // Project ARIA: Route 5 day care (was IS_FRLG)
+    return GetNumLevelsGainedForDaycareMon(&ROUTE5_DAYCARE_MON);
 #else
     return 0;
 #endif
@@ -1550,8 +1556,8 @@ u8 GetNumLevelsGainedForRoute5DaycareMon(void)
 
 u16 TakePokemonFromRoute5Daycare(void)
 {
-#if IS_FRLG
-    return TakeSelectedPokemonFromDaycare(&gSaveBlock1Ptr->route5DayCareMon);
+#if 1 // Project ARIA: Route 5 day care (was IS_FRLG)
+    return TakeSelectedPokemonFromDaycare(&ROUTE5_DAYCARE_MON);
 #else
     return SPECIES_NONE;
 #endif

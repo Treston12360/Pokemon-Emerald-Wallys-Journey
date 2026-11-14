@@ -350,24 +350,6 @@ struct SaveBlock3
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;
 
-// Windows game: data with no GBA size limit (owner rule "NO LIMITS", AGENTS.md). Stored in the .sav file
-// after the 128 KB GBA flash image, so an old GBA save simply has none (it loads as all clear).
-// Grow it freely: add fields at the END only, and old PC saves load with the new fields clear.
-#define SAVE_BLOCK_PC_MAGIC 0x43504A57 // "WJPC"
-struct SaveBlockPC
-{
-    u32 magic;
-    u32 size;
-#if !IS_FRLG
-    u8 kantoFlags[KANTO_FLAGS_COUNT / 8]; // Project ARIA: FRLG flags, KANTO_FLAGS_START..
-    u16 kantoVars[KANTO_VARS_COUNT];      // K4: FRLG vars, KANTO_VARS_START.. (constants/vars_frlg.h)
-    u8 kantoTrainerFlags[KANTO_TRAINERS_COUNT / 8]; // K4: Kanto trainers defeated (constants/opponents_frlg.h)
-#endif
-};
-extern struct SaveBlockPC gSaveBlockPC;
-void SaveBlockPC_Clear(void);
-void SaveBlockPC_Write(void);
-void SaveBlockPC_Read(void);
 
 struct Pokedex
 {
@@ -970,6 +952,26 @@ struct DaycareMon
     struct DaycareMail mail;
     u32 steps;
 };
+
+// Windows game: data with no GBA size limit (owner rule "NO LIMITS", AGENTS.md). Stored in the .sav file
+// after the 128 KB GBA flash image, so an old GBA save simply has none (it loads as all clear).
+// Grow it freely: add fields at the END only, and old PC saves load with the new fields clear.
+#define SAVE_BLOCK_PC_MAGIC 0x43504A57 // "WJPC"
+struct SaveBlockPC
+{
+    u32 magic;
+    u32 size;
+#if !IS_FRLG
+    u8 kantoFlags[KANTO_FLAGS_COUNT / 8]; // Project ARIA: FRLG flags, KANTO_FLAGS_START..
+    u16 kantoVars[KANTO_VARS_COUNT];      // K4: FRLG vars, KANTO_VARS_START.. (constants/vars_frlg.h)
+    u8 kantoTrainerFlags[KANTO_TRAINERS_COUNT / 8]; // K4: Kanto trainers defeated (constants/opponents_frlg.h)
+    struct DaycareMon route5DayCareMon;   // K5: Route 5's day care (FireRed keeps it in SaveBlock1)
+#endif
+};
+extern struct SaveBlockPC gSaveBlockPC;
+void SaveBlockPC_Clear(void);
+void SaveBlockPC_Write(void);
+void SaveBlockPC_Read(void);
 
 struct DayCare
 {

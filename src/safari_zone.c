@@ -58,7 +58,7 @@ void EnterSafariMode(void)
     SetSafariZoneFlag();
     ClearAllPokeblockFeeders();
     gNumSafariBalls = 30;
-    if (IS_FRLG)
+    if (IN_KANTO_MAP)
         gSafariZoneStepCounter = 600;
     else
         gSafariZoneStepCounter = 500;

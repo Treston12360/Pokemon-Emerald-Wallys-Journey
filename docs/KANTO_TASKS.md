@@ -68,7 +68,19 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
         and trainer 2362 leaves Emerald's var 0x4050 and trainer 314 alone; after saving (file grows by the PC
         block) and loading again all of them are still set. `trainerbattle 2362` is Leader Brock with his
         FireRed team.
-- [ ] **K5. Kanto scripts, specials, object events, heal locations, wild encounters, trainers work.** WIP (Claude session 019khs4X, 2026-11-13 18:30)
+- [x] **K5. Kanto scripts, specials, object events, heal locations, wild encounters, trainers work.** Done 2026-11-13
+      (session 019khs4X). Checked in game: Route 1 wild battle (FireRed's table, Lv3 Rattata), Viridian Pokémon
+      Center nurse (full heal script), Viridian Forest Bug Catcher Rick (sight, intro, battle), walking into the
+      Viridian Pokémon Center door. Changes: FireRed's wild tables built in (`tools/wild_encounters/
+      wild_encounters_to_header.py`, as Crossroads `FRLG_KANTO_MAP_WILD_PKMN = FIRE_RED`; LeafGreen's left out);
+      both games' door animations (`field_door.c`, matched by tileset); new `IN_KANTO_MAP` (run-time "this map is
+      FireRed's", `global.fieldmap.h`) instead of `IS_FRLG` for: Pokémon Center PCs, cycling/surf music, TV/food/
+      machine signs, the after-white-out heal script, Safari Zone steps window and step count, the {REGION} text;
+      new special `IsInKantoMap` used by `data/scripts/safari_zone.inc` (which Safari Zone to leave to); Route 5
+      day care kept in `SaveBlockPC.route5DayCareMon`.
+      **Left on purpose (later tasks):** `{RIVAL}` text still gives May/Brendan (rival name is story, S0); the PC is
+      still "Lanette's PC" in Kanto (wording — ask owner); HM badge checks stay Hoenn's (owner: HMs carry over);
+      Trainer Tower / Sevii code still `IS_FRLG` (Sevii decided later); cable club attendants Emerald's.
 - [ ] **K6. Region-aware Fly and region map** (Fly map can switch Hoenn/Kanto; normal Fly animation; no
       key item — owner decision).
 

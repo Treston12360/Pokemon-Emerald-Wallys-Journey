@@ -447,6 +447,9 @@ extern struct ObjectEvent gObjectEvents[OBJECT_EVENTS_COUNT];
 #endif
 extern u8 gSelectedObjectEvent;
 extern struct MapHeader gMapHeader;
+// Project ARIA: Kanto's maps are in the Emerald build; FireRed's own behaviour (its PCs, doors, music, ...)
+// is chosen at run time by the map, not by IS_FRLG.
+#define IN_KANTO_MAP (gMapHeader.mapLayout != NULL && gMapHeader.mapLayout->isFrlg)
 extern struct PlayerAvatar gPlayerAvatar;
 extern struct Camera gCamera;
 
