@@ -68,7 +68,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
         and trainer 2362 leaves Emerald's var 0x4050 and trainer 314 alone; after saving (file grows by the PC
         block) and loading again all of them are still set. `trainerbattle 2362` is Leader Brock with his
         FireRed team.
-- [ ] **K5. Kanto scripts, specials, object events, heal locations, wild encounters, trainers work.**
+- [ ] **K5. Kanto scripts, specials, object events, heal locations, wild encounters, trainers work.** WIP (Claude session 019khs4X, 2026-11-13 18:30)
 - [ ] **K6. Region-aware Fly and region map** (Fly map can switch Hoenn/Kanto; normal Fly animation; no
       key item — owner decision).
 
