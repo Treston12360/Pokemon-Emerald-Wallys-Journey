@@ -361,4 +361,7 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   need a new purpose now the Rockets are gone (old Rocket spots in Mt. Moon, the Rocket Hideout, etc.).
   Each tear sits on open floor, is solid (3×3, you can't walk onto it — it's a sprite, not a cracked floor you
   fall through), and gets an in-game screenshot for the owner.
+- 2026-11-14 (owner): **Kanto is more narrative-driven than Hoenn:** more dialogue and more scripted events.
+  Reuse places that are now empty (old Rocket spots, the hideouts) and areas vanilla FRLG left pointless or
+  unexplored — give them a purpose in the story.
 
