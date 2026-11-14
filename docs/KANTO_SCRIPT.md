@@ -405,31 +405,33 @@ home (the Volunteer House), not held in the tower.
 > VARNELL: {PLAYER}, you made it through. Good. I was worried about that tunnel.
 > The readings from Pokémon Tower have been climbing all week. Whatever was crying in Rock Tunnel... I think
 > it's coming from there.
-> I've had a calibration lens sent ahead to Mr. Fuji at the Volunteer House. With it, ARIA can read what my
-> scanner can't — echoes. Things that stayed behind.
+> I've had a calibration lens delivered to the Volunteer House, by the tower. The man who runs it agreed to
+> hold it for you. With it, ARIA can read what my scanner can't — echoes. Things that stayed behind.
 > I'd come myself, but... the readings need a trainer's Pokémon to take them. Mine would only get in the way.
-> Fuji will explain. Be gentle in there, {PLAYER}. It's a place for the dead.
+> Be gentle in there, {PLAYER}. It's a place for the dead.
 
 **4.2 Lavender locals (talk)**
 > WOMAN (Pokémon Center): Everyone in Lavender knows someone who's buried in that tower.
 > Some people say they can hear crying up there at night. ...It's been worse lately.
 > OLD MAN (by the tower): Years ago, when Team Rocket came through, they tore that tower apart.
-> A little girl died up there. Somebody's daughter. Nobody here ever learned her name.
+> A little girl died up there. Nobody here ever learned her name.
 > They never caught the ones who did it, either.
 > LITTLE GIRL: Mommy says not to go in the tower. She says there's a girl in there who's still looking for
 > her friend.
 
 **4.3 Mr. Fuji — the Volunteer House**
-> MR. FUJI: Ah. You must be the young trainer Dr. Varnell spoke of. Please, come in.
-> He sent this for you. A lens of some kind. He was very particular that it reach you, and no one else.
+> MR. FUJI: Ah. You must be the trainer this was left for. Please, come in.
+> A courier brought it yesterday, from some research institute. I'm afraid I don't know the people who sent it.
+> They were very particular that it reach you, and no one else.
 > {PLAYER} received the CALIBRATION LENS!
 > MR. FUJI: ......
 > I was in the tower, you know. The day Team Rocket came.
 > I have spent many years since trying to give the Pokémon in this house what I couldn't give the ones I
 > lost that day.
-> There is a man who comes to the tower sometimes. Late, when no one is there.
-> He stands at a grave with no Pokémon's name on it. He never says a word. He never stays long.
-> I have never asked him whose it is. Some grief is not meant to be asked about.
+> There is a man who comes to the tower sometimes. Late at night, when no one is there.
+> I've only ever seen him from my window, in the dark. Never his face.
+> He stands at a grave with no Pokémon's name on it. He never stays long.
+> I have never gone up to ask whose it is. Some grief is not meant to be asked about.
 > ...Forgive an old man. Go on. Whatever is crying up there has been crying a very long time.
 
 **4.4 Pokémon Tower, top floor — the echo (scripted; the lens reveals it)**
@@ -460,6 +462,8 @@ home (the Volunteer House), not held in the tower.
 (Then the report-back in Celadon — design doc §2, Blue: "Like the project", Varnell: "Perhaps it does know..."
 — drafted with chapter 5.)
 
+Owner 2026-11-14 fixes: Fuji doesn't know Varnell (the lens comes by courier from 'some research institute'; he's
+only seen the man at the grave from his window in the dark); no 'somebody's daughter' (too revealing).
 Notes for the owner: the Calibration Lens would be a new key item that does what the Silph Scope did (ghosts
 in the tower can be seen and fought). The Clefairy echo sits on the top floor where FireRed had Mr. Fuji and
 the Rockets.
