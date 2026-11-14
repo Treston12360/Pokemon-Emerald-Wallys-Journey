@@ -151,6 +151,7 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 1 | **The investigation team** | In the lab: Oak, **Varnell** and **Blue**. Oak introduces Varnell — Kanto's leading, highly revered researcher — who is putting together an investigation team. Oak wants the player on it: a Champion, with first-hand experience of Hoenn's legendary crisis and how to handle it. Varnell seems impressed and warmly interested; **secretly he just wants to use the player.** Blue, already on the case, is openly irritated that they brought in an outsider. First assignment: survey Mt. Moon. | — |
 | 2 | **Mt. Moon** | The "meteorite anomaly" is the first tear. Closing it with Varnell's device feels heroic. (It's really feeding ARIA.) Fossils kept. | Brock (Pewter) |
 | 3 | **Cerulean** | A displaced person, pulled from another time, lashes out. First sign the tears hurt people. | Misty |
+| 3b | **Vermilion (on foot, as in FireRed)** | First real visit to Vermilion (the arrival was only the dock). | Lt. Surge (3rd Gym) |
 | 4 | **Lavender** | The ghost: an echo of a lost **Clefairy** searching the tower and crying out **"Aria"** (Aria's Pokémon; the player doesn't know who Aria is). Not Marowak. Varnell's "calibration lens" assignment (= Silph Scope) reveals it. Mr. Fuji's clue about the grieving father. Poké Flute. | — |
 | 5 | **Celadon / Snorlax** | Snorlax ×2 woken with the flute. Varnell's staff start acting cagey. | Erika |
 | 6 | **Saffron quarantine** | An ARIA containment machine malfunctions inside Silph Co.; the building warps (Silph's teleport maze). City sealed by Jenny and Silph security until you're cleared. You clear it; Master Ball. **Blue turns** — he saw the machine's markings and starts suspecting Varnell. | Sabrina |
@@ -338,5 +339,5 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   their own story), and **every trainer with their own, different lines that make sense for who they are and
   the world** — no "random fact + battle!" filler. Use trainers and NPCs to explain and tie together things
   FireRed left unexplained. **Longer dialogue is welcome** when it makes a scene more impactful.
-- OPEN: Lt. Surge / Vermilion Gym is missing from the chapter list (§3). Owner to place it.
+- 2026-11-13 (owner): Lt. Surge stays the 3rd Gym; the player reaches Vermilion on foot as in FireRed (ch. 3b).
 

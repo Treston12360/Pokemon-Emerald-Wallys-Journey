@@ -17,10 +17,10 @@ lines that fit who they are.
 > ...I don't think I'll ever get tired of saying that.
 > The phone hasn't stopped ringing, you know. Reporters, neighbours, people I haven't heard from since we
 > left Johto. Everybody wants to say they know you.
-> Oh! And Professor Birch came by about an hour ago.
-> He said it wasn't urgent... but he kept pacing by the door, and he didn't touch his coffee.
-> I've known that man long enough to know when something's on his mind.
-> He asked you to come to the lab as soon as you were up. Go on. I'll keep breakfast warm.
+> Oh! One of those calls was Professor Birch.
+> He asked you to come over to the lab as soon as you're up. He said it wasn't urgent...
+> But he called twice. Birch doesn't call twice.
+> Go on. I'll keep breakfast warm.
 
 **0.2 Birch (lab)**
 > BIRCH: {PLAYER}! Sorry to drag you over so early. Sit, sit.
@@ -62,8 +62,9 @@ lines that fit who they are.
 > Kanto has its own League. Eight badges, same as here.
 > Everyone over there grew up hearing Kanto is where the real trainers come from.
 > If you're going all that way anyway... go take their badges. All eight.
-> Show Kanto what Hoenn is made of.
-> And come back. I still owe you a rematch.
+> They'll take one look at a trainer from Hoenn and think you got lucky. That our League is the easy one.
+> Don't let them. Prove them wrong. Show them what Hoenn is made of.
+> I'll keep the seat warm for you. And come back. I still owe you a rematch.
 
 **0.5 Boarding**
 > SAILOR: Ticket, please. ...The Champion! It's an honour. Welcome aboard the S.S. Anne.
@@ -93,7 +94,10 @@ lines that fit who they are.
 > {PLAYER}. It's a real pleasure.
 > I read every report from Hoenn. Groudon. Kyogre. Rayquaza, brought down from the sky.
 > And in every report, the same name, right in the middle of it.
-> I've spent my life studying forces like those from behind glass. You stood in front of them.
+> Legendary Pokémon. Forces that shape the land and the sea and the sky.
+> I've spent my whole life studying Pokémon like that. Their traces, their old records, the marks they leave
+> in space and time. Always from a distance. From behind the glass of an instrument.
+> You stood right in front of them. And you're still here.
 > I'm leading the investigation into these anomalies. I'd be very glad to have you with us.
 > OAK: And this is my grandson, Blue. He's been working with Dr. Varnell for... how long now?
 > BLUE: ......
@@ -118,7 +122,7 @@ lines that fit who they are.
 > a light in the tunnels that won't stay in one place.
 > I'd like you to look into it.
 > I built this for exactly this kind of work.
-> {PLAYER} received the RIFT SCANNER!   ← name to decide
+> {PLAYER} received the RIFT SCANNER!   (name approved by owner)
 > VARNELL: If you find a tear, point the scanner at it. It will read it, and then seal it.
 > Every tear we close tells us a little more about what's causing them.
 > Oh, and one practical matter.
@@ -132,9 +136,14 @@ lines that fit who they are.
 
 ---
 
-## Open questions for the owner (from this draft)
-1. Name of Varnell's device. Draft: RIFT SCANNER.
-2. Wally 0.4: right amount of rival edge vs friendly? (Draft keeps his Champion-room voice.)
-3. Blue 1.1: keep Oak's "He hasn't had an easy few years" and Varnell's "I suppose I taught him that"?
-4. Mom 0.3 mentions Norman leaving — fits the Hoenn story bible (Norman went ahead to Hoenn). Keep?
-5. Where does Lt. Surge / the Vermilion Gym go in the chapter order?
+## Owner answers (2026-11-13)
+- RIFT SCANNER: approved. Wally's tone: approved (his line now means "don't let them look down on Hoenn").
+- Mom doesn't see Birch — he called the house; she passes it on (0.1 fixed).
+- Varnell's "forces" = the legendaries (Groudon, Kyogre, Rayquaza); said plainly now (1.1 fixed).
+- No cap on dialogue length, as long as it makes sense.
+- Lt. Surge stays the **3rd** Gym, as in FireRed. The arrival in Vermilion is only the dock scene; the player
+  comes back to Vermilion on foot later, the same way as in FireRed.
+
+## Still open
+- Blue 1.1: keep Oak's "He hasn't had an easy few years" and Varnell's "I suppose I taught him that"?
+- Mom 0.3 mentions the player's father leaving — keep?
