@@ -4,6 +4,7 @@
 
 struct AudioCGB gb;
 float soundChannelPos[4];
+extern u8 gCgbMuteMask; // mp3_glue.c
 const s16 *PU1Table;
 const s16 *PU2Table;
 u32 apuFrame;
@@ -202,19 +203,20 @@ void cgb_audio_generate(u16 samplesPerFrame){
         while(soundChannelPos[1] >= 32) soundChannelPos[1] -= 32;
         while(soundChannelPos[2] >= 32) soundChannelPos[2] -= 32;
         float outputL = 0;
+        u8 nr51 = REG_NR51 & ~(gCgbMuteMask * 0x11); // ENG-MP3: GB channels of an MP3-replaced song are silent
         float outputR = 0;
         if(REG_NR52 & 0x80){
             if((gb.DAC[0]) && (REG_NR52 & 0x01)){
-                if(REG_NR51 & 0x10) outputL += gb.Vol[0] * PU1Table[(int)(soundChannelPos[0])] / 15.0f;
-                if(REG_NR51 & 0x01) outputR += gb.Vol[0] * PU1Table[(int)(soundChannelPos[0])] / 15.0f;
+                if(nr51 & 0x10) outputL += gb.Vol[0] * PU1Table[(int)(soundChannelPos[0])] / 15.0f;
+                if(nr51 & 0x01) outputR += gb.Vol[0] * PU1Table[(int)(soundChannelPos[0])] / 15.0f;
             }
             if((gb.DAC[1]) && (REG_NR52 & 0x02)){
-                if(REG_NR51 & 0x20) outputL += gb.Vol[1] * PU2Table[(int)(soundChannelPos[1])] / 15.0f;
-                if(REG_NR51 & 0x02) outputR += gb.Vol[1] * PU2Table[(int)(soundChannelPos[1])] / 15.0f;
+                if(nr51 & 0x20) outputL += gb.Vol[1] * PU2Table[(int)(soundChannelPos[1])] / 15.0f;
+                if(nr51 & 0x02) outputR += gb.Vol[1] * PU2Table[(int)(soundChannelPos[1])] / 15.0f;
             }
             if((REG_NR30 & 0x80) && (REG_NR52 & 0x04)){
-                if(REG_NR51 & 0x40) outputL += gb.Vol[2] * gb.WAVRAM[(int)(soundChannelPos[2])] / 4.0f;
-                if(REG_NR51 & 0x04) outputR += gb.Vol[2] * gb.WAVRAM[(int)(soundChannelPos[2])] / 4.0f;
+                if(nr51 & 0x40) outputL += gb.Vol[2] * gb.WAVRAM[(int)(soundChannelPos[2])] / 4.0f;
+                if(nr51 & 0x04) outputR += gb.Vol[2] * gb.WAVRAM[(int)(soundChannelPos[2])] / 4.0f;
             }
             if((gb.DAC[3]) && (REG_NR52 & 0x08)){
                 bool32 lfsrMode = ((REG_NR43 & 0x08) == 8);
@@ -242,8 +244,8 @@ void cgb_audio_generate(u16 samplesPerFrame){
                 }
                 float sample = ch4Out;
                 if(avgDiv > 1) sample /= avgDiv;
-                if(REG_NR51 & 0x80) outputL += gb.Vol[3] * sample / 15.0f;
-                if(REG_NR51 & 0x08) outputR += gb.Vol[3] * sample / 15.0f;
+                if(nr51 & 0x80) outputL += gb.Vol[3] * sample / 15.0f;
+                if(nr51 & 0x08) outputR += gb.Vol[3] * sample / 15.0f;
             }
         }
         outBuffer[0] = outputL / 4.0f;

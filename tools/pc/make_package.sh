@@ -14,6 +14,7 @@ rm -rf "$D" "$OUT/$NAME.zip"; mkdir -p "$D"
 cp WallysJourney.exe "$D/"; i686-w64-mingw32-strip "$D/WallysJourney.exe"
 cp "$DEPS/SDL2.dll" "$DEPS/SDL2_image.dll" "$D/"
 cp -r pc_data/voxel "$D/voxel"        # the 3D data (regenerate with tools/voxel3ds/README.md, then copy here)
+cp -r pc_data/music "$D/music"        # ENG-MP3: MP3 songs (music/MUS_NAME.mp3) + how-to README
 printf '@echo off\r\ncd /d "%%~dp0"\r\nset WJPC_3D=1\r\nstart "" WallysJourney.exe\r\n' > "$D/Play in 3D.bat"
 cat > "$D/README.txt" <<'R'
 Pokemon Emerald: Wally's Journey (Windows)
@@ -21,12 +22,13 @@ Pokemon Emerald: Wally's Journey (Windows)
 WallysJourney.exe = the game. 3D World, 3D Battles and Gamma Lighting are in Options > Settings > Video.
 "Play in 3D.bat" = start straight in 3D.
 Keep the voxel folder next to the exe (it is the 3D world).
+music folder = optional MP3 songs that replace the game's music (see music/README.txt).
 Your files: copy your WallysJourney.cfg (settings) and WallysJourney.sav (save) into this folder.
 Old GBA .sav files import: name it WallysJourney.sav and put it next to the exe.
 R
 (cd "$OUT" && zip -qr "$NAME.zip" "$NAME")
 for f in WallysJourney.exe SDL2.dll SDL2_image.dll voxel/buildings.bin voxel/relief.bin voxel/regions.bin \
-         voxel/signposts.bin voxel/trees.rgba5551 voxel/gamma_clouds.bin README.txt; do
+         voxel/signposts.bin voxel/trees.rgba5551 voxel/gamma_clouds.bin README.txt music/README.txt; do
     [ -e "$D/$f" ] || { echo "MISSING $f"; exit 1; }
 done
 echo "$OUT/$NAME.zip"

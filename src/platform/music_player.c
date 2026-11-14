@@ -786,6 +786,18 @@ void m4aSoundVSync(void)
                 sample = -1.0f;
             audioBuffer[i] = sample;
         }
+        {
+            // ENG-MP3: an MP3 background song is added on top of the GBA mix
+            extern void Mp3Glue_AddToFrame(float *out, s32 frames);
+            Mp3Glue_AddToFrame(audioBuffer, mixer->samplesPerFrame);
+            for (u32 i = 0; i < samplesPerFrame; i++)
+            {
+                if (audioBuffer[i] > 1.0f)
+                    audioBuffer[i] = 1.0f;
+                else if (audioBuffer[i] < -1.0f)
+                    audioBuffer[i] = -1.0f;
+            }
+        }
 
         Platform_QueueAudio(audioBuffer, samplesPerFrame * 4);
         if((s8)(--mixer->dmaCounter) <= 0)

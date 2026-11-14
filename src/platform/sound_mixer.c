@@ -12,6 +12,9 @@
 
 
 static inline void GenerateAudio(struct SoundMixerState *mixer, struct MixerSource *chan, struct WaveData2 *wav, float *outBuffer, u16 samplesPerFrame, float sampleRateReciprocal);
+#ifdef PORTABLE
+bool32 Mp3Glue_MuteChannel(const struct MixerSource *chan);
+#endif
 void SampleMixer(struct SoundMixerState *mixer, u32 scanlineLimit, u16 samplesPerFrame, float *outBuffer, u8 dmaCounter, u16 maxBufSize);
 static inline bool32 TickEnvelope(struct MixerSource *chan, struct WaveData2 *wav);
 void GeneratePokemonSampleAudio(struct SoundMixerState *mixer, struct MixerSource *chan, s8 *current, float *outBuffer, u16 samplesPerFrame, float sampleRateReciprocal, s32 samplesLeftInWav, signed envR, signed envL, s32 loopLen);
@@ -37,6 +40,10 @@ void RunMixerFrame(void) {
     if (mixer->firstPlayerFunc != NULL) {
         mixer->firstPlayerFunc(mixer->firstPlayer);
     }
+#ifdef PORTABLE
+    extern void Mp3Glue_BeforeMix(struct SoundMixerState *mixer);
+    Mp3Glue_BeforeMix(mixer); // ENG-MP3: start/stop the MP3 for the background song
+#endif
     
     mixer->cgbMixerFunc();
     
@@ -106,7 +113,11 @@ void SampleMixer(struct SoundMixerState *mixer, u32 scanlineLimit, u16 samplesPe
             }
         }
         
-        if (TickEnvelope(chan, wav)) 
+        if (TickEnvelope(chan, wav)
+#ifdef PORTABLE
+            && !Mp3Glue_MuteChannel(chan) // ENG-MP3: the GBA song under an MP3 stays silent
+#endif
+            )
         {
 
             GenerateAudio(mixer, chan, wav, outBuffer, samplesPerFrame, sampleRateReciprocal);

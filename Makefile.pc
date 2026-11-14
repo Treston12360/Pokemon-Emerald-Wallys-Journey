@@ -114,6 +114,15 @@ $(TARGET): $(OBJS)
 # with PC stand-ins for their console headers.
 $(OBJ_DIR)/src/platform/voxel3d/%.o: CPPFLAGS += -iquote src/platform/voxel3d -iquote src/platform/voxel3d/compat -DVOXEL_HOST_FILES -DCTR_VOXEL_LIGHTING=1
 
+# ENG-MP3: the MP3 decoder (dr_mp3, public domain/MIT-0) is plain C, so it skips the game's text preprocessor.
+$(OBJ_DIR)/src/platform/mp3_music.o: src/platform/mp3_music.c src/platform/mp3_music.h src/platform/dr_mp3.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# ENG-MP3: song number -> MUS_ name table, regenerated when the song list changes
+src/platform/mp3_song_names.h: include/constants/songs.h tools/pc/gen_mp3_song_names.py
+	python3 tools/pc/gen_mp3_song_names.py $@
+$(OBJ_DIR)/src/platform/mp3_glue.o: src/platform/mp3_song_names.h
+
 $(OBJ_DIR)/src/%.o: src/%.c
 	@$(CC) -E $(CPPFLAGS) $(SDL_CFLAGS) -m32 -MMD -MF $(OBJ_DIR)/src/$*.d -MT $@ $< -o $(OBJ_DIR)/src/$*.i
 	@$(PREPROC) -i -g $(ASSETS) $< charmap.txt < $(OBJ_DIR)/src/$*.i | sed -E $(SECTION_SED) | python3 tools/pc/align4.py > $(OBJ_DIR)/src/$*.pp.i
