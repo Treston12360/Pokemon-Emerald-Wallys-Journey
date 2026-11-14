@@ -1,7 +1,7 @@
 @ Project ARIA — chapter 0 "The call" (docs/KANTO_SCRIPT.md, APPROVED 2026-11-13). Hoenn maps, post-game only.
 @ VAR_ARIA_STORY (include/constants/vars_frlg.h, kept in the PC save block):
 @   0 = not started   1 = Mom passed on Birch's call   2 = Birch gave the S.S. Anne Ticket
-@   3 = Mom's goodbye  4 = Wally said goodbye   5 = on the Vermilion dock (Oak)   6 = at Oak's lab (ch. 1 next)
+@   3 = Mom's goodbye  4 = Wally said goodbye   5 = on the S.S. Anne (voyage), Oak waits on the Vermilion dock   6 = at Oak's lab (ch. 1 next)
 @   7 = ch. 1 done
 @ Nothing here runs before the first Champion win (FLAG_SYS_GAME_CLEAR) and Norman's post-game visit
 @ (VAR_LITTLEROOT_HOUSES_STATE_BRENDAN 4). Owner 2026-11-14: Norman's visit plays first, the same morning.
@@ -207,7 +207,9 @@ Aria_Ch0_AnneSailor::
 	playse SE_SHIP
 	delay 60
 	setvar VAR_ARIA_STORY, 5
-	warp MAP_SSANNE_EXTERIOR, 32, 12
+	@ Owner 2026-11-14: the voyage is played on the real S.S. Anne (explore, battle its trainers). Walking off
+	@ the ship (SSAnne_Exterior) means it has docked in Vermilion: Oak's scene plays there.
+	warp MAP_SSANNE_1F_CORRIDOR, 19, 2
 	waitstate
 	release
 	end
@@ -217,7 +219,7 @@ Aria_Ch0_AnneSailorNotYet::
 	release
 	end
 
-@ ---- 0b Vermilion dock (FRLG map SSAnne_Exterior). VAR_ARIA_STORY 5 = on the dock, Oak waiting.
+@ ---- 0b Vermilion dock (FRLG map SSAnne_Exterior). VAR_ARIA_STORY 5 = on board the S.S. Anne / stepping off.
 @ Owner 2026-11-13: Vermilion is NOT marked visited (no Fly there yet); straight to Pallet after a black screen.
 Aria_Ch0b_DockOnTransition::
 	setflag FLAG_TEMP_11

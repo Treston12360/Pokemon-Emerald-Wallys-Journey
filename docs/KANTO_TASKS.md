@@ -126,11 +126,18 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       (8th badge, ch. 10); Fuchsia → **Janine**; Elite Four (owner 2026-11-14): **Lorelei, Bruno, Agatha, Koga** (Koga in Lance's room);
       **Lance = Champion** in the Champion's room (replaces FireRed's Blue there). Giovanni is hidden only in the Rocket Hideout (S0 step 2); the Viridian Gym and Champion's room
       objects are untouched until this task. Mt. Moon: fossils kept (ch. 2) — Miguel's fossil scene stays.
-- [ ] **S-ANNE. The S.S. Anne in Vermilion** (owner, 2026-11-14): its trainers get teams for where the player is
-      at that point (L4 level curve, ch. 3b) and new lines — passengers and crew talk about the anomalies, Pokémon
+- [ ] **S-ANNE. The S.S. Anne voyage** (owner, 2026-11-14): the trip from Slateport is played on the real ship —
+      explore and battle like normal (boarding puts you in 1F corridor; stepping off = Vermilion, Oak's scene).
+      Its trainers get teams for a Hoenn Champion arriving in Kanto (L4 level curve) and new lines — passengers and crew talk about the anomalies, Pokémon
       from other regions suddenly showing up (the ship carried the player from Hoenn). The captain is **not sick**
       and **does not give Cut** (HMs come from Kanto Gym Leaders); he gets his own new lines. Draft in
       `docs/KANTO_SCRIPT.md` first.
+- [ ] **S-ITEMS. No repeat TMs from Hoenn** (owner, 2026-11-14): TMs are infinite use, so no TM the player could
+      already get in Hoenn is given again in Kanto (Gym Leader TMs, gifts, ground items) — replace each with a TM
+      the player can't have yet. Battle Frontier items don't count. Useful items **may** repeat where it makes sense:
+      nature mints, Bottle Caps, good healing items, Full Heals, Rare Candies, etc. But nothing weak for a Champion
+      (no Potions healing 20 HP) — Kanto's ground items fit a Champion. Make a list (Hoenn TMs vs. Kanto planned)
+      for the owner first.
 - [ ] **S-BLOCK. Road blocks** from `docs/KANTO_PROJECT_ARIA.md` §4 (after the owner confirms the table).
 - [ ] **S-TALK. New dialogue for every Kanto NPC and trainer** (owner: each trainer unique and believable, Gym
       Leaders with their own story, longer is fine). Drafts go in `docs/KANTO_SCRIPT.md` for approval first.

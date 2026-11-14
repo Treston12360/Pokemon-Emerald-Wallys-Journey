@@ -69,7 +69,8 @@ lines that fit who they are.
 
 **0.5 Boarding**
 > SAILOR: Ticket, please. ...The Champion! It's an honour. Welcome aboard the S.S. Anne.
-> (fade to black)
+> (Owner 2026-11-14: no cut to black — the player is on the real S.S. Anne for the voyage: explore it and battle
+> its trainers (new lines, task S-ANNE). Stepping off the ship = docked in Vermilion → 0b.)
 
 ---
 
