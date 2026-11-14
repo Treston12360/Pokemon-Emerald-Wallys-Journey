@@ -89,7 +89,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       map → R shows Kanto (Pallet Town) → L back to Hoenn; R then A on Pallet Town flies there. Test-script command
       `flymap` opens the Fly map from the field. Not done: no on-screen hint that L/R switch (wording/visual — ask
       the owner first).
-- [ ] **K7. Kanto in 3D.** Kanto must work in the 3D view too (owner 2026-11-13). The 3D data is made by Emerald 3DS's
+- [ ] **K7. Kanto in 3D.** WIP (Claude session 019khs4X, 2026-11-13 19:05) Kanto must work in the 3D view too (owner 2026-11-13). The 3D data is made by Emerald 3DS's
       generators (`tools/voxel3ds/README.md`); they skip every FRLG layout today ("WJTEST skipped layout ..._FRLG:
       IndexError" — their reader expects Emerald's 512/512 tileset split, see K2). Fix the reader for FRLG tilesets,
       then model Kanto's buildings/rooms the 3DS way (`voxel_building_specs.py`), and check Pallet, Viridian etc.
