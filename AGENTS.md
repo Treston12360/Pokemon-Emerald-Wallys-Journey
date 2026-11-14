@@ -21,9 +21,24 @@ and tick tasks off in `docs/KANTO_TASKS.md` in the same push as the work. Story 
 One of the people working on this game does not want Project ARIA's story spoiled. In anything you write or
 show to the person you are working for — replies, summaries, pictures, file captions — say nothing of the
 Kanto plot: who anyone is, what happens, twists, endings, lines of dialogue. Talk about the work instead
-("chapter 2's script is in", "the lab map loads"). The only exception is a person who is discussing the story
-with you themselves (the story's writer). Story questions never go to the chat: write them into
+("chapter 2's script is in", "the lab map loads"). The only exception is the story's writer: **the repo owner (Treston) wrote the story and may discuss it
+freely** — the rule protects his friend, who works on the game but should not have the Kanto story spoiled. Story questions never go to the chat: write them into
 `docs/KANTO_STORY_QUESTIONS.md` and push; the writer answers there.
+
+## Who works on what — never cross work or overwrite each other (owner rule, 2026-11-13)
+Two people, each with their own Claude, work on this repo at the same time:
+- **The owner (Treston) → Project ARIA (Kanto).** Branch `kanto-port` only. Task list: `docs/KANTO_TASKS.md`.
+- **His friend → polishing the game's existing (Hoenn) features.** His own branches, not `kanto-port`.
+
+Rules for every session:
+1. Find out which of the two you are working for (ask if it isn't clear) and stay in that lane and branch.
+2. Before editing a file the other lane also uses (engine code in `src/` outside Kanto data, the 3D renderer
+   `src/platform/voxel3d/`, save code, `include/`, `AGENTS.md`), check `docs/WORK_CLAIMS.md`. If the other
+   lane has claimed it, don't edit it — write what you need in that file and tell the person you work for.
+   If not, add your claim (file or area, who, date), push, then edit; remove the claim when you are done.
+3. `git fetch` and rebase before every push; never force-push; never rewrite or revert the other lane's
+   commits. If a rebase conflicts in the other lane's work, stop and ask the person you work for.
+4. Small commits, pushed often, so the other lane sees your changes early.
 
 ## No guessing, ever (owner rule, 2026-11-13)
 Port exactly how the reference does it (Emerald 3DS source for 3D, Gamma's files for lighting, FRLG/Crossroads code for Kanto). If the reference doesn't cover it, ask the owner. Never invent a fix, a value or a design.
