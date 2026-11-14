@@ -470,7 +470,7 @@ the Rockets.
 
 ---
 
-## Chapter 5 — Celadon: the office, the report, Erika, Snorlax  · DRAFT (owner to approve)
+## Chapter 5 — Celadon: the office, the report, Erika, Snorlax  · APPROVED (owner 2026-11-14)
 Design doc: first visit to Varnell's public office in Celadon (only reachable through Lavender); the report-back
 with Blue ("Like the project"); Erika; both Snorlax woken with the Poké Flute; Varnell's staff start acting cagey.
 
