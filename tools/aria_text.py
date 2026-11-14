@@ -15,5 +15,8 @@ def strings(boxes, end="$"):
                 term = end if bi == len(boxes) - 1 else "\\p"
             else:
                 term = "\\n" if li == 0 else "\\l"
-            out.append('\t.string "%s%s"' % (ln.replace('"', '\\"'), term))
+            ln = ln.replace('\u2014', '-')  # em dash: not in the charmap
+            q = iter(['\u201c', '\u201d'] * 50)
+            ln = ''.join(next(q) if ch == '"' else ch for ch in ln)  # straight quotes -> curly (charmap)
+            out.append('\t.string "%s%s"' % (ln, term))
     return "\n".join(out)

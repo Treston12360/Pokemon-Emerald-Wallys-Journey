@@ -13,6 +13,7 @@ PalletTown_ProfessorOaksLab_Frlg_MapScripts::
 
 PalletTown_ProfessorOaksLab_OnTransition::
 	setflag FLAG_VISITED_OAKS_LAB
+	call Aria_Ch1_LabOnTransition @ Project ARIA ch. 1
 	call_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 1, PalletTown_ProfessorOaksLab_EventScript_ReadyOakForStarterScene
 	call_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 7, PalletTown_ProfessorOaksLab_EventScript_ReadyOakForNationalDexScene
 	call_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 8, PalletTown_ProfessorOaksLab_EventScript_SetNationalDexSceneFinished
@@ -46,6 +47,7 @@ PalletTown_ProfessorOaksLab_EventScript_ReadyPlayerForStarterScene::
 	end
 
 PalletTown_ProfessorOaksLab_OnFrame::
+	map_script_2 VAR_TEMP_8, 1, Aria_Ch1_Lab @ Project ARIA ch. 1
 	.2byte 0
 
 PalletTown_ProfessorOaksLab_EventScript_EnterForNationalDexScene:: @ 8169002 
@@ -564,6 +566,7 @@ PalletTown_ProfessorOaksLab_EventScript_RivalChoseStarter::
 PalletTown_ProfessorOaksLab_EventScript_ProfOak::
 	lock
 	faceplayer
+	goto_if_ge VAR_ARIA_STORY, 7, Aria_Ch1_OakAfter @ Project ARIA: no FireRed Oak scenes (Hoenn game-clear would start his National Dex scene)
 	goto_if_set SHOWED_OAK_COMPLETE_DEX, PalletTown_ProfessorOaksLab_EventScript_OakJustShownCompleteDex
 	goto_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 9, PalletTown_ProfessorOaksLab_EventScript_RatePokedex
 	goto_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 8, PalletTown_ProfessorOaksLab_EventScript_MonsAroundWorldWait

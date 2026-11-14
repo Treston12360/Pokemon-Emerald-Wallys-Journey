@@ -1054,6 +1054,7 @@ gStdScripts_End::
 	.include "data/scripts/new_game.inc"
 	.include "data/scripts/aria_kanto_start.inc"
 	.include "data/scripts/aria_ch0.inc"
+	.include "data/scripts/aria_ch1.inc"
 	.include "data/scripts/hall_of_fame.inc"
 	.include "data/scripts/hall_of_fame_frlg.inc"
 
