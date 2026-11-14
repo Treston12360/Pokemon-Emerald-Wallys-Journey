@@ -5,10 +5,12 @@ SSAnne_Exterior_Frlg_MapScripts::
 
 SSAnne_Exterior_OnTransition::
 	setworldmapflag FLAG_WORLD_MAP_SSANNE_EXTERIOR
+	call Aria_Ch0b_DockOnTransition @ Project ARIA ch. 0b
 	end
 
 SSAnne_Exterior_OnFrame::
 	map_script_2 VAR_MAP_SCENE_VERMILION_CITY, 1, SSAnne_Exterior_ExitSSAnne
+	map_script_2 VAR_TEMP_8, 1, Aria_Ch0b_OakAtDock @ Project ARIA ch. 0b
 	.2byte 0
 
 SSAnne_Exterior_ExitSSAnne::

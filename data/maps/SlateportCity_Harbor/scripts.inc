@@ -7,6 +7,7 @@ SlateportCity_Harbor_OnTransition:
 	setvar VAR_TEMP_1, 0
 	call_if_eq VAR_SLATEPORT_HARBOR_STATE, 1, SlateportCity_Harbor_EventScript_ReadyAquaEscapeScene
 	call_if_set FLAG_SYS_GAME_CLEAR, SlateportCity_Harbor_EventScript_ShowSSTidal
+	call Aria_Ch0_HarborOnTransition @ Project ARIA ch. 0: S.S. Anne at the berth, Wally
 	end
 
 SlateportCity_Harbor_EventScript_ShowSSTidal::

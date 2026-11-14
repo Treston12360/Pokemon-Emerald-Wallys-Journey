@@ -19,11 +19,12 @@ lines that fit who they are.
 > left Johto. Everybody wants to say they know you.
 > Oh! One of those calls was Professor Birch.
 > He asked you to come over to the lab as soon as you're up. He said it wasn't urgent...
-> But he called twice. Birch doesn't call twice.
+> But he sounded uneasy. Not like himself at all.
+> And he called twice. Birch doesn't call twice.
 > Go on. I'll keep breakfast warm.
 
 **0.2 Birch (lab)**
-> BIRCH: {PLAYER}! Sorry to drag you over so early. Sit, sit.
+> BIRCH: {PLAYER}! Sorry to drag you over so early.
 > You remember the Pokémon that started turning up all over Hoenn? The ones that had no business being here?
 > I've spent months on it. Pokémon from regions an ocean away, living in our grass like they were born there.
 > No migration, no shipments, no explanation. They're just... here.
@@ -137,6 +138,9 @@ lines that fit who they are.
 ---
 
 ## Owner answers (2026-11-13)
+- 2026-11-14: Ch. 0 plays the same morning as Norman's post-game visit (wake up, Mom and Dad as normal, then
+  Mom passes on Birch's call — **he sounded uneasy**). Birch doesn't say "sit" (there's nowhere to sit) and
+  doesn't ask about the Pokédex in this scene. Two separate tickets: Briney's S.S. Ticket, Birch's S.S. Anne Ticket.
 - RIFT SCANNER: approved. Wally's tone: approved (his line now means "don't let them look down on Hoenn").
 - Mom doesn't see Birch — he called the house; she passes it on (0.1 fixed).
 - Varnell's "forces" = the legendaries (Groudon, Kyogre, Rayquaza); said plainly now (1.1 fixed).
