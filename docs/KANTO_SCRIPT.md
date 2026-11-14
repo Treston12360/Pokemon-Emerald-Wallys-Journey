@@ -368,6 +368,7 @@ and should be scary — the Clefairy's cry building up ("Ar...." → "Ari....").
 
 **3b.3 A Hiker near the Lavender exit (talk)**
 > HIKER: You heard it too? Don't tell me you didn't. That crying.
-> I've been through this tunnel a hundred times. There's never been a Clefairy in here.
+> I've been through this tunnel a hundred times. I know every Pokémon that lives in here. That's none of them.
+> It almost sounds like... words.
 > It's coming from the Lavender side. Same as the tower. ...I'm not going back in there.
 
