@@ -79,11 +79,14 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       in 3D. Do K2 first.
 
 ## Also open on the 3D side (branch `deluxe-3d`, see docs/DELUXE_WORK_QUEUE.md)
-- **DLX-28 furniture in every house 3D** WIP (Claude session 019khs4X, 2026-11-13 16:10) (owner 2026-11-13: "all houses furniture should be 3D"). 3DS left ~30
-  rooms "walls only" (`PLAIN_ROOMS` in `voxel_building_specs.py`). Started: `dewford_hall()` in
-  `tools/voxel3ds/our_changes.patch` — not generated or checked yet. Model each room's furniture with the
-  reference's `piece()` / `house_chair()` / partition pieces (copy House1/House2/Briney rooms), measure pixels
-  from the room's art, run `--only <room> --preview`, then regenerate and test in game.
+- **DLX-28 furniture in every house 3D** — mostly done 2026-11-13 (session 019khs4X), checked in game: Dewford hall
+  (table, partition, bath wall), House3/4 + Lilycove house + Tunneler's + Trick House entrance + Cove Lily Motel (low
+  tables, cushions, jars), Pacifidlog 1/2 + Cutter's (table, chairs, kitchen), Steven's (table, cases), Rustboro
+  houses/flats + Sootopolis houses (tables, a bed), Wanda's (partition, bed), Fossil Maniac (case, bookcase),
+  Pokémon School (desks). In `tools/voxel3ds/our_changes.patch` (`PLAIN_FURNITURE` etc.); passes `--verify` except
+  the 4 lint failures the reference already had (Briney's room etc.). **Left:** the Fortree houses' tree trunk
+  (`fortree_room()` written but fails lint "under" — not hooked up), Fortree decoration shop benches, flower shop
+  counter (3DS left it flat on purpose). The shipped `voxel/buildings.bin` is regenerated from this patch.
 - **DLX-22 black lines in Granite Cave** — still there on the owner's GPU (not visible in Mesa software GL).
   Full-width straight rows across the floor. Need a picture from the newest build.
 

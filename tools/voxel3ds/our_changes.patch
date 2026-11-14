@@ -31,8 +31,8 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/gen_voxel_relief.py b/3ds_port/scri
          cut = cut_cells(lid, roles_layout, h) if drawn else []
 diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/scripts/voxel_building_specs.py
 --- a/3ds_port/scripts/voxel_building_specs.py	2026-11-12 05:40:19.869405517 -0600
-+++ b/3ds_port/scripts/voxel_building_specs.py	2026-11-13 17:54:25.861587899 -0600
-@@ -3522,6 +3522,139 @@
++++ b/3ds_port/scripts/voxel_building_specs.py	2026-11-13 18:12:41.433565558 -0600
+@@ -3522,6 +3522,137 @@
  ]
  
  
@@ -149,8 +149,6 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
 +
 +
 +PLAIN_FURNITURE = {
-+    "LAYOUT_FORTREE_CITY_HOUSE1": fortree_room,
-+    "LAYOUT_FORTREE_CITY_HOUSE2": fortree_room,
 +    "LAYOUT_VERDANTURF_TOWN_WANDAS_HOUSE": wandas_room,
 +    "LAYOUT_ROUTE114_FOSSIL_MANIACS_HOUSE": fossil_room,
 +    "LAYOUT_HOUSE4": low_tables((114, 67, 146, 96), jars=((49, 33, 63, 47), (67, 33, 81, 47))),
@@ -172,7 +170,7 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
  def plain_room(width, height, plain_x, sides):
      w, h = width * 16, height * 16
      side = (plain_x * 16, 0, plain_x * 16 + 16, 32)
-@@ -3632,7 +3765,12 @@
+@@ -3632,7 +3763,12 @@
  
  def school_room():
      side = (176, 8, 192, 36)
@@ -186,7 +184,7 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
          piece("wall", [(0, 8, 192, 36)], 28, fill=16, foot=36, side=side),
          piece("side_w", [], 28, side=side, walls=[((0, 176), (0, 36))]),
          piece("side_e", [], 28, side=side, walls=[((192, 36), (192, 176))]),
-@@ -5934,6 +6072,17 @@
+@@ -5934,6 +6070,17 @@
          "exact": kit_house_exact(80),
      },
      {
@@ -204,7 +202,7 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
          "name": "dewford_gym_exterior",
          "layout": "LAYOUT_DEWFORD_TOWN",
          "rect": (5, 13, 6, 5),
-@@ -6434,16 +6583,7 @@
+@@ -6434,16 +6581,7 @@
          # the real depth raises the roof behind the antenna (behind: True)
          "exact": [(3, 55, 62, 78), (10, 29, 54, 55), (32, 2, 57, 18, True)],
      },
@@ -222,7 +220,7 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
      {
          # Route 113's glass workshop: Fallarbor's house with a roof of glass
          # (the trees' crowns overlap its top row)
-@@ -7740,7 +7880,8 @@
+@@ -7740,7 +7878,8 @@
      {
          "name": layout[len("LAYOUT_"):].lower(),
          "interior": {"layout": layout, "ground": [ground],
@@ -232,7 +230,7 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
      }
      for layout, width, height, ground, plain_x, sides in PLAIN_ROOMS
  ] + [
-@@ -7754,7 +7895,8 @@
+@@ -7754,7 +7893,8 @@
      {
          "name": layout[len("LAYOUT_"):].lower(),
          "interior": {"layout": layout, "ground": [ground],
