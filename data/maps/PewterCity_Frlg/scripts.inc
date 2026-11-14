@@ -5,6 +5,10 @@ PewterCity_Frlg_MapScripts::
 PewterCity_OnTransition::
 	setworldmapflag FLAG_WORLD_MAP_PEWTER_CITY
 	setvar VAR_MAP_SCENE_PEWTER_CITY_MUSEUM_1F, 0
+	@ Project ARIA (S-FOSSIL, approved ch. 2 line): fossils are revived in the Pewter Museum (the Cinnabar Lab is
+	@ closed until ch. 9). Same scientist script and state var as FireRed's lab: a fossil handed over is ready
+	@ the next time you come back in from the city.
+	call_if_eq VAR_MAP_SCENE_CINNABAR_ISLAND_POKEMON_LAB_EXPERIMENT_ROOM_REVIVE_STATE, 1, Aria_PewterFossilReady
 	end
 
 @ Impossible to speak to this NPC from a facing dir != DIR_EAST normally, so they arent checked
@@ -974,3 +978,7 @@ PewterCity_Text_RunningShoesLetterFromMom::
 	.string "you! Don't ever give up!\p"
 	.string "From Mom$"
 
+
+Aria_PewterFossilReady::
+	setvar VAR_MAP_SCENE_CINNABAR_ISLAND_POKEMON_LAB_EXPERIMENT_ROOM_REVIVE_STATE, 2
+	return
