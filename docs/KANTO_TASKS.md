@@ -5,7 +5,8 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 
 > **Build gotcha (2026-11-14):** after changing map scripts/text, run `make release`, then `touch data/*.s` before
 > `make -f Makefile.pc`. The PC build doesn't see changes in files that `data/*.s` include, so it can say
-> "Nothing to be done" and keep the old text. Check the binary's time before testing.
+> "Nothing to be done" and keep the old text. Check the binary's time before testing. Same for graphics: after
+> changing a PNG, delete its build/assets/... file and touch the .c file that includes it.
 
 ## Rules for every session (people and AIs)
 
