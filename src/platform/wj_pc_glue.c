@@ -121,3 +121,13 @@ void WJPC_TestSetBattlerMoves(int battler, const int *moves)
         gBattleMons[battler].pp[k] = 10;
     }
 }
+
+// Test aid (Project ARIA K6): open the Fly map from the field.
+void WJPC_TestOpenFlyMap(void)
+{
+    extern void CB2_OpenFlyMap(void);
+    extern void CleanupOverworldWindowsAndTilemaps(void);
+    CleanupOverworldWindowsAndTilemaps(); // as Crossroads' Flight Call special does
+    gMain.state = 0;
+    SetMainCallback2(CB2_OpenFlyMap);
+}

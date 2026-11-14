@@ -83,6 +83,69 @@ static EWRAM_DATA struct {
 
 static bool32 sDrawFlyDestTextWindow;
 
+// Project ARIA (K6): the Fly map shows Hoenn or Kanto. Ported from Crossroads' Flight Call
+// (sUseForcedFlightRegion / GetActiveRegionMapType); here L or R on the Fly map flips the region
+// (owner 2026-11-13: "switch on the map", no key item).
+static EWRAM_DATA bool8 sUseForcedFlightRegion;
+static EWRAM_DATA u8 sForcedFlightRegion;
+
+static void SetForcedFlightRegion(u8 region)
+{
+    sForcedFlightRegion = region;
+    sUseForcedFlightRegion = TRUE;
+}
+
+static void ClearForcedFlightRegion(void)
+{
+    sForcedFlightRegion = 0;
+    sUseForcedFlightRegion = FALSE;
+}
+
+static u8 GetActiveRegionMapType(void)
+{
+    if (sUseForcedFlightRegion)
+        return sForcedFlightRegion;
+    return GetRegionMapType(gMapHeader.regionMapSectionId);
+}
+
+static u8 GetActiveTopLevelRegion(void)
+{
+    switch (GetActiveRegionMapType())
+    {
+    case REGION_MAP_KANTO:
+    case REGION_MAP_SEVII123:
+    case REGION_MAP_SEVII45:
+    case REGION_MAP_SEVII67:
+        return REGION_KANTO;
+    case REGION_MAP_HOENN:
+    default:
+        return REGION_HOENN;
+    }
+}
+
+static u8 GetActiveKantoSubregion(void)
+{
+    if (sUseForcedFlightRegion)
+    {
+        switch (sForcedFlightRegion)
+        {
+        case REGION_MAP_SEVII123:
+            return KANTO_SUBREGION_SEVII123;
+        case REGION_MAP_SEVII45:
+            return KANTO_SUBREGION_SEVII45;
+        case REGION_MAP_SEVII67:
+            return KANTO_SUBREGION_SEVII67;
+        case REGION_MAP_KANTO:
+        default:
+            return KANTO_SUBREGION_KANTO;
+        }
+    }
+    return GetKantoSubregion(gMapHeader.regionMapSectionId);
+}
+
+static void InitMapForForcedFlightRegion(void);
+static void CB_SwitchFlyMapRegion(void);
+
 static u8 ProcessRegionMapInput_Full(void);
 static u8 MoveRegionMapCursor_Full(void);
 static u8 ProcessRegionMapInput_Zoomed(void);
@@ -742,14 +805,14 @@ bool8 LoadRegionMapGfx(void)
     switch (sRegionMap->initStep)
     {
     case 0:
-        regionMapType = GetRegionMapType(gMapHeader.regionMapSectionId);
+        regionMapType = GetActiveRegionMapType();
         if (sRegionMap->bgManaged)
             DecompressAndCopyTileDataToVram(sRegionMap->bgNum, gRegionMapInfos[regionMapType].regionMapGfx, 0, 0, 0);
         else
             DecompressDataWithHeaderVram(gRegionMapInfos[regionMapType].regionMapGfx, (u16 *)BG_CHAR_ADDR(2));
         break;
     case 1:
-        regionMapType = GetRegionMapType(gMapHeader.regionMapSectionId);
+        regionMapType = GetActiveRegionMapType();
         if (sRegionMap->bgManaged)
         {
             if (!FreeTempTileDataBuffersIfPossible())
@@ -761,7 +824,7 @@ bool8 LoadRegionMapGfx(void)
         }
         break;
     case 2:
-        regionMapType = GetRegionMapType(gMapHeader.regionMapSectionId);
+        regionMapType = GetActiveRegionMapType();
         if (!FreeTempTileDataBuffersIfPossible())
             LoadPalette(gRegionMapInfos[regionMapType].regionMapPalette, BG_PLTT_ID(7), 3 * PLTT_SIZE_4BPP);
         break;
@@ -1193,10 +1256,10 @@ static mapsec_u16_t GetMapSecIdAt(u16 x, u16 y)
     y -= MAPCURSOR_Y_MIN;
     x -= MAPCURSOR_X_MIN;
 
-    switch (GetCurrentRegion())
+    switch (GetActiveTopLevelRegion())
     {
     case REGION_KANTO:
-        switch (GetKantoSubregion(gMapHeader.regionMapSectionId))
+        switch (GetActiveKantoSubregion())
         {
         case KANTO_SUBREGION_SEVII123:
                 return sRegionMapSections_Sevii123[y][x];
@@ -1224,6 +1287,12 @@ static void InitMapBasedOnPlayerLocation(void)
     u16 dimensionScale;
     u16 xOnMap;
     struct WarpData *warp;
+
+    if (sUseForcedFlightRegion)
+    {
+        InitMapForForcedFlightRegion(); // Project ARIA (K6), as Crossroads
+        return;
+    }
 
     if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_SS_TIDAL_CORRIDOR)
         && (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_SS_TIDAL_CORRIDOR)
@@ -1740,8 +1809,9 @@ void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag)
     struct SpritePalette palette = {sRegionMapPlayerIcon_BrendanPal, paletteTag};
     struct SpriteTemplate template = {tileTag, paletteTag, &sRegionMapPlayerIconOam, sRegionMapPlayerIconAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy};
 
-    if (IsEventIslandMapSecId(gMapHeader.regionMapSectionId))
+    if (IsEventIslandMapSecId(gMapHeader.regionMapSectionId) || sUseForcedFlightRegion)
     {
+        // (Project ARIA K6: no player on the other region's map)
         sRegionMap->playerIconSprite = NULL;
         return;
     }
@@ -2333,13 +2403,68 @@ static const struct FlyLocation sFlyLocations[] =
 };
 
 
+// Project ARIA (K6), from Crossroads: the other region's map opens on its first fly destination the
+// player has visited (else its first).
+static void InitMapForForcedFlightRegion(void)
+{
+    u32 i;
+    u16 x, y, width, height;
+    mapsec_u16_t mapSecId = MAPSEC_NONE;
+
+    for (i = 0; i < ARRAY_COUNT(sFlyLocations); i++)
+    {
+        if (sFlyLocations[i].regionMapType != GetActiveRegionMapType())
+            continue;
+        if (FlagGet(sFlyLocations[i].flag))
+        {
+            mapSecId = sFlyLocations[i].mapsec;
+            break;
+        }
+    }
+    if (mapSecId == MAPSEC_NONE)
+    {
+        for (i = 0; i < ARRAY_COUNT(sFlyLocations); i++)
+        {
+            if (sFlyLocations[i].regionMapType == GetActiveRegionMapType())
+            {
+                mapSecId = sFlyLocations[i].mapsec;
+                break;
+            }
+        }
+    }
+    if (mapSecId == MAPSEC_NONE)
+        mapSecId = MAPSEC_LITTLEROOT_TOWN;
+
+    sRegionMap->mapSecId = mapSecId;
+    sRegionMap->playerIsInCave = FALSE;
+    GetMapSecDimensions(mapSecId, &x, &y, &width, &height);
+    sRegionMap->cursorPosX = x + MAPCURSOR_X_MIN;
+    sRegionMap->cursorPosY = y + MAPCURSOR_Y_MIN;
+}
+
+// Project ARIA (K6): the other region can be flown to once one of its fly destinations is visited.
+static bool32 CanSwitchFlyMapRegion(void)
+{
+    u32 i;
+    u8 here = GetRegionMapType(gMapHeader.regionMapSectionId);
+    bool32 hereIsKanto = (here != REGION_MAP_HOENN);
+
+    for (i = 0; i < ARRAY_COUNT(sFlyLocations); i++)
+    {
+        bool32 isKanto = (sFlyLocations[i].regionMapType != REGION_MAP_HOENN);
+        if (isKanto != hereIsKanto && FlagGet(sFlyLocations[i].flag))
+            return TRUE;
+    }
+    return FALSE;
+}
+
 // Sprite data for SpriteCB_FlyDestIcon
 #define sIconMapSec   data[0]
 #define sFlickerTimer data[1]
 
 static void CreateFlyDestIcons(void)
 {
-    enum RegionMapType regionMapType = GetRegionMapType(gMapHeader.regionMapSectionId);
+    enum RegionMapType regionMapType = GetActiveRegionMapType();
     u32 i;
     u16 x;
     u16 y;
@@ -2454,6 +2579,20 @@ static void CB_HandleFlyMapInput(void)
 {
     if (sFlyMap->state == 0)
     {
+        if (JOY_NEW(L_BUTTON | R_BUTTON) && CanSwitchFlyMapRegion())
+        {
+            u8 here = GetRegionMapType(gMapHeader.regionMapSectionId);
+            bool32 showingKanto = (GetActiveRegionMapType() != REGION_MAP_HOENN);
+            u8 target = showingKanto ? REGION_MAP_HOENN : REGION_MAP_KANTO;
+
+            m4aSongNumStart(SE_SELECT);
+            if ((here != REGION_MAP_HOENN) == (target != REGION_MAP_HOENN))
+                ClearForcedFlightRegion(); // back to where the player is
+            else
+                SetForcedFlightRegion(target);
+            SetFlyMapCallback(CB_SwitchFlyMapRegion);
+            return;
+        }
         switch (DoRegionMapInputCallback())
         {
         case MAP_INPUT_NONE:
@@ -2480,6 +2619,29 @@ static void CB_HandleFlyMapInput(void)
     }
 }
 
+// Project ARIA (K6): fade out, then build the Fly map again for the other region.
+static void CB_SwitchFlyMapRegion(void)
+{
+    switch (sFlyMap->state)
+    {
+    case 0:
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+        sFlyMap->state++;
+        break;
+    case 1:
+        if (!UpdatePaletteFade())
+        {
+            FreeRegionMapIconResources();
+            ResetSpriteData(); // the icons' callbacks read sFlyMap, about to be freed
+            TRY_FREE_AND_SET_NULL(sFlyMap);
+            FreeAllWindowBuffers();
+            gMain.state = 0;
+            SetMainCallback2(CB2_OpenFlyMap);
+        }
+        break;
+    }
+}
+
 static void CB_ExitFlyMap(void)
 {
     switch (sFlyMap->state)
@@ -2503,6 +2665,8 @@ static void CB_ExitFlyMap(void)
             {
                 SetMainCallback2(CB2_ReturnToPartyMenuFromFlyMap);
             }
+            ClearForcedFlightRegion(); // Project ARIA (K6)
+            ResetSpriteData(); // PC: the icons' callbacks read sFlyMap (a NULL read the GBA shrugs off)
             TRY_FREE_AND_SET_NULL(sFlyMap);
             FreeAllWindowBuffers();
         }

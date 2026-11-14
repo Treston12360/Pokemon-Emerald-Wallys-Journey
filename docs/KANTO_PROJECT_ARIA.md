@@ -320,3 +320,5 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
 - When Hoopa is taken (cold open?).
 - Varnell's Pokémon team.
 - Sevii Islands: decide later.
+
+- 2026-11-13 (owner): Fly between regions — the Fly map switches on the map itself (L/R), no key item.

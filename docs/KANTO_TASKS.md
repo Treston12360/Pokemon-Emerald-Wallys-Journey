@@ -81,9 +81,14 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       **Left on purpose (later tasks):** `{RIVAL}` text still gives May/Brendan (rival name is story, S0); the PC is
       still "Lanette's PC" in Kanto (wording — ask owner); HM badge checks stay Hoenn's (owner: HMs carry over);
       Trainer Tower / Sevii code still `IS_FRLG` (Sevii decided later); cable club attendants Emerald's.
-- [ ] **K6. Region-aware Fly and region map** WIP (Claude session 019khs4X, 2026-11-13 18:55) (Fly map can switch Hoenn/Kanto; normal Fly animation; no
-      key item — owner decision).
-
+- [x] **K6. Region-aware Fly and region map.** Done 2026-11-13 (session 019khs4X). Owner's choice: "switch on the
+      map" — the Fly map opens on the region you are in; **L or R flips to the other region** once one of that
+      region's fly spots has been visited (until then the button does nothing). Ported from Crossroads' Flight Call
+      (`sUseForcedFlightRegion`, `GetActiveRegionMapType`, `InitMapForForcedFlightRegion` in `src/region_map.c`),
+      no key item; normal Fly. No player head is drawn on the other region's map. Checked in game: Dewford → Fly
+      map → R shows Kanto (Pallet Town) → L back to Hoenn; R then A on Pallet Town flies there. Test-script command
+      `flymap` opens the Fly map from the field. Not done: no on-screen hint that L/R switch (wording/visual — ask
+      the owner first).
 - [ ] **K7. Kanto in 3D.** Kanto must work in the 3D view too (owner 2026-11-13). The 3D data is made by Emerald 3DS's
       generators (`tools/voxel3ds/README.md`); they skip every FRLG layout today ("WJTEST skipped layout ..._FRLG:
       IndexError" — their reader expects Emerald's 512/512 tileset split, see K2). Fix the reader for FRLG tilesets,

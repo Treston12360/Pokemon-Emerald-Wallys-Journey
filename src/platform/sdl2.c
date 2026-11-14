@@ -425,6 +425,13 @@ static bool TestStep(void)
             FieldEffectStart(FLDEFF_USE_SURF);
             continue;
         }
+        if (!strcmp(cmd, "flymap"))
+        {
+            // The Fly map, straight from the field (test aid, Project ARIA K6).
+            extern void WJPC_TestOpenFlyMap(void);
+            WJPC_TestOpenFlyMap();
+            continue;
+        }
         if (!strcmp(cmd, "fieldmove"))
         {
             // The HM "Pokémon shows itself" animation for party slot 0 (test aid).
