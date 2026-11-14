@@ -85,7 +85,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
       not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
 - [ ] **POL-28. Petalburg Woods black lines.** "Bunch of black lines inside of petalburg woods."
-- [ ] **POL-29. Separate music and gameplay volume.** "Add a feature in the volume setting to differentiate music
+- [~] **POL-29. Separate music and gameplay volume.** (Claude 019khs4X, 2026-11-14, in work) "Add a feature in the volume setting to differentiate music
       volume and gameplay volume incase you want to turn off music but keep gameplay audio."
 
 - [ ] **POL-30. Backdrop changes between routes, everywhere** (Brennan, 2026-11-14, later the same day): "Also fix
