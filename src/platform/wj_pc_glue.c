@@ -77,6 +77,7 @@ void BitUnPack(const void *src, void *dest, const void *paramsVoid)
 #include "event_data.h"
 #include "battle_setup.h"
 #include "save.h"
+#include "field_move.h"
 // Test aid (sdl2.c "state"): game state read or written from a test script.
 int WJPC_TestState(const char *what, int id, int set, int value)
 {
@@ -104,6 +105,12 @@ int WJPC_TestState(const char *what, int id, int set, int value)
     }
     if (!strcmp(what, "save"))
         return TrySavingData(SAVE_NORMAL);
+    if (!strcmp(what, "fieldmove"))
+    {
+        // "state fieldmove ID": can the player use this field move here (badge + HM item)? (Project ARIA test aid)
+        extern bool32 WallyHasFieldMoveLicense(enum FieldMove fieldMove);
+        return WallyHasFieldMoveLicense(id);
+    }
     return -1;
 }
 

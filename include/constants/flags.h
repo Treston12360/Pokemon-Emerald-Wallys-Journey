@@ -2441,6 +2441,18 @@
 #define FLAG_WORLD_MAP_SEVEN_ISLAND_SEVAULT_CANYON_TANOBY_KEY       (KANTO_FLAGS_START + 0x2C8)
 #define FLAG_WORLD_MAP_BIRTH_ISLAND_EXTERIOR                        (KANTO_FLAGS_START + 0x2C9)
 
+// Project ARIA: Kanto badges, separate from Hoenn's FLAG_BADGE0x_GET (FireRed's gym scripts set these;
+// a post-game Hoenn save already has every Hoenn badge). Order = FireRed's: Boulder, Cascade, Thunder,
+// Rainbow, Soul, Marsh, Volcano, Earth.
+#define FLAG_KANTO_BADGE01_GET                                     (KANTO_FLAGS_START + 0x2E0)
+#define FLAG_KANTO_BADGE02_GET                                     (KANTO_FLAGS_START + 0x2E1)
+#define FLAG_KANTO_BADGE03_GET                                     (KANTO_FLAGS_START + 0x2E2)
+#define FLAG_KANTO_BADGE04_GET                                     (KANTO_FLAGS_START + 0x2E3)
+#define FLAG_KANTO_BADGE05_GET                                     (KANTO_FLAGS_START + 0x2E4)
+#define FLAG_KANTO_BADGE06_GET                                     (KANTO_FLAGS_START + 0x2E5)
+#define FLAG_KANTO_BADGE07_GET                                     (KANTO_FLAGS_START + 0x2E6)
+#define FLAG_KANTO_BADGE08_GET                                     (KANTO_FLAGS_START + 0x2E7)
+
 // Project ARIA story flags (Kanto flag space, 0x2F0 up; free in FireRed)
 #define FLAG_ARIA_TEAR_MT_MOON_SEALED                               (KANTO_FLAGS_START + 0x2F0)
 #define FLAG_ARIA_CH2_HIKER_TALKED                                  (KANTO_FLAGS_START + 0x2F1)

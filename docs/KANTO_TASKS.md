@@ -121,7 +121,12 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 - [ ] **S1. Chapter 0 — the call:** Mom → Birch → S.S. Anne ticket; Wally's send-off at Slateport.
 - [ ] **S2. Chapter 0b — arrival:** S.S. Anne to Vermilion, fade to black, Oak's lab in Pallet.
 - [ ] **S3. Chapter 1 — the investigation team:** Oak, Varnell, Blue; first assignment (Mt. Moon).
-- [ ] **S-HM. Kanto HM licenses:** (owner 2026-11-14: Rock Tunnel needs Flash — the player must have a way to get
+- [x] **S-HM. Kanto HM licenses** (2026-11-14): Kanto badges are now their own flags (`FLAG_KANTO_BADGE01..08_GET`,
+      FireRed's gym scripts set them — before this they set Hoenn's badge flags, which a post-game save already had).
+      `src/field_move.c` HasBadgeForFieldMove: in Kanto maps each field move needs FireRed's badge for it (Flash Boulder,
+      Cut Cascade, Strength Rainbow, Surf Soul, Rock Smash Marsh, Dive/Waterfall Volcano); Fly always; Hoenn unchanged.
+      The player's HM items are their Hoenn ones (owner: HMs are a licence). Test: `state fieldmove ID`.
+      Old notes: (owner 2026-11-14: Rock Tunnel needs Flash — the player must have a way to get
       Flash from a Kanto Gym Leader before ch. 3b; Brock's badge allows Flash in FireRed.) on Kanto maps, Cut/Surf/Strength/Rock Smash/Waterfall/Flash/Dive need the Kanto
       badge from the Gym Leader who gives that HM (FireRed's badge→HM table); Fly always works; Hoenn unchanged.
 - [ ] **S-LEAGUE. Kanto League lineup** (already decided, design doc §1): Viridian Gym leader Giovanni → **Blue**

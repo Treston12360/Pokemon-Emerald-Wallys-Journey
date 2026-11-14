@@ -64,8 +64,28 @@ static bool32 IsAlwaysTrue(enum FieldMove fieldMove)
     return TRUE;
 }
 
+// Project ARIA (owner 2026-11-13): in Kanto, field moves need the KANTO badge FireRed uses for them
+// (FireRed's table, as in the IS_FRLG branches below); Hoenn badges don't count there. Fly always works.
+static const u8 sKantoFieldMoveBadge[FIELD_MOVES_COUNT] =
+{
+    [FIELD_MOVE_CUT]        = 2, // Cascade (Misty)
+    [FIELD_MOVE_FLASH]      = 1, // Boulder (Brock)
+    [FIELD_MOVE_ROCK_SMASH] = 6, // Marsh (Sabrina)
+    [FIELD_MOVE_STRENGTH]   = 4, // Rainbow (Erika)
+    [FIELD_MOVE_SURF]       = 5, // Soul (Fuchsia)
+    [FIELD_MOVE_DIVE]       = 7, // Volcano (Blaine)
+    [FIELD_MOVE_WATERFALL]  = 7, // Volcano (Blaine)
+};
+
 static bool32 HasBadgeForFieldMove(enum FieldMove fieldMove)
 {
+    if (IN_KANTO_MAP)
+    {
+        if (fieldMove == FIELD_MOVE_FLY)
+            return TRUE;
+        if (sKantoFieldMoveBadge[fieldMove] != 0)
+            return FlagGet(FLAG_KANTO_BADGE01_GET + sKantoFieldMoveBadge[fieldMove] - 1);
+    }
     return FlagGet(gFieldMoveInfo[fieldMove].arg + FLAG_BADGE01_GET);
 }
 
