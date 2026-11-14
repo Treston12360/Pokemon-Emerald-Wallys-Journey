@@ -307,7 +307,7 @@ DLX-7). People on neighbouring maps should already be drawn.
 - Measured (Wine, Oldale -> Route 103): the step that crosses 4.5 ms of map/belt work (was ~13 ms plus
   15-20 ms on each of the next frames). Test aids: WJPC_VOXEL_LOG logs "slow frame" over 4 ms;
   WJPC_3D_BUILD_MS=N sets the budget; WJPC_3D_OLD_CROSSING=1 the old snap; WJPC_TEST_NO_GHOSTS=1 no stand-ins.
-- GBA ROM unchanged (PC code only).
+- PC code only.
 
 ### DLX-19 3D: Lavaridge gym sign folded in half; check the gym door (DONE 2026-11-13, session 019khs4X)
 The new gym model (DLX-1) shows the sign bent. The model is visual only, but confirm in game that
@@ -386,7 +386,7 @@ Grey/transparent squares under rocks and other objects, and long light lines on 
 Picture: fa34c54f, fd24e386. Checked against the 3DS reference: our ship is the 3DS `abandoned_ship` model (hull 8 high, cabin 15, landing stage) exactly. 3DS VOXEL_STATUS.md itself rates Route 108 and the deck 🟧 ("Flat: the deck shows none of its levels" — raising them is unfinished terrain work there too). Changing it is new design: waiting on the owner. Images in `docs/dlx_reports/2026-11-13/`.
 
 ### DLX-28 3D: furniture and half walls flat inside houses (and odd lines) (CHECKED, owner report 2026-11-13)
-Checked against the 3DS reference: 3DS VOXEL_STATUS.md lists 46 interiors as "Walls only; the furniture is still flat on the floor" and Pokémon Center 1F "The glass table and stools still to review". Ours matches the reference's unfinished state. Raising furniture is new design: waiting on the owner.
+Checked against the 3DS reference: 3DS VOXEL_STATUS.md lists 46 interiors as "Walls only; the furniture is still flat on the floor" and Pokémon Center 1F "The glass table and stools still to review". Ours matches the reference's unfinished state. UPDATE 2026-11-13: owner wants furniture 3D in ALL houses. The zip sent earlier had an old voxel/ folder (Center stools/table were flat because of that; fixed zip sent). Work started — see docs/KANTO_TASKS.md 'Also open on the 3D side' and tools/voxel3ds/.
 Chairs and tables look flat, half walls show lines. Pictures: f1550854 (Silph-style railings), 7e0beffa (house). Images in `docs/dlx_reports/2026-11-13/`.
 
 ## How to build and test (short)

@@ -2,7 +2,8 @@
 
 **Authority:** This is the standing record of the owner's requested design for Pokémon Emerald: Wally's Journey. Read this file **before** making changes, planning work, or claiming completion. Preserve these requirements between sessions. When the owner changes a decision, update this file in the same commit. Do not silently change the design.
 
-**Project:** A playable **GBA Pokémon Emerald ROM hack**, not a Python or PC-only game. Python is allowed for offline tooling/checks, not as a replacement for the ROM. Develop on `wally-journey-development`; verify before integrating/releasing. Build and emulator playtesting are required before calling a feature complete.
+**Project (owner, 2026-11-13):** a **native Windows game, `WallysJourney.exe`**. No GBA ROM is made, tested or released any more, and no GBA limit applies; old GBA `.sav` files must still import. Where older rows below say "ROM", "GBA build" or "emulator test", read "the .exe" and "test in the .exe".
+
 
 ## Story, characters and world
 
@@ -23,7 +24,7 @@
 - **Field HM effects** require the relevant Gym Badge and HM item, but **never require any party Pokémon to know, be able to learn, or be compatible with the HM move**. Press A on a Cut tree, smashable rock, Strength boulder, etc., to activate the field move via the normal interaction; Surf/Dive/Waterfall must work at their map prompts too. Party-member selection is an internal visual effect only. Fly and Flash remain accessible via field actions without teaching the moves. Preserve this rule for all eight HMs.
 - **HM acquisition/story dialogue overhaul:** Existing moments where other characters simply hand out HMs should use fitting normal dialogue instead where necessary; Gym Leaders will explain that unlocking an HM's field use through the badge means the player need not teach the move to any Pokémon, and the Gym Leader also awards the corresponding HM. Audit each HM, badge, map event and story dependency so the game never loses a required HM or locks progression.
 - Pokémon can **relearn eligible moves conveniently**, in the spirit of Pokémon Legends: Arceus, without permanent lockout of previously learned moves. Final UI/implementation details need verification.
-- An optional **game speed-up** should not pitch-shift, accelerate, or distort music; design for actual GBA emulator/hardware constraints and test rather than promising arbitrary speedups.
+- An optional **game speed-up** should not pitch-shift, accelerate, or distort music; test it in the Windows game rather than promising arbitrary speedups.
 - **Following Pokémon:** party Pokémon can visibly follow the player in the overworld, with appropriate sprites/behavior and **correct shiny variants** for shiny Pokémon.
 - **Shiny odds: 1 in 4,096** for ordinary shiny generation; audit applicable encounter, gift, breeding, and static-generation paths and document deliberate exceptions.
 - **Champion title defenses:** after becoming Champion, the player should be able to defend the championship in repeatable challenges; design proper triggers, teams, and progression.
@@ -46,7 +47,7 @@
 - Use `src/data/wild_encounters.json` and actual species/evolution definitions as source of truth. Existing scripts under `tools/` provide **partial static checks**; they are not proof of complete obtainable Pokédex.
 - Check encounter slot structure, map/method rates, rod subgroups, starters and pseudo family rarity, effective repeated-slot rate, habitat fit, underleveled evolutions, species line reachability, and no unintended legendary/mythical ambient encounters.
 - The initial audit identified **261 underleveled wild slots among 1,362 checked slots**, across Hoenn plus bundled non-Hoenn maps. **22 Hoenn slots were subsequently changed to catchable earlier stages** (commit `a04f4310`), with family-aware validator updates. Those source changes are committed but require fresh full-audit execution, ROM compilation, and emulator testing; never present 261 as the current post-change count without rerunning the audit.
-- Build the GBA ROM and run real emulator checks for encounters, evolutions, story, HM badge gates, TMs, bike switching, move relearning, Mega Evolution and save/load stability. Never claim the ROM or a feature is fully complete until verified.
+- Build `WallysJourney.exe` and play-test encounters, evolutions, story, HM badge gates, TMs, bike switching, move relearning, Mega Evolution and save/load stability in it. Never claim a feature is fully complete until verified in the game.
 
 ## Status and decision hygiene
 
@@ -61,7 +62,7 @@
 - **Active:** audit and correct remaining underleveled encounters without introducing implausible levels or habitats. Keep the earlier stage available; an evolved stage needs no wild placement when evolution is reachable.
 - **Next:** run full static validators again, review their exceptions, and check complete evolution-chain reachability, including alternate forms, items, breeding, and event sources.
 - **Then:** research Pokédex ecology and actual historical game locations for every Gen 1–9 family; maintain sourced per-species placement and rarity ledger and rebalance wild tables accordingly.
-- **Later verification:** compile a playable GBA ROM, run tests and emulator playthroughs for wild encounters, evolutions, key story/QoL mechanics, and saving.
+- **Later verification:** build the Windows game, run tests and play-throughs for wild encounters, evolutions, key story/QoL mechanics, and saving.
 - **Update 2026-10-17:** static obtainability proof (0 missing Pokédex numbers), sub-1% mechanic and full underlevel correction are done; see the status ledger. Still open: alternate forms, deeper per-species habitat research, and emulator certification.
 
 ## Explicit owner decisions added 2026-10-16
@@ -80,7 +81,7 @@ These points were recovered from earlier Wally's Journey discussions and compare
 - **Wally rival frequency:** Earlier planning mentioned **12 or more Wally battles** and a developing rival relationship/character memory. Treat 12+ as a prior planning target, **not a finalized exact battle count**; confirm story pacing and record all final battle triggers.
 - **Starter Mega Stone specificity:** The post-Norman Steven sequence should grant or enable access to **Sceptilite, Blazikenite, or Swampertite as appropriate for the player's chosen starter**. A prior discussion proposed Steven granting the matching stone in the same scene. Align the final script with the owner's confirmed starter-stone requirement, not a generic stone.
 - **Wally's final team — OWNER APPROVED (2026-10-16):** Armaldo, Mawile, Ludicolo, Crawdaunt, Flygon and Mega Gardevoir (the Champion team already in `trainers.party`). His earlier battles build toward this six, starting from Ralts. The owner also approved retiring Wally's Victory Road rematch tiers to free trainer slots, since Wally becomes Champion.
-- **Emulator testing:** Earlier development explicitly targeted testing in **mGBA** on a GBA-compatible ROM; a PC/Python port is not a substitute.
+- **Testing:** in the Windows game (`WallysJourney.exe`, or the Linux build of the same code with the test-script harness).
 
 The above historical details must be checked against newer explicit owner instructions before implementation; newer decisions always supersede older brainstorms.
 
@@ -95,7 +96,7 @@ The above historical details must be checked against newer explicit owner instru
 
 - **Physical/Special split:** Use the modern **per-move** Physical / Special / Status distinction rather than determining damage category solely from move type as in original Pokémon Emerald. Audit current engine configuration and move metadata first; if already supported, verify it rather than reimplementing.
 - **Upgraded trainer battle AI:** Trainers should make noticeably smarter choices about moves, switching, type matchups, abilities, team synergy and battle strategy where appropriate. Difficulty should be **challenging but fair, never impossibly hard**. Scale intelligence and teams appropriately to trainer rank, story progression and available player resources. Ordinary trainers should not be tuned like competitive Champions, and still **must not Mega Evolve**.
-- **Prefer existing compatible mods/implementations when sensible:** Before building major features from scratch, investigate existing Pokémon Emerald / pokeemerald-expansion / compatible GBA ROM-hack implementations and patches. Compare compatibility, maintenance, code quality, licensing, integration cost, behavior and testing effort. Reuse/adapt proven code when it saves effort and preserves the desired behavior; implement internally when that is simpler, safer or more maintainable. Do not blindly copy incompatible ROM patches or claim another project's feature has been integrated without testing.
+- **Prefer existing compatible mods/implementations when sensible:** Before building major features from scratch, investigate existing Pokémon Emerald / pokeemerald-expansion / other fan-game implementations and patches. Compare compatibility, maintenance, code quality, licensing, integration cost, behavior and testing effort. Reuse/adapt proven code when it saves effort and preserves the desired behavior; implement internally when that is simpler, safer or more maintainable. Do not claim another project's feature has been integrated without testing.
 - **Status:** These are confirmed requirements. Whether the current engine already supplies the physical/special split or sufficiently advanced trainer AI must be audited before calling either complete.
 
 ## Catch-rate realism and legendary spectacle — confirmed owner requirements (2026-10-16)
@@ -192,7 +193,7 @@ The owner explicitly approved **all previously suggested Wally narrative, explor
 
 - **Existing baseline (observed in code, not end-to-end gameplay certified):** pokeemerald-expansion day/night is enabled (`OW_ENABLE_DNS TRUE`, `OW_TIMES_OF_DAY GEN_LATEST`, `OW_USE_FAKE_RTC FALSE`); Wally's Journey currently has **real-calendar-month season selection**, season-dependent daylight tint, deterministic per-day map weather on eligible sunny/cloudy maps, and Deerling/Sawsbuck seasonal wild forms. These are **not** the newly requested 48-hour seasons or full foliage/snow/window-light/NPC/weather-front systems.
 - Build in stages: (1) RTC correctness and stable 48-hour cycle; (2) seasonal foliage/snow/tile/palette art; (3) geography-aware weather and smooth transitions; (4) night exterior/window/street lighting; (5) schedules, reactions, ambient audio and optional PokéNav forecasts; (6) emulator and physical hardware performance/collision/save tests.
-- Reuse compatible upstream day/night, seasonal tile, weather and palette techniques when licenses and performance permit. Avoid heavy new engine requirements where simpler, tested methods suffice. Check VRAM, tile and palette limits, loading times, maps, story flags, weather clashes and frame rate; prioritize original GBA and mGBA compatibility.
+- Reuse compatible upstream day/night, seasonal tile, weather and palette techniques when licenses permit. Check maps, story flags, weather clashes and frame rate in the Windows game. (No GBA limits apply — see AGENTS.md "NO LIMITS".)
 - **Acceptance tests:** all four seasons on the same map; tree recolors visually obvious; snowy and rainy routes where appropriate; changing between routes without unnatural weather snapping; day/night window and streetlights; NPCs behave sensibly; same path access in every season; full Pokédex remains achievable; time advances predictably after 48 hours offline; no wrong dialogue/cutscene/screen glitches, corrupted saves, or unacceptable performance loss.
 
 **Status (2026-10-17): OWNER-APPROVED WISHLIST. All new features in this section require implementation and gameplay verification; do not mark complete because related older tint/weather code exists.**
@@ -243,7 +244,7 @@ The owner explicitly rejects rebalancing captures to be easier to compensate for
 
 ## Implementation status ledger (2026-10-16)
 
-Status words: **code-in** = written and compiles; **build-passed** = full ROM builds; **emulator-verified** = played in mGBA. Nothing below is emulator-verified yet.
+Status words: **code-in** = written and compiles; **build-passed** = the Windows game builds; **game-verified** = played in the Windows game.
 
 | Requirement | Status | How it's done |
 |---|---|---|
@@ -432,7 +433,7 @@ Still to build: Wally story/rival battles/Champion arc, gym leader HM scenes, up
 ### Acceptance criteria / implementation tracking
 - Every new/rewritten scene should record original scene replaced, location, trigger, mandatory flags, characters present, dialogue intent, progression consequence and relevant save/reload tests.
 - Audit the complete original Emerald event order against planned changes, including Birch's starter event; Petalburg Gym and Steven's Wally-house scene; Devon goods; Mt. Chimney; Mt. Pyre; Slateport submarine; Seafloor Cavern; Sootopolis; Sky Pillar; Victory Road; Wallace-to-Wally succession; Elite Four; Hall of Fame and event unlocks.
-- Validate plot continuity for different player gender/rival identity and optional scene order, ensure no duplicate items or stranded quests, and compile/test the narrative in mGBA.
+- Validate plot continuity for different player gender/rival identity and optional scene order, ensure no duplicate items or stranded quests, and build/test the narrative in the Windows game.
 - **Status:** All above is **owner-approved for the wishlist**. Detailed script changes, exact dialogue, cutscenes, trainer teams, event flags and emulator certification are **not yet completed**.
 
 ## Wally Champion victory broadcast after sixth Gym — owner-proposed narrative direction (2026-10-16)
@@ -481,7 +482,7 @@ These are **wishlist items, not claims of implementation**. Adapt the design pri
 - Do **not** import Legacy's old type-based physical/special mechanics: keep the planned modern physical/special split.
 - Do **not** adopt Steven-as-Champion or Wallace-as-Gym-Leader story structure: Wally beats Wallace shortly before the eighth Gym and is the final League Champion opponent, per the latest owner decision.
 - Do not wholesale copy Legacy trainers, script text, music, art, or balance tables. Implement original work consistent with this project's distinct direction.
-- Before marking any item done, verify the actual code, compile, and playtest the affected mechanics on a GBA emulator.
+- Before marking any item done, verify the actual code, build, and playtest the affected mechanics in the Windows game.
 
 ## Wally personality arc — FINAL dialogue-only owner direction (2026-10-17)
 
@@ -666,3 +667,7 @@ These are **wishlist items, not claims of implementation**. Adapt the design pri
 | 2026-11-12 | DLX-10: "Yes, jump to the move"; DLX-14: no limits on PC ("we have no limitations ... as long as the original .sav files are compatible") | DLX-10 done (both builds). DLX-14 done on PC: 64 sprite palettes, 4096 sprite tiles; GBA keeps hardware limits. Saves untouched |
 | 2026-11-12 | DLX-5: 3D Battles "Starts on" | Default On (battle3d=1) kept |
 | 2026-11-13 | "Wallysjourney + Project Aria is one game... now that it is a Windows game we are allowed to do whatever we want with no limitations as long as we can import our old saves"; "no need to ever care about any GBA limitations ever again" (also 3DS limits) | No GBA or 3DS limits of any kind (save size, flags, VRAM, budgets...). Only hard rule: old GBA saves import into the PC game; writing GBA saves back is not needed. Recorded in AGENTS.md "NO LIMITS". |
+| 2026-11-13 | "We are not making a GBA ROM anymore. The game is now a .exe game. The GitHub should explain that there are no more limitations. Focus on the .exe and not work on the GBA ROM anymore." | README, AGENTS.md, this file, PROJECT_PC_PORT.md and KANTO_TASKS.md say so. No ROM testing, no `.gba` files sent, no ROM-only code kept. `make release` only as the data-generation step of the PC build. Old GBA saves still import |
+| 2026-11-13 | "Do not spoil the project aria storyline to me specifically; if you have story questions put them in the GitHub, my friend who is also working on the game will answer them." | AGENTS.md rule "No story spoilers in chat"; questions go to `docs/KANTO_STORY_QUESTIONS.md`, answered there by the story's writer |
+| 2026-11-13 | "I noticed in Hoenn that you got lazy with the trainers... they would say a random sentence and then battle... no normal person is gonna say 'Roxanne teaches at the school, battle'... we need to go through every trainer and add different dialogue that makes sense for the world" | Every trainer (Hoenn and Kanto) needs their own believable lines that fit who they are; no fact-then-"battle!" filler. Longer dialogue is fine when it helps. Hoenn trainers = polish lane (owner's friend); Kanto = ARIA lane. |
+

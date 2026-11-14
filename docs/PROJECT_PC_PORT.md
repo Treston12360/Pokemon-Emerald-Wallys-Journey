@@ -5,7 +5,7 @@
 Read this section, then the rest of the file. Repo `Treston12360/Pokemon-Emerald-Wallys-Journey`, PC branch `deluxe`.
 Another Claude session may also push to `deluxe`: always `git pull --rebase` before pushing.
 
-**Done since alpha 5b (all on `deluxe`, GBA ROM still 21f006ad...):**
+**Done since alpha 5b (all on `deluxe`):**
 - Overworld fills the screen edge to edge at any window size; **zoom** like gen1recomp (keys `-` `=`, mouse wheel,
   Settings > Video > Zoom 1-8): whole-number scale, zooming out shows more map. Indoors zooms one step closer.
 - **UI layer**: text boxes, menus and the start menu are drawn separately at the biggest whole GBA size that fits
@@ -201,12 +201,8 @@ controller mapping (owner confirmed it works) and the bad-read fixes. **Next: st
 - If a machine has gcc-multilib + 32-bit SDL2 and mingw-w64 + Wine, the original commands still work.
 
 ## Rules (same as the main project, plus PC ones)
-- **The GBA ROM must not change.** Every change to shared code is behind `#ifdef PORTABLE` (C) or
-  `.ifdef PORTABLE_ASM` (asm). After every change run `make release` and compare the SHA-1 with a build of
-  the base commit (0.18.19 = `21f006adcc5d884c4992805296e171f45428c46b`).
-  **Careful:** expansion asserts embed `__LINE__`, so adding lines above an assert in files like sprite.c
-  changes the ROM bytes. Keep edits on the same line (see the `CALL_SPRITE_CALLBACK` / `SPRITE_HAS_ANIM`
-  macros in include/global.h) when a file has asserts.
+- **The game is `WallysJourney.exe` (owner 2026-11-13).** No GBA ROM is made, tested, compared or sent. `make
+  release` is only the step that generates the data files the PC build needs. No GBA limits; old GBA saves import.
 - PC-only code goes in `src/platform/`, `include/platform/`, `tools/pc/`; the GBA Makefile skips `src/platform/`.
 - Owner rules from the main project still apply: plain language, call out mistakes, new/changed dialogue and
   any visual change must be shown to and approved by the owner first, no new hand-drawn art (recolours OK),
@@ -214,7 +210,8 @@ controller mapping (owner confirmed it works) and the bad-read fixes. **Next: st
 - mGBA saves must load on PC (owner 2026-11-12: PC saves no longer need to go back to mGBA). The save file is the raw 128 KB flash image.
 
 ## Building
-Run the normal GBA build first (`make release`) so all generated files exist, then:
+Run `make release` first — not for the ROM (no ROM is made any more), only because it generates files the PC
+build needs (map data, trainer tables, graphics). Then:
 ```
 make -f Makefile.pc            # Linux 32-bit: ./wallys-journey
 make -f Makefile.pc WIN=1      # Windows 32-bit: WallysJourney.exe

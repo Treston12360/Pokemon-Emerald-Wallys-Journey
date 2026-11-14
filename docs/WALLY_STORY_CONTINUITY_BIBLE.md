@@ -4,7 +4,7 @@
 
 **Authority order:** `WALLY_JOURNEY_OWNER_REQUIREMENTS.md` (owner's words) > this bible > code comments. If they disagree, fix this bible.
 
-**Status words used below:** **done** = in the ROM and compiling · **partial** = some of the scene is done · **planned** = designed here, not built · **keep** = original Emerald scene stays as-is.
+**Status words used below:** **done** = in the game and compiling · **partial** = some of the scene is done · **planned** = designed here, not built · **keep** = original Emerald scene stays as-is.
 
 ---
 
