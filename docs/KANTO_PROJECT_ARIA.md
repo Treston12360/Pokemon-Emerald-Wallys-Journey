@@ -48,8 +48,12 @@ a reveal or a choice, not just a gym.
   > Blue: "It was weird. It kept saying 'Aria.' Like the project. Maybe the tears pulled it in like the
   > other Pokémon that shouldn't be here... and it's reacting to the machine somehow?"
   > Varnell: "......"
-  > Varnell: "...Possibly. The tower's readings were high. Echoes tend to latch onto strong signals.
-  > Good work, both of you."
+  > Varnell: "...Perhaps it does know. The tower's readings were the highest we've ever recorded.
+  > If that echo was pulled through a tear, it may have sensed ARIA working — the one thing in Kanto that
+  > could put it back where it belongs. Maybe that's what it was asking us to do."
+  > Varnell: "Good work, both of you."
+  (Owner 2026-11-14: Varnell suggests the Clefairy somehow knew of the project and was asking to be put back
+  where it belongs — misleads the player away from "that was his daughter's Clefairy". Draft wording.)
   Blue honestly thinks the ghost means *the project* (he never knew her name). Varnell lies by agreeing —
   he uses Blue's mistake as cover. This doubles as a red herring that points players at the machine, not a person.
   Exactly one beat of silence, then he recovers. Longer or emotional reactions would tip off sharp players.
