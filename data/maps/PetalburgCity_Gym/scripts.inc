@@ -147,6 +147,7 @@ PetalburgCity_Gym_EventScript_BeginWallyTutorial::
 	call_if_eq VAR_0x8008, 1, PetalburgCity_Gym_EventScript_WallyArriveNorth
 	call_if_eq VAR_0x8008, 2, PetalburgCity_Gym_EventScript_WallyArriveWestEast
 	call_if_eq VAR_0x8008, 3, PetalburgCity_Gym_EventScript_WallyArriveWestEast
+	setspeaker SP_NAME_WALLY
 	msgbox PetalburgCity_Gym_Text_WallyIdLikeAPokemon, MSGBOX_DEFAULT
 	msgbox PetalburgCity_Gym_Text_DadOhYoureWallyRight, MSGBOX_DEFAULT
 	msgbox PetalburgCity_Gym_Text_WallyIveNeverCaughtAPokemon, MSGBOX_DEFAULT
@@ -160,6 +161,7 @@ PetalburgCity_Gym_EventScript_BeginWallyTutorial::
 	call_if_eq VAR_0x8008, 1, PetalburgCity_Gym_EventScript_NormanAddressWallyNorth
 	call_if_eq VAR_0x8008, 2, PetalburgCity_Gym_EventScript_NormanAddressWallyWest
 	call_if_eq VAR_0x8008, 3, PetalburgCity_Gym_EventScript_NormanAddressWallyEast
+	setspeaker SP_NAME_DAD
 	msgbox PetalburgCity_Gym_Text_IllLoanYouMyZigzagoon, MSGBOX_DEFAULT
 	msgbox PetalburgCity_Gym_Text_WallyThankYouAndDadGivesPokeBall, MSGBOX_DEFAULT
 	msgbox PetalburgCity_Gym_Text_WallyOhWowThankYou, MSGBOX_DEFAULT
@@ -171,6 +173,7 @@ PetalburgCity_Gym_EventScript_BeginWallyTutorial::
 	call_if_eq VAR_0x8008, 1, PetalburgCity_Gym_EventScript_WallyFaceDown
 	call_if_eq VAR_0x8008, 2, PetalburgCity_Gym_EventScript_WallyFacePlayer
 	call_if_eq VAR_0x8008, 3, PetalburgCity_Gym_EventScript_WallyFacePlayer
+	setspeaker SP_NAME_WALLY
 	msgbox PetalburgCity_Gym_Text_WouldYouReallyComeWithMe, MSGBOX_DEFAULT
 	closemessage
 	setflag FLAG_DONT_TRANSITION_MUSIC
@@ -1031,7 +1034,7 @@ PetalburgCity_Gym_EventScript_GymStatue::
 	end
 
 PetalburgCity_Gym_Text_DadYoureHereWithYourPokemon:
-	.string "Dad: Hm?\p"
+	.string "{SPEAKER SPK_DAD}Hm?\p"
 	.string "{PLAYER}! You're all moved in? You\n"
 	.string "found your way here by yourself.\p"
 	.string "…And you have a Pokémon with you.\p"
@@ -1055,11 +1058,11 @@ PetalburgCity_Gym_Text_WallyIdLikeAPokemon:
 	.string "I'd like to get a Pokémon, please…$"
 
 PetalburgCity_Gym_Text_DadOhYoureWallyRight:
-	.string "Dad: Hm? You're… Uh… Oh, right.\n"
+	.string "{SPEAKER SPK_DAD}Hm? You're… Uh… Oh, right.\n"
 	.string "You're Wally, right?$"
 
 PetalburgCity_Gym_Text_WallyIveNeverCaughtAPokemon:
-	.string "Wally: I'm going to go stay with my\n"
+	.string "{SPEAKER SPK_WALLY}I'm going to go stay with my\n"
 	.string "relatives in Verdanturf Town.\p"
 	.string "I thought I would be lonely by myself,\n"
 	.string "so I wanted to take a Pokémon along.\p"
@@ -1067,10 +1070,10 @@ PetalburgCity_Gym_Text_WallyIveNeverCaughtAPokemon:
 	.string "I don't know how…$"
 
 PetalburgCity_Gym_Text_DadHmISee:
-	.string "Dad: Hm. I see.$"
+	.string "{SPEAKER SPK_DAD}Hm. I see.$"
 
 PetalburgCity_Gym_Text_DadPlayerGoWithWally:
-	.string "Dad: {PLAYER}, you heard that,\n"
+	.string "{SPEAKER SPK_DAD}{PLAYER}, you heard that,\n"
 	.string "right?\p"
 	.string "Go with Wally and make sure that he\n"
 	.string "safely catches a Pokémon.$"
@@ -1080,14 +1083,14 @@ PetalburgCity_Gym_Text_IllLoanYouMyZigzagoon:
 	.string "Wally received a Zigzagoon!$"
 
 PetalburgCity_Gym_Text_WallyThankYouAndDadGivesPokeBall:
-	.string "Wally: Oh, wow!\n"
+	.string "{SPEAKER SPK_WALLY}Oh, wow!\n"
 	.string "A Pokémon!\p"
-	.string "Dad: Hm. I'll give you a Poké Ball, too.\n"
+	.string "{SPEAKER SPK_DAD}Hm. I'll give you a Poké Ball, too.\n"
 	.string "Go for it!\p"
 	.string "Wally received a Poké Ball!$"
 
 PetalburgCity_Gym_Text_WallyOhWowThankYou:
-	.string "Wally: Oh, wow!\n"
+	.string "{SPEAKER SPK_WALLY}Oh, wow!\n"
 	.string "Thank you!$"
 
 PetalburgCity_Gym_Text_WouldYouReallyComeWithMe:
@@ -1095,10 +1098,10 @@ PetalburgCity_Gym_Text_WouldYouReallyComeWithMe:
 	.string "with me?$"
 
 PetalburgCity_Gym_Text_DadSoDidItWorkOut:
-	.string "Dad: So, did it work out?$"
+	.string "{SPEAKER SPK_DAD}So, did it work out?$"
 
 PetalburgCity_Gym_Text_WallyThankYouBye:
-	.string "Wally: Thank you, yes, it did.\n"
+	.string "{SPEAKER SPK_WALLY}Thank you, yes, it did.\n"
 	.string "Here's your Pokémon back.\p"
 	.string "{PLAYER}, thank you for coming along\n"
 	.string "with me.\p"
@@ -1111,7 +1114,7 @@ PetalburgCity_Gym_Text_WallyThankYouBye:
 	.string "Bye, {PLAYER}!$"
 
 PetalburgCity_Gym_Text_DadGoCollectBadges:
-	.string "Dad: Now, {PLAYER}. If you want to\n"
+	.string "{SPEAKER SPK_DAD}Now, {PLAYER}. If you want to\n"
 	.string "be strong, here's my advice.\p"
 	.string "Head for Rustboro City and challenge\n"
 	.string "Roxanne. Then the other Gyms.\p"
@@ -1123,14 +1126,14 @@ PetalburgCity_Gym_Text_DadGoCollectBadges:
 	.string "there.$"
 
 PetalburgCity_Gym_Text_NormanGoToRustboro:
-	.string "Dad: Aren't you headed to Rustboro?\p"
+	.string "{SPEAKER SPK_DAD}Aren't you headed to Rustboro?\p"
 	.string "I won't battle a greenhorn. Not even\n"
 	.string "you. Especially not you.\p"
 	.string "Come back with four Gym Badges. Then\n"
 	.string "we'll see.$"
 
 PetalburgCity_Gym_Text_NormanGoToDewford:
-	.string "Dad: So you beat Roxanne. Good.\p"
+	.string "{SPEAKER SPK_DAD}So you beat Roxanne. Good.\p"
 	.string "But there are many Trainers stronger\n"
 	.string "than you.\p"
 	.string "Across the sea in Dewford, Brawly\n"
@@ -1139,12 +1142,12 @@ PetalburgCity_Gym_Text_NormanGoToDewford:
 	.string "well. Good. Keep it up.$"
 
 PetalburgCity_Gym_Text_YouHaveGottenStronger:
-	.string "Dad: Hm… You've gotten stronger.\p"
+	.string "{SPEAKER SPK_DAD}Hm… You've gotten stronger.\p"
 	.string "I can see it in your Badges. And in\n"
 	.string "how you stand.$"
 
 PetalburgCity_Gym_Text_NormanIntro:
-	.string "Dad: Hm…\n"
+	.string "{SPEAKER SPK_DAD}Hm…\n"
 	.string "So you did get four Gym Badges.\p"
 	.string "As I promised, we will battle.\p"
 	.string "{PLAYER}…\p"
@@ -1168,14 +1171,14 @@ PetalburgCity_Gym_Text_ReceivedBalanceBadge:
 	.string "from Dad!$"
 
 PetalburgCity_Gym_Text_ExplainBalanceBadgeTakeThis:
-	.string "Dad: With that Badge, your Pokémon\n"
+	.string "{SPEAKER SPK_DAD}With that Badge, your Pokémon\n"
 	.string "can Surf across water. No need to\l"
 	.string "teach them the move.\p"
 	.string "And this is my gift to you. {PLAYER},\n"
 	.string "I'm sure you'll use it well.$"
 
 PetalburgCity_Gym_Text_ExplainFacade:
-	.string "Dad: TM42 contains Facade.\p"
+	.string "{SPEAKER SPK_DAD}TM42 contains Facade.\p"
 	.string "It doubles the power of moves if\n"
 	.string "the Pokémon is poisoned, paralyzed,\l"
 	.string "or burned.\p"
@@ -1183,7 +1186,7 @@ PetalburgCity_Gym_Text_ExplainFacade:
 	.string "situation into an advantage.$"
 
 PetalburgCity_Gym_Text_DadHappyAndSad:
-	.string "Dad: As the Gym Leader, I can't\n"
+	.string "{SPEAKER SPK_DAD}As the Gym Leader, I can't\n"
 	.string "express how upset I am…\p"
 	.string "But as your father… Hm.\n"
 	.string "There's something I should have\l"
@@ -1211,7 +1214,7 @@ PetalburgCity_Gym_Text_DadHappyAndSad:
 	.string "…If you'll let me.$"
 
 PetalburgCity_Gym_Text_DadGoingToKeepTraining:
-	.string "Dad: {PLAYER}, I meant what I said.\n"
+	.string "{SPEAKER SPK_DAD}{PLAYER}, I meant what I said.\n"
 	.string "The Gym closes early on Sundays now.\p"
 	.string "I'll be home this weekend. Tell your\n"
 	.string "mother I'm bringing dinner.\p"
@@ -1220,7 +1223,7 @@ PetalburgCity_Gym_Text_DadGoingToKeepTraining:
 	.string "Trainer not to win one back!$"
 
 PetalburgCity_Gym_Text_DadNoAmountOfTrainingIsEnough:
-	.string "Dad: {PLAYER}! How are things going?\p"
+	.string "{SPEAKER SPK_DAD}{PLAYER}! How are things going?\p"
 	.string "Wally stopped by last week. Asked if\n"
 	.string "I'd spar with him before he\l"
 	.string "challenges you again.\p"
@@ -1459,7 +1462,7 @@ PetalburgCity_Gym_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 PetalburgCity_Gym_Text_NormanPreRematch:
-	.string "Dad: {PLAYER}… I had a feeling you'd\n"
+	.string "{SPEAKER SPK_DAD}{PLAYER}… I had a feeling you'd\n"
 	.string "come.\p"
 	.string "Inside this Gym, we're Leader and\n"
 	.string "challenger.\p"
@@ -1471,7 +1474,7 @@ PetalburgCity_Gym_Text_NormanRematchDefeat:
 	.string "and you still won.$"
 
 PetalburgCity_Gym_Text_NormanPostRematch:
-	.string "Dad: {PLAYER}…\n"
+	.string "{SPEAKER SPK_DAD}{PLAYER}…\n"
 	.string "What is your dream?\p"
 	.string "Mine used to be this Gym.\p"
 	.string "Now it's simpler. Sunday dinners,\n"
@@ -1480,7 +1483,7 @@ PetalburgCity_Gym_Text_NormanPostRematch:
 	.string "That dream, I'm finally keeping.$"
 
 PetalburgCity_Gym_Text_NormanRematchNeedTwoMons:
-	.string "Dad: {PLAYER}… I had a feeling you'd\n"
+	.string "{SPEAKER SPK_DAD}{PLAYER}… I had a feeling you'd\n"
 	.string "come.\p"
 	.string "Hm? Only one Pokémon that can\n"
 	.string "battle?\p"
@@ -1488,19 +1491,19 @@ PetalburgCity_Gym_Text_NormanRematchNeedTwoMons:
 	.string "Come back with at least two.$"
 
 PetalburgCity_Gym_Text_NormanPreRematch3:
-	.string "Dad: {PLAYER}. Your mother made me\n"
+	.string "{SPEAKER SPK_DAD}{PLAYER}. Your mother made me\n"
 	.string "promise not to go easy on you.\p"
 	.string "As if I could. Let's go!$"
 
 PetalburgCity_Gym_Text_NormanPreRematch4:
-	.string "Dad: I used to train at night so I'd\n"
+	.string "{SPEAKER SPK_DAD}I used to train at night so I'd\n"
 	.string "be strong enough to provide for us.\p"
 	.string "Now I train just to keep up with my\n"
 	.string "own kid. Funny how that works.\p"
 	.string "Show me everything, {PLAYER}!$"
 
 PetalburgCity_Gym_Text_NormanPreRematch5:
-	.string "Dad: This is the team I'd have taken\n"
+	.string "{SPEAKER SPK_DAD}This is the team I'd have taken\n"
 	.string "to the League, if I'd ever gone.\p"
 	.string "I never did. There was always a Gym\n"
 	.string "to run and a family to feed.\p"
@@ -1511,7 +1514,7 @@ PetalburgCity_Gym_Text_NormanRematchDefeatElite:
 	.string "…Hah. That's my kid.$"
 
 PetalburgCity_Gym_Text_NormanPostRematchElite:
-	.string "Dad: Wally asked me how to beat you.\p"
+	.string "{SPEAKER SPK_DAD}Wally asked me how to beat you.\p"
 	.string "I told him I'd let him know the\n"
 	.string "moment I figure it out myself.$"
 
@@ -1531,6 +1534,7 @@ PetalburgCity_Gym_EventScript_NormanRematchStage1::
 	goto_if_eq VAR_RESULT, NO, PetalburgCity_Gym_EventScript_NormanRematchDecline
 	cleartrainerflag TRAINER_NORMAN_2
 	trainerbattle_no_intro TRAINER_NORMAN_2, PetalburgCity_Gym_Text_NormanGrowDefeat1
+	setspeaker SP_NAME_DAD
 	msgbox PetalburgCity_Gym_Text_NormanGrowAfter1, MSGBOX_DEFAULT
 	release
 	end
@@ -1540,6 +1544,7 @@ PetalburgCity_Gym_EventScript_NormanRematchStage2::
 	goto_if_eq VAR_RESULT, NO, PetalburgCity_Gym_EventScript_NormanRematchDecline
 	cleartrainerflag TRAINER_NORMAN_2
 	trainerbattle_no_intro TRAINER_NORMAN_2, PetalburgCity_Gym_Text_NormanGrowDefeat2
+	setspeaker SP_NAME_DAD
 	msgbox PetalburgCity_Gym_Text_NormanGrowAfter2, MSGBOX_DEFAULT
 	release
 	end
@@ -1551,6 +1556,7 @@ PetalburgCity_Gym_EventScript_NormanRematchStage3::
 	trainerbattle_double TRAINER_NORMAN_3, PetalburgCity_Gym_Text_NormanGrowGo, PetalburgCity_Gym_Text_NormanGrowDefeat3, PetalburgCity_Gym_Text_NormanGrowNeedTwo
 	setvar VAR_0x8004, 5
 	special WallyJourney_RecordLeaderPostgameWin
+	setspeaker SP_NAME_DAD
 	msgbox PetalburgCity_Gym_Text_NormanGrowAfter3, MSGBOX_DEFAULT
 	release
 	end
@@ -1560,6 +1566,7 @@ PetalburgCity_Gym_EventScript_NormanRematchStage4::
 	goto_if_eq VAR_RESULT, NO, PetalburgCity_Gym_EventScript_NormanRematchDecline
 	cleartrainerflag TRAINER_NORMAN_4
 	trainerbattle_double TRAINER_NORMAN_4, PetalburgCity_Gym_Text_NormanGrowGo, PetalburgCity_Gym_Text_NormanGrowDefeat4, PetalburgCity_Gym_Text_NormanGrowNeedTwo
+	setspeaker SP_NAME_DAD
 	msgbox PetalburgCity_Gym_Text_NormanGrowAfter4, MSGBOX_DEFAULT
 	release
 	end
@@ -1578,7 +1585,7 @@ PetalburgCity_Gym_Text_NormanGrowNeedTwo:
 	.string "battle. Come back with more.$"
 
 PetalburgCity_Gym_Text_NormanGrowOffer1:
-	.string "Dad: {STR_VAR_1} Badges. I'm proud of you.\p"
+	.string "{SPEAKER SPK_DAD}{STR_VAR_1} Badges. I'm proud of you.\p"
 	.string "A Leader fights each challenger\n"
 	.string "with a team that suits their Badges.\p"
 	.string "Yours have earned a tougher one.\n"
@@ -1593,7 +1600,7 @@ PetalburgCity_Gym_Text_NormanGrowAfter1:
 	.string "I'll be here, training.$"
 
 PetalburgCity_Gym_Text_NormanGrowOffer2:
-	.string "Dad: All eight Badges.\p"
+	.string "{SPEAKER SPK_DAD}All eight Badges.\p"
 	.string "Before the League, let your father\n"
 	.string "test you one more time.$"
 
@@ -1605,7 +1612,7 @@ PetalburgCity_Gym_Text_NormanGrowAfter2:
 	.string "to Ever Grande.$"
 
 PetalburgCity_Gym_Text_NormanGrowOffer3:
-	.string "Dad: My own child, the Champion.\p"
+	.string "{SPEAKER SPK_DAD}My own child, the Champion.\p"
 	.string "My full team is ready.\n"
 	.string "Show me what a Champion can do.$"
 
@@ -1617,7 +1624,7 @@ PetalburgCity_Gym_Text_NormanGrowAfter3:
 	.string "to keep up somehow.$"
 
 PetalburgCity_Gym_Text_NormanGrowOffer4:
-	.string "Dad: You've defended your title.\p"
+	.string "{SPEAKER SPK_DAD}You've defended your title.\p"
 	.string "This is the strongest team I've\n"
 	.string "ever raised. No holding back.$"
 

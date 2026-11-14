@@ -121,8 +121,10 @@ Route119_EventScript_BattleBrendanMudkip::
 	end
 
 Route119_EventScript_DefeatedBrendan::
+	setspeaker SP_NAME_BRENDAN
 	msgbox Route119_Text_NoHmFly, MSGBOX_DEFAULT
 	call Route119_EventScript_GiveFlyHM
+	setspeaker SP_NAME_BRENDAN
 	msgbox Route119_Text_NoHmFlyAdvice, MSGBOX_DEFAULT
 	goto Route119_EventScript_RivalExitScottArrive
 	end
@@ -475,7 +477,7 @@ Route119_EventScript_ScottWonAtFortreeGymCall::
 	end
 
 Route119_Text_MayIntro:
-	.string "May: {PLAYER}{KUN}!\n"
+	.string "{SPEAKER SPK_MAY}{PLAYER}{KUN}!\n"
 	.string "Where were you? I was looking for you!\p"
 	.string "How much stronger have you gotten?\n"
 	.string "Let me check for you!\p"
@@ -489,14 +491,14 @@ Route119_Text_MayDefeat:
 	.string "I'm glad one of us is doing great.$"
 
 Route119_Text_MayResearchAfterBattle:
-	.string "May: You keep surprising me,\n"
+	.string "{SPEAKER SPK_MAY}You keep surprising me,\n"
 	.string "and you're not the only one.\p"
 	.string "Dad's migration notes don't match\n"
 	.string "the Pokémon we're seeing here.\p"
 	.string "I want to find out why.$"
 
 Route119_Text_MayExplainFly:
-	.string "May: Winona can teach you how\n"
+	.string "{SPEAKER SPK_MAY}Winona can teach you how\n"
 	.string "to travel with Fly once you win\l"
 	.string "the Feather Badge.\p"
 	.string "She'll give you the HM herself.\n"
@@ -505,7 +507,7 @@ Route119_Text_MayExplainFly:
 	.string "See you around, {PLAYER}!$"
 
 Route119_Text_BrendanIntro:
-	.string "Brendan: {PLAYER}! So this is where\n"
+	.string "{SPEAKER SPK_BRENDAN}{PLAYER}! So this is where\n"
 	.string "you've been looking for Pokémon?\p"
 	.string "Let me see how good you got.\n"
 	.string "I'll test you!\p"
@@ -520,13 +522,13 @@ Route119_Text_BrendanDefeat:
 	.string "Guess both our dads are like that.$"
 
 Route119_Text_BrendanIllGiveYouThis:
-	.string "Brendan: I'd say you're good enough\n"
+	.string "{SPEAKER SPK_BRENDAN}I'd say you're good enough\n"
 	.string "to search for Pokémon anywhere.\p"
 	.string "Here, I'll give you this.\n"
 	.string "Try it out.$"
 
 Route119_Text_BrendanExplainFly:
-	.string "Brendan: Use Fly, and your Pokémon\n"
+	.string "{SPEAKER SPK_BRENDAN}Use Fly, and your Pokémon\n"
 	.string "instantly carries you to any town\l"
 	.string "you've already visited.\p"
 	.string "But you need the Fortree Gym Badge \n"
@@ -534,7 +536,7 @@ Route119_Text_BrendanExplainFly:
 	.string "Anyway, I have to move along.$"
 
 Route119_Text_ScottWayToGoBeSeeingYou:
-	.string "Scott: Hahahah!\n"
+	.string "{SPEAKER SPK_SCOTT}Hahahah!\n"
 	.string "Way to go, {PLAYER}{KUN}!\p"
 	.string "I just passed by a Trainer riding\n"
 	.string "a Bike.\p"
@@ -551,7 +553,7 @@ Route119_Text_ScottWayToGoBeSeeingYou:
 Route119_Text_ScottYouWonAtFortreeGym:
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "Scott: Hiya, {PLAYER}{KUN}, it's me!\p"
+	.string "{SPEAKER SPK_SCOTT}Hiya, {PLAYER}{KUN}, it's me!\p"
 	.string "Just as I thought, you won at\n"
 	.string "the Fortree Gym.\p"
 	.string "Your strength…\n"

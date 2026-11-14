@@ -440,12 +440,12 @@ SlateportCity_Harbor_Text_SubTooSmallForMe:
 	.string "for air!$"
 
 SlateportCity_Harbor_Text_SameThugsTriedToRobAtMuseum:
-	.string "Capt. Stern: Those thugs…\p"
+	.string "{SPEAKER SPK_STERN}Those thugs…\p"
 	.string "They're the same lot who tried to rob\n"
 	.string "the Devon Goods at the Museum.$"
 
 SlateportCity_Harbor_Text_ArchieYouAgainHideoutInLilycove:
-	.string "Archie: Oh?\n"
+	.string "{SPEAKER SPK_ARCHIE}Oh?\n"
 	.string "Not you again…\p"
 	.string "You are tenacious to track us here,\n"
 	.string "that much I will give you.\p"
@@ -456,7 +456,7 @@ SlateportCity_Harbor_Text_ArchieYouAgainHideoutInLilycove:
 	.string "Fwahahahaha…$"
 
 SlateportCity_Harbor_Text_CaptSternWhyStealMySubmarine:
-	.string "Capt. Stern: They knew exactly when\n"
+	.string "{SPEAKER SPK_STERN}They knew exactly when\n"
 	.string "the guards changed shifts…\p"
 	.string "Someone on my own crew gave them the\n"
 	.string "schedule. I'd bet my ship on it.\p"
@@ -465,7 +465,7 @@ SlateportCity_Harbor_Text_CaptSternWhyStealMySubmarine:
 	.string "find out who.$"
 
 SlateportCity_Harbor_Text_TeamAquaLeftNeedDive:
-	.string "Capt. Stern: Oh, {PLAYER}{KUN}…\p"
+	.string "{SPEAKER SPK_STERN}Oh, {PLAYER}{KUN}…\p"
 	.string "Don't blame yourself. They planned\n"
 	.string "this for weeks.\p"
 	.string "One of my shipyard hands, Dale, has\n"
@@ -477,20 +477,20 @@ SlateportCity_Harbor_Text_TeamAquaLeftNeedDive:
 	.string "yours do it.$"
 
 SlateportCity_Harbor_Text_NeedDiveToCatchSub:
-	.string "Capt. Stern: Catching a submarine at\n"
+	.string "{SPEAKER SPK_STERN}Catching a submarine at\n"
 	.string "sea means going under the waves.\p"
 	.string "The Mind Badge from Mossdeep would\n"
 	.string "let you Dive. Tate and Liza run\l"
 	.string "the Gym there.$"
 
 SlateportCity_Harbor_Text_WontBeLongBeforeWeFinishFerry:
-	.string "Capt. Stern: Oh, yes.\n"
+	.string "{SPEAKER SPK_STERN}Oh, yes.\n"
 	.string "Mr. Briney came to our Shipyard.\p"
 	.string "It won't be long now before we finish\n"
 	.string "making the ferry!$"
 
 SlateportCity_Harbor_Text_FinishedMakingFerry:
-	.string "Capt. Stern: {PLAYER}{KUN}!\p"
+	.string "{SPEAKER SPK_STERN}{PLAYER}{KUN}!\p"
 	.string "We finally finished making the ferry\n"
 	.string "S.S. Tidal!\p"
 	.string "We couldn't have done it without\n"
@@ -498,7 +498,7 @@ SlateportCity_Harbor_Text_FinishedMakingFerry:
 	.string "Please go for a short cruise on it!$"
 
 SlateportCity_Harbor_Text_WouldYouTradeScanner:
-	.string "Capt. Stern: Oh?\n"
+	.string "{SPEAKER SPK_STERN}Oh?\n"
 	.string "{PLAYER}{KUN}, that item you have…\p"
 	.string "That's a Scanner! That would sure\n"
 	.string "help us on our explorations.\p"
@@ -508,26 +508,26 @@ SlateportCity_Harbor_Text_WouldYouTradeScanner:
 	.string "a Deepseascale that I have?$"
 
 SlateportCity_Harbor_Text_IfYouWantToTradeLetMeKnow:
-	.string "Capt. Stern: Are you certain?\n"
+	.string "{SPEAKER SPK_STERN}Are you certain?\n"
 	.string "It's useless to you, {PLAYER}{KUN}…\p"
 	.string "Well, okay, then. If you want to trade\n"
 	.string "your Scanner, let me know.$"
 
 SlateportCity_Harbor_Text_TradeForDeepSeaTooth:
-	.string "Capt. Stern: So you'll trade it for\n"
+	.string "{SPEAKER SPK_STERN}So you'll trade it for\n"
 	.string "my Deepseatooth?$"
 
 SlateportCity_Harbor_Text_TradeForDeepSeaScale:
-	.string "Capt. Stern: So you'll trade it for\n"
+	.string "{SPEAKER SPK_STERN}So you'll trade it for\n"
 	.string "my Deepseascale?$"
 
 SlateportCity_Harbor_Text_WhichOneDoYouWant:
-	.string "Capt. Stern: Which one do you want?$"
+	.string "{SPEAKER SPK_STERN}Which one do you want?$"
 
 SlateportCity_Harbor_Text_HandedScannerToStern:
 	.string "{PLAYER} handed the Scanner to\n"
 	.string "Capt. Stern.$"
 
 SlateportCity_Harbor_Text_ThisWillHelpResearch:
-	.string "Capt. Stern: Thanks, {PLAYER}{KUN}!\n"
+	.string "{SPEAKER SPK_STERN}Thanks, {PLAYER}{KUN}!\n"
 	.string "This will help our research a lot!$"

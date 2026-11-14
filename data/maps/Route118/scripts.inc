@@ -245,7 +245,7 @@ Route118_EventScript_Deandre::
 	end
 
 Route118_Text_StevenQuestions:
-	.string "Steven: {PLAYER}! It's good to see\n"
+	.string "{SPEAKER SPK_STEVEN}{PLAYER}! It's good to see\n"
 	.string "you again. How is your journey?\p"
 	.string "The Weather Institute has reported\n"
 	.string "rain patterns that don't add up.\p"

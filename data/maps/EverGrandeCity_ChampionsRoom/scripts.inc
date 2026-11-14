@@ -244,7 +244,7 @@ WallyJourney_ChampionDefense_NoCount::
 	end
 
 WallyJourney_ChampionDefense_Intro:
-	.string "Wally: Comfortable up here?\p"
+	.string "{SPEAKER SPK_WALLY}Comfortable up here?\p"
 	.string "Good. I've been training at the\n"
 	.string "Battle Frontier while you sat on\l"
 	.string "my old throne.\p"
@@ -254,14 +254,14 @@ WallyJourney_ChampionDefense_Intro:
 WallyJourney_ChampionDefense_DefeatedText:
 	.string "Still yours. For now.$"
 WallyJourney_ChampionDefense_Victory:
-	.string "Wally: You're even better than last\n"
+	.string "{SPEAKER SPK_WALLY}You're even better than last\n"
 	.string "time. That's annoying.\p"
 	.string "Word's going to get out that you\n"
 	.string "won. You won't only be facing me\l"
 	.string "from now on.\p"
 	.string "I'll be back. Keep the seat warm.$"
 WallyJourney_ChampionDefense_WallaceIntro:
-	.string "Wallace: Ah, {PLAYER}. Surprised?\p"
+	.string "{SPEAKER SPK_WALLACE}Ah, {PLAYER}. Surprised?\p"
 	.string "I lost this room to a boy I once\n"
 	.string "guided. Then he lost it to you.\p"
 	.string "Juan says I've grown soft. I'd like\n"
@@ -271,7 +271,7 @@ WallyJourney_ChampionDefense_WallaceIntro:
 WallyJourney_ChampionDefense_WallaceDefeat:
 	.string "Magnificent. Truly.$"
 WallyJourney_ChampionDefense_WallaceVictory:
-	.string "Wallace: I see why Wally speaks of\n"
+	.string "{SPEAKER SPK_WALLACE}I see why Wally speaks of\n"
 	.string "you the way he does.\p"
 	.string "I'll return to Sootopolis and train\n"
 	.string "with my old mentor.\p"
@@ -279,7 +279,7 @@ WallyJourney_ChampionDefense_WallaceVictory:
 	.string "Someone who has watched you from\l"
 	.string "the very start.$"
 WallyJourney_ChampionDefense_StevenIntro:
-	.string "Steven: Hello, {PLAYER}{KUN}.\p"
+	.string "{SPEAKER SPK_STEVEN}Hello, {PLAYER}{KUN}.\p"
 	.string "I told you once that I'd like to\n"
 	.string "see how far you'd go.\p"
 	.string "You went further than I imagined.\n"
@@ -288,14 +288,14 @@ WallyJourney_ChampionDefense_StevenIntro:
 WallyJourney_ChampionDefense_StevenDefeat:
 	.string "That's the answer I was hoping for.$"
 WallyJourney_ChampionDefense_StevenVictory:
-	.string "Steven: Thank you. Truly.\p"
+	.string "{SPEAKER SPK_STEVEN}Thank you. Truly.\p"
 	.string "I'll be honest. Wally asked me to\n"
 	.string "go first. He wanted you at your\l"
 	.string "sharpest.\p"
 	.string "Next time, it's him. And he's been\n"
 	.string "training like I've never seen.$"
 WallyJourney_ChampionDefense_FinalFirstIntro:
-	.string "Wally: Wallace. Steven. You beat\n"
+	.string "{SPEAKER SPK_WALLY}Wallace. Steven. You beat\n"
 	.string "both of them.\p"
 	.string "I asked them to go first. I wanted\n"
 	.string "you at your absolute best.\p"
@@ -305,7 +305,7 @@ WallyJourney_ChampionDefense_FinalFirstIntro:
 	.string "Let's find out who's really the\n"
 	.string "best in Hoenn.$"
 WallyJourney_ChampionDefense_FinalIntro:
-	.string "Wally: Back again. So am I.\p"
+	.string "{SPEAKER SPK_WALLY}Back again. So am I.\p"
 	.string "Every time I lose to you, I go home\n"
 	.string "and figure out exactly why.\p"
 	.string "That's what makes me dangerous,\n"
@@ -313,7 +313,7 @@ WallyJourney_ChampionDefense_FinalIntro:
 WallyJourney_ChampionDefense_FinalDefeat:
 	.string "…Yeah. You earned that.$"
 WallyJourney_ChampionDefense_FinalVictory:
-	.string "Wally: I'm not done. I don't think\n"
+	.string "{SPEAKER SPK_WALLY}I'm not done. I don't think\n"
 	.string "I'll ever be done.\p"
 	.string "That's a good thing, by the way.\n"
 	.string "See you next time, Champion.$"
@@ -494,7 +494,7 @@ EverGrandeCity_ChampionsRoom_Movement_BirchArrives:
 	step_end
 
 EverGrandeCity_ChampionsRoom_Text_IntroSpeech:
-	.string "Wally: So you actually made it. The\n"
+	.string "{SPEAKER SPK_WALLY}So you actually made it. The\n"
 	.string "Elite Four must be getting soft.\p"
 	.string "I beat Wallace. I beat your dad. I beat\n"
 	.string "every Gym in Hoenn.\p"
@@ -508,14 +508,14 @@ EverGrandeCity_ChampionsRoom_Text_IntroSpeech:
 	.string "all.$"
 
 EverGrandeCity_ChampionsRoom_Text_Defeat:
-	.string "Wally: …No. No, no, no.\p"
+	.string "{SPEAKER SPK_WALLY}…No. No, no, no.\p"
 	.string "I was supposed to be the strongest. I\n"
 	.string "was supposed to finally matter.\p"
 	.string "…Why does winning everything feel like\n"
 	.string "this?$"
 
 EverGrandeCity_ChampionsRoom_Text_PostBattleSpeech:
-	.string "Wally: …I called you a nobody.\p"
+	.string "{SPEAKER SPK_WALLY}…I called you a nobody.\p"
 	.string "I told you no one was waiting for you. I\n"
 	.string "mocked your dad.\p"
 	.string "I laughed at Wallace, the man who\n"
@@ -545,32 +545,32 @@ EverGrandeCity_ChampionsRoom_Text_PostBattleSpeech:
 	.string "actually want to battle.$"
 
 EverGrandeCity_ChampionsRoom_Text_MayAdvice:
-	.string "May: {PLAYER}! I heard you'd\n"
+	.string "{SPEAKER SPK_MAY}{PLAYER}! I heard you'd\n"
 	.string "reached the Pokémon League.\p"
 	.string "I brought notes on Wally's team.\n"
 	.string "Before you face him, you should…$"
 
 EverGrandeCity_ChampionsRoom_Text_MayItsAlreadyOver:
-	.string "May: Wait. It's over already?\p"
+	.string "{SPEAKER SPK_MAY}Wait. It's over already?\p"
 	.string "You beat Wally? {PLAYER},\n"
 	.string "that's incredible!\p"
 	.string "I knew you'd give him a fight.\n"
 	.string "You won the whole thing!$"
 
 EverGrandeCity_ChampionsRoom_Text_BrendanAdvice:
-	.string "Brendan: {PLAYER}! I heard\n"
+	.string "{SPEAKER SPK_BRENDAN}{PLAYER}! I heard\n"
 	.string "Wally was waiting for you.\p"
 	.string "I've been studying his team.\n"
 	.string "There's something you should know…$"
 
 EverGrandeCity_ChampionsRoom_Text_BrendanYouveWon:
-	.string "Brendan: …You're telling me\n"
+	.string "{SPEAKER SPK_BRENDAN}…You're telling me\n"
 	.string "you already beat him?\p"
 	.string "Of course you did. You've been\n"
 	.string "surprising us since day one.$"
 
 EverGrandeCity_ChampionsRoom_Text_BirchArriveRatePokedex:
-	.string "Prof. Birch: There you are!\p"
+	.string "{SPEAKER SPK_BIRCH}There you are!\p"
 	.string "{PLAYER}, I watched you grow\n"
 	.string "from that first day on Route 101.\p"
 	.string "Then you faced your own father\n"
@@ -581,12 +581,12 @@ EverGrandeCity_ChampionsRoom_Text_BirchArriveRatePokedex:
 	.string "field notes matter, too.$"
 
 EverGrandeCity_ChampionsRoom_Text_BirchCongratulations:
-	.string "Prof. Birch: Anyways,\n"
+	.string "{SPEAKER SPK_BIRCH}Anyways,\n"
 	.string "congratulations!\p"
 	.string "Now, go proudly into the final room!$"
 
 EverGrandeCity_ChampionsRoom_Text_WallaceComeWithMe:
-	.string "Wally: {PLAYER}…\p"
+	.string "{SPEAKER SPK_WALLY}{PLAYER}…\p"
 	.string "No. Let me say it properly.\n"
 	.string "Champion {PLAYER}.\p"
 	.string "I won't pretend it doesn't sting.\n"
@@ -594,20 +594,20 @@ EverGrandeCity_ChampionsRoom_Text_WallaceComeWithMe:
 	.string "Come on. The Hall Of Fame awaits.$"
 
 EverGrandeCity_ChampionsRoom_Text_WallaceWaitOutside:
-	.string "Wally: Only Trainers who've held\n"
+	.string "{SPEAKER SPK_WALLY}Only Trainers who've held\n"
 	.string "the title can go past here.\p"
 	.string "{RIVAL}, I'm sorry. You'll have\n"
 	.string "to wait with Prof. Birch.\p"
 	.string "{PLAYER}, let's go.$"
 
 EverGrandeCity_ChampionsRoom_Text_MayCongratulations:
-	.string "May: Just Champions beyond here?\p"
+	.string "{SPEAKER SPK_MAY}Just Champions beyond here?\p"
 	.string "Then go on. You've earned it.\p"
 	.string "And when you're back, I want\n"
 	.string "every detail. Congratulations!$"
 
 EverGrandeCity_ChampionsRoom_Text_BrendanCongratulations:
-	.string "Brendan: Rules are rules.\n"
+	.string "{SPEAKER SPK_BRENDAN}Rules are rules.\n"
 	.string "We'll be right here.\p"
 	.string "Dad's going to want the whole\n"
 	.string "story. So will I.\p"
@@ -615,7 +615,7 @@ EverGrandeCity_ChampionsRoom_Text_BrendanCongratulations:
 
 
 WallyJourney_Text_ChampionWallyBack:
-	.string "Wally: …I heard your footsteps all\n"
+	.string "{SPEAKER SPK_WALLY}…I heard your footsteps all\n"
 	.string "the way up the stairs.$"
 
 @ Wally's Journey: open title-defense challengers (5th defense on).
@@ -737,24 +737,24 @@ WallyJourney_ChampionPool_BrendanTorchic::
 	goto WallyJourney_ChampionPool_RivalAfter
 
 WallyJourney_ChampionPool_WallaceIntro:
-	.string "Wallace: I took my mentor's advice\n"
+	.string "{SPEAKER SPK_WALLACE}I took my mentor's advice\n"
 	.string "and trained in Sootopolis.\p"
 	.string "The title isn't mine anymore, but\n"
 	.string "my pride still is. Defend it!$"
 WallyJourney_ChampionPool_WallaceDefeat:
 	.string "Beautiful. Truly beautiful.$"
 WallyJourney_ChampionPool_WallaceVictory:
-	.string "Wallace: I'll be back to try again.\n"
+	.string "{SPEAKER SPK_WALLACE}I'll be back to try again.\n"
 	.string "Sootopolis sends its regards.$"
 WallyJourney_ChampionPool_StevenIntro:
-	.string "Steven: I went back to my\n"
+	.string "{SPEAKER SPK_STEVEN}I went back to my\n"
 	.string "exploring for a while.\p"
 	.string "I found a few things that made my\n"
 	.string "team stronger. Let me show you.$"
 WallyJourney_ChampionPool_StevenDefeat:
 	.string "Remarkable. As always.$"
 WallyJourney_ChampionPool_StevenVictory:
-	.string "Steven: I'll head back to the caves.\n"
+	.string "{SPEAKER SPK_STEVEN}I'll head back to the caves.\n"
 	.string "There's always more to dig up.$"
 WallyJourney_ChampionPool_RivalIntro:
 	.string "{RIVAL}: Surprise! I cleared the\n"
@@ -767,82 +767,82 @@ WallyJourney_ChampionPool_RivalVictory:
 	.string "{RIVAL}: Fine. Back to fieldwork.\n"
 	.string "I'm still going to beat you someday!$"
 WallyJourney_ChampionPool_RoxanneIntro:
-	.string "Roxanne: I closed the school for a\n"
+	.string "{SPEAKER SPK_ROXANNE}I closed the school for a\n"
 	.string "week to make this trip.\p"
 	.string "I've prepared for this exam more\n"
 	.string "than for any other. Begin!$"
 WallyJourney_ChampionPool_RoxanneDefeat:
 	.string "Full marks. Again.$"
 WallyJourney_ChampionPool_RoxanneVictory:
-	.string "Roxanne: I'll grade my own mistakes\n"
+	.string "{SPEAKER SPK_ROXANNE}I'll grade my own mistakes\n"
 	.string "on the way home.$"
 WallyJourney_ChampionPool_BrawlyIntro:
-	.string "Brawly: Rode the tide all the way to\n"
+	.string "{SPEAKER SPK_BRAWLY}Rode the tide all the way to\n"
 	.string "Ever Grande!\p"
 	.string "Your title's the biggest wave\n"
 	.string "around. Let's go!$"
 WallyJourney_ChampionPool_BrawlyDefeat:
 	.string "Wiped out! Worth it!$"
 WallyJourney_ChampionPool_BrawlyVictory:
-	.string "Brawly: Back to the island.\n"
+	.string "{SPEAKER SPK_BRAWLY}Back to the island.\n"
 	.string "See you on the next swell!$"
 WallyJourney_ChampionPool_WattsonIntro:
-	.string "Wattson: Wahahaha! This old man\n"
+	.string "{SPEAKER SPK_WATTSON}Wahahaha! This old man\n"
 	.string "cleared the Elite Four!\p"
 	.string "Now let's see if I can charge\n"
 	.string "past the Champion!$"
 WallyJourney_ChampionPool_WattsonDefeat:
 	.string "Wahahaha! Not today!$"
 WallyJourney_ChampionPool_WattsonVictory:
-	.string "Wattson: Back to Mauville.\n"
+	.string "{SPEAKER SPK_WATTSON}Back to Mauville.\n"
 	.string "That was the best fun I've had!$"
 WallyJourney_ChampionPool_FlanneryIntro:
-	.string "Flannery: I trained every day\n"
+	.string "{SPEAKER SPK_FLANNERY}I trained every day\n"
 	.string "since our last battle.\p"
 	.string "This time I'm taking that title.\n"
 	.string "Here I come!$"
 WallyJourney_ChampionPool_FlanneryDefeat:
 	.string "Argh! So close!$"
 WallyJourney_ChampionPool_FlanneryVictory:
-	.string "Flannery: Grandpa's going to tease\n"
+	.string "{SPEAKER SPK_FLANNERY}Grandpa's going to tease\n"
 	.string "me about this one.$"
 WallyJourney_ChampionPool_NormanIntro:
-	.string "Dad: The Elite Four let me through.\p"
+	.string "{SPEAKER SPK_DAD}The Elite Four let me through.\p"
 	.string "I'm not here as your father today.\n"
 	.string "I'm a challenger. Defend your title.$"
 WallyJourney_ChampionPool_NormanDefeat:
 	.string "...That's my kid.$"
 WallyJourney_ChampionPool_NormanVictory:
-	.string "Dad: Your mother is going to\n"
+	.string "{SPEAKER SPK_DAD}Your mother is going to\n"
 	.string "laugh at me. Worth it.$"
 WallyJourney_ChampionPool_WinonaIntro:
-	.string "Winona: The wind carried me here.\p"
+	.string "{SPEAKER SPK_WINONA}The wind carried me here.\p"
 	.string "Let us see whose wings are\n"
 	.string "stronger today, Champion.$"
 WallyJourney_ChampionPool_WinonaDefeat:
 	.string "You still fly higher.$"
 WallyJourney_ChampionPool_WinonaVictory:
-	.string "Winona: I'll return to Fortree\n"
+	.string "{SPEAKER SPK_WINONA}I'll return to Fortree\n"
 	.string "and keep training.$"
 WallyJourney_ChampionPool_TateAndLizaIntro:
-	.string "Tate: We cleared the Elite Four!\n"
-	.string "Liza: Together, like always!\p"
-	.string "Tate&Liza: Now we want your title!$"
+	.string "{SPEAKER SPK_TATE}We cleared the Elite Four!\p"
+	.string "{SPEAKER SPK_LIZA}Together, like always!\p"
+	.string "{SPEAKER SPK_TATE_LIZA}Now we want your title!$"
 WallyJourney_ChampionPool_TateAndLizaDefeat:
-	.string "Tate: Not again...\n"
-	.string "Liza: ...we'll be back!$"
+	.string "{SPEAKER SPK_TATE}Not again...\p"
+	.string "{SPEAKER SPK_LIZA}...we'll be back!$"
 WallyJourney_ChampionPool_TateAndLizaVictory:
-	.string "Liza: We'll practice more!\n"
-	.string "Tate: Way more!$"
+	.string "{SPEAKER SPK_LIZA}We'll practice more!\p"
+	.string "{SPEAKER SPK_TATE}Way more!$"
 WallyJourney_ChampionPool_JuanIntro:
-	.string "Juan: I taught Wallace, and I have\n"
+	.string "{SPEAKER SPK_JUAN}I taught Wallace, and I have\n"
 	.string "watched you from afar.\p"
 	.string "Allow me one last performance,\n"
 	.string "for the title itself.$"
 WallyJourney_ChampionPool_JuanDefeat:
 	.string "Bravo. The title suits you.$"
 WallyJourney_ChampionPool_JuanVictory:
-	.string "Juan: I am content.\n"
+	.string "{SPEAKER SPK_JUAN}I am content.\n"
 	.string "The stage remains yours.$"
 
 @ Wally's Journey: MAXIE and ARCHIE, reformed, as title challengers.
@@ -934,7 +934,7 @@ WallyJourney_ChampionPool_CameronVictory:
 	.string "ready.$"
 
 WallyJourney_ChampionPool_MaxieIntro:
-	.string "Maxie: Champion. You remember me.\p"
+	.string "{SPEAKER SPK_MAXIE}Champion. You remember me.\p"
 	.string "I nearly dried out Hoenn for\n"
 	.string "a dream.\p"
 	.string "Team Magma is no more.\n"
@@ -948,11 +948,11 @@ WallyJourney_ChampionPool_MaxieIntro:
 	.string "Show me.$"
 
 WallyJourney_ChampionPool_MaxieDefeat:
-	.string "Maxie: …So this is the strength\n"
+	.string "{SPEAKER SPK_MAXIE}…So this is the strength\n"
 	.string "that stopped us.$"
 
 WallyJourney_ChampionPool_MaxieVictory:
-	.string "Maxie: Even if Groudon had given\n"
+	.string "{SPEAKER SPK_MAXIE}Even if Groudon had given\n"
 	.string "us more land, people would have\l"
 	.string "filled it.\p"
 	.string "The same troubles would have\n"
@@ -964,7 +964,7 @@ WallyJourney_ChampionPool_MaxieVictory:
 	.string "Thank you, Champion.$"
 
 WallyJourney_ChampionPool_ArchieIntro:
-	.string "Archie: Ahoy, Champion! Didn't\n"
+	.string "{SPEAKER SPK_ARCHIE}Ahoy, Champion! Didn't\n"
 	.string "expect this old sea dog, did you?\p"
 	.string "I almost drowned Hoenn chasing\n"
 	.string "Kyogre. I won't ever forget that.\p"
@@ -976,11 +976,11 @@ WallyJourney_ChampionPool_ArchieIntro:
 	.string "fight. Let's go!$"
 
 WallyJourney_ChampionPool_ArchieDefeat:
-	.string "Archie: Hah! Sunk again,\n"
+	.string "{SPEAKER SPK_ARCHIE}Hah! Sunk again,\n"
 	.string "fair and square!$"
 
 WallyJourney_ChampionPool_ArchieVictory:
-	.string "Archie: Say Kyogre had given us\n"
+	.string "{SPEAKER SPK_ARCHIE}Say Kyogre had given us\n"
 	.string "more sea. Sooner or later, we'd\l"
 	.string "have fouled that too.\p"
 	.string "A new world doesn't fix the people\n"

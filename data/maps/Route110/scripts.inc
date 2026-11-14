@@ -615,6 +615,7 @@ Route110_EventScript_BirchScene::
 	applymovement LOCALID_ROUTE110_BIRCH, Common_Movement_WalkInPlaceFasterDown
 	waitmovement 0
 	delay 30
+	setspeaker SP_NAME_BIRCH
 	msgbox Route110_Text_HeardYouInstallMatchCall, MSGBOX_DEFAULT
 	closemessage
 	delay 30
@@ -763,7 +764,7 @@ Route110_Text_AquaActionsBringSmiles:
 	.string "see our uniform?$"
 
 Route110_Text_MayLetsBattle:
-	.string "May: Hi, {PLAYER}{KUN}, long time no see!\p"
+	.string "{SPEAKER SPK_MAY}Hi, {PLAYER}{KUN}, long time no see!\p"
 	.string "While I was searching for other\n"
 	.string "Pokémon, my Pokémon grew stronger.\p"
 	.string "So…\n"
@@ -775,13 +776,13 @@ Route110_Text_MayDefeated:
 	.string "the Pokémon under Cycling Road.$"
 
 Route110_Text_MayTakeThis:
-	.string "May: {PLAYER}{KUN}, you've been busy\n"
+	.string "{SPEAKER SPK_MAY}{PLAYER}{KUN}, you've been busy\n"
 	.string "training, too, haven't you?\p"
 	.string "I think you deserve a reward!\n"
 	.string "This is from me!$"
 
 Route110_Text_MayExplainItemfinder:
-	.string "May: That's an Itemfinder.\p"
+	.string "{SPEAKER SPK_MAY}That's an Itemfinder.\p"
 	.string "Try it out. If there is an item that's\n"
 	.string "not visible, it emits a sound.\p"
 	.string "Okay, {PLAYER}{KUN}, let's meet again!\p"
@@ -790,7 +791,7 @@ Route110_Text_MayExplainItemfinder:
 	.string "harder for the next time.$"
 
 Route110_Text_BrendanLetsBattle:
-	.string "Brendan: Hey, {PLAYER}.\n"
+	.string "{SPEAKER SPK_BRENDAN}Hey, {PLAYER}.\n"
 	.string "So this is where you were.\l"
 	.string "How's it going?\p"
 	.string "Have you been raising your Pokémon?\n"
@@ -802,13 +803,13 @@ Route110_Text_BrendanDefeated:
 	.string "Pokémon moved. For Dad. Mostly.$"
 
 Route110_Text_BrendanTakeThis:
-	.string "Brendan: {PLAYER}, you've trained\n"
+	.string "{SPEAKER SPK_BRENDAN}{PLAYER}, you've trained\n"
 	.string "without me noticing…\p"
 	.string "Good enough!\n"
 	.string "Here, take this.$"
 
 Route110_Text_BrendanExplainItemfinder:
-	.string "Brendan: That's an Itemfinder.\p"
+	.string "{SPEAKER SPK_BRENDAN}That's an Itemfinder.\p"
 	.string "Use it to root around for items that\n"
 	.string "aren't visible.\p"
 	.string "If it senses something, it emits\n"
@@ -975,7 +976,7 @@ Route110_Text_ThereIsNoRecord:
 	.string "challenge. There is no record…$"
 
 Route110_Text_ImagineSeeingYouHere:
-	.string "Prof. Birch: Oh, {PLAYER}{KUN}!\n"
+	.string "{SPEAKER SPK_BIRCH}Oh, {PLAYER}{KUN}!\n"
 	.string "Imagine seeing you here!\p"
 	.string "And where might my {RIVAL} be?$"
 
@@ -996,7 +997,7 @@ Route110_Text_RegisteredBirchInPokenav:
 	.string "in the PokéNav.$"
 
 Route110_Text_KeepAnEyeOutForRival:
-	.string "Prof. Birch: {PLAYER}{KUN}…\p"
+	.string "{SPEAKER SPK_BIRCH}{PLAYER}{KUN}…\p"
 	.string "Please keep an eye out for my {RIVAL}.\n"
 	.string "… … … … … …\p"
 	.string "Well, I had better get going.\n"

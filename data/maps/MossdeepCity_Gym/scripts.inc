@@ -588,19 +588,19 @@ MossdeepCity_Gym_Text_NicholasPostBattle:
 	.string "invincible Pokémon power! Soon!$"
 
 MossdeepCity_Gym_Text_TateAndLizaIntro:
-	.string "Tate: Hehehe… Surprised?\n"
-	.string "Liza: Fufufu… Surprised?\p"
-	.string "Tate: Two Leaders.\n"
-	.string "Liza: One mind.\p"
-	.string "Tate: Mom and Dad build rockets\n"
+	.string "{SPEAKER SPK_TATE}Hehehe… Surprised?\p"
+	.string "{SPEAKER SPK_LIZA}Fufufu… Surprised?\p"
+	.string "{SPEAKER SPK_TATE}Two Leaders.\p"
+	.string "{SPEAKER SPK_LIZA}One mind.\p"
+	.string "{SPEAKER SPK_TATE}Mom and Dad build rockets\n"
 	.string "at the Space Center.\p"
-	.string "Liza: We grew up counting the\n"
+	.string "{SPEAKER SPK_LIZA}We grew up counting the\n"
 	.string "launches from the roof.\p"
-	.string "Tate: Everyone said eleven was too\n"
+	.string "{SPEAKER SPK_TATE}Everyone said eleven was too\n"
 	.string "young to lead a Gym.\p"
-	.string "Liza: Then they battled us.\p"
-	.string "Tate: Ready for our combination?\n"
-	.string "Liza: Can you beat it?$"
+	.string "{SPEAKER SPK_LIZA}Then they battled us.\p"
+	.string "{SPEAKER SPK_TATE}Ready for our combination?\p"
+	.string "{SPEAKER SPK_LIZA}Can you beat it?$"
 
 MossdeepCity_Gym_Text_TateAndLizaDefeat:
 	.string "Tate: What?! We saw it coming…\n"
@@ -613,19 +613,19 @@ MossdeepCity_Gym_Text_ReceivedMindBadge:
 	.string "from Tate and Liza.$"
 
 MossdeepCity_Gym_Text_ExplainMindBadgeTakeThis:
-	.string "Tate: The Mind Badge enhances the\n"
+	.string "{SPEAKER SPK_TATE}The Mind Badge enhances the\n"
 	.string "Sp. Atk and Sp. Def of Pokémon.\p"
-	.string "Liza: It also lets you use the HM move\n"
+	.string "{SPEAKER SPK_LIZA}It also lets you use the HM move\n"
 	.string "Dive outside of battle.\p"
-	.string "Tate: You should also take this, too.$"
+	.string "{SPEAKER SPK_TATE}You should also take this, too.$"
 
 MossdeepCity_Gym_Text_ExplainCalmMind:
-	.string "Tate: That TM04 contains…\n"
-	.string "Liza: Calm Mind!\p"
-	.string "Tate: It raises Sp. Atk and…\n"
-	.string "Liza: It raises Sp. Def!\p"
-	.string "Tate: It's a move that's perfect…\n"
-	.string "Liza: For Psychic Pokémon!\p"
+	.string "{SPEAKER SPK_TATE}That TM04 contains…\p"
+	.string "{SPEAKER SPK_LIZA}Calm Mind!\p"
+	.string "{SPEAKER SPK_TATE}It raises Sp. Atk and…\p"
+	.string "{SPEAKER SPK_LIZA}It raises Sp. Def!\p"
+	.string "{SPEAKER SPK_TATE}It's a move that's perfect…\p"
+	.string "{SPEAKER SPK_LIZA}For Psychic Pokémon!\p"
 	.string "… … … … … …$"
 
 MossdeepCity_Gym_Text_RegisteredTateAndLiza:
@@ -633,23 +633,23 @@ MossdeepCity_Gym_Text_RegisteredTateAndLiza:
 	.string "in the PokéNav.$"
 
 MossdeepCity_Gym_Text_TateAndLizaPostBattle:
-	.string "Tate: Looks like the bond between you\n"
+	.string "{SPEAKER SPK_TATE}Looks like the bond between you\n"
 	.string "and your Pokémon is far stronger than\l"
 	.string "the bond that we share as twins.\p"
-	.string "Liza: You will become even stronger!\n"
+	.string "{SPEAKER SPK_LIZA}You will become even stronger!\n"
 	.string "We've battled you, so we know.\p"
-	.string "Tate: Wally was here before you.\n"
-	.string "Liza: We saw his moves coming…\p"
-	.string "Tate: …and he still won.\n"
-	.string "Liza: We're still mad about it!$"
+	.string "{SPEAKER SPK_TATE}Wally was here before you.\p"
+	.string "{SPEAKER SPK_LIZA}We saw his moves coming…\p"
+	.string "{SPEAKER SPK_TATE}…and he still won.\p"
+	.string "{SPEAKER SPK_LIZA}We're still mad about it!$"
 
 MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons:
-	.string "Tate: Hehehe… Surprised?\n"
-	.string "Liza: Two Leaders!\p"
-	.string "Tate: But you only have one…\n"
-	.string "Liza: …Pokémon that can battle.\p"
-	.string "Tate: There are two of us.\n"
-	.string "Liza: So bring two Pokémon!$"
+	.string "{SPEAKER SPK_TATE}Hehehe… Surprised?\p"
+	.string "{SPEAKER SPK_LIZA}Two Leaders!\p"
+	.string "{SPEAKER SPK_TATE}But you only have one…\p"
+	.string "{SPEAKER SPK_LIZA}…Pokémon that can battle.\p"
+	.string "{SPEAKER SPK_TATE}There are two of us.\p"
+	.string "{SPEAKER SPK_LIZA}So bring two Pokémon!$"
 
 MossdeepCity_Gym_Text_GymStatue:
 	.string "Mossdeep City Pokémon Gym$"
@@ -660,65 +660,65 @@ MossdeepCity_Gym_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 MossdeepCity_Gym_Text_TateAndLizaPreRematch:
-	.string "Tate: You came back!\n"
-	.string "Liza: We knew you would.\p"
-	.string "Tate: We've been training apart.\n"
-	.string "Liza: It was awful.\p"
-	.string "Tate: But now we're even stronger\n"
+	.string "{SPEAKER SPK_TATE}You came back!\p"
+	.string "{SPEAKER SPK_LIZA}We knew you would.\p"
+	.string "{SPEAKER SPK_TATE}We've been training apart.\p"
+	.string "{SPEAKER SPK_LIZA}It was awful.\p"
+	.string "{SPEAKER SPK_TATE}But now we're even stronger\n"
 	.string "together.\p"
-	.string "Liza: Let's show you!$"
+	.string "{SPEAKER SPK_LIZA}Let's show you!$"
 
 MossdeepCity_Gym_Text_TateAndLizaRematchDefeat:
 	.string "Tate: You and your Pokémon…\n"
 	.string "Liza: …you're two minds, one heart.$"
 
 MossdeepCity_Gym_Text_TateAndLizaPostRematch:
-	.string "Tate: Knock us down…\n"
-	.string "Liza: …and we get back up.\p"
-	.string "Tate: Because we hold each other up.\n"
-	.string "Liza: We always have.$"
+	.string "{SPEAKER SPK_TATE}Knock us down…\p"
+	.string "{SPEAKER SPK_LIZA}…and we get back up.\p"
+	.string "{SPEAKER SPK_TATE}Because we hold each other up.\p"
+	.string "{SPEAKER SPK_LIZA}We always have.$"
 
 MossdeepCity_Gym_Text_TateAndLizaRematchNeedTwoMons:
-	.string "Tate: You came back!\n"
-	.string "Liza: We knew you would.\p"
-	.string "Tate: But you only have one…\n"
-	.string "Liza: …Pokémon that can battle.\p"
-	.string "Tate: Bring two.\n"
-	.string "Liza: Then we'll battle!$"
+	.string "{SPEAKER SPK_TATE}You came back!\p"
+	.string "{SPEAKER SPK_LIZA}We knew you would.\p"
+	.string "{SPEAKER SPK_TATE}But you only have one…\p"
+	.string "{SPEAKER SPK_LIZA}…Pokémon that can battle.\p"
+	.string "{SPEAKER SPK_TATE}Bring two.\p"
+	.string "{SPEAKER SPK_LIZA}Then we'll battle!$"
 
 MossdeepCity_Gym_Text_TateAndLizaPreRematch3:
-	.string "Tate: We used to read your moves…\n"
-	.string "Liza: …after you made them.\p"
-	.string "Tate: Now we're faster.\n"
-	.string "Liza: Much faster. Let's battle!$"
+	.string "{SPEAKER SPK_TATE}We used to read your moves…\p"
+	.string "{SPEAKER SPK_LIZA}…after you made them.\p"
+	.string "{SPEAKER SPK_TATE}Now we're faster.\p"
+	.string "{SPEAKER SPK_LIZA}Much faster. Let's battle!$"
 
 MossdeepCity_Gym_Text_TateAndLizaPreRematch4:
-	.string "Tate: The Space Center asked us…\n"
-	.string "Liza: …to track meteor pieces.\p"
-	.string "Tate: We saw the stars up close.\n"
-	.string "Liza: We felt so small.\p"
-	.string "Tate: But not in battle!\n"
-	.string "Liza: Never in battle!$"
+	.string "{SPEAKER SPK_TATE}The Space Center asked us…\p"
+	.string "{SPEAKER SPK_LIZA}…to track meteor pieces.\p"
+	.string "{SPEAKER SPK_TATE}We saw the stars up close.\p"
+	.string "{SPEAKER SPK_LIZA}We felt so small.\p"
+	.string "{SPEAKER SPK_TATE}But not in battle!\p"
+	.string "{SPEAKER SPK_LIZA}Never in battle!$"
 
 MossdeepCity_Gym_Text_TateAndLizaPreRematch5:
-	.string "Tate: This is it.\n"
-	.string "Liza: Our best.\p"
-	.string "Tate: Our minds are completely\n"
+	.string "{SPEAKER SPK_TATE}This is it.\p"
+	.string "{SPEAKER SPK_LIZA}Our best.\p"
+	.string "{SPEAKER SPK_TATE}Our minds are completely\n"
 	.string "in sync.\p"
-	.string "Liza: Can you keep up…\n"
-	.string "Tate: …with both of us?$"
+	.string "{SPEAKER SPK_LIZA}Can you keep up…\p"
+	.string "{SPEAKER SPK_TATE}…with both of us?$"
 
 MossdeepCity_Gym_Text_TateAndLizaRematchDefeatElite:
 	.string "Tate: …We lost again.\n"
 	.string "Liza: …but together.$"
 
 MossdeepCity_Gym_Text_TateAndLizaPostRematchElite:
-	.string "Tate: Wally reads people really well.\n"
-	.string "Liza: He reads them like a book.\p"
-	.string "Tate: You don't read people…\n"
-	.string "Liza: …you trust them.\p"
-	.string "Tate: That's harder to beat.\n"
-	.string "Liza: Much harder.$"
+	.string "{SPEAKER SPK_TATE}Wally reads people really well.\p"
+	.string "{SPEAKER SPK_LIZA}He reads them like a book.\p"
+	.string "{SPEAKER SPK_TATE}You don't read people…\p"
+	.string "{SPEAKER SPK_LIZA}…you trust them.\p"
+	.string "{SPEAKER SPK_TATE}That's harder to beat.\p"
+	.string "{SPEAKER SPK_LIZA}Much harder.$"
 
 @ Wally's Journey: growing Gym Leader rematches (see WallyJourney_ScaleLeaderParty).
 MossdeepCity_Gym_EventScript_TateAndLizaRematchOffer::
@@ -782,39 +782,39 @@ MossdeepCity_Gym_Text_TateAndLizaGrowNeedTwo:
 	.string "battle. Come back with more.$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowOffer1:
-	.string "Tate: {STR_VAR_1} Badges...\n"
-	.string "Liza: ...we saw it coming!\p"
-	.string "Tate: More Badges means...\n"
-	.string "Liza: ...we hold back less!\p"
-	.string "Tate&Liza: Rematch?$"
+	.string "{SPEAKER SPK_TATE}{STR_VAR_1} Badges...\p"
+	.string "{SPEAKER SPK_LIZA}...we saw it coming!\p"
+	.string "{SPEAKER SPK_TATE}More Badges means...\p"
+	.string "{SPEAKER SPK_LIZA}...we hold back less!\p"
+	.string "{SPEAKER SPK_TATE_LIZA}Rematch?$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowDefeat1:
 	.string "Tate: We lost...\n"
 	.string "Liza: ...together, again!$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowAfter1:
-	.string "Liza: Get your last Badge!\n"
-	.string "Tate: We'll be practicing!$"
+	.string "{SPEAKER SPK_LIZA}Get your last Badge!\p"
+	.string "{SPEAKER SPK_TATE}We'll be practicing!$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowOffer2:
-	.string "Tate: Eight Badges!\n"
-	.string "Liza: The League is next!\p"
-	.string "Tate: So we'll show you...\n"
-	.string "Liza: ...much more of our team!\p"
-	.string "Tate&Liza: One more battle?$"
+	.string "{SPEAKER SPK_TATE}Eight Badges!\p"
+	.string "{SPEAKER SPK_LIZA}The League is next!\p"
+	.string "{SPEAKER SPK_TATE}So we'll show you...\p"
+	.string "{SPEAKER SPK_LIZA}...much more of our team!\p"
+	.string "{SPEAKER SPK_TATE_LIZA}One more battle?$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowDefeat2:
 	.string "Tate: You're ready...\n"
 	.string "Liza: ...for the League!$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowAfter2:
-	.string "Liza: Good luck at Ever Grande!\n"
-	.string "Tate: We'll be watching!$"
+	.string "{SPEAKER SPK_LIZA}Good luck at Ever Grande!\p"
+	.string "{SPEAKER SPK_TATE}We'll be watching!$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowOffer3:
-	.string "Tate: The Champion!\n"
-	.string "Liza: Here in Mossdeep!\p"
-	.string "Tate&Liza: Our full team is ready!\n"
+	.string "{SPEAKER SPK_TATE}The Champion!\p"
+	.string "{SPEAKER SPK_LIZA}Here in Mossdeep!\p"
+	.string "{SPEAKER SPK_TATE_LIZA}Our full team is ready!\n"
 	.string "Battle us?$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowDefeat3:
@@ -822,13 +822,13 @@ MossdeepCity_Gym_Text_TateAndLizaGrowDefeat3:
 	.string "Liza: ...as expected!$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowAfter3:
-	.string "Liza: We'll train harder!\n"
-	.string "Tate: Together!$"
+	.string "{SPEAKER SPK_LIZA}We'll train harder!\p"
+	.string "{SPEAKER SPK_TATE}Together!$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowOffer4:
-	.string "Tate: You kept your title!\n"
-	.string "Liza: So we brought our best!\p"
-	.string "Tate&Liza: Our strongest team!\n"
+	.string "{SPEAKER SPK_TATE}You kept your title!\p"
+	.string "{SPEAKER SPK_LIZA}So we brought our best!\p"
+	.string "{SPEAKER SPK_TATE_LIZA}Our strongest team!\n"
 	.string "Ready?$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowDefeat4:
@@ -836,5 +836,5 @@ MossdeepCity_Gym_Text_TateAndLizaGrowDefeat4:
 	.string "Liza: ...predict that!$"
 
 MossdeepCity_Gym_Text_TateAndLizaGrowAfter4:
-	.string "Tate&Liza: Come back anytime!$"
+	.string "{SPEAKER SPK_TATE_LIZA}Come back anytime!$"
 

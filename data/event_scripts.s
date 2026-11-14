@@ -1433,7 +1433,7 @@ gText_MonsHealed::
 	.string "We hope you excel!$"
 
 gText_HadQuiteAnExperienceTakeRest::
-	.string "Mom: {PLAYER}!\n"
+	.string "{SPEAKER SPK_MOM}{PLAYER}!\n"
 	.string "Welcome home.\p"
 	.string "It sounds like you had quite\n"
 	.string "an experience.\p"
@@ -1441,7 +1441,7 @@ gText_HadQuiteAnExperienceTakeRest::
 	.string "rest.$"
 
 gText_MomExplainHPGetPotions::
-	.string "Mom: Oh, good! You and your\n"
+	.string "{SPEAKER SPK_MOM}Oh, good! You and your\n"
 	.string "Pokémon are looking great.\p"
 	.string "I just heard from {STR_VAR_1}.\p"
 	.string "He said that Pokémon's energy is\n"

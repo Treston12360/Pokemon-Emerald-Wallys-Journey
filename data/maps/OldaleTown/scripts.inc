@@ -388,12 +388,12 @@ OldaleTown_Text_FinishedSketchingFootprints:
 	.string "Don't tell Prof. Birch.$"
 
 OldaleTown_Text_MayLetsGoBack:
-	.string "May: {PLAYER}{KUN}!\n"
+	.string "{SPEAKER SPK_MAY}{PLAYER}{KUN}!\n"
 	.string "Over here!\l"
 	.string "Let's hurry home!$"
 
 OldaleTown_Text_BrendanLetsGoBack:
-	.string "Brendan: I'm heading back to my dad's\n"
+	.string "{SPEAKER SPK_BRENDAN}I'm heading back to my dad's\n"
 	.string "Lab now.\l"
 	.string "{PLAYER}, you should hustle back, too.$"
 

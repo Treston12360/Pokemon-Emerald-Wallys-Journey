@@ -34,6 +34,7 @@ Route103_EventScript_RivalMay::
 	waitmovement 0
 	applymovement LOCALID_ROUTE103_RIVAL, Common_Movement_Delay48
 	waitmovement 0
+	setspeaker SP_NAME_MAY
 	msgbox Route103_Text_MayLetsBattle, MSGBOX_DEFAULT
 	switch VAR_STARTER_MON
 	case 0, Route103_EventScript_StartMayBattleTreecko
@@ -51,6 +52,7 @@ Route103_EventScript_RivalBrendan::
 	waitmovement 0
 	applymovement LOCALID_ROUTE103_RIVAL, Common_Movement_Delay48
 	waitmovement 0
+	setspeaker SP_NAME_BRENDAN
 	msgbox Route103_Text_BrendanLetsBattle, MSGBOX_DEFAULT
 	switch VAR_STARTER_MON
 	case 0, Route103_EventScript_StartBrendanBattleTreecko
@@ -287,7 +289,7 @@ Route103_EventScript_Isabelle::
 	end
 
 Route103_Text_MayRoute103Pokemon:
-	.string "May: Let's see… The Pokémon found\n"
+	.string "{SPEAKER SPK_MAY}Let's see… The Pokémon found\n"
 	.string "on Route 103 include…$"
 
 Route103_Text_MayLetsBattle:
@@ -304,7 +306,7 @@ Route103_Text_MayDefeated:
 	.string "{PLAYER}{KUN}, not bad for day one!$"
 
 Route103_Text_MayTimeToHeadBack:
-	.string "May: I think I know why my dad has\n"
+	.string "{SPEAKER SPK_MAY}I think I know why my dad has\n"
 	.string "an eye out for you now.\p"
 	.string "I mean, you just got that Pokémon,\n"
 	.string "but it already likes you.\p"
@@ -314,7 +316,7 @@ Route103_Text_MayTimeToHeadBack:
 	.string "the Lab.$"
 
 Route103_Text_BrendanRoute103Pokemon:
-	.string "Brendan: Okay, so it's this one and\n"
+	.string "{SPEAKER SPK_BRENDAN}Okay, so it's this one and\n"
 	.string "that one that live on Route 103…$"
 
 Route103_Text_BrendanLetsBattle:
@@ -331,7 +333,7 @@ Route103_Text_BrendanDefeated:
 	.string "down.$"
 
 Route103_Text_BrendanTimeToHeadBack:
-	.string "Brendan: I think I get it.\n"
+	.string "{SPEAKER SPK_BRENDAN}I think I get it.\n"
 	.string "I think I know why my dad has his eye\l"
 	.string "out for you now.\p"
 	.string "Look, your Pokémon already likes you,\n"

@@ -8,6 +8,7 @@ PlayersHouse_1F_EventScript_EnterHouseMovingIn::
 	waitmovement 0
 	call_if_eq VAR_0x8005, MALE, PlayersHouse_1F_EventScript_MomFacePlayerMovingInMale
 	call_if_eq VAR_0x8005, FEMALE, PlayersHouse_1F_EventScript_MomFacePlayerMovingInFemale
+	setspeaker SP_NAME_MOM
 	msgbox PlayersHouse_1F_Text_MoversPokemonGoSetClock, MSGBOX_DEFAULT
 	closemessage
 	setvar VAR_LITTLEROOT_INTRO_STATE, 4
@@ -178,6 +179,7 @@ PlayersHouse_1F_EventScript_PetalburgGymReportMale::
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
 	waitmovement 0
 	msgbox PlayersHouse_1F_Text_ItsOverWeMissedHim, MSGBOX_DEFAULT
+	setspeaker SP_NAME_MOM
 	msgbox PlayersHouse_1F_Text_GoIntroduceYourselfNextDoor, MSGBOX_DEFAULT
 	closemessage
 	setvar VAR_TEMP_1, 1
@@ -203,6 +205,7 @@ PlayersHouse_1F_EventScript_PetalburgGymReportFemale::
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
 	msgbox PlayersHouse_1F_Text_ItsOverWeMissedHim, MSGBOX_DEFAULT
+	setspeaker SP_NAME_MOM
 	msgbox PlayersHouse_1F_Text_GoIntroduceYourselfNextDoor, MSGBOX_DEFAULT
 	closemessage
 	setvar VAR_TEMP_1, 1
@@ -329,6 +332,7 @@ PlayersHouse_1F_EventScript_Mom::
 	end
 
 PlayersHouse_1F_EventScript_DontPushYourselfTooHard::
+	setspeaker SP_NAME_MOM
 	msgbox PlayersHouse_1F_Text_DontPushYourselfTooHard, MSGBOX_DEFAULT
 	release
 	end
@@ -356,6 +360,7 @@ PlayersHouse_1F_EventScript_TryGiveAmuletCoin::
 	msgbox PlayersHouse_1F_Text_GotDadsBadgeHeresSomethingFromMom, MSGBOX_DEFAULT
 	giveitem ITEM_AMULET_COIN
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	setspeaker SP_NAME_MOM
 	msgbox PlayersHouse_1F_Text_DontPushYourselfTooHard, MSGBOX_DEFAULT
 	setflag FLAG_RECEIVED_AMULET_COIN
 	release
@@ -456,6 +461,7 @@ PlayersHouse_1F_EventScript_GetSSTicketAndSeeLatiTV::
 	delay 20
 	call_if_eq VAR_0x8008, MALE, PlayersHouse_1F_EventScript_MomApproachDadMale
 	call_if_eq VAR_0x8008, FEMALE, PlayersHouse_1F_EventScript_MomApproachDadFemale
+	setspeaker SP_NAME_DAD
 	msgbox PlayersHouse_1F_Text_BetterGetBackToGym, MSGBOX_DEFAULT
 	closemessage
 	call_if_eq VAR_0x8008, MALE, PlayersHouse_1F_EventScript_DadExitsMale

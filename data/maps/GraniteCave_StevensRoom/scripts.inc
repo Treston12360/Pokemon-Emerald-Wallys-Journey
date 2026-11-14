@@ -4,6 +4,7 @@ GraniteCave_StevensRoom_MapScripts::
 GraniteCave_StevensRoom_EventScript_Steven::
 	lock
 	faceplayer
+	setspeaker SP_NAME_STEVEN
 	msgbox GraniteCave_StevensRoom_Text_ImStevenLetterForMe, MSGBOX_DEFAULT
 	setvar VAR_0x8004, ITEM_LETTER
 	call Common_EventScript_PlayerHandedOverTheItem
@@ -20,6 +21,7 @@ GraniteCave_StevensRoom_EventScript_Steven::
 	closemessage
 	delay 30
 	setflag FLAG_REGISTERED_STEVEN_POKENAV
+	setspeaker SP_NAME_STEVEN
 	msgbox GraniteCave_StevensRoom_Text_IveGotToHurryAlong, MSGBOX_DEFAULT
 	closemessage
 	call_if_eq VAR_FACING, DIR_NORTH, GraniteCave_StevensRoom_EventScript_StevenExitNorth
@@ -92,7 +94,7 @@ GraniteCave_StevensRoom_Text_ImStevenLetterForMe:
 	.string "quarries too.$"
 
 GraniteCave_StevensRoom_Text_ThankYouTakeThis:
-	.string "Steven: Okay, thank you.\p"
+	.string "{SPEAKER SPK_STEVEN}Okay, thank you.\p"
 	.string "You went through all this trouble to\n"
 	.string "deliver that. I need to thank you.\p"
 	.string "Let me see…\n"
@@ -101,7 +103,7 @@ GraniteCave_StevensRoom_Text_ThankYouTakeThis:
 	.string "Steel Wing.$"
 
 GraniteCave_StevensRoom_Text_CouldBecomeChampionLetsRegister:
-	.string "Steven: Your Pokémon appear quite\n"
+	.string "{SPEAKER SPK_STEVEN}Your Pokémon appear quite\n"
 	.string "capable.\p"
 	.string "If you keep training, you could even\n"
 	.string "become the Champion of the Pokémon\l"

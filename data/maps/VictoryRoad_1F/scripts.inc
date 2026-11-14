@@ -130,7 +130,7 @@ VictoryRoad_1F_EventScript_Katelynn::
 	end
 
 VictoryRoad_1F_Text_WallyNotGoingToLoseAnymore:
-	.string "Wally: Oh. You're still here. I was\n"
+	.string "{SPEAKER SPK_WALLY}Oh. You're still here. I was\n"
 	.string "hoping you'd have quit by now.\p"
 	.string "You saw the broadcast. I crushed\n"
 	.string "Wallace in front of all of Hoenn.\p"
@@ -144,11 +144,11 @@ VictoryRoad_1F_Text_WallyNotGoingToLoseAnymore:
 	.string "Littleroot can get.$"
 
 VictoryRoad_1F_Text_WallyEntranceDefeat:
-	.string "Wally: …Don't flatter yourself. I\n"
+	.string "{SPEAKER SPK_WALLY}…Don't flatter yourself. I\n"
 	.string "could've crushed you any time I wanted.$"
 
 VictoryRoad_1F_Text_WallyPostEntranceBattle:
-	.string "Wally: Congratulations. You beat half\n"
+	.string "{SPEAKER SPK_WALLY}Congratulations. You beat half\n"
 	.string "of me.\p"
 	.string "Your dad must be so proud. Oh, wait. I\n"
 	.string "beat him too.\p"
@@ -158,7 +158,7 @@ VictoryRoad_1F_Text_WallyPostEntranceBattle:
 	.string "end your journey myself.$"
 
 VictoryRoad_1F_Text_WallyIntro:
-	.string "Wally: Hey, Champion.\p"
+	.string "{SPEAKER SPK_WALLY}Hey, Champion.\p"
 	.string "I train down here between title\n"
 	.string "challenges. Nobody bothers me.\p"
 	.string "Want to see what I've been working\n"
@@ -169,7 +169,7 @@ VictoryRoad_1F_Text_WallyDefeat:
 	.string "That just means I keep going.$"
 
 VictoryRoad_1F_Text_WallyPostBattle:
-	.string "Wally: When I'm ready, I'll come up\n"
+	.string "{SPEAKER SPK_WALLY}When I'm ready, I'll come up\n"
 	.string "those stairs and take the title back.\p"
 	.string "Don't get comfortable.$"
 
@@ -260,7 +260,7 @@ VictoryRoad_1F_Text_KatelynnPostBattle:
 	.string "That still means something.$"
 
 VictoryRoad_1F_Text_WallyWinsEntranceBattle:
-	.string "Wally: Pathetic. Even half of me is too\n"
+	.string "{SPEAKER SPK_WALLY}Pathetic. Even half of me is too\n"
 	.string "much for you.\p"
 	.string "Go home to Littleroot, {PLAYER}.\p"
 	.string "Nobody up there is waiting for you.\n"

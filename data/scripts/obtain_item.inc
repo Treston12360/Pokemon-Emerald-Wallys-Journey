@@ -5,7 +5,9 @@ Std_ObtainItem::
 	copyvar VAR_0x8006, ITEMID
 	additem ITEMID, AMOUNT
 	copyvar VAR_0x8007, VAR_RESULT
+	callnative Speaker_HoldForSystemText @ ENG-NAMEBOX: no name box on "obtained" lines
 	call EventScript_ObtainItemMessage
+	callnative Speaker_ResumeAfterSystemText
 	return
 
 EventScript_ObtainItemMessage::
@@ -94,7 +96,9 @@ EventScript_PlayFanfareObtainedTMHM::
 Std_ObtainDecoration::
 	adddecoration ITEMID
 	copyvar VAR_0x8007, VAR_RESULT
+	callnative Speaker_HoldForSystemText @ ENG-NAMEBOX
 	call EventScript_ObtainDecorationMessage
+	callnative Speaker_ResumeAfterSystemText
 	return
 
 EventScript_ObtainDecorationMessage::

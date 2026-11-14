@@ -11,6 +11,7 @@ RustboroCity_Gym_EventScript_RoxanneDefeated::
 	message RustboroCity_Gym_Text_ReceivedStoneBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	setspeaker SP_NAME_ROXANNE
 	msgbox RustboroCity_Gym_Text_StoneBadgeInfoTakeThis, MSGBOX_DEFAULT
 	setflag FLAG_DEFEATED_RUSTBORO_GYM
 	setflag FLAG_BADGE01_GET
@@ -250,7 +251,7 @@ RustboroCity_Gym_Text_GymStatueCertified:
 RustboroCity_Gym_Text_RoxanneRegisterCall:
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "Roxanne: Hello, {PLAYER}? This is\n"
+	.string "{SPEAKER SPK_ROXANNE}Hello, {PLAYER}? This is\n"
 	.string "Roxanne of Rustboro.\p"
 	.string "Brawly tells me you're climbing fast.\n"
 	.string "I've added you to my lesson plans.\p"
@@ -264,7 +265,7 @@ RustboroCity_Gym_Text_RegisteredRoxanne:
 	.string "in the PokéNav.$"
 
 RustboroCity_Gym_Text_RoxannePreRematch:
-	.string "Roxanne: Welcome back.\p"
+	.string "{SPEAKER SPK_ROXANNE}Welcome back.\p"
 	.string "I've reviewed our last battle eleven\n"
 	.string "times. I found four mistakes.\p"
 	.string "All mine. Let us see if I fixed them!$"
@@ -273,32 +274,32 @@ RustboroCity_Gym_Text_RoxanneRematchDefeat:
 	.string "…Five mistakes, then.$"
 
 RustboroCity_Gym_Text_RoxannePostRematch:
-	.string "Roxanne: Every loss is a lesson.\n"
+	.string "{SPEAKER SPK_ROXANNE}Every loss is a lesson.\n"
 	.string "You are a very good teacher.\p"
 	.string "Please don't tell my students.$"
 
 RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons:
-	.string "Roxanne: Welcome back.\p"
+	.string "{SPEAKER SPK_ROXANNE}Welcome back.\p"
 	.string "Oh dear. You only have one Pokémon\n"
 	.string "with you?\p"
 	.string "Rematches here are two at a time.\n"
 	.string "Please return with one more.$"
 
 RustboroCity_Gym_Text_RoxannePreRematch3:
-	.string "Roxanne: I rebuilt my team from the\n"
+	.string "{SPEAKER SPK_ROXANNE}I rebuilt my team from the\n"
 	.string "textbook up.\p"
 	.string "Then I threw the textbook away.\p"
 	.string "Let's see which version of me wins.$"
 
 RustboroCity_Gym_Text_RoxannePreRematch4:
-	.string "Roxanne: The League asked me to join\n"
+	.string "{SPEAKER SPK_ROXANNE}The League asked me to join\n"
 	.string "its Gym review board.\p"
 	.string "I said yes, on one condition: I keep\n"
 	.string "battling you until I stop losing.\p"
 	.string "Show me where I'm still wrong.$"
 
 RustboroCity_Gym_Text_RoxannePreRematch5:
-	.string "Roxanne: This is the strongest team\n"
+	.string "{SPEAKER SPK_ROXANNE}This is the strongest team\n"
 	.string "I can build. No theory left. Only\l"
 	.string "what's true.\p"
 	.string "Teach me one more lesson, Champion.$"
@@ -308,7 +309,7 @@ RustboroCity_Gym_Text_RoxanneRematchDefeatElite:
 	.string "a new chapter.$"
 
 RustboroCity_Gym_Text_RoxannePostRematchElite:
-	.string "Roxanne: Wally came by asking to\n"
+	.string "{SPEAKER SPK_ROXANNE}Wally came by asking to\n"
 	.string "read my notes on you.\p"
 	.string "I said no. Some lessons have to be\n"
 	.string "earned in battle.$"
@@ -329,6 +330,7 @@ RustboroCity_Gym_EventScript_RoxanneRematchStage1::
 	goto_if_eq VAR_RESULT, NO, RustboroCity_Gym_EventScript_RoxanneRematchDecline
 	cleartrainerflag TRAINER_ROXANNE_2
 	trainerbattle_no_intro TRAINER_ROXANNE_2, RustboroCity_Gym_Text_RoxanneGrowDefeat1
+	setspeaker SP_NAME_ROXANNE
 	msgbox RustboroCity_Gym_Text_RoxanneGrowAfter1, MSGBOX_DEFAULT
 	release
 	end
@@ -338,6 +340,7 @@ RustboroCity_Gym_EventScript_RoxanneRematchStage2::
 	goto_if_eq VAR_RESULT, NO, RustboroCity_Gym_EventScript_RoxanneRematchDecline
 	cleartrainerflag TRAINER_ROXANNE_2
 	trainerbattle_no_intro TRAINER_ROXANNE_2, RustboroCity_Gym_Text_RoxanneGrowDefeat2
+	setspeaker SP_NAME_ROXANNE
 	msgbox RustboroCity_Gym_Text_RoxanneGrowAfter2, MSGBOX_DEFAULT
 	release
 	end
@@ -349,6 +352,7 @@ RustboroCity_Gym_EventScript_RoxanneRematchStage3::
 	trainerbattle_double TRAINER_ROXANNE_3, RustboroCity_Gym_Text_RoxanneGrowGo, RustboroCity_Gym_Text_RoxanneGrowDefeat3, RustboroCity_Gym_Text_RoxanneGrowNeedTwo
 	setvar VAR_0x8004, 1
 	special WallyJourney_RecordLeaderPostgameWin
+	setspeaker SP_NAME_ROXANNE
 	msgbox RustboroCity_Gym_Text_RoxanneGrowAfter3, MSGBOX_DEFAULT
 	release
 	end
@@ -358,11 +362,13 @@ RustboroCity_Gym_EventScript_RoxanneRematchStage4::
 	goto_if_eq VAR_RESULT, NO, RustboroCity_Gym_EventScript_RoxanneRematchDecline
 	cleartrainerflag TRAINER_ROXANNE_4
 	trainerbattle_double TRAINER_ROXANNE_4, RustboroCity_Gym_Text_RoxanneGrowGo, RustboroCity_Gym_Text_RoxanneGrowDefeat4, RustboroCity_Gym_Text_RoxanneGrowNeedTwo
+	setspeaker SP_NAME_ROXANNE
 	msgbox RustboroCity_Gym_Text_RoxanneGrowAfter4, MSGBOX_DEFAULT
 	release
 	end
 
 RustboroCity_Gym_EventScript_RoxanneRematchDecline::
+	setspeaker SP_NAME_ROXANNE
 	msgbox RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT
 	release
 	end
@@ -375,7 +381,7 @@ RustboroCity_Gym_Text_RoxanneGrowNeedTwo:
 	.string "battle. Come back with more.$"
 
 RustboroCity_Gym_Text_RoxanneGrowOffer1:
-	.string "Roxanne: You have {STR_VAR_1} Badges now.\p"
+	.string "{SPEAKER SPK_ROXANNE}You have {STR_VAR_1} Badges now.\p"
 	.string "A Leader chooses a team to suit a\n"
 	.string "challenger's Badges.\p"
 	.string "You've earned a harder exam.\n"
@@ -390,7 +396,7 @@ RustboroCity_Gym_Text_RoxanneGrowAfter1:
 	.string "I'll have revised my team again.$"
 
 RustboroCity_Gym_Text_RoxanneGrowOffer2:
-	.string "Roxanne: Eight Badges. Next is the\n"
+	.string "{SPEAKER SPK_ROXANNE}Eight Badges. Next is the\n"
 	.string "Pokémon League.\p"
 	.string "So I'll hold back much less this\n"
 	.string "time. Shall we test you?$"
@@ -404,7 +410,7 @@ RustboroCity_Gym_Text_RoxanneGrowAfter2:
 	.string "I'll tell my students about you.$"
 
 RustboroCity_Gym_Text_RoxanneGrowOffer3:
-	.string "Roxanne: Our Champion came back to\n"
+	.string "{SPEAKER SPK_ROXANNE}Our Champion came back to\n"
 	.string "my Gym. That's a lesson in itself.\p"
 	.string "My full team is ready.\n"
 	.string "Will you battle me?$"
@@ -418,7 +424,7 @@ RustboroCity_Gym_Text_RoxanneGrowAfter3:
 	.string "I'll keep refining my team.$"
 
 RustboroCity_Gym_Text_RoxanneGrowOffer4:
-	.string "Roxanne: You've defended your title.\p"
+	.string "{SPEAKER SPK_ROXANNE}You've defended your title.\p"
 	.string "This is the strongest team I can\n"
 	.string "build. Will you face it?$"
 

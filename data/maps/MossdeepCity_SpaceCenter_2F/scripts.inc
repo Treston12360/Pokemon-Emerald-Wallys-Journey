@@ -164,6 +164,7 @@ MossdeepCity_SpaceCenter_2F_EventScript_Grunt5::
 MossdeepCity_SpaceCenter_2F_EventScript_Tabitha::
 	lock
 	faceplayer
+	setspeaker SP_NAME_TABITHA
 	msgbox MossdeepCity_SpaceCenter_2F_Text_WellTakeCareOfYou, MSGBOX_DEFAULT
 	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
 	waitmovement 0
@@ -437,16 +438,16 @@ MossdeepCity_SpaceCenter_2F_Text_WellTakeCareOfYou:
 	.string "we'll take care of you at the same time!$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieDontInterfere:
-	.string "Maxie: Clear out of the way!\n"
+	.string "{SPEAKER SPK_MAXIE}Clear out of the way!\n"
 	.string "Don't you dare interfere!$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenWhyStealRocketFuel:
-	.string "Steven: Team Magma…\p"
+	.string "{SPEAKER SPK_STEVEN}Team Magma…\p"
 	.string "What's the point of stealing rocket\n"
 	.string "fuel?$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieUseFuelToEruptVolcano:
-	.string "Maxie: Since you're so curious,\n"
+	.string "{SPEAKER SPK_MAXIE}Since you're so curious,\n"
 	.string "you deserve an explanation.\p"
 	.string "We're going to fire the entire load\n"
 	.string "into Mt. Chimney.\p"
@@ -457,13 +458,13 @@ MossdeepCity_SpaceCenter_2F_Text_MaxieUseFuelToEruptVolcano:
 	.string "wait.$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenAreYouReadyToBattle:
-	.string "Steven: {PLAYER}{KUN}!\n"
+	.string "{SPEAKER SPK_STEVEN}{PLAYER}{KUN}!\n"
 	.string "You're going to help me?\p"
 	.string "Let's go into battle together!\n"
 	.string "Are you ready?$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenHurryGetReadyQuickly:
-	.string "Steven: Then, hurry!\n"
+	.string "{SPEAKER SPK_STEVEN}Then, hurry!\n"
 	.string "Get ready quickly!$"
 
 MossdeepCity_SpaceCenter_2F_Text_JustWantToExpandLand:
@@ -474,7 +475,7 @@ MossdeepCity_SpaceCenter_Text_TabithaDefeat:
 	.string "I'm with our leader…$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieWeFailedIsAquaAlsoMisguided:
-	.string "Maxie: We failed to make the volcano\n"
+	.string "{SPEAKER SPK_MAXIE}We failed to make the volcano\n"
 	.string "erupt. We failed to control Groudon.\p"
 	.string "I told my people I could give them\n"
 	.string "land. Homes. A future.\p"
@@ -488,13 +489,13 @@ MossdeepCity_SpaceCenter_2F_Text_MaxieWeFailedIsAquaAlsoMisguided:
 	.string "just as wrong.$"
 
 MossdeepCity_SpaceCenter_2F_Text_MaxieWeWillGiveUp:
-	.string "Maxie: All right…\n"
+	.string "{SPEAKER SPK_MAXIE}All right…\n"
 	.string "We will give up on the fuel…\p"
 	.string "There appear to be more important\n"
 	.string "matters that I must examine…$"
 
 MossdeepCity_SpaceCenter_2F_Text_StevenThankYouComeSeeMeAtHome:
-	.string "Steven: Whew, that was too tense.\n"
+	.string "{SPEAKER SPK_STEVEN}Whew, that was too tense.\n"
 	.string "{PLAYER}{KUN}, thank you.\p"
 	.string "I have something to give you as\n"
 	.string "thanks for your support.\p"

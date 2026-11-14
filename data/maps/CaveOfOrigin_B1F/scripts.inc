@@ -4,6 +4,7 @@ CaveOfOrigin_B1F_MapScripts::
 CaveOfOrigin_B1F_EventScript_Wallace::
 	lock
 	faceplayer
+	setspeaker SP_NAME_WALLACE
 	msgbox CaveOfOrigin_B1F_Text_WallaceStory, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_CAVE_OF_ORIGIN_WALLACE, Common_Movement_WalkInPlaceFasterUp
@@ -78,31 +79,31 @@ CaveOfOrigin_B1F_Text_WallaceStory:
 	.string "than any of us lately.$"
 
 CaveOfOrigin_B1F_Text_WhereIsRayquaza:
-	.string "Wallace: {PLAYER}{KUN}, do you perhaps\n"
+	.string "{SPEAKER SPK_WALLACE}{PLAYER}{KUN}, do you perhaps\n"
 	.string "know where Rayquaza is now?\p"
 	.string "If you do, please tell me.$"
 
 CaveOfOrigin_B1F_Text_ButWereInCaveOfOrigin:
-	.string "Wallace: The Cave Of Origin?\p"
+	.string "{SPEAKER SPK_WALLACE}The Cave Of Origin?\p"
 	.string "But that's right here!\n"
 	.string "I need you to do better than that!\p"
 	.string "Please, I need you to think about\n"
 	.string "where Rayquaza might be right now.$"
 
 CaveOfOrigin_B1F_Text_OldLadyDidntMentionThat:
-	.string "Wallace: Mt. Pyre?\p"
+	.string "{SPEAKER SPK_WALLACE}Mt. Pyre?\p"
 	.string "The keepers there guard the Orbs,\n"
 	.string "not Rayquaza. They told me so.\p"
 	.string "Though… didn't they say something\n"
 	.string "about a tower by the sea?$"
 
 CaveOfOrigin_B1F_Text_CantYouRememberSomehow:
-	.string "Wallace: Huh? You don't remember?\n"
+	.string "{SPEAKER SPK_WALLACE}Huh? You don't remember?\n"
 	.string "Hmm… That's a problem…\p"
 	.string "Can't you remember somehow?$"
 
 CaveOfOrigin_B1F_Text_WellHeadToSkyPillar:
-	.string "Wallace: The Sky Pillar?\p"
+	.string "{SPEAKER SPK_WALLACE}The Sky Pillar?\p"
 	.string "That's it!\n"
 	.string "It must be the Sky Pillar!\p"
 	.string "{PLAYER}{KUN}, there's not a moment to lose!\n"

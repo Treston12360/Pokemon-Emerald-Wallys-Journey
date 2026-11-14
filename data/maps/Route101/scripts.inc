@@ -19,6 +19,7 @@ Route101_EventScript_HideMapNamePopup::
 Route101_EventScript_StartBirchRescue::
 	lockall
 	playbgm MUS_HELP, TRUE
+	setspeaker SP_NAME_BIRCH
 	msgbox Route101_Text_HelpMe, MSGBOX_DEFAULT
 	closemessage
 	setobjectxy LOCALID_ROUTE101_BIRCH, 0, 15
@@ -35,6 +36,7 @@ Route101_EventScript_StartBirchRescue::
 	applymovement LOCALID_ROUTE101_ZIGZAGOON, Route101_Movement_ZigzagoonFaceBirch
 	applymovement LOCALID_ROUTE101_BIRCH, Route101_Movement_BirchFaceZigzagoon
 	waitmovement 0
+	setspeaker SP_NAME_BIRCH
 	msgbox Route101_Text_PleaseHelp, MSGBOX_DEFAULT
 	closemessage
 	setvar VAR_ROUTE101_STATE, 2
@@ -270,7 +272,7 @@ Route101_Text_DontLeaveMe:
 	.string "Don't leave me like this!$"
 
 Route101_Text_YouSavedMe:
-	.string "Prof. Birch: Whew…\p"
+	.string "{SPEAKER SPK_BIRCH}Whew…\p"
 	.string "I was in the tall grass studying wild\n"
 	.string "Pokémon when I was jumped.\p"
 	.string "You saved me.\n"

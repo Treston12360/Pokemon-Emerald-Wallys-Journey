@@ -20,6 +20,7 @@ Route128_EventScript_KyogreAwakenedScene::
 	closemessage
 	applymovement LOCALID_ROUTE128_ARCHIE, Route128_Movement_ArchieBackUp
 	waitmovement 0
+	setspeaker SP_NAME_ARCHIE
 	msgbox Route128_Text_ArchieIOnlyWanted, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_ROUTE128_MAXIE, Route128_Movement_MaxieApproachArchie
@@ -60,9 +61,11 @@ Route128_EventScript_KyogreAwakenedScene::
 	applymovement LOCALID_ROUTE128_STEVEN, Route128_Movement_StevenWalkUp
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterUp
 	waitmovement 0
+	setspeaker SP_NAME_STEVEN
 	msgbox Route128_Text_StevenWholeWorldWillDrown, MSGBOX_DEFAULT
 	applymovement LOCALID_ROUTE128_STEVEN, Common_Movement_WalkInPlaceFasterDown
 	waitmovement 0
+	setspeaker SP_NAME_STEVEN
 	msgbox Route128_Text_StevenImGoingToSootopolis, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_ROUTE128_STEVEN, Common_Movement_WalkInPlaceFasterDown
@@ -242,7 +245,7 @@ Route128_EventScript_Carlee::
 	end
 
 Route128_Text_ArchieWhatHappened:
-	.string "Archie: What happened…\n"
+	.string "{SPEAKER SPK_ARCHIE}What happened…\n"
 	.string "What is this wretched scene…\p"
 	.string "Did I…make a horrible mistake?$"
 
@@ -251,7 +254,7 @@ Route128_Text_ArchieIOnlyWanted:
 	.string "I only wanted…$"
 
 Route128_Text_MaxieDoYouUnderstandNow:
-	.string "Maxie: Do you understand now,\n"
+	.string "{SPEAKER SPK_MAXIE}Do you understand now,\n"
 	.string "Archie?\p"
 	.string "Do you finally see how disastrous\n"
 	.string "your dream turned out to be?\p"
@@ -260,7 +263,7 @@ Route128_Text_MaxieDoYouUnderstandNow:
 	.string "completely out of control!$"
 
 Route128_Text_MaxieResposibilityFallsToArchieAndMe:
-	.string "Maxie: {PLAYER}, don't say anything.\p"
+	.string "{SPEAKER SPK_MAXIE}{PLAYER}, don't say anything.\p"
 	.string "I know that I have no right to be\n"
 	.string "critical of Archie…\p"
 	.string "But the way things are now, I doubt\n"
@@ -272,13 +275,13 @@ Route128_Text_MaxieResposibilityFallsToArchieAndMe:
 	.string "to this falls to Archie and me…$"
 
 Route128_Text_MaxieThisDefiesBelief:
-	.string "Maxie: This defies belief…\p"
+	.string "{SPEAKER SPK_MAXIE}This defies belief…\p"
 	.string "Those super-ancient Pokémon…\p"
 	.string "Their power is unbelievable.\n"
 	.string "They've upset the balance of nature…$"
 
 Route128_Text_StevenWhatIsHappening:
-	.string "Steven: {PLAYER}{KUN}!\n"
+	.string "{SPEAKER SPK_STEVEN}{PLAYER}{KUN}!\n"
 	.string "What is happening?$"
 
 Route128_Text_StevenWholeWorldWillDrown:

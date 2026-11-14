@@ -24,6 +24,7 @@ AquaHideout_B2F_EventScript_MattNoticePlayer::
 
 AquaHideout_B2F_EventScript_Matt::
 	trainerbattle_single TRAINER_MATT, AquaHideout_B2F_Text_MattIntro, AquaHideout_B2F_Text_MattDefeat, AquaHideout_B2F_EventScript_SubmarineEscape
+	setspeaker SP_NAME_MATT
 	msgbox AquaHideout_B2F_Text_MattPostBattle, MSGBOX_DEFAULT
 	release
 	end
@@ -45,6 +46,7 @@ AquaHideout_B2F_EventScript_SubmarineEscape::
 	delay 20
 	applymovement VAR_0x8008, Common_Movement_FacePlayer
 	waitmovement 0
+	setspeaker SP_NAME_MATT
 	msgbox AquaHideout_B2F_Text_MattPostBattle, MSGBOX_DEFAULT
 	setflag FLAG_TEAM_AQUA_ESCAPED_IN_SUBMARINE
 	setflag FLAG_HIDE_LILYCOVE_CITY_AQUA_GRUNTS

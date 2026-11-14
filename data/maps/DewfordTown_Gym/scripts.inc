@@ -143,6 +143,7 @@ DewfordTown_Gym_EventScript_BrawlyDefeated::
 	message DewfordTown_Gym_Text_ReceivedKnuckleBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	setspeaker SP_NAME_BRAWLY
 	msgbox DewfordTown_Gym_Text_KnuckleBadgeInfoTakeThis, MSGBOX_DEFAULT
 	setflag FLAG_DEFEATED_DEWFORD_GYM
 	setflag FLAG_BADGE02_GET
@@ -467,7 +468,7 @@ DewfordTown_Gym_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 DewfordTown_Gym_Text_BrawlyPreRematch:
-	.string "Brawly: A wave pulls back, but it\n"
+	.string "{SPEAKER SPK_BRAWLY}A wave pulls back, but it\n"
 	.string "always comes back to the shore.\p"
 	.string "I knew you would too.\n"
 	.string "Show me how big you've gotten!$"
@@ -477,12 +478,12 @@ DewfordTown_Gym_Text_BrawlyRematchDefeat:
 	.string "Again! What a rush!$"
 
 DewfordTown_Gym_Text_BrawlyPostRematch:
-	.string "Brawly: Battling's like the sea out\n"
+	.string "{SPEAKER SPK_BRAWLY}Battling's like the sea out\n"
 	.string "there. You never touch the bottom.\p"
 	.string "That's why I keep diving.$"
 
 DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons:
-	.string "Brawly: A wave pulls back, but it\n"
+	.string "{SPEAKER SPK_BRAWLY}A wave pulls back, but it\n"
 	.string "always comes back to the shore.\p"
 	.string "Oh? Only one of your Pokémon can\n"
 	.string "battle?\p"
@@ -490,19 +491,19 @@ DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons:
 	.string "Come back with at least two.$"
 
 DewfordTown_Gym_Text_BrawlyPreRematch3:
-	.string "Brawly: I spent all season hauling\n"
+	.string "{SPEAKER SPK_BRAWLY}I spent all season hauling\n"
 	.string "relief crates between the islands.\p"
 	.string "Best training I ever did.\n"
 	.string "Let's see if it shows!$"
 
 DewfordTown_Gym_Text_BrawlyPreRematch4:
-	.string "Brawly: The swells have been huge\n"
+	.string "{SPEAKER SPK_BRAWLY}The swells have been huge\n"
 	.string "since the storms.\p"
 	.string "I learned to ride them instead of\n"
 	.string "fighting them. Let's go!$"
 
 DewfordTown_Gym_Text_BrawlyPreRematch5:
-	.string "Brawly: No more hiding in the dark.\n"
+	.string "{SPEAKER SPK_BRAWLY}No more hiding in the dark.\n"
 	.string "I turned the lights on for this one.\p"
 	.string "I want to see every move coming.\n"
 	.string "Bring the storm, Champion!$"
@@ -511,7 +512,7 @@ DewfordTown_Gym_Text_BrawlyRematchDefeatElite:
 	.string "Wiped out! What a ride!$"
 
 DewfordTown_Gym_Text_BrawlyPostRematchElite:
-	.string "Brawly: Champion or not, you still\n"
+	.string "{SPEAKER SPK_BRAWLY}Champion or not, you still\n"
 	.string "fight like someone protecting\l"
 	.string "something.\p"
 	.string "Never lose that. That's what makes\n"
@@ -533,6 +534,7 @@ DewfordTown_Gym_EventScript_BrawlyRematchStage1::
 	goto_if_eq VAR_RESULT, NO, DewfordTown_Gym_EventScript_BrawlyRematchDecline
 	cleartrainerflag TRAINER_BRAWLY_2
 	trainerbattle_no_intro TRAINER_BRAWLY_2, DewfordTown_Gym_Text_BrawlyGrowDefeat1
+	setspeaker SP_NAME_BRAWLY
 	msgbox DewfordTown_Gym_Text_BrawlyGrowAfter1, MSGBOX_DEFAULT
 	release
 	end
@@ -542,6 +544,7 @@ DewfordTown_Gym_EventScript_BrawlyRematchStage2::
 	goto_if_eq VAR_RESULT, NO, DewfordTown_Gym_EventScript_BrawlyRematchDecline
 	cleartrainerflag TRAINER_BRAWLY_2
 	trainerbattle_no_intro TRAINER_BRAWLY_2, DewfordTown_Gym_Text_BrawlyGrowDefeat2
+	setspeaker SP_NAME_BRAWLY
 	msgbox DewfordTown_Gym_Text_BrawlyGrowAfter2, MSGBOX_DEFAULT
 	release
 	end
@@ -553,6 +556,7 @@ DewfordTown_Gym_EventScript_BrawlyRematchStage3::
 	trainerbattle_double TRAINER_BRAWLY_3, DewfordTown_Gym_Text_BrawlyGrowGo, DewfordTown_Gym_Text_BrawlyGrowDefeat3, DewfordTown_Gym_Text_BrawlyGrowNeedTwo
 	setvar VAR_0x8004, 2
 	special WallyJourney_RecordLeaderPostgameWin
+	setspeaker SP_NAME_BRAWLY
 	msgbox DewfordTown_Gym_Text_BrawlyGrowAfter3, MSGBOX_DEFAULT
 	release
 	end
@@ -562,11 +566,13 @@ DewfordTown_Gym_EventScript_BrawlyRematchStage4::
 	goto_if_eq VAR_RESULT, NO, DewfordTown_Gym_EventScript_BrawlyRematchDecline
 	cleartrainerflag TRAINER_BRAWLY_4
 	trainerbattle_double TRAINER_BRAWLY_4, DewfordTown_Gym_Text_BrawlyGrowGo, DewfordTown_Gym_Text_BrawlyGrowDefeat4, DewfordTown_Gym_Text_BrawlyGrowNeedTwo
+	setspeaker SP_NAME_BRAWLY
 	msgbox DewfordTown_Gym_Text_BrawlyGrowAfter4, MSGBOX_DEFAULT
 	release
 	end
 
 DewfordTown_Gym_EventScript_BrawlyRematchDecline::
+	setspeaker SP_NAME_BRAWLY
 	msgbox DewfordTown_Gym_Text_BrawlyPostBattle, MSGBOX_DEFAULT
 	release
 	end
@@ -579,7 +585,7 @@ DewfordTown_Gym_Text_BrawlyGrowNeedTwo:
 	.string "battle. Come back with more.$"
 
 DewfordTown_Gym_Text_BrawlyGrowOffer1:
-	.string "Brawly: Whoa, {STR_VAR_1} Badges already!\p"
+	.string "{SPEAKER SPK_BRAWLY}Whoa, {STR_VAR_1} Badges already!\p"
 	.string "In Gym battles I pick my crew to\n"
 	.string "match the Badges you've got.\p"
 	.string "With that many, I can bring a\n"
@@ -594,7 +600,7 @@ DewfordTown_Gym_Text_BrawlyGrowAfter1:
 	.string "I'll be training on the rocks.$"
 
 DewfordTown_Gym_Text_BrawlyGrowOffer2:
-	.string "Brawly: All eight Badges, huh?\p"
+	.string "{SPEAKER SPK_BRAWLY}All eight Badges, huh?\p"
 	.string "Then I don't have to go so easy.\n"
 	.string "One last wave before the League?$"
 
@@ -607,7 +613,7 @@ DewfordTown_Gym_Text_BrawlyGrowAfter2:
 	.string "The whole island's rooting for you.$"
 
 DewfordTown_Gym_Text_BrawlyGrowOffer3:
-	.string "Brawly: The Champion, back in\n"
+	.string "{SPEAKER SPK_BRAWLY}The Champion, back in\n"
 	.string "little old Dewford!\p"
 	.string "I've got my full crew now.\n"
 	.string "Rematch?$"
@@ -620,7 +626,7 @@ DewfordTown_Gym_Text_BrawlyGrowAfter3:
 	.string "a wave like you.$"
 
 DewfordTown_Gym_Text_BrawlyGrowOffer4:
-	.string "Brawly: You kept your title. Nice!\p"
+	.string "{SPEAKER SPK_BRAWLY}You kept your title. Nice!\p"
 	.string "This is my strongest team ever.\n"
 	.string "Ready for the biggest wave yet?$"
 

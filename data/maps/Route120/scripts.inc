@@ -367,7 +367,7 @@ Route120_EventScript_Callie::
 	end
 
 Route120_Text_StevenGreeting:
-	.string "Steven: Hm? {PLAYER}{KUN}, hi.\n"
+	.string "{SPEAKER SPK_STEVEN}Hm? {PLAYER}{KUN}, hi.\n"
 	.string "It's been a while.\p"
 	.string "There's something here that you can't\n"
 	.string "see, right?\p"
@@ -380,18 +380,18 @@ Route120_Text_StevenGreeting:
 	.string "battle?$"
 
 Route120_Text_StevenIllWaitHere:
-	.string "Steven: No?\p"
+	.string "{SPEAKER SPK_STEVEN}No?\p"
 	.string "I'll wait here, so you can get ready.$"
 
 Route120_Text_StevenReadyForBattle:
-	.string "Steven: Are you ready?\p"
+	.string "{SPEAKER SPK_STEVEN}Are you ready?\p"
 	.string "The Devon Scope shows what our\n"
 	.string "eyes can't see. It can't tell us\l"
 	.string "whether a Pokémon is hostile.\p"
 	.string "That's something we must learn.$"
 
 Route120_Text_StevenShowMeYourPower:
-	.string "Steven: {PLAYER}{KUN}, show me your true\n"
+	.string "{SPEAKER SPK_STEVEN}{PLAYER}{KUN}, show me your true\n"
 	.string "power as a Trainer!$"
 
 Route120_Text_StevenUsedDevonScope:
@@ -401,7 +401,7 @@ Route120_Text_StevenUsedDevonScope:
 	.string "The startled Pokémon attacked!$"
 
 Route120_Text_StevenGiveDevonScope:
-	.string "Steven: I see…\n"
+	.string "{SPEAKER SPK_STEVEN}I see…\n"
 	.string "Your battle style is intriguing.\p"
 	.string "Your Pokémon have obviously grown\n"
 	.string "since I first met you in Dewford.\p"
@@ -411,7 +411,7 @@ Route120_Text_StevenGiveDevonScope:
 	.string "concealed Pokémon.$"
 
 Route120_Text_StevenGoodbye:
-	.string "Steven: You handled that well.\p"
+	.string "{SPEAKER SPK_STEVEN}You handled that well.\p"
 	.string "My father's company built the\n"
 	.string "Devon Scope to solve a problem.\p"
 	.string "But any invention can be misused.\n"

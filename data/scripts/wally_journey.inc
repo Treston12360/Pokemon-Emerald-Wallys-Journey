@@ -173,7 +173,7 @@ WallyJourney_EventScript_RivalVERDANTURFWon::
 
 @ Spoken at the north end of the FIERY PATH (owner-approved 2026-10-26).
 WallyJourney_Text_RivalVERDANTURFIntro:
-	.string "Wally: {PLAYER}! You made it through!\p"
+	.string "{SPEAKER SPK_WALLY}{PLAYER}! You made it through!\p"
 	.string "I came in from the other side.\n"
 	.string "It's so hot in here…\p"
 	.string "I heard you beat Wattson! I've been\n"
@@ -189,7 +189,7 @@ WallyJourney_Text_RivalVERDANTURFDefeat:
 
 
 WallyJourney_Text_RivalVERDANTURFPost:
-	.string "Wally: Every battle teaches me\n"
+	.string "{SPEAKER SPK_WALLY}Every battle teaches me\n"
 	.string "something new.\p"
 	.string "I'm going to keep going. Next time,\n"
 	.string "I'll be even stronger!$"
@@ -207,7 +207,7 @@ WallyJourney_EventScript_RivalLAVARIDGEWon::
 	end
 
 WallyJourney_Text_RivalLAVARIDGEIntro:
-	.string "Wally: Oh. {PLAYER}.\p"
+	.string "{SPEAKER SPK_WALLY}Oh. {PLAYER}.\p"
 	.string "I've been training on this volcano.\p"
 	.string "You only just beat Flannery? And here\n"
 	.string "I thought I was being slow.\p"
@@ -222,7 +222,7 @@ WallyJourney_Text_RivalLAVARIDGEDefeat:
 
 
 WallyJourney_Text_RivalLAVARIDGEPost:
-	.string "Wally: I've been up training for three\n"
+	.string "{SPEAKER SPK_WALLY}I've been up training for three\n"
 	.string "straight days.\p"
 	.string "You're lucky I wasn't at my best.\p"
 	.string "Next time, I will be.$"
@@ -240,7 +240,7 @@ WallyJourney_EventScript_RivalFORTREEWon::
 	end
 
 WallyJourney_Text_RivalFORTREEIntro:
-	.string "Wally: Oh, look who finally showed up.\p"
+	.string "{SPEAKER SPK_WALLY}Oh, look who finally showed up.\p"
 	.string "So you beat your dad. Congrats. I did\n"
 	.string "that days ago.\p"
 	.string "Winona too. She barely put up a fight.\p"
@@ -255,7 +255,7 @@ WallyJourney_Text_RivalFORTREEDefeat:
 
 
 WallyJourney_Text_RivalFORTREEPost:
-	.string "Wally: Enjoy it. That's the last time\n"
+	.string "{SPEAKER SPK_WALLY}Enjoy it. That's the last time\n"
 	.string "you'll beat me.\p"
 	.string "I'm a badge ahead of you, and the gap's\n"
 	.string "only getting bigger.\p"
@@ -275,7 +275,7 @@ WallyJourney_EventScript_RivalLILYCOVEWon::
 	end
 
 WallyJourney_Text_RivalLILYCOVEIntro:
-	.string "Wally: Oh. It's you.\p"
+	.string "{SPEAKER SPK_WALLY}Oh. It's you.\p"
 	.string "Seven badges. Tate and Liza didn't\n"
 	.string "even make me sweat.\p"
 	.string "How many do you have again? Six? Cute.\p"
@@ -291,7 +291,7 @@ WallyJourney_Text_RivalLILYCOVEDefeat:
 
 
 WallyJourney_Text_RivalLILYCOVEPost:
-	.string "Wally: Wallace asked me what I still\n"
+	.string "{SPEAKER SPK_WALLY}Wallace asked me what I still\n"
 	.string "needed to prove.\p"
 	.string "I laughed. I'm about to take his title.\p"
 	.string "Enjoy beating me while it still counts\n"
@@ -312,7 +312,7 @@ WallyJourney_EventScript_RivalMOSSDEEPWon::
 	end
 
 WallyJourney_Text_RivalMOSSDEEPIntro:
-	.string "Wally: Seven badges. Took you long\n"
+	.string "{SPEAKER SPK_WALLY}Seven badges. Took you long\n"
 	.string "enough.\p"
 	.string "I've had all eight for a while now.\p"
 	.string "Elite Four next. Then Wallace.\p"
@@ -329,7 +329,7 @@ WallyJourney_Text_RivalMOSSDEEPDefeat:
 
 
 WallyJourney_Text_RivalMOSSDEEPPost:
-	.string "Wally: Wallace keeps asking why I want\n"
+	.string "{SPEAKER SPK_WALLY}Wallace keeps asking why I want\n"
 	.string "to be Champion.\p"
 	.string "Easy. Because I'm better than\n"
 	.string "everyone.\p"
@@ -440,17 +440,17 @@ WallyJourney_Movement_WallyWalkDown2:
 	step_end
 
 WallyJourney_Text_SootopolisWallyCalls:
-	.string "Wally: {PLAYER}. Hold up.$"
+	.string "{SPEAKER SPK_WALLY}{PLAYER}. Hold up.$"
 
 WallyJourney_Text_SootopolisWallyWon:
-	.string "Wally: Pathetic. You're not a hero.\n"
+	.string "{SPEAKER SPK_WALLY}Pathetic. You're not a hero.\n"
 	.string "You're a fluke.\p"
 	.string "Watch the broadcast tonight. That's\n"
 	.string "the closest you'll ever get to the\l"
 	.string "title.$"
 
 WallyJourney_Text_RivalSOOTOPOLISIntro:
-	.string "Wally: Wow. Everyone's calling you a\n"
+	.string "{SPEAKER SPK_WALLY}Wow. Everyone's calling you a\n"
 	.string "hero. It's honestly embarrassing.\p"
 	.string "I dragged this whole city into the\n"
 	.string "shelters while you soaked up all the\l"
@@ -472,12 +472,12 @@ WallyJourney_Text_RivalSOOTOPOLISIntro:
 
 
 WallyJourney_Text_RivalSOOTOPOLISDefeat:
-	.string "Wally: …You don't deserve this. You\n"
+	.string "{SPEAKER SPK_WALLY}…You don't deserve this. You\n"
 	.string "never did.$"
 
 
 WallyJourney_Text_RivalSOOTOPOLISPost:
-	.string "Wally: Savor it. It's the last good\n"
+	.string "{SPEAKER SPK_WALLY}Savor it. It's the last good\n"
 	.string "thing that'll ever happen to you.\p"
 	.string "Tonight I become Champion.\p"
 	.string "You'll just be another Trainer who\n"
@@ -531,7 +531,7 @@ WallyJourney_EventScript_JirachiCaught::
 	end
 
 WallyJourney_Text_CozmoJirachiStory:
-	.string "Prof. Cozmo: Oh, the new Champion!\p"
+	.string "{SPEAKER SPK_COZMO}Oh, the new Champion!\p"
 	.string "I've been studying the Meteorite\n"
 	.string "again. It's been glowing lately.\p"
 	.string "Old legends say a star-shaped\n"
@@ -543,7 +543,7 @@ WallyJourney_Text_CozmoJirachiStory:
 	.string "If anyone can find it, it's you!$"
 
 WallyJourney_Text_CozmoJirachiReminder:
-	.string "Prof. Cozmo: Any luck in Meteor\n"
+	.string "{SPEAKER SPK_COZMO}Any luck in Meteor\n"
 	.string "Falls? The light was seen past\l"
 	.string "the underground lake.$"
 
@@ -666,7 +666,7 @@ WallyJourney_EventScript_JuansHouseBroadcast::
 	end
 
 WallyJourney_Text_WallaceMustReturn:
-	.string "Wallace: Now, forgive me, but I must\n"
+	.string "{SPEAKER SPK_WALLACE}Now, forgive me, but I must\n"
 	.string "fly back to Ever Grande at once.\p"
 	.string "A challenger has made it through the\n"
 	.string "Elite Four. My title is on the line\l"
@@ -676,7 +676,7 @@ WallyJourney_Text_WallaceMustReturn:
 	.string "…Perhaps you'll guess who.$"
 
 WallyJourney_Text_StevenFollowMe:
-	.string "Steven: {PLAYER}! Congratulations\n"
+	.string "{SPEAKER SPK_STEVEN}{PLAYER}! Congratulations\n"
 	.string "on the Rain Badge.\p"
 	.string "I've been looking for you. Juan\n"
 	.string "headed home the moment you won.\p"
@@ -684,11 +684,11 @@ WallyJourney_Text_StevenFollowMe:
 	.string "Follow me. Quickly!$"
 
 WallyJourney_Text_StevenWeLetOurselvesIn:
-	.string "Steven: Juan, I brought {PLAYER}.\n"
+	.string "{SPEAKER SPK_STEVEN}Juan, I brought {PLAYER}.\n"
 	.string "Has it started?$"
 
 WallyJourney_Text_JuanComeQuickly:
-	.string "Juan: Ah, my newest Badge holder.\p"
+	.string "{SPEAKER SPK_JUAN}Ah, my newest Badge holder.\p"
 	.string "Come, quickly. My former student is\n"
 	.string "defending his title.\p"
 	.string "It is the final Pokémon for both.$"
@@ -710,7 +710,7 @@ WallyJourney_Text_BroadcastAnnouncer:
 	.string "Wally, of Petalburg and Verdanturf!$"
 
 WallyJourney_Text_BroadcastWallace:
-	.string "Wallace: Magnificent.\p"
+	.string "{SPEAKER SPK_WALLACE}Magnificent.\p"
 	.string "When we first met, you asked me how\n"
 	.string "to stop being afraid.\p"
 	.string "I never answered. You found it on\n"
@@ -719,7 +719,7 @@ WallyJourney_Text_BroadcastWallace:
 	.string "Hoenn is in good hands.$"
 
 WallyJourney_Text_BroadcastWally:
-	.string "Wally: Thank you, Wallace.\n"
+	.string "{SPEAKER SPK_WALLY}Thank you, Wallace.\n"
 	.string "You gave me a real battle.\p"
 	.string "I used to watch champions\n"
 	.string "and wonder how they did it.\p"
@@ -731,7 +731,7 @@ WallyJourney_Text_BroadcastWally:
 	.string "Try not to disappoint me.$"
 
 WallyJourney_Text_JuanAfterBroadcast:
-	.string "Juan: …So Wallace has been dethroned.\p"
+	.string "{SPEAKER SPK_JUAN}…So Wallace has been dethroned.\p"
 	.string "It was I who taught Wallace, long\n"
 	.string "ago. He was proud, and impatient,\l"
 	.string "and brilliant.\p"
@@ -740,12 +740,12 @@ WallyJourney_Text_JuanAfterBroadcast:
 	.string "The very thing I once saw in him.$"
 
 WallyJourney_Text_StevenAfterBroadcast:
-	.string "Steven: …Like I saw in you, {PLAYER}.\p"
+	.string "{SPEAKER SPK_STEVEN}…Like I saw in you, {PLAYER}.\p"
 	.string "Wally's already at the top.\n"
 	.string "He's waiting for you.$"
 
 WallyJourney_Text_JuanSeeYouAtGym:
-	.string "Juan: You hold every Badge in Hoenn.\p"
+	.string "{SPEAKER SPK_JUAN}You hold every Badge in Hoenn.\p"
 	.string "Victory Road lies to the east of\n"
 	.string "Ever Grande. Go, and climb it.$"
 
@@ -815,7 +815,7 @@ WallyJourney_EventScript_RivalFinal_BRENDAN_MUDKIP::
 	end
 
 WallyJourney_Text_RivalFinalMayIntro:
-	.string "May: {PLAYER}{KUN}! The Champion, in\n"
+	.string "{SPEAKER SPK_MAY}{PLAYER}{KUN}! The Champion, in\n"
 	.string "my dad's lab!\p"
 	.string "I've been thinking about what I want\n"
 	.string "to do next. Before I decide…\p"
@@ -827,7 +827,7 @@ WallyJourney_Text_RivalFinalMayDefeat:
 	.string "You're the real deal.$"
 
 WallyJourney_Text_RivalFinalMayAfter:
-	.string "May: I've decided. I'm staying on as\n"
+	.string "{SPEAKER SPK_MAY}I've decided. I'm staying on as\n"
 	.string "Dad's field partner.\p"
 	.string "The data we logged during the crisis\n"
 	.string "is helping the coast recover. That\l"
@@ -838,7 +838,7 @@ WallyJourney_Text_RivalFinalMayAfter:
 	.string "rival I needed.$"
 
 WallyJourney_Text_RivalFinalBrendanIntro:
-	.string "Brendan: Hey, Champion.\p"
+	.string "{SPEAKER SPK_BRENDAN}Hey, Champion.\p"
 	.string "I've been doing a lot of thinking\n"
 	.string "since Sootopolis.\p"
 	.string "Before I tell you what I decided,\n"
@@ -849,7 +849,7 @@ WallyJourney_Text_RivalFinalBrendanDefeat:
 	.string "Good. I needed to see that.$"
 
 WallyJourney_Text_RivalFinalBrendanAfter:
-	.string "Brendan: I'm going to work with my\n"
+	.string "{SPEAKER SPK_BRENDAN}I'm going to work with my\n"
 	.string "dad. Officially.\p"
 	.string "Tracking migrations, helping the\n"
 	.string "habitats heal. It matters.\p"
@@ -868,7 +868,7 @@ WallyJourney_EventScript_SootopolisCrisisWally::
 	end
 
 WallyJourney_Text_SootopolisCrisisWally:
-	.string "Wally: Oh. It's you. Keep moving, I've\n"
+	.string "{SPEAKER SPK_WALLY}Oh. It's you. Keep moving, I've\n"
 	.string "got this side of town.\p"
 	.string "Everyone's going into the Pokémon\n"
 	.string "Center. Somebody has to actually\l"
@@ -1025,7 +1025,7 @@ WallyJourney_EventScript_PyreTeamUpNotYet::
 	end
 
 WallyJourney_Text_PyreWallyArrives:
-	.string "Wally: Great. Of course it's you.\p"
+	.string "{SPEAKER SPK_WALLY}Great. Of course it's you.\p"
 	.string "The League asked me to babysit Mt.\n"
 	.string "Pyre. Team Aqua is crawling all over the\l"
 	.string "summit.\p"
@@ -1039,7 +1039,7 @@ WallyJourney_Text_PyreWallyArrives:
 	.string "three worth picking.$"
 
 WallyJourney_Text_PyreWallyAfter:
-	.string "Wally: That was pathetic. I carried you\n"
+	.string "{SPEAKER SPK_WALLY}That was pathetic. I carried you\n"
 	.string "the whole way.\p"
 	.string "If I weren't here, Team Aqua would've\n"
 	.string "wiped the floor with you.\p"
@@ -1049,7 +1049,7 @@ WallyJourney_Text_PyreWallyAfter:
 	.string "there.$"
 
 WallyJourney_Text_PyreWallyLater:
-	.string "Wally: Not ready? Of course you're not.\p"
+	.string "{SPEAKER SPK_WALLY}Not ready? Of course you're not.\p"
 	.string "Go sort out your team. I'll wait. Try not\n"
 	.string "to take all day.$"
 
@@ -1980,7 +1980,7 @@ WallyJourney_EventScript_RivalVERDANTURFPlayerWon::
 	return
 
 WallyJourney_Text_RivalVERDANTURFWallyWon:
-	.string "Wally: I… I won?\p"
+	.string "{SPEAKER SPK_WALLY}I… I won?\p"
 	.string "Huh. I always thought you were way\n"
 	.string "stronger than me.\p"
 	.string "I didn't think I could beat you at my\n"
@@ -2003,7 +2003,7 @@ WallyJourney_EventScript_RivalLAVARIDGEPlayerWon::
 	return
 
 WallyJourney_Text_RivalLAVARIDGEWallyWon:
-	.string "Wally: Oh. I guess you aren't special.$"
+	.string "{SPEAKER SPK_WALLY}Oh. I guess you aren't special.$"
 
 WallyJourney_EventScript_RivalFORTREEWallyWon::
 	special HealPlayerParty
@@ -2015,7 +2015,7 @@ WallyJourney_EventScript_RivalFORTREEPlayerWon::
 	return
 
 WallyJourney_Text_RivalFORTREEWallyWon:
-	.string "Wally: See? I'm not the one who needs\n"
+	.string "{SPEAKER SPK_WALLY}See? I'm not the one who needs\n"
 	.string "help anymore, looks like you are.\p"
 	.string "Remember that next time.$"
 
@@ -2029,7 +2029,7 @@ WallyJourney_EventScript_RivalLILYCOVEPlayerWon::
 	return
 
 WallyJourney_Text_RivalLILYCOVEWallyWon:
-	.string "Wally: Every move had a purpose. Yours\n"
+	.string "{SPEAKER SPK_WALLY}Every move had a purpose. Yours\n"
 	.string "didn't.\p"
 	.string "Maybe go back to catching Zigzagoon.\n"
 	.string "That's more your level.$"
@@ -2044,7 +2044,7 @@ WallyJourney_EventScript_RivalMOSSDEEPPlayerWon::
 	return
 
 WallyJourney_Text_RivalMOSSDEEPWallyWon:
-	.string "Wally: That's what I thought.\p"
+	.string "{SPEAKER SPK_WALLY}That's what I thought.\p"
 	.string "I'll go deal with the weather now. You\n"
 	.string "can watch.$"
 

@@ -5,6 +5,7 @@
 #include "dynamic_placeholder_text_util.h"
 #include "event_data.h"
 #include "field_name_box.h"
+#include "overworld.h"
 #include "fonts.h"
 #include "m4a.h"
 #include "main.h"
@@ -1713,7 +1714,13 @@ static u16 RenderText(struct TextPrinter *textPrinter)
             case EXT_CTRL_CODE_SPEAKER:
                 {
                     enum SpeakerNames name = *textPrinter->printerTemplate.currentChar++;
-                    TrySpawnAndShowNamebox(gSpeakerNamesTable[name], NAME_BOX_BASE_TILE_NUM);
+                    // Only the overworld message box has a name box. In battle, menus or the PokéNav screen the
+                    // code is just skipped (ENG-NAMEBOX).
+                    if (gMain.callback2 == CB2_Overworld && name < SP_NAME_COUNT)
+                    {
+                        NoteTextSpeaker();
+                        TrySpawnAndShowNamebox(gSpeakerNamesTable[name], NAME_BOX_BASE_TILE_NUM);
+                    }
 
                     return RENDER_REPEAT;
                 }

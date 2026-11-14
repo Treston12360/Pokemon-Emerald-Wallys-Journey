@@ -245,6 +245,7 @@ LilycoveCity_Harbor_EventScript_OldSeaMapFirstTime::
 	msgbox EventTicket_Text_BrineyHoldOnASecond, MSGBOX_DEFAULT
 	call_if_eq VAR_FACING, DIR_NORTH, LilycoveCity_Harbor_EventScript_BrineyFacePlayerNorth
 	call_if_eq VAR_FACING, DIR_EAST, LilycoveCity_Harbor_EventScript_BrineyFacePlayerEast
+	setspeaker SP_NAME_BRINEY
 	msgbox EventTicket_Text_BrineyLetsSail, MSGBOX_DEFAULT
 	closemessage
 	call_if_eq VAR_FACING, DIR_NORTH, LilycoveCity_Harbor_EventScript_BoardFerryWithBrineyAndSailorNorth

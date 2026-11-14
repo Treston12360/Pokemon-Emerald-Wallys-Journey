@@ -1170,7 +1170,7 @@ RustboroCity_Text_PleaseComeWithMe:
 	.string "himself.$"
 
 RustboroCity_Text_MayHiLetsRegister:
-	.string "May: Oh, hi, {PLAYER}{KUN}!\p"
+	.string "{SPEAKER SPK_MAY}Oh, hi, {PLAYER}{KUN}!\p"
 	.string "You had a Match Call feature put\n"
 	.string "on your PokéNav!\p"
 	.string "Let's register each other so we can\n"
@@ -1182,7 +1182,7 @@ RustboroCity_Text_RegisteredMay:
 	.string "in the PokéNav.$"
 
 RustboroCity_Text_MayPassedBrineyWantToBattle:
-	.string "May: Oh, by the way, I passed\n"
+	.string "{SPEAKER SPK_MAY}Oh, by the way, I passed\n"
 	.string "Mr. Briney in Petalburg Woods.\p"
 	.string "I guess he's on his way home to his\n"
 	.string "cottage by the sea.\p"
@@ -1192,17 +1192,17 @@ RustboroCity_Text_MayPassedBrineyWantToBattle:
 	.string "How about a little battle?$"
 
 RustboroCity_Text_MayOhHaventRaisedPokemonEnough:
-	.string "May: Oh, what's the matter?\p"
+	.string "{SPEAKER SPK_MAY}Oh, what's the matter?\p"
 	.string "Haven't you caught or raised your\n"
 	.string "Pokémon very much?\p"
 	.string "That's not very good for a Trainer!$"
 
 RustboroCity_Text_MayWantToBattle:
-	.string "May: So, what do you think?\n"
+	.string "{SPEAKER SPK_MAY}So, what do you think?\n"
 	.string "How about a little battle here?$"
 
 RustboroCity_Text_MayImNotGoingToLose:
-	.string "May: You just became a Trainer,\n"
+	.string "{SPEAKER SPK_MAY}You just became a Trainer,\n"
 	.string "{PLAYER}{KUN}. I'm not going to lose!$"
 
 RustboroCity_Text_MayDefeat:
@@ -1211,14 +1211,14 @@ RustboroCity_Text_MayDefeat:
 	.string "for Dad instead of training. Worth it.$"
 
 RustboroCity_Text_MayMrBrineyHint:
-	.string "May: Oh, by the way, Mr. Briney, who\n"
+	.string "{SPEAKER SPK_MAY}Oh, by the way, Mr. Briney, who\n"
 	.string "I just passed…\p"
 	.string "{PLAYER}{KUN}, you just moved here so you\n"
 	.string "might not know this, but Mr. Briney\l"
 	.string "was once a revered seafarer.$"
 
 RustboroCity_Text_BrendanHiLetsRegister:
-	.string "Brendan: Oh, hey, {PLAYER}!\p"
+	.string "{SPEAKER SPK_BRENDAN}Oh, hey, {PLAYER}!\p"
 	.string "You had a Match Call feature put\n"
 	.string "on your PokéNav! Cool!\p"
 	.string "Let's register each other so we can\n"
@@ -1230,7 +1230,7 @@ RustboroCity_Text_RegisteredBrendan:
 	.string "in the PokéNav.$"
 
 RustboroCity_Text_BrendanPassedBrineyWantToBattle:
-	.string "Brendan: By the way, {PLAYER}, I walked\n"
+	.string "{SPEAKER SPK_BRENDAN}By the way, {PLAYER}, I walked\n"
 	.string "by Mr. Briney in Petalburg Woods.\p"
 	.string "I bet he was on his way home to his\n"
 	.string "cottage by the sea.\p"
@@ -1241,15 +1241,15 @@ RustboroCity_Text_BrendanPassedBrineyWantToBattle:
 	.string "far you've progressed?$"
 
 RustboroCity_Text_BrendanNoConfidenceInPokemon:
-	.string "Brendan: What's the matter? Don't have\n"
+	.string "{SPEAKER SPK_BRENDAN}What's the matter? Don't have\n"
 	.string "any confidence in your Pokémon?$"
 
 RustboroCity_Text_BrendanWantToBattle:
-	.string "Brendan: What's up?\n"
+	.string "{SPEAKER SPK_BRENDAN}What's up?\n"
 	.string "Want to have a battle with me?$"
 
 RustboroCity_Text_BrendanIWontGoEasy:
-	.string "Brendan: I know you just became\n"
+	.string "{SPEAKER SPK_BRENDAN}I know you just became\n"
 	.string "a Trainer, but I won't go easy!$"
 
 RustboroCity_Text_BrendanDefeat:
@@ -1258,7 +1258,7 @@ RustboroCity_Text_BrendanDefeat:
 	.string "That's not supposed to happen.$"
 
 RustboroCity_Text_BrendanMrBrineyHint:
-	.string "Brendan: By the way, you know\n"
+	.string "{SPEAKER SPK_BRENDAN}By the way, you know\n"
 	.string "Mr. Briney? The guy I just passed?\p"
 	.string "I bet you didn't know this, since you\n"
 	.string "just moved here, {PLAYER}, but\l"

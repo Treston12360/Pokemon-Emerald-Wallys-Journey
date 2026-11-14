@@ -83,6 +83,7 @@ MauvilleCity_Gym_EventScript_WattsonDefeated::
 	message MauvilleCity_Gym_Text_ReceivedDynamoBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	setspeaker SP_NAME_WATTSON
 	msgbox MauvilleCity_Gym_Text_ExplainDynamoBadgeTakeThis, MSGBOX_DEFAULT
 	setvar VAR_SLATEPORT_OUTSIDE_MUSEUM_STATE, 3
 	clearflag FLAG_HIDE_VERDANTURF_TOWN_SCOTT
@@ -126,6 +127,7 @@ MauvilleCity_Gym_EventScript_GiveShockWave::
 	return
 
 MauvilleCity_Gym_EventScript_CompletedNewMauville::
+	setspeaker SP_NAME_WATTSON
 	msgbox MauvilleCity_Gym_Text_WattsonGoForthAndEndeavor, MSGBOX_DEFAULT
 	release
 	end
@@ -425,7 +427,7 @@ MauvilleCity_Gym_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 MauvilleCity_Gym_Text_WattsonPreRematch:
-	.string "Wattson: Ah-ha! Here at last!\p"
+	.string "{SPEAKER SPK_WATTSON}Ah-ha! Here at last!\p"
 	.string "I rerouted three generators to get\n"
 	.string "my team this charged. Wahahaha!\p"
 	.string "Don't say I didn't warn you!$"
@@ -435,26 +437,26 @@ MauvilleCity_Gym_Text_WattsonRematchDefeat:
 	.string "Batteries drained!$"
 
 MauvilleCity_Gym_Text_WattsonPostRematch:
-	.string "Wattson: We'll recharge and try\n"
+	.string "{SPEAKER SPK_WATTSON}We'll recharge and try\n"
 	.string "again!\p"
 	.string "The city still runs on my old wiring,\n"
 	.string "you know. It holds. Mostly.\p"
 	.string "Come back anytime! Wahahaha!$"
 
 MauvilleCity_Gym_Text_WattsonRematchNeedTwoMons:
-	.string "Wattson: Ah-ha! Here at last!\p"
+	.string "{SPEAKER SPK_WATTSON}Ah-ha! Here at last!\p"
 	.string "Oops! Wait! Only one Pokémon?\p"
 	.string "My rematches are two at a time.\n"
 	.string "Come back with two or more!$"
 
 MauvilleCity_Gym_Text_WattsonPreRematch3:
-	.string "Wattson: Wahahaha! I rewired the\n"
+	.string "{SPEAKER SPK_WATTSON}Wahahaha! I rewired the\n"
 	.string "whole Gym last week!\p"
 	.string "Blew every fuse in Mauville doing it.\n"
 	.string "Worth it! Can you take the voltage?$"
 
 MauvilleCity_Gym_Text_WattsonPreRematch4:
-	.string "Wattson: The storms knocked out half\n"
+	.string "{SPEAKER SPK_WATTSON}The storms knocked out half\n"
 	.string "of Hoenn's power.\p"
 	.string "My Pokémon kept the hospitals lit for\n"
 	.string "three nights straight.\p"
@@ -462,7 +464,7 @@ MauvilleCity_Gym_Text_WattsonPreRematch4:
 	.string "Brace yourself!$"
 
 MauvilleCity_Gym_Text_WattsonPreRematch5:
-	.string "Wattson: At my age, a man thinks\n"
+	.string "{SPEAKER SPK_WATTSON}At my age, a man thinks\n"
 	.string "about what he'll leave behind.\p"
 	.string "A city. A Gym. And this team, at full\n"
 	.string "charge! Wahahaha!\p"
@@ -472,7 +474,7 @@ MauvilleCity_Gym_Text_WattsonRematchDefeatElite:
 	.string "Wahaha… Total blackout!$"
 
 MauvilleCity_Gym_Text_WattsonPostRematchElite:
-	.string "Wattson: New Mauville was the\n"
+	.string "{SPEAKER SPK_WATTSON}New Mauville was the\n"
 	.string "biggest mistake of my life.\p"
 	.string "Losing to you isn't. Best thing to\n"
 	.string "happen to this Gym in years!$"
@@ -493,6 +495,7 @@ MauvilleCity_Gym_EventScript_WattsonRematchStage1::
 	goto_if_eq VAR_RESULT, NO, MauvilleCity_Gym_EventScript_WattsonRematchDecline
 	cleartrainerflag TRAINER_WATTSON_2
 	trainerbattle_no_intro TRAINER_WATTSON_2, MauvilleCity_Gym_Text_WattsonGrowDefeat1
+	setspeaker SP_NAME_WATTSON
 	msgbox MauvilleCity_Gym_Text_WattsonGrowAfter1, MSGBOX_DEFAULT
 	release
 	end
@@ -502,6 +505,7 @@ MauvilleCity_Gym_EventScript_WattsonRematchStage2::
 	goto_if_eq VAR_RESULT, NO, MauvilleCity_Gym_EventScript_WattsonRematchDecline
 	cleartrainerflag TRAINER_WATTSON_2
 	trainerbattle_no_intro TRAINER_WATTSON_2, MauvilleCity_Gym_Text_WattsonGrowDefeat2
+	setspeaker SP_NAME_WATTSON
 	msgbox MauvilleCity_Gym_Text_WattsonGrowAfter2, MSGBOX_DEFAULT
 	release
 	end
@@ -513,6 +517,7 @@ MauvilleCity_Gym_EventScript_WattsonRematchStage3::
 	trainerbattle_double TRAINER_WATTSON_3, MauvilleCity_Gym_Text_WattsonGrowGo, MauvilleCity_Gym_Text_WattsonGrowDefeat3, MauvilleCity_Gym_Text_WattsonGrowNeedTwo
 	setvar VAR_0x8004, 3
 	special WallyJourney_RecordLeaderPostgameWin
+	setspeaker SP_NAME_WATTSON
 	msgbox MauvilleCity_Gym_Text_WattsonGrowAfter3, MSGBOX_DEFAULT
 	release
 	end
@@ -522,12 +527,14 @@ MauvilleCity_Gym_EventScript_WattsonRematchStage4::
 	goto_if_eq VAR_RESULT, NO, MauvilleCity_Gym_EventScript_WattsonRematchDecline
 	cleartrainerflag TRAINER_WATTSON_4
 	trainerbattle_double TRAINER_WATTSON_4, MauvilleCity_Gym_Text_WattsonGrowGo, MauvilleCity_Gym_Text_WattsonGrowDefeat4, MauvilleCity_Gym_Text_WattsonGrowNeedTwo
+	setspeaker SP_NAME_WATTSON
 	msgbox MauvilleCity_Gym_Text_WattsonGrowAfter4, MSGBOX_DEFAULT
 	release
 	end
 
 MauvilleCity_Gym_EventScript_WattsonRematchDecline::
 	goto_if_eq VAR_NEW_MAUVILLE_STATE, 2, MauvilleCity_Gym_EventScript_CompletedNewMauville
+	setspeaker SP_NAME_WATTSON
 	msgbox MauvilleCity_Gym_Text_WattsonPostBattle, MSGBOX_DEFAULT
 	release
 	end
@@ -540,7 +547,7 @@ MauvilleCity_Gym_Text_WattsonGrowNeedTwo:
 	.string "battle. Come back with more.$"
 
 MauvilleCity_Gym_Text_WattsonGrowOffer1:
-	.string "Wattson: Wahahaha! {STR_VAR_1} Badges!\p"
+	.string "{SPEAKER SPK_WATTSON}Wahahaha! {STR_VAR_1} Badges!\p"
 	.string "A Leader sets the voltage to suit\n"
 	.string "the challenger. Yours just went\l"
 	.string "up! Want a jolt?$"
@@ -553,7 +560,7 @@ MauvilleCity_Gym_Text_WattsonGrowAfter1:
 	.string "I'll recharge in the meantime!$"
 
 MauvilleCity_Gym_Text_WattsonGrowOffer2:
-	.string "Wattson: Eight Badges! Wahahaha!\p"
+	.string "{SPEAKER SPK_WATTSON}Eight Badges! Wahahaha!\p"
 	.string "Then I'll turn the dial way up.\n"
 	.string "One more spark?$"
 
@@ -565,7 +572,7 @@ MauvilleCity_Gym_Text_WattsonGrowAfter2:
 	.string "Off to Ever Grande with you!$"
 
 MauvilleCity_Gym_Text_WattsonGrowOffer3:
-	.string "Wattson: Wahahaha! The Champion\n"
+	.string "{SPEAKER SPK_WATTSON}Wahahaha! The Champion\n"
 	.string "came to see this old man!\p"
 	.string "My full team is charged.\n"
 	.string "Shall we?$"
@@ -578,7 +585,7 @@ MauvilleCity_Gym_Text_WattsonGrowAfter3:
 	.string "needs the exercise.$"
 
 MauvilleCity_Gym_Text_WattsonGrowOffer4:
-	.string "Wattson: You defended your title!\p"
+	.string "{SPEAKER SPK_WATTSON}You defended your title!\p"
 	.string "My team is at full power now.\n"
 	.string "The biggest surge I've got!$"
 

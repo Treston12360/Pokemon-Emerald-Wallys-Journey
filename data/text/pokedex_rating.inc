@@ -1,5 +1,5 @@
 gBirchDexRatingText_AreYouCurious::
-	.string "Prof. Birch: Ah, {PLAYER}{KUN}!\p"
+	.string "{SPEAKER SPK_BIRCH}Ah, {PLAYER}{KUN}!\p"
 	.string "Are you curious about how your\n"
 	.string "Pokédex is coming along?$"
 

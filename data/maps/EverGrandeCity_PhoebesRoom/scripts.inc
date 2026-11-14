@@ -63,7 +63,7 @@ EverGrandeCity_PhoebesRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_PhoebesRoom_Text_IntroSpeech:
-	.string "Phoebe: Welcome!\n"
+	.string "{SPEAKER SPK_PHOEBE}Welcome!\n"
 	.string "I've heard about you.\p"
 	.string "I was raised with the\n"
 	.string "stories of Mt. Pyre.\p"
@@ -75,7 +75,7 @@ EverGrandeCity_PhoebesRoom_Text_IntroSpeech:
 	.string "Now show me yours!$"
 
 EverGrandeCity_PhoebesRoom_Text_Defeat:
-	.string "Phoebe: Oh! You found a\n"
+	.string "{SPEAKER SPK_PHOEBE}Oh! You found a\n"
 	.string "way through my team!\p"
 	.string "I wasn't expecting that.\n"
 	.string "Heehee! Well done!$"
@@ -99,12 +99,13 @@ EverGrandeCity_PhoebesRoom_EventScript_PhoebeRematch::
 	setflag FLAG_DEFEATED_ELITE_4_PHOEBE
 	call PokemonLeague_EliteFour_SetAdvanceToNextRoomMetatiles
 EverGrandeCity_PhoebesRoom_EventScript_PhoebeRematchPost::
+	setspeaker SP_NAME_PHOEBE
 	msgbox EverGrandeCity_PhoebesRoom_Text_RematchPost, MSGBOX_DEFAULT
 	release
 	end
 
 EverGrandeCity_PhoebesRoom_Text_RematchIntro:
-	.string "Phoebe: Welcome back, Champion.\p"
+	.string "{SPEAKER SPK_PHOEBE}Welcome back, Champion.\p"
 	.string "I trained on Mt. Pyre again.\n"
 	.string "My team is stronger now, and\l"
 	.string "so am I.\p"

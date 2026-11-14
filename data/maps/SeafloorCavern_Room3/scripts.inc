@@ -3,6 +3,7 @@ SeafloorCavern_Room3_MapScripts::
 
 SeafloorCavern_Room3_EventScript_Shelly::
 	trainerbattle_single TRAINER_SHELLY_SEAFLOOR_CAVERN, SeafloorCavern_Room3_Text_ShellyIntro, SeafloorCavern_Room3_Text_ShellyDefeat
+	setspeaker SP_NAME_SHELLY
 	msgbox SeafloorCavern_Room3_Text_ShellyPostBattle, MSGBOX_AUTOCLOSE
 	end
 

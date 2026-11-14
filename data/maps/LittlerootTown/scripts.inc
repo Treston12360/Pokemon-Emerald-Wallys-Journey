@@ -904,13 +904,14 @@ LittlerootTown_EventScript_GiveRunningShoes::
 	waitfanfare
 	setflag FLAG_RECEIVED_RUNNING_SHOES
 	msgbox LittlerootTown_Text_ExplainRunningShoes, MSGBOX_DEFAULT
+	setspeaker SP_NAME_MOM
 	msgbox LittlerootTown_Text_ComeHomeIfAnythingHappens, MSGBOX_DEFAULT
 	closemessage
 	delay 30
 	return
 
 LittlerootTown_Text_OurNewHomeLetsGoInside:
-	.string "Mom: {PLAYER}, we're here, honey!\p"
+	.string "{SPEAKER SPK_MOM}{PLAYER}, we're here, honey!\p"
 	.string "Thank you for riding up front with\n"
 	.string "the movers all the way from the port.\p"
 	.string "After the ferry from Johto, we just\n"
@@ -927,10 +928,10 @@ LittlerootTown_Text_OurNewHomeLetsGoInside:
 	.string "Let's go inside.$"
 
 LittlerootTown_Text_WaitPlayer:
-	.string "Mom: Wait, {PLAYER}!$"
+	.string "{SPEAKER SPK_MOM}Wait, {PLAYER}!$"
 
 LittlerootTown_Text_WearTheseRunningShoes:
-	.string "Mom: {PLAYER}! {PLAYER}! Did you\n"
+	.string "{SPEAKER SPK_MOM}{PLAYER}! {PLAYER}! Did you\n"
 	.string "introduce yourself to Prof. Birch?\p"
 	.string "Oh! What an adorable Pokémon!\n"
 	.string "You got it from Prof. Birch. How nice!\p"
@@ -945,7 +946,7 @@ LittlerootTown_Text_SwitchShoesWithRunningShoes:
 	.string "Running Shoes.$"
 
 LittlerootTown_Text_ExplainRunningShoes:
-	.string "Mom: {PLAYER}, those shoes came with\n"
+	.string "{SPEAKER SPK_MOM}{PLAYER}, those shoes came with\n"
 	.string "instructions.\p"
 	.string "“Press the B Button while wearing these\n"
 	.string "Running Shoes to run extra-fast!\p"
@@ -1024,7 +1025,7 @@ LittlerootTown_Text_ProfBirchsHouse:
 	.string "Prof. Birch's House$"
 
 LittlerootTown_Text_BirchSomethingToShowYouAtLab:
-	.string "Prof. Birch: Well, well, {PLAYER}{KUN}!\n"
+	.string "{SPEAKER SPK_BIRCH}Well, well, {PLAYER}{KUN}!\n"
 	.string "That was good work out there!\p"
 	.string "I knew there was something special\n"
 	.string "about you when I first saw you,\l"

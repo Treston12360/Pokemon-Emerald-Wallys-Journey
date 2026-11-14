@@ -69,7 +69,7 @@ EverGrandeCity_SidneysRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_SidneysRoom_Text_IntroSpeech:
-	.string "Sidney: Hey, challenger!\n"
+	.string "{SPEAKER SPK_SIDNEY}Hey, challenger!\n"
 	.string "Glad you made it.\p"
 	.string "I helped track the teams\n"
 	.string "when they went underground.\p"
@@ -87,7 +87,7 @@ EverGrandeCity_SidneysRoom_Text_Defeat:
 	.string "That's a good battle!$"
 
 EverGrandeCity_SidneysRoom_Text_PostBattleSpeech:
-	.string "Sidney: Know what I like\n"
+	.string "{SPEAKER SPK_SIDNEY}Know what I like\n"
 	.string "about battling?\p"
 	.string "Someone can surprise you\n"
 	.string "even when you think you've\l"
@@ -105,12 +105,13 @@ EverGrandeCity_SidneysRoom_EventScript_SidneyRematch::
 	setflag FLAG_DEFEATED_ELITE_4_SIDNEY
 	call PokemonLeague_EliteFour_SetAdvanceToNextRoomMetatiles
 EverGrandeCity_SidneysRoom_EventScript_SidneyRematchPost::
+	setspeaker SP_NAME_SIDNEY
 	msgbox EverGrandeCity_SidneysRoom_Text_RematchPost, MSGBOX_DEFAULT
 	release
 	end
 
 EverGrandeCity_SidneysRoom_Text_RematchIntro:
-	.string "Sidney: Well, well. The Champion\n"
+	.string "{SPEAKER SPK_SIDNEY}Well, well. The Champion\n"
 	.string "walked back in through the front door.\p"
 	.string "You didn't think we'd sit still\n"
 	.string "after you beat us, did you?\p"

@@ -329,7 +329,7 @@ BattleFrontier_ReceptionGate_Text_OhMrScottGoodDay:
 	.string "Good day to you, sir!$"
 
 BattleFrontier_ReceptionGate_Text_ScottGreatToSeeYouHere:
-	.string "Scott: It's great to see you here,\n"
+	.string "{SPEAKER SPK_SCOTT}It's great to see you here,\n"
 	.string "it really is!\p"
 	.string "I hope you'll take your time and\n"
 	.string "explore everywhere.\p"

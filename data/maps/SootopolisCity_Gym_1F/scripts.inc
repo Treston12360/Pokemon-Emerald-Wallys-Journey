@@ -90,6 +90,7 @@ SootopolisCity_Gym_1F_EventScript_JuanDefeated::
 	message SootopolisCity_Gym_1F_Text_ReceivedRainBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	setspeaker SP_NAME_JUAN
 	msgbox SootopolisCity_Gym_1F_Text_ExplainRainBadgeTakeThis, MSGBOX_DEFAULT
 	setflag FLAG_DEFEATED_SOOTOPOLIS_GYM
 	setflag FLAG_BADGE08_GET
@@ -301,7 +302,7 @@ SootopolisCity_Gym_1F_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 SootopolisCity_Gym_1F_Text_JuanPreRematch:
-	.string "Juan: Ah, the Gym had returned to\n"
+	.string "{SPEAKER SPK_JUAN}Ah, the Gym had returned to\n"
 	.string "its serenity…\p"
 	.string "And now our young typhoon returns!\p"
 	.string "I shall be delighted to dance with\n"
@@ -312,7 +313,7 @@ SootopolisCity_Gym_1F_Text_JuanRematchDefeat:
 	.string "Magnificent!$"
 
 SootopolisCity_Gym_1F_Text_JuanPostRematch:
-	.string "Juan: If I asked you to be my\n"
+	.string "{SPEAKER SPK_JUAN}If I asked you to be my\n"
 	.string "apprentice, you would refuse.\p"
 	.string "If I offered you my coat, you would\n"
 	.string "refuse that too.\p"
@@ -320,28 +321,28 @@ SootopolisCity_Gym_1F_Text_JuanPostRematch:
 	.string "is the difference between you.$"
 
 SootopolisCity_Gym_1F_Text_JuanRematchNeedTwoMons:
-	.string "Juan: Ah, our young typhoon returns!\p"
+	.string "{SPEAKER SPK_JUAN}Ah, our young typhoon returns!\p"
 	.string "Ah, no, no, no. You have but one\n"
 	.string "Pokémon with you.\p"
 	.string "My rematches are danced in pairs.\n"
 	.string "Please return with two.$"
 
 SootopolisCity_Gym_1F_Text_JuanPreRematch3:
-	.string "Juan: Wallace has come home to\n"
+	.string "{SPEAKER SPK_JUAN}Wallace has come home to\n"
 	.string "train under me once more.\p"
 	.string "Teacher and student, side by side\n"
 	.string "again. He has made me sharper.\p"
 	.string "Let us see whether it is enough!$"
 
 SootopolisCity_Gym_1F_Text_JuanPreRematch4:
-	.string "Juan: Sootopolis has nearly healed\n"
+	.string "{SPEAKER SPK_JUAN}Sootopolis has nearly healed\n"
 	.string "from the storm.\p"
 	.string "The water in the crater runs clear\n"
 	.string "again. It reminds me why we guard it.\p"
 	.string "Come. Let us make it ripple!$"
 
 SootopolisCity_Gym_1F_Text_JuanPreRematch5:
-	.string "Juan: In my long life I have taught\n"
+	.string "{SPEAKER SPK_JUAN}In my long life I have taught\n"
 	.string "one Champion and lost to two more.\p"
 	.string "This is my final masterpiece.\n"
 	.string "Every wave perfected.\p"
@@ -352,7 +353,7 @@ SootopolisCity_Gym_1F_Text_JuanRematchDefeatElite:
 	.string "everyone.$"
 
 SootopolisCity_Gym_1F_Text_JuanPostRematchElite:
-	.string "Juan: I once said you lacked\n"
+	.string "{SPEAKER SPK_JUAN}I once said you lacked\n"
 	.string "elegance.\p"
 	.string "I was wrong. Yours is simply quieter\n"
 	.string "than mine.$"
@@ -373,6 +374,7 @@ SootopolisCity_Gym_1F_EventScript_JuanRematchStage1::
 	goto_if_eq VAR_RESULT, NO, SootopolisCity_Gym_1F_EventScript_JuanRematchDecline
 	cleartrainerflag TRAINER_JUAN_2
 	trainerbattle_no_intro TRAINER_JUAN_2, SootopolisCity_Gym_1F_Text_JuanGrowDefeat1
+	setspeaker SP_NAME_JUAN
 	msgbox SootopolisCity_Gym_1F_Text_JuanGrowAfter1, MSGBOX_DEFAULT
 	release
 	end
@@ -382,6 +384,7 @@ SootopolisCity_Gym_1F_EventScript_JuanRematchStage2::
 	goto_if_eq VAR_RESULT, NO, SootopolisCity_Gym_1F_EventScript_JuanRematchDecline
 	cleartrainerflag TRAINER_JUAN_2
 	trainerbattle_no_intro TRAINER_JUAN_2, SootopolisCity_Gym_1F_Text_JuanGrowDefeat2
+	setspeaker SP_NAME_JUAN
 	msgbox SootopolisCity_Gym_1F_Text_JuanGrowAfter2, MSGBOX_DEFAULT
 	release
 	end
@@ -393,6 +396,7 @@ SootopolisCity_Gym_1F_EventScript_JuanRematchStage3::
 	trainerbattle_double TRAINER_JUAN_3, SootopolisCity_Gym_1F_Text_JuanGrowGo, SootopolisCity_Gym_1F_Text_JuanGrowDefeat3, SootopolisCity_Gym_1F_Text_JuanGrowNeedTwo
 	setvar VAR_0x8004, 8
 	special WallyJourney_RecordLeaderPostgameWin
+	setspeaker SP_NAME_JUAN
 	msgbox SootopolisCity_Gym_1F_Text_JuanGrowAfter3, MSGBOX_DEFAULT
 	release
 	end
@@ -402,11 +406,13 @@ SootopolisCity_Gym_1F_EventScript_JuanRematchStage4::
 	goto_if_eq VAR_RESULT, NO, SootopolisCity_Gym_1F_EventScript_JuanRematchDecline
 	cleartrainerflag TRAINER_JUAN_4
 	trainerbattle_double TRAINER_JUAN_4, SootopolisCity_Gym_1F_Text_JuanGrowGo, SootopolisCity_Gym_1F_Text_JuanGrowDefeat4, SootopolisCity_Gym_1F_Text_JuanGrowNeedTwo
+	setspeaker SP_NAME_JUAN
 	msgbox SootopolisCity_Gym_1F_Text_JuanGrowAfter4, MSGBOX_DEFAULT
 	release
 	end
 
 SootopolisCity_Gym_1F_EventScript_JuanRematchDecline::
+	setspeaker SP_NAME_JUAN
 	msgbox SootopolisCity_Gym_1F_Text_JuanPostBattle, MSGBOX_DEFAULT
 	release
 	end
@@ -419,7 +425,7 @@ SootopolisCity_Gym_1F_Text_JuanGrowNeedTwo:
 	.string "battle. Come back with more.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowOffer1:
-	.string "Juan: Eight Badges, mine among them.\p"
+	.string "{SPEAKER SPK_JUAN}Eight Badges, mine among them.\p"
 	.string "Before the League, allow me to test\n"
 	.string "you with my rehearsed team.$"
 
@@ -431,7 +437,7 @@ SootopolisCity_Gym_1F_Text_JuanGrowAfter1:
 	.string "your art.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowOffer2:
-	.string "Juan: Eight Badges, mine among them.\p"
+	.string "{SPEAKER SPK_JUAN}Eight Badges, mine among them.\p"
 	.string "Before the League, allow me to test\n"
 	.string "you. This time I shall hold back\l"
 	.string "far less.$"
@@ -445,7 +451,7 @@ SootopolisCity_Gym_1F_Text_JuanGrowAfter2:
 	.string "your art.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowOffer3:
-	.string "Juan: The Champion graces my Gym.\p"
+	.string "{SPEAKER SPK_JUAN}The Champion graces my Gym.\p"
 	.string "Allow me to present my full\n"
 	.string "ensemble.$"
 
@@ -457,7 +463,7 @@ SootopolisCity_Gym_1F_Text_JuanGrowAfter3:
 	.string "I shall polish my team further.$"
 
 SootopolisCity_Gym_1F_Text_JuanGrowOffer4:
-	.string "Juan: You have defended your title.\p"
+	.string "{SPEAKER SPK_JUAN}You have defended your title.\p"
 	.string "Then witness my finest work,\n"
 	.string "performed at full strength.$"
 

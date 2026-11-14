@@ -27,7 +27,7 @@ MeteorFalls_StevensCave_EventScript_Defeated::
 	end
 
 MeteorFalls_StevensCave_Text_ShouldKnowHowGoodIAmExpectWorst:
-	.string "Steven: Oh, wow, {PLAYER}{KUN}.\n"
+	.string "{SPEAKER SPK_STEVEN}Oh, wow, {PLAYER}{KUN}.\n"
 	.string "I'm amazed you knew where to find me.\p"
 	.string "Do you, uh…maybe think of me as\n"
 	.string "just a rock maniac?\p"
@@ -44,7 +44,7 @@ MeteorFalls_StevensCave_Text_StevenDefeat:
 	.string "I had no idea you'd become so strong…$"
 
 MeteorFalls_StevensCave_Text_MyPredictionCameTrue:
-	.string "Steven: Come to think of it, ever since\n"
+	.string "{SPEAKER SPK_STEVEN}Come to think of it, ever since\n"
 	.string "our paths first crossed in Granite\l"
 	.string "Cave in Dewford, I had this feeling.\p"
 	.string "I thought that you would eventually\n"

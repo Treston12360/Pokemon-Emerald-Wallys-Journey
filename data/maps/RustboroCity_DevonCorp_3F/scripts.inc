@@ -224,7 +224,7 @@ RustboroCity_DevonCorp_3F_Text_MrStoneIHaveFavor:
 	.string "and deliver a Letter to Steven?$"
 
 RustboroCity_DevonCorp_3F_Text_MrStoneWantYouToHaveThis:
-	.string "Mr. Stone: Now, you should know that\n"
+	.string "{SPEAKER SPK_MR_STONE}Now, you should know that\n"
 	.string "I am a great President.\p"
 	.string "So, I'd never be so cheap as to ask\n"
 	.string "a favor for nothing in return.\p"
@@ -234,7 +234,7 @@ RustboroCity_DevonCorp_3F_Text_ReceivedPokenav:
 	.string "{PLAYER} received a PokéNav.$"
 
 RustboroCity_DevonCorp_3F_Text_MrStoneExplainPokenavRestUp:
-	.string "Mr. Stone: That device…\p"
+	.string "{SPEAKER SPK_MR_STONE}That device…\p"
 	.string "It's a Pokémon Navigator, or PokéNav\n"
 	.string "for short.\p"
 	.string "It's an indispensable tool for any\n"
@@ -249,20 +249,20 @@ RustboroCity_DevonCorp_3F_Text_MrStoneExplainPokenavRestUp:
 	.string "up before you go on your way.$"
 
 RustboroCity_DevonCorp_3F_Text_MrStoneGoWithCautionAndCare:
-	.string "Mr. Stone: Well, then, {PLAYER}{KUN},\n"
+	.string "{SPEAKER SPK_MR_STONE}Well, then, {PLAYER}{KUN},\n"
 	.string "go with caution and care!$"
 
 RustboroCity_DevonCorp_3F_Text_CountingOnYou:
-	.string "Mr. Stone: I'm counting on you!$"
+	.string "{SPEAKER SPK_MR_STONE}I'm counting on you!$"
 
 RustboroCity_DevonCorp_3F_Text_ThankYouForDeliveringLetter:
-	.string "Mr. Stone: You delivered my Letter?\n"
+	.string "{SPEAKER SPK_MR_STONE}You delivered my Letter?\n"
 	.string "Thank you kindly!\p"
 	.string "This is my way of thanking you.\n"
 	.string "It should help you, a Trainer.$"
 
 RustboroCity_DevonCorp_3F_Text_ExplainExpShare:
-	.string "Mr. Stone: A Pokémon holding that\n"
+	.string "{SPEAKER SPK_MR_STONE}A Pokémon holding that\n"
 	.string "EXP. Share will be given some of the\l"
 	.string "EXP Points from battle.\p"
 	.string "It will get EXP Points even if it didn't\n"
@@ -271,7 +271,7 @@ RustboroCity_DevonCorp_3F_Text_ExplainExpShare:
 	.string "for raising weak Pokémon.$"
 
 RustboroCity_DevonCorp_3F_Text_ExplainExpAll:
-	.string "Mr. Stone: That's the EXP. All, one of\n"
+	.string "{SPEAKER SPK_MR_STONE}That's the EXP. All, one of\n"
 	.string "Devon's newest devices.\p"
 	.string "While it's on, the EXP Points from\n"
 	.string "a battle are split evenly across\l"
@@ -282,7 +282,7 @@ RustboroCity_DevonCorp_3F_Text_ExplainExpAll:
 	.string "on or off.$"
 
 RustboroCity_DevonCorp_3F_Text_NotFamiliarWithTrends:
-	.string "Mr. Stone: Since my youth, I've\n"
+	.string "{SPEAKER SPK_MR_STONE}Since my youth, I've\n"
 	.string "immersed myself in work.\p"
 	.string "Steven says I measure everything in\n"
 	.string "profits and forget what it costs\l"

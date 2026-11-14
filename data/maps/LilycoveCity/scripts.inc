@@ -371,15 +371,18 @@ LilycoveCity_EventScript_HasFinalBadge::
 	return
 
 LilycoveCity_EventScript_MayCollectBadges::
+	setspeaker SP_NAME_MAY
 	msgbox LilycoveCity_Text_MayYouGoingToCollectBadges, MSGBOX_DEFAULT
 	return
 
 LilycoveCity_EventScript_MayPokemonLeague::
 	goto_if_set FLAG_SYS_GAME_CLEAR, LilycoveCity_EventScript_MayBattleFrontier
+	setspeaker SP_NAME_MAY
 	msgbox LilycoveCity_Text_MayYouGoingToPokemonLeague, MSGBOX_DEFAULT
 	return
 
 LilycoveCity_EventScript_MayBattleFrontier::
+	setspeaker SP_NAME_MAY
 	msgbox LilycoveCity_Text_MayYouGoingToBattleFrontier, MSGBOX_DEFAULT
 	return
 
@@ -395,15 +398,18 @@ LilycoveCity_EventScript_DefeatedBrendan::
 	end
 
 LilycoveCity_EventScript_BrendanCollectBadges::
+	setspeaker SP_NAME_BRENDAN
 	msgbox LilycoveCity_Text_BrendanYouGoingToCollectBadges, MSGBOX_DEFAULT
 	return
 
 LilycoveCity_EventScript_BrendanPokemonLeague::
 	goto_if_set FLAG_SYS_GAME_CLEAR, LilycoveCity_EventScript_BrendanBattleFrontier
+	setspeaker SP_NAME_BRENDAN
 	msgbox LilycoveCity_Text_BrendanYouGoingToPokemonLeague, MSGBOX_DEFAULT
 	return
 
 LilycoveCity_EventScript_BrendanBattleFrontier::
+	setspeaker SP_NAME_BRENDAN
 	msgbox LilycoveCity_Text_BrendanYouGoingToBattleFrontier, MSGBOX_DEFAULT
 	return
 
@@ -441,7 +447,7 @@ LilycoveCity_EventScript_DontKnowAboutBerryBlender::
 	return
 
 LilycoveCity_Text_MayShoppingLetsBattle:
-	.string "May: Oh, hey?\n"
+	.string "{SPEAKER SPK_MAY}Oh, hey?\n"
 	.string "{PLAYER}{KUN}, are you shopping, too?\p"
 	.string "I bought a whole bunch of Dolls and\n"
 	.string "Posters.\p"
@@ -454,17 +460,17 @@ LilycoveCity_Text_MayShoppingLetsBattle:
 	.string "me your Pokémon, {PLAYER}{KUN}.$"
 
 LilycoveCity_Text_MayNotRaisingPokemon:
-	.string "May: Oh, why? {PLAYER}{KUN}, haven't you\n"
+	.string "{SPEAKER SPK_MAY}Oh, why? {PLAYER}{KUN}, haven't you\n"
 	.string "been raising your Pokémon?\p"
 	.string "That's not a very good showing as a\n"
 	.string "Trainer…$"
 
 LilycoveCity_Text_MayBattleMe:
-	.string "May: Come on, battle with me, so I can\n"
+	.string "{SPEAKER SPK_MAY}Come on, battle with me, so I can\n"
 	.string "check out your Pokémon!$"
 
 LilycoveCity_Text_MayWontBeBeaten:
-	.string "May: The Pokémon I raised won't be\n"
+	.string "{SPEAKER SPK_MAY}The Pokémon I raised won't be\n"
 	.string "beaten by your Pokémon, {PLAYER}{KUN}!$"
 
 LilycoveCity_Text_MayDefeat:
@@ -475,7 +481,7 @@ LilycoveCity_Text_MayDefeat:
 	.string "I'm okay with that.$"
 
 LilycoveCity_Text_MayGoingBackToLittleroot:
-	.string "May: I'm heading back to Littleroot.\p"
+	.string "{SPEAKER SPK_MAY}I'm heading back to Littleroot.\p"
 	.string "Dad's migration data is all over the\n"
 	.string "place. I want to help him figure out\l"
 	.string "what's going on.\p"
@@ -512,7 +518,7 @@ LilycoveCity_Text_MayYouGoingToBattleFrontier:
 	.string "See you!$"
 
 LilycoveCity_Text_BrendanShoppingLetsBattle:
-	.string "Brendan: Oh, hey, it's {PLAYER}.\p"
+	.string "{SPEAKER SPK_BRENDAN}Oh, hey, it's {PLAYER}.\p"
 	.string "I'm running an errand for my dad.\n"
 	.string "No, I'm not buying any Dolls.\p"
 	.string "Anyways, it's been a while.\p"
@@ -520,15 +526,15 @@ LilycoveCity_Text_BrendanShoppingLetsBattle:
 	.string "raising Pokémon better?$"
 
 LilycoveCity_Text_BrendanNoConfidence:
-	.string "Brendan: Oh, what's the matter?\n"
+	.string "{SPEAKER SPK_BRENDAN}Oh, what's the matter?\n"
 	.string "Don't have the confidence?$"
 
 LilycoveCity_Text_BrendanBattleMe:
-	.string "Brendan: Want to battle to see who's\n"
+	.string "{SPEAKER SPK_BRENDAN}Want to battle to see who's\n"
 	.string "been raising Pokémon better?$"
 
 LilycoveCity_Text_BrendanWontBeBeaten:
-	.string "Brendan: Aww, but you know I'm not\n"
+	.string "{SPEAKER SPK_BRENDAN}Aww, but you know I'm not\n"
 	.string "going to lose to no {PLAYER}.$"
 
 LilycoveCity_Text_BrendanDefeat:
@@ -539,7 +545,7 @@ LilycoveCity_Text_BrendanDefeat:
 	.string "thing. Don't tell anyone.$"
 
 LilycoveCity_Text_BrendanGoingBackToLittleroot:
-	.string "Brendan: I'm going home to Littleroot.\p"
+	.string "{SPEAKER SPK_BRENDAN}I'm going home to Littleroot.\p"
 	.string "Dad's readings are weird lately.\n"
 	.string "Pokémon moving where they shouldn't.\p"
 	.string "…I want to know why. Don't tell him\n"

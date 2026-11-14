@@ -407,6 +407,7 @@ MtChimney_EventScript_BusyAquaGrunt3::
 
 MtChimney_EventScript_Tabitha::
 	trainerbattle_single TRAINER_TABITHA_MT_CHIMNEY, MtChimney_Text_TabithaIntro, MtChimney_Text_TabithaDefeat
+	setspeaker SP_NAME_TABITHA
 	msgbox MtChimney_Text_TabithaPostBattle, MSGBOX_AUTOCLOSE
 	end
 
@@ -542,7 +543,7 @@ MtChimney_EventScript_SawyerRematch::
 	end
 
 MtChimney_Text_MeteoriteWillActivateVolcano:
-	.string "Maxie: The Meteorite's energy,\n"
+	.string "{SPEAKER SPK_MAXIE}The Meteorite's energy,\n"
 	.string "amplified by this machine, will open\l"
 	.string "a vent on the southern flank.\p"
 	.string "A slow, controlled flow. New ground\n"
@@ -554,7 +555,7 @@ MtChimney_Text_MeteoriteWillActivateVolcano:
 	.string "Mine are correct.$"
 
 MtChimney_Text_MaxieIntro:
-	.string "Maxie: Hm? Who are you?\p"
+	.string "{SPEAKER SPK_MAXIE}Hm? Who are you?\p"
 	.string "Ah. Archie's little problem.\n"
 	.string "Let me guess. You think we're\l"
 	.string "villains.\p"
@@ -580,7 +581,7 @@ MtChimney_Text_MaxieDefeat:
 	.string "I, Maxie, was caught off guard?!$"
 
 MtChimney_Text_MaxieYouHaventSeenLastOfMagma:
-	.string "Maxie: Enough. I will withdraw.\p"
+	.string "{SPEAKER SPK_MAXIE}Enough. I will withdraw.\p"
 	.string "But the families waiting for a home\n"
 	.string "won't disappear because you won a\l"
 	.string "battle.\p"
@@ -675,7 +676,7 @@ MtChimney_Text_Bufoh:
 	.string "Bufoh!$"
 
 MtChimney_Text_ArchieGoStopTeamMagma:
-	.string "Archie: Grr, {PLAYER}!\n"
+	.string "{SPEAKER SPK_ARCHIE}Grr, {PLAYER}!\n"
 	.string "I should've guessed you'd show up!\p"
 	.string "See for yourself what the fanatics\n"
 	.string "of Team Magma are up to!\p"
@@ -685,14 +686,14 @@ MtChimney_Text_ArchieGoStopTeamMagma:
 	.string "the volcano's eruption!$"
 
 MtChimney_Text_ArchieIHaveMyHandsFull:
-	.string "Archie: Grrr…\p"
+	.string "{SPEAKER SPK_ARCHIE}Grrr…\p"
 	.string "I want to stop that Maxie,\n"
 	.string "but I can't!\p"
 	.string "Not when I have my hands full battling\n"
 	.string "three opponents at once!$"
 
 MtChimney_Text_ArchieThankYou:
-	.string "Archie: {PLAYER}!\n"
+	.string "{SPEAKER SPK_ARCHIE}{PLAYER}!\n"
 	.string "Thank you!\p"
 	.string "With your help, we thwarted Team\n"
 	.string "Magma's destructive plan!\p"

@@ -27,6 +27,7 @@ FortreeCity_Gym_EventScript_WinonaDefeated::
 	message FortreeCity_Gym_Text_ReceivedFeatherBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	setspeaker SP_NAME_WINONA
 	msgbox FortreeCity_Gym_Text_ExplainFeatherBadgeTakeThis, MSGBOX_DEFAULT
 	setflag FLAG_DEFEATED_FORTREE_GYM
 	setflag FLAG_BADGE06_GET
@@ -312,7 +313,7 @@ FortreeCity_Gym_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 FortreeCity_Gym_Text_WinonaPreRematch:
-	.string "Winona: We can never escape\n"
+	.string "{SPEAKER SPK_WINONA}We can never escape\n"
 	.string "gravity.\p"
 	.string "But we can choose how high we climb.\n"
 	.string "You've climbed to the very top.\p"
@@ -323,13 +324,13 @@ FortreeCity_Gym_Text_WinonaRematchDefeat:
 	.string "I couldn't follow.$"
 
 FortreeCity_Gym_Text_WinonaPostRematch:
-	.string "Winona: My wings are bruised, not\n"
+	.string "{SPEAKER SPK_WINONA}My wings are bruised, not\n"
 	.string "broken.\p"
 	.string "I'll rise again. The birds taught me\n"
 	.string "that.$"
 
 FortreeCity_Gym_Text_WinonaRematchNeedTwoMons:
-	.string "Winona: We can never escape\n"
+	.string "{SPEAKER SPK_WINONA}We can never escape\n"
 	.string "gravity.\p"
 	.string "Oh… You have only one Pokémon\n"
 	.string "with you?\p"
@@ -337,21 +338,21 @@ FortreeCity_Gym_Text_WinonaRematchNeedTwoMons:
 	.string "Please return with two.$"
 
 FortreeCity_Gym_Text_WinonaPreRematch3:
-	.string "Winona: Since the storms, my Bird\n"
+	.string "{SPEAKER SPK_WINONA}Since the storms, my Bird\n"
 	.string "Pokémon have flown rescue patrols\l"
 	.string "every dawn.\p"
 	.string "Their wings have never been stronger.\n"
 	.string "Shall we see?$"
 
 FortreeCity_Gym_Text_WinonaPreRematch4:
-	.string "Winona: The sky over Fortree has\n"
+	.string "{SPEAKER SPK_WINONA}The sky over Fortree has\n"
 	.string "changed. Wetter. Wilder.\p"
 	.string "We've learned to fly through it\n"
 	.string "instead of waiting for it to pass.\p"
 	.string "Let us soar, Champion.$"
 
 FortreeCity_Gym_Text_WinonaPreRematch5:
-	.string "Winona: In every flight there is a\n"
+	.string "{SPEAKER SPK_WINONA}In every flight there is a\n"
 	.string "moment when you stop fighting the\l"
 	.string "wind and become part of it.\p"
 	.string "That is the team you face now.\n"
@@ -361,7 +362,7 @@ FortreeCity_Gym_Text_WinonaRematchDefeatElite:
 	.string "Grounded… but never broken.$"
 
 FortreeCity_Gym_Text_WinonaPostRematchElite:
-	.string "Winona: Wally read my strategy by the\n"
+	.string "{SPEAKER SPK_WINONA}Wally read my strategy by the\n"
 	.string "second turn. You read it before I'd\l"
 	.string "even made it.\p"
 	.string "Two different kinds of genius.\n"
@@ -383,6 +384,7 @@ FortreeCity_Gym_EventScript_WinonaRematchStage1::
 	goto_if_eq VAR_RESULT, NO, FortreeCity_Gym_EventScript_WinonaRematchDecline
 	cleartrainerflag TRAINER_WINONA_2
 	trainerbattle_no_intro TRAINER_WINONA_2, FortreeCity_Gym_Text_WinonaGrowDefeat1
+	setspeaker SP_NAME_WINONA
 	msgbox FortreeCity_Gym_Text_WinonaGrowAfter1, MSGBOX_DEFAULT
 	release
 	end
@@ -392,6 +394,7 @@ FortreeCity_Gym_EventScript_WinonaRematchStage2::
 	goto_if_eq VAR_RESULT, NO, FortreeCity_Gym_EventScript_WinonaRematchDecline
 	cleartrainerflag TRAINER_WINONA_2
 	trainerbattle_no_intro TRAINER_WINONA_2, FortreeCity_Gym_Text_WinonaGrowDefeat2
+	setspeaker SP_NAME_WINONA
 	msgbox FortreeCity_Gym_Text_WinonaGrowAfter2, MSGBOX_DEFAULT
 	release
 	end
@@ -403,6 +406,7 @@ FortreeCity_Gym_EventScript_WinonaRematchStage3::
 	trainerbattle_double TRAINER_WINONA_3, FortreeCity_Gym_Text_WinonaGrowGo, FortreeCity_Gym_Text_WinonaGrowDefeat3, FortreeCity_Gym_Text_WinonaGrowNeedTwo
 	setvar VAR_0x8004, 6
 	special WallyJourney_RecordLeaderPostgameWin
+	setspeaker SP_NAME_WINONA
 	msgbox FortreeCity_Gym_Text_WinonaGrowAfter3, MSGBOX_DEFAULT
 	release
 	end
@@ -412,11 +416,13 @@ FortreeCity_Gym_EventScript_WinonaRematchStage4::
 	goto_if_eq VAR_RESULT, NO, FortreeCity_Gym_EventScript_WinonaRematchDecline
 	cleartrainerflag TRAINER_WINONA_4
 	trainerbattle_double TRAINER_WINONA_4, FortreeCity_Gym_Text_WinonaGrowGo, FortreeCity_Gym_Text_WinonaGrowDefeat4, FortreeCity_Gym_Text_WinonaGrowNeedTwo
+	setspeaker SP_NAME_WINONA
 	msgbox FortreeCity_Gym_Text_WinonaGrowAfter4, MSGBOX_DEFAULT
 	release
 	end
 
 FortreeCity_Gym_EventScript_WinonaRematchDecline::
+	setspeaker SP_NAME_WINONA
 	msgbox FortreeCity_Gym_Text_WinonaPostBattle, MSGBOX_DEFAULT
 	release
 	end
@@ -429,7 +435,7 @@ FortreeCity_Gym_Text_WinonaGrowNeedTwo:
 	.string "battle. Come back with more.$"
 
 FortreeCity_Gym_Text_WinonaGrowOffer1:
-	.string "Winona: You hold {STR_VAR_1} Badges now.\p"
+	.string "{SPEAKER SPK_WINONA}You hold {STR_VAR_1} Badges now.\p"
 	.string "A Leader's team is chosen to suit\n"
 	.string "the challenger's Badges.\p"
 	.string "Yours let us fly higher.\n"
@@ -443,7 +449,7 @@ FortreeCity_Gym_Text_WinonaGrowAfter1:
 	.string "We'll be training on the wind.$"
 
 FortreeCity_Gym_Text_WinonaGrowOffer2:
-	.string "Winona: Eight Badges. The League\n"
+	.string "{SPEAKER SPK_WINONA}Eight Badges. The League\n"
 	.string "waits beyond Victory Road.\p"
 	.string "We will hold back far less today.\n"
 	.string "One more flight?$"
@@ -456,7 +462,7 @@ FortreeCity_Gym_Text_WinonaGrowAfter2:
 	.string "The sky is yours.$"
 
 FortreeCity_Gym_Text_WinonaGrowOffer3:
-	.string "Winona: The Champion returns to\n"
+	.string "{SPEAKER SPK_WINONA}The Champion returns to\n"
 	.string "Fortree.\p"
 	.string "My full team will greet you.\n"
 	.string "Will you battle?$"
@@ -470,7 +476,7 @@ FortreeCity_Gym_Text_WinonaGrowAfter3:
 	.string "the treetops.$"
 
 FortreeCity_Gym_Text_WinonaGrowOffer4:
-	.string "Winona: You defended your title.\p"
+	.string "{SPEAKER SPK_WINONA}You defended your title.\p"
 	.string "My team has reached its peak.\n"
 	.string "Let us fly with everything we have.$"
 

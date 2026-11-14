@@ -20,6 +20,40 @@
 
 static EWRAM_INIT u8 sNameboxWindowId = WINDOW_NONE;
 EWRAM_DATA const u8 *gSpeakerName = NULL;
+// ENG-NAMEBOX: a {SPEAKER SPK_X} code inside a text only names THAT message. The speaker that was set before it
+// (setspeaker in the script, the trainer box, or none) comes back on the next message without a code.
+static EWRAM_DATA const u8 *sSpeakerBeforeText = NULL;
+static EWRAM_DATA bool8 sTextSpeakerActive = FALSE;
+
+// charmap.txt SPK_* bytes are positions in enum SpeakerNames; adding a name means adding its SPK_ line too.
+STATIC_ASSERT(SP_NAME_COUNT == 0x2D, SpeakerNamesMatchCharmapSPK);
+
+// "{PLAYER} obtained X!" lines are the game talking, not the character. The item scripts hide the name box for
+// them and bring the character's name back afterwards (ENG-NAMEBOX).
+static EWRAM_DATA const u8 *sSpeakerHeld = NULL;
+
+void Speaker_HoldForSystemText(void)
+{
+    // a {SPEAKER} code only named its own message, so the speaker to bring back is the one from before it
+    sSpeakerHeld = sTextSpeakerActive ? sSpeakerBeforeText : gSpeakerName;
+    gSpeakerName = NULL;
+    sTextSpeakerActive = FALSE;
+}
+
+void Speaker_ResumeAfterSystemText(void)
+{
+    gSpeakerName = sSpeakerHeld;
+    sSpeakerHeld = NULL;
+}
+
+void NoteTextSpeaker(void)
+{
+    if (!sTextSpeakerActive)
+    {
+        sSpeakerBeforeText = gSpeakerName;
+        sTextSpeakerActive = TRUE;
+    }
+}
 
 static const u32 sNameBoxDefaultGfx[] = INCGFX_U32("graphics/text_window/name_box.png", ".4bpp");
 static const u32 sNameBoxClassicGfx[] = INCGFX_U32("graphics/text_window/classic/name_box.png", ".4bpp"); // Options → Text Box: Classic
@@ -112,6 +146,8 @@ void ResetNameboxData(void)
 {
     sNameboxWindowId = WINDOW_NONE;
     gSpeakerName = NULL;
+    sSpeakerBeforeText = NULL;
+    sTextSpeakerActive = FALSE;
 }
 
 static void DestroyNameboxFrame(void)
@@ -238,6 +274,7 @@ void SetSpeaker(struct ScriptContext *ctx)
         speaker = (const u8 *)arg;
 
     gSpeakerName = speaker;
+    sTextSpeakerActive = FALSE; // the script's choice wins over a text code from an earlier message
 }
 
 // useful for other context e.g. match call
@@ -264,9 +301,15 @@ bool32 IsSpeakerBuffered(const u8 *str)
 {
     if (str[0] == EXT_CTRL_CODE_BEGIN
      && str[1] == EXT_CTRL_CODE_SPEAKER
-     && str[2] >= SP_NAME_NONE)
+     && str[2] < SP_NAME_COUNT)
     {
+        NoteTextSpeaker();
         gSpeakerName = gSpeakerNamesTable[str[2]];
+    }
+    else if (sTextSpeakerActive)
+    {
+        gSpeakerName = sSpeakerBeforeText;
+        sTextSpeakerActive = FALSE;
     }
 
     u32 res = FALSE;

@@ -66,7 +66,7 @@ EverGrandeCity_DrakesRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_DrakesRoom_Text_IntroSpeech:
-	.string "Drake: I am Drake, the\n"
+	.string "{SPEAKER SPK_DRAKE}I am Drake, the\n"
 	.string "last of the Elite Four.\p"
 	.string "I've sailed through storms\n"
 	.string "that swallowed whole ships.\p"
@@ -79,7 +79,7 @@ EverGrandeCity_DrakesRoom_Text_IntroSpeech:
 	.string "Show me what you've learned.$"
 
 EverGrandeCity_DrakesRoom_Text_Defeat:
-	.string "Drake: Ha! Well fought!\p"
+	.string "{SPEAKER SPK_DRAKE}Ha! Well fought!\p"
 	.string "You've the judgment of\n"
 	.string "a seasoned captain.$"
 
@@ -108,12 +108,13 @@ EverGrandeCity_DrakesRoom_EventScript_DrakeRematch::
 	setflag FLAG_DEFEATED_ELITE_4_DRAKE
 	call PokemonLeague_EliteFour_SetAdvanceToNextRoomMetatiles
 EverGrandeCity_DrakesRoom_EventScript_DrakeRematchPost::
+	setspeaker SP_NAME_DRAKE
 	msgbox EverGrandeCity_DrakesRoom_Text_RematchPost, MSGBOX_DEFAULT
 	release
 	end
 
 EverGrandeCity_DrakesRoom_Text_RematchIntro:
-	.string "Drake: So you came back, Champion.\p"
+	.string "{SPEAKER SPK_DRAKE}So you came back, Champion.\p"
 	.string "A true captain doesn't rest on one\n"
 	.string "victory. Neither do I.\p"
 	.string "Show me you still have what\n"

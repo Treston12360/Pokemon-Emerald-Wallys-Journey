@@ -219,6 +219,7 @@ MauvilleCity_EventScript_BattleWally::
 	msgbox MauvilleCity_Text_WallyIllGoBackToVerdanturf, MSGBOX_DEFAULT
 	applymovement LOCALID_MAUVILLE_WALLY, Common_Movement_FacePlayer
 	waitmovement 0
+	setspeaker SP_NAME_WALLY
 	msgbox MauvilleCity_Text_ThankYouNotEnoughToBattle, MSGBOX_DEFAULT
 	applymovement LOCALID_MAUVILLE_WALLY, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
@@ -480,7 +481,7 @@ MauvilleCity_Text_UncleHesTooPeppy:
 	.string "But he's become a bit too peppy…$"
 
 MauvilleCity_Text_WallyWantToChallengeGym:
-	.string "Wally: Aww, Uncle, please?\p"
+	.string "{SPEAKER SPK_WALLY}Aww, Uncle, please?\p"
 	.string "I want to challenge this Gym and see\n"
 	.string "how much better I've become.\p"
 	.string "Please? May I, please?$"
@@ -493,7 +494,7 @@ MauvilleCity_Text_UncleYourePushingIt:
 	.string "to suddenly challenge a Gym?$"
 
 MauvilleCity_Text_WallyWeCanBeatAnyone:
-	.string "Wally: I know I can do this.\p"
+	.string "{SPEAKER SPK_WALLY}I know I can do this.\p"
 	.string "Ralts and I have trained\n"
 	.string "every day in Verdanturf.\p"
 	.string "Uncle still sees the boy\n"
@@ -502,7 +503,7 @@ MauvilleCity_Text_WallyWeCanBeatAnyone:
 	.string "I'm not that boy anymore.$"
 
 MauvilleCity_Text_WallyWillYouBattleMe:
-	.string "Wally: Oh! Hi, {PLAYER}!\p"
+	.string "{SPEAKER SPK_WALLY}Oh! Hi, {PLAYER}!\p"
 	.string "I've gotten a lot stronger since\n"
 	.string "we met.\p"
 	.string "{PLAYER}, I want you and my Uncle to\n"
@@ -511,7 +512,7 @@ MauvilleCity_Text_WallyWillYouBattleMe:
 	.string "a battle with me?$"
 
 MauvilleCity_Text_WallyMyUncleWontKnowImStrong:
-	.string "Wally: Oh… If you won't battle me,\n"
+	.string "{SPEAKER SPK_WALLY}Oh… If you won't battle me,\n"
 	.string "{PLAYER}, my Uncle won't know that I've\l"
 	.string "become really strong.$"
 
@@ -523,20 +524,20 @@ MauvilleCity_Text_UncleCanYouBattleWally:
 	.string "any reason the way he is now.$"
 
 MauvilleCity_Text_WallyPleaseBattleMe:
-	.string "Wally: {PLAYER}, please!\n"
+	.string "{SPEAKER SPK_WALLY}{PLAYER}, please!\n"
 	.string "Battle with me, please.$"
 
 MauvilleCity_Text_WallyHereICome:
-	.string "Wally: {PLAYER}, thank you.\p"
+	.string "{SPEAKER SPK_WALLY}{PLAYER}, thank you.\p"
 	.string "Okay… Here I come!$"
 
 MauvilleCity_Text_WallyDefeat:
-	.string "Wally: … … … … … … …\p"
+	.string "{SPEAKER SPK_WALLY}… … … … … … …\p"
 	.string "… … … … … … … …\p"
 	.string "I lost…$"
 
 MauvilleCity_Text_WallyIllGoBackToVerdanturf:
-	.string "Wally: …I lost.\p"
+	.string "{SPEAKER SPK_WALLY}…I lost.\p"
 	.string "Uncle, I'll come back to\n"
 	.string "Verdanturf with you.\p"
 	.string "But I won't stay there forever.\n"
@@ -570,7 +571,7 @@ MauvilleCity_Text_UncleVisitUsSometime:
 MauvilleCity_Text_WallyPokenavCall:
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "Wally: Oh, hello, {PLAYER}!\p"
+	.string "{SPEAKER SPK_WALLY}Oh, hello, {PLAYER}!\p"
 	.string "I just wanted to tell you that\n"
 	.string "my uncle bought me a PokéNav!\p"
 	.string "Now I can get in touch with you\n"
@@ -583,7 +584,7 @@ MauvilleCity_Text_RegisteredWally:
 	.string "in the PokéNav.$"
 
 MauvilleCity_Text_ScottYouDidntHoldBack:
-	.string "Scott: Hehe…\n"
+	.string "{SPEAKER SPK_SCOTT}Hehe…\n"
 	.string "I was watching that match!\p"
 	.string "You're friends with that boy Wally,\n"
 	.string "aren't you?\p"
@@ -596,7 +597,7 @@ MauvilleCity_Text_ScottYouDidntHoldBack:
 	.string "I'll be cheering for you!$"
 
 MauvilleCity_Text_WattsonNeedFavorTakeKey:
-	.string "Wattson: Oh, {PLAYER}{KUN}!\n"
+	.string "{SPEAKER SPK_WATTSON}Oh, {PLAYER}{KUN}!\n"
 	.string "You look like you have a lot of zip!\l"
 	.string "That's a good thing, wahahahaha!\p"
 	.string "Fine! I've decided!\n"
@@ -611,7 +612,7 @@ MauvilleCity_Text_WattsonNeedFavorTakeKey:
 	.string "New Mauville.$"
 
 MauvilleCity_Text_WattsonWontBeChallenge:
-	.string "Wattson: Don't you worry about it.\n"
+	.string "{SPEAKER SPK_WATTSON}Don't you worry about it.\n"
 	.string "It won't be a challenge to you.\p"
 	.string "The entrance to New Mauville is just\n"
 	.string "a short Surf away from Route 110.\p"
@@ -619,7 +620,7 @@ MauvilleCity_Text_WattsonWontBeChallenge:
 	.string "Wahahahaha!$"
 
 MauvilleCity_Text_WattsonThanksTakeTM:
-	.string "Wattson: Wahahahaha!\p"
+	.string "{SPEAKER SPK_WATTSON}Wahahahaha!\p"
 	.string "I knew it, {PLAYER}{KUN}! I knew I'd made\n"
 	.string "the right choice asking you!\p"
 	.string "This is my thanks--a TM containing\n"
@@ -627,7 +628,7 @@ MauvilleCity_Text_WattsonThanksTakeTM:
 	.string "Go on, you've earned it!$"
 
 MauvilleCity_Text_WattsonYoungTakeCharge:
-	.string "Wattson: Wahahahaha!\p"
+	.string "{SPEAKER SPK_WATTSON}Wahahahaha!\p"
 	.string "It pleases me to no end to see\n"
 	.string "the young step up and take charge!$"
 

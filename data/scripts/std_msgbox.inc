@@ -30,6 +30,7 @@ Std_MsgboxYesNo:
 	return
 
 Std_ReceivedItem::
+	callnative Speaker_HoldForSystemText @ ENG-NAMEBOX: no name box on "received" lines
 	textcolor NPC_TEXT_COLOR_NEUTRAL
 	call_if_eq VAR_0x8002, MUS_LEVEL_UP, EventScript_ReceivedItemFanfare1
 	call_if_eq VAR_0x8002, MUS_RG_OBTAIN_KEY_ITEM, EventScript_ReceivedItemFanfare2
@@ -39,6 +40,7 @@ Std_ReceivedItem::
 	call_if_eq VAR_0x8002, MUS_LEVEL_UP, EventScript_ReceivedItemWaitFanfare
 	putitemaway VAR_0x8000, VAR_0x8001
 	call EventScript_RestorePrevTextColor
+	callnative Speaker_ResumeAfterSystemText
 	return
 
 EventScript_ReceivedItemFanfare1::

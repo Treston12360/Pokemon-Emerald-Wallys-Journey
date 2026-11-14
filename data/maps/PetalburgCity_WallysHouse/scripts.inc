@@ -254,7 +254,7 @@ WallyJourney_EventScript_StevenGiveSwampertite::
 	return
 
 WallyJourney_StevenMega_GymIntro:
-	.string "Steven: {PLAYER}! I caught the end of\n"
+	.string "{SPEAKER SPK_STEVEN}{PLAYER}! I caught the end of\n"
 	.string "your battle with Norman.\p"
 	.string "That was impressive. You and your\n"
 	.string "Pokémon fought as one.\p"
@@ -266,7 +266,7 @@ WallyJourney_StevenMega_GymIntro:
 	.string "Pokémon reach new heights.$"
 
 WallyJourney_StevenMega_Intro:
-	.string "Steven: {PLAYER}! I heard you\n"
+	.string "{SPEAKER SPK_STEVEN}{PLAYER}! I heard you\n"
 	.string "defeated your father, Norman.\p"
 	.string "When we first met, you were just\n"
 	.string "starting out. Look at you now.\p"
@@ -277,7 +277,7 @@ WallyJourney_StevenMega_Intro:
 	.string "Pokémon reach new heights.$"
 
 WallyJourney_StevenMega_Stone:
-	.string "Steven: A Mega Bracelet is only\n"
+	.string "{SPEAKER SPK_STEVEN}A Mega Bracelet is only\n"
 	.string "half of it. Your partner needs a\l"
 	.string "Mega Stone that answers its call.\p"
 	.string "I found three, one for each Pokémon\n"
@@ -285,7 +285,7 @@ WallyJourney_StevenMega_Stone:
 	.string "Take them all.$"
 
 WallyJourney_StevenMega_End:
-	.string "Steven: Have your first partner\n"
+	.string "{SPEAKER SPK_STEVEN}Have your first partner\n"
 	.string "hold its stone once it's fully\l"
 	.string "evolved.\p"
 	.string "When your bond is strong enough,\n"
@@ -299,7 +299,7 @@ WallyJourney_StevenMega_End:
 	.string "you'll go. Until next time!$"
 
 WallyJourney_StevenMega_AfterText:
-	.string "Steven: Watch for that sparkle.\n"
+	.string "{SPEAKER SPK_STEVEN}Watch for that sparkle.\n"
 	.string "Mega Stones rest where their\l"
 	.string "Pokémon feel at home.\p"
 	.string "Your bond with your Pokémon is\n"

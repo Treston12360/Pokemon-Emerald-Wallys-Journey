@@ -63,7 +63,7 @@ EverGrandeCity_GlaciasRoom_EventScript_Defeated::
 	end
 
 EverGrandeCity_GlaciasRoom_Text_IntroSpeech:
-	.string "Glacia: I am Glacia.\n"
+	.string "{SPEAKER SPK_GLACIA}I am Glacia.\n"
 	.string "You may begin when ready.\p"
 	.string "During the storms, we moved\n"
 	.string "families to safer ground.\p"
@@ -74,7 +74,7 @@ EverGrandeCity_GlaciasRoom_Text_IntroSpeech:
 	.string "is as steady as your team.$"
 
 EverGrandeCity_GlaciasRoom_Text_Defeat:
-	.string "Glacia: Remarkable.\p"
+	.string "{SPEAKER SPK_GLACIA}Remarkable.\p"
 	.string "You remained composed even\n"
 	.string "when the match turned.\p"
 	.string "You have earned this win.$"
@@ -97,12 +97,13 @@ EverGrandeCity_GlaciasRoom_EventScript_GlaciaRematch::
 	setflag FLAG_DEFEATED_ELITE_4_GLACIA
 	call PokemonLeague_EliteFour_SetAdvanceToNextRoomMetatiles
 EverGrandeCity_GlaciasRoom_EventScript_GlaciaRematchPost::
+	setspeaker SP_NAME_GLACIA
 	msgbox EverGrandeCity_GlaciasRoom_Text_RematchPost, MSGBOX_DEFAULT
 	release
 	end
 
 EverGrandeCity_GlaciasRoom_Text_RematchIntro:
-	.string "Glacia: The Champion, here to take\n"
+	.string "{SPEAKER SPK_GLACIA}The Champion, here to take\n"
 	.string "the challenge again?\p"
 	.string "Last time I held back a little.\n"
 	.string "Not today. Prepare to freeze.$"

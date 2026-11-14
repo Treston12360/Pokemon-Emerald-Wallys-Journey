@@ -80,7 +80,7 @@ EverGrandeCity_HallOfFame_Movement_WalkIntoHallOfFame2:
 	step_end
 
 EverGrandeCity_HallOfFame_Text_HereWeHonorLeagueChampions:
-	.string "Wally: This room…\p"
+	.string "{SPEAKER SPK_WALLY}This room…\p"
 	.string "Wallace brought me here after I beat\n"
 	.string "him. I didn't say a word. I just\l"
 	.string "stared at the names.\p"
@@ -88,7 +88,7 @@ EverGrandeCity_HallOfFame_Text_HereWeHonorLeagueChampions:
 	.string "that got them here is recorded.$"
 
 EverGrandeCity_HallOfFame_Text_LetsRecordYouAndYourPartnersNames:
-	.string "Wally: Go on. Your turn.\p"
+	.string "{SPEAKER SPK_WALLY}Go on. Your turn.\p"
 	.string "Record your name, and the names of\n"
 	.string "the partners who beat me.\p"
 	.string "…Mine will go back up there. Just\n"

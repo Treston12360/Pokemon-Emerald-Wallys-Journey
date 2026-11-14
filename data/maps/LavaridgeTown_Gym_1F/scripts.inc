@@ -53,6 +53,7 @@ LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated::
 	message LavaridgeTown_Gym_1F_Text_ReceivedHeatBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	setspeaker SP_NAME_FLANNERY
 	msgbox LavaridgeTown_Gym_1F_Text_ExplainHeatBadgeTakeThis, MSGBOX_DEFAULT
 	setflag FLAG_WHITEOUT_TO_LAVARIDGE
 	setflag FLAG_DEFEATED_LAVARIDGE_GYM
@@ -378,7 +379,7 @@ LavaridgeTown_Gym_1F_Text_GymStatueCertified:
 	.string "{PLAYER}$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryPreRematch:
-	.string "Flannery: You came back!\p"
+	.string "{SPEAKER SPK_FLANNERY}You came back!\p"
 	.string "Grandpa said real Leaders want the\n"
 	.string "rematch more than the win.\p"
 	.string "I finally get what he meant.\n"
@@ -389,33 +390,33 @@ LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeat:
 	.string "That was hotter than the springs!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryPostRematch:
-	.string "Flannery: I lost, and I feel great!\p"
+	.string "{SPEAKER SPK_FLANNERY}I lost, and I feel great!\p"
 	.string "Grandpa always said the mountain\n"
 	.string "teaches patience. I'm learning.\l"
 	.string "Slowly!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryRematchNeedTwoMons:
-	.string "Flannery: Losing won't deflate me!\p"
+	.string "{SPEAKER SPK_FLANNERY}Losing won't deflate me!\p"
 	.string "Oh, wait. You only have one Pokémon\n"
 	.string "that can battle?\p"
 	.string "Rematches here are two at a time.\n"
 	.string "Bring at least two!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryPreRematch3:
-	.string "Flannery: I stopped trying to battle\n"
+	.string "{SPEAKER SPK_FLANNERY}I stopped trying to battle\n"
 	.string "like my grandfather.\p"
 	.string "Now I battle like me.\n"
 	.string "And I'm way hotter. Let's go!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryPreRematch4:
-	.string "Flannery: That volcano nearly blew\n"
+	.string "{SPEAKER SPK_FLANNERY}That volcano nearly blew\n"
 	.string "because people thought they could\l"
 	.string "control it.\p"
 	.string "My fire's different. I know exactly\n"
 	.string "how hot it burns. Here it comes!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryPreRematch5:
-	.string "Flannery: This is everything I've\n"
+	.string "{SPEAKER SPK_FLANNERY}This is everything I've\n"
 	.string "got. No nerves. No holding back.\p"
 	.string "If you win, I'll treat the whole\n"
 	.string "Gym to the hot springs.\p"
@@ -425,7 +426,7 @@ LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeatElite:
 	.string "Burned out… and I loved every second!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryPostRematchElite:
-	.string "Flannery: Grandpa called after our\n"
+	.string "{SPEAKER SPK_FLANNERY}Grandpa called after our\n"
 	.string "last match.\p"
 	.string "He said I finally look like a Leader.\n"
 	.string "I told him I learned it from losing\l"
@@ -448,6 +449,7 @@ LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage1::
 	goto_if_eq VAR_RESULT, NO, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline
 	cleartrainerflag TRAINER_FLANNERY_2
 	trainerbattle_no_intro TRAINER_FLANNERY_2, LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat1
+	setspeaker SP_NAME_FLANNERY
 	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter1, MSGBOX_DEFAULT
 	release
 	end
@@ -457,6 +459,7 @@ LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage2::
 	goto_if_eq VAR_RESULT, NO, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline
 	cleartrainerflag TRAINER_FLANNERY_2
 	trainerbattle_no_intro TRAINER_FLANNERY_2, LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat2
+	setspeaker SP_NAME_FLANNERY
 	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter2, MSGBOX_DEFAULT
 	release
 	end
@@ -468,6 +471,7 @@ LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage3::
 	trainerbattle_double TRAINER_FLANNERY_3, LavaridgeTown_Gym_1F_Text_FlanneryGrowGo, LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat3, LavaridgeTown_Gym_1F_Text_FlanneryGrowNeedTwo
 	setvar VAR_0x8004, 4
 	special WallyJourney_RecordLeaderPostgameWin
+	setspeaker SP_NAME_FLANNERY
 	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter3, MSGBOX_DEFAULT
 	release
 	end
@@ -477,11 +481,13 @@ LavaridgeTown_Gym_1F_EventScript_FlanneryRematchStage4::
 	goto_if_eq VAR_RESULT, NO, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline
 	cleartrainerflag TRAINER_FLANNERY_4
 	trainerbattle_double TRAINER_FLANNERY_4, LavaridgeTown_Gym_1F_Text_FlanneryGrowGo, LavaridgeTown_Gym_1F_Text_FlanneryGrowDefeat4, LavaridgeTown_Gym_1F_Text_FlanneryGrowNeedTwo
+	setspeaker SP_NAME_FLANNERY
 	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter4, MSGBOX_DEFAULT
 	release
 	end
 
 LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline::
+	setspeaker SP_NAME_FLANNERY
 	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostBattle, MSGBOX_DEFAULT
 	release
 	end
@@ -494,7 +500,7 @@ LavaridgeTown_Gym_1F_Text_FlanneryGrowNeedTwo:
 	.string "battle. Come back with more.$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer1:
-	.string "Flannery: {STR_VAR_1} Badges already?\p"
+	.string "{SPEAKER SPK_FLANNERY}{STR_VAR_1} Badges already?\p"
 	.string "Gym Leaders match their team to a\n"
 	.string "challenger's Badges, you know.\p"
 	.string "So I get to turn up the heat!\n"
@@ -508,7 +514,7 @@ LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter1:
 	.string "I'll be hotter by then!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer2:
-	.string "Flannery: Eight Badges!\p"
+	.string "{SPEAKER SPK_FLANNERY}Eight Badges!\p"
 	.string "Then I can bring out a lot more\n"
 	.string "of my real team. One more battle?$"
 
@@ -520,7 +526,7 @@ LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter2:
 	.string "Grandpa's going to hear about this.$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer3:
-	.string "Flannery: The Champion, in my Gym!\p"
+	.string "{SPEAKER SPK_FLANNERY}The Champion, in my Gym!\p"
 	.string "I'm not new at this anymore.\n"
 	.string "My full team is ready. Battle me!$"
 
@@ -532,7 +538,7 @@ LavaridgeTown_Gym_1F_Text_FlanneryGrowAfter3:
 	.string "melt that title right off you!$"
 
 LavaridgeTown_Gym_1F_Text_FlanneryGrowOffer4:
-	.string "Flannery: You kept your title!\p"
+	.string "{SPEAKER SPK_FLANNERY}You kept your title!\p"
 	.string "This is everything I've got.\n"
 	.string "My hottest team ever!$"
 
