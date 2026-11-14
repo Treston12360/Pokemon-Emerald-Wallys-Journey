@@ -202,8 +202,8 @@ Lineup (owner 2026-11-14): Blue = Viridian Gym (8th); Janine = Fuchsia; Elite Fo
 
 ## Chapter 2 — Mt. Moon, the first tear  · DRAFT (owner to approve)
 Beats (owner 2026-11-14: narrative-driven, scripted events; use spots FireRed left empty): the tear is on the
-old Rocket spot by the crater on B2F (in game, mechanics done). Proposed species for "something slipping
-through": **Minior** (Alola's meteor Pokémon — fits "meteorite anomaly"). Owner to confirm.
+old Rocket spot by the crater on B2F (in game, mechanics done). Owner 2026-11-14: **no Pokémon fall out of
+tears** — the anomaly Pokémon are simply *there* in the wild, where they don't belong.
 
 **2.1 Mt. Moon entrance (Route 4 side) — a Hiker, scripted: he stops you on the way in**
 > HIKER: Hey, hold on! You're not heading in there alone, are you?
@@ -215,15 +215,15 @@ through": **Minior** (Alola's meteor Pokémon — fits "meteorite anomaly"). Own
 > Fine. If you see it, don't touch it. And if the ground starts humming, run.
 
 **2.2 B1F — a Camper and a Lass by the ladder (talk to them)**
-> CAMPER: There's a Pokémon down there that isn't from here. Little rock thing, glowing.
-> It fell out of the ceiling. I swear it fell out of the ceiling.
-> LASS: He's been saying that all day. ...I believe him, though. I saw it too.
+> CAMPER: There are Pokémon down there that aren't from here. I've never seen them in any book.
+> A week ago they weren't there. Now they're just... living here. Like they always were.
+> LASS: He's been saying that all day. ...I believe him, though. I saw one too.
 
 **2.3 B2F — Miguel at the fossils (rewrite of his FireRed scene; fossils kept)**
 > MIGUEL: Stop right there! These fossils are mine — I mean, they're the museum's — I mean...
 > Sorry. Sorry. I've been down here two days. I haven't slept.
-> I came to dig. That's all. Then the crater started glowing and things started falling out of the air.
-> Rocks that move. Rocks that look at you.
+> I came to dig. That's all. Then the crater started glowing, and Pokémon I've never seen started turning up
+> in the tunnels. Like they'd been here forever.
 > I'm not leaving these fossils down here with whatever that is. But I'm not going near it either.
 > You look like you've handled worse. Prove it, and I'll trust you with one of them.
 > (battle — his team rebuilt for this point in the story, task L4)
@@ -233,9 +233,7 @@ through": **Minior** (Alola's meteor Pokémon — fits "meteorite anomaly"). Own
 
 **2.4 The tear — scripted, as you step in front of it**
 > (The Rift Scanner starts beeping. The beeping gets faster.)
-> (The room flickers violet. Something drops out of the tear!)
-> (Wild Minior battle — catchable.)
-> (After the battle the scanner is still beeping.)
+> (The room flickers violet.)
 > {PLAYER} held up the Rift Scanner.
 > ...Reading...
 > ...Reading...
