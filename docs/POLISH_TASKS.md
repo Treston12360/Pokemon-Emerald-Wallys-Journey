@@ -79,11 +79,25 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-24. Route 112 into Lavaridge.** "Route 112 into lavaridge town rocks in background appear and then level."
 - [ ] **POL-26. Rustboro lights blink.** "Lights in rustboro city blink in and out while walking."
 - [ ] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
-      not show crash or anything." (asked Brennan whether "crash" means the ash puff — see Questions.)
+      not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
 - [ ] **POL-28. Petalburg Woods black lines.** "Bunch of black lines inside of petalburg woods."
 - [ ] **POL-29. Separate music and gameplay volume.** "Add a feature in the volume setting to differentiate music
       volume and gameplay volume incase you want to turn off music but keep gameplay audio."
 
+- [ ] **POL-30. Backdrop changes between routes, everywhere** (Brennan, 2026-11-14, later the same day): "Also fix
+      the background in every route as it is changing from one background to the other when going to and from
+      routes." The general case of POL-15, POL-21 and POL-24 (and DLX-25, which fixed Dewford's): check every
+      Hoenn map link, not only the ones he named.
+
 ## Questions for Brennan (and his answers)
 
-(none yet)
+Asked 2026-11-14, answered the same day:
+1. Crash files (`WallysJourney_crash.txt`, `WallysJourney_errors.txt`, `WallysJourney.cfg`): "yes I can provide
+   that" - not received yet.
+2. Which build: "I can't remember what version. But I start in 3D and have gamma on." -> test POL-11/14 with
+   Gamma lighting ON.
+3. Move Deleter refusing to delete the last Surf: he asked what the question was about; explained again
+   (waiting for a yes/no).
+4. POL-27 Route 113: "yes you are right I misspoke" -> he meant the ash puff when stepping in the ash.
+5. Who merges Polish fixes into the game: "by you" -> this session merges finished `polish` work into
+   `kanto-port` (fetch + rebase first, never force-push, check WORK_CLAIMS; AGENTS.md rules).
