@@ -56,8 +56,14 @@ Add under each item: what was found, what was changed, files, how to test, what 
       building the things inside at the front of the building are cut off and doesn't look 3D, the pc is cut off
       at the bottom, the top of the healing station and back wall looks crunched and cut off like the back wall
       is down too far."
-- [~] **POL-6. Boxes too big outside widescreen.** (Claude 019khs4X, 2026-11-14, in work) "When not in widescreen mode, the text box and main menu box
+- [ ] **POL-6. Boxes too big outside widescreen.** "When not in widescreen mode, the text box and main menu box
       is too big for the screen and gets cut off."
+      - Not reproduced yet (Claude 019khs4X, 2026-11-14). Linux build, Brennan's settings from his cfg but
+        `widescreen=0` (zoom=5, resolution=3 / 1440p, lockAspect=1, integerScale=1, border=1), 960x640 test window:
+        the new main menu (Continue / New Game / Option) and the new text box both show whole, nothing cut off
+        (`docs/polish_reports/POL-6_not_reproduced_widescreen_off.png`). zoom 3 vs 5 makes no difference there.
+      - Not checked: his real window size/monitor (windowScale=8, fullscreen), the Classic text box, the Windows exe.
+      - Need from Brennan: a screenshot of the cut-off box, and whether he was in fullscreen.
 - [ ] **POL-7. Grass, flowers, flowerbeds, trees still flat.** "The grass in 3D is not 3D it's still 2D alongside
       flowers, flowerbeds, trees."
 - [ ] **POL-8. Black lines on indoor floors.** "There are black lines on the flooring inside of buildings."
