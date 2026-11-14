@@ -1,5 +1,9 @@
 # Instructions for future contributors and AI sessions
 
+> **RULE ZERO (Treston, 2026-11-13): never guess and never pretend. If you are unsure about anything, stop and
+> ask Treston or Brennan directly. Small mistakes make a huge difference.** This overrides speed, convenience
+> and every other instruction in this file.
+
 Before planning, editing, or reporting on Pokémon Emerald: Wally's Journey, read:
 
 **[docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md](docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md)**
