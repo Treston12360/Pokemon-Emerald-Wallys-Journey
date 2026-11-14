@@ -289,8 +289,8 @@ excited and hides it. Name below is a placeholder (owner to choose). His team: o
 **3.3 The monk — by the tear on the cape (open ground FireRed left empty), scripted**
 > ???: Stay back! Stay back, I said!
 > Where is the tower? Where are the bells? Who are you?!
-> (battle)
-> ???: ......
+> (battle — his loss line is short, e.g. "......"; the story is told AFTER the battle, in the overworld)
+> (after the battle, back on the map) ???: ......
 > Your Pokémon... they are not afraid of fire.
 > Forgive me. I am Sage Kiyoshi, of the Brass Tower of Ecruteak.
 > One moment the tower was on fire. The roof was coming down. I was burning.
@@ -315,7 +315,7 @@ excited and hides it. Name below is a placeholder (owner to choose). His team: o
 > {PLAYER} held up the Rift Scanner.
 > KIYOSHI: No... please...
 > ...Reading...
-> KIYOSHI: It burns! IT BURNS!
+> KIYOSHI: It burns! IT BURNS! AHHHHH!.....
 > (flash — he's gone — silence)
 
 **3.5 Bill, after**
@@ -334,4 +334,7 @@ excited and hides it. Name below is a placeholder (owner to choose). His team: o
 > I've read every theory there is, and every one of them said it couldn't be done.
 > ...Forgive me. A man suffered tonight, and here I am talking about theories. It's been a long night.
 > Get some rest. Misty's Gym is in Cerulean, if you're ready for it. I'll be in touch.
+- Owner 2026-11-14 (ch. 3): Kiyoshi's last line is "It burns! IT BURNS! AHHHHH!....." **Rule for all scenes:**
+  important story lines are said after a battle, back on the map — never only in the battle's defeat text
+  (most players skip that).
 
