@@ -43,6 +43,13 @@ How to use:
 |---|---|---|---|
 | [ ] | (Brennan's Claude: add your tasks here) | | |
 
+## Whole-game engine tasks (either project — claim in `docs/WORK_CLAIMS.md` first; they touch shared code)
+
+| Status | Task | Date / commit | Affects / don't revert |
+|---|---|---|---|
+| [ ] | **ENG-MP3. Music tracks can be MP3 files** (owner, 2026-11-14). Let any song play from an MP3 instead of the GBA music engine (e.g. new or remixed themes). Old tracks keep working; a track uses its MP3 only if one is provided. Must work in the Windows `.exe` package (MP3 files ship in the game folder). | | Sound code (`src/platform/sdl2.c` audio, `sound/`); `tools/pc/make_package.sh` must copy the music folder |
+| [ ] | **ENG-SPRITES. Remove the colour limits on sprites** (owner, 2026-11-14): "I want them to be the same size so they don't stick out, but no limit on the colours." Overworld, battle and trainer sprites may use more than 16 colours (full colour PNGs). **Keep sizes and pixel scale the same as FireRed/Emerald** (e.g. 64×64 battle pictures, 16×32 / 32×32 overworld) so new art matches. Existing 16-colour sprites keep working unchanged. | | Graphics loading + drawing (sprite/OAM code, `src/platform/` renderer, 3D sprite path in `voxel3d`), `graphics/` build rules |
+
 Open items handed to Polish (Hoenn): DLX-22 Granite Cave black lines; Hoenn trainers' repetitive lines
 (owner: every trainer needs believable, unique dialogue — `WALLY_JOURNEY_OWNER_REQUIREMENTS.md` 2026-11-13);
 Seasons message says "Winter has arrived in Hoenn" while the player is in Kanto (seen 2026-11-14 on Route 12/Cerulean) — whole-game seasons code, needs a fix that says the right region;
