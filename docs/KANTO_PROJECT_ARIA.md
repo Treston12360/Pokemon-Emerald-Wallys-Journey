@@ -368,4 +368,7 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
 - 2026-11-14 (owner): **Blue crosses paths with the player now and then** (same investigation) — not every
   chapter, but eventually; each meeting builds his respect until they investigate together (§2b). First one:
   leaving Mt. Moon (ch. 2.6 draft).
+- 2026-11-14 (owner): **Ch. 3 happens near Bill's house** (Route 25, Sea Cottage): it gives the player a reason
+  to cross Nugget Bridge, and Bill gets a part to play. Details (who the displaced person is, how it ends) TBD
+  with the owner; Bill returns with new lines (his FireRed scene stays stripped).
 

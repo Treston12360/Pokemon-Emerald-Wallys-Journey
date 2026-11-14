@@ -138,6 +138,13 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       nature mints, Bottle Caps, good healing items, Full Heals, Rare Candies, etc. But nothing weak for a Champion
       (no Potions healing 20 HP) — Kanto's ground items fit a Champion. Make a list (Hoenn TMs vs. Kanto planned)
       for the owner first.
+- [ ] **S-WILD. Kanto wild encounters overhaul, same as Hoenn's** (owner, 2026-11-14): every non-legendary,
+      non-mythical species obtainable across the game's wild encounters, placed believably (habitat, climate,
+      terrain — the Hoenn rules in `WALLY_JOURNEY_OWNER_REQUIREMENTS.md`). Levels fit the Kanto curve (L-tasks).
+- [ ] **S-NUGGET. Nugget Bridge** (owner, 2026-11-14): the five bridge trainers and the man at the end stay
+      (the man wasn't dressed as a Rocket in FireRed). New, non-Rocket dialogue for all of them; the man becomes
+      an ordinary trainer (no recruiting, no Rocket trainer class/team). His FireRed object is still visible now
+      with his Rocket script — fix in this task. Teams for the player's level.
 - [ ] **S-BLOCK. Road blocks** from `docs/KANTO_PROJECT_ARIA.md` §4 (after the owner confirms the table).
 - [ ] **S-TALK. New dialogue for every Kanto NPC and trainer** (owner: each trainer unique and believable, Gym
       Leaders with their own story, longer is fine). Drafts go in `docs/KANTO_SCRIPT.md` for approval first.
