@@ -59,6 +59,20 @@ file (`WallysJourney.cfg`) and save (`WallysJourney.sav`). If you regenerate the
 If you don't know whether the person you're working with is **Treston** or **Brennan**, ask before saying
 anything about the Kanto story. Treston: story is fine. Brennan: no story at all.
 
+## Leave maximum context on GitHub (owner rule, 2026-11-13)
+Either project's Claude may have to pick up the other's work cold. So everything you push must carry the full
+context needed to continue it without guessing:
+- **Commit messages:** what changed, why, which owner decision or reference it follows, and what is left.
+- **Task entries** (`docs/TASKS.md`, `docs/KANTO_TASKS.md`, `docs/DELUXE_WORK_QUEUE.md`): exactly where you
+  stopped, what you tried that didn't work and why, files touched, how to test it, open questions.
+- **Owner decisions** go into the docs the moment they're made, in his words where possible (ARIA story →
+  `docs/KANTO_PROJECT_ARIA.md` / `docs/KANTO_SCRIPT.md`; everything else → `docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md`).
+- **Tools, test scripts and data you made or used** (generators, saves, scripts) go in the repo with a README,
+  not only on your machine.
+- If something important lives outside the repo (big files, the Gamma archive), say where and who has it.
+If context is missing when you pick something up, ask — don't fill the gap by guessing.
+(Story context stays in ARIA's story files; never put story in places Brennan reads for his own work.)
+
 ## References: `docs/REFERENCES.md`
 Where the Emerald 3DS source and Gamma Emerald's files are, and how to get them. Read the reference before
 building anything it already does.
