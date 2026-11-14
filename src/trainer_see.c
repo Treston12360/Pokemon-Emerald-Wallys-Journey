@@ -433,8 +433,16 @@ static const struct SpriteTemplate sSpriteTemplate_Emote =
 };
 
 // code
+#ifdef PORTABLE
+extern bool32 WJPC_TestNoBattles(void); // test aid (src/platform/wj_pc_glue.c)
+#endif
+
 bool8 CheckForTrainersWantingBattle(void)
 {
+#ifdef PORTABLE
+    if (WJPC_TestNoBattles())
+        return FALSE;
+#endif
     u8 i;
     u8 trainerObjects[OBJECT_EVENTS_COUNT] = {0};
     u8 trainerObjectsCount = 0;

@@ -14,11 +14,34 @@ anything about the Kanto story**; test on `WallysJourney.exe`; builds handed ove
 Status: `[ ]` open, `[~]` in work (who, date), `[x]` done (date, commit, what was sent to Brennan).
 Add under each item: what was found, what was changed, files, how to test, what is left.
 
-- [ ] **POL-11 (PRIORITY). Freezing in 3D.** "There's freezing and pausing when in 3D making the whole game stop
-      for a second or two then start again."
-- [ ] **POL-14 (PRIORITY). Crash in 3D after about 10 minutes.** "When in 3D mode after about 10min the game
-      crashes after a lot of skipping and pausing."
-- [ ] **POL-25 (PRIORITY). Unlearn HM moves.** "Make it to where you can unlearn an HM move."
+- [~] **POL-11 (PRIORITY). Freezing in 3D.** "There's freezing and pausing when in 3D making the whole game stop
+      for a second or two then start again." (Claude 014PwRDj, 2026-11-14, in work together with POL-14)
+      - Not reproduced yet. Stress run in Wine + Xvfb (software GL), Gamma lighting off, the shipped `pc_data/voxel`,
+        a late-game save, script = warp to each of the 56 outdoor Hoenn maps and walk a square (`WJPC_TEST_NO_BATTLES=1
+        WJPC_3D=1 WJPC_VOXEL_LOG=1 WJPC_TEST_WINDOW=1`): 26,000 frames, 45+ warps, worst frame 77 ms of map/belt
+        work (a warp: the map underfoot + whole belt built at once), memory flat at ~480 MB. Nothing near 1-2 s.
+      - Still to try: Gamma lighting on (bloom, depth of field), walking across seams for a long time instead of
+        warping, battles in between, real-time speed with sound. Asked Brennan for his build name, his
+        `WallysJourney.cfg`, and `WallysJourney_crash.txt` / `WallysJourney_errors.txt` from his game folder.
+- [~] **POL-14 (PRIORITY). Crash in 3D after about 10 minutes.** "When in 3D mode after about 10min the game
+      crashes after a lot of skipping and pausing." (Claude 014PwRDj, 2026-11-14)
+      - Not reproduced yet (see POL-11's run: 12 minutes, no crash, memory flat). The game writes
+        `WallysJourney_crash.txt` next to the exe when it crashes: Brennan's copy says exactly where. Look the
+        addresses up with `llvm-nm -n WallysJourney.exe` on the unstripped exe of the same commit.
+      - Found on the way (a test-script artefact, but a real weak spot): a test `warp` during a wild battle
+        crashes in `VoxelBattle_Shadows` (`voxel_battle.c`) called from sdl2.c `BattleEffects` while callback2 is
+        `CB2_LoadMap`: `gMain.inBattle` is still set but the battle's heap is gone (`gBattleSpritesDataPtr`
+        dangling). Normal play clears inBattle before a map load, so this should not be Brennan's crash; the test
+        aid `WJPC_TEST_NO_BATTLES=1` (no wild encounters, trainers don't spot) keeps scripts out of battles.
+- [~] **POL-25 (PRIORITY). Unlearn HM moves.** "Make it to where you can unlearn an HM move." (Claude 014PwRDj, 2026-11-14)
+      - Found: the game's setting already allows it (`P_CAN_FORGET_HIDDEN_MOVE TRUE`, include/config/pokemon.h), and
+        battles / evolution / the old summary screen ask `CannotForgetMove()`. But the summary screen the game
+        actually uses (`src/bw_summary_screen.c`, `CanReplaceMove`) asked `IsMoveHM()` directly, so picking an HM
+        move to replace still said "HM moves can't be forgotten now." Changed to `CannotForgetMove()`.
+      - Safe because field HMs never need a Pokémon to know the move (owner requirements, "Quality-of-life").
+      - **Not yet tested in play** (needs a Pokémon with an HM move learning a 5th move) and no picture sent yet.
+      - Asked Brennan: the Move Deleter in Lilycove still refuses to delete the last Surf in the party
+        (`IsLastMonThatKnowsSurf`); remove that refusal too?
 - [ ] **POL-1. People look like paper.** "People's silhouettes are still like paper. They need to be rounded out
       to look like people."
 - [ ] **POL-2. Background trees end in blue.** "The background trees go up in the sky revealing a blue background."

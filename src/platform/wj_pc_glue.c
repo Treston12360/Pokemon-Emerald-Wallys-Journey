@@ -78,6 +78,18 @@ void BitUnPack(const void *src, void *dest, const void *paramsVoid)
 #include "battle_setup.h"
 #include "save.h"
 #include "field_move.h"
+// Test aid: WJPC_TEST_NO_BATTLES=1 - no wild encounters and no trainers spotting the player, so a long
+// walking/warping test script is not interrupted (a test `warp` in the middle of a battle crashes: the
+// battle's memory is freed by the map load while the game still says it is in a battle).
+extern char *getenv(const char *name);
+bool32 WJPC_TestNoBattles(void)
+{
+    static int sOn = -1;
+    if (sOn < 0)
+        sOn = getenv("WJPC_TEST_NO_BATTLES") != NULL;
+    return sOn;
+}
+
 // Test aid (sdl2.c "state"): game state read or written from a test script.
 int WJPC_TestState(const char *what, int id, int set, int value)
 {

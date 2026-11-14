@@ -797,8 +797,16 @@ bool8 AreLegendariesInSootopolisPreventingEncounters(void)
     return FlagGet(FLAG_LEGENDARIES_IN_SOOTOPOLIS);
 }
 
+#ifdef PORTABLE
+extern bool32 WJPC_TestNoBattles(void); // test aid (src/platform/wj_pc_glue.c)
+#endif
+
 bool8 StandardWildEncounter(u16 curMetatileBehavior, u16 prevMetatileBehavior)
 {
+#ifdef PORTABLE
+    if (WJPC_TestNoBattles())
+        return FALSE;
+#endif
     u32 headerId;
     enum TimeOfDay timeOfDay;
     struct Roamer *roamer;
