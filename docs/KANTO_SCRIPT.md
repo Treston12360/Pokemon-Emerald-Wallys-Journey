@@ -262,3 +262,76 @@ chapter. He's cold at first; respect builds over these meetings until you invest
 > Next time you find one, don't just slam it shut. Look at it first.
 > (He walks past you, into the mountain.)
 
+---
+
+## Chapter 3 — Cerulean / Bill's cottage: the man from the fire  · DRAFT (owner to approve)
+Owner direction 2026-11-14: a monk from the Brass Tower fire (Ecruteak, ~150 years ago), pulled through by
+accident; begs you not to close it; Varnell says you must; he fades screaming "It burns!"; Varnell is
+excited and hides it. Name below is a placeholder (owner to choose). His team: old Ecruteak Pokémon
+(e.g. Hoothoot/Noctowl, Misdreavus, Houndour, Gastly line) — levels in L4.
+
+**3.1 Cerulean — an Officer at the north exit (Nugget Bridge), scripted**
+> OFFICER: You're the trainer from Hoenn, right? Professor Oak said you might come this way.
+> We've had calls all night from up the cape. Smoke, but no fire. Somebody screaming in a language
+> nobody can place. People are calling it a ghost.
+> Bill, the PC guy, lives out at the end of Route 25. He's the one who called it in.
+> I'd go myself, but... look, I've got a city to keep calm. Can you check on him?
+
+**3.2 Bill — outside the Sea Cottage, shaken**
+> BILL: Oh, thank goodness. You're the one Oak sent? Then you know about the tears.
+> I know what it feels like to get pulled through something you don't understand. Trust me.
+> But this... this is different. There's a man out by the cape. He's not hurt. He's... wrong.
+> His clothes are burned. He smells like smoke. And he keeps asking where the tower went.
+> He set his Pokémon on me when I got close. Old Pokémon. I mean old — the way they look, the way
+> they move. Like something out of my grandfather's books.
+> Please. Be careful.
+
+**3.3 The monk — by the tear on the cape (open ground FireRed left empty), scripted**
+> ???: Stay back! Stay back, I said!
+> Where is the tower? Where are the bells? Who are you?!
+> (battle)
+> ???: ......
+> Your Pokémon... they are not afraid of fire.
+> Forgive me. I am Sage Kiyoshi, of the Brass Tower of Ecruteak.
+> One moment the tower was on fire. The roof was coming down. I was burning.
+> I heard the three of them crying in the flames, and I could not reach them.
+> And the next moment... I was here. The air is cold. The sea is wrong. Nothing is burning.
+> What is this place? What year is this?
+> ......
+> Then everyone I know is gone. And still the tower burns, somewhere behind that light.
+
+**3.4 Closing the tear — scripted**
+> (The Rift Scanner starts beeping.)
+> KIYOSHI: What is that? What are you doing?
+> No. No, no — please. If you close it, I go back. Back into the fire.
+> I can feel it pulling at me. I can still feel the heat. Please. Let me stay.
+> (PokéNav: VARNELL)
+> VARNELL: {PLAYER}, I'm seeing your readings. Listen to me very carefully.
+> I know what he's asking. I know how it sounds.
+> But he isn't supposed to be here. If he stays, everything he would have done, everything that came after
+> him... We cannot change time. Not even for one man. It could be catastrophic.
+> Close it. Please.
+> ......
+> {PLAYER} held up the Rift Scanner.
+> KIYOSHI: No... please...
+> ...Reading...
+> KIYOSHI: It burns! IT BURNS!
+> (flash — he's gone — silence)
+
+**3.5 Bill, after**
+> BILL: ......
+> He knew. The whole time, he knew where he was going back to.
+> I've spent my whole life building machines that move things from one place to another.
+> I never once thought about what it's like to be the thing that gets moved.
+> ...Go on. I need to sit down for a while.
+
+**3.6 Varnell calls again (PokéNav)**
+> VARNELL: {PLAYER}. Are you all right?
+> I'm sorry you had to be the one to do that. I mean that.
+> ......
+> But do you understand what we just saw? A living person. Carried a hundred and fifty years, whole.
+> Breathing. Speaking. Himself.
+> I've read every theory there is, and every one of them said it couldn't be done.
+> ...Forgive me. A man suffered tonight, and here I am talking about theories. It's been a long night.
+> Get some rest. Misty's Gym is in Cerulean, if you're ready for it. I'll be in touch.
+

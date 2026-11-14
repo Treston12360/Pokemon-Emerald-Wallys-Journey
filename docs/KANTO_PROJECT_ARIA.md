@@ -377,4 +377,8 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   **sent back — and screams, like it hurts.** First sign the tears hurt people. Varnell is privately thrilled
   (proof the dead can come back → why he later goes after Dialga). Near Bill's house (Bill explains it).
   Who exactly: owner choosing from pitches.
+- 2026-11-14 (owner): **Ch. 3 person = a monk from the Brass Tower fire** (Ecruteak, ~150 years ago). He was
+  burning when he was pulled through. He begs you not to close the tear (he'd go back into the fire). Varnell
+  calls: you must — altering time could be catastrophic. As he fades he screams "It burns!" Afterwards Varnell
+  is strangely excited but hides it (a person moved across time is possible) — this is what leads him to Dialga.
 
