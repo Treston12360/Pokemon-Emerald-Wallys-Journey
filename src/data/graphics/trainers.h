@@ -397,6 +397,12 @@ const u16 gTrainerPalette_LeaderLtSurgeFrlg[] = INCGFX_U16("graphics/trainers/pa
 const u32 gTrainerFrontPic_LeaderErikaFrlg[] = INCGFX_U32("graphics/trainers/front_pics/leader_erika_frlg.png", ".4bpp.smol");
 const u16 gTrainerPalette_LeaderErikaFrlg[] = INCGFX_U16("graphics/trainers/palettes/leader_erika_frlg.pal", ".gbapal");
 
+// Project ARIA: owner's art (2026-11-14). The PNG is the 16-colour stand-in made by tools/pc/hicolor.py; the PC
+// game draws the full-colour picture from graphics/hicolor/trainers/ over it.
+const u32 gTrainerFrontPic_Janine[] = INCGFX_U32("graphics/trainers/front_pics/janine.png", ".4bpp.smol");
+const u16 gTrainerPalette_Janine[] = INCGFX_U16("graphics/trainers/palettes/janine.pal", ".gbapal");
+const u32 gTrainerFrontPic_Varnell[] = INCGFX_U32("graphics/trainers/front_pics/varnell.png", ".4bpp.smol");
+const u16 gTrainerPalette_Varnell[] = INCGFX_U16("graphics/trainers/palettes/varnell.pal", ".gbapal");
 const u32 gTrainerFrontPic_LeaderKogaFrlg[] = INCGFX_U32("graphics/trainers/front_pics/leader_koga_frlg.png", ".4bpp.smol");
 const u16 gTrainerPalette_LeaderKogaFrlg[] = INCGFX_U16("graphics/trainers/palettes/leader_koga_frlg.pal", ".gbapal");
 
@@ -1233,5 +1239,13 @@ const struct TrainerPicInfo gTrainerPicInfo[TRAINER_PIC_COUNT] =
     [TRAINER_PIC_PAINTER_FRLG] =
     {
         .frontPic = TRAINER_FRONT_PIC(gTrainerFrontPic_PainterFrlg, gTrainerPalette_PainterFrlg),
+    },
+    [TRAINER_PIC_JANINE] =
+    {
+        .frontPic = TRAINER_FRONT_PIC(gTrainerFrontPic_Janine, gTrainerPalette_Janine),
+    },
+    [TRAINER_PIC_VARNELL] =
+    {
+        .frontPic = TRAINER_FRONT_PIC(gTrainerFrontPic_Varnell, gTrainerPalette_Varnell),
     },
 };

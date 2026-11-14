@@ -521,3 +521,41 @@ with Blue ("Like the project"); Erika; both Snorlax woken with the Poké Flute; 
 > Well, go on. Play it. Just stand back when it wakes up. They're always cranky.
 > (Snorlax wakes — battle, as in FireRed.)
 
+
+## Hoenn League before Kanto is beaten (L1)  · DRAFT — waiting for owner approval
+
+Owner (2026-11-14): title defenses stay locked until Kanto's story is beaten. Until then, a Champion who walks
+the League again "can just walk in and talk to the Elite Four members and they don't challenge you, but they
+talk to you like the champion you are". No battles; each door opens after the talk. In the Champion's Room
+Wally is there (no challenger). After talking to him, the player is sent back to the League lobby like after a
+title defense. (Once Kanto is beaten, the normal title-defense ladder starts.)
+
+**Sidney**
+> Hey, Champion! Relax, I'm not battling you today.
+> League rules: no title matches while the Champion's off on outside business.
+> Kanto, right? Word gets around up here.
+> Go on through. And when you get back, I want a rematch that actually counts.
+
+**Phoebe**
+> Oh! The Champion, come to visit us!
+> Grandma says the air on Mt. Pyre has felt thin lately. Like something far away is tugging at it.
+> The spirits are restless too. I don't know what it means.
+> Wherever you're headed, take care, okay?
+
+**Glacia**
+> Champion. There will be no battle today.
+> The League has frozen every title match until your business abroad is settled.
+> But remember: a Champion who stops training melts.
+> Don't melt.
+
+**Drake**
+> Ha! Look at you, walking through here like you own the place. I suppose you do.
+> A captain doesn't leave port without a reason.
+> Whatever's calling you away, sail straight into it.
+> Then come back and give us a real fight.
+
+**Wally** (Champion's Room)
+> {PLAYER}! I figured you'd come by.
+> Nobody's allowed to challenge for the title while you're away, so it's just me up here, keeping your seat
+> warm.
+> Go do what you have to do. When you get back, I'll be first in line.

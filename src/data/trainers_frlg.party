@@ -7150,11 +7150,13 @@ IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 - Stun Spore
 - Giga Drain
 
+/* Project ARIA (owner 2026-11-13): Janine runs the Fuchsia Gym (Koga is in the Elite Four). Picture = owner's
+   art (2026-11-14). Team and Gym dialogue still FireRed's Koga: L4 (team, owner approval) and S-TALK. */
 === TRAINER_LEADER_KOGA ===
-Name: KOGA
+Name: JANINE
 Class: Leader Frlg
-Pic: Leader Koga Frlg
-Gender: Male
+Pic: Janine
+Gender: Female
 Music: Serious
 Items: Hyper Potion / Hyper Potion / Full Heal
 Double Battle: No

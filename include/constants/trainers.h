@@ -178,6 +178,9 @@ enum __attribute__((packed)) TrainerPicID
     TRAINER_PIC_POKEMON_BREEDER_FRLG,
     TRAINER_PIC_PAINTER_FRLG,
     TRAINER_PIC_WJ_PLAYER, // Wally's Journey: the player's outfit (filled in at runtime)
+    // Project ARIA: owner's art, full colour on PC (ENG-SPRITES, graphics/hicolor/list.txt)
+    TRAINER_PIC_JANINE,
+    TRAINER_PIC_VARNELL,
     TRAINER_PIC_COUNT,
 };
 

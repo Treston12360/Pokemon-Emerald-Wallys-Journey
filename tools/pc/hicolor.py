@@ -7,6 +7,9 @@ graphics/hicolor/list.txt, one picture per line (blank lines and # comments allo
                                               GAME.png is rewritten as the 16-colour version of FULL_COLOUR.png
     FULL_COLOUR.png  GAME.png  PALETTE.pal    the sprite uses a shared palette (overworld people): GAME.png is
                                               rewritten using only that palette's colours
+    FULL_COLOUR.png  GAME.png  new:PALETTE.pal  the sprite's palette is its own separate .pal file (trainer
+                                              pictures): the 16 colours are chosen from the picture and written
+                                              to PALETTE.pal; GAME.png is (re)created from them
 
 FULL_COLOUR.png must be exactly the size of GAME.png (same frames, same layout); transparent pixels
 (alpha < 128) stay transparent. Any number of colours.
@@ -101,9 +104,18 @@ def main():
         hi_path, game_png = ln[0], ln[1]
         pal_file = ln[2] if len(ln) > 2 else None
         hi = Image.open(hi_path).convert('RGBA')
+        own_pal = None
+        if pal_file and pal_file.startswith('new:'):
+            own_pal, pal_file = pal_file[4:], None
+            if not os.path.exists(game_png):
+                Image.new('P', hi.size).save(game_png)
         g = Image.open(game_png)
         assert hi.size == g.size, f'{hi_path} is {hi.size}, {game_png} is {g.size}: they must match'
         idx, pal555 = make_indexed(hi, game_png, pal_file)
+        if own_pal:
+            pal8 = Image.open(game_png).getpalette()[:48]
+            with open(own_pal, 'w', newline='\r\n') as f:
+                f.write('JASC-PAL\n0100\n16\n' + ''.join('%d %d %d\n' % tuple(pal8[i * 3:i * 3 + 3]) for i in range(16)))
         if pal_file:
             # the game's own picture keeps its pixels: check it still matches what the palette gives
             pass
