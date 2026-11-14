@@ -371,4 +371,10 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
 - 2026-11-14 (owner): **Ch. 3 happens near Bill's house** (Route 25, Sea Cottage): it gives the player a reason
   to cross Nugget Bridge, and Bill gets a part to play. Details (who the displaced person is, how it ends) TBD
   with the owner; Bill returns with new lines (his FireRed scene stays stripped).
+- 2026-11-14 (owner, ch. 3 direction): the "displaced person" is **someone from the past who has died**, pulled
+  through by accident (Hoopa's rings brushing time — Varnell has no Dialga yet). Leaning **Johto**: a trainer
+  from Johto's past with an old-style team of Johto Pokémon (Gen 2 species). When the tear is sealed he is
+  **sent back — and screams, like it hurts.** First sign the tears hurt people. Varnell is privately thrilled
+  (proof the dead can come back → why he later goes after Dialga). Near Bill's house (Bill explains it).
+  Who exactly: owner choosing from pitches.
 
