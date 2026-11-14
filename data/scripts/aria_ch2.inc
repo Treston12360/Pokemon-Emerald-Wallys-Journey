@@ -84,15 +84,15 @@ Aria_Ch2_TearScene::
 	setvar VAR_TEMP_9, 0
 	goto_if_ne VAR_ARIA_STORY, 7, Aria_Ch2_TearNotYet
 	@ the Rift Scanner beeps faster and faster
-	playse SE_POKENAV_CALL
+	playse SE_SELECT @ the Rift Scanner beeping
 	delay 40
-	playse SE_POKENAV_CALL
+	playse SE_SELECT @ the Rift Scanner beeping
 	delay 24
-	playse SE_POKENAV_CALL
+	playse SE_SELECT @ the Rift Scanner beeping
 	delay 12
-	playse SE_POKENAV_CALL
+	playse SE_SELECT @ the Rift Scanner beeping
 	delay 8
-	playse SE_POKENAV_CALL
+	playse SE_SELECT @ the Rift Scanner beeping
 	delay 30
 	@ the room flickers violet
 	call Aria_Ch2_Flicker
@@ -125,14 +125,9 @@ Aria_Ch2_TearScene::
 	closemessage
 	delay 60
 	@ 2.5 Varnell calls
-	playse SE_POKENAV_CALL
-	waitse
+	pokenavcall Aria_Ch2_Text_Varnell
+	waitmessage
 	delay 20
-	playse SE_POKENAV_CALL
-	waitse
-	setspeaker SP_NAME_VARNELL
-	msgbox Aria_Ch2_Text_Varnell, MSGBOX_DEFAULT
-	closemessage
 	setvar VAR_ARIA_STORY, 8
 	releaseall
 	end
@@ -245,24 +240,30 @@ Aria_Ch2_Text_Seal::
 Aria_Ch2_Text_HeldUp::
 	.string "{PLAYER} held up the Rift Scanner.$"
 
-Aria_Ch2_Text_Varnell::
-	.string "{PLAYER}! My instruments just went\n"
-	.string "quiet. That was you, wasn't it?\p"
-	.string "Remarkable. Truly. Do you know how\n"
-	.string "long I've spent watching these\l"
-	.string "readings from behind a screen?\p"
+Aria_Ch2_Text_Varnell:: @ PokéNav call (owner 2026-11-14: Varnell talks to you through the PokéNav)
+	.string "… … … … … …\n"
+	.string "… … … … … Beep!\p"
+	.string "Varnell: {PLAYER}! My\n"
+	.string "instruments just went quiet.\l"
+	.string "That was you, wasn't it?\p"
+	.string "Remarkable. Truly. Do you know\n"
+	.string "how long I've spent watching\l"
+	.string "these readings from behind a\l"
+	.string "screen?\p"
 	.string "And you closed one on your first\n"
 	.string "day. Samuel was right about you.\p"
 	.string "The data's coming through now.\n"
 	.string "It's... more than I hoped. Much\l"
 	.string "more.\p"
 	.string "Rest a little. Then head on to\n"
-	.string "Cerulean. There've been reports from\l"
-	.string "the city, and I don't like the sound\l"
-	.string "of them.\p"
-	.string "Oh, and {PLAYER}... thank you. You\n"
-	.string "have no idea how much this means to\l"
-	.string "me.$"
+	.string "Cerulean. There've been reports\l"
+	.string "from the city, and I don't like\l"
+	.string "the sound of them.\p"
+	.string "Oh, and {PLAYER}... thank you.\n"
+	.string "You have no idea how much this\l"
+	.string "means to me.\p"
+	.string "… … … … … …\n"
+	.string "… … … … … Click!$"
 
 Aria_Ch2_Text_Blue::
 	.string "......\p"

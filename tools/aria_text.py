@@ -5,10 +5,11 @@ Usage (from Python): from aria_text import strings; print(strings(["box 1", "box
 import textwrap
 WIDTH = 36  # FireRed message box, roughly; check in game
 
-def strings(boxes, end="$"):
+def strings(boxes, end="$", width=None):
+    W = width or WIDTH
     out = []
     for bi, box in enumerate(boxes):
-        lines = textwrap.wrap(box, WIDTH) or [""]
+        lines = textwrap.wrap(box, W) or [""]
         for li, ln in enumerate(lines):
             last_line = li == len(lines) - 1
             if last_line:
@@ -20,3 +21,12 @@ def strings(boxes, end="$"):
             ln = ''.join(next(q) if ch == '"' else ch for ch in ln)  # straight quotes -> curly (charmap)
             out.append('\t.string "%s%s"' % (ln, term))
     return "\n".join(out)
+
+
+def call_strings(speaker, boxes):
+    """A PokéNav call (pokenavcall): rings, 'Speaker: ...', hang-up click — Emerald's own format."""
+    out = ['\t.string "… … … … … …\\n"', '\t.string "… … … … … Beep!\\p"']
+    boxes = list(boxes)
+    boxes[0] = speaker + ": " + boxes[0]
+    body = strings(boxes, end="\\p", width=32)
+    return "\n".join(out) + "\n" + body + '\n\t.string "… … … … … …\\n"\n\t.string "… … … … … Click!$"'

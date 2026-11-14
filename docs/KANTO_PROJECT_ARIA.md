@@ -381,4 +381,6 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   burning when he was pulled through. He begs you not to close the tear (he'd go back into the fire). Varnell
   calls: you must — altering time could be catastrophic. As he fades he screams "It burns!" Afterwards Varnell
   is strangely excited but hides it (a person moved across time is possible) — this is what leads him to Dialga.
+- 2026-11-14 (owner): **Varnell (and other callers) talk to the player through the PokéNav** — Emerald's
+  `pokenavcall` window (rings, 'Name: ...', click), built with `call_strings()` in `tools/aria_text.py`.
 

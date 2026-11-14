@@ -106,22 +106,17 @@ Aria_Ch3_KiyoshiStop::
 	delay 30
 Aria_Ch3_CloseTear::
 	@ the Rift Scanner starts beeping
-	playse SE_POKENAV_CALL
+	playse SE_SELECT @ the Rift Scanner beeping
 	delay 30
-	playse SE_POKENAV_CALL
+	playse SE_SELECT @ the Rift Scanner beeping
 	delay 20
 	setspeaker SP_NAME_KIYOSHI
 	msgbox Aria_Ch3_Text_KiyoshiPlead, MSGBOX_DEFAULT
 	closemessage
 	@ Varnell calls
-	playse SE_POKENAV_CALL
-	waitse
-	delay 16
-	playse SE_POKENAV_CALL
-	waitse
-	setspeaker SP_NAME_VARNELL
-	msgbox Aria_Ch3_Text_Varnell1, MSGBOX_DEFAULT
-	closemessage
+	pokenavcall Aria_Ch3_Text_Varnell1
+	waitmessage
+	delay 20
 	delay 30
 	msgbox Aria_Ch3_Text_Silence, MSGBOX_DEFAULT
 	msgbox Aria_Ch3_Text_HeldUp, MSGBOX_DEFAULT
@@ -163,14 +158,9 @@ Aria_Ch3_CloseTear::
 	closemessage
 	delay 40
 	@ 3.6 Varnell calls again
-	playse SE_POKENAV_CALL
-	waitse
-	delay 16
-	playse SE_POKENAV_CALL
-	waitse
-	setspeaker SP_NAME_VARNELL
-	msgbox Aria_Ch3_Text_Varnell2, MSGBOX_DEFAULT
-	closemessage
+	pokenavcall Aria_Ch3_Text_Varnell2
+	waitmessage
+	delay 20
 	setvar VAR_ARIA_STORY, 12
 	releaseall
 	end
@@ -258,18 +248,23 @@ Aria_Ch3_Text_KiyoshiPlead::
 	.string "still feel the heat. Please. Let me\l"
 	.string "stay.$"
 
-Aria_Ch3_Text_Varnell1::
-	.string "{PLAYER}, I'm seeing your readings.\n"
-	.string "Listen to me very carefully.\p"
-	.string "I know what he's asking. I know how\n"
-	.string "it sounds.\p"
-	.string "But he isn't supposed to be here. If\n"
-	.string "he stays, everything he would have\l"
-	.string "done, everything that came after\l"
-	.string "him... We cannot change time. Not\l"
-	.string "even for one man. It could be\l"
-	.string "catastrophic.\p"
-	.string "Close it. Please.$"
+Aria_Ch3_Text_Varnell1:: @ PokéNav call (owner 2026-11-14: Varnell talks to you through the PokéNav)
+	.string "… … … … … …\n"
+	.string "… … … … … Beep!\p"
+	.string "Varnell: {PLAYER}, I'm seeing\n"
+	.string "your readings. Listen to me very\l"
+	.string "carefully.\p"
+	.string "I know what he's asking. I know\n"
+	.string "how it sounds.\p"
+	.string "But he isn't supposed to be\n"
+	.string "here. If he stays, everything he\l"
+	.string "would have done, everything that\l"
+	.string "came after him... We cannot\l"
+	.string "change time. Not even for one\l"
+	.string "man. It could be catastrophic.\p"
+	.string "Close it. Please.\p"
+	.string "… … … … … …\n"
+	.string "… … … … … Click!$"
 
 Aria_Ch3_Text_Silence::
 	.string "......$"
@@ -299,24 +294,31 @@ Aria_Ch3_Text_BillAfter::
 	.string "...Go on. I need to sit down for a\n"
 	.string "while.$"
 
-Aria_Ch3_Text_Varnell2::
-	.string "{PLAYER}. Are you all right?\p"
-	.string "I'm sorry you had to be the one to\n"
-	.string "do that. I mean that.\p"
+Aria_Ch3_Text_Varnell2:: @ PokéNav call (owner 2026-11-14: Varnell talks to you through the PokéNav)
+	.string "… … … … … …\n"
+	.string "… … … … … Beep!\p"
+	.string "Varnell: {PLAYER}. Are you all\n"
+	.string "right?\p"
+	.string "I'm sorry you had to be the one\n"
+	.string "to do that. I mean that.\p"
 	.string "......\p"
-	.string "But do you understand what we just\n"
-	.string "saw? A living person. Carried a\l"
-	.string "hundred and fifty years, whole.\l"
-	.string "Breathing. Speaking. Himself.\p"
-	.string "I've read every theory there is, and\n"
-	.string "every one of them said it couldn't\l"
-	.string "be done.\p"
+	.string "But do you understand what we\n"
+	.string "just saw? A living person.\l"
+	.string "Carried a hundred and fifty\l"
+	.string "years, whole. Breathing.\l"
+	.string "Speaking. Himself.\p"
+	.string "I've read every theory there is,\n"
+	.string "and every one of them said it\l"
+	.string "couldn't be done.\p"
 	.string "...Forgive me. A man suffered\n"
-	.string "tonight, and here I am talking about\l"
-	.string "theories. It's been a long night.\p"
+	.string "tonight, and here I am talking\l"
+	.string "about theories. It's been a long\l"
+	.string "night.\p"
 	.string "Get some rest. Misty's Gym is in\n"
-	.string "Cerulean, if you're ready for it.\l"
-	.string "I'll be in touch.$"
+	.string "Cerulean, if you're ready for\l"
+	.string "it. I'll be in touch.\p"
+	.string "… … … … … …\n"
+	.string "… … … … … Click!$"
 
 Aria_Ch3_Text_BillLater::
 	.string "I keep hearing it. That scream.\n"
