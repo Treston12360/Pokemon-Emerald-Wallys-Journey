@@ -89,7 +89,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       map → R shows Kanto (Pallet Town) → L back to Hoenn; R then A on Pallet Town flies there. Test-script command
       `flymap` opens the Fly map from the field. Not done: no on-screen hint that L/R switch (wording/visual — ask
       the owner first).
-- [ ] **K7. Kanto in 3D.** WIP (Claude session 019khs4X, 2026-11-13). Done so far: the 3DS generators' map reader
+- [ ] **K7. Kanto in 3D.** PAUSED 2026-11-13 (owner: story first, then 3D). Also done: `voxel_cells.py` reads FireRed's 32-bit attributes and 640 split (`split_for`, `read_attr16`), water lookups in relief fixes / buildings too. Done so far: the 3DS generators' map reader
       reads FireRed layouts (`layout_version: frlg` → 640/640 split, 7 palettes, `*_frlg` tileset folders;
       `voxel_building.py` LayoutArt, `dump_region_art.py` Tilesets — in `tools/voxel3ds/our_changes.patch`); Pallet
       Town composes correctly. **Left (big):** the rest of the generators still assume 512 (`NUM_PRIMARY` in
@@ -112,7 +112,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 
 ## Phase 2 — Story (see `docs/KANTO_PROJECT_ARIA.md` chapters)
 
-- [ ] **S0. Remove FRLG's own story start** (Oak's parcel, rival intro etc.) where it conflicts.
+- [ ] **S0. Remove FRLG's own story start** WIP (Claude session 019khs4X, 2026-11-13 19:25) (Oak's parcel, rival intro etc.) where it conflicts.
 - [ ] **S1. Chapter 0 — the call:** Mom → Birch → S.S. Anne ticket; Wally's send-off at Slateport.
 - [ ] **S2. Chapter 0b — arrival:** S.S. Anne to Vermilion, fade to black, Oak's lab in Pallet.
 - [ ] **S3. Chapter 1 — the investigation team:** Oak, Varnell, Blue; first assignment (Mt. Moon).

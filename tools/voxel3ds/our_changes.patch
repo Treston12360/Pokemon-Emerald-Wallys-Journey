@@ -54,7 +54,7 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/dump_region_art.py b/3ds_port/scrip
              for x in range(8):
 diff -u -r -x __pycache__ a/3ds_port/scripts/gen_voxel_buildings.py b/3ds_port/scripts/gen_voxel_buildings.py
 --- a/3ds_port/scripts/gen_voxel_buildings.py	2026-11-12 05:40:19.867423670 -0600
-+++ b/3ds_port/scripts/gen_voxel_buildings.py	2026-11-12 06:11:43.789180081 -0600
++++ b/3ds_port/scripts/gen_voxel_buildings.py	2026-11-13 19:06:23.488213883 -0600
 @@ -917,7 +917,10 @@
                  or {"0", "NULL"} & {entry.get("primary_tileset"), entry.get("secondary_tileset")}
                  or not os.path.exists(os.path.join(vb.ROOT, entry["blockdata_filepath"]))):
@@ -67,6 +67,27 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/gen_voxel_buildings.py b/3ds_port/s
  
  
  # Where the diagnostic images go (a room's claims): main sets it when it
+@@ -3239,9 +3242,9 @@
+         out = set()
+         for which, ts in enumerate((primary, secondary)):
+             if ts in vc.ATTRIBUTES:
+-                for k, a in enumerate(vc.read_u16(vc.ATTRIBUTES[ts])):
++                for k, a in enumerate(vc.read_attr16(ts)):     # WJ (ARIA K7): FireRed's too
+                     if (a & 0xFF) in vc.WATER:
+-                        out.add(k + which * vb.NUM_PRIMARY)
++                        out.add(k + which * vc.split_for(primary))
+         _WATER[(primary, secondary)] = out
+     return _WATER[(primary, secondary)]
+ 
+@@ -4632,7 +4635,7 @@
+                 if not (0 <= x < e["width"] and 0 <= y < e["height"]):
+                     continue    # across a seam: the map next door draws it
+                 mt = blocks_of[lid][y * e["width"] + x] & 0x3FF
+-                ts = e["primary_tileset"] if mt < vb.NUM_PRIMARY else e["secondary_tileset"]
++                ts = e["primary_tileset"] if mt < vc.split_for(e["primary_tileset"]) else e["secondary_tileset"]
+                 out.setdefault((ts, mt, q), index_of[lid])
+     variants = sorted((lid, mt, q) for (ts, mt, q), lid in out.items())
+     if len(variants) > MAX_VARIANTS:
 diff -u -r -x __pycache__ a/3ds_port/scripts/gen_voxel_relief.py b/3ds_port/scripts/gen_voxel_relief.py
 --- a/3ds_port/scripts/gen_voxel_relief.py	2026-11-12 05:40:19.867423670 -0600
 +++ b/3ds_port/scripts/gen_voxel_relief.py	2026-11-12 06:59:48.818457631 -0600
@@ -332,3 +353,120 @@ diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_building_specs.py b/3ds_port/
      }
      for layout, width, height, ground, plain_x, doors, *extra in STAIR_ROOMS
  ] + [
+diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_cells.py b/3ds_port/scripts/voxel_cells.py
+--- a/3ds_port/scripts/voxel_cells.py	2026-11-12 05:40:19.869405517 -0600
++++ b/3ds_port/scripts/voxel_cells.py	2026-11-13 19:06:23.488644956 -0600
+@@ -114,6 +114,35 @@
+ ATTRIBUTES = _incbin(r"gMetatileAttributes_(\w+)\[\]\s*=\s*INCBIN_U16\(\"([^\"]+)\"\)")
+ 
+ 
++# WJ (Project ARIA K7): the tilesets FireRed's layouts use - 640-metatile primaries, 32-bit attributes
++def _frlg_tilesets():
++    with open(os.path.join(ROOT, "data", "layouts", "layouts.json"), encoding="utf-8") as f:
++        out = set()
++        for e in json.load(f)["layouts"]:
++            if e.get("layout_version") == "frlg":
++                out.add(e.get("primary_tileset"))
++                out.add(e.get("secondary_tileset"))
++    return out
++
++
++FRLG_TILESETS = _frlg_tilesets()
++
++
++def split_for(primary):
++    """Where a layout's metatiles go over from its primary tileset to its secondary."""
++    return 640 if primary in FRLG_TILESETS else NUM_PRIMARY
++
++
++def read_attr16(tileset):
++    """A tileset's metatile attributes in Emerald's 16-bit form (FireRed's are 32-bit: behaviour bits 0-8,
++    layer type bits 29-30)."""
++    if tileset not in FRLG_TILESETS:
++        return read_u16(ATTRIBUTES[tileset])
++    raw = open(ATTRIBUTES[tileset], "rb").read()
++    vals = struct.unpack("<%dI" % (len(raw) // 4), raw[:len(raw) // 4 * 4])
++    return [(v & 0xFF) | (((v >> 29) & 3) << 12) for v in vals]
++
++
+ def read_u16(path):
+     raw = open(path, "rb").read()
+     return list(struct.unpack("<%dH" % (len(raw) // 2), raw[:len(raw) // 2 * 2]))
+@@ -175,8 +204,13 @@
+         self.blocks = read_u16(os.path.join(ROOT, entry["blockdata_filepath"]))
+         self.primary = entry["primary_tileset"]
+         self.secondary = entry["secondary_tileset"]
+-        self.attr = (read_u16(ATTRIBUTES[self.primary]) if self.primary in ATTRIBUTES else [],
+-                     read_u16(ATTRIBUTES[self.secondary]) if self.secondary in ATTRIBUTES else [])
++        # WJ (Project ARIA K7): a FireRed layout splits at 640 and its attributes are 32-bit (behaviour bits
++        # 0-8, layer type bits 29-30); handed on in Emerald's 16-bit form, as voxel_world.c does
++        self.frlg = entry.get("layout_version") == "frlg"
++        self.num_primary = 640 if self.frlg else NUM_PRIMARY
++        read_attr = read_attr16
++        self.attr = (read_attr(self.primary) if self.primary in ATTRIBUTES else [],
++                     read_attr(self.secondary) if self.secondary in ATTRIBUTES else [])
+         self.outdoor = self.layout_id in events.outdoor
+         self.warps = sorted(events.warps.get(self.layout_id, ()))
+         self.signs = events.signs.get(self.layout_id, set())
+@@ -206,9 +240,9 @@
+     def attributes(self, metatile):
+         if metatile is None:
+             return 0
+-        which = 0 if metatile < NUM_PRIMARY else 1
++        which = 0 if metatile < self.num_primary else 1
+         table = self.attr[which]
+-        index = metatile - which * NUM_PRIMARY
++        index = metatile - which * self.num_primary
+         return table[index] if index < len(table) else 0
+ 
+     def behaviour(self, x, y):
+@@ -350,16 +384,16 @@
+         if (x, y) in self.signs:
+             return True
+         m = self.metatile(x, y)
+-        if m >= NUM_PRIMARY and m in NOT_POSTS.get(self.secondary, ()):
++        if m >= self.num_primary and m in NOT_POSTS.get(self.secondary, ()):
+             return False
+-        if m < NUM_PRIMARY and self.primary == "gTileset_General" and m in MOUNTAIN_ROCK:
++        if m < self.num_primary and self.primary == "gTileset_General" and m in MOUNTAIN_ROCK:
+             return False
+-        if m >= NUM_PRIMARY and self.mountain_drawn(m):
++        if m >= self.num_primary and self.mountain_drawn(m):
+             return False
+         # a corner of a mountain's outline: a little of its rock, the
+         # mountain drawn on beside it (Route 114's corners over its grass,
+         # mostly grass themselves, stood as signs on the plateau's edge)
+-        if m >= NUM_PRIMARY and self.rock_pixels(m) and any(
++        if m >= self.num_primary and self.rock_pixels(m) and any(
+                 not self.off_map(x + dx, y + dy) and self.mountain_drawn(self.metatile(x + dx, y + dy))
+                 for dx, dy in ((1, 0), (-1, 0), (0, 1))):
+             return False
+@@ -450,7 +484,7 @@
+ 
+ def post_key(layout, metatile):
+     """A metatile as the tileset it is drawn from names it."""
+-    return (layout.primary if metatile < NUM_PRIMARY else layout.secondary, metatile)
++    return (layout.primary if metatile < getattr(layout, "num_primary", NUM_PRIMARY) else layout.secondary, metatile)
+ 
+ 
+ def post_metatiles(events):
+diff -u -r -x __pycache__ a/3ds_port/scripts/voxel_relief_fixes.py b/3ds_port/scripts/voxel_relief_fixes.py
+--- a/3ds_port/scripts/voxel_relief_fixes.py	2026-11-12 05:40:19.869405517 -0600
++++ b/3ds_port/scripts/voxel_relief_fixes.py	2026-11-13 19:06:23.486819341 -0600
+@@ -396,12 +396,13 @@
+     """A metatile of a layout's tilesets the console lays as water
+     (voxel_cells.WATER, voxel_world.c BehaviorShape)."""
+     import voxel_cells as vc
+-    second = metatile >= vc.NUM_PRIMARY
++    split = vc.split_for(entry["primary_tileset"])      # WJ (ARIA K7): FireRed splits at 640
++    second = metatile >= split
+     tileset = entry["secondary_tileset" if second else "primary_tileset"]
+     if tileset not in vc.ATTRIBUTES:
+         return False
+-    table = vc.read_u16(vc.ATTRIBUTES[tileset])
+-    i = metatile - (vc.NUM_PRIMARY if second else 0)
++    table = vc.read_attr16(tileset)
++    i = metatile - (split if second else 0)
+     return i < len(table) and (table[i] & 0xFF) in vc.WATER
+ 
+ 
