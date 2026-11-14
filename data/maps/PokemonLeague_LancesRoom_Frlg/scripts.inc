@@ -162,7 +162,7 @@ PokemonLeague_LancesRoom_Movement_LanceMoveOutOfWayRight::
 	step_end
 
 PokemonLeague_LancesRoom_Text_Intro:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.2)
-	.string "Fwahahaha! So the traveller from\n"
+	.string "Fwahahaha! So the traveler from\n"
 	.string "Hoenn reaches my chamber at last.\p"
 	.string "I am Koga of the Elite Four! I live\n"
 	.string "in the shadows, a master of the\l"
@@ -180,7 +180,7 @@ PokemonLeague_LancesRoom_Text_Intro:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIP
 	.string "Prepare yourself!$"
 
 PokemonLeague_LancesRoom_Text_RematchIntro:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.2)
-	.string "Fwahahaha! So the traveller from\n"
+	.string "Fwahahaha! So the traveler from\n"
 	.string "Hoenn reaches my chamber at last.\p"
 	.string "I am Koga of the Elite Four! I live\n"
 	.string "in the shadows, a master of the\l"

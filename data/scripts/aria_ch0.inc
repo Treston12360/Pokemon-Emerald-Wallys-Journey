@@ -86,7 +86,7 @@ Aria_Ch0_Text_MomCall:: @ 0.1
 	.string "...I don't think I'll ever get tired\n"
 	.string "of saying that.\p"
 	.string "The phone hasn't stopped ringing,\n"
-	.string "you know. Reporters, neighbours,\l"
+	.string "you know. Reporters, neighbors,\l"
 	.string "people I haven't heard from since we\l"
 	.string "left Johto. Everybody wants to say\l"
 	.string "they know you.\p"
@@ -285,7 +285,7 @@ Aria_Ch0_Text_WallyAfter:: @ 0.4 repeat (not in script doc)
 
 Aria_Ch0_Text_Sailor:: @ 0.5
 	.string "Sailor: Ticket, please. ...The\n"
-	.string "Champion! It's an honour. Welcome\l"
+	.string "Champion! It's an honor. Welcome\l"
 	.string "aboard the S.S. Anne.$"
 
 Aria_Ch0_Text_SailorNotYet:: @ 0.5 before Wally / no ticket (not in script doc)

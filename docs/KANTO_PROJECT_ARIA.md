@@ -364,4 +364,8 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
 - 2026-11-14 (owner): **Kanto is more narrative-driven than Hoenn:** more dialogue and more scripted events.
   Reuse places that are now empty (old Rocket spots, the hideouts) and areas vanilla FRLG left pointless or
   unexplored — give them a purpose in the story.
+- 2026-11-14 (owner): **American spelling** in all game text (players are American): color, honor, neighbor...
+- 2026-11-14 (owner): **Blue crosses paths with the player now and then** (same investigation) — not every
+  chapter, but eventually; each meeting builds his respect until they investigate together (§2b). First one:
+  leaving Mt. Moon (ch. 2.6 draft).
 

@@ -3,6 +3,7 @@
 **Spoiler file.** Owner (Treston) writes/approves everything here before it goes in the game. Status per scene:
 **DRAFT** (waiting for owner) · **APPROVED** (owner OK, not in game yet) · **IN GAME**.
 One `>` line = one text box. Owner edits win; mark what changed. Story source: `docs/KANTO_PROJECT_ARIA.md` §3.
+Owner rule (2026-11-14): **American spelling** (color, honor, neighbor, traveler...) — the players are American.
 Owner rule (2026-11-13): longer dialogue is welcome when it makes a scene land; every NPC and trainer gets
 lines that fit who they are.
 
@@ -15,7 +16,7 @@ lines that fit who they are.
 **0.1 Mom (downstairs, by the TV)**
 > MOM: Well, look who's up! Good morning, Champion.
 > ...I don't think I'll ever get tired of saying that.
-> The phone hasn't stopped ringing, you know. Reporters, neighbours, people I haven't heard from since we
+> The phone hasn't stopped ringing, you know. Reporters, neighbors, people I haven't heard from since we
 > left Johto. Everybody wants to say they know you.
 > Oh! One of those calls was Professor Birch.
 > He asked you to come over to the lab as soon as you're up. He said it wasn't urgent...
@@ -68,7 +69,7 @@ lines that fit who they are.
 > I'll keep the seat warm for you. And come back. I still owe you a rematch.
 
 **0.5 Boarding**
-> SAILOR: Ticket, please. ...The Champion! It's an honour. Welcome aboard the S.S. Anne.
+> SAILOR: Ticket, please. ...The Champion! It's an honor. Welcome aboard the S.S. Anne.
 > (Owner 2026-11-14: no cut to black — the player is on the real S.S. Anne for the voyage: explore it and battle
 > its trainers (new lines, task S-ANNE). Stepping off the ship = docked in Vermilion → 0b.)
 
@@ -173,7 +174,7 @@ Lineup (owner 2026-11-14): Blue = Viridian Gym (8th); Janine = Fuchsia; Elite Fo
 > **(talk again)** BLUE: Don't make that face. Losing to you doesn't feel like losing to Red did. / Go win it. Then tell Gramps and Varnell yourself. They'll want to hear it from you.
 
 **L.2 Koga — Elite Four, 4th room** (v2: his real voice — HGSS/FRLG Koga: "Fwahahaha!", ninja of the shadows, proud father)
-> Fwahahaha! So the traveller from Hoenn reaches my chamber at last.
+> Fwahahaha! So the traveler from Hoenn reaches my chamber at last.
 > I am Koga of the Elite Four! I live in the shadows, a master of the ninja arts!
 > I left the Fuchsia Gym to my daughter, Janine. She told me of her battle with you. She did not hide that she lost.
 > Good. A ninja must face defeat honestly before she can rise above it.
@@ -182,7 +183,7 @@ Lineup (owner 2026-11-14): Blue = Viridian Gym (8th); Janine = Fuchsia; Elite Fo
 > **(defeat)** KOGA: Fwaha... Ah! You have proven your worth!
 > **(after)** KOGA: Your strength is no accident. Janine was right to respect it. / Go. The Champion awaits. Show him what you have shown me.
 
-**L.3 Lance — Champion** (v2: his real voice — the Dragon Master, honourable, protector of Kanto)
+**L.3 Lance — Champion** (v2: his real voice — the Dragon Master, honorable, protector of Kanto)
 > I've been waiting for you, {PLAYER}.
 > I knew the day would come when a trainer from another region stood in this room.
 > I am Lance, the Dragon Master, and the Champion of Kanto.
@@ -208,7 +209,7 @@ through": **Minior** (Alola's meteor Pokémon — fits "meteorite anomaly"). Own
 > HIKER: Hey, hold on! You're not heading in there alone, are you?
 > I've walked these tunnels for twenty years. I know every echo in this mountain.
 > Three nights ago the lights started. Down on the lowest floor, by the old crater.
-> Not torchlight. Not Clefairy. A colour I don't have a word for.
+> Not torchlight. Not Clefairy. A color I don't have a word for.
 > My Geodude won't go past the second floor any more. It just sits down and won't budge.
 > ...You've got that look. The one people get right before they do something stupid.
 > Fine. If you see it, don't touch it. And if the ground starts humming, run.
@@ -248,4 +249,18 @@ through": **Minior** (Alola's meteor Pokémon — fits "meteorite anomaly"). Own
 > The data's coming through now. It's... more than I hoped. Much more.
 > Rest a little. Then head on to Cerulean. There've been reports from the city, and I don't like the sound of them.
 > Oh, and {PLAYER}... thank you. You have no idea how much this means to me.
+
+**2.6 Blue — on the way out of Mt. Moon (Route 4 exit), scripted**
+(Owner 2026-11-14: Blue is chasing the same anomalies, so you run into him from time to time — not every
+chapter. He's cold at first; respect builds over these meetings until you investigate together.)
+> BLUE: ......
+> So it was you.
+> My readings on that crater went flat ten minutes ago. A week of data, and it just stopped.
+> I was going to close it myself. Tonight. I had the whole thing mapped.
+> ...Whatever. It's closed. That's what matters.
+> Did it give you anything? Before it went? A pattern, a pulse, anything?
+> ......
+> Figures. That scanner of Varnell's reads everything and tells you nothing.
+> Next time you find one, don't just slam it shut. Look at it first.
+> (He walks past you, into the mountain.)
 
