@@ -191,6 +191,10 @@ Lineup (owner 2026-11-14): Blue = Viridian Gym (8th); Janine = Fuchsia; Elite Fo
 > **(defeat)** LANCE: ......It's over. Ha! I can't remember the last time I lost like that.
 > **(after)** LANCE: You've earned the Hall of Fame. Kanto's, this time.
 > Come on. I'll walk you in.
-> (Hall of Fame. Ch. 11's vault scene comes after this and is written with that chapter.)
+> **(Hall of Fame — Lance in Oak's FireRed spot)** LANCE: This is the Hall of Fame.
+> Every trainer who has beaten this League is recorded here, along with the Pokémon who got them through it.
+> {PLAYER}. You've worked hard for this.
+> Congratulations. You and your Pokémon are part of Kanto's Hall of Fame now.
+> (Ch. 11's vault scene comes after this and is written with that chapter.)
 
 **L.4 Janine — Fuchsia Gym**: waiting on her sprite (see owner question); lines drafted with chapter 7.

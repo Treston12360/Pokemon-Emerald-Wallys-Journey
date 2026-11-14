@@ -53,18 +53,14 @@ PokemonLeague_HallOfFame_Movement_EnterRoom::
 	walk_up
 	step_end
 
-PokemonLeague_HallOfFame_Text_OakCongratulations::
-	.string "Oak: Er-hem!\n"
-	.string "Congratulations, {PLAYER}!\p"
-	.string "This floor is the Pokémon Hall Of\n"
-	.string "Fame.\p"
-	.string "Pokémon League Champions are\n"
-	.string "honored for their exploits here.\p"
-	.string "Their Pokémon are also recorded in\n"
-	.string "the Hall Of Fame.\p"
-	.string "{PLAYER}!\p"
-	.string "You have worked hard to become\n"
-	.string "the new League Champion.\p"
-	.string "Congratulations, {PLAYER}, you and\n"
-	.string "your Pokémon are Hall Of Famers!$"
+PokemonLeague_HallOfFame_Text_OakCongratulations:: @ ARIA S-LEAGUE draft: Lance, not Oak (docs/KANTO_SCRIPT.md L.3)
+	.string "This is the Hall of Fame.\p"
+	.string "Every trainer who has beaten this\n"
+	.string "League is recorded here, along with\l"
+	.string "the Pokémon who got them through it.\p"
+	.string "{PLAYER}. You've worked hard for\n"
+	.string "this.\p"
+	.string "Congratulations. You and your\n"
+	.string "Pokémon are part of Kanto's Hall of\l"
+	.string "Fame now.$"
 
