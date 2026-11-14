@@ -3,6 +3,10 @@
 Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 **"Continue Project ARIA"** (repo `Treston12360/Pokemon-Emerald-Wallys-Journey`, file `docs/KANTO_TASKS.md`).
 
+> **Build gotcha (2026-11-14):** after changing map scripts/text, run `make release`, then `touch data/*.s` before
+> `make -f Makefile.pc`. The PC build doesn't see changes in files that `data/*.s` include, so it can say
+> "Nothing to be done" and keep the old text. Check the binary's time before testing.
+
 ## Rules for every session (people and AIs)
 
 1. Read first, in order: `docs/KANTO_PROJECT_ARIA.md` (story + design, every owner decision),
