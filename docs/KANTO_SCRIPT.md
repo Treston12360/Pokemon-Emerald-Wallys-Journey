@@ -348,16 +348,36 @@ excited and hides it. Name below is a placeholder (owner to choose). His team: o
 Owner 2026-11-14: the S.S. Anne has sailed; Blue's spot in Vermilion NOT decided (3b.1 is a placeholder spot); Rock Tunnel is the only way to Lavender
 and should be scary — the Clefairy's cry building up ("Ar...." → "Ari....").
 
-**3b.1 Blue — in Vermilion (spot TBD by owner; draft assumes outside Diglett's Cave)**
-> BLUE: ......
-> Don't look at me like that. I'm not following you.
-> Something's been coming up through Diglett's Cave. Diglett are turning up in Viridian Forest, in Pewter,
-> in people's gardens. Like the ground's being pushed from somewhere underneath.
-> ...No tear down there, though. I checked. Twice.
-> You beat Misty yet? ......Huh. Fine.
-> Surge's Gym is right there. He's loud, he's tough, and he hates losing more than anyone I know.
+**3b.1 Blue — in Vermilion (owner 2026-11-14: he tells you about Varnell's daughter here; exact spot TBD,
+draft assumes the empty dock where the S.S. Anne was)**
+> BLUE: ......Oh. It's you.
+> You closed the one out by Bill's place. I heard. ...Bill told me what happened.
+> ......
+> Look. You're working with Varnell now, so you should probably know something.
+> He had a daughter. She was killed in the Rocket attacks. Years ago, before any of this.
+> He doesn't talk about it. Ever. I don't even know her name.
+> But after that he threw himself into his work like it was the only thing keeping him standing.
+> The tears, the readings, all of it. He's taken it further than anyone thought was possible.
+> ......After I lost to Red, I didn't have anything either. He's the one who took me in.
+> Gave me work. Gave me a reason to get up in the morning.
+> I guess we've been keeping each other going.
+> ...So don't let him down. That's all.
+> Surge's Gym is in town. He's loud, he's tough, and he hates losing more than anyone I know.
 > You'll like him.
-> (He walks into Diglett's Cave.)
+
+**3b.1b Varnell — first meeting, Route 11 gate 2F (an old Oak aide spot) — he explains Project ARIA**
+> VARNELL: {PLAYER}! Thank you for coming. I wanted to thank you in person — what you did at Mt. Moon,
+> and at Bill's... I'm sorry that was the one you had to close.
+> I owe you an explanation. You've been sealing tears with my scanner. Let me tell you what that data is for.
+> For years I've been building a machine. The only one of its kind. It reads the tears, maps where space is
+> thinnest, and in time, I believe, it will close them for good. All of them, at once.
+> I call it ARIA. Project ARIA. Everything my team does, everything you've been doing, feeds into it.
+> Every tear you close tells ARIA a little more about where the next one will open.
+> It isn't finished. It needs parts — some I can build, some I can't. That's where I could use your help.
+> Old Rocket sites. Meteorite fragments. Things that were never meant to be found again.
+> I'll tell you more when I know what I need. For now... rest. Surge's Gym is just over there.
+> And {PLAYER}... the road east, through Rock Tunnel. My readings from that tunnel are strange.
+> Be careful in there.
 
 **3b.2 Rock Tunnel — the cry (random, scripted on certain floor tiles, once each)**
 > (B1F, first time) ......

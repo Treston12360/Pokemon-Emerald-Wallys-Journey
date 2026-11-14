@@ -426,4 +426,6 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   **Lavender locals talk about a girl who was killed there during the Rocket attacks** (no name).
   Note: with the Clefairy crying "Aria", sharp players may now guess the project is named after her — that's
   the built-in misdirection (§2): they still won't guess he's trying to bring her back.
+- 2026-11-14 (owner): Blue tells the player about Varnell's daughter **in Vermilion (ch. 3b)**; **Varnell explains
+  Project ARIA at the first aide-spot meeting** (Route 11 gate 2F, ch. 3b). Drafts in KANTO_SCRIPT.md 3b.1/3b.1b.
 
