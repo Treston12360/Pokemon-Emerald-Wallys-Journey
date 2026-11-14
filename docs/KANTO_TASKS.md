@@ -89,11 +89,14 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       map → R shows Kanto (Pallet Town) → L back to Hoenn; R then A on Pallet Town flies there. Test-script command
       `flymap` opens the Fly map from the field. Not done: no on-screen hint that L/R switch (wording/visual — ask
       the owner first).
-- [ ] **K7. Kanto in 3D.** WIP (Claude session 019khs4X, 2026-11-13 19:05) Kanto must work in the 3D view too (owner 2026-11-13). The 3D data is made by Emerald 3DS's
-      generators (`tools/voxel3ds/README.md`); they skip every FRLG layout today ("WJTEST skipped layout ..._FRLG:
-      IndexError" — their reader expects Emerald's 512/512 tileset split, see K2). Fix the reader for FRLG tilesets,
-      then model Kanto's buildings/rooms the 3DS way (`voxel_building_specs.py`), and check Pallet, Viridian etc.
-      in 3D. Do K2 first.
+- [ ] **K7. Kanto in 3D.** WIP (Claude session 019khs4X, 2026-11-13). Done so far: the 3DS generators' map reader
+      reads FireRed layouts (`layout_version: frlg` → 640/640 split, 7 palettes, `*_frlg` tileset folders;
+      `voxel_building.py` LayoutArt, `dump_region_art.py` Tilesets — in `tools/voxel3ds/our_changes.patch`); Pallet
+      Town composes correctly. **Left (big):** the rest of the generators still assume 512 (`NUM_PRIMARY` in
+      `voxel_cells.py`, `voxel_terraces.py`, `gen_voxel_relief.py`, `voxel_bridge.py`, `gen_voxel_buildings.py`,
+      `voxel_relief_fixes.py`) and their tree/cliff/rock tables are Emerald's metatiles; Kanto's buildings and rooms
+      need modelling in `voxel_building_specs.py` the 3DS way (the 3DS port never did Kanto). Then regenerate
+      relief/trees/buildings and check Pallet, Viridian etc. in 3D.
 
 ## Also open on the 3D side (branch `deluxe-3d`, see docs/DELUXE_WORK_QUEUE.md)
 - **DLX-28 furniture in every house 3D** — mostly done 2026-11-13 (session 019khs4X), checked in game: Dewford hall
