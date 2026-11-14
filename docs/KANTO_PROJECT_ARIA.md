@@ -124,9 +124,10 @@ the clues, it's also the moment they learn Aria was his daughter and the project
 - **Varnell uses Blue too, and doesn't mind.** Blue's investigation data feeds ARIA. Bringing in the player
   is purely practical: he needs a Kanto badge holder's clearance, and Blue knows him and the lab too well
   — Blue would notice sooner. A stranger from Hoenn won't.
-- Saffron: Blue recognises ARIA markings from his time in the lab and starts to doubt the man who saved him.
-- The reveal hits Blue harder than the player: the man who gave him a second chance was using him all along. Viridian is Blue choosing to stand with the player against
-  his mentor — the turning point of his arc, not just the 8th badge.
+- **Owner 2026-11-14: Blue never suspects Varnell.** He is blindsided at the reveal, the same as the player.
+  No hints from Blue before ch. 12 (replaces the old "Saffron: Blue starts to doubt" and "Viridian: Blue stands against his mentor").
+- The reveal hits Blue harder than the player: the man who gave him a second chance was using him all along.
+  Viridian is Blue's own turning point as a trainer (his Gym, coming back after Red), not about Varnell.
 
 ## 2c. The gym challenge is clearance (the player's progress builds ARIA)
 
@@ -155,7 +156,7 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 3b | **Vermilion (on foot, as in FireRed)** | First real visit to Vermilion (the arrival was only the dock). | Lt. Surge (3rd Gym) |
 | 4 | **Lavender** | The ghost: an echo of a lost **Clefairy** searching the tower and crying out **"Aria"** (Aria's Pokémon; the player doesn't know who Aria is). Not Marowak. Varnell's "calibration lens" assignment (= Silph Scope) reveals it. Mr. Fuji's clue about the grieving father. Poké Flute. | — |
 | 5 | **Celadon / Snorlax** | Snorlax ×2 woken with the flute. Varnell's staff start acting cagey. | Erika |
-| 6 | **Saffron quarantine** | An ARIA containment machine malfunctions inside Silph Co.; the building warps (Silph's teleport maze). City sealed by Jenny and Silph security until you're cleared. You clear it; Master Ball. **Blue turns** — he saw the machine's markings and starts suspecting Varnell. | Sabrina |
+| 6 | **Saffron quarantine** | An ARIA containment machine malfunctions inside Silph Co.; the building warps (Silph's teleport maze). City sealed by Jenny and Silph security until you're cleared. You clear it; Master Ball. (Blue does NOT suspect Varnell — owner 2026-11-14.) | Sabrina |
 | 7 | **Fuchsia** | Blue shares what he's found, coldly. Safari side quest. | Janine |
 | 8 | **Seafoam** | Boulder/current puzzle. Blaine's temporary gym is here because Cinnabar's volcano is acting up (the tears). | Blaine (in Seafoam) |
 | 8b | **Rocket Hideout (late game)** | Sealed under the Game Corner by the League; opened with the player's badge clearance. Varnell sends you for Rocket's old research on the anomalies. **What Varnell really needs: Rocket's inventory list, showing the Griseous Orb (stolen by Rocket) went into League custody after Rocket fell.** Clues: Rocket's logs show **they stole his research** and were in Pokémon Tower that day because of his readings; a raid report mentions "a civilian child in the tower" (no name); a recent gap where tower-raid files were taken (players assume a thief — it was Varnell's people). Ties his grief to guilt without revealing the plan. | — |

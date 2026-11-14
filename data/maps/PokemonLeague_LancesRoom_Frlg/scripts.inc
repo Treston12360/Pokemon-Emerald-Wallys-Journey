@@ -161,41 +161,49 @@ PokemonLeague_LancesRoom_Movement_LanceMoveOutOfWayRight::
 	walk_in_place_faster_left
 	step_end
 
-PokemonLeague_LancesRoom_Text_Intro:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.2)
-	.string "Fa-ha-ha! You have come far,\n"
-	.string "traveller from Hoenn.\p"
-	.string "I am Koga of the Elite Four. Once I\n"
-	.string "ran the Fuchsia Gym. I left it to my\l"
-	.string "daughter, Janine.\p"
-	.string "You fought her, did you not? She\n"
-	.string "wrote to me about it. Three pages.\l"
-	.string "Most of them complaints.\p"
-	.string "A ninja's art is patience: poison\n"
-	.string "that works slowly, a trap that\l"
-	.string "waits.\p"
-	.string "Let us see whether a Champion can be\n"
-	.string "patient.$"
+PokemonLeague_LancesRoom_Text_Intro:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.2)
+	.string "Fwahahaha! So the traveller from\n"
+	.string "Hoenn reaches my chamber at last.\p"
+	.string "I am Koga of the Elite Four! I live\n"
+	.string "in the shadows, a master of the\l"
+	.string "ninja arts!\p"
+	.string "I left the Fuchsia Gym to my\n"
+	.string "daughter, Janine. She told me of her\l"
+	.string "battle with you. She did not hide\l"
+	.string "that she lost.\p"
+	.string "Good. A ninja must face defeat\n"
+	.string "honestly before she can rise above\l"
+	.string "it.\p"
+	.string "Now it is my turn. Confusion, sleep,\n"
+	.string "poison... my techniques strike from\l"
+	.string "where you cannot see!\p"
+	.string "Prepare yourself!$"
 
-PokemonLeague_LancesRoom_Text_RematchIntro:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.2)
-	.string "Fa-ha-ha! You have come far,\n"
-	.string "traveller from Hoenn.\p"
-	.string "I am Koga of the Elite Four. Once I\n"
-	.string "ran the Fuchsia Gym. I left it to my\l"
-	.string "daughter, Janine.\p"
-	.string "You fought her, did you not? She\n"
-	.string "wrote to me about it. Three pages.\l"
-	.string "Most of them complaints.\p"
-	.string "A ninja's art is patience: poison\n"
-	.string "that works slowly, a trap that\l"
-	.string "waits.\p"
-	.string "Let us see whether a Champion can be\n"
-	.string "patient.$"
+PokemonLeague_LancesRoom_Text_RematchIntro:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.2)
+	.string "Fwahahaha! So the traveller from\n"
+	.string "Hoenn reaches my chamber at last.\p"
+	.string "I am Koga of the Elite Four! I live\n"
+	.string "in the shadows, a master of the\l"
+	.string "ninja arts!\p"
+	.string "I left the Fuchsia Gym to my\n"
+	.string "daughter, Janine. She told me of her\l"
+	.string "battle with you. She did not hide\l"
+	.string "that she lost.\p"
+	.string "Good. A ninja must face defeat\n"
+	.string "honestly before she can rise above\l"
+	.string "it.\p"
+	.string "Now it is my turn. Confusion, sleep,\n"
+	.string "poison... my techniques strike from\l"
+	.string "where you cannot see!\p"
+	.string "Prepare yourself!$"
 
-PokemonLeague_LancesRoom_Text_Defeat:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.2)
-	.string "Hmph... Janine was right about you.\n"
-	.string "Do not tell her I said so.$"
+PokemonLeague_LancesRoom_Text_Defeat:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.2)
+	.string "Fwaha... Ah! You have proven your\n"
+	.string "worth!$"
 
-PokemonLeague_LancesRoom_Text_PostBattle:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.2)
-	.string "Go. Lance is waiting. He is not a\n"
-	.string "man who likes to wait.$"
+PokemonLeague_LancesRoom_Text_PostBattle:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.2)
+	.string "Your strength is no accident. Janine\n"
+	.string "was right to respect it.\p"
+	.string "Go. The Champion awaits. Show him\n"
+	.string "what you have shown me.$"
 

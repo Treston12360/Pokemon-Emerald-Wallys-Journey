@@ -98,50 +98,48 @@ ViridianCity_Gym_EventScript_GymStatuePostVictory::
 	releaseall
 	end
 
-ViridianCity_Gym_Text_GiovanniIntro:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.1)
-	.string "So you made it. Seven Kanto badges.\n"
-	.string "I figured you'd quit somewhere\l"
-	.string "around Celadon.\p"
-	.string "This used to be Giovanni's Gym. Did\n"
-	.string "you know that? Team Rocket's boss,\l"
-	.string "running a League Gym.\p"
-	.string "Nobody saw it. Not the League, not\n"
-	.string "the people in this town. Not me.\p"
+ViridianCity_Gym_Text_GiovanniIntro:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.1)
+	.string "So you made it. Seven badges. I\n"
+	.string "figured you'd quit somewhere around\l"
+	.string "Celadon.\p"
+	.string "This used to be Giovanni's Gym. Team\n"
+	.string "Rocket's boss, running a League Gym,\l"
+	.string "and nobody noticed.\p"
 	.string "When the League asked me to take it\n"
 	.string "over, I said no three times.\p"
+	.string "Gramps finally talked me into it. He\n"
+	.string "said a Gym should belong to someone\l"
+	.string "who lost everything here and still\l"
+	.string "came back.\p"
 	.string "......\p"
-	.string "Gramps says people stop seeing\n"
-	.string "what's right in front of them when\l"
-	.string "they trust it.\p"
-	.string "I've been thinking about that a lot\n"
-	.string "lately.\p"
-	.string "Anyway. You didn't come here to\n"
-	.string "listen to me think.\p"
+	.string "I lost everything in that Champion's\n"
+	.string "room once. I've spent a long time\l"
+	.string "getting it back.\p"
 	.string "I've been watching you since Mt.\n"
 	.string "Moon. You don't fight like a\l"
 	.string "tourist.\p"
-	.string "So let's see it. No holding back.\n"
-	.string "I'm not the guy who lost to Red any\l"
-	.string "more.$"
+	.string "So no holding back. This is my Gym,\n"
+	.string "and I'm not the guy who lost to Red\l"
+	.string "any more.$"
 
-ViridianCity_Gym_Text_GiovanniDefeat:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.1)
-	.string "......Yeah. Okay. That's what Gramps\n"
-	.string "saw.\p"
+ViridianCity_Gym_Text_GiovanniDefeat:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.1)
+	.string "......Yeah. Okay. I get it now.\n"
+	.string "That's what Gramps saw in you.\p"
 	.string "{PLAYER} received the Earth Badge\n"
 	.string "from Blue!{PAUSE_MUSIC}{PLAY_BGM}{MUS_OBTAIN_BADGE}{PAUSE 0xFE}{PAUSE 0x56}{RESUME_MUSIC}$"
 
-ViridianCity_Gym_Text_GiovanniPostBattle:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.1)
-	.string "...Every door. Think about who's\n"
-	.string "been asking you to open them.\p"
-	.string "Forget it. I'm tired. Go on,\n"
-	.string "Champion.$"
+ViridianCity_Gym_Text_GiovanniPostBattle:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.1)
+	.string "Don't make that face. Losing to you\n"
+	.string "doesn't feel like losing to Red did.\p"
+	.string "Go win it. Then tell Gramps and\n"
+	.string "Varnell yourself. They'll want to\l"
+	.string "hear it from you.$"
 
-ViridianCity_Gym_Text_ExplainEarthBadgeTakeThis:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.1)
+ViridianCity_Gym_Text_ExplainEarthBadgeTakeThis:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.1)
 	.string "Here. The Earth Badge. That's all\n"
 	.string "eight.\p"
 	.string "With all eight, the League will let\n"
-	.string "you onto Victory Road. Every door\l"
-	.string "Kanto has is open to you now.\p"
+	.string "you onto Victory Road.\p"
 	.string "Take this too.$"
 
 ViridianCity_Gym_Text_ReceivedTM26FromGiovanni::

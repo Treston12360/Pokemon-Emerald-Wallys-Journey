@@ -202,44 +202,48 @@ PokemonLeague_ChampionsRoom_Movement_RivalWatchOakEnter::
 	walk_in_place_faster_left
 	step_end
 
-PokemonLeague_ChampionsRoom_Text_Intro:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.3)
-	.string "So you're the one.\p"
-	.string "The Champion of Hoenn, here to take\n"
-	.string "Kanto's challenge. The whole League\l"
-	.string "has been talking about you.\p"
-	.string "I'm Lance. I've held this room since\n"
-	.string "Red left it empty.\p"
-	.string "Kanto's had a hard few years. Team\n"
-	.string "Rocket. Now these tears.\p"
-	.string "People need to believe the League\n"
-	.string "can still protect them. That's what\l"
-	.string "this title means to me.\p"
-	.string "So I won't go easy on you because\n"
-	.string "you're a guest.\p"
-	.string "Come at me with everything Hoenn\n"
-	.string "gave you!$"
+PokemonLeague_ChampionsRoom_Text_Intro:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.3)
+	.string "I've been waiting for you, {PLAYER}.\p"
+	.string "I knew the day would come when a\n"
+	.string "trainer from another region stood in\l"
+	.string "this room.\p"
+	.string "I am Lance, the Dragon Master, and\n"
+	.string "the Champion of Kanto.\p"
+	.string "Dragons are mystical Pokémon. Hard\n"
+	.string "to catch, harder to raise, but their\l"
+	.string "power is unmatched.\p"
+	.string "I've fought to keep this region\n"
+	.string "safe. Against Team Rocket. Now\l"
+	.string "against whatever is tearing at\l"
+	.string "Kanto.\p"
+	.string "You're a guest here, but I won't\n"
+	.string "hold back. You've earned a real\l"
+	.string "battle.\p"
+	.string "No more words. Let's begin!$"
 
-PokemonLeague_ChampionsRoom_Text_RematchIntro:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.3)
-	.string "So you're the one.\p"
-	.string "The Champion of Hoenn, here to take\n"
-	.string "Kanto's challenge. The whole League\l"
-	.string "has been talking about you.\p"
-	.string "I'm Lance. I've held this room since\n"
-	.string "Red left it empty.\p"
-	.string "Kanto's had a hard few years. Team\n"
-	.string "Rocket. Now these tears.\p"
-	.string "People need to believe the League\n"
-	.string "can still protect them. That's what\l"
-	.string "this title means to me.\p"
-	.string "So I won't go easy on you because\n"
-	.string "you're a guest.\p"
-	.string "Come at me with everything Hoenn\n"
-	.string "gave you!$"
+PokemonLeague_ChampionsRoom_Text_RematchIntro:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.3)
+	.string "I've been waiting for you, {PLAYER}.\p"
+	.string "I knew the day would come when a\n"
+	.string "trainer from another region stood in\l"
+	.string "this room.\p"
+	.string "I am Lance, the Dragon Master, and\n"
+	.string "the Champion of Kanto.\p"
+	.string "Dragons are mystical Pokémon. Hard\n"
+	.string "to catch, harder to raise, but their\l"
+	.string "power is unmatched.\p"
+	.string "I've fought to keep this region\n"
+	.string "safe. Against Team Rocket. Now\l"
+	.string "against whatever is tearing at\l"
+	.string "Kanto.\p"
+	.string "You're a guest here, but I won't\n"
+	.string "hold back. You've earned a real\l"
+	.string "battle.\p"
+	.string "No more words. Let's begin!$"
 
-PokemonLeague_ChampionsRoom_Text_Defeat:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.3)
-	.string "......It's over. Ha! I can't\n"
-	.string "remember the last time I lost like\l"
-	.string "that.$"
+PokemonLeague_ChampionsRoom_Text_Defeat:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.3)
+	.string "...It's over. I haven't lost like\n"
+	.string "that in a long time. You're a true\l"
+	.string "Champion.$"
 
 PokemonLeague_ChampionsRoom_Text_Victory::
 	.string "はーはッ！\n"
@@ -252,10 +256,11 @@ PokemonLeague_ChampionsRoom_Text_Victory::
 	.string "ほめて　つかわす！\n"
 	.string "はーッ！　はーはッはッ！$"
 
-PokemonLeague_ChampionsRoom_Text_PostBattle:: @ ARIA S-LEAGUE draft (docs/KANTO_SCRIPT.md L.3)
+PokemonLeague_ChampionsRoom_Text_PostBattle:: @ ARIA S-LEAGUE draft v2 (docs/KANTO_SCRIPT.md L.3)
+	.string "There's no shame in losing to\n"
+	.string "strength like yours.\p"
 	.string "You've earned the Hall of Fame.\n"
-	.string "Kanto's, this time.\p"
-	.string "Come on. I'll walk you in.$"
+	.string "Come. I'll walk you in.$"
 
 PokemonLeague_ChampionsRoom_Text_OakPlayer::
 	.string "Oak: {PLAYER}!$"
