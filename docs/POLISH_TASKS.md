@@ -100,8 +100,24 @@ Asked 2026-11-14, answered the same day:
    that" - not received yet.
 2. Which build: "I can't remember what version. But I start in 3D and have gamma on." -> test POL-11/14 with
    Gamma lighting ON.
-3. Move Deleter refusing to delete the last Surf: he asked what the question was about; explained again
-   (waiting for a yes/no).
+3. Move Deleter refusing to delete the last Surf: "disregard 3" -> leave the Move Deleter as it is.
 4. POL-27 Route 113: "yes you are right I misspoke" -> he meant the ash puff when stepping in the ash.
 5. Who merges Polish fixes into the game: "by you" -> this session merges finished `polish` work into
    `kanto-port` (fetch + rebase first, never force-push, check WORK_CLAIMS; AGENTS.md rules).
+
+### Files Brennan sent, 2026-11-14 17:09 (kept by session 014PwRDj in `/home/claude/keep/brennan_2026-11-14/`, not in git: his own save)
+- `WallysJourney.cfg`: `world3d=1 battle3d=1 gammaLight=1 frameRate=144 resolution=3 (1440p) zoom=5 bilinear=1
+  interframe=1 integerScale=1 vsync=1 lockAspect=1 widescreen=1 fullscreen=0 windowScale=8 volume=0`.
+  -> test POL-11/14 with exactly these (Gamma on, 144 fps in-between frames, interframe blend, 1440p).
+- `WallysJourney.sav`: 131,788 bytes = a PC save that already has the Kanto block with K4's vars/trainer flags,
+  so his build is from 2026-11-13 evening or later. Player in Mauville. Loads fine in the current build (3D, Wine).
+- `WallysJourney_errors.txt` (no `WallysJourney_crash.txt` was sent - ask again after the next crash). Addresses
+  are exe-relative for HIS build, which we cannot identify yet, so they are not resolved:
+  ```
+  skipped: callback exe+19c110, c0000005, address 0000002c, callback2 exe+19c0f0
+  skipped: callback exe+37c970, c0000005, address 00000000, callback2 exe+2395a0   (3 times)
+  skipped: callback exe+2c76f0, c0000005, address 00000008, callback2 exe+239c60
+  skipped: callback exe+1a40e0, c0000005, address 0000002c, callback2 exe+1a40c0
+  ```
+  (NULL reads the guard skipped: one callback skipped each time, not a crash by itself. To resolve them: get the
+  zip name of his build, rebuild that commit unstripped, `llvm-nm -n`.)
