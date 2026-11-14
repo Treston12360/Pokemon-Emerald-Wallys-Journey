@@ -394,4 +394,13 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
 - 2026-11-14 (owner): **Rock Tunnel's scare = the Clefairy's cry, building up** (owner: "near dark tunnel"). As you go through, you randomly
   hear a Clefairy cry, the words getting further each time: first "Ar....", later "Ari....". In Lavender (ch. 4),
   when the ghost is revealed with Varnell's tool, it becomes a Clefairy and cries out "Aria..." *sniffle*.
+- 2026-11-14 (owner): **Varnell introduces Project ARIA** to the player — the machine he's building and using to
+  resolve the tears; the project is named after the machine (the player never learns the "named after Aria"
+  part until the reveal). Place it early (before Rock Tunnel / Lavender) so Blue's "Like the project" lands.
+- 2026-11-14 (owner): **Fetch missions fill the gaps** between story beats and tears: retrieve parts for Varnell
+  (meteorite pieces, machine parts from old Rocket hideouts, etc.). Each pushes him further: the monk → Dialga;
+  another event → Palkia; another → Giratina.
+- 2026-11-14 (owner): **You visit Varnell at his institute** to bring parts / check in; Blue is sometimes there.
+  First arrival: Varnell welcomes you, explains this is where Blue has been helping him with his research since
+  losing to Red; after Blue leaves, Varnell says Blue is like a son to him. **Where the institute is: TBD.**
 
