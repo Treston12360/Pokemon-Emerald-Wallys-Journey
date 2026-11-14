@@ -81,7 +81,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       **Left on purpose (later tasks):** `{RIVAL}` text still gives May/Brendan (rival name is story, S0); the PC is
       still "Lanette's PC" in Kanto (wording — ask owner); HM badge checks stay Hoenn's (owner: HMs carry over);
       Trainer Tower / Sevii code still `IS_FRLG` (Sevii decided later); cable club attendants Emerald's.
-- [ ] **K6. Region-aware Fly and region map** (Fly map can switch Hoenn/Kanto; normal Fly animation; no
+- [ ] **K6. Region-aware Fly and region map** WIP (Claude session 019khs4X, 2026-11-13 18:55) (Fly map can switch Hoenn/Kanto; normal Fly animation; no
       key item — owner decision).
 
 - [ ] **K7. Kanto in 3D.** Kanto must work in the 3D view too (owner 2026-11-13). The 3D data is made by Emerald 3DS's
