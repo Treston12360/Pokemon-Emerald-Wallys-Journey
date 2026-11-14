@@ -24,7 +24,8 @@ a reveal or a choice, not just a gym.
 | Kanto League | HGSS lineup: Will, Koga, Bruno, Karen; **Lance** is Kanto Champion (Koga's move to the E4 is why Janine runs Fuchsia). |
 | Red | **Optional superboss only.** No story role. Final Champion-defense challenger. |
 | Oak | Introduces Varnell. Trusts him; is shaken by the reveal. |
-| Items | All Hoenn items, HMs and badges carry over. Nothing in Kanto is gated by an item. |
+| Items / HMs | All Hoenn items carry over. **Fly works everywhere, always. Every other HM works in Kanto only with the Kanto badge whose Gym Leader gives it** (Kanto doesn't recognise Hoenn field licenses); Hoenn HMs still work in Hoenn. |
+| Kanto is linear | Not open world. The path is fixed by story-caused road blocks (§4) so story and level curve stay controlled. |
 | Return | After Kanto the player returns to Hoenn to defend the title (see §6). |
 
 ## 2. Aria and Varnell (the emotional core)
@@ -169,20 +170,31 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 
 Open: which chapter Hoopa is first taken in (suggest before ch. 1, shown in a cold open).
 
-## 4. Road blocks (Kanto is linear; all carry-over items/HMs still work)
+## 4. Road blocks (Kanto is linear, not open world)
 
-| Block | Opens when |
-|---|---|
-| Snorlax ×2 (Routes 12 and 16) | Poké Flute from Mr. Fuji (ch. 4) |
-| Spatial tears (shimmering/blocked passages, or a displaced Pokémon standing in the way) | Closed by Varnell's assignments |
-| Saffron quarantine | Cleared after the Silph incident starts (ch. 6) |
-| Cinnabar eruption warnings | After the reveal (ch. 10) |
-| Seafoam currents | Boulder puzzle |
-| Victory Road guards | Kanto badges only |
-| Viridian Gym door | Blue decides you've earned it (ch. 11) |
-| Fly | Only to Kanto towns already visited |
+The player starts in **Pallet** (the Vermilion arrival is only the dock scene; Vermilion is not marked visited)
+and goes Pallet → Route 1 → Viridian → Pewter → Mt. Moon → Cerulean → Vermilion (3rd Gym, Lt. Surge, on foot as
+in FireRed) → onward in chapter order (§3). Blocks must make sense to people who live there (owner 2026-11-13):
+badge clearance only for genuinely restricted places (Silph's sealed floors, Rocket Hideout, Hall of Fame vault,
+Victory Road gate, Varnell's sites); roads are closed by story-caused events. HMs need Kanto badges (§1), so
+Cut trees, Strength boulders and water also block as in FireRed.
 
-No tea, no item gates.
+Proposed blocks (owner to confirm or adjust):
+
+| Gap | Block | Opens |
+|---|---|---|
+| Route 22 → Victory Road | League gate checks Kanto badges | 8 badges |
+| Nugget Bridge / Routes 24–25 | Bridge damaged by an anomaly surge, repair crew | Story (Cerulean) |
+| Rock Tunnel | Rockslide at the entrance | Story (ch. 3–4) |
+| Saffron gates | Anomaly cordon (Jenny, League rangers), later quarantine | Ch. 6 |
+| Diglett's Cave | Cave-in from tremors | Later |
+| Routes 12 and 16 | Snorlax | Poké Flute (ch. 4) |
+| Cycling Road | Closed for repairs (after Snorlax) | Ch. 7 |
+| Sea routes 19–21 | Coast Guard closure (strange currents) | Ch. 8 |
+| Cinnabar | Eruption warning, island evacuated | After Seafoam |
+| Underground Path | Flooded / inspection | Mid-game |
+| Viridian Gym door | Blue decides you've earned it | Ch. 10 |
+| Fly | Only to Kanto towns already visited | Always |
 
 ## 5. Levels and EXP (simulated — see `tools/exp_curve_full.py`, `tools/exp_curve_kanto.py`)
 

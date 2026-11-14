@@ -31,7 +31,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       graphics (`src/data/object_events/*.h`, palettes in `event_object_movement.c`) always built; FRLG flags given
       real ids at `KANTO_FLAGS_START` (0x1000) kept in the new PC-only save block `SaveBlockPC` (no size limit,
       stored after the 128 KB GBA image in the .sav — old GBA saves load with Kanto clear); Celadon Game Corner
-      coin checks written without spaces for the PC assembler. GBA data build and Windows/Linux PC build link.
+      coin checks written without spaces for the PC assembler. Data build and Windows/Linux build link.
 - [x] **K2. Tilesets load.** Done 2026-11-13 (Claude session 014PwRDj). 2D needed nothing: the engine already
       takes the split from `mapLayout->isFrlg` (`fieldmap.c`), and the zoomed-out view asks the same functions.
       The 3D view had Emerald's split (512 metatiles / 512 tiles / 6 palettes) and 16-bit attributes fixed in:
@@ -79,7 +79,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       new special `IsInKantoMap` used by `data/scripts/safari_zone.inc` (which Safari Zone to leave to); Route 5
       day care kept in `SaveBlockPC.route5DayCareMon`.
       **Left on purpose (later tasks):** `{RIVAL}` text still gives May/Brendan (rival name is story, S0); the PC is
-      still "Lanette's PC" in Kanto (wording — ask owner); HM badge checks stay Hoenn's (owner: HMs carry over);
+      still "Lanette's PC" in Kanto (wording — ask owner); HM rule changed since (owner 2026-11-13): Kanto HMs come from Kanto Gym Leaders and need Kanto badges (Fly always works) — new task S-HM below;
       Trainer Tower / Sevii code still `IS_FRLG` (Sevii decided later); cable club attendants Emerald's.
 - [x] **K6. Region-aware Fly and region map.** Done 2026-11-13 (session 019khs4X). Owner's choice: "switch on the
       map" — the Fly map opens on the region you are in; **L or R flips to the other region** once one of that
@@ -116,6 +116,11 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 - [ ] **S1. Chapter 0 — the call:** Mom → Birch → S.S. Anne ticket; Wally's send-off at Slateport.
 - [ ] **S2. Chapter 0b — arrival:** S.S. Anne to Vermilion, fade to black, Oak's lab in Pallet.
 - [ ] **S3. Chapter 1 — the investigation team:** Oak, Varnell, Blue; first assignment (Mt. Moon).
+- [ ] **S-HM. Kanto HM licenses:** on Kanto maps, Cut/Surf/Strength/Rock Smash/Waterfall/Flash/Dive need the Kanto
+      badge from the Gym Leader who gives that HM (FireRed's badge→HM table); Fly always works; Hoenn unchanged.
+- [ ] **S-BLOCK. Road blocks** from `docs/KANTO_PROJECT_ARIA.md` §4 (after the owner confirms the table).
+- [ ] **S-TALK. New dialogue for every Kanto NPC and trainer** (owner: each trainer unique and believable, Gym
+      Leaders with their own story, longer is fine). Drafts go in `docs/KANTO_SCRIPT.md` for approval first.
 - [ ] S4+. Remaining chapters, one task each, added as they're reached.
 
 ## Phase 3 — Levels and balance

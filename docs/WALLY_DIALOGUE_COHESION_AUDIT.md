@@ -57,7 +57,7 @@ The first automated inventory reviewed **974 script files and 8,324 labeled dial
 - Build and test the audit PR's Emerald target, then playtest the entire story with fresh saves: both genders, each Sootopolis and Victory Road battle outcome, before/after Badge 8, Champion win and return visits to Wally's parents.
 - Consult the reusable candidate inventory script `tools/wally_dialogue_inventory.py` for all Champion/Wallace/Wally and HM-gift dialogue across map scripts. Candidate results require context; obsolete but unreferenced original dialogue may be harmless.
 - Visit every existing NPC across milestone saves (before and after badges 3, 5, 7, 8; after Wally's broadcast; after the player's Hall of Fame) to identify obsolete original Emerald lines, particularly ones referring to Wallace as current Champion.
-- Verify offscreen timing, object positions, dialogue page display, and script flags in mGBA. A source scan cannot establish these.
+- Verify offscreen timing, object positions, dialogue page display, and script flags in the Windows game. A source scan cannot establish these.
 - Revisit Magma/Aqua arguments and each Gym/League character in a complete emulator narrative run; broad story-bible coverage does **not** certify that every script branch was observed.
 
 The dialogue-only character-arc requirement is preserved: Wally's emotional development uses existing dialogue locations, not new story events.

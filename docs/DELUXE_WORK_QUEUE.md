@@ -307,7 +307,7 @@ DLX-7). People on neighbouring maps should already be drawn.
 - Measured (Wine, Oldale -> Route 103): the step that crosses 4.5 ms of map/belt work (was ~13 ms plus
   15-20 ms on each of the next frames). Test aids: WJPC_VOXEL_LOG logs "slow frame" over 4 ms;
   WJPC_3D_BUILD_MS=N sets the budget; WJPC_3D_OLD_CROSSING=1 the old snap; WJPC_TEST_NO_GHOSTS=1 no stand-ins.
-- GBA ROM unchanged (PC code only).
+- PC code only.
 
 ### DLX-19 3D: Lavaridge gym sign folded in half; check the gym door (DONE 2026-11-13, session 019khs4X)
 The new gym model (DLX-1) shows the sign bent. The model is visual only, but confirm in game that
