@@ -200,7 +200,7 @@ Lineup (owner 2026-11-14): Blue = Viridian Gym (8th); Janine = Fuchsia; Elite Fo
 
 ---
 
-## Chapter 2 — Mt. Moon, the first tear  · APPROVED (owner 2026-11-14)
+## Chapter 2 — Mt. Moon, the first tear  · APPROVED (owner 2026-11-14) · IN GAME
 Beats (owner 2026-11-14: narrative-driven, scripted events; use spots FireRed left empty): the tear is on the
 old Rocket spot by the crater on B2F (in game, mechanics done). Owner 2026-11-14: **no Pokémon fall out of
 tears** — the anomaly Pokémon are simply *there* in the wild, where they don't belong.
@@ -264,7 +264,7 @@ chapter. He's cold at first; respect builds over these meetings until you invest
 
 ---
 
-## Chapter 3 — Cerulean / Bill's cottage: the man from the fire  · DRAFT (owner to approve)
+## Chapter 3 — Cerulean / Bill's cottage: the man from the fire  · APPROVED (owner 2026-11-14) · IN GAME
 Owner direction 2026-11-14: a monk from the Brass Tower fire (Ecruteak, ~150 years ago), pulled through by
 accident; begs you not to close it; Varnell says you must; he fades screaming "It burns!"; Varnell is
 excited and hides it. Name below is a placeholder (owner to choose). His team: old Ecruteak Pokémon
@@ -339,6 +339,6 @@ excited and hides it. Name below is a placeholder (owner to choose). His team: o
   (most players skip that).
 - Owner 2026-11-14 (ch. 3): Kiyoshi is **weak on purpose** — canon Sage levels, the fight is about the story.
   Team modelled on Sprout Tower's Elder Li in Gold/Silver (Bellsprout, Bellsprout, Hoothoot, levels 7–10; check
-  against the GSC data when building). He must be **excluded from Wally's Journey trainer level scaling**
-  (`src/data/wj_trainer_scaling.h`) so he stays weak.
+  against the GSC data when building). Wally's Journey scaling only touches the trainers listed in `src/data/wj_trainer_scaling.h`,
+  so he stays weak (team checked: Bulbapedia "Li", GSC Bellsprout 7, Bellsprout 7, Hoothoot 10).
 

@@ -645,8 +645,9 @@
 
 #define TRAINER_LEADER_BLUE                        KANTO_TRAINER(624) // S-LEAGUE: Viridian Gym
 #define TRAINER_ELITE_FOUR_KOGA                    KANTO_TRAINER(625) // S-LEAGUE: Elite Four 4th room
+#define TRAINER_SAGE_KIYOSHI                       KANTO_TRAINER(626) // ARIA ch. 3: the monk from the Brass Tower fire
 
-#define TRAINERS_COUNT_FRLG                      626
+#define TRAINERS_COUNT_FRLG                      627
 #define MAX_TRAINERS_COUNT_FRLG                  768
 
 #endif  // GUARD_CONSTANTS_OPPONENTS_FRLG_H

@@ -5,6 +5,7 @@ CeruleanCity_Frlg_MapScripts::
 CeruleanCity_OnTransition::
 	setworldmapflag FLAG_WORLD_MAP_CERULEAN_CITY
 	call_if_unset FLAG_GOT_SS_TICKET, CeruleanCity_EventScript_BlockExits
+	call Aria_Ch3_CeruleanOnTransition @ Project ARIA ch. 3
 	end
 
 CeruleanCity_EventScript_BlockExits::

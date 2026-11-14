@@ -522,6 +522,7 @@ enum TrainerClassID
     TRAINER_CLASS_RUIN_MANIAC_FRLG,
     TRAINER_CLASS_LADY_FRLG,
     TRAINER_CLASS_PAINTER_FRLG,
+    TRAINER_CLASS_SAGE, // Project ARIA ch. 3: Kiyoshi of the Brass Tower
 
     TRAINER_CLASS_COUNT,
 };

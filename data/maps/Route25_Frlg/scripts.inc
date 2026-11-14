@@ -1,4 +1,6 @@
 Route25_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, Aria_Ch3_Route25OnLoad
+	map_script MAP_SCRIPT_ON_TRANSITION, Aria_Ch3_Route25OnTransitionMap
 	.byte 0
 
 Route25_EventScript_SeaCottageSign::
@@ -128,3 +130,7 @@ Route25_Text_AreYouHereAlone::
 	.string "If you're out at Cerulean's cape…\n"
 	.string "Well, it should be as a couple.$"
 
+
+Aria_Ch3_Route25OnTransitionMap::
+	call Aria_Ch3_Route25OnTransition
+	end

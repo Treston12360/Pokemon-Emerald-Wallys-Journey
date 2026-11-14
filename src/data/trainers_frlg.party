@@ -13890,3 +13890,25 @@ IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 - Sludge
 - Smokescreen
 - Toxic
+
+/* ARIA ch. 3 (owner 2026-11-14): weak on purpose - Sprout Tower Elder Li's Gold/Silver team (Bellsprout 7,
+   Bellsprout 7, Hoothoot 10; Bulbapedia "Li"). Not in Wally's Journey level scaling. Pic: Emerald Expert M
+   until he has his own. */
+=== TRAINER_SAGE_KIYOSHI ===
+Name: KIYOSHI
+Class: Sage
+Pic: Expert M
+Gender: Male
+Music: Intense
+Double Battle: No
+AI: Basic Trainer
+
+Bellsprout
+Level: 7
+
+Bellsprout
+Level: 7
+
+Hoothoot
+Level: 10
+

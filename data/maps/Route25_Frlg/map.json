@@ -203,6 +203,51 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Route25_EventScript_Man",
       "flag": "0"
+    },
+    {
+      "local_id": "LOCALID_ROUTE25_ARIA_BILL",
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_BILL",
+      "x": 51,
+      "y": 5,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Aria_Ch3_Bill",
+      "flag": "FLAG_TEMP_11"
+    },
+    {
+      "local_id": "LOCALID_ROUTE25_ARIA_TEAR",
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ARIA_TEAR",
+      "x": 57,
+      "y": 7,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Aria_Ch3_Kiyoshi",
+      "flag": "FLAG_TEMP_12"
+    },
+    {
+      "local_id": "LOCALID_ROUTE25_ARIA_KIYOSHI",
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_EXPERT_M",
+      "x": 55,
+      "y": 8,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Aria_Ch3_Kiyoshi",
+      "flag": "FLAG_TEMP_12"
     }
   ],
   "warp_events": [
@@ -215,7 +260,69 @@
     }
   ],
   "coord_events": [
-
+    {
+      "type": "trigger",
+      "x": 53,
+      "y": 6,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3_KiyoshiStop"
+    },
+    {
+      "type": "trigger",
+      "x": 53,
+      "y": 7,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3_KiyoshiStop"
+    },
+    {
+      "type": "trigger",
+      "x": 53,
+      "y": 8,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3_KiyoshiStop"
+    },
+    {
+      "type": "trigger",
+      "x": 53,
+      "y": 5,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3_KiyoshiStop"
+    },
+    {
+      "type": "trigger",
+      "x": 53,
+      "y": 9,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3_KiyoshiStop"
+    },
+    {
+      "type": "trigger",
+      "x": 53,
+      "y": 10,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3_KiyoshiStop"
+    },
+    {
+      "type": "trigger",
+      "x": 53,
+      "y": 11,
+      "elevation": 3,
+      "var": "VAR_TEMP_9",
+      "var_value": "1",
+      "script": "Aria_Ch3_KiyoshiStop"
+    }
   ],
   "bg_events": [
     {
