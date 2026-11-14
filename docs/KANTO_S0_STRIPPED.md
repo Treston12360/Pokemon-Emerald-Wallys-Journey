@@ -48,3 +48,8 @@ Sevii Islands → "We will do a overhaul for sevii islands later" (Sevii untouch
 - Tested: Route 12 has no Snorlax, Sea Cottage empty, Route 5 gate walks through.
 - Known, not changed: Pokémon Tower's ghosts still can't be identified without the Silph Scope (you can run);
   Mr. Fuji stays hidden on 7F. Raise with the owner in S-BLOCK.
+
+## Step 4 — Snorlax back (owner, 2026-11-14)
+"We don't want someone going to Lavender or Fuchsia early." Both Snorlax (Routes 12 and 16) are shown
+again until the Poké Flute (ch. 4/5); step 3's hiding is undone for every save.
+

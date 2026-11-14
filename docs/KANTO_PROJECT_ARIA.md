@@ -387,4 +387,6 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   **Diglett's Cave is open. Lavender can only be reached through Rock Tunnel** ("make the dark tunnel scary
   somehow, since it leads to Lavender"). **Blue bumps into the player in Vermilion** (ch. 3b).
   League lines (Blue/Koga/Lance) approved.
+- 2026-11-14 (owner): no Lavender or Fuchsia early: **Snorlax back on Routes 12 and 16** until the Poké Flute.
+  Lavender's other ways in (Route 8 from Saffron, the Route 7–8 underground path) stay closed (S-BLOCK).
 

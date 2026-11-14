@@ -60,3 +60,10 @@ EventScript_AriaKantoStart3::
 	setflag FLAG_HIDE_ROUTE_16_SNORLAX
 	setvar VAR_MAP_SCENE_POKEMON_TOWER_6F, 1
 	end
+
+@ Step 4. Owner 2026-11-14: nobody reaches Lavender or Fuchsia early — the two Snorlax are back on Routes 12
+@ and 16 (as in FireRed) until the Poké Flute (ch. 4/5). Undoes step 3's Snorlax lines.
+EventScript_AriaKantoStart4::
+	clearflag FLAG_HIDE_ROUTE_12_SNORLAX
+	clearflag FLAG_HIDE_ROUTE_16_SNORLAX
+	end
