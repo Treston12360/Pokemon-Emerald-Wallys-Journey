@@ -1,0 +1,3 @@
+# ENG-SPRITES: full-colour sprites. One per line:  FULL_COLOUR.png  GAME.png  [SHARED_PALETTE.pal]
+# Same size as GAME.png. Then run: python3 tools/pc/hicolor.py   (rewrites GAME.png + src/platform/hicolor_tiles.h)
+# Rules and how it works: tools/pc/hicolor.py and src/platform/hicolor.c.

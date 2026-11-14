@@ -1,5 +1,6 @@
 #ifdef RENDERER_EASY_DRAW
 #include "global.h"
+#include "hicolor.h" // ENG-SPRITES
 #include "platform/null_guard.h"
 #include <stdbool.h>
 #include "platform/dma.h"
@@ -623,7 +624,14 @@ static void DrawSprites(struct scanlineData* scanline, uint16_t vcount, bool win
 
                 if (pixel != 0)
                 {
-                    uint16_t color = palette[pixel];;
+                    uint16_t color = palette[pixel];
+                    // ENG-SPRITES: a full-colour sprite tile is drawn with its own colours
+                    if (!is8BPP && gHiColorActive)
+                    {
+                        u16 hiColor;
+                        if (HiColor_ObjPixel(block_offset + oam->tileNum, tile_x, tile_y, oam->paletteNum, pixel, &hiColor))
+                            color = hiColor;
+                    }
                     
                     //if sprite mode is 2 then write to the window mask instead
                     if (isObjWin)
@@ -943,6 +951,7 @@ static bool LineEffectsOn(void)
 void DrawFramePlain(uint16_t *pixels)
 {
     u16 vcount = REG_VCOUNT;
+    HiColor_PrepareFrame();
     for (int i = 0; i < DISPLAY_HEIGHT; i++)
     {
         REG_VCOUNT = i;
@@ -968,6 +977,7 @@ void DrawFrame(uint16_t *pixels)
     int i;
     int j;
     SnapRegs(sLine0Regs);
+    HiColor_PrepareFrame(); // ENG-SPRITES
     gPcFrameHadLineEffects = LineEffectsOn();
     for (i = 0; i < DISPLAY_HEIGHT; i++)
     {

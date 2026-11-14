@@ -13,6 +13,7 @@
 // the middle of the wide canvas with black around it, so the zoom does not jump.
 #if defined(PORTABLE) && defined(RENDERER_EASY_DRAW)
 #include "global.h"
+#include "hicolor.h" // ENG-SPRITES
 #include "constants/map_groups.h"
 #include "field_effect.h"
 #include "constants/field_effects.h"
@@ -1188,6 +1189,12 @@ static void DrawWideSprites(struct WideLine *line, int vy, bool windowsEnabled)
             if (!pixel)
                 continue;
             uint16_t color = palette[pixel];
+            if (!is8bpp && gHiColorActive) // ENG-SPRITES: full-colour sprite tile
+            {
+                u16 hiColor;
+                if (HiColor_ObjPixel(block + oam->tileNum, texX % 8, texY % 8, oam->paletteNum, pixel, &hiColor))
+                    color = hiColor;
+            }
             if (objWin)
             {
                 if (line->winMask[gx] & WINMASK_WINOUT)
@@ -1508,6 +1515,7 @@ void WideView_DrawFrame(uint16_t *out, struct WideViewFrame *frame)
 
     GetViewSize(&w, &h);
     UpdatePads(w, h);
+    HiColor_PrepareFrame(); // ENG-SPRITES (DrawFrame does it again for GBA-size frames; cheap)
     sWideFrameNo++;
     frame->mode = mode;
     frame->margin = 0;
