@@ -44,3 +44,19 @@ EventScript_AriaKantoStart2::
 	setvar VAR_MAP_SCENE_FOUR_ISLAND, 1
 	setvar VAR_MAP_SCENE_SIX_ISLAND_POKEMON_CENTER_1F, 1
 	end
+
+@ Step 3. Owner 2026-11-14: strip Bill's Sea Cottage scene ("Bill is just a resident for now") and remove
+@ the road blocks that depended on the Rockets: Snorlax on Routes 12/16 (Poké Flute), Pokémon Tower's
+@ Marowak ghost (Silph Scope; its triggers are removed from the map), Saffron's gate guards (tea; triggers
+@ removed). Our own road blocks come with S-BLOCK.
+EventScript_AriaKantoStart3::
+	@ Bill's mix-up counts as over; FLAG_GOT_SS_TICKET also opens Cerulean's exits and the Vermilion dock
+	@ check (the player already has the S.S. Ticket from Birch). Bill himself is hidden until he gets new lines.
+	setflag FLAG_HELPED_BILL_IN_SEA_COTTAGE
+	setflag FLAG_GOT_SS_TICKET
+	setflag FLAG_HIDE_BILL_HUMAN_SEA_COTTAGE
+	setflag FLAG_HIDE_BILL_CLEFAIRY
+	setflag FLAG_HIDE_ROUTE_12_SNORLAX
+	setflag FLAG_HIDE_ROUTE_16_SNORLAX
+	setvar VAR_MAP_SCENE_POKEMON_TOWER_6F, 1
+	end

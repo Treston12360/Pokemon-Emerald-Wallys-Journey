@@ -36,3 +36,15 @@ check; Pewter Museum fee; Pallet sign lady (her lines get rewritten in S-TALK).
 - Start state is now versioned: `SaveBlockPC.kantoMapFlagsSet` = steps applied; `SaveBlockPC_InitKanto`
   runs only the newer steps on an older save. Never change a released step — add a new one.
 - Tested (Linux build, owner_brawly save): Mt. Moon B2F has no Rockets; Cerulean has no Blue/Rocket.
+
+## Step 3 — Bill, and the Rocket-era road blocks (owner, 2026-11-14)
+Owner: Bill → "Strip Bill's scene"; Snorlax / Tower ghost / Saffron guards → "Remove them now";
+Sevii Islands → "We will do a overhaul for sevii islands later" (Sevii untouched apart from step 2's Rockets/Blue).
+- `EventScript_AriaKantoStart3`: Bill's scene counts as done (`FLAG_HELPED_BILL_IN_SEA_COTTAGE`), Bill and
+  Clefairy-Bill hidden (cottage empty until Bill gets new lines), `FLAG_GOT_SS_TICKET` set (FireRed uses it to
+  open Cerulean's exits and for the Vermilion dock check; the player has Birch's ticket), both Snorlax hidden,
+  Tower 6F Marowak scene done.
+- Triggers removed: Pokémon Tower 6F Marowak ×2; Saffron gate guards (Route 5 S, 6 N, 7 E, 8 W) ×3 each.
+- Tested: Route 12 has no Snorlax, Sea Cottage empty, Route 5 gate walks through.
+- Known, not changed: Pokémon Tower's ghosts still can't be identified without the Silph Scope (you can run);
+  Mr. Fuji stays hidden on 7F. Raise with the owner in S-BLOCK.

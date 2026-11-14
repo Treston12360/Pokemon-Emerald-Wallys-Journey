@@ -262,7 +262,8 @@ void SaveBlockPC_InitKanto(void)
     // Never edit an old step's script once released: add a new step (data/scripts/aria_kanto_start.inc).
     extern const u8 EventScript_AriaKantoStart[];   // 1: FireRed's map flags, Pallet->Pewter
     extern const u8 EventScript_AriaKantoStart2[];  // 2: no FireRed Rockets / Blue rival scenes (owner 2026-11-14)
-    static const u8 *const steps[] = {EventScript_AriaKantoStart, EventScript_AriaKantoStart2};
+    extern const u8 EventScript_AriaKantoStart3[];  // 3: no Bill scene, Rocket-era road blocks gone (owner 2026-11-14)
+    static const u8 *const steps[] = {EventScript_AriaKantoStart, EventScript_AriaKantoStart2, EventScript_AriaKantoStart3};
     while (gSaveBlockPC.kantoMapFlagsSet < ARRAY_COUNT(steps))
         RunScriptImmediately(steps[gSaveBlockPC.kantoMapFlagsSet++]);
 #endif
