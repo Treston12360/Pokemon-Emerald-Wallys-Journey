@@ -21,9 +21,9 @@ ViridianCity_Gym_EventScript_DefeatedGiovanni::
 ViridianCity_Gym_EventScript_GiveTM26::
 	setspeaker SP_NAME_BLUE
 	msgbox ViridianCity_Gym_Text_ExplainEarthBadgeTakeThis
-	checkitemspace ITEM_TM26
+	checkitemspace ITEM_TM58
 	goto_if_eq VAR_RESULT, FALSE, ViridianCity_Gym_EventScript_NoRoomForTM26
-	giveitem_msg ViridianCity_Gym_Text_ReceivedTM26FromGiovanni, ITEM_TM26
+	giveitem_msg ViridianCity_Gym_Text_ReceivedTM26FromGiovanni, ITEM_TM58
 	setflag FLAG_GOT_TM26_FROM_GIOVANNI
 	setspeaker SP_NAME_BLUE
 	msgbox ViridianCity_Gym_Text_ExplainTM26
@@ -146,11 +146,11 @@ ViridianCity_Gym_Text_ExplainEarthBadgeTakeThis:: @ ARIA S-LEAGUE draft v2 (docs
 	.string "Take this too.$"
 
 ViridianCity_Gym_Text_ReceivedTM26FromGiovanni::
-	.string "{PLAYER} received TM26\n"
+	.string "{PLAYER} received TM58\n"
 	.string "from Blue.$"
 
 ViridianCity_Gym_Text_ExplainTM26::
-	.string "TM26 contains Earthquake.$"
+	.string "TM58 contains Dragon Pulse.$"
 
 ViridianCity_Gym_Text_YouDoNotHaveSpace::
 	.string "You do not have space for this!$"

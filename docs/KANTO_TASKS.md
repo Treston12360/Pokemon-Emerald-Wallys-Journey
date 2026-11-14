@@ -141,7 +141,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       from other regions suddenly showing up (the ship carried the player from Hoenn). The captain is **not sick**
       and **does not give Cut** (HMs come from Kanto Gym Leaders); he gets his own new lines. Draft in
       `docs/KANTO_SCRIPT.md` first.
-- [ ] **S-ITEMS. No repeat TMs from Hoenn** (owner, 2026-11-14): TMs are infinite use, so no TM the player could
+- [x] **S-ITEMS (TMs done 2026-11-14 — new TM51–TM100, see `docs/KANTO_TM_LIST.md`; HM spots and low-value ground items still open). No repeat TMs from Hoenn** (owner, 2026-11-14): TMs are infinite use, so no TM the player could
       already get in Hoenn is given again in Kanto (Gym Leader TMs, gifts, ground items) — replace each with a TM
       the player can't have yet. Battle Frontier items don't count. Useful items **may** repeat where it makes sense:
       nature mints, Bottle Caps, good healing items, Full Heals, Rare Candies, etc. But nothing weak for a Champion

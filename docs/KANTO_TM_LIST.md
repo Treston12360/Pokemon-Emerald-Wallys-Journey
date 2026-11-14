@@ -87,7 +87,7 @@ HMs are not needed in Kanto at all (Hoenn already gave all 8; Kanto field moves 
 - HM spots (S.S. Anne captain, Fly house, Safari secret house, Warden, Route 2 aide, Ember Spa) give no HM.
 - Frontier Brains get the green name box too (owner, same day) — done.
 
-## Proposal: which new TM goes where — WAITING FOR OWNER APPROVAL
+## Which new TM goes where — APPROVED by owner 2026-11-14, in game
 
 Gym Leaders get a move of their own type. Moves are the usual competitive staples from Gen 4–9 so every one is worth having.
 
@@ -109,3 +109,20 @@ Gym Leaders get a move of their own type. Moves are the usual competitive staple
 | TM75 | Knock Off | Cerulean (the house that gave Dig) |
 | TM76 | Dazzling Gleam | Five Island Memorial Pillar |
 | TM77–TM100 | X-Scissor, Poison Jab, Rock Slide, Air Slash, Bug Buzz, Zen Headbutt, Seed Bomb, Wild Charge, Iron Head, Drain Punch, Hyper Voice, Play Rough, Grass Knot, Heat Wave, Hurricane, Bulldoze, Liquidation, Shadow Claw, Psycho Cut, Sludge Wave, Roost, Dragon Dance, Body Press, Spikes | The 28 ground balls (24 TMs; the 4 balls left over give good repeatable items) |
+
+## Done (2026-11-14)
+
+- `include/constants/tms_hms.h`: TM51–TM100 added in the order above; bag descriptions in `src/data/items.h` (from each
+  move's own description, rewrapped). Learnsets regenerate automatically (`teachable_learnsets.h`), e.g. Starmie learns
+  Scald and Psyshock.
+- `tools/aria_kanto_tms.py` swapped the items and the "TMxx" numbers in Kanto text; the lines that named the old move
+  (Gym Leaders' TM talk, Blaine's and Koga's after-battle lines, roof drink girl, Mr. Psychic, Route 12 gate) now
+  describe the new move in the same voice. Flag names (FLAG_GOT_TM39_FROM_BROCK...) are unchanged on purpose: save data.
+- Game Corner prize menu (`src/data/script_menu.h`) shows TM68–TM72 at FireRed's prices.
+- Ground balls: TM77–TM100 in file order; the last four (Victory Road 2F, Victory Road 3F, Rocket Warehouse,
+  Silph Co. 4F) give Rare Candy, Bottle Cap, Rare Candy, Bottle Cap.
+- With 100 TMs the bag shows TM numbers with three digits (TM001…), the engine's own rule.
+- Tested: Brock gives TM51 Stealth Rock with the new explanation.
+
+Still open: the six HM spots (S.S. Anne captain, Fly house, Safari secret house, Warden, Route 2 aide, Ember Spa) still
+hand out an HM the player already has. They need new scenes/dialogue (S-ANNE, S-TALK).

@@ -20,9 +20,9 @@ CeruleanCity_Gym_EventScript_MistyDefeated::
 
 CeruleanCity_Gym_EventScript_GiveTM03::
 	msgbox CeruleanCity_Gym_Text_ExplainCascadeBadge
-	checkitemspace ITEM_TM03
+	checkitemspace ITEM_TM52
 	goto_if_eq VAR_RESULT, FALSE, CeruleanCity_Gym_EventScript_NoRoomForTM03
-	giveitem_msg CeruleanCity_Gym_Text_ReceivedTM03FromMisty, ITEM_TM03
+	giveitem_msg CeruleanCity_Gym_Text_ReceivedTM03FromMisty, ITEM_TM52
 	setflag FLAG_GOT_TM03_FROM_MISTY
 	msgbox CeruleanCity_Gym_Text_ExplainTM03
 	release
@@ -79,8 +79,9 @@ CeruleanCity_Gym_Text_MistyIntro::
 	.string "with Water-type Pokémon!{PLAY_BGM}{MUS_RG_ENCOUNTER_GYM_LEADER}$"
 
 CeruleanCity_Gym_Text_ExplainTM03::
-	.string "TM03 teaches Water Pulse.\p"
-	.string "Use it on an aquatic Pokémon!$"
+	.string "TM52 teaches Scald.\p"
+	.string "It shoots boiling water and can\n"
+	.string "leave the foe with a burn!$"
 
 CeruleanCity_Gym_Text_ExplainCascadeBadge::
 	.string "The Cascadebadge makes all\n"
@@ -94,7 +95,7 @@ CeruleanCity_Gym_Text_ExplainCascadeBadge::
 	.string "You can also have my favorite TM.$"
 
 CeruleanCity_Gym_Text_ReceivedTM03FromMisty::
-	.string "{PLAYER} received TM03\n"
+	.string "{PLAYER} received TM52\n"
 	.string "from Misty.$"
 
 CeruleanCity_Gym_Text_BetterMakeRoomForThis::

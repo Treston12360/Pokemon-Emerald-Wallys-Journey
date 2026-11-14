@@ -21,9 +21,9 @@ CeladonCity_Gym_EventScript_DefeatedErika::
 
 CeladonCity_Gym_EventScript_GiveTM19::
 	msgbox CeladonCity_Gym_Text_ExplainRainbowBadgeTakeThis
-	checkitemspace ITEM_TM19
+	checkitemspace ITEM_TM54
 	goto_if_eq VAR_RESULT, FALSE, CeladonCity_Gym_EventScript_NoRoomForTM19
-	giveitem_msg CeladonCity_Gym_Text_ReceivedTM19FromErika, ITEM_TM19
+	giveitem_msg CeladonCity_Gym_Text_ReceivedTM19FromErika, ITEM_TM54
 	setflag FLAG_GOT_TM19_FROM_ERIKA
 	msgbox CeladonCity_Gym_Text_ExplainTM19
 	release
@@ -120,13 +120,13 @@ CeladonCity_Gym_Text_ExplainRainbowBadgeTakeThis::
 	.string "Please also take this with you.$"
 
 CeladonCity_Gym_Text_ReceivedTM19FromErika::
-	.string "{PLAYER} received TM19\n"
+	.string "{PLAYER} received TM54\n"
 	.string "from Erika.$"
 
 CeladonCity_Gym_Text_ExplainTM19::
-	.string "TM19 contains Giga Drain.\p"
-	.string "Half the damage it inflicts is\n"
-	.string "drained to heal your Pokémon.\p"
+	.string "TM54 contains Energy Ball.\p"
+	.string "It gathers the power of nature and\n"
+	.string "may lower the foe's Sp. Def.\p"
 	.string "Wouldn't you agree that it's a\n"
 	.string "wonderful move?$"
 

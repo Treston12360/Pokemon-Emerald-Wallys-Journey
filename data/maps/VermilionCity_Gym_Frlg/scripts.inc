@@ -225,9 +225,9 @@ VermilionCity_Gym_EventScript_ShowOaksAide::
 
 VermilionCity_Gym_EventScript_GiveTM34::
 	msgbox VermilionCity_Gym_Text_ExplainThunderBadgeTakeThis
-	checkitemspace ITEM_TM34
+	checkitemspace ITEM_TM53
 	goto_if_eq VAR_RESULT, FALSE, VermilionCity_Gym_EventScript_NoRoomForTM34
-	giveitem_msg VermilionCity_Gym_Text_ReceivedTM34FromLtSurge, ITEM_TM34
+	giveitem_msg VermilionCity_Gym_Text_ReceivedTM34FromLtSurge, ITEM_TM53
 	setflag FLAG_GOT_TM34_FROM_SURGE
 	msgbox VermilionCity_Gym_Text_ExplainTM34
 	release
@@ -311,12 +311,13 @@ VermilionCity_Gym_Text_ExplainThunderBadgeTakeThis::
 	.string "Take this!$"
 
 VermilionCity_Gym_Text_ReceivedTM34FromLtSurge::
-	.string "{PLAYER} received TM34\n"
+	.string "{PLAYER} received TM53\n"
 	.string "from Lt. Surge.$"
 
 VermilionCity_Gym_Text_ExplainTM34::
-	.string "TM34 contains Shock Wave!\p"
-	.string "Teach it to an Electric Pokémon!$"
+	.string "TM53 contains Volt Switch!\p"
+	.string "Hit 'em, then swap out before\n"
+	.string "they can hit back!$"
 
 VermilionCity_Gym_Text_MakeRoomInYourBag::
 	.string "Yo, kid, make room in your Bag!$"

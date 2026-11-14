@@ -66,9 +66,9 @@ CinnabarIsland_Gym_EventScript_DefeatedBlaine::
 
 CinnabarIsland_Gym_EventScript_GiveTM38::
 	msgbox CinnabarIsland_Gym_Text_ExplainVolcanoBadge
-	checkitemspace ITEM_TM38
+	checkitemspace ITEM_TM57
 	goto_if_eq VAR_RESULT, FALSE, CinnabarIsland_Gym_EventScript_NoRoomForTM38
-	giveitem_msg CinnabarIsland_Gym_Text_ReceivedTM38FromBlaine, ITEM_TM38
+	giveitem_msg CinnabarIsland_Gym_Text_ReceivedTM38FromBlaine, ITEM_TM57
 	setflag FLAG_GOT_TM38_FROM_BLAINE
 	msgbox CinnabarIsland_Gym_Text_FireBlastIsUltimateFireMove
 	release
@@ -725,9 +725,10 @@ CinnabarIsland_Gym_Text_BlaineDefeat::
 	.string "You have earned the Volcanobadge.$"
 
 CinnabarIsland_Gym_Text_FireBlastIsUltimateFireMove::
-	.string "Fire Blast is the ultimate fire\n"
-	.string "technique.\p"
-	.string "Don't waste it on Water Pokémon.$"
+	.string "Will-O-Wisp leaves the foe with\n"
+	.string "a burn.\p"
+	.string "A burned attacker hits much\n"
+	.string "weaker. Don't forget that!$"
 
 CinnabarIsland_Gym_Text_ExplainVolcanoBadge::
 	.string "Hah!\p"
@@ -736,14 +737,14 @@ CinnabarIsland_Gym_Text_ExplainVolcanoBadge::
 	.string "Here, you can have this, too!$"
 
 CinnabarIsland_Gym_Text_ReceivedTM38FromBlaine::
-	.string "{PLAYER} received TM38\n"
+	.string "{PLAYER} received TM57\n"
 	.string "from Blaine.$"
 
 CinnabarIsland_Gym_Text_BlainePostBattle::
-	.string "TM38 contains Fire Blast.\n"
-	.string "Teach it to Fire-type Pokémon.\p"
-	.string "Vulpix or Charmeleon would be\n"
-	.string "ideal for that move.$"
+	.string "TM57 contains Will-O-Wisp.\n"
+	.string "It burns the foe without a hit.\p"
+	.string "Physical attackers hate it.\n"
+	.string "Hah!$"
 
 CinnabarIsland_Gym_Text_MakeSpaceForThis::
 	.string "Make space for this, child!$"

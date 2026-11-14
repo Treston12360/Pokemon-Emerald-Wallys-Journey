@@ -22,9 +22,9 @@ PewterCity_Gym_EventScript_DefeatedBrock::
 
 PewterCity_Gym_EventScript_GiveTM39::
 	msgbox PewterCity_Gym_Text_TakeThisWithYou
-	checkitemspace ITEM_TM39
+	checkitemspace ITEM_TM51
 	goto_if_eq VAR_RESULT, FALSE, PewterCity_Gym_EventScript_NoRoomForTM39
-	giveitem_msg PewterCity_Gym_Text_ReceivedTM39FromBrock, ITEM_TM39
+	giveitem_msg PewterCity_Gym_Text_ReceivedTM39FromBrock, ITEM_TM51
 	setflag FLAG_GOT_TM39_FROM_BROCK
 	msgbox PewterCity_Gym_Text_ExplainTM39
 	release
@@ -117,21 +117,15 @@ PewterCity_Gym_Text_TakeThisWithYou::
 	.string "Take this with you.$"
 
 PewterCity_Gym_Text_ReceivedTM39FromBrock::
-	.string "{PLAYER} received TM39\n"
+	.string "{PLAYER} received TM51\n"
 	.string "from Brock.$"
 
 PewterCity_Gym_Text_ExplainTM39::
-	.string "A TM, Technical Machine, contains a\n"
-	.string "technique for Pokémon.\p"
-	.string "Using a TM teaches the move it\n"
-	.string "contains to a Pokémon.\p"
-	.string "A TM is good for only one use.\p"
-	.string "So, when you use one, pick the\n"
-	.string "Pokémon carefully.\p"
-	.string "Anyways…\n"
-	.string "TM39 contains Rock Tomb.\p"
-	.string "It hurls boulders at the foe and\n"
-	.string "lowers its Speed.$"
+	.string "TM51 contains Stealth Rock.\p"
+	.string "It scatters pointed stones around\n"
+	.string "the foe's side of the field.\p"
+	.string "Every Pokémon they send in gets\n"
+	.string "hurt. Rock-solid defense!$"
 
 PewterCity_Gym_Text_BrockPostBattle::
 	.string "There are all kinds of Trainers in\n"

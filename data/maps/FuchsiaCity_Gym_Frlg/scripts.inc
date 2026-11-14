@@ -20,9 +20,9 @@ FuchsiaCity_Gym_EventScript_DefeatedKoga::
 
 FuchsiaCity_Gym_EventScript_GiveTM06::
 	msgbox FuchsiaCity_Gym_Text_KogaExplainSoulBadge
-	checkitemspace ITEM_TM06
+	checkitemspace ITEM_TM55
 	goto_if_eq VAR_RESULT, FALSE, FuchsiaCity_Gym_EventScript_NoRoomForTM06
-	giveitem_msg FuchsiaCity_Gym_Text_ReceivedTM06FromKoga, ITEM_TM06
+	giveitem_msg FuchsiaCity_Gym_Text_ReceivedTM06FromKoga, ITEM_TM55
 	setflag FLAG_GOT_TM06_FROM_KOGA
 	msgbox FuchsiaCity_Gym_Text_KogaExplainTM06
 	release
@@ -109,10 +109,9 @@ FuchsiaCity_Gym_Text_KogaDefeat::
 	.string "Take the Soulbadge!$"
 
 FuchsiaCity_Gym_Text_KogaPostBattle::
-	.string "When afflicted by Toxic, a Pokémon\n"
-	.string "suffers more and more.\p"
-	.string "It suffers worsening damage as the\n"
-	.string "battle wears on!\p"
+	.string "Venoshock strikes twice as hard\n"
+	.string "when the foe is already poisoned.\p"
+	.string "Poison first, then strike!\p"
 	.string "It will surely terrorize foes!$"
 
 FuchsiaCity_Gym_Text_KogaExplainSoulBadge::
@@ -124,12 +123,12 @@ FuchsiaCity_Gym_Text_KogaExplainSoulBadge::
 	.string "Take this, too!$"
 
 FuchsiaCity_Gym_Text_ReceivedTM06FromKoga::
-	.string "{PLAYER} received TM06\n"
+	.string "{PLAYER} received TM55\n"
 	.string "from Koga.$"
 
 FuchsiaCity_Gym_Text_KogaExplainTM06::
-	.string "Sealed within that TM06 lies\n"
-	.string "Toxic!\p"
+	.string "Sealed within that TM55 lies\n"
+	.string "Venoshock!\p"
 	.string "It is a secret technique dating\n"
 	.string "back some four hundred years.$"
 

@@ -924,12 +924,13 @@ static const struct MenuAction sMultichoiceList_GameCornerPokemonPrizes[] = {
     {sText_NoThanks}
 };
 
+// Kanto Game Corner (Project ARIA S-ITEMS): new TM68-TM72, same prices as FireRed's TMs
 static const struct MenuAction sMultichoiceList_GameCornerTMPrizes[] = {
-    {COMPOUND_STRING("TM13{CLEAR_TO 72}{FONT_SMALL}4,000 Coins")},
-    {COMPOUND_STRING("TM23{CLEAR_TO 72}{FONT_SMALL}3,500 Coins")},
-    {COMPOUND_STRING("TM24{CLEAR_TO 72}{FONT_SMALL}4,000 Coins")},
-    {COMPOUND_STRING("TM30{CLEAR_TO 72}{FONT_SMALL}4,500 Coins")},
-    {COMPOUND_STRING("TM35{CLEAR_TO 72}{FONT_SMALL}4,000 Coins")},
+    {COMPOUND_STRING("TM68{CLEAR_TO 72}{FONT_SMALL}4,000 Coins")},
+    {COMPOUND_STRING("TM69{CLEAR_TO 72}{FONT_SMALL}3,500 Coins")},
+    {COMPOUND_STRING("TM70{CLEAR_TO 72}{FONT_SMALL}4,000 Coins")},
+    {COMPOUND_STRING("TM71{CLEAR_TO 72}{FONT_SMALL}4,500 Coins")},
+    {COMPOUND_STRING("TM72{CLEAR_TO 72}{FONT_SMALL}4,000 Coins")},
     {sText_NoThanks}
 };
 

@@ -51,7 +51,59 @@
     F(STEEL_WING) \
     F(SKILL_SWAP) \
     F(SNATCH) \
-    F(OVERHEAT)
+    F(OVERHEAT) \
+    /* TM51-TM100: Project ARIA Kanto TMs (owner approved 2026-11-14, docs/KANTO_TM_LIST.md). Kanto gives  */ \
+    /* only these, because all 50 Gen 3 TMs are already found in Hoenn. Item IDs were unused before.       */ \
+    F(STEALTH_ROCK) \
+    F(SCALD) \
+    F(VOLT_SWITCH) \
+    F(ENERGY_BALL) \
+    F(VENOSHOCK) \
+    F(PSYSHOCK) \
+    F(WILL_O_WISP) \
+    F(DRAGON_PULSE) \
+    F(SWORDS_DANCE) \
+    F(NASTY_PLOT) \
+    F(SUBSTITUTE) \
+    F(THUNDER_WAVE) \
+    F(AGILITY) \
+    F(SLEEP_TALK) \
+    F(TRICK_ROOM) \
+    F(TAILWIND) \
+    F(ENCORE) \
+    F(FLASH_CANNON) \
+    F(DARK_PULSE) \
+    F(EARTH_POWER) \
+    F(FOCUS_BLAST) \
+    F(STONE_EDGE) \
+    F(TRICK) \
+    F(U_TURN) \
+    F(KNOCK_OFF) \
+    F(DAZZLING_GLEAM) \
+    F(X_SCISSOR) \
+    F(POISON_JAB) \
+    F(ROCK_SLIDE) \
+    F(AIR_SLASH) \
+    F(BUG_BUZZ) \
+    F(ZEN_HEADBUTT) \
+    F(SEED_BOMB) \
+    F(WILD_CHARGE) \
+    F(IRON_HEAD) \
+    F(DRAIN_PUNCH) \
+    F(HYPER_VOICE) \
+    F(PLAY_ROUGH) \
+    F(GRASS_KNOT) \
+    F(HEAT_WAVE) \
+    F(HURRICANE) \
+    F(BULLDOZE) \
+    F(LIQUIDATION) \
+    F(SHADOW_CLAW) \
+    F(PSYCHO_CUT) \
+    F(SLUDGE_WAVE) \
+    F(ROOST) \
+    F(DRAGON_DANCE) \
+    F(BODY_PRESS) \
+    F(SPIKES)
 
 #define FOREACH_HM(F) \
     F(CUT) \

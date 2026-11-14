@@ -6,9 +6,9 @@ SaffronCity_MrPsychicsHouse_EventScript_MrPsychic::
 	faceplayer
 	goto_if_set FLAG_GOT_TM29_FROM_MR_PSYCHIC, SaffronCity_MrPsychicsHouse_EventScript_AlreadyGotTM29
 	msgbox SaffronCity_MrPsychicsHouse_Text_YouWantedThis
-	checkitemspace ITEM_TM29
+	checkitemspace ITEM_TM73
 	goto_if_eq VAR_RESULT, FALSE, SaffronCity_MrPsychicsHouse_EventScript_NoRoomForTM29
-	giveitem_msg SaffronCity_MrPsychicsHouse_Text_ReceivedTM29FromMrPsychic, ITEM_TM29
+	giveitem_msg SaffronCity_MrPsychicsHouse_Text_ReceivedTM29FromMrPsychic, ITEM_TM73
 	msgbox SaffronCity_MrPsychicsHouse_Text_ExplainTM29
 	setflag FLAG_GOT_TM29_FROM_MR_PSYCHIC
 	release
@@ -29,14 +29,14 @@ SaffronCity_MrPsychicsHouse_Text_YouWantedThis::
 	.string "You wanted this!$"
 
 SaffronCity_MrPsychicsHouse_Text_ReceivedTM29FromMrPsychic::
-	.string "{PLAYER} received TM29\n"
+	.string "{PLAYER} received TM73\n"
 	.string "from Mr. Psychic.$"
 
 SaffronCity_MrPsychicsHouse_Text_ExplainTM29::
 	.string "You already know, don't you?\n"
-	.string "TM29 is Psychic.\p"
-	.string "It's an attack that may also lower\n"
-	.string "the target's special stats.$"
+	.string "TM73 is Trick.\p"
+	.string "It swaps held items with the\n"
+	.string "target.$"
 
 SaffronCity_MrPsychicsHouse_Text_YouveNoRoom::
 	.string "Where do you plan to put this?\n"
