@@ -156,7 +156,7 @@ lines that fit who they are.
 
 ---
 
-## League battles (S-LEAGUE)  · DRAFT — owner to approve
+## League battles (S-LEAGUE)  · APPROVED (owner 2026-11-14) · IN GAME
 Lineup (owner 2026-11-14): Blue = Viridian Gym (8th); Janine = Fuchsia; Elite Four Lorelei, Bruno, Agatha,
 **Koga**; Champion **Lance**. Lorelei/Bruno/Agatha keep FireRed's lines until S-TALK.
 

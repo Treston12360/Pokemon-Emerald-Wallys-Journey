@@ -186,9 +186,9 @@ Proposed blocks (owner to confirm or adjust):
 |---|---|---|
 | Route 22 → Victory Road | League gate checks Kanto badges | 8 badges |
 | Nugget Bridge / Routes 24–25 | Bridge damaged by an anomaly surge, repair crew | Story (Cerulean) |
-| Rock Tunnel | Rockslide at the entrance | Story (ch. 3–4) |
+| Rock Tunnel | **Open — the only way to Lavender** (owner 2026-11-14); make it scary | — |
 | Saffron gates | Anomaly cordon (Jenny, League rangers), later quarantine | Ch. 6 |
-| Diglett's Cave | Cave-in from tremors | Later |
+| Diglett's Cave | **Open** (owner 2026-11-14) | — |
 | Routes 12 and 16 | Snorlax | Poké Flute (ch. 4) |
 | Cycling Road | Closed for repairs (after Snorlax) | Ch. 7 |
 | Sea routes 19–21 | Coast Guard closure (strange currents) | Ch. 8 |
@@ -383,4 +383,8 @@ Varnell learns this from Rocket's inventory, which the player retrieves for him 
   is strangely excited but hides it (a person moved across time is possible) — this is what leads him to Dialga.
 - 2026-11-14 (owner): **Varnell (and other callers) talk to the player through the PokéNav** — Emerald's
   `pokenavcall` window (rings, 'Name: ...', click), built with `call_strings()` in `tools/aria_text.py`.
+- 2026-11-14 (owner): **S.S. Anne has sailed off** when the player reaches Vermilion on foot (ch. 3b).
+  **Diglett's Cave is open. Lavender can only be reached through Rock Tunnel** ("make the dark tunnel scary
+  somehow, since it leads to Lavender"). **Blue bumps into the player in Vermilion** (ch. 3b).
+  League lines (Blue/Koga/Lance) approved.
 

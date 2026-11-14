@@ -249,6 +249,10 @@ Aria_Ch0b_OakAtDock::
 	fadescreen FADE_TO_BLACK
 	delay 60
 	setvar VAR_ARIA_STORY, 6
+	@ Owner 2026-11-14: the S.S. Anne has sailed off by the time you reach Vermilion on foot (FireRed's
+	@ 'departed' state: ship hidden, Vermilion scene var 2 as after FireRed's departure cutscene)
+	setflag FLAG_HIDE_SS_ANNE
+	setvar VAR_MAP_SCENE_VERMILION_CITY, 2
 	warp MAP_PALLET_TOWN_PROFESSOR_OAKS_LAB, 6, 10
 	waitstate
 	releaseall
