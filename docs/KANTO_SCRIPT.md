@@ -337,4 +337,8 @@ excited and hides it. Name below is a placeholder (owner to choose). His team: o
 - Owner 2026-11-14 (ch. 3): Kiyoshi's last line is "It burns! IT BURNS! AHHHHH!....." **Rule for all scenes:**
   important story lines are said after a battle, back on the map — never only in the battle's defeat text
   (most players skip that).
+- Owner 2026-11-14 (ch. 3): Kiyoshi is **weak on purpose** — canon Sage levels, the fight is about the story.
+  Team modelled on Sprout Tower's Elder Li in Gold/Silver (Bellsprout, Bellsprout, Hoothoot, levels 7–10; check
+  against the GSC data when building). He must be **excluded from Wally's Journey trainer level scaling**
+  (`src/data/wj_trainer_scaling.h`) so he stays weak.
 
