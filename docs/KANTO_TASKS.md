@@ -119,8 +119,8 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 - [ ] **S-HM. Kanto HM licenses:** on Kanto maps, Cut/Surf/Strength/Rock Smash/Waterfall/Flash/Dive need the Kanto
       badge from the Gym Leader who gives that HM (FireRed's badge→HM table); Fly always works; Hoenn unchanged.
 - [ ] **S-LEAGUE. Kanto League lineup** (already decided, design doc §1): Viridian Gym leader Giovanni → **Blue**
-      (8th badge, ch. 10); Fuchsia → **Janine**; Elite Four **as in original FireRed** (owner 2026-11-14): Lorelei, Bruno, Agatha, then **Lance** as Champion;
-      the Champion's room Blue is removed (Lance's room is the last fight). Giovanni is hidden only in the Rocket Hideout (S0 step 2); the Viridian Gym and Champion's room
+      (8th badge, ch. 10); Fuchsia → **Janine**; Elite Four (owner 2026-11-14): **Lorelei, Bruno, Agatha, Koga** (Koga in Lance's room);
+      **Lance = Champion** in the Champion's room (replaces FireRed's Blue there). Giovanni is hidden only in the Rocket Hideout (S0 step 2); the Viridian Gym and Champion's room
       objects are untouched until this task. Mt. Moon: fossils kept (ch. 2) — Miguel's fossil scene stays.
 - [ ] **S-BLOCK. Road blocks** from `docs/KANTO_PROJECT_ARIA.md` §4 (after the owner confirms the table).
 - [ ] **S-TALK. New dialogue for every Kanto NPC and trainer** (owner: each trainer unique and believable, Gym
