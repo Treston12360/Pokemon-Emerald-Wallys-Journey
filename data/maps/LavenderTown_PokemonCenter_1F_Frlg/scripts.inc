@@ -19,7 +19,7 @@ LavenderTown_PokemonCenter_1F_EventScript_Gentleman::
 	end
 
 LavenderTown_PokemonCenter_1F_EventScript_Lass::
-	msgbox LavenderTown_PokemonCenter_1F_Text_CubonesMotherKilledByRockets, MSGBOX_NPC
+	msgbox Aria_Ch4_Text_Woman, MSGBOX_NPC @ ARIA ch. 4 (approved)
 	end
 
 LavenderTown_PokemonCenter_1F_EventScript_Youngster::

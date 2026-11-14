@@ -16166,6 +16166,22 @@ const struct ItemInfo gItemsInfo[] =
         .iconPic = gItemIcon_Scanner,
         .iconPalette = gItemIconPalette_Scanner,
     },
+
+    [ITEM_CALIBRATION_LENS] =
+    {
+        .name = ITEM_NAME("Calibration Lens"),
+        .description = COMPOUND_STRING(
+            "A lens from Dr.\n"
+            "Varnell. It shows\n"
+            "what stayed behind."),
+        .price = 0,
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .iconPic = gItemIcon_SilphScope,
+        .iconPalette = gItemIconPalette_SilphScope,
+    },
 };
 
 #undef ITEM_NAME

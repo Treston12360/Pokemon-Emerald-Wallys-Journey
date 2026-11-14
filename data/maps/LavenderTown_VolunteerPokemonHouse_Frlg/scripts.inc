@@ -4,6 +4,7 @@ LavenderTown_VolunteerPokemonHouse_Frlg_MapScripts::
 LavenderTown_VolunteerPokemonHouse_EventScript_MrFuji::
 	lock
 	faceplayer
+	goto Aria_Ch4_Fuji @ Project ARIA ch. 4 (FireRed's flute scene replaced)
 	goto_if_set FLAG_GOT_POKE_FLUTE, LavenderTown_VolunteerPokemonHouse_EventScript_AlreadyHavePokeFlute
 	msgbox LavenderTown_VolunteerPokemonHouse_Text_IdLikeYouToHaveThis
 	checkitemspace ITEM_POKE_FLUTE

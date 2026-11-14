@@ -1,4 +1,5 @@
 PokemonTower_7F_Frlg_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Aria_Ch4_Tower7FOnTransition
 	.byte 0
 
 PokemonTower_7F_EventScript_MrFuji::

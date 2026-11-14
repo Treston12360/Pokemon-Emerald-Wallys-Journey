@@ -1058,6 +1058,7 @@ gStdScripts_End::
 	.include "data/scripts/aria_ch2.inc"
 	.include "data/scripts/aria_ch3.inc"
 	.include "data/scripts/aria_ch3b.inc"
+	.include "data/scripts/aria_ch4.inc"
 	.include "data/scripts/hall_of_fame.inc"
 	.include "data/scripts/hall_of_fame_frlg.inc"
 

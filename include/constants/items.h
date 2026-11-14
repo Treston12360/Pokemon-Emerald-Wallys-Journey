@@ -1054,6 +1054,7 @@ enum __attribute__((packed)) Item
     ITEM_OUTFIT_CASE = 875, // Wally's Journey: key item, opens the outfit menu
     ITEM_SS_ANNE_TICKET = 876, // Project ARIA ch. 0: Birch's ticket for the S.S. Anne (Norman's Briney ticket stays ITEM_SS_TICKET)
     ITEM_RIFT_SCANNER = 877, // Project ARIA ch. 1: Varnell's device (name owner-approved); use is added with ch. 2
+    ITEM_CALIBRATION_LENS = 878, // Project ARIA ch. 4: does what FireRed's Silph Scope did (see GHOSTS_REVEALED)
 
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,

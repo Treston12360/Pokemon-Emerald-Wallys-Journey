@@ -264,7 +264,8 @@ void SaveBlockPC_InitKanto(void)
     extern const u8 EventScript_AriaKantoStart2[];  // 2: no FireRed Rockets / Blue rival scenes (owner 2026-11-14)
     extern const u8 EventScript_AriaKantoStart3[];  // 3: no Bill scene, Rocket-era road blocks gone (owner 2026-11-14)
     extern const u8 EventScript_AriaKantoStart4[];  // 4: Snorlax back on Routes 12/16 (owner 2026-11-14)
-    static const u8 *const steps[] = {EventScript_AriaKantoStart, EventScript_AriaKantoStart2, EventScript_AriaKantoStart3, EventScript_AriaKantoStart4};
+    extern const u8 EventScript_AriaKantoStart5[];  // 5: Mr. Fuji not in the tower (ch. 4)
+    static const u8 *const steps[] = {EventScript_AriaKantoStart, EventScript_AriaKantoStart2, EventScript_AriaKantoStart3, EventScript_AriaKantoStart4, EventScript_AriaKantoStart5};
     while (gSaveBlockPC.kantoMapFlagsSet < ARRAY_COUNT(steps))
         RunScriptImmediately(steps[gSaveBlockPC.kantoMapFlagsSet++]);
 #endif

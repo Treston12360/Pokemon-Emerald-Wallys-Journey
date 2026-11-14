@@ -332,7 +332,7 @@ static bool8 CheckSilphScopeInPokemonTower(u16 mapGroup, u16 mapNum)
       || mapNum == MAP_NUM(MAP_POKEMON_TOWER_5F)
       || mapNum == MAP_NUM(MAP_POKEMON_TOWER_6F)
       || mapNum == MAP_NUM(MAP_POKEMON_TOWER_7F))
-     && !(CheckBagHasItem(ITEM_SILPH_SCOPE, 1)))
+     && !((CheckBagHasItem(ITEM_SILPH_SCOPE, 1) || CheckBagHasItem(ITEM_CALIBRATION_LENS, 1)) /* ARIA: Varnell's lens */))
         return TRUE;
     else
         return FALSE;
@@ -599,7 +599,7 @@ void StartMarowakBattle(void)
     gMain.savedCallback = CB2_EndMarowakBattle;
     gBattleTypeFlags = BATTLE_TYPE_GHOST;
 
-    if (CheckBagHasItem(ITEM_SILPH_SCOPE, 1))
+    if ((CheckBagHasItem(ITEM_SILPH_SCOPE, 1) || CheckBagHasItem(ITEM_CALIBRATION_LENS, 1)) /* ARIA: Varnell's lens */)
     {
         u32 personality = GetMonPersonality(SPECIES_MAROWAK, MON_FEMALE, NATURE_SERIOUS, RANDOM_UNOWN_LETTER);
 

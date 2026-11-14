@@ -67,3 +67,8 @@ EventScript_AriaKantoStart4::
 	clearflag FLAG_HIDE_ROUTE_12_SNORLAX
 	clearflag FLAG_HIDE_ROUTE_16_SNORLAX
 	end
+
+@ Step 5. Mr. Fuji isn't held in Pokémon Tower (no Rockets): he's at home; his tower object stays hidden.
+EventScript_AriaKantoStart5::
+	setflag FLAG_HIDE_TOWER_FUJI
+	end

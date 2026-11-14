@@ -1,20 +1,17 @@
 LavenderTown_Frlg_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, LavenderTown_OnTransition
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, Aria_Ch4_LavenderOnFrame
 	.byte 0
 
 LavenderTown_OnTransition::
 	setworldmapflag FLAG_WORLD_MAP_LAVENDER_TOWN
 	setvar VAR_MAP_SCENE_S_S_ANNE_2F_CORRIDOR, 1
 	setflag FLAG_HIDE_SS_ANNE_RIVAL
+	call Aria_Ch4_LavenderOnTransition @ Project ARIA ch. 4
 	end
 
 LavenderTown_EventScript_LittleGirl::
-	lock
-	faceplayer
-	msgbox LavenderTown_Text_DoYouBelieveInGhosts, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, LavenderTown_EventScript_LittleGirlBelieve
-	msgbox LavenderTown_Text_JustImaginingWhiteHand
-	release
+	msgbox Aria_Ch4_Text_LittleGirl, MSGBOX_NPC @ ARIA ch. 4 (approved)
 	end
 
 LavenderTown_EventScript_LittleGirlBelieve::

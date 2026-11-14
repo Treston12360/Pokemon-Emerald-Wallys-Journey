@@ -394,7 +394,7 @@ and should be scary — the Clefairy's cry building up ("Ar...." → "Ari....").
 
 ---
 
-## Chapter 4 — Lavender: the crying in the tower  · APPROVED (owner 2026-11-14)
+## Chapter 4 — Lavender: the crying in the tower  · APPROVED (owner 2026-11-14) · IN GAME
 From the design doc: Aria died in Pokémon Tower during Rocket's raid, chasing the Rockets who stole her Clefairy
 (both died; Mr. Fuji was there). Varnell won't enter the tower and sends the player ("the readings need a
 trainer's Pokémon"). His "calibration lens" (does what FireRed's Silph Scope did) reveals the ghost: the

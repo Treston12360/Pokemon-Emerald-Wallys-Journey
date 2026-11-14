@@ -16,6 +16,7 @@ enum SpeakerNames {
     SP_NAME_KOGA,
     SP_NAME_MIGUEL,
     SP_NAME_KIYOSHI,
+    SP_NAME_FUJI,
     SP_NAME_COUNT
 };
 
