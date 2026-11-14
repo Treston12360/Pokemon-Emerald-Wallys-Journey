@@ -61,7 +61,8 @@ Add under each item: what was found, what was changed, files, how to test, what 
       - Not reproduced yet (Claude 019khs4X, 2026-11-14). Linux build, Brennan's settings from his cfg but
         `widescreen=0` (zoom=5, resolution=3 / 1440p, lockAspect=1, integerScale=1, border=1), 960x640 test window:
         the new main menu (Continue / New Game / Option) and the new text box both show whole, nothing cut off
-        (`docs/polish_reports/POL-6_not_reproduced_widescreen_off.png`). zoom 3 vs 5 makes no difference there.
+        (picture: `docs/polish_reports/POL-6_not_reproduced_widescreen_off.png` = the menu; the text box was checked in
+        an earlier run, not kept). zoom 3 vs 5 makes no difference there.
       - Not checked: his real window size/monitor (windowScale=8, fullscreen), the Classic text box, the Windows exe.
       - Need from Brennan: a screenshot of the cut-off box, and whether he was in fullscreen.
 - [ ] **POL-7. Grass, flowers, flowerbeds, trees still flat.** "The grass in 3D is not 3D it's still 2D alongside
