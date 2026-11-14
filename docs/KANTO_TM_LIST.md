@@ -78,3 +78,34 @@ Nothing has been changed yet; the owner picks what goes in their place.
 | TM41 | Torment | SilphCo 4F |
 
 HMs are not needed in Kanto at all (Hoenn already gave all 8; Kanto field moves use the HM licence + Kanto badges, S-HM).
+
+## Owner decision (2026-11-14)
+
+- Kanto gives **new TMs: TM51–TM100, moves from later generations** (owner picked "New TMs (later-gen moves)").
+  The item slots ITEM_TM51..ITEM_TM100 already exist and are unused, so old saves are not affected; which Pokémon
+  can learn each new TM comes from the expansion's own later-generation data (`tools/learnset_helpers/make_teachables.py`).
+- HM spots (S.S. Anne captain, Fly house, Safari secret house, Warden, Route 2 aide, Ember Spa) give no HM.
+- Frontier Brains get the green name box too (owner, same day) — done.
+
+## Proposal: which new TM goes where — WAITING FOR OWNER APPROVAL
+
+Gym Leaders get a move of their own type. Moves are the usual competitive staples from Gen 4–9 so every one is worth having.
+
+| TM | Move | Where |
+|---|---|---|
+| TM51 | Stealth Rock | Brock (Pewter Gym) |
+| TM52 | Scald | Misty (Cerulean Gym) |
+| TM53 | Volt Switch | Lt. Surge (Vermilion Gym) |
+| TM54 | Energy Ball | Erika (Celadon Gym) |
+| TM55 | Venoshock | Janine (Fuchsia Gym) |
+| TM56 | Psyshock | Sabrina (Saffron Gym) |
+| TM57 | Will-O-Wisp | Blaine (Cinnabar Gym) |
+| TM58 | Dragon Pulse | Blue (Viridian Gym) — Blue has no single type, so this one is a free choice |
+| TM59–TM64 | Swords Dance, Nasty Plot, Substitute, Thunder Wave, Agility, Sleep Talk | Celadon Dept. Store 2F (for sale) |
+| TM65–TM67 | Trick Room, Tailwind, Encore | Celadon roof drink girl |
+| TM68–TM72 | Flash Cannon, Dark Pulse, Earth Power, Focus Blast, Stone Edge | Game Corner prizes |
+| TM73 | Trick | Mr. Psychic (Saffron) |
+| TM74 | U-turn | Route 12 gate 2F |
+| TM75 | Knock Off | Cerulean (the house that gave Dig) |
+| TM76 | Dazzling Gleam | Five Island Memorial Pillar |
+| TM77–TM100 | X-Scissor, Poison Jab, Rock Slide, Air Slash, Bug Buzz, Zen Headbutt, Seed Bomb, Wild Charge, Iron Head, Drain Punch, Hyper Voice, Play Rough, Grass Knot, Heat Wave, Hurricane, Bulldoze, Liquidation, Shadow Claw, Psycho Cut, Sludge Wave, Roost, Dragon Dance, Body Press, Spikes | The 28 ground balls (24 TMs; the 4 balls left over give good repeatable items) |
