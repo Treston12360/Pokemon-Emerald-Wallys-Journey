@@ -56,7 +56,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
       building the things inside at the front of the building are cut off and doesn't look 3D, the pc is cut off
       at the bottom, the top of the healing station and back wall looks crunched and cut off like the back wall
       is down too far."
-- [ ] **POL-6. Boxes too big outside widescreen.** "When not in widescreen mode, the text box and main menu box
+- [~] **POL-6. Boxes too big outside widescreen.** (Claude 019khs4X, 2026-11-14, in work) "When not in widescreen mode, the text box and main menu box
       is too big for the screen and gets cut off."
 - [ ] **POL-7. Grass, flowers, flowerbeds, trees still flat.** "The grass in 3D is not 3D it's still 2D alongside
       flowers, flowerbeds, trees."
