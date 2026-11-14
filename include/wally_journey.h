@@ -28,6 +28,7 @@ void WallyJourney_ScaleImportantParty(struct Pokemon *party, u16 trainerId);
 void WallyJourney_ScaleReporterParty(struct Pokemon *party, u16 trainerId);
 bool32 WallyJourney_IsReporterTrainer(u16 trainerId);
 bool32 WallyJourney_IsLeaderRematchTrainer(u16 trainerId);
+bool32 WallyJourney_IsRepeatEliteFourBattle(u16 trainerId);
 void WallyJourney_RecordLeaderPostgameWin(void);
 bool8 WallyJourney_IsEliteFourRematchUnlocked(void);
 void WallyJourney_RecordCatch(u16 species);

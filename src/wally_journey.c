@@ -631,8 +631,8 @@ void WallyJourney_RecordLeaderPostgameWin(void)
 }
 
 // The Elite Four rematch is the last challenge: it opens once the player has
-// beaten every Gym Leader's post-League team, the final rival battle at Birch's
-// lab and Steven in Meteor Falls.
+// beaten every Gym Leader's post-League team and Steven in Meteor Falls.
+// (Project ARIA L1, owner 2026-11-13: May/Brendan's lab battle was removed, so it is no longer needed.)
 bool8 WallyJourney_IsEliteFourRematchUnlocked(void)
 {
 #if IS_FRLG
@@ -640,7 +640,6 @@ bool8 WallyJourney_IsEliteFourRematchUnlocked(void)
 #else
     return FlagGet(FLAG_SYS_GAME_CLEAR)
         && (VarGet(VAR_WALLY_LEADER_POSTGAME_WINS) & 0xFF) == 0xFF
-        && FlagGet(FLAG_WALLY_RIVAL_FINAL_DONE)
         && FlagGet(FLAG_DEFEATED_METEOR_FALLS_STEVEN);
 #endif
 }
@@ -655,6 +654,58 @@ bool32 WallyJourney_IsLeaderRematchTrainer(u16 trainerId)
             return TRUE;
     }
     return FALSE;
+}
+
+// Project ARIA L1 (owner 2026-11-13): Hoenn's Elite Four after the first League win (repeat runs and the
+// rematch teams) give 5% EXP, so the post-game can't be farmed before Kanto.
+bool32 WallyJourney_IsRepeatEliteFourBattle(u16 trainerId)
+{
+#if IS_FRLG
+    return FALSE;
+#else
+    switch (trainerId)
+    {
+    case TRAINER_SIDNEY: case TRAINER_PHOEBE: case TRAINER_GLACIA: case TRAINER_DRAKE:
+    case TRAINER_SIDNEY_2: case TRAINER_PHOEBE_2: case TRAINER_GLACIA_2: case TRAINER_DRAKE_2:
+        return FlagGet(FLAG_SYS_GAME_CLEAR);
+    default:
+        return FALSE;
+    }
+#endif
+}
+
+// Project ARIA L1 (owner 2026-11-13): Steven in Meteor Falls is about as strong as Champion Wally (mid-60s),
+// so the post-game before Kanto doesn't over-level the player. His title-defense team (Champion's Room) is
+// the same trainer and stays at its own levels.
+#define WJ_METEOR_FALLS_STEVEN_ACE 67 // = Champion Wally's ace
+static void WallyJourney_ScaleMeteorFallsSteven(struct Pokemon *party, u16 trainerId)
+{
+    u32 i, n;
+    s32 shift;
+    if (trainerId != TRAINER_STEVEN
+     || gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(MAP_METEOR_FALLS_STEVENS_CAVE)
+     || gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_METEOR_FALLS_STEVENS_CAVE))
+        return;
+    for (n = 0; n < PARTY_SIZE && GetMonData(&party[n], MON_DATA_SPECIES) != SPECIES_NONE; n++)
+        ;
+    if (n == 0)
+        return;
+    shift = WJ_METEOR_FALLS_STEVEN_ACE - (s32)GetMonData(&party[n - 1], MON_DATA_LEVEL);
+    if (shift >= 0)
+        return;
+    for (i = 0; i < n; i++)
+    {
+        struct Pokemon *mon = &party[i];
+        s32 level = (s32)GetMonData(mon, MON_DATA_LEVEL) + shift;
+        u16 species = GetMonData(mon, MON_DATA_SPECIES);
+        u32 exp;
+        if (level < 1)
+            level = 1;
+        exp = gExperienceTables[gSpeciesInfo[species].growthRate][level];
+        SetMonData(mon, MON_DATA_EXP, &exp);
+        SetMonData(mon, MON_DATA_LEVEL, &level);
+        CalculateMonStats(mon);
+    }
 }
 
 // May/Brendan's final team is levels 67-72 for the postgame battle on the way to the
@@ -746,6 +797,7 @@ void WallyJourney_ScaleLeaderParty(struct Pokemon *party, u16 trainerId)
     u32 gym, i, n, count, badges, target, aceLevel, stage;
     WallyJourney_ScaleTitleRivalParty(party, trainerId);
     WallyJourney_ScaleVitoParty(party, trainerId);
+    WallyJourney_ScaleMeteorFallsSteven(party, trainerId);
     for (gym = 0; gym < ARRAY_COUNT(sLeaderGrowthIds); gym++)
         if (sLeaderGrowthIds[gym] == trainerId)
             break;

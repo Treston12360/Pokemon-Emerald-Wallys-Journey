@@ -30,23 +30,30 @@ for e in W:
     ys = [E.yields.get(m['species'], 60) for m in mons]
     wild[name] = (lv, sum(ys) / len(ys))
 
+# Post-game before Kanto, with the owner's 2026-11-13 rules (Project ARIA L1): Leader rematches give 5% EXP,
+# May/Brendan's lab battle is gone, Steven (Meteor Falls) is cut to Champion Wally's strength (ace 67).
 POST = ['TRAINER_ROXANNE_3', 'TRAINER_BRAWLY_3', 'TRAINER_WATTSON_3', 'TRAINER_FLANNERY_3',
         'TRAINER_NORMAN_3', 'TRAINER_WINONA_3', 'TRAINER_TATE_AND_LIZA_3', 'TRAINER_JUAN_3',
-        'TRAINER_MAY_FINAL_MUDKIP', 'TRAINER_STEVEN']
+        'TRAINER_STEVEN']
+EXP_MULT = {t: 0.05 for t in POST if t != 'TRAINER_STEVEN'}
+STEVEN_ACE = 67  # src/wally_journey.c WJ_METEOR_FALLS_STEVEN_ACE
 LEAGUE = ['TRAINER_SIDNEY', 'TRAINER_PHOEBE', 'TRAINER_GLACIA', 'TRAINER_DRAKE', 'TRAINER_WALLY_CHAMPION']
 
 def run(wild_per_map=3, post=True, rates=('MS', 'MF', 'MF', 'MF', 'S', 'F'), join=(0, 1, 3, 5, 9, 12)):
     team = [[rates[0], E.exp_for(rates[0], 5)]]
     locks = {}; log = []
     def lv(): return [E.level_of(r, x) for r, x in team]
-    def gain(foe, y):
-        base = int(y * foe / 5); pool = base + base // 2; share = max(1, pool // len(team))
+    def gain(foe, y, mult=1.0):
+        base = int(y * foe / 5); pool = base + base // 2; pool = max(1, int(pool * mult)) if mult < 1 else pool
+        share = max(1, pool // len(team))
         for mon in team:
             mon[1] += int(share * E.scale(foe, E.level_of(mon[0], mon[1]))) + 1
     def fight(t):
         p = E.parties.get(t, [])
         lvls = scaled(t, [l for _, l in p], max(lv()), locks)
-        for (sp, _), l in zip(p, lvls): gain(l, E.yields.get(sp, 100))
+        if t == 'TRAINER_STEVEN' and lvls:
+            lvls = [l + STEVEN_ACE - lvls[-1] for l in lvls]
+        for (sp, _), l in zip(p, lvls): gain(l, E.yields.get(sp, 100), EXP_MULT.get(t, 1.0))
         return lvls
     seq = list(E.encounters()) + [('League', t) for t in LEAGUE] + ([('Postgame', t) for t in POST] if post else [])
     lastmap = None

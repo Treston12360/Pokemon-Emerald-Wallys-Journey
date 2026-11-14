@@ -2215,9 +2215,13 @@ static void Cmd_getexp(void)
             if (GetConfig(B_TRAINER_EXP_MULTIPLIER) <= GEN_7 && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
                 calculatedExp = (calculatedExp * 150) / 100;
 
-            // Wally's Journey: repeatable Gym Leader rematches give a quarter of the EXP.
+            // Wally's Journey: repeatable Gym Leader rematches give 5% of the EXP (Project ARIA L1, owner
+            // 2026-11-13: was a quarter; nothing in Hoenn's post-game may push the player past the Kanto curve).
             if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && WallyJourney_IsLeaderRematchTrainer(TRAINER_BATTLE_PARAM.opponentA))
-                calculatedExp /= 4;
+                calculatedExp = max(1, calculatedExp * 5 / 100);
+            // Project ARIA L1: every Elite Four battle after the first League win gives 5%, like Gabby & Ty.
+            else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && WallyJourney_IsRepeatEliteFourBattle(TRAINER_BATTLE_PARAM.opponentA))
+                calculatedExp = max(1, calculatedExp * 5 / 100);
             // Wally's Journey: Gabby & Ty (repeatable, scaled) give 5% (owner 2026-11-11; was a quarter).
             else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && WallyJourney_IsReporterTrainer(TRAINER_BATTLE_PARAM.opponentA))
                 calculatedExp = max(1, calculatedExp * 5 / 100);

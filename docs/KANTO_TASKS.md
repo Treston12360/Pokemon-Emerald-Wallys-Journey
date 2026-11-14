@@ -172,6 +172,11 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 - [ ] **L1. Hoenn post-game rules:** remove May/Brendan lab battle (and from the E4-rematch unlock); lower
       Steven to Wally's strength; Gym Leader rematch EXP 5% (or none); repeat Elite Four runs 5% EXP;
       Champion defenses locked until Kanto is beaten.
+      **Done 2026-11-14:** lab battle removed (May/Brendan still say what they decided; E4-rematch unlock no
+      longer needs it); Steven in Meteor Falls cut to ace 67 = Champion Wally (`WallyJourney_ScaleMeteorFallsSteven`,
+      his title-defense team unchanged); Leader rematches 5% EXP; every Hoenn E4 battle after the first League
+      win 5% EXP (`WallyJourney_IsRepeatEliteFourBattle`). **Open: Champion defenses lock** — waiting for the
+      owner to say what the Champion's Room does on a repeat run before Kanto is beaten.
 - [ ] **L2. Re-run `tools/exp_curve_full.py`** with L1's rules; update the arrival level in the design doc.
 - [ ] **L3. Kanto trainer and wild levels** per the design doc; check with `tools/exp_curve_kanto.py`.
 - [ ] **L4. Kanto Gym Leaders / Elite Four / important teams** (Kanto families only, no regional forms) —

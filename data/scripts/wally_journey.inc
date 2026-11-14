@@ -754,6 +754,9 @@ WallyJourney_Text_JuanSeeYouAtGym:
 @ Wally's Journey: after the Hall of Fame, May/Brendan asks for one last real
 @ battle in Birch's lab, then explains they've chosen research as well as battling.
 WallyJourney_EventScript_RivalFinal::
+	@ Project ARIA L1 (owner 2026-11-13): the lab battle is removed - May/Brendan only battle as title
+	@ challengers now. They still tell you what they decided (the "After" lines read fine on their own).
+	goto WallyJourney_EventScript_RivalFinalAfter
 	checkplayergender
 	goto_if_eq VAR_RESULT, FEMALE, WallyJourney_EventScript_RivalFinalBrendan
 	msgbox WallyJourney_Text_RivalFinalMayIntro, MSGBOX_DEFAULT

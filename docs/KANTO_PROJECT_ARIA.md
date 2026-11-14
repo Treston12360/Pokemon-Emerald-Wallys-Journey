@@ -204,8 +204,10 @@ Proposed blocks (owner to confirm or adjust):
 ## 5. Levels and EXP (simulated — see `tools/exp_curve_full.py`, `tools/exp_curve_kanto.py`)
 
 - **Normal EXP. No Kanto EXP cut.** Gen 7 scaled EXP already slows over-levelled teams.
-- A player who beats every Hoenn trainer reaches Champion Wally at about **55** (top ~58);
-  with the post-game one-time fights, about **60**.
+- A player who beats every Hoenn trainer reaches Champion Wally at about **55** (top ~58).
+- **Kanto arrival (L2, re-run 2026-11-14 with the L1 rules):** Leader rematches at 5% EXP, no May/Brendan lab
+  battle, Steven cut to ace 67 → a thorough player arrives in Kanto at **avg ~55–56, top ~58–59**
+  (0–6 wild battles per area). (Before L1 it was about 60.) `python3 tools/exp_curve_full.py`.
 - **Route trainers:** fixed levels per area, about **5 below** where the simulation says the player is
   (the same gap Hoenn has at around level 20–29).
 - **Wild Pokémon:** fixed, about **4 below** the local trainers. Not scaled.
