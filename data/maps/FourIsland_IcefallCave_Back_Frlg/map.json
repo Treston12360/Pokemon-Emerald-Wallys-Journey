@@ -86,34 +86,6 @@
       "dest_warp_id": "5"
     }
   ],
-  "coord_events": [
-    {
-      "type": "trigger",
-      "x": 11,
-      "y": 18,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_ICEFALL_CAVE_BACK",
-      "var_value": "0",
-      "script": "FourIsland_IcefallCave_Back_EventScript_LoreleiRocketsScene"
-    },
-    {
-      "type": "trigger",
-      "x": 12,
-      "y": 18,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_ICEFALL_CAVE_BACK",
-      "var_value": "0",
-      "script": "FourIsland_IcefallCave_Back_EventScript_LoreleiRocketsScene"
-    },
-    {
-      "type": "trigger",
-      "x": 13,
-      "y": 18,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_ICEFALL_CAVE_BACK",
-      "var_value": "0",
-      "script": "FourIsland_IcefallCave_Back_EventScript_LoreleiRocketsScene"
-    }
-  ],
+  "coord_events": [],
   "bg_events": []
 }

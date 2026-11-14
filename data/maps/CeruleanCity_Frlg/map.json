@@ -307,53 +307,7 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [
-    {
-      "type": "trigger",
-      "x": 22,
-      "y": 6,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_CERULEAN_CITY_RIVAL",
-      "var_value": "0",
-      "script": "CeruleanCity_EventScript_RivalTriggerLeft"
-    },
-    {
-      "type": "trigger",
-      "x": 23,
-      "y": 6,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_CERULEAN_CITY_RIVAL",
-      "var_value": "0",
-      "script": "CeruleanCity_EventScript_RivalTriggerMid"
-    },
-    {
-      "type": "trigger",
-      "x": 24,
-      "y": 6,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_CERULEAN_CITY_RIVAL",
-      "var_value": "0",
-      "script": "CeruleanCity_EventScript_RivalTriggerRight"
-    },
-    {
-      "type": "trigger",
-      "x": 33,
-      "y": 5,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_CERULEAN_CITY_ROCKET",
-      "var_value": "0",
-      "script": "CeruleanCity_EventScript_GruntTriggerTop"
-    },
-    {
-      "type": "trigger",
-      "x": 33,
-      "y": 7,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_CERULEAN_CITY_ROCKET",
-      "var_value": "0",
-      "script": "CeruleanCity_EventScript_GruntTriggerBottom"
-    }
-  ],
+  "coord_events": [],
   "bg_events": [
     {
       "type": "sign",

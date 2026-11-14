@@ -258,12 +258,13 @@ void SaveBlockPC_Read(void)
 void SaveBlockPC_InitKanto(void)
 {
 #if !IS_FRLG
-    extern const u8 EventScript_AriaKantoStart[];
-    if (!gSaveBlockPC.kantoMapFlagsSet)
-    {
-        RunScriptImmediately(EventScript_AriaKantoStart); // data/scripts/aria_kanto_start.inc
-        gSaveBlockPC.kantoMapFlagsSet = TRUE;
-    }
+    // Each step runs once per save, in order; a save that already has step N only gets the newer ones.
+    // Never edit an old step's script once released: add a new step (data/scripts/aria_kanto_start.inc).
+    extern const u8 EventScript_AriaKantoStart[];   // 1: FireRed's map flags, Pallet->Pewter
+    extern const u8 EventScript_AriaKantoStart2[];  // 2: no FireRed Rockets / Blue rival scenes (owner 2026-11-14)
+    static const u8 *const steps[] = {EventScript_AriaKantoStart, EventScript_AriaKantoStart2};
+    while (gSaveBlockPC.kantoMapFlagsSet < ARRAY_COUNT(steps))
+        RunScriptImmediately(steps[gSaveBlockPC.kantoMapFlagsSet++]);
 #endif
 }
 

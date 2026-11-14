@@ -127,26 +127,7 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [
-    {
-      "type": "trigger",
-      "x": 5,
-      "y": 15,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_SILPH_CO_11F",
-      "var_value": "0",
-      "script": "SilphCo_11F_EventScript_GiovanniTriggerLeft"
-    },
-    {
-      "type": "trigger",
-      "x": 6,
-      "y": 15,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_SILPH_CO_11F",
-      "var_value": "0",
-      "script": "SilphCo_11F_EventScript_GiovanniTriggerRight"
-    }
-  ],
+  "coord_events": [],
   "bg_events": [
     {
       "type": "sign",

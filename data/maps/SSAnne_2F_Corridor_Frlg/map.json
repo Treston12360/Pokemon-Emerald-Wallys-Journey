@@ -111,36 +111,6 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [
-    {
-      "type": "trigger",
-      "x": 30,
-      "y": 6,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_S_S_ANNE_2F_CORRIDOR",
-      "var_value": "0",
-      "script": "SSAnne_2F_Corridor_EventScript_RivalTriggerLeft"
-    },
-    {
-      "type": "trigger",
-      "x": 31,
-      "y": 6,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_S_S_ANNE_2F_CORRIDOR",
-      "var_value": "0",
-      "script": "SSAnne_2F_Corridor_EventScript_RivalTriggerMid"
-    },
-    {
-      "type": "trigger",
-      "x": 32,
-      "y": 6,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_S_S_ANNE_2F_CORRIDOR",
-      "var_value": "0",
-      "script": "SSAnne_2F_Corridor_EventScript_RivalTriggerRight"
-    }
-  ],
-  "bg_events": [
-
-  ]
+  "coord_events": [],
+  "bg_events": []
 }
