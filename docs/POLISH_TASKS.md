@@ -158,6 +158,17 @@ Add under each item: what was found, what was changed, files, how to test, what 
         nothing in 2D. Picture: `docs/polish_reports/2D_check_POL-12_16_23_27.png`.
 - [ ] **POL-24. Route 112 into Lavaridge.** "Route 112 into lavaridge town rocks in background appear and then level."
 - [ ] **POL-26. Rustboro lights blink.** "Lights in rustboro city blink in and out while walking."
+      - Looked at 2026-11-14 (Claude 019khs4X), Windows exe (Wine), Rustboro (warp `0 3 16 40`), walking left then
+        up, a picture every 4 frames, 3D and 2D, at the test machine's night (01:xx): no blinking seen in either.
+      - Found instead: **the 3D view has no night at all.** At the same moment 2D shows night (lamps and windows
+        lit) and 3D shows full daylight with the lamps dark - Gamma lighting on or off. Emerald 3DS does have it
+        in 3D (`ctr_voxel.c`: `UpdateNightLamps`, window glow from `buildings.bin`, moonlight, CtrDayNight);
+        our port never brought that over, and Gamma's own files are fixed at day (GAMMA_LIGHTING_VALUES.md).
+        The owner's wish list asks for night street lights and lit windows (OWNER_REQUIREMENTS "Atmospheric
+        day/night"). Which lights Brennan saw blink is unknown - asked (below).
+      - Need from Brennan: 2D or 3D, time of day, which lights (street lamps, windows, the Pokémon Center/Mart
+        signs), a screenshot or video. Asked Treston whether 3D should get Emerald 3DS's day/night.
+      - Test aid for later: `WJPC_RTC_EPOCH=<unix time>` fixes the game clock (sdl2.c UpdateInternalClock).
 - [x] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
       not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
       - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-27_ash_trail_fixed.png`.
