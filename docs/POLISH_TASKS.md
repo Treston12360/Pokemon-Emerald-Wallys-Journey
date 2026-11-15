@@ -73,7 +73,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
       game corner is very skippy/laggy."
 - [ ] **POL-10. Walking through the top of doors.** "When walking in entrances you walk through the top of the
       door this should be fluid and not be cutting off the top when walking through the door."
-- [ ] **POL-12. Water is still.** "Water is not moving in 3D mode it is still."
+- [~] **POL-12. Water is still.** (Claude 019khs4X, 2026-11-14, in work) "Water is not moving in 3D mode it is still."
       - Found (Claude 019khs4X, 2026-11-14): reproduced in the Windows exe (Wine, 3D on, Route 103 sea): two frames
         40 apart are pixel-identical in the water. Cause: our 3D renderer never redraws the animated tiles. The
         atlas code for it is already ported (`voxel_atlas.c`: `VoxelAnim_*`, `VoxelAtlas_RefreshAnimated*`) but
