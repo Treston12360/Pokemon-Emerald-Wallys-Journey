@@ -74,6 +74,13 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-10. Walking through the top of doors.** "When walking in entrances you walk through the top of the
       door this should be fluid and not be cutting off the top when walking through the door."
 - [ ] **POL-12. Water is still.** "Water is not moving in 3D mode it is still."
+      - Found (Claude 019khs4X, 2026-11-14): reproduced in the Windows exe (Wine, 3D on, Route 103 sea): two frames
+        40 apart are pixel-identical in the water. Cause: our 3D renderer never redraws the animated tiles. The
+        atlas code for it is already ported (`voxel_atlas.c`: `VoxelAnim_*`, `VoxelAtlas_RefreshAnimated*`) but
+        nothing calls it. Emerald 3DS does it every 16 frames in `ctr_voxel.c` (comment block at line ~5462, "The
+        animated tiles (water, flowers) of the atlases in view ... VoxelAnim_*") and re-uploads the slots.
+        The fix is a port into `voxel_gl.c` (texture uploads live there) - that file is claimed by 014PwRDj for
+        POL-11/14, so it is waiting for that claim to be released or for permission. Flowers will animate too.
 - [ ] **POL-13. Background mountains are blocks.** "Mountains in background are blocks and not like mountains."
 - [ ] **POL-15. Route 110 into Mauville.** "Walking into mauville city from route 110 everything below disappears
       and reappears."
@@ -87,6 +94,12 @@ Add under each item: what was found, what was changed, files, how to test, what 
       from water to trees and skips into frame."
 - [ ] **POL-22. Breakable rocks.** "Rocks that are breakable disappear and reappear and also 2D not 3D."
 - [ ] **POL-23. No sandstorm.** "There's no sandstorm in the desert."
+      - Found (Claude 019khs4X, 2026-11-14): 2D shows the sandstorm on Route 111's desert (same save, same spot);
+        3D shows plain sand. Cause: `voxel_world.c` `VoxelWorld_Weather()` / `VoxelWorld_WeatherAmount()` only
+        work under `#ifdef PLATFORM_3DS`, so on PC the 3D world always gets "clear" weather, and the 3D view has no
+        port of Emerald 3DS's `DrawWeather` (`ctr_voxel.c` lines 8005-8137: rain, sand and ash drawn in the world,
+        `CtrVoxel_DrawsWeather` / `CtrVoxel_DrawsSand`). Same cause for rain and ash in 3D (likely POL-27's ash puff
+        too). Fix = port those into `voxel_world.c` + `voxel_gl.c` (claimed by 014PwRDj) - waiting like POL-12.
 - [ ] **POL-24. Route 112 into Lavaridge.** "Route 112 into lavaridge town rocks in background appear and then level."
 - [ ] **POL-26. Rustboro lights blink.** "Lights in rustboro city blink in and out while walking."
 - [ ] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
