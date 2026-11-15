@@ -55,6 +55,17 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-3. Mountain edges show blue.** "The mountains edges reveal a blue background."
 - [ ] **POL-4. People vanish behind you.** "People disappear after walking away a few steps then come back when
       you turn around, they need to be there at all times."
+      - Not reproduced yet (Claude 019khs4X, 2026-11-14), 3D and 2D (`world3d=1` / `0`, Windows exe, Wine):
+        Slateport (warp `0 1 19 20`, 6 tiles down and back) and Oldale -> Route 101 -> Littleroot (warp `0 10 10 12`,
+        walk down, then back up): everyone in view stayed in view.
+      - Checked in the code: the 3D view does not hide people the 2D game marks off-screen (`voxel_entities.c`
+        ~1719, as Emerald 3DS); in 3D, people load and stay loaded 42-44 tiles out (`wide_view.c` UpdatePads,
+        DLX-18), far past what the camera shows. Differences from Emerald 3DS that could matter and are NOT
+        changed: the 3DS sizes that box from the 3D camera's real view and reloads people when the view changes
+        without a step (`UpdateObjectEventsForViewChange`); PC loads the extra ring only while more than 4
+        object slots are free (`WJPC_SpawnOk`), so a crowded map could leave far people unloaded.
+      - Need from Brennan: where it happens (map), 2D or 3D, a screenshot or short video, and what "turn around"
+        means (the player facing the other way, or walking back?).
 - [ ] **POL-5. Trainer Hill.** "Trainer hill entrance is missing the top of the door. Inside of trainer hill
       building the things inside at the front of the building are cut off and doesn't look 3D, the pc is cut off
       at the bottom, the top of the healing station and back wall looks crunched and cut off like the back wall
