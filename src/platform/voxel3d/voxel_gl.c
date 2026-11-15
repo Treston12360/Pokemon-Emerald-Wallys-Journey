@@ -545,12 +545,24 @@ static uint32_t sAtlasGen;
  * (the blue squares). Emerald 3DS grows its atlas then (extendPending); here: a map whose cells use a metatile
  * the atlas has no slot for has it made again with every loaded map's metatiles. Checked once per map and build.
  */
+/*
+ * POL-27 (Brennan: "Route 113 ash on the floor after walking through it shows blue boxes"): stepping in ash turns
+ * the cell into another metatile (Fallarbor ash grass -> normal grass) that no map had when the atlas was made, so
+ * it was drawn as nothing - the sky through the gap. The check was kept per map and build only, so it never saw a
+ * cell a script or field effect changed later. For the map underfoot (`live`, read off the live grid) it is now
+ * also kept per state of the live grid (VoxelWorld_LiveDigest, taken once a frame in Voxel3D_Render): the grid
+ * changes, the map is checked again, and a new metatile has the atlas made again as above.
+ */
+static uint32_t sAtlasLiveDigest;
+
 static bool AtlasCovers(const Atlas *a, const VoxelMapInstance *inst)
 {
-    static struct { const Atlas *atlas; uint32_t gen; uint16_t group, num; } seen[32];
+    static struct { const Atlas *atlas; uint32_t gen, digest; uint16_t group, num; } seen[32];
     static unsigned next;
+    uint32_t digest = inst->live ? sAtlasLiveDigest : 0;
     for (unsigned i = 0; i < 32; i++)
-        if (seen[i].atlas == a && seen[i].gen == a->gen && seen[i].group == inst->mapGroup && seen[i].num == inst->mapNum)
+        if (seen[i].atlas == a && seen[i].gen == a->gen && seen[i].group == inst->mapGroup && seen[i].num == inst->mapNum
+            && seen[i].digest == digest)
             return true;
     for (int y = 0; y < inst->height; y++)
         for (int x = 0; x < inst->width; x++)
@@ -566,6 +578,7 @@ static bool AtlasCovers(const Atlas *a, const VoxelMapInstance *inst)
         }
     seen[next].atlas = a;
     seen[next].gen = a->gen;
+    seen[next].digest = digest;
     seen[next].group = (uint16_t)inst->mapGroup;
     seen[next].num = (uint16_t)inst->mapNum;
     next = (next + 1) % 32;
@@ -2503,6 +2516,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
 
     VoxelWorld_GetLocation(&group, &num);
     digest = VoxelWorld_LiveDigest();
+    sAtlasLiveDigest = digest; // POL-27: AtlasCovers checks the map underfoot again when its grid changes
     if (group != sLastGroup || num != sLastNum)
     {
         // DLX-18: walked across a seam (the new map was on screen, its place known in last frame's

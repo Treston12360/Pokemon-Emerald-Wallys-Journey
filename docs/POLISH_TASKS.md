@@ -116,11 +116,24 @@ Add under each item: what was found, what was changed, files, how to test, what 
         not in battle. Off switch for testing: `WJPC_3D_NO_WEATHER=1`. Test: `WJPC_FORCE_WEATHER=3/7/8`.
         Not ported: 3DS's sand "dust sheets" (`DrawBanks`) - the streaks are there, the haze layer is not.
         Not tested: weather during battle transitions; real GPUs (only Wine/llvmpipe here) - Brennan please check.
-        Does NOT fix POL-27 (the ash puff is a sprite effect, not weather) - POL-27 stays open.
+        Did not fix POL-27 by itself; that was a separate cause (see POL-27).
 - [ ] **POL-24. Route 112 into Lavaridge.** "Route 112 into lavaridge town rocks in background appear and then level."
 - [ ] **POL-26. Rustboro lights blink.** "Lights in rustboro city blink in and out while walking."
-- [ ] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
+- [x] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
       not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
+      - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-27_ash_trail_fixed.png`.
+      - Reproduced in the exe (Wine, 3D, Route 113 = warp `0 28 38 4`, walk right): every ash cell walked over
+        turned into a light-blue box. Cause: stepping in ash changes the cell from ash grass (metatile 0x20A) to
+        normal grass (0x212), which the 3D texture sheet (atlas) did not hold, so the cell drew nothing and the sky
+        showed through. `voxel_gl.c` `AtlasCovers` (which has the atlas made again when a map uses a metatile it
+        lacks) remembered its answer per map and atlas build only, so it never looked again after the change.
+      - Fix: for the map underfoot it now also remembers the state of the live grid (`VoxelWorld_LiveDigest`), so
+        any cell a field effect or script changes is checked; a new metatile has the atlas made again once (log:
+        `atlas lacks metatile 212 of 0:28: made again`, `WJPC_VOXEL_LOG=1`). Same fix covers other mid-play tile
+        changes in 3D (e.g. Lavaridge's ash grass, script `setmetatile`s), not tested one by one.
+      - Cost: one atlas rebuild the first time a new metatile appears (a short hitch, like entering a map); the
+        map's cells are re-scanned only on frames the grid changed. Not measured on a real GPU.
+      - The ash puff sprite itself and the ash weather (POL-23) were already fine; the boxes were the ground.
 - [ ] **POL-28. Petalburg Woods black lines.** "Bunch of black lines inside of petalburg woods."
 - [x] **POL-29. Separate music and gameplay volume.** "Add a feature in the volume setting to differentiate music
       volume and gameplay volume incase you want to turn off music but keep gameplay audio." Done 2026-11-14
