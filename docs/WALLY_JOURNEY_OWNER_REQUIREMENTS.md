@@ -11,7 +11,7 @@ Owner reports the following six issues in the native Windows game. Treat these a
 
 - "the houses lost their color for some reason"
 - "there is black lines inside of certain areas like granite cave, pokemon center"
-- "Allow us to leave the battle before the 3d battle transition happens once entering battle" (**exact behavior needs confirmation before implementing; do not guess between skip intro and early Run**)
+- "Allow us to leave the battle before the 3d battle transition happens once entering battle" — **CLARIFIED AND OWNER-LOCKED 2026-11-15**: skip the 3D cinematic battle introduction to reach the normally initialized battle command menu **immediately**, including the **Run** command in wild battles. Do not force-end a battle before its initialization, ignore normal Run success/restrictions, or allow escape from mandatory trainer/scripted battles. Exact skip button/input and implementation details are still to be agreed; **NOT implemented or tested**.
 - "the zoom isn't working in 2d for some reason"
 - "sometimes with certain screen settings the start menu goes off the screen and is too big"
 - "the trees outside usually on the outskirts of the screen changes when you change routes"
