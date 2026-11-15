@@ -1357,6 +1357,59 @@ bool VoxelWorld_ScreenFade(float *amount, float rgb[3])
     return *amount > 0.0f;
 }
 
+#ifdef PORTABLE
+/*
+ * POL-26b (Treston, 2026-11-14: 3D gets night; "Match our 2D"): the time-of-day colour the 2D game puts on the
+ * map's palettes, as a per-channel line shown = mul * stored + add (0..1 colours), so the 3D world can take the
+ * same colour. Worked out from the blend itself, exactly as palette.c TimeMixPalettes_Internal does it per
+ * colour: a tint multiplies (tint / 256, clamped at full), a blend moves towards its colour by coeff * 2 / 32;
+ * the start blend has weight / 256, the end blend the rest. Colours flagged for the alternate/default light
+ * colour (bit 15: lamps) and the lit-window palettes (overworld.c WallyJourney_ApplyNightLights) are not in this
+ * line - the 3D view's own lamps and windows do those (later step). False: no tint (indoors, DNS off, day).
+ */
+static void BlendLine(const struct BlendSettings *blend, float mul[3], float add[3])
+{
+    u32 color = blend->blendColor;
+    for (int c = 0; c < 3; c++)
+    {
+        if (blend->isTint)
+        {
+            mul[c] = (float)((color >> (8 * c)) & 0xFF) / 256.0f;
+            add[c] = 0.0f;
+        }
+        else
+        {
+            float k = (float)(blend->coeff * 2) / 32.0f;
+            mul[c] = 1.0f - k;
+            add[c] = k * (float)((color >> (5 * c)) & 31) / 31.0f;
+        }
+    }
+}
+
+bool VoxelWorld_TimeTint(float mul[3], float add[3])
+{
+    float m0[3], a0[3], m1[3], a1[3], w = gTimeBlend.weight / 256.0f;
+    bool any = false;
+
+    for (int c = 0; c < 3; c++)
+    {
+        mul[c] = 1.0f;
+        add[c] = 0.0f;
+    }
+    if (gMapHeader.mapLayout == NULL || !MapHasNaturalLight(gMapHeader.mapType) || getenv("WJPC_3D_NO_TIME_TINT") != NULL)
+        return false;
+    BlendLine(&gTimeBlend.startBlend, m0, a0);
+    BlendLine(&gTimeBlend.endBlend, m1, a1);
+    for (int c = 0; c < 3; c++)
+    {
+        mul[c] = w * m0[c] + (1.0f - w) * m1[c];
+        add[c] = w * a0[c] + (1.0f - w) * a1[c];
+        any |= mul[c] < 0.999f || mul[c] > 1.001f || add[c] > 0.001f;
+    }
+    return any;
+}
+#endif
+
 void VoxelWorld_GetLocation(int *mapGroup, int *mapNum)
 {
     if (mapGroup != NULL) *mapGroup = gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1;

@@ -193,6 +193,8 @@ static GLuint UploadTiled(GLuint tex, const uint16_t *tiled, unsigned w, unsigne
 
 static GLuint sProgram;
 static GLint sUniUnfade; // POL-16
+static GLint sUniTintMul, sUniTintAdd, sUniHazeMul; // POL-26b
+static float sTintMul[3] = {1, 1, 1}, sTintAdd[3]; // POL-26b: this frame's time-of-day colour (world)
 static GLint sUniMode, sUniAlphaMin, sUniMvp, sUniOrigin, sUniTex, sUniFade, sUniFog, sUniFogColor, sUniCam;
 static GLint sUniChunky, sUniAtlasTexel, sUniTime, sUniGamma, sUniSunDir, sUniSunLight, sUniSkyTint, sUniSh, sUniSat, sUniExposure;
 
@@ -270,6 +272,7 @@ static const char *sFragmentSrc =
     // DLX-8 chunky people: the card is drawn as stacked slices; a slice keeps a pixel only where the
     // sprite is thick enough there (1 = even blocks, 2 = rounded: thicker away from the row's edges)
     "uniform vec4 unfade;\n"
+    "uniform vec3 tintMul, tintAdd, hazeMul;\n" // POL-26b: the 2D time-of-day colour (world), the haze's too
     "uniform vec3 chunky;\n" // x mode, y slice depth in sprite pixels (signed), z unused
     "uniform vec2 atlasTexel;\n"
     "void main() {\n"
@@ -277,6 +280,7 @@ static const char *sFragmentSrc =
     "  if (c.a < alphaMin) discard;\n"
     // POL-16: a palette fade taken back off a person's colours (Gamma lighting: the screen pass fades them)
     "  if (unfade.a > 0.0) c.rgb = clamp((c.rgb - unfade.a * unfade.rgb) / max(1.0 - unfade.a, 0.004), 0.0, 1.0);\n"
+    "  c.rgb = clamp(c.rgb * tintMul + tintAdd, 0.0, 1.0);\n" // POL-26b: as the 2D palettes are moved (night)
     "  if (chunky.x > 0.5) {\n"
     "    float half_ = 2.0;\n"
     "    if (chunky.x > 1.5) {\n"
@@ -305,7 +309,7 @@ static const char *sFragmentSrc =
     "    float amt = clamp((d - 10.0) / 39990.0, 0.0, 1.0) * 0.35;\n"
     "    vec3 v = normalize(cam - vWorld);\n"
     "    amt = min(amt, clamp(1.0 - 0.4 * (dot(sunDir, v) - 0.5), 0.0, 1.0));\n"
-    "    rgb = mix(rgb, vec3(0.2, 0.467, 1.0), amt);\n"
+    "    rgb = mix(rgb, vec3(0.2, 0.467, 1.0) * hazeMul, amt);\n"
     "    if (mode > 1.5) { gl_FragColor = vec4(albedo * (sunLight * 0.643 + skyTint * skyIrr(vec3(0,1,0))), 0.45); return; }\n"
     "    if (mode > 0.5) { gl_FragColor = vec4(0.0, 0.0, 0.0, vShade); return; }\n"
     "    gl_FragColor = vec4(rgb, 1.0);\n"
@@ -429,6 +433,13 @@ static bool MakeProgram(void)
     sUniTex = wj_glGetUniformLocation(sProgram, "tex");
     sUniFade = wj_glGetUniformLocation(sProgram, "fade");
     sUniUnfade = wj_glGetUniformLocation(sProgram, "unfade");
+    sUniTintMul = wj_glGetUniformLocation(sProgram, "tintMul");
+    sUniTintAdd = wj_glGetUniformLocation(sProgram, "tintAdd");
+    sUniHazeMul = wj_glGetUniformLocation(sProgram, "hazeMul");
+    wj_glUseProgram(sProgram); // uniforms start at 0: no tint is 1, 0
+    wj_glUniform3f(sUniTintMul, 1, 1, 1);
+    wj_glUniform3f(sUniTintAdd, 0, 0, 0);
+    wj_glUniform3f(sUniHazeMul, 1, 1, 1);
     sUniFog = wj_glGetUniformLocation(sProgram, "fog");
     sUniFogColor = wj_glGetUniformLocation(sProgram, "fogColor");
     sUniMode = wj_glGetUniformLocation(sProgram, "mode");
@@ -2831,6 +2842,18 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             // Outdoors: a sky colour, not the GBA backdrop (a cave keeps its backdrop, as indoors and the 3DS).
             r = 0.55f; g = 0.75f; b = 0.95f;
         }
+        // POL-26b (Treston: 3D night, "Match our 2D"): the 2D game's time-of-day colour for the world this frame
+        if (sBattleMode || !VoxelWorld_TimeTint(sTintMul, sTintAdd))
+        {
+            sTintMul[0] = sTintMul[1] = sTintMul[2] = 1.0f;
+            sTintAdd[0] = sTintAdd[1] = sTintAdd[2] = 0.0f;
+        }
+        if (!inst0->indoor && !inst0->underground)
+        {
+            r = r * sTintMul[0] + sTintAdd[0];
+            g = g * sTintMul[1] + sTintAdd[1];
+            b = b * sTintMul[2] + sTintAdd[2];
+        }
         if (gVoxelGammaLight)
         {   /* backdrop in linear light, so the screen pass returns it unchanged in look */
             r = r * r / sExposure; g = g * g / sExposure; b = b * b / sExposure;
@@ -2899,6 +2922,9 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
      * screen pass fades them once, like the world.
      */
     fieldFadeInShader = VoxelWorld_ScreenFade(&fadeAmount, fadeRgb) && !gVoxelGammaLight;
+    wj_glUniform3f(sUniTintMul, sTintMul[0], sTintMul[1], sTintMul[2]);
+    wj_glUniform3f(sUniTintAdd, sTintAdd[0], sTintAdd[1], sTintAdd[2]);
+    wj_glUniform3f(sUniHazeMul, sTintMul[0] + sTintAdd[0], sTintMul[1] + sTintAdd[1], sTintMul[2] + sTintAdd[2]);
     if (fieldFadeInShader)
         wj_glUniform4f(sUniFade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount);
     else
@@ -2909,7 +2935,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         wj_glUniform2f(sUniFog, 1.0e6f, 2.0e6f);
     else
         wj_glUniform2f(sUniFog, sFogNear, sFogFar);
-    wj_glUniform3f(sUniFogColor, 0.55f, 0.75f, 0.95f);
+    wj_glUniform3f(sUniFogColor, 0.55f * sTintMul[0] + sTintAdd[0], 0.75f * sTintMul[1] + sTintAdd[1],
+                   0.95f * sTintMul[2] + sTintAdd[2]); // POL-26b: the sky's colour at this time of day
     GammaLightUniforms();
     // Gamma's cloud shadows are its sun's light function: none where the sun does not reach (indoors, caves)
     wj_glUniform1f(wj_glGetUniformLocation(sProgram, "cloudsOn"), inst0->indoor || inst0->underground ? 0.0f : 1.0f);
@@ -2962,6 +2989,9 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     {
         // POL-16: the people's palettes are faded already (3DS sSpriteFade = none)
         wj_glUniform4f(sUniFade, 0, 0, 0, 0);
+        // POL-26b: and carry the time of day already (the game tints sprite palettes too)
+        wj_glUniform3f(sUniTintMul, 1, 1, 1);
+        wj_glUniform3f(sUniTintAdd, 0, 0, 0);
         if (gVoxelGammaLight && fadeAmount > 0.0f)
             wj_glUniform4f(sUniUnfade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount); // the screen pass fades them
     }

@@ -180,6 +180,18 @@ Add under each item: what was found, what was changed, files, how to test, what 
         switching 2D/3D never changes the look; lit windows, street lamps and moonlight as Emerald 3DS does them.
       - Steps (picture after each): 1 world tint from the 2D tint; 2 the 3DS daylight factor (sun rays, clouds,
         dapples fade at night) + moonlight; 3 lit windows (buildings.bin glow) and night lamps (VoxelSign_EmitNight).
+      - Step 1 done 2026-11-14: `voxel_world.c` `VoxelWorld_TimeTint` works out the game's time blend (gTimeBlend:
+        tint = multiply by tint/256, blend = move towards its colour by coeff*2/32, start blend weight/256) as one
+        line per colour channel; `voxel_gl.c` puts it on the world's texels (`tintMul`/`tintAdd`, not the people:
+        their palettes carry it), the sky colour, the haze. Indoors / no natural light: none. Off switch for tests:
+        `WJPC_3D_NO_TIME_TINT=1`. Picture: `docs/polish_reports/POL-26b_step1_time_of_day.png` (Rustboro 1 PM,
+        6:30 PM, 10 PM; 2D left, 3D right; `WJPC_RTC_EPOCH`). 1 PM 3D mean colour 93,114,124 vs 2D 96,110,113
+        (untinted 3D was 121,136,129: November = winter daylight tint). 2D at 10 PM identical, pixel for pixel,
+        to the exe before this change.
+      - Seen, for the next steps: night windows not lit in 3D yet (step 3); the game's lamp-glow sprites show in
+        3D as flat yellow discs (they are the 2D game's light sprites drawn as cards - `voxel_entities.c`,
+        claimed by 014PwRDj; Emerald 3DS draws its own lamp pools instead, UpdateNightLamps) - maybe POL-26's
+        "blinking" (they appear/disappear as the 2D view's light sprites come and go). Not changed yet.
 - [x] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
       not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
       - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-27_ash_trail_fixed.png`.

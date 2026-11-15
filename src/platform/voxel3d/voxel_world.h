@@ -159,6 +159,8 @@ bool VoxelWorld_Underground(void);
 /* The palette fade on the backgrounds as a blend towards rgb (0-1) by amount,
  * false when there is none (voxel_world.c). */
 bool VoxelWorld_ScreenFade(float *amount, float rgb[3]);
+/* POL-26b: the 2D game's time-of-day colour as shown = mul * stored + add per channel; false = none. */
+bool VoxelWorld_TimeTint(float mul[3], float add[3]);
 
 /*
  * Content signature of one rectangle of world tiles: what decides whether the
