@@ -207,6 +207,117 @@ static struct WideViewFrame sFrameInfo = {DISPLAY_WIDTH, DISPLAY_HEIGHT, WIDE_VI
 // by a script:  "wait N" | "press KEYS N" | "shot PATH" | "quit"
 // KEYS: A B S(start) s(select) U D L R l r
 static FILE *sTestScript;
+// Test aid WJPC_SCRIPT_REALTIME=1: the script only presses the buttons; the game runs through its normal
+// real-time loop (frame rate setting, in-between frames, vsync, sound timing) instead of the test loop that
+// runs frame by frame as fast as it can. For bugs that only show in real play (POL-11/14). No shots.
+static bool sScriptRealtime;
+
+// POL-11/14 (Brennan: the game freezes for a second or two in 3D, then crashes after about 10 minutes):
+// WallysJourney_stalls.txt, next to the game, gets a line whenever one trip round the main loop takes longer
+// than 150 ms, saying which part took the time, and a line a minute with the memory still free. Always on:
+// it costs nothing while the game runs well, and the file is what to send when it does not.
+static Uint64 sStallVDraw, sStall3D;
+extern double gVoxel3DMapMs, gVoxel3DBeltMs, gVoxel3DDrawMs;
+extern unsigned gVoxel3DMeshes, gVoxel3DPages, gVoxel3DBeltLayers, gVoxel3DBeltFlushes;
+
+static unsigned StallFreeAddressMb(void)
+{
+#ifdef _WIN32
+    MEMORYSTATUSEX ms;
+    ms.dwLength = sizeof(ms);
+    if (GlobalMemoryStatusEx(&ms))
+        return (unsigned)(ms.ullAvailVirtual >> 20); // address space this (32-bit) program can still use
+#endif
+    return 0;
+}
+
+static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 presented)
+{
+    static Uint64 sFirst, sLastMinute;
+    static unsigned sLines, sLoops;
+    static bool sStarted;
+    Uint64 freq = SDL_GetPerformanceFrequency();
+    double total = (presented - start) * 1000.0 / freq;
+    bool minute;
+    FILE *f;
+
+    sLoops++;
+    if (!sStarted)
+    {
+        sStarted = true;
+        sFirst = sLastMinute = start;
+        f = fopen("WallysJourney_stalls.txt", "w");
+        if (f != NULL)
+        {
+            fprintf(f, "Wally's Journey stall log. Build " __DATE__ " " __TIME__ ". Lines: a trip round the main loop over 150 ms,\n"
+                       "and one line a minute. Times in ms. Send this file with a freeze or crash report.\n");
+            fclose(f);
+        }
+        return; // the first trip loads everything
+    }
+    minute = (presented - sLastMinute) / freq >= 60;
+    /* POL-15 (Brennan 2026-11-15: after Route 110 -> Mauville "the whole game starts becoming laggy and not
+     * smooth"): lag is many slow trips, not one long one. A line for every second in which more than 10 trips
+     * took over 20 ms: how many, the worst, and the 3D work of the last one. */
+    {
+        static Uint64 sSecond;
+        static unsigned sSlow, sTrips, sFlushesAt;
+        static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw;
+
+        sTrips++;
+        if (total > 20.0)
+        {
+            sSlow++;
+            if (total > sWorst)
+            {
+                sWorst = total;
+                sWorstMaps = gVoxel3DMapMs;
+                sWorstBelt = gVoxel3DBeltMs;
+                sWorstDraw = gVoxel3DDrawMs;
+            }
+        }
+        if (sSecond == 0)
+            sSecond = presented;
+        if ((presented - sSecond) >= freq)
+        {
+            if (sSlow > 10 && sLines <= 5000 && (f = fopen("WallysJourney_stalls.txt", "a")) != NULL)
+            {
+                sLines++;
+                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f (3D maps %.0f, belt %.0f, drawing %.0f)"
+                           " | map %d:%d, belt layers %u, belt rebuilds %u\n",
+                        (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstMaps, sWorstBelt, sWorstDraw,
+                        gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1,
+                        gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapNum : -1,
+                        gVoxel3DBeltLayers, gVoxel3DBeltFlushes - sFlushesAt);
+                fclose(f);
+            }
+            sSecond = presented;
+            sSlow = sTrips = 0;
+            sWorst = 0.0;
+            sFlushesAt = gVoxel3DBeltFlushes;
+        }
+    }
+    if (total < 150.0 && !minute)
+        return;
+    if (sLines > 5000)
+        return;
+    f = fopen("WallysJourney_stalls.txt", "a");
+    if (f == NULL)
+        return;
+    sLines++;
+    fprintf(f, "%7.1fs %s %6.0f: game %.0f, frame %.0f (3D %.0f: maps %.0f, belt %.0f, drawing %.0f), screen %.0f, present %.0f"
+               " | map %d:%d, 3D %d, meshes %u, pages %u, free memory %u MB, loops %u\n",
+            (presented - sFirst) / (double)freq, total >= 150.0 ? "STALL" : "minute", total,
+            (batchEnd - start - sStallVDraw) * 1000.0 / freq, sStallVDraw * 1000.0 / freq, sStall3D * 1000.0 / freq,
+            gVoxel3DMapMs, gVoxel3DBeltMs, gVoxel3DDrawMs,
+            (drawn - batchEnd) * 1000.0 / freq, (presented - drawn) * 1000.0 / freq,
+            gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1,
+            gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapNum : -1,
+            (int)(s3DReady && s3DWanted), gVoxel3DMeshes, gVoxel3DPages, StallFreeAddressMb(), sLoops);
+    fclose(f);
+    if (minute)
+        sLastMinute = presented;
+}
 static unsigned int sTestFfSpeed; // test script "ff N": fast forward without a clock (0/1 = off)
 static u16 sTestKeys;
 static int sTestHold;
@@ -1100,6 +1211,7 @@ int main(int argc, char **argv)
         SDL_snprintf(sSavePath, sizeof(sSavePath), "%s", getenv("WJPC_SAVE"));
     if (getenv("WJPC_SCRIPT"))
         sTestScript = fopen(getenv("WJPC_SCRIPT"), "r");
+        sScriptRealtime = sTestScript != NULL && getenv("WJPC_SCRIPT_REALTIME") != NULL;
     ReadSaveFile(sSavePath);
     ReadConfigFile();
 
@@ -1306,7 +1418,7 @@ int main(int argc, char **argv)
     while (isRunning)
     {
         ApplyChangedWindowSettings();
-        if (sTestScript != NULL)
+        if (sTestScript != NULL && !sScriptRealtime)
         {
             while (!SDL_AtomicGet(&isFrameAvailable))
                 SDL_Delay(0);
@@ -1372,6 +1484,8 @@ int main(int argc, char **argv)
         }
         ProcessEvents();
         ApplyFastForward();
+        Uint64 stallLoopStart = SDL_GetPerformanceCounter();
+        sStallVDraw = sStall3D = 0;
 
         if (!paused)
         {
@@ -1398,11 +1512,20 @@ int main(int argc, char **argv)
                     // per-line timing going. If this PC can't reach the chosen speed, stop after
                     // about one screen refresh, show that frame and forget the backlog, so the
                     // picture stays smooth and the game runs as fast as the PC manages.
+                    if (sTestScript != NULL)
+                    {
+                        // (WJPC_SCRIPT_REALTIME: one script step a game frame)
+                        if (!TestStep())
+                            isRunning = false;
+                        keyboardKeys = sTestKeys;
+                    }
                     bool lastOfBatch = accumulator - dt < dt;
                     bool outOfTime = speedUp && (SDL_GetPerformanceCounter() - batchStart) * 1000 / SDL_GetPerformanceFrequency() >= 14;
                     if (!speedUp || lastOfBatch || outOfTime)
                     {
+                        Uint64 v0 = SDL_GetPerformanceCounter();
                         VDraw(sdlTexture);
+                        sStallVDraw += SDL_GetPerformanceCounter() - v0;
                         sDrewFrame = true;
                     }
                     else
@@ -1438,6 +1561,7 @@ int main(int argc, char **argv)
             }
         }
 
+        Uint64 stallBatchEnd = SDL_GetPerformanceCounter();
 #ifndef __ANDROID__
         // Draw every loop (every monitor refresh with vsync). With smooth motion the map is slid
         // part of the way between the last two game frames.
@@ -1446,7 +1570,9 @@ int main(int argc, char **argv)
             double t = paused ? 1.0 : accumulator / (fixedTimestep / timeScale);
             DrawScreen(t < 0 ? 0 : t > 1 ? 1 : t);
         }
+        Uint64 stallDrawn = SDL_GetPerformanceCounter();
         SDL_RenderPresent(sdlRenderer);
+        StallLog(stallLoopStart, stallBatchEnd, stallDrawn, SDL_GetPerformanceCounter());
         // Frame rate 60/120/180/240: don't draw faster than chosen (with vsync the monitor may cap it lower).
         {
             static Uint64 lastPresent;
@@ -2464,7 +2590,7 @@ bool8 Platform_SoundFrameDue(void)
 {
     bool due = true;
 
-    if (sTestScript != NULL)
+    if (sTestScript != NULL && !sScriptRealtime)
     {
         // Scripts run without a clock: exactly one sound frame every N game frames.
         if (sTestFfSpeed > 1 && !getenv("WJPC_FF_NOSOUNDGATE"))
@@ -2693,7 +2819,7 @@ void VDraw(SDL_Texture *texture)
     static uint32_t uiImage[TEX_W * TEX_H];
     static uint32_t lastImage[TEX_W * TEX_H];
     static int lastW, lastH;
-    bool smooth = sPlatformSettings[PLATFORM_SETTING_SMOOTH] && sTestScript == NULL && sdlOverlayTexture != NULL;
+    bool smooth = sPlatformSettings[PLATFORM_SETTING_SMOOTH] && (sTestScript == NULL || sScriptRealtime) && sdlOverlayTexture != NULL;
     int prevW = sFrameInfo.width, prevH = sFrameInfo.height, prevMargin = sFrameInfo.margin;
 
     {
@@ -2932,7 +3058,9 @@ void VDraw(SDL_Texture *texture)
                     Voxel3D_SetSettings(true, 0, 100 * 160 / sZoomHeights[level]);
                 }
                 Voxel3D_SetGammaLight(sGammaWanted);
+                Uint64 r0 = SDL_GetPerformanceCounter();
                 s3DFrame = Voxel3D_Render(id, w, h);
+                sStall3D += SDL_GetPerformanceCounter() - r0;
                 // SDL caches its GL state: switching targets makes it send viewport and target again.
                 SDL_SetRenderTarget(sdlRenderer, sdl3DTexture);
                 SDL_SetRenderTarget(sdlRenderer, was);

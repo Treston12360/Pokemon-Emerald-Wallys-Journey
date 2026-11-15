@@ -960,6 +960,9 @@ static GLuint LoadBuildingPage(int page, bool reload)
     if (!VoxelBuildings_ReadPage((unsigned)page, 0, w * h, sPageScratch))
         return 0;
     VoxelWorld_SeasonTexels(sPageScratch, (size_t)w * h); // DLX-17 (after ReadPage's grading)
+    extern unsigned gVoxel3DPages;
+    if (sPageTex[page] == 0)
+        gVoxel3DPages++; // (stall log)
     sPageTex[page] = UploadTiled(sPageTex[page], sPageScratch, w, th);
     return sPageTex[page];
 }
@@ -1311,8 +1314,10 @@ static BeltChunk sBeltCache[BELT_CACHE];
 static unsigned sBeltUse;
 static int sBeltWantX = 0x7FFFFFFF, sBeltWantY;
 
+extern unsigned gVoxel3DBeltFlushes;
 static void BeltCache_Flush(void)
 {
+    gVoxel3DBeltFlushes++;
     for (int i = 0; i < BELT_CACHE; i++)
         sBeltCache[i].valid = false;
     sBeltWantX = 0x7FFFFFFF;
@@ -2252,6 +2257,11 @@ void Voxel3D_SetGammaLight(bool on)
 }
 
 static void BattleZoomBlur(int w, int h);
+// For sdl2.c's stall log (WallysJourney_stalls.txt, POL-11/14/15): where the last 3D frame's time went, and how
+// much is loaded.
+double gVoxel3DMapMs, gVoxel3DBeltMs, gVoxel3DDrawMs;
+unsigned gVoxel3DMeshes, gVoxel3DPages, gVoxel3DBeltLayers, gVoxel3DBeltFlushes;
+static Uint64 sStallDrawStart;
 
 /*
  * POL-23 (Brennan: "There's no sandstorm in the desert"): rain, sand and ash drawn in the 3D world, ported from
@@ -2674,6 +2684,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
 
     SaveGl(&saved);
     Uint64 workStart = SDL_GetPerformanceCounter();
+    sStallDrawStart = 0;
     // POL-30: the belt also draws the borders of the maps next door (VoxelWorld_BorderMetatile). An atlas
     // made before such a map was loaded may lack its border's metatiles: made again then, as AtlasCovers
     // does for a map's own cells. Looked at once per atlas build and set of maps.
@@ -2984,6 +2995,13 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     {
         // Test aid: frames whose map and belt work took long (the hitches DLX-18 is about).
         double ms = (SDL_GetPerformanceCounter() - workStart) * 1000.0 / SDL_GetPerformanceFrequency();
+        gVoxel3DMapMs = (workMaps - workStart) * 1000.0 / SDL_GetPerformanceFrequency();
+        gVoxel3DBeltMs = ms - (workCam - workStart) * 1000.0 / SDL_GetPerformanceFrequency();
+        gVoxel3DMeshes = 0;
+        for (int i = 0; i < MAX_INSTANCES; i++)
+            gVoxel3DMeshes += sInstanceMeshes[i].used;
+        gVoxel3DBeltLayers = sBeltLayers;
+        sStallDrawStart = SDL_GetPerformanceCounter();
         if (ms > 4.0 && getenv("WJPC_VOXEL_LOG") != NULL)
             Voxel3D_Log("[3D] slow frame %u: %.1f ms of map and belt work (maps %.1f, camera %.1f)", sFrame, ms,
                         (workMaps - workStart) * 1000.0 / SDL_GetPerformanceFrequency(),
@@ -3402,6 +3420,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             free(all);
         }
     }
+    if (sStallDrawStart != 0)
+        gVoxel3DDrawMs = (SDL_GetPerformanceCounter() - sStallDrawStart) * 1000.0 / SDL_GetPerformanceFrequency();
     RestoreGl(&saved);
     return true;
 }
