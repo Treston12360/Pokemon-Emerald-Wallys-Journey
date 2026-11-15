@@ -35,11 +35,13 @@
 
 **Owner wording verbatim:** "Allow us to leave the battle before the 3d battle transition happens once entering battle".
 
-**Interpretation NOT LOCKED:** Could mean allow battle commands/Run immediately rather than waiting for a cinematic intro, or allow skipping/canceling the 3D intro to leave the battle sooner. **Do not pick one behavior silently.** At minimum, examine early input/interrupt handling and the transition-to-battle state. Do not permit wild-battle Run to skip a mandatory trainer battle or corrupt battle startup. Keep double-battle and scripted encounters correct.
+**OWNER-CONFIRMED 2026-11-15:** The **3D battle introduction/cinematic must be skippable**, allowing the player to get immediately to the **normal battle command menu**, including **Run** for encounters that normally permit fleeing. This is **not** permission to flee before a battle is initialized, cancel mandatory trainer encounters, bypass normal wild Run success/failure logic, or skip scripted battle restrictions. Skip should end/start the battle intro in a consistent initialized state, rather than forcibly abandoning a battle or teleporting back to the overworld.
+
+**Exact skip input (A/B/Start/other), frame at which the skip is accepted, and visual treatment are not yet owner-approved.** Investigate existing skip/fast-forward handling and show the actual control plan before changing it. Keep trainer, double, scripted, and wild battle state intact.
 
 **Known code:** `docs/DELUXE_WORK_QUEUE.md` DLX-4 (2D transition) and DLX-5 (3D transition), `src/platform/sdl2.c`, 3D battle transition paths. **No changes made.**
 
-**Acceptance (pending exact owner interpretation):** A permitted exit/skip behavior can be triggered promptly, while mandatory trainer/scripted battles remain mandatory, and no transitions leave dangling battle state.
+**Acceptance (OWNER-CONFIRMED desired behavior, NOT tested):** Player can skip the 3D cinematic and immediately access the fully initialized command menu, including the normal Run option if battle type permits; trainer battles still cannot be escaped when normally prohibited. Wild Run retains all ordinary mechanics. No dangling battle state, duplicated entry sequences, interrupted music/scene effects, or 2D regression. Test skip at earliest permitted moment, multiple points in the cinematic, and no-skip baseline.
 
 ### PC-1115-04 — 2D zoom not responding
 
@@ -74,5 +76,5 @@
 - **Currently claimed 3D areas:** `src/platform/voxel3d/voxel_gl.c`, `voxel_world.c`, belt/backdrop paths and `pc_data/voxel/`, with active entries in `docs/WORK_CLAIMS.md`. No renderer edits by this report's author.
 - **Potential unclaimed but shared PC files:** `src/platform/sdl2.c`, `src/platform/wide_view.c`, `src/option_menu.c`; acquire a work claim and check latest cross-branch edits before changes. Avoid speculative fixes to zoom or menu sizing until reproduced.
 - **POLISH coordination:** POL-6, POL-8, POL-28 and POL-30 overlap four symptoms. Do not mark those tasks completed based on documentation or earlier attempts.
-- **3D battle-intro requirement:** keep verbatim until the precise permitted input behavior is confirmed; do not conflate ability to **run from a wild battle** with an ability to skip required trainer/scripted battles.
+- **3D battle-intro requirement (OWNER-CONFIRMED 2026-11-15):** The cinematic must be skippable to the initialized battle command menu, including ordinary Run in wild encounters; never skip a mandatory trainer/scripted battle. Determine/approve exact skip key and test every battle type before code edits.
 - **Verification:** Run the native Windows executable from a complete packaged folder; save logs/PNG comparisons, test both `world3d=0` and `world3d=1`, enable/disable Gamma, verify story flags/old `.sav` import, and record build commit and reproducible test conditions. This report contains no claimed code fixes or new builds.
