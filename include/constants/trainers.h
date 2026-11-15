@@ -181,6 +181,7 @@ enum __attribute__((packed)) TrainerPicID
     // Project ARIA: owner's art, full colour on PC (ENG-SPRITES, graphics/hicolor/list.txt)
     TRAINER_PIC_JANINE,
     TRAINER_PIC_VARNELL,
+    TRAINER_PIC_COPYCAT,  // Project ARIA: owner's art (2026-11-15), new Saffron Gym leader
     TRAINER_PIC_COUNT,
 };
 

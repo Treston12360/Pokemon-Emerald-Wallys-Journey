@@ -174,7 +174,7 @@ Lineup (owner 2026-11-14): Blue = Viridian Gym (8th); Janine = Fuchsia; Elite Fo
 > **(badge)** BLUE: Here. The Earth Badge. That's all eight. / With all eight, the League will let you onto Victory Road. / Take this too.  (then TM26)
 > **(talk again)** BLUE: Don't make that face. Losing to you doesn't feel like losing to Red did. / Go win it. Then tell Gramps and Varnell yourself. They'll want to hear it from you.
 
-**L.2 Koga — Elite Four, 4th room** (v2: his real voice — HGSS/FRLG Koga: "Fwahahaha!", ninja of the shadows, proud father)
+**L.2 Koga — Elite Four, ~~4th room~~ 1st room (owner 2026-11-15; the closing line below was written for the last room and must be redrafted)** (v2: his real voice — HGSS/FRLG Koga: "Fwahahaha!", ninja of the shadows, proud father)
 > Fwahahaha! So the traveler from Hoenn reaches my chamber at last.
 > I am Koga of the Elite Four! I live in the shadows, a master of the ninja arts!
 > I left the Fuchsia Gym to my daughter, Janine. She told me of her battle with you. She did not hide that she lost.

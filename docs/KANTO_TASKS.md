@@ -135,6 +135,46 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       (8th badge, ch. 10); Fuchsia → **Janine**; Elite Four (owner 2026-11-14): **Lorelei, Bruno, Agatha, Koga** (Koga in Lance's room);
       **Lance = Champion** in the Champion's room (replaces FireRed's Blue there). Giovanni is hidden only in the Rocket Hideout (S0 step 2); the Viridian Gym and Champion's room
       objects are untouched until this task. Mt. Moon: fossils kept (ch. 2) — Miguel's fossil scene stays.
+- [ ] **S-LEAGUE2. Kanto boss type coverage rework** (owner, 2026-11-15: "max coverage ... there shouldn't be one kind
+      of Pokemon or typing that can just carry somebody through"). **Decided 2026-11-15:** Blue = Flying Gym (Mega Pidgeot),
+      his title defense = real Blastoise team; Sabrina promoted to the E4 (Agatha out); Copycat = Normal Saffron Gym;
+      **Janine = Ghost** (owner: "Janine can be ghost"). Lineup in KANTO_PROJECT_ARIA §1. Coverage now: Ground still hits 4
+      bosses (Brock, Surge, Blaine, Koga) - unavoidable with those types, so each carries an in-type Ground answer
+      (Aerodactyl, Air Balloon, Charizard, Crobat/Weezing) + coverage moves; no other type hits more than 3 of 13; the
+      E4+Lance block: no type hits more than 2 of 5. **E4 order decided 2026-11-15: Koga → Lorelei → Bruno → Sabrina → Lance**
+      (owner: "Koga, Lorelei, Bruno, Sabrina, Lance"). To do: move the E4 trainers/scripts to their new rooms; Koga's approved
+      after-battle line "Go. The Champion awaits." no longer fits room 1 — draft a new ending (KANTO_SCRIPT L.2) for approval. **Open:** **Janine's Ghost team needs Pokémon from other regions** (Gengar is Kanto's only Ghost family) —
+      proposed story reason, NOT yet approved: ghosts from elsewhere slip through the tears and she takes them in, finding
+      her own path apart from her father's Poison. Before showing any team: run the coverage checker (to be written as
+      tools/aria_league_coverage.py) over all Kanto boss teams.
+- [ ] **S-COPYCAT. Saffron Gym -> the Copycat, Normal type** (owner by voice, 2026-11-15, with the Sabrina-to-E4
+      plan: asked who takes Sabrina's place; Copycat chosen; "we still want her to be strong" — copying is her flavour, not
+      every Pokémon). She is a little girl in FRLG; our story is after FRLG, so she is **older** (teen/young adult) and needs
+      a new overworld sprite + a battle picture (drafts shown first; research how good Gen 3 sprites are made first).
+      **Team DRAFT (owner OK'd putting it in her draft):** Mega Kangaskhan (ace, Parental Bond), Snorlax (Curse), Tauros
+      (Intimidate), Porygon-Z (Adaptability; owner: never two Porygon on one team), Blissey (special wall), Ditto
+      (Imposter, her one copying signature). Kanto families only. Moves/items/natures still to do + coverage check.
+      **Sprites (2026-11-15):** overworld draft OK'd ("her ingame sprite looks good": FRLG Lass recoloured, pink hair,
+      straight bangs + long sides, white top/red skirt — `tools/aria_copycat_sprites.py`). **Battle picture: all four
+      drafts rejected** (v1/v2 too close to the Lass, v3 "looks like shit", v4 "looks awful") — parked, come back later
+      **RESOLVED 2026-11-15: Treston supplied the battle art himself** (`docs/kanto_art/copycat_battle_art_owner.png`) ->
+      `TRAINER_PIC_COPYCAT`, via `tools/aria_copycat_from_art.py` + graphics/hicolor. **Name: Mimi** (owner, 2026-11-15: "Mimi is good"). Picture now cut at the thighs (figure 88 px) so the art's own eyes and Poké Ball survive; the hand-redrawn
+      eyes/ball at full-body size were rejected ("You made it worse").
+      (owner: "let's move on and return to this later"). Wanted: Hinata-style hair (blunt bangs, long side strands, long
+      in the back), not recognisable as an existing trainer. Read `docs/SPRITING_NOTES.md` first; consider asking Treston
+      for reference art (Janine/Varnell battle art came from his own art).
+- [ ] **ENG-HIRES. Battle pictures with more pixels — ON HOLD** (owner, 2026-11-15: option 1, "but put that on hold").
+      Same on-screen size as every trainer (keeps his 2026-11-14 rule "same size so they don't stick out"), but drawn at
+      2x detail: a 128x128 full-colour picture in the 64x64 spot. Needs the PC renderer to draw those sprites at output
+      resolution (src/platform/hicolor.c + sdl2.c — shared engine files, claim in WORK_CLAIMS first). Then Mimi goes back
+      to full body from his art (eyes/ball/boots intact); Janine's and Varnell's art can use it too.
+- [ ] **S-SAFFRON-GYM. Redesign the Saffron Gym for the Copycat** (owner, 2026-11-15) — it is Sabrina's teleporter maze now.
+- [ ] **S-SABRINA-ROOM. New Elite Four room for Sabrina** (owner, 2026-11-15) — the 4th room (FireRed's dragon room, Lance's old one), alongside S-KOGA-ROOM.
+      **Rule for all three (owner, 2026-11-15): before designing any map, research how people make good Gen 3 maps**
+      (mapping guides, Porymap practice, well-regarded hacks) and write the findings down; don't just try.
+- [ ] **S-KOGA-ROOM. Redesign Koga's Elite Four room (now the 1st room, FireRed's ice room) — later** (owner, 2026-11-15: "eventually we need 
+      [to] redesign Koga's E4 room"). Koga sits in Lance's old room (S-LEAGUE), which still has FireRed's
+      dragon-themed layout. Not started, no design decided yet — ask Treston what he wants before drafting.
 - [ ] **S-ANNE. The S.S. Anne voyage** (owner, 2026-11-14): the trip from Slateport is played on the real ship —
       explore and battle like normal (boarding puts you in 1F corridor; stepping off = Vermilion, Oak's scene).
       Its trainers get teams for a Hoenn Champion arriving in Kanto (L4 level curve) and new lines — passengers and crew talk about the anomalies, Pokémon

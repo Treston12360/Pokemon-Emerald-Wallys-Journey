@@ -20,8 +20,8 @@ a reveal or a choice, not just a gym.
 | Legendaries | Hoopa (taken first), Dialga, Palkia, Giratina, held in containment machines. |
 | Varnell's ending | **Lost to the rift, by choice.** He glimpses Aria in Giratina's Distortion World and jumps in. Whether he survives is left **ambiguous.** Not redeemed. |
 | Wally | **Small cameos only.** He sees the player off at the Hoenn harbour: "show Kanto what Hoenn is made of" — the reason the player takes the Kanto gym challenge. |
-| Blue | Former Champion, now the 8th leader (Viridian). Part of the investigation alongside Oak (his grandfather) and Varnell (the man who rebuilt him). Cold to the player at first — see §2b. Respect earned slowly. Not a jerk, no quippy banter. |
-| Kanto League | **Owner 2026-11-14:** Elite Four = FireRed's with **Koga** in Lance's place: **Lorelei, Bruno, Agatha, Koga**. **Lance is the Champion** (Champion's room, where FireRed had Blue). **Janine** runs Fuchsia. Blue runs Viridian. (Replaces the earlier HGSS lineup.) |
+| Blue | Former Champion, now the 8th leader (Viridian) — **a Flying-type Gym** (owner, 2026-11-15: "we can do blue as the flying type"; Mega Pidgeot ace). His real Blastoise team is kept for his title-defense fight (§6). Part of the investigation alongside Oak (his grandfather) and Varnell (the man who rebuilt him). Cold to the player at first — see §2b. Respect earned slowly. Not a jerk, no quippy banter. |
+| Kanto League | **Owner 2026-11-15 (replaces 2026-11-14):** Elite Four = **Lorelei (Ice), Bruno (Fighting), Sabrina (Psychic, promoted from Saffron; "Sabrina is good"), Koga (Poison)**; Agatha leaves the Elite Four. **Lance (Dragon) is the Champion.** Gyms: Brock (Rock), Misty (Water), Surge (Electric), Erika (Grass), **Janine (Ghost** — "Janine can be ghost"; not Poison so the type isn't repeated), **Mimi, the Copycat (Normal, new Saffron leader; name owner 2026-11-15)**, Blaine (Fire), **Blue (Flying, Viridian, 8th)**. No type repeats. **E4 room order (owner 2026-11-15): Koga (1st room) → Lorelei (2nd) → Bruno (3rd) → Sabrina (4th) → Lance.** Why: type-coverage check, see KANTO_TASKS S-LEAGUE2. |
 | Red | **Optional superboss only.** No story role. Final Champion-defense challenger. |
 | Oak | Introduces Varnell. Trusts him; is shaken by the reveal. |
 | Items / HMs | All Hoenn items carry over. **Fly works everywhere, always. Every other HM works in Kanto only with the Kanto badge whose Gym Leader gives it** (Kanto doesn't recognise Hoenn field licenses); Hoenn HMs still work in Hoenn. |
@@ -240,6 +240,12 @@ Proposed blocks (owner to confirm or adjust):
   Story: you come home to defend your title now that everything is done.
 - Keep every existing Hoenn challenger (Treston, Wally, Wallace, Steven, rival, Gym Leaders…).
 - Add Kanto challengers: the Kanto Gym Leaders, Blue, the Kanto Elite Four.
+- **Blue as a title-defense challenger uses his *real* team, with Blastoise** (owner, 2026-11-15) — his
+  FireRed Champion team (Pidgeot, Alakazam, Rhydon, Arcanine, Exeggutor, Blastoise; the FRLG rematch version
+  has Heracross/Tyranitar) as the base, not his Flying Gym team. **Owner 2026-11-15: Blastoise is his ace and
+  his Mega; also Pidgeot, Arcanine, Exeggutor, Alakazam; Kanto Pokémon only.** Sixth slot: Rhyperior proposed
+  (= Rhydon, which RBY/FRLG Blue used with Blastoise) — waiting for the owner.
+- **Blue's Flying Gym team: no Charizard** (owner, 2026-11-15).
 - **Red** is the final challenger, at the top of the curve (current defenses run 74–90).
 - Needs a code change: today the ladder triggers on repeat E4 runs after the Hall of Fame.
 
@@ -269,6 +275,20 @@ Proposed blocks (owner to confirm or adjust):
   "Red Alert" (ARIA firing) — palette swap is a live story trigger, plus a breathing pulse on the tanks.
 - Varnell's sprite: an existing scientist/gentleman sprite with a new palette unless a free outside sprite
   is approved.
+- **Varnell's overworld sprite — APPROVED v7 (Treston, 2026-11-15: "Looks good that is his new sprite").**
+  A frankensprite of official Gen 3 parts (Steven's hair on top, the Scientist's face/glasses/coat below),
+  recoloured and cleaned by hand-picked ramps. In game: `graphics/object_events/pics/people/varnell.png`
+  + `graphics/object_events/palettes/varnell.pal` (14 colours). Builder: `tools/aria_varnell_overworld_franken.py`;
+  picture `docs/kanto_mockups/varnell_overworld_v7_ingame.png` (2D left, 3D right). Drafts v4–v6 and
+  `graphics/hicolor/varnell_overworld_v*_draft.png` are history only, not used.
+  Build note: the PC makefile does not rebuild `src/event_object_movement.o` when only a sprite PNG
+  changes — `touch src/event_object_movement.c` after changing any overworld sprite.
+- **Janine's overworld sprite — APPROVED v2 (Treston, 2026-11-15: "Sounds good" to v2 + cleanup).**
+  Official FRLG Cooltrainer F (purple ponytail) recoloured to her battle picture: indigo hair, dark purple
+  ninja suit and pants, pink hair tie, scarf (tail behind her / over the shoulder / bow at the back) and sash.
+  `OBJ_EVENT_GFX_JANINE` + `OBJ_EVENT_PAL_TAG_JANINE` (0x11F3), files `janine.png`/`janine.pal`; the Fuchsia
+  Gym leader uses it (Koga's own sprite stays for his E4 room). Tools `tools/aria_janine_overworld*.py`;
+  pictures `docs/kanto_mockups/janine_overworld_v1/v2.png`, in game `janine_overworld_v2_ingame.png` (2D left, 3D right).
 
 ## 7b. Getting Kanto into the Emerald build (findings 2026-11-13)
 
