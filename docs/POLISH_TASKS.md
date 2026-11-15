@@ -157,7 +157,15 @@ Add under each item: what was found, what was changed, files, how to test, what 
         built with this session's 3D files put back (only a randomly walking person differs): the fix changes
         nothing in 2D. Picture: `docs/polish_reports/2D_check_POL-12_16_23_27.png`.
 - [ ] **POL-24. Route 112 into Lavaridge.** "Route 112 into lavaridge town rocks in background appear and then level."
-- [ ] **POL-26. Rustboro lights blink.** "Lights in rustboro city blink in and out while walking."
+- [x] **POL-26. Rustboro lights blink.** "Lights in rustboro city blink in and out while walking."
+      - Fixed 2026-11-15 (Claude 019khs4X): `src/event_object_movement.c` UpdateLightSprite removed a lamp glow as
+        soon as it was outside the GBA's 15x20-tile window, but TrySpawnLightSprites makes them in the padded PC
+        area (widescreen / 3D, WJ_SPAWN_PAD_X/Y). So lamps near the view's edges were made and removed again
+        every step, and in 3D lamps still in view went out. UpdateLightSprite now uses the same padded area.
+        Tested at night (WJPC_RTC_EPOCH, 10 PM), Rustboro, walking left, 3D and 2D: 3D lamp glows now stay on
+        (yellow-pixel count steady, ~5,300; the older exe fell from ~1,650 to ~0 half way); 2D shows no change
+        in what it shows. Picture: `docs/polish_reports/POL-26_lamps_no_blink.png`.
+      - Still open (POL-26b): in 3D the lamp glows are the 2D glow sprite drawn flat (yellow discs).
       - Looked at 2026-11-14 (Claude 019khs4X), Windows exe (Wine), Rustboro (warp `0 3 16 40`), walking left then
         up, a picture every 4 frames, 3D and 2D, at the test machine's night (01:xx): no blinking seen in either.
       - Found instead: **the 3D view has no night at all.** At the same moment 2D shows night (lamps and windows

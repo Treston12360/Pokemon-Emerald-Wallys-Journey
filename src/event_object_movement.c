@@ -2760,10 +2760,14 @@ void GetFollowerAction(struct ScriptContext *ctx) // Essentially a big switch fo
 // Sprite callback for light sprites
 void UpdateLightSprite(struct Sprite *sprite)
 {
-    s16 left =   gSaveBlock1Ptr->pos.x - 2;
-    s16 right =  gSaveBlock1Ptr->pos.x + 17;
-    s16 top =    gSaveBlock1Ptr->pos.y;
-    s16 bottom = gSaveBlock1Ptr->pos.y + 15;
+    // POL-26 (Brennan: "Lights in rustboro city blink in and out while walking"): the same area
+    // TrySpawnLightSprites makes lights in. It is padded on PC (widescreen / 3D view, WJ_SPAWN_PAD_X/Y), this was
+    // not, so every step a light in the padding was made, then removed here the next frame: a flash at the
+    // view's edges. (No padding on the GBA: the same area as before.)
+    s16 left =   gSaveBlock1Ptr->pos.x - 2 - WJ_SPAWN_PAD_X;
+    s16 right =  gSaveBlock1Ptr->pos.x + 17 + WJ_SPAWN_PAD_X;
+    s16 top =    gSaveBlock1Ptr->pos.y - WJ_SPAWN_PAD_Y;
+    s16 bottom = gSaveBlock1Ptr->pos.y + 15 + WJ_SPAWN_PAD_Y;
     s16 x = sprite->sLightXPos;
     s16 y = sprite->sLightYPos;
     u16 sheetTileStart;
