@@ -2739,12 +2739,18 @@ bool VoxelMesh_BeltCell(int x, int y, int *metatile, int *height16)
     if (!BorderAt(x, y))
         return false;
     *metatile = VoxelWorld_BorderMetatile(x, y);
+    bool follows = true;
+
     if (!BorderWaterLevel(x, y, &level, &shift))
     {
-        VoxelMesh_BorderLevel(x, y, &level, &shift);
+        follows = VoxelMesh_BorderLevel(x, y, &level, &shift);
         level += (float)VOXEL_BORDER_COURSES;
     }
+    if (getenv("WJPC_BELT_TABLE_Z") != NULL && !follows)
+        *metatile |= 1 << 28;
     *height16 = (int)floorf((level + BeltBase(x, y)) * 16.0f + 0.5f);
+    if (getenv("WJPC_BELT_TABLE_Z") != NULL) /* (and how far south it is drawn, in the metatile's high bits) */
+        *metatile |= ((int)floorf((shift + BeltBase(x, y)) * 16.0f + 0.5f) & 0xFFF) << 16;
     return true;
 }
 
