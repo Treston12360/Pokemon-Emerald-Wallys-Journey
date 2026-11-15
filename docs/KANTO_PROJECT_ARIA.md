@@ -20,7 +20,7 @@ a reveal or a choice, not just a gym.
 | Legendaries | Hoopa (taken first), Dialga, Palkia, Giratina, held in containment machines. |
 | Varnell's ending | **Lost to the rift, by choice.** He glimpses Aria in Giratina's Distortion World and jumps in. Whether he survives is left **ambiguous.** Not redeemed. |
 | Wally | **Small cameos only.** He sees the player off at the Hoenn harbour: "show Kanto what Hoenn is made of" — the reason the player takes the Kanto gym challenge. |
-| Blue | Former Champion, now the 8th leader (Viridian). Part of the investigation alongside Oak (his grandfather) and Varnell (the man who rebuilt him). Cold to the player at first — see §2b. Respect earned slowly. Not a jerk, no quippy banter. |
+| Blue | Former Champion, now the 8th leader (Viridian) — **a Flying-type Gym** (owner, 2026-11-15: "we can do blue as the flying type"; Mega Pidgeot ace). His real Blastoise team is kept for his title-defense fight (§6). Part of the investigation alongside Oak (his grandfather) and Varnell (the man who rebuilt him). Cold to the player at first — see §2b. Respect earned slowly. Not a jerk, no quippy banter. |
 | Kanto League | **Owner 2026-11-14:** Elite Four = FireRed's with **Koga** in Lance's place: **Lorelei, Bruno, Agatha, Koga**. **Lance is the Champion** (Champion's room, where FireRed had Blue). **Janine** runs Fuchsia. Blue runs Viridian. (Replaces the earlier HGSS lineup.) |
 | Red | **Optional superboss only.** No story role. Final Champion-defense challenger. |
 | Oak | Introduces Varnell. Trusts him; is shaken by the reveal. |
@@ -240,6 +240,9 @@ Proposed blocks (owner to confirm or adjust):
   Story: you come home to defend your title now that everything is done.
 - Keep every existing Hoenn challenger (Treston, Wally, Wallace, Steven, rival, Gym Leaders…).
 - Add Kanto challengers: the Kanto Gym Leaders, Blue, the Kanto Elite Four.
+- **Blue as a title-defense challenger uses his *real* team, with Blastoise** (owner, 2026-11-15) — his
+  FireRed Champion team (Pidgeot, Alakazam, Rhydon, Arcanine, Exeggutor, Blastoise; the FRLG rematch version
+  has Heracross/Tyranitar) as the base, not his Flying Gym team. Final six still to be shown to the owner.
 - **Red** is the final challenger, at the top of the curve (current defenses run 74–90).
 - Needs a code change: today the ladder triggers on repeat E4 runs after the Hall of Fame.
 

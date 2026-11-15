@@ -135,6 +135,15 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       (8th badge, ch. 10); Fuchsia → **Janine**; Elite Four (owner 2026-11-14): **Lorelei, Bruno, Agatha, Koga** (Koga in Lance's room);
       **Lance = Champion** in the Champion's room (replaces FireRed's Blue there). Giovanni is hidden only in the Rocket Hideout (S0 step 2); the Viridian Gym and Champion's room
       objects are untouched until this task. Mt. Moon: fossils kept (ch. 2) — Miguel's fossil scene stays.
+- [ ] **S-LEAGUE2. Kanto boss type coverage rework** (owner, 2026-11-15: "max coverage ... there shouldn't be one kind
+      of Pokemon or typing that can just carry somebody through"). **Decided:** Blue = Flying Gym (Viridian, Mega Pidgeot);
+      Blue's title-defense fight uses his real Blastoise team. **Proposed, waiting for Treston:** only one Poison (Koga
+      or Janine changes type); Agatha leaves the E4; promote a Gym Leader to the E4 (math favours Sabrina or Misty);
+      a new Gym in the promoted leader's city; best extra types Ghost + Normal (Ghost needs a Kanto-rule exception; Ground
+      is the Kanto-only alternative). Ground hits 4 bosses whatever we do (Brock/Surge/Blaine/Poison) -> every one of
+      them carries a Ground answer in-type (Aerodactyl, Air Balloon, Charizard, Crobat/Weezing) + coverage moves.
+      Before showing any team: run a coverage checker over all Kanto boss teams (types hit, physical/special both ways,
+      nothing carries). Type-chart search used: scratchpad script, to be added as tools/aria_league_coverage.py.
 - [ ] **S-KOGA-ROOM. Redesign Koga's Elite Four room — later** (owner, 2026-11-15: "eventually we need 
       [to] redesign Koga's E4 room"). Koga sits in Lance's old room (S-LEAGUE), which still has FireRed's
       dragon-themed layout. Not started, no design decided yet — ask Treston what he wants before drafting.
