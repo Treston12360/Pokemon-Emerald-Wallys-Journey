@@ -73,14 +73,22 @@ Add under each item: what was found, what was changed, files, how to test, what 
       game corner is very skippy/laggy."
 - [ ] **POL-10. Walking through the top of doors.** "When walking in entrances you walk through the top of the
       door this should be fluid and not be cutting off the top when walking through the door."
-- [~] **POL-12. Water is still.** (Claude 019khs4X, 2026-11-14, in work) "Water is not moving in 3D mode it is still."
-      - Found (Claude 019khs4X, 2026-11-14): reproduced in the Windows exe (Wine, 3D on, Route 103 sea): two frames
-        40 apart are pixel-identical in the water. Cause: our 3D renderer never redraws the animated tiles. The
-        atlas code for it is already ported (`voxel_atlas.c`: `VoxelAnim_*`, `VoxelAtlas_RefreshAnimated*`) but
-        nothing calls it. Emerald 3DS does it every 16 frames in `ctr_voxel.c` (comment block at line ~5462, "The
-        animated tiles (water, flowers) of the atlases in view ... VoxelAnim_*") and re-uploads the slots.
-        The fix is a port into `voxel_gl.c` (texture uploads live there) - that file is claimed by 014PwRDj for
-        POL-11/14, so it is waiting for that claim to be released or for permission. Flowers will animate too.
+- [x] **POL-12. Water is still.** "Water is not moving in 3D mode it is still." Done 2026-11-14 (Claude 019khs4X);
+      picture for Brennan: `docs/polish_reports/POL-12_water_moves.png` (Route 103, two frames 16 apart).
+      - Cause: our 3D renderer never redrew the animated tiles; the 3DS code for it (`VoxelAtlas_RefreshAnimatedPageRows`)
+        was already ported in `voxel_atlas.c` but nothing called it.
+      - Fix (`voxel_gl.c`, `AnimateAtlasTiles`, after the maps' meshes each frame, not in battle): compares BG VRAM's
+        two tile sets (0x8000 bytes) with last frame's copy; once a frame passes with no write (the game writes
+        its animation frames on frames 0-4 of every 16 - 3DS's VOXEL_ANIM_SETTLE), every slot made from a changed
+        tile is composed again (3DS rule, ctr_voxel.c AnimateTiles/AnimBegin) in the current map's atlas and in
+        the atlases of maps beside it with the same primary tile set (primary tiles only - 3DS AnimShares), then
+        the page is graded and uploaded again. Each atlas now keeps its pages as composed (`Atlas.raw`, 256 KB a
+        page) to compose into. Flowers and sea edges move too.
+      - Tested in the Windows exe (Wine, 3D on, Route 103): the sea differs between frames 16 apart; with
+        `WJPC_3D_NO_TILE_ANIM=1` (new switch: turns it off) the frames are identical. `WJPC_VOXEL_LOG=1` logs
+        the first redraws. Test scripts need `WJPC_TEST_WINDOW=1`, or the 3D view is only drawn on screenshots.
+      - Not measured: cost per redraw on a real GPU (a whole page is untiled and uploaded per change, every 16
+        frames per atlas in view).
 - [ ] **POL-13. Background mountains are blocks.** "Mountains in background are blocks and not like mountains."
 - [ ] **POL-15. Route 110 into Mauville.** "Walking into mauville city from route 110 everything below disappears
       and reappears."

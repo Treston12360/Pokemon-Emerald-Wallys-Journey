@@ -534,6 +534,7 @@ typedef struct
     uint32_t season; // VoxelWorld_SeasonKey() it was baked for (DLX-17)
     uint32_t gen;    // bumped at every (re)build: meshes laid on an older one are laid again
     bool valid;
+    uint16_t *raw[VOXEL_ATLAS_PAGES]; // POL-12: each page as composed, before VoxelGrade_Texels (tiled order)
 } Atlas;
 
 static uint32_t sAtlasGen;
@@ -573,6 +574,15 @@ static bool AtlasCovers(const Atlas *a, const VoxelMapInstance *inst)
 
 static Atlas sAtlases[MAX_ATLASES];
 static void LoadGammaClouds(void);
+
+static void AtlasFreeRaw(Atlas *a)
+{
+    for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+    {
+        free(a->raw[p]);
+        a->raw[p] = NULL;
+    }
+}
 
 // The season key, asked for once a frame (it reads the clock; asked per atlas per map it was most of a frame).
 static uint32_t sSeasonKey, sSeasonFrame = 0xFFFFFFFFu;
@@ -615,6 +625,7 @@ static Atlas *FindAtlas(const VoxelMapInstance *inst)
                 // made again (PrepareAtlas) with every loaded map's metatiles; meshes follow by its gen
                 wj_glDeleteTextures(VOXEL_ATLAS_PAGES, sAtlases[i].tex);
                 memset(sAtlases[i].tex, 0, sizeof(sAtlases[i].tex));
+                AtlasFreeRaw(&sAtlases[i]);
                 sAtlases[i].valid = false;
                 return NULL;
             }
@@ -649,6 +660,7 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
         {
             wj_glDeleteTextures(VOXEL_ATLAS_PAGES, slot->tex);
             memset(slot->tex, 0, sizeof(slot->tex));
+            AtlasFreeRaw(slot);
         }
         slot->valid = false;
         if (sAtlasStaging == NULL)
@@ -675,6 +687,11 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
             Voxel3D_Log("[3D] atlas for %d:%d failed", sAtlasJob.mapGroup, sAtlasJob.mapNum);
             return NULL;
         }
+        // POL-12: keep the page as composed, so the animated tiles can be composed into it again later
+        if (slot->raw[sAtlasJob.page] == NULL)
+            slot->raw[sAtlasJob.page] = malloc(VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
+        if (slot->raw[sAtlasJob.page] != NULL)
+            memcpy(slot->raw[sAtlasJob.page], sAtlasStaging, VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
         VoxelGrade_Texels(sAtlasStaging, VOXEL_ATLAS_PIXELS);
         slot->tex[sAtlasJob.page] = UploadTiled(0, sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
         if (getenv("WJPC_VOXEL_DUMP") != NULL && sAtlasJob.page == 0)
@@ -717,6 +734,104 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
 static Atlas *GetAtlas(const VoxelMapInstance *inst)
 {
     return PrepareAtlas(inst, 0);
+}
+
+/*
+ * POL-12 (Brennan: "Water is not moving in 3D mode it is still"): the animated tiles - the sea and its sandy,
+ * grassy and waterfall edges, the flowers - redrawn in the atlases, as Emerald 3DS does (ctr_voxel.c
+ * AnimateTiles / AnimBegin, "The animated tiles (water, flowers) of the atlases in view"). The game writes its
+ * animation frames into BG VRAM (TransferTilesetAnimsBuffer) on frames 0-4 of every 16. Here the tiles that
+ * changed are found by comparing VRAM with last frame's copy; once a frame passes with no change (3DS's
+ * VOXEL_ANIM_SETTLE: wait for the writes to finish), every slot drawn from a changed tile is composed again
+ * (VoxelAtlas_RefreshAnimatedPageRows, ported from 3DS) in the current map's atlas, and in the atlases of maps
+ * beside it that share its primary tile set (only the primary tiles' changes: VRAM holds just the current map's
+ * secondary set - 3DS's AnimShares), then those pages are graded and uploaded again.
+ */
+#define ANIM_VRAM_BYTES 0x8000 // both tile sets, 1024 tiles (VoxelAtlas_RefreshAnimatedPage)
+static uint8_t sAnimVram[ANIM_VRAM_BYTES];
+static uint8_t sAnimDirty[128];
+static bool sAnimHaveVram, sAnimAnyDirty;
+static const void *sAnimPrimary, *sAnimSecondary;
+
+static void AnimateAtlasTiles(const VoxelMapInstance *inst)
+{
+    const uint8_t *vram = VRAM_; // BG char block 0: the overworld's two tile sets (3DS: CtrVideo_GetBgVram)
+    bool wrote = false;
+
+    if (vram == NULL || inst == NULL || getenv("WJPC_3D_NO_TILE_ANIM") != NULL)
+        return;
+    if (!sAnimHaveVram || inst->primaryTileset != sAnimPrimary || inst->secondaryTileset != sAnimSecondary)
+    {
+        // first frame, or new tile sets in VRAM (a new map): start comparing from here
+        memcpy(sAnimVram, vram, ANIM_VRAM_BYTES);
+        memset(sAnimDirty, 0, sizeof(sAnimDirty));
+        sAnimHaveVram = true;
+        sAnimAnyDirty = false;
+        sAnimPrimary = inst->primaryTileset;
+        sAnimSecondary = inst->secondaryTileset;
+        return;
+    }
+    for (unsigned t = 0; t < ANIM_VRAM_BYTES / 32; t++)
+        if (memcmp(sAnimVram + t * 32, vram + t * 32, 32) != 0)
+        {
+            sAnimDirty[t >> 3] |= (uint8_t)(1u << (t & 7));
+            memcpy(sAnimVram + t * 32, vram + t * 32, 32);
+            wrote = true;
+        }
+    if (wrote)
+    {
+        static unsigned sLoggedW;
+        if (sLoggedW++ < 10)
+            Voxel3D_Log("[3D] animated tiles: VRAM tiles written (frame %u)", sFrame);
+        sAnimAnyDirty = true;
+        return; // still writing: wait for a quiet frame
+    }
+    if (!sAnimAnyDirty)
+        return;
+    {
+        unsigned primaryTiles = Voxel_PrimaryTiles(inst->primaryTileset);
+        uint8_t primaryOnly[128];
+
+        memcpy(primaryOnly, sAnimDirty, sizeof(primaryOnly));
+        for (unsigned t = primaryTiles; t < 1024; t++)
+            primaryOnly[t >> 3] &= (uint8_t)~(1u << (t & 7));
+        for (int i = 0; i < MAX_ATLASES; i++)
+        {
+            Atlas *a = &sAtlases[i];
+            VoxelMapInstance pair;
+            bool same;
+
+            if (!a->valid || a->primary != inst->primaryTileset || a->season != SeasonNow())
+                continue;
+            same = a->secondary == inst->secondaryTileset;
+            memset(&pair, 0, sizeof(pair));
+            pair.primaryTileset = a->primary;
+            pair.secondaryTileset = a->secondary;
+            for (unsigned p = 0; p < a->pages && p < VOXEL_ATLAS_PAGES; p++)
+            {
+                unsigned rows = 0;
+                if (a->raw[p] == NULL || a->tex[p] == 0)
+                    continue;
+                if (VoxelAtlas_RefreshAnimatedPageRows(&pair, &a->map, p, a->raw[p], vram,
+                                                       same ? sAnimDirty : primaryOnly, &rows) == 0)
+                    continue;
+                if (sAtlasStaging == NULL)
+                    sAtlasStaging = malloc(VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
+                if (sAtlasStaging == NULL || (sJobSlot != NULL && sAtlasJob.active))
+                    continue; // the staging page is a job's right now: this page waits for the next change
+                memcpy(sAtlasStaging, a->raw[p], VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
+                VoxelGrade_Texels(sAtlasStaging, VOXEL_ATLAS_PIXELS);
+                UploadTiled(a->tex[p], sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
+                {
+                    static unsigned sLogged;
+                    if (sLogged++ < 20)
+                        Voxel3D_Log("[3D] animated tiles: atlas %d page %u rows %x redrawn (frame %u)", i, p, rows, sFrame);
+                }
+            }
+        }
+    }
+    memset(sAnimDirty, 0, sizeof(sAnimDirty));
+    sAnimAnyDirty = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -2168,6 +2283,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         }
     }
 
+    if (!sBattleMode)
+        AnimateAtlasTiles(inst0); // POL-12
     Uint64 workMaps = SDL_GetPerformanceCounter();
     // Camera follows the player.
     VoxelWorld_GetPlayerWorldCoords(&playerX, &playerZ);
