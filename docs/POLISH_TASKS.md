@@ -310,6 +310,29 @@ Add under each item: what was found, what was changed, files, how to test, what 
       the background in every route as it is changing from one background to the other when going to and from
       routes." The general case of POL-15, POL-21 and POL-24 (and DLX-25, which fixed Dewford's): check every
       Hoenn map link, not only the ones he named.
+    - **2026-11-15, 014PwRDj - fix in 3D, pushed to `polish`, waiting for Brennan's look (not ticked yet).**
+      Cause: everything past the maps' edges (the "belt") was decided by the map the player stands on - its
+      border art, its edge heights, its edge fills - so at every crossing the belt beside the next map was
+      redrawn as the new map's. Now each belt cell goes with the **nearest loaded map**, whichever map the
+      player is on:
+      - art: `VoxelWorld_BorderMetatile` / `NearestBeltMap` (DLX-25's rule, widened to maps on another secondary
+        tile set whose border is the shared primary set's; ties to the lower map number);
+      - height and base: `VoxelWorld_BeltRing` in `BorderWaterLevel`, `VoxelMesh_BorderLevel`, seam skirts,
+        tree belt; `VoxelMesh_EmitBorder` sets the builder's base per cell;
+      - edge fills (`EdgeFillAt`) the same; atlas marks them and is made again if it lacks them.
+      - **My own design choice, NOT from Emerald 3DS (which has the same swap, hidden by its narrow view) -
+        Brennan/Treston please confirm:** between two maps whose edges stand at different heights the belt
+        height is blended (every map's nearest edge pulls, 1/distance^3) and step faces are tiled a tile a level.
+        Without the blend a tall wall stood where the two maps' halves met (behind Lavaridge).
+        `WJPC_BELT_NO_BLEND=1` turns only the blend off; `WJPC_BELT_OLD=1` gives the whole old belt back.
+      - Check of all 64 Hoenn links (`docs/polish_reports/POL-30_belt_sweep.py`, belt cells within 24 tiles of
+        each link, seen from both sides; 34029 cells): **old 8318 differ in art, 9661 in height; new 641 in art,
+        70 in height.** What is left: Route 113 <-> Route 112 / Route 111 art (Route 113's ash-tree border is on
+        Fallarbor's tile set, which Route 112/111's atlas cannot draw - would need a second atlas on the belt);
+        a few cells of height near Route 118/123 and Verdanturf (far maps coming and going). Two links gave no
+        table (Route 119/118, Route 111/Mauville) - **not checked by the sweep.**
+      - Pictures: `docs/polish_reports/POL-21_route110_to_103.png`, `POL-24_route112_to_lavaridge.png`
+        (top old, bottom new; left before the crossing, right after). 2D does not use this code.
 
 ## Questions for Brennan (and his answers)
 
