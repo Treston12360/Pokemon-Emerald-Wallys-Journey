@@ -12,11 +12,20 @@
 
 **Character truth:** Rocket DID raid the Tower, DID steal Clefairy, DID endanger Aria and DID steal Varnell's research; Varnell sincerely blamed them for her death. Rocket did **not directly cause** the falling ceiling. Do not have authorial narration falsely confirm that it did. Old residents may reasonably believe it.
 
+## Three owner-locked historical details (2026-11-15)
+
+**LOCKED, not just suggestions:**
+1. **Young Varnell was forced outside Pokémon Tower** during the original Team Rocket raid. He survives, does not witness the future gateway or recognize the future man, and sincerely attributes the tragedy to Rocket.
+2. **Aria's Clefairy remained captive with a Rocket member inside the tower** while Aria searched for it. It did NOT escape its captor first. Aria won't cross the future window without her Clefairy. Precisely where the member and Clefairy stand when the ceiling falls is a *staging question*, not permission to invent an escape.
+3. **Lavender residents may speculate the unidentified adult man was a Rocket member.** His body was too badly damaged to recognize. This is historically plausible, mistaken testimony—not an authoritative statement that the man WAS a Rocket. Future Varnell is the unidentified casualty.
+
+**Approval boundary:** the three *facts* above are locked. The exact resident dialogue, Kiyoshi rescue rewrite and all final battle/portal dialogue are still **DRAFT — not approved for inclusion in the game**. In-game Chapter 3 and Lavender NPC scripts have not been rewritten.
+
 ## Hidden chronology and ARIA's component discoveries (LOCKED direction; exact scenes still drafts)
 
 | Period / chapter | Actual cause | Believable first-playthrough understanding |
 | --- | --- | --- |
-| Historical Tower raid | Rocket theft; Aria searches for Clefairy; future Varnell calls through a retrieval window, then jumps; **jump -> rupture -> collapse -> Aria/Clefairy/future Varnell deaths** | Most people blame Rocket; an unidentified unrecognizable man was also found; young Varnell survives |
+| Historical Tower raid | Rocket member holds Aria's Clefairy **captive inside** the tower; **young Varnell is forced outside**. Aria searches for Clefairy and hears future Varnell's call. After she refuses to abandon Clefairy, **future Varnell jumps -> rupture -> collapse -> deaths of Aria, Clefairy, and future Varnell**. Exact positions to storyboard. | Residents blame Rocket, possibly guessing the **unrecognizable unidentified adult male** in rubble was also a Rocket. Young Varnell survives outside and never knows the real cause. |
 | Years later, before Hoenn | Grieving Varnell researches dimensional travel and captures Hoopa in Hoenn before the player arrived in Littleroot | Non-native Pokémon gradually appear with no known explanation |
 | Hoenn / Kanto beginning | Hoopa's uncontrolled portals displace species between present-day habitats; occasional temporal effects are possible | Anomalies seem to originate externally |
 | Chapter 3, Kiyoshi | Accidental temporal rift pulls Sage Kiyoshi out of the old Brass Tower fire; Varnell is fascinated and tries to help stabilize the connection. It naturally expires and pulls Kiyoshi back. | A tragic failure to save a displaced man; secretly proof living humans can cross time and **why Dialga is needed** |
@@ -60,7 +69,7 @@
 
 **Clue pacing rules:** Important scenes convey the plot even if a player skips optional dialogue. Let players encounter clue sites via actual quests (e.g., retrieve information from a computer next to a *completely optional* photo). Do not force inspection of the photo, place it immediately after Lavender's ghost, add spooky music, or repeatedly point to the corpse. Most attentive players may infer the **daughter** clue; keep the *purpose of ARIA* and *fatal loop* concealed until the end. Distinguish ghostly Clefairy (a remnant in the present) from the living Aria reached in the historical past.
 
-## Lavender Town resident — DRAFT wording, not approved verbatim
+## Lavender Town resident — DRAFT ONLY; exact wording NOT owner-approved or in game
 
 "I remember when Team Rocket attacked Pokémon Tower. Terrible day. There was a little girl up there looking for her Clefairy. They say something caught her attention just before part of the ceiling came down. Nobody ever knew exactly what caused it. Most folks figured Rocket must have been doing something up there. Another man was found in the rubble, too. His body was so badly damaged that nobody could recognize him. Some thought he might have been one of the Rockets. Awful business."
 
@@ -76,10 +85,10 @@
 4. **Orb custody logic:** Why does a newly Kanto-certified Champion access the restricted vault, why does a guard accept a forged scientific transfer, and how can Lance notice only after Orb is delivered? Define a transfer ledger, limited clearance, and believable late audit before scripting. Player must not appear to knowingly steal it.
 5. **Blue's knowledge:** Public one-way retrieval theory and danger must be established earlier, while Blue never suspects Varnell or knows Aria's name or the hidden legendaries until final reveal.
 6. **Final machine autonomy:** Explain why loss of captured legendary Pokémon in battle does not immediately stop a precharged window; ensure defeat has visible effects while program runs on stored power.
-7. **Body recognition:** Older Varnell's body and distinguishing possessions must be unrecoverably damaged so witnesses do not identify the famous scientist. Avoid invented forensic claims. Young Varnell is alive somewhere else in this same period.
+7. **Body recognition — basic facts OWNER-LOCKED:** The older man's body is unrecognizable due to collapse damage, younger Varnell was **forced outside the tower**, and residents speculate the unidentified man may have been Rocket. **Still verify:** whether any distinctive surviving items or contemporary eyewitness descriptions could undermine anonymity. Avoid invented forensic claims.
 8. **Kiyoshi physics:** Hoopa's uncontrolled temporal rift predates Dialga; why an uncontrolled pull decays while controlled machine holds a target must be consistent.
 9. **Giratina / capture logistics:** Specific failed experiment must point to Distortion World, and Orb must make an already prepared Giratina capture feasible quickly. Explain how four legendary captives can be used in a final trainer fight and freed after.
-10. **Clefairy's location:** Rocket steals Clefairy; Aria looks for it; the fall kills both. Map exactly where each is at the final moment to avoid an impossible chase or contradictory ghost lore.
+10. **Clefairy's location — captivity OWNER-LOCKED:** A **Rocket member still has Clefairy captive inside the tower** while Aria searches and refuses to leave; the fall kills both Aria and Clefairy. **OPEN:** map the member, Clefairy, Aria and structural collapse precisely; don't quietly change it to an escape.
 11. **Quest/photo knowledge:** Blue can't have spent years walking past an obviously identifiable signed picture. Keep mementos private, photo on an optional later return visit; explain why player has the errand there.
 12. **Physical timing:** Stable portal -> father's call -> daughter stops/refuses -> Blue warns -> father jumps -> *first* overload -> collapse -> window closes. No "Aria look out, the ceiling!" before the jump.
 
@@ -98,7 +107,7 @@
 
 ## Unresolved author decisions before claiming airtight continuity
 
-- Precisely where young Varnell was during the raid; why he does not identify future Varnell's remains; where Clefairy is taken and where Aria is standing.
+- **Owner-locked 2026-11-15:** young Varnell was **forced outside**; **Clefairy is still captive inside with a Rocket member**; Lavender locals **speculate the unrecognizable man might have been Rocket**. **Still OPEN:** who physically forced Varnell outside, and exact Tower floor/positions of captive Clefairy, Aria and Rocket member. Do not reinterpret the locked facts to solve blocking.
 - Exactly how League vault access + forged authorization works, who is allegedly authorizing it, and timing of Lance's delayed discovery.
 - What earlier credible technical detail makes Blue's retrieval-only warning natural without revealing the secret machine.
 - Where/when combined space-time test fails and why it requires Giratina specifically; detailed capture and battle sequencing.
