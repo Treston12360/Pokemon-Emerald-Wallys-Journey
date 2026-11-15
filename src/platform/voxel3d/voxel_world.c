@@ -1683,6 +1683,110 @@ uint32_t VoxelWorld_BlockHash(int x0, int y0, int x1, int y1)
     return hash;
 }
 
+/* A map's 2x2 border block made of the primary tile set's metatiles only. */
+static bool BorderIsPrimaryOnly(const VoxelMapInstance *m)
+{
+    const void *source = ((const struct MapLayout *)m->layout)->border, *resolved;
+    const uint16_t *border;
+
+    if (!MemoGet(&sBorderMemo, source, &resolved))
+    {
+        resolved = Port_ResolveAssetPointer(source);
+        MemoPut(&sBorderMemo, source, resolved);
+    }
+    border = resolved;
+    if (border == NULL)
+        return false;
+    for (unsigned t = 0; t < 4; ++t)
+        if ((border[t] & MAPGRID_METATILE_ID_MASK) >= Voxel_PrimaryMetatiles(m->primaryTileset))
+            return false;
+    return true;
+}
+
+/*
+ * The loaded outdoor map nearest a cell of the belt; a tie goes to the lower map number, not to the current
+ * map, so the answer is the same from both sides of a crossing. `art`: only maps whose border the current
+ * map's atlas can draw -
+ * DLX-25: maps on the current map's tile sets;
+ * POL-30 (Brennan 2026-11-14: the background changes from one to the other between routes, e.g. Route 110's sea
+ * turning into Route 103's trees): and maps on another secondary tile set whose border is made of the shared
+ * primary set's metatiles only (the same art here) - the atlas already holds those (MarkUsedMetatiles' "any
+ * border whose metatiles these tilesets hold").
+ */
+static const VoxelMapInstance *NearestBeltMap(int worldX, int worldY, bool art)
+{
+    const VoxelMapInstance *best = NULL;
+    int bestD = 0x7FFFFFFF;
+
+    for (unsigned i = 0; i < sInstanceCount; ++i)
+    {
+        const VoxelMapInstance *m = &sInstances[i];
+        int dx, dy, d;
+
+        if (m->layout == NULL || m->indoor)
+            continue;
+        if (art)
+        {
+            if (m->primaryTileset != sInstances[0].primaryTileset
+             || ((const struct MapLayout *)m->layout)->border == NULL)
+                continue;
+            if (m->secondaryTileset != sInstances[0].secondaryTileset && !BorderIsPrimaryOnly(m))
+                continue;
+        }
+        dx = worldX < m->originX ? m->originX - worldX : worldX >= m->originX + m->width ? worldX - (m->originX + m->width - 1) : 0;
+        dy = worldY < m->originY ? m->originY - worldY : worldY >= m->originY + m->height ? worldY - (m->originY + m->height - 1) : 0;
+        d = dx > dy ? dx : dy;
+        if (d < bestD || (d == bestD && best != NULL
+                          && (m->mapGroup << 8 | m->mapNum) < (best->mapGroup << 8 | best->mapNum)))
+        {
+            bestD = d;
+            best = m;
+        }
+    }
+    return best;
+}
+
+/* POL-30: the map a cell of the belt stands with - its level and base are that map's nearest edge's, whichever
+ * map the player is on (it was always the current map's: the belt beside the next map rose or sank at the
+ * crossing). The current map when there is no other. */
+const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY)
+{
+    const VoxelMapInstance *best;
+
+    if (sInstanceCount == 0)
+        return NULL;
+    if (sInstances[0].indoor || sInstances[0].layout == NULL)
+        return &sInstances[0];
+    best = NearestBeltMap(worldX, worldY, false);
+    return best != NULL ? best : &sInstances[0];
+}
+
+/* POL-30: the border metatiles the belt may draw from loaded map i (VoxelWorld_BorderMetatile's rule), so the
+ * renderer can see its atlas holds them. FALSE: that map's border is not used. */
+bool VoxelWorld_BeltBorderOf(unsigned i, int ids[4])
+{
+    const VoxelMapInstance *m;
+    const void *resolved;
+
+    if (i >= sInstanceCount || sInstances[0].layout == NULL)
+        return false;
+    m = &sInstances[i];
+    if (m->layout == NULL || m->indoor || m->primaryTileset != sInstances[0].primaryTileset
+     || ((const struct MapLayout *)m->layout)->border == NULL)
+        return false;
+    if (m->secondaryTileset != sInstances[0].secondaryTileset && !BorderIsPrimaryOnly(m))
+        return false;
+    if (!MemoGet(&sBorderMemo, ((const struct MapLayout *)m->layout)->border, &resolved) || resolved == NULL)
+    {
+        resolved = Port_ResolveAssetPointer(((const struct MapLayout *)m->layout)->border);
+        if (resolved == NULL)
+            return false;
+    }
+    for (unsigned t = 0; t < 4; ++t)
+        ids[t] = ((const uint16_t *)resolved)[t] & MAPGRID_METATILE_ID_MASK;
+    return true;
+}
+
 /*
  * The metatile Emerald tiles outside the map.
  *
@@ -1718,27 +1822,8 @@ int VoxelWorld_BorderMetatile(int worldX, int worldY)
      * Phase from that map's own origin, as the 2D game tiles it.
      */
     {
-        const VoxelMapInstance *best = NULL;
-        int bestD = 0x7FFFFFFF;
+        const VoxelMapInstance *best = NearestBeltMap(worldX, worldY, true);
 
-        for (unsigned i = 0; i < sInstanceCount; ++i)
-        {
-            const VoxelMapInstance *m = &sInstances[i];
-            int dx, dy, d;
-
-            if (m->layout == NULL || m->indoor || m->primaryTileset != sInstances[0].primaryTileset
-             || m->secondaryTileset != sInstances[0].secondaryTileset
-             || ((const struct MapLayout *)m->layout)->border == NULL)
-                continue;
-            dx = worldX < m->originX ? m->originX - worldX : worldX >= m->originX + m->width ? worldX - (m->originX + m->width - 1) : 0;
-            dy = worldY < m->originY ? m->originY - worldY : worldY >= m->originY + m->height ? worldY - (m->originY + m->height - 1) : 0;
-            d = dx > dy ? dx : dy;
-            if (d < bestD || (d == bestD && i == 0))
-            {
-                bestD = d;
-                best = m;
-            }
-        }
         if (best != NULL && best != &sInstances[0])
         {
             source = ((const struct MapLayout *)best->layout)->border;

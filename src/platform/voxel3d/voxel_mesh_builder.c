@@ -1042,6 +1042,11 @@ void VoxelMesh_BeginWindow(int x0, int y0, int x1, int y1)
  * low wall and never a gap onto the clear colour.
  */
 static bool BorderWaterLevel(int x, int y, float *level, float *shift);
+/* POL-30: the base a cell of the belt is built over - its own map's (VoxelWorld_BeltRing), not instance 0's. */
+static float BeltBase(int x, int y)
+{
+    return VoxelRelief_Base(VoxelWorld_BeltRing(x, y));
+}
 
 /* A cell of the belt past the last map that is a tree's (VoxelTree_EmitBorder):
  * flat trunks and tilted crowns, nothing standing. */
@@ -1147,7 +1152,7 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
              * belt is drawn as far south as its base is high, as a map is
              * (VoxelBuilder_StretchZ): its top's edge is that far from ours.
              */
-            const VoxelMapInstance *ring = VoxelWorld_Instance(0);
+            const VoxelMapInstance *ring = VoxelWorld_BeltRing(nx, ny); /* POL-30: was instance 0 */
             float belt = ring != NULL ? VoxelRelief_Base(ring) - VoxelRelief_Base(inst) : 0.0f;
             const float beltZ = belt;
             const int16_t *grid = VoxelRelief_Cell(inst, x, y);
@@ -1227,7 +1232,7 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
              * 120). The edge cell's drawing goes on to the belt, point by
              * point of the lattice, as it does to a map at another level.
              */
-            const VoxelMapInstance *ring = VoxelWorld_Instance(0);
+            const VoxelMapInstance *ring = VoxelWorld_BeltRing(nx, ny); /* POL-30: was instance 0 */
             const int16_t *ours = VoxelRelief_Depth(inst, x, y);
             const int16_t *oursH = VoxelRelief_Cell(inst, x, y);
             const unsigned last = (VOXEL_RELIEF_SIDE - 1) * VOXEL_RELIEF_SIDE;
@@ -2527,7 +2532,9 @@ static bool BorderAt(int x, int y)
 
 static bool BorderWaterLevel(int x, int y, float *level, float *shift)
 {
-    const VoxelMapInstance *ring = VoxelWorld_Instance(0);
+    /* POL-30: over the base of the map the cell stands with (BeltBase), at that map's sea's level - it was
+     * always the current map's, so the belt beside the next map moved at the crossing. */
+    const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y);
     int ex, ey;
 
     VoxelEdgeFill fill;
@@ -2539,11 +2546,18 @@ static bool BorderWaterLevel(int x, int y, float *level, float *shift)
      * level - the level most of the map's own sea lies at - so no steps (and no lines) between belt cells. */
     if (getenv("WJPC_BELT_SEA_STEPS") == NULL)
     {
-        static int sFlatKey = -1;
-        static float sFlatLevel, sFlatShift;
+        /* (POL-30: one entry per map the belt stands with, not one in all) */
+        static int sKeys[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
+        static float sLevels[8], sShifts[8];
+        static unsigned sNext;
         int key = (ring->mapGroup << 8 | ring->mapNum) ^ (ring->lift << 16);
-        if (sFlatKey != key)
+        unsigned slot;
+        for (slot = 0; slot < 8 && sKeys[slot] != key; ++slot)
+            ;
+        if (slot == 8)
         {
+            float sFlatLevel, sFlatShift;
+            slot = sNext++ % 8;
             float lv[16], sh[16];
             int cnt[16], kinds = 0, best = -1;
             for (int cy = ring->originY; cy < ring->originY + ring->height; ++cy)
@@ -2569,10 +2583,12 @@ static bool BorderWaterLevel(int x, int y, float *level, float *shift)
                     best = k;
             if (best >= 0)
                 sFlatLevel = lv[best], sFlatShift = sh[best];
-            sFlatKey = key;
+            sKeys[slot] = key;
+            sLevels[slot] = sFlatLevel;
+            sShifts[slot] = sFlatShift;
         }
-        *level = sFlatLevel;
-        *shift = sFlatShift;
+        *level = sLevels[slot];
+        *shift = sShifts[slot];
         return true;
     }
     ex = x < ring->originX ? ring->originX
@@ -2639,7 +2655,7 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
 
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 {
-    const VoxelMapInstance *ring = VoxelWorld_Instance(0);
+    const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y); /* POL-30: was instance 0 (see BorderWaterLevel) */
     int ex, ey;
 
     VoxelEdgeFill fill;
@@ -2747,6 +2763,7 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
         /* (a belt of water beside it lies at its own level) */
         if (!BorderWaterLevel(nx, ny, &other, &otherShift))
             VoxelMesh_BorderLevel(nx, ny, &other, &otherShift);
+        other += BeltBase(nx, ny) - BeltBase(x, y); /* POL-30: over this cell's base */
         if (other >= level - 0.05f)
             continue;
         if (d == 0)
@@ -2767,6 +2784,9 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
             VoxelMesh_BorderLevel(x, y - 1, &other, &otherShift);
             low = other + (float)VOXEL_BORDER_COURSES;
         }
+        /* POL-30: over this cell's base, and as far south */
+        low += BeltBase(x, y - 1) - BeltBase(x, y);
+        otherShift += BeltBase(x, y - 1) - BeltBase(x, y);
         EmitBorderNorth(builder, x, y, low, otherShift, level + (float)VOXEL_BORDER_COURSES, shift,
                         u0, v0, u1, v1);
     }
@@ -2784,7 +2804,11 @@ static void BeltWaterSkirts(VoxelBuilder *b, int x, int y, float wx, float wz, f
 {
     float nl, ns;
 
-    if (BorderAt(x + 1, y) && BorderWaterLevel(x + 1, y, &nl, &ns) && (nl != level || ns != shift))
+    /* POL-30: the neighbour's level over this cell's base (and as far south) */
+    const float here = BeltBase(x, y);
+
+    if (BorderAt(x + 1, y) && BorderWaterLevel(x + 1, y, &nl, &ns)
+     && (nl += BeltBase(x + 1, y) - here, ns += BeltBase(x + 1, y) - here, nl != level || ns != shift))
     {
         float ex = wx + 1.0f;
         VoxelBuilder_Quad(b,
@@ -2793,7 +2817,8 @@ static void BeltWaterSkirts(VoxelBuilder *b, int x, int y, float wx, float wz, f
             &(VoxelVertex){ex, nl, wz + ns + 1.0f, u1, v1, SHADE_TOP},
             &(VoxelVertex){ex, nl, wz + ns, u1, v0, SHADE_TOP});
     }
-    if (BorderAt(x, y + 1) && BorderWaterLevel(x, y + 1, &nl, &ns) && (nl != level || ns != shift))
+    if (BorderAt(x, y + 1) && BorderWaterLevel(x, y + 1, &nl, &ns)
+     && (nl += BeltBase(x, y + 1) - here, ns += BeltBase(x, y + 1) - here, nl != level || ns != shift))
     {
         VoxelBuilder_Quad(b,
             &(VoxelVertex){wx, level, wz + shift + 1.0f, u0, v0, SHADE_TOP},
@@ -2820,8 +2845,9 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
      * stand past it. */
     drawn = VoxelWorld_Instance(0) != NULL ? VoxelRelief_Belt(VoxelWorld_Instance(0)) : 0u;
     courses = drawn ? drawn : VOXEL_BORDER_COURSES;
+    const float callerBase = builder->base;
     for (int y = y0; y < y1; ++y)
-        for (int x = x0; x < x1; ++x)
+        for (int x = x0; x < x1; ++x, builder->base = callerBase)
         {
             float wx = (float)x, wz = (float)(y + (int)drawn);
             /* Only where the border meets something else: the inside of a
@@ -2832,6 +2858,9 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 
             if (!BorderAt(x, y))
                 continue;
+            /* POL-30: each cell over the base of the map it stands with, not the current map's */
+            if (!drawn)
+                builder->base = BeltBase(x, y);
             if (BorderWaterLevel(x, y, &level, &shift))
             {
                 /* flat, and no faces: the map's own edge closes any step */

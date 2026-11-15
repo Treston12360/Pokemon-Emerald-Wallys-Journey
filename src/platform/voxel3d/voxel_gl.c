@@ -1278,6 +1278,7 @@ static int sBeltX = 0x7FFFFFFF, sBeltY;
 static int sBeltShiftX, sBeltShiftZ;
 static bool sBeltRedo;
 static Atlas *sBeltCacheAtlas;
+static uint32_t sBorderRemadeKey; // POL-30, see the belt in Voxel3D_Render
 static uint32_t sBeltCacheGen;
 #define BELT_RADIUS 40
 
@@ -2645,6 +2646,46 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
 
     SaveGl(&saved);
     Uint64 workStart = SDL_GetPerformanceCounter();
+    // POL-30: the belt also draws the borders of the maps next door (VoxelWorld_BorderMetatile). An atlas
+    // made before such a map was loaded may lack its border's metatiles: made again then, as AtlasCovers
+    // does for a map's own cells. Looked at once per atlas build and set of maps.
+    {
+        Atlas *atlas0 = (inst0->indoor || inst0->underground) ? NULL : FindAtlas(inst0);
+
+        static const Atlas *seenAtlas;
+        static uint32_t seenGen, seenKey;
+        uint32_t key = 0;
+        int ids[4];
+
+        for (unsigned i = 0; i < count; i++)
+            key = key * 31u + (uint32_t)(VoxelWorld_Instance(i)->mapGroup << 8 | VoxelWorld_Instance(i)->mapNum) + 1u;
+        if (atlas0 != NULL && (seenAtlas != atlas0 || seenGen != atlas0->gen || seenKey != key))
+        {
+            bool lacks = false;
+
+            for (unsigned i = 1; i < count && !lacks; i++)
+                if (VoxelWorld_BeltBorderOf(i, ids))
+                    for (int t = 0; t < 4; t++)
+                        if (ids[t] < VOXEL_METATILE_REAL && atlas0->map.slotOf[ids[t]] == 0)
+                        {
+                            Voxel3D_Log("[3D] atlas lacks border metatile %x of %d:%d: made again", ids[t],
+                                        VoxelWorld_Instance(i)->mapGroup, VoxelWorld_Instance(i)->mapNum);
+                            lacks = true;
+                            break;
+                        }
+            seenAtlas = atlas0;
+            seenGen = atlas0->gen;
+            seenKey = key;
+            if (lacks && sBorderRemadeKey != key)
+            {
+                sBorderRemadeKey = key; // once per set of maps: never a loop if a build leaves it out
+                wj_glDeleteTextures(VOXEL_ATLAS_PAGES, atlas0->tex);
+                memset(atlas0->tex, 0, sizeof(atlas0->tex));
+                AtlasFreeRaw(atlas0);
+                atlas0->valid = false;
+            }
+        }
+    }
 
     // Maps (DLX-18). The player's own is built at once if it has to be; the others in the background, a few
     // ms a frame, nearest first, old meshes shown meanwhile. While the screen is dark (a warp's fade) the

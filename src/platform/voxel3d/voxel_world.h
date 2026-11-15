@@ -120,6 +120,8 @@ bool VoxelWorld_UsesTreeSprites(const VoxelMapInstance *inst);
 /* The metatile the 2D game tiles outside the map, or -1 if there is none.
  * Without it the view ends in the clear colour past the last map. */
 int VoxelWorld_BorderMetatile(int worldX, int worldY);
+bool VoxelWorld_BeltBorderOf(unsigned i, int ids[4]); /* POL-30 */
+const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY); /* POL-30 */
 /* True where that metatile is water: it lies flush with the map's own water,
  * not stood up as the belt (VoxelMesh_EmitBorder). */
 bool VoxelWorld_BorderIsWater(int worldX, int worldY);
