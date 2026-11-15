@@ -73,6 +73,7 @@ void VoxelSign_Shutdown(void);
 bool VoxelSign_IsLantern(const uint16_t head[16]);
 /* POL-26b (PC): the pool of light of a lamp at (centerX, centerZ), world tiles; texture coordinates 0..1 over
  * the pool's disc (radius VOXEL_LAMP_POOL_RADIUS). */
+bool VoxelSign_LanternGlass(const VoxelMapInstance *inst, int cellX, int cellZ, float *x, float *y, float *z);
 void VoxelSign_LampPool(VoxelBuilder *ground, const VoxelMapInstance *inst, float centerX, float centerZ);
 void VoxelSign_EmitNight(VoxelBuilder *glass, VoxelBuilder *ground,
                        const VoxelMapInstance *inst, int x0, int y0, int x1, int y1);

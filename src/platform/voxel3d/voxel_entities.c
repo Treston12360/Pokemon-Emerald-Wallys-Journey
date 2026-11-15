@@ -2038,27 +2038,62 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
         base = sprite->y + sprite->centerToCornerVecY + h;
         if (sprite->callback == UpdateLightSprite && sGlowBuilder != NULL)
         {
-            /* POL-26b: placed as a card on its own is (below), into the glow builder; a lamp ball's pool on
-             * the ground of its tile (sLightXPos / sLightYPos, map coordinates). */
+            /* POL-26b: placed as a card on its own is (below), into the glow builder. A lamp ball's pool goes on
+             * the ground of the lamp's post (sLightXPos / sLightYPos, map coordinates: the light object is on
+             * the lamp's head tile, the post one tile south; the 3DS centres its pool on the post). */
+            bool ball = sprite->data[5] == LIGHT_TYPE_BALL && VoxelWorld_InstanceCount() > 0;
+            float px = 0.0f, pz = 0.0f;
+
             reference = gPlayerAvatar.objectEventId < OBJECT_EVENTS_COUNT
                       ? &objects[gPlayerAvatar.objectEventId] : NULL;
             if (reference == NULL || !reference->drawn)
                 continue;
+            if (ball)
+            {
+                px = (float)(sprite->data[6] - MAP_OFFSET + VoxelWorld_Instance(0)->originX) + 0.5f;
+                pz = (float)(sprite->data[7] - MAP_OFFSET + VoxelWorld_Instance(0)->originY) + 1.5f;
+            }
             {
                 float cx = reference->worldX + 0.5f + (x - reference->screenX) / VOXEL_PIXELS_PER_TILE;
                 float cz = reference->worldZ + 0.5f + (base - reference->base) / VOXEL_PIXELS_PER_TILE;
+                float rise = -sprite->y2 * pixel;
 
                 if (fabsf(cx - camera->targetX) > VOXEL_CARD_RANGE || fabsf(cz - camera->targetZ) > VOXEL_CARD_RANGE)
                     continue;
-                EmitBillboard(sGlowBuilder, &sSlots[effect->slot], effect->slot, cx, cz, 0.0f, 0.0f,
-                              -sprite->y2 * pixel, reference->deck, rightX, rightZ, stretch,
-                              1.0f, SpriteScale(sprite));
+                float gx, gy, gz;
+                const VoxelMapInstance *lampInst = ball ? VoxelWorld_GetInstanceAt((int)floorf(px), (int)floorf(pz)) : NULL;
+
+                /* Treston, 2026-11-15: "The lights look like it's behind the lamp in 3d". Placed from the screen,
+                 * the glow's card stood about half a tile north of the lamp and up-left of its head, the lamp's
+                 * 3D model in front of it. The lamp is Emerald 3DS's lantern (sign data): the glow is centred
+                 * where the 3DS lights its glass (VoxelSign_LanternGlass) and stands just in front of it. */
+                if (ball && VoxelSign_LanternGlass(lampInst, (int)floorf(px), (int)floorf(pz), &gx, &gy, &gz))
+                {
+                    /* the card shows the slot's top VisibleRows rows, its bottom at the lift; the glow's middle
+                     * is the sprite's middle row, (rows - height / 2) pixels above that bottom */
+                    float above = (VisibleRows(&sSlots[effect->slot]) - sSlots[effect->slot].height * 0.5f)
+                                * pixel * SpriteScale(sprite);
+                    float front = gz + 0.05f;
+
+                    EmitBillboard(sGlowBuilder, &sSlots[effect->slot], effect->slot, gx, front, 0.0f, 0.0f,
+                                  gy - VoxelRelief_LiftAt(gx, front) - above, 0.0f, rightX, rightZ, stretch,
+                                  1.0f, SpriteScale(sprite));
+                }
+                else
+                {
+                    /* No 3DS lantern there: placed from the screen, moved a tile straight towards the camera
+                     * (along the line of sight a card keeps its place on the screen, a few % bigger). */
+                    float cy = VoxelRelief_LiftAt(cx, cz) + rise + sSlots[effect->slot].height * pixel * 0.5f;
+                    float dx = camera->x - cx, dy = camera->y - cy, dz = camera->z - cz;
+                    float len = sqrtf(dx * dx + dy * dy + dz * dz);
+                    float d = len > 2.0f ? 1.0f / len : 0.0f;
+
+                    EmitBillboard(sGlowBuilder, &sSlots[effect->slot], effect->slot, cx, cz, dx * d, dz * d,
+                                  rise + dy * d, reference->deck, rightX, rightZ, stretch, 1.0f, SpriteScale(sprite));
+                }
             }
-            if (sPoolBuilder != NULL && sprite->data[5] == LIGHT_TYPE_BALL && VoxelWorld_InstanceCount() > 0)
+            if (ball && sPoolBuilder != NULL)
             {
-                float px = (float)(sprite->data[6] - MAP_OFFSET + VoxelWorld_Instance(0)->originX) + 0.5f;
-                /* the light object is on the lamp's head tile; the 3DS centres the pool on the post (one south) */
-                float pz = (float)(sprite->data[7] - MAP_OFFSET + VoxelWorld_Instance(0)->originY) + 1.5f;
                 const VoxelMapInstance *inst = VoxelWorld_GetInstanceAt((int)floorf(px), (int)floorf(pz));
 
                 VoxelSign_LampPool(sPoolBuilder, inst, px, pz);

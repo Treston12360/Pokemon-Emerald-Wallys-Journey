@@ -201,6 +201,44 @@ static void LampGround(VoxelBuilder *builder, const VoxelMapInstance *inst,
         }
 }
 
+/*
+ * POL-26b (PC): the middle of the lit glass of the lantern standing at world cell (cellX, cellZ), where
+ * VoxelSign_EmitNight puts it (head rows 6..10, columns trimmed by 2, on the lantern's front face): x, height over
+ * the ground (lift added), z. False: no 3DS lantern there.
+ */
+bool VoxelSign_LanternGlass(const VoxelMapInstance *inst, int cellX, int cellZ, float *x, float *y, float *z)
+{
+    if (inst == NULL || inst->indoor || !LoadMasks())
+        return false;
+    for (unsigned index = 0; index < sCount; ++index)
+    {
+        const SignRecord *record = &sIndex[index];
+        int xpos = inst->originX + record->x, zpos = inst->originY + record->y;
+        if (record->layout != inst->layoutId || xpos != cellX || zpos != cellZ || !VoxelSign_IsLantern(record->head)
+            || VoxelRegions_RoleAt(inst->layoutId, record->x, record->y) != VOXEL_ROLE_SIGNPOST)
+            continue;
+        int last = 16, left = 16, right = -1;
+        for (unsigned row = 0; row < 16; ++row)
+            if (record->rows[row] != 0)
+                last = (int)row + 16;
+        for (unsigned row = 6; row < 11; ++row)
+            for (int col = 2; col < 14; ++col)
+                if ((record->head[row] & (1u << col)) != 0)
+                {
+                    left = col < left ? col : left;
+                    right = col > right ? col : right;
+                }
+        if (left > right)
+            return false;
+        float back = zpos - 1 + (last / 8) * 0.5f + 0.25f - VOXEL_SIGN_PINNED_DEPTH / 32.0f;
+        *x = xpos + (left + right + 1) / 32.0f;
+        *y = VoxelRelief_Base(inst) + VoxelRelief_CellLift(inst, xpos, zpos) + (last - 8) / 16.0f + 1.0f / 32.0f;
+        *z = back + VOXEL_SIGN_PINNED_DEPTH / 16.0f;
+        return true;
+    }
+    return false;
+}
+
 /* POL-26b (PC): the 3DS's pool of light around a lamp of our own maps (the game's light objects). */
 void VoxelSign_LampPool(VoxelBuilder *ground, const VoxelMapInstance *inst, float centerX, float centerZ)
 {

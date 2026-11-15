@@ -232,6 +232,12 @@ Add under each item: what was found, what was changed, files, how to test, what 
         Picture: `docs/polish_reports/POL-26b_lamps.png`. Tested Rustboro 10 PM, 3D (Gamma on and off) and 2D
         (unchanged; only randomly walking people differ). The pools are faint on the night-blue ground (the 3DS
         formula adds mostly red) - ask Treston if they should be stronger.
+      - Treston, 2026-11-15: "The lights look like it's behind the lamp in 3d". Placed from the screen, the glow's
+        card stood ~half a tile north of the lamp and up-left of its head, so the 3D lantern hid it. Now centred
+        where Emerald 3DS lights the lantern's glass (voxel_sign.c VoxelSign_LanternGlass: head rows 6..10, the
+        lantern's front face, as VoxelSign_EmitNight) and stood just in front of it. Lamps with no 3DS lantern data
+        keep the screen placement, moved a tile towards the camera along the line of sight. Not handled: maps
+        with eased rows / raised bases (z stretch) - Rustboro is flat. Picture updated: POL-26b_lamps.png.
 - [x] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
       not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
       - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-27_ash_trail_fixed.png`.
