@@ -262,7 +262,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
     {
         static Uint64 sSecond;
         static unsigned sSlow, sTrips, sFlushesAt;
-        static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw;
+        static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw, sWorstGame, sWorstFrame, sWorst3D, sWorstScreen, sWorstPresent;
 
         sTrips++;
         if (total > 20.0)
@@ -274,6 +274,11 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
                 sWorstMaps = gVoxel3DMapMs;
                 sWorstBelt = gVoxel3DBeltMs;
                 sWorstDraw = gVoxel3DDrawMs;
+                sWorstGame = (batchEnd - start - sStallVDraw) * 1000.0 / freq;
+                sWorstFrame = sStallVDraw * 1000.0 / freq;
+                sWorst3D = sStall3D * 1000.0 / freq;
+                sWorstScreen = (drawn - batchEnd) * 1000.0 / freq;
+                sWorstPresent = (presented - drawn) * 1000.0 / freq;
             }
         }
         if (sSecond == 0)
@@ -283,9 +288,10 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
             if (sSlow > 10 && sLines <= 5000 && (f = fopen("WallysJourney_stalls.txt", "a")) != NULL)
             {
                 sLines++;
-                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f (3D maps %.0f, belt %.0f, drawing %.0f)"
-                           " | map %d:%d, belt layers %u, belt rebuilds %u\n",
-                        (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstMaps, sWorstBelt, sWorstDraw,
+                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f: game %.0f, frame %.0f (3D %.0f: maps %.0f,"
+                           " belt %.0f, drawing %.0f), screen %.0f, present %.0f | map %d:%d, belt layers %u, belt rebuilds %u\n",
+                        (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstGame, sWorstFrame, sWorst3D,
+                        sWorstMaps, sWorstBelt, sWorstDraw, sWorstScreen, sWorstPresent,
                         gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1,
                         gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapNum : -1,
                         gVoxel3DBeltLayers, gVoxel3DBeltFlushes - sFlushesAt);
