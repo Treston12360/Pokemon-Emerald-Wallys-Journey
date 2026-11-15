@@ -46,6 +46,11 @@ unsigned int GetDecompressedDataSize(const unsigned int *ptr);
 #include "constants/field_weather.h"
 #include "constants/weather.h"
 #endif
+#ifdef PORTABLE // POL-23: the game's weather for the 3D weather
+#include "field_weather.h"
+#include "constants/field_weather.h"
+#include "constants/weather.h"
+#endif
 
 extern const struct Tileset gTileset_General;
 extern const struct Tileset gTileset_Fortree;
@@ -1140,7 +1145,7 @@ void VoxelWorld_GetPlayerWorldCoords(float *worldX, float *worldZ)
 
 VoxelWeatherClass VoxelWorld_Weather(void)
 {
-#ifdef PLATFORM_3DS
+#if defined(PLATFORM_3DS) || defined(PORTABLE) // PC too: POL-23 (3D weather)
     switch (GetCurrentWeather())
     {
     case WEATHER_SUNNY:
@@ -1171,7 +1176,7 @@ VoxelWeatherClass VoxelWorld_Weather(void)
 
 float VoxelWorld_WeatherAmount(void)
 {
-#ifdef PLATFORM_3DS
+#if defined(PLATFORM_3DS) || defined(PORTABLE) // PC too: POL-23 (3D weather)
     float amount;
 
     switch (GetCurrentWeather())
@@ -1203,7 +1208,7 @@ float VoxelWorld_WeatherAmount(void)
 /* The bolt's colour map is 19, the storm's own 3 (Thunderstorm_Main). */
 float VoxelWorld_Lightning(void)
 {
-#ifdef PLATFORM_3DS
+#if defined(PLATFORM_3DS) || defined(PORTABLE) // PC too: POL-23
     if (GetCurrentWeather() != WEATHER_RAIN_THUNDERSTORM || gWeatherPtr->colorMapIndex <= 3)
         return 0.0f;
     return gWeatherPtr->colorMapIndex >= 19 ? 1.0f : (float)(gWeatherPtr->colorMapIndex - 3) / 16.0f;

@@ -2126,6 +2126,344 @@ void Voxel3D_SetGammaLight(bool on)
 }
 
 static void BattleZoomBlur(int w, int h);
+
+/*
+ * POL-23 (Brennan: "There's no sandstorm in the desert"): rain, sand and ash drawn in the 3D world, ported from
+ * Emerald 3DS (ctr_voxel.c DrawWeather / MakeWeather, the weather kinds, and voxel_weather.v.pica). Particles sit
+ * at fixed places in a box round the camera; each frame the box's contents move by one offset and the shader wraps
+ * them back in, fading them at the box's sides, near the lens and into the haze. Two or three groups per weather,
+ * each with its own speed, wind and size. How many are drawn follows the game's weather as it comes and goes
+ * (VoxelWorld_WeatherAmount). Not ported (yet): 3DS's sand dust sheets (DrawBanks) - the streaks only.
+ * Our haze is distance-based (the world's own fog rule here), 3DS's is depth-based.
+ */
+#define VOXEL_STREAKS 768
+#define VOXEL_FLAKES 512
+#define VOXEL_STREAK_VERTICES 6
+#define VOXEL_FLAKE_VERTICES 12
+#define VOXEL_WEATHER_GROUPS 3
+#define VOXEL_FLAKE_RIM 0.35f
+#define VOXEL_WEATHER_SOUTH 1.0f
+#define VOXEL_WEATHER_EDGE 8.0f
+#define VOXEL_WEATHER_EDGE_ALONG 24.0f
+#define VOXEL_WEATHER_TOP 6.0f
+#define VOXEL_WEATHER_LENS 1.5f
+#define VOXEL_WEATHER_LENS_RAMP 1.6f
+
+typedef struct
+{
+    float velocity[3]; // tiles per second
+    float width;       // a streak's width, or a flake's size
+    float length;      // a streak's length; 0: a flake
+    float alpha;       // x the weather's own
+} WeatherGroup;
+
+typedef struct
+{
+    float box[3];    // tiles: across, up, north to south
+    float low;       // the box's bottom, tiles over the player's ground
+    uint32_t colour; // 0xAABBGGRR
+    float alpha;
+    WeatherGroup groups[VOXEL_WEATHER_GROUPS];
+} WeatherKind;
+
+// Values exactly as Emerald 3DS's.
+static const WeatherKind sRainKind = {
+    {24.0f, 8.5f, 28.0f}, -3.0f, 0xFFF4E8DEu, 0.62f,
+    {
+        {{-1.6f, -13.0f, 0.5f}, 0.034f, 0.95f, 1.00f},
+        {{-1.3f, -11.0f, 0.4f}, 0.028f, 0.75f, 0.85f},
+        {{-0.9f, -8.5f, 0.3f}, 0.020f, 0.45f, 0.60f},
+    },
+};
+static const WeatherKind sSandKind = {
+    {24.0f, 5.0f, 28.0f}, -1.5f, 0xFF7EB8E6u, 0.55f,
+    {
+        {{-13.0f, -0.6f, 1.0f}, 0.030f, 1.10f, 1.00f},
+        {{-17.0f, -0.3f, 0.6f}, 0.024f, 1.60f, 0.75f},
+        {{-9.5f, 0.4f, 1.6f}, 0.040f, 0.60f, 0.85f},
+    },
+};
+static const WeatherKind sAshKind = {
+    {24.0f, 8.0f, 28.0f}, -2.0f, 0xFFE2E6EAu, 1.00f,
+    {
+        {{-0.50f, -0.75f, 0.15f}, 0.120f, 0.0f, 1.00f},
+        {{-0.25f, -1.00f, -0.12f}, 0.100f, 0.0f, 0.95f},
+        {{-0.80f, -0.55f, 0.30f}, 0.145f, 0.0f, 0.85f},
+    },
+};
+
+static float MoteRandom(unsigned i, unsigned salt)
+{
+    uint32_t h = i * 2654435761u ^ salt * 2246822519u;
+
+    h = (h ^ (h >> 15)) * 2246822519u;
+    h ^= h >> 13;
+    return (float)(h & 0xFFFFu) / 65535.0f;
+}
+
+typedef struct
+{
+    float place[4];  // x, y, z in the box as fractions, alpha
+    float corner[2]; // across, along (3DS: in 1/64)
+} WeatherVertex;
+
+static GLuint sWeatherProg, sWeatherVbo[2];
+static GLint sWUniProj, sWUniView, sWUniOffset, sWUniSize, sWUniBase, sWUniAcross, sWUniAlong, sWUniColour, sWUniStrength,
+    sWUniFog, sWUniCam, sWUniFade;
+static bool sWeatherTried;
+
+static void WeatherCorner(WeatherVertex *v, int across, int along, const float place[3], float alpha)
+{
+    v->place[0] = place[0];
+    v->place[1] = place[1];
+    v->place[2] = place[2];
+    v->place[3] = alpha;
+    v->corner[0] = across / 64.0f;
+    v->corner[1] = along / 64.0f;
+}
+
+static bool MakeWeather(void)
+{
+    static const char *vs =
+        "#version 120\n"
+        "uniform mat4 proj, view;\n"
+        "uniform vec4 boxOffset, boxSize, boxBase, across, along;\n"
+        "uniform vec2 fog;\n"
+        "uniform vec3 cam;\n"
+        "attribute vec4 place;\n"
+        "attribute vec2 corner;\n"
+        "varying float vAlpha;\n"
+        "void main() {\n"
+        "  vec3 p = fract(place.xyz + boxOffset.xyz);\n"
+        "  vec3 side = 0.5 - abs(p - 0.5);\n"                               // 0 at a side, 0.5 in the middle
+        "  float edge = min(min(boxSize.w * side.x, boxOffset.w * side.z), boxBase.w * side.y);\n"
+        "  edge = min(1.0, edge);\n"
+        "  vec3 w = boxBase.xyz + p * boxSize.xyz + across.xyz * corner.x + along.xyz * corner.y;\n"
+        "  vec4 v = view * vec4(w, 1.0);\n"
+        "  gl_Position = proj * v;\n"
+        "  float lens = clamp((-v.z - across.w) * along.w, 0.0, 1.0);\n"
+        "  float h = clamp((length(w - cam) - fog.x) / max(fog.y - fog.x, 0.001), 0.0, 1.0);\n"
+        "  vAlpha = place.w * edge * lens * (1.0 - h * h);\n"
+        "}\n";
+    static const char *fs =
+        "#version 120\n"
+        "uniform vec3 colour;\n"
+        "uniform float strength;\n"
+        "uniform vec4 fade;\n"
+        "varying float vAlpha;\n"
+        "void main() { gl_FragColor = vec4(mix(colour, fade.rgb, fade.a), clamp(vAlpha * strength, 0.0, 1.0)); }\n";
+    WeatherVertex *streaks, *flakes;
+    GLuint v, f;
+    GLint ok = 0;
+
+    sWeatherTried = true;
+    v = Compile(GL_VERTEX_SHADER, vs);
+    f = Compile(GL_FRAGMENT_SHADER, fs);
+    if (v == 0 || f == 0)
+        return false;
+    sWeatherProg = wj_glCreateProgram();
+    wj_glAttachShader(sWeatherProg, v);
+    wj_glAttachShader(sWeatherProg, f);
+    wj_glBindAttribLocation(sWeatherProg, 0, "place");
+    wj_glBindAttribLocation(sWeatherProg, 1, "corner");
+    wj_glLinkProgram(sWeatherProg);
+    wj_glGetProgramiv(sWeatherProg, GL_LINK_STATUS, &ok);
+    if (!ok)
+    {
+        Voxel3D_Log("[3D] weather program does not link");
+        sWeatherProg = 0;
+        return false;
+    }
+    sWUniProj = wj_glGetUniformLocation(sWeatherProg, "proj");
+    sWUniView = wj_glGetUniformLocation(sWeatherProg, "view");
+    sWUniOffset = wj_glGetUniformLocation(sWeatherProg, "boxOffset");
+    sWUniSize = wj_glGetUniformLocation(sWeatherProg, "boxSize");
+    sWUniBase = wj_glGetUniformLocation(sWeatherProg, "boxBase");
+    sWUniAcross = wj_glGetUniformLocation(sWeatherProg, "across");
+    sWUniAlong = wj_glGetUniformLocation(sWeatherProg, "along");
+    sWUniColour = wj_glGetUniformLocation(sWeatherProg, "colour");
+    sWUniStrength = wj_glGetUniformLocation(sWeatherProg, "strength");
+    sWUniFog = wj_glGetUniformLocation(sWeatherProg, "fog");
+    sWUniCam = wj_glGetUniformLocation(sWeatherProg, "cam");
+    sWUniFade = wj_glGetUniformLocation(sWeatherProg, "fade");
+
+    streaks = malloc(VOXEL_STREAKS * VOXEL_STREAK_VERTICES * sizeof(WeatherVertex));
+    flakes = malloc(VOXEL_FLAKES * VOXEL_FLAKE_VERTICES * sizeof(WeatherVertex));
+    if (streaks == NULL || flakes == NULL)
+    {
+        free(streaks);
+        free(flakes);
+        sWeatherProg = 0;
+        return false;
+    }
+    // MakeWeather (3DS): a streak runs from its bright head back up its fall to a gone tail.
+    for (unsigned i = 0; i < VOXEL_STREAKS; ++i)
+    {
+        WeatherVertex *q = streaks + i * VOXEL_STREAK_VERTICES;
+        float place[3] = {MoteRandom(i, 21), MoteRandom(i, 22), MoteRandom(i, 23)};
+        int half = 44 + (int)(MoteRandom(i, 24) * 20.0f);
+        int tail = 38 + (int)(MoteRandom(i, 25) * 26.0f);
+        float alpha = 0.55f + 0.45f * MoteRandom(i, 26);
+
+        WeatherCorner(&q[0], -half, 0, place, alpha);
+        WeatherCorner(&q[1], half, 0, place, alpha);
+        WeatherCorner(&q[2], half, tail, place, 0.0f);
+        q[3] = q[0];
+        q[4] = q[2];
+        WeatherCorner(&q[5], -half, tail, place, 0.0f);
+    }
+    // A flake is a fan of four triangles, bright in the middle, fainter at its corners.
+    for (unsigned i = 0; i < VOXEL_FLAKES; ++i)
+    {
+        static const int fan[4][2][2] = {
+            {{0, 1}, {1, 0}}, {{1, 0}, {0, -1}}, {{0, -1}, {-1, 0}}, {{-1, 0}, {0, 1}},
+        };
+        WeatherVertex *q = flakes + i * VOXEL_FLAKE_VERTICES;
+        float place[3] = {MoteRandom(i, 31), MoteRandom(i, 32), MoteRandom(i, 33)};
+        int size = 40 + (int)(MoteRandom(i, 34) * 24.0f);
+        float alpha = 0.70f + 0.30f * MoteRandom(i, 35), rim = alpha * VOXEL_FLAKE_RIM;
+
+        for (unsigned k = 0; k < 4; ++k)
+        {
+            WeatherCorner(&q[k * 3], 0, 0, place, alpha);
+            WeatherCorner(&q[k * 3 + 1], fan[k][0][0] * size, fan[k][0][1] * size, place, rim);
+            WeatherCorner(&q[k * 3 + 2], fan[k][1][0] * size, fan[k][1][1] * size, place, rim);
+        }
+    }
+    wj_glGenBuffers(2, sWeatherVbo);
+    wj_glBindBuffer(GL_ARRAY_BUFFER, sWeatherVbo[0]);
+    wj_glBufferData(GL_ARRAY_BUFFER, VOXEL_STREAKS * VOXEL_STREAK_VERTICES * sizeof(WeatherVertex), streaks, GL_STATIC_DRAW);
+    wj_glBindBuffer(GL_ARRAY_BUFFER, sWeatherVbo[1]);
+    wj_glBufferData(GL_ARRAY_BUFFER, VOXEL_FLAKES * VOXEL_FLAKE_VERTICES * sizeof(WeatherVertex), flakes, GL_STATIC_DRAW);
+    free(streaks);
+    free(flakes);
+    return true;
+}
+
+static float Normalise3(float v[3])
+{
+    float length = sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+
+    if (length > 0.0001f)
+        for (int i = 0; i < 3; ++i)
+            v[i] /= length;
+    return length;
+}
+
+static float WeatherOffset(double seconds, float velocity, float corner, float size)
+{
+    double f = (seconds * velocity - corner) / size;
+
+    return (float)(f - floor(f));
+}
+
+static void DrawWeather(const float *proj, const float *view, const float fade[4])
+{
+    VoxelWeatherClass weather = VoxelWorld_Weather();
+    float amount = VoxelWorld_WeatherAmount();
+    const WeatherKind *kind;
+    bool flakes;
+    unsigned count, per, group;
+    double seconds;
+    float corner[3], forward[3], flash, alpha;
+    uint32_t colour;
+
+    if (weather != VOXEL_WEATHER_RAIN && weather != VOXEL_WEATHER_SAND && weather != VOXEL_WEATHER_ASH)
+        return;
+    if (amount <= 0.0f || getenv("WJPC_3D_NO_WEATHER") != NULL)
+        return;
+    if (!sWeatherTried)
+        MakeWeather();
+    if (sWeatherProg == 0)
+        return;
+    kind = weather == VOXEL_WEATHER_RAIN ? &sRainKind : weather == VOXEL_WEATHER_SAND ? &sSandKind : &sAshKind;
+    flakes = weather == VOXEL_WEATHER_ASH;
+    count = flakes ? VOXEL_FLAKES : VOXEL_STREAKS;
+    per = flakes ? VOXEL_FLAKE_VERTICES : VOXEL_STREAK_VERTICES;
+    group = count / VOXEL_WEATHER_GROUPS;
+    seconds = fmod((double)SDL_GetPerformanceCounter() / (double)SDL_GetPerformanceFrequency(), 86400.0);
+    corner[0] = sCamera.targetX - kind->box[0] * 0.5f;
+    corner[1] = sCamera.ground + kind->low;
+    corner[2] = sCamera.z - VOXEL_WEATHER_SOUTH - kind->box[2];
+    forward[0] = sCamera.targetX - sCamera.x;
+    forward[1] = sCamera.targetY - sCamera.y;
+    forward[2] = sCamera.targetZ - sCamera.z;
+    Normalise3(forward);
+    flash = weather == VOXEL_WEATHER_RAIN ? VoxelWorld_Lightning() : 0.0f;
+    alpha = kind->alpha * (1.0f + 0.5f * flash);
+    colour = flash > 0.0f ? 0xFFFFFFFFu : kind->colour;
+
+    wj_glUseProgram(sWeatherProg);
+    wj_glUniformMatrix4fv(sWUniProj, 1, GL_FALSE, proj);
+    wj_glUniformMatrix4fv(sWUniView, 1, GL_FALSE, view);
+    wj_glUniform4f(sWUniSize, kind->box[0], kind->box[1], kind->box[2], VOXEL_WEATHER_EDGE);
+    wj_glUniform4f(sWUniBase, corner[0], corner[1], corner[2], VOXEL_WEATHER_TOP);
+    wj_glUniform2f(sWUniFog, sFogNear, sFogFar);
+    wj_glUniform3f(sWUniCam, sCamera.x, sCamera.y, sCamera.z);
+    wj_glUniform4f(sWUniFade, fade[0], fade[1], fade[2], fade[3]);
+    wj_glUniform3f(sWUniColour, (colour & 0xFF) / 255.0f, ((colour >> 8) & 0xFF) / 255.0f, ((colour >> 16) & 0xFF) / 255.0f);
+    wj_glBindBuffer(GL_ARRAY_BUFFER, sWeatherVbo[flakes ? 1 : 0]);
+    wj_glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(WeatherVertex), (void *)0);
+    wj_glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(WeatherVertex), (void *)(4 * sizeof(float)));
+    wj_glEnableVertexAttribArray(0);
+    wj_glEnableVertexAttribArray(1);
+    wj_glDisableVertexAttribArray(2);
+    wj_glEnable(GL_BLEND);
+    wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    wj_glEnable(GL_DEPTH_TEST);
+    wj_glDepthMask(GL_FALSE); // tested against the finished world, never written
+    wj_glDisable(GL_CULL_FACE);
+    for (unsigned g = 0; g < VOXEL_WEATHER_GROUPS; ++g)
+    {
+        const WeatherGroup *wg = &kind->groups[g];
+        unsigned shown = (unsigned)(group * amount + 0.5f);
+        float strength = alpha * wg->alpha;
+        float across[3], along[3];
+
+        if (shown == 0 || strength <= 0.0f)
+            continue;
+        if (shown > group)
+            shown = group;
+        if (wg->length > 0.0f)
+        {
+            // back up the fall, and across it as the camera sees it
+            float back[3] = {-wg->velocity[0], -wg->velocity[1], -wg->velocity[2]};
+
+            Normalise3(back);
+            across[0] = back[1] * forward[2] - back[2] * forward[1];
+            across[1] = back[2] * forward[0] - back[0] * forward[2];
+            across[2] = back[0] * forward[1] - back[1] * forward[0];
+            Normalise3(across);
+            for (int c = 0; c < 3; ++c)
+            {
+                across[c] *= wg->width;
+                along[c] = back[c] * wg->length;
+            }
+        }
+        else
+        {
+            // turned to the camera: the view's right and up rows (column-major: m[0], m[4], m[8] ...)
+            across[0] = view[0] * wg->width;
+            across[1] = view[4] * wg->width;
+            across[2] = view[8] * wg->width;
+            along[0] = view[1] * wg->width;
+            along[1] = view[5] * wg->width;
+            along[2] = view[9] * wg->width;
+        }
+        wj_glUniform4f(sWUniAcross, across[0], across[1], across[2], VOXEL_WEATHER_LENS);
+        wj_glUniform4f(sWUniAlong, along[0], along[1], along[2], 1.0f / VOXEL_WEATHER_LENS_RAMP);
+        wj_glUniform4f(sWUniOffset, WeatherOffset(seconds, wg->velocity[0], corner[0], kind->box[0]),
+                       WeatherOffset(seconds, wg->velocity[1], corner[1], kind->box[1]),
+                       WeatherOffset(seconds, wg->velocity[2], corner[2], kind->box[2]), VOXEL_WEATHER_EDGE_ALONG);
+        wj_glUniform1f(sWUniStrength, strength > 1.0f ? 1.0f : strength);
+        wj_glDrawArrays(GL_TRIANGLES, (GLint)(g * group * per), (GLsizei)(shown * per));
+    }
+    wj_glDepthMask(GL_TRUE);
+    wj_glDisable(GL_BLEND);
+    wj_glDisableVertexAttribArray(1);
+    wj_glUseProgram(sProgram);
+}
+
 bool Voxel3D_Render(unsigned colorTexture, int w, int h)
 {
     SavedGl saved;
@@ -2621,6 +2959,12 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             MeshDraw(&sSpriteMesh, sSpriteTex, 0, 0, 0);
     }
 
+    if (!sBattleMode && !inst0->indoor)
+    {
+        // POL-23: rain, sand and ash over the finished world (3DS: DrawWeather after the world)
+        float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], gVoxelGammaLight ? 0.0f : fadeAmount};
+        DrawWeather(proj, view, fd);
+    }
     if (gVoxelGammaLight)
     {
         float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount};

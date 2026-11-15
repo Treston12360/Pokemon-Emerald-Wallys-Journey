@@ -101,13 +101,22 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-21. Route 110 to 103 backdrop.** "Going from route 110 to 103 the background is not fluid and changes
       from water to trees and skips into frame."
 - [ ] **POL-22. Breakable rocks.** "Rocks that are breakable disappear and reappear and also 2D not 3D."
-- [ ] **POL-23. No sandstorm.** "There's no sandstorm in the desert."
+- [x] **POL-23. No sandstorm.** "There's no sandstorm in the desert."
       - Found (Claude 019khs4X, 2026-11-14): 2D shows the sandstorm on Route 111's desert (same save, same spot);
         3D shows plain sand. Cause: `voxel_world.c` `VoxelWorld_Weather()` / `VoxelWorld_WeatherAmount()` only
         work under `#ifdef PLATFORM_3DS`, so on PC the 3D world always gets "clear" weather, and the 3D view has no
         port of Emerald 3DS's `DrawWeather` (`ctr_voxel.c` lines 8005-8137: rain, sand and ash drawn in the world,
         `CtrVoxel_DrawsWeather` / `CtrVoxel_DrawsSand`). Same cause for rain and ash in 3D (likely POL-27's ash puff
         too). Fix = port those into `voxel_world.c` + `voxel_gl.c` (claimed by 014PwRDj) - waiting like POL-12.
+      - Done 2026-11-14 (Claude 019khs4X; Treston OK'd taking voxel_gl.c over). Picture for Brennan:
+        `docs/polish_reports/POL-23_3d_weather.png` (rain, volcanic ash, sandstorm in 3D, Windows exe).
+        `voxel_world.c`: the three weather functions now also run on PC (`#if PLATFORM_3DS || PORTABLE`).
+        `voxel_gl.c`: Emerald 3DS `DrawWeather` ported (same streak/flake kinds and numbers: rain, sand, ash;
+        768 streaks, 512 flakes, camera-relative box, fog and screen-fade aware), drawn after the world, outdoors,
+        not in battle. Off switch for testing: `WJPC_3D_NO_WEATHER=1`. Test: `WJPC_FORCE_WEATHER=3/7/8`.
+        Not ported: 3DS's sand "dust sheets" (`DrawBanks`) - the streaks are there, the haze layer is not.
+        Not tested: weather during battle transitions; real GPUs (only Wine/llvmpipe here) - Brennan please check.
+        Does NOT fix POL-27 (the ash puff is a sprite effect, not weather) - POL-27 stays open.
 - [ ] **POL-24. Route 112 into Lavaridge.** "Route 112 into lavaridge town rocks in background appear and then level."
 - [ ] **POL-26. Rustboro lights blink.** "Lights in rustboro city blink in and out while walking."
 - [ ] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
