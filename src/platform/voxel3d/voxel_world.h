@@ -121,7 +121,9 @@ bool VoxelWorld_UsesTreeSprites(const VoxelMapInstance *inst);
  * Without it the view ends in the clear colour past the last map. */
 int VoxelWorld_BorderMetatile(int worldX, int worldY);
 bool VoxelWorld_BeltBorderOf(unsigned i, int ids[4]); /* POL-30 */
+bool VoxelWorld_BeltFillOf(unsigned i, unsigned k, int *metatile); /* POL-30 */
 const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY); /* POL-30 */
+bool VoxelWorld_BeltOld(void); /* POL-30: WJPC_BELT_OLD=1 */
 /* True where that metatile is water: it lies flush with the map's own water,
  * not stood up as the belt (VoxelMesh_EmitBorder). */
 bool VoxelWorld_BorderIsWater(int worldX, int worldY);

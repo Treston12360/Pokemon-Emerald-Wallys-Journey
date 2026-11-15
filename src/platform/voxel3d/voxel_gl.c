@@ -2673,6 +2673,15 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                             lacks = true;
                             break;
                         }
+            for (unsigned i = 1; i < count && !lacks; i++)
+                for (unsigned k = 0; VoxelWorld_BeltFillOf(i, k, &ids[0]); k++)
+                    if (ids[0] >= 0 && ids[0] < VOXEL_METATILE_REAL && atlas0->map.slotOf[ids[0]] == 0)
+                    {
+                        Voxel3D_Log("[3D] atlas lacks edge fill metatile %x of %d:%d: made again", ids[0],
+                                    VoxelWorld_Instance(i)->mapGroup, VoxelWorld_Instance(i)->mapNum);
+                        lacks = true;
+                        break;
+                    }
             seenAtlas = atlas0;
             seenGen = atlas0->gen;
             seenKey = key;
@@ -2815,6 +2824,32 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     }
 
     Uint64 workCam = SDL_GetPerformanceCounter();
+    // POL-30 test aid: WJPC_BELT_TABLE=file - the belt round the player as cells (map-relative x y, metatile,
+    // height), appended once the player has stood a second on a new spot, to compare one map's view of the
+    // belt with the next map's (tools: docs/polish_reports/POL-30_belt_sweep.py).
+    if (getenv("WJPC_BELT_TABLE") != NULL && !inst0->indoor && !inst0->underground)
+    {
+        static int lastKey = -1, still, dumped = -1;
+        int px = (int)floorf(playerX), py = (int)floorf(playerZ), mt, h;
+        int key = ((inst0->mapGroup << 8 | inst0->mapNum) << 16) ^ ((px - inst0->originX) << 8) ^ (py - inst0->originY);
+
+        still = key == lastKey ? still + 1 : 0;
+        lastKey = key;
+        if (still == 60 && dumped != key)
+        {
+            FILE *f = fopen(getenv("WJPC_BELT_TABLE"), "a");
+            dumped = key;
+            if (f != NULL)
+            {
+                fprintf(f, "MAP %d %d %d %d\n", inst0->mapGroup, inst0->mapNum, px - inst0->originX, py - inst0->originY);
+                for (int y = py - 36; y <= py + 36; y++)
+                    for (int x = px - 36; x <= px + 36; x++)
+                        if (VoxelWorld_GetInstanceAt(x, y) == NULL && VoxelMesh_BeltCell(x, y, &mt, &h))
+                            fprintf(f, "%d %d %d %d\n", x - inst0->originX, y - inst0->originY, mt, h);
+                fclose(f);
+            }
+        }
+    }
     // The belt round the maps, rebuilt when the player has moved a chunk.
     {
         int cx = ((int)floorf(playerX) / CHUNK) * CHUNK, cy = ((int)floorf(playerZ) / CHUNK) * CHUNK;
@@ -2849,22 +2884,6 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 sBeltY = cy;
                 sBeltShiftX = sBeltShiftZ = 0;
                 sBeltRedo = false;
-                // POL-30 test aid: WJPC_BELT_TABLE=file - the belt round the player as cells (map-relative x y,
-                // metatile, height), appended at every full build, to compare one map's view with the next's.
-                if (getenv("WJPC_BELT_TABLE") != NULL)
-                {
-                    FILE *f = fopen(getenv("WJPC_BELT_TABLE"), "a");
-                    if (f != NULL)
-                    {
-                        int px = (int)floorf(playerX), py = (int)floorf(playerZ), mt, h;
-                        fprintf(f, "MAP %d %d %d %d\n", inst0->mapGroup, inst0->mapNum, px - inst0->originX, py - inst0->originY);
-                        for (int y = py - 36; y <= py + 36; y++)
-                            for (int x = px - 36; x <= px + 36; x++)
-                                if (VoxelWorld_GetInstanceAt(x, y) == NULL && VoxelMesh_BeltCell(x, y, &mt, &h))
-                                    fprintf(f, "%d %d %d %d\n", x - inst0->originX, y - inst0->originY, mt, h);
-                        fclose(f);
-                    }
-                }
             }
             else
             {

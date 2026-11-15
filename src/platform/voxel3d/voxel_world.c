@@ -1448,11 +1448,26 @@ void VoxelWorld_SetMaterialView(const int rect[4], int margin)
  */
 
 /* The metatile an edge fill puts at (worldX, worldY), or -1. */
+const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY);
+
 static int EdgeFillAt(int worldX, int worldY)
 {
     VoxelEdgeFill fill;
 
-    if (sInstanceCount == 0 || !VoxelRelief_EdgeFillAt(&sInstances[0], worldX, worldY, &fill))
+    const VoxelMapInstance *ring;
+
+    if (sInstanceCount == 0)
+        return -1;
+    /* POL-30: the fill of the map the cell stands with (VoxelWorld_BeltRing), not only the current map's - a
+     * map's filled edge (Fallarbor's ash, Rustboro's sea) came and went at the crossing. Only a fill the current
+     * map's atlas can draw: the same tile sets, or the shared primary set's metatile. */
+    ring = VoxelWorld_BeltRing(worldX, worldY);
+    if (ring == NULL || !VoxelRelief_EdgeFillAt(ring, worldX, worldY, &fill))
+        return -1;
+    if (ring != &sInstances[0]
+     && (ring->primaryTileset != sInstances[0].primaryTileset
+      || (ring->secondaryTileset != sInstances[0].secondaryTileset
+       && fill.metatile >= (int)Voxel_PrimaryMetatiles(ring->primaryTileset))))
         return -1;
     return fill.metatile;
 }
@@ -1517,8 +1532,7 @@ void VoxelWorld_MarkUsedMetatiles(const void *primaryTileset, const void *second
             if (y1 > sMaterialView[3] + sMaterialMargin - inst->originY)
                 y1 = sMaterialView[3] + sMaterialMargin - inst->originY;
         }
-        if (i == 0)
-            MarkEdgeFills(inst, used);
+        MarkEdgeFills(inst, used); /* POL-30: every map's on these tile sets (was the current map's only) */
         const uint16_t *map = i == 0 ? gBackupMapLayout.map : Voxel_ResolveMap(layout);
         if (map != NULL)
             for (int y = y0; y < y1; ++y)
@@ -1562,6 +1576,15 @@ void VoxelWorld_MarkUsedMetatiles(const void *primaryTileset, const void *second
         border = Port_ResolveAssetPointer(layout->border);
         if (border == NULL)
             continue;
+        /* POL-30: and the edge fills of a map on another secondary set that are the primary set's */
+        if (inst->secondaryTileset != secondaryTileset)
+        {
+            int metatile;
+
+            for (unsigned k = 0; VoxelRelief_EdgeFills((unsigned)inst->layoutId, k, &metatile); ++k)
+                if (metatile >= 0 && metatile < (int)Voxel_PrimaryMetatiles(primaryTileset))
+                    used[metatile] = 2;
+        }
         for (unsigned t = 0; t < 4; ++t)
             secondary |= (border[t] & MAPGRID_METATILE_ID_MASK) >= Voxel_PrimaryMetatiles(primaryTileset);
         if (secondary && inst->secondaryTileset != secondaryTileset)
@@ -1713,6 +1736,16 @@ static bool BorderIsPrimaryOnly(const VoxelMapInstance *m)
  * primary set's metatiles only (the same art here) - the atlas already holds those (MarkUsedMetatiles' "any
  * border whose metatiles these tilesets hold").
  */
+/* WJPC_BELT_OLD=1: the belt as before POL-30 (the current map decides), to compare. */
+bool VoxelWorld_BeltOld(void)
+{
+    static int sOld = -1;
+
+    if (sOld < 0)
+        sOld = getenv("WJPC_BELT_OLD") != NULL;
+    return sOld;
+}
+
 static const VoxelMapInstance *NearestBeltMap(int worldX, int worldY, bool art)
 {
     const VoxelMapInstance *best = NULL;
@@ -1730,14 +1763,14 @@ static const VoxelMapInstance *NearestBeltMap(int worldX, int worldY, bool art)
             if (m->primaryTileset != sInstances[0].primaryTileset
              || ((const struct MapLayout *)m->layout)->border == NULL)
                 continue;
-            if (m->secondaryTileset != sInstances[0].secondaryTileset && !BorderIsPrimaryOnly(m))
+            if (m->secondaryTileset != sInstances[0].secondaryTileset && (VoxelWorld_BeltOld() || !BorderIsPrimaryOnly(m)))
                 continue;
         }
         dx = worldX < m->originX ? m->originX - worldX : worldX >= m->originX + m->width ? worldX - (m->originX + m->width - 1) : 0;
         dy = worldY < m->originY ? m->originY - worldY : worldY >= m->originY + m->height ? worldY - (m->originY + m->height - 1) : 0;
         d = dx > dy ? dx : dy;
-        if (d < bestD || (d == bestD && best != NULL
-                          && (m->mapGroup << 8 | m->mapNum) < (best->mapGroup << 8 | best->mapNum)))
+        if (d < bestD || (d == bestD && (VoxelWorld_BeltOld() ? i == 0 : best != NULL
+                          && (m->mapGroup << 8 | m->mapNum) < (best->mapGroup << 8 | best->mapNum))))
         {
             bestD = d;
             best = m;
@@ -1755,10 +1788,26 @@ const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY)
 
     if (sInstanceCount == 0)
         return NULL;
-    if (sInstances[0].indoor || sInstances[0].layout == NULL)
+    if (sInstances[0].indoor || sInstances[0].layout == NULL || VoxelWorld_BeltOld())
         return &sInstances[0];
     best = NearestBeltMap(worldX, worldY, false);
     return best != NULL ? best : &sInstances[0];
+}
+
+/* POL-30: edge fill k of loaded map i that the belt may draw (EdgeFillAt's rule), for the same check. */
+bool VoxelWorld_BeltFillOf(unsigned i, unsigned k, int *metatile)
+{
+    const VoxelMapInstance *m;
+
+    if (i >= sInstanceCount || sInstances[0].layout == NULL)
+        return false;
+    m = &sInstances[i];
+    if (m->layout == NULL || m->indoor || m->primaryTileset != sInstances[0].primaryTileset
+     || !VoxelRelief_EdgeFills((unsigned)m->layoutId, k, metatile))
+        return false;
+    if (m->secondaryTileset != sInstances[0].secondaryTileset && *metatile >= (int)Voxel_PrimaryMetatiles(m->primaryTileset))
+        *metatile = -1; /* not drawn from here */
+    return true;
 }
 
 /* POL-30: the border metatiles the belt may draw from loaded map i (VoxelWorld_BorderMetatile's rule), so the

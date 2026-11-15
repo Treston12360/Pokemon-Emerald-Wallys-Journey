@@ -2695,7 +2695,7 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
         float sumW = 0.0f, sumH = 0.0f, sumS = 0.0f;
 
         if (sBlend < 0)
-            sBlend = getenv("WJPC_BELT_NO_BLEND") == NULL;
+            sBlend = getenv("WJPC_BELT_NO_BLEND") == NULL && !VoxelWorld_BeltOld();
         for (unsigned i = 0; sBlend && i < VoxelWorld_InstanceCount(); ++i)
         {
             const VoxelMapInstance *m = VoxelWorld_Instance(i);
