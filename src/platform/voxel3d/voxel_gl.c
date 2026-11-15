@@ -613,7 +613,7 @@ static bool AtlasCovers(const Atlas *a, const VoxelMapInstance *inst)
                 id = VoxelTree_GroundMetatile(inst->secondaryTileset, id);
             if (id >= 0 && id < VOXEL_METATILE_REAL && a->map.slotOf[id] == 0)
             {
-                Voxel3D_Log("[3D] atlas lacks metatile %x of %d:%d: made again", id, inst->mapGroup, inst->mapNum);
+                Voxel3D_Log("[3D] atlas lacks metatile %x of %d:%d: grown", id, inst->mapGroup, inst->mapNum);
                 return false;
             }
         }

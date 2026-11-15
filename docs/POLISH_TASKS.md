@@ -146,6 +146,19 @@ Add under each item: what was found, what was changed, files, how to test, what 
         pairs loaded, 12 atlas slots, 12 maps: no slot thrash. The real-time loop (144 fps) cannot be tested
         here: software GL draws ~5 frames a second. So the build now writes `WallysJourney_stalls.txt` (stalls
         over 150 ms, LAGGY seconds, what the 3D work was) - asked Brennan to send it after it happens.
+      - **Brennan 17:06: stall log + phone video; "It still does it with the old backgrounds as well."** Video: at the
+        crossing ALL of Route 110 (south half of the screen) is gone for ~1.3 s while Mauville is drawn. Log: seconds
+        of ~11 trips/s (~100 ms each) with almost no 3D map/belt/drawing time - the split of the rest was not logged
+        (now it is: game/frame/screen/present in LAGGY lines).
+      - **Cause (code):** FindAtlas threw an atlas away whenever a map that came into reach used a metatile it
+        lacked. Route 110, Mauville, 111, 117, 118 and Verdanturf share one atlas (General + Mauville), so all of
+        them lost their meshes until laid again one at a time (only the map underfoot at once). The test run that
+        visits 12 towns first logs 15 such throw-aways in one tour.
+      - **Fix (2026-11-15, ported idea from Emerald 3DS `extendPending`):** the atlas is grown (same slots, pages
+        recomposed into the same textures, `VoxelAtlas_JobBegin` with `base`); meshes on it stay drawn
+        (`Atlas.layoutGen`) and are laid again behind it. Picture `POL-15_route110_to_mauville_after_fix.png`
+        (walking north from Route 110 into Mauville, Route 110 stays). The lag part is NOT proven fixed: waiting
+        for Brennan's next stall log.
 - [x] **POL-16. People turn black at doors.** "When walking into doors all npcs turn black and disappear then
       reappear whenever you come back out."
       - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-16_door_fade.png`.
