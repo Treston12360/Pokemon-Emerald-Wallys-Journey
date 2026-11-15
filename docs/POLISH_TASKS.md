@@ -180,7 +180,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
         night (night tint, lit windows, street lamps, moonlight), ported as the 3DS does it; pictures first.
         Claude 019khs4X working on it (task POL-26b below).
       - Test aid for later: `WJPC_RTC_EPOCH=<unix time>` fixes the game clock (sdl2.c UpdateInternalClock).
-- [~] **POL-26b. 3D night (Treston's decision 2026-11-14, from POL-26).** Port Emerald 3DS's day/night to the 3D
+- [x] **POL-26b. 3D night (Treston's decision 2026-11-14, from POL-26).** Port Emerald 3DS's day/night to the 3D
       view: `3ds_port/src/3ds_daynight.c` + `ctr_voxel.c` (UpdateNightLamps, window glow from buildings.bin,
       moonlight, glow pass). Claude 019khs4X, in work. Test 3D and 2D (2D must stay as it is).
       - **Treston, 2026-11-14 (night colours): "Match our 2D"** - the 3D world takes its time-of-day colour from the
