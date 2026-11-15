@@ -1270,8 +1270,18 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
 // ---------------------------------------------------------------------------
 // The belt: filler (sea, forest) round the maps, the world's edge.
 
-static Mesh sBeltTerrain[VOXEL_ATLAS_PAGES], sBeltTrees;
+// POL-30 (Brennan 2026-11-15: "fix route 113"): the belt in layers, one per atlas it is drawn with. Layer 0 is
+// the current map's atlas; the others are the atlases of loaded maps on other tile sets, whose border the belt
+// shows beside them (Route 113's ash trees seen from Route 111/112). A ground vertex of layer L carries
+// 2 * VOXEL_ATLAS_PAGES * L more in u until BeltAssemble sorts it into its layer's page.
+#define BELT_LAYERS 4
+static Mesh sBeltTerrain[BELT_LAYERS][VOXEL_ATLAS_PAGES], sBeltTrees;
 static Atlas *sBeltAtlas;
+static Atlas *sBeltLayer[BELT_LAYERS];        // what the pieces are built with now ([0] unused: atlas0)
+static uint32_t sBeltLayerGen[BELT_LAYERS];
+static unsigned sBeltLayers = 1;
+static Atlas *sBeltDrawn[BELT_LAYERS];        // what the uploaded belt was built with
+static uint32_t sBeltDrawnGen[BELT_LAYERS];
 static int sBeltX = 0x7FFFFFFF, sBeltY;
 // DLX-18: after a crossing the old belt is drawn moved into the new map's coordinates until the new one is
 // ready; sBeltRedo asks for that (all pieces again, a few a frame).
@@ -1351,9 +1361,21 @@ static void BeltCache_Build(const VoxelMapInstance *inst0, Atlas *atlas, int x0,
     b.lighting = !inst0->indoor;
     b.lightingRefine = false;
     VoxelMesh_BeginWindow(x0 - 1, y0 - VOXEL_CHUNK_MARGIN_NORTH, x0 + CHUNK + 1, y0 + CHUNK + 1);
-    for (int y = y0; y < y0 + CHUNK; y++)
-        for (int x = x0; x < x0 + CHUNK; x++)
-            VoxelMesh_EmitBorder(&b, x, y, x + 1, y + 1);
+    for (unsigned layer = 0; layer < sBeltLayers; layer++)
+    {
+        Atlas *a = layer == 0 ? atlas : sBeltLayer[layer];
+        unsigned first = b.count;
+
+        VoxelBuilder_SetAtlas(&b, &a->map);
+        VoxelMesh_SetBeltPass(a->primary, a->secondary);
+        for (int y = y0; y < y0 + CHUNK; y++)
+            for (int x = x0; x < x0 + CHUNK; x++)
+                VoxelMesh_EmitBorder(&b, x, y, x + 1, y + 1);
+        for (unsigned i = first; layer != 0 && i < b.count; i++)
+            b.vertices[i].u += 2.0f * VOXEL_ATLAS_PAGES * layer;
+    }
+    VoxelMesh_SetBeltPass(NULL, NULL);
+    VoxelBuilder_SetAtlas(&b, &atlas->map);
     terrainEnd = b.count;
     for (int y = y0; y < y0 + CHUNK; y++)
         for (int x = x0; x < x0 + CHUNK; x++)
@@ -1404,14 +1426,15 @@ static bool BeltBuildStep(const VoxelMapInstance *inst0, Atlas *atlas, int cx, i
 // Ground triangles go straight into their atlas page's run of sSorted (count, then place: one pass each).
 static void BeltAssemble(Atlas *atlas, int cx, int cy)
 {
-    unsigned count[VOXEL_ATLAS_PAGES] = {0}, at[VOXEL_ATLAS_PAGES], total = 0;
+#define BELT_BINS (BELT_LAYERS * VOXEL_ATLAS_PAGES)
+    unsigned count[BELT_BINS] = {0}, at[BELT_BINS], total = 0;
 
     sTerrainCount = sTreeCount = sBuildCount = 0;
     sBeltUse++;
     for (int pass = 0; pass < 2; pass++)
     {
         if (pass == 1)
-            for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+            for (unsigned p = 0; p < BELT_BINS; p++)
             {
                 at[p] = total;
                 total += count[p];
@@ -1425,7 +1448,7 @@ static void BeltAssemble(Atlas *atlas, int cx, int cy)
                 for (unsigned i = 0; i + 2 < c->terrainN; i += 3)
                 {
                     unsigned page = (unsigned)(c->v[i].u * 0.5f);
-                    if (page >= VOXEL_ATLAS_PAGES)
+                    if (page >= BELT_BINS)
                         continue;
                     if (pass == 0)
                     {
@@ -1449,7 +1472,7 @@ static void BeltAssemble(Atlas *atlas, int cx, int cy)
         if (pass == 0)
         {
             unsigned sum = 0;
-            for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+            for (unsigned p = 0; p < BELT_BINS; p++)
                 sum += count[p];
             if (sum > SCRATCH_VERTS) // far beyond any real belt; keep it safe anyway
             {
@@ -1459,9 +1482,9 @@ static void BeltAssemble(Atlas *atlas, int cx, int cy)
         }
     }
     total = 0;
-    for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+    for (unsigned p = 0; p < BELT_BINS; p++)
     {
-        MeshSetQuantised(&sBeltTerrain[p], sSorted + total, count[p], GL_STATIC_DRAW);
+        MeshSetQuantised(&sBeltTerrain[p / VOXEL_ATLAS_PAGES][p % VOXEL_ATLAS_PAGES], sSorted + total, count[p], GL_STATIC_DRAW);
         if (getenv("WJPC_DUMP_BELT"))
         {
             FILE *f = fopen(getenv("WJPC_DUMP_BELT"), p == 0 ? "wb" : "ab");
@@ -1475,6 +1498,11 @@ static void BeltAssemble(Atlas *atlas, int cx, int cy)
     }
     MeshSetQuantised(&sBeltTrees, sTreeBuf, sTreeCount, GL_STATIC_DRAW);
     sBeltAtlas = atlas;
+    for (unsigned l = 1; l < BELT_LAYERS; l++)
+    {
+        sBeltDrawn[l] = l < sBeltLayers ? sBeltLayer[l] : NULL;
+        sBeltDrawnGen[l] = l < sBeltLayers ? sBeltLayerGen[l] : 0;
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -2860,6 +2888,52 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             Uint64 t0 = SDL_GetPerformanceCounter();
             bool full = sBeltX == 0x7FFFFFFF || sBeltAtlas == NULL;
 
+            // POL-30: the belt's other layers - the ready atlases of the loaded maps on other tile sets. A new
+            // set of them: the pieces again, a few a frame (as into a map with other tile sets).
+            if (!VoxelWorld_BeltOld())
+            {
+                Atlas *want[BELT_LAYERS] = {NULL};
+                const void *pairs[BELT_LAYERS][2];
+                unsigned n = 1;
+                bool same;
+
+                for (unsigned i = 1; i < count && n < BELT_LAYERS; i++)
+                {
+                    const VoxelMapInstance *m = VoxelWorld_Instance(i);
+                    Atlas *a;
+                    bool have = false;
+
+                    if (m == NULL || m->layout == NULL || m->indoor || m->underground
+                     || (m->primaryTileset == inst0->primaryTileset && m->secondaryTileset == inst0->secondaryTileset))
+                        continue;
+                    for (unsigned k = 1; k < n; k++)
+                        have |= want[k]->primary == m->primaryTileset && want[k]->secondary == m->secondaryTileset;
+                    if (have || (a = FindAtlas(m)) == NULL || a->tex[0] == 0)
+                        continue;
+                    pairs[n - 1][0] = a->primary;
+                    pairs[n - 1][1] = a->secondary;
+                    want[n++] = a;
+                }
+                same = n == sBeltLayers;
+                for (unsigned k = 1; same && k < n; k++)
+                    same = want[k] == sBeltLayer[k] && want[k]->gen == sBeltLayerGen[k];
+                if (!same)
+                {
+                    for (unsigned k = 1; k < n; k++)
+                    {
+                        sBeltLayer[k] = want[k];
+                        sBeltLayerGen[k] = want[k]->gen;
+                    }
+                    sBeltLayers = n;
+                    VoxelWorld_SetBeltPairs((const void *const (*)[2])pairs, n - 1);
+                    Voxel3D_Log("[3D] belt layers: %u", n);
+                    if (!full)
+                    {
+                        BeltCache_Flush();
+                        sBeltRedo = true;
+                    }
+                }
+            }
             if (!full && (atlas0 != sBeltCacheAtlas || atlas0->gen != sBeltCacheGen))
             {
                 // Into a map with other tile sets: its pieces again, a few a frame, the old belt up meanwhile.
@@ -3173,7 +3247,12 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground && !(getenv("WJPC_3D_SKIP") && (atoi(getenv("WJPC_3D_SKIP")) & 8)))
     {
         for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
-            MeshDraw(&sBeltTerrain[p], sBeltAtlas->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
+            MeshDraw(&sBeltTerrain[0][p], sBeltAtlas->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
+        // (POL-30: the other layers, each with the atlas it was built with - not one made again since)
+        for (unsigned l = 1; l < BELT_LAYERS; l++)
+            if (sBeltDrawn[l] != NULL && sBeltDrawn[l]->valid && sBeltDrawn[l]->gen == sBeltDrawnGen[l])
+                for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+                    MeshDraw(&sBeltTerrain[l][p], sBeltDrawn[l]->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
         MeshDraw(&sBeltTrees, sTreeTex, (float)sBeltShiftX, 0, (float)sBeltShiftZ);
     }
 

@@ -1052,7 +1052,7 @@ static float BeltBase(int x, int y)
  * flat trunks and tilted crowns, nothing standing. */
 static bool TreeBeltAt(int x, int y)
 {
-    const VoxelMapInstance *ring = VoxelWorld_Instance(0);
+    const VoxelMapInstance *ring = VoxelWorld_BorderArtMap(x, y); /* POL-30: was instance 0 */
 
     return ring != NULL && VoxelWorld_GetInstanceAt(x, y) == NULL && VoxelWorld_UsesTreeSprites(ring)
         && VoxelTree_Part(ring->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) >= 0;
@@ -2819,10 +2819,40 @@ static void EmitBorderNorth(VoxelBuilder *b, int x, int y, float low, float lowS
  * not the belt's courses higher as every other belt cell's top is. */
 static bool BeltIsTree(int x, int y)
 {
-    const VoxelMapInstance *current = VoxelWorld_Instance(0);
+    const VoxelMapInstance *current = VoxelWorld_BorderArtMap(x, y);
 
     return current != NULL && VoxelWorld_UsesTreeSprites(current)
         && VoxelTree_Part(current->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) >= 0;
+}
+
+/*
+ * POL-30 (Brennan 2026-11-15: "fix route 113"): the belt is emitted once per atlas it is drawn with - the
+ * current map's, and those of loaded maps on other tile sets whose border the belt shows (voxel_gl.c's belt
+ * layers). A pass only lays the cells whose metatile is of its tile sets.
+ */
+static const void *sBeltPassPrimary, *sBeltPassSecondary;
+
+void VoxelMesh_SetBeltPass(const void *primaryTileset, const void *secondaryTileset)
+{
+    sBeltPassPrimary = primaryTileset;
+    sBeltPassSecondary = secondaryTileset;
+}
+
+static bool BeltInPass(int x, int y)
+{
+    const VoxelMapInstance *art;
+
+    if (sBeltPassPrimary == NULL)
+        return true; /* (no pass set: everything, as before) */
+    art = VoxelWorld_BorderArtMap(x, y);
+    return art == NULL || (art->primaryTileset == sBeltPassPrimary && art->secondaryTileset == sBeltPassSecondary);
+}
+
+/* The metatile of the belt at (x, wantY) for a cell at (x, y) (a standing cell reads the rows above it) - the
+ * cell's own when that one is of other tile sets than this pass's. */
+static int BeltMetatileFor(int x, int wantY, int y)
+{
+    return BeltInPass(x, wantY) ? VoxelWorld_BorderMetatile(x, wantY) : VoxelWorld_BorderMetatile(x, y);
 }
 
 /* The faces of a belt cell's step down to a lower neighbour (d: 0 south, 1 east, 2 west), from `other` up to
@@ -3002,7 +3032,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             bool south, east, west;
             float level, shift, lift = 0.0f;
 
-            if (!BorderAt(x, y))
+            if (!BorderAt(x, y) || !BeltInPass(x, y))
                 continue;
             /* POL-30: each cell over the base of the map it stands with, not the current map's */
             if (!drawn)
@@ -3027,9 +3057,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 wz += edgeShift;
                 lift = edge;
             }
-            if (VoxelWorld_UsesTreeSprites(VoxelWorld_Instance(0))
-             && VoxelTree_Part(VoxelWorld_Instance(0)->secondaryTileset,
-                               VoxelWorld_BorderMetatile(x, y)) >= 0)
+            if (BeltIsTree(x, y))
             {
                 /* POL-30: at the edge of the trees (a cell of another map's belt beside it) the sky showed under
                  * the leaning crowns: the cell's own drawing laid as ground there. */
@@ -3045,7 +3073,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             west = !BorderAt(x - 1, y) || BorderWaterLevel(x - 1, y, &level, &shift) || BeltIsTree(x - 1, y);
             /* Laid as drawn, a cell's top is its own drawing; stood where it
              * is tiled, the column reads the rows above it. */
-            if (MetatileUV(builder, VoxelWorld_BorderMetatile(x, drawn ? y : y - (int)courses + 1),
+            if (MetatileUV(builder, BeltMetatileFor(x, drawn ? y : y - (int)courses + 1, y),
                            &u0, &v0, &u1, &v1))
                 VoxelMesh_Top(builder, wx, wz, (float)courses + lift, 0.0f,
                               u0, v0, u1, v1, SHADE_TOP);
@@ -3060,7 +3088,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             {
                 float yBottom = (float)h + lift, yTop = (float)(h + 1) + lift;
 
-                if (!MetatileUV(builder, VoxelWorld_BorderMetatile(x, drawn ? y : y - h),
+                if (!MetatileUV(builder, BeltMetatileFor(x, drawn ? y : y - h, y),
                                 &u0, &v0, &u1, &v1))
                     continue;
                 if (south) VoxelMesh_South(builder, wx, wz, yBottom, yTop, 0.0f, u0, v0, u1, v1);

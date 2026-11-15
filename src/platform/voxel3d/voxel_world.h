@@ -123,6 +123,8 @@ int VoxelWorld_BorderMetatile(int worldX, int worldY);
 bool VoxelWorld_BeltBorderOf(unsigned i, int ids[4]); /* POL-30 */
 bool VoxelWorld_BeltFillOf(unsigned i, unsigned k, int *metatile); /* POL-30 */
 const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY); /* POL-30 */
+const VoxelMapInstance *VoxelWorld_BorderArtMap(int worldX, int worldY); /* POL-30 */
+void VoxelWorld_SetBeltPairs(const void *const (*pairs)[2], unsigned count); /* POL-30 */
 bool VoxelWorld_BeltOld(void); /* POL-30: WJPC_BELT_OLD=1 */
 /* True where that metatile is water: it lies flush with the map's own water,
  * not stood up as the belt (VoxelMesh_EmitBorder). */

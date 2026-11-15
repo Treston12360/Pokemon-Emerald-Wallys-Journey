@@ -576,16 +576,21 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     const VoxelMapInstance *current = VoxelWorld_Instance(0);
 
-    if (!VoxelWorld_UsesTreeSprites(current))
-        return;
     for (int y = y0; y < y1; ++y)
         for (int x = x0; x < x1; ++x)
         {
             int metatileId, part;
+            /* POL-30: the tile sets the cell's metatile is of - another loaded map's when the belt draws that
+             * map's border with its own atlas (VoxelWorld_BorderArtMap); it was always the current map's */
+            const VoxelMapInstance *art;
+
             if (VoxelWorld_GetInstanceAt(x, y) != NULL)
                 continue;
+            art = VoxelWorld_BorderArtMap(x, y);
+            if (art == NULL || !VoxelWorld_UsesTreeSprites(art))
+                continue;
             metatileId = VoxelWorld_BorderMetatile(x, y);
-            part = VoxelTree_Part(current->secondaryTileset, metatileId);
+            part = VoxelTree_Part(art->secondaryTileset, metatileId);
             if (part >= 0)
             {
                 /* at its map edge's level (VoxelMesh_BorderLevel) */
@@ -599,8 +604,8 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 /* POL-30: over the base of the map the cell stands with (VoxelMesh_EmitBorder) */
                 if (VoxelRelief_Belt(current) == 0)
                     builder->base = VoxelRelief_Base(VoxelWorld_BeltRing(x, y));
-                EmitCell(builder, NULL, current->secondaryTileset, x, y, part, metatileId, false);
-                EmitMissingRow(builder, NULL, current->secondaryTileset, x, y, part, metatileId, false);
+                EmitCell(builder, NULL, art->secondaryTileset, x, y, part, metatileId, false);
+                EmitMissingRow(builder, NULL, art->secondaryTileset, x, y, part, metatileId, false);
                 builder->base = callerBase;
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;

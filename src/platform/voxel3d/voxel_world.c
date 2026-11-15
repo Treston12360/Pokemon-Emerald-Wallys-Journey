@@ -1450,7 +1450,9 @@ void VoxelWorld_SetMaterialView(const int rect[4], int margin)
 /* The metatile an edge fill puts at (worldX, worldY), or -1. */
 const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY);
 
-static int EdgeFillAt(int worldX, int worldY)
+static bool BeltPairDrawn(const VoxelMapInstance *m);
+
+static int EdgeFillAt(int worldX, int worldY, const VoxelMapInstance **art)
 {
     VoxelEdgeFill fill;
 
@@ -1464,11 +1466,19 @@ static int EdgeFillAt(int worldX, int worldY)
     ring = VoxelWorld_BeltRing(worldX, worldY);
     if (ring == NULL || !VoxelRelief_EdgeFillAt(ring, worldX, worldY, &fill))
         return -1;
+    if (art != NULL)
+        *art = &sInstances[0];
     if (ring != &sInstances[0]
      && (ring->primaryTileset != sInstances[0].primaryTileset
       || (ring->secondaryTileset != sInstances[0].secondaryTileset
        && fill.metatile >= (int)Voxel_PrimaryMetatiles(ring->primaryTileset))))
-        return -1;
+    {
+        /* (or, with the renderer's belt layers, one drawn with that map's own atlas) */
+        if (VoxelWorld_BeltOld() || !BeltPairDrawn(ring))
+            return -1;
+        if (art != NULL)
+            *art = ring;
+    }
     return fill.metatile;
 }
 
@@ -1736,6 +1746,34 @@ static bool BorderIsPrimaryOnly(const VoxelMapInstance *m)
  * primary set's metatiles only (the same art here) - the atlas already holds those (MarkUsedMetatiles' "any
  * border whose metatiles these tilesets hold").
  */
+/*
+ * POL-30 (Brennan 2026-11-15: "fix route 113" - its ash trees are on Fallarbor's tile set, which Route 111's and
+ * Route 112's atlas cannot draw): the renderer can draw belt cells with other loaded maps' atlases as well
+ * (voxel_gl.c, belt layers) and says here which tile set pairs it has ready. A map on one of them gives the
+ * belt its border like any other; VoxelWorld_BorderArtMap says whose tile sets a cell's metatile is of.
+ */
+#define BELT_PAIRS 4
+static const void *sBeltPairs[BELT_PAIRS][2];
+static unsigned sBeltPairCount;
+
+void VoxelWorld_SetBeltPairs(const void *const (*pairs)[2], unsigned count)
+{
+    sBeltPairCount = count > BELT_PAIRS ? BELT_PAIRS : count;
+    for (unsigned i = 0; i < sBeltPairCount; ++i)
+    {
+        sBeltPairs[i][0] = pairs[i][0];
+        sBeltPairs[i][1] = pairs[i][1];
+    }
+}
+
+static bool BeltPairDrawn(const VoxelMapInstance *m)
+{
+    for (unsigned i = 0; i < sBeltPairCount; ++i)
+        if (sBeltPairs[i][0] == m->primaryTileset && sBeltPairs[i][1] == m->secondaryTileset)
+            return true;
+    return false;
+}
+
 /* WJPC_BELT_OLD=1: the belt as before POL-30 (the current map decides), to compare. */
 bool VoxelWorld_BeltOld(void)
 {
@@ -1760,11 +1798,15 @@ static const VoxelMapInstance *NearestBeltMap(int worldX, int worldY, bool art)
             continue;
         if (art)
         {
-            if (m->primaryTileset != sInstances[0].primaryTileset
-             || ((const struct MapLayout *)m->layout)->border == NULL)
+            if (((const struct MapLayout *)m->layout)->border == NULL)
                 continue;
-            if (m->secondaryTileset != sInstances[0].secondaryTileset && (VoxelWorld_BeltOld() || !BorderIsPrimaryOnly(m)))
-                continue;
+            if (m->primaryTileset != sInstances[0].primaryTileset || m->secondaryTileset != sInstances[0].secondaryTileset)
+            {
+                if (VoxelWorld_BeltOld())
+                    continue;
+                if (!(m->primaryTileset == sInstances[0].primaryTileset && BorderIsPrimaryOnly(m)) && !BeltPairDrawn(m))
+                    continue;
+            }
         }
         dx = worldX < m->originX ? m->originX - worldX : worldX >= m->originX + m->width ? worldX - (m->originX + m->width - 1) : 0;
         dy = worldY < m->originY ? m->originY - worldY : worldY >= m->originY + m->height ? worldY - (m->originY + m->height - 1) : 0;
@@ -1792,6 +1834,26 @@ const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY)
         return &sInstances[0];
     best = NearestBeltMap(worldX, worldY, false);
     return best != NULL ? best : &sInstances[0];
+}
+
+/* POL-30: the loaded map whose tile sets (and atlas) a belt cell's metatile (VoxelWorld_BorderMetatile) is of:
+ * the current map, unless the cell is another tile set pair's map's border and not the shared primary set's. */
+const VoxelMapInstance *VoxelWorld_BorderArtMap(int worldX, int worldY)
+{
+    const VoxelMapInstance *best;
+
+    if (sInstanceCount == 0)
+        return NULL;
+    if (sInstances[0].indoor || sInstances[0].layout == NULL)
+        return &sInstances[0];
+    if (EdgeFillAt(worldX, worldY, &best) >= 0)
+        return best;
+    best = NearestBeltMap(worldX, worldY, true);
+    if (best == NULL || best == &sInstances[0]
+     || (best->primaryTileset == sInstances[0].primaryTileset
+      && (best->secondaryTileset == sInstances[0].secondaryTileset || BorderIsPrimaryOnly(best))))
+        return &sInstances[0];
+    return best;
 }
 
 /* POL-30: edge fill k of loaded map i that the belt may draw (EdgeFillAt's rule), for the same check. */
@@ -1859,7 +1921,7 @@ int VoxelWorld_BorderMetatile(int worldX, int worldY)
 
     if (sInstanceCount == 0 || sInstances[0].layout == NULL)
         return -1;
-    fill = EdgeFillAt(worldX, worldY);
+    fill = EdgeFillAt(worldX, worldY, NULL);
     if (fill >= 0)
         return fill;
     source = MapGridGetCameraBorderAt(worldX - sInstances[0].originX,
@@ -1897,7 +1959,7 @@ bool VoxelWorld_BorderIsWater(int worldX, int worldY)
     int metatileId = VoxelWorld_BorderMetatile(worldX, worldY);
 
     return metatileId >= 0 && !sInstances[0].indoor
-        && BehaviorShape(UNPACK_BEHAVIOR(GetMetatileAttribute(&sInstances[0], metatileId)))
+        && BehaviorShape(UNPACK_BEHAVIOR(GetMetatileAttribute(VoxelWorld_BorderArtMap(worldX, worldY), metatileId)))
            == VOXEL_SHAPE_WATER;
 }
 
