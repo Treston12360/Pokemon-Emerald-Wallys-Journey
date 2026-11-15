@@ -5,7 +5,6 @@ done (in the same push as the work). Projects: **ARIA** (Treston, branch `kanto-
 
 | Lane | Who / session | File or area | Since | What for |
 |---|---|---|---|---|
-| ARIA | ChatGPT (Treston, 2026-11-15) | `src/platform/sdl2.c` and narrow PC display geometry/zoom; no voxel3d files | 2026-11-15 | PC-BUGS-1115: fix 2D zoom quantization and screen/UI clipping without touching POLISH-owned renderer; code review and constrained geometry tests pending |
 | ARIA | Claude 019khs4X (Treston) | `tools/voxel3ds/` (3DS generator patch) and `pc_data/voxel/` | 2026-11-13 | K7 Kanto in 3D, DLX-28 furniture (paused for story) |
 | ARIA | Claude 019khs4X (Treston) | L1 Hoenn post-game rules: `src/battle_script_commands.c` (EXP), `src/wally_journey.c` (Steven, E4 unlock), `data/scripts/wally_journey.inc` (rival final), Champion's Room defenses | 2026-11-14 | Owner's 2026-11-13 post-game rules before Kanto |
 | ARIA | Claude 019khs4X (Treston) | Hoenn maps: Littleroot (player's houses 1F/2F, town), Birch's lab, Slateport harbour; new `data/scripts/aria_*.inc` | 2026-11-14 | S1 Project ARIA ch. 0 (post-Champion call to Kanto). Only runs after the first Champion win — earlier saves unchanged |
