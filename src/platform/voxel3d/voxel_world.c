@@ -1810,7 +1810,12 @@ static const VoxelMapInstance *NearestBeltMap(int worldX, int worldY, bool art)
         }
         dx = worldX < m->originX ? m->originX - worldX : worldX >= m->originX + m->width ? worldX - (m->originX + m->width - 1) : 0;
         dy = worldY < m->originY ? m->originY - worldY : worldY >= m->originY + m->height ? worldY - (m->originY + m->height - 1) : 0;
-        d = dx > dy ? dx : dy;
+        /* POL-30 (Brennan 2026-11-15: "trees and the mountain meshing together" north-west of Route 111): by
+         * the straight-line distance, not the larger of the two - with that every cell diagonally off a map's
+         * corner was as near as the map straight beside it, the tie cut the belt along a diagonal, and one
+         * map's trees stood in the steps of the other's rock. Now the cut runs straight out from where two
+         * maps meet. */
+        d = VoxelWorld_BeltOld() ? (dx > dy ? dx : dy) : dx * dx + dy * dy;
         if (d < bestD || (d == bestD && (VoxelWorld_BeltOld() ? i == 0 : best != NULL
                           && (m->mapGroup << 8 | m->mapNum) < (best->mapGroup << 8 | best->mapNum))))
         {
