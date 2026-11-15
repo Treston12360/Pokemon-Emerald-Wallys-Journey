@@ -163,9 +163,6 @@ bool VoxelWorld_ScreenFade(float *amount, float rgb[3]);
 bool VoxelWorld_TimeTint(float mul[3], float add[3]);
 /* POL-26b: windows lit now (the 2D game's times) */
 bool VoxelWorld_WindowsLit(void);
-/* POL-26b: Emerald 3DS's night light now (outdoors): daylight 0..1 (dapples, rays), sun strength 0..1, the
- * moonlight's amount and colour. Day elsewhere. */
-void VoxelWorld_NightLight(float *daylight, float *sunStrength, float *moonAmount, float moonRgb[3]);
 
 /*
  * Content signature of one rectangle of world tiles: what decides whether the
