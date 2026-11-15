@@ -206,6 +206,27 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       Leaders with their own story, longer is fine). Drafts go in `docs/KANTO_SCRIPT.md` for approval first.
 - [x] Ch. 2, 3, 3b, 4 in game (2026-11-14). Script: `docs/KANTO_SCRIPT.md` (status per chapter).
 - [ ] Ch. 5 (Celadon office — new building, show owner a picture first), then ch. 6+.
+- [x] **S-ARIA-CANON-LOCK (DOCUMENTATION ONLY — owner 2026-11-15):** Three historical points locked
+      in `docs/KANTO_PROJECT_ARIA.md` and `docs/KANTO_NARRATIVE_AUDIT.md`: (1) young Varnell was **forced
+      outside Pokémon Tower** during Rocket's raid; (2) Clefairy remained **captive with a Rocket member
+      inside** while Aria searched for it; (3) Lavender residents **speculate the unrecognizable adult
+      man found in the rubble might have been a Rocket member**. This is **not** approval of exact NPC
+      dialogue and **not** a claim the current game scripts implement these decisions.
+- [ ] **S-ARIA-LOOP-IMPLEMENTATION (STORY / SCRIPT — unimplemented; owner-approved facts only, wording DRAFT):**
+      First read `docs/KANTO_NARRATIVE_AUDIT.md` and the locked §2 history in
+      `docs/KANTO_PROJECT_ARIA.md`. Draft and obtain approval for: (a) Chapter 3 Kiyoshi's failed
+      stabilizing rescue instead of the old forced-seal scene (current `data/scripts/aria_ch3.inc` is
+      **superseded but still in game**); (b) the understated Lavender NPC account of a girl seeking
+      captive Clefairy, unexplained collapse, severe damage to the unidentified man, and locals' **mistaken
+      Rocket-member speculation**, without revealing any relationship; (c) later subtle clue placement;
+      (d) Chapters 12–13 staged time-loop finale, where the **one-way retrieval portal stays stable
+      until Varnell jumps**, and his reverse crossing FIRST triggers the old Tower collapse.
+      **Unresolved blocking:** decide who forced young Varnell outside, where the captive Clefairy,
+      Rocket member and Aria stood, and why the historical body is not identified through effects.
+      Keep all new dialogue labeled **DRAFT** until the owner approves exact text. Build/test
+      WallysJourney.exe for branch-specific flags, old saves, optional interactions, skipped dialogue,
+      revisits, and the exact cutscene timeline; **do not** mark this done before game verification.
+
 
 ## Phase 3 — Levels and balance
 

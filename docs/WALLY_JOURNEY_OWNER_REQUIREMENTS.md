@@ -5,6 +5,19 @@
 **Project (owner, 2026-11-13):** a **native Windows game, `WallysJourney.exe`**. No GBA ROM is made, tested or released any more, and no GBA limit applies; old GBA `.sav` files must still import. Where older rows below say "ROM", "GBA build" or "emulator test", read "the .exe" and "test in the .exe".
 
 
+## Owner PC bug reports — 2026-11-15 (reported; NOT fixed)
+
+Owner reports the following six issues in the native Windows game. Treat these as authoritative **symptoms/desired behavior**, not verified root causes or completed fixes. The specific report and reproduction/ownership audit is `docs/PC_OWNER_ISSUES_2026-11-15.md`.
+
+- "the houses lost their color for some reason"
+- "there is black lines inside of certain areas like granite cave, pokemon center"
+- "Allow us to leave the battle before the 3d battle transition happens once entering battle" — **CLARIFIED AND OWNER-LOCKED 2026-11-15**: skip the 3D cinematic battle introduction to reach the normally initialized battle command menu **immediately**, including the **Run** command in wild battles. Do not force-end a battle before its initialization, ignore normal Run success/restrictions, or allow escape from mandatory trainer/scripted battles. Exact skip button/input and implementation details are still to be agreed; **NOT implemented or tested**.
+- "the zoom isn't working in 2d for some reason"
+- "sometimes with certain screen settings the start menu goes off the screen and is too big"
+- "the trees outside usually on the outskirts of the screen changes when you change routes"
+
+All six require reproduction and testing in the actual Windows executable and both 2D/3D modes where relevant. Respect existing POL-6/POL-8/POL-30 and shared renderer work claims; no file or branch may be overwritten without coordination. **Documenting a report is not a fix.**
+
 ## Story, characters and world
 
 - Emerald's core Hoenn adventure remains recognizable, but the story is rewritten/enhanced around **Wally's Journey**.

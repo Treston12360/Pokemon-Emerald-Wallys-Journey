@@ -79,7 +79,8 @@ static void Try3DInit(void)
         fprintf(stderr, "3D world unavailable (OpenGL or %s missing): drawing the map flat\n", s3DDir);
 }
 static SDL_Texture *sdl3DTexture, *sdl3DTransTexture;
-static int sUiPlaceX, sUiPlaceY, sUiPlaceS, sUiOutW, sUiOutH; // DLX-24: last frame's UI placement
+static int sUiPlaceX, sUiPlaceY, sUiOutW, sUiOutH;
+static float sUiPlaceS; // DLX-24: fractional only if the output is smaller than a GBA screen
 static bool s3DTransition;
 // DLX-4: a battle transition over the wide 2D field (no 3D): the last field picture stays in the map
 // texture and the transition's own picture goes over it, as in 3D.
@@ -603,28 +604,42 @@ static bool PrepareGameTarget(int w, int h, int k)
 }
 
 // ---- Zoom (overworld, like gen1recomp) ----------------------------------------------
-// Each zoom level is how many world pixels tall the view should be. The map is always a whole
-// number of screen pixels per game pixel (sharp) and always fills the screen edge to edge: the
-// view is made as big as the screen holds at that size. Keys - and =, or the mouse wheel.
+// Each zoom level specifies a target view height, with nearest-neighbour sampling to
+// preserve hard pixel edges even at fractional output scale. The view fills the screen,
+// within the PC wide-view buffer capacity. Keys - and =, or the mouse wheel.
 static const u16 sZoomHeights[] = {120, 144, 162, 180, 216, 240, 270, 324};
 #define ZOOM_COUNT ARRAY_COUNT(sZoomHeights)
-static int sFieldZ = 1, sFieldViewW = DISPLAY_WIDTH, sFieldViewH = DISPLAY_HEIGHT;
+static float sFieldZ = 1.0f;
+static int sFieldViewW = DISPLAY_WIDTH, sFieldViewH = DISPLAY_HEIGHT;
 
 static void ComputeFieldView(int outW, int outH)
 {
     int level = sPlatformSettings[PLATFORM_SETTING_ZOOM] % ZOOM_COUNT;
-    int target, k;
+    int target;
+    float z, minZ;
     if (WideView_IsIndoorMap() && level > 0)
         level--; // rooms are small: one step closer
     target = sZoomHeights[level];
-    k = (outH + target / 2) / target;
-    if (k < 1)
-        k = 1;
-    while ((outW + k - 1) / k > WIDE_VIEW_MAX_W || (outH + k - 1) / k > WIDE_VIEW_MAX_H)
-        k++;
-    sFieldZ = k;
-    sFieldViewW = (outW + k - 1) / k;
-    sFieldViewH = (outH + k - 1) / k;
+
+    // The old integer-only zoom rounded several adjacent settings to the exact
+    // same view (e.g. heights 216 and 240 at 1080p both used 5x). On PC a
+    // fractional nearest-neighbour scale is better than a setting that does
+    // nothing. The game is still drawn from unfiltered, sharp source pixels.
+    z = (float)outH / target;
+    minZ = (float)outW / WIDE_VIEW_MAX_W;
+    if ((float)outH / WIDE_VIEW_MAX_H > minZ)
+        minZ = (float)outH / WIDE_VIEW_MAX_H;
+    if (z < minZ)
+        z = minZ; // never ask WideView to render past its allocated buffers
+    if (z <= 0.0f)
+        z = 1.0f;
+    sFieldZ = z;
+    sFieldViewW = (int)ceilf((float)outW / z);
+    sFieldViewH = (int)ceilf((float)outH / z);
+    if (sFieldViewW > WIDE_VIEW_MAX_W)
+        sFieldViewW = WIDE_VIEW_MAX_W;
+    if (sFieldViewH > WIDE_VIEW_MAX_H)
+        sFieldViewH = WIDE_VIEW_MAX_H;
 }
 
 static void ZoomStep(int delta)
@@ -664,7 +679,8 @@ extern bool32 Vol_StartMenu_IsOpen(void);
 // always in the top-left corner of the screen.
 static void DrawFieldScene(double t, int outW, int outH)
 {
-    int z = sFieldZ, m = sFrameInfo.margin;
+    float z = sFieldZ;
+    int m = sFrameInfo.margin;
     int cw = sFrameInfo.width, ch = sFrameInfo.height;
     float shiftX = 0, shiftY = 0;
     if (m > 0 && sCamMoveValid && sPlatformSettings[PLATFORM_SETTING_SMOOTH])
@@ -694,13 +710,20 @@ static void DrawFieldScene(double t, int outW, int outH)
     }
     if (sdlUiTexture != NULL && !s2DTransition)
     {
-        int s = outW / DISPLAY_WIDTH;
-        if (outH / DISPLAY_HEIGHT < s)
-            s = outH / DISPLAY_HEIGHT;
-        if (s < 1)
-            s = 1;
+        // Keep the usual largest whole-pixel UI scale for normal window sizes.
+        // If the effective output target is smaller than 240x160, downscale
+        // instead of forcing 1x (which draws part of the start menu offscreen).
+        float scaleLimitW = (float)outW / DISPLAY_WIDTH;
+        float scaleLimitH = (float)outH / DISPLAY_HEIGHT;
+        float scaleLimit = scaleLimitW < scaleLimitH ? scaleLimitW : scaleLimitH;
+        float s = floorf(scaleLimit);
+        if (s < 1.0f)
+            s = scaleLimit;
+        if (s <= 0.0f)
+            s = 1.0f;
         // Start menu open: the UI slides right so the menu is flush with the screen's right edge.
-        int ux = Vol_StartMenu_IsOpen() ? outW - DISPLAY_WIDTH * s : (outW - DISPLAY_WIDTH * s) / 2, uy = outH - DISPLAY_HEIGHT * s;
+        int ux = (int)(Vol_StartMenu_IsOpen() ? outW - DISPLAY_WIDTH * s : (outW - DISPLAY_WIDTH * s) / 2);
+        int uy = (int)(outH - DISPLAY_HEIGHT * s);
         int band = 0;
         if (GetMapNamePopUpWindowId() != 0xFF)
         {
@@ -872,10 +895,14 @@ static void DrawScene(double t, int outputWidth, int outputHeight)
         if (integer)
         {
             int scale = gameWidth / srcW;
-            if (scale < 1)
-                scale = 1;
-            gameWidth = srcW * scale;
-            gameHeight = srcH * scale;
+            // There is no whole-pixel scale that fits a target smaller than
+            // the native picture. Preserve the fitted fractional viewport
+            // rather than clipping the image by forcing a 1x scale.
+            if (scale >= 1)
+            {
+                gameWidth = srcW * scale;
+                gameHeight = srcH * scale;
+            }
         }
     }
     else
@@ -884,8 +911,13 @@ static void DrawScene(double t, int outputWidth, int outputHeight)
         gameHeight = outputHeight;
         if (integer)
         {
-            gameWidth = srcW * (outputWidth / srcW > 0 ? outputWidth / srcW : 1);
-            gameHeight = srcH * (outputHeight / srcH > 0 ? outputHeight / srcH : 1);
+            int sx = outputWidth / srcW;
+            int sy = outputHeight / srcH;
+            if (sx >= 1 && sy >= 1)
+            {
+                gameWidth = srcW * sx;
+                gameHeight = srcH * sy;
+            }
         }
     }
     SDL_Rect gameViewport = {(outputWidth - gameWidth) / 2,
