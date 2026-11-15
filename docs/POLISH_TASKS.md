@@ -135,6 +135,17 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-13. Background mountains are blocks.** "Mountains in background are blocks and not like mountains."
 - [ ] **POL-15. Route 110 into Mauville.** "Walking into mauville city from route 110 everything below disappears
       and reappears."
+      - **Brennan 2026-11-15 15:52, PRIORITY:** "going from route 110 to mauville city the whole bottom of the
+        screen goes blue and then the whole game starts becoming laggy and not smooth. Make this a priority fix
+        and when fixed send me the newest zip file."
+      - 014PwRDj, 2026-11-15: not reproduced yet. Test-script loop (frame by frame) Route 110 (14,8) -> Mauville,
+        Brennan's save, cfg with Gamma: nothing disappears, no rebuild or atlas churn in the log after the
+        crossing (the only map/belt work after it: the belt pieces again over ~8 frames of 3-11 ms, then the
+        water/flower animation's atlas redraw every 16 frames, 5-11 ms here, also before the crossing). Route 110,
+        Mauville, 111, 117, 118 and Verdanturf all share one atlas (General + Mauville tile sets); 7 tile set
+        pairs loaded, 12 atlas slots, 12 maps: no slot thrash. The real-time loop (144 fps) cannot be tested
+        here: software GL draws ~5 frames a second. So the build now writes `WallysJourney_stalls.txt` (stalls
+        over 150 ms, LAGGY seconds, what the 3D work was) - asked Brennan to send it after it happens.
 - [x] **POL-16. People turn black at doors.** "When walking into doors all npcs turn black and disappear then
       reappear whenever you come back out."
       - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-16_door_fade.png`.
