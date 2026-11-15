@@ -8,13 +8,13 @@ st = Image.open(B+'steven.png'); sc = Image.open(B+'scientist.png')
 sp, cp = st.load(), sc.load()
 KIND = ['down','up','side','down','down','up','up','side','side','down']
 # Varnell's colours (from the portrait), as overworld-style shades
-HAIR = {0xB:(156,148,178), 0xC:(104,96,124), 0xD:(56,50,70)}          # Steven's hair greys -> purple-grey
-SKIN = {1:(255,213,180), 2:(246,189,148), 3:(222,148,115)}
+HAIR = {0xB:(160,156,190), 0xC:(106,96,128), 0xD:(58,46,72)}          # Steven's hair greys -> purple-grey
+SKIN = {1:(255,216,184), 2:(246,186,150), 3:(214,134,112)}
 OUTL = {4:(123,65,65), 0xF:(0,0,0)}
-COAT = {0xE:(255,255,255), 0xB:(213,209,230), 0xC:(156,150,184), 0xD:(82,78,104)}
+COAT = {0xE:(255,255,255), 0xB:(222,216,240), 0xC:(170,160,204), 0xD:(96,86,128)}
 GLOVE= (49,49,66); GLOVE2=(24,24,32)
 NECK = (49,47,62); NECK2=(28,26,36)
-PANTS= (66,64,82)
+PANTS= (62,56,80)
 SHOE = (32,30,40)
 GLASS_FRAME=(57,57,74)
 STACHE=(139,133,148); STACHE2=(98,92,108)
@@ -52,6 +52,7 @@ for f in range(10):
                 elif v in (1,2,3) and not body and f == 9 and x <= 4: c = GLOVE if v != 3 else GLOVE2  # hand at his glasses
                 elif v in (1,2,3) and not body: c = SKIN[v]
                 elif v in (1,2,3) and body: c = GLOVE if v != 3 else GLOVE2
+                elif v == 4 and not body and f == 9 and x <= 4: c = (0,0,0)   # the gloved hand's outline: black (clothing)
                 elif v == 4 and not body: c = OUTL[4]
                 elif v == 4: c = SHOE
                 elif v in (6,7) and body: c = NECK if v == 6 else NECK2
