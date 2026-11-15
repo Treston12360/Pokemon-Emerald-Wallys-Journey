@@ -42,9 +42,41 @@ for y in range(64):
         if px[x,y][3]==0 and any(0<=x+dx<64 and 0<=y+dy<64 and px[x+dx,y+dy][3] and sum(px[x+dx,y+dy][:3])>60 for dx,dy in ((1,0),(-1,0),(0,1),(0,-1))):
             add.append((x,y))
 for p in add: px[p]=(0,0,0,255)
-img.save('copycat_64.png'); print('size',W,H,'colours',len({px[x,y] for x in range(64) for y in range(64) if px[x,y][3]}))
+img.save('copycat_64_raw.png'); print('size',W,H,'colours',len({px[x,y] for x in range(64) for y in range(64) if px[x,y][3]}))
 G=(115,197,164,255)
 v=Image.new('RGBA',(64*5+20+192+20+64,64*5),(24,24,30,255))
 b=Image.new('RGBA',(64,64),G); b.alpha_composite(img); v.paste(b.resize((320,320),Image.NEAREST),(0,0))
 v.paste(b.resize((192,192),Image.NEAREST),(340,0)); v.paste(b,(552,0))
 v.save('view.png')
+
+# --- hand clean-up after the downscale (owner 2026-11-15: "her eyes and poke ball look weird") ----------------
+# At 62 px the face is ~6 px wide, so the eyes and the ball are re-drawn by hand in the Gen 3 way:
+# eyes = dark lash line over a two-tone magenta iris with a white catch-light; ball = outlined 5-px ball.
+K=(0,0,0,255); W=(255,255,255,255); IRD=(110,24,66,255); IRL=(222,82,138,255)
+RED=(255,82,90,255); RDD=(189,41,57,255); GRY=(189,189,205,255)
+px=img.load()
+for x in (29,30,33,34): px[x,11]=K                      # lashes
+SK=px[32,13]                                              # her skin tone from the face
+for (x,y) in [(29,12),(30,12),(29,13),(30,13),(33,12),(34,12),(33,13),(34,13),(35,13)]: px[x,y]=SK
+# 2x2 eyes: dark pupil + white shine on top, magenta iris below (looking left, like the art)
+px[29,12]=IRD; px[30,12]=W; px[29,13]=IRL; px[30,13]=IRL
+px[33,12]=IRD; px[34,12]=W; px[33,13]=IRL; px[34,13]=IRL
+# Poke Ball, 6 px wide, held on top of the fist; clear the mushy old ball pixels first
+for y in range(9,16):
+    for x in range(14,22):
+        c=px[x,y]
+        if c[3] and not (c[0]>200 and 150<c[1]<215 and c[2]>120): px[x,y]=(0,0,0,0)   # keep skin (fingers)
+B=[" KKKK ",
+   "KRRRDK",
+   "KKKwKK",
+   "KWWWGK",
+   " KKKK "]
+M={'K':K,'R':RED,'D':RDD,'w':W,'W':W,'G':GRY}
+for dy,row in enumerate(B):
+    for dx,ch in enumerate(row):
+        if ch!=' ': px[15+dx,10+dy]=M[ch]
+# re-outline anything the clean-up left open
+for y in range(8,18):
+    for x in range(12,23):
+        if px[x,y][3]==0 and any(px[x+a,y+b][3] and px[x+a,y+b][:3]!=(0,0,0) for a,b in ((1,0),(-1,0),(0,1),(0,-1))): px[x,y]=K
+img.save('graphics/hicolor/trainers/copycat.png' if len(sys.argv)>3 and sys.argv[3]=='install' else 'copycat_64.png')
