@@ -572,6 +572,8 @@ typedef struct
     uint32_t lastUse;
     uint32_t season; // VoxelWorld_SeasonKey() it was baked for (DLX-17)
     uint32_t gen;    // bumped at every (re)build: meshes laid on an older one are laid again
+    uint32_t layoutGen; // POL-15: the build its slots were last placed anew; growing keeps them (MeshAtlasOk)
+    bool grow;          // POL-15: a loaded map uses metatiles it has no slot for: grown (PrepareAtlas)
     bool valid;
     uint16_t *raw[VOXEL_ATLAS_PAGES]; // POL-12: each page as composed, before VoxelGrade_Texels (tiled order)
 } Atlas;
@@ -672,27 +674,47 @@ static Atlas *FindAtlas(const VoxelMapInstance *inst)
         if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset
             && sAtlases[i].season == SeasonNow())
         {
-            if (!AtlasCovers(&sAtlases[i], inst))
-            {
-                // made again (PrepareAtlas) with every loaded map's metatiles; meshes follow by its gen
-                wj_glDeleteTextures(VOXEL_ATLAS_PAGES, sAtlases[i].tex);
-                memset(sAtlases[i].tex, 0, sizeof(sAtlases[i].tex));
-                AtlasFreeRaw(&sAtlases[i]);
-                sAtlases[i].valid = false;
-                return NULL;
-            }
+            /*
+             * POL-15 (Brennan 2026-11-15, video: from Route 110 into Mauville the whole of Route 110 went blue for
+             * over a second, then the game lagged): a map that came into reach used metatiles the atlas lacked,
+             * and the atlas was thrown away and made again - every map on its tile sets (Route 110, Mauville,
+             * 111, 117, 118 and Verdanturf share one) lost its mesh until it was laid again, one map at a time.
+             * Now, as Emerald 3DS does (ctr_voxel.c extendPending; VoxelAtlas_JobBegin's `base`), the atlas is
+             * grown instead: its slots stay where they are, so every mesh on it is still drawn while the new
+             * metatiles are added (PrepareAtlas) and the maps are laid again behind it.
+             */
+            if (!sAtlases[i].grow && !AtlasCovers(&sAtlases[i], inst))
+                sAtlases[i].grow = true;
             sAtlases[i].lastUse = sFrame;
             return &sAtlases[i];
         }
     return NULL;
 }
 
+static bool sJobGrow; // POL-15: the job grows sJobSlot (its slots kept) rather than making it anew
+
 static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
 {
     Atlas *slot = FindAtlas(inst);
 
-    if (slot != NULL)
-        return slot;
+    if (slot != NULL && (!slot->grow || (sJobSlot != NULL && sJobSlot != slot)))
+        return slot; // ready (or to be grown once the job under way is done: drawn as it is meanwhile)
+    if (slot != NULL && sJobSlot == NULL)
+    {
+        // POL-15: grow it - the same slots, the new metatiles added, every page composed again
+        if (sAtlasStaging == NULL)
+            sAtlasStaging = malloc(VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
+        if (sAtlasStaging == NULL || !VoxelAtlas_JobBegin(&sAtlasJob, inst, sAtlasStaging, &slot->map))
+        {
+            slot->grow = false; // nothing new to add after all (or no memory: drawn as it is)
+            return slot;
+        }
+        sJobSlot = slot;
+        sJobGrow = true;
+        sJobPrimary = inst->primaryTileset;
+        sJobSecondary = inst->secondaryTileset;
+        Voxel3D_Log("[3D] atlas grown for %d:%d (slot %d)", inst->mapGroup, inst->mapNum, (int)(slot - sAtlases));
+    }
     if (sJobSlot != NULL && (sJobPrimary != inst->primaryTileset || sJobSecondary != inst->secondaryTileset
                              || sJobSlot->season != SeasonNow()))
     {
@@ -721,7 +743,9 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
             return NULL;
         slot->pages = 0;
         slot->season = SeasonNow();
+        slot->grow = false;
         sJobSlot = slot;
+        sJobGrow = false;
         sJobPrimary = inst->primaryTileset;
         sJobSecondary = inst->secondaryTileset;
         Voxel3D_Log("[3D] atlas job begins for %d:%d (slot %d)", inst->mapGroup, inst->mapNum, (int)(slot - sAtlases));
@@ -745,7 +769,8 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
         if (slot->raw[sAtlasJob.page] != NULL)
             memcpy(slot->raw[sAtlasJob.page], sAtlasStaging, VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
         VoxelGrade_Texels(sAtlasStaging, VOXEL_ATLAS_PIXELS);
-        slot->tex[sAtlasJob.page] = UploadTiled(0, sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
+        // (grown: into the page's own texture, the meshes drawn from it see the same slots)
+        slot->tex[sAtlasJob.page] = UploadTiled(sJobGrow ? slot->tex[sAtlasJob.page] : 0, sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
         if (getenv("WJPC_VOXEL_DUMP") != NULL && sAtlasJob.page == 0)
         {
             char name[64];
@@ -779,6 +804,10 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
     slot->secondary = sJobSecondary;
     slot->valid = true;
     slot->gen = ++sAtlasGen;
+    if (!sJobGrow)
+        slot->layoutGen = slot->gen;
+    slot->grow = false;
+    sJobGrow = false;
     slot->lastUse = sFrame;
     return slot->primary == inst->primaryTileset && slot->secondary == inst->secondaryTileset ? slot : NULL;
 }
@@ -2203,7 +2232,7 @@ static InstanceMesh *MeshSlotFor(int mapGroup, int mapNum)
 static bool MeshAtlasOk(const InstanceMesh *m)
 {
     return m->atlas != NULL && m->atlas->valid && m->atlas->primary == m->primary && m->atlas->secondary == m->secondary
-        && m->atlasGen == m->atlas->gen;
+        && m->atlasGen >= m->atlas->layoutGen; // POL-15: laid on an earlier growth of it: the same slots
 }
 
 static float sFogNear = 40.0f, sFogFar = 90.0f;
@@ -2727,10 +2756,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             if (lacks && sBorderRemadeKey != key)
             {
                 sBorderRemadeKey = key; // once per set of maps: never a loop if a build leaves it out
-                wj_glDeleteTextures(VOXEL_ATLAS_PAGES, atlas0->tex);
-                memset(atlas0->tex, 0, sizeof(atlas0->tex));
-                AtlasFreeRaw(atlas0);
-                atlas0->valid = false;
+                atlas0->grow = true;    // (POL-15: grown, not thrown away)
             }
         }
     }
@@ -2757,7 +2783,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             uint32_t sig = VoxelBuildings_LiveSignature(inst);
             Atlas *atlas = i == 0 ? GetAtlas(inst) : FindAtlas(inst);
             bool stale = m == NULL || m->signature != sig || m->lift != inst->lift || atlas == NULL
-                      || m->atlas != atlas || !MeshAtlasOk(m);
+                      || m->atlas != atlas || !MeshAtlasOk(m)
+                      || m->atlasGen != atlas->gen || atlas->grow; // (POL-15: laid again once it has grown)
 
             if (BuildIsFor(&sBackBuild, inst))
             {
@@ -3268,7 +3295,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             MeshDraw(&sBeltTerrain[0][p], sBeltAtlas->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
         // (POL-30: the other layers, each with the atlas it was built with - not one made again since)
         for (unsigned l = 1; l < BELT_LAYERS; l++)
-            if (sBeltDrawn[l] != NULL && sBeltDrawn[l]->valid && sBeltDrawn[l]->gen == sBeltDrawnGen[l])
+            if (sBeltDrawn[l] != NULL && sBeltDrawn[l]->valid && sBeltDrawn[l]->layoutGen <= sBeltDrawnGen[l])
                 for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
                     MeshDraw(&sBeltTerrain[l][p], sBeltDrawn[l]->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
         MeshDraw(&sBeltTrees, sTreeTex, (float)sBeltShiftX, 0, (float)sBeltShiftZ);
