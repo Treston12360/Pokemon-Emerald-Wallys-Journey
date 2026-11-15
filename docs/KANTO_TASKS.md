@@ -141,8 +141,9 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       **Janine = Ghost** (owner: "Janine can be ghost"). Lineup in KANTO_PROJECT_ARIA §1. Coverage now: Ground still hits 4
       bosses (Brock, Surge, Blaine, Koga) - unavoidable with those types, so each carries an in-type Ground answer
       (Aerodactyl, Air Balloon, Charizard, Crobat/Weezing) + coverage moves; no other type hits more than 3 of 13; the
-      E4+Lance block: no type hits more than 2 of 5. **Open:** E4 room order / Sabrina's room (S-SABRINA-ROOM); Koga's lines
-      if he is no longer last; **Janine's Ghost team needs Pokémon from other regions** (Gengar is Kanto's only Ghost family) —
+      E4+Lance block: no type hits more than 2 of 5. **E4 order decided 2026-11-15: Koga → Lorelei → Bruno → Sabrina → Lance**
+      (owner: "Koga, Lorelei, Bruno, Sabrina, Lance"). To do: move the E4 trainers/scripts to their new rooms; Koga's approved
+      after-battle line "Go. The Champion awaits." no longer fits room 1 — draft a new ending (KANTO_SCRIPT L.2) for approval. **Open:** **Janine's Ghost team needs Pokémon from other regions** (Gengar is Kanto's only Ghost family) —
       proposed story reason, NOT yet approved: ghosts from elsewhere slip through the tears and she takes them in, finding
       her own path apart from her father's Poison. Before showing any team: run the coverage checker (to be written as
       tools/aria_league_coverage.py) over all Kanto boss teams.
@@ -160,10 +161,10 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       in the back), not recognisable as an existing trainer. Read `docs/SPRITING_NOTES.md` first; consider asking Treston
       for reference art (Janine/Varnell battle art came from his own art).
 - [ ] **S-SAFFRON-GYM. Redesign the Saffron Gym for the Copycat** (owner, 2026-11-15) — it is Sabrina's teleporter maze now.
-- [ ] **S-SABRINA-ROOM. New Elite Four room for Sabrina** (owner, 2026-11-15), alongside S-KOGA-ROOM.
+- [ ] **S-SABRINA-ROOM. New Elite Four room for Sabrina** (owner, 2026-11-15) — the 4th room (FireRed's dragon room, Lance's old one), alongside S-KOGA-ROOM.
       **Rule for all three (owner, 2026-11-15): before designing any map, research how people make good Gen 3 maps**
       (mapping guides, Porymap practice, well-regarded hacks) and write the findings down; don't just try.
-- [ ] **S-KOGA-ROOM. Redesign Koga's Elite Four room — later** (owner, 2026-11-15: "eventually we need 
+- [ ] **S-KOGA-ROOM. Redesign Koga's Elite Four room (now the 1st room, FireRed's ice room) — later** (owner, 2026-11-15: "eventually we need 
       [to] redesign Koga's E4 room"). Koga sits in Lance's old room (S-LEAGUE), which still has FireRed's
       dragon-themed layout. Not started, no design decided yet — ask Treston what he wants before drafting.
 - [ ] **S-ANNE. The S.S. Anne voyage** (owner, 2026-11-14): the trip from Slateport is played on the real ship —
