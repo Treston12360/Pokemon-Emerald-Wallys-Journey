@@ -42,12 +42,14 @@ for y in range(64):
         if px[x,y][3]==0 and any(0<=x+dx<64 and 0<=y+dy<64 and px[x+dx,y+dy][3] and sum(px[x+dx,y+dy][:3])>60 for dx,dy in ((1,0),(-1,0),(0,1),(0,-1))):
             add.append((x,y))
 for p in add: px[p]=(0,0,0,255)
-img.save('copycat_64_raw.png'); print('size',W,H,'colours',len({px[x,y] for x in range(64) for y in range(64) if px[x,y][3]}))
+INSTALL=len(sys.argv)>3 and sys.argv[3]=='install'
+if not INSTALL: img.save('copycat_64_raw.png')
+print('size',W,H,'colours',len({px[x,y] for x in range(64) for y in range(64) if px[x,y][3]}))
 G=(115,197,164,255)
 v=Image.new('RGBA',(64*5+20+192+20+64,64*5),(24,24,30,255))
 b=Image.new('RGBA',(64,64),G); b.alpha_composite(img); v.paste(b.resize((320,320),Image.NEAREST),(0,0))
 v.paste(b.resize((192,192),Image.NEAREST),(340,0)); v.paste(b,(552,0))
-v.save('view.png')
+if not INSTALL: v.save('view.png')   # previews only when not installing (keeps the repo clean)
 
 # --- hand clean-up after the downscale (owner 2026-11-15: "her eyes and poke ball look weird") ----------------
 # At 62 px the face is ~6 px wide, so the eyes and the ball are re-drawn by hand in the Gen 3 way:
