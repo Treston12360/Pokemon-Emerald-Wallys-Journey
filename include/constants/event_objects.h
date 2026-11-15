@@ -415,6 +415,7 @@ enum
     OBJ_EVENT_GFX_BREAKABLE_ROCK_FRLG,
     OBJ_EVENT_GFX_VARNELL, // Project ARIA: FireRed scientist recoloured for Varnell (owner-approved 2026-11-14)
     OBJ_EVENT_GFX_ARIA_TEAR, // Project ARIA: a tear (Emerald cracked floor + hole tiles, recoloured; owner-chosen 2026-11-14)
+    OBJ_EVENT_GFX_JANINE, // Project ARIA: FRLG Cooltrainer F recoloured for Janine (owner-approved v2, 2026-11-15)
     NUM_OBJ_EVENT_GFX,
 };
 
@@ -615,6 +616,7 @@ enum
 // Not a real OW palette tag; used for the white flash applied to followers
 #define OBJ_EVENT_PAL_TAG_WJ_PLAYER               0x11F0 // Wally's Journey: player outfit (RAM palette)
 #define OBJ_EVENT_PAL_TAG_VARNELL                 0x11F1 // Project ARIA: Varnell's own palette
+#define OBJ_EVENT_PAL_TAG_JANINE                  0x11F3 // Project ARIA: Janine's own palette
 #define OBJ_EVENT_PAL_TAG_ARIA_TEAR               0x11F2 // Project ARIA: tears
 #define OBJ_EVENT_PAL_TAG_WHITE                   (OBJ_EVENT_PAL_TAG_NONE - 1)
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF

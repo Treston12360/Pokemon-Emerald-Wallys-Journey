@@ -135,6 +135,9 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       (8th badge, ch. 10); Fuchsia → **Janine**; Elite Four (owner 2026-11-14): **Lorelei, Bruno, Agatha, Koga** (Koga in Lance's room);
       **Lance = Champion** in the Champion's room (replaces FireRed's Blue there). Giovanni is hidden only in the Rocket Hideout (S0 step 2); the Viridian Gym and Champion's room
       objects are untouched until this task. Mt. Moon: fossils kept (ch. 2) — Miguel's fossil scene stays.
+- [ ] **S-KOGA-ROOM. Redesign Koga's Elite Four room — later** (owner, 2026-11-15: "eventually we need 
+      [to] redesign Koga's E4 room"). Koga sits in Lance's old room (S-LEAGUE), which still has FireRed's
+      dragon-themed layout. Not started, no design decided yet — ask Treston what he wants before drafting.
 - [ ] **S-ANNE. The S.S. Anne voyage** (owner, 2026-11-14): the trip from Slateport is played on the real ship —
       explore and battle like normal (boarding puts you in 1F corridor; stepping off = Vermilion, Oak's scene).
       Its trainers get teams for a Hoenn Champion arriving in Kanto (L4 level curve) and new lines — passengers and crew talk about the anomalies, Pokémon

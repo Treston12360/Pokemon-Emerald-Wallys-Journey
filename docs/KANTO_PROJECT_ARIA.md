@@ -277,6 +277,12 @@ Proposed blocks (owner to confirm or adjust):
   `graphics/hicolor/varnell_overworld_v*_draft.png` are history only, not used.
   Build note: the PC makefile does not rebuild `src/event_object_movement.o` when only a sprite PNG
   changes — `touch src/event_object_movement.c` after changing any overworld sprite.
+- **Janine's overworld sprite — APPROVED v2 (Treston, 2026-11-15: "Sounds good" to v2 + cleanup).**
+  Official FRLG Cooltrainer F (purple ponytail) recoloured to her battle picture: indigo hair, dark purple
+  ninja suit and pants, pink hair tie, scarf (tail behind her / over the shoulder / bow at the back) and sash.
+  `OBJ_EVENT_GFX_JANINE` + `OBJ_EVENT_PAL_TAG_JANINE` (0x11F3), files `janine.png`/`janine.pal`; the Fuchsia
+  Gym leader uses it (Koga's own sprite stays for his E4 room). Tools `tools/aria_janine_overworld*.py`;
+  pictures `docs/kanto_mockups/janine_overworld_v1/v2.png`, in game `janine_overworld_v2_ingame.png` (2D left, 3D right).
 
 ## 7b. Getting Kanto into the Emerald build (findings 2026-11-13)
 

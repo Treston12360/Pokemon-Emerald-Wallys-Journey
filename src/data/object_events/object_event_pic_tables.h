@@ -1634,6 +1634,10 @@ static const struct SpriteFrameImage sPicTable_Varnell[] = {
     overworld_ascending_frames(gObjectEventPic_Varnell, 2, 4),
 };
 
+static const struct SpriteFrameImage sPicTable_Janine[] = {
+    overworld_ascending_frames(gObjectEventPic_Janine, 2, 4),
+};
+
 static const struct SpriteFrameImage sPicTable_AriaTear[] = {
     obj_frame_tiles(gObjectEventPic_AriaTear),
 };
