@@ -144,6 +144,17 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       them carries a Ground answer in-type (Aerodactyl, Air Balloon, Charizard, Crobat/Weezing) + coverage moves.
       Before showing any team: run a coverage checker over all Kanto boss teams (types hit, physical/special both ways,
       nothing carries). Type-chart search used: scratchpad script, to be added as tools/aria_league_coverage.py.
+- [ ] **S-COPYCAT. Saffron Gym -> the Copycat, Normal type** (owner by voice, 2026-11-15, with the Sabrina-to-E4
+      plan: asked who takes Sabrina's place; Copycat chosen; "we still want her to be strong" — copying is her flavour, not
+      every Pokémon). She is a little girl in FRLG; our story is after FRLG, so she is **older** (teen/young adult) and needs
+      a new overworld sprite + a battle picture (drafts shown first; research how good Gen 3 sprites are made first).
+      **Team DRAFT (owner OK'd putting it in her draft):** Mega Kangaskhan (ace, Parental Bond), Snorlax (Curse), Tauros
+      (Intimidate), Porygon-Z (Adaptability; owner: never two Porygon on one team), Blissey (special wall), Ditto
+      (Imposter, her one copying signature). Kanto families only. Moves/items/natures still to do + coverage check.
+- [ ] **S-SAFFRON-GYM. Redesign the Saffron Gym for the Copycat** (owner, 2026-11-15) — it is Sabrina's teleporter maze now.
+- [ ] **S-SABRINA-ROOM. New Elite Four room for Sabrina** (owner, 2026-11-15), alongside S-KOGA-ROOM.
+      **Rule for all three (owner, 2026-11-15): before designing any map, research how people make good Gen 3 maps**
+      (mapping guides, Porymap practice, well-regarded hacks) and write the findings down; don't just try.
 - [ ] **S-KOGA-ROOM. Redesign Koga's Elite Four room — later** (owner, 2026-11-15: "eventually we need 
       [to] redesign Koga's E4 room"). Koga sits in Lance's old room (S-LEAGUE), which still has FireRed's
       dragon-themed layout. Not started, no design decided yet — ask Treston what he wants before drafting.
