@@ -8,6 +8,9 @@ are the DLX entries in `docs/DELUXE_WORK_QUEUE.md`.
 Rules that apply here (AGENTS.md has them in full): never guess — ask Brennan; show him a PNG of every fix
 ("With all fixes send me pngs of the fixes and if there are any questions ask me"); **never tell Brennan
 anything about the Kanto story**; test on `WallysJourney.exe`; builds handed over are the whole zipped folder.
+**Test every fix in both 2D and 3D** (Treston, 2026-11-14: "Make sure you're testing everything in 2D too all fixes
+need to be checked for both"): a 3D fix must not break the 2D game, and the reverse. Say in each item which modes
+were tested (`world3d=0` / `world3d=1` in `WallysJourney.cfg`).
 
 ## The list (Brennan, 2026-11-14, his words). Three are marked "prioritize this".
 
@@ -89,6 +92,9 @@ Add under each item: what was found, what was changed, files, how to test, what 
         the first redraws. Test scripts need `WJPC_TEST_WINDOW=1`, or the 3D view is only drawn on screenshots.
       - Not measured: cost per redraw on a real GPU (a whole page is untiled and uploaded per change, every 16
         frames per atlas in view).
+      - 2D checked 2026-11-14 (`world3d=0`, Windows exe, Wine): Route 103's water moves. Same pictures, pixel for pixel, as an exe
+        built with this session's 3D files put back (only a randomly walking person differs): the fix changes
+        nothing in 2D. Picture: `docs/polish_reports/2D_check_POL-12_16_23_27.png`.
 - [ ] **POL-13. Background mountains are blocks.** "Mountains in background are blocks and not like mountains."
 - [ ] **POL-15. Route 110 into Mauville.** "Walking into mauville city from route 110 everything below disappears
       and reappears."
@@ -110,6 +116,9 @@ Add under each item: what was found, what was changed, files, how to test, what 
         stayed blue at full black - tried and dropped.
       - Tested Gamma lighting on and off: fade out, full black, fade in all even. Not tested: battle fades
         (that path is unchanged), fades to white, real GPUs.
+      - 2D checked 2026-11-14 (`world3d=0`, Windows exe, Wine): going into Oldale's Pokémon Center fades the town and the people out together, and the room in. Same pictures, pixel for pixel, as an exe
+        built with this session's 3D files put back (only a randomly walking person differs): the fix changes
+        nothing in 2D. Picture: `docs/polish_reports/2D_check_POL-12_16_23_27.png`.
 - [ ] **POL-17. Seed mounds.** "Seed mounds look like shrubs and are above the dirt."
 - [ ] **POL-18. Pokémon are flat.** "Pokemon in 3D are still 2D."
 - [ ] **POL-19. Falling leaves.** "Leaves appear only in certain areas and randomly disappear or speed up."
@@ -133,6 +142,9 @@ Add under each item: what was found, what was changed, files, how to test, what 
         Not ported: 3DS's sand "dust sheets" (`DrawBanks`) - the streaks are there, the haze layer is not.
         Not tested: weather during battle transitions; real GPUs (only Wine/llvmpipe here) - Brennan please check.
         Did not fix POL-27 by itself; that was a separate cause (see POL-27).
+      - 2D checked 2026-11-14 (`world3d=0`, Windows exe, Wine): rain, ash and Route 111's sandstorm show as before (2D rain looked sparse with the forced test weather after ~3 s - the same in the older exe, not looked into). Same pictures, pixel for pixel, as an exe
+        built with this session's 3D files put back (only a randomly walking person differs): the fix changes
+        nothing in 2D. Picture: `docs/polish_reports/2D_check_POL-12_16_23_27.png`.
 - [ ] **POL-24. Route 112 into Lavaridge.** "Route 112 into lavaridge town rocks in background appear and then level."
 - [ ] **POL-26. Rustboro lights blink.** "Lights in rustboro city blink in and out while walking."
 - [x] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
@@ -150,6 +162,9 @@ Add under each item: what was found, what was changed, files, how to test, what 
       - Cost: one atlas rebuild the first time a new metatile appears (a short hitch, like entering a map); the
         map's cells are re-scanned only on frames the grid changed. Not measured on a real GPU.
       - The ash puff sprite itself and the ash weather (POL-23) were already fine; the boxes were the ground.
+      - 2D checked 2026-11-14 (`world3d=0`, Windows exe, Wine): walking through Route 113's ash leaves the plain grass, as the game always did. Same pictures, pixel for pixel, as an exe
+        built with this session's 3D files put back (only a randomly walking person differs): the fix changes
+        nothing in 2D. Picture: `docs/polish_reports/2D_check_POL-12_16_23_27.png`.
 - [ ] **POL-28. Petalburg Woods black lines.** "Bunch of black lines inside of petalburg woods."
 - [x] **POL-29. Separate music and gameplay volume.** "Add a feature in the volume setting to differentiate music
       volume and gameplay volume incase you want to turn off music but keep gameplay audio." Done 2026-11-14
@@ -165,6 +180,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
         -> the town music with no menu sounds; both 10 -> same as before. The rows change and save (`musicVolume=7`).
       - Not tested in the Windows exe yet (same code).
 
+      - 2D/3D: the volume code has no 2D or 3D path (it mixes the sound itself), so it is the same in both.
 - [ ] **POL-30. Backdrop changes between routes, everywhere** (Brennan, 2026-11-14, later the same day): "Also fix
       the background in every route as it is changing from one background to the other when going to and from
       routes." The general case of POL-15, POL-21 and POL-24 (and DLX-25, which fixed Dewford's): check every
