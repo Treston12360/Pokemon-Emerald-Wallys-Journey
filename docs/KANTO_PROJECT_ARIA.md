@@ -269,6 +269,14 @@ Proposed blocks (owner to confirm or adjust):
   "Red Alert" (ARIA firing) — palette swap is a live story trigger, plus a breathing pulse on the tanks.
 - Varnell's sprite: an existing scientist/gentleman sprite with a new palette unless a free outside sprite
   is approved.
+- **Varnell's overworld sprite — APPROVED v7 (Treston, 2026-11-15: "Looks good that is his new sprite").**
+  A frankensprite of official Gen 3 parts (Steven's hair on top, the Scientist's face/glasses/coat below),
+  recoloured and cleaned by hand-picked ramps. In game: `graphics/object_events/pics/people/varnell.png`
+  + `graphics/object_events/palettes/varnell.pal` (14 colours). Builder: `tools/aria_varnell_overworld_franken.py`;
+  picture `docs/kanto_mockups/varnell_overworld_v7_ingame.png` (2D left, 3D right). Drafts v4–v6 and
+  `graphics/hicolor/varnell_overworld_v*_draft.png` are history only, not used.
+  Build note: the PC makefile does not rebuild `src/event_object_movement.o` when only a sprite PNG
+  changes — `touch src/event_object_movement.c` after changing any overworld sprite.
 
 ## 7b. Getting Kanto into the Emerald build (findings 2026-11-13)
 
