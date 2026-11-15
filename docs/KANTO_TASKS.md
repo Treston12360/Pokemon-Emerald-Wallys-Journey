@@ -136,14 +136,16 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       **Lance = Champion** in the Champion's room (replaces FireRed's Blue there). Giovanni is hidden only in the Rocket Hideout (S0 step 2); the Viridian Gym and Champion's room
       objects are untouched until this task. Mt. Moon: fossils kept (ch. 2) — Miguel's fossil scene stays.
 - [ ] **S-LEAGUE2. Kanto boss type coverage rework** (owner, 2026-11-15: "max coverage ... there shouldn't be one kind
-      of Pokemon or typing that can just carry somebody through"). **Decided:** Blue = Flying Gym (Viridian, Mega Pidgeot);
-      Blue's title-defense fight uses his real Blastoise team. **Proposed, waiting for Treston:** only one Poison (Koga
-      or Janine changes type); Agatha leaves the E4; promote a Gym Leader to the E4 (math favours Sabrina or Misty);
-      a new Gym in the promoted leader's city; best extra types Ghost + Normal (Ghost needs a Kanto-rule exception; Ground
-      is the Kanto-only alternative). Ground hits 4 bosses whatever we do (Brock/Surge/Blaine/Poison) -> every one of
-      them carries a Ground answer in-type (Aerodactyl, Air Balloon, Charizard, Crobat/Weezing) + coverage moves.
-      Before showing any team: run a coverage checker over all Kanto boss teams (types hit, physical/special both ways,
-      nothing carries). Type-chart search used: scratchpad script, to be added as tools/aria_league_coverage.py.
+      of Pokemon or typing that can just carry somebody through"). **Decided 2026-11-15:** Blue = Flying Gym (Mega Pidgeot),
+      his title defense = real Blastoise team; Sabrina promoted to the E4 (Agatha out); Copycat = Normal Saffron Gym;
+      **Janine = Ghost** (owner: "Janine can be ghost"). Lineup in KANTO_PROJECT_ARIA §1. Coverage now: Ground still hits 4
+      bosses (Brock, Surge, Blaine, Koga) - unavoidable with those types, so each carries an in-type Ground answer
+      (Aerodactyl, Air Balloon, Charizard, Crobat/Weezing) + coverage moves; no other type hits more than 3 of 13; the
+      E4+Lance block: no type hits more than 2 of 5. **Open:** E4 room order / Sabrina's room (S-SABRINA-ROOM); Koga's lines
+      if he is no longer last; **Janine's Ghost team needs Pokémon from other regions** (Gengar is Kanto's only Ghost family) —
+      proposed story reason, NOT yet approved: ghosts from elsewhere slip through the tears and she takes them in, finding
+      her own path apart from her father's Poison. Before showing any team: run the coverage checker (to be written as
+      tools/aria_league_coverage.py) over all Kanto boss teams.
 - [ ] **S-COPYCAT. Saffron Gym -> the Copycat, Normal type** (owner by voice, 2026-11-15, with the Sabrina-to-E4
       plan: asked who takes Sabrina's place; Copycat chosen; "we still want her to be strong" — copying is her flavour, not
       every Pokémon). She is a little girl in FRLG; our story is after FRLG, so she is **older** (teen/young adult) and needs
