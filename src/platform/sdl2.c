@@ -604,9 +604,9 @@ static bool PrepareGameTarget(int w, int h, int k)
 }
 
 // ---- Zoom (overworld, like gen1recomp) ----------------------------------------------
-// Each zoom level is how many world pixels tall the view should be. The map is always a whole
-// number of screen pixels per game pixel (sharp) and always fills the screen edge to edge: the
-// view is made as big as the screen holds at that size. Keys - and =, or the mouse wheel.
+// Each zoom level specifies a target view height, with nearest-neighbour sampling to
+// preserve hard pixel edges even at fractional output scale. The view fills the screen,
+// within the PC wide-view buffer capacity. Keys - and =, or the mouse wheel.
 static const u16 sZoomHeights[] = {120, 144, 162, 180, 216, 240, 270, 324};
 #define ZOOM_COUNT ARRAY_COUNT(sZoomHeights)
 static float sFieldZ = 1.0f;
