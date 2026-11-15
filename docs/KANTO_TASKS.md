@@ -157,6 +157,8 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       **Sprites (2026-11-15):** overworld draft OK'd ("her ingame sprite looks good": FRLG Lass recoloured, pink hair,
       straight bangs + long sides, white top/red skirt — `tools/aria_copycat_sprites.py`). **Battle picture: all four
       drafts rejected** (v1/v2 too close to the Lass, v3 "looks like shit", v4 "looks awful") — parked, come back later
+      **RESOLVED 2026-11-15: Treston supplied the battle art himself** (`docs/kanto_art/copycat_battle_art_owner.png`) ->
+      `TRAINER_PIC_COPYCAT`, full body 62 px, via `tools/aria_copycat_from_art.py` + graphics/hicolor. **She needs a name** (owner).
       (owner: "let's move on and return to this later"). Wanted: Hinata-style hair (blunt bangs, long side strands, long
       in the back), not recognisable as an existing trainer. Read `docs/SPRITING_NOTES.md` first; consider asking Treston
       for reference art (Janine/Varnell battle art came from his own art).

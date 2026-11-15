@@ -4,3 +4,5 @@
 # Owner-approved battle pictures (2026-11-14): his art at its own pixel size, 64x64, cut at the knees.
 graphics/hicolor/trainers/janine.png   graphics/trainers/front_pics/janine.png   new:graphics/trainers/palettes/janine.pal
 graphics/hicolor/trainers/varnell.png  graphics/trainers/front_pics/varnell.png  new:graphics/trainers/palettes/varnell.pal
+# Owner's art for the Copycat (2026-11-15): docs/kanto_art/copycat_battle_art_owner.png -> tools/aria_copycat_from_art.py (full body, 62 px tall)
+graphics/hicolor/trainers/copycat.png  graphics/trainers/front_pics/copycat.png  new:graphics/trainers/palettes/copycat.pal

@@ -403,6 +403,8 @@ const u32 gTrainerFrontPic_Janine[] = INCGFX_U32("graphics/trainers/front_pics/j
 const u16 gTrainerPalette_Janine[] = INCGFX_U16("graphics/trainers/palettes/janine.pal", ".gbapal");
 const u32 gTrainerFrontPic_Varnell[] = INCGFX_U32("graphics/trainers/front_pics/varnell.png", ".4bpp.smol");
 const u16 gTrainerPalette_Varnell[] = INCGFX_U16("graphics/trainers/palettes/varnell.pal", ".gbapal");
+const u32 gTrainerFrontPic_Copycat[] = INCGFX_U32("graphics/trainers/front_pics/copycat.png", ".4bpp.smol");
+const u16 gTrainerPalette_Copycat[] = INCGFX_U16("graphics/trainers/palettes/copycat.pal", ".gbapal");
 const u32 gTrainerFrontPic_LeaderKogaFrlg[] = INCGFX_U32("graphics/trainers/front_pics/leader_koga_frlg.png", ".4bpp.smol");
 const u16 gTrainerPalette_LeaderKogaFrlg[] = INCGFX_U16("graphics/trainers/palettes/leader_koga_frlg.pal", ".gbapal");
 
@@ -1247,5 +1249,9 @@ const struct TrainerPicInfo gTrainerPicInfo[TRAINER_PIC_COUNT] =
     [TRAINER_PIC_VARNELL] =
     {
         .frontPic = TRAINER_FRONT_PIC(gTrainerFrontPic_Varnell, gTrainerPalette_Varnell),
+    },
+    [TRAINER_PIC_COPYCAT] =
+    {
+        .frontPic = TRAINER_FRONT_PIC(gTrainerFrontPic_Copycat, gTrainerPalette_Copycat),
     },
 };
