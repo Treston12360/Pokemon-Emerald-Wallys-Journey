@@ -238,6 +238,14 @@ Add under each item: what was found, what was changed, files, how to test, what 
         lantern's front face, as VoxelSign_EmitNight) and stood just in front of it. Lamps with no 3DS lantern data
         keep the screen placement, moved a tile towards the camera along the line of sight. Not handled: maps
         with eased rows / raised bases (z stretch) - Rustboro is flat. Picture updated: POL-26b_lamps.png.
+      - Treston, 2026-11-15: "Still doesn't look good, maybe it's too low, and also idk like look at how the 2D
+        looks". Three differences from 2D fixed: (1) the glow's centre is now the 2D game's (the head cell's middle,
+        6 px under its top: SpawnLightSprite x + 8, y + 22 - 16), not the glass; (2) the lantern's glass is lit as
+        Emerald 3DS lights it (VoxelSign_EmitNight glass, LampTexEnv 255,191,107 at alpha 220/255; mode 5), as the 2D
+        lamp's glass turns yellow at night; (3) with Gamma lighting the glows are drawn over the finished picture
+        (after PostFinish, with the scene's depth sHdrDepth on the output), as the GBA blends over its finished
+        picture - added to the linear light before the tone curve they washed the lamp head out. Picture:
+        POL-26b_lamps.png (2D vs 3D, close-ups Gamma on/off).
 - [x] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
       not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
       - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-27_ash_trail_fixed.png`.

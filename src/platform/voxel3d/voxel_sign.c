@@ -202,11 +202,14 @@ static void LampGround(VoxelBuilder *builder, const VoxelMapInstance *inst,
 }
 
 /*
- * POL-26b (PC): the middle of the lit glass of the lantern standing at world cell (cellX, cellZ), where
- * VoxelSign_EmitNight puts it (head rows 6..10, columns trimmed by 2, on the lantern's front face): x, height over
- * the ground (lift added), z. False: no 3DS lantern there.
+ * POL-26b (PC): the lantern standing at world cell (cellX, cellZ) (its post's cell; the head is drawn in the cell
+ * north). Out: where the 2D game centres the lamp's glow - the middle of the head's cell across, 6 px down from its
+ * top (event_object_movement.c SpawnLightSprite: x + 8, y + 22 - 16) - as x, height (base and lift added) and the
+ * lantern's front face z. With `glass`, its lit glass too, as VoxelSign_EmitNight lays it (Emerald 3DS). False: no
+ * 3DS lantern there.
  */
-bool VoxelSign_LanternGlass(const VoxelMapInstance *inst, int cellX, int cellZ, float *x, float *y, float *z)
+bool VoxelSign_LanternGlass(const VoxelMapInstance *inst, int cellX, int cellZ, float *x, float *y, float *z,
+                            VoxelBuilder *glass)
 {
     if (inst == NULL || inst->indoor || !LoadMasks())
         return false;
@@ -217,23 +220,48 @@ bool VoxelSign_LanternGlass(const VoxelMapInstance *inst, int cellX, int cellZ, 
         if (record->layout != inst->layoutId || xpos != cellX || zpos != cellZ || !VoxelSign_IsLantern(record->head)
             || VoxelRegions_RoleAt(inst->layoutId, record->x, record->y) != VOXEL_ROLE_SIGNPOST)
             continue;
-        int last = 16, left = 16, right = -1;
+        int last = 16;
         for (unsigned row = 0; row < 16; ++row)
             if (record->rows[row] != 0)
                 last = (int)row + 16;
-        for (unsigned row = 6; row < 11; ++row)
-            for (int col = 2; col < 14; ++col)
-                if ((record->head[row] & (1u << col)) != 0)
-                {
-                    left = col < left ? col : left;
-                    right = col > right ? col : right;
-                }
-        if (left > right)
-            return false;
         float back = zpos - 1 + (last / 8) * 0.5f + 0.25f - VOXEL_SIGN_PINNED_DEPTH / 32.0f;
-        *x = xpos + (left + right + 1) / 32.0f;
-        *y = VoxelRelief_Base(inst) + VoxelRelief_CellLift(inst, xpos, zpos) + (last - 8) / 16.0f + 1.0f / 32.0f;
-        *z = back + VOXEL_SIGN_PINNED_DEPTH / 16.0f;
+        float front = back + VOXEL_SIGN_PINNED_DEPTH / 16.0f;
+        /* mask row r's bottom edge stands (last - r) / 16 over the ground (EmitNight): the head's top edge is at
+         * (last + 1) / 16, 6 px under it (last - 5) / 16 */
+        *x = xpos + 0.5f;
+        *y = VoxelRelief_Base(inst) + VoxelRelief_CellLift(inst, xpos, zpos) + (last - 5) / 16.0f;
+        *z = front;
+        if (glass != NULL)
+        {
+            /* as VoxelSign_EmitNight, this lantern only */
+            glass->base = VoxelRelief_Base(inst);
+            glass->lift = VoxelRelief_CellLift(inst, xpos, zpos);
+            glass->shift = VoxelRelief_CellShift(inst, xpos, zpos);
+            for (unsigned row = 6; row < 11; ++row)
+            {
+                unsigned bits = record->head[row];
+                int left = 0, right = 15;
+                while (left < 16 && (bits & (1u << left)) == 0)
+                    ++left;
+                while (right >= left && (bits & (1u << right)) == 0)
+                    --right;
+                left += 2;
+                right -= 2;
+                if (left > right || glass->capacity - glass->count < 12u)
+                    continue;
+                float leftX = xpos + left / 16.0f, rightX = xpos + (right + 1) / 16.0f;
+                float bottom = (last - (int)row) / 16.0f, top = bottom + 1.0f / 16.0f;
+                for (unsigned face = 0; face < 2; ++face)
+                {
+                    float depth = face == 0 ? front : back;
+                    VoxelBuilder_Quad(glass,
+                        &(VoxelVertex){leftX, bottom, depth, 0.0f, 0.0f, 1.0f},
+                        &(VoxelVertex){rightX, bottom, depth, 0.0f, 0.0f, 1.0f},
+                        &(VoxelVertex){rightX, top, depth, 0.0f, 0.0f, 1.0f},
+                        &(VoxelVertex){leftX, top, depth, 0.0f, 0.0f, 1.0f});
+                }
+            }
+        }
         return true;
     }
     return false;

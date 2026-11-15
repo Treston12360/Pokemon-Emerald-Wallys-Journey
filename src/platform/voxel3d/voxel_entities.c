@@ -1649,12 +1649,13 @@ static unsigned GatherStandIns(const VoxelCamera *camera, uint16_t *atlas, bool 
  * to a builder of their own, drawn blended as the GBA blends them (voxel_gl.c), and every lamp ball also gets
  * Emerald 3DS's pool of light on the ground (voxel_sign.c LampGround). NULL: drawn with the other cards.
  */
-static VoxelBuilder *sGlowBuilder, *sPoolBuilder;
+static VoxelBuilder *sGlowBuilder, *sPoolBuilder, *sGlassBuilder;
 
-void VoxelEntities_SetLampBuilders(VoxelBuilder *glows, VoxelBuilder *pools)
+void VoxelEntities_SetLampBuilders(VoxelBuilder *glows, VoxelBuilder *pools, VoxelBuilder *glass)
 {
     sGlowBuilder = glows;
     sPoolBuilder = pools;
+    sGlassBuilder = glass; /* the 3DS's lit lantern glass (VoxelSign_LanternGlass) */
 }
 
 unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelCamera *camera,
@@ -2065,9 +2066,11 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
 
                 /* Treston, 2026-11-15: "The lights look like it's behind the lamp in 3d". Placed from the screen,
                  * the glow's card stood about half a tile north of the lamp and up-left of its head, the lamp's
-                 * 3D model in front of it. The lamp is Emerald 3DS's lantern (sign data): the glow is centred
-                 * where the 3DS lights its glass (VoxelSign_LanternGlass) and stands just in front of it. */
-                if (ball && VoxelSign_LanternGlass(lampInst, (int)floorf(px), (int)floorf(pz), &gx, &gy, &gz))
+                 * 3D model in front of it. The lamp is Emerald 3DS's lantern (sign data): the glow stands just in
+                 * front of it, centred where the 2D game centres it on the lamp's head (then: "Still doesn't look
+                 * good, maybe it's too low ... look at how the 2D looks"), and the lantern's glass is lit as the
+                 * 3DS lights it (VoxelSign_LanternGlass), as the 2D lamp's glass turns yellow at night. */
+                if (ball && VoxelSign_LanternGlass(lampInst, (int)floorf(px), (int)floorf(pz), &gx, &gy, &gz, sGlassBuilder))
                 {
                     /* the card shows the slot's top VisibleRows rows, its bottom at the lift; the glow's middle
                      * is the sprite's middle row, (rows - height / 2) pixels above that bottom */
