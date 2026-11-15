@@ -151,6 +151,12 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       **Team DRAFT (owner OK'd putting it in her draft):** Mega Kangaskhan (ace, Parental Bond), Snorlax (Curse), Tauros
       (Intimidate), Porygon-Z (Adaptability; owner: never two Porygon on one team), Blissey (special wall), Ditto
       (Imposter, her one copying signature). Kanto families only. Moves/items/natures still to do + coverage check.
+      **Sprites (2026-11-15):** overworld draft OK'd ("her ingame sprite looks good": FRLG Lass recoloured, pink hair,
+      straight bangs + long sides, white top/red skirt — `tools/aria_copycat_sprites.py`). **Battle picture: all four
+      drafts rejected** (v1/v2 too close to the Lass, v3 "looks like shit", v4 "looks awful") — parked, come back later
+      (owner: "let's move on and return to this later"). Wanted: Hinata-style hair (blunt bangs, long side strands, long
+      in the back), not recognisable as an existing trainer. Read `docs/SPRITING_NOTES.md` first; consider asking Treston
+      for reference art (Janine/Varnell battle art came from his own art).
 - [ ] **S-SAFFRON-GYM. Redesign the Saffron Gym for the Copycat** (owner, 2026-11-15) — it is Sabrina's teleporter maze now.
 - [ ] **S-SABRINA-ROOM. New Elite Four room for Sabrina** (owner, 2026-11-15), alongside S-KOGA-ROOM.
       **Rule for all three (owner, 2026-11-15): before designing any map, research how people make good Gen 3 maps**
