@@ -2849,6 +2849,22 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 sBeltY = cy;
                 sBeltShiftX = sBeltShiftZ = 0;
                 sBeltRedo = false;
+                // POL-30 test aid: WJPC_BELT_TABLE=file - the belt round the player as cells (map-relative x y,
+                // metatile, height), appended at every full build, to compare one map's view with the next's.
+                if (getenv("WJPC_BELT_TABLE") != NULL)
+                {
+                    FILE *f = fopen(getenv("WJPC_BELT_TABLE"), "a");
+                    if (f != NULL)
+                    {
+                        int px = (int)floorf(playerX), py = (int)floorf(playerZ), mt, h;
+                        fprintf(f, "MAP %d %d %d %d\n", inst0->mapGroup, inst0->mapNum, px - inst0->originX, py - inst0->originY);
+                        for (int y = py - 36; y <= py + 36; y++)
+                            for (int x = px - 36; x <= px + 36; x++)
+                                if (VoxelWorld_GetInstanceAt(x, y) == NULL && VoxelMesh_BeltCell(x, y, &mt, &h))
+                                    fprintf(f, "%d %d %d %d\n", x - inst0->originX, y - inst0->originY, mt, h);
+                        fclose(f);
+                    }
+                }
             }
             else
             {

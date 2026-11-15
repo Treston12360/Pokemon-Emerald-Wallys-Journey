@@ -2683,6 +2683,68 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
         return false;
     *level = VoxelRelief_CellLift(ring, ex, ey);
     *shift = VoxelRelief_CellShift(ring, ex, ey);
+    /*
+     * POL-30: between two maps whose edges stand at different heights (Lavaridge's north cliff and Route 112's
+     * west slope) the belt took the nearer one's and stood a tall wall where the two halves met. Every loaded
+     * map's nearest edge now pulls on the cell, the nearer the stronger (1 / distance cubed): beside a map the
+     * belt still meets that map's edge, and between maps it goes from one height to the other in small steps.
+     * WJPC_BELT_NO_BLEND=1: the nearest map's alone, to compare.
+     */
+    {
+        static int sBlend = -1;
+        float sumW = 0.0f, sumH = 0.0f, sumS = 0.0f;
+
+        if (sBlend < 0)
+            sBlend = getenv("WJPC_BELT_NO_BLEND") == NULL;
+        for (unsigned i = 0; sBlend && i < VoxelWorld_InstanceCount(); ++i)
+        {
+            const VoxelMapInstance *m = VoxelWorld_Instance(i);
+            int mx, my, dx, dy, d;
+            float w, h = 0.0f, sh = 0.0f;
+
+            if (m == NULL || m->layout == NULL || m->indoor || VoxelRelief_Belt(m) != 0)
+                continue;
+            mx = x < m->originX ? m->originX : x >= m->originX + m->width ? m->originX + m->width - 1 : x;
+            my = y < m->originY ? m->originY : y >= m->originY + m->height ? m->originY + m->height - 1 : y;
+            dx = x > mx ? x - mx : mx - x;
+            dy = y > my ? y - my : my - y;
+            d = dx > dy ? dx : dy;
+            if (d < 1)
+                d = 1;
+            if (VoxelMesh_Classify(mx, my) != VOXEL_SHAPE_WATER)
+            {
+                h = VoxelRelief_CellLift(m, mx, my);
+                sh = VoxelRelief_CellShift(m, mx, my);
+            }
+            w = 1.0f / ((float)d * (float)d * (float)d);
+            sumW += w;
+            sumH += w * (h + VoxelRelief_Base(m));
+            sumS += w * sh;
+        }
+        if (sumW > 0.0f)
+        {
+            *level = sumH / sumW - VoxelRelief_Base(ring);
+            *shift = sumS / sumW;
+        }
+    }
+    return true;
+}
+
+/* POL-30 test aid (WJPC_BELT_TABLE, voxel_gl.c): what stands at a cell of the belt - its metatile, and its top's
+ * height over the world's zero in 1/16 tile (water: its surface). FALSE: not a belt cell. */
+bool VoxelMesh_BeltCell(int x, int y, int *metatile, int *height16)
+{
+    float level, shift;
+
+    if (!BorderAt(x, y))
+        return false;
+    *metatile = VoxelWorld_BorderMetatile(x, y);
+    if (!BorderWaterLevel(x, y, &level, &shift))
+    {
+        VoxelMesh_BorderLevel(x, y, &level, &shift);
+        level += (float)VOXEL_BORDER_COURSES;
+    }
+    *height16 = (int)floorf((level + BeltBase(x, y)) * 16.0f + 0.5f);
     return true;
 }
 
@@ -2766,12 +2828,22 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
         other += BeltBase(nx, ny) - BeltBase(x, y); /* POL-30: over this cell's base */
         if (other >= level - 0.05f)
             continue;
-        if (d == 0)
-            VoxelMesh_South(builder, (float)x, (float)y + shift, other, level, 0.0f, u0, v0, u1, v1);
-        else if (d == 1)
-            VoxelMesh_East(builder, (float)x, (float)y + shift, other, level, 0.0f, u0, v0, u1, v1);
-        else
-            VoxelMesh_West(builder, (float)x, (float)y + shift, other, level, 0.0f, u0, v0, u1, v1);
+        /* POL-30: a tile a level, as EmitBorderNorth's wall - one drawing pulled over a tall step was streaks
+         * (the belt rising behind Lavaridge to Route 112's slope) */
+        for (float band = floorf(other); band < level; band += 1.0f)
+        {
+            float h0 = fmaxf(other, band), h1 = fminf(level, band + 1.0f);
+            float vb = v1 + (v0 - v1) * (h0 - band), vt = v1 + (v0 - v1) * (h1 - band);
+
+            if (h1 <= h0)
+                continue;
+            if (d == 0)
+                VoxelMesh_South(builder, (float)x, (float)y + shift, h0, h1, 0.0f, u0, vt, u1, vb);
+            else if (d == 1)
+                VoxelMesh_East(builder, (float)x, (float)y + shift, h0, h1, 0.0f, u0, vt, u1, vb);
+            else
+                VoxelMesh_West(builder, (float)x, (float)y + shift, h0, h1, 0.0f, u0, vt, u1, vb);
+        }
     }
     if (VoxelWorld_GetInstanceAt(x, y - 1) == NULL)
     {
