@@ -18,5 +18,6 @@ def recolor(path, mapping, keep=lambda x,y,i:False):
 bp=recolor(R+'trainers/front_pics/lass_frlg.png',{11:PINK[1],10:PINK[2],9:PINK[3]},keep=lambda x,y,i:i==9 and y>=56)
 bp.save('ccB_battle.png')
 # overworld: hair 6,7 + its outline 13; dress 8,9,10 -> blue
-ow=recolor(R+'object_events/pics/people/lass_frlg.png',{6:PINK[1],7:PINK[2],13:PINK[3],8:(148,197,246),9:(74,123,205),10:(41,57,115)})
+# ribbon (11,12) made blue to match the battle picture's blue hair tie
+ow=recolor(R+'object_events/pics/people/lass_frlg.png',{6:PINK[1],7:PINK[2],13:PINK[3],8:(148,197,246),9:(74,123,205),10:(41,57,115),11:(65,172,213),12:(65,106,164)})
 ow.save('ccB_ow.png')
