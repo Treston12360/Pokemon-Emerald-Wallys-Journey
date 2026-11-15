@@ -19,6 +19,13 @@ Add under each item: what was found, what was changed, files, how to test, what 
 
 - [~] **POL-11 (PRIORITY). Freezing in 3D.** "There's freezing and pausing when in 3D making the whole game stop
       for a second or two then start again." (Claude 014PwRDj, 2026-11-14, in work together with POL-14)
+      - **Taken over by Claude 019khs4X, 2026-11-15 (Treston: "Yea you can take over"; 014PwRDj had pushed nothing
+        on it for ~11 hours).** Lead: Brennan's `WallysJourney_errors.txt` (below, "Files Brennan sent") lists four
+        callbacks the NULL guard (src/platform/null_guard.c) skipped. The guard logs each callback ONCE, but a
+        broken sprite / task / vblank callback runs every frame: the guard may be catching a fault 60-144 times a
+        second, and Windows exception handling is slow - a possible cause of "freezing and pausing" and of the
+        crash after "a lot of skipping". Not proven yet. His build is unknown (save made after fc0c34d283,
+        11-13 15:35; report 11-14 15:45: ~26 code commits), so the addresses are not resolved.
       - Not reproduced yet. Stress run in Wine + Xvfb (software GL), Gamma lighting off, the shipped `pc_data/voxel`,
         a late-game save, script = warp to each of the 56 outdoor Hoenn maps and walk a square (`WJPC_TEST_NO_BATTLES=1
         WJPC_3D=1 WJPC_VOXEL_LOG=1 WJPC_TEST_WINDOW=1`): 26,000 frames, 45+ warps, worst frame 77 ms of map/belt
