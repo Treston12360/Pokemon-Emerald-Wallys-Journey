@@ -343,8 +343,11 @@ static void EmitSmallCell(VoxelBuilder *builder, const VoxelMapInstance *inst, i
     EmitGround(builder, inst, x, y, TEX_U(tx), TEX_V(ty), TEX_U(tx + 16), TEX_V(ty + 16));
     builder->rounded = true;
     VoxelBuilder_Quad(builder,
-        &(VoxelVertex){wx,        baseHeight + rise, baseZ - run, TEX_U(cx),      TEX_V(cy),      1.0f},
-        &(VoxelVertex){wx + 1.0f, baseHeight + rise, baseZ - run, TEX_U(cx + 16), TEX_V(cy),      1.0f},
+        /* POL (Brennan 2026-11-15: "a white line going across the top of the trees", Route 111): the card's top
+         * edge read the row of the tree texture over its own art (another tree's foot) wherever a screen row
+         * fell right on the edge - a thin light line over a whole row of crowns. A quarter texel inside. */
+        &(VoxelVertex){wx,        baseHeight + rise, baseZ - run, TEX_U(cx),      TEX_V(cy + 0.25f), 1.0f},
+        &(VoxelVertex){wx + 1.0f, baseHeight + rise, baseZ - run, TEX_U(cx + 16), TEX_V(cy + 0.25f), 1.0f},
         &(VoxelVertex){wx + 1.0f, baseHeight,        baseZ,       TEX_U(cx + 16), TEX_V(cy + 32), 1.0f},
         &(VoxelVertex){wx,        baseHeight,        baseZ,       TEX_U(cx),      TEX_V(cy + 32), 1.0f});
     builder->rounded = false;
@@ -403,8 +406,9 @@ static void EmitCrownCard(VoxelBuilder *builder, const LargeArt *art, int x, int
     float wx = (float)x, wz = (float)y;
     float u0 = (art->crownX + col * 16.0f) / VOXEL_TREE_TEXTURE_DIM;
     float u1 = u0 + 16.0f / VOXEL_TREE_TEXTURE_DIM;
-    float v0 = 1.0f - (art->crownY + row * (float)art->rowPx) / VOXEL_TREE_TEXTURE_DIM;
-    float v1 = v0 - (float)art->rowPx / VOXEL_TREE_TEXTURE_DIM;
+    /* (a quarter texel inside at the very top, as the small tree's card: EmitSmallCell) */
+    float v0 = 1.0f - (art->crownY + row * (float)art->rowPx + (row == 0 ? 0.25f : 0.0f)) / VOXEL_TREE_TEXTURE_DIM;
+    float v1 = 1.0f - (art->crownY + (row + 1) * (float)art->rowPx) / VOXEL_TREE_TEXTURE_DIM;
     /* The crown keeps its aspect ratio: width 2, length 2.25 tiles for the
      * large tree's 32:36, 2 for the secret base's 32:32. sin/cos(50
      * degrees), fixed in the world rather than camera billboarding.
