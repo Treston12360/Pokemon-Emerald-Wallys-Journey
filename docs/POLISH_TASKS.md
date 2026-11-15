@@ -204,6 +204,14 @@ Add under each item: what was found, what was changed, files, how to test, what 
         also keeps its cloud shadows at night (see the picture).
         **Treston, 2026-11-15: "Do it like the 3DS"** - sun effects fade at night and soft moonlight comes in, as
         Emerald 3DS does it, even though 2D keeps its cloud shadows.
+      - Step 2 done 2026-11-15: `voxel_world.c` `VoxelWorld_NightLight` = the 3DS's curves exactly (3ds_daynight.c
+        CtrDayNight_At daylight + glow keys, SunAt strength in 15-minute steps 04:00-20:00, Moonlight 0.06 x glow^2
+        towards 70,92,136) on the game clock. `voxel_gl.c` (outdoors, world only - not the people, as 3DS
+        TerrainTexEnv): Gamma's cloud shadows x daylight; with less sun every face is lit as the ground is and the
+        baked shade fades (the 3DS's ambient -> 1 with no sun); then the moon mix. Gamma's sun direction is kept
+        (the 3DS moves its sun; ours is Gamma's fixed one). Off switch: `WJPC_3D_NO_NIGHT_LIGHT=1`.
+        Picture: `docs/polish_reports/POL-26b_step2_night_sun_moon.png` (10 PM and 6:30 PM 3D, before/after).
+        Tested 1 PM, 6:30 PM, 10 PM, 3D and 2D: 2D all three and 3D 1 PM pixel-identical to before.
       - Lamps: the 2D game's lamp-glow sprites show in 3D as flat yellow discs that pop in and out.
         **Treston, 2026-11-15: "Yes, take it over"** - Claude 019khs4X takes `voxel_entities.c` over from 014PwRDj
         for the lamps and draws them the way Emerald 3DS does (UpdateNightLamps).

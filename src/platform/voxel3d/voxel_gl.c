@@ -195,6 +195,7 @@ static GLuint sProgram;
 static GLint sUniUnfade; // POL-16
 static GLint sUniTintMul, sUniTintAdd, sUniHazeMul; // POL-26b
 static GLint sUniGlowStrength, sUniGlowLin; // POL-26b: lit windows
+static GLint sUniNight, sUniMoon, sUniMoonLin; // POL-26b step 2: the 3DS's night light
 #define GLOW_UNIT 1 // texture unit of a building page's window mask
 static float sTintMul[3] = {1, 1, 1}, sTintAdd[3]; // POL-26b: this frame's time-of-day colour (world)
 static GLint sUniMode, sUniAlphaMin, sUniMvp, sUniOrigin, sUniTex, sUniFade, sUniFog, sUniFogColor, sUniCam;
@@ -280,7 +281,13 @@ static const char *sFragmentSrc =
     // mask x strength). glowLin is that colour in the Gamma path's linear light (see Voxel3D_Render).
     "uniform sampler2D glowTex;\n"
     "uniform float glowStrength;\n"
-    "uniform vec3 glowLin;\n" // POL-26b: the 2D time-of-day colour (world), the haze's too
+    "uniform vec3 glowLin;\n"
+    // POL-26b step 2, Emerald 3DS at night (ctr_voxel.c LightFor / TerrainTexEnv, 3ds_daynight.c): x daylight
+    // (dapples - here Gamma's cloud shadows - scale by it), y sun strength (no sun: the 3DS's ambient goes to 1,
+    // every face lit alike - here the sun lights every face as it lights the ground, and the baked shade fades),
+    // z moonlight amount (the lit colour goes towards the moon colour by it; world only)
+    "uniform vec4 night;\n"
+    "uniform vec3 moon, moonLin;\n" // POL-26b: the 2D time-of-day colour (world), the haze's too
     "uniform vec3 chunky;\n" // x mode, y slice depth in sprite pixels (signed), z unused
     "uniform vec2 atlasTexel;\n"
     "void main() {\n"
@@ -305,8 +312,10 @@ static const char *sFragmentSrc =
     "    vec3 n = normalize(cross(dFdx(vWorld), dFdy(vWorld)));\n"
     "    if (dot(n, cam - vWorld) < 0.0) n = -n;\n"
     "    vec3 albedo = toLinear(c.rgb);\n"
-    "    vec3 light = sunLight * max(dot(n, sunDir), 0.0) * vShade * clouds(vWorld) + skyTint * max(skyIrr(n), 0.0);\n"
+    "    float direct = mix(max(sunDir.y, 0.0), max(dot(n, sunDir), 0.0), night.y);\n"
+    "    vec3 light = sunLight * direct * mix(1.0, vShade, night.y) * mix(1.0, clouds(vWorld), night.x) + skyTint * max(skyIrr(n), 0.0);\n"
     "    rgb = albedo * light;\n"
+    "    rgb = mix(rgb, moonLin, night.z);\n"
     "    if (glowStrength > 0.0) rgb = mix(rgb, glowLin, texture2D(glowTex, vUv).r * glowStrength);\n"
     "    if (gammaLight > 1.5 && gammaLight < 2.5) { gl_FragColor = vec4(vec3(vShade) * 0.1, 1.0); return; }\n"
     "    if (gammaLight > 4.5) { vec2 f = fract(vWorld.xz / 8.0); vec2 g = fract(vWorld.xz); gl_FragColor = vec4(min(f.x, f.y) < 0.015 ? 0.1 : 0.0, min(g.x, g.y) < 0.03 ? 0.03 : 0.0, 0.02, 1.0); return; }\n"
@@ -324,7 +333,8 @@ static const char *sFragmentSrc =
     "    gl_FragColor = vec4(rgb, 1.0);\n"
     "    return;\n"
     "  } else {\n"
-    "    rgb = c.rgb * vShade;\n"
+    "    rgb = c.rgb * mix(1.0, vShade, night.y);\n"
+    "    rgb = mix(rgb, moon, night.z);\n"
     "    if (glowStrength > 0.0) rgb = mix(rgb, vec3(1.0, 0.847, 0.627), texture2D(glowTex, vUv).r * glowStrength);\n"
     "    float f = clamp((vDist - fog.x) / max(fog.y - fog.x, 0.001), 0.0, 1.0);\n"
     "    rgb = mix(rgb, fogColor, f * f);\n"
@@ -448,12 +458,16 @@ static bool MakeProgram(void)
     sUniHazeMul = wj_glGetUniformLocation(sProgram, "hazeMul");
     sUniGlowStrength = wj_glGetUniformLocation(sProgram, "glowStrength");
     sUniGlowLin = wj_glGetUniformLocation(sProgram, "glowLin");
+    sUniNight = wj_glGetUniformLocation(sProgram, "night");
+    sUniMoon = wj_glGetUniformLocation(sProgram, "moon");
+    sUniMoonLin = wj_glGetUniformLocation(sProgram, "moonLin");
     wj_glUseProgram(sProgram); // uniforms start at 0: no tint is 1, 0
     wj_glUniform3f(sUniTintMul, 1, 1, 1);
     wj_glUniform3f(sUniTintAdd, 0, 0, 0);
     wj_glUniform3f(sUniHazeMul, 1, 1, 1);
     wj_glUniform1i(wj_glGetUniformLocation(sProgram, "glowTex"), GLOW_UNIT);
     wj_glUniform1f(sUniGlowStrength, 0);
+    wj_glUniform4f(sUniNight, 1, 1, 0, 0); // day: daylight 1, sun 1, no moon
     sUniFog = wj_glGetUniformLocation(sProgram, "fog");
     sUniFogColor = wj_glGetUniformLocation(sProgram, "fogColor");
     sUniMode = wj_glGetUniformLocation(sProgram, "mode");
@@ -2981,6 +2995,15 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     // the lit window colour in the Gamma path's linear light: c * c / exposure comes out of the screen pass as
     // c (as the backdrop above)
     wj_glUniform3f(sUniGlowLin, 1.0f / sExposure, 0.847f * 0.847f / sExposure, 0.627f * 0.627f / sExposure);
+    {   // POL-26b step 2: the 3DS's night light (outdoors); day in a battle
+        float daylight = 1, sun = 1, moonAmt = 0, moonRgb[3] = {0, 0, 0};
+        if (!sBattleMode && !inst0->indoor && !inst0->underground)
+            VoxelWorld_NightLight(&daylight, &sun, &moonAmt, moonRgb);
+        wj_glUniform4f(sUniNight, daylight, sun, moonAmt, 0);
+        wj_glUniform3f(sUniMoon, moonRgb[0], moonRgb[1], moonRgb[2]);
+        wj_glUniform3f(sUniMoonLin, moonRgb[0] * moonRgb[0] / sExposure, moonRgb[1] * moonRgb[1] / sExposure,
+                       moonRgb[2] * moonRgb[2] / sExposure);
+    }
     if (fieldFadeInShader)
         wj_glUniform4f(sUniFade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount);
     else
@@ -3057,6 +3080,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         wj_glUniform4f(sUniFade, 0, 0, 0, 0);
         // POL-26b: and carry the time of day already (the game tints sprite palettes too)
         wj_glUniform3f(sUniTintMul, 1, 1, 1);
+        wj_glUniform4f(sUniNight, 1, 1, 0, 0); // POL-26b step 2: moonlight is the world's only (3DS TerrainTexEnv)
         wj_glUniform3f(sUniTintAdd, 0, 0, 0);
         if (gVoxelGammaLight && fadeAmount > 0.0f)
             wj_glUniform4f(sUniUnfade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount); // the screen pass fades them

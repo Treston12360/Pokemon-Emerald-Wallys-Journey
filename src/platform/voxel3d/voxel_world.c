@@ -47,6 +47,7 @@ unsigned int GetDecompressedDataSize(const unsigned int *ptr);
 #include "constants/weather.h"
 #endif
 #ifdef PORTABLE // POL-23: the game's weather for the 3D weather
+#include "rtc.h" // POL-26b: the game clock
 #include "field_weather.h"
 #include "constants/field_weather.h"
 #include "constants/weather.h"
@@ -1384,6 +1385,57 @@ static void BlendLine(const struct BlendSettings *blend, float mul[3], float add
             add[c] = k * (float)((color >> (5 * c)) & 31) / 31.0f;
         }
     }
+}
+
+/*
+ * POL-26b step 2 (Treston, 2026-11-15: "Do it like the 3DS"): Emerald 3DS's night light, its numbers exactly
+ * (3ds_daynight.c CtrDayNight_At / CtrDayNight_SunAt / CtrDayNight_Moonlight, ctr_voxel.c LightFor), on the game
+ * clock (gLocalTime, as the 2D tint). Only `daylight` (sun rays, motes and dapples scale by it: 0 from 20:00 to
+ * 02:00), `glow` (for the moon) and the sun's strength are taken: the 3DS colour curve is not, the colour is the
+ * 2D game's (Treston, "Match our 2D", VoxelWorld_TimeTint). Outdoors only; elsewhere day (1, 1, no moon).
+ */
+static float Smooth(float t)
+{
+    return t * t * (3.0f - 2.0f * t);
+}
+
+void VoxelWorld_NightLight(float *daylight, float *sunStrength, float *moonAmount, float moonRgb[3])
+{
+    static const struct { unsigned minute; float daylight, glow; } keys[] = {
+        {0, 0.0f, 1.0f},     {120, 0.0f, 1.0f},  {240, 0.75f, 0.0f}, {480, 0.75f, 0.0f},  {600, 1.0f, 0.0f},
+        {900, 1.0f, 0.0f},   {1020, 0.35f, 0.25f}, {1080, 0.35f, 0.25f}, {1200, 0.0f, 1.0f}, {1440, 0.0f, 1.0f},
+    };
+    float glow = 0.0f, minute;
+    unsigned key;
+
+    *daylight = 1.0f;
+    *sunStrength = 1.0f;
+    *moonAmount = 0.0f;
+    moonRgb[0] = 70.0f / 255.0f;
+    moonRgb[1] = 92.0f / 255.0f;
+    moonRgb[2] = 136.0f / 255.0f;
+    if (gMapHeader.mapLayout == NULL || !MapHasNaturalLight(gMapHeader.mapType) || getenv("WJPC_3D_NO_NIGHT_LIGHT") != NULL)
+        return;
+    minute = (float)(gLocalTime.hours % 24) * 60.0f + (float)gLocalTime.minutes + (float)gLocalTime.seconds / 60.0f;
+    for (unsigned i = 1; i < ARRAY_COUNT(keys); i++)
+        if (minute < (float)keys[i].minute)
+        {
+            float t = Smooth((minute - keys[i - 1].minute) / (float)(keys[i].minute - keys[i - 1].minute));
+            *daylight = keys[i - 1].daylight + (keys[i].daylight - keys[i - 1].daylight) * t;
+            glow = keys[i - 1].glow + (keys[i].glow - keys[i - 1].glow) * t;
+            break;
+        }
+    /* SunAt: 15-minute steps from 04:00 to 20:00, strength min(1, 2 x altitude); none at night */
+    key = (unsigned)minute;
+    if (key >= 240u && key < 1200u)
+    {
+        float progress = ((float)((key / 15u) * 15u) - 240.0f) / 960.0f;
+        float altitude = sinf(progress * 3.141592654f);
+        *sunStrength = altitude * 2.0f < 1.0f ? altitude * 2.0f : 1.0f;
+    }
+    else
+        *sunStrength = 0.0f;
+    *moonAmount = 0.06f * glow * glow;
 }
 
 /* POL-26b: windows lit at night, at the times the 2D game lights its own (overworld.c WJ_WindowsLit). */
