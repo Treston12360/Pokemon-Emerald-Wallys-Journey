@@ -192,6 +192,7 @@ static GLuint UploadTiled(GLuint tex, const uint16_t *tiled, unsigned w, unsigne
 // Shader: texture x the vertex's shade, alpha tested; a palette fade and distance haze on top.
 
 static GLuint sProgram;
+static GLint sUniUnfade; // POL-16
 static GLint sUniMode, sUniAlphaMin, sUniMvp, sUniOrigin, sUniTex, sUniFade, sUniFog, sUniFogColor, sUniCam;
 static GLint sUniChunky, sUniAtlasTexel, sUniTime, sUniGamma, sUniSunDir, sUniSunLight, sUniSkyTint, sUniSh, sUniSat, sUniExposure;
 
@@ -268,11 +269,14 @@ static const char *sFragmentSrc =
     "}\n"
     // DLX-8 chunky people: the card is drawn as stacked slices; a slice keeps a pixel only where the
     // sprite is thick enough there (1 = even blocks, 2 = rounded: thicker away from the row's edges)
+    "uniform vec4 unfade;\n"
     "uniform vec3 chunky;\n" // x mode, y slice depth in sprite pixels (signed), z unused
     "uniform vec2 atlasTexel;\n"
     "void main() {\n"
     "  vec4 c = texture2D(tex, vUv);\n"
     "  if (c.a < alphaMin) discard;\n"
+    // POL-16: a palette fade taken back off a person's colours (Gamma lighting: the screen pass fades them)
+    "  if (unfade.a > 0.0) c.rgb = clamp((c.rgb - unfade.a * unfade.rgb) / max(1.0 - unfade.a, 0.004), 0.0, 1.0);\n"
     "  if (chunky.x > 0.5) {\n"
     "    float half_ = 2.0;\n"
     "    if (chunky.x > 1.5) {\n"
@@ -424,6 +428,7 @@ static bool MakeProgram(void)
     sUniOrigin = wj_glGetUniformLocation(sProgram, "origin");
     sUniTex = wj_glGetUniformLocation(sProgram, "tex");
     sUniFade = wj_glGetUniformLocation(sProgram, "fade");
+    sUniUnfade = wj_glGetUniformLocation(sProgram, "unfade");
     sUniFog = wj_glGetUniformLocation(sProgram, "fog");
     sUniFogColor = wj_glGetUniformLocation(sProgram, "fogColor");
     sUniMode = wj_glGetUniformLocation(sProgram, "mode");
@@ -2487,6 +2492,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     uint32_t digest;
     float proj[16], view[16], mvp[16];
     float fadeAmount = 0.0f, fadeRgb[3] = {0, 0, 0};
+    bool fieldFadeInShader = false;
 
     // DLX-17: the trees' and building models' baked textures follow the season too; reload them when it changes.
     {
@@ -2881,7 +2887,19 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     sHaveFieldMvp = !sBattleMode;
     wj_glUniformMatrix4fv(sUniMvp, 1, GL_FALSE, mvp);
     wj_glUniform3f(sUniCam, sCamera.x, sCamera.y, sCamera.z);
-    if (VoxelWorld_ScreenFade(&fadeAmount, fadeRgb) && !gVoxelGammaLight)
+    /*
+     * POL-16 (Brennan: "When walking into doors all npcs turn black and disappear then reappear"): the screen
+     * fades of the field (doors, warps) now fade the 3D world too, as Emerald 3DS does (VoxelWorld_ScreenFade,
+     * ctr_voxel.c PrepareFades: sWorldFade). Before, only the people faded (their colours come from the faded
+     * palettes) and the world stayed lit, so they turned to black figures. As on the 3DS the people get no fade
+     * of their own on top (sSpriteFade = none): their palettes already carry it (see the sprite pass below).
+     * With Gamma lighting the fade is done in the screen pass (PostFinish), after the tone curve, as for battles:
+     * done in the world shader the curve squashed it (a lit room stayed bright half the fade) and the people's
+     * haze stayed blue at black. The people's pass then undoes their palette fade first (`unfade`), so the
+     * screen pass fades them once, like the world.
+     */
+    fieldFadeInShader = VoxelWorld_ScreenFade(&fadeAmount, fadeRgb) && !gVoxelGammaLight;
+    if (fieldFadeInShader)
         wj_glUniform4f(sUniFade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount);
     else
         wj_glUniform4f(sUniFade, 0, 0, 0, 0);
@@ -2940,6 +2958,13 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     wj_glEnable(GL_BLEND);
     wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     wj_glDepthMask(GL_FALSE);
+    if (!sBattleMode)
+    {
+        // POL-16: the people's palettes are faded already (3DS sSpriteFade = none)
+        wj_glUniform4f(sUniFade, 0, 0, 0, 0);
+        if (gVoxelGammaLight && fadeAmount > 0.0f)
+            wj_glUniform4f(sUniUnfade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount); // the screen pass fades them
+    }
     wj_glUniform1f(sUniMode, 2.0f);
     if (getenv("WJPC_3D_NOREFLECT") == NULL)
         MeshDraw(&sReflectMesh, sSpriteTex, 0, 0, 0);
@@ -2972,16 +2997,17 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         else
             MeshDraw(&sSpriteMesh, sSpriteTex, 0, 0, 0);
     }
+    wj_glUniform4f(sUniUnfade, 0, 0, 0, 0);
 
     if (!sBattleMode && !inst0->indoor)
     {
         // POL-23: rain, sand and ash over the finished world (3DS: DrawWeather after the world)
-        float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], gVoxelGammaLight ? 0.0f : fadeAmount};
+        float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fieldFadeInShader ? fadeAmount : 0.0f};
         DrawWeather(proj, view, fd);
     }
     if (gVoxelGammaLight)
     {
-        float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount};
+        float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fieldFadeInShader ? 0.0f : fadeAmount};
         float dx = sCamera.x - sCamera.targetX, dy = sCamera.y - sCamera.targetY, dz = sCamera.z - sCamera.targetZ;
         PostFinish(sFbo, w, h, fd, sqrtf(dx * dx + dy * dy + dz * dz));
     }

@@ -92,8 +92,24 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-13. Background mountains are blocks.** "Mountains in background are blocks and not like mountains."
 - [ ] **POL-15. Route 110 into Mauville.** "Walking into mauville city from route 110 everything below disappears
       and reappears."
-- [ ] **POL-16. People turn black at doors.** "When walking into doors all npcs turn black and disappear then
+- [x] **POL-16. People turn black at doors.** "When walking into doors all npcs turn black and disappear then
       reappear whenever you come back out."
+      - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-16_door_fade.png`.
+      - Reproduced in the exe (Wine, 3D, Oldale Town = warp `0 10 6 18`, walk up into the Pokémon Center): the
+        screen fade at a door/warp darkened only the people (their colours come from the game's faded palettes);
+        the 3D world never faded, so they turned into black figures on a lit town, then the picture cut to the
+        room, where the people came back from black on a fully lit floor.
+      - Cause: `voxel_world.c` `VoxelWorld_ScreenFade` only reported battle fades on PC (the comment said field
+        fades were "drawn over the 3D view instead"; nothing did that). Fix: the field branch Emerald 3DS has
+        (palette fade active / weather screen fade) now runs on PC too, so the 3D world fades with the screen.
+      - `voxel_gl.c`: as on the 3DS (`PrepareFades`: sWorldFade for the world, no extra fade for sprites), the
+        people's pass gets no world fade (their palettes already carry it). With Gamma lighting the fade is done
+        in the screen pass (after the tone curve, as battles already did); the people's pass first takes their
+        palette fade back off (`unfade` uniform), so they are faded once, the same as the world. Done in the
+        world shader instead, the tone curve kept a lit room bright for half the fade and the people's haze
+        stayed blue at full black - tried and dropped.
+      - Tested Gamma lighting on and off: fade out, full black, fade in all even. Not tested: battle fades
+        (that path is unchanged), fades to white, real GPUs.
 - [ ] **POL-17. Seed mounds.** "Seed mounds look like shrubs and are above the dirt."
 - [ ] **POL-18. Pokémon are flat.** "Pokemon in 3D are still 2D."
 - [ ] **POL-19. Falling leaves.** "Leaves appear only in certain areas and randomly disappear or speed up."

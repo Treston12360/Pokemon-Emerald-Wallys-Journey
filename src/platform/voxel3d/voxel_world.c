@@ -1313,7 +1313,7 @@ bool VoxelWorld_ScreenFade(float *amount, float rgb[3])
     rgb[0] = rgb[1] = rgb[2] = 0.0f;
 #if !defined(PLATFORM_3DS)
     /* PC (DLX-5): in a battle the world stands in for the scenery and fades as its palettes do
-     * (BG 2-4, LoadBattleTerrainGfx). The field's fades are drawn over the 3D view instead. */
+     * (BG 2-4, LoadBattleTerrainGfx). POL-16: the field's fades (doors, warps) are the 3DS's, below. */
     if (gMain.inBattle)
     {
         const u16 *shown = (const u16 *)PLTT + BG_PLTT_ID(2), *unfaded = gPlttBufferUnfaded + BG_PLTT_ID(2);
@@ -1325,7 +1325,7 @@ bool VoxelWorld_ScreenFade(float *amount, float rgb[3])
         return *amount > 0.0f;
     }
 #endif
-#ifdef PLATFORM_3DS
+#if defined(PLATFORM_3DS) || defined(PORTABLE)
     {
         bool fading = gPaletteFade.active || gPaletteFade.y != 0
                    || (gWeatherPtr != NULL && gWeatherPtr->palProcessingState == WEATHER_PAL_STATE_SCREEN_FADING_IN)
