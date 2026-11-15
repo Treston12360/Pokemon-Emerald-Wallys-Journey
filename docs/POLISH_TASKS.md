@@ -30,8 +30,27 @@ Add under each item: what was found, what was changed, files, how to test, what 
         a late-game save, script = warp to each of the 56 outdoor Hoenn maps and walk a square (`WJPC_TEST_NO_BATTLES=1
         WJPC_3D=1 WJPC_VOXEL_LOG=1 WJPC_TEST_WINDOW=1`): 26,000 frames, 45+ warps, worst frame 77 ms of map/belt
         work (a warp: the map underfoot + whole belt built at once), memory flat at ~480 MB. Nothing near 1-2 s.
-      - Still to try: Gamma lighting on (bloom, depth of field), walking across seams for a long time instead of
-        warping, battles in between, real-time speed with sound. Asked Brennan for his build name, his
+      - **More from Claude 014PwRDj (2026-11-14 evening, written up 2026-11-15; for whoever has POL-11/14 now):**
+        - Gamma lighting ON can be stress-tested here if the window is tiny: Brennan's cfg with `resolution=0`,
+          `windowScale=1` and Xvfb `-screen 0 640x400x24` gives a 320x180 3D picture at ~25-35 fps in software GL
+          (at 1280x720 it is ~3 fps). With that, his save, Gamma on, the same 56-map script x3, `WJPC_TEST_NO_BATTLES=1`:
+          20,000+ frames (about 14 minutes), no crash, no errors file, memory flat (~360 MB RSS).
+        - So neither Gamma nor warping/walking reproduces it **in the test-script loop**. That loop is not the
+          real one: with `WJPC_SCRIPT` the main loop runs frame by frame as fast as it can - no frame-rate setting,
+          no 144 fps in-between frames (`smooth` is forced off under a script), no vsync pacing, no sound-timing
+          gate. Brennan plays at frameRate=144 with interframe=1. The freeze may live in that real-time path.
+        - Route 110 -> Mauville (POL-15) recorded every 2nd frame for 220 frames with his cfg (Gamma on) at
+          640x360: frame-to-frame difference is smooth, nothing disappears in the current build.
+        - **Unfinished patch, NOT applied** (files are claimed by 019khs4X): `docs/polish_reports/
+          POL-11_stall_log_and_realtime_script.patch` (against d46130bf, `git apply --3way`). It adds
+          (1) `WallysJourney_stalls.txt`: always-on log, a line whenever one trip round the real main loop takes
+          over 150 ms saying where the time went (waiting for the game thread, VDraw, of which 3D: maps / belt /
+          drawing, DrawScreen, present) plus map, mesh and page counts and the free 32-bit address space
+          (`GlobalMemoryStatusEx`), and one line a minute - so Brennan can just send the file after a freeze;
+          (2) test aid `WJPC_SCRIPT_REALTIME=1`: the script only presses buttons while the game runs its normal
+          real-time loop. It compiled; the first real-time run was interrupted before any result. Use or drop it.
+      - Still to try: walking across seams for a long time instead of warping, battles in between, real-time
+        speed with sound (see the patch above). Asked Brennan for his build name, his
         `WallysJourney.cfg`, and `WallysJourney_crash.txt` / `WallysJourney_errors.txt` from his game folder.
 - [~] **POL-14 (PRIORITY). Crash in 3D after about 10 minutes.** "When in 3D mode after about 10min the game
       crashes after a lot of skipping and pausing." (Claude 014PwRDj, 2026-11-14)
