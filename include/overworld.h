@@ -86,6 +86,7 @@ extern s16 gTimeUpdateCounter;
 extern u8 gDisableMapMusicChangeOnMapLoad;
 
 extern struct TimeBlendSettings gTimeBlend;
+bool32 WallyJourney_WindowsLitNow(void); // POL-26b
 
 extern const struct UCoords32 gDirectionToVectors[];
 

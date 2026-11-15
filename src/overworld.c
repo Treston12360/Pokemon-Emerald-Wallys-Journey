@@ -1829,6 +1829,13 @@ static bool32 WJ_WindowsLit(void)
     return hours >= 20 || hours < 5;
 }
 
+// POL-26b (3D night): whether the 2D game lights windows now (outdoors, 20:00-04:59), so the 3D view
+// lights its buildings' windows at the same times.
+bool32 WallyJourney_WindowsLitNow(void)
+{
+    return gMapHeader.mapLayout != NULL && MapHasNaturalLight(gMapHeader.mapType) && WJ_WindowsLit();
+}
+
 // Called after the day/night mix wrote palettes into dst (only acts on gPlttBufferFaded).
 void WallyJourney_ApplyNightLights(u32 palettes, const u16 *dst)
 {

@@ -194,6 +194,8 @@ static GLuint UploadTiled(GLuint tex, const uint16_t *tiled, unsigned w, unsigne
 static GLuint sProgram;
 static GLint sUniUnfade; // POL-16
 static GLint sUniTintMul, sUniTintAdd, sUniHazeMul; // POL-26b
+static GLint sUniGlowStrength, sUniGlowLin; // POL-26b: lit windows
+#define GLOW_UNIT 1 // texture unit of a building page's window mask
 static float sTintMul[3] = {1, 1, 1}, sTintAdd[3]; // POL-26b: this frame's time-of-day colour (world)
 static GLint sUniMode, sUniAlphaMin, sUniMvp, sUniOrigin, sUniTex, sUniFade, sUniFog, sUniFogColor, sUniCam;
 static GLint sUniChunky, sUniAtlasTexel, sUniTime, sUniGamma, sUniSunDir, sUniSunLight, sUniSkyTint, sUniSh, sUniSat, sUniExposure;
@@ -272,7 +274,13 @@ static const char *sFragmentSrc =
     // DLX-8 chunky people: the card is drawn as stacked slices; a slice keeps a pixel only where the
     // sprite is thick enough there (1 = even blocks, 2 = rounded: thicker away from the row's edges)
     "uniform vec4 unfade;\n"
-    "uniform vec3 tintMul, tintAdd, hazeMul;\n" // POL-26b: the 2D time-of-day colour (world), the haze's too
+    "uniform vec3 tintMul, tintAdd, hazeMul;\n"
+    // POL-26b: a building page's window-glass mask (buildings.bin L8 glow), lit at night as Emerald 3DS does
+    // (ctr_voxel.c BuildingGlowEnv: after the light, the texel goes towards warm light 255,216,160 by
+    // mask x strength). glowLin is that colour in the Gamma path's linear light (see Voxel3D_Render).
+    "uniform sampler2D glowTex;\n"
+    "uniform float glowStrength;\n"
+    "uniform vec3 glowLin;\n" // POL-26b: the 2D time-of-day colour (world), the haze's too
     "uniform vec3 chunky;\n" // x mode, y slice depth in sprite pixels (signed), z unused
     "uniform vec2 atlasTexel;\n"
     "void main() {\n"
@@ -299,6 +307,7 @@ static const char *sFragmentSrc =
     "    vec3 albedo = toLinear(c.rgb);\n"
     "    vec3 light = sunLight * max(dot(n, sunDir), 0.0) * vShade * clouds(vWorld) + skyTint * max(skyIrr(n), 0.0);\n"
     "    rgb = albedo * light;\n"
+    "    if (glowStrength > 0.0) rgb = mix(rgb, glowLin, texture2D(glowTex, vUv).r * glowStrength);\n"
     "    if (gammaLight > 1.5 && gammaLight < 2.5) { gl_FragColor = vec4(vec3(vShade) * 0.1, 1.0); return; }\n"
     "    if (gammaLight > 4.5) { vec2 f = fract(vWorld.xz / 8.0); vec2 g = fract(vWorld.xz); gl_FragColor = vec4(min(f.x, f.y) < 0.015 ? 0.1 : 0.0, min(g.x, g.y) < 0.03 ? 0.03 : 0.0, 0.02, 1.0); return; }\n"
     "    if (gammaLight > 3.5) { gl_FragColor = vec4(vec3(clouds(vWorld)) * 0.1, 1.0); return; }\n"
@@ -316,6 +325,7 @@ static const char *sFragmentSrc =
     "    return;\n"
     "  } else {\n"
     "    rgb = c.rgb * vShade;\n"
+    "    if (glowStrength > 0.0) rgb = mix(rgb, vec3(1.0, 0.847, 0.627), texture2D(glowTex, vUv).r * glowStrength);\n"
     "    float f = clamp((vDist - fog.x) / max(fog.y - fog.x, 0.001), 0.0, 1.0);\n"
     "    rgb = mix(rgb, fogColor, f * f);\n"
     "  }\n"
@@ -436,10 +446,14 @@ static bool MakeProgram(void)
     sUniTintMul = wj_glGetUniformLocation(sProgram, "tintMul");
     sUniTintAdd = wj_glGetUniformLocation(sProgram, "tintAdd");
     sUniHazeMul = wj_glGetUniformLocation(sProgram, "hazeMul");
+    sUniGlowStrength = wj_glGetUniformLocation(sProgram, "glowStrength");
+    sUniGlowLin = wj_glGetUniformLocation(sProgram, "glowLin");
     wj_glUseProgram(sProgram); // uniforms start at 0: no tint is 1, 0
     wj_glUniform3f(sUniTintMul, 1, 1, 1);
     wj_glUniform3f(sUniTintAdd, 0, 0, 0);
     wj_glUniform3f(sUniHazeMul, 1, 1, 1);
+    wj_glUniform1i(wj_glGetUniformLocation(sProgram, "glowTex"), GLOW_UNIT);
+    wj_glUniform1f(sUniGlowStrength, 0);
     sUniFog = wj_glGetUniformLocation(sProgram, "fog");
     sUniFogColor = wj_glGetUniformLocation(sProgram, "fogColor");
     sUniMode = wj_glGetUniformLocation(sProgram, "mode");
@@ -872,6 +886,43 @@ static uint16_t *sPageScratch;
 static size_t sPageScratchSize;
 
 static GLuint LoadBuildingPage(int page, bool reload);
+
+/* POL-26b: a page's window mask (w x h bytes, tiled like the page), as a one-channel texture; 0 = none. */
+static GLuint sGlowTex[MAX_PAGES];
+static bool sGlowTried[MAX_PAGES];
+static GLuint GlowPage(int page)
+{
+    unsigned w, h, th;
+    uint8_t *tiled, *flat;
+
+    if (page < 0 || page >= MAX_PAGES)
+        return 0;
+    if (sGlowTex[page] != 0 || sGlowTried[page])
+        return sGlowTex[page];
+    sGlowTried[page] = true;
+    if (!VoxelBuildings_PageHasGlow((unsigned)page) || !VoxelBuildings_PageSize((unsigned)page, &w, &h, &th))
+        return 0;
+    tiled = malloc((size_t)w * th);
+    flat = calloc((size_t)w * th, 1);
+    if (tiled != NULL && flat != NULL && VoxelBuildings_ReadGlow((unsigned)page, 0, w * h, tiled))
+    {
+        for (unsigned y = 0; y < h; y++)
+            for (unsigned x = 0; x < w; x++)
+                flat[y * w + x] = tiled[CtrVideo_Texel(x, y, w)];
+        wj_glGenTextures(1, &sGlowTex[page]);
+        wj_glBindTexture(GL_TEXTURE_2D, sGlowTex[page]);
+        wj_glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        wj_glPixelStorei(0x0CF2 /* GL_UNPACK_ROW_LENGTH */, 0);
+        wj_glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, w, th, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, flat);
+        wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
+    free(tiled);
+    free(flat);
+    return sGlowTex[page];
+}
 static GLuint BuildingPage(int page)
 {
     return LoadBuildingPage(page, false);
@@ -2504,6 +2555,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     float proj[16], view[16], mvp[16];
     float fadeAmount = 0.0f, fadeRgb[3] = {0, 0, 0};
     bool fieldFadeInShader = false;
+    // POL-26b: windows lit at the 2D game's times (as the 3DS: the full mask, glow strength 1 at night)
+    bool windowsLit = !sBattleMode && VoxelWorld_WindowsLit();
 
     // DLX-17: the trees' and building models' baked textures follow the season too; reload them when it changes.
     {
@@ -2925,6 +2978,9 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     wj_glUniform3f(sUniTintMul, sTintMul[0], sTintMul[1], sTintMul[2]);
     wj_glUniform3f(sUniTintAdd, sTintAdd[0], sTintAdd[1], sTintAdd[2]);
     wj_glUniform3f(sUniHazeMul, sTintMul[0] + sTintAdd[0], sTintMul[1] + sTintAdd[1], sTintMul[2] + sTintAdd[2]);
+    // the lit window colour in the Gamma path's linear light: c * c / exposure comes out of the screen pass as
+    // c (as the backdrop above)
+    wj_glUniform3f(sUniGlowLin, 1.0f / sExposure, 0.847f * 0.847f / sExposure, 0.627f * 0.627f / sExposure);
     if (fieldFadeInShader)
         wj_glUniform4f(sUniFade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount);
     else
@@ -2963,6 +3019,14 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             GLuint page = BuildingPage(m->buildingPage);
             if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
                 Voxel3D_Log("[3D]   map %d:%d buildings page %d tex %u, %u chunk verts, %u statics, first model %p", m->mapGroup, m->mapNum, m->buildingPage, page, m->buildings.count, m->staticCount, m->staticCount ? (const void *)StaticModel(m->statics[0].pageModel, m->statics[0].lit) : NULL);
+            GLuint glow = windowsLit ? GlowPage(m->buildingPage) : 0; // POL-26b
+            if (glow != 0)
+            {
+                wj_glActiveTexture(GL_TEXTURE0 + GLOW_UNIT);
+                wj_glBindTexture(GL_TEXTURE_2D, glow);
+                wj_glActiveTexture(GL_TEXTURE0);
+                wj_glUniform1f(sUniGlowStrength, 1.0f);
+            }
             MeshDraw(&m->buildings, page, (float)m->originX, 0, (float)m->originY);
             for (unsigned s = 0; s < m->staticCount; s++)
             {
@@ -2971,6 +3035,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 if (mesh != NULL)
                     MeshDraw(mesh, page, d->x + (float)m->originX, d->y, d->z + (float)m->originY);
             }
+            if (glow != 0)
+                wj_glUniform1f(sUniGlowStrength, 0.0f);
         }
     }
     if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground && !(getenv("WJPC_3D_SKIP") && (atoi(getenv("WJPC_3D_SKIP")) & 8)))

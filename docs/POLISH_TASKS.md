@@ -192,6 +192,16 @@ Add under each item: what was found, what was changed, files, how to test, what 
         3D as flat yellow discs (they are the 2D game's light sprites drawn as cards - `voxel_entities.c`,
         claimed by 014PwRDj; Emerald 3DS draws its own lamp pools instead, UpdateNightLamps) - maybe POL-26's
         "blinking" (they appear/disappear as the 2D view's light sprites come and go). Not changed yet.
+      - Step 3 (windows) done 2026-11-15: building pages' window-glass masks (buildings.bin L8 glow, already read
+        by `voxel_building.c`) uploaded as a second texture (`voxel_gl.c` GlowPage, unit 1) and lit as Emerald 3DS
+        does (BuildingGlowEnv: after the light, towards 255,216,160 by mask x strength; Gamma path: that colour in
+        linear light, c*c/exposure). Lit at the 2D game's own times (`WallyJourney_WindowsLitNow`, overworld.c:
+        outdoors, 20:00-04:59), strength 1. Off switch: `WJPC_3D_NO_WINDOWS=1`. Picture:
+        `docs/polish_reports/POL-26b_step3_lit_windows.png`. Tested 10 PM and 1 PM, 3D and 2D: 2D both times and
+        3D at 1 PM pixel-identical to before; 3D 10 PM windows lit. Difference from 2D: the 3DS masks also light
+        the Pokémon Center / Mart door glass (kept: it is the 3DS's data).
+      - Step 2 not done yet: Gamma's sunlight direction and cloud shadows still run at night in 3D. The 2D game
+        also keeps its cloud shadows at night (see the picture), so whether to dim them is a question.
 - [x] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
       not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
       - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-27_ash_trail_fixed.png`.

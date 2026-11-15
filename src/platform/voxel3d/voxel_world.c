@@ -1386,6 +1386,12 @@ static void BlendLine(const struct BlendSettings *blend, float mul[3], float add
     }
 }
 
+/* POL-26b: windows lit at night, at the times the 2D game lights its own (overworld.c WJ_WindowsLit). */
+bool VoxelWorld_WindowsLit(void)
+{
+    return WallyJourney_WindowsLitNow() && getenv("WJPC_3D_NO_WINDOWS") == NULL;
+}
+
 bool VoxelWorld_TimeTint(float mul[3], float add[3])
 {
     float m0[3], a0[3], m1[3], a1[3], w = gTimeBlend.weight / 256.0f;

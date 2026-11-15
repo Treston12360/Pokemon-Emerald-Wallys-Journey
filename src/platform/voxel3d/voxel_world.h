@@ -161,6 +161,8 @@ bool VoxelWorld_Underground(void);
 bool VoxelWorld_ScreenFade(float *amount, float rgb[3]);
 /* POL-26b: the 2D game's time-of-day colour as shown = mul * stored + add per channel; false = none. */
 bool VoxelWorld_TimeTint(float mul[3], float add[3]);
+/* POL-26b: windows lit now (the 2D game's times) */
+bool VoxelWorld_WindowsLit(void);
 
 /*
  * Content signature of one rectangle of world tiles: what decides whether the
