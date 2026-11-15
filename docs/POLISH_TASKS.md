@@ -201,7 +201,12 @@ Add under each item: what was found, what was changed, files, how to test, what 
         3D at 1 PM pixel-identical to before; 3D 10 PM windows lit. Difference from 2D: the 3DS masks also light
         the Pokémon Center / Mart door glass (kept: it is the 3DS's data).
       - Step 2 not done yet: Gamma's sunlight direction and cloud shadows still run at night in 3D. The 2D game
-        also keeps its cloud shadows at night (see the picture), so whether to dim them is a question.
+        also keeps its cloud shadows at night (see the picture).
+        **Treston, 2026-11-15: "Do it like the 3DS"** - sun effects fade at night and soft moonlight comes in, as
+        Emerald 3DS does it, even though 2D keeps its cloud shadows.
+      - Lamps: the 2D game's lamp-glow sprites show in 3D as flat yellow discs that pop in and out.
+        **Treston, 2026-11-15: "Yes, take it over"** - Claude 019khs4X takes `voxel_entities.c` over from 014PwRDj
+        for the lamps and draws them the way Emerald 3DS does (UpdateNightLamps).
 - [x] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
       not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
       - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-27_ash_trail_fixed.png`.
