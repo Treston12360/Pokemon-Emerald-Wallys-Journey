@@ -331,6 +331,14 @@ Add under each item: what was found, what was changed, files, how to test, what 
         Fallarbor's tile set, which Route 112/111's atlas cannot draw - would need a second atlas on the belt);
         a few cells of height near Route 118/123 and Verdanturf (far maps coming and going). Two links gave no
         table (Route 119/118, Route 111/Mauville) - **not checked by the sweep.**
+      - **Brennan 2026-11-15 13:15:** (1) the blended slope "is okay for now"; (2) "fix route 113"; (3) "fix the
+        small blue sawtooth edges in the fallarbor area / routes"; then go on with Polish, keep sending
+        pictures/video.
+      - (3) done 2026-11-15: the saw teeth were sky between Fallarbor's filled edge (stands the belt's 2 courses
+        up) and Route 113's tree belt (trees stand on the level, no ground laid). A standing belt cell now
+        shows its faces beside a tree cell, a flat cell steps down to a lower one that is not flat
+        (`BeltFlatSteps`), side faces lean to the lower neighbour's row, and the first tree cells get ground.
+        Picture `docs/polish_reports/POL-30_fallarbor_sawteeth_fixed.png`. Only looked at in Fallarbor so far.
       - Pictures: `docs/polish_reports/POL-21_route110_to_103.png`, `POL-24_route112_to_lavaridge.png`
         (top old, bottom new; left before the crossing, right after). 2D does not use this code.
 

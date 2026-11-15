@@ -2761,8 +2761,14 @@ static void EmitBorderNorth(VoxelBuilder *b, int x, int y, float low, float lowS
 {
     const float c = (float)VOXEL_BORDER_COURSES, za = y + lowShift, zb = y + shift;
 
-    if (top - low < 1.0f / 16.0f || zb <= za)
+    /* POL-30 (Brennan 2026-11-15: blue saw teeth past Fallarbor): two cells at one height can still lie
+     * apart north to south (a filled edge beside another map's belt: each as far south as its own map's edge
+     * says), and the sky showed between. The flat part is laid then too (it was only laid under a step), at
+     * the lower of the two. */
+    if (zb <= za)
         return;
+    if (low > top)
+        low = top;
     for (float band = floorf(low); band < top; band += 1.0f)
     {
         float h0 = fmaxf(low, band), h1 = fminf(top, band + 1.0f);
@@ -2809,8 +2815,90 @@ static void EmitBorderNorth(VoxelBuilder *b, int x, int y, float low, float lowS
  * its own drawing from their level up to its own (a step along the belt
  * where the map's edge steps, or down to a belt of water); north, the wall
  * up from the top there (EmitBorderNorth). */
+/* A belt cell drawn as a tree (VoxelTree_EmitBorder): it stands on the level itself, with no ground laid and
+ * not the belt's courses higher as every other belt cell's top is. */
+static bool BeltIsTree(int x, int y)
+{
+    const VoxelMapInstance *current = VoxelWorld_Instance(0);
+
+    return current != NULL && VoxelWorld_UsesTreeSprites(current)
+        && VoxelTree_Part(current->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) >= 0;
+}
+
+/* The faces of a belt cell's step down to a lower neighbour (d: 0 south, 1 east, 2 west), from `other` up to
+ * `level`, both over this cell's base. */
+static void BeltStepFaces(VoxelBuilder *builder, int x, int y, int d, int nx, int ny, float other, float otherShift,
+                          float level, float shift, float u0, float v0, float u1, float v1)
+{
+    /* POL-30: a tile a level, as EmitBorderNorth's wall - one drawing pulled over a tall step was streaks
+     * (the belt rising behind Lavaridge to Route 112's slope) */
+    for (float band = floorf(other); band < level; band += 1.0f)
+    {
+        float h0 = fmaxf(other, band), h1 = fminf(level, band + 1.0f);
+        float vb = v1 + (v0 - v1) * (h0 - band), vt = v1 + (v0 - v1) * (h1 - band);
+
+        if (h1 <= h0)
+            continue;
+        if (d == 0)
+            VoxelMesh_South(builder, (float)x, (float)y + shift, h0, h1, 0.0f, u0, vt, u1, vb);
+        else
+        {
+            /* POL-30 (Brennan 2026-11-15: blue saw teeth past Fallarbor): a cell is drawn as far south as
+             * it is high, so the lower neighbour lies further north than this one. A side face standing
+             * straight at this cell's row left a triangle of sky down to the neighbour: it leans from this
+             * cell's row at the top to the neighbour's row at the foot. */
+            float lowZ = otherShift + BeltBase(nx, ny) - BeltBase(x, y);
+            float za = (float)y + lowZ + (shift - lowZ) * (h0 - other) / (level - other);
+            float zb = (float)y + lowZ + (shift - lowZ) * (h1 - other) / (level - other);
+            float fx = d == 1 ? (float)x + 1.0f : (float)x;
+            uint8_t shade = d == 1 ? SHADE_EAST : SHADE_WEST;
+
+            if (d == 1)
+                VoxelBuilder_Quad(builder,
+                    &(VoxelVertex){fx, h0, za + 1.0f, u0, vb, shade}, &(VoxelVertex){fx, h0, za, u1, vb, shade},
+                    &(VoxelVertex){fx, h1, zb, u1, vt, shade}, &(VoxelVertex){fx, h1, zb + 1.0f, u0, vt, shade});
+            else
+                VoxelBuilder_Quad(builder,
+                    &(VoxelVertex){fx, h0, za, u0, vb, shade}, &(VoxelVertex){fx, h0, za + 1.0f, u1, vb, shade},
+                    &(VoxelVertex){fx, h1, zb + 1.0f, u1, vt, shade}, &(VoxelVertex){fx, h1, zb, u0, vt, shade});
+        }
+    }
+}
+
+/* POL-30: a flat belt cell (water, or a filled edge's top - BorderWaterLevel) beside one that is not flat and
+ * stands lower: BeltWaterSkirts only closes flat against flat. (Fallarbor's filled edge beside Route 113's
+ * trees: the blue saw teeth, Brennan 2026-11-15.) */
+static void BeltFlatSteps(VoxelBuilder *builder, int x, int y, float level, float shift,
+                          float u0, float v0, float u1, float v1)
+{
+    static const int kDir[4][2] = { {0, 1}, {1, 0}, {-1, 0}, {0, -1} };
+
+    for (int d = 0; d < 4; ++d)
+    {
+        int nx = x + kDir[d][0], ny = y + kDir[d][1];
+        float other, otherShift, rebase = BeltBase(nx, ny) - BeltBase(x, y);
+
+        if (!BorderAt(nx, ny) || BorderWaterLevel(nx, ny, &other, &otherShift))
+            continue;
+        VoxelMesh_BorderLevel(nx, ny, &other, &otherShift);
+        other += rebase + (BeltIsTree(nx, ny) ? 0.0f : (float)VOXEL_BORDER_COURSES);
+        if (other >= level - 0.05f)
+            continue;
+        if (d < 3)
+            BeltStepFaces(builder, x, y, d, nx, ny, other, otherShift, level, shift, u0, v0, u1, v1);
+        else
+            EmitBorderNorth(builder, x, y, other, otherShift + rebase, level, shift, u0, v0, u1, v1);
+    }
+}
+
 static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, float shift)
 {
+    /* POL-30 (Brennan 2026-11-15: blue saw teeth past Fallarbor, where its filled edge meets Route 113's
+     * trees): a tree cell's foot is the belt's courses under a standing cell's top, and nothing closed that
+     * step - one map's border was all trees or none, so the two never met before the belt took each cell from
+     * the nearest map. VoxelMesh_EmitBorder stands the courses' faces beside a tree cell, and lays the ground
+     * under the first of the trees. */
+
     static const int kDir[3][2] = { {0, 1}, {1, 0}, {-1, 0} };
     float u0, v0, u1, v1, other, otherShift;
 
@@ -2828,22 +2916,7 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
         other += BeltBase(nx, ny) - BeltBase(x, y); /* POL-30: over this cell's base */
         if (other >= level - 0.05f)
             continue;
-        /* POL-30: a tile a level, as EmitBorderNorth's wall - one drawing pulled over a tall step was streaks
-         * (the belt rising behind Lavaridge to Route 112's slope) */
-        for (float band = floorf(other); band < level; band += 1.0f)
-        {
-            float h0 = fmaxf(other, band), h1 = fminf(level, band + 1.0f);
-            float vb = v1 + (v0 - v1) * (h0 - band), vt = v1 + (v0 - v1) * (h1 - band);
-
-            if (h1 <= h0)
-                continue;
-            if (d == 0)
-                VoxelMesh_South(builder, (float)x, (float)y + shift, h0, h1, 0.0f, u0, vt, u1, vb);
-            else if (d == 1)
-                VoxelMesh_East(builder, (float)x, (float)y + shift, h0, h1, 0.0f, u0, vt, u1, vb);
-            else
-                VoxelMesh_West(builder, (float)x, (float)y + shift, h0, h1, 0.0f, u0, vt, u1, vb);
-        }
+        BeltStepFaces(builder, x, y, d, nx, ny, other, otherShift, level, shift, u0, v0, u1, v1);
     }
     if (VoxelWorld_GetInstanceAt(x, y - 1) == NULL)
     {
@@ -2854,8 +2927,9 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
         else
         {
             VoxelMesh_BorderLevel(x, y - 1, &other, &otherShift);
-            low = other + (float)VOXEL_BORDER_COURSES;
+            low = other + (BeltIsTree(x, y - 1) ? 0.0f : (float)VOXEL_BORDER_COURSES);
         }
+
         /* POL-30: over this cell's base, and as far south */
         low += BeltBase(x, y - 1) - BeltBase(x, y);
         otherShift += BeltBase(x, y - 1) - BeltBase(x, y);
@@ -2941,6 +3015,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                     VoxelMesh_Top(builder, wx, wz + shift, level, 0.0f,
                                   u0, v0, u1, v1, SHADE_TOP);
                     BeltWaterSkirts(builder, x, y, wx, wz, level, shift, u0, v0, u1, v1);
+                    BeltFlatSteps(builder, x, y, level, shift, u0, v0, u1, v1);
                 }
                 continue;
             }
@@ -2955,11 +3030,19 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             if (VoxelWorld_UsesTreeSprites(VoxelWorld_Instance(0))
              && VoxelTree_Part(VoxelWorld_Instance(0)->secondaryTileset,
                                VoxelWorld_BorderMetatile(x, y)) >= 0)
+            {
+                /* POL-30: at the edge of the trees (a cell of another map's belt beside it) the sky showed under
+                 * the leaning crowns: the cell's own drawing laid as ground there. */
+                if (!drawn && (!BeltIsTree(x - 1, y) || !BeltIsTree(x + 1, y) || !BeltIsTree(x, y - 1) || !BeltIsTree(x, y + 1))
+                 && MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+                    VoxelMesh_Top(builder, wx, wz, lift, 0.0f, u0, v0, u1, v1, SHADE_TOP);
                 continue; /* flat trunks and tilted crowns are appended later */
+            }
             /* a standing cell beside a flat one of water shows its face too */
-            south = !BorderAt(x, y + 1) || BorderWaterLevel(x, y + 1, &level, &shift);
-            east = !BorderAt(x + 1, y) || BorderWaterLevel(x + 1, y, &level, &shift);
-            west = !BorderAt(x - 1, y) || BorderWaterLevel(x - 1, y, &level, &shift);
+            /* (POL-30: and beside a tree cell, which stands the courses lower - EmitBorderSteps) */
+            south = !BorderAt(x, y + 1) || BorderWaterLevel(x, y + 1, &level, &shift) || BeltIsTree(x, y + 1);
+            east = !BorderAt(x + 1, y) || BorderWaterLevel(x + 1, y, &level, &shift) || BeltIsTree(x + 1, y);
+            west = !BorderAt(x - 1, y) || BorderWaterLevel(x - 1, y, &level, &shift) || BeltIsTree(x - 1, y);
             /* Laid as drawn, a cell's top is its own drawing; stood where it
              * is tiled, the column reads the rows above it. */
             if (MetatileUV(builder, VoxelWorld_BorderMetatile(x, drawn ? y : y - (int)courses + 1),
