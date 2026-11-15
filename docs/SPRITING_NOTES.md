@@ -11,6 +11,17 @@ so new characters are **frankensprites/recolours of official Gen 3 sprites**, no
 - Janine: official FRLG Cooltrainer F recoloured + small additions (scarf tail, sash, pants) → approved (v2).
 - Lesson: **start from the official sprite that is closest in shape/pose**, change colours and only a few pixels.
 
+## Copycat lessons (2026-11-15)
+- v1/v2 (FRLG Lass recolour + bang edit): rejected, "too similar to the original".
+- v3 (Erika's front-facing head on the 3/4-view Emerald Lass body, hair as uniform tubes): rejected, "looks like shit".
+  Why (research): a head must match the body's angle; added hair must be drawn in the sprite's own 1-px style with
+  strand clusters, not uniform tubes; edited areas need re-shading, not pasted linework (PokéCommunity critique,
+  Reborn tutorial: "start with a canon pose close to your character, then change its features").
+- v4: keep the base's own head/face (same angle, lively eyes), redraw only the hair by hand: rounded crown with a
+  curved highlight, blunt bangs + forehead shadow, uneven strand partings, locks framing the face, long back hair that
+  only shows where nothing is in front, dark-pink outline on the lit side and black on the shadow side; 15 colours by
+  reusing skin-light as hair shine (official sprites do this).
+
 ## Technique checklist
 1. **Pick the base by silhouette**, not colour: hair shape, body type, pose. Colours are cheap to change, shapes aren't.
 2. **Palette:** 16 entries, index 0 transparent → 15 colours for the whole sprite (Voliol, Gen III palettes).
