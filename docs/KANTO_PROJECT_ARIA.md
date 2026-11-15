@@ -242,7 +242,10 @@ Proposed blocks (owner to confirm or adjust):
 - Add Kanto challengers: the Kanto Gym Leaders, Blue, the Kanto Elite Four.
 - **Blue as a title-defense challenger uses his *real* team, with Blastoise** (owner, 2026-11-15) — his
   FireRed Champion team (Pidgeot, Alakazam, Rhydon, Arcanine, Exeggutor, Blastoise; the FRLG rematch version
-  has Heracross/Tyranitar) as the base, not his Flying Gym team. Final six still to be shown to the owner.
+  has Heracross/Tyranitar) as the base, not his Flying Gym team. **Owner 2026-11-15: Blastoise is his ace and
+  his Mega; also Pidgeot, Arcanine, Exeggutor, Alakazam; Kanto Pokémon only.** Sixth slot: Rhyperior proposed
+  (= Rhydon, which RBY/FRLG Blue used with Blastoise) — waiting for the owner.
+- **Blue's Flying Gym team: no Charizard** (owner, 2026-11-15).
 - **Red** is the final challenger, at the top of the curve (current defenses run 74–90).
 - Needs a code change: today the ladder triggers on repeat E4 runs after the Hall of Fame.
 
