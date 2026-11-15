@@ -339,6 +339,14 @@ Add under each item: what was found, what was changed, files, how to test, what 
         shows its faces beside a tree cell, a flat cell steps down to a lower one that is not flat
         (`BeltFlatSteps`), side faces lean to the lower neighbour's row, and the first tree cells get ground.
         Picture `docs/polish_reports/POL-30_fallarbor_sawteeth_fixed.png`. Only looked at in Fallarbor so far.
+      - (2) Route 113, 2026-11-15: **belt layers** (`BELT_LAYERS` in `voxel_gl.c`). The belt is emitted once per
+        atlas: layer 0 the current map's, layers 1-3 the ready atlases of loaded maps on other tile sets
+        (`VoxelWorld_SetBeltPairs`, `VoxelWorld_BorderArtMap`, `VoxelMesh_SetBeltPass`). A new set of layers
+        rebuilds the belt a few pieces a frame (no whole-belt build). Sweep after this: **0 of 34029 cells differ
+        in art, 70 in height** (Route 118/123 30, Verdanturf/116 21, 117/Verdanturf 14, Lavaridge/112 5).
+        Picture `POL-30_route111_sees_route113_old_vs_new.png`.
+        Not checked by the sweep: Route 119/118 and Route 111/Mauville (the test `warp` cannot place the player
+        past y=127 on those tall maps).
       - Pictures: `docs/polish_reports/POL-21_route110_to_103.png`, `POL-24_route112_to_lavaridge.png`
         (top old, bottom new; left before the crossing, right after). 2D does not use this code.
 
