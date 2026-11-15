@@ -163,6 +163,11 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       (owner: "let's move on and return to this later"). Wanted: Hinata-style hair (blunt bangs, long side strands, long
       in the back), not recognisable as an existing trainer. Read `docs/SPRITING_NOTES.md` first; consider asking Treston
       for reference art (Janine/Varnell battle art came from his own art).
+- [ ] **ENG-HIRES. Battle pictures with more pixels — ON HOLD** (owner, 2026-11-15: option 1, "but put that on hold").
+      Same on-screen size as every trainer (keeps his 2026-11-14 rule "same size so they don't stick out"), but drawn at
+      2x detail: a 128x128 full-colour picture in the 64x64 spot. Needs the PC renderer to draw those sprites at output
+      resolution (src/platform/hicolor.c + sdl2.c — shared engine files, claim in WORK_CLAIMS first). Then Mimi goes back
+      to full body from his art (eyes/ball/boots intact); Janine's and Varnell's art can use it too.
 - [ ] **S-SAFFRON-GYM. Redesign the Saffron Gym for the Copycat** (owner, 2026-11-15) — it is Sabrina's teleporter maze now.
 - [ ] **S-SABRINA-ROOM. New Elite Four room for Sabrina** (owner, 2026-11-15) — the 4th room (FireRed's dragon room, Lance's old one), alongside S-KOGA-ROOM.
       **Rule for all three (owner, 2026-11-15): before designing any map, research how people make good Gen 3 maps**
