@@ -92,5 +92,7 @@ int VoxelEntities_PlayerVertexFirst(void);
 unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas,
                             const VoxelCamera *camera, VoxelBuilder *shadows,
                             VoxelBuilder *reflections);
+/* POL-26b: builders for the night-light sprites' cards and their lamps' pools (NULL: with the others / none) */
+void VoxelEntities_SetLampBuilders(VoxelBuilder *glows, VoxelBuilder *pools);
 
 #endif

@@ -31,6 +31,7 @@
 #include "voxel_tree.h"
 #include "voxel_world.h"
 #include "voxel_lighting.h"
+#include "voxel_sign.h"
 
 /* 16 pixels of sprite is one world tile, as in the reference renderer. */
 #define VOXEL_PIXELS_PER_TILE 16.0f
@@ -1641,6 +1642,21 @@ static unsigned GatherStandIns(const VoxelCamera *camera, uint16_t *atlas, bool 
 }
 #endif
 
+/*
+ * POL-26b (Treston, 2026-11-15: lamps in 3D the 3DS way): the game's night-light sprites (UpdateLightSprite:
+ * lamp balls, the Pokemon Center / Mart sign lights). The GBA draws them semi-transparent (OBJ blend,
+ * Weather_SetBlendCoeffs(7, BASE_SHADOW_INTENSITY)); as solid cards they were flat yellow discs. Their cards go
+ * to a builder of their own, drawn blended as the GBA blends them (voxel_gl.c), and every lamp ball also gets
+ * Emerald 3DS's pool of light on the ground (voxel_sign.c LampGround). NULL: drawn with the other cards.
+ */
+static VoxelBuilder *sGlowBuilder, *sPoolBuilder;
+
+void VoxelEntities_SetLampBuilders(VoxelBuilder *glows, VoxelBuilder *pools)
+{
+    sGlowBuilder = glows;
+    sPoolBuilder = pools;
+}
+
 unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelCamera *camera,
                             VoxelBuilder *shadows, VoxelBuilder *reflections)
 {
@@ -2020,6 +2036,35 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
         h = sSlots[effect->slot].height;
         x = sprite->x + sprite->x2;
         base = sprite->y + sprite->centerToCornerVecY + h;
+        if (sprite->callback == UpdateLightSprite && sGlowBuilder != NULL)
+        {
+            /* POL-26b: placed as a card on its own is (below), into the glow builder; a lamp ball's pool on
+             * the ground of its tile (sLightXPos / sLightYPos, map coordinates). */
+            reference = gPlayerAvatar.objectEventId < OBJECT_EVENTS_COUNT
+                      ? &objects[gPlayerAvatar.objectEventId] : NULL;
+            if (reference == NULL || !reference->drawn)
+                continue;
+            {
+                float cx = reference->worldX + 0.5f + (x - reference->screenX) / VOXEL_PIXELS_PER_TILE;
+                float cz = reference->worldZ + 0.5f + (base - reference->base) / VOXEL_PIXELS_PER_TILE;
+
+                if (fabsf(cx - camera->targetX) > VOXEL_CARD_RANGE || fabsf(cz - camera->targetZ) > VOXEL_CARD_RANGE)
+                    continue;
+                EmitBillboard(sGlowBuilder, &sSlots[effect->slot], effect->slot, cx, cz, 0.0f, 0.0f,
+                              -sprite->y2 * pixel, reference->deck, rightX, rightZ, stretch,
+                              1.0f, SpriteScale(sprite));
+            }
+            if (sPoolBuilder != NULL && sprite->data[5] == LIGHT_TYPE_BALL && VoxelWorld_InstanceCount() > 0)
+            {
+                float px = (float)(sprite->data[6] - MAP_OFFSET + VoxelWorld_Instance(0)->originX) + 0.5f;
+                /* the light object is on the lamp's head tile; the 3DS centres the pool on the post (one south) */
+                float pz = (float)(sprite->data[7] - MAP_OFFSET + VoxelWorld_Instance(0)->originY) + 1.5f;
+                const VoxelMapInstance *inst = VoxelWorld_GetInstanceAt((int)floorf(px), (int)floorf(pz));
+
+                VoxelSign_LampPool(sPoolBuilder, inst, px, pz);
+            }
+            continue;
+        }
         if (effect->cloud)
         {
             /* Placed from the player as a decal is: its picture's bottom

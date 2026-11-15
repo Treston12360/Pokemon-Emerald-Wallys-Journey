@@ -195,6 +195,7 @@ static GLuint sProgram;
 static GLint sUniUnfade; // POL-16
 static GLint sUniTintMul, sUniTintAdd, sUniHazeMul; // POL-26b
 static GLint sUniGlowStrength, sUniGlowLin; // POL-26b: lit windows
+static GLint sUniLamp; // POL-26b: night lamps
 #define GLOW_UNIT 1 // texture unit of a building page's window mask
 static float sTintMul[3] = {1, 1, 1}, sTintAdd[3]; // POL-26b: this frame's time-of-day colour (world)
 static GLint sUniMode, sUniAlphaMin, sUniMvp, sUniOrigin, sUniTex, sUniFade, sUniFog, sUniFogColor, sUniCam;
@@ -280,7 +281,11 @@ static const char *sFragmentSrc =
     // mask x strength). glowLin is that colour in the Gamma path's linear light (see Voxel3D_Render).
     "uniform sampler2D glowTex;\n"
     "uniform float glowStrength;\n"
-    "uniform vec3 glowLin;\n" // POL-26b: the 2D time-of-day colour (world), the haze's too
+    "uniform vec3 glowLin;\n"
+    // POL-26b lamps: mode 3 a night-light sprite, as the GBA blends it (OBJ blend 7/16 over the scene x 12/16:
+    // out = c x 7/16, alpha 12/16, blended ONE, SRC_ALPHA; Gamma path: c in its linear light, c x c x lamp.w);
+    // mode 4 a lamp's pool (Emerald 3DS LampTexEnv: the ground x (1 + falloff x lamp.rgb), blended DST_COLOR, ONE)
+    "uniform vec4 lamp;\n" // POL-26b: the 2D time-of-day colour (world), the haze's too
     "uniform vec3 chunky;\n" // x mode, y slice depth in sprite pixels (signed), z unused
     "uniform vec2 atlasTexel;\n"
     "void main() {\n"
@@ -289,6 +294,8 @@ static const char *sFragmentSrc =
     // POL-16: a palette fade taken back off a person's colours (Gamma lighting: the screen pass fades them)
     "  if (unfade.a > 0.0) c.rgb = clamp((c.rgb - unfade.a * unfade.rgb) / max(1.0 - unfade.a, 0.004), 0.0, 1.0);\n"
     "  c.rgb = clamp(c.rgb * tintMul + tintAdd, 0.0, 1.0);\n" // POL-26b: as the 2D palettes are moved (night)
+    "  if (mode > 3.5) { gl_FragColor = vec4(c.r * lamp.rgb, 1.0); return; }\n"
+    "  if (mode > 2.5) { vec3 g = gammaLight > 0.5 ? c.rgb * c.rgb * lamp.w : c.rgb; gl_FragColor = vec4(g * (7.0 / 16.0), 12.0 / 16.0); return; }\n"
     "  if (chunky.x > 0.5) {\n"
     "    float half_ = 2.0;\n"
     "    if (chunky.x > 1.5) {\n"
@@ -448,6 +455,7 @@ static bool MakeProgram(void)
     sUniHazeMul = wj_glGetUniformLocation(sProgram, "hazeMul");
     sUniGlowStrength = wj_glGetUniformLocation(sProgram, "glowStrength");
     sUniGlowLin = wj_glGetUniformLocation(sProgram, "glowLin");
+    sUniLamp = wj_glGetUniformLocation(sProgram, "lamp");
     wj_glUseProgram(sProgram); // uniforms start at 0: no tint is 1, 0
     wj_glUniform3f(sUniTintMul, 1, 1, 1);
     wj_glUniform3f(sUniTintAdd, 0, 0, 0);
@@ -1475,6 +1483,11 @@ static VoxelVertex *sSpriteVerts, *sShadowVerts, *sReflectVerts;
 static uint16_t *sSpriteAtlas;
 static GLuint sSpriteTex;
 static Mesh sSpriteMesh, sShadowMesh, sReflectMesh;
+// POL-26b: the night-light sprites' cards (blended as the GBA does) and the lamps' pools of light (Emerald 3DS)
+#define LAMP_VERTS 4096u
+static VoxelVertex *sGlowVerts, *sPoolVerts;
+static Mesh sGlowMesh, sPoolMesh;
+static GLuint sPoolTex;
 
 // ---------------------------------------------------------------------------
 
@@ -1975,6 +1988,8 @@ bool Voxel3D_Init(const char *dataDir)
     sSpriteVerts = malloc(SPRITE_VERTS * sizeof(VoxelVertex) * 3);
     sShadowVerts = sSpriteVerts + SPRITE_VERTS;
     sReflectVerts = sSpriteVerts + 2 * SPRITE_VERTS;
+    sGlowVerts = malloc(LAMP_VERTS * sizeof(VoxelVertex) * 2);
+    sPoolVerts = sGlowVerts != NULL ? sGlowVerts + LAMP_VERTS : NULL;
     sSpriteAtlas = calloc(VOXEL_SPRITE_PIXELS, sizeof(uint16_t));
     if (sScratch == NULL || sSpriteVerts == NULL || sSpriteAtlas == NULL)
         return false;
@@ -2831,9 +2846,44 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         VoxelBuilder_SetOrigin(&shadows, 0, 0);
         VoxelBuilder_Init(&reflections, sReflectVerts, SPRITE_VERTS);
         VoxelBuilder_SetOrigin(&reflections, 0, 0);
+        VoxelBuilder glows, pools; // POL-26b
+        bool lamps = sGlowVerts != NULL && getenv("WJPC_3D_FLAT_LAMPS") == NULL;
+        if (lamps)
+        {
+            VoxelBuilder_Init(&glows, sGlowVerts, LAMP_VERTS);
+            VoxelBuilder_SetOrigin(&glows, 0, 0);
+            VoxelBuilder_Init(&pools, sPoolVerts, LAMP_VERTS);
+            VoxelBuilder_SetOrigin(&pools, 0, 0);
+            if (sPoolTex == 0)
+            {   // Emerald 3DS MakeLampPool: 64 x 64, (1 - r^2)^2, linear filter, black at the rim
+                static uint8_t px[64 * 64];
+                for (int y = 0; y < 64; y++)
+                    for (int x = 0; x < 64; x++)
+                    {
+                        float dx = ((float)x + 0.5f) / 32.0f - 1.0f, dy = ((float)y + 0.5f) / 32.0f - 1.0f;
+                        float k = 1.0f - (dx * dx + dy * dy);
+                        px[y * 64 + x] = k > 0.0f ? (uint8_t)(k * k * 255.0f + 0.5f) : 0;
+                    }
+                wj_glGenTextures(1, &sPoolTex);
+                wj_glBindTexture(GL_TEXTURE_2D, sPoolTex);
+                wj_glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+                wj_glPixelStorei(0x0CF2 /* GL_UNPACK_ROW_LENGTH */, 0);
+                wj_glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 64, 64, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, px);
+                wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            }
+        }
+        VoxelEntities_SetLampBuilders(lamps ? &glows : NULL, lamps ? &pools : NULL);
         unsigned changed = 0;
         if (!sBattleMode) // in a battle the people are not there (the battle draws its own)
             changed = VoxelEntities_Emit(&sprites, sSpriteAtlas, &sCamera, &shadows, &reflections);
+        VoxelEntities_SetLampBuilders(NULL, NULL);
+        MeshSet(&sGlowMesh, sGlowVerts, lamps && !sBattleMode ? glows.count : 0, GL_STREAM_DRAW);
+        MeshSet(&sPoolMesh, sPoolVerts, lamps && !sBattleMode ? pools.count : 0, GL_STREAM_DRAW);
+        if (lamps && getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
+            Voxel3D_Log("[3D] lamps: %u glow verts, %u pool verts", glows.count, pools.count);
         if (changed != 0 || sSpriteTex == 0) // 1024x512 now: not every frame when nothing in it changed
             sSpriteTex = UploadTiled(sSpriteTex, sSpriteAtlas, VOXEL_SPRITE_ATLAS_W, VOXEL_SPRITE_ATLAS_H);
         MeshSet(&sSpriteMesh, sSpriteVerts, sprites.count, GL_STREAM_DRAW);
@@ -3092,6 +3142,31 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         }
         else
             MeshDraw(&sSpriteMesh, sSpriteTex, 0, 0, 0);
+    }
+    if (!sBattleMode && (sPoolMesh.count != 0 || sGlowMesh.count != 0))
+    {
+        // POL-26b: the lamps - pools on the ground first (3DS: 0.5 x glow x 255,150,60; glow 1 while the game
+        // shows its lights), then the night-light cards over them, both blended, depth tested, not written
+        wj_glEnable(GL_BLEND);
+        wj_glDepthMask(GL_FALSE);
+        if (sPoolMesh.count != 0 && sPoolTex != 0)
+        {
+            wj_glBlendFunc(GL_DST_COLOR, GL_ONE);
+            wj_glUniform1f(sUniMode, 4.0f);
+            wj_glUniform4f(sUniLamp, 0.5f, 0.5f * 150.0f / 255.0f, 0.5f * 60.0f / 255.0f, 1.0f / sExposure);
+            MeshDraw(&sPoolMesh, sPoolTex, 0, 0.02f, 0); // just over the ground it lies on
+        }
+        if (sGlowMesh.count != 0)
+        {
+            wj_glBlendFunc(GL_ONE, GL_SRC_ALPHA);
+            wj_glUniform1f(sUniMode, 3.0f);
+            wj_glUniform4f(sUniLamp, 0, 0, 0, 1.0f / sExposure);
+            MeshDraw(&sGlowMesh, sSpriteTex, 0, 0, 0);
+        }
+        wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        wj_glUniform1f(sUniMode, 0.0f);
+        wj_glDepthMask(GL_TRUE);
+        wj_glDisable(GL_BLEND);
     }
     wj_glUniform4f(sUniUnfade, 0, 0, 0, 0);
 

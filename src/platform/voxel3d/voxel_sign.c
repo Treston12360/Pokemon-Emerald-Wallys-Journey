@@ -201,6 +201,13 @@ static void LampGround(VoxelBuilder *builder, const VoxelMapInstance *inst,
         }
 }
 
+/* POL-26b (PC): the 3DS's pool of light around a lamp of our own maps (the game's light objects). */
+void VoxelSign_LampPool(VoxelBuilder *ground, const VoxelMapInstance *inst, float centerX, float centerZ)
+{
+    if (ground != NULL && inst != NULL && !inst->indoor)
+        LampGround(ground, inst, centerX, centerZ);
+}
+
 void VoxelSign_EmitNight(VoxelBuilder *glass, VoxelBuilder *ground,
                        const VoxelMapInstance *inst, int x0, int y0, int x1, int y1)
 {

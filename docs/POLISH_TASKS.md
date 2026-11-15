@@ -165,7 +165,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
         Tested at night (WJPC_RTC_EPOCH, 10 PM), Rustboro, walking left, 3D and 2D: 3D lamp glows now stay on
         (yellow-pixel count steady, ~5,300; the older exe fell from ~1,650 to ~0 half way); 2D shows no change
         in what it shows. Picture: `docs/polish_reports/POL-26_lamps_no_blink.png`.
-      - Still open (POL-26b): in 3D the lamp glows are the 2D glow sprite drawn flat (yellow discs).
+      - 3D look of the lamps: done in POL-26b (lamps step).
       - Looked at 2026-11-14 (Claude 019khs4X), Windows exe (Wine), Rustboro (warp `0 3 16 40`), walking left then
         up, a picture every 4 frames, 3D and 2D, at the test machine's night (01:xx): no blinking seen in either.
       - Found instead: **the 3D view has no night at all.** At the same moment 2D shows night (lamps and windows
@@ -220,6 +220,18 @@ Add under each item: what was found, what was changed, files, how to test, what 
       - Lamps: the 2D game's lamp-glow sprites show in 3D as flat yellow discs that pop in and out.
         **Treston, 2026-11-15: "Yes, take it over"** - Claude 019khs4X takes `voxel_entities.c` over from 014PwRDj
         for the lamps and draws them the way Emerald 3DS does (UpdateNightLamps).
+      - Lamps done 2026-11-15: the game's night-light sprites (UpdateLightSprite: lamp balls, PC / Mart sign lights)
+        no longer go into the solid card mesh. `voxel_entities.c` puts their cards in a builder of their own
+        (VoxelEntities_SetLampBuilders), and `voxel_gl.c` draws them as the GBA blends them (OBJ blend
+        Weather_SetBlendCoeffs(7, BASE_SHADOW_INTENSITY = 12): scene x 12/16 + glow x 7/16; shader mode 3).
+        Every lamp ball also gets Emerald 3DS's pool of light (voxel_sign.c LampGround, now public as
+        VoxelSign_LampPool; 3DS MakeLampPool texture (1-r^2)^2, LampTexEnv: ground x (1 + falloff x 0.5 x
+        255,150,60), shader mode 4), centred on the post: the light object is on the lamp's head tile, the post
+        one tile south (3DS: centred on the post). The 3DS's lamp "glass" is not used: it comes from its sign data
+        (signs.bin lanterns), not from our maps' light objects. Off switch: `WJPC_3D_FLAT_LAMPS=1` (old look).
+        Picture: `docs/polish_reports/POL-26b_lamps.png`. Tested Rustboro 10 PM, 3D (Gamma on and off) and 2D
+        (unchanged; only randomly walking people differ). The pools are faint on the night-blue ground (the 3DS
+        formula adds mostly red) - ask Treston if they should be stronger.
 - [x] **POL-27. Route 113 ash.** "Route 113 ash on the floor after walking through it shows blue boxes and does
       not show crash or anything." (Brennan, confirmed: he meant the ash puff when you step in it.)
       - Done 2026-11-14 (Claude 019khs4X). Picture for Brennan: `docs/polish_reports/POL-27_ash_trail_fixed.png`.
