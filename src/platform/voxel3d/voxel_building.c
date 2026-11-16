@@ -614,8 +614,7 @@ bool VoxelBuildings_ReadPage(unsigned page, unsigned first, unsigned count, uint
     if (fseek(sPageFile, (long)(sPages[page].offset + first * sizeof(uint16_t)), SEEK_SET) != 0
      || fread(dest, sizeof(uint16_t), count, sPageFile) != count)
         return false;
-    /* On the reading thread, off the render thread's frame. */
-    VoxelGrade_Texels(dest, count);
+    /* (graded by the caller, after the season's colours - POL-34: voxel_gl.c LoadBuildingPage) */
     return true;
 }
 

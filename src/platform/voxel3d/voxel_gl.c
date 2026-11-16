@@ -988,7 +988,13 @@ static GLuint LoadBuildingPage(int page, bool reload)
     memset(sPageScratch, 0, (size_t)w * th * sizeof(uint16_t));
     if (!VoxelBuildings_ReadPage((unsigned)page, 0, w * h, sPageScratch))
         return 0;
-    VoxelWorld_SeasonTexels(sPageScratch, (size_t)w * h); // DLX-17 (after ReadPage's grading)
+    // DLX-17 seasons, then the grading. POL-34 (Brennan 2026-11-15, winter night in Mauville: "All the houses now
+    // lost their color ... appear to be pale white"): the season was applied AFTER the grading (in ReadPage), so
+    // the formula saw brightened colours - in winter (snow cover: light earth tones turn white) most of a house's
+    // walls passed its brightness test and turned white, where 2D, which recolours the tile sets' own palette
+    // colours, keeps them. Now the formula sees the page's own colours, as 2D does (and as the trees already did).
+    VoxelWorld_SeasonTexels(sPageScratch, (size_t)w * h);
+    VoxelGrade_Texels(sPageScratch, (unsigned)(w * h));
     extern unsigned gVoxel3DPages;
     if (sPageTex[page] == 0)
         gVoxel3DPages++; // (stall log)

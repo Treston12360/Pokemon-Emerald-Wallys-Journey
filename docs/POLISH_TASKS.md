@@ -397,6 +397,15 @@ Add under each item: what was found, what was changed, files, how to test, what 
   even when searching using the alphabetical search in filters"
 - **POL-34 (new; same as Treston's PC-1115-01). Houses lost their colour (3D):** "All the houses now lost their color
   for some reason and jus appear to be pale white for the most part, for some reason most of their color was removed"
+  - Brennan 19:40: Mauville, winter at night; reference = the GBA Mauville picture (houses with tan/gold posts,
+    the Gym's orange roof). **Fixed 2026-11-15 (014PwRDj), 3D only:** my own DLX-17 bug - the season recolour of
+    the building-model pages ran AFTER the colour grading (inside `VoxelBuildings_ReadPage`), so the season
+    formula saw brightened colours; in winter its snow cover (light earth tones -> white, owner choice 2026-10-29:
+    snow on every outdoor map) caught most wall/post/roof colours. Now season first, then grading
+    (`voxel_gl.c` LoadBuildingPage), as for the trees and as 2D does on the tile sets' own colours. Picture
+    `docs/polish_reports/POL-34_mauville_houses_before_after.png` (left before, right after; winter night).
+    Treston's PC-1115-01 ("the houses lost their color") is likely the same; tell him.
+- **POL-33: Brennan 19:40 "I was wrong disregard the Pokédex search."** Closed, no change.
 - **POL-30 (reopened, quality pass):** "Since we introduced the zoom feature the out of boarder areas that the player
   could not see before were "filled" with a bunch of trees added and then they would change when switching routes ...
   but now like in Dewford for example you jus put a bunch of trees in the middle of the ocean to "fill" the out of
