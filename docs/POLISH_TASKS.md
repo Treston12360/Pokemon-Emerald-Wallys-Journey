@@ -524,6 +524,12 @@ Add under each item: what was found, what was changed, files, how to test, what 
         are not in their engine's scene - they are our renderer's texture-edge sampling at high resolution.
 - [ ] **POL-38. Sandstorm north of Mauville (Route 111).** "sandstorm north of mauville looks weird not like a
       sandstorm. Rocks within the sandstorm, the top right of the rocks so a blue box"
+      - 2026-11-16 (014PwRDj): two causes. (1) With Gamma lighting the weather colours went into the linear
+        scene as they were and the exposure pushed them to white: the sand's streaks read as rain. Now converted
+        to linear light / exposure (rain's too). (2) Only the streaks of Emerald 3DS's sandstorm were ported; its
+        dust (ctr_voxel.c DrawBanks with sSandBanks: two drifting noise sheets near the ground) now too
+        (voxel_gl.c DrawSandBanks, values as the 3DS's; WJPC_NO_SAND_DUST=1 off). Picture:
+        docs/polish_reports/POL-38_sandstorm.png. The "blue box" at the rocks not found in the test shots yet.
 - [ ] **POL-39 (PRIORITY). White flowers.** "The white flowers around the region have been turned into 3D, but
       now they have black lines and rough textures." (the POL-7 flower cards)
       - 2026-11-16 (014PwRDj): his crop shows a dark tick at both ends of every card: the card's u ran right to

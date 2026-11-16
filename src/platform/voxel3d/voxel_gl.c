@@ -2412,7 +2412,7 @@ static Uint64 sStallDrawStart;
  * at fixed places in a box round the camera; each frame the box's contents move by one offset and the shader wraps
  * them back in, fading them at the box's sides, near the lens and into the haze. Two or three groups per weather,
  * each with its own speed, wind and size. How many are drawn follows the game's weather as it comes and goes
- * (VoxelWorld_WeatherAmount). Not ported (yet): 3DS's sand dust sheets (DrawBanks) - the streaks only.
+ * (VoxelWorld_WeatherAmount). The sand's dust sheets (3DS DrawBanks): DrawSandBanks (POL-38).
  * Our haze is distance-based (the world's own fog rule here), 3DS's is depth-based.
  */
 #define VOXEL_STREAKS 768
@@ -2680,7 +2680,16 @@ static void DrawWeather(const float *proj, const float *view, const float fade[4
     wj_glUniform2f(sWUniFog, sFogNear, sFogFar);
     wj_glUniform3f(sWUniCam, sCamera.x, sCamera.y, sCamera.z);
     wj_glUniform4f(sWUniFade, fade[0], fade[1], fade[2], fade[3]);
-    wj_glUniform3f(sWUniColour, (colour & 0xFF) / 255.0f, ((colour >> 8) & 0xFF) / 255.0f, ((colour >> 16) & 0xFF) / 255.0f);
+    {
+        /* POL-38: with Gamma lighting the scene is linear light the screen pass multiplies by the exposure;
+         * the 3DS's colour put in as it is came out near white (the sand's streaks read as rain) */
+        float c[3] = {(colour & 0xFF) / 255.0f, ((colour >> 8) & 0xFF) / 255.0f, ((colour >> 16) & 0xFF) / 255.0f};
+
+        if (gVoxelGammaLight)
+            for (int k = 0; k < 3; ++k)
+                c[k] = (c[k] <= 0.04045f ? c[k] / 12.92f : powf((c[k] + 0.055f) / 1.055f, 2.4f)) / sExposure;
+        wj_glUniform3f(sWUniColour, c[0], c[1], c[2]);
+    }
     wj_glBindBuffer(GL_ARRAY_BUFFER, sWeatherVbo[flakes ? 1 : 0]);
     wj_glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(WeatherVertex), (void *)0);
     wj_glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(WeatherVertex), (void *)(4 * sizeof(float)));
@@ -2740,6 +2749,254 @@ static void DrawWeather(const float *proj, const float *view, const float fade[4
     wj_glDepthMask(GL_TRUE);
     wj_glDisable(GL_BLEND);
     wj_glDisableVertexAttribArray(1);
+    wj_glUseProgram(sProgram);
+}
+
+/*
+ * POL-38 (Brennan 2026-11-16: "sandstorm north of mauville looks weird not like a sandstorm"): the rest of Emerald
+ * 3DS's sandstorm - its dust. ctr_voxel.c DrawBanks with sSandBanks: two horizontal sheets round the camera,
+ * 0.35 and 1.30 tiles over the player's ground, textured with soft tileable noise (MakeFog: four octaves of
+ * DappleNoise, thresholded so clear gaps open between the wisps), swept along by the wind (5.2 and 7.8 tiles a
+ * second west), fading out towards the sheet's rim; depth tested, never written - a wall or a rock rising
+ * through the dust parts it. Colour 0xFF88BEE0 (ABGR), strength 0.50 / 0.30 x the weather's amount. Values
+ * exactly as Emerald 3DS's.
+ */
+#define VOXEL_FOG_DIM 128
+#define VOXEL_FOG_GRID 8
+#define VOXEL_FOG_REACH 32.0f
+#define VOXEL_FOG_FADE 0.55f
+#define VOXEL_FOG_SHEET_VERTICES (VOXEL_FOG_GRID * VOXEL_FOG_GRID * 6)
+
+typedef struct { float period, height, driftX, driftZ, strength; } FogBank;
+static const FogBank sSandBanks[2] = {
+    {12.0f, 0.35f, -5.20f, 0.55f, 0.50f},
+    {7.0f, 1.30f, -7.80f, 0.25f, 0.30f},
+};
+static GLuint sBankProg, sBankVbo, sBankTex;
+static GLint sBUProj, sBUView, sBUOffset, sBUStrength, sBUColour, sBUFog, sBUCam, sBUFade, sBUTex;
+static bool sBankTried;
+
+static float DappleLattice(int x, int y, int period, uint32_t seed)
+{
+    uint32_t h = (uint32_t)(x % period) * 374761393u + (uint32_t)(y % period) * 668265263u + seed * 2246822519u;
+
+    h = (h ^ (h >> 13)) * 1274126177u;
+    h ^= h >> 16;
+    return (float)(h & 0xFFFFu) / 65535.0f;
+}
+
+static float Quintic(float t)
+{
+    return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
+}
+
+static float DappleNoise(float u, float v, int period, uint32_t seed)
+{
+    int x = (int)u, y = (int)v;
+    float fx = Quintic(u - (float)x), fy = Quintic(v - (float)y);
+    float a = DappleLattice(x, y, period, seed), b = DappleLattice(x + 1, y, period, seed);
+    float c = DappleLattice(x, y + 1, period, seed), d = DappleLattice(x + 1, y + 1, period, seed);
+    float top = a + (b - a) * fx, bottom = c + (d - c) * fx;
+
+    return top + (bottom - top) * fy;
+}
+
+static bool MakeBanks(void)
+{
+    static const char *vs =
+        "#version 120\n"
+        "uniform mat4 proj, view;\n"
+        "uniform vec3 offset;\n"
+        "uniform vec2 fog;\n"
+        "uniform vec3 cam;\n"
+        "attribute vec3 pos;\n"
+        "attribute vec2 uv;\n"
+        "attribute float shade;\n"
+        "varying vec2 vUv;\n"
+        "varying float vAlpha;\n"
+        "void main() {\n"
+        "  vec3 w = pos + offset;\n"
+        "  gl_Position = proj * (view * vec4(w, 1.0));\n"
+        "  float h = clamp((length(w - cam) - fog.x) / max(fog.y - fog.x, 0.001), 0.0, 1.0);\n"
+        "  vUv = uv;\n"
+        "  vAlpha = shade * (1.0 - h * h);\n"
+        "}\n";
+    static const char *fs =
+        "#version 120\n"
+        "uniform sampler2D tex;\n"
+        "uniform vec3 colour;\n"
+        "uniform float strength;\n"
+        "uniform vec4 fade;\n"
+        "varying vec2 vUv;\n"
+        "varying float vAlpha;\n"
+        "void main() { gl_FragColor = vec4(mix(colour, fade.rgb, fade.a),\n"
+        "  clamp(texture2D(tex, vUv).a * vAlpha * strength, 0.0, 1.0)); }\n";
+    static const struct { int period; float weight; } octaves[] = {{4, 1.0f}, {8, 0.55f}, {16, 0.30f}, {32, 0.12f}};
+    GLuint v, f;
+    GLint ok = 0;
+    uint8_t *texels;
+    VoxelVertex *quad;
+
+    sBankTried = true;
+    v = Compile(GL_VERTEX_SHADER, vs);
+    f = Compile(GL_FRAGMENT_SHADER, fs);
+    if (v == 0 || f == 0)
+        return false;
+    sBankProg = wj_glCreateProgram();
+    wj_glAttachShader(sBankProg, v);
+    wj_glAttachShader(sBankProg, f);
+    wj_glBindAttribLocation(sBankProg, 0, "pos");
+    wj_glBindAttribLocation(sBankProg, 1, "uv");
+    wj_glBindAttribLocation(sBankProg, 2, "shade");
+    wj_glLinkProgram(sBankProg);
+    wj_glGetProgramiv(sBankProg, GL_LINK_STATUS, &ok);
+    if (!ok)
+    {
+        Voxel3D_Log("[3D] sand dust program does not link");
+        sBankProg = 0;
+        return false;
+    }
+    sBUProj = wj_glGetUniformLocation(sBankProg, "proj");
+    sBUView = wj_glGetUniformLocation(sBankProg, "view");
+    sBUOffset = wj_glGetUniformLocation(sBankProg, "offset");
+    sBUStrength = wj_glGetUniformLocation(sBankProg, "strength");
+    sBUColour = wj_glGetUniformLocation(sBankProg, "colour");
+    sBUFog = wj_glGetUniformLocation(sBankProg, "fog");
+    sBUCam = wj_glGetUniformLocation(sBankProg, "cam");
+    sBUFade = wj_glGetUniformLocation(sBankProg, "fade");
+    sBUTex = wj_glGetUniformLocation(sBankProg, "tex");
+
+    // MakeFog (3DS): wisps rather than a wash
+    texels = malloc(VOXEL_FOG_DIM * VOXEL_FOG_DIM * 4);
+    quad = malloc(2 * VOXEL_FOG_SHEET_VERTICES * sizeof(VoxelVertex));
+    if (texels == NULL || quad == NULL)
+    {
+        free(texels);
+        free(quad);
+        sBankProg = 0;
+        return false;
+    }
+    for (unsigned y = 0; y < VOXEL_FOG_DIM; ++y)
+        for (unsigned x = 0; x < VOXEL_FOG_DIM; ++x)
+        {
+            float n = 0.0f, total = 0.0f, t;
+
+            for (unsigned o = 0; o < sizeof(octaves) / sizeof(octaves[0]); ++o)
+            {
+                float scale = (float)octaves[o].period / VOXEL_FOG_DIM;
+
+                n += octaves[o].weight * DappleNoise((float)x * scale, (float)y * scale, octaves[o].period, o + 11);
+                total += octaves[o].weight;
+            }
+            t = (n / total - 0.32f) / 0.40f;
+            t = t < 0.0f ? 0.0f : t > 1.0f ? 1.0f : t;
+            uint8_t *px = texels + 4 * (y * VOXEL_FOG_DIM + x);
+            px[0] = px[1] = px[2] = 255;
+            px[3] = (uint8_t)(t * t * (3.0f - 2.0f * t) * 255.0f + 0.5f);
+        }
+    wj_glGenTextures(1, &sBankTex);
+    wj_glBindTexture(GL_TEXTURE_2D, sBankTex);
+    wj_glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, VOXEL_FOG_DIM, VOXEL_FOG_DIM, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
+    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    free(texels);
+    // the sheets: a grid round their own centre, the pattern in world tiles, coverage falling to the rim
+    {
+        float cell = 2.0f * VOXEL_FOG_REACH / VOXEL_FOG_GRID;
+        unsigned n = 0;
+
+        for (unsigned bank = 0; bank < 2; ++bank)
+            for (unsigned gz = 0; gz < VOXEL_FOG_GRID; ++gz)
+                for (unsigned gx = 0; gx < VOXEL_FOG_GRID; ++gx)
+                {
+                    static const unsigned corners[6][2] = {{0, 0}, {1, 0}, {1, 1}, {0, 0}, {1, 1}, {0, 1}};
+
+                    for (unsigned k = 0; k < 6; ++k)
+                    {
+                        float x = -VOXEL_FOG_REACH + (float)(gx + corners[k][0]) * cell;
+                        float z = -VOXEL_FOG_REACH + (float)(gz + corners[k][1]) * cell;
+                        float r = sqrtf(x * x + z * z) / VOXEL_FOG_REACH;
+                        float edge = (1.0f - r) / (1.0f - VOXEL_FOG_FADE);
+
+                        edge = edge < 0.0f ? 0.0f : edge > 1.0f ? 1.0f : edge;
+                        quad[n].x = x;
+                        quad[n].y = 0.0f;
+                        quad[n].z = z;
+                        quad[n].u = x / sSandBanks[bank].period;
+                        quad[n].v = z / sSandBanks[bank].period;
+                        quad[n].shade = edge * edge * (3.0f - 2.0f * edge);
+                        ++n;
+                    }
+                }
+        wj_glGenBuffers(1, &sBankVbo);
+        wj_glBindBuffer(GL_ARRAY_BUFFER, sBankVbo);
+        wj_glBufferData(GL_ARRAY_BUFFER, n * sizeof(VoxelVertex), quad, GL_STATIC_DRAW);
+    }
+    free(quad);
+    return true;
+}
+
+static void DrawSandBanks(const float *proj, const float *view, const float fade[4])
+{
+    float amount = VoxelWorld_WeatherAmount();
+    const uint32_t colour = 0xFF88BEE0u; /* 0xAABBGGRR */
+    double seconds;
+
+    if (VoxelWorld_Weather() != VOXEL_WEATHER_SAND || amount <= 0.0f || getenv("WJPC_3D_NO_WEATHER") != NULL
+     || getenv("WJPC_NO_SAND_DUST") != NULL)
+        return;
+    if (!sBankTried)
+        MakeBanks();
+    if (sBankProg == 0)
+        return;
+    seconds = fmod((double)SDL_GetPerformanceCounter() / (double)SDL_GetPerformanceFrequency(), 86400.0);
+    wj_glUseProgram(sBankProg);
+    wj_glUniformMatrix4fv(sBUProj, 1, GL_FALSE, proj);
+    wj_glUniformMatrix4fv(sBUView, 1, GL_FALSE, view);
+    wj_glUniform2f(sBUFog, sFogNear, sFogFar);
+    wj_glUniform3f(sBUCam, sCamera.x, sCamera.y, sCamera.z);
+    wj_glUniform4f(sBUFade, fade[0], fade[1], fade[2], fade[3]);
+    {
+        /* 3DS: coverage = texture x shade (its colour carries the shade halved and the stage doubles it back).
+         * With Gamma lighting the scene is linear light that the screen pass multiplies by the exposure: the
+         * dust's colour goes in as the light that comes out as that colour. */
+        float c[3] = {(colour & 0xFF) / 255.0f, ((colour >> 8) & 0xFF) / 255.0f, ((colour >> 16) & 0xFF) / 255.0f};
+
+        if (gVoxelGammaLight)
+            for (int k = 0; k < 3; ++k)
+                c[k] = (c[k] <= 0.04045f ? c[k] / 12.92f : powf((c[k] + 0.055f) / 1.055f, 2.4f)) / sExposure;
+        wj_glUniform3f(sBUColour, c[0], c[1], c[2]);
+    }
+    wj_glUniform1i(sBUTex, 0);
+    wj_glActiveTexture(GL_TEXTURE0);
+    wj_glBindTexture(GL_TEXTURE_2D, sBankTex);
+    wj_glBindBuffer(GL_ARRAY_BUFFER, sBankVbo);
+    wj_glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VoxelVertex), (void *)offsetof(VoxelVertex, x));
+    wj_glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VoxelVertex), (void *)offsetof(VoxelVertex, u));
+    wj_glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(VoxelVertex), (void *)offsetof(VoxelVertex, shade));
+    wj_glEnableVertexAttribArray(0);
+    wj_glEnableVertexAttribArray(1);
+    wj_glEnableVertexAttribArray(2);
+    wj_glEnable(GL_BLEND);
+    wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    wj_glEnable(GL_DEPTH_TEST);
+    wj_glDepthMask(GL_FALSE);
+    wj_glDisable(GL_CULL_FACE);
+    for (unsigned bank = 0; bank < 2; ++bank)
+    {
+        const FogBank *b = &sSandBanks[bank];
+        float dx = (float)fmod(seconds * b->driftX, b->period);
+        float dz = (float)fmod(seconds * b->driftZ, b->period);
+
+        wj_glUniform3f(sBUOffset, floorf(sCamera.targetX / b->period) * b->period + dx, sCamera.ground + b->height,
+                       floorf(sCamera.targetZ / b->period) * b->period + dz);
+        wj_glUniform1f(sBUStrength, b->strength * amount);
+        wj_glDrawArrays(GL_TRIANGLES, (GLint)(bank * VOXEL_FOG_SHEET_VERTICES), VOXEL_FOG_SHEET_VERTICES);
+    }
+    wj_glDepthMask(GL_TRUE);
+    wj_glDisable(GL_BLEND);
     wj_glUseProgram(sProgram);
 }
 
@@ -3500,6 +3757,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     {
         // POL-23: rain, sand and ash over the finished world (3DS: DrawWeather after the world)
         float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fieldFadeInShader ? fadeAmount : 0.0f};
+        DrawSandBanks(proj, view, fd); // POL-38: the dust under the streaks, as 3DS draws its banks first
         DrawWeather(proj, view, fd);
     }
     if (gVoxelGammaLight)
