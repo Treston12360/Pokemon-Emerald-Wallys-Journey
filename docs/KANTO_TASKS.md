@@ -224,7 +224,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       **Owner-clarified 2026-11-16 final sequence:** stable window and Aria's refusal while Clefairy
       is captive → Varnell jumps backward → FIRST shaking / roof fall → Clefairy escapes
       Rocket's custody and runs to Aria DURING the collapse → Aria, Clefairy and future
-      Varnell die together. Never start shaking or release Clefairy before Varnell jumps.
+      Varnell die together. **Owner-locked motivation 2026-11-16:** Varnell believes the historically recorded time of Aria's death is almost here; she will not leave without Clefairy, so he jumps because he thinks he must save her himself. He does not know his jump causes the death he fears. Never start shaking or release Clefairy before Varnell jumps. Exact countdown/portal-time behavior and spoken wording remain DRAFT.
       **Unresolved blocking:** decide who forced young Varnell outside, exact placement and
       mechanism of Clefairy's escape from the Rocket member, and why the historical body
       cannot be identified by surviving effects. These details are DRAFT, not in game.
