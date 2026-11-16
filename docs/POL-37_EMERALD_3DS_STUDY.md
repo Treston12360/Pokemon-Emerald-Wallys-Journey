@@ -127,3 +127,17 @@ Checked for the report:
 Options given: close open steps in the renderer; a ground-coloured safety floor under every map; model what they
 left flat (no 3DS memory limits); their mountain rules for 118/119/111 through a full relief build with their checks;
 anti-aliasing (MSAA) for the high resolutions; a sweep of every map with their engine view to number the faults.
+
+## 9. Options done (Brennan 2026-11-16 09:39: "Sounds good, go.")
+
+- Option 1 (close every open step): tried, NOT kept - our renderer already shows the ground run on behind those
+  steps; the strips made dark streaky bands on Route 111's ledges.
+- Option 2 (safety floor): done, `voxel_mesh_builder.c` EmitSafetyFloor (WJPC_NO_SAFETY_FLOOR=1 off). Route 118's
+  sky-blue lines at the trees' feet gone. Picture: `docs/polish_reports/POLISH-OPT2_safety_floor_route118.png`.
+- Option 5 (anti-aliasing): done, 4x MSAA on the Gamma-lighting path, `antialias=` in the cfg (0 off), centroid
+  uv. Picture: `docs/polish_reports/POLISH-OPT5_antialiasing_petalburg.png`. A T-junction repair pass was tried
+  with it and dropped (no visible gain, 30-780 ms per map load).
+- Option 4 (their mountain rules on 118/119/111): the "block" mountain in Brennan's Route 118 picture is outside
+  the map (our POL-30 belt extends the mountain columns at Route 118's north edge, x 6-13), so it is POL-40 belt
+  work, not their terrace rules. Their rules run by hand on 118/119 changed nothing visible (section 8).
+- Left: option 6 (sweep every map), option 3 (prize machines and other flat props), POL-40 belt mountain.

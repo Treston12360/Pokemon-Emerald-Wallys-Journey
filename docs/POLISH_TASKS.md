@@ -141,6 +141,10 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-9. Game Corner.** "You can walk through the left and right columns of the game corner building,
       inside of the game corner the gatcha machines need to be fixed as they are in parts or not fully 3D and the
       game corner is very skippy/laggy."
+      - 2026-11-16 (014PwRDj): prize ("gatcha") machines: three were flat cards in Emerald 3DS's spec (named
+        "plant_0..2") and the purple one was left painted on the wall. Now one 3D box like the arcade cabinets
+        (tools/voxel3ds/game_corner_spec.py, layout 91 respliced). Picture: docs/polish_reports/POL-9_prize_machines_3d.png.
+        Still open: "walk through the left and right columns" (not yet clear which columns) and the lag.
 - [ ] **POL-10. Walking through the top of doors.** "When walking in entrances you walk through the top of the
       door this should be fluid and not be cutting off the top when walking through the door."
 - [x] **POL-12. Water is still.** "Water is not moving in 3D mode it is still." Done 2026-11-14 (Claude 019khs4X);
@@ -520,6 +524,12 @@ Add under each item: what was found, what was changed, files, how to test, what 
         are not in their engine's scene - they are our renderer's texture-edge sampling at high resolution.
 - [ ] **POL-38. Sandstorm north of Mauville (Route 111).** "sandstorm north of mauville looks weird not like a
       sandstorm. Rocks within the sandstorm, the top right of the rocks so a blue box"
+      - 2026-11-16 (014PwRDj): two causes. (1) With Gamma lighting the weather colours went into the linear
+        scene as they were and the exposure pushed them to white: the sand's streaks read as rain. Now converted
+        to linear light / exposure (rain's too). (2) Only the streaks of Emerald 3DS's sandstorm were ported; its
+        dust (ctr_voxel.c DrawBanks with sSandBanks: two drifting noise sheets near the ground) now too
+        (voxel_gl.c DrawSandBanks, values as the 3DS's; WJPC_NO_SAND_DUST=1 off). Picture:
+        docs/polish_reports/POL-38_sandstorm.png. The "blue box" at the rocks not found in the test shots yet.
 - [ ] **POL-39 (PRIORITY). White flowers.** "The white flowers around the region have been turned into 3D, but
       now they have black lines and rough textures." (the POL-7 flower cards)
       - 2026-11-16 (014PwRDj): his crop shows a dark tick at both ends of every card: the card's u ran right to
@@ -530,6 +540,12 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-40. Route 118.** "look within the red boxes in the picture provided. There are black lines along the
       beaches and on the ground near the trees. Also the background mountains are blocks instead of like the
       mountain south of it that looks correct." (picture not received yet - asked 08:50)
+      - 2026-11-16 (014PwRDj): the blocks are past Route 118's north edge: our belt (POL-30) stood every cell flat at
+        the height blended from the nearest maps, a wall a tile a level between neighbours, sky between columns.
+        Belt land now lies on its corners (each the mean of the land cells round it) as one slope; walls only
+        towards water/trees, cut a tile a level (voxel_mesh_builder.c BeltCorner/BeltSlopeSteps; WJPC_BELT_BLOCKS=1
+        the old way). Lavaridge and Fallarbor checked unchanged. Picture: docs/polish_reports/POL-40_route118_background_blocks.png.
+        Black lines on the beaches: the 16c/16e fixes (atlas inset, safety floor, centroid) - waiting for Brennan.
 - [ ] **POL-41. Route 119 trees.** "look within the red boxes in the picture provided. The trees in the back ground
       look to be higher than the others showing a block look to them. All trees should align together to show a
       full forest." (picture not received yet - asked 08:50)
