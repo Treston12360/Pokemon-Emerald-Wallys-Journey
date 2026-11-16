@@ -231,6 +231,13 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       Keep all new dialogue labeled **DRAFT** until the owner approves exact text. Build/test
       WallysJourney.exe for branch-specific flags, old saves, optional interactions, skipped dialogue,
       revisits, and the exact cutscene timeline; **do not** mark this done before game verification.
+- [ ] **S-ARIA-CONTINUITY-REVIEW (DRAFT, 2026-11-16):** Review `docs/KANTO_CONTINUITY_SOLUTIONS_DRAFT.md`
+      sections P01–P09 with the owner. Proposed, **not canon**: who forced young Varnell outside;
+      how Clefairy escapes **after Varnell jumps and roof starts falling**; Lavender echo's hidden
+      targeting role; public vs hidden Blue research; Palkia/Dialga/Giratina causal tests;
+      credible League vault transfer and delayed audit; Orb-to-Giratina capture timing;
+      independently charged one-way receiver; final choreography with only approved assets.
+      Do not edit live script or mark approved without owner sign-off; do not expose to Polish.
 
 
 ## Phase 3 — Levels and balance
