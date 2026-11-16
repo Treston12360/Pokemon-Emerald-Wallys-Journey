@@ -525,7 +525,8 @@ Add under each item: what was found, what was changed, files, how to test, what 
       - 2026-11-16 (014PwRDj): his crop shows a dark tick at both ends of every card: the card's u ran right to
         its edge, so a screen pixel there read the next card's column in trees.rgba5551 (dark outline). Fixed:
         the card's uv 1/32 texel inside (voxel_tree.c EmitGroundCard), as the tree crowns' top already was. Route 118
-        at 1280x720: the ticks are gone. "Rough textures" not changed yet - waiting for his look at the new build.
+        at 1280x720: no ticks with the fix - but 16c shows none at that size either (the ticks need his
+        resolution), so this waits for Brennan's check. "Rough textures" not changed yet - waiting for his look at the new build.
 - [ ] **POL-40. Route 118.** "look within the red boxes in the picture provided. There are black lines along the
       beaches and on the ground near the trees. Also the background mountains are blocks instead of like the
       mountain south of it that looks correct." (picture not received yet - asked 08:50)
