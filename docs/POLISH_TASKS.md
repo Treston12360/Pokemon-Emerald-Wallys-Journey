@@ -399,6 +399,19 @@ Add under each item: what was found, what was changed, files, how to test, what 
   Stall log (build 17:08): whole seconds of 11-20 loop trips (~50-120 ms each); of a ~100 ms trip, the 3D work
   (maps/belt/drawing calls) is 5-20 ms and the rest is in the frame step outside it - not yet split further (the
   2D-picture time is now logged too). Here, his cfg at Route 111: the 2D picture costs ~6 ms a frame.
+  - 18:28: his friend's cfg has the same graphics settings (only controls, fast-forward, music/sound volume 0
+    differ). GPUs: Brennan RTX 3080 + AMD CPU, 144 Hz; friend RTX 3060 + Intel, 180 Hz. Lag only above 60 fps.
+  - 18:42 log (build 18:32): "GL waits" 1-6 ms - not the GPU. The CPU-drawn 2D picture took 13-60 ms a frame
+    (7-10 ms here with his cfg on Route 111, 2.1 GHz Xeon under Wine) and the 3D CPU work was inflated alike,
+    varying frame to frame: looked like the thread waiting for a CPU. Build 18:44 logs the thread's own CPU time.
+  - **18:53: "It seems to not be lagging anymore ... nothing has changed on my end."** His 18:44-build log has no
+    LAGGY line at all (only map-entry stalls of 150-190 ms on Route 110, mostly building the maps). Cause of the
+    earlier lag not found; it went away without a change on his side - most likely something outside the game
+    taking the CPU. The stall log stays in the game; if it comes back, the LAGGY line's "thread CPU" says whether
+    the game was starved. The blue-bottom fix (atlas grown) stays.
+  - His `WallysJourney_errors.txt` (build 18:44): `skipped: callback exe+198be0 = Task_HandleExpansionIntro,
+    c0000005 at 0x2c, callback2 exe+198bc0 = CB2_ExpansionIntro` - a NULL read in the boot "powered by" intro,
+    skipped by the guard (the game goes on). Not looked into yet.
 
 ## Questions for Brennan (and his answers)
 
