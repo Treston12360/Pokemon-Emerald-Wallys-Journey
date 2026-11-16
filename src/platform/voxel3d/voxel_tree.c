@@ -621,7 +621,9 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
             }
-            else if ((metatileId == 0x004 || metatileId == 0x001 || metatileId == 0x007) && FlatRelief(inst, x, y)
+            /* (0x001, the grass's white flowers, stood as tufts too until 2026-11-16: Brennan, "revert back
+             * all the white flowers to the 2D form") */
+            else if ((metatileId == 0x004 || metatileId == 0x007) && FlatRelief(inst, x, y)
                   && !VoxelBuildings_CellAt(inst, x, y, NULL, NULL))
             {
                 builder->lift = VoxelRelief_CellLift(inst, x, y);
