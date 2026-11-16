@@ -8,6 +8,8 @@ Owner rule (2026-11-14): **American spelling** (color, honor, neighbor, traveler
 Owner rule (2026-11-13): longer dialogue is welcome when it makes a scene land; every NPC and trainer gets
 lines that fit who they are.
 
+**Continuity warning — November 16, 2026 (not a retroactive approval):** Ch.3 scenes 3.4–3.6 and the old Lavender resident line in Ch.4 scene 4.2 were **approved/implemented historically but are now SUPERSEDED BY NEW OWNER-LOCKED PLOT DECISIONS**. The old text is preserved below to show what is still **IN GAME**, not what should be written going forward. **Do not implement more scenes using the forced-Kiyoshi-seal or certain-Rocket-collapse explanations.** For revised **DRAFT dialogue** and complete Chapter 6–14 prose see `docs/KANTO_NARRATIVE_SCENES_DRAFT.md`; for who knows what and reveal order see `docs/KANTO_STORY_QA_MATRIX.md`. The new lines are **not owner-approved or in game** until reviewed and scripted.
+
 ---
 
 ## Chapter 0 — The call (Littleroot → Slateport)  · APPROVED
