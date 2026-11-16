@@ -38,6 +38,9 @@ How to use:
 | [x] | Seasons message names the region (ARIA, 2026-11-14) | 2026-11-14 | `data/scripts/wally_journey.inc` season texts use `{REGION}` (Kanto in Kanto maps, Hoenn otherwise); 'grey' -> 'gray' |
 | [ ] | Story chapters — 0, 0b, 1, 2, 3, 3b, 4 IN GAME (2026-11-14); next ch. 5 Celadon | 2026-11-14 | Ch. 0 touches Littleroot/Birch's lab/Slateport harbour scripts (Hoenn, post-game only) |
 | [ ] | K7 Kanto in 3D — paused (story first) | | Will regenerate `pc_data/voxel/*` — claim first |
+| [x] | **ARIA story-development draft pass, documentation only**: revised older scenes, later chapters, consistency/knowledge matrix, and owner-review questions drafted; no new scripted content built into game | 2026-11-16, a5dfbab / 9380d34 / 335d8cb / 9bcc3e4 | **Affects / don't revert:** Story notes only under `docs/KANTO_*`; prior in-game dialogue still present pending separate approval/testing. Keep spoilers confined to ARIA story docs; no engine or Polish-owned files changed. |
+| [ ] | **ARIA narrative approval and playable integration**: review draft text, implement superseding and later story scripts scene by scene, test in native Windows package | Open 2026-11-16 | Details in `docs/KANTO_TASKS.md`; no gameplay changes yet. |
+
 
 ## Project Polish (Brennan)
 
