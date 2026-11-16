@@ -107,10 +107,34 @@ void G5Preview_Draw(SDL_Renderer *renderer, SDL_Rect view)
         }
         if (!a->frames[idx])
             continue;
-        // A DS-size image is drawn 80/96 native pixels tall for a 240x160 GBA
-        // canvas, preserving the original pixel art with nearest-neighbour sampling.
-        int h = b == 0 ? 90 : 76;
-        int w = a->animation->w * h / a->animation->h;
+        // Gen 5 GIFs already contain pixel-art frames at sensible sprite sizes.
+        // Keep small Pokémon at 1 GIF pixel = 1 Emerald logical pixel: forcing
+        // every species to 76-90px tall made Beldum 2.2x too large and pushed
+        // it off its battle platform. Only shrink oversized animations to the
+        // familiar 64x64 (back) / 56x56 (front) Gen 3 battler footprints.
+        int w = a->animation->w;
+        int h = a->animation->h;
+        const int maxW = b == 0 ? 64 : 56;
+        const int maxH = b == 0 ? 64 : 56;
+        if (w <= 0 || h <= 0)
+            continue;
+        if (w > maxW || h > maxH)
+        {
+            if ((long)w * maxH > (long)h * maxW)
+            {
+                h = (h * maxW + w / 2) / w;
+                w = maxW;
+            }
+            else
+            {
+                w = (w * maxH + h / 2) / h;
+                h = maxH;
+            }
+        }
+        if (w < 1) w = 1;
+        if (h < 1) h = 1;
+        // Respect the real engine's live battler center. This keeps Beldum's
+        // lower edge at the platform rather than drawing a huge overlay over it.
         int centerX = sp->x + sp->x2;
         int centerY = sp->y + sp->y2;
         SDL_Rect dst = {
