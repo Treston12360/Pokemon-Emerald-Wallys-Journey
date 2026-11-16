@@ -37,3 +37,11 @@ made from this session's 3ds_port does NOT match pc_data's (53 models fewer), so
 The renderer binds one page per map, so the tool replaces Route 119's page with the donor's (same drawings, checked
 texel by texel, plus the Institute's) and moves the page's other models to their new place; round trip checked.
 Whoever regenerates buildings.bin must add the spec first.
+
+## Trainer Hill (POL-5, 2026-11-16, session 014PwRDj)
+Spec changes in `tools/voxel3ds/trainer_hill_spec.py` (a door model on Route 111 - Brennan's save runs the
+Route111_NoMirageTower layout 392, so the model is placed on 27 and 392 - and the lobby room: back wall 20 tall on
+row 132 instead of 16 on 128, the healing machine as a box on the counter). Spliced into pc_data/voxel/buildings.bin:
+`splice_buildings.py OURS DONOR OUT 27 30 112`, again for 392, then `splice_buildings.py --layout ... 414` (the
+whole room: every piece, a page of its own). relief.bin: `patch_relief_cells.py relief.bin 27 0 30,113 31,113
+32,113` and the same for 392 (the model's foot cells; their relief lifted the model 8 px - a light line at its foot).

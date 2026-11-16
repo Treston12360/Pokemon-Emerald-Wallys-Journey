@@ -2,6 +2,7 @@
 """Copy one building placement (its model, page, heights...) from one buildings.bin (VXB9) into another.
 
 usage: splice_buildings.py OURS.bin DONOR.bin OUT.bin LAYOUT_ID X Y
+       splice_buildings.py --layout OURS.bin DONOR.bin OUT.bin LAYOUT_ID   (a whole room: all its pieces)
 
 Wally's Journey (POL-36, 2026-11-15): the Weather Institute's model on Route 119 was made with
 3ds_port/scripts (spec "weather_institute_exterior"), but a whole buildings.bin made here does not
@@ -219,5 +220,94 @@ def main():
           % (w, h, count, extra_n, u16(page, 0), u16(page, 2) & 0x7FFF, added, n))
 
 
+
+def splice_layout(ours, donor, lid):
+    """Every placement of layout `lid` from DONOR (a room's pieces, rebuilt): OURS's placements of it
+    go, DONOR's come with their models, vertices, heights, masks, ground patches and a page of their
+    own (appended; the renderer binds one page per map, and all of them are on it). Conditions of the
+    removed placements go too (none expected)."""
+    dpl = [p for p in donor['places'] if u16(p, 0) == lid]
+    pages = {u16(donor['pms'][u16(p, 2)], 2) for p in dpl}
+    assert len(pages) == 1, pages
+    dpage = pages.pop()
+    keep = [i for i, p in enumerate(ours['places']) if u16(p, 0) != lid]
+    gone = [i for i, p in enumerate(ours['places']) if u16(p, 0) == lid]
+    assert not [c for c in ours['conds'] if u16(c, 0) in gone], 'conditions on removed placements'
+    new_page = len(ours['pages'])
+    ours['pages'].append(bytearray(donor['pages'][dpage]))
+    ours['texels'].append(donor['texels'][dpage])
+    model_map, pm_map = {}, {}
+    added = []
+    for p in dpl:
+        dpi = u16(p, 2)
+        if dpi not in pm_map:
+            dpm = donor['pms'][dpi]
+            dmi = u16(dpm, 0)
+            if dmi not in model_map:
+                dm = donor['models'][dmi]
+                w, h = dm[0], dm[1]
+                first, count, hts = u32(dm, 4), u32(dm, 8), u32(dm, 12)
+                static = count & 0x80000000
+                count &= 0x7FFFFFFF
+                nf = len(ours['verts'])
+                ours['verts'] += [bytearray(v) for v in donor['verts'][first:first + count]]
+                nh = len(ours['heights'])
+                ours['heights'] += donor['heights'][hts:hts + w * h]
+                ours['quarters'] += donor['quarters'][hts:hts + w * h]
+                for k in range(w * h):
+                    m = donor['foot'][hts + k]
+                    if m != 0xFFFF:
+                        ours['masks'].append(bytearray(donor['masks'][m]))
+                        m = len(ours['masks']) - 1
+                    ours['foot'].append(m)
+                model = bytearray(dm)
+                struct.pack_into('<III', model, 4, nf, count | static, nh)
+                model_map[dmi] = len(ours['models'])
+                ours['models'].append(model)
+            pm = bytearray(dpm)
+            struct.pack_into('<HH', pm, 0, model_map[dmi], new_page)
+            pm_map[dpi] = len(ours['pms'])
+            ours['pms'].append(pm)
+        place = bytearray(p)
+        extra_n, extra_first = u16(p, 10), u32(p, 12)
+        ne = len(ours['verts'])
+        ours['verts'] += [bytearray(v) for v in donor['verts'][extra_first:extra_first + extra_n]]
+        struct.pack_into('<H', place, 2, pm_map[dpi])
+        struct.pack_into('<I', place, 12, ne if extra_n else extra_first)
+        added.append(place)
+    # rebuild the placement list: OURS's others in order, the layout's new ones where its old ones were
+    old_index = {}
+    places = []
+    at = None
+    for i, p in enumerate(ours['places']):
+        if u16(p, 0) == lid:
+            if at is None:
+                at = len(places)
+            continue
+        old_index[i] = len(places)
+        places.append(p)
+    if at is None:
+        at = next((k for k, p in enumerate(places) if u16(p, 0) > lid), len(places))
+    places[at:at] = added
+    for c in ours['conds']:
+        oi = u16(c, 0)
+        ni = old_index[oi]
+        if ni >= at:
+            ni += len(added)
+        struct.pack_into('<H', c, 0, ni)
+    ours['places'] = places
+    have = {bytes(v) for v in ours['variants']}
+    for v in donor['variants']:
+        if u16(v, 0) == lid and bytes(v) not in have:
+            ours['variants'].append(bytearray(v))
+    # decks of the layout (none expected for a room)
+    return len(added), len(gone)
+
+
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == '--layout':
+        o, d = parse(sys.argv[2]), parse(sys.argv[3])
+        print('placements in %d, out %d' % splice_layout(o, d, int(sys.argv[5])))
+        print(write(o, sys.argv[4]), 'bytes')
+    else:
+        main()
