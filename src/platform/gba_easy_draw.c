@@ -132,7 +132,11 @@ static void RenderBGScanline(int bgNum, uint16_t control, uint16_t hoffs, uint16
             if (pixel != 0)
                 line[x] = pal[16 * paletteNum + pixel] | 0x8000;
         }
-        else {
+        else if (pixel != 0) {
+            // POL-32 (Brennan 2026-11-15: PC mass select "turns the screen a solid color"): colour 0 of a
+            // 256-colour background is see-through on the GBA, as in 16-colour ones (wide_view.c's renderer already
+            // skips it). The PC boxes' multi-select draws the picked group on such a layer over the whole screen,
+            // which hid the box, party and wallpaper behind a sheet of the backdrop colour.
             line[x] = pal[pixel] | 0x8000;
         }
     }

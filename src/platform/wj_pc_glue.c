@@ -151,6 +151,33 @@ int WJPC_TestState(const char *what, int id, int set, int value)
         ShowSelectMovePokemonSummaryScreen(gParties[B_TRAINER_PLAYER], 0, TestLearnScreenDone, id);
         return id;
     }
+    if (!strcmp(what, "classicgfx"))
+    {
+        // "state classicgfx FEATURE [0/1]": Options -> graphics style (WJGFX_*), 1 = Classic (test aid)
+        extern bool32 WJ_ClassicGfx(u32 feature);
+        if (set && gSaveBlock3Ptr != NULL)
+        {
+            gSaveBlock3Ptr->wjGfxMagic = 0xA5; // (WJ_GFX_MAGIC, wally_journey.c)
+            if (value)
+                gSaveBlock3Ptr->wjClassicGfx |= 1u << id;
+            else
+                gSaveBlock3Ptr->wjClassicGfx &= ~(1u << id);
+        }
+        return WJ_ClassicGfx(id);
+    }
+    if (!strcmp(what, "reg"))
+    {
+        // "state reg OFFSET": a GBA I/O register's value (16 bits), e.g. 0 = DISPCNT, 8.. = BG0CNT.. (test aid)
+        return *(volatile u16 *)(REG_BASE + (id & 0x3FE));
+    }
+    if (!strcmp(what, "storage"))
+    {
+        // "state storage 0": from the field, open the PC's Pokemon storage menu as the PC does - Sword/Shield
+        // or classic boxes per the player's setting (test aid, POL-32).
+        extern void ShowPokemonStorageSystemPC(void);
+        ShowPokemonStorageSystemPC();
+        return 1;
+    }
     if (!strcmp(what, "fieldmove"))
     {
         // "state fieldmove ID": can the player use this field move here (badge + HM item)? (Project ARIA test aid)

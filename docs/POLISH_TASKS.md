@@ -380,6 +380,15 @@ Add under each item: what was found, what was changed, files, how to test, what 
   down a bit, also the models inside are still 2D whenever in 3D."
 - **POL-32 (new). PC mass select:** "When trying to mass select pokemon within PC it turns the screen a solid color and
   sorta glitches out, also mass select only works on when you have sword and shield boxes on via settings."
+  - **Fixed 2026-11-15 (014PwRDj), in 2D renderer code:** reproduced with Brennan's save (test aid `state storage 0`
+    opens the PC box menu; `state classicgfx 5 1` switches to Classic boxes): starting a multi-select turned the
+    whole screen black in BOTH Sword/Shield and Classic boxes. Cause: `src/platform/gba_easy_draw.c` drew colour 0
+    of 256-colour backgrounds as solid (on the GBA it is see-through, and wide_view.c already skipped it); the
+    multi-select draws the picked group on such a layer covering the screen. Fix: colour 0 skipped. Side effect,
+    also correct: the boot intro's "POWERED BY" line now shows (it was hidden by the same bug). 2D field and 3D
+    untouched (other renderer). Picture: `docs/polish_reports/POL-32_pc_multiselect_fixed.png` (Classic left,
+    Sword/Shield right, a group picked up). Mass RELEASE (Start while holding a group) exists only in the
+    Sword/Shield boxes (WJ 0.18.9) - asked Brennan whether he wants it in Classic too.
 - **POL-6 (clarified):** "The sword and shield start menu is too big and goes off the screen when widescreen is turned
   off for some reason."
 - **POL-33 (new). Pokédex name search:** "When searching in pokedex to find pokemon under name using the alphabetical
