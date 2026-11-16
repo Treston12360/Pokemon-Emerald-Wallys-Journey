@@ -593,3 +593,10 @@ Asked 2026-11-14, answered the same day:
   (WJPC_MSAA overrides). Waiting for his check on 16g.
 - White flowers (General 0x001, the grass's flowers) back to 2D; red flowers (0x004) and planters (0x007) stay cards.
 - POL-40 belt terraces work in progress on branch `polish-belt-wip` (not in 16g).
+
+- [x] **POL-42. Ground moves vs Orthworm.** Brennan 2026-11-16 15:39: "ground type moves arent super effective against
+      steel type as they should be. this happened when battling against Orthworm in the desert."
+      - 014PwRDj, checked: the type chart is right (src/data/types_info.h, Ground -> Steel x2). Orthworm (Route 111's desert,
+        wild_encounters.json) has the ability Earth Eater (gen_9_families.h: { EARTH_EATER, NONE, SAND_VEIL }) - as in
+        Scarlet/Violet, a Ground move heals it instead of hurting it. Asked Brennan whether to keep that (official) or change it.
+      - Brennan 2026-11-16: "Keep Earth Eater". Closed, no change.
