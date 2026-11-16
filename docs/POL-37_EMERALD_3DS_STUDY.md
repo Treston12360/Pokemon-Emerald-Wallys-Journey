@@ -112,3 +112,18 @@ python3 cracks.py ../romfs/voxel/relief.bin 34     # their "black dash" (open st
    (`voxel_terraces.py LAYOUT --check`, `cracks.py`, `ledgecheck.py`) - their method, but work they have not done.
 5. Sandstorm: port the rest of theirs (light, haze, dust sheets).
 6. Game Corner prize machines: a box spec like the arcade cabinets', the way their specs make furniture.
+
+## 8. Going further than Emerald 3DS (options reported to Brennan 2026-11-16 09:5x, nothing changed yet)
+
+Brennan 09:34: "Is there anyway we can improve the 3d worlds better than what emerald 3ds did to fix the issues we
+have that we both share, report back to me with what you find out before making any changes".
+Checked for the report:
+- `cracks.py` (theirs) on pc_data/voxel/relief.bin: 1,645 "open steps" (ground rising southward with nothing under:
+  a dark dash) across Hoenn - Route 111 114 (each layout), Route 119 59, Route 118 0. Same in the 3DS data.
+- Their mountain rules run by hand on Route 118 / 119 (`voxel_terraces.py LAYOUT --relief IN OUT --check`):
+  15 s each, "open edges: 0", but the 3DS engine view of Route 119 at (20,12), (12,40), (20,135) came out pixel-identical
+  to today's - running the tool alone does not switch the maps over; that goes through gen_voxel_relief.py's GROUPS
+  and a full relief build (not tried yet).
+Options given: close open steps in the renderer; a ground-coloured safety floor under every map; model what they
+left flat (no 3DS memory limits); their mountain rules for 118/119/111 through a full relief build with their checks;
+anti-aliasing (MSAA) for the high resolutions; a sweep of every map with their engine view to number the faults.
