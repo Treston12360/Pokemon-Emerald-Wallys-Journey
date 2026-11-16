@@ -3056,6 +3056,109 @@ static void BeltWaterSkirts(VoxelBuilder *b, int x, int y, float wx, float wz, f
     }
 }
 
+/*
+ * POL-40 (Brennan 2026-11-16, Route 118: "the background mountains are blocks instead of like the mountain south of
+ * it"): past a map's edge the belt's land takes the level of the nearest map edges, blended between maps (POL-30),
+ * and every cell stood flat at its own level with a wall a tile a level down to the next: a mountain going on past
+ * the edge, or the ground rising from one map's height to another's, read as a staircase of blocks with the sky
+ * between them. A land cell's top now lies on its corners instead, each corner the mean of the land cells round
+ * it (in the world: their bases counted), so neighbouring land cells meet edge to edge as one slope and need no
+ * walls between them. Walls still stand towards water, trees and the maps. WJPC_BELT_BLOCKS=1: as before.
+ */
+static int sBeltSlopes = -1;
+
+static bool BeltLand(int x, int y, float *top, float *shift)
+{
+    float level, sh;
+
+    if (!BorderAt(x, y) || BorderWaterLevel(x, y, &level, &sh) || BeltIsTree(x, y))
+        return false;
+    if (!VoxelMesh_BorderLevel(x, y, &level, &sh))
+        return false;
+    *top = level + (float)VOXEL_BORDER_COURSES + BeltBase(x, y);
+    *shift = sh + BeltBase(x, y);
+    return true;
+}
+
+/* The corner (cx, cy) - a cell's top-left is (x, y) - over `base`: FALSE when no land cell is round it. */
+static bool BeltCorner(int cx, int cy, float base, float *top, float *shift)
+{
+    float sumT = 0.0f, sumS = 0.0f, t, s;
+    int n = 0;
+
+    for (int dy = -1; dy <= 0; ++dy)
+        for (int dx = -1; dx <= 0; ++dx)
+            if (BeltLand(cx + dx, cy + dy, &t, &s))
+                sumT += t, sumS += s, ++n;
+    if (n == 0)
+        return false;
+    *top = sumT / n - base;
+    *shift = sumS / n - base;
+    return true;
+}
+
+/* POL-40: a sloped land cell's walls - only down to water or trees beside it (a land neighbour shares its
+ * edge), from its edge as the slope leaves it down to the neighbour's level. */
+static void BeltSlopeSteps(VoxelBuilder *builder, int x, int y, float level, float shift)
+{
+    static const int kDir[4][2] = { {0, 1}, {1, 0}, {-1, 0}, {0, -1} };
+    /* each side's two corners, (dx, dy) from the cell's top-left, in the order the face is wound */
+    static const int kEdge[4][2][2] = { {{1, 1}, {0, 1}}, {{1, 0}, {1, 1}}, {{0, 1}, {0, 0}}, {{0, 0}, {1, 0}} };
+    float u0, v0, u1, v1, other, otherShift, t[2], z[2], t0, s0;
+
+    (void)level; (void)shift;
+    if (!MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+        return;
+    for (int d = 0; d < 4; ++d)
+    {
+        int nx = x + kDir[d][0], ny = y + kDir[d][1];
+        bool ok = true;
+
+        if (VoxelWorld_GetInstanceAt(nx, ny) != NULL || BeltLand(nx, ny, &t0, &s0))
+            continue;
+        if (BorderWaterLevel(nx, ny, &other, &otherShift))
+            ;
+        else
+        {
+            VoxelMesh_BorderLevel(nx, ny, &other, &otherShift);
+            if (!BeltIsTree(nx, ny))
+                other += (float)VOXEL_BORDER_COURSES;
+        }
+        other += BeltBase(nx, ny) - BeltBase(x, y);
+        otherShift += BeltBase(nx, ny) - BeltBase(x, y);
+        for (int k = 0; k < 2 && ok; ++k)
+            ok = BeltCorner(x + kEdge[d][k][0], y + kEdge[d][k][1], BeltBase(x, y), &t[k], &z[k]);
+        if (!ok || (t[0] <= other + 0.01f && t[1] <= other + 0.01f))
+            continue;
+        {
+            /* a tile a level up the wall, as BeltStepFaces (one drawing pulled over a tall wall was streaks) */
+            float xa = (float)(x + kEdge[d][0][0]), xb = (float)(x + kEdge[d][1][0]);
+            float za = (float)(y + kEdge[d][0][1]), zb = (float)(y + kEdge[d][1][1]);
+            float top = fmaxf(t[0], t[1]);
+            uint8_t shade = d == 0 ? SHADE_SOUTH : d == 1 ? SHADE_EAST : d == 2 ? SHADE_WEST : SHADE_NORTH;
+
+            for (float band = other; band < top - 0.01f; band += 1.0f)
+            {
+                float ha0 = fminf(band, t[0]), ha1 = fminf(band + 1.0f, t[0]);
+                float hb0 = fminf(band, t[1]), hb1 = fminf(band + 1.0f, t[1]);
+                /* along the wall, z goes from the neighbour's row at its foot to this cell's at its top */
+                float fa0 = t[0] > other ? (ha0 - other) / (t[0] - other) : 1.0f;
+                float fa1 = t[0] > other ? (ha1 - other) / (t[0] - other) : 1.0f;
+                float fb0 = t[1] > other ? (hb0 - other) / (t[1] - other) : 1.0f;
+                float fb1 = t[1] > other ? (hb1 - other) / (t[1] - other) : 1.0f;
+
+                if (ha1 <= ha0 && hb1 <= hb0)
+                    continue;
+                VoxelBuilder_Quad(builder,
+                    &(VoxelVertex){xa, ha1, za + otherShift + (z[0] - otherShift) * fa1, u0, v1 + (v0 - v1) * (ha1 - band), shade},
+                    &(VoxelVertex){xb, hb1, zb + otherShift + (z[1] - otherShift) * fb1, u1, v1 + (v0 - v1) * (hb1 - band), shade},
+                    &(VoxelVertex){xb, hb0, zb + otherShift + (z[1] - otherShift) * fb0, u1, v1 + (v0 - v1) * (hb0 - band), shade},
+                    &(VoxelVertex){xa, ha0, za + otherShift + (z[0] - otherShift) * fa0, u0, v1 + (v0 - v1) * (ha0 - band), shade});
+            }
+        }
+    }
+}
+
 void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     float u0, v0, u1, v1;
@@ -3104,8 +3207,15 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             {
                 float edge, edgeShift;
 
+                if (sBeltSlopes < 0)
+                    sBeltSlopes = getenv("WJPC_BELT_BLOCKS") == NULL;
                 if (VoxelMesh_BorderLevel(x, y, &edge, &edgeShift))
-                    EmitBorderSteps(builder, x, y, edge, edgeShift);
+                {
+                    if (!(sBeltSlopes && !drawn && !BeltIsTree(x, y)))
+                        EmitBorderSteps(builder, x, y, edge, edgeShift);
+                    else
+                        BeltSlopeSteps(builder, x, y, edge, edgeShift);
+                }
                 wz += edgeShift;
                 lift = edge;
             }
@@ -3125,15 +3235,60 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             west = !BorderAt(x - 1, y) || BorderWaterLevel(x - 1, y, &level, &shift) || BeltIsTree(x - 1, y);
             /* Laid as drawn, a cell's top is its own drawing; stood where it
              * is tiled, the column reads the rows above it. */
+            bool slopedTop = false;
             if (MetatileUV(builder, BeltMetatileFor(x, drawn ? y : y - (int)courses + 1, y),
                            &u0, &v0, &u1, &v1))
-                VoxelMesh_Top(builder, wx, wz, (float)courses + lift, 0.0f,
-                              u0, v0, u1, v1, SHADE_TOP);
+            {
+                float ct[4], cz[4];
+                const int kc[4][2] = { {0, 0}, {1, 0}, {1, 1}, {0, 1} };
+                bool sloped = sBeltSlopes && !drawn;
+
+                for (int k = 0; k < 4 && sloped; ++k)
+                    sloped = BeltCorner(x + kc[k][0], y + kc[k][1], builder->base, &ct[k], &cz[k]);
+                slopedTop = sloped;
+                if (sloped)
+                {
+                    /* a steep slope is cut a level a piece, each with the whole drawing (one drawing pulled
+                     * over a tall slope was streaks, as EmitBorderNorth's wall) */
+                    float lo = fminf(fminf(ct[0], ct[1]), fminf(ct[2], ct[3]));
+                    float hi = fmaxf(fmaxf(ct[0], ct[1]), fmaxf(ct[2], ct[3]));
+                    int n = (int)ceilf(hi - lo - 0.25f);
+
+                    n = n < 1 ? 1 : n > 12 ? 12 : n;
+                    for (int j = 0; j < n; ++j)
+                        for (int i = 0; i < n; ++i)
+                        {
+                            VoxelVertex q[4];
+                            const int di[4] = { 0, 1, 1, 0 }, dj[4] = { 0, 0, 1, 1 };
+
+                            for (int k = 0; k < 4; ++k)
+                            {
+                                float a = (float)(i + di[k]) / n, c = (float)(j + dj[k]) / n;
+                                float t = (ct[0] * (1 - a) + ct[1] * a) * (1 - c) + (ct[3] * (1 - a) + ct[2] * a) * c;
+                                float zz = (cz[0] * (1 - a) + cz[1] * a) * (1 - c) + (cz[3] * (1 - a) + cz[2] * a) * c;
+
+                                q[k] = (VoxelVertex){ wx + a, t, (float)y + c + zz, di[k] ? u1 : u0, dj[k] ? v1 : v0,
+                                                      SHADE_TOP };
+                            }
+                            VoxelBuilder_Quad(builder, &q[0], &q[1], &q[2], &q[3]);
+                        }
+                }
+                else
+                    VoxelMesh_Top(builder, wx, wz, (float)courses + lift, 0.0f,
+                                  u0, v0, u1, v1, SHADE_TOP);
+            }
             /* Laid as drawn it meets the map at its own height: the map's
              * faces close every step there, and a wall of the belt's would
              * stand in the same place as the cave's north wall. */
             /* Wally's Journey PC: the wider view sees between a drawn belt's
              * rows of tops, so it keeps its faces too. */
+            if (slopedTop)
+            {
+                /* POL-40: water and trees beside it have their walls in BeltSlopeSteps */
+                south = !BorderAt(x, y + 1);
+                east = !BorderAt(x + 1, y);
+                west = !BorderAt(x - 1, y);
+            }
             if (!south && !east && !west)
                 continue;
             for (int h = 0; h < (int)courses; ++h)

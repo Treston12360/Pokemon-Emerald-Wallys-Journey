@@ -540,6 +540,12 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-40. Route 118.** "look within the red boxes in the picture provided. There are black lines along the
       beaches and on the ground near the trees. Also the background mountains are blocks instead of like the
       mountain south of it that looks correct." (picture not received yet - asked 08:50)
+      - 2026-11-16 (014PwRDj): the blocks are past Route 118's north edge: our belt (POL-30) stood every cell flat at
+        the height blended from the nearest maps, a wall a tile a level between neighbours, sky between columns.
+        Belt land now lies on its corners (each the mean of the land cells round it) as one slope; walls only
+        towards water/trees, cut a tile a level (voxel_mesh_builder.c BeltCorner/BeltSlopeSteps; WJPC_BELT_BLOCKS=1
+        the old way). Lavaridge and Fallarbor checked unchanged. Picture: docs/polish_reports/POL-40_route118_background_blocks.png.
+        Black lines on the beaches: the 16c/16e fixes (atlas inset, safety floor, centroid) - waiting for Brennan.
 - [ ] **POL-41. Route 119 trees.** "look within the red boxes in the picture provided. The trees in the back ground
       look to be higher than the others showing a block look to them. All trees should align together to show a
       full forest." (picture not received yet - asked 08:50)
