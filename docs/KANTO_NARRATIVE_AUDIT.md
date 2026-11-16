@@ -16,7 +16,7 @@
 
 **LOCKED, not just suggestions:**
 1. **Young Varnell was forced outside Pokémon Tower** during the original Team Rocket raid. He survives, does not witness the future gateway or recognize the future man, and sincerely attributes the tragedy to Rocket.
-2. **Aria's Clefairy remained captive with a Rocket member inside the tower** while Aria searched for it. It did NOT escape its captor first. Aria won't cross the future window without her Clefairy. Precisely where the member and Clefairy stand when the ceiling falls is a *staging question*, not permission to invent an escape.
+2. **Aria's Clefairy remained captive with a Rocket member inside the tower until the final collapse began.** It did NOT escape before Varnell crossed. Aria won't cross the stable future window without her Clefairy. **OWNER CLARIFICATION 2026-11-16:** once future Varnell jumps and the roof starts falling, Clefairy escapes the Rocket member and runs back to Aria; they reunite during the collapse, which kills Aria, Clefairy, and future Varnell. Precise escape mechanics and positions remain *DRAFT blocking*, not permission to make the escape happen sooner.
 3. **Lavender residents may speculate the unidentified adult man was a Rocket member.** His body was too badly damaged to recognize. This is historically plausible, mistaken testimony—not an authoritative statement that the man WAS a Rocket. Future Varnell is the unidentified casualty.
 
 **Approval boundary:** the three *facts* above are locked. The exact resident dialogue, Kiyoshi rescue rewrite and all final battle/portal dialogue are still **DRAFT — not approved for inclusion in the game**. In-game Chapter 3 and Lavender NPC scripts have not been rewritten.
@@ -25,7 +25,7 @@
 
 | Period / chapter | Actual cause | Believable first-playthrough understanding |
 | --- | --- | --- |
-| Historical Tower raid | Rocket member holds Aria's Clefairy **captive inside** the tower; **young Varnell is forced outside**. Aria searches for Clefairy and hears future Varnell's call. After she refuses to abandon Clefairy, **future Varnell jumps -> rupture -> collapse -> deaths of Aria, Clefairy, and future Varnell**. Exact positions to storyboard. | Residents blame Rocket, possibly guessing the **unrecognizable unidentified adult male** in rubble was also a Rocket. Young Varnell survives outside and never knows the real cause. |
+| Historical Tower raid | Rocket member holds Aria's Clefairy captive inside; **young Varnell is forced outside**. Aria hears future Varnell through the stable retrieval window but refuses to leave without Clefairy. **Future Varnell jumps -> FIRST rupture/shaking -> roof begins falling -> Clefairy escapes Rocket and runs to Aria -> both reunite just as rubble falls -> all three die.** Exact positions and how the Rocket loses Clefairy remain DRAFT. | Residents blame Rocket, possibly guessing the **unrecognizable unidentified adult male** in rubble was also a Rocket. Young Varnell survives outside and never knows the real cause. |
 | Years later, before Hoenn | Grieving Varnell researches dimensional travel and captures Hoopa in Hoenn before the player arrived in Littleroot | Non-native Pokémon gradually appear with no known explanation |
 | Hoenn / Kanto beginning | Hoopa's uncontrolled portals displace species between present-day habitats; occasional temporal effects are possible | Anomalies seem to originate externally |
 | Chapter 3, Kiyoshi | Accidental temporal rift pulls Sage Kiyoshi out of the old Brass Tower fire; Varnell is fascinated and tries to help stabilize the connection. It naturally expires and pulls Kiyoshi back. | A tragic failure to save a displaced man; secretly proof living humans can cross time and **why Dialga is needed** |
@@ -65,7 +65,7 @@
 | Impossible geometry during later failed test | Another anomaly | Missing Giratina intermediary |
 | Rocket reports: cause of Tower collapse unknown | Rocket's recklessness | Future gateway overload |
 | Varnell becomes progressively exhausted | Dangerous project takes a toll | Closing in on reversing Aria's death |
-| Final jump and crash | A father makes a desperate decision | Solves the original historic mystery |
+| Final jump and crash | A father makes a desperate decision; Clefairy finally reaches Aria amid falling rubble | His reverse crossing caused the original collapse and made the unidentified corpse |
 
 **Clue pacing rules:** Important scenes convey the plot even if a player skips optional dialogue. Let players encounter clue sites via actual quests (e.g., retrieve information from a computer next to a *completely optional* photo). Do not force inspection of the photo, place it immediately after Lavender's ghost, add spooky music, or repeatedly point to the corpse. Most attentive players may infer the **daughter** clue; keep the *purpose of ARIA* and *fatal loop* concealed until the end. Distinguish ghostly Clefairy (a remnant in the present) from the living Aria reached in the historical past.
 
@@ -88,9 +88,9 @@
 7. **Body recognition — basic facts OWNER-LOCKED:** The older man's body is unrecognizable due to collapse damage, younger Varnell was **forced outside the tower**, and residents speculate the unidentified man may have been Rocket. **Still verify:** whether any distinctive surviving items or contemporary eyewitness descriptions could undermine anonymity. Avoid invented forensic claims.
 8. **Kiyoshi physics:** Hoopa's uncontrolled temporal rift predates Dialga; why an uncontrolled pull decays while controlled machine holds a target must be consistent.
 9. **Giratina / capture logistics:** Specific failed experiment must point to Distortion World, and Orb must make an already prepared Giratina capture feasible quickly. Explain how four legendary captives can be used in a final trainer fight and freed after.
-10. **Clefairy's location — captivity OWNER-LOCKED:** A **Rocket member still has Clefairy captive inside the tower** while Aria searches and refuses to leave; the fall kills both Aria and Clefairy. **OPEN:** map the member, Clefairy, Aria and structural collapse precisely; don't quietly change it to an escape.
+10. **Clefairy's location — owner clarified 2026-11-16:** A **Rocket member still holds Clefairy captive inside** while Aria searches and refuses the stable window. **Varnell must jump BEFORE any collapse or escape**. Once falling rubble starts, Clefairy breaks free and runs to Aria; the roof kills both, plus future Varnell. **OPEN:** define the escape animation and map positions; don't place Clefairy free beforehand.
 11. **Quest/photo knowledge:** Blue can't have spent years walking past an obviously identifiable signed picture. Keep mementos private, photo on an optional later return visit; explain why player has the errand there.
-12. **Physical timing:** Stable portal -> father's call -> daughter stops/refuses -> Blue warns -> father jumps -> *first* overload -> collapse -> window closes. No "Aria look out, the ceiling!" before the jump.
+12. **Physical timing (owner clarification):** Stable portal -> father's call -> daughter stops/refuses while Clefairy remains captive -> Blue warns -> father jumps -> *first* overload/roof shaking -> captive Clefairy escapes and runs to Aria while the roof is falling -> all three perish -> window closes. No falling roof, escaping Clefairy or "Aria look out, the ceiling!" before the jump.
 
 **HIGH / MEDIUM — verify in chapter drafting and gameplay:**
 - Varnell's night grave visits vs. refusal to enter Tower publicly: not contradictory if he avoids *this investigation*, but don't let him say he NEVER enters.
@@ -107,7 +107,7 @@
 
 ## Unresolved author decisions before claiming airtight continuity
 
-- **Owner-locked 2026-11-15:** young Varnell was **forced outside**; **Clefairy is still captive inside with a Rocket member**; Lavender locals **speculate the unrecognizable man might have been Rocket**. **Still OPEN:** who physically forced Varnell outside, and exact Tower floor/positions of captive Clefairy, Aria and Rocket member. Do not reinterpret the locked facts to solve blocking.
+- **Owner-locked 2026-11-15; clarified 2026-11-16:** young Varnell was **forced outside**; **Clefairy remains captive inside with Rocket until *after* future Varnell jumps and the roof begins falling**, then escapes and runs to Aria. Lavender locals **speculate the unrecognizable man might have been Rocket**. **Still OPEN:** who physically forced Varnell outside, precisely how the Rocket loses Clefairy, and exact Tower positions / three-person collapse. Never show escape or shaking before the jump.
 - Exactly how League vault access + forged authorization works, who is allegedly authorizing it, and timing of Lance's delayed discovery.
 - What earlier credible technical detail makes Blue's retrieval-only warning natural without revealing the secret machine.
 - Where/when combined space-time test fails and why it requires Giratina specifically; detailed capture and battle sequencing.
