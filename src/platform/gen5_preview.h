@@ -1,5 +1,6 @@
 #ifndef GUARD_GEN5_PREVIEW_H
 #define GUARD_GEN5_PREVIEW_H
+#include <stdbool.h>
 
 // Experimental native PC screenshot prototype. Do not merge into kanto-port yet.
 #include <SDL2/SDL.h>

@@ -42,9 +42,12 @@ jobs:
           PY
           python3 tools/wj_testfw/install.py on preview/scenario.json
       - name: Generate required data
-        run: make -j4 release 2>&1 | tee preview-generate.log
+        run: |
+          set -o pipefail
+          make -j4 release 2>&1 | tee preview-generate.log
       - name: Build native game
         run: |
+          set -o pipefail
           make -f Makefile.pc -j4 2>&1 | tee preview-build.log
           file wallys-journey
       - name: Run real native battle and capture screen
