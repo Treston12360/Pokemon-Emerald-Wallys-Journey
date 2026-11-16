@@ -389,6 +389,12 @@ Add under each item: what was found, what was changed, files, how to test, what 
     untouched (other renderer). Picture: `docs/polish_reports/POL-32_pc_multiselect_fixed.png` (Classic left,
     Sword/Shield right, a group picked up). Mass RELEASE (Start while holding a group) exists only in the
     Sword/Shield boxes (WJ 0.18.9) - asked Brennan whether he wants it in Classic too.
+  - **Classic mass release added 2026-11-15 (014PwRDj)**, Brennan: "Yes make it the same way in the classic boxes as
+    well." `src/pokemon_storage_system.c` now has the same Start-while-holding-a-group release as the Sword/Shield
+    boxes (same rules: Eggs, the last Pokémon knowing a protected move, and a Pokémon whose item won't fit in the
+    bag stay; held items go to the bag). Messages shortened to fit the narrower Classic message box. Checked with
+    Brennan's save (test aid `state boxmon BOX*30+SLOT`): a 3x2 group of 6, 5 released, his Swampert stayed (it is
+    the last one knowing a protected move). Picture: `docs/polish_reports/POL-32_classic_mass_release.png`.
 - **POL-6 (clarified):** "The sword and shield start menu is too big and goes off the screen when widescreen is turned
   off for some reason."
 - **POL-33 (new). Pokédex name search:** "When searching in pokedex to find pokemon under name using the alphabetical

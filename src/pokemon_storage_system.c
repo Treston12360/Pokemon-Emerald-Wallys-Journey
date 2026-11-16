@@ -111,6 +111,9 @@ enum {
     MSG_ITEM_IS_HELD,
     MSG_CHANGED_TO_ITEM,
     MSG_CANT_STORE_MAIL,
+    MSG_WJ_RELEASE_SELECTED,
+    MSG_WJ_RELEASED_COUNT,
+    MSG_WJ_SOME_STAYED,
 };
 
 // IDs for how to resolve variables in the above messages
@@ -201,6 +204,7 @@ enum {
     INPUT_MULTIMOVE_UNABLE,
     INPUT_MULTIMOVE_MOVE_MONS,
     INPUT_MULTIMOVE_PLACE_MONS,
+    INPUT_MULTIMOVE_RELEASE_MONS,   // Wally's Journey: Start while holding a group
     INPUT_SELECT_MON,
 };
 
@@ -585,6 +589,9 @@ static void Task_TakeItemForMoving(u8);
 static void Task_ShowMarkMenu(u8);
 static void Task_ShowMonSummary(u8);
 static void Task_ReleaseMon(u8);
+static void Task_WJMassRelease(u8);
+static void WJMassRelease_RecordSelection(void);
+static void WJMassRelease_Run(void);
 static void Task_ReshowPokeStorage(u8);
 static void Task_PokeStorageMain(u8);
 static void Task_JumpBox(u8);
@@ -1081,6 +1088,10 @@ static const struct StorageMessage sMessages[] =
     [MSG_ITEM_IS_HELD]         = {COMPOUND_STRING("{DYNAMIC 0} is now held."),   MSG_VAR_ITEM_NAME},
     [MSG_CHANGED_TO_ITEM]      = {COMPOUND_STRING("Changed to {DYNAMIC 0}."),    MSG_VAR_ITEM_NAME},
     [MSG_CANT_STORE_MAIL]      = {COMPOUND_STRING("Mail can't be stored!"),      MSG_VAR_NONE},
+    // Wally's Journey: mass release (owner 2026-11-08; in the Classic boxes too, Brennan 2026-11-15)
+    [MSG_WJ_RELEASE_SELECTED]  = {COMPOUND_STRING("Release these Pokémon?"), MSG_VAR_NONE},
+    [MSG_WJ_RELEASED_COUNT]    = {COMPOUND_STRING("Released {DYNAMIC 0} Pokémon!"), MSG_VAR_RELEASE_MON_1},
+    [MSG_WJ_SOME_STAYED]       = {COMPOUND_STRING("Some stayed in the box."), MSG_VAR_NONE},
 };
 
 static const struct WindowTemplate sYesNoWindowTemplate =
@@ -2252,6 +2263,7 @@ enum {
     MSTATE_MULTIMOVE_RUN,
     MSTATE_MULTIMOVE_RUN_CANCEL,
     MSTATE_MULTIMOVE_RUN_MOVED,
+    MSTATE_MULTIMOVE_RUN_RELEASE,
     MSTATE_SCROLL_BOX_ITEM,
     MSTATE_WAIT_ITEM_ANIM,
 };
@@ -2425,6 +2437,11 @@ static void Task_PokeStorageMain(u8 taskId)
             MultiMove_SetFunction(MULTIMOVE_PLACE_MONS);
             sStorage->state = MSTATE_MULTIMOVE_RUN;
             break;
+        case INPUT_MULTIMOVE_RELEASE_MONS:
+            PlaySE(SE_SELECT);
+            MultiMove_SetFunction(MULTIMOVE_PLACE_MONS);
+            sStorage->state = MSTATE_MULTIMOVE_RUN_RELEASE;
+            break;
         case INPUT_MULTIMOVE_UNABLE:
             // When selecting/moving multiple Pokémon the
             // cursor may not wrap around the edges.
@@ -2493,6 +2510,10 @@ static void Task_PokeStorageMain(u8 taskId)
     case MSTATE_MULTIMOVE_RUN:
         if (!MultiMove_RunFunction())
             sStorage->state = MSTATE_HANDLE_INPUT;
+        break;
+    case MSTATE_MULTIMOVE_RUN_RELEASE:
+        if (!MultiMove_RunFunction())
+            SetPokeStorageTask(Task_WJMassRelease);
         break;
     case MSTATE_MULTIMOVE_RUN_CANCEL:
         // Began a multiple Pokémon selection but
@@ -7463,6 +7484,22 @@ static u8 InBoxInput_MovingMultiple(void)
             return INPUT_MULTIMOVE_UNABLE;
         }
     }
+    else if (JOY_NEW(START_BUTTON))
+    {
+        // Wally's Journey: mass release (as the Sword/Shield boxes). The group is put down here first (so it
+        // must fit), then the player is asked whether to release it.
+        if (MultiMove_CanPlaceSelection())
+        {
+            WJMassRelease_RecordSelection();
+            sIsMonBeingMoved = FALSE;
+            sStorage->inBoxMovingMode = MOVE_MODE_NORMAL;
+            return INPUT_MULTIMOVE_RELEASE_MONS;
+        }
+        else
+        {
+            return INPUT_MULTIMOVE_UNABLE;
+        }
+    }
     else if (JOY_NEW(B_BUTTON))
     {
         return INPUT_MULTIMOVE_UNABLE;
@@ -8279,6 +8316,178 @@ EWRAM_DATA static struct
     u16 bgMoveSteps;
     struct BoxPokemon boxMons[IN_BOX_COUNT];
 } *sMultiMove = NULL;
+
+// Wally's Journey: mass release (owner 2026-11-08), the same code as swsh_storage_system.c (Classic boxes too,
+// Brennan 2026-11-15).
+// Box positions of the group that was just put down with Start, and the result.
+static EWRAM_DATA u8 sWJRelPositions[IN_BOX_COUNT] = {0};
+static EWRAM_DATA u8 sWJRelCount = 0;
+static EWRAM_DATA u8 sWJRelReleased = 0;
+static EWRAM_DATA u8 sWJRelKept = 0;
+
+static void WJMassRelease_RecordSelection(void)
+{
+    s32 i, j;
+    u8 monArrayId = 0;
+
+    sWJRelCount = 0;
+    for (i = sMultiMove->minRow; i < sMultiMove->minRow + sMultiMove->rowsTotal; i++)
+    {
+        for (j = sMultiMove->minColumn; j < sMultiMove->minColumn + sMultiMove->columnsTotal; j++)
+        {
+            if (GetBoxMonData(&sMultiMove->boxMons[monArrayId], MON_DATA_SANITY_HAS_SPECIES))
+                sWJRelPositions[sWJRelCount++] = IN_BOX_COLUMNS * i + j;
+            monArrayId++;
+        }
+    }
+}
+
+static bool32 WJMassRelease_IsSelected(u8 boxId, u8 pos)
+{
+    u32 i;
+    if (boxId != StorageGetCurrentBox())
+        return FALSE;
+    for (i = 0; i < sWJRelCount; i++)
+        if (sWJRelPositions[i] == pos)
+            return TRUE;
+    return FALSE;
+}
+
+// Releases the recorded group. Kept (stay in the box): Eggs; the last Pokémon that
+// knows a move the single release also protects (Surf, Dive, ...); a Pokémon whose
+// held item doesn't fit in the bag. Held items go to the bag (OW_PC_RELEASE_ITEM).
+static void WJMassRelease_Run(void)
+{
+    u16 moves[8];
+    u32 covered = 0, i, b, p;
+    u8 boxId = StorageGetCurrentBox();
+
+    sWJRelReleased = 0;
+    sWJRelKept = 0;
+    GetRestrictedReleaseMoves(moves);
+    // Protected moves already known by a Pokémon that stays (party, or any boxed one outside the group)
+    for (i = 0; i < PARTY_SIZE; i++)
+        if (GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SANITY_HAS_SPECIES)
+         && !GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SANITY_IS_EGG))
+            covered |= GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_KNOWN_MOVES, (u8 *)moves);
+    for (b = 0; b < TOTAL_BOXES_COUNT; b++)
+    {
+        for (p = 0; p < IN_BOX_COUNT; p++)
+        {
+            struct BoxPokemon *boxMon = GetBoxedMonPtr(b, p);
+            if (WJMassRelease_IsSelected(b, p) || !GetBoxMonData(boxMon, MON_DATA_SANITY_HAS_SPECIES)
+             || GetBoxMonData(boxMon, MON_DATA_SANITY_IS_EGG))
+                continue;
+            covered |= GetBoxMonData(boxMon, MON_DATA_KNOWN_MOVES, (u8 *)moves);
+        }
+    }
+
+    for (i = 0; i < sWJRelCount; i++)
+    {
+        u8 pos = sWJRelPositions[i];
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, pos);
+        u32 known;
+        enum Item item;
+
+        if (!GetBoxMonData(boxMon, MON_DATA_SANITY_HAS_SPECIES))
+            continue;
+        if (GetBoxMonData(boxMon, MON_DATA_SANITY_IS_EGG))
+        {
+            sWJRelKept++;
+            continue;
+        }
+        known = GetBoxMonData(boxMon, MON_DATA_KNOWN_MOVES, (u8 *)moves);
+        if (known & ~covered)
+        {
+            // It's the only one left with that move: keep it (and it now covers the move)
+            covered |= known;
+            sWJRelKept++;
+            continue;
+        }
+        item = ITEM_NONE;
+        if (OW_PC_RELEASE_ITEM >= GEN_8)
+            item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM);
+        if (item != ITEM_NONE && !CheckBagHasSpace(item, 1))
+        {
+            sWJRelKept++;
+            continue;
+        }
+        DestroyBoxMonIconAtPosition(pos);
+        ZeroBoxMonAt(boxId, pos);
+        if (item != ITEM_NONE)
+            AddBagItem(item, 1);
+        sWJRelReleased++;
+    }
+}
+
+static void Task_WJMassRelease(u8 taskId)
+{
+    switch (sStorage->state)
+    {
+    case 0:
+        if (sWJRelCount == 0)
+        {
+            SetPokeStorageTask(Task_PokeStorageMain);
+            break;
+        }
+        PrintMessage(MSG_WJ_RELEASE_SELECTED);
+        ShowYesNoWindow(1); // cursor on No
+        sStorage->state++;
+        break;
+    case 1:
+        switch (Menu_ProcessInputNoWrapClearOnChoose())
+        {
+        case MENU_B_PRESSED:
+        case 1: // No: the group just stays where it was put down
+            ClearBottomWindow();
+            SetPokeStorageTask(Task_PokeStorageMain);
+            break;
+        case 0: // Yes
+            ClearBottomWindow();
+            WJMassRelease_Run();
+            TryRefreshDisplayMon();
+            RefreshDisplayMonData();
+            if (sWJRelReleased != 0)
+            {
+                PlaySE(SE_BALL_OPEN);
+                ConvertIntToDecimalStringN(sStorage->releaseMonName, sWJRelReleased, STR_CONV_MODE_LEFT_ALIGN, 2);
+                PrintMessage(MSG_WJ_RELEASED_COUNT);
+                sStorage->state = 2;
+            }
+            else
+            {
+                PlaySE(SE_FAILURE);
+                PrintMessage(MSG_WJ_SOME_STAYED);
+                sStorage->state = 3;
+            }
+            break;
+        }
+        break;
+    case 2:
+        if (JOY_NEW(A_BUTTON | B_BUTTON | DPAD_ANY))
+        {
+            if (sWJRelKept != 0)
+            {
+                PrintMessage(MSG_WJ_SOME_STAYED);
+                sStorage->state = 3;
+            }
+            else
+            {
+                ClearBottomWindow();
+                SetPokeStorageTask(Task_PokeStorageMain);
+            }
+        }
+        break;
+    case 3:
+        if (JOY_NEW(A_BUTTON | B_BUTTON | DPAD_ANY))
+        {
+            ClearBottomWindow();
+            SetPokeStorageTask(Task_PokeStorageMain);
+        }
+        break;
+    }
+}
+
 
 static bool8 MultiMove_Init(void)
 {

@@ -93,6 +93,7 @@ bool32 WJPC_TestNoBattles(void)
 // "state learnscreen": what a TM does after the screen - the chosen slot gets the new move - then the field.
 #include "pokemon_summary_screen.h"
 #include "overworld.h"
+#include "pokemon_storage_system.h"
 static u16 sTestLearnMove;
 static void TestLearnScreenDone(void)
 {
@@ -177,6 +178,11 @@ int WJPC_TestState(const char *what, int id, int set, int value)
         extern void ShowPokemonStorageSystemPC(void);
         ShowPokemonStorageSystemPC();
         return 1;
+    }
+    if (!strcmp(what, "boxmon"))
+    {
+        // "state boxmon BOX*30+SLOT": species in that PC box slot, 0 = empty (test aid, POL-32)
+        return GetBoxMonDataAt(id / IN_BOX_COUNT, id % IN_BOX_COUNT, MON_DATA_SPECIES);
     }
     if (!strcmp(what, "fieldmove"))
     {
