@@ -209,7 +209,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 - [x] **S-ARIA-CANON-LOCK (DOCUMENTATION ONLY — owner 2026-11-15):** Three historical points locked
       in `docs/KANTO_PROJECT_ARIA.md` and `docs/KANTO_NARRATIVE_AUDIT.md`: (1) young Varnell was **forced
       outside Pokémon Tower** during Rocket's raid; (2) Clefairy remained **captive with a Rocket member
-      inside** while Aria searched for it; (3) Lavender residents **speculate the unrecognizable adult
+      inside** while Aria searched for it (until the **post-jump** collapse began; clarified 2026-11-16: Clefairy then escapes and runs back to Aria); (3) Lavender residents **speculate the unrecognizable adult
       man found in the rubble might have been a Rocket member**. This is **not** approval of exact NPC
       dialogue and **not** a claim the current game scripts implement these decisions.
 - [ ] **S-ARIA-LOOP-IMPLEMENTATION (STORY / SCRIPT — unimplemented; owner-approved facts only, wording DRAFT):**
@@ -221,8 +221,13 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       Rocket-member speculation**, without revealing any relationship; (c) later subtle clue placement;
       (d) Chapters 12–13 staged time-loop finale, where the **one-way retrieval portal stays stable
       until Varnell jumps**, and his reverse crossing FIRST triggers the old Tower collapse.
-      **Unresolved blocking:** decide who forced young Varnell outside, where the captive Clefairy,
-      Rocket member and Aria stood, and why the historical body is not identified through effects.
+      **Owner-clarified 2026-11-16 final sequence:** stable window and Aria's refusal while Clefairy
+      is captive → Varnell jumps backward → FIRST shaking / roof fall → Clefairy escapes
+      Rocket's custody and runs to Aria DURING the collapse → Aria, Clefairy and future
+      Varnell die together. Never start shaking or release Clefairy before Varnell jumps.
+      **Unresolved blocking:** decide who forced young Varnell outside, exact placement and
+      mechanism of Clefairy's escape from the Rocket member, and why the historical body
+      cannot be identified by surviving effects. These details are DRAFT, not in game.
       Keep all new dialogue labeled **DRAFT** until the owner approves exact text. Build/test
       WallysJourney.exe for branch-specific flags, old saves, optional interactions, skipped dialogue,
       revisits, and the exact cutscene timeline; **do not** mark this done before game verification.
