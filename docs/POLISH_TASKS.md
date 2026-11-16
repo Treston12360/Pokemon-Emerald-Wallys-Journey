@@ -118,7 +118,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
         an earlier run, not kept). zoom 3 vs 5 makes no difference there.
       - Not checked: his real window size/monitor (windowScale=8, fullscreen), the Classic text box, the Windows exe.
       - Need from Brennan: a screenshot of the cut-off box, and whether he was in fullscreen.
-- [ ] **POL-7. Grass, flowers, flowerbeds, trees still flat.** "The grass in 3D is not 3D it's still 2D alongside
+- [x] **POL-7. Grass, flowers, flowerbeds, trees still flat.** "The grass in 3D is not 3D it's still 2D alongside
       flowers, flowerbeds, trees."
       - 2026-11-16 (014PwRDj), Brennan's answers: flat ones = "Flowers and flowerbeds", "Short grass too"; look =
         "Same as tall grass" (a card standing, leant back as the long grass's tuft); prototype picture
@@ -130,7 +130,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
       - Brennan: "The flower patches along with the planter boxes were 2D ... The planter boxes inside mauville and
         petalburg. Also whatever planter boxes you can find inside cities." Done: the General planter boxes (0x007:
         Petalburg's garden, the Battle Frontier) stand as two cards a tile (trees texture 32,112). Mauville's map
-        has only the 0x004 flower patches (done) - asked Brennan where Mauville's planter boxes are.
+        has only the 0x004 flower patches (done). Brennan 2026-11-16 07:41: "We can close POL-7 and move onto POL-8".
         Pictures: `POL-7_flowers_and_grass_prototype.png`, `POL-7_petalburg_planters.png`.
 - [ ] **POL-8. Black lines on indoor floors.** "There are black lines on the flooring inside of buildings."
 - [ ] **POL-9. Game Corner.** "You can walk through the left and right columns of the game corner building,
