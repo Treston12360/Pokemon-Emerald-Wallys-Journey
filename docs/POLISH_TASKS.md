@@ -75,8 +75,11 @@ Add under each item: what was found, what was changed, files, how to test, what 
       - Open question to Brennan: the Lilycove Move Deleter still refuses to delete the last Surf in the party
         (`IsLastMonThatKnowsSurf`, vanilla rule so you can't strand yourself; not needed here since Surf works
         without a Pokémon knowing it). Remove that refusal too? Waiting for yes/no.
-- [ ] **POL-1. People look like paper.** "People's silhouettes are still like paper. They need to be rounded out
+- [x] **POL-1. People look like paper.** "People's silhouettes are still like paper. They need to be rounded out
       to look like people."
+      - 2026-11-15 (014PwRDj): Emerald 3DS draws people flat too. Prototyped two looks (thick pixel slices; shading
+        darker to the edges) and showed Brennan `docs/polish_reports/POL-1_flat_thick_round.png`; from the game's
+        camera both change little. **Brennan: "Keep them flat"** - closed, no change.
 - [ ] **POL-2. Background trees end in blue.** "The background trees go up in the sky revealing a blue background."
 - [ ] **POL-3. Mountain edges show blue.** "The mountains edges reveal a blue background."
 - [ ] **POL-4. People vanish behind you.** "People disappear after walking away a few steps then come back when
