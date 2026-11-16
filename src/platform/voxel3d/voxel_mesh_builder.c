@@ -2699,7 +2699,7 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
     sBorderFollowsEdge = on;
 }
 
-bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
+static bool BorderLevelRaw(int x, int y, float *level, float *shift)
 {
     const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y); /* POL-30: was instance 0 (see BorderWaterLevel) */
     int ex, ey;
@@ -2774,6 +2774,162 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
         }
     }
     return true;
+}
+
+/*
+ * POL-40 (Brennan 2026-11-16: "the rocks in the background still are built like pillars ... make it like the
+ * mountains that appear in front of them ... the mountains should be staggered as it is getting higher instead
+ * of a straight slope"): the belt's land as terraces. Its level (BorderLevelRaw: the nearest maps' edges,
+ * blended) is (1) held to rise at most a level a cell from the belt land round it - the lower envelope of
+ * level + distance over BELT_TERRACE_REACH cells, as a mountain of the General tileset steps back a tile a
+ * level - except a cell right beside a map, which keeps the map's edge; and (2) laid on a whole level. The
+ * walls between terraces are the map's mountain face (VoxelRelief_FaceTile), a tile a level (EmitBorderSteps).
+ * Levels are kept per cell until the world changes (VoxelMesh_BeltLevelsFlush). WJPC_BELT_RAW=1: as before.
+ */
+#define BELT_TERRACE_REACH 6
+#define BELT_LEVEL_CACHE 32768
+typedef struct { int x, y; float level, shift; uint8_t state; } BeltLevelSlot; /* state 0 empty, 1 land, 2 none */
+static BeltLevelSlot sBeltLevels[BELT_LEVEL_CACHE];
+static int sBeltRaw = -1;
+
+void VoxelMesh_BeltLevelsFlush(void)
+{
+    memset(sBeltLevels, 0, sizeof(sBeltLevels));
+}
+
+static bool BeltRawCached(int x, int y, float *level, float *shift)
+{
+    uint32_t h = ((uint32_t)x * 73856093u ^ (uint32_t)y * 19349663u) & (BELT_LEVEL_CACHE - 1);
+
+    for (unsigned probe = 0; probe < 16; ++probe, h = (h + 1) & (BELT_LEVEL_CACHE - 1))
+    {
+        BeltLevelSlot *s = &sBeltLevels[h];
+
+        if (s->state != 0 && s->x == x && s->y == y)
+        {
+            *level = s->level;
+            *shift = s->shift;
+            return s->state == 1;
+        }
+        if (s->state == 0)
+        {
+            bool ok = BorderLevelRaw(x, y, level, shift);
+
+            s->x = x;
+            s->y = y;
+            s->level = *level;
+            s->shift = *shift;
+            s->state = ok ? 1 : 2;
+            return ok;
+        }
+    }
+    return BorderLevelRaw(x, y, level, shift);
+}
+
+static bool BesideMap(int x, int y)
+{
+    for (int dy = -1; dy <= 1; ++dy)
+        for (int dx = -1; dx <= 1; ++dx)
+            if ((dx || dy) && VoxelWorld_GetInstanceAt(x + dx, y + dy) != NULL)
+                return true;
+    return false;
+}
+
+bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
+{
+    float raw, rawShift, here, best, l, sh;
+    VoxelEdgeFill fill;
+    const VoxelMapInstance *ring;
+
+    if (sBeltRaw < 0)
+        sBeltRaw = getenv("WJPC_BELT_RAW") != NULL;
+    if (sBeltRaw)
+        return BorderLevelRaw(x, y, level, shift);
+    if (!BeltRawCached(x, y, &raw, &rawShift))
+    {
+        *level = raw;
+        *shift = rawShift;
+        return false;
+    }
+    ring = VoxelWorld_BeltRing(x, y);
+    /* a fill the map's fixes give a height keeps it */
+    if (ring != NULL && VoxelRelief_EdgeFillAt(ring, x, y, &fill) && fill.hasTop && !fill.water)
+    {
+        *level = raw;
+        *shift = rawShift;
+        return true;
+    }
+    here = BeltBase(x, y);
+    best = raw + here;
+    if (!BesideMap(x, y))
+        for (int dy = -BELT_TERRACE_REACH; dy <= BELT_TERRACE_REACH; ++dy)
+            for (int dx = -BELT_TERRACE_REACH; dx <= BELT_TERRACE_REACH; ++dx)
+            {
+                int d = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
+
+                if (d == 0 || !BorderAt(x + dx, y + dy) || VoxelWorld_GetInstanceAt(x + dx, y + dy) != NULL)
+                    continue;
+                if (!BeltRawCached(x + dx, y + dy, &l, &sh))
+                    continue;
+                l += BeltBase(x + dx, y + dy) + (float)d;
+                if (l < best)
+                    best = l;
+            }
+    best = BesideMap(x, y) ? best : floorf(best + 0.5f);
+    *level = best - here;
+    *shift = rawShift + (best - here - raw);
+    return true;
+}
+
+/*
+ * POL-40: the top a terrace of the belt is drawn with, where it stands for the map's rock (the map's edge cell
+ * nearest it is lifted a level or more over the map's base): the map's own mountain top - the metatile most of
+ * its flat relief cells a level or more up are drawn with (Route 118: 0x071; Lavaridge: its red rock's top),
+ * found once per map. -1: none (the cell's own drawing, as before).
+ */
+static int BeltTopTile(const VoxelMapInstance *ring)
+{
+    static const VoxelMapInstance *sRing[8];
+    static int sTile[8], sNext;
+    int counts[1024];
+    int best = -1, bestN = 0;
+
+    for (int i = 0; i < 8; ++i)
+        if (sRing[i] == ring)
+            return sTile[i];
+    memset(counts, 0, sizeof(counts));
+    for (int y = ring->originY; y < ring->originY + ring->height; ++y)
+        for (int x = ring->originX; x < ring->originX + ring->width; ++x)
+        {
+            const int16_t *g = VoxelRelief_Cell(ring, x, y);
+            int m;
+
+            if (g == NULL || VoxelRelief_IsSlope(g) || g[0] < 16)
+                continue;
+            m = VoxelWorld_GetMetatileId(x, y);
+            if (m >= 0 && m < 1024 && m != VoxelRelief_FaceTile(ring))
+                counts[m]++;
+        }
+    for (int m = 0; m < 1024; ++m)
+        if (counts[m] > bestN)
+            bestN = counts[m], best = m;
+    sRing[sNext] = ring;
+    sTile[sNext] = best;
+    sNext = (sNext + 1) % 8;
+    return best;
+}
+
+static bool BeltRockColumn(int x, int y, const VoxelMapInstance **ringOut)
+{
+    const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y);
+    int ex, ey;
+
+    *ringOut = ring;
+    if (ring == NULL || ring->indoor)
+        return false;
+    ex = x < ring->originX ? ring->originX : x >= ring->originX + ring->width ? ring->originX + ring->width - 1 : x;
+    ey = y < ring->originY ? ring->originY : y >= ring->originY + ring->height ? ring->originY + ring->height - 1 : y;
+    return VoxelRelief_CellLift(ring, ex, ey) >= 1.0f;
 }
 
 /* POL-30 test aid (WJPC_BELT_TABLE, voxel_gl.c): what stands at a cell of the belt - its metatile, and its top's
@@ -2983,8 +3139,12 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
 
     static const int kDir[3][2] = { {0, 1}, {1, 0}, {-1, 0} };
     float u0, v0, u1, v1, other, otherShift;
+    const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y);
+    int face = ring != NULL && !sBeltRaw ? VoxelRelief_FaceTile(ring) : -1;
 
-    if (!MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+    /* POL-40: the walls between terraces are the map's mountain face */
+    if (!(face >= 0 && face < VOXEL_RELIEF_NO_FACE && MetatileUV(builder, face, &u0, &v0, &u1, &v1))
+     && !MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
         return;
     for (int d = 0; d < 3; ++d)
     {
@@ -3208,7 +3368,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 float edge, edgeShift;
 
                 if (sBeltSlopes < 0)
-                    sBeltSlopes = getenv("WJPC_BELT_BLOCKS") == NULL;
+                    sBeltSlopes = getenv("WJPC_BELT_SLOPES") != NULL;
                 if (VoxelMesh_BorderLevel(x, y, &edge, &edgeShift))
                 {
                     if (!(sBeltSlopes && !drawn && !BeltIsTree(x, y)))
@@ -3236,8 +3396,12 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             /* Laid as drawn, a cell's top is its own drawing; stood where it
              * is tiled, the column reads the rows above it. */
             bool slopedTop = false;
-            if (MetatileUV(builder, BeltMetatileFor(x, drawn ? y : y - (int)courses + 1, y),
-                           &u0, &v0, &u1, &v1))
+            const VoxelMapInstance *rockRing;
+            int topTile = !sBeltRaw && !drawn && BeltRockColumn(x, y, &rockRing) ? BeltTopTile(rockRing) : -1;
+
+            if (topTile >= 0 ? MetatileUV(builder, topTile, &u0, &v0, &u1, &v1)
+                             : MetatileUV(builder, BeltMetatileFor(x, drawn ? y : y - (int)courses + 1, y),
+                                          &u0, &v0, &u1, &v1))
             {
                 float ct[4], cz[4];
                 const int kc[4][2] = { {0, 0}, {1, 0}, {1, 1}, {0, 1} };

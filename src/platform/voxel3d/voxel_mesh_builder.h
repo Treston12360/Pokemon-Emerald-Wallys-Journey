@@ -201,6 +201,8 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 /* The level a cell of the belt of land stands at, in tiles over instance 0's
  * base, and its depth: its map edge's (false, both 0: at the base). */
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift);
+/* POL-40: forget the belt's terrace levels (the world changed) */
+void VoxelMesh_BeltLevelsFlush(void);
 void VoxelMesh_SetBeltPass(const void *primaryTileset, const void *secondaryTileset); /* POL-30 */
 bool VoxelMesh_BeltCell(int x, int y, int *metatile, int *height16); /* POL-30 test aid */
 

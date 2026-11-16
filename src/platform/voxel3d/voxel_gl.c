@@ -1358,6 +1358,7 @@ extern unsigned gVoxel3DBeltFlushes;
 static void BeltCache_Flush(void)
 {
     gVoxel3DBeltFlushes++;
+    VoxelMesh_BeltLevelsFlush(); // POL-40
     for (int i = 0; i < BELT_CACHE; i++)
         sBeltCache[i].valid = false;
     sBeltWantX = 0x7FFFFFFF;
