@@ -1,6 +1,7 @@
 #ifdef RENDERER_EASY_DRAW
 #include "global.h"
 #include "hicolor.h" // ENG-SPRITES
+#include "platform/gen5_preview.h" // experimental animated Pokémon replacement; no gameplay changes
 #include "platform/null_guard.h"
 #include <stdbool.h>
 #include "platform/dma.h"
@@ -525,6 +526,9 @@ static void DrawSprites(struct scanlineData* scanline, uint16_t vcount, bool win
             x -= 512;
         if (y >= DISPLAY_HEIGHT)
             y -= 256;
+
+        if (G5Preview_MaskOam(oam, x, y, width, height))
+            continue;
 
         if (isAffine)
         {
