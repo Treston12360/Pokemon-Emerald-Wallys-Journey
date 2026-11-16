@@ -415,6 +415,12 @@ Add under each item: what was found, what was changed, files, how to test, what 
     Pokémon's on the hook!" after the first bite, every rod. Test aids: `state fish ROD`, `state rng SEED`,
     WJPC_TEST_AUTO_REEL=1. Picture: `docs/polish_reports/POL-35_super_rod_one_bite.png` (Super Rod, Petalburg pond:
     dots, one bite, on the hook; the battle followed).
+- **POL-36 (new, PRIORITY). Route 119 / Weather Institute (3D):** Brennan 2026-11-15 21:14 (6 photos, his save
+  `WallysJourney.sav` of 21:14 kept for future checks, stalls + errors files): "On route 119 west of fortree city the
+  whole ways from north to south where the waterfall is located needs to be looked at and fixed. It is shooting up in
+  the sky and the bridges are in pieces. The weather institute is flat and in pieces alongside the terrain around it
+  as well as the background. If you go south of the weather institute the terrain also shoots up in the sky. There
+  are also black lines around the tall grass in this area. It seems elevation is the problem in this area."
 - **POL-33 (new). Pokédex name search:** "When searching in pokedex to find pokemon under name using the alphabetical
   search, it shows pokemon you havent found yet, allowing players to find locations of all pokemon without having
   encountered them before which was not intended, you're suppose to encounter a pokemon before they show in your dex
