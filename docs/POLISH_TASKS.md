@@ -549,6 +549,11 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-41. Route 119 trees.** "look within the red boxes in the picture provided. The trees in the back ground
       look to be higher than the others showing a block look to them. All trees should align together to show a
       full forest." (picture not received yet - asked 08:50)
+      - 2026-11-16 (014PwRDj): the walls are in the wood past Route 119's west edge (the belt, Route 119's border
+        trees). POL-30's belt took each cell's level from every map's edge, blended - Route 118's mountains to the
+        south pulled the wood up column by column, and each step showed as a wall of tree crowns. Belt tree cells
+        now keep their own map's edge level, unblended (voxel_mesh_builder.c BorderLevelRaw; WJPC_BELT_TREE_BLEND=1
+        old way). Picture: docs/polish_reports/POL-41_route119_tree_walls.png (the walls Brennan boxed, then even).
 - POL-8 (2026-11-16 08:34): Brennan's photo of the lines (Pokemon Center 1F, build 16b, before the atlas fix):
   thin dark lines along the floor in front of the counter and the mat, and dashed lines on the side walls and
   around the stools. Those are the room's own models (page textures, not the atlas), so the 16c atlas inset
@@ -583,3 +588,26 @@ Asked 2026-11-14, answered the same day:
   ```
   (NULL reads the guard skipped: one callback skipped each time, not a crash by itself. To resolve them: get the
   zip name of his build, rebuild that commit unstripped, `llvm-nm -n`.)
+
+## Brennan 2026-11-16 14:56: build 16f "laggy and there was also a crash" (+ "revert back all the white flowers to the 2D form")
+- His files kept in /home/claude/keep/brennan_2026-11-16_1456.sav (save). cfg: resolution=4 (4K), antialias=4, gammaLight=1.
+- Crash: c0000005 in the GL driver, stack through MakeBanks (POL-38's sand dust, first frame of Route 111's sandstorm):
+  the texture upload ran with SDL's GL_UNPACK_ROW_LENGTH still set, reading past the texels. Unpack state reset first.
+- Lag (LAGGY lines, 2D picture 18-25 ms + 3D 18-65 ms on Mauville/Route 111): option 5's 4x MSAA on an RGBA16F target
+  at 3840x2160 (~265 MB, resolved each frame) - the change these builds added. MSAA now off above 1440p, 2x max at 1440p
+  (WJPC_MSAA overrides). Waiting for his check on 16g.
+- White flowers (General 0x001, the grass's flowers) back to 2D; red flowers (0x004) and planters (0x007) stay cards.
+- POL-40 belt terraces work in progress on branch `polish-belt-wip` (not in 16g).
+
+- [x] **POL-42. Ground moves vs Orthworm.** Brennan 2026-11-16 15:39: "ground type moves arent super effective against
+      steel type as they should be. this happened when battling against Orthworm in the desert."
+      - 014PwRDj, checked: the type chart is right (src/data/types_info.h, Ground -> Steel x2). Orthworm (Route 111's desert,
+        wild_encounters.json) has the ability Earth Eater (gen_9_families.h: { EARTH_EATER, NONE, SAND_VEIL }) - as in
+        Scarlet/Violet, a Ground move heals it instead of hurting it. Asked Brennan whether to keep that (official) or change it.
+      - Brennan 2026-11-16: "Keep Earth Eater". Closed, no change.
+- 16h (Brennan 15:34, 16g at 4K/240 fps "the lag is back whenever walking ... the whole game lags behind"): a catch-up
+  spiral in sdl2.c's main loop - every game frame of a catch-up batch was drawn (CPU picture + whole 3D world), only the
+  last shown; one slow trip made the next run up to 6 frames, each drawn. Now only the batch's last frame is drawn (as
+  fast-forward did; WJPC_DRAW_EVERY_FRAME=1 old way). Measured here with his save in Mauville at frameRate=240 (software
+  GL, so slow overall): old ~3000 ms trips (3D 2900 ms = ~6 world draws each), new ~250-500 ms (one draw). Stall log now
+  says "N drawn" per worst trip. His save: /home/claude/keep/brennan_2026-11-16_1534.sav.

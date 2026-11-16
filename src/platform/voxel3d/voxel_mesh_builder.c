@@ -2699,6 +2699,8 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
     sBorderFollowsEdge = on;
 }
 
+static bool BeltIsTree(int x, int y);
+
 static bool BorderLevelRaw(int x, int y, float *level, float *shift)
 {
     const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y); /* POL-30: was instance 0 (see BorderWaterLevel) */
@@ -2742,7 +2744,17 @@ static bool BorderLevelRaw(int x, int y, float *level, float *shift)
 
         if (sBlend < 0)
             sBlend = getenv("WJPC_BELT_NO_BLEND") == NULL && !VoxelWorld_BeltOld();
-        for (unsigned i = 0; sBlend && i < VoxelWorld_InstanceCount(); ++i)
+        /* POL-41 (Brennan 2026-11-16, Route 119: "The trees in the back ground look to be higher than the
+         * others ... All trees should align together to show a full forest"): a wood of the belt stood each
+         * column at the blend of every map's edge (Route 118's mountains pulled the wood west of Route 119 up
+         * column by column), and the steps between columns read as walls of trees. A tree cell keeps its own
+         * map's edge level, unblended: the wood lies as the map's edge beside it does. WJPC_BELT_TREE_BLEND=1:
+         * blended as before. */
+        static int sTreeBlend = -1;
+        if (sTreeBlend < 0)
+            sTreeBlend = getenv("WJPC_BELT_TREE_BLEND") != NULL;
+        bool blendHere = sBlend && (sTreeBlend || !BeltIsTree(x, y));
+        for (unsigned i = 0; blendHere && i < VoxelWorld_InstanceCount(); ++i)
         {
             const VoxelMapInstance *m = VoxelWorld_Instance(i);
             int mx, my, dx, dy, d;
@@ -2835,6 +2847,30 @@ static bool BesideMap(int x, int y)
     return false;
 }
 
+/*
+ * POL-40 (Brennan 2026-11-16: "the mountains should be staggered as it is getting higher instead of a straight
+ * slope going from top to bottom"): past a map edge drawn as rock (its edge cell a level or more up over its
+ * map's base), the belt goes on as the mountain does - a level higher every BELT_RISE_CELLS cells away from the
+ * edge, at most BELT_RISE_MAX levels, so it stands as terraces stepping back from the map. 0 past a flat edge.
+ */
+#define BELT_RISE_CELLS 2
+#define BELT_RISE_MAX 4
+static float BeltRise(int x, int y)
+{
+    const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y);
+    int ex, ey, d;
+
+    if (ring == NULL || ring->indoor || BeltIsTree(x, y))
+        return 0.0f;
+    ex = x < ring->originX ? ring->originX : x >= ring->originX + ring->width ? ring->originX + ring->width - 1 : x;
+    ey = y < ring->originY ? ring->originY : y >= ring->originY + ring->height ? ring->originY + ring->height - 1 : y;
+    if (VoxelMesh_Classify(ex, ey) == VOXEL_SHAPE_WATER || VoxelRelief_CellLift(ring, ex, ey) < 1.0f)
+        return 0.0f;
+    d = abs(x - ex) > abs(y - ey) ? abs(x - ex) : abs(y - ey);
+    d /= BELT_RISE_CELLS;
+    return (float)(d > BELT_RISE_MAX ? BELT_RISE_MAX : d);
+}
+
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 {
     float raw, rawShift, here, best, l, sh;
@@ -2852,6 +2888,13 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
         return false;
     }
     ring = VoxelWorld_BeltRing(x, y);
+    /* (a wood keeps its map's edge level, POL-41) */
+    if (BeltIsTree(x, y))
+    {
+        *level = raw;
+        *shift = rawShift;
+        return true;
+    }
     /* a fill the map's fixes give a height keeps it */
     if (ring != NULL && VoxelRelief_EdgeFillAt(ring, x, y, &fill) && fill.hasTop && !fill.water)
     {
@@ -2860,18 +2903,19 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
         return true;
     }
     here = BeltBase(x, y);
-    best = raw + here;
+    best = raw + here + BeltRise(x, y);
     if (!BesideMap(x, y))
         for (int dy = -BELT_TERRACE_REACH; dy <= BELT_TERRACE_REACH; ++dy)
             for (int dx = -BELT_TERRACE_REACH; dx <= BELT_TERRACE_REACH; ++dx)
             {
                 int d = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
 
-                if (d == 0 || !BorderAt(x + dx, y + dy) || VoxelWorld_GetInstanceAt(x + dx, y + dy) != NULL)
+                if (d == 0 || !BorderAt(x + dx, y + dy) || VoxelWorld_GetInstanceAt(x + dx, y + dy) != NULL
+                 || BeltIsTree(x + dx, y + dy))
                     continue;
                 if (!BeltRawCached(x + dx, y + dy, &l, &sh))
                     continue;
-                l += BeltBase(x + dx, y + dy) + (float)d;
+                l += BeltBase(x + dx, y + dy) + BeltRise(x + dx, y + dy) + (float)d;
                 if (l < best)
                     best = l;
             }

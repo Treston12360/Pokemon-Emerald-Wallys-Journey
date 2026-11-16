@@ -1940,13 +1940,22 @@ static int MsaaSamples(void)
     if (wj_glRenderbufferStorageMultisample == NULL || wj_glBlitFramebuffer == NULL)
         return 0;
     wj_glGetIntegerv(0x8D57 /* GL_MAX_SAMPLES */, &most);
-    return n > most ? (int)most : n;
+    n = n > most ? (int)most : n;
+    return n;
 }
 
 /* Draw into the multisampled target (after PostBeginScene bound the half-float one); false: draw as before. */
 static bool MsaaBegin(int w, int h)
 {
     int n = MsaaSamples();
+
+    /* Brennan 2026-11-16 (build 16f at 4K: laggy, and a crash in the graphics driver): a multisampled
+     * half-float target is 8 bytes a sample - 4 samples at 3840x2160 are 265 MB with their depth, every frame
+     * resolved again. Above 1440p it is off (the pixels are small enough there), at 1440p 2 samples at most. */
+    if ((long)w * h > 2560L * 1440L && getenv("WJPC_MSAA") == NULL)
+        n = 0;
+    else if ((long)w * h > 1920L * 1080L && n > 2 && getenv("WJPC_MSAA") == NULL)
+        n = 2;
 
     sMsActive = false;
     if (n <= 1)
@@ -2897,6 +2906,10 @@ static bool MakeBanks(void)
         }
     wj_glGenTextures(1, &sBankTex);
     wj_glBindTexture(GL_TEXTURE_2D, sBankTex);
+    /* Brennan's crash, 16f, entering Route 111's sandstorm: SDL leaves its own GL_UNPACK_ROW_LENGTH set (its
+     * picture's pitch), so the driver read this 128-wide texture as rows that long, past the end of `texels` */
+    wj_glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+    wj_glPixelStorei(0x0CF2 /* GL_UNPACK_ROW_LENGTH */, 0);
     wj_glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, VOXEL_FOG_DIM, VOXEL_FOG_DIM, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
     wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     wj_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
