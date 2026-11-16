@@ -2699,6 +2699,8 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
     sBorderFollowsEdge = on;
 }
 
+static bool BeltIsTree(int x, int y);
+
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 {
     const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y); /* POL-30: was instance 0 (see BorderWaterLevel) */
@@ -2742,7 +2744,17 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 
         if (sBlend < 0)
             sBlend = getenv("WJPC_BELT_NO_BLEND") == NULL && !VoxelWorld_BeltOld();
-        for (unsigned i = 0; sBlend && i < VoxelWorld_InstanceCount(); ++i)
+        /* POL-41 (Brennan 2026-11-16, Route 119: "The trees in the back ground look to be higher than the
+         * others ... All trees should align together to show a full forest"): a wood of the belt stood each
+         * column at the blend of every map's edge (Route 118's mountains pulled the wood west of Route 119 up
+         * column by column), and the steps between columns read as walls of trees. A tree cell keeps its own
+         * map's edge level, unblended: the wood lies as the map's edge beside it does. WJPC_BELT_TREE_BLEND=1:
+         * blended as before. */
+        static int sTreeBlend = -1;
+        if (sTreeBlend < 0)
+            sTreeBlend = getenv("WJPC_BELT_TREE_BLEND") != NULL;
+        bool blendHere = sBlend && (sTreeBlend || !BeltIsTree(x, y));
+        for (unsigned i = 0; blendHere && i < VoxelWorld_InstanceCount(); ++i)
         {
             const VoxelMapInstance *m = VoxelWorld_Instance(i);
             int mx, my, dx, dy, d;

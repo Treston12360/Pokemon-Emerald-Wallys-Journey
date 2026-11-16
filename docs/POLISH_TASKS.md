@@ -549,6 +549,11 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-41. Route 119 trees.** "look within the red boxes in the picture provided. The trees in the back ground
       look to be higher than the others showing a block look to them. All trees should align together to show a
       full forest." (picture not received yet - asked 08:50)
+      - 2026-11-16 (014PwRDj): the walls are in the wood past Route 119's west edge (the belt, Route 119's border
+        trees). POL-30's belt took each cell's level from every map's edge, blended - Route 118's mountains to the
+        south pulled the wood up column by column, and each step showed as a wall of tree crowns. Belt tree cells
+        now keep their own map's edge level, unblended (voxel_mesh_builder.c BorderLevelRaw; WJPC_BELT_TREE_BLEND=1
+        old way). Picture: docs/polish_reports/POL-41_route119_tree_walls.png (the walls Brennan boxed, then even).
 - POL-8 (2026-11-16 08:34): Brennan's photo of the lines (Pokemon Center 1F, build 16b, before the atlas fix):
   thin dark lines along the floor in front of the counter and the mat, and dashed lines on the side walls and
   around the stools. Those are the room's own models (page textures, not the atlas), so the 16c atlas inset
