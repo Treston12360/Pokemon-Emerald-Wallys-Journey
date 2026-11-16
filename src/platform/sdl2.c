@@ -220,6 +220,18 @@ static Uint64 sStallVDraw, sStall3D, sStall2D; // (2D: the GBA/wide picture draw
 // POL-15: time spent in the SDL/GL calls of a frame that can wait for the graphics card (texture uploads, flushes,
 // render-target switches) - where a full GPU queue shows up.
 static Uint64 sStallGl;
+// POL-15: the main thread's own CPU time during a trip (Windows), against the clock: much less means the thread
+// was waiting for a CPU (another program, power saving) rather than working.
+static double StallThreadCpuMs(void)
+{
+#ifdef _WIN32
+    FILETIME c, e, k, u;
+    if (GetThreadTimes(GetCurrentThread(), &c, &e, &k, &u))
+        return ((((Uint64)k.dwHighDateTime << 32) | k.dwLowDateTime) + (((Uint64)u.dwHighDateTime << 32) | u.dwLowDateTime)) / 10000.0;
+#endif
+    return 0.0;
+}
+static double sStallCpuStart;
 #define STALL_GL(call) do { Uint64 stallGl0_ = SDL_GetPerformanceCounter(); call; sStallGl += SDL_GetPerformanceCounter() - stallGl0_; } while (0)
 static int sStallFieldW, sStallFieldH;
 extern double gVoxel3DMapMs, gVoxel3DBeltMs, gVoxel3DDrawMs;
@@ -267,7 +279,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
     {
         static Uint64 sSecond;
         static unsigned sSlow, sTrips, sFlushesAt;
-        static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw, sWorstGame, sWorstFrame, sWorst3D, sWorstScreen, sWorstPresent, sWorst2D, sWorstGl;
+        static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw, sWorstGame, sWorstFrame, sWorst3D, sWorstScreen, sWorstPresent, sWorst2D, sWorstGl, sWorstCpu;
 
         sTrips++;
         if (total > 20.0)
@@ -284,6 +296,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
                 sWorst3D = sStall3D * 1000.0 / freq;
                 sWorst2D = sStall2D * 1000.0 / freq;
                 sWorstGl = sStallGl * 1000.0 / freq;
+                sWorstCpu = StallThreadCpuMs() - sStallCpuStart;
                 sWorstScreen = (drawn - batchEnd) * 1000.0 / freq;
                 sWorstPresent = (presented - drawn) * 1000.0 / freq;
             }
@@ -295,9 +308,9 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
             if (sSlow > 10 && sLines <= 5000 && (f = fopen("WallysJourney_stalls.txt", "a")) != NULL)
             {
                 sLines++;
-                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f: game %.0f, frame %.0f (2D picture %.0f at %dx%d, GL waits %.0f, 3D %.0f:"
+                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f (thread CPU %.0f): game %.0f, frame %.0f (2D picture %.0f at %dx%d, GL waits %.0f, 3D %.0f:"
                            " maps %.0f, belt %.0f, drawing %.0f), screen %.0f, present %.0f | map %d:%d, belt layers %u, belt rebuilds %u\n",
-                        (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstGame, sWorstFrame, sWorst2D,
+                        (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstCpu, sWorstGame, sWorstFrame, sWorst2D,
                         sStallFieldW, sStallFieldH, sWorstGl, sWorst3D,
                         sWorstMaps, sWorstBelt, sWorstDraw, sWorstScreen, sWorstPresent,
                         gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1,
@@ -1499,6 +1512,7 @@ int main(int argc, char **argv)
         ProcessEvents();
         ApplyFastForward();
         Uint64 stallLoopStart = SDL_GetPerformanceCounter();
+        sStallCpuStart = StallThreadCpuMs();
         sStallVDraw = sStall3D = sStall2D = sStallGl = 0;
 
         if (!paused)
