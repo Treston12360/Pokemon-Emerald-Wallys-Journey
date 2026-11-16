@@ -216,7 +216,8 @@ static bool sScriptRealtime;
 // WallysJourney_stalls.txt, next to the game, gets a line whenever one trip round the main loop takes longer
 // than 150 ms, saying which part took the time, and a line a minute with the memory still free. Always on:
 // it costs nothing while the game runs well, and the file is what to send when it does not.
-static Uint64 sStallVDraw, sStall3D;
+static Uint64 sStallVDraw, sStall3D, sStall2D; // (2D: the GBA/wide picture drawn on the CPU, POL-15)
+static int sStallFieldW, sStallFieldH;
 extern double gVoxel3DMapMs, gVoxel3DBeltMs, gVoxel3DDrawMs;
 extern unsigned gVoxel3DMeshes, gVoxel3DPages, gVoxel3DBeltLayers, gVoxel3DBeltFlushes;
 
@@ -262,7 +263,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
     {
         static Uint64 sSecond;
         static unsigned sSlow, sTrips, sFlushesAt;
-        static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw, sWorstGame, sWorstFrame, sWorst3D, sWorstScreen, sWorstPresent;
+        static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw, sWorstGame, sWorstFrame, sWorst3D, sWorstScreen, sWorstPresent, sWorst2D;
 
         sTrips++;
         if (total > 20.0)
@@ -277,6 +278,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
                 sWorstGame = (batchEnd - start - sStallVDraw) * 1000.0 / freq;
                 sWorstFrame = sStallVDraw * 1000.0 / freq;
                 sWorst3D = sStall3D * 1000.0 / freq;
+                sWorst2D = sStall2D * 1000.0 / freq;
                 sWorstScreen = (drawn - batchEnd) * 1000.0 / freq;
                 sWorstPresent = (presented - drawn) * 1000.0 / freq;
             }
@@ -288,9 +290,10 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
             if (sSlow > 10 && sLines <= 5000 && (f = fopen("WallysJourney_stalls.txt", "a")) != NULL)
             {
                 sLines++;
-                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f: game %.0f, frame %.0f (3D %.0f: maps %.0f,"
-                           " belt %.0f, drawing %.0f), screen %.0f, present %.0f | map %d:%d, belt layers %u, belt rebuilds %u\n",
-                        (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstGame, sWorstFrame, sWorst3D,
+                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f: game %.0f, frame %.0f (2D picture %.0f at %dx%d, 3D %.0f:"
+                           " maps %.0f, belt %.0f, drawing %.0f), screen %.0f, present %.0f | map %d:%d, belt layers %u, belt rebuilds %u\n",
+                        (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstGame, sWorstFrame, sWorst2D,
+                        sStallFieldW, sStallFieldH, sWorst3D,
                         sWorstMaps, sWorstBelt, sWorstDraw, sWorstScreen, sWorstPresent,
                         gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1,
                         gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapNum : -1,
@@ -1491,7 +1494,7 @@ int main(int argc, char **argv)
         ProcessEvents();
         ApplyFastForward();
         Uint64 stallLoopStart = SDL_GetPerformanceCounter();
-        sStallVDraw = sStall3D = 0;
+        sStallVDraw = sStall3D = sStall2D = 0;
 
         if (!paused)
         {
@@ -2843,12 +2846,32 @@ void VDraw(SDL_Texture *texture)
     WideView_SetSmooth(smooth ? overlay : NULL, SMOOTH_M);
     WideView_SetUiOverlay(sdlUiTexture != NULL ? uiLayer : NULL);
     sVDrawImage = gbaImage;
+    Uint64 stall2D = SDL_GetPerformanceCounter();
     if (!PcGuard_Call0(DrawFrameGuarded))
     {
         // The wide view hit a bad memory access: fall back to the normal picture for good.
         WideView_SetEnabled(FALSE);
         sVDrawImage = gbaImage;
         PcGuard_Call0(DrawFrameGuarded);
+    }
+    sStall2D += SDL_GetPerformanceCounter() - stall2D;
+    sStallFieldW = sFrameInfo.width;
+    sStallFieldH = sFrameInfo.height;
+    if (getenv("WJPC_VDRAW_TIME") != NULL) // test aid: the CPU picture's cost, every 60 frames
+    {
+        static double acc;
+        static unsigned n;
+        acc += (SDL_GetPerformanceCounter() - stall2D) * 1000.0 / SDL_GetPerformanceFrequency();
+        if (++n % 60 == 0)
+        {
+            FILE *tf = fopen(getenv("WJPC_VDRAW_TIME"), "a");
+            if (tf != NULL)
+            {
+                fprintf(tf, "[vdraw] field %dx%d: 2D picture %.2f ms/frame\n", sFrameInfo.width, sFrameInfo.height, acc / 60.0);
+                fclose(tf);
+            }
+            acc = 0.0;
+        }
     }
     WideView_SetSmooth(NULL, 0);
     WideView_SetUiOverlay(NULL);

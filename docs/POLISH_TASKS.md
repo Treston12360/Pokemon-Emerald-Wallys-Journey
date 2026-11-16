@@ -374,6 +374,32 @@ Add under each item: what was found, what was changed, files, how to test, what 
       - Pictures: `docs/polish_reports/POL-21_route110_to_103.png`, `POL-24_route112_to_lavaridge.png`
         (top old, bottom new; left before the crossing, right after). 2D does not use this code.
 
+
+## Brennan's clarifications and new items, 2026-11-15 18:05 (his words; numbered as he sent them)
+- **POL-31 (new). New Mauville in 3D:** "the glare whenever having gamma lighting on is way to bright needs to be tuned
+  down a bit, also the models inside are still 2D whenever in 3D."
+- **POL-32 (new). PC mass select:** "When trying to mass select pokemon within PC it turns the screen a solid color and
+  sorta glitches out, also mass select only works on when you have sword and shield boxes on via settings."
+- **POL-6 (clarified):** "The sword and shield start menu is too big and goes off the screen when widescreen is turned
+  off for some reason."
+- **POL-33 (new). Pokédex name search:** "When searching in pokedex to find pokemon under name using the alphabetical
+  search, it shows pokemon you havent found yet, allowing players to find locations of all pokemon without having
+  encountered them before which was not intended, you're suppose to encounter a pokemon before they show in your dex
+  even when searching using the alphabetical search in filters"
+- **POL-34 (new; same as Treston's PC-1115-01). Houses lost their colour (3D):** "All the houses now lost their color
+  for some reason and jus appear to be pale white for the most part, for some reason most of their color was removed"
+- **POL-30 (reopened, quality pass):** "Since we introduced the zoom feature the out of boarder areas that the player
+  could not see before were "filled" with a bunch of trees added and then they would change when switching routes ...
+  but now like in Dewford for example you jus put a bunch of trees in the middle of the ocean to "fill" the out of
+  bounds area we couldn't see before, we need a quality pass making sure we are filling the out of bound areas with
+  terrain that makes sense for the area and to make sure we don't reintroduce the popping in when switching routes."
+- **POL-15 lag, PRIORITY:** "my game is lagging but my buddy game is not lagging at all he has a intel cpu and I have
+  a amd cpu and we both have nvidia gpu's, could that have anything to do with it?" His cfg at 17:48:
+  `resolution=4` (3D drawn at 3840x2160), `frameRate=240`, `zoom=7`, `gammaLight=1`, `interframe=0`, `bilinear=0`.
+  Stall log (build 17:08): whole seconds of 11-20 loop trips (~50-120 ms each); of a ~100 ms trip, the 3D work
+  (maps/belt/drawing calls) is 5-20 ms and the rest is in the frame step outside it - not yet split further (the
+  2D-picture time is now logged too). Here, his cfg at Route 111: the 2D picture costs ~6 ms a frame.
+
 ## Questions for Brennan (and his answers)
 
 Asked 2026-11-14, answered the same day:
