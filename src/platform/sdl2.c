@@ -217,6 +217,10 @@ static bool sScriptRealtime;
 // than 150 ms, saying which part took the time, and a line a minute with the memory still free. Always on:
 // it costs nothing while the game runs well, and the file is what to send when it does not.
 static Uint64 sStallVDraw, sStall3D, sStall2D; // (2D: the GBA/wide picture drawn on the CPU, POL-15)
+// POL-15: time spent in the SDL/GL calls of a frame that can wait for the graphics card (texture uploads, flushes,
+// render-target switches) - where a full GPU queue shows up.
+static Uint64 sStallGl;
+#define STALL_GL(call) do { Uint64 stallGl0_ = SDL_GetPerformanceCounter(); call; sStallGl += SDL_GetPerformanceCounter() - stallGl0_; } while (0)
 static int sStallFieldW, sStallFieldH;
 extern double gVoxel3DMapMs, gVoxel3DBeltMs, gVoxel3DDrawMs;
 extern unsigned gVoxel3DMeshes, gVoxel3DPages, gVoxel3DBeltLayers, gVoxel3DBeltFlushes;
@@ -263,7 +267,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
     {
         static Uint64 sSecond;
         static unsigned sSlow, sTrips, sFlushesAt;
-        static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw, sWorstGame, sWorstFrame, sWorst3D, sWorstScreen, sWorstPresent, sWorst2D;
+        static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw, sWorstGame, sWorstFrame, sWorst3D, sWorstScreen, sWorstPresent, sWorst2D, sWorstGl;
 
         sTrips++;
         if (total > 20.0)
@@ -279,6 +283,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
                 sWorstFrame = sStallVDraw * 1000.0 / freq;
                 sWorst3D = sStall3D * 1000.0 / freq;
                 sWorst2D = sStall2D * 1000.0 / freq;
+                sWorstGl = sStallGl * 1000.0 / freq;
                 sWorstScreen = (drawn - batchEnd) * 1000.0 / freq;
                 sWorstPresent = (presented - drawn) * 1000.0 / freq;
             }
@@ -290,10 +295,10 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
             if (sSlow > 10 && sLines <= 5000 && (f = fopen("WallysJourney_stalls.txt", "a")) != NULL)
             {
                 sLines++;
-                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f: game %.0f, frame %.0f (2D picture %.0f at %dx%d, 3D %.0f:"
+                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f: game %.0f, frame %.0f (2D picture %.0f at %dx%d, GL waits %.0f, 3D %.0f:"
                            " maps %.0f, belt %.0f, drawing %.0f), screen %.0f, present %.0f | map %d:%d, belt layers %u, belt rebuilds %u\n",
                         (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstGame, sWorstFrame, sWorst2D,
-                        sStallFieldW, sStallFieldH, sWorst3D,
+                        sStallFieldW, sStallFieldH, sWorstGl, sWorst3D,
                         sWorstMaps, sWorstBelt, sWorstDraw, sWorstScreen, sWorstPresent,
                         gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1,
                         gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapNum : -1,
@@ -1494,7 +1499,7 @@ int main(int argc, char **argv)
         ProcessEvents();
         ApplyFastForward();
         Uint64 stallLoopStart = SDL_GetPerformanceCounter();
-        sStallVDraw = sStall3D = sStall2D = 0;
+        sStallVDraw = sStall3D = sStall2D = sStallGl = 0;
 
         if (!paused)
         {
@@ -2932,7 +2937,7 @@ void VDraw(SDL_Texture *texture)
     else if (!WideView_BattleTransitionOnField())
         sHaveLastField = false; // a battle, a menu: the next transition starts from a new field picture
     if (!s2DTransition)
-        SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32));
+        STALL_GL(SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32)));
     if (fullW == DISPLAY_WIDTH && fullH == DISPLAY_HEIGHT)
         memcpy(sLastUploaded, image, sizeof(sLastUploaded));
     else
@@ -2980,7 +2985,7 @@ void VDraw(SDL_Texture *texture)
             faded[i] = o;
         }
         SDL_Rect fieldArea = {0, 0, fw, fh};
-        SDL_UpdateTexture(texture, &fieldArea, faded, fw * sizeof(Uint32));
+        STALL_GL(SDL_UpdateTexture(texture, &fieldArea, faded, fw * sizeof(Uint32)));
     }
 
     s3DFrame = false;
@@ -3018,7 +3023,7 @@ void VDraw(SDL_Texture *texture)
                     sTransImage[i] = ToArgb(gbaImage[(y + oy) * stride + x + ox]);
             }
         if (sdl3DTransTexture != NULL)
-            SDL_UpdateTexture(sdl3DTransTexture, NULL, sTransImage, DISPLAY_WIDTH * sizeof(uint32_t));
+            STALL_GL(SDL_UpdateTexture(sdl3DTransTexture, NULL, sTransImage, DISPLAY_WIDTH * sizeof(uint32_t)));
     }
     if ((s3DWanted || s3DBattleWanted) && !s3DReady)
         Try3DInit(); // turned on in Settings
@@ -3073,8 +3078,8 @@ void VDraw(SDL_Texture *texture)
         if (sdl3DTexture != NULL)
         {
             unsigned id;
-            SDL_RenderFlush(sdlRenderer);
-            id = Voxel3D_TextureId(sdl3DTexture);
+            STALL_GL(SDL_RenderFlush(sdlRenderer));
+            STALL_GL(id = Voxel3D_TextureId(sdl3DTexture));
             if (id != 0)
             {
                 SDL_Texture *was = SDL_GetRenderTarget(sdlRenderer);
@@ -3091,8 +3096,8 @@ void VDraw(SDL_Texture *texture)
                 s3DFrame = Voxel3D_Render(id, w, h);
                 sStall3D += SDL_GetPerformanceCounter() - r0;
                 // SDL caches its GL state: switching targets makes it send viewport and target again.
-                SDL_SetRenderTarget(sdlRenderer, sdl3DTexture);
-                SDL_SetRenderTarget(sdlRenderer, was);
+                STALL_GL(SDL_SetRenderTarget(sdlRenderer, sdl3DTexture));
+                STALL_GL(SDL_SetRenderTarget(sdlRenderer, was));
             }
         }
     }
@@ -3102,19 +3107,19 @@ void VDraw(SDL_Texture *texture)
         if (!sBattleShow)
             s3DBattleFrame = false; // a move's background, BG3 off or a blank screen: the 2D battle, whole
         else
-            SDL_UpdateTexture(sdl3DBattleTexture, NULL, sBattleImage, DISPLAY_WIDTH * sizeof(uint32_t));
+            STALL_GL(SDL_UpdateTexture(sdl3DBattleTexture, NULL, sBattleImage, DISPLAY_WIDTH * sizeof(uint32_t)));
     }
     if (sFrameInfo.mode == WIDE_VIEW_FIELD && sdlUiTexture != NULL)
     {
         for (int i = 0; i < fullW * fullH; i++)
             uiImage[i] = (uiLayer[i] & 0x8000) ? ToArgb(uiLayer[i]) : 0;
-        SDL_UpdateTexture(sdlUiTexture, &area, uiImage, fullW * sizeof(Uint32));
+        STALL_GL(SDL_UpdateTexture(sdlUiTexture, &area, uiImage, fullW * sizeof(Uint32)));
     }
     if (sFrameInfo.margin > 0)
     {
         for (int i = 0; i < fullW * fullH; i++)
             overlayImage[i] = (overlay[i] & 0x8000) ? ToArgb(overlay[i]) : 0;
-        SDL_UpdateTexture(sdlOverlayTexture, &area, overlayImage, fullW * sizeof(Uint32));
+        STALL_GL(SDL_UpdateTexture(sdlOverlayTexture, &area, overlayImage, fullW * sizeof(Uint32)));
 
         // How far the camera moved since the last frame; big jumps (warps, map changes) aren't slid.
         sPrevCamX = sCurCamX;
