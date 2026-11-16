@@ -506,6 +506,38 @@ Add under each item: what was found, what was changed, files, how to test, what 
     c0000005 at 0x2c, callback2 exe+198bc0 = CB2_ExpansionIntro` - a NULL read in the boot "powered by" intro,
     skipped by the guard (the game goes on). Not looked into yet.
 
+## Brennan's new items, 2026-11-16 08:46 (his words; numbered here by session 014PwRDj)
+
+- [ ] **POL-37. Learn from Emerald 3DS.** "Emerald 3DS doesn't seem to have 3D issues, please research how they
+      were able to generate everything in 3D so cleanly and use what you learn to help polish our 3D world. please
+      review their code to learn how they do it, no guessing or pretending, if you need anything to accomplish
+      this please ask me"
+      - 2026-11-16 (014PwRDj): study written up in `docs/POL-37_EMERALD_3DS_STUDY.md` (what they do, what was
+        checked, how to run their engine view on our data, the plan). Pictures:
+        `docs/polish_reports/POL-37_route118_ours_vs_3ds_engine.png`, `POL-37_pokecenter_ours_vs_3ds_engine.png`.
+        Short version: our relief data is byte-for-byte theirs on every unchanged map; their own status list has
+        the same faults on Route 118/119/111 and the Game Corner; the lines on the sand and the Pokemon Center
+        are not in their engine's scene - they are our renderer's texture-edge sampling at high resolution.
+- [ ] **POL-38. Sandstorm north of Mauville (Route 111).** "sandstorm north of mauville looks weird not like a
+      sandstorm. Rocks within the sandstorm, the top right of the rocks so a blue box"
+- [ ] **POL-39 (PRIORITY). White flowers.** "The white flowers around the region have been turned into 3D, but
+      now they have black lines and rough textures." (the POL-7 flower cards)
+      - 2026-11-16 (014PwRDj): his crop shows a dark tick at both ends of every card: the card's u ran right to
+        its edge, so a screen pixel there read the next card's column in trees.rgba5551 (dark outline). Fixed:
+        the card's uv 1/32 texel inside (voxel_tree.c EmitGroundCard), as the tree crowns' top already was. Route 118
+        at 1280x720: the ticks are gone. "Rough textures" not changed yet - waiting for his look at the new build.
+- [ ] **POL-40. Route 118.** "look within the red boxes in the picture provided. There are black lines along the
+      beaches and on the ground near the trees. Also the background mountains are blocks instead of like the
+      mountain south of it that looks correct." (picture not received yet - asked 08:50)
+- [ ] **POL-41. Route 119 trees.** "look within the red boxes in the picture provided. The trees in the back ground
+      look to be higher than the others showing a block look to them. All trees should align together to show a
+      full forest." (picture not received yet - asked 08:50)
+- POL-8 (2026-11-16 08:34): Brennan's photo of the lines (Pokemon Center 1F, build 16b, before the atlas fix):
+  thin dark lines along the floor in front of the counter and the mat, and dashed lines on the side walls and
+  around the stools. Those are the room's own models (page textures, not the atlas), so the 16c atlas inset
+  does not reach them; the same 1/32-pixel inset is now applied to every model face
+  (`VoxelBuildings_InsetTriUV`, building chunks and static models).
+
 ## Questions for Brennan (and his answers)
 
 Asked 2026-11-14, answered the same day:
