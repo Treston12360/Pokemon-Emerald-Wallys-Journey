@@ -7,18 +7,65 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - name: Native prerequisites
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y build-essential gcc-multilib gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi libpng-dev libsdl2-dev:i386 libsdl2-image-dev:i386 python3
-      - run: make -j2 release
-      - run: make -f Makefile.pc -j2
-      - uses: actions/upload-artifact@v4
+          sudo apt-get install -y build-essential gcc-multilib gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi libpng-dev libsdl2-dev:i386 libsdl2-image-dev:i386 python3 python3-pil curl file
+      - name: Fetch actual animated sprite assets
+        run: |
+          mkdir -p preview
+          curl -fLSs --retry 2 https://play.pokemonshowdown.com/sprites/gen5ani-back/sceptile.gif -o preview/sceptile-back.gif
+          curl -fLSs --retry 2 https://play.pokemonshowdown.com/sprites/gen5ani/beldum.gif -o preview/beldum.gif
+          file preview/*.gif
+      - name: Install temporary test scenario (Sceptile in Oldale)
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          Path("preview").mkdir(exist_ok=True)
+          Path("preview/scenario.json").write_text(json.dumps([{"map":"MAP_OLDALE_TOWN","x":9,"y":9,"flags":[],"party":[["SCEPTILE",55]]}]))
+          # Original documented test harness repeatedly presses A through new game.
+          lines=["wait 400"]
+          for _ in range(300):
+              lines.extend(["press A 4","wait 30"])
+          lines.extend(["wait 90","winshot preview-before-battle.ppm","wait 5","previewbattle","wait 200",
+                        "winshot preview-battle-1.ppm","wait 180","winshot preview-battle-2.ppm",
+                        "wait 180","winshot preview-battle-3.ppm","quit"])
+          Path("preview/run.script").write_text("\n".join(lines)+"\n")
+          PY
+          python3 tools/wj_testfw/install.py on preview/scenario.json
+      - name: Generate required data
+        run: make -j2 release 2>&1 | tee preview-generate.log
+      - name: Build native game
+        run: |
+          make -f Makefile.pc -j2 2>&1 | tee preview-build.log
+          file wallys-journey
+      - name: Run real native battle and capture screen
+        timeout-minutes: 15
+        run: |
+          SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy WJPC_3D=0 WJPC_WINDOW=960x640 WJPC_GEN5_PREVIEW=1 WJPC_SCRIPT=preview/run.script ./wallys-journey > preview-game.log 2>&1
+          python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          for p in Path(".").glob("preview-*.ppm"):
+              im=Image.open(p); im.save(p.with_suffix(".png"))
+              print(p.with_suffix(".png"), im.size)
+          assert Path("preview-battle-2.png").is_file(), "No battle capture produced"
+          PY
+      - name: Upload actual render and diagnostics
         if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: aria-preview-native
-          path: wallys-journey
+          name: aria-real-engine-battle-preview
+          path: |
+            preview-*.png
+            preview-*.ppm
+            preview-game.log
+            preview-generate.log
+            preview-build.log
           if-no-files-found: warn
+          retention-days: 14
