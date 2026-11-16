@@ -2,6 +2,9 @@ name: ARIA PC preview
 on:
   push:
     branches: [aria-animated-sprite-preview]
+concurrency:
+  group: aria-gen5-preview
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
@@ -39,10 +42,10 @@ jobs:
           PY
           python3 tools/wj_testfw/install.py on preview/scenario.json
       - name: Generate required data
-        run: make -j2 release 2>&1 | tee preview-generate.log
+        run: make -j4 release 2>&1 | tee preview-generate.log
       - name: Build native game
         run: |
-          make -f Makefile.pc -j2 2>&1 | tee preview-build.log
+          make -f Makefile.pc -j4 2>&1 | tee preview-build.log
           file wallys-journey
       - name: Run real native battle and capture screen
         timeout-minutes: 15
