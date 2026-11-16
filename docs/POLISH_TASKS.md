@@ -429,6 +429,11 @@ Add under each item: what was found, what was changed, files, how to test, what 
     (`tools/voxel3ds/splice_relief.py`, notes in `tools/voxel3ds/README.md`). Checked in 3D: Weather Institute,
     waterfall + bridges, south of the Institute, Route 120, Lilycove. Picture:
     `docs/polish_reports/POL-36_route119_before_after.png` (top before, bottom after).
+  - Brennan 22:23 (photo): "you didn't make the weather institute 3D it is 2D flat against the ground."
+    **Fixed 2026-11-15 (014PwRDj), data:** Emerald 3DS has no model for it. New model (spec
+    `weather_institute_exterior`: a rounded body 51 px tall, the pillared front 62 px, two domes; every face reads
+    the drawing), put into `pc_data/voxel/buildings.bin` with `tools/voxel3ds/splice_buildings.py` (notes in
+    `tools/voxel3ds/README.md`). Picture: `docs/polish_reports/POL-36_weather_institute_3d.png`.
   - Black lines around the tall grass: faint dark specks seen at grass tile edges in my shots too - separate
     from the elevation, still to do.
 - **POL-33 (new). Pokédex name search:** "When searching in pokedex to find pokemon under name using the alphabetical

@@ -28,3 +28,12 @@ maps are byte-for-byte vanilla, so their records were spliced in from the vanill
 OURS byte-for-byte). **Whoever regenerates relief.bin from our tree must re-run that splice** until the
 generator is fixed for these maps (likely cause: WJ's Fortree/General tileset art and metatile layers differ
 from vanilla - pokeemerald-expansion lighting - and the generator reads the drawing).
+
+## Weather Institute exterior (POL-36, 2026-11-15, session 014PwRDj)
+Emerald 3DS has no model for the Weather Institute on Route 119 (drawn flat on the ground). Spec + model:
+`tools/voxel3ds/weather_institute_spec.py` (paste into voxel_building_specs.py as it says). A whole buildings.bin
+made from this session's 3ds_port does NOT match pc_data's (53 models fewer), so only this placement was moved in:
+`tools/voxel3ds/splice_buildings.py OURS DONOR OUT 35 1 26` (DONOR = a buildings.bin generated with the spec).
+The renderer binds one page per map, so the tool replaces Route 119's page with the donor's (same drawings, checked
+texel by texel, plus the Institute's) and moves the page's other models to their new place; round trip checked.
+Whoever regenerates buildings.bin must add the spec first.
