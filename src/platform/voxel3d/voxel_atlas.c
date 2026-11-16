@@ -46,8 +46,11 @@ void VoxelAtlas_SlotUV(unsigned slot, float *u0, float *v0, float *u1, float *v1
      * line of another metatile's art right along the tile edge. Inside the
      * slot no sample moves by more than that thirty-second.
      */
-    *u0 = page * 2.0f + x / VOXEL_ATLAS_W;
-    *u1 = page * 2.0f + (x + VOXEL_ATLAS_SLOT) / VOXEL_ATLAS_W;
+    /* POL-8 (Brennan 2026-11-14: "black lines on the flooring inside of buildings"; his scene is drawn at 4K):
+     * the slot's west and east edges likewise, a thirty-second of a texel in - only the rows were; a tile edge
+     * on a pixel centre sideways took a column of the slot beside it (a black void tile, indoors). */
+    *u0 = page * 2.0f + (x + VOXEL_ATLAS_EDGE_INSET) / VOXEL_ATLAS_W;
+    *u1 = page * 2.0f + (x + VOXEL_ATLAS_SLOT - VOXEL_ATLAS_EDGE_INSET) / VOXEL_ATLAS_W;
     *v0 = 1.0f - (y + VOXEL_ATLAS_EDGE_INSET) / VOXEL_ATLAS_H;
     *v1 = 1.0f - (y + VOXEL_ATLAS_SLOT - VOXEL_ATLAS_EDGE_INSET) / VOXEL_ATLAS_H;
 }
