@@ -24,6 +24,8 @@
 #include <string.h>
 #include "global.h"
 #include "battle_setup.h"
+#include "pokemon.h"
+#include "constants/species.h"
 #include "battle_transition.h"
 #include "constants/characters.h"
 #include "constants/event_objects.h"
@@ -40,6 +42,7 @@
 #include "gba/flash_internal.h"
 #include "platform/dma.h"
 #include "platform/framedraw.h"
+#include "platform/gen5_preview.h" // isolated animated Pokémon screenshot prototype
 #include "overworld.h"
 #include "field_screen_effect.h"
 #include "field_player_avatar.h"
@@ -556,6 +559,17 @@ static bool TestStep(void)
             gTrainerBattleParameter.params.opponentB = 0;
             gNoOfApproachingTrainers = 0;
             BattleSetup_StartTrainerBattle();
+            continue;
+        }
+        if (!strcmp(cmd, "previewbattle"))
+        {
+            // VISUAL TEST ONLY, isolated preview branch. Must be called from the normal field.
+            // Give the player Sceptile and start a regular wild Beldum battle.
+            ZeroPlayerPartyMons();
+            CreateMon(&gPlayerParty[0], SPECIES_SCEPTILE, 55, 0, OTID_STRUCT_PLAYER_ID);
+            gPlayerPartyCount = 1;
+            CreateMon(&gEnemyParty[0], SPECIES_BELDUM, 47, 0, OTID_STRUCT_PLAYER_ID);
+            BattleSetup_StartWildBattle();
             continue;
         }
         if (!strcmp(cmd, "surfon"))
@@ -1116,6 +1130,7 @@ static void DrawScene(double t, int outputWidth, int outputHeight)
         SDL_RenderCopy(sdlRenderer, sdlTexture, &gameSource, &gameViewport);
         }
     }
+    G5Preview_Draw(sdlRenderer, gameViewport); // experimental 96px animated Pokémon layer, aligned to live battler positions
     if (useTarget)
     {
         if (sPlatformSettings[PLATFORM_SETTING_FILTER] && sFilterTexture != NULL)
