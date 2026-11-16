@@ -1030,10 +1030,14 @@ static const Mesh *StaticModel(unsigned pageModel, bool lit)
                 return NULL;
             // The model's texture place and scale, as ctr_voxel.c applies them.
             for (unsigned k = 0; k < count; k++)
-            {
                 t[k] = v[k];
-                t[k].u = (ox + v[k].u) * su;
-                t[k].v = 1.0f - (oy + v[k].v) * sv;
+            // POL-8: faces' uv 1/32 pixel in from their edges (VoxelBuildings_InsetTriUV)
+            for (unsigned k = 0; k + 2 < count; k += 3)
+                VoxelBuildings_InsetTriUV(&t[k]);
+            for (unsigned k = 0; k < count; k++)
+            {
+                t[k].u = (ox + t[k].u) * su;
+                t[k].v = 1.0f - (oy + t[k].v) * sv;
             }
             sStatics[i].used = true;
             sStatics[i].pageModel = pageModel;

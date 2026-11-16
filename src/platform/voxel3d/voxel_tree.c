@@ -558,12 +558,18 @@ static void EmitGroundCard(VoxelBuilder *builder, int x, int y, int kind, float 
     float wx = (float)x, baseZ = (float)y + at;
     int tx = kTx[kind], ty = 112, th = kTh[kind];
 
+    /* POL-39 (Brennan 2026-11-16: "black lines and rough textures" on the
+     * white flowers/grass): the uv 1/32 texel in from the card's edges - on
+     * the edge itself a screen pixel could read the next card's column (dark
+     * outlines), a dark tick at both ends of every card */
+    const float in = 1.0f / 32.0f;
+
     builder->rounded = true;
     VoxelBuilder_Quad(builder,
-        &(VoxelVertex){wx,        baseHeight + rise, baseZ - run, TEX_U(tx),      TEX_V(ty + 0.25f), 1.0f},
-        &(VoxelVertex){wx + 1.0f, baseHeight + rise, baseZ - run, TEX_U(tx + 16), TEX_V(ty + 0.25f), 1.0f},
-        &(VoxelVertex){wx + 1.0f, baseHeight,        baseZ,       TEX_U(tx + 16), TEX_V(ty + th), 1.0f},
-        &(VoxelVertex){wx,        baseHeight,        baseZ,       TEX_U(tx),      TEX_V(ty + th), 1.0f});
+        &(VoxelVertex){wx,        baseHeight + rise, baseZ - run, TEX_U(tx + in),      TEX_V(ty + 0.25f), 1.0f},
+        &(VoxelVertex){wx + 1.0f, baseHeight + rise, baseZ - run, TEX_U(tx + 16 - in), TEX_V(ty + 0.25f), 1.0f},
+        &(VoxelVertex){wx + 1.0f, baseHeight,        baseZ,       TEX_U(tx + 16 - in), TEX_V(ty + th - in), 1.0f},
+        &(VoxelVertex){wx,        baseHeight,        baseZ,       TEX_U(tx + in),      TEX_V(ty + th - in), 1.0f});
     builder->rounded = false;
 }
 

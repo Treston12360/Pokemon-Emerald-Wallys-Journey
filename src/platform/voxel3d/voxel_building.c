@@ -1470,6 +1470,29 @@ bool VoxelBuildings_StaticModel(unsigned pageModel, const VoxelVertex **vertices
     return true;
 }
 
+void VoxelBuildings_InsetTriUV(VoxelVertex *t)
+{
+    const float inset = 1.0f / 32.0f;
+    float u0 = t[0].u, u1 = t[0].u, v0 = t[0].v, v1 = t[0].v;
+
+    for (unsigned j = 1; j < 3; ++j)
+    {
+        u0 = fminf(u0, t[j].u);
+        u1 = fmaxf(u1, t[j].u);
+        v0 = fminf(v0, t[j].v);
+        v1 = fmaxf(v1, t[j].v);
+    }
+    for (unsigned j = 0; j < 3; ++j)
+    {
+        /* only across a span of a pixel or more: a face drawn from one
+         * pixel's line keeps it */
+        if (u1 - u0 >= 1.0f)
+            t[j].u += t[j].u == u0 ? inset : t[j].u == u1 ? -inset : 0.0f;
+        if (v1 - v0 >= 1.0f)
+            t[j].v += t[j].v == v0 ? inset : t[j].v == v1 ? -inset : 0.0f;
+    }
+}
+
 bool VoxelBuildings_DoorWall(const VoxelMapInstance *inst, int x, int y, float *z)
 {
     /* across the middle of the cell, half a tile up */
@@ -1562,8 +1585,11 @@ bool VoxelBuildings_EmitSome(VoxelBuilder *builder, const VoxelMapInstance *inst
                 triangles -= step / 3u;
 
                 for (unsigned j = 0; j < step; ++j)
-                {
                     t[j] = v[k + j];
+                for (unsigned j = 0; j < step; j += 3)
+                    VoxelBuildings_InsetTriUV(&t[j]);
+                for (unsigned j = 0; j < step; ++j)
+                {
                     t[j].x += wx;
                     t[j].z += wz;
                     t[j].u = (ox[r] + t[j].u) * su;
