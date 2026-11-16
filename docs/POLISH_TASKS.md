@@ -583,3 +583,13 @@ Asked 2026-11-14, answered the same day:
   ```
   (NULL reads the guard skipped: one callback skipped each time, not a crash by itself. To resolve them: get the
   zip name of his build, rebuild that commit unstripped, `llvm-nm -n`.)
+
+## Brennan 2026-11-16 14:56: build 16f "laggy and there was also a crash" (+ "revert back all the white flowers to the 2D form")
+- His files kept in /home/claude/keep/brennan_2026-11-16_1456.sav (save). cfg: resolution=4 (4K), antialias=4, gammaLight=1.
+- Crash: c0000005 in the GL driver, stack through MakeBanks (POL-38's sand dust, first frame of Route 111's sandstorm):
+  the texture upload ran with SDL's GL_UNPACK_ROW_LENGTH still set, reading past the texels. Unpack state reset first.
+- Lag (LAGGY lines, 2D picture 18-25 ms + 3D 18-65 ms on Mauville/Route 111): option 5's 4x MSAA on an RGBA16F target
+  at 3840x2160 (~265 MB, resolved each frame) - the change these builds added. MSAA now off above 1440p, 2x max at 1440p
+  (WJPC_MSAA overrides). Waiting for his check on 16g.
+- White flowers (General 0x001, the grass's flowers) back to 2D; red flowers (0x004) and planters (0x007) stay cards.
+- POL-40 belt terraces work in progress on branch `polish-belt-wip` (not in 16g).
