@@ -42,7 +42,7 @@
 #include "gba/flash_internal.h"
 #include "platform/dma.h"
 #include "platform/framedraw.h"
-#include "platform/gen5_preview.h" // isolated animated Pokémon screenshot prototype
+#include "gen5_preview.h" // isolated animated Pokémon screenshot prototype
 #include "overworld.h"
 #include "field_screen_effect.h"
 #include "field_player_avatar.h"

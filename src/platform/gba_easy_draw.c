@@ -1,7 +1,7 @@
 #ifdef RENDERER_EASY_DRAW
 #include "global.h"
 #include "hicolor.h" // ENG-SPRITES
-#include "platform/gen5_preview.h" // experimental animated Pokémon replacement; no gameplay changes
+#include "gen5_preview.h" // experimental animated Pokémon replacement; no gameplay changes
 #include "platform/null_guard.h"
 #include <stdbool.h>
 #include "platform/dma.h"

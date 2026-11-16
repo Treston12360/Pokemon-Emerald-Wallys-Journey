@@ -8,7 +8,7 @@
 #include "battle.h"
 #include "sprite.h"
 #include "constants/species.h"
-#include "platform/gen5_preview.h"
+#include "gen5_preview.h"
 
 #if defined(NATIVE_LINUX)
 #include <SDL2/SDL_image.h>
