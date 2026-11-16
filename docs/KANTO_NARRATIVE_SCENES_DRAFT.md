@@ -338,9 +338,7 @@ VARNELL: She's right there.
 
 BLUE: I know. But if you go through—
 
-VARNELL: She won't leave him.
-
-(Use 'Clefairy' or 'her' in final writing depending on the established Clefairy pronouns; **do not invent the Pokémon's sex**. Drafts should use "Clefairy" or "it" until the owner chooses.)
+VARNELL: She won't leave Clefairy.
 
 VARNELL: I have to get her out.
 
@@ -348,7 +346,7 @@ VARNELL: I have to get her out.
 
 **Do not say:** "I'm the one who killed her," "that's the unidentified body," "the past has changed," or "the roof was already coming down." Neither Blue nor Varnell should explain the twist. Varnell never knows it.
 
-**CRITICAL continuity flag:** A line above says "She won't leave him", which *does not specify Clefairy's gender* but is ambiguous. **Replace with "She won't leave Clefairy" in final-approved dialogue.** (Draft keeps note to catch it.)
+**Continuity rule:** Clefairy's gender is not specified. Always use its species name or a neutral pronoun in draft dialogue; avoid inventing sex or gender details.
 
 ## Chapter 14 — Aftermath, restrained (DRAFT)
 
