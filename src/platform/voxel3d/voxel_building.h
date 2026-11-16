@@ -161,6 +161,12 @@ bool VoxelBuildings_StaticModel(unsigned pageModel, const VoxelVertex **vertices
 
 bool VoxelBuildings_DoorWall(const VoxelMapInstance *inst, int x, int y, float *z);
 
+/* POL-8: a triangle's uv (pixels of the drawing, before the page scale)
+ * pulled 1/32 pixel in from its own uv box's edges, so a face whose edge
+ * lies exactly on a pixel line never samples the next pixel of the page
+ * (a thin dark line along the face at high resolution). */
+void VoxelBuildings_InsetTriUV(VoxelVertex *t);
+
 /* Appends every model whose top-left cell lies in [x0,x1) x [y0,y1), with
  * its placement's ground patches. */
 void VoxelBuildings_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
