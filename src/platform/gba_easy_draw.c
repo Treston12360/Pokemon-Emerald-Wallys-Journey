@@ -1,4 +1,6 @@
 #ifdef RENDERER_EASY_DRAW
+// SDL must be parsed before global.h defines its abs macro.
+#include <SDL2/SDL.h>
 #include "global.h"
 #include "hicolor.h" // ENG-SPRITES
 #include "gen5_preview.h" // experimental animated Pokémon replacement; no gameplay changes
