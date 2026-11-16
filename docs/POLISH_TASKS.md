@@ -99,6 +99,19 @@ Add under each item: what was found, what was changed, files, how to test, what 
       building the things inside at the front of the building are cut off and doesn't look 3D, the pc is cut off
       at the bottom, the top of the healing station and back wall looks crunched and cut off like the back wall
       is down too far."
+      - WIP 2026-11-16 (014PwRDj), nothing shipped yet. Checked in 3D with Brennan's save:
+        - Door (Route 111, cells 30..32 x 112..113): the green cap with the Poke Ball is drawn in the cliff-face
+          cells of row 112, which the relief draws as cliff - so the cap is lost and only the posts stand. Tried a
+          model (`tools/voxel3ds/trainer_hill_door_spec_WIP.py`, PlanPrism 24 x 4 x 29 px, `relief_bare`): the
+          posts come from it but the cap still does not show (relief_bare leaves row 112 to the relief, which
+          takes the cap's pixels). Owning row 112 instead would replace that cliff with flat ground. Also: the
+          splice replaced Route 111's page with this session's generated page, whose night-glass mask differs
+          (the Trainer Hill building turned bright green at night) - a splice must keep the old page and its mask
+          and only append the new drawing (not written yet).
+        - Inside (Trainer Hill entrance room): Emerald 3DS's own room (`trainer_hill_entrance` in its specs): the
+          PC (cell 0,9) and the healing machine are painted on the counter piece (counter_0_8), not modelled -
+          that is the "cut off / crunched" look; the lobby's back wall pieces (`wall_w`/`wall_e`) are only 16 px
+          tall over a 32 px drawn wall. Needs new pieces for the PC and the healing machine and taller walls.
 - [ ] **POL-6. Boxes too big outside widescreen.** "When not in widescreen mode, the text box and main menu box
       is too big for the screen and gets cut off."
       - Not reproduced yet (Claude 019khs4X, 2026-11-14). Linux build, Brennan's settings from his cfg but
