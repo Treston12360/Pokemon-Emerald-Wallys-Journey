@@ -4,6 +4,9 @@ bottom row of voxel/trees.rgba5551 (128x128 RGBA5551, PICA 8x8 Morton tiles; row
 
   (0, 112)  16x16  the General tileset's flowers (metatile 0x004) - its drawing less every pixel of the plain
                    grass's three colours (metatile 0x001: base 73C5A4, specks 41B483 / A4D5C5)
+  (32, 112) 16x8   a planter box (metatile 0x007, Petalburg's garden, the Battle Frontier): its upper box,
+                   rows 0-7 (the tile is two boxes one above the other), less the grass round it (73C5A4);
+                   Brennan: "the planter boxes ... were 2D"
   (16, 112) 16x8   a short-grass tuft - the top 8 rows (the blades' tips) of the long-grass tuft already in
                    the texture at (80, 32), recoloured to the short grass's colours (dark -> 41B483,
                    mid -> 73C5A4, light -> A4D5C5; its darkest outline -> 41B483)
@@ -35,7 +38,7 @@ def main():
     from dump_region_art import metatile_image
     path = sys.argv[1]
     d = bytearray(open(path, 'rb').read())
-    assert all(struct.unpack_from('<H', d, 2 * tex(x, y))[0] & 1 == 0 for y in range(112, 128) for x in range(0, 32)), \
+    assert all(struct.unpack_from('<H', d, 2 * tex(x, y))[0] & 1 == 0 for y in range(112, 128) for x in range(32, 48)), \
         'slots not free'
     a = LayoutArt('LAYOUT_ROUTE101')
     grass = metatile_image(a.entries(0x001), a.ts).convert('RGB')
@@ -52,6 +55,11 @@ def main():
         for x in range(16):
             c = unpack(struct.unpack_from('<H', d, 2 * tex(80 + x, 32 + y))[0])
             struct.pack_into('<H', d, 2 * tex(16 + x, 112 + y), pack(remap.get(c, c) if c else None))
+    planter = metatile_image(a.entries(0x007), a.ts).convert('RGB')
+    for y in range(8):
+        for x in range(16):
+            c = planter.getpixel((x, y))
+            struct.pack_into('<H', d, 2 * tex(32 + x, 112 + y), pack(None if c == (115, 197, 164) else c))
     open(path, 'wb').write(d)
     print('cards written')
 

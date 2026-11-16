@@ -541,17 +541,22 @@ static bool AgainstRock(const VoxelMapInstance *inst, int x, int y, float lift)
 /*
  * POL-7 (Brennan 2026-11-16: flowers, flowerbeds and short grass in 3D, "same as tall grass"): the General
  * tileset's flowers (0x004) and plain grass (0x001) get a card standing on the ground, leant back as the long
- * grass's tuft is (EmitSmallCell): the flowers' own drawing less the grass (trees texture 0,112, 16x16), and a
- * low tuft of blades for the grass (16,112, 16x8) - tools/voxel3ds/add_tree_cards.py made both. The ground
+ * grass's tuft is (EmitSmallCell): the flowers' own drawing less the grass (trees texture 0,112, 16x16), a
+ * low tuft of blades for the grass (16,112, 16x8) and Petalburg's planter boxes (0x007, 32,112, 16x8, two a tile:
+ * "the planter boxes ... were 2D") - tools/voxel3ds/add_tree_cards.py made them. The ground
  * stays the ground pass's. Not on a cell a building model stands on or on sloping relief.
  */
-static void EmitGroundCard(VoxelBuilder *builder, int x, int y, bool flower)
+enum { CARD_FLOWER, CARD_TUFT, CARD_PLANTER };
+
+static void EmitGroundCard(VoxelBuilder *builder, int x, int y, int kind, float at)
 {
-    const float len = flower ? 0.75f : 0.30f;            /* the card's length, tiles */
+    static const float kLen[] = { 0.75f, 0.30f, 0.45f };  /* the card's length, tiles */
+    static const uint8_t kTx[] = { 0, 16, 32 }, kTh[] = { 16, 8, 8 };
+    const float len = kLen[kind];
     const float rise = 0.766044f * len, run = 0.642788f * len; /* 50 degrees, as the tuft */
     const float baseHeight = -0.02f;
-    float wx = (float)x, baseZ = (float)y + (flower ? 0.80f : 0.70f);
-    int tx = flower ? 0 : 16, ty = 112, th = flower ? 16 : 8;
+    float wx = (float)x, baseZ = (float)y + at;
+    int tx = kTx[kind], ty = 112, th = kTh[kind];
 
     builder->rounded = true;
     VoxelBuilder_Quad(builder,
@@ -610,12 +615,20 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
             }
-            else if ((metatileId == 0x004 || metatileId == 0x001) && FlatRelief(inst, x, y)
+            else if ((metatileId == 0x004 || metatileId == 0x001 || metatileId == 0x007) && FlatRelief(inst, x, y)
                   && !VoxelBuildings_CellAt(inst, x, y, NULL, NULL))
             {
                 builder->lift = VoxelRelief_CellLift(inst, x, y);
                 builder->shift = VoxelRelief_CellShift(inst, x, y);
-                EmitGroundCard(builder, x, y, metatileId == 0x004);
+                if (metatileId == 0x007)
+                {
+                    /* a planter box: the tile is two boxes, one over the other - a card for each */
+                    EmitGroundCard(builder, x, y, CARD_PLANTER, 0.50f);
+                    EmitGroundCard(builder, x, y, CARD_PLANTER, 1.00f);
+                }
+                else
+                    EmitGroundCard(builder, x, y, metatileId == 0x004 ? CARD_FLOWER : CARD_TUFT,
+                                   metatileId == 0x004 ? 0.80f : 0.70f);
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
             }

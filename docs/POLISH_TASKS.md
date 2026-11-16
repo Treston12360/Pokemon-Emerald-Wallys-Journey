@@ -127,7 +127,11 @@ Add under each item: what was found, what was changed, files, how to test, what 
         50 degrees; every plain grass tile (0x001) a low tuft (0.3 tile) of blade tips. Art: two cards added to
         `pc_data/voxel/trees.rgba5551` (free bottom row) by `tools/voxel3ds/add_tree_cards.py`; renderer:
         `voxel_tree.c` EmitGroundCard (not on building cells or sloping relief). Emerald 3DS has neither.
-      - **Still to do:** flowerbeds/flowers drawn in towns' own (secondary) tilesets.
+      - Brennan: "The flower patches along with the planter boxes were 2D ... The planter boxes inside mauville and
+        petalburg. Also whatever planter boxes you can find inside cities." Done: the General planter boxes (0x007:
+        Petalburg's garden, the Battle Frontier) stand as two cards a tile (trees texture 32,112). Mauville's map
+        has only the 0x004 flower patches (done) - asked Brennan where Mauville's planter boxes are.
+        Pictures: `POL-7_flowers_and_grass_prototype.png`, `POL-7_petalburg_planters.png`.
 - [ ] **POL-8. Black lines on indoor floors.** "There are black lines on the flooring inside of buildings."
 - [ ] **POL-9. Game Corner.** "You can walk through the left and right columns of the game corner building,
       inside of the game corner the gatcha machines need to be fixed as they are in parts or not fully 3D and the
