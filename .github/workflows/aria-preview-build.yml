@@ -36,8 +36,10 @@ jobs:
           for _ in range(300):
               lines.extend(["press A 4","wait 30"])
           lines.extend(["wait 90","winshot preview-before-battle.ppm","wait 5","previewbattle","wait 200",
-                        "winshot preview-battle-1.ppm","wait 180","winshot preview-battle-2.ppm",
-                        "wait 180","winshot preview-battle-3.ppm","quit"])
+                        "winshot preview-battle-1.ppm",
+                        "press A 4","wait 160","winshot preview-battle-2.ppm",
+                        "press A 4","wait 160","winshot preview-battle-3.ppm",
+                        "wait 180","winshot preview-battle-4.ppm","quit"])
           Path("preview/run.script").write_text("\n".join(lines)+"\n")
           PY
           python3 tools/wj_testfw/install.py on preview/scenario.json
@@ -60,7 +62,7 @@ jobs:
           for p in Path(".").glob("preview-*.ppm"):
               im=Image.open(p); im.save(p.with_suffix(".png"))
               print(p.with_suffix(".png"), im.size)
-          assert Path("preview-battle-2.png").is_file(), "No battle capture produced"
+          assert Path("preview-battle-4.png").is_file(), "No late battle capture produced"
           PY
       - name: Upload actual render and diagnostics
         if: always()
