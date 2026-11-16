@@ -1,0 +1,24 @@
+name: ARIA PC preview
+on:
+  push:
+    branches: [aria-animated-sprite-preview]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Native prerequisites
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc-multilib gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi libpng-dev libsdl2-dev:i386 libsdl2-image-dev:i386 python3
+      - run: make -j2 release
+      - run: make -f Makefile.pc -j2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aria-preview-native
+          path: wallys-journey
+          if-no-files-found: warn
