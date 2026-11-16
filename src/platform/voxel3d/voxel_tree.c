@@ -2,6 +2,7 @@
 #include "voxel_tree.h"
 #include "voxel_relief.h"
 #include "voxel_regions.h"
+#include "voxel_building.h"
 
 struct Tileset;
 extern const struct Tileset gTileset_Dewford;
@@ -537,6 +538,42 @@ static bool AgainstRock(const VoxelMapInstance *inst, int x, int y, float lift)
     return large && y - 2 >= inst->originY && VoxelRelief_CellLift(inst, x, y - 2) > lift + 0.25f;
 }
 
+/*
+ * POL-7 (Brennan 2026-11-16: flowers, flowerbeds and short grass in 3D, "same as tall grass"): the General
+ * tileset's flowers (0x004) and plain grass (0x001) get a card standing on the ground, leant back as the long
+ * grass's tuft is (EmitSmallCell): the flowers' own drawing less the grass (trees texture 0,112, 16x16), and a
+ * low tuft of blades for the grass (16,112, 16x8) - tools/voxel3ds/add_tree_cards.py made both. The ground
+ * stays the ground pass's. Not on a cell a building model stands on or on sloping relief.
+ */
+static void EmitGroundCard(VoxelBuilder *builder, int x, int y, bool flower)
+{
+    const float len = flower ? 0.75f : 0.30f;            /* the card's length, tiles */
+    const float rise = 0.766044f * len, run = 0.642788f * len; /* 50 degrees, as the tuft */
+    const float baseHeight = -0.02f;
+    float wx = (float)x, baseZ = (float)y + (flower ? 0.80f : 0.70f);
+    int tx = flower ? 0 : 16, ty = 112, th = flower ? 16 : 8;
+
+    builder->rounded = true;
+    VoxelBuilder_Quad(builder,
+        &(VoxelVertex){wx,        baseHeight + rise, baseZ - run, TEX_U(tx),      TEX_V(ty + 0.25f), 1.0f},
+        &(VoxelVertex){wx + 1.0f, baseHeight + rise, baseZ - run, TEX_U(tx + 16), TEX_V(ty + 0.25f), 1.0f},
+        &(VoxelVertex){wx + 1.0f, baseHeight,        baseZ,       TEX_U(tx + 16), TEX_V(ty + th), 1.0f},
+        &(VoxelVertex){wx,        baseHeight,        baseZ,       TEX_U(tx),      TEX_V(ty + th), 1.0f});
+    builder->rounded = false;
+}
+
+static bool FlatRelief(const VoxelMapInstance *inst, int x, int y)
+{
+    const int16_t *g = VoxelRelief_Cell(inst, x, y);
+
+    if (g == NULL)
+        return true;
+    for (int k = 1; k < VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE; ++k)
+        if (g[k] != g[0])
+            return false;
+    return true;
+}
+
 void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
                             int x0, int y0, int x1, int y1)
 {
@@ -570,6 +607,15 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
                 EmitCell(builder, inst, inst->secondaryTileset, x, y, part, metatileId, rock);
                 /* At the tree's own lift, so both rows meet. */
                 EmitMissingRow(builder, inst, inst->secondaryTileset, x, y, part, metatileId, rock);
+                builder->lift = 0.0f;
+                builder->shift = 0.0f;
+            }
+            else if ((metatileId == 0x004 || metatileId == 0x001) && FlatRelief(inst, x, y)
+                  && !VoxelBuildings_CellAt(inst, x, y, NULL, NULL))
+            {
+                builder->lift = VoxelRelief_CellLift(inst, x, y);
+                builder->shift = VoxelRelief_CellShift(inst, x, y);
+                EmitGroundCard(builder, x, y, metatileId == 0x004);
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
             }

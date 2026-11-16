@@ -120,6 +120,14 @@ Add under each item: what was found, what was changed, files, how to test, what 
       - Need from Brennan: a screenshot of the cut-off box, and whether he was in fullscreen.
 - [ ] **POL-7. Grass, flowers, flowerbeds, trees still flat.** "The grass in 3D is not 3D it's still 2D alongside
       flowers, flowerbeds, trees."
+      - 2026-11-16 (014PwRDj), Brennan's answers: flat ones = "Flowers and flowerbeds", "Short grass too"; look =
+        "Same as tall grass" (a card standing, leant back as the long grass's tuft); prototype picture
+        `docs/polish_reports/POL-7_flowers_and_grass_prototype.png` -> "Yes, keep both".
+      - **Done (General tileset):** flowers (0x004) stand as their own drawing less the grass, 0.75 tile long at
+        50 degrees; every plain grass tile (0x001) a low tuft (0.3 tile) of blade tips. Art: two cards added to
+        `pc_data/voxel/trees.rgba5551` (free bottom row) by `tools/voxel3ds/add_tree_cards.py`; renderer:
+        `voxel_tree.c` EmitGroundCard (not on building cells or sloping relief). Emerald 3DS has neither.
+      - **Still to do:** flowerbeds/flowers drawn in towns' own (secondary) tilesets.
 - [ ] **POL-8. Black lines on indoor floors.** "There are black lines on the flooring inside of buildings."
 - [ ] **POL-9. Game Corner.** "You can walk through the left and right columns of the game corner building,
       inside of the game corner the gatcha machines need to be fixed as they are in parts or not fully 3D and the
