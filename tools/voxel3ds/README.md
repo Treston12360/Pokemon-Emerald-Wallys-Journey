@@ -17,3 +17,14 @@ current one — on 2026-11-13 a zip went out with an old copy and broke the ligh
 4. relief/regions/trees: the other `gen_voxel_*.py` the same way (see 3ds_port/full.mk rules).
 5. `gamma_clouds.bin` is Gamma's cloud texture (docs/GAMMA_LIGHTING_VALUES.md) — copy from the
    last release zip.
+
+## Route 119 relief (POL-36, 2026-11-15, session 014PwRDj)
+relief.bin generated against OUR tree (2026-11-14, in git as pc_data/voxel) lifted Route 119's ground into
+tall walls (bridges in pieces, Weather Institute flat, terrain "shooting up into the sky"). The relief.bin made
+by Emerald 3DS's builder from a vanilla Emerald ROM (2026-11-12) draws Route 119 right. Only 5 layouts differ
+between the two: Lilycove, Route 106, 119, 120, 121. Route 106's map is changed in WJ (keep ours); the other four
+maps are byte-for-byte vanilla, so their records were spliced in from the vanilla-built file with
+`tools/voxel3ds/splice_relief.py OURS DONOR OUT 35 36 37 6` (round-trip checked: with no layouts it rewrites
+OURS byte-for-byte). **Whoever regenerates relief.bin from our tree must re-run that splice** until the
+generator is fixed for these maps (likely cause: WJ's Fortree/General tileset art and metatile layers differ
+from vanilla - pokeemerald-expansion lighting - and the generator reads the drawing).

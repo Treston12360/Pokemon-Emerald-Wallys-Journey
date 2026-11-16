@@ -421,6 +421,16 @@ Add under each item: what was found, what was changed, files, how to test, what 
   the sky and the bridges are in pieces. The weather institute is flat and in pieces alongside the terrain around it
   as well as the background. If you go south of the weather institute the terrain also shoots up in the sky. There
   are also black lines around the tall grass in this area. It seems elevation is the problem in this area."
+  - **Elevation fixed 2026-11-15 (014PwRDj), data only:** reproduced with his save (Weather Institute door, the
+    waterfall). Cause: `pc_data/voxel/relief.bin` (generated against our tree on 2026-11-14) differs from the one
+    Emerald 3DS's builder makes from vanilla Emerald in 5 layouts - Lilycove, Route 106, 119, 120, 121 - and its
+    Route 119 is the broken one (with the vanilla-built file Route 119 draws right). Route 106's map is changed in
+    WJ, the other four are byte-for-byte vanilla, so their records were spliced in from the vanilla-built file
+    (`tools/voxel3ds/splice_relief.py`, notes in `tools/voxel3ds/README.md`). Checked in 3D: Weather Institute,
+    waterfall + bridges, south of the Institute, Route 120, Lilycove. Picture:
+    `docs/polish_reports/POL-36_route119_before_after.png` (top before, bottom after).
+  - Black lines around the tall grass: faint dark specks seen at grass tile edges in my shots too - separate
+    from the elevation, still to do.
 - **POL-33 (new). Pokédex name search:** "When searching in pokedex to find pokemon under name using the alphabetical
   search, it shows pokemon you havent found yet, allowing players to find locations of all pokemon without having
   encountered them before which was not intended, you're suppose to encounter a pokemon before they show in your dex
