@@ -600,3 +600,9 @@ Asked 2026-11-14, answered the same day:
         wild_encounters.json) has the ability Earth Eater (gen_9_families.h: { EARTH_EATER, NONE, SAND_VEIL }) - as in
         Scarlet/Violet, a Ground move heals it instead of hurting it. Asked Brennan whether to keep that (official) or change it.
       - Brennan 2026-11-16: "Keep Earth Eater". Closed, no change.
+- 16h (Brennan 15:34, 16g at 4K/240 fps "the lag is back whenever walking ... the whole game lags behind"): a catch-up
+  spiral in sdl2.c's main loop - every game frame of a catch-up batch was drawn (CPU picture + whole 3D world), only the
+  last shown; one slow trip made the next run up to 6 frames, each drawn. Now only the batch's last frame is drawn (as
+  fast-forward did; WJPC_DRAW_EVERY_FRAME=1 old way). Measured here with his save in Mauville at frameRate=240 (software
+  GL, so slow overall): old ~3000 ms trips (3D 2900 ms = ~6 world draws each), new ~250-500 ms (one draw). Stall log now
+  says "N drawn" per worst trip. His save: /home/claude/keep/brennan_2026-11-16_1534.sav.

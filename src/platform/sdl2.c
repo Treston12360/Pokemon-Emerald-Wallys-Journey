@@ -217,6 +217,7 @@ static bool sScriptRealtime;
 // WallysJourney_stalls.txt, next to the game, gets a line whenever one trip round the main loop takes longer
 // than 150 ms, saying which part took the time, and a line a minute with the memory still free. Always on:
 // it costs nothing while the game runs well, and the file is what to send when it does not.
+static unsigned sStallDraws; // pictures drawn in this trip
 static Uint64 sStallVDraw, sStall3D, sStall2D; // (2D: the GBA/wide picture drawn on the CPU, POL-15)
 // POL-15: time spent in the SDL/GL calls of a frame that can wait for the graphics card (texture uploads, flushes,
 // render-target switches) - where a full GPU queue shows up.
@@ -280,6 +281,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
     {
         static Uint64 sSecond;
         static unsigned sSlow, sTrips, sFlushesAt;
+        static unsigned sWorstDraws;
         static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw, sWorstGame, sWorstFrame, sWorst3D, sWorstScreen, sWorstPresent, sWorst2D, sWorstGl, sWorstCpu;
 
         sTrips++;
@@ -298,6 +300,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
                 sWorst2D = sStall2D * 1000.0 / freq;
                 sWorstGl = sStallGl * 1000.0 / freq;
                 sWorstCpu = StallThreadCpuMs() - sStallCpuStart;
+                sWorstDraws = sStallDraws;
                 sWorstScreen = (drawn - batchEnd) * 1000.0 / freq;
                 sWorstPresent = (presented - drawn) * 1000.0 / freq;
             }
@@ -309,9 +312,9 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
             if (sSlow > 10 && sLines <= 5000 && (f = fopen("WallysJourney_stalls.txt", "a")) != NULL)
             {
                 sLines++;
-                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f (thread CPU %.0f): game %.0f, frame %.0f (2D picture %.0f at %dx%d, GL waits %.0f, 3D %.0f:"
+                fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f (thread CPU %.0f): game %.0f, frame %.0f (%u drawn, 2D picture %.0f at %dx%d, GL waits %.0f, 3D %.0f:"
                            " maps %.0f, belt %.0f, drawing %.0f), screen %.0f, present %.0f | map %d:%d, belt layers %u, belt rebuilds %u\n",
-                        (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstCpu, sWorstGame, sWorstFrame, sWorst2D,
+                        (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstCpu, sWorstGame, sWorstFrame, sWorstDraws, sWorst2D,
                         sStallFieldW, sStallFieldH, sWorstGl, sWorst3D,
                         sWorstMaps, sWorstBelt, sWorstDraw, sWorstScreen, sWorstPresent,
                         gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1,
@@ -1534,6 +1537,7 @@ int main(int argc, char **argv)
         Uint64 stallLoopStart = SDL_GetPerformanceCounter();
         sStallCpuStart = StallThreadCpuMs();
         sStallVDraw = sStall3D = sStall2D = sStallGl = 0;
+        sStallDraws = 0;
 
         if (!paused)
         {
@@ -1569,10 +1573,20 @@ int main(int argc, char **argv)
                     }
                     bool lastOfBatch = accumulator - dt < dt;
                     bool outOfTime = speedUp && (SDL_GetPerformanceCounter() - batchStart) * 1000 / SDL_GetPerformanceFrequency() >= 14;
-                    if (!speedUp || lastOfBatch || outOfTime)
+                    /* Brennan 2026-11-16 (16g, 4K, 240 fps: "the whole game lags behind and visually lags"):
+                     * every game frame of a catch-up batch was drawn - the CPU picture and the whole 3D world -
+                     * although only the last is ever shown. One slow trip (a map's meshes being built) made the
+                     * next trip run up to 6 game frames, each drawn, so that one was slow too, and so on: the
+                     * game never caught up. Now only the last frame of a batch is drawn, as fast-forward
+                     * already does (WJPC_DRAW_EVERY_FRAME=1: as before). */
+                    static int sDrawEvery = -1;
+                    if (sDrawEvery < 0)
+                        sDrawEvery = getenv("WJPC_DRAW_EVERY_FRAME") != NULL;
+                    if ((!speedUp && sDrawEvery) || lastOfBatch || outOfTime)
                     {
                         Uint64 v0 = SDL_GetPerformanceCounter();
                         VDraw(sdlTexture);
+                        sStallDraws++;
                         sStallVDraw += SDL_GetPerformanceCounter() - v0;
                         sDrewFrame = true;
                     }
