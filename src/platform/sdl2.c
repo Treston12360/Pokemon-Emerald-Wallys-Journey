@@ -66,6 +66,7 @@ static bool s3DWanted, s3DReady, s3DFrame;
 static bool s3DAvailable, s3DInitTried;
 // DLX-5: 3D battle scenery (Settings "3D Battles"); s3DBattleFrame: this frame is a 3D battle.
 static bool s3DBattleWanted = true, s3DBattleFrame;
+static unsigned sAntiAlias = 4; // Polish option 5: "antialias" in the cfg, samples a pixel (0 off)
 static bool sGammaWanted; // DLX-9: Gamma Emerald's lighting ("gammaLight" in the cfg; Options > Gamma Lighting)
 static SDL_Texture *sdl3DBattleTexture;
 static char s3DDir[600];
@@ -1751,6 +1752,8 @@ static void ReadConfigFile(void)
             s3DBattleWanted = value != 0;
         else if (sscanf(line, "gammaLight=%u", &value) == 1)
             sGammaWanted = value != 0;
+        else if (sscanf(line, "antialias=%u", &value) == 1)
+            sAntiAlias = value > 8 ? 8 : value;
         else if (sscanf(line, "widescreen=%u", &value) == 1)
             WideView_SetEnabled(value != 0);
         else if (strncmp(line, "key", 3) == 0)
@@ -1833,6 +1836,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "world3d=%u\n", s3DWanted ? 1 : 0);
     fprintf(configFile, "battle3d=%u\n", s3DBattleWanted ? 1 : 0);
     fprintf(configFile, "gammaLight=%u\n", sGammaWanted ? 1 : 0);
+    fprintf(configFile, "antialias=%u\n", sAntiAlias);
     fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
     fprintf(configFile, "frameRate=%u\n", gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT]);
     fprintf(configFile, "filter=%u\n", sPlatformSettings[PLATFORM_SETTING_FILTER]);
@@ -3125,6 +3129,7 @@ void VDraw(SDL_Texture *texture)
                     Voxel3D_SetSettings(true, 0, 100 * 160 / sZoomHeights[level]);
                 }
                 Voxel3D_SetGammaLight(sGammaWanted);
+                Voxel3D_SetAntiAlias((int)sAntiAlias);
                 Uint64 r0 = SDL_GetPerformanceCounter();
                 s3DFrame = Voxel3D_Render(id, w, h);
                 sStall3D += SDL_GetPerformanceCounter() - r0;

@@ -209,7 +209,7 @@ static const char *sVertexSrc =
     "attribute vec3 pos;\n"
     "attribute vec2 uv;\n"
     "attribute float shade;\n"
-    "varying vec2 vUv;\n"
+    "centroid varying vec2 vUv;\n" // (option 5: with anti-aliasing an edge pixel reads its uv inside its own face)
     "varying float vShade;\n"
     "varying float vDist;\n"
     "varying vec3 vWorld;\n"
@@ -242,7 +242,7 @@ static const char *sFragmentSrc =
     "uniform float saturation;\n"
     "uniform float exposure;\n"
     "uniform float time;\n"
-    "varying vec2 vUv;\n"
+    "centroid varying vec2 vUv;\n" // (option 5: with anti-aliasing an edge pixel reads its uv inside its own face)
     "varying float vShade;\n"
     "varying float vDist;\n"
     "varying vec3 vWorld;\n"
@@ -1247,6 +1247,7 @@ static bool BuildSteps(InstanceBuild *pb, const VoxelMapInstance *inst, Uint64 d
 static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, InstanceMesh *m)
 {
     unsigned ground = pb->n[0] < SCRATCH_VERTS ? pb->n[0] : SCRATCH_VERTS;
+    const VoxelVertex *groundV = pb->v[0];
 
     if (m->used)
         InstanceFree(m);
@@ -1256,12 +1257,12 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
         unsigned n = 0;
         for (unsigned i = 0; i + 2 < ground; i += 3)
         {
-            unsigned page = (unsigned)(pb->v[0][i].u * 0.5f);
+            unsigned page = (unsigned)(groundV[i].u * 0.5f);
             if (page != p)
                 continue;
             for (int k = 0; k < 3; k++)
             {
-                sSorted[n] = pb->v[0][i + k];
+                sSorted[n] = groundV[i + k];
                 sSorted[n].u -= 2.0f * p;
                 n++;
             }
@@ -1895,6 +1896,106 @@ static GLuint MakeTarget(GLuint *tex, int w, int h, GLenum fmt, GLenum type, GLe
     return fbo;
 }
 
+/*
+ * Polish option 5 (Brennan 2026-11-16, "go"): anti-aliasing. Emerald 3DS draws 400x240 with no smoothing, where a
+ * hair-wide seam or a stair-stepped edge is never seen; at 1080p-4K the same seams show as thin lines and every
+ * edge crawls while the camera moves. The scene is drawn into a multisampled target (4 samples a pixel by
+ * default) and resolved into the half-float target the screen pass reads, depth too (depth of field, the
+ * lamps' glows). "antialias=" in WallysJourney.cfg (sdl2.c: 0 off, 2, 4, 8); WJPC_MSAA overrides it.
+ * Gamma lighting's path only (the one with the half-float target). The functions are looked up on their own:
+ * a driver without them draws as before.
+ */
+typedef void (APIENTRY *PFN_wj_glRenderbufferStorageMultisample)(GLenum, GLsizei, GLenum, GLsizei, GLsizei);
+typedef void (APIENTRY *PFN_wj_glBlitFramebuffer)(GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLint,
+                                                  GLbitfield, GLenum);
+static PFN_wj_glRenderbufferStorageMultisample wj_glRenderbufferStorageMultisample;
+static PFN_wj_glBlitFramebuffer wj_glBlitFramebuffer;
+static GLuint sMsFbo, sMsColor, sMsDepth;
+static int sMsW, sMsH, sMsSamples, sMsWanted = -1;
+static bool sMsActive, sMsLooked;
+
+void Voxel3D_SetAntiAlias(int samples)
+{
+    sMsWanted = samples < 0 ? 0 : samples > 8 ? 8 : samples;
+}
+
+static int MsaaSamples(void)
+{
+    const char *e = getenv("WJPC_MSAA");
+    int n = e != NULL ? atoi(e) : sMsWanted >= 0 ? sMsWanted : 4;
+    GLint most = 0;
+
+    if (n <= 1)
+        return 0;
+    if (!sMsLooked)
+    {
+        sMsLooked = true;
+        wj_glRenderbufferStorageMultisample =
+            (PFN_wj_glRenderbufferStorageMultisample)SDL_GL_GetProcAddress("glRenderbufferStorageMultisample");
+        wj_glBlitFramebuffer = (PFN_wj_glBlitFramebuffer)SDL_GL_GetProcAddress("glBlitFramebuffer");
+        if (wj_glRenderbufferStorageMultisample == NULL || wj_glBlitFramebuffer == NULL)
+            Voxel3D_Log("[3D] anti-aliasing not available (no multisampled framebuffers)");
+    }
+    if (wj_glRenderbufferStorageMultisample == NULL || wj_glBlitFramebuffer == NULL)
+        return 0;
+    wj_glGetIntegerv(0x8D57 /* GL_MAX_SAMPLES */, &most);
+    return n > most ? (int)most : n;
+}
+
+/* Draw into the multisampled target (after PostBeginScene bound the half-float one); false: draw as before. */
+static bool MsaaBegin(int w, int h)
+{
+    int n = MsaaSamples();
+
+    sMsActive = false;
+    if (n <= 1)
+        return false;
+    if (sMsFbo == 0 || sMsW != w || sMsH != h || sMsSamples != n)
+    {
+        if (sMsFbo == 0)
+            wj_glGenFramebuffers(1, &sMsFbo);
+        if (sMsColor == 0)
+            wj_glGenRenderbuffers(1, &sMsColor);
+        if (sMsDepth == 0)
+            wj_glGenRenderbuffers(1, &sMsDepth);
+        wj_glBindRenderbuffer(GL_RENDERBUFFER, sMsColor);
+        wj_glRenderbufferStorageMultisample(GL_RENDERBUFFER, n, 0x881A /* RGBA16F */, w, h);
+        wj_glBindRenderbuffer(GL_RENDERBUFFER, sMsDepth);
+        wj_glRenderbufferStorageMultisample(GL_RENDERBUFFER, n, GL_DEPTH_COMPONENT24, w, h);
+        wj_glBindFramebuffer(GL_FRAMEBUFFER, sMsFbo);
+        wj_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sMsColor);
+        wj_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, sMsDepth);
+        sMsW = w;
+        sMsH = h;
+        sMsSamples = n;
+    }
+    wj_glBindFramebuffer(GL_FRAMEBUFFER, sMsFbo);
+    if (wj_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        static bool logged;
+        if (!logged)
+            Voxel3D_Log("[3D] anti-aliasing target incomplete (%d samples): drawn without", n);
+        logged = true;
+        wj_glBindFramebuffer(GL_FRAMEBUFFER, sHdrFbo);
+        return false;
+    }
+    sMsActive = true;
+    return true;
+}
+
+/* The multisampled picture and depth into the half-float target, for the screen pass. */
+static void MsaaResolve(void)
+{
+    if (!sMsActive)
+        return;
+    sMsActive = false;
+    wj_glBindFramebuffer(0x8CA8 /* GL_READ_FRAMEBUFFER */, sMsFbo);
+    wj_glBindFramebuffer(0x8CA9 /* GL_DRAW_FRAMEBUFFER */, sHdrFbo);
+    wj_glBlitFramebuffer(0, 0, sMsW, sMsH, 0, 0, sMsW, sMsH, 0x4000 /* COLOR */, GL_NEAREST);
+    wj_glBlitFramebuffer(0, 0, sMsW, sMsH, 0, 0, sMsW, sMsH, 0x100 /* DEPTH */, GL_NEAREST);
+    wj_glBindFramebuffer(GL_FRAMEBUFFER, sHdrFbo);
+}
+
 /* Bind the half-float scene target (with a depth texture for the blur). */
 static bool PostBeginScene(int w, int h)
 {
@@ -1931,7 +2032,10 @@ static bool PostBeginScene(int w, int h)
         sHdrH = h;
     }
     wj_glBindFramebuffer(GL_FRAMEBUFFER, sHdrFbo);
-    return wj_glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+    if (wj_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        return false;
+    MsaaBegin(w, h);
+    return true;
 }
 
 static void PostQuad(void)
@@ -3402,6 +3506,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     {
         float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fieldFadeInShader ? 0.0f : fadeAmount};
         float dx = sCamera.x - sCamera.targetX, dy = sCamera.y - sCamera.targetY, dz = sCamera.z - sCamera.targetZ;
+        MsaaResolve();
         PostFinish(sFbo, w, h, fd, sqrtf(dx * dx + dy * dy + dz * dz));
         if (!sBattleMode && sGlowMesh.count != 0 && sHdrDepth != 0)
         {

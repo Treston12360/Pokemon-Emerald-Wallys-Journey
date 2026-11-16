@@ -12,6 +12,8 @@ void Voxel3D_SetSettings(bool on, int pitch, int zoom);
 void Voxel3D_SetBattle(bool on);
 /* Gamma Emerald's lighting on or off (lays every map again). */
 void Voxel3D_SetGammaLight(bool on);
+/* Polish option 5: anti-aliasing samples a pixel (0/1 off, 2, 4, 8; Gamma lighting's path). */
+void Voxel3D_SetAntiAlias(int samples);
 /* Emerald 3DS's battle frame: the intro is sliding its scenery in (the camera glides then), and BG3's scroll
  * from rest in GBA pixels (a move shaking the scenery; 0 while sliding or with a move's background). */
 void Voxel3D_SetBattleFrame(bool introSliding, float shakeX, float shakeY);
