@@ -133,6 +133,11 @@ Add under each item: what was found, what was changed, files, how to test, what 
         has only the 0x004 flower patches (done). Brennan 2026-11-16 07:41: "We can close POL-7 and move onto POL-8".
         Pictures: `POL-7_flowers_and_grass_prototype.png`, `POL-7_petalburg_planters.png`.
 - [ ] **POL-8. Black lines on indoor floors.** "There are black lines on the flooring inside of buildings."
+      - 2026-11-16 (014PwRDj): not seen here (Petalburg Center, Oldale Mart, Brendan's house, Devon Corp, 1280x720;
+        Brennan's 4K scene setting is too slow to run here). Brennan: "Try a fix anyway". Likely cause fixed:
+        `voxel_atlas.c` VoxelAtlas_SlotUV insets a slot's west/east edges a 1/32 texel too (only north/south were),
+        so a tile edge on a pixel centre can't take a column of the next slot (black void tile indoors).
+        **Waiting for Brennan to check it at 4K.**
 - [ ] **POL-9. Game Corner.** "You can walk through the left and right columns of the game corner building,
       inside of the game corner the gatcha machines need to be fixed as they are in parts or not fully 3D and the
       game corner is very skippy/laggy."
