@@ -2067,9 +2067,55 @@ static void ModelFlatSkirts(VoxelBuilder *b, const VoxelMapInstance *inst, int x
 }
 
 /* One row of the ground pass over [x0,x1), already clipped to the instance. */
+/*
+ * Polish option 2 (Brennan 2026-11-16, "go"): a safety floor. Where two
+ * pieces of ground meet a hair apart (the foot of a tree's step beside a
+ * ledge on Route 118: Emerald 3DS's own engine leaves the same gaps, its
+ * console's 400x240 hides them), the camera looked through to the sky under
+ * the map - a light blue line. Every cell gets its own drawing (a tree cell:
+ * the ground it stands on, VoxelMesh_TileUV) laid once more, flat, a pixel
+ * under the lowest point of it and its four neighbours, where nothing else
+ * is ever drawn: a gap now shows the ground's colour. WJPC_NO_SAFETY_FLOOR=1:
+ * off, to compare.
+ */
+static void EmitSafetyFloor(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    static int sOff = -1;
+    static const int kDir[5][2] = { {0, 0}, {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+    float u0, v0, u1, v1, low = 1e9f;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_NO_SAFETY_FLOOR") != NULL;
+    if (sOff || !VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1))
+        return;
+    for (int d = 0; d < 5; ++d)
+    {
+        int nx = x + kDir[d][0], ny = y + kDir[d][1];
+        const int16_t *g;
+
+        if (VoxelWorld_GetInstanceAt(nx, ny) != inst)
+            continue;
+        g = VoxelRelief_Cell(inst, nx, ny);
+        if (g == NULL)
+        {
+            low = fminf(low, 0.0f);
+            continue;
+        }
+        for (int i = 0; i < VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE; ++i)
+            low = fminf(low, g[i] / 16.0f);
+    }
+    b->lift = low - 1.0f / 16.0f;
+    b->shift = b->lift;
+    VoxelMesh_Top(b, (float)x, (float)y, 0.0f, 0.0f, u0, v0, u1, v1, SHADE_TOP);
+    b->lift = 0.0f;
+    b->shift = 0.0f;
+}
+
 void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst,
                              int x0, int x1, int y)
 {
+    for (int x = x0; x < x1; ++x)
+        EmitSafetyFloor(builder, inst, x, y);
     for (int x = x0; x < x1; ++x)
         if (x == inst->originX || x == inst->originX + inst->width - 1
          || y == inst->originY || y == inst->originY + inst->height - 1)
