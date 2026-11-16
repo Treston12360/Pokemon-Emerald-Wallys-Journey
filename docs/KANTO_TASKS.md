@@ -238,6 +238,23 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       credible League vault transfer and delayed audit; Orb-to-Giratina capture timing;
       independently charged one-way receiver; final choreography with only approved assets.
       Do not edit live script or mark approved without owner sign-off; do not expose to Polish.
+- [x] **S-ARIA-NARRATIVE-DRAFT-PASS (DOCUMENTATION ONLY — 2026-11-16):** Drafted revised
+      Chapter 3 Kiyoshi rescue (tether expires, not player-forced seal), understated
+      Lavender rumor, Chapter 5 later optional photo, and key Chapters 6–14 beats and
+      dialogue in `docs/KANTO_NARRATIVE_SCENES_DRAFT.md`. Added
+      `docs/KANTO_STORY_QA_MATRIX.md`: fixed history, character-knowledge by chapter,
+      first-playthrough vs hindsight clues, live-script conflicts and gameplay test plan.
+      `docs/KANTO_SCRIPT.md` now explicitly labels its prior Ch.3 / Ch.4 IN GAME text
+      as obsolete **without replacing it**. All newly drafted words and physical staging
+      remain **DRAFT**, not owner-approved; no playable game scripts/build changed.
+- [ ] **S-ARIA-OWNER-APPROVAL-AND-IMPLEMENTATION:** Owner review of drafted replacements
+      and Ch.6–14 scenes; resolve explicit `docs/KANTO_STORY_QUESTIONS.md` decisions
+      before choosing precise cutscene blocking or a League authorizing signatory. Only
+      after approval, integrate scene-by-scene into `docs/KANTO_SCRIPT.md`, write the
+      corresponding scripts/flags, and **test in the complete Windows game** with early
+      and late saves, 2D/3D, optional clue skips and final battle win/loss/retry.
+      **Open:** owner sign-off, implementation, tests and verified Windows package.
+
 
 
 ## Phase 3 — Levels and balance
