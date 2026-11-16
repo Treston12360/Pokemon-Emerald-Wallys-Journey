@@ -45,3 +45,8 @@ row 132 instead of 16 on 128, the healing machine as a box on the counter). Spli
 `splice_buildings.py OURS DONOR OUT 27 30 112`, again for 392, then `splice_buildings.py --layout ... 414` (the
 whole room: every piece, a page of its own). relief.bin: `patch_relief_cells.py relief.bin 27 0 30,113 31,113
 32,113` and the same for 392 (the model's foot cells; their relief lifted the model 8 px - a light line at its foot).
+
+## Game Corner prize machines (POL-9, 2026-11-16, session 014PwRDj)
+Spec change in `tools/voxel3ds/game_corner_spec.py` (the three "plant" cards and the purple machine painted on
+the wall become one box, as the arcade cabinets beside them). Spliced: `splice_buildings.py --layout
+pc_data/voxel/buildings.bin DONOR OUT 91` (DONOR = a full gen_voxel_buildings.py --output with the spec).

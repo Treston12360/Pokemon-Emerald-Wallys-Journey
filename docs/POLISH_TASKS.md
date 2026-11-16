@@ -141,6 +141,10 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-9. Game Corner.** "You can walk through the left and right columns of the game corner building,
       inside of the game corner the gatcha machines need to be fixed as they are in parts or not fully 3D and the
       game corner is very skippy/laggy."
+      - 2026-11-16 (014PwRDj): prize ("gatcha") machines: three were flat cards in Emerald 3DS's spec (named
+        "plant_0..2") and the purple one was left painted on the wall. Now one 3D box like the arcade cabinets
+        (tools/voxel3ds/game_corner_spec.py, layout 91 respliced). Picture: docs/polish_reports/POL-9_prize_machines_3d.png.
+        Still open: "walk through the left and right columns" (not yet clear which columns) and the lag.
 - [ ] **POL-10. Walking through the top of doors.** "When walking in entrances you walk through the top of the
       door this should be fluid and not be cutting off the top when walking through the door."
 - [x] **POL-12. Water is still.** "Water is not moving in 3D mode it is still." Done 2026-11-14 (Claude 019khs4X);
