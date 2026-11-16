@@ -908,6 +908,14 @@ static void DrawFieldScene(double t, int outW, int outH)
             SDL_Rect bd = {0, uy + (int)(BAR_TOP * s), ux, (int)((DISPLAY_HEIGHT - BAR_TOP) * s)};
             SDL_RenderCopy(sdlRenderer, sdlUiTexture, &bs, &bd);
         }
+        if (uy > 0 && Vol_StartMenu_IsSwshOpen())
+        {
+            // ...and its right-hand column runs from the screen's top: the GBA screen's first row (the
+            // column's border and green, no icons; see-through elsewhere) carries on upwards.
+            SDL_Rect cs = {sFrameInfo.gbaX, sFrameInfo.gbaY, DISPLAY_WIDTH, 1};
+            SDL_Rect cd = {ux, 0, (int)(DISPLAY_WIDTH * s), uy};
+            SDL_RenderCopy(sdlRenderer, sdlUiTexture, &cs, &cd);
+        }
         sUiPlaceX = ux;
         sUiPlaceY = uy;
         sUiPlaceS = s3DFrame ? s : 0;

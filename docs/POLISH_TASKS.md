@@ -404,6 +404,9 @@ Add under each item: what was found, what was changed, files, how to test, what 
     bar on to the left edge (its first column, GBA rows 124-159: edge lines and green, no text) while the
     Sword/Shield start menu is open (`Vol_StartMenu_IsSwshOpen`, `src/vol_start_menu.c`). Classic menu untouched.
     Picture: `docs/polish_reports/POL-6_start_menu_bar_full_width.png` (1280x720 window, Brennan's save).
+  - Brennan 20:58: "the right side top it also runs from top to bottom". Done: when the window is taller than the
+    menu, the GBA screen's first row (the right column's border and green, no icons) carries on up to the top edge.
+    Same picture, updated.
 - **POL-35 (new, priority after POL-6). Fishing bites:** Brennan 2026-11-15 20:12: "when fishing in the water for
   pokemon, make it only one "Oh! A bite!" before you can get into battle with it. currently it makes you wait 3 times
   in order to get into a battle with the pokemon."
