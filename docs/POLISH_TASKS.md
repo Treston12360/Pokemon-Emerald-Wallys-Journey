@@ -397,6 +397,9 @@ Add under each item: what was found, what was changed, files, how to test, what 
     the last one knowing a protected move). Picture: `docs/polish_reports/POL-32_classic_mass_release.png`.
 - **POL-6 (clarified):** "The sword and shield start menu is too big and goes off the screen when widescreen is turned
   off for some reason."
+- **POL-35 (new, priority after POL-6). Fishing bites:** Brennan 2026-11-15 20:12: "when fishing in the water for
+  pokemon, make it only one "Oh! A bite!" before you can get into battle with it. currently it makes you wait 3 times
+  in order to get into a battle with the pokemon."
 - **POL-33 (new). Pokédex name search:** "When searching in pokedex to find pokemon under name using the alphabetical
   search, it shows pokemon you havent found yet, allowing players to find locations of all pokemon without having
   encountered them before which was not intended, you're suppose to encounter a pokemon before they show in your dex
