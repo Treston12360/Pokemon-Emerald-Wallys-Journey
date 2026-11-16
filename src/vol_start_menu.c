@@ -1267,4 +1267,11 @@ bool32 Vol_StartMenu_IsOpen(void)
 {
     return sVol_StartMenu != NULL || GetStartMenuWindowId() != WINDOW_NONE;
 }
+
+// PC build: the Sword/Shield start menu (not the classic one) is open: its bottom bar runs the screen's
+// whole width (POL-6).
+bool32 Vol_StartMenu_IsSwshOpen(void)
+{
+    return sVol_StartMenu != NULL;
+}
 #endif

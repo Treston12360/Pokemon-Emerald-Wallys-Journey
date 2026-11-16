@@ -308,6 +308,10 @@ static bool32 Fishing_ChangeMinigame(struct Task *task)
     return TRUE;
 }
 
+#ifdef PORTABLE
+extern bool32 WJPC_TestAutoReel(void);
+#endif
+
 // We have a bite. Now, wait for the player to press A, or the timer to expire.
 static bool32 Fishing_WaitForA(struct Task *task)
 {
@@ -323,6 +327,10 @@ static bool32 Fishing_WaitForA(struct Task *task)
         task->tStep = FISHING_GOT_AWAY;
     else if (JOY_NEW(A_BUTTON))
         task->tStep = FISHING_CHECK_MORE_DOTS;
+#ifdef PORTABLE
+    else if (task->tFrameCounter == 8 && WJPC_TestAutoReel())
+        task->tStep = FISHING_CHECK_MORE_DOTS; // test aid (POL-35): A pressed in time for every bite
+#endif
     return FALSE;
 }
 
@@ -346,6 +354,10 @@ static bool32 Fishing_CheckMoreDots(struct Task *task)
 
     AlignFishingAnimationFrames();
     task->tStep = FISHING_MON_ON_HOOK;
+    // Wally's Journey (Brennan 2026-11-15, POL-35): one "Oh! A bite!" is enough with every rod -
+    // no extra rounds of dots before the battle.
+    if (TRUE)
+        return FALSE;
     if (task->tRoundsPlayed < task->tMinRoundsRequired)
     {
         task->tStep = FISHING_INIT_DOTS;

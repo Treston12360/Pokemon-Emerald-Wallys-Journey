@@ -106,6 +106,12 @@ static void TestLearnScreenDone(void)
     SetMainCallback2(CB2_ReturnToField);
 }
 
+// Test aid: WJPC_TEST_AUTO_REEL=1 - every fishing bite is reeled in as if A was pressed in time (POL-35).
+bool32 WJPC_TestAutoReel(void)
+{
+    return getenv("WJPC_TEST_AUTO_REEL") != NULL;
+}
+
 // Test aid (sdl2.c "state"): game state read or written from a test script.
 int WJPC_TestState(const char *what, int id, int set, int value)
 {
@@ -183,6 +189,20 @@ int WJPC_TestState(const char *what, int id, int set, int value)
     {
         // "state boxmon BOX*30+SLOT": species in that PC box slot, 0 = empty (test aid, POL-32)
         return GetBoxMonDataAt(id / IN_BOX_COUNT, id % IN_BOX_COUNT, MON_DATA_SPECIES);
+    }
+    if (!strcmp(what, "rng"))
+    {
+        // "state rng SEED": reseed the game's random numbers, so a test run repeats exactly (test aid, POL-35)
+        extern void SeedRng(u32 seed);
+        SeedRng(id);
+        return id;
+    }
+    if (!strcmp(what, "fish"))
+    {
+        // "state fish ROD": from the field, cast that rod (0 old, 1 good, 2 super) as the bag does (test aid, POL-35)
+        extern void StartFishing(u8 rod);
+        StartFishing(id);
+        return id;
     }
     if (!strcmp(what, "fieldmove"))
     {

@@ -811,6 +811,7 @@ static void GetSceneSize(int *w, int *h)
 
 extern u8 GetMapNamePopUpWindowId(void);
 extern bool32 Vol_StartMenu_IsOpen(void);
+extern bool32 Vol_StartMenu_IsSwshOpen(void);
 
 // Overworld: the map at the zoom scale, edge to edge; the UI layer (text boxes, menus) at the
 // biggest whole size the GBA screen fits, bottom-centred like on the GBA; the map name pop-up
@@ -897,6 +898,16 @@ static void DrawFieldScene(double t, int outW, int outH)
         SDL_Rect src = {sFrameInfo.gbaX, sFrameInfo.gbaY + band, DISPLAY_WIDTH, DISPLAY_HEIGHT - band};
         SDL_Rect dst = {ux, uy + band * s, DISPLAY_WIDTH * s, (DISPLAY_HEIGHT - band) * s};
         SDL_RenderCopy(sdlRenderer, sdlUiTexture, &src, &dst);
+        if (ux > 0 && Vol_StartMenu_IsSwshOpen())
+        {
+            // POL-6 (Brennan 2026-11-15): the Sword/Shield start menu's bottom bar runs from the screen's
+            // left edge, not from where the GBA screen starts: its first column (GBA rows 124-159, the bar's
+            // edge lines and green, no text) carries on to the left.
+            enum { BAR_TOP = 124 };
+            SDL_Rect bs = {sFrameInfo.gbaX, sFrameInfo.gbaY + BAR_TOP, 1, DISPLAY_HEIGHT - BAR_TOP};
+            SDL_Rect bd = {0, uy + (int)(BAR_TOP * s), ux, (int)((DISPLAY_HEIGHT - BAR_TOP) * s)};
+            SDL_RenderCopy(sdlRenderer, sdlUiTexture, &bs, &bd);
+        }
         sUiPlaceX = ux;
         sUiPlaceY = uy;
         sUiPlaceS = s3DFrame ? s : 0;

@@ -397,9 +397,21 @@ Add under each item: what was found, what was changed, files, how to test, what 
     the last one knowing a protected move). Picture: `docs/polish_reports/POL-32_classic_mass_release.png`.
 - **POL-6 (clarified):** "The sword and shield start menu is too big and goes off the screen when widescreen is turned
   off for some reason."
+  - Brennan 20:47 (with his photo): "The sword and shield menu gets cut off on left side. It needs to flow from left to
+    right. On the bottom of the screen. As you can see in the photo that it starts about halfway then goes to the
+    right." **Fixed 2026-11-15 (014PwRDj):** on a screen wider than the GBA's, the menu sits against the right edge
+    and its bottom bar started where the GBA screen starts. `src/platform/sdl2.c` (DrawFieldScene) now carries the
+    bar on to the left edge (its first column, GBA rows 124-159: edge lines and green, no text) while the
+    Sword/Shield start menu is open (`Vol_StartMenu_IsSwshOpen`, `src/vol_start_menu.c`). Classic menu untouched.
+    Picture: `docs/polish_reports/POL-6_start_menu_bar_full_width.png` (1280x720 window, Brennan's save).
 - **POL-35 (new, priority after POL-6). Fishing bites:** Brennan 2026-11-15 20:12: "when fishing in the water for
   pokemon, make it only one "Oh! A bite!" before you can get into battle with it. currently it makes you wait 3 times
   in order to get into a battle with the pokemon."
+  - **Fixed 2026-11-15 (014PwRDj):** Gen 3 rule made each rod need several rounds of dots + "Oh! A bite!" (Good Rod
+    1-3, Super Rod 1-6, plus a chance of more). `src/fishing.c` Fishing_CheckMoreDots now goes straight to "A
+    Pokémon's on the hook!" after the first bite, every rod. Test aids: `state fish ROD`, `state rng SEED`,
+    WJPC_TEST_AUTO_REEL=1. Picture: `docs/polish_reports/POL-35_super_rod_one_bite.png` (Super Rod, Petalburg pond:
+    dots, one bite, on the hook; the battle followed).
 - **POL-33 (new). Pokédex name search:** "When searching in pokedex to find pokemon under name using the alphabetical
   search, it shows pokemon you havent found yet, allowing players to find locations of all pokemon without having
   encountered them before which was not intended, you're suppose to encounter a pokemon before they show in your dex
