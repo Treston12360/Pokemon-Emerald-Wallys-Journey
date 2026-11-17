@@ -754,6 +754,26 @@ static void EmitBillboard(VoxelBuilder *builder, const VoxelSpriteSlot *slot, un
 }
 
 /*
+ * POL-4 (Brennan 2026-11-16 20:33, after 16k-test: "the fake tree is still disappearing whenever walking away"): a
+ * ninja's tree / rock disguise copies its object's sprite's `invisible` (UpdateDisguiseFieldEffect), which the game
+ * sets for an object off the 2D field of view - while this view draws the object itself (by obj->invisible only,
+ * VoxelEntities_Emit) twice as far: the boy stood there without his tree. A disguise is hidden here only when its
+ * object is.
+ */
+void UpdateDisguiseFieldEffect(struct Sprite *sprite); /* field_effect_helpers.c */
+
+static bool DisguiseShown(const struct Sprite *sprite)
+{
+    u8 objectEventId;
+
+    if (sprite->callback != UpdateDisguiseFieldEffect)
+        return false;
+    if (TryGetObjectEventIdByLocalIdAndMap((u8)sprite->data[2], (u8)sprite->data[3], (u8)sprite->data[4], &objectEventId))
+        return false;
+    return !gObjectEvents[objectEventId].invisible;
+}
+
+/*
  * POL-17 (Brennan 2026-11-16 19:12: "the seeds sitting back behind off of the dirt, the seeds should be remaining in
  * the middle of the dirt as if they were planted"): a card stands on its cell's centre with its feet (the standing
  * pose's lowest row) there - right for people, half a tile north of where the GBA draws them. A berry plant's soil
@@ -1974,7 +1994,8 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
 
         /* sprite->invisible is honoured: an effect hidden on purpose (a
          * blinking one's off frames) is hidden here too. */
-        if (!sprite->inUse || sprite->invisible || !sprite->coordOffsetEnabled || objectSprite[id])
+        if (!sprite->inUse || (sprite->invisible && !DisguiseShown(sprite)) || !sprite->coordOffsetEnabled
+         || objectSprite[id])
             continue;
         cloud = CtrSprite_IsVoxelCloud(sprite);
         if (IsTemplate(sprite->template, FLDEFFOBJ_SHADOW_S, FLDEFFOBJ_SHADOW_XL)

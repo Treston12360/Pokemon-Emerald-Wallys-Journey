@@ -138,7 +138,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
         `voxel_atlas.c` VoxelAtlas_SlotUV insets a slot's west/east edges a 1/32 texel too (only north/south were),
         so a tile edge on a pixel centre can't take a column of the next slot (black void tile indoors).
         **Waiting for Brennan to check it at 4K.**
-- [ ] **POL-9. Game Corner.** "You can walk through the left and right columns of the game corner building,
+- [x] **POL-9. Game Corner.** "You can walk through the left and right columns of the game corner building,
       inside of the game corner the gatcha machines need to be fixed as they are in parts or not fully 3D and the
       game corner is very skippy/laggy."
       - 2026-11-16 (014PwRDj): prize ("gatcha") machines: three were flat cards in Emerald 3DS's spec (named
@@ -214,13 +214,13 @@ Add under each item: what was found, what was changed, files, how to test, what 
       - 2D checked 2026-11-14 (`world3d=0`, Windows exe, Wine): going into Oldale's Pokémon Center fades the town and the people out together, and the room in. Same pictures, pixel for pixel, as an exe
         built with this session's 3D files put back (only a randomly walking person differs): the fix changes
         nothing in 2D. Picture: `docs/polish_reports/2D_check_POL-12_16_23_27.png`.
-- [ ] **POL-17. Seed mounds.** "Seed mounds look like shrubs and are above the dirt."
+- [x] **POL-17. Seed mounds.** "Seed mounds look like shrubs and are above the dirt."
 - [x] **POL-18. Pokémon are flat.** "Pokemon in 3D are still 2D."
 - [x] **POL-19. Falling leaves.** "Leaves appear only in certain areas and randomly disappear or speed up."
 - [x] **POL-20. Boats are flat.** "Boats in the water are 2D not 3D."
 - [x] **POL-21. Route 110 to 103 backdrop.** "Going from route 110 to 103 the background is not fluid and changes
       from water to trees and skips into frame."
-- [ ] **POL-22. Breakable rocks.** "Rocks that are breakable disappear and reappear and also 2D not 3D."
+- [x] **POL-22. Breakable rocks.** "Rocks that are breakable disappear and reappear and also 2D not 3D."
 - [x] **POL-23. No sandstorm.** "There's no sandstorm in the desert."
       - Found (Claude 019khs4X, 2026-11-14): 2D shows the sandstorm on Route 111's desert (same save, same spot);
         3D shows plain sand. Cause: `voxel_world.c` `VoxelWorld_Weather()` / `VoxelWorld_WeatherAmount()` only
@@ -742,3 +742,15 @@ POL-4 (Fortree), POL-2/3 green safety screen, POL-28, POL-8; then the mountains 
   (`POL-22_breakable_rock_3d.png`), porch flush (`POL-9_game_corner_porch.png`), machines (`POL-9_machines_tall.png`).
   Not checked here: the Fortree ninja stand-ins (the test script's warp to Fortree times out under Wine) and the crack
   fill at 4K (cannot run 4K here) - both for Brennan's check on 16k-test.
+
+## Brennan 2026-11-16 20:33, checks on 16k-test
+- Closed: POL-17 ("berries are now fixed close this one out"), POL-22 ("that will suffice for now, close this out"),
+  POL-9 ("Game corner now looks good, close this out").
+- **POL-2/3, 8, 28:** "still show black lines inside of buildings." Picture: `BREN_2033_POL-8_house_lines.png` (a house,
+  two thin dark lines across the floor/rug at tile-row boundaries, behind the table - floor seams, not screen rows).
+  The crack fill did not catch them: being looked at with a 4K run here.
+- **POL-4:** "the fake tree is still disappearing whenever walking away." Picture: `BREN_2033_POL-4_route119_ninja.png`.
+  Cause found: the disguise field effect copies its object's sprite's `invisible` flag (UpdateDisguiseFieldEffect),
+  which the game sets once the object is off the 2D screen; our 3D view draws the object itself further out (it
+  ignores that flag for objects) but honoured it for effects - so the boy stood there without his tree. Fix:
+  `voxel_entities.c` DisguiseShown - a disguise is hidden only when its object is (obj->invisible).
