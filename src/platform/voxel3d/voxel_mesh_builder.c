@@ -3350,12 +3350,25 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
     /* A belt laid as the drawing (above): each cell stands `drawn` courses,
      * that many rows south. Its cells are the window's; their blocks may
      * stand past it. */
-    drawn = VoxelWorld_Instance(0) != NULL ? VoxelRelief_Belt(VoxelWorld_Instance(0)) : 0u;
-    courses = drawn ? drawn : VOXEL_BORDER_COURSES;
+    /*
+     * POL-24/30/43 (Brennan 2026-11-16: "when going from route 112 to lavaridge the backgrounds disappear in the red
+     * boxed areas"): whether the belt is laid as the drawing (a map's VoxelRelief_Belt, Lavaridge's) was the map the
+     * player stood on's: crossing from Route 112 into Lavaridge switched the WHOLE belt - Route 112's side too -
+     * from standing blocks to Lavaridge's drawn rock, and back. Each cell now goes with its own map (BeltRing), as
+     * its art, height and base already do. WJPC_BELT_DRAWN_GLOBAL=1: as before.
+     */
+    static int sDrawnGlobal = -1;
+    if (sDrawnGlobal < 0)
+        sDrawnGlobal = getenv("WJPC_BELT_DRAWN_GLOBAL") != NULL;
+    const unsigned drawnHere = VoxelWorld_Instance(0) != NULL ? VoxelRelief_Belt(VoxelWorld_Instance(0)) : 0u;
     const float callerBase = builder->base;
     for (int y = y0; y < y1; ++y)
         for (int x = x0; x < x1; ++x, builder->base = callerBase)
         {
+            const VoxelMapInstance *own = sDrawnGlobal ? NULL : VoxelWorld_BeltRing(x, y);
+
+            drawn = sDrawnGlobal ? drawnHere : own != NULL ? VoxelRelief_Belt(own) : 0u;
+            courses = drawn ? drawn : VOXEL_BORDER_COURSES;
             float wx = (float)x, wz = (float)(y + (int)drawn);
             /* Only where the border meets something else: the inside of a
              * belt that reaches the whole way to the horizon is never seen,
@@ -3365,8 +3378,9 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 
             if (!BorderAt(x, y) || !BeltInPass(x, y))
                 continue;
-            /* POL-30: each cell over the base of the map it stands with, not the current map's */
-            if (!drawn)
+            /* POL-30: each cell over the base of the map it stands with, not the current map's (a drawn cell too,
+             * now that it goes with its own map) */
+            if (!drawn || !sDrawnGlobal)
                 builder->base = BeltBase(x, y);
             if (BorderWaterLevel(x, y, &level, &shift))
             {

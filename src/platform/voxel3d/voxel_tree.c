@@ -673,7 +673,8 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 builder->lift = level;
                 builder->shift = shift;
                 /* POL-30: over the base of the map the cell stands with (VoxelMesh_EmitBorder) */
-                if (VoxelRelief_Belt(current) == 0)
+                /* (POL-24/43: always the cell's own map's now, as voxel_mesh_builder.c's drawn belt) */
+                if (VoxelRelief_Belt(current) == 0 || getenv("WJPC_BELT_DRAWN_GLOBAL") == NULL)
                     builder->base = VoxelRelief_Base(VoxelWorld_BeltRing(x, y));
                 EmitCell(builder, NULL, art->secondaryTileset, x, y, part, metatileId, false);
                 EmitMissingRow(builder, NULL, art->secondaryTileset, x, y, part, metatileId, false);
