@@ -2715,43 +2715,12 @@ static bool BeltIsTree(int x, int y);
  */
 enum { BELT_HOLD = 1, BELT_FALL = 7 };
 
-static void BeltMountain(const VoxelMapInstance *ring, int x, int y, int ex, int ey, float *level, float *shift)
+/* POL-13/40: a belt land cell `d` out from its map, its mountain `h` (shift `sh`) high: held BELT_HOLD cells, then
+ * rounded down to the ground, and down to the water's level near water (BeltMountain, and the edge fills) */
+static void BeltRoundOff(int x, int y, int d, float h, float sh, float *level, float *shift)
 {
-    static int sOff = -1;
-    bool alongY = x < ring->originX || x >= ring->originX + ring->width;
-    bool alongX = y < ring->originY || y >= ring->originY + ring->height;
-    int dx = x > ex ? x - ex : ex - x, dy = y > ey ? y - ey : ey - y;
-    int d = dx > dy ? dx : dy, reach;
-    float sumW = 0.0f, sumH = 0.0f, sumS = 0.0f, h, sh, f;
+    float f;
 
-    if (sOff < 0)
-        sOff = getenv("WJPC_BELT_COLUMNS") != NULL;
-    if (sOff || BeltIsTree(x, y))
-        return;
-    reach = 1 + 2 * d;
-    for (int k = -reach; k <= reach; ++k)
-    {
-        /* past a corner (both off the map) the reach runs along both edges' lines: the corner cell's own row */
-        int cx = alongY && !alongX ? ex : ex + k, cy = alongY && !alongX ? ey + k : ey;
-        float w = (float)(reach + 1 - abs(k));
-
-        if (alongX && alongY && k != 0)
-        {
-            /* a corner: average the corner cell's two edges */
-            cx = ex + ((k & 1) ? k / 2 : 0);
-            cy = ey + ((k & 1) ? 0 : k / 2);
-        }
-        if (cx < ring->originX || cy < ring->originY || cx >= ring->originX + ring->width
-         || cy >= ring->originY + ring->height || VoxelMesh_Classify(cx, cy) == VOXEL_SHAPE_WATER)
-            continue;
-        sumW += w;
-        sumH += w * VoxelRelief_CellLift(ring, cx, cy);
-        sumS += w * VoxelRelief_CellShift(ring, cx, cy);
-    }
-    if (sumW <= 0.0f)
-        return;
-    h = sumH / sumW;
-    sh = sumS / sumW;
     if (d <= BELT_HOLD)
         f = 1.0f;
     else if (d >= BELT_HOLD + BELT_FALL)
@@ -2801,6 +2770,46 @@ static void BeltMountain(const VoxelMapInstance *ring, int x, int y, int ex, int
     }
 }
 
+static void BeltMountain(const VoxelMapInstance *ring, int x, int y, int ex, int ey, float *level, float *shift)
+{
+    static int sOff = -1;
+    bool alongY = x < ring->originX || x >= ring->originX + ring->width;
+    bool alongX = y < ring->originY || y >= ring->originY + ring->height;
+    int dx = x > ex ? x - ex : ex - x, dy = y > ey ? y - ey : ey - y;
+    int d = dx > dy ? dx : dy, reach;
+    float sumW = 0.0f, sumH = 0.0f, sumS = 0.0f, h, sh, f;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_BELT_COLUMNS") != NULL;
+    if (sOff || BeltIsTree(x, y))
+        return;
+    reach = 1 + 2 * d;
+    for (int k = -reach; k <= reach; ++k)
+    {
+        /* past a corner (both off the map) the reach runs along both edges' lines: the corner cell's own row */
+        int cx = alongY && !alongX ? ex : ex + k, cy = alongY && !alongX ? ey + k : ey;
+        float w = (float)(reach + 1 - abs(k));
+
+        if (alongX && alongY && k != 0)
+        {
+            /* a corner: average the corner cell's two edges */
+            cx = ex + ((k & 1) ? k / 2 : 0);
+            cy = ey + ((k & 1) ? 0 : k / 2);
+        }
+        if (cx < ring->originX || cy < ring->originY || cx >= ring->originX + ring->width
+         || cy >= ring->originY + ring->height || VoxelMesh_Classify(cx, cy) == VOXEL_SHAPE_WATER)
+            continue;
+        sumW += w;
+        sumH += w * VoxelRelief_CellLift(ring, cx, cy);
+        sumS += w * VoxelRelief_CellShift(ring, cx, cy);
+    }
+    if (sumW <= 0.0f)
+        return;
+    h = sumH / sumW;
+    sh = sumS / sumW;
+    BeltRoundOff(x, y, d, h, sh, level, shift);
+}
+
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 {
     const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y); /* POL-30: was instance 0 (see BorderWaterLevel) */
@@ -2823,6 +2832,14 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
     {
         *level = (float)fill.top / 16.0f - (float)VOXEL_BORDER_COURSES;
         *shift = VoxelRelief_CellShift(ring, ex, ey);
+        /* POL-40 (Route 118's north: the fill stood the mountain's whole height out to the horizon, its side to
+         * the sea a stair of tall dark walls): rounded off as the belt's own mountain is (WJPC_BELT_COLUMNS=1 not) */
+        if (getenv("WJPC_BELT_COLUMNS") == NULL)
+        {
+            int fdx = x > ex ? x - ex : ex - x, fdy = y > ey ? y - ey : ey - y;
+
+            BeltRoundOff(x, y, fdx > fdy ? fdx : fdy, *level, *shift, level, shift);
+        }
         return true;
     }
     if (!sBorderFollowsEdge)
