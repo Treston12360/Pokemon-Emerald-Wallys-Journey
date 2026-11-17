@@ -7,6 +7,11 @@ just before "# Fortree's gym", plus its entry in the interiors list:
         "interior": {"layout": "LAYOUT_NEW_MAUVILLE_INSIDE", "ground": [0x210],
                      "pieces": own_shell(new_mauville_inside())},
     },
+    {
+        "name": "new_mauville_inside_alt",
+        "interior": {"layout": "LAYOUT_NEW_MAUVILLE_INSIDE", "ground": [0x210],
+                     "draw": NEW_MAUVILLE_HIDDEN, "pieces": new_mauville_inside_alt()},
+    },
 
 and gen_voxel_buildings.py: MAX_TEXTURE = (512, 1024) (was the 3DS's 512x512; New Mauville's page is 512x536; our
 voxel_building.c takes pages up to 1024x1024). Spliced into pc_data/voxel/buildings.bin with
@@ -23,8 +28,20 @@ tools/voxel3ds/splice_buildings.py --layout OURS DONOR OUT 185.
 
 NEW_MAUVILLE_FLOOR = ("cdcdcd", "acbdac", "d5ded5", "83948b", "000000")
 NEW_MAUVILLE_VOID = {0x208}
-# the barriers' cells across the corridors (their tops in the walls go with the walls for now)
-NEW_MAUVILLE_BARRIER = {0x2c6, 0x2c7, 0x2ce, 0x2cf}
+# the barriers (x, y of the Top cell, lit Top metatile): a column of 4 cells - Top (the north wall's top),
+# TopMid (its face), BottomMid (the corridor), Bottom (the corridor's last rows and the south wall's top edge).
+# The bar is the left 8 px of the column. The scripts hide them (setmetatile: Top -> 0x269, TopMid -> 0x271,
+# BottomMid -> 0x26d, Bottom -> 0x281) and light them (Blue 2b7/2bf/2c7/2cf, Green 2b6/2be/2c6/2ce)
+NEW_MAUVILLE_BARRIERS = [(10, 0, 0x2b7), (21, 2, 0x2b6), (10, 16, 0x2b7), (28, 22, 0x2b6), (10, 24, 0x2b6),
+                         (37, 33, 0x2b6), (23, 34, 0x2b7)]
+NEW_MAUVILLE_BARRIER = {0x2c6, 0x2c7}  # the corridor's barrier cells: not walls
+# the floor switches (x, y, metatile as drawn): blue 236, green 22e, the generator's red 23e; pressed 24f
+NEW_MAUVILLE_BUTTONS = [(33, 6, 0x23e), (13, 10, 0x236), (17, 10, 0x22e), (2, 11, 0x22e), (6, 11, 0x236),
+                        (25, 18, 0x22e), (16, 22, 0x236), (4, 26, 0x236), (18, 36, 0x22e), (30, 38, 0x236)]
+# every barrier hidden: the drawing new_mauville_inside_alt reads its hidden wall halves from
+NEW_MAUVILLE_HIDDEN = {}
+for _x, _y, _m in NEW_MAUVILLE_BARRIERS:
+    NEW_MAUVILLE_HIDDEN.update({(_x, _y): 0x269, (_x, _y + 1): 0x271, (_x, _y + 2): 0x26d, (_x, _y + 3): 0x281})
 # props, by kind: (metatiles, face height px)
 NEW_MAUVILLE_PROPS = [
     ({0x2a1, 0x2a2, 0x2a9, 0x2aa}, 20),                      # parts shelves
@@ -46,10 +63,25 @@ def new_mauville_inside():
     for k, (ms, h) in enumerate(NEW_MAUVILLE_PROPS):
         for m in ms:
             kind[m] = k
+    column = {(x, y + k) for (x, y, _) in NEW_MAUVILLE_BARRIERS for k in (0, 1)}
     walls = [(x, y) for y in range(lay.h) for x in range(lay.w)
              if blocked(x, y) and lay.metatile(x, y) not in NEW_MAUVILLE_VOID
-             and lay.metatile(x, y) not in NEW_MAUVILLE_BARRIER and lay.metatile(x, y) not in kind]
+             and lay.metatile(x, y) not in NEW_MAUVILLE_BARRIER and lay.metatile(x, y) not in kind
+             and (x, y) not in column]
     pieces = []
+    # the barriers, lit (while their corridor cell holds the lit bar): the bar a solid strip 8 px wide from the
+    # north wall's top to the south wall, 24 px tall as the walls; the column's east half of wall stands always
+    for (x, y, top) in NEW_MAUVILLE_BARRIERS:
+        mid = top + 0x10  # 2b6/2b7 -> 2c6/2c7
+        pieces.append(piece("bar_%d_%d" % (x, y), [(x * 16, y * 16, x * 16 + 8, (y + 3) * 16 + 4)], 24,
+                            solid=True, when=(x, y + 2, mid)))
+        pieces.append(piece("block_bar_%d_%d" % (x, y), [(x * 16 + 8, y * 16, x * 16 + 16, (y + 2) * 16)], 24,
+                            side=NEW_MAUVILLE_SIDE, solid=True))
+    # the switches: a low round button, while it is drawn up (pressed: flat, as drawn)
+    for (x, y, m) in NEW_MAUVILLE_BUTTONS:
+        pieces.append(piece("button_%d_%d" % (x, y), [(x * 16 + 2, y * 16 + 1, x * 16 + 15, y * 16 + 15)], 3,
+                            leave=NEW_MAUVILLE_FLOOR, side=(x * 16 + 6, y * 16 + 6, x * 16 + 10, y * 16 + 10),
+                            when=(x, y, m)))
     # props first (front first): groups of neighbouring prop cells
     seen = set()
     for y in range(lay.h):
@@ -70,8 +102,20 @@ def new_mauville_inside():
             x0 = min(c[0] for c in group); x1 = max(c[0] for c in group) + 1
             y0 = min(c[1] for c in group); y1 = max(c[1] for c in group) + 1
             h = max(NEW_MAUVILLE_PROPS[kind[lay.metatile(*c)]][1] for c in group)
-            pieces.append(piece("prop_%d_%d" % (x0, y0), [(x0 * 16, y0 * 16, x1 * 16, y1 * 16)],
-                                min(h, (y1 - y0) * 16 - 4), leave=NEW_MAUVILLE_FLOOR))
+            hh = min(h, (y1 - y0) * 16 - 4)
+            # its sides a patch of its own front, inside its outline (not the dark outline the generator
+            # otherwise takes: "dark sides" in the interior lint)
+            fx = (x0 * 16 + x1 * 16) // 2
+            pieces.append(piece("prop_%d_%d" % (x0, y0), [(x0 * 16, y0 * 16, x1 * 16, y1 * 16)], hh,
+                                leave=NEW_MAUVILLE_FLOOR,
+                                side=(fx - 2, y1 * 16 - hh + 3, fx + 2, y1 * 16 - 4)))
     pieces += rect_pieces("block", runs_of(walls), 24, side=lambda *r: NEW_MAUVILLE_SIDE, solid=True)
     return pieces
 
+
+
+def new_mauville_inside_alt():
+    """The barriers hidden: each column's west half of wall, as the hidden drawing has it."""
+    return [piece("block_hid_%d_%d" % (x, y), [(x * 16, y * 16, x * 16 + 8, (y + 2) * 16)], 24,
+                  side=NEW_MAUVILLE_SIDE, solid=True, when=(x, y, 0x269))
+            for (x, y, _) in NEW_MAUVILLE_BARRIERS]
