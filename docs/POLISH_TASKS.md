@@ -754,3 +754,8 @@ POL-4 (Fortree), POL-2/3 green safety screen, POL-28, POL-8; then the mountains 
   which the game sets once the object is off the 2D screen; our 3D view draws the object itself further out (it
   ignores that flag for objects) but honoured it for effects - so the boy stood there without his tree. Fix:
   `voxel_entities.c` DisguiseShown - a disguise is hidden only when its object is (obj->invisible).
+- 16l-test (2026-11-16 ~22:40) = 16k-test + the POL-4 disguise fix. Not checked here: since ~20:30 this machine's
+  Wine test runs to Route 118 / Fortree end without a picture even with the older 16h exe (a test-setup problem here,
+  not the game). POL-8 house lines: not reproduced at 1280x720 (zoom 1 and 4) and a 4K run here is too slow to reach
+  the field; the floor of LAYOUT_HOUSE1 has no ground patches and chunks are quantised to 1/512 tile (no chunk
+  cracks), so the cause is still open. Brennan (asked): the lines are "Both" - some stay put, more appear while walking.
