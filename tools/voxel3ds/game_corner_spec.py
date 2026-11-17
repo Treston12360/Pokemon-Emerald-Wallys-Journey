@@ -23,3 +23,9 @@
 # squares"): the same drawing on taller, shallower boxes - gacha 14 -> 24 px, and the two machines at the back left
 #     piece("arcade", [(0, 18, 32, 48)], 14, ...)  ->  piece("arcade", [(0, 18, 32, 48)], 22, ...)
 # Preview: gacha 396 tris exact wrong=0 missing=0 extra=0; arcade 138 tris exact. Respliced layout 91.
+
+# POL-9 front columns (Brennan 2026-11-16: "you can still walk through the columns at the front of the game corner";
+# asked, he chose "Pull the porch back"), in game_corner(art) of voxel_building_specs.py: the "portal" HeightSolid
+# (8 px forward of the facade, posts on Mauville row 14 - cells the cartridge lets you walk on) is left out, and the
+# Mauville "game_corner" entry's keep/exact drop (40, 64, 48, 72), (64, 64, 72, 72) - the posts' feet stay painted on
+# the ground. Preview: game_corner 272 tris exact. Spliced: splice_buildings.py OURS DONOR OUT 3 5 10 --replace.
