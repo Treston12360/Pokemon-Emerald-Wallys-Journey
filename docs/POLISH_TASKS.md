@@ -634,16 +634,50 @@ tasks and we can leave these harder ones for later. if any questions ask me firs
     (VoxelRelief_Belt != 0, relief_fixes) - none of the belt-land changes reach it.
   - Idea not tried: model the belt's mountains as their own relief (gen_voxel_relief / voxel_terraces over a padded map)
     rather than in the renderer.
-- **NEW: Route 112 -> Lavaridge:** "when going from route 112 to lavaridge the backgrounds disappear in the red boxed
+- **NEW, numbered POL-43: Route 112 -> Lavaridge:** "when going from route 112 to lavaridge the backgrounds disappear in the red boxed
   areas" (pictures not received in this message).
-- **NEW: Lavaridge cable-car stairs:** "the stairs leading up to the lifts east of lavaridge go straight up instead of
+- **NEW, numbered POL-44: Lavaridge cable-car stairs:** "the stairs leading up to the lifts east of lavaridge go straight up instead of
   staggering like real stairs."
 - **Brennan's pictures for the above, 18:41** (`docs/polish_reports/BREN_1841_*`):
   1. Route 119, west of the Weather Institute: a dark/black box where belt trees should be (red box).
   2. A town by the sea (pink-roof houses, beach east): the mountain north of the town over the water is a block of
-     stepped rock with vertical seams (red box). Which town not confirmed yet - asked Brennan.
+     stepped rock with vertical seams (red box). Which town not confirmed yet - asked Brennan. Numbered POL-45.
   3. Lavaridge: the background top-left (behind the Mart) has sky-blue holes and floating slabs; the bottom-right edge
      has a sky-blue strip.
   4. Same view on arriving from Route 112 (sign "ROUTE 112"): same holes top-left, and the bottom-left edge shows flat
      grass instead of the mountain.
   5. The "stairs" east of Lavaridge: the grass ledges run as long straight strips up the slope, not staggered steps.
+
+## STATUS BOARD, 2026-11-16 18:45 (session 014PwRDj) - for Brennan to choose what comes next
+Brennan 18:42: "update the github on everything that we have accomplished and the fixes that are left to do. give me a
+list of all the POLs left so i can choose which ones we need to complete."
+
+**Done (ticked):** POL-1 people round, POL-5 Trainer Hill, POL-7 3D flowers/grass/planters, POL-12 water moves,
+POL-16 people black at doors, POL-23 sandstorm, POL-25 unlearn HMs, POL-26 + 26b Rustboro lights / 3D night,
+POL-27 Route 113 ash, POL-29 music/sound volume, POL-42 Orthworm (keep Earth Eater).
+
+**Done 2026-11-16 by 014PwRDj, not ticked (waiting for Brennan's eyes on his GPU):**
+- POL-8 black lines indoors: 1/32-texel inset on the atlas and every model face (needs his 4K check).
+- POL-37 Emerald 3DS study (docs/POL-37_EMERALD_3DS_STUDY.md); from it: safety floor under every map, MSAA (off above
+  1440p), sand dust.
+- POL-38 sandstorm look (colours + dust sheets). Left: the "blue box" at the rocks (not found).
+- POL-39 white flowers back to 2D; red flowers/planters keep the inset fix. Left: "rough textures" if he still sees them.
+- POL-9 prize machines now 3D. Left: walk-through columns (which ones?), the Game Corner lag.
+- Crash fix (sand dust upload) and lag fixes (MSAA at 4K; draw once per catch-up batch at 240 fps).
+- POL-41 belt wood level and seam (Brennan: "the trees look good"). Left: see below.
+
+**Left - easier / need one answer from Brennan:**
+- POL-4 people vanish behind you (not reproduced; need map + video).
+- POL-6 boxes cut off outside widescreen (not reproduced; need screenshot + fullscreen or not).
+- POL-10 walking through the top of doors.
+- POL-17 seed mounds look like shrubs, sit above the dirt.
+- POL-19 falling leaves appear/disappear/speed up.
+- POL-15 Route 110 -> Mauville (atlas fix in; lag not proven fixed - need a new stall log).
+
+**Left - bigger 3D model work:** POL-18 Pokemon flat, POL-20 boats flat, POL-22 breakable rocks flat / pop in.
+
+**Left - hard, parked (the belt / backdrop past map edges):** POL-2 trees end in blue, POL-3 mountain edges blue,
+POL-13 background mountains are blocks, POL-21 Route 110->103 backdrop, POL-24 + POL-43 Route 112 -> Lavaridge
+backdrop, POL-28 Petalburg Woods lines, POL-30 backdrop changes between routes, POL-40 Route 118 pillars + Lavaridge
+mountains, POL-41 leftovers (black box west of the Weather Institute, rock blocks between trees), POL-44 Lavaridge
+cable-car stairs straight, POL-45 town mountain over water (which town?).
