@@ -68,6 +68,19 @@ def new_mauville_inside():
              if blocked(x, y) and lay.metatile(x, y) not in NEW_MAUVILLE_VOID
              and lay.metatile(x, y) not in NEW_MAUVILLE_BARRIER and lay.metatile(x, y) not in kind
              and (x, y) not in column]
+    # POL-31 (Brennan 2026-11-17 16:00, with his picture: "the wall is short and cut off ... make this a full wall";
+    # "The cabinet is cut of at the top of it along with the wall behind being short, make the cabinet 3D model
+    # and raise the back wall to align with the rest across the top"; "raise them to be even across the top"):
+    # a prop standing against a wall (its top row in the wall's face row: the wall cell north of it) leaves that
+    # row to the wall, so the wall runs whole behind it; and every wall stands its whole 24 px (rect_pieces
+    # whole=True) - a run a single cell tall stood 12, cut short.
+    wallset = set(walls)
+    against = set()
+    for y in range(lay.h):
+        for x in range(lay.w):
+            if lay.metatile(x, y) in kind and blocked(x, y) and (x, y - 1) in wallset:
+                against.add((x, y))
+    walls += sorted(against)
     pieces = []
     # the barriers, lit (while their corridor cell holds the lit bar): the bar a solid strip 8 px wide from the
     # north wall's top to the south wall, 24 px tall as the walls; the column's east half of wall stands always
@@ -103,13 +116,15 @@ def new_mauville_inside():
             y0 = min(c[1] for c in group); y1 = max(c[1] for c in group) + 1
             h = max(NEW_MAUVILLE_PROPS[kind[lay.metatile(*c)]][1] for c in group)
             hh = min(h, (y1 - y0) * 16 - 4)
+            backed = any((cx, cy) in against for (cx, cy) in group)
             # its sides a patch of its own front, inside its outline (not the dark outline the generator
             # otherwise takes: "dark sides" in the interior lint)
             fx = (x0 * 16 + x1 * 16) // 2
             pieces.append(piece("prop_%d_%d" % (x0, y0), [(x0 * 16, y0 * 16, x1 * 16, y1 * 16)], hh,
-                                leave=NEW_MAUVILLE_FLOOR,
+                                leave=NEW_MAUVILLE_FLOOR, against=(y0 + 1) * 16 if backed else None,
                                 side=(fx - 2, y1 * 16 - hh + 3, fx + 2, y1 * 16 - 4)))
-    pieces += rect_pieces("block", runs_of(walls), 24, side=lambda *r: NEW_MAUVILLE_SIDE, solid=True)
+    pieces += rect_pieces("block", runs_of(walls), 24, side=lambda *r: NEW_MAUVILLE_SIDE, solid=True,
+                          whole=True)
     return pieces
 
 
