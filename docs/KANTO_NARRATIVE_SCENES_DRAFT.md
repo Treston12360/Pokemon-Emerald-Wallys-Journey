@@ -330,9 +330,9 @@ ARIA: I can't. They still have Clefairy.
 
 VARNELL: Aria, please.
 
-(Portal displays a few ordinary moments passing in that past corridor. There is no collapse underway.)
+(Portal displays a few ordinary moments passing in that past corridor. There is no collapse underway. Varnell speaks to Blue.)
 
-VARNELL: There's hardly any time.
+VARNELL: I know exactly when that roof came down. We have seconds.
 
 BLUE: Varnell. It's a receiving field. It brings something here. We never made it safe the other way.
 
@@ -340,9 +340,7 @@ VARNELL: She's right there.
 
 BLUE: I know. But if you go through—
 
-VARNELL: She won't leave Clefairy.
-
-VARNELL: I have to get her out.
+VARNELL: If I stay here, she dies again. I have to get her out.
 
 (He jumps. **First** rumble. The past-side tower starts failing. Rocket captor loses Clefairy amid the first falling stones. Clefairy runs back to Aria, reaching her as the roof comes down. Future Varnell is caught beside them. View cuts out. Sound/flash, then silence.)
 
