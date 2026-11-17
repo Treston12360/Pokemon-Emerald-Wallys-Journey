@@ -807,3 +807,8 @@ POL-2/3 asked: "One each" (POL-2 out of bounds, POL-3 3D generation).
 - [ ] **POL-41** Route 119 belt trees: rock blocks between tree cells, black box west of the Weather Institute.
 
 **Other:** - [ ] **POL-4** Fortree ninjas' disguise (16l-test, not checked yet).
+- POL-31 progress (2026-11-17): glare done (Brennan: "Good as is"). Walls: tried scaling relief heights for New
+  Mauville (VoxelRelief_Cell) - no effect: New Mauville has NO relief cells and NO building models (relief.bin and
+  buildings.bin checked); its walls only look raised because the art draws them. Reverted. Now modelling it in
+  3ds_port/scripts/voxel_building_specs.py new_mauville_inside() (Mossdeep gym's way: wall runs 24 px, props as
+  boxes); barriers/switches next. Brennan (asked about walls): "Too short" + "They just look flat like 2D".
