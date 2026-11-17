@@ -91,7 +91,7 @@ def new_mauville_inside():
         pieces.append(piece("block_bar_%d_%d" % (x, y), [(x * 16 + 8, y * 16, x * 16 + 16, (y + 2) * 16)], 24,
                             side=NEW_MAUVILLE_SIDE, solid=True))
     # the switches: a low round button, while it is drawn up (pressed: flat, as drawn)
-    for (x, y, m) in NEW_MAUVILLE_BUTTONS:
+    for (x, y, m) in (NEW_MAUVILLE_BUTTONS if os.environ.get("NM_RAISED_BUTTONS") else ()):
         pieces.append(piece("button_%d_%d" % (x, y), [(x * 16 + 2, y * 16 + 1, x * 16 + 15, y * 16 + 15)], 3,
                             leave=NEW_MAUVILLE_FLOOR, side=(x * 16 + 6, y * 16 + 6, x * 16 + 10, y * 16 + 10),
                             when=(x, y, m)))
@@ -123,8 +123,38 @@ def new_mauville_inside():
             pieces.append(piece("prop_%d_%d" % (x0, y0), [(x0 * 16, y0 * 16, x1 * 16, y1 * 16)], hh,
                                 leave=NEW_MAUVILLE_FLOOR, against=(y0 + 1) * 16 if backed else None,
                                 side=(fx - 2, y1 * 16 - hh + 3, fx + 2, y1 * 16 - 4)))
-    pieces += rect_pieces("block", runs_of(walls), 24, side=lambda *r: NEW_MAUVILLE_SIDE, solid=True,
-                          whole=True)
+    # a wall whose top is drawn on the walkable cell north of it (0x237 and its kind: the wall's top band and
+    # the top of its face on a floor cell - the cartridge lets you walk there, behind the wall) takes those
+    # rows too: its drawing from the band down, as a wall whose top cell is blocked has it (Brennan's red boxes
+    # 1 and 4: those walls stood with their top cut off). `ext`: the north cell's bottom rows that are not floor.
+    floor_rgb = set(NEW_MAUVILLE_FLOOR[:4])
+
+    def ext(x, y):
+        if y < 0 or blocked(x, y):
+            return 0
+        im = lay.cell_image(lay.metatile(x, y)).convert("RGB")
+        px = im.load()
+        n = 0
+        for r in range(15, -1, -1):
+            if any("%02x%02x%02x" % px[c, r] not in floor_rgb for c in range(16)):
+                n += 1
+            else:
+                break
+        return n if n < 16 else 0
+    rows = {}
+    for (x, y0, y1) in runs_of(walls):
+        rows.setdefault((y0, y1, ext(x, y0 - 1)), []).append(x)
+    for (y0, y1, e), xs in sorted(rows.items()):
+        xs.sort()
+        start = prev = xs[0]
+        for x in xs[1:] + [None]:
+            if x is None or x != prev + 1:
+                pieces.append(piece("block_%d_%d" % (start, y0), [(start * 16, y0 * 16 - e, (prev + 1) * 16,
+                                                                     (y1 + 1) * 16)], 24,
+                                    side=NEW_MAUVILLE_SIDE, solid=True))
+                start = x
+            if x is not None:
+                prev = x
     return pieces
 
 
