@@ -872,10 +872,12 @@ static void EmitMound(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsign
             pz = z;
             pv = v;
         }
-        /* the back, down at 45 degrees to the ground, in the top row's colour */
+        /* the back, down at 45 degrees to the ground, in the colour under the top's outline (the camera's 40
+         * degrees sees a sliver of it; in the outline's dark it was a black cap) */
         {
-            float v = 1.0f - (baseY + (unsigned)top + 0.5f) / (float)VOXEL_SPRITE_ATLAS_H;
-            float s = shade * edge * 0.6f;
+            int under = top + 1 <= bot ? top + 1 : top;
+            float v = 1.0f - (baseY + (unsigned)under + 0.5f) / (float)VOXEL_SPRITE_ATLAS_H;
+            float s = shade * edge * 0.72f;
 
             VoxelBuilder_Quad(builder,
                 &(VoxelVertex){ax, lift + py,  pz + az,      u0, v, s},
