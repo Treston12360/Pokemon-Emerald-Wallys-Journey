@@ -781,3 +781,29 @@ Brennan 23:17: "Continue onto the harder ones for now." 23:27: "Provide me pictu
   did not help. Earlier lesson: never `pkill -f wine...` from a command line that itself contains those words (it
   kills its own shell) - `scratchpad/cx/clean.sh` now kills by process name only. Not solved.
 - Not started: POL-41 leftovers, POL-44 (Lavaridge cable-car stairs).
+
+## GROUPS (Brennan 2026-11-17 10:43: "Combine all POLs that have to do with 3D generation together and then combine
+## all POLs that have to do with the out of bounds terrain that the zoom feature allowed us to see, then work on the
+## new mauville glare and 3d generation first since new mauville is all flat still, then once finished with that work
+## on the remaining pols, no guessing or pretending please ask if you have any questions")
+POL-2/3 asked: "One each" (POL-2 out of bounds, POL-3 3D generation).
+
+**A. 3D generation (inside the maps)** - order: POL-31 first, then the rest
+- [ ] **POL-31** New Mauville: Gamma-lighting glare too bright; its models still 2D (Emerald 3DS has not modelled
+  New Mauville at all: VOXEL_STATUS "Entrance/Inside" both not started).
+- [ ] **POL-3** mountain edges show blue (and "the bases around trees or some edge lines still show either black or
+  blue"). Crack fill in the final pass (16k-test) - outdoor result not reported yet.
+- [ ] **POL-8** black lines on indoor floors at 4K ("Both": some stay, more while walking). Not reproduced here.
+- [ ] **POL-28** black lines at the base of the trees in Petalburg Woods.
+- [ ] **POL-44** Lavaridge cable-car stairs go straight up instead of staggering.
+- [ ] **POL-37** the Emerald 3DS study (done; its findings are these POLs) - close when Brennan says.
+
+**B. Out of bounds terrain (the belt past the map's edge, seen when zoomed out)**
+- [ ] **POL-2** background trees go up into the sky showing blue.
+- [ ] **POL-13 / POL-40 / POL-45** background mountains as blocks / pillars (Route 118 north) - rounded mountain
+  (BeltMountain / BeltRoundOff), not seen in a test build yet.
+- [ ] **POL-24 / POL-30 / POL-43** backgrounds change / disappear going Route 112 <-> Lavaridge - per-cell drawn belt,
+  not seen in a test build yet.
+- [ ] **POL-41** Route 119 belt trees: rock blocks between tree cells, black box west of the Weather Institute.
+
+**Other:** - [ ] **POL-4** Fortree ninjas' disguise (16l-test, not checked yet).
