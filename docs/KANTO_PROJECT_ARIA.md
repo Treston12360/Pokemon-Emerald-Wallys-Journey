@@ -72,7 +72,9 @@ a reveal or a choice, not just a gym.
 - The dead man is not described as reaching for Aria or being related to her. Do not spotlight him with a special cutscene, extra camera movement, or ominous music. His identification is an optional hindsight payoff. The final revelation of Aria as Varnell's daughter and ARIA's purpose belongs to Chapter 12; realization of the fatal time loop follows the Chapter 13 jump.
 - **Visual constraint:** stage these scenes using the game's Emerald, FireRed and LeafGreen assets and effects; no invented environment art is required. The Windows executable can avoid old hardware limits but should retain the established pixel-art presentation.
 
-**Dialogue remains DRAFT:** any newly suggested Lavender resident text, Kiyoshi rescue rewrite, Blue's final warning, and Aria/Varnell finale lines are proposals requiring separate owner approval. The existing executable scripts are not updated by these decisions. See `docs/KANTO_NARRATIVE_AUDIT.md` for the causal timeline and verification checklist.
+- **Owner-approved opening line, 2026-11-17:** As soon as the stable retrieval portal opens and Varnell sees Aria alive, he yells, “ARIA! My sweet daughter! It’s so good to see you. Please, come here!” Aria has yet to answer, and Clefairy is still captive.
+
+**Remaining dialogue is DRAFT:** newly suggested Lavender resident text, the Kiyoshi rescue rewrite, Blue's warning, and the rest of the finale dialogue still require separate owner approval. The existing executable scripts are not updated by these decisions. See `docs/KANTO_NARRATIVE_AUDIT.md` for the causal timeline and verification checklist.
 
 ### How the name hides in plain sight
 "Project ARIA" is said all game and sounds like any acronym. Clues the player can miss:
