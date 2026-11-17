@@ -2701,6 +2701,73 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
 
 static bool BeltIsTree(int x, int y);
 
+/*
+ * POL-13 / POL-40 (Brennan 2026-11-16: "the rock still shows pillars ... just make a mountain round itself out
+ * instead of pillars"; "all mountains we have added in are not 3D but more so 2D blocks ... the mirrored mountains
+ * meshing well with one another"): a land cell of the belt took its nearest edge cell's height, so every column of
+ * the map's edge went on outward at its own height - a cliff column of the edge a long ridge, the next column's
+ * another: the pillars. Now the belt's land is one mountain: its height out at distance d is the map's edge
+ * averaged along the edge over a reach that widens the further out it is (+-(1 + 2d) cells, the nearer the
+ * heavier, water left out) - neighbouring columns grow together - and it rounds off going out: held for
+ * BELT_HOLD cells, then down a quarter cosine to the ground over BELT_FALL. With the belt's sloped tops
+ * (BeltCorner) that is one rounded slope, no walls. Trees keep their own rule (POL-41). WJPC_BELT_COLUMNS=1: as
+ * before (each edge column straight out).
+ */
+enum { BELT_HOLD = 1, BELT_FALL = 7 };
+
+static void BeltMountain(const VoxelMapInstance *ring, int x, int y, int ex, int ey, float *level, float *shift)
+{
+    static int sOff = -1;
+    bool alongY = x < ring->originX || x >= ring->originX + ring->width;
+    bool alongX = y < ring->originY || y >= ring->originY + ring->height;
+    int dx = x > ex ? x - ex : ex - x, dy = y > ey ? y - ey : ey - y;
+    int d = dx > dy ? dx : dy, reach;
+    float sumW = 0.0f, sumH = 0.0f, sumS = 0.0f, h, sh, f;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_BELT_COLUMNS") != NULL;
+    if (sOff || BeltIsTree(x, y))
+        return;
+    reach = 1 + 2 * d;
+    for (int k = -reach; k <= reach; ++k)
+    {
+        /* past a corner (both off the map) the reach runs along both edges' lines: the corner cell's own row */
+        int cx = alongY && !alongX ? ex : ex + k, cy = alongY && !alongX ? ey + k : ey;
+        float w = (float)(reach + 1 - abs(k));
+
+        if (alongX && alongY && k != 0)
+        {
+            /* a corner: average the corner cell's two edges */
+            cx = ex + ((k & 1) ? k / 2 : 0);
+            cy = ey + ((k & 1) ? 0 : k / 2);
+        }
+        if (cx < ring->originX || cy < ring->originY || cx >= ring->originX + ring->width
+         || cy >= ring->originY + ring->height || VoxelMesh_Classify(cx, cy) == VOXEL_SHAPE_WATER)
+            continue;
+        sumW += w;
+        sumH += w * VoxelRelief_CellLift(ring, cx, cy);
+        sumS += w * VoxelRelief_CellShift(ring, cx, cy);
+    }
+    if (sumW <= 0.0f)
+        return;
+    h = sumH / sumW;
+    sh = sumS / sumW;
+    if (d <= BELT_HOLD)
+        f = 1.0f;
+    else if (d >= BELT_HOLD + BELT_FALL)
+        f = 0.0f;
+    else
+        f = cosf((float)(d - BELT_HOLD) / (float)BELT_FALL * 1.5707963f);
+    /* down to the ground the belt stands on (its courses under the map's zero), not under it */
+    {
+        const float floorLevel = -(float)VOXEL_BORDER_COURSES;
+        float top = h > floorLevel ? h : floorLevel;
+
+        *level = floorLevel + (top - floorLevel) * f;
+        *shift = sh * (*level - floorLevel) / (top - floorLevel > 0.01f ? top - floorLevel : 1.0f);
+    }
+}
+
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 {
     const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y); /* POL-30: was instance 0 (see BorderWaterLevel) */
@@ -2731,6 +2798,7 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
         return false;
     *level = VoxelRelief_CellLift(ring, ex, ey);
     *shift = VoxelRelief_CellShift(ring, ex, ey);
+    BeltMountain(ring, x, y, ex, ey, level, shift);
     /*
      * POL-41 follow-up (Brennan 2026-11-16 17:56, west of the Weather Institute: dark bands between rows of the
      * wood): a wood of the belt took exactly its nearest edge cell's level, and where the edge climbs a cliff a
@@ -2772,6 +2840,7 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
     {
         static int sBlend = -1;
         float sumW = 0.0f, sumH = 0.0f, sumS = 0.0f;
+        const float ownLevel = *level, ownShift = *shift;
 
         if (sBlend < 0)
             sBlend = getenv("WJPC_BELT_NO_BLEND") == NULL && !VoxelWorld_BeltOld();
@@ -2800,7 +2869,12 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
             d = dx > dy ? dx : dy;
             if (d < 1)
                 d = 1;
-            if (VoxelMesh_Classify(mx, my) != VOXEL_SHAPE_WATER)
+            if (m == ring)
+            {
+                h = ownLevel;  /* POL-13/40: the ring's own mountain (BeltMountain), not its edge cell's height */
+                sh = ownShift;
+            }
+            else if (VoxelMesh_Classify(mx, my) != VOXEL_SHAPE_WATER)
             {
                 h = VoxelRelief_CellLift(m, mx, my);
                 sh = VoxelRelief_CellShift(m, mx, my);
