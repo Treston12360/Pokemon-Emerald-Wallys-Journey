@@ -73,6 +73,7 @@ a reveal or a choice, not just a gym.
 - **Visual constraint:** stage these scenes using the game's Emerald, FireRed and LeafGreen assets and effects; no invented environment art is required. The Windows executable can avoid old hardware limits but should retain the established pixel-art presentation.
 
 - **Owner-approved opening line, 2026-11-17:** As soon as the stable retrieval portal opens and Varnell sees Aria alive, he yells, “ARIA! My sweet daughter! It’s so good to see you. Please, come here!” Aria has yet to answer, and Clefairy is still captive.
+- **Owner clarification, 2026-11-17 — LOCKED TIMING:** Varnell knows the exact recorded time of Aria's death and recognizes that the moment is approaching as he watches through the portal. After Aria refuses to leave without Clefairy, he says aloud how little time is left. Blue's warning comes before Varnell voices his belief that Aria will die again if he stays where he is. That belief drives his jump. The exact dialogue remains a draft.
 
 **Remaining dialogue is DRAFT:** newly suggested Lavender resident text, the Kiyoshi rescue rewrite, Blue's warning, and the rest of the finale dialogue still require separate owner approval. The existing executable scripts are not updated by these decisions. See `docs/KANTO_NARRATIVE_AUDIT.md` for the causal timeline and verification checklist.
 
