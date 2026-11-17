@@ -114,6 +114,11 @@ int WideView_GammaRoom(void)
         return 1;
     if (map == MAP_DEWFORD_TOWN_GYM)
         return 2;
+    // POL-31 (Brennan 2026-11-15: New Mauville "the glare whenever having gamma lighting on is way to bright needs to
+    // be tuned down a bit"; 2026-11-17: the whole room): its white tiles under the caves' light came out glaring.
+    // Gamma has no trigger there; ours, the same kind as the two above: a colour gain (WideView_RoomGain).
+    if (map == MAP_NEW_MAUVILLE_ENTRANCE || map == MAP_NEW_MAUVILLE_INSIDE)
+        return 4;
     if (gMapHeader.mapType == MAP_TYPE_UNDERGROUND)
         return 3; // another cave: no sun or clouds reach it, Gamma's grading otherwise as outdoors
     return 0;

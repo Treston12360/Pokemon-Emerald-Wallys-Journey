@@ -2119,13 +2119,22 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
         }
         int lv = 0;
         wj_glUseProgram(sPostProg);
-        wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f : 6.0f * (sIndoorNow ? IndoorBloomScale() : 1.0f), 0.4f);
+        {
+            extern int WideView_GammaRoom(void);
+            /* POL-31: New Mauville's (room 4) white walls bloomed into a halo over the dark - a third of it there */
+            float roomBloom = WideView_GammaRoom() == 4 ? 0.35f : 1.0f;
+
+            wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f
+                           : 6.0f * roomBloom * (sIndoorNow ? IndoorBloomScale() : 1.0f), 0.4f);
+        }
         wj_glUniform1fv(wj_glGetUniformLocation(sPostProg, "tint"), 6, tint);
         {
             /* Gamma: engine default vignette 0.4; Granite Cave gain 0.49 + vignette 3, Brawly's gym 0.49 + 2 */
             extern int WideView_GammaRoom(void);
             int room = WideView_GammaRoom();
-            wj_glUniform4f(wj_glGetUniformLocation(sPostProg, "room"), room == 1 || room == 2 ? 0.49f : 1.0f,
+            /* room 4 (POL-31, New Mauville): gain NEW_MAUVILLE_GAIN, the default vignette; WJPC_ROOM_GAIN=x tries another */
+            float gain4 = getenv("WJPC_ROOM_GAIN") ? (float)atof(getenv("WJPC_ROOM_GAIN")) : 0.7f;
+            wj_glUniform4f(wj_glGetUniformLocation(sPostProg, "room"), room == 1 || room == 2 ? 0.49f : room == 4 ? gain4 : 1.0f,
                            room == 1 ? 3.0f : room == 2 ? 2.0f : 0.4f, (float)h / (float)w, 0.0f);
         }
         for (int i = 1; i < 6; i++)
