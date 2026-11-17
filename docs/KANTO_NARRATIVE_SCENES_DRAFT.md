@@ -1,6 +1,6 @@
 # Project ARIA — complete narrative scene pass (DRAFT, not approved)
 
-**Prepared November 16, 2026. Status: NEW PROPOSALS / OWNER REVIEW.** Source of truth for decisions is `docs/KANTO_PROJECT_ARIA.md`; see `docs/KANTO_NARRATIVE_AUDIT.md` for locked causality and `docs/KANTO_CONTINUITY_SOLUTIONS_DRAFT.md` for proposed mechanisms. This document is **not playable game script**. None of the spoken lines below are approved merely because they appear here. Preserve old, approved lines that do not conflict. **Treston's ARIA story only — no spoilers to Brennan / Polish.**
+**Prepared November 16, 2026. Status: NEW PROPOSALS / OWNER REVIEW.** Source of truth for decisions is `docs/KANTO_PROJECT_ARIA.md`; see `docs/KANTO_NARRATIVE_AUDIT.md` for locked causality and `docs/KANTO_CONTINUITY_SOLUTIONS_DRAFT.md` for proposed mechanisms. This document is **not playable game script**. Varnell's opening portal line in Chapter 13 is owner-approved (2026-11-17). Other proposed lines still await review. Preserve old, approved lines that do not conflict. **Treston's ARIA story only — no spoilers to Brennan / Polish.**
 
 ## Narrative rules, before writing a single new script
 
@@ -318,7 +318,9 @@ VARNELL: If I interrupt the receiving field now, I can't tell you where that ene
 
 (A stable view of historical Pokémon Tower appears. Aria is alive, with a Rocket member still holding Clefairy elsewhere in the scene. No shakes, flashes of destruction or falling rock.)
 
-VARNELL: ...Aria?
+**Owner-approved opening line (2026-11-17). Varnell yells as soon as he sees Aria through the stable portal.**
+
+VARNELL: ARIA! My sweet daughter! It’s so good to see you. Please, come here!
 
 ARIA: Dad?
 
@@ -390,7 +392,7 @@ BLUE: ...Thank you.
 
 **Can be drafted without additional game-code authority:** written dialogue drafts and blocking, causal chart, pacing map, scene asset inventory, character knowledge audit, black-box first-run readability test.
 
-**Requires Treston's explicit approval before playable scripts change:** exact Kiyoshi rescue wording; Lavender NPC dialogue; all Ch.6–14 dialogue; forged League authorization mechanism/signatory; Clefairy escaping mechanism; final fight team slots; any optional photo/cutscene positions; newly designed maps.
+**Requires Treston's explicit approval before playable scripts change:** exact Kiyoshi rescue wording; Lavender NPC dialogue; remaining Ch.6–14 dialogue; forged League authorization mechanism/signatory; Clefairy escaping mechanism; final fight team slots; any optional photo/cutscene positions; newly designed maps.
 
 **Not part of this document:** engine changes, Windows executable build/verification, modifying Polish work, final Kanto trainer rosters/encounter tables, new custom sprites. Those are separate project tasks.
 
