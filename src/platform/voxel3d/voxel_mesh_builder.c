@@ -2699,6 +2699,33 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
     sBorderFollowsEdge = on;
 }
 
+/*
+ * POL-40 (Brennan 2026-11-16 17:59: "the mountains should merge together with the mountain you can see on its
+ * left. try mirroring the mountains to get both sides of it the same"; Lavaridge: "make the mountain mirror whats
+ * on its west side and make it horizontal like the rest of it"): past a map's edge the belt's land stands as the
+ * map's own cells mirrored across that edge - a cell d cells out takes the height of the cell d - 1 cells in -
+ * so a mountain at the edge goes on as its own reflection, terraces and all, and a plateau goes on flat.
+ * WJPC_BELT_NO_MIRROR=1: the nearest edge cell, as before.
+ */
+static void BeltMirror(const VoxelMapInstance *m, int x, int y, int *mx, int *my)
+{
+    static int sNoMirror = -1;
+    int ox = m->originX, oy = m->originY, w = m->width, h = m->height;
+
+    if (sNoMirror < 0)
+        sNoMirror = getenv("WJPC_BELT_NO_MIRROR") != NULL;
+    if (sNoMirror)
+    {
+        *mx = x < ox ? ox : x >= ox + w ? ox + w - 1 : x;
+        *my = y < oy ? oy : y >= oy + h ? oy + h - 1 : y;
+        return;
+    }
+    *mx = x < ox ? ox + (ox - 1 - x) : x >= ox + w ? ox + w - 1 - (x - (ox + w)) : x;
+    *my = y < oy ? oy + (oy - 1 - y) : y >= oy + h ? oy + h - 1 - (y - (oy + h)) : y;
+    *mx = *mx < ox ? ox : *mx >= ox + w ? ox + w - 1 : *mx;
+    *my = *my < oy ? oy : *my >= oy + h ? oy + h - 1 : *my;
+}
+
 static bool BeltIsTree(int x, int y);
 
 static bool BorderLevelRaw(int x, int y, float *level, float *shift)
@@ -2731,6 +2758,17 @@ static bool BorderLevelRaw(int x, int y, float *level, float *shift)
         return false;
     *level = VoxelRelief_CellLift(ring, ex, ey);
     *shift = VoxelRelief_CellShift(ring, ex, ey);
+    if (!BeltIsTree(x, y))
+    {
+        int rx, ry;
+
+        BeltMirror(ring, x, y, &rx, &ry);
+        if (VoxelMesh_Classify(rx, ry) != VOXEL_SHAPE_WATER)
+        {
+            *level = VoxelRelief_CellLift(ring, rx, ry);
+            *shift = VoxelRelief_CellShift(ring, rx, ry);
+        }
+    }
     /*
      * POL-41 follow-up (Brennan 2026-11-16 17:56, west of the Weather Institute: dark bands between rows of the
      * wood): a wood of the belt took exactly its nearest edge cell's level, and where the edge climbs a cliff a
@@ -2800,6 +2838,14 @@ static bool BorderLevelRaw(int x, int y, float *level, float *shift)
             d = dx > dy ? dx : dy;
             if (d < 1)
                 d = 1;
+            {
+                /* (POL-40: the map's cell mirrored across its edge, not its nearest edge cell) */
+                int rx, ry;
+
+                BeltMirror(m, x, y, &rx, &ry);
+                if (VoxelMesh_Classify(rx, ry) != VOXEL_SHAPE_WATER)
+                    mx = rx, my = ry;
+            }
             if (VoxelMesh_Classify(mx, my) != VOXEL_SHAPE_WATER)
             {
                 h = VoxelRelief_CellLift(m, mx, my);
@@ -2934,8 +2980,8 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
         return true;
     }
     here = BeltBase(x, y);
-    best = raw + here + BeltRise(x, y);
-    if (!BesideMap(x, y))
+    best = raw + here;
+    if (getenv("WJPC_BELT_ENVELOPE") != NULL && !BesideMap(x, y))
         for (int dy = -BELT_TERRACE_REACH; dy <= BELT_TERRACE_REACH; ++dy)
             for (int dx = -BELT_TERRACE_REACH; dx <= BELT_TERRACE_REACH; ++dx)
             {
@@ -2946,7 +2992,7 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
                     continue;
                 if (!BeltRawCached(x + dx, y + dy, &l, &sh))
                     continue;
-                l += BeltBase(x + dx, y + dy) + BeltRise(x + dx, y + dy) + (float)d;
+                l += BeltBase(x + dx, y + dy) + (float)d;
                 if (l < best)
                     best = l;
             }
