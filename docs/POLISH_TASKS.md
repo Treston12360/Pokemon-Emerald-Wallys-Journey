@@ -638,3 +638,12 @@ tasks and we can leave these harder ones for later. if any questions ask me firs
   areas" (pictures not received in this message).
 - **NEW: Lavaridge cable-car stairs:** "the stairs leading up to the lifts east of lavaridge go straight up instead of
   staggering like real stairs."
+- **Brennan's pictures for the above, 18:41** (`docs/polish_reports/BREN_1841_*`):
+  1. Route 119, west of the Weather Institute: a dark/black box where belt trees should be (red box).
+  2. A town by the sea (pink-roof houses, beach east): the mountain north of the town over the water is a block of
+     stepped rock with vertical seams (red box). Which town not confirmed yet - asked Brennan.
+  3. Lavaridge: the background top-left (behind the Mart) has sky-blue holes and floating slabs; the bottom-right edge
+     has a sky-blue strip.
+  4. Same view on arriving from Route 112 (sign "ROUTE 112"): same holes top-left, and the bottom-left edge shows flat
+     grass instead of the mountain.
+  5. The "stairs" east of Lavaridge: the grass ledges run as long straight strips up the slope, not staggered steps.
