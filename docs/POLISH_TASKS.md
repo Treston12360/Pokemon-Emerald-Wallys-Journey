@@ -821,3 +821,14 @@ POL-2/3 asked: "One each" (POL-2 out of bounds, POL-3 3D generation).
   took the wall's face row, leaving a 1-cell run). Fix in new_mauville_inside(): props against a wall leave that row
   to the wall (the prop stands in front, against=); every wall run whole=True (24 px). Switches: Brennan "Try to keep
   them raised and brighten them. If you can't ... leave them flat on the floor and as bright as the original art."
+- POL-31, Brennan 2026-11-17 17:06 (picture `BREN_1706_POL-31_south_of_barriers.png`): "if you look to the south of
+  each switched walls the wall to the bottom of it is still a half wall and not full in line with the top of the
+  wall. check every wall in new mauville and check if their tops align with one another make it make sense and look
+  clean." Causes: (1) the bar had taken the west half of the south wall's cell under it (only an east-half piece
+  stood there, so a dark notch showed); (2) whole-cell wall runs: New Mauville's thin north-south walls are drawn
+  8 px wide down one half of their cells (0x26a/272/27a/282, the other half black), and a column's run went on from an
+  east-west wall down a thin wall, laying the east-west wall's face flat as a top. Fix (new_mauville_inside()): the
+  south wall under each bar is a normal wall (its Bottom cell starts at row 4, below the bar's end); walls are built
+  in half cells (8 px): an all-black half is no wall, a half's run ends at its foot (outline in row 15 under face
+  colour), so every wall's front is its drawn face and every wall 24 px. Tried and dropped: running the bar on to the
+  south wall's foot (the bar went dark). Picture: `POL-31_south_of_barriers_fixed.png`.

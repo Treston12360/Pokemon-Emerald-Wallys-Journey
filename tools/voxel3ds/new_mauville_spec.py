@@ -64,6 +64,12 @@ def new_mauville_inside():
         for m in ms:
             kind[m] = k
     column = {(x, y + k) for (x, y, _) in NEW_MAUVILLE_BARRIERS for k in (0, 1)}
+    # (Brennan 2026-11-17 17:06: "to the south of each switched walls the wall to the bottom of it is still a
+    # half wall") the barrier's Bottom cell is the south wall's top band (its rows 4-15) with the bar's end over
+    # rows 0-3: the south wall's column there starts below it, its band taken as a 0x237's is (`ext`)
+    bottoms = {(x, y + 3) for (x, y, _) in NEW_MAUVILLE_BARRIERS}
+    # ... and the south wall under the bar is a wall like the rest, its whole cell, in both states (the bar had
+    # taken its west half: the dark notch south of each barrier)
     walls = [(x, y) for y in range(lay.h) for x in range(lay.w)
              if blocked(x, y) and lay.metatile(x, y) not in NEW_MAUVILLE_VOID
              and lay.metatile(x, y) not in NEW_MAUVILLE_BARRIER and lay.metatile(x, y) not in kind
@@ -130,6 +136,8 @@ def new_mauville_inside():
     floor_rgb = set(NEW_MAUVILLE_FLOOR[:4])
 
     def ext(x, y):
+        if (x, y) in bottoms:
+            return 12
         if y < 0 or blocked(x, y):
             return 0
         im = lay.cell_image(lay.metatile(x, y)).convert("RGB")
@@ -141,20 +149,80 @@ def new_mauville_inside():
             else:
                 break
         return n if n < 16 else 0
+    # and a run whose first cell's top rows are the black past the walls (0x21f: rows 0-3) starts below them,
+    # so every wall's top is its cream band, the same depth everywhere ("check every wall in new mauville and
+    # check if their tops align with one another make it make sense and look clean")
+    def black_top(x, y):
+        im = lay.cell_image(lay.metatile(x, y)).convert("RGB")
+        px = im.load()
+        n = 0
+        for r in range(16):
+            if all(px[c, r] == (0, 0, 0) for c in range(16)):
+                n += 1
+            else:
+                break
+        return n if n < 16 else 0
+    # POL-31 (Brennan 2026-11-17 17:06: "check every wall in new mauville and check if their tops align with one
+    # another make it make sense and look clean"): the walls are built in half cells, 8 px wide, as drawn - a thin
+    # wall running north-south is drawn 8 px wide down one half of its cells (0x26a/272/27a/282, the other half
+    # the black past the walls), and where it meets an east-west wall the cell is half each (0x28e/296). Whole
+    # cells had stood a thin wall a whole cell wide over the black, and one column's run went on from an
+    # east-west wall down the thin wall, the east-west wall's face laid flat as its top (the dark "half walls"
+    # south of the barriers). Now: a half that is all black is no wall; a half's run ends at its foot (its face
+    # down to the outline in row 15: the wall's front), so every wall's front is its drawn face, 24 px up.
+    pix = {}
+
+    def half(x, y, h):
+        m = lay.metatile(x, y)
+        if m not in pix:
+            im = lay.cell_image(m).convert("RGB")
+            px = im.load()
+            pix[m] = [["%02x%02x%02x" % px[c, r] for c in range(16)] for r in range(16)]
+        return [row[h * 8:h * 8 + 8] for row in pix[m]]
+    FACE = {"acac8b", "947b6a"}
+
+    def black(rows):
+        return all(c == "000000" for row in rows for c in row)
+
+    def foot(rows):
+        return all(c == "414a6a" for c in rows[15][1:7]) and any(c in FACE for c in rows[14])
+
+    def black_top_h(rows):
+        n = 0
+        for row in rows:
+            if all(c == "000000" for c in row):
+                n += 1
+            else:
+                break
+        return n if n < 16 else 0
+    halves = [(2 * x + h, y) for (x, y) in walls for h in (0, 1) if not black(half(x, y, h))]
+    split = []
+    for (hx, y0, y1) in runs_of(halves):
+        start = y0
+        for y in range(y0, y1 + 1):
+            if y < y1 and foot(half(hx // 2, y, hx % 2)):
+                split.append((hx, start, y))
+                start = y + 1
+        split.append((hx, start, y1))
     rows = {}
-    for (x, y0, y1) in runs_of(walls):
-        rows.setdefault((y0, y1, ext(x, y0 - 1)), []).append(x)
+    for (hx, y0, y1) in split:
+        x = hx // 2
+        if (x, y0) in bottoms:
+            e = -4   # the barrier's Bottom cell: the bar's end over rows 0-3, the south wall's band from row 4
+        else:
+            e = ext(x, y0 - 1) or -black_top_h(half(x, y0, hx % 2))
+        rows.setdefault((y0, y1, e), []).append(hx)
     for (y0, y1, e), xs in sorted(rows.items()):
         xs.sort()
         start = prev = xs[0]
-        for x in xs[1:] + [None]:
-            if x is None or x != prev + 1:
-                pieces.append(piece("block_%d_%d" % (start, y0), [(start * 16, y0 * 16 - e, (prev + 1) * 16,
-                                                                     (y1 + 1) * 16)], 24,
+        for hx in xs[1:] + [None]:
+            if hx is None or hx != prev + 1:
+                pieces.append(piece("block_%d_%d_%d" % (start, y0, prev), [(start * 8, y0 * 16 - e, (prev + 1) * 8,
+                                                                            (y1 + 1) * 16)], 24,
                                     side=NEW_MAUVILLE_SIDE, solid=True))
-                start = x
-            if x is not None:
-                prev = x
+                start = hx
+            if hx is not None:
+                prev = hx
     return pieces
 
 
