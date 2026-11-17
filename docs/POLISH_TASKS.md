@@ -611,3 +611,30 @@ Asked 2026-11-14, answered the same day:
   fast-forward did; WJPC_DRAW_EVERY_FRAME=1 old way). Measured here with his save in Mauville at frameRate=240 (software
   GL, so slow overall): old ~3000 ms trips (3D 2900 ms = ~6 world draws each), new ~250-500 ms (one draw). Stall log now
   says "N drawn" per worst trip. His save: /home/claude/keep/brennan_2026-11-16_1534.sav.
+
+## Brennan 2026-11-16 ~19:00, after test builds 16i-test / 16j-test (his words) - HARD, PARKED FOR LATER
+Brennan: "take all this info and update the github on these POLs, after updating lets try and complete the easier
+tasks and we can leave these harder ones for later. if any questions ask me first."
+- **POL-41 (Route 119 belt wood):** 17:56 - trees look good, but "where the mountain edge and trees start theres a black
+  line with blue showing ... needs to be meshed together"; west of the Weather Institute "the trees have rock squares
+  showing and blue showing through the ground". ~19:00 (16j-test): "Route 119 there is now more mountain blocks in
+  between each tree cell, this needs to be only trees."
+  - State: `polish` has the unblended belt wood (570268b8), BeltTreeSeam + edge mean +-4 (2eec5a4e). The 16j-test also
+    carried the POL-40 WIP (branch `polish-belt-wip`: mirrored belt heights, BeltTopTile mountain tops, face-tile walls) -
+    likely the source of the "mountain blocks between trees" (land belt cells next to wood drawn as rock). Not confirmed.
+- **POL-40 (background mountains):** Route 118: "the rock still shows pillars on the most recent build, just make a
+  mountain round itself out instead of pillars." Earlier: "make it like the mountains that appear in front of them and to
+  the left ... staggered as it is getting higher". Lavaridge: "it is way incorrect make mountains where it makes sense to
+  flow with the background"; earlier: "mirror whats on its west side and make it horizontal like the rest of it until it
+  meets the trees and have it slope up from there".
+  - Tried on `polish-belt-wip` (none shipped in a release build): flat blocks per cell at blended heights (pillars);
+    corner-sloped tops (16f, "still pillars"); terraces: envelope + whole levels + rock rise (16i-test, pillars); mirrored
+    heights (16j-test, pillars - each cell still a flat block); mirrored relief grid + face walls (picture
+    POL-40_mirror_try.png: terraces' backs face the camera, light gaps at the water). Lavaridge's belt is a *drawn* belt
+    (VoxelRelief_Belt != 0, relief_fixes) - none of the belt-land changes reach it.
+  - Idea not tried: model the belt's mountains as their own relief (gen_voxel_relief / voxel_terraces over a padded map)
+    rather than in the renderer.
+- **NEW: Route 112 -> Lavaridge:** "when going from route 112 to lavaridge the backgrounds disappear in the red boxed
+  areas" (pictures not received in this message).
+- **NEW: Lavaridge cable-car stairs:** "the stairs leading up to the lifts east of lavaridge go straight up instead of
+  staggering like real stairs."
