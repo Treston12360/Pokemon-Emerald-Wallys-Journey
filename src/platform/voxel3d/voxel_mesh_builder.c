@@ -3182,6 +3182,49 @@ static void BeltWaterSkirts(VoxelBuilder *b, int x, int y, float wx, float wz, f
  * it (in the world: their bases counted), so neighbouring land cells meet edge to edge as one slope and need no
  * walls between them. Walls still stand towards water, trees and the maps. WJPC_BELT_BLOCKS=1: as before.
  */
+/*
+ * POL-13/40 (Brennan: the belt's mountains should look "like the mountains that appear in front of them"): the
+ * belt's rounded slope was laid with the border's drawing - the rock face's vertical streaks - and read as columns
+ * again. The slope is laid with the map's own mountain top instead: the metatile most of its raised, unsloped
+ * relief cells show (not the face tile). -1: none (the border's drawing, as before). WJPC_BELT_FACE_TOP=1: as before.
+ */
+static int BeltTopTile(const VoxelMapInstance *ring)
+{
+    static const VoxelMapInstance *sRing[8];
+    static int sTile[8], sNext;
+    static int sOff = -1;
+    int counts[1024];
+    int best = -1, bestN = 0;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_BELT_FACE_TOP") != NULL;
+    if (sOff || ring == NULL)
+        return -1;
+    for (int i = 0; i < 8; ++i)
+        if (sRing[i] == ring)
+            return sTile[i];
+    memset(counts, 0, sizeof(counts));
+    for (int y = ring->originY; y < ring->originY + ring->height; ++y)
+        for (int x = ring->originX; x < ring->originX + ring->width; ++x)
+        {
+            const int16_t *g = VoxelRelief_Cell(ring, x, y);
+            int m;
+
+            if (g == NULL || VoxelRelief_IsSlope(g) || g[0] < 16)
+                continue;
+            m = VoxelWorld_GetMetatileId(x, y);
+            if (m >= 0 && m < 1024 && m != VoxelRelief_FaceTile(ring))
+                counts[m]++;
+        }
+    for (int m = 0; m < 1024; ++m)
+        if (counts[m] > bestN)
+            bestN = counts[m], best = m;
+    sRing[sNext] = ring;
+    sTile[sNext] = best;
+    sNext = (sNext + 1) % 8;
+    return best;
+}
+
 static int sBeltSlopes = -1;
 
 static bool BeltLand(int x, int y, float *top, float *shift)
@@ -3446,6 +3489,12 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 slopedTop = sloped;
                 if (sloped)
                 {
+                    int topTile = BeltTopTile(VoxelWorld_BeltRing(x, y));
+
+                    float tu0, tv0, tu1, tv1;
+
+                    if (topTile >= 0 && MetatileUV(builder, topTile, &tu0, &tv0, &tu1, &tv1))
+                        u0 = tu0, v0 = tv0, u1 = tu1, v1 = tv1;
                     /* a steep slope is cut a level a piece, each with the whole drawing (one drawing pulled
                      * over a tall slope was streaks, as EmitBorderNorth's wall) */
                     float lo = fminf(fminf(ct[0], ct[1]), fminf(ct[2], ct[3]));
