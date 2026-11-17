@@ -3499,6 +3499,177 @@ static void BeltTreeSeam(VoxelBuilder *b, int x, int y, float level, float shift
     }
 }
 
+/*
+ * POL-40 (Brennan 2026-11-16 17:59: "try mirroring the mountains to get both sides of it the same"): a land cell
+ * of the belt is drawn as its map's cell mirrored across the map's edge - that cell's own relief (5 x 5 points,
+ * flipped across the edge) and its own drawing - instead of a flat block. Mirrored cells meet each other as the
+ * map's cells do, and the first row meets the map's edge exactly; a cliff between two of them gets a wall of
+ * the map's mountain face (BeltMirrorWalls). Mirroring the heights alone left each cell a flat block, and a
+ * mountain's slope came out as a row of pillars. WJPC_BELT_NO_MIRROR=1: the old belt.
+ */
+static bool BeltMirrorGrid(int x, int y, int16_t g[VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE],
+                           int16_t s[VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE], int *metatile)
+{
+    static int sOff = -1;
+    const VoxelMapInstance *ring;
+    const int16_t *mg, *ms;
+    int rx, ry, n = VOXEL_RELIEF_SIDE;
+    bool flipX, flipY;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_BELT_NO_MIRROR") != NULL;
+    if (sOff || !BorderAt(x, y) || VoxelWorld_GetInstanceAt(x, y) != NULL || BeltIsTree(x, y))
+        return false;
+    ring = VoxelWorld_BeltRing(x, y);
+    if (ring == NULL || ring->indoor || VoxelRelief_Belt(ring) != 0)
+        return false;
+    BeltMirror(ring, x, y, &rx, &ry);
+    if (VoxelMesh_Classify(rx, ry) == VOXEL_SHAPE_WATER)
+        return false;
+    flipX = x < ring->originX || x >= ring->originX + ring->width;
+    flipY = y < ring->originY || y >= ring->originY + ring->height;
+    mg = VoxelRelief_Cell(ring, rx, ry);
+    ms = mg != NULL ? VoxelRelief_Depth(ring, rx, ry) : NULL;
+    for (int j = 0; j < n; ++j)
+        for (int i = 0; i < n; ++i)
+        {
+            int si = flipX ? n - 1 - i : i, sj = flipY ? n - 1 - j : j;
+
+            g[j * n + i] = mg != NULL ? mg[sj * n + si] : 0;
+            s[j * n + i] = ms != NULL ? ms[sj * n + si] : 0;
+        }
+    *metatile = VoxelWorld_GetMetatileId(rx, ry);
+    return true;
+}
+
+/* The heights along a belt cell's edge d (0 north, 1 south, 2 west, 3 east), in 1/16 tile over its base; FALSE
+ * when it is not a mirrored land cell. */
+static bool BeltMirrorEdge(int x, int y, int d, float h[VOXEL_RELIEF_SIDE], float z[VOXEL_RELIEF_SIDE])
+{
+    int16_t g[VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE], s[VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE];
+    int m;
+    const int n = VOXEL_RELIEF_SIDE, last = VOXEL_RELIEF_SIDE - 1;
+
+    if (!BeltMirrorGrid(x, y, g, s, &m))
+        return false;
+    for (int k = 0; k < n; ++k)
+    {
+        int i = d == 0 ? k : d == 1 ? last * n + k : k * n + (d == 2 ? 0 : last);
+        h[k] = g[i];
+        z[k] = s[i] / 16.0f;
+    }
+    return true;
+}
+
+static void BeltMirrorWalls(VoxelBuilder *b, int x, int y, float u0, float v0, float u1, float v1)
+{
+    /* south, east, west: the faces the camera sees; north: seen from the side */
+    static const int kDir[4][2] = { {0, 1}, {1, 0}, {-1, 0}, {0, -1} };
+    static const int kOurs[4] = { 1, 3, 2, 0 };
+    const int n = VOXEL_RELIEF_SIDE;
+    const float last = (float)(VOXEL_RELIEF_SIDE - 1);
+
+    for (int d = 0; d < 4; ++d)
+    {
+        int nx = x + kDir[d][0], ny = y + kDir[d][1];
+        float ourH[VOXEL_RELIEF_SIDE], ourZ[VOXEL_RELIEF_SIDE], thH[VOXEL_RELIEF_SIDE], thZ[VOXEL_RELIEF_SIDE];
+        float level, shift;
+
+        if (VoxelWorld_GetInstanceAt(nx, ny) != NULL || !BorderAt(nx, ny))
+            continue; /* the map: the edges meet (row 0 mirrored) */
+        BeltMirrorEdge(x, y, kOurs[d], ourH, ourZ);
+        if (!BeltMirrorEdge(nx, ny, kOurs[d] ^ 1, thH, thZ))
+        {
+            /* water, a wood or a plain belt cell beside it: its flat level */
+            if (BorderWaterLevel(nx, ny, &level, &shift))
+                ;
+            else if (VoxelMesh_BorderLevel(nx, ny, &level, &shift))
+                level += BeltIsTree(nx, ny) ? 0.0f : (float)VOXEL_BORDER_COURSES;
+            else
+                continue;
+            level += BeltBase(nx, ny) - BeltBase(x, y);
+            shift += BeltBase(nx, ny) - BeltBase(x, y);
+            for (int k = 0; k < n; ++k)
+            {
+                thH[k] = level * 16.0f;
+                thZ[k] = shift;
+            }
+        }
+        for (int k = 0; k + 1 < n; ++k)
+        {
+            float ta = ourH[k] / 16.0f, tb = ourH[k + 1] / 16.0f, ba = thH[k] / 16.0f, bb = thH[k + 1] / 16.0f;
+            float xa, xb, za, zb, zc, zd, ka = k / last, kb = (k + 1) / last;
+            uint8_t shade = d == 0 ? SHADE_SOUTH : d == 1 ? SHADE_EAST : d == 2 ? SHADE_WEST : SHADE_NORTH;
+
+            if (ta - ba <= 0.01f && tb - bb <= 0.01f)
+                continue;
+            if (d == 0 || d == 3)
+            {
+                float e = d == 0 ? 1.0f : 0.0f;
+                xa = x + ka; xb = x + kb;
+                za = y + e + ourZ[k]; zb = y + e + ourZ[k + 1];
+                zc = y + e + thZ[k]; zd = y + e + thZ[k + 1];
+            }
+            else
+            {
+                float e = d == 1 ? 1.0f : 0.0f;
+                xa = xb = x + e;
+                za = y + ka + ourZ[k]; zb = y + kb + ourZ[k + 1];
+                zc = y + ka + thZ[k]; zd = y + kb + thZ[k + 1];
+            }
+            /* a tile a level, as the map's walls */
+            for (float band = floorf(fminf(ba, bb)); band < fmaxf(ta, tb) - 0.01f; band += 1.0f)
+            {
+                float a0 = fmaxf(ba, fminf(band, ta)), a1 = fmaxf(ba, fminf(band + 1.0f, ta));
+                float b0 = fmaxf(bb, fminf(band, tb)), b1 = fmaxf(bb, fminf(band + 1.0f, tb));
+                float fa0 = ta > ba ? (a0 - ba) / (ta - ba) : 0.0f, fa1 = ta > ba ? (a1 - ba) / (ta - ba) : 0.0f;
+                float fb0 = tb > bb ? (b0 - bb) / (tb - bb) : 0.0f, fb1 = tb > bb ? (b1 - bb) / (tb - bb) : 0.0f;
+
+                if (a1 <= a0 && b1 <= b0)
+                    continue;
+                VoxelBuilder_Quad(b,
+                    &(VoxelVertex){xa, a1, zc + (za - zc) * fa1, u0, v1 + (v0 - v1) * (a1 - band), shade},
+                    &(VoxelVertex){xb, b1, zd + (zb - zd) * fb1, u1, v1 + (v0 - v1) * (b1 - band), shade},
+                    &(VoxelVertex){xb, b0, zd + (zb - zd) * fb0, u1, v1 + (v0 - v1) * (b0 - band), shade},
+                    &(VoxelVertex){xa, a0, zc + (za - zc) * fa0, u0, v1 + (v0 - v1) * (a0 - band), shade});
+            }
+        }
+    }
+}
+
+static bool EmitBeltMirror(VoxelBuilder *b, int x, int y)
+{
+    int16_t g[VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE], s[VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE];
+    int m, face;
+    const int n = VOXEL_RELIEF_SIDE, last = VOXEL_RELIEF_SIDE - 1;
+    float u0, v0, u1, v1;
+    const VoxelMapInstance *ring;
+
+    if (!BeltMirrorGrid(x, y, g, s, &m) || !MetatileUV(b, m, &u0, &v0, &u1, &v1))
+        return false;
+    for (int j = 0; j < last; ++j)
+        for (int i = 0; i < last; ++i)
+        {
+            VoxelVertex q[4];
+            static const int di[4] = { 0, 1, 1, 0 }, dj[4] = { 0, 0, 1, 1 };
+
+            for (int k = 0; k < 4; ++k)
+            {
+                int a = i + di[k], c = j + dj[k], at = c * n + a;
+
+                q[k] = (VoxelVertex){ x + a / (float)last, g[at] / 16.0f, y + c / (float)last + s[at] / 16.0f,
+                                      u0 + (u1 - u0) * a / last, v0 + (v1 - v0) * c / last, SHADE_TOP };
+            }
+            VoxelBuilder_Quad(b, &q[0], &q[1], &q[2], &q[3]);
+        }
+    ring = VoxelWorld_BeltRing(x, y);
+    face = VoxelRelief_FaceTile(ring);
+    if (!(face >= 0 && face < VOXEL_RELIEF_NO_FACE && MetatileUV(b, face, &u0, &v0, &u1, &v1)))
+        MetatileUV(b, m, &u0, &v0, &u1, &v1);
+    BeltMirrorWalls(b, x, y, u0, v0, u1, v1);
+    return true;
+}
+
 void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     float u0, v0, u1, v1;
@@ -3544,6 +3715,8 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 }
                 continue;
             }
+            if (!drawn && EmitBeltMirror(builder, x, y))
+                continue;
             {
                 float edge, edgeShift;
 
