@@ -109,7 +109,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
         - How: specs `tools/voxel3ds/trainer_hill_spec.py`, splice/patch tools + notes `tools/voxel3ds/README.md`.
           Pictures: `docs/polish_reports/POL-5_trainer_hill_door_before_after.png`,
           `POL-5_trainer_hill_room_before_after.png`.
-- [ ] **POL-6. Boxes too big outside widescreen.** "When not in widescreen mode, the text box and main menu box
+- [x] **POL-6. Boxes too big outside widescreen.** "When not in widescreen mode, the text box and main menu box
       is too big for the screen and gets cut off."
       - Not reproduced yet (Claude 019khs4X, 2026-11-14). Linux build, Brennan's settings from his cfg but
         `widescreen=0` (zoom=5, resolution=3 / 1440p, lockAspect=1, integerScale=1, border=1), 960x640 test window:
@@ -145,7 +145,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
         "plant_0..2") and the purple one was left painted on the wall. Now one 3D box like the arcade cabinets
         (tools/voxel3ds/game_corner_spec.py, layout 91 respliced). Picture: docs/polish_reports/POL-9_prize_machines_3d.png.
         Still open: "walk through the left and right columns" (not yet clear which columns) and the lag.
-- [ ] **POL-10. Walking through the top of doors.** "When walking in entrances you walk through the top of the
+- [x] **POL-10. Walking through the top of doors.** "When walking in entrances you walk through the top of the
       door this should be fluid and not be cutting off the top when walking through the door."
 - [x] **POL-12. Water is still.** "Water is not moving in 3D mode it is still." Done 2026-11-14 (Claude 019khs4X);
       picture for Brennan: `docs/polish_reports/POL-12_water_moves.png` (Route 103, two frames 16 apart).
@@ -167,7 +167,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
         built with this session's 3D files put back (only a randomly walking person differs): the fix changes
         nothing in 2D. Picture: `docs/polish_reports/2D_check_POL-12_16_23_27.png`.
 - [ ] **POL-13. Background mountains are blocks.** "Mountains in background are blocks and not like mountains."
-- [ ] **POL-15. Route 110 into Mauville.** "Walking into mauville city from route 110 everything below disappears
+- [x] **POL-15. Route 110 into Mauville.** "Walking into mauville city from route 110 everything below disappears
       and reappears."
       - **Brennan 2026-11-15 15:52, PRIORITY:** "going from route 110 to mauville city the whole bottom of the
         screen goes blue and then the whole game starts becoming laggy and not smooth. Make this a priority fix
@@ -215,10 +215,10 @@ Add under each item: what was found, what was changed, files, how to test, what 
         built with this session's 3D files put back (only a randomly walking person differs): the fix changes
         nothing in 2D. Picture: `docs/polish_reports/2D_check_POL-12_16_23_27.png`.
 - [ ] **POL-17. Seed mounds.** "Seed mounds look like shrubs and are above the dirt."
-- [ ] **POL-18. Pokémon are flat.** "Pokemon in 3D are still 2D."
-- [ ] **POL-19. Falling leaves.** "Leaves appear only in certain areas and randomly disappear or speed up."
-- [ ] **POL-20. Boats are flat.** "Boats in the water are 2D not 3D."
-- [ ] **POL-21. Route 110 to 103 backdrop.** "Going from route 110 to 103 the background is not fluid and changes
+- [x] **POL-18. Pokémon are flat.** "Pokemon in 3D are still 2D."
+- [x] **POL-19. Falling leaves.** "Leaves appear only in certain areas and randomly disappear or speed up."
+- [x] **POL-20. Boats are flat.** "Boats in the water are 2D not 3D."
+- [x] **POL-21. Route 110 to 103 backdrop.** "Going from route 110 to 103 the background is not fluid and changes
       from water to trees and skips into frame."
 - [ ] **POL-22. Breakable rocks.** "Rocks that are breakable disappear and reappear and also 2D not 3D."
 - [x] **POL-23. No sandstorm.** "There's no sandstorm in the desert."
@@ -522,7 +522,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
         Short version: our relief data is byte-for-byte theirs on every unchanged map; their own status list has
         the same faults on Route 118/119/111 and the Game Corner; the lines on the sand and the Pokemon Center
         are not in their engine's scene - they are our renderer's texture-edge sampling at high resolution.
-- [ ] **POL-38. Sandstorm north of Mauville (Route 111).** "sandstorm north of mauville looks weird not like a
+- [x] **POL-38. Sandstorm north of Mauville (Route 111).** "sandstorm north of mauville looks weird not like a
       sandstorm. Rocks within the sandstorm, the top right of the rocks so a blue box"
       - 2026-11-16 (014PwRDj): two causes. (1) With Gamma lighting the weather colours went into the linear
         scene as they were and the exposure pushed them to white: the sand's streaks read as rain. Now converted
@@ -530,7 +530,7 @@ Add under each item: what was found, what was changed, files, how to test, what 
         dust (ctr_voxel.c DrawBanks with sSandBanks: two drifting noise sheets near the ground) now too
         (voxel_gl.c DrawSandBanks, values as the 3DS's; WJPC_NO_SAND_DUST=1 off). Picture:
         docs/polish_reports/POL-38_sandstorm.png. The "blue box" at the rocks not found in the test shots yet.
-- [ ] **POL-39 (PRIORITY). White flowers.** "The white flowers around the region have been turned into 3D, but
+- [x] **POL-39 (PRIORITY). White flowers.** "The white flowers around the region have been turned into 3D, but
       now they have black lines and rough textures." (the POL-7 flower cards)
       - 2026-11-16 (014PwRDj): his crop shows a dark tick at both ends of every card: the card's u ran right to
         its edge, so a screen pixel there read the next card's column in trees.rgba5551 (dark outline). Fixed:
@@ -681,3 +681,37 @@ POL-13 background mountains are blocks, POL-21 Route 110->103 backdrop, POL-24 +
 backdrop, POL-28 Petalburg Woods lines, POL-30 backdrop changes between routes, POL-40 Route 118 pillars + Lavaridge
 mountains, POL-41 leftovers (black box west of the Weather Institute, rock blocks between trees),
 POL-44 Lavaridge cable-car stairs straight. (POL-45 = Route 118, folded into POL-40.)
+
+## Brennan 2026-11-16 19:12 - his checks on test build 16j-test, every open POL (his words)
+Closed by Brennan (ticked above): POL-6 ("close this one out"), POL-10 ("close this one out"), POL-15 ("the lag is no
+longer there"), POL-18 ("close this one out"), POL-19 ("you can close this one out"), POL-20 ("boats have been fixed"),
+POL-21 ("close this one out"), POL-38 ("the blue boxes are no longer there, and the sandstorm looks good"), POL-39 ("the
+white flowers look good"), the 16f sandstorm crash and lag ("crash and lag from the sandstorm has been fixed").
+
+Still open:
+- **POL-4:** "people no longer disappear, only things are the kids in fortree city with the fake tree in front of them
+  when walking away the fake tree disappears."
+- **POL-8:** "the lines still appear as you are walking when at 4K."
+- **POL-9:** "you can still walk through the columns at the front of the game corner, it is not so laggy anymore, the
+  prize machines look scrunched down they need to be raised at the top to make it look full, the vending machines also
+  do this same thing. imagine them as tall rectangles instead of squares"
+- **POL-17:** "the picture provided shows the seeds sitting back behind off of the dirt, the seeds should be remaining in
+  the middle of the dirt as if they were planted." Picture: `docs/polish_reports/BREN_1912_POL-17_berry_plants_behind_dirt.png`.
+- **POL-22:** "mauville to route 111, the breakable rocks at the passageway to go north is still a 2D object it needs to
+  be 3D". Picture: `docs/polish_reports/BREN_1912_POL-22_route111_rock_still_2D.png`.
+- **POL-2/3:** "this still continues around the region, the bases around trees or some edge lines still show either
+  black or blue. try using a green safety screen behind it so the colors match and dont show backgrounds"
+- **POL-13:** "this is a continuing issue, all mountains we have added in are not 3D but more so 2D blocks. try
+  researching into how the other mountains were created so that the mirrored mountains are meshing well with one
+  another and make sense along side one another."
+- **POL-24 & POL-43:** "this continues as a problem". **POL-30:** "this continues happening going from route 112 and
+  lavaridge".
+- **POL-28:** "the black lines appear at the base of the trees inside of the woods."
+- **POL-40:** "try taking information from what i said in POL-13 to fix this issue." **POL-45** (= north of Route 118):
+  "these mountains are located north of route 118, use what i have stated in POL-13 to fix this issue."
+- **POL-41:** "this is still an issue". **POL-44:** "the stairs go straight up instead of stagger" (picture
+  `BREN_1841_5_lavaridge_stairs_straight_up.png`).
+- POL-37: Brennan asked what is left on it (answered in chat: the study is done; what is left are the plan items it
+  produced, which are now POL-13/40/2/3/28).
+Brennan: "lets focus on the easier POLs first, if any questions ask me." Order taken (014PwRDj): POL-17, POL-22, POL-9,
+POL-4 (Fortree), POL-2/3 green safety screen, POL-28, POL-8; then the mountains (POL-13/40/45/41/24/43/30/44).
