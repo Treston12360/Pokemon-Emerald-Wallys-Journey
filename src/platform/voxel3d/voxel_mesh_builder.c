@@ -2699,6 +2699,8 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
     sBorderFollowsEdge = on;
 }
 
+static bool BeltIsTree(int x, int y);
+
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 {
     const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y); /* POL-30: was instance 0 (see BorderWaterLevel) */
@@ -2730,6 +2732,37 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
     *level = VoxelRelief_CellLift(ring, ex, ey);
     *shift = VoxelRelief_CellShift(ring, ex, ey);
     /*
+     * POL-41 follow-up (Brennan 2026-11-16 17:56, west of the Weather Institute: dark bands between rows of the
+     * wood): a wood of the belt took exactly its nearest edge cell's level, and where the edge climbs a cliff a
+     * row of crowns stood a whole level over the next with the void under it. It takes the mean of its map's edge
+     * cells along the edge over +-BELT_TREE_SPAN cells (the nearer the heavier; water left out): the wood rises
+     * with the edge a little a row, and its crowns hide the rise.
+     */
+    if (BeltIsTree(x, y) && getenv("WJPC_BELT_TREE_STEPS") == NULL)
+    {
+        enum { BELT_TREE_SPAN = 4 };
+        bool alongY = x < ring->originX || x >= ring->originX + ring->width;
+        float sumW = 0.0f, sumH = 0.0f, sumS = 0.0f;
+
+        for (int k = -BELT_TREE_SPAN; k <= BELT_TREE_SPAN; ++k)
+        {
+            int cx = alongY ? ex : ex + k, cy = alongY ? ey + k : ey;
+            float w = (float)(BELT_TREE_SPAN + 1 - abs(k));
+
+            if (cx < ring->originX || cy < ring->originY || cx >= ring->originX + ring->width
+             || cy >= ring->originY + ring->height || VoxelMesh_Classify(cx, cy) == VOXEL_SHAPE_WATER)
+                continue;
+            sumW += w;
+            sumH += w * VoxelRelief_CellLift(ring, cx, cy);
+            sumS += w * VoxelRelief_CellShift(ring, cx, cy);
+        }
+        if (sumW > 0.0f)
+        {
+            *level = sumH / sumW;
+            *shift = sumS / sumW;
+        }
+    }
+    /*
      * POL-30: between two maps whose edges stand at different heights (Lavaridge's north cliff and Route 112's
      * west slope) the belt took the nearer one's and stood a tall wall where the two halves met. Every loaded
      * map's nearest edge now pulls on the cell, the nearer the stronger (1 / distance cubed): beside a map the
@@ -2742,7 +2775,17 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 
         if (sBlend < 0)
             sBlend = getenv("WJPC_BELT_NO_BLEND") == NULL && !VoxelWorld_BeltOld();
-        for (unsigned i = 0; sBlend && i < VoxelWorld_InstanceCount(); ++i)
+        /* POL-41 (Brennan 2026-11-16, Route 119: "The trees in the back ground look to be higher than the
+         * others ... All trees should align together to show a full forest"): a wood of the belt stood each
+         * column at the blend of every map's edge (Route 118's mountains pulled the wood west of Route 119 up
+         * column by column), and the steps between columns read as walls of trees. A tree cell keeps its own
+         * map's edge level, unblended: the wood lies as the map's edge beside it does. WJPC_BELT_TREE_BLEND=1:
+         * blended as before. */
+        static int sTreeBlend = -1;
+        if (sTreeBlend < 0)
+            sTreeBlend = getenv("WJPC_BELT_TREE_BLEND") != NULL;
+        bool blendHere = sBlend && (sTreeBlend || !BeltIsTree(x, y));
+        for (unsigned i = 0; blendHere && i < VoxelWorld_InstanceCount(); ++i)
         {
             const VoxelMapInstance *m = VoxelWorld_Instance(i);
             int mx, my, dx, dy, d;
@@ -3159,6 +3202,65 @@ static void BeltSlopeSteps(VoxelBuilder *builder, int x, int y, float level, flo
     }
 }
 
+/*
+ * POL-41 follow-up (Brennan 2026-11-16 17:53, Route 119, picture: "where the mountain edge and trees start there's
+ * a black line with blue showing ... this needs to be meshed together"): a wood of the belt beside a map stands at
+ * that map's edge level, but the map's edge cell is drawn at its own heights along the edge (a cliff, a slope),
+ * and nothing filled the gap between the two: the sky showed through under the first column of crowns. The wood's
+ * ground (laid beside a map too, BeltLand's caller) is joined to the map's edge point by point (SeamEdge) by a
+ * skirt of the cell's own drawing, as ModelFlatSkirts joins a flat model cell.
+ */
+static void BeltTreeSeam(VoxelBuilder *b, int x, int y, float level, float shift,
+                         float u0, float v0, float u1, float v1)
+{
+    static const int kDir[4][2] = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+    const unsigned n = VOXEL_RELIEF_SIDE;
+    const float last = (float)(VOXEL_RELIEF_SIDE - 1);
+    const float here = BeltBase(x, y);
+
+    for (int d = 0; d < 4; ++d)
+    {
+        int nx = x + kDir[d][0], ny = y + kDir[d][1];
+        const VoxelMapInstance *m = VoxelWorld_GetInstanceAt(nx, ny);
+        float theirH[VOXEL_RELIEF_SIDE], theirZ[VOXEL_RELIEF_SIDE], rebase;
+
+        if (m == NULL || m->indoor || VoxelRelief_Cell(m, nx, ny) == NULL)
+            continue;
+        /* the map cell's edge facing this cell: north 0, south 1, west 2, east 3 */
+        SeamEdge(m, nx, ny, d ^ 1, theirH, theirZ, NULL);
+        rebase = VoxelRelief_Base(m) - here;
+        for (unsigned k = 0; k + 1 < n; ++k)
+        {
+            float ka = k / last, kb = (k + 1) / last;
+            float ha = theirH[k] / 16.0f + rebase, hb = theirH[k + 1] / 16.0f + rebase;
+            float xa, xb, za, zb, zA, zB;
+
+            if (fabsf(ha - level) < 0.01f && fabsf(hb - level) < 0.01f
+             && fabsf(theirZ[k] + rebase - shift) < 0.01f && fabsf(theirZ[k + 1] + rebase - shift) < 0.01f)
+                continue;
+            if (d < 2)
+            {
+                float e = d == 0 ? 0.0f : 1.0f;
+                xa = x + ka; xb = x + kb;
+                za = zb = y + e + shift;
+                zA = y + e + theirZ[k] + rebase; zB = y + e + theirZ[k + 1] + rebase;
+            }
+            else
+            {
+                float e = d == 2 ? 0.0f : 1.0f;
+                xa = xb = x + e;
+                za = y + ka + shift; zb = y + kb + shift;
+                zA = y + ka + theirZ[k] + rebase; zB = y + kb + theirZ[k + 1] + rebase;
+            }
+            VoxelBuilder_Quad(b,
+                &(VoxelVertex){xa, level, za, u0, v0, SHADE_TOP},
+                &(VoxelVertex){xb, level, zb, u1, v0, SHADE_TOP},
+                &(VoxelVertex){xb, hb, zB, u1, v1, SHADE_TOP},
+                &(VoxelVertex){xa, ha, zA, u0, v1, SHADE_TOP});
+        }
+    }
+}
+
 void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     float u0, v0, u1, v1;
@@ -3223,9 +3325,17 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             {
                 /* POL-30: at the edge of the trees (a cell of another map's belt beside it) the sky showed under
                  * the leaning crowns: the cell's own drawing laid as ground there. */
-                if (!drawn && (!BeltIsTree(x - 1, y) || !BeltIsTree(x + 1, y) || !BeltIsTree(x, y - 1) || !BeltIsTree(x, y + 1))
+                bool besideMap = VoxelWorld_GetInstanceAt(x - 1, y) || VoxelWorld_GetInstanceAt(x + 1, y)
+                              || VoxelWorld_GetInstanceAt(x, y - 1) || VoxelWorld_GetInstanceAt(x, y + 1);
+
+                if (!drawn && (besideMap || !BeltIsTree(x - 1, y) || !BeltIsTree(x + 1, y) || !BeltIsTree(x, y - 1)
+                               || !BeltIsTree(x, y + 1))
                  && MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+                {
                     VoxelMesh_Top(builder, wx, wz, lift, 0.0f, u0, v0, u1, v1, SHADE_TOP);
+                    if (besideMap)
+                        BeltTreeSeam(builder, x, y, lift, wz - (float)y, u0, v0, u1, v1);
+                }
                 continue; /* flat trunks and tilted crowns are appended later */
             }
             /* a standing cell beside a flat one of water shows its face too */

@@ -549,6 +549,11 @@ Add under each item: what was found, what was changed, files, how to test, what 
 - [ ] **POL-41. Route 119 trees.** "look within the red boxes in the picture provided. The trees in the back ground
       look to be higher than the others showing a block look to them. All trees should align together to show a
       full forest." (picture not received yet - asked 08:50)
+      - 2026-11-16 (014PwRDj): the walls are in the wood past Route 119's west edge (the belt, Route 119's border
+        trees). POL-30's belt took each cell's level from every map's edge, blended - Route 118's mountains to the
+        south pulled the wood up column by column, and each step showed as a wall of tree crowns. Belt tree cells
+        now keep their own map's edge level, unblended (voxel_mesh_builder.c BorderLevelRaw; WJPC_BELT_TREE_BLEND=1
+        old way). Picture: docs/polish_reports/POL-41_route119_tree_walls.png (the walls Brennan boxed, then even).
 - POL-8 (2026-11-16 08:34): Brennan's photo of the lines (Pokemon Center 1F, build 16b, before the atlas fix):
   thin dark lines along the floor in front of the counter and the mat, and dashed lines on the side walls and
   around the stools. Those are the room's own models (page textures, not the atlas), so the 16c atlas inset
@@ -606,3 +611,39 @@ Asked 2026-11-14, answered the same day:
   fast-forward did; WJPC_DRAW_EVERY_FRAME=1 old way). Measured here with his save in Mauville at frameRate=240 (software
   GL, so slow overall): old ~3000 ms trips (3D 2900 ms = ~6 world draws each), new ~250-500 ms (one draw). Stall log now
   says "N drawn" per worst trip. His save: /home/claude/keep/brennan_2026-11-16_1534.sav.
+
+## Brennan 2026-11-16 ~19:00, after test builds 16i-test / 16j-test (his words) - HARD, PARKED FOR LATER
+Brennan: "take all this info and update the github on these POLs, after updating lets try and complete the easier
+tasks and we can leave these harder ones for later. if any questions ask me first."
+- **POL-41 (Route 119 belt wood):** 17:56 - trees look good, but "where the mountain edge and trees start theres a black
+  line with blue showing ... needs to be meshed together"; west of the Weather Institute "the trees have rock squares
+  showing and blue showing through the ground". ~19:00 (16j-test): "Route 119 there is now more mountain blocks in
+  between each tree cell, this needs to be only trees."
+  - State: `polish` has the unblended belt wood (570268b8), BeltTreeSeam + edge mean +-4 (2eec5a4e). The 16j-test also
+    carried the POL-40 WIP (branch `polish-belt-wip`: mirrored belt heights, BeltTopTile mountain tops, face-tile walls) -
+    likely the source of the "mountain blocks between trees" (land belt cells next to wood drawn as rock). Not confirmed.
+- **POL-40 (background mountains):** Route 118: "the rock still shows pillars on the most recent build, just make a
+  mountain round itself out instead of pillars." Earlier: "make it like the mountains that appear in front of them and to
+  the left ... staggered as it is getting higher". Lavaridge: "it is way incorrect make mountains where it makes sense to
+  flow with the background"; earlier: "mirror whats on its west side and make it horizontal like the rest of it until it
+  meets the trees and have it slope up from there".
+  - Tried on `polish-belt-wip` (none shipped in a release build): flat blocks per cell at blended heights (pillars);
+    corner-sloped tops (16f, "still pillars"); terraces: envelope + whole levels + rock rise (16i-test, pillars); mirrored
+    heights (16j-test, pillars - each cell still a flat block); mirrored relief grid + face walls (picture
+    POL-40_mirror_try.png: terraces' backs face the camera, light gaps at the water). Lavaridge's belt is a *drawn* belt
+    (VoxelRelief_Belt != 0, relief_fixes) - none of the belt-land changes reach it.
+  - Idea not tried: model the belt's mountains as their own relief (gen_voxel_relief / voxel_terraces over a padded map)
+    rather than in the renderer.
+- **NEW: Route 112 -> Lavaridge:** "when going from route 112 to lavaridge the backgrounds disappear in the red boxed
+  areas" (pictures not received in this message).
+- **NEW: Lavaridge cable-car stairs:** "the stairs leading up to the lifts east of lavaridge go straight up instead of
+  staggering like real stairs."
+- **Brennan's pictures for the above, 18:41** (`docs/polish_reports/BREN_1841_*`):
+  1. Route 119, west of the Weather Institute: a dark/black box where belt trees should be (red box).
+  2. A town by the sea (pink-roof houses, beach east): the mountain north of the town over the water is a block of
+     stepped rock with vertical seams (red box). Which town not confirmed yet - asked Brennan.
+  3. Lavaridge: the background top-left (behind the Mart) has sky-blue holes and floating slabs; the bottom-right edge
+     has a sky-blue strip.
+  4. Same view on arriving from Route 112 (sign "ROUTE 112"): same holes top-left, and the bottom-left edge shows flat
+     grass instead of the mountain.
+  5. The "stairs" east of Lavaridge: the grass ledges run as long straight strips up the slope, not staggered steps.
