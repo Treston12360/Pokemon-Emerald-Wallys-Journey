@@ -812,3 +812,12 @@ POL-2/3 asked: "One each" (POL-2 out of bounds, POL-3 3D generation).
   buildings.bin checked); its walls only look raised because the art draws them. Reverted. Now modelling it in
   3ds_port/scripts/voxel_building_specs.py new_mauville_inside() (Mossdeep gym's way: wall runs 24 px, props as
   boxes); barriers/switches next. Brennan (asked about walls): "Too short" + "They just look flat like 2D".
+- POL-31, Brennan 2026-11-17 16:00 (picture `BREN_1600_POL-31_new_mauville_walls.png`): "Red Box 1 - the wall is short
+  and cut off from top to bottom, make this a full wall going from top to bottom / Red Box 2 - The cabinet is cut of
+  at the top of it along with the wall behind being short, make the cabinet 3D model and raise the back wall to align
+  with the rest across the top / Red Box 3 - ... the wall is short in this section among other sections check this
+  along with others and raise them to be even across the top. / Red Box 4 - ... other walls also dont align at the
+  top and are short or cut off." Cause: rect_pieces stood a run a single cell tall 12 px (and a prop against a wall
+  took the wall's face row, leaving a 1-cell run). Fix in new_mauville_inside(): props against a wall leave that row
+  to the wall (the prop stands in front, against=); every wall run whole=True (24 px). Switches: Brennan "Try to keep
+  them raised and brighten them. If you can't ... leave them flat on the floor and as bright as the original art."
