@@ -2764,6 +2764,39 @@ static void BeltMountain(const VoxelMapInstance *ring, int x, int y, int ex, int
         float top = h > floorLevel ? h : floorLevel;
 
         *level = floorLevel + (top - floorLevel) * f;
+        /* and down to the water's edge (Route 118's sea east of the mountain: the slope stood its full height
+         * over the sea, a stair of tall dark walls along the shore): within BELT_SHORE cells of water - the map's
+         * or the belt's - it comes down to the map's zero, the water's level, the nearer the lower */
+        {
+            enum { BELT_SHORE = 4 };
+            int wd = BELT_SHORE + 1;
+            float wl, ws;
+
+            for (int r = 1; r <= BELT_SHORE && wd > BELT_SHORE; ++r)
+                for (int j = -r; j <= r && wd > BELT_SHORE; ++j)
+                    for (int i = -r; i <= r; ++i)
+                    {
+                        int qx = x + i, qy = y + j;
+
+                        if (abs(i) != r && abs(j) != r)
+                            continue;
+                        if (VoxelWorld_GetInstanceAt(qx, qy) != NULL
+                            ? VoxelMesh_Classify(qx, qy) == VOXEL_SHAPE_WATER
+                            : BorderWaterLevel(qx, qy, &wl, &ws))
+                        {
+                            wd = r;
+                            break;
+                        }
+                    }
+            if (wd <= BELT_SHORE && *level > 0.0f)
+            {
+                float g = (float)(wd - 1) / (float)(BELT_SHORE - 1);
+
+                g = sinf(g * 1.5707963f);
+                *level *= g;
+                top = top > 0.01f ? top : 0.01f;
+            }
+        }
         *shift = sh * (*level - floorLevel) / (top - floorLevel > 0.01f ? top - floorLevel : 1.0f);
     }
 }
