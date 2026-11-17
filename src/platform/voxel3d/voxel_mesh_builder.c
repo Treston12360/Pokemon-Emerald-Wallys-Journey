@@ -3296,11 +3296,18 @@ static bool BeltCorner(int cx, int cy, float base, float *top, float *shift)
     float sumT = 0.0f, sumS = 0.0f, t, s;
     int n = 0;
 
+    int land = 0;
+
     for (int dy = -1; dy <= 0; ++dy)
         for (int dx = -1; dx <= 0; ++dx)
             if (BeltLand(cx + dx, cy + dy, &t, &s))
-                sumT += t, sumS += s, ++n;
-    if (n == 0)
+                sumT += t, sumS += s, ++n, ++land;
+            /* POL-40: water of the belt round the corner pulls it down to its surface, so a slope meets the sea
+             * at the water instead of a wall a level tall all along the shore (WJPC_BELT_COLUMNS=1: not) */
+            else if (BorderAt(cx + dx, cy + dy) && getenv("WJPC_BELT_COLUMNS") == NULL
+                  && BorderWaterLevel(cx + dx, cy + dy, &t, &s))
+                sumT += t + BeltBase(cx + dx, cy + dy), sumS += s + BeltBase(cx + dx, cy + dy), ++n;
+    if (land == 0)
         return false;
     *top = sumT / n - base;
     *shift = sumS / n - base;
