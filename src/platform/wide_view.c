@@ -734,6 +734,49 @@ int WideView_GhostPalette(u16 tag)
     return GhostPaletteSlot(tag);
 }
 
+/*
+ * POL-4 (Brennan 2026-11-16: "the kids in fortree city with the fake tree in front of them when walking away the
+ * fake tree disappears" - Route 119's ninja boys by Fortree, MOVEMENT_TYPE_TREE/MOUNTAIN_DISGUISE): a person on a
+ * neighbouring map is drawn from its template as a stand-in, but a hidden ninja is seen only as its disguise (a
+ * field effect over it, ShowDisguiseFieldEffect). So its stand-in is the disguise's first frame, not the boy.
+ * NULL for everyone else (use the person's own graphics info).
+ */
+extern const struct SpriteTemplate gFieldEffectObjectTemplate_TreeDisguise;
+extern const struct SpriteTemplate gFieldEffectObjectTemplate_MountainDisguise;
+extern const struct SpriteTemplate gFieldEffectObjectTemplate_SandDisguisePlaceholder;
+
+const struct ObjectEventGraphicsInfo *WideView_DisguiseInfo(const struct ObjectEventTemplate *t)
+{
+    static struct ObjectEventGraphicsInfo sInfo[3];
+    const struct SpriteTemplate *tmpl;
+    const struct ObjectEventGraphicsInfo *person;
+    int k;
+
+    switch (t->movementType)
+    {
+    case MOVEMENT_TYPE_TREE_DISGUISE:     k = 0; tmpl = &gFieldEffectObjectTemplate_TreeDisguise; break;
+    case MOVEMENT_TYPE_MOUNTAIN_DISGUISE: k = 1; tmpl = &gFieldEffectObjectTemplate_MountainDisguise; break;
+    case MOVEMENT_TYPE_BURIED:            k = 2; tmpl = &gFieldEffectObjectTemplate_SandDisguisePlaceholder; break;
+    default: return NULL;
+    }
+    if (tmpl->paletteTag == TAG_NONE)
+        return NULL; // the sand one is drawn with the person's palette - leave it as before
+    person = GetObjectEventGraphicsInfo(t->graphicsId);
+    if (person == NULL)
+        return NULL;
+    sInfo[k] = *person;
+    sInfo[k].paletteTag = tmpl->paletteTag;
+    sInfo[k].oam = tmpl->oam;
+    sInfo[k].images = tmpl->images;
+    sInfo[k].width = 16;
+    sInfo[k].height = 32;
+    sInfo[k].size = 16 * 32 / 2;
+    sInfo[k].inanimate = TRUE;
+    sInfo[k].compressed = FALSE;
+    sInfo[k].subspriteTables = NULL;
+    return &sInfo[k];
+}
+
 // The real object of that template is out already: a map just left keeps its people until out of range.
 static bool32 NeighbourPersonLoaded(u8 localId, u8 mapNum, u8 mapGroup)
 {
@@ -781,7 +824,9 @@ static void AddNeighbourPeople(void)
             if (NeighbourPersonLoaded(t->localId, nm->num, nm->group))
                 continue; // drawn as itself
             SetSpritePosToMapCoords(nm->x + t->x + MAP_OFFSET, nm->y + t->y + MAP_OFFSET, &sx, &sy);
-            info = GetObjectEventGraphicsInfo(t->graphicsId);
+            info = WideView_DisguiseInfo(t);
+            if (info == NULL)
+                info = GetObjectEventGraphicsInfo(t->graphicsId);
             if (info == NULL || info->images == NULL || info->oam == NULL || info->compressed)
                 continue;
             x = sx + 8 - info->width / 2 + gSpriteCoordOffsetX;

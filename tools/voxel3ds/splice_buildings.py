@@ -3,6 +3,7 @@
 
 usage: splice_buildings.py OURS.bin DONOR.bin OUT.bin LAYOUT_ID X Y
        splice_buildings.py --layout OURS.bin DONOR.bin OUT.bin LAYOUT_ID   (a whole room: all its pieces)
+       splice_buildings.py OURS.bin DONOR.bin OUT.bin LAYOUT_ID X Y --replace   (swap an existing placement)
 
 Wally's Journey (POL-36, 2026-11-15): the Weather Institute's model on Route 119 was made with
 3ds_port/scripts (spec "weather_institute_exterior"), but a whole buildings.bin made here does not
@@ -129,6 +130,19 @@ def main():
         n = write(ours, sys.argv[3]); print('round trip', n); return
     hit = [i for i, p in enumerate(donor['places']) if (u16(p, 0), u16(p, 4), u16(p, 6)) == (lid, px, py)]
     assert len(hit) == 1, 'donor placements at that spot: %d' % len(hit)
+    # --replace (POL-9 porch, 2026-11-16): OURS's placement at that spot is dropped first and the donor's put
+    # in its stead; its old page model is left unused (no placement points at it).
+    orphan = None
+    if '--replace' in sys.argv[7:]:
+        mine = [i for i, p in enumerate(ours['places']) if (u16(p, 0), u16(p, 4), u16(p, 6)) == (lid, px, py)]
+        assert len(mine) == 1, 'OURS placements at that spot: %d' % len(mine)
+        orphan = u16(ours['places'][mine[0]], 2)
+        assert not [c for c in ours['conds'] if u16(c, 0) == mine[0]], 'conditions on the replaced placement'
+        del ours['places'][mine[0]]
+        for c in ours['conds']:
+            if u16(c, 0) > mine[0]:
+                struct.pack_into('<H', c, 0, u16(c, 0) - 1)
+        assert all(u16(p, 2) != orphan for p in ours['places']), 'its page model is shared'
     for p in ours['places']:
         assert (u16(p, 0), u16(p, 4), u16(p, 6)) != (lid, px, py), 'OURS already has a placement there'
     dp = donor['places'][hit[0]]
@@ -166,7 +180,7 @@ def main():
         struct.pack_into('<hh', old, 4, *struct.unpack_from('<hh', d, 4))
         fixed.add(pmi)
     for k, pm in enumerate(ours['pms']):
-        assert u16(pm, 2) != new_page or k in fixed, 'a page model of that page with no placement there'
+        assert u16(pm, 2) != new_page or k in fixed or k == orphan, 'a page model of that page with no placement there'
     ours['pages'][new_page] = bytearray(donor['pages'][dpage])
     ours['texels'][new_page] = donor['texels'][dpage]
     page = ours['pages'][new_page]

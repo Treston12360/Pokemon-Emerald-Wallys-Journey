@@ -754,6 +754,139 @@ static void EmitBillboard(VoxelBuilder *builder, const VoxelSpriteSlot *slot, un
 }
 
 /*
+ * POL-17 (Brennan 2026-11-16 19:12: "the seeds sitting back behind off of the dirt, the seeds should be remaining in
+ * the middle of the dirt as if they were planted"): a card stands on its cell's centre with its feet (the standing
+ * pose's lowest row) there - right for people, half a tile north of where the GBA draws them. A berry plant's soil
+ * is drawn across its cell and the one south of it (Route 111: 14b-14d over 113-115), and the GBA puts the plant's
+ * frame's foot on the cell's south edge, the plant's base (rows 26-30 of 32) in the soil's middle. So a berry
+ * plant stands on its cell's south edge with its whole frame (no foot pad: its picture table is the berry's own,
+ * not its graphics info's, so the pad measured there was another picture's). WJPC_BERRY_CENTRE=1: as before.
+ */
+#define VOXEL_BERRY_STAND 0.999f   /* its cell's south edge, a hair inside it */
+
+static bool BerryPlant(u16 graphicsId)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_BERRY_CENTRE") != NULL;
+    return !sOff && (graphicsId == OBJ_EVENT_GFX_BERRY_TREE || graphicsId == OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES
+                     || graphicsId == OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES);
+}
+
+/*
+ * POL-22 (Brennan 2026-11-16 19:12: "mauville to route 111, the breakable rocks at the passageway to go north is
+ * still a 2D object it needs to be 3D"): a rock (Rock Smash's, Strength's boulder) is a mound, not a card. The
+ * mound is built so that, seen at 45 degrees, every texel lands where the card put it - Emerald 3DS's rule, "the
+ * drawing is the truth": a point (z, y) of the mound shows the card's row whose screen key z - y it shares.
+ * Column by column (a pixel wide), the rows from the column's lowest opaque pixel up to its highest are laid on a
+ * quarter round: up the front, over the top and back; the back drops at 45 degrees (seen edge on). The crown is
+ * under 0.63 of the column's rows, so the front never leans out (the round's slope stays under the drawing's).
+ * Shading by the faces' facing, a little darker to the sides. WJPC_FLAT_ROCKS=1: the old card.
+ */
+static bool MoundObject(u16 graphicsId)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_FLAT_ROCKS") != NULL;
+    if (sOff)
+        return false;
+    return graphicsId == OBJ_EVENT_GFX_BREAKABLE_ROCK || graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER
+        || graphicsId == OBJ_EVENT_GFX_BREAKABLE_ROCK_FRLG || graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER_FRLG;
+}
+
+#define VOXEL_MOUND_CROWN 0.5f   /* the crown's height, of the column's rows */
+
+static void EmitMound(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigned index,
+                      float cx, float cz, float rise, float rightX, float rightZ, float shade)
+{
+    unsigned baseX = (index % VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM;
+    unsigned baseY = (index / VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM;
+    const float p = 1.0f / VOXEL_PIXELS_PER_TILE;
+    int rows = VisibleRows(slot), w = slot->width;
+    float halfW = w * p * 0.5f;
+    float lift = VoxelRelief_LiftAt(cx, cz) + rise;
+    float front = cz + VoxelRelief_ShiftAt(cx, cz);
+    /* the sun's side: up and towards the camera */
+    const float ly = 0.8f, lz = 0.6f;
+
+    if (slot->atlasWidth != slot->width || slot->color256)
+        return;
+    /* a model's scale, not the cards' (narrowed for the camera's pitch): one pixel a pixel, as the rocks round it */
+    {
+        float len = sqrtf(rightX * rightX + rightZ * rightZ);
+
+        if (len > 0.0f)
+        {
+            rightX /= len;
+            rightZ /= len;
+        }
+    }
+    for (int x = 0; x < w; ++x)
+    {
+        unsigned sx = (unsigned)(slot->flipX ? w - 1 - x : x);
+        int top = -1, bot = -1;
+
+        for (int y = 0; y < rows; ++y)
+        {
+            unsigned sy = (unsigned)(slot->flipY ? slot->height - 1 - y : y);
+
+            if (VoxelSlots_TilePixel(slot->source, (unsigned)w, sx, sy, false) != 0)
+            {
+                if (top < 0)
+                    top = y;
+                bot = y;
+            }
+        }
+        if (top < 0)
+            continue;
+
+        int n = bot + 1 - top;
+        float crown = VOXEL_MOUND_CROWN * (float)n;
+        float u0 = (baseX + (unsigned)x) / (float)VOXEL_SPRITE_ATLAS_W;
+        float u1 = (baseX + (unsigned)x + 1) / (float)VOXEL_SPRITE_ATLAS_W;
+        float a = x * p - halfW, b = a + p;
+        float ax = cx + rightX * a, az = rightZ * a, bx = cx + rightX * b, bz = rightZ * b;
+        float side = (x + 0.5f) / (float)w * 2.0f - 1.0f;
+        float edge = 1.0f - 0.18f * side * side;
+        float py = 0.0f, pz = front - (rows - (bot + 1)) * p, pv;
+
+        pv = 1.0f - (baseY + (unsigned)(bot + 1)) / (float)VOXEL_SPRITE_ATLAS_H;
+        for (int e = 1; e <= n; ++e)
+        {
+            int r = bot + 1 - e;  /* the row boundary this step reaches */
+            float y = crown * sinf((float)e / (float)n * 1.5707963f) * p;
+            float z = front - (rows - r) * p + y;
+            float v = 1.0f - (baseY + (unsigned)r) / (float)VOXEL_SPRITE_ATLAS_H;
+            float dz = z - pz, dy = y - py, len = sqrtf(dz * dz + dy * dy);
+            float lit = len > 0.0f ? (-dz * ly + dy * lz) / len : 1.0f;
+            float s = shade * edge * (0.72f + 0.28f * (lit > 0.0f ? lit : 0.0f));
+
+            VoxelBuilder_Quad(builder,
+                &(VoxelVertex){ax, lift + py, pz + az, u0, pv, s},
+                &(VoxelVertex){bx, lift + py, pz + bz, u1, pv, s},
+                &(VoxelVertex){bx, lift + y,  z + bz,  u1, v,  s},
+                &(VoxelVertex){ax, lift + y,  z + az,  u0, v,  s});
+            py = y;
+            pz = z;
+            pv = v;
+        }
+        /* the back, down at 45 degrees to the ground, in the top row's colour */
+        {
+            float v = 1.0f - (baseY + (unsigned)top + 0.5f) / (float)VOXEL_SPRITE_ATLAS_H;
+            float s = shade * edge * 0.6f;
+
+            VoxelBuilder_Quad(builder,
+                &(VoxelVertex){ax, lift + py,  pz + az,      u0, v, s},
+                &(VoxelVertex){bx, lift + py,  pz + bz,      u1, v, s},
+                &(VoxelVertex){bx, lift,       pz - py + bz, u1, v, s},
+                &(VoxelVertex){ax, lift,       pz - py + az, u0, v, s});
+        }
+    }
+}
+
+/*
  * A mark on the ground (a ripple, footprints, tyre tracks) lies on it: a
  * card standing up would be a wall of footprints. The top of the picture is
  * north, as on the GBA screen.
@@ -1446,6 +1579,7 @@ static int EffectOwner(const struct Sprite *sprite, const VoxelObjectCard *objec
  * day and faded with the screen like any sprite's).
  */
 extern int WideView_GhostPalette(u16 tag);
+extern const struct ObjectEventGraphicsInfo *WideView_DisguiseInfo(const struct ObjectEventTemplate *t); /* POL-4 */
 extern const u8 gInitialMovementTypeFacingDirections[];
 
 typedef struct
@@ -1599,7 +1733,9 @@ static unsigned GatherStandIns(const VoxelCamera *camera, uint16_t *atlas, bool 
                 continue;
             if (StandInIsLoaded(t->localId, (u8)inst->mapNum, (u8)inst->mapGroup))
                 continue;
-            info = GetObjectEventGraphicsInfo(t->graphicsId);
+            info = WideView_DisguiseInfo(t); /* POL-4: a hidden ninja is its disguise */
+            if (info == NULL)
+                info = GetObjectEventGraphicsInfo(t->graphicsId);
             if (info == NULL || info->images == NULL || info->compressed)
                 continue;
             pal = WideView_GhostPalette(info->paletteTag);
@@ -1780,6 +1916,12 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
                     sSlots[i].footPad = pad;
                 sSlots[i].footPadExact = exact;
             }
+        }
+        /* POL-17: a berry plant shows its whole frame (its art is the plant, from the soil up), see BerryPlant */
+        if (BerryPlant(obj->graphicsId))
+        {
+            sSlots[i].footPad = 0;
+            sSlots[i].footPadExact = true;
         }
         card->deck = ObjectDeck(obj, worldX, worldZ);
 #if CTR_VOXEL_LIGHTING
@@ -1996,7 +2138,14 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
             EmitReflection(reflections, &sSlots[i], i, card->worldX, card->worldZ,
                            rightX, rightZ, stretch);
         unsigned first = builder->count;
-        EmitBillboard(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f,
+        if (MoundObject(gObjectEvents[i].graphicsId) && card->deck <= 0.0f)
+        {
+            EmitMound(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f, rise,
+                      rightX, rightZ, card->shade * dusk);
+            continue;
+        }
+        EmitBillboard(builder, &sSlots[i], i, card->worldX + 0.5f,
+                      card->worldZ + (BerryPlant(gObjectEvents[i].graphicsId) ? VOXEL_BERRY_STAND : 0.5f),
                       0.0f, 0.0f, rise, card->deck, rightX, rightZ, stretch, card->shade * dusk, 1.0f);
         if (i == gPlayerAvatar.objectEventId && builder->count == first + 6)
             sPlayerVertexFirst = (int)first;
