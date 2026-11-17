@@ -715,3 +715,30 @@ Still open:
   produced, which are now POL-13/40/2/3/28).
 Brennan: "lets focus on the easier POLs first, if any questions ask me." Order taken (014PwRDj): POL-17, POL-22, POL-9,
 POL-4 (Fortree), POL-2/3 green safety screen, POL-28, POL-8; then the mountains (POL-13/40/45/41/24/43/30/44).
+
+## Easier POLs, 2026-11-16 evening (session 014PwRDj) - what was done (build 16k-test)
+- **POL-17 berry plants:** the GBA stands a berry plant's 32-row frame on its cell's south edge (its base, rows 26-30,
+  in the soil's middle: the soil is drawn across its cell and the one south of it). Our cards stand on the cell's
+  centre with the feet (pad measured on the graphics info's frame 0 - not the berry's own picture table) there: half a
+  tile north, "behind off of the dirt". Now berry plants stand on the cell's south edge with their whole frame
+  (`voxel_entities.c` BerryPlant, VOXEL_BERRY_STAND; WJPC_BERRY_CENTRE=1 old way).
+- **POL-22 breakable rocks (and Strength boulders):** a mound instead of a card (`voxel_entities.c` EmitMound): column
+  by column the sprite's rows are laid on a quarter round so at 45 degrees every texel is where the card had it
+  (the 3DS rule "the drawing is the truth"), back face at 45 degrees, shaded by facing. WJPC_FLAT_ROCKS=1 old way.
+- **POL-9 machines:** prize machines and the two back-left machines as tall boxes (gacha 14->24 px, arcade 14->22),
+  same drawing, generator exact.
+- **POL-9 front columns:** the Mauville Game Corner portal stood 8 px forward with its posts on row 14's cells, which
+  the cartridge lets you walk on. Asked Brennan: "Pull the porch back" (not blocking the squares). The portal is now
+  flush with the facade and the posts' feet are painted on the ground (spec game_corner(): portal part off; keep/exact
+  without rows 64-72). Spliced with the new `splice_buildings.py ... 3 5 10 --replace`.
+- **POL-4 Fortree ninjas:** Route 119's two ninja boys by Fortree hide under a tree / rock disguise (a field effect). When
+  Route 119 is a neighbouring map their stand-in was drawn from the boy's own picture - the tree "disappeared". Now a
+  disguised ninja's stand-in is the disguise's first frame (`wide_view.c` WideView_DisguiseInfo, used by the 3D
+  stand-ins and the 2D wide view's neighbour people).
+- **POL-2/3/8/28 crack fill:** in the final screen pass (Gamma lighting path), a pixel nothing was drawn on between two
+  drawn pixels (1-2 px apart, across or down) takes their colour - the "safety screen" Brennan asked for, made of the
+  ground's own colours instead of one green (so sand, water, floors and snow match too). WJPC_NO_CRACK_FILL=1 off.
+- Checked here (Windows exe, Wine, 1280x720): berries planted (`POL-17_berry_plants_planted.png`), rock mound
+  (`POL-22_breakable_rock_3d.png`), porch flush (`POL-9_game_corner_porch.png`), machines (`POL-9_machines_tall.png`).
+  Not checked here: the Fortree ninja stand-ins (the test script's warp to Fortree times out under Wine) and the crack
+  fill at 4K (cannot run 4K here) - both for Brennan's check on 16k-test.

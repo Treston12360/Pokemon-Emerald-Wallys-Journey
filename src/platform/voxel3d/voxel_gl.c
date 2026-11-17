@@ -1816,6 +1816,23 @@ static const char *sPostFs =
     "    float wt = (Dn < D - 1.0) ? clamp(rn - rr + 1.0, 0.0, 1.0) : 1.0;\n"
     "    c += texture2D(src, uv + o).rgb * wt; wsum += wt; }\n"
     "  c /= max(wsum, 1e-4);\n"
+    // POL-2/3/8/28 (Brennan 2026-11-16: "the bases around trees or some edge lines still show either black or blue. try
+    // using a green safety screen behind it so the colors match and dont show backgrounds"): a pixel nothing was drawn
+    // on (its depth still the clear's) between two drawn ones, across or down, up to 2 px apart, is a crack between
+    // faces - at 4K the seams too thin to see at console sizes - not sky or the room's dark: it takes its drawn
+    // neighbours' colour, so the screen behind it is the ground's own. radius > 0.5: on (WJPC_NO_CRACK_FILL=1 off).
+    "  if (radius > 0.5 && texture2D(depthTex, uv).r >= 0.9999999) {\n"
+    "    vec2 tx = vec2(texel.x, 0.0), ty = vec2(0.0, texel.y); vec2 a = vec2(-9.0), b = vec2(-9.0);\n"
+    "    if (texture2D(depthTex, uv - tx).r < 0.9999999) {\n"
+    "      if (texture2D(depthTex, uv + tx).r < 0.9999999) { a = uv - tx; b = uv + tx; }\n"
+    "      else if (texture2D(depthTex, uv + 2.0 * tx).r < 0.9999999) { a = uv - tx; b = uv + 2.0 * tx; } }\n"
+    "    else if (texture2D(depthTex, uv - 2.0 * tx).r < 0.9999999 && texture2D(depthTex, uv + tx).r < 0.9999999) { a = uv - 2.0 * tx; b = uv + tx; }\n"
+    "    if (a.x < -8.0 && texture2D(depthTex, uv - ty).r < 0.9999999) {\n"
+    "      if (texture2D(depthTex, uv + ty).r < 0.9999999) { a = uv - ty; b = uv + ty; }\n"
+    "      else if (texture2D(depthTex, uv + 2.0 * ty).r < 0.9999999) { a = uv - ty; b = uv + 2.0 * ty; } }\n"
+    "    else if (a.x < -8.0 && texture2D(depthTex, uv - 2.0 * ty).r < 0.9999999 && texture2D(depthTex, uv + ty).r < 0.9999999) { a = uv - 2.0 * ty; b = uv + ty; }\n"
+    "    if (a.x > -8.0) c = 0.5 * (texture2D(src, a).rgb + texture2D(src, b).rgb);\n"
+    "  }\n"
     "  c += (texture2D(src2, uv).rgb * tint[0] + texture2D(b1, uv).rgb * tint[1] + texture2D(b2, uv).rgb * tint[2]\n"
     "       + texture2D(b3, uv).rgb * tint[3] + texture2D(b4, uv).rgb * tint[4] + texture2D(b5, uv).rgb * tint[5]) * misc.z;\n"
     "  c *= misc.x;\n"
@@ -2137,6 +2154,13 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
             float S = playerDist * 640.0f;
             float k = A * f / ((S - f) > 1.0f ? (S - f) : 1.0f) / 450.0f * (float)w;
             wj_glUniform4f(sPU_coc, getenv("WJPC_3D_NODOF") ? 0.0f : k, S, 0.5f, 400.0f);
+        }
+        {
+            static int sNoFill = -1;   /* the crack fill in the final pass (POL-2/3/8/28) */
+
+            if (sNoFill < 0)
+                sNoFill = getenv("WJPC_NO_CRACK_FILL") != NULL;
+            wj_glUniform1f(sPU_radius, sNoFill ? 0.0f : 1.0f);
         }
         wj_glUniform1f(sPU_mode, 2.0f);
         PostQuad();
