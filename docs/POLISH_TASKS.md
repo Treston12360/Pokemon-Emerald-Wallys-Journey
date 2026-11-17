@@ -641,7 +641,7 @@ tasks and we can leave these harder ones for later. if any questions ask me firs
 - **Brennan's pictures for the above, 18:41** (`docs/polish_reports/BREN_1841_*`):
   1. Route 119, west of the Weather Institute: a dark/black box where belt trees should be (red box).
   2. A town by the sea (pink-roof houses, beach east): the mountain north of the town over the water is a block of
-     stepped rock with vertical seams (red box). Which town not confirmed yet - asked Brennan. Numbered POL-45.
+     stepped rock with vertical seams (red box). Brennan 18:44: "the town with the beach and pink roofed houses is route 118 left of mauville." So this is POL-40's Route 118 mountain (the belt past Route 118's north edge, x 6-13) - POL-45 folded into POL-40.
   3. Lavaridge: the background top-left (behind the Mart) has sky-blue holes and floating slabs; the bottom-right edge
      has a sky-blue strip.
   4. Same view on arriving from Route 112 (sign "ROUTE 112"): same holes top-left, and the bottom-left edge shows flat
@@ -679,5 +679,5 @@ POL-27 Route 113 ash, POL-29 music/sound volume, POL-42 Orthworm (keep Earth Eat
 **Left - hard, parked (the belt / backdrop past map edges):** POL-2 trees end in blue, POL-3 mountain edges blue,
 POL-13 background mountains are blocks, POL-21 Route 110->103 backdrop, POL-24 + POL-43 Route 112 -> Lavaridge
 backdrop, POL-28 Petalburg Woods lines, POL-30 backdrop changes between routes, POL-40 Route 118 pillars + Lavaridge
-mountains, POL-41 leftovers (black box west of the Weather Institute, rock blocks between trees), POL-44 Lavaridge
-cable-car stairs straight, POL-45 town mountain over water (which town?).
+mountains, POL-41 leftovers (black box west of the Weather Institute, rock blocks between trees),
+POL-44 Lavaridge cable-car stairs straight. (POL-45 = Route 118, folded into POL-40.)
