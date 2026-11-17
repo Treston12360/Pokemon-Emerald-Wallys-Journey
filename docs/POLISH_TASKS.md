@@ -759,3 +759,25 @@ POL-4 (Fortree), POL-2/3 green safety screen, POL-28, POL-8; then the mountains 
   not the game). POL-8 house lines: not reproduced at 1280x720 (zoom 1 and 4) and a 4K run here is too slow to reach
   the field; the floor of LAYOUT_HOUSE1 has no ground patches and chunks are quantised to 1/512 tile (no chunk
   cracks), so the cause is still open. Brennan (asked): the lines are "Both" - some stay put, more appear while walking.
+
+## Harder POLs, night of 2026-11-16/17 (session 014PwRDj) - code pushed to `polish`, only partly seen
+Brennan 23:17: "Continue onto the harder ones for now." 23:27: "Provide me pictures not a test build for right now".
+- **POL-13/40/45 (belt mountains, Route 118 north):** `voxel_mesh_builder.c` BeltMountain / BeltRoundOff: a land cell
+  of the belt takes the map's edge heights averaged along the edge over +-(1+2d) cells (d = distance out), held a
+  cell, then rounded down to the ground over 7 cells (quarter cosine), and down to the water's level within 4 cells
+  of water; Route 118's north edge FILL (relief.bin "EDGE", a plateau at 64 px out to the horizon - the "pillars":
+  a stair of dark walls down to the sea, row by row) is rounded the same way; belt corners next to belt water are
+  pulled down to the water's surface (BeltCorner); sloped belt tops laid with the map's mountain-top tile
+  (BeltTopTile), not the face's streaks. Not near a drawn belt (NearDrawnBelt, 8 cells). Off: WJPC_BELT_COLUMNS=1,
+  WJPC_BELT_FACE_TOP=1. Seen: `POL-40_route118_mountain_round_try1.png` (try 1); later tries: walls shorter, a low
+  step still along the shore (m57); the last two changes not seen yet.
+- **POL-24/30/43 (Route 112 <-> Lavaridge):** the drawn belt (VoxelRelief_Belt, Lavaridge's) was chosen by the map the
+  player stands on, so crossing switched the whole belt. Now per cell, by its own map (VoxelWorld_BeltRing)
+  (WJPC_BELT_DRAWN_GLOBAL=1 old). Seen: `POL-24-43_lavaridge_belt_before_after.png` - pillars / floating slabs gone,
+  thin light lines left top right. With the round-off a sky gap opened at the drawn/undrawn seam -> NearDrawnBelt
+  (not seen yet).
+- **Test machine problem (not the game):** since ~20:30 the Wine test runs end with exit code 0 shortly after a warp
+  to Lavaridge / Route 118 / Fortree (2D too, and with the 16h build), at varying frame counts; a fresh Wine prefix
+  did not help. Earlier lesson: never `pkill -f wine...` from a command line that itself contains those words (it
+  kills its own shell) - `scratchpad/cx/clean.sh` now kills by process name only. Not solved.
+- Not started: POL-41 leftovers, POL-44 (Lavaridge cable-car stairs).
