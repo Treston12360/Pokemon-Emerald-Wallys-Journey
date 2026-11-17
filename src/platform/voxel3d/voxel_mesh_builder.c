@@ -2715,6 +2715,26 @@ static bool BeltIsTree(int x, int y);
  */
 enum { BELT_HOLD = 1, BELT_FALL = 7 };
 
+/* Is a map whose belt is laid as its drawing (Lavaridge) within `reach` cells? There the belt's land keeps its edge
+ * columns' heights: the drawn belt stands its rows that far south of where it is tiled, and a rounded slope beside
+ * it opened a gap of sky between the two (Lavaridge's north-east, seen 2026-11-17). */
+static bool NearDrawnBelt(int x, int y, int reach)
+{
+    for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+    {
+        const VoxelMapInstance *m = VoxelWorld_Instance(i);
+        int dx, dy;
+
+        if (m == NULL || m->layout == NULL || m->indoor || VoxelRelief_Belt(m) == 0)
+            continue;
+        dx = x < m->originX ? m->originX - x : x >= m->originX + m->width ? x - (m->originX + m->width - 1) : 0;
+        dy = y < m->originY ? m->originY - y : y >= m->originY + m->height ? y - (m->originY + m->height - 1) : 0;
+        if (dx <= reach && dy <= reach)
+            return true;
+    }
+    return false;
+}
+
 /* POL-13/40: a belt land cell `d` out from its map, its mountain `h` (shift `sh`) high: held BELT_HOLD cells, then
  * rounded down to the ground, and down to the water's level near water (BeltMountain, and the edge fills) */
 static void BeltRoundOff(int x, int y, int d, float h, float sh, float *level, float *shift)
@@ -2781,7 +2801,7 @@ static void BeltMountain(const VoxelMapInstance *ring, int x, int y, int ex, int
 
     if (sOff < 0)
         sOff = getenv("WJPC_BELT_COLUMNS") != NULL;
-    if (sOff || BeltIsTree(x, y))
+    if (sOff || BeltIsTree(x, y) || NearDrawnBelt(x, y, 8))
         return;
     reach = 1 + 2 * d;
     for (int k = -reach; k <= reach; ++k)
@@ -2834,7 +2854,7 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
         *shift = VoxelRelief_CellShift(ring, ex, ey);
         /* POL-40 (Route 118's north: the fill stood the mountain's whole height out to the horizon, its side to
          * the sea a stair of tall dark walls): rounded off as the belt's own mountain is (WJPC_BELT_COLUMNS=1 not) */
-        if (getenv("WJPC_BELT_COLUMNS") == NULL)
+        if (getenv("WJPC_BELT_COLUMNS") == NULL && !NearDrawnBelt(x, y, 8))
         {
             int fdx = x > ex ? x - ex : ex - x, fdy = y > ey ? y - ey : ey - y;
 
