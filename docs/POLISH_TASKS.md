@@ -880,3 +880,15 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   frames). Not found yet which heights make the columns (SPAN 2 -> 5 changed nothing). Forests (rule B) and seas
   (rule C) not started. Test note: warps to Route 118 / Lilycove now often close the game 150+ frames in (the old
   test-setup problem), take shots within ~120 frames.
+- Brennan 2026-11-18 13:33: Lavaridge corner "blocky 90-degree Lego stair cutouts", a vertical strip of tree tiles in the
+  rock; Route 118 "long, parallel extruded planks/beams with deep vertical grooves"; asked for a unified heightmap with
+  shared vertices and chamfered (45 degree) terrace corners; and to fix "Route 118 crashing". Done (voxel_mesh_builder.c
+  BeltField / EmitFieldCell, default on; WJPC_BELT_BLOCKS_OLD=1 old): one height per grid corner (maps' edge heights
+  blended 1/d^3, exact on an edge, + a level every 2 cells by distance to the nearest map off its N/W/E sides, max 6),
+  each cell two terraced triangles (flat ledges, 1-level walls along level crossings, 45 degrees at turns), walls down
+  to the ground where the field meets the belt's sea or trees. Picture `POL-46_heightfield_lavaridge_route118.png`.
+- The "Route 118 crash" was NOT the game: the test script's last screenshot before `quit` was lost (the game quit
+  before it was written). With a `wait 60` after the last shot every shot is there (Route 118 ran 540+ frames fine).
+  So zoomed-out shots work too. (3DS limits do not apply: PC game, NO LIMITS; BELT_LAYERS/PAIRS raised 4 -> 16.)
+- Left: tree belt ground not yet on the field (rule B), seas (rule C), the small dark notch north-west of Lavaridge's
+  hot spring, Lilycove / Route 119 not checked yet.
