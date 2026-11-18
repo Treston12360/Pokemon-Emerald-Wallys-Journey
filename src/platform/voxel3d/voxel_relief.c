@@ -80,6 +80,7 @@ typedef struct
     const uint8_t *cells;  /* into sBlob: x, y and the stored heights */
     uint8_t stride;        /* bytes a cell: CELL_BYTES, or WIDE_CELL_BYTES */
     int16_t *heights;      /* GRID per cell, pixels */
+    int16_t *depths;       /* GRID per cell, pixels south a point stands; NULL: its height (StairFlights) */
     /* A drawn map's surface where it stands, for the sun to be stopped by:
      * its height (pixels) every lattice step of world X and Z, not of the
      * drawing's rows - a point of the drawing lies as far south as it is
@@ -124,6 +125,118 @@ static unsigned EaseRows(const ReliefLayout *l)
     return rows < l->height / 2u ? rows : l->height / 2u;
 }
 static bool BuildSurface(ReliefLayout *l);
+
+/*
+ * POL-44 (Brennan 2026-11-16: "the stairs leading up to the lifts east of lavaridge go straight up instead of
+ * staggering like real stairs"). A flight of stairs drawn up a cliff face is drawn as tall as the face (its rows as
+ * many as the pixels it climbs), so read as the drawing (every point at (u, h, v + h)) it stands straight up like
+ * the face - Emerald 3DS's way too. Brennan (asked where the room for a slope comes from, 2026-11-17): "Half and
+ * half" - half a flight out onto the ground in front, half cut back into the cliff top. So a listed flight is laid
+ * as steps: each drawn step (8 rows: its tread rows 0-3, its riser's nose and face rows 4-7) a tread 8 px deep,
+ * level, then a riser 8 px tall, straight down; the flight from `rise` px up to the ground, its middle where the
+ * face was. The cliff top's cells north of it (`lip` rows) are drawn shorter, back to where the top tread starts.
+ * Only the cells' depths change, and their heights by step: what stands on them (the player) climbs the treads.
+ * WJPC_STAIRS_UPRIGHT=1: as drawn (upright).
+ */
+typedef struct
+{
+    uint16_t layout;
+    uint8_t x0, x1;   /* the flight's columns */
+    uint8_t row;      /* its top drawn row of cells */
+    uint8_t steps;    /* drawn steps, 8 rows each */
+    uint8_t lip;      /* cliff-top cells north of it laid shorter */
+} StairFlight;
+
+static const StairFlight sStairFlights[] = {
+    /* Route 112, up to the cable car station (metatiles 0xaf, 0xcf, rows 41-43) */
+    {28 /* LAYOUT_ROUTE112 */, 20, 21, 41, 6, 2},
+};
+
+static int16_t *DepthsOf(ReliefLayout *l)
+{
+    if (l->depths == NULL)
+    {
+        l->depths = malloc((size_t)(l->count ? l->count : 1) * GRID * sizeof(int16_t));
+        if (l->depths == NULL)
+            return NULL;
+        memcpy(l->depths, l->heights, (size_t)l->count * GRID * sizeof(int16_t));
+    }
+    return l->depths;
+}
+
+static int FindIn(const ReliefLayout *l, int x, int y)
+{
+    for (unsigned k = 0; k < l->count; ++k)
+    {
+        const uint8_t *c = l->cells + (unsigned)k * l->stride;
+        if (c[0] == x && c[1] == y)
+            return (int)k;
+    }
+    return -1;
+}
+
+static bool StairFlights(ReliefLayout *l)
+{
+    const char *env = getenv("WJPC_STAIRS_UPRIGHT");
+
+    if (env != NULL && env[0] == '1')
+        return true;
+    for (unsigned f = 0; f < sizeof(sStairFlights) / sizeof(sStairFlights[0]); ++f)
+    {
+        const StairFlight *s = &sStairFlights[f];
+        int rise = 8 * s->steps, top = 16 * s->row;
+        /* the face stood at v + h = top + rise; the flight's top tread starts half a flight back */
+        int z0 = top + rise - rise / 2;
+        int16_t *depths;
+
+        if (l->layoutId != s->layout)
+            continue;
+        depths = DepthsOf(l);
+        if (depths == NULL)
+            return false;
+        for (int x = s->x0; x <= s->x1; ++x)
+        {
+            /* the flight: lattice rows 4 px apart, two to a step (tread, riser) */
+            for (int r = 0; r < (rise + 15) / 16; ++r)
+            {
+                int k = FindIn(l, x, s->row + r);
+                if (k < 0)
+                    continue;
+                for (int j = 0; j < VOXEL_RELIEF_SIDE; ++j)
+                {
+                    int n = r * (VOXEL_RELIEF_SIDE - 1) + j;      /* the flight's lattice row */
+                    int step = n / 2, v = top + 4 * n;
+                    int h = rise - 8 * step, z = z0 + 8 * step + (n % 2) * 8;
+                    if (h < 0) h = 0;
+                    for (int i = 0; i < VOXEL_RELIEF_SIDE; ++i)
+                    {
+                        l->heights[k * GRID + j * VOXEL_RELIEF_SIDE + i] = (int16_t)h;
+                        depths[k * GRID + j * VOXEL_RELIEF_SIDE + i] = (int16_t)(z - v);
+                    }
+                }
+            }
+            /* the lip: its cells' rows laid evenly from where they started to the top tread */
+            {
+                int lipTop = top - 16 * s->lip;
+                int zTop = lipTop + rise;   /* as the drawing has it */
+                for (int r = 0; r < s->lip; ++r)
+                {
+                    int k = FindIn(l, x, s->row - s->lip + r);
+                    if (k < 0)
+                        continue;
+                    for (int j = 0; j < VOXEL_RELIEF_SIDE; ++j)
+                    {
+                        int v = lipTop + 16 * r + 4 * j;
+                        int z = zTop + (v - lipTop) * (z0 - zTop) / (top - lipTop);
+                        for (int i = 0; i < VOXEL_RELIEF_SIDE; ++i)
+                            depths[k * GRID + j * VOXEL_RELIEF_SIDE + i] = (int16_t)(z - v);
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
 
 static uint8_t *sBlob;
 static ReliefLayout *sLayouts;
@@ -258,6 +371,8 @@ bool VoxelRelief_Init(void)
                 l->heights[k * GRID + g] = wide
                     ? (int16_t)U16(l->cells + k * WIDE_CELL_BYTES + 2 + 2 * g)
                     : (int16_t)((int8_t)l->cells[k * CELL_BYTES + 2 + g] * (int)unit);
+        if (!StairFlights(l))
+            goto fail;
     }
     fclose(file);
     /* each map's commonest cliff wall (VoxelRelief_FaceTile): its cut cells
@@ -329,6 +444,7 @@ void VoxelRelief_Shutdown(void)
     {
         free(sLayouts[i].surface);
         free(sLayouts[i].heights);
+        free(sLayouts[i].depths);
     }
     memset(sFindMemo, 0, sizeof(sFindMemo));
     memset(sCutMemo, 0, sizeof(sCutMemo));
@@ -841,7 +957,12 @@ const int16_t *VoxelRelief_Cell(const VoxelMapInstance *inst, int x, int y)
 
 const int16_t *VoxelRelief_Depth(const VoxelMapInstance *inst, int x, int y)
 {
-    return VoxelRelief_Cell(inst, x, y);
+    const ReliefLayout *l = LayoutOf(inst);
+    int k = Find(l, inst, x, y);
+
+    if (k < 0)
+        return NULL;
+    return (l->depths != NULL ? l->depths : l->heights) + (unsigned)k * GRID;
 }
 
 /*
