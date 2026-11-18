@@ -804,6 +804,8 @@ POL-2/3 asked: "One each" (POL-2 out of bounds, POL-3 3D generation).
   flights elsewhere are untouched (add rows to sStairFlights). Test: warp `0 27 20 39` (on the cliff top above the
   stairs) works; warping to the path below (`0 27 20 46`, `24 47`) ends the game 100-300 frames later (2D too, exit
   code 0, not this change - WJPC_STAIRS_UPRIGHT=1 does the same). Picture: `POL-44_route112_stairs.png`.
+  Brennan 2026-11-17 19:33: "i will find more stairs and let you know whenever i have a list." (Other flights wait
+  for his list; add each as a row of sStairFlights.)
 - [ ] **POL-37** the Emerald 3DS study (done; its findings are these POLs) - close when Brennan says.
 
 **B. Out of bounds terrain (the belt past the map's edge, seen when zoomed out)**
