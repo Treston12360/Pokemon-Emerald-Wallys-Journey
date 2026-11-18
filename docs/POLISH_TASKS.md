@@ -798,6 +798,12 @@ POL-2/3 asked: "One each" (POL-2 out of bounds, POL-3 3D generation).
 - [ ] **POL-8** black lines on indoor floors at 4K ("Both": some stay, more while walking). Not reproduced here.
 - [ ] **POL-28** black lines at the base of the trees in Petalburg Woods.
 - [ ] **POL-44** Lavaridge cable-car stairs go straight up instead of staggering.
+  2026-11-17: Brennan, asked where a sloped flight's room comes from: "Half and half". Done in `voxel_relief.c`
+  StairFlights (Route 112 x 20-21 rows 41-43: 6 steps, 8 px tread + 8 px riser, top 24 px into the cliff top, foot
+  24 px out onto the path; the 2 cliff-top cells north of it laid shorter). WJPC_STAIRS_UPRIGHT=1 = old. Other
+  flights elsewhere are untouched (add rows to sStairFlights). Test: warp `0 27 20 39` (on the cliff top above the
+  stairs) works; warping to the path below (`0 27 20 46`, `24 47`) ends the game 100-300 frames later (2D too, exit
+  code 0, not this change - WJPC_STAIRS_UPRIGHT=1 does the same). Picture: `POL-44_route112_stairs.png`.
 - [ ] **POL-37** the Emerald 3DS study (done; its findings are these POLs) - close when Brennan says.
 
 **B. Out of bounds terrain (the belt past the map's edge, seen when zoomed out)**
