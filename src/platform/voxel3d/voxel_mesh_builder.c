@@ -1150,6 +1150,18 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     if (top <= beltTop + 0.05f)
         return;
     face = VoxelRelief_FaceTile(inst);
+    /* beside the drawn belt's terraces, its rock (one mountain): the drawn map's cliff face */
+    for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+    {
+        const VoxelMapInstance *m = VoxelWorld_Instance(i);
+        if (m != NULL && m->layout != NULL && !m->indoor && VoxelRelief_Belt(m) != 0
+         && abs(nx - (m->originX + m->width / 2)) <= m->width / 2 + 24 && abs(ny - (m->originY + m->height / 2)) <= m->height / 2 + 24
+         && VoxelRelief_FaceTile(m) >= 0)
+        {
+            face = VoxelRelief_FaceTile(m);
+            break;
+        }
+    }
     if (face < 0 || !MetatileUV(b, face, &u0, &v0, &u1, &v1))
     {
         if (!VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1))
@@ -3093,12 +3105,37 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
                     continue;
                 drawnTop = VoxelRelief_Base(m) + (float)VoxelRelief_Belt(m);
                 own = VoxelRelief_Base(ring) + (float)VOXEL_BORDER_COURSES + *level;
-                /* the drawn belt's rings of ledges, gone on across the seam (DrawnTierLift) */
+                /* the drawn belt's rings of ledges, gone on across the seam (DrawnTierLift); and (Brennan 22:07,
+                 * "Align the elevation tiers of the forested east wall with the horizontal cliff terraces ... one
+                 * continuous, uniform mountain corner") its own map's edge coming down to them the same way, a level
+                 * every 2 cells out from the edge: beside the edge the belt stands at the edge's height (no wall,
+                 * no shelf), and the higher of the two wins */
                 ownTop = drawnTop + (float)((dm > 1 ? dm - 1 : 0) / 2);
-                if (ownTop > own)
-                    ownTop = own > drawnTop ? floorf(own) : drawnTop;
+                {
+                    /* from the edge cell's highest point (its lattice, not the blend of the edge): the belt beside
+                     * it never under it, so no wall of the edge stands open over a gully (22:07 red box) */
+                    int ex = x < ring->originX ? ring->originX : x >= ring->originX + ring->width ? ring->originX + ring->width - 1 : x;
+                    int ey = y < ring->originY ? ring->originY : y >= ring->originY + ring->height ? ring->originY + ring->height - 1 : y;
+                    const int16_t *eg = VoxelRelief_Cell(ring, ex, ey);
+                    float edgeTop = own;
+
+                    if (eg != NULL)
+                    {
+                        int hi = eg[0];
+                        for (int g = 1; g < VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE; ++g)
+                            hi = eg[g] > hi ? eg[g] : hi;
+                        if (VoxelRelief_Base(ring) + hi / 16.0f > edgeTop)
+                            edgeTop = VoxelRelief_Base(ring) + hi / 16.0f;
+                    }
+                    float cone = ceilf(edgeTop - 0.001f) - (float)((dr > 1 ? dr - 1 : 0) / 2);
+                    if (cone > ownTop)
+                        ownTop = cone;
+                }
+                ownTop = floorf(ownTop + 0.001f);
                 *level = ownTop - VoxelRelief_Base(ring) - (float)VOXEL_BORDER_COURSES;
-                *shift = (float)VoxelRelief_Belt(m) + (VoxelRelief_Base(m) - VoxelRelief_Base(ring));
+                /* drawn as far south as it is high, as the drawing has every point (the drawn belt and the map's
+                 * edge both are): one rule, so every top meets its neighbours' */
+                *shift = ownTop - VoxelRelief_Base(ring);
                 inDrawnBand = true;
                 continue;
             }
@@ -3637,6 +3674,14 @@ static void BeltTreeSeam(VoxelBuilder *b, int x, int y, float level, float shift
  * its map, so its rock climbs away from the town in rings of ledges (north of it, ledges along the rows, their walls
  * facing the town). WJPC_BELT_SMOOTH=1: flat as before. */
 enum { BELT_TIER_DEPTH = 2 };
+/* WJPC_TERRACE_FLAT_ROWS=1: a drawn belt's ledges not drawn further south as they rise (as the 21:00 build) */
+static bool TerraceSouthOff(void)
+{
+    static int sOff = -1;
+    if (sOff < 0)
+        sOff = getenv("WJPC_TERRACE_FLAT_ROWS") != NULL;
+    return sOff != 0;
+}
 static float DrawnTierLift(int x, int y)
 {
     static int sFlat = -1;
@@ -3669,7 +3714,7 @@ static bool BeltTopWorld(int x, int y, float *top, float *z, unsigned *drawnOut)
     drawn = own != NULL ? VoxelRelief_Belt(own) : 0u;
     VoxelMesh_BorderLevel(x, y, &edge, &edgeShift);
     *top = BeltBase(x, y) + (float)(drawn ? drawn : VOXEL_BORDER_COURSES) + edge + (drawn ? DrawnTierLift(x, y) : 0.0f);
-    *z = (float)y + (float)drawn + edgeShift;
+    *z = (float)y + (float)drawn + edgeShift + (drawn && !TerraceSouthOff() ? DrawnTierLift(x, y) : 0.0f);
     *drawnOut = drawn;
     return true;
 }
@@ -3818,7 +3863,13 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 wz += edgeShift;
                 lift = edge;
                 if (drawn)
-                    lift += DrawnTierLift(x, y);
+                {
+                    /* (a ledge up is drawn a row further south, as every point of the drawing) */
+                    float tier = DrawnTierLift(x, y);
+                    lift += tier;
+                    if (!TerraceSouthOff())
+                        wz += tier;
+                }
             }
             if (BeltIsTree(x, y))
             {
