@@ -14,27 +14,45 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update -qq
-          sudo apt-get install -y gcc-multilib binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev libsdl2-dev libsdl2-2.0-0:i386 libsdl2-image-dev libsdl2-image-2.0-0:i386 libgl1-mesa-dri:i386 xvfb imagemagick
-      - name: Configure screenshot-only starting location
+          sudo apt-get install -y gcc-multilib binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev libsdl2-dev libsdl2-2.0-0:i386 libsdl2-image-dev libsdl2-image-2.0-0:i386 libgl1-mesa-dri:i386 xvfb imagemagick python3-pil
+      - name: Start the native game's field test at the dock
         run: |
+          printf '[{"map":"MAP_DEWFORD_TOWN","x":12,"y":12,"party":[["MUDKIP",5]]}]' > scenario.json
+          python3 tools/wj_testfw/install.py on scenario.json
           python3 - <<'PY'
           from pathlib import Path
+          p=Path("src/overworld.c")
+          s=p.read_text().replace("gFieldCallback = ExecuteTruckSequence;", "gFieldCallback = FieldCB_WarpExitFadeFromBlack;")
+          p.write_text(s)
           p=Path("src/platform/sdl2.c")
-          s=p.read_text().replace('if (!strcmp(cmd, "warp"))','if (!strcmp(cmd, "startcapture")) { extern void CB2_NewGame(void); SetMainCallback2(CB2_NewGame); return true; }\n        if (!strcmp(cmd, "warp"))',1)
+          s=p.read_text().replace('if (!strcmp(cmd, "warp"))', '''if (!strcmp(cmd, "renderfield"))
+                  {
+                      SDL_setenv("WJPC_TEST_WINDOW", "1", 1);
+                      return true;
+                  }
+                  if (!strcmp(cmd, "warp"))''',1)
+          s=s.replace('FILE *f = fopen(sTestWinShot, "wb");','fprintf(stderr, "CAPTURE %s: map=%d:%d field=%d voxel=%d\\n",sTestWinShot,gSaveBlock1Ptr->location.mapGroup,gSaveBlock1Ptr->location.mapNum,sFrameInfo.mode==WIDE_VIEW_FIELD,s3DFrame); FILE *f = fopen(sTestWinShot, "wb");')
           p.write_text(s)
-          p=Path("src/new_game.c")
-          s=p.read_text().replace("MAP_GROUP(MAP_INSIDE_OF_TRUCK), MAP_NUM(MAP_INSIDE_OF_TRUCK), WARP_ID_NONE, -1, -1","0, 11, WARP_ID_NONE, 12, 12")
-          p.write_text(s)
+          script=["wait 400"]
+          for _ in range(300):
+              script.extend(["press A 4","wait 30"])
+          script.extend(["renderfield","wait 120","winshot dewford.ppm","wait 8","warp 0 11 12 12","wait 150","winshot dock.ppm","wait 5","quit"])
+          Path("capture.txt").write_text("\n".join(script)+"\n")
           PY
       - run: make -j4 release
       - run: make -j4 -f Makefile.pc
-      - name: Capture dock
+      - name: Capture 3D and 2D from the running game
         run: |
-          printf 'world3d=1\nzoom=7\nresolution=1\n' > WallysJourney.cfg
-          printf 'wait 160\nstartcapture\nwait 250\nwinshot dewford.ppm\nwait 4\nquit\n' > capture.txt
-          xvfb-run -a env WJPC_SCRIPT=capture.txt WJPC_TEST_WINDOW=1 WJPC_3D=1 WJPC_VOXEL_DIR="$PWD/pc_data/voxel" SDL_AUDIODRIVER=dummy LIBGL_ALWAYS_SOFTWARE=1 ./wallys-journey
-          convert dewford.ppm dewford.png
+          for mode in 0 1; do
+            printf 'world3d=%s\nzoom=7\nresolution=1\n' "$mode" > WallysJourney.cfg
+            mkdir -p "captures/$mode"
+            xvfb-run -a env WJPC_SCRIPT=capture.txt WJPC_3D="$mode" WJPC_RTC_EPOCH=1795003200 WJPC_VOXEL_DIR="$PWD/pc_data/voxel" SDL_AUDIODRIVER=dummy LIBGL_ALWAYS_SOFTWARE=1 ./wallys-journey > "captures/$mode/game.log" 2>&1 || true
+            for name in dewford dock; do
+              if test -e "$name.ppm"; then convert "$name.ppm" "captures/$mode/$name.png"; rm "$name.ppm"; fi
+            done
+            grep 'CAPTURE ' "captures/$mode/game.log" || true
+          done
       - uses: actions/upload-artifact@v4
         with:
           name: dewford-dock
-          path: dewford.png
+          path: captures/
