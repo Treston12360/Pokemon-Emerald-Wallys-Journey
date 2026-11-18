@@ -842,3 +842,16 @@ POL-2/3 asked: "One each" (POL-2 out of bounds, POL-3 3D generation).
   in half cells (8 px): an all-black half is no wall, a half's run ends at its foot (outline in row 15 under face
   colour), so every wall's front is its drawn face and every wall 24 px. Tried and dropped: running the bar on to the
   south wall's foot (the bar went dark). Picture: `POL-31_south_of_barriers_fixed.png`.
+
+## POL-46 (new): Brennan's 3D brief, 2026-11-17 19:42
+Brennan sent a brief ("overlook this information and work on this for our 3D POL section"): close every mountain
+volume (no open back faces / sky leaks), stepped multi-sided ridges instead of flat blocks (Lilycove north), no black
+void boxes behind trees (Route 119 Weather Institute), seamless map edges (Lavaridge south). "Start by fixing the
+Lavaridge Town to Route 112/Mt. Chimney northern mountain seam." (The brief names 3DS code/limits; our game is the PC
+renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show me both". Pictures: "Use old ones".
+- Lavaridge NE seam (voxel_mesh_builder.c): cause = Lavaridge's drawn belt (4 levels, drawn 4 rows south) meeting
+  Route 112's belt (2 levels, drawn where tiled) along a diagonal - a pit + a stair of sky. Fix: near a drawn belt
+  the other belt starts at its top/shift and eases to its own over 8 cells; BeltCloseSeams walls between the two
+  kinds. Terraces: WJPC_BELT_TIERS=1 (whole levels + whole rows, every step walled). Picture:
+  `POL-46_lavaridge_seam_smooth_vs_tiers.png` (before / smooth / tiers). Thin slivers still show along the seam in
+  both. Waiting: Brennan's pick. Next: Lilycove north ridge, Route 119 black box, Lavaridge south edge.

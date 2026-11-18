@@ -3014,7 +3014,8 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
         {
             float q = floorf(*level + 0.5f);
 
-            *shift += q - *level;
+            /* (and drawn a whole row south a level: a terrace is a block of the belt, its rows whole) */
+            *shift = floorf(*shift + (q - *level) + 0.5f);
             *level = q;
         }
     }
@@ -3552,6 +3553,9 @@ static void BeltCloseSeams(VoxelBuilder *builder, int x, int y, unsigned drawn, 
 
     if (sOpen < 0)
         sOpen = getenv("WJPC_BELT_OPEN_SEAMS") != NULL;
+    static int sTiersClose = -1;
+    if (sTiersClose < 0)
+        sTiersClose = getenv("WJPC_BELT_TIERS") != NULL;
     if (sOpen || !BeltTopWorld(x, y, &myTop, &myZ, &myDrawn))
         return;
     for (int d = 0; d < 4; ++d)
@@ -3560,7 +3564,9 @@ static void BeltCloseSeams(VoxelBuilder *builder, int x, int y, unsigned drawn, 
         float top, z, u0, v0, u1, v1;
         unsigned nDrawn;
 
-        if (!BeltTopWorld(nx, ny, &top, &z, &nDrawn) || (nDrawn != 0) == (drawn != 0) || top > myTop - 0.05f)
+        /* (terraces, WJPC_BELT_TIERS: every step of the belt, each side - a terrace is closed all round) */
+        if (!BeltTopWorld(nx, ny, &top, &z, &nDrawn) || ((nDrawn != 0) == (drawn != 0) && !sTiersClose)
+         || top > myTop - 0.05f)
             continue;
         /* a level of wall a tile of the drawing, from their top up to ours */
         for (float lo = top; lo < myTop - 0.05f; lo += 1.0f)
