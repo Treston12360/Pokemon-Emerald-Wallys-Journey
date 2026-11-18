@@ -38,6 +38,7 @@ unsigned int GetDecompressedDataSize(const unsigned int *ptr);
 #include "voxel_tree.h"
 #include "voxel_atlas.h"
 #include "voxel_relief.h"
+#include "platform/dewford_coast.h"
 #ifdef PLATFORM_3DS
 #include "3ds_video.h"
 #include "voxel_building.h"
@@ -1464,8 +1465,16 @@ static int EdgeFillAt(int worldX, int worldY, const VoxelMapInstance **art)
      * map's filled edge (Fallarbor's ash, Rustboro's sea) came and went at the crossing. Only a fill the current
      * map's atlas can draw: the same tile sets, or the shared primary set's metatile. */
     ring = VoxelWorld_BeltRing(worldX, worldY);
-    if (ring == NULL || !VoxelRelief_EdgeFillAt(ring, worldX, worldY, &fill))
+    if (ring == NULL)
         return -1;
+    if (!VoxelRelief_EdgeFillAt(ring, worldX, worldY, &fill))
+    {
+        int coast = DewfordCoastTile((ring->mapGroup << 8) | ring->mapNum,
+                                     worldX - ring->originX, worldY - ring->originY);
+        if (coast < 0)
+            return -1;
+        fill.metatile = coast;
+    }
     if (art != NULL)
         *art = &sInstances[0];
     if (ring != &sInstances[0]
@@ -1486,6 +1495,10 @@ static int EdgeFillAt(int worldX, int worldY, const VoxelMapInstance **art)
 static void MarkEdgeFills(const VoxelMapInstance *inst, uint8_t *used)
 {
     int metatile;
+
+    int count = DewfordCoastMaterialCount((inst->mapGroup << 8) | inst->mapNum);
+    for (int i = 0; i < count; ++i)
+        used[sDewfordCoastMaterials[i]] = 2;
 
     for (unsigned i = 0; VoxelRelief_EdgeFills((unsigned)inst->layoutId, i, &metatile); ++i)
         if (metatile >= 0 && metatile < NUM_METATILES_TOTAL)
@@ -1869,8 +1882,12 @@ bool VoxelWorld_BeltFillOf(unsigned i, unsigned k, int *metatile)
     if (i >= sInstanceCount || sInstances[0].layout == NULL)
         return false;
     m = &sInstances[i];
-    if (m->layout == NULL || m->indoor || m->primaryTileset != sInstances[0].primaryTileset
-     || !VoxelRelief_EdgeFills((unsigned)m->layoutId, k, metatile))
+    if (m->layout == NULL || m->indoor || m->primaryTileset != sInstances[0].primaryTileset)
+        return false;
+    unsigned count = DewfordCoastMaterialCount((m->mapGroup << 8) | m->mapNum);
+    if (k < count)
+        *metatile = sDewfordCoastMaterials[k];
+    else if (!VoxelRelief_EdgeFills((unsigned)m->layoutId, k - count, metatile))
         return false;
     if (m->secondaryTileset != sInstances[0].secondaryTileset && *metatile >= (int)Voxel_PrimaryMetatiles(m->primaryTileset))
         *metatile = -1; /* not drawn from here */

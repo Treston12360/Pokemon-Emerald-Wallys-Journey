@@ -34,6 +34,7 @@ extern int atoi(const char *);
 #include "platform/dma.h"
 #include "platform/null_guard.h"
 #include "platform/wide_view.h"
+#include "platform/dewford_coast.h"
 #include "decompress.h"
 #include "event_data.h"
 #include "constants/event_objects.h"
@@ -334,6 +335,9 @@ static u16 GetNearestBorderMetatileFrom(s32 gx, s32 gy, const struct MapLayout *
     *outLayout = l;
     lx = x - best->x;
     ly = y - best->y;
+    int coast = DewfordCoastTile((best->group << 8) | best->num, lx, ly);
+    if (coast >= 0)
+        return coast;
     if (l->isFrlg && l->borderWidth != 0 && l->borderHeight != 0)
     {
         s32 xp = (lx + 8 * l->borderWidth) % l->borderWidth, yp = (ly + 8 * l->borderHeight) % l->borderHeight;
