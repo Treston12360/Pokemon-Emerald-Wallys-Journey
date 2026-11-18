@@ -855,3 +855,9 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   kinds. Terraces: WJPC_BELT_TIERS=1 (whole levels + whole rows, every step walled). Picture:
   `POL-46_lavaridge_seam_smooth_vs_tiers.png` (before / smooth / tiers). Thin slivers still show along the seam in
   both. Waiting: Brennan's pick. Next: Lilycove north ridge, Route 119 black box, Lavaridge south edge.
+- Brennan 21:00 on that picture: blue triangle still at the seam; smooth = "stretched curtain" + black tears; tiers =
+  "organ-pipe slivers". Wants "horizontal stepped plateaus (terraces)—each tier must have a vertical rock wall of fixed
+  tile height (1 to 2 tiles high with tiled rock UVs) followed by a flat horizontal top ledge", like Route 112's own
+  behind the Mart. Done for Lavaridge (DrawnTierLift, TerraceBand, BeltCloseSeams in the cliff face a tile a level,
+  EdgeOverBelt): picture `POL-46_lavaridge_terraces.png`. Elsewhere still smooth; WJPC_BELT_TIERS_ALL=1 made Route
+  118's north columns - the next thing to do right (terraces stepping along rows, not per cell).
