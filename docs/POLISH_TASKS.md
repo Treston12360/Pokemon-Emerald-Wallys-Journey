@@ -861,3 +861,12 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   behind the Mart. Done for Lavaridge (DrawnTierLift, TerraceBand, BeltCloseSeams in the cliff face a tile a level,
   EdgeOverBelt): picture `POL-46_lavaridge_terraces.png`. Elsewhere still smooth; WJPC_BELT_TIERS_ALL=1 made Route
   118's north columns - the next thing to do right (terraces stepping along rows, not per cell).
+- Brennan 22:07 (picture `BREN_2207_POL-46_lavaridge_red_box.png`): left terraces "look much better now and the blue
+  sky leak is gone", but in the red box (upper right, where the terraces meet Route 112's east wall and forest):
+  (1) missing cap blocks / dark notches on the uppermost tier; (2) a jagged black vertical seam where the terraces
+  meet the east wall - needs east-facing cliff walls with rock UVs; (3) the raised trees on the right sit on a dark
+  disconnected shelf - align their ground with the terraces so it is one mountain corner. Then: "do not hardcode this
+  fix only for Lavaridge" - generalize to all of Hoenn: (A) mountains: horizontal terraces, walls on every exposed
+  side, continuous massifs across borders/connections; (B) forests: tree ground aligned with terraces, border trees
+  continuing across seams at matching height; (C) seas: sealed shorelines, ocean border extended flat to the horizon
+  at sea level.
