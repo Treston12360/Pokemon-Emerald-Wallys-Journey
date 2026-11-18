@@ -870,3 +870,13 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   side, continuous massifs across borders/connections; (B) forests: tree ground aligned with terraces, border trees
   continuing across seams at matching height; (C) seas: sealed shorelines, ocean border extended flat to the horizon
   at sea level.
+- 22:07 red box fixed (`POL-46_lavaridge_corner.png`): belt beside a drawn belt takes the higher of the drawn belt's
+  rings and its own map's edge stepping down a level every 2 cells (from the edge cell's highest point), all drawn as
+  far south as they are high - the terraces wrap the corner up to Route 112's edge, no gully, no sky.
+- Generalizing (Brennan: "do not hardcode this fix only for Lavaridge"): `BeltTerraces` in voxel_mesh_builder.c
+  (every loaded map's edge stepping down a level every 2 cells, highest wins; edge height = max over +-5 cells along
+  the edge; walls all round; blocks). WIP, OFF by default (WJPC_BELT_TERRACES_ALL=1 turns it on): on Route 118 the
+  north mountain came out as tall columns (pictures not committed: Route 118 at 0 33 9 5, shots after 40-120
+  frames). Not found yet which heights make the columns (SPAN 2 -> 5 changed nothing). Forests (rule B) and seas
+  (rule C) not started. Test note: warps to Route 118 / Lilycove now often close the game 150+ frames in (the old
+  test-setup problem), take shots within ~120 frames.

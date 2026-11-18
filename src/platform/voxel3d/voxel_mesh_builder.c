@@ -2785,6 +2785,8 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
 }
 
 static bool BeltIsTree(int x, int y);
+enum { BELT_TIER_DEPTH = 2 };
+static bool TerracesOn(void);
 
 /*
  * POL-13 / POL-40 (Brennan 2026-11-16: "the rock still shows pillars ... just make a mountain round itself out
@@ -2828,7 +2830,7 @@ static bool TerraceBand(int x, int y)
 
     if (sOff < 0)
         sOff = getenv("WJPC_BELT_SMOOTH") != NULL;
-    return !sOff && NearDrawnBelt(x, y, 24);
+    return !sOff && (TerracesOn() || NearDrawnBelt(x, y, 24));
 }
 
 /* POL-13/40: a belt land cell `d` out from its map, its mountain `h` (shift `sh`) high: held BELT_HOLD cells, then
@@ -2926,6 +2928,104 @@ static void BeltMountain(const VoxelMapInstance *ring, int x, int y, int ex, int
     BeltRoundOff(x, y, d, h, sh, level, shift);
 }
 
+/*
+ * POL-46, Brennan 2026-11-17 22:07 ("generalize these exact rules into our global overworld terrain mesher so they
+ * automatically apply across the entire Hoenn region"; "always generate horizontal stepped cliff ledges (fixed
+ * tile-height vertical rock walls ... + flat horizontal top caps), never stretched vertical walls or organ-pipe
+ * slivers"; "Continuous Mountain Massifs: When a mountain border ... or map connection meets another elevated map,
+ * weld edge vertices and continue stepping tiers"). A cell of the belt's land (not trees, not water) stands as
+ * the highest of every loaded map's terraces at it: each map's nearest edge cell, from its highest point (whole
+ * levels, rounded up), down a level every BELT_TIER_DEPTH cells out; a drawn belt's (Lavaridge's) rings of ledges
+ * climbing from its top the same way; never under the ground. Drawn as far south as it is high, as every point of
+ * the drawing is, so neighbouring tops meet; walls all round (BeltCloseSeams), blocks not slopes (TerraceBand).
+ * Beside a map the belt meets its edge's height (no gully, no wall over a gap); between two maps the higher's
+ * terraces win, so their two mountains join. WJPC_BELT_OLD_LEVELS=1: the levels as before (edge-following,
+ * rounded off).
+ */
+enum { BELT_TERRACE_REACH = 24, BELT_TERRACE_SPAN = 5 };
+static bool TerracesOn(void)
+{
+    static int sOn = -1;
+    if (sOn < 0)
+        /* not yet by default: Route 118's north came out as tall columns (2026-11-17 22:55, WIP) */
+        sOn = getenv("WJPC_BELT_TERRACES_ALL") != NULL && getenv("WJPC_BELT_SMOOTH") == NULL;
+    return sOn != 0;
+}
+
+static bool BeltTerraces(int x, int y, const VoxelMapInstance *ring, float *level, float *shift)
+{
+    float best = -1e9f;
+
+    if (!TerracesOn() || BeltIsTree(x, y))
+        return false;
+    for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+    {
+        const VoxelMapInstance *m = VoxelWorld_Instance(i);
+        int mx, my, gx, gy, d;
+        float top;
+
+        if (m == NULL || m->layout == NULL || m->indoor)
+            continue;
+        mx = x < m->originX ? m->originX : x >= m->originX + m->width ? m->originX + m->width - 1 : x;
+        my = y < m->originY ? m->originY : y >= m->originY + m->height ? m->originY + m->height - 1 : y;
+        gx = x > mx ? x - mx : mx - x;
+        gy = y > my ? y - my : my - y;
+        d = gx > gy ? gx : gy;
+        if (d < 1 || d > BELT_TERRACE_REACH)
+            continue;
+        if (VoxelRelief_Belt(m) != 0)
+        {
+            /* a drawn belt's rings (DrawnTierLift), its first ring its own courses */
+            top = VoxelRelief_Base(m) + (float)VoxelRelief_Belt(m) + (float)((d - 1) / BELT_TIER_DEPTH);
+        }
+        else
+        {
+            float hi = -1e9f;
+
+            if (VoxelMesh_Classify(mx, my) == VOXEL_SHAPE_WATER)
+                continue;
+            /* the edge's highest point over BELT_TERRACE_SPAN cells along it either way: a terrace runs on as one
+             * ledge, never a column a cell (each its own height, its own way south: the organ pipes) */
+            for (int k = -BELT_TERRACE_SPAN; k <= BELT_TERRACE_SPAN; ++k)
+            {
+                int cx = gy >= gx ? mx + k : mx, cy = gy >= gx ? my : my + k;
+                const int16_t *g;
+                float h;
+
+                if (cx < m->originX || cy < m->originY || cx >= m->originX + m->width || cy >= m->originY + m->height
+                 || VoxelMesh_Classify(cx, cy) == VOXEL_SHAPE_WATER)
+                    continue;
+                g = VoxelRelief_Cell(m, cx, cy);
+                if (g != NULL)
+                {
+                    int t = g[0];
+                    for (int q = 1; q < VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE; ++q)
+                        t = g[q] > t ? g[q] : t;
+                    h = t / 16.0f;
+                }
+                else
+                    h = VoxelRelief_CellLift(m, cx, cy);
+                hi = h > hi ? h : hi;
+            }
+            if (hi < -1e8f)
+                continue;
+            /* (south of a map the belt is in front of it, under the view: at the edge's height, never climbing) */
+            top = VoxelRelief_Base(m) + ceilf(hi - 0.001f) + (float)VOXEL_BORDER_COURSES
+                - (float)((d - 1) / BELT_TIER_DEPTH);
+        }
+        if (top > best)
+            best = top;
+    }
+    if (best < -1e8f)
+        return false;
+    if (best < VoxelRelief_Base(ring))
+        best = VoxelRelief_Base(ring);
+    best = floorf(best + 0.001f);
+    *level = best - VoxelRelief_Base(ring) - (float)VOXEL_BORDER_COURSES;
+    *shift = best - VoxelRelief_Base(ring);
+    return true;
+}
+
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 {
     const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y); /* POL-30: was instance 0 (see BorderWaterLevel) */
@@ -2942,6 +3042,10 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
        : x >= ring->originX + ring->width ? ring->originX + ring->width - 1 : x;
     ey = y < ring->originY ? ring->originY
        : y >= ring->originY + ring->height ? ring->originY + ring->height - 1 : y;
+    /* POL-46 everywhere (Brennan 22:07: "do not hardcode this fix only for Lavaridge"): the belt's land as terraces
+     * round every map (BeltTerraces) */
+    if (BeltTerraces(x, y, ring, level, shift))
+        return true;
     /* a fill the map's fixes give a height stands its top there, laid on
      * from the map's edge as it is drawn (BorderWaterLevel) */
     if (VoxelRelief_EdgeFillAt(ring, x, y, &fill) && fill.hasTop && !fill.water)
@@ -3673,7 +3777,6 @@ static void BeltTreeSeam(VoxelBuilder *b, int x, int y, float level, float shift
 /* POL-46 terraces round a belt laid as its drawing (Lavaridge's): a level up every BELT_TIER_DEPTH cells out from
  * its map, so its rock climbs away from the town in rings of ledges (north of it, ledges along the rows, their walls
  * facing the town). WJPC_BELT_SMOOTH=1: flat as before. */
-enum { BELT_TIER_DEPTH = 2 };
 /* WJPC_TERRACE_FLAT_ROWS=1: a drawn belt's ledges not drawn further south as they rise (as the 21:00 build) */
 static bool TerraceSouthOff(void)
 {
