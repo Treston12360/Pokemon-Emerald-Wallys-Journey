@@ -2960,6 +2960,64 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
             *shift = sumS / sumW;
         }
     }
+    /*
+     * POL-46 (Brennan 2026-11-17 19:42: "Never leave open vertical seams between two adjacent elevation levels";
+     * "Start by fixing the Lavaridge Town to Route 112/Mt. Chimney northern mountain seam"). Beside a belt laid as
+     * its drawing (Lavaridge's, its rows 4 levels up) Route 112's part of the belt lay at the ground, 2 levels
+     * under it, then rose to Route 112's mountain: a pit with the sky down its stair-shaped seam. Near a drawn belt
+     * the cell now starts at the drawn belt's top where the two meet and goes over to its own height over
+     * BELT_DRAWN_EASE cells (eased), so the mountain rises out of the drawn rock with no step.
+     * WJPC_BELT_DRAWN_PIT=1: as before.
+     */
+    {
+        enum { BELT_DRAWN_EASE = 8 };
+        static int sPit = -1;
+
+        if (sPit < 0)
+            sPit = getenv("WJPC_BELT_DRAWN_PIT") != NULL;
+        for (unsigned i = 0; !sPit && i < VoxelWorld_InstanceCount(); ++i)
+        {
+            const VoxelMapInstance *m = VoxelWorld_Instance(i);
+            int dm, dr, gx, gy;
+            float drawnTop, ownTop, t;
+
+            if (m == NULL || m == ring || m->layout == NULL || m->indoor || VoxelRelief_Belt(m) == 0)
+                continue;
+            gx = x < m->originX ? m->originX - x : x >= m->originX + m->width ? x - (m->originX + m->width - 1) : 0;
+            gy = y < m->originY ? m->originY - y : y >= m->originY + m->height ? y - (m->originY + m->height - 1) : 0;
+            dm = gx > gy ? gx : gy;
+            gx = x < ring->originX ? ring->originX - x : x >= ring->originX + ring->width ? x - (ring->originX + ring->width - 1) : 0;
+            gy = y < ring->originY ? ring->originY - y : y >= ring->originY + ring->height ? y - (ring->originY + ring->height - 1) : 0;
+            dr = gx > gy ? gx : gy;
+            if (dm - dr >= BELT_DRAWN_EASE)
+                continue;
+            t = dm - dr <= 0 ? 0.0f : (float)(dm - dr) / (float)BELT_DRAWN_EASE;
+            t = 0.5f - 0.5f * cosf(t * 3.14159265f);
+            drawnTop = VoxelRelief_Base(m) + (float)VoxelRelief_Belt(m);
+            ownTop = VoxelRelief_Base(ring) + (float)VOXEL_BORDER_COURSES + *level;
+            ownTop = drawnTop + (ownTop - drawnTop) * t;
+            /* and drawn as far south as the drawn belt's rows are (its courses, VoxelMesh_EmitBorder), going over
+             * to its own: tops at one height a different way south left the stair of sky as before */
+            *shift = (float)VoxelRelief_Belt(m) + (*shift - (float)VoxelRelief_Belt(m)) * t;
+            *level = ownTop - VoxelRelief_Base(ring) - (float)VOXEL_BORDER_COURSES;
+        }
+    }
+    /* POL-46, Brennan's brief ("Mountains and background hills must step inward concentrically as height
+     * increases ... tiered terraces"), asked to see it beside the rounded one ("Show me both"): WJPC_BELT_TIERS=1
+     * stands the belt's land in whole levels, so a slope reads as terraces each a level up and further in. */
+    {
+        static int sTiers = -1;
+
+        if (sTiers < 0)
+            sTiers = getenv("WJPC_BELT_TIERS") != NULL;
+        if (sTiers && !BeltIsTree(x, y))
+        {
+            float q = floorf(*level + 0.5f);
+
+            *shift += q - *level;
+            *level = q;
+        }
+    }
     return true;
 }
 
@@ -3455,6 +3513,72 @@ static void BeltTreeSeam(VoxelBuilder *b, int x, int y, float level, float shift
     }
 }
 
+/*
+ * POL-46 (Brennan 2026-11-17 19:42, the 3D brief: "Every elevated terrain mass must be a watertight, closed 3D
+ * manifold ... Never leave open vertical seams between two adjacent elevation levels"; first: "the Lavaridge Town
+ * to Route 112/Mt. Chimney northern mountain seam"). A cell of the belt's top, in the world: its height and how far
+ * south it is drawn, as VoxelMesh_EmitBorder stands it. FALSE for no standing belt cell (a map's, water, trees).
+ */
+static bool BeltTopWorld(int x, int y, float *top, float *z, unsigned *drawnOut)
+{
+    float level, shift, edge = 0.0f, edgeShift = 0.0f;
+    const VoxelMapInstance *own;
+    unsigned drawn;
+
+    if (!BorderAt(x, y) || VoxelWorld_GetInstanceAt(x, y) != NULL || BeltIsTree(x, y)
+     || BorderWaterLevel(x, y, &level, &shift))
+        return false;
+    own = VoxelWorld_BeltRing(x, y);
+    drawn = own != NULL ? VoxelRelief_Belt(own) : 0u;
+    VoxelMesh_BorderLevel(x, y, &edge, &edgeShift);
+    *top = BeltBase(x, y) + (float)(drawn ? drawn : VOXEL_BORDER_COURSES) + edge;
+    *z = (float)y + (float)drawn + edgeShift;
+    *drawnOut = drawn;
+    return true;
+}
+
+/*
+ * Between a cell of a belt laid as the drawing (Lavaridge's) and one stood as the map's edge (Route 112's, its
+ * mountain) nothing closed the step: the two tops stood at their own heights and the sky showed down the seam in a
+ * stair of blue (BREN_1841_3/4, "lavaridge background holes"). The higher cell stands a wall of its own drawing
+ * down to the lower one's top, on each side where the other kind is lower. WJPC_BELT_OPEN_SEAMS=1: as before.
+ */
+static void BeltCloseSeams(VoxelBuilder *builder, int x, int y, unsigned drawn, float wz)
+{
+    static int sOpen = -1;
+    static const int kDir[4][2] = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+    float myTop, myZ, base = builder->base;
+    unsigned myDrawn;
+
+    if (sOpen < 0)
+        sOpen = getenv("WJPC_BELT_OPEN_SEAMS") != NULL;
+    if (sOpen || !BeltTopWorld(x, y, &myTop, &myZ, &myDrawn))
+        return;
+    for (int d = 0; d < 4; ++d)
+    {
+        int nx = x + kDir[d][0], ny = y + kDir[d][1];
+        float top, z, u0, v0, u1, v1;
+        unsigned nDrawn;
+
+        if (!BeltTopWorld(nx, ny, &top, &z, &nDrawn) || (nDrawn != 0) == (drawn != 0) || top > myTop - 0.05f)
+            continue;
+        /* a level of wall a tile of the drawing, from their top up to ours */
+        for (float lo = top; lo < myTop - 0.05f; lo += 1.0f)
+        {
+            float hi = lo + 1.0f < myTop ? lo + 1.0f : myTop;
+            float yb = lo - base, yt = hi - base;
+
+            if (!MetatileUV(builder, BeltMetatileFor(x, y, y), &u0, &v0, &u1, &v1))
+                break;
+            v0 = v1 - (v1 - v0) * (hi - lo);
+            if (d == 0) VoxelMesh_North(builder, (float)x, wz, yb, yt, 0.0f, u0, v0, u1, v1);
+            if (d == 1) VoxelMesh_South(builder, (float)x, wz, yb, yt, 0.0f, u0, v0, u1, v1);
+            if (d == 2) VoxelMesh_West(builder, (float)x, wz, yb, yt, 0.0f, u0, v0, u1, v1);
+            if (d == 3) VoxelMesh_East(builder, (float)x, wz, yb, yt, 0.0f, u0, v0, u1, v1);
+        }
+    }
+}
+
 void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     float u0, v0, u1, v1;
@@ -3518,7 +3642,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 float edge, edgeShift;
 
                 if (sBeltSlopes < 0)
-                    sBeltSlopes = getenv("WJPC_BELT_BLOCKS") == NULL;
+                    sBeltSlopes = getenv("WJPC_BELT_BLOCKS") == NULL && getenv("WJPC_BELT_TIERS") == NULL;
                 if (VoxelMesh_BorderLevel(x, y, &edge, &edgeShift))
                 {
                     if (!(sBeltSlopes && !drawn && !BeltIsTree(x, y)))
@@ -3613,6 +3737,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 east = !BorderAt(x + 1, y);
                 west = !BorderAt(x - 1, y);
             }
+            BeltCloseSeams(builder, x, y, drawn, wz);
             if (!south && !east && !west)
                 continue;
             for (int h = 0; h < (int)courses; ++h)
