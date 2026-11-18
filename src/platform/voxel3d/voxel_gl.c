@@ -1317,7 +1317,7 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
 // the current map's atlas; the others are the atlases of loaded maps on other tile sets, whose border the belt
 // shows beside them (Route 113's ash trees seen from Route 111/112). A ground vertex of layer L carries
 // 2 * VOXEL_ATLAS_PAGES * L more in u until BeltAssemble sorts it into its layer's page.
-#define BELT_LAYERS 4
+#define BELT_LAYERS 16  /* POL-46: was 4 - a fifth tile set's belt was never drawn (a hole of sky north of Route 118) */
 static Mesh sBeltTerrain[BELT_LAYERS][VOXEL_ATLAS_PAGES], sBeltTrees;
 static Atlas *sBeltAtlas;
 static Atlas *sBeltLayer[BELT_LAYERS];        // what the pieces are built with now ([0] unused: atlas0)

@@ -3892,6 +3892,358 @@ static void BeltCloseSeams(VoxelBuilder *builder, int x, int y, unsigned drawn, 
     }
 }
 
+/*
+ * POL-46, Brennan 2026-11-18 13:33 - the belt's land as ONE terraced heightfield ("Treat the mountain as a unified
+ * 2D heightmap grid first, then mesh it cleanly"; "Weld/share vertices between adjacent columns (X and Z
+ * neighbors) so neighboring cliff columns form a single continuous hillside surface"; "Stop extruding
+ * axis-aligned square boxes (90 degree corners) per tile ... chamfer/bevel diagonal corners (45 degree corner
+ * slopes) so the terrace ledges curve and flow naturally around the mountain corner"; earlier, 21:00: "each tier
+ * must have a vertical rock wall of fixed tile height ... followed by a flat horizontal top ledge" with the rock
+ * tiled by world height, never stretched).
+ *
+ * BeltField: one height (world tiles) and one way south for every CORNER of the grid - a pure function of the
+ * corner, so a corner shared by four cells, by two chunks or by the belt and a map's edge is the same point
+ * (watertight by construction, nothing to weld afterwards). Every loaded map gives the height of its nearest edge
+ * point (its relief lattice there) and, off its north, west and east sides, climbs a level every
+ * BELT_FIELD_RATE cells (to BELT_FIELD_RISE levels: the mountain behind rises away from the route); off its
+ * south side (in front, under the view) it stays at the edge's height. The highest map wins, so two maps'
+ * mountains join into one massif. Its way south: the nearest edge point's (the map's own drawing: where the belt
+ * meets the map it meets it exactly), blended with distance.
+ *
+ * Each cell is two triangles of that field, terraced: the part between level k and k+1 lies flat at k; where the
+ * field crosses a whole level a wall a level high stands along the crossing (straight, or across the cell at 45
+ * degrees where the levels turn a corner - the chamfer). WJPC_BELT_BLOCKS_OLD=1: the cell-by-cell belt as before.
+ */
+enum { BELT_FIELD_REACH = 16, BELT_FIELD_RATE = 2, BELT_FIELD_RISE = 6, BELT_FIELD_SOUTH = 3 };
+
+static bool FieldOn(void)
+{
+    static int sOn = -1;
+    if (sOn < 0)
+        sOn = getenv("WJPC_BELT_BLOCKS_OLD") == NULL;
+    return sOn != 0;
+}
+
+static void BeltField(int vx, int vy, float *height, float *south)
+{
+    /* blended over the maps by 1/d^3 (the nearest map's edge wins near it, exactly on it): the edge's height, its way
+     * south, and whether the point is off a side the mountain climbs from (north, west, east) or in front (south);
+     * then the climb, by the distance to the nearest map. One smooth function: no map's cone outgrowing another's
+     * with distance, no cliff where a map drops out of reach (both made walls of columns, 2026-11-18). */
+    float sumW = 0.0f, sumE = 0.0f, sumS = 0.0f, sumBack = 0.0f, dmin = 1e9f;
+    float exactE = 0.0f, exactS = 0.0f;
+    bool exact = false;
+
+    for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+    {
+        const VoxelMapInstance *m = VoxelWorld_Instance(i);
+        int ox, oy, cx, cy, gi, gj;
+        float qx, qy, dx, dy, d, e, sd, w;
+        const int16_t *g, *dg;
+
+        if (m == NULL || m->layout == NULL || m->indoor)
+            continue;
+        ox = m->originX;
+        oy = m->originY;
+        if (vx > ox && vx < ox + m->width && vy > oy && vy < oy + m->height)
+            continue;
+        qx = vx < ox ? (float)ox : vx > ox + m->width ? (float)(ox + m->width) : (float)vx;
+        qy = vy < oy ? (float)oy : vy > oy + m->height ? (float)(oy + m->height) : (float)vy;
+        dx = (float)vx - qx;
+        dy = (float)vy - qy;
+        d = sqrtf(dx * dx + dy * dy);
+        cx = (int)qx - (qx >= (float)(ox + m->width) ? 1 : 0);
+        cy = (int)qy - (qy >= (float)(oy + m->height) ? 1 : 0);
+        gi = (int)((qx - (float)cx) * (VOXEL_RELIEF_SIDE - 1) + 0.5f);
+        gj = (int)((qy - (float)cy) * (VOXEL_RELIEF_SIDE - 1) + 0.5f);
+        g = VoxelRelief_Cell(m, cx, cy);
+        dg = VoxelRelief_Depth(m, cx, cy);
+        e = VoxelRelief_Base(m) + (g != NULL ? g[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
+        sd = VoxelRelief_Base(m) + (dg != NULL ? dg[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f
+                                    : g != NULL ? g[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
+        if (d < 1e-4f)
+        {
+            if (!exact || e > exactE)
+            {
+                exactE = e;
+                exactS = sd;
+            }
+            exact = true;
+            continue;
+        }
+        w = 1.0f / (d * d * d);
+        sumW += w;
+        sumE += w * e;
+        sumS += w * sd;
+        sumBack += w * (vy >= oy + m->height ? 0.0f : 1.0f);
+        dmin = d < dmin ? d : dmin;
+    }
+    if (exact)
+    {
+        *height = exactE;
+        *south = exactS;
+        return;
+    }
+    if (sumW <= 0.0f)
+    {
+        *height = 0.0f;
+        *south = 0.0f;
+        return;
+    }
+    {
+        float r = dmin / (float)BELT_FIELD_RATE;
+        r = r < (float)BELT_FIELD_RISE ? r : (float)BELT_FIELD_RISE;
+        *height = sumE / sumW + r * (sumBack / sumW);
+        /* the way south only where the belt meets a map (to meet its edge exactly), gone over BELT_FIELD_SOUTH cells:
+         * a mountain drawn as far south as it is high stood rows away from where it is, over the belt's sea and
+         * trees beside it (which lie at their own rows), and left a hole of sky where it should have been */
+        {
+            float k = 1.0f - dmin / (float)BELT_FIELD_SOUTH;
+            *south = k > 0.0f ? (sumS / sumW) * k : 0.0f;
+        }
+    }
+}
+
+typedef struct { float x, y, h, s; } FieldPt;   /* grid position (cells), field height, way south */
+
+static FieldPt FieldLerp(FieldPt a, FieldPt b, float level)
+{
+    float t = (level - a.h) / (b.h - a.h);
+    FieldPt r = { a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, level, a.s + (b.s - a.s) * t };
+    return r;
+}
+
+/* the part of a polygon with field height >= lo (keepAbove) or < hi (else): Sutherland-Hodgman on a plane */
+static int FieldClip(const FieldPt *in, int n, FieldPt *out, float level, bool keepAbove)
+{
+    int m = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        FieldPt a = in[i], b = in[(i + 1) % n];
+        bool ina = keepAbove ? a.h >= level : a.h < level;
+        bool inb = keepAbove ? b.h >= level : b.h < level;
+        if (ina)
+            out[m++] = a;
+        if (ina != inb)
+            out[m++] = FieldLerp(a, b, level);
+    }
+    return m;
+}
+
+static void FieldTriangle(VoxelBuilder *b, int cellX, int cellY, FieldPt p0, FieldPt p1, FieldPt p2,
+                          float tu0, float tv0, float tu1, float tv1, bool haveWall,
+                          float wu0, float wv0, float wu1, float wv1)
+{
+    FieldPt tri[3] = { p0, p1, p2 };
+    float lo = p0.h, hi = p0.h;
+
+    for (int i = 1; i < 3; ++i)
+    {
+        lo = tri[i].h < lo ? tri[i].h : lo;
+        hi = tri[i].h > hi ? tri[i].h : hi;
+    }
+    /* the ledges: each level's part, flat at that level */
+    for (float k = floorf(lo); k <= floorf(hi); k += 1.0f)
+    {
+        FieldPt a[8], c[10];
+        int n = FieldClip(tri, 3, a, k, true);
+        n = FieldClip(a, n, c, k + 1.0f, false);
+        if (n < 3)
+            continue;
+        for (int i = 1; i + 1 < n; ++i)
+        {
+            const FieldPt *q[3] = { &c[0], &c[i], &c[i + 1] };
+            VoxelVertex v[3];
+            for (int j = 0; j < 3; ++j)
+            {
+                v[j].x = q[j]->x;
+                v[j].y = k;
+                v[j].z = q[j]->y + q[j]->s;
+                v[j].u = tu0 + (tu1 - tu0) * (q[j]->x - (float)cellX);
+                v[j].v = tv0 + (tv1 - tv0) * (q[j]->y - (float)cellY);
+                v[j].shade = SHADE_TOP;
+            }
+            /* wound to face up */
+            VoxelBuilder_Tri(b, &v[0], &v[2], &v[1]);
+        }
+    }
+    /* the walls: where the field crosses a whole level, a level of rock along the crossing */
+    if (!haveWall)
+        return;
+    for (float k = floorf(lo) + 1.0f; k <= hi; k += 1.0f)
+    {
+        FieldPt cut[2];
+        int n = 0;
+        float gx, gy;
+
+        for (int i = 0; i < 3 && n < 2; ++i)
+        {
+            FieldPt a = tri[i], c = tri[(i + 1) % 3];
+            if ((a.h < k) != (c.h < k))
+                cut[n++] = FieldLerp(a, c, k);
+        }
+        if (n < 2)
+            continue;
+        /* the downhill way (the wall faces it): the field's gradient on the triangle */
+        {
+            float ax = p1.x - p0.x, ay = p1.y - p0.y, ah = p1.h - p0.h;
+            float bx = p2.x - p0.x, by = p2.y - p0.y, bh = p2.h - p0.h;
+            float det = ax * by - ay * bx;
+            if (fabsf(det) < 1e-6f)
+                continue;
+            gx = (ah * by - bh * ay) / det;
+            gy = (bh * ax - ah * bx) / det;
+        }
+        {
+            float ex = cut[1].x - cut[0].x, ey = cut[1].y - cut[0].y;
+            /* the quad's face is (-ey, ex) for this order; it must face downhill, -grad */
+            if (-ey * -gx + ex * -gy < 0.0f)
+            {
+                FieldPt t = cut[0];
+                cut[0] = cut[1];
+                cut[1] = t;
+            }
+        }
+        {
+            float nx = -(cut[1].y - cut[0].y), ny = cut[1].x - cut[0].x;
+            float shade = fabsf(nx) > fabsf(ny) ? (nx < 0 ? SHADE_WEST : SHADE_EAST) : (ny > 0 ? SHADE_SOUTH : SHADE_NORTH);
+            VoxelVertex q0 = { cut[0].x, k - 1.0f, cut[0].y + cut[0].s, wu0, wv1, shade };
+            VoxelVertex q1 = { cut[1].x, k - 1.0f, cut[1].y + cut[1].s, wu1, wv1, shade };
+            VoxelVertex q2 = { cut[1].x, k,        cut[1].y + cut[1].s, wu1, wv0, shade };
+            VoxelVertex q3 = { cut[0].x, k,        cut[0].y + cut[0].s, wu0, wv0, shade };
+            VoxelBuilder_Quad(b, &q0, &q1, &q2, &q3);
+        }
+    }
+}
+
+static void EmitFieldCell(VoxelBuilder *b, int x, int y)
+{
+    FieldPt c[4];
+    float tu0, tv0, tu1, tv1, wu0, wv0, wu1, wv1;
+    const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y);
+    int face = ring != NULL ? VoxelRelief_FaceTile(ring) : -1;
+    bool wall;
+    const float keepBase = b->base, keepLift = b->lift, keepShift = b->shift, keepStretch = b->stretchAdd;
+
+    if (getenv("WJPC_FIELD_NONE") != NULL || !MetatileUV(b, BeltMetatileFor(x, y, y), &tu0, &tv0, &tu1, &tv1))
+        return;
+    wall = (face >= 0 && MetatileUV(b, face, &wu0, &wv0, &wu1, &wv1))
+        || MetatileUV(b, BeltMetatileFor(x, y, y), &wu0, &wv0, &wu1, &wv1);
+    for (int k = 0; k < 4; ++k)
+    {
+        int vx = x + (k & 1), vy = y + (k >> 1);
+        c[k].x = (float)vx;
+        c[k].y = (float)vy;
+        BeltField(vx, vy, &c[k].h, &c[k].s);
+    }
+    {
+        static int sDump = -1;
+        if (sDump < 0)
+            sDump = getenv("WJPC_FIELD_DUMP") != NULL ? 1 : 0;
+        static const void *sLast0;
+        if (sDump && VoxelWorld_Instance(0) != NULL && sLast0 != (const void *)VoxelWorld_Instance(0)->layout)
+        {
+            sLast0 = (const void *)VoxelWorld_Instance(0)->layout;
+            for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+            {
+                const VoxelMapInstance *m = VoxelWorld_Instance(i);
+                if (m != NULL)
+                    fprintf(stderr, "INST %u %p origin %d,%d size %dx%d indoor %d layout %p base %.2f\n", i, (const void *)m,
+                            m->originX, m->originY, m->width, m->height, (int)m->indoor, (const void *)m->layout,
+                            VoxelRelief_Base(m));
+            }
+            for (int vy = -16; vy <= 2; ++vy)
+            {
+                fprintf(stderr, "GRID %3d:", vy);
+                for (int vx = -8; vx <= 28; ++vx)
+                {
+                    float fh, fs;
+                    BeltField(vx, vy, &fh, &fs);
+                    fprintf(stderr, " %4.1f", fh);
+                }
+                fprintf(stderr, "\n");
+            }
+        }
+        if (sDump)
+            fprintf(stderr, "FIELD %d %d  %.2f/%.2f %.2f/%.2f %.2f/%.2f %.2f/%.2f  ring=%p\n", x, y, c[0].h, c[0].s,
+                    c[1].h, c[1].s, c[2].h, c[2].s, c[3].h, c[3].s, (const void *)ring);
+    }
+    /* world heights and ways south, as they are */
+    b->base = 0.0f;
+    b->lift = 0.0f;
+    b->shift = 0.0f;
+    b->stretchAdd = 0.0f;
+    /* the diagonal along the corner that differs most from the others' mean - the chamfer runs across a turn */
+    if (fabsf(c[0].h - c[3].h) <= fabsf(c[1].h - c[2].h))
+    {
+        FieldTriangle(b, x, y, c[0], c[1], c[3], tu0, tv0, tu1, tv1, wall, wu0, wv0, wu1, wv1);
+        FieldTriangle(b, x, y, c[0], c[3], c[2], tu0, tv0, tu1, tv1, wall, wu0, wv0, wu1, wv1);
+    }
+    else
+    {
+        FieldTriangle(b, x, y, c[0], c[1], c[2], tu0, tv0, tu1, tv1, wall, wu0, wv0, wu1, wv1);
+        FieldTriangle(b, x, y, c[1], c[3], c[2], tu0, tv0, tu1, tv1, wall, wu0, wv0, wu1, wv1);
+    }
+    /* its sides on what is not the field (the belt's sea and trees, a map): a wall of rock from the ground up to
+     * the ledges along that side, each stretch of the side at its whole level - the field's edge stood open over
+     * the sea beside it, a hole of sky down the shore (Route 118's north, 2026-11-18) */
+    if (wall)
+    {
+        static const int kSide[4][2] = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+        /* each side's corners, in the order that faces it outward (see VoxelMesh_North/South/West/East) */
+        static const int kCorner[4][2] = { {1, 0}, {2, 3}, {0, 2}, {3, 1} };
+
+        for (int d = 0; d < 4; ++d)
+        {
+            int nx = x + kSide[d][0], ny = y + kSide[d][1];
+            float floorH, wl, ws;
+            FieldPt a = c[kCorner[d][0]], e = c[kCorner[d][1]], cut[8];
+            int n = 0;
+            float shade = d == 0 ? SHADE_NORTH : d == 1 ? SHADE_SOUTH : d == 2 ? SHADE_WEST : SHADE_EAST;
+
+            if (VoxelWorld_GetInstanceAt(nx, ny) != NULL || !BorderAt(nx, ny))
+                continue;   /* a map: its edge closes it (EdgeOverBelt, EmitSeamSkirt) */
+            if (!BeltIsTree(nx, ny) && !BorderWaterLevel(nx, ny, &wl, &ws))
+                continue;   /* the field: the same corners, nothing open */
+            floorH = BeltBase(nx, ny) - 1.0f;
+            /* the side, cut where the field crosses a whole level: each stretch one level of ledge */
+            cut[n++] = a;
+            {
+                float lo = a.h < e.h ? a.h : e.h, hi = a.h < e.h ? e.h : a.h;
+                for (float k = floorf(lo) + 1.0f; k <= hi && n < 7; k += 1.0f)
+                    cut[n++] = FieldLerp(a, e, k);
+                if (a.h > e.h)
+                    for (int i = 1, j = n - 1; i < j; ++i, --j)
+                    {
+                        FieldPt t = cut[i];
+                        cut[i] = cut[j];
+                        cut[j] = t;
+                    }
+            }
+            cut[n++] = e;
+            for (int i = 0; i + 1 < n; ++i)
+            {
+                FieldPt p = cut[i], q = cut[i + 1];
+                float top = floorf((p.h + q.h) * 0.5f + 1e-4f);
+                for (float lo = floorH; lo < top; lo += 1.0f)
+                {
+                    float hi = lo + 1.0f < top ? lo + 1.0f : top;
+                    float vb = wv1, vt = wv1 + (wv0 - wv1) * (hi - lo);
+                    VoxelVertex q0 = { p.x, lo, p.y + p.s, wu0, vb, shade };
+                    VoxelVertex q1 = { q.x, lo, q.y + q.s, wu1, vb, shade };
+                    VoxelVertex q2 = { q.x, hi, q.y + q.s, wu1, vt, shade };
+                    VoxelVertex q3 = { p.x, hi, p.y + p.s, wu0, vt, shade };
+                    VoxelBuilder_Quad(b, &q0, &q1, &q2, &q3);
+                }
+            }
+        }
+    }
+    b->base = keepBase;
+    b->lift = keepLift;
+    b->shift = keepShift;
+    b->stretchAdd = keepStretch;
+}
+
 void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     float u0, v0, u1, v1;
@@ -3941,6 +4293,18 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 builder->base = BeltBase(x, y);
             if (BorderWaterLevel(x, y, &level, &shift))
             {
+                if (getenv("WJPC_FIELD_DUMP") != NULL)
+                    fprintf(stderr, "WATER %d %d %.2f %.2f base %.2f mt %d uv %d pass %p\n", x, y, level, shift, builder->base,
+                            VoxelWorld_BorderMetatile(x, y),
+                            (int)MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1),
+                            (const void *)sBeltPassPrimary);
+                if (getenv("WJPC_FIELD_DUMP") != NULL)
+                {
+                    const VoxelMapInstance *am = VoxelWorld_BorderArtMap(x, y), *rg = VoxelWorld_BeltRing(x, y);
+                    fprintf(stderr, "ART %d %d art %p (%d,%d) ring %p (%d,%d) uv %.4f %.4f %.4f %.4f\n", x, y, (const void *)am,
+                            am ? am->originX : 0, am ? am->originY : 0, (const void *)rg, rg ? rg->originX : 0,
+                            rg ? rg->originY : 0, u0, v0, u1, v1);
+                }
                 /* flat, and no faces: the map's own edge closes any step */
                 if (MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
                 {
@@ -3949,6 +4313,11 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                     BeltWaterSkirts(builder, x, y, wx, wz, level, shift, u0, v0, u1, v1);
                     BeltFlatSteps(builder, x, y, level, shift, u0, v0, u1, v1);
                 }
+                continue;
+            }
+            if (FieldOn() && !BeltIsTree(x, y))
+            {
+                EmitFieldCell(builder, x, y);
                 continue;
             }
             {

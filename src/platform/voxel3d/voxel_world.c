@@ -1752,7 +1752,7 @@ static bool BorderIsPrimaryOnly(const VoxelMapInstance *m)
  * (voxel_gl.c, belt layers) and says here which tile set pairs it has ready. A map on one of them gives the
  * belt its border like any other; VoxelWorld_BorderArtMap says whose tile sets a cell's metatile is of.
  */
-#define BELT_PAIRS 4
+#define BELT_PAIRS 16  /* POL-46: was 4 (BELT_LAYERS) */
 static const void *sBeltPairs[BELT_PAIRS][2];
 static unsigned sBeltPairCount;
 
