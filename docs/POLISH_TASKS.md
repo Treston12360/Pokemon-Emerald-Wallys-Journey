@@ -789,8 +789,10 @@ Brennan 23:17: "Continue onto the harder ones for now." 23:27: "Provide me pictu
 POL-2/3 asked: "One each" (POL-2 out of bounds, POL-3 3D generation).
 
 **A. 3D generation (inside the maps)** - order: POL-31 first, then the rest
-- [ ] **POL-31** New Mauville: Gamma-lighting glare too bright; its models still 2D (Emerald 3DS has not modelled
-  New Mauville at all: VOXEL_STATUS "Entrance/Inside" both not started).
+- [x] **POL-31** New Mauville: Gamma-lighting glare too bright; its models still 2D (Emerald 3DS has not modelled
+  New Mauville at all: VOXEL_STATUS "Entrance/Inside" both not started). Done 2026-11-17 (Brennan 18:02: "things
+  look to be fine, if there are anymore things to fix i will let you be aware"). All notes, fixes and how to rebuild:
+  `docs/NEW_MAUVILLE_3D.md`. Entrance (layout 184) still flat.
 - [ ] **POL-3** mountain edges show blue (and "the bases around trees or some edge lines still show either black or
   blue"). Crack fill in the final pass (16k-test) - outdoor result not reported yet.
 - [ ] **POL-8** black lines on indoor floors at 4K ("Both": some stay, more while walking). Not reproduced here.
