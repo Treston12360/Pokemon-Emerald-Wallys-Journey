@@ -1,0 +1,40 @@
+name: Capture Dewford
+on:
+  push:
+    branches: [capture-dewford-coast]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install native build dependencies
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update -qq
+          sudo apt-get install -y gcc-multilib binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi libpng-dev libsdl2-dev libsdl2-2.0-0:i386 libsdl2-image-dev libsdl2-image-2.0-0:i386 libgl1-mesa-dri:i386 xvfb imagemagick
+      - name: Configure screenshot-only starting location
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("src/platform/sdl2.c")
+          s=p.read_text().replace('if (!strcmp(cmd, "warp"))','if (!strcmp(cmd, "startcapture")) { extern void CB2_NewGame(void); SetMainCallback2(CB2_NewGame); return true; }\n        if (!strcmp(cmd, "warp"))',1)
+          p.write_text(s)
+          p=Path("src/new_game.c")
+          s=p.read_text().replace("MAP_GROUP(MAP_INSIDE_OF_TRUCK), MAP_NUM(MAP_INSIDE_OF_TRUCK), WARP_ID_NONE, -1, -1","0, 11, WARP_ID_NONE, 12, 12")
+          p.write_text(s)
+          PY
+      - run: make -j4 release
+      - run: make -j4 -f Makefile.pc
+      - name: Capture dock
+        run: |
+          printf 'world3d=1\nzoom=7\nresolution=1\n' > WallysJourney.cfg
+          printf 'wait 160\nstartcapture\nwait 250\nwinshot dewford.ppm\nwait 4\nquit\n' > capture.txt
+          xvfb-run -a env WJPC_SCRIPT=capture.txt WJPC_TEST_WINDOW=1 WJPC_3D=1 WJPC_VOXEL_DIR="$PWD/pc_data/voxel" SDL_AUDIODRIVER=dummy LIBGL_ALWAYS_SOFTWARE=1 ./wallys-journey
+          convert dewford.ppm dewford.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dewford-dock
+          path: dewford.png
