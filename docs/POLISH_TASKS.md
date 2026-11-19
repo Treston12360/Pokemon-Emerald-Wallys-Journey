@@ -1073,3 +1073,11 @@ Numbered here POL-49..; status kept below as work goes.
   entrance, mid terraces, and upper summit flight) stand out as true 3D staggered steps." Also: "Check if any other
   maps in Hoenn (such as Sky Pillar, Jagged Pass, Meteor Falls, or Sootopolis) are also being skipped or left flat by
   that legacy 3D data tool, and upgrade the generator so it handles them properly too." Then the to-do order.
+- POL-51 Mt Pyre outside (2026-11-19): height data made with the upgraded generator (VOXEL_SPREAD_OK=mt_pyre_exterior,
+  tools/voxel3ds/gen_relief_spread_ok.patch) and spliced in as layout 302 (`POL-51_mt_pyre_terraces.png`): real
+  terraces, the stairs stepped flights between them. Seen: a tall dark cliff from the island's edge down to the sea
+  on the west and east (the map stands high over the sea fill) - to look at. Generator survey: only Mt Pyre outside,
+  Route 122 (excluded on purpose) and Slateport (no record) lacked height data; Sky Pillar, Jagged Pass, Meteor
+  Falls, Sootopolis have it. Summit's two flights (rows 17, 31) still flat - next.
+- POL-56 Route 120 south-west triangle: two tries (south seam over any land belt; edge corner = higher of two cells)
+  did NOT close it - still open.
