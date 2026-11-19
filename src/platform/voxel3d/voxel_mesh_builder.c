@@ -4428,8 +4428,10 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
         return false;
     /* the shelf all round it flat too (Brennan: "Snap tree positions onto the flat centers of the terrace shelves"
      * - a tree on a shelf's edge cell hung its crown over the drop) */
-    for (int vy = y - 1; vy <= y + 2; ++vy)
-        for (int vx = x - 1; vx <= x + 2; ++vx)
+    /* (its own corners and the next row's south of it: the shelf in front of the trunk, where the crown leans;
+     * a 3x3 flat patch was too much for 2-square shelves - no trees at all on them) */
+    for (int vy = y; vy <= y + 2; ++vy)
+        for (int vx = x; vx <= x + 1; ++vx)
         {
             float fh, fs;
             BeltField(vx, vy, &fh, &fs);
