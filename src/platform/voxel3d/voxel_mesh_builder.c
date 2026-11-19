@@ -3062,7 +3062,9 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
             h += fh * 0.25f;
             sh += fs * 0.25f;
         }
-        *level = floorf(h + 1e-4f) - VoxelRelief_Base(ring);
+        /* (not floored to the ledge: a wood rising a whole level at once showed the dark ground under the higher
+         * crowns in squares; the crowns hide a gentle rise) */
+        *level = h - VoxelRelief_Base(ring);
         *shift = sh - VoxelRelief_Base(ring);
         return true;
     }
