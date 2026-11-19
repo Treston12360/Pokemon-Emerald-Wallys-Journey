@@ -3955,7 +3955,7 @@ static void BeltCloseSeams(VoxelBuilder *builder, int x, int y, unsigned drawn, 
  * field crosses a whole level a wall a level high stands along the crossing (straight, or across the cell at 45
  * degrees where the levels turn a corner - the chamfer). WJPC_BELT_BLOCKS_OLD=1: the cell-by-cell belt as before.
  */
-enum { BELT_FIELD_REACH = 16, BELT_FIELD_RATE = 2, BELT_FIELD_RISE = 6, BELT_FIELD_SOUTH = 3 };
+enum { BELT_FIELD_REACH = 16, BELT_FIELD_RATE = 2, BELT_FIELD_RISE = 6, BELT_FIELD_SOUTH = 3, BELT_FIELD_PEAK = 14 };
 
 static bool FieldOn(void)
 {
@@ -3972,7 +3972,8 @@ static void BeltField(int vx, int vy, float *height, float *south)
      * then the climb, by the distance to the nearest map. One smooth function: no map's cone outgrowing another's
      * with distance, no cliff where a map drops out of reach (both made walls of columns, 2026-11-18). */
     float sumW = 0.0f, sumE = 0.0f, sumS = 0.0f, sumBack = 0.0f, dmin = 1e9f;
-    float exactE = 0.0f, exactS = 0.0f, capMin = 1e9f;
+    float exactE = 0.0f, exactS = 0.0f, capMin = 1e9f, sumRise = 0.0f, nearE = 0.0f;
+    bool nearSouth = false;
     bool exact = false;
 
     for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
@@ -4028,6 +4029,17 @@ static void BeltField(int vx, int vy, float *height, float *south)
         sumE += w * e;
         sumS += w * sd;
         sumBack += w * (vy >= oy + m->height ? 0.0f : 1.0f);
+        /* POL-46 (Brennan 22:39, Lavaridge north: "Mirror/extend the stepped rocky mountain peak from the east side
+         * across to the west side"): behind a map whose belt is its drawing (Lavaridge's rock) the mountain goes on
+         * climbing, as Route 112's does east of it, to BELT_FIELD_PEAK levels; elsewhere BELT_FIELD_RISE (Route 118,
+         * locked in 22:39, unchanged). Blended by the same weights, so no seam where one map's pull gives way. */
+        sumRise += w * (float)(VoxelRelief_Belt(m) != 0 && getenv("WJPC_FIELD_NO_PEAK") == NULL ? BELT_FIELD_PEAK
+                                                                                            : BELT_FIELD_RISE);
+        if (d < dmin)
+        {
+            nearE = e;
+            nearSouth = vy >= oy + m->height && vx >= ox && vx <= ox + m->width;
+        }
         dmin = d < dmin ? d : dmin;
     }
     if (getenv("WJPC_FIELD_NO_CAP") != NULL)
@@ -4045,9 +4057,15 @@ static void BeltField(int vx, int vy, float *height, float *south)
         return;
     }
     {
-        float r = dmin / (float)BELT_FIELD_RATE;
-        r = r < (float)BELT_FIELD_RISE ? r : (float)BELT_FIELD_RISE;
+        float r = dmin / (float)BELT_FIELD_RATE, rise = sumRise / sumW;
+        r = r < rise ? r : rise;
         *height = sumE / sumW + r * (sumBack / sumW);
+        /* POL-46 (Brennan 22:39, Lavaridge's south: "Make the Top of the Bottom Mountain Flush & Level Across the
+         * Whole Width"; a blue triangle under the red-roofed houses): in front of a map (south of it) the land
+         * never dips under the map's edge - the blend with farther, lower maps took it to 5.9 under an edge of 6.0,
+         * a whole level down in places (sawtooth steps, a gap). WJPC_FIELD_SOUTH_DIP=1: as before. */
+        if (nearSouth && *height < nearE && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
+            *height = nearE;
         if (*height > capMin)
             *height = capMin;
         /* POL-46 (Brennan 2026-11-18 19:18: "Step the mountain down on BOTH sides toward the water"): within
@@ -4386,6 +4404,16 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
             wood = VoxelWorld_GetInstanceAt(nx, ny) != NULL ? VoxelTree_PartAt(nx, ny) >= 0
                  : BorderAt(nx, ny) && BeltIsTree(nx, ny);
         }
+    /* POL-46 (Brennan 22:39: "Mirror the tree placement onto the western shelves too"): on the mountain behind a map
+     * whose belt is its drawing (Lavaridge), its shelves two levels or more over the map's rock carry trees too */
+    if (!wood && getenv("WJPC_FIELD_NO_PEAK") == NULL)
+    {
+        const VoxelMapInstance *r = VoxelWorld_BeltRing(x, y);
+        float fh, fs;
+        BeltField(x, y, &fh, &fs);
+        wood = r != NULL && VoxelRelief_Belt(r) != 0
+            && fh >= VoxelRelief_Base(r) + (float)VoxelRelief_Belt(r) + 2.0f;
+    }
     if (!wood)
         return false;
     /* the shelf all round it flat too (Brennan: "Snap tree positions onto the flat centers of the terrace shelves"
