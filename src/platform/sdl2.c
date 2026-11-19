@@ -3140,7 +3140,10 @@ void VDraw(SDL_Texture *texture)
                     int level = sPlatformSettings[PLATFORM_SETTING_ZOOM] % ZOOM_COUNT;
                     if (WideView_IsIndoorMap() && level > 0)
                         level--;
-                    Voxel3D_SetSettings(true, 0, 100 * 160 / sZoomHeights[level]);
+                    // (test aid, Brennan 2026-11-18 "Fix zoom first" for the 3D audit pictures: WJPC_TEST_3D_ZOOM=percent
+                    // takes the camera further out than the widest setting, e.g. 30; WJPC_TEST_3D_PITCH=degrees)
+                    const char *tz = getenv("WJPC_TEST_3D_ZOOM"), *tp = getenv("WJPC_TEST_3D_PITCH");
+                    Voxel3D_SetSettings(true, tp != NULL ? atoi(tp) : 0, tz != NULL ? atoi(tz) : 100 * 160 / sZoomHeights[level]);
                 }
                 Voxel3D_SetGammaLight(sGammaWanted);
                 Voxel3D_SetAntiAlias((int)sAntiAlias);

@@ -4035,7 +4035,7 @@ static void BeltField(int vx, int vy, float *height, float *south)
     if (exact)
     {
         *height = exactE < capMin ? exactE : capMin;
-        *south = exactS;
+        *south = exactE <= capMin || getenv("WJPC_FIELD_SOUTH_OLD") != NULL ? exactS : *height;
         return;
     }
     if (sumW <= 0.0f)
@@ -4080,9 +4080,19 @@ static void BeltField(int vx, int vy, float *height, float *south)
         /* the way south only where the belt meets a map (to meet its edge exactly), gone over BELT_FIELD_SOUTH cells:
          * a mountain drawn as far south as it is high stood rows away from where it is, over the belt's sea and
          * trees beside it (which lie at their own rows), and left a hole of sky where it should have been */
+        if (getenv("WJPC_FIELD_SOUTH_OLD") != NULL)
         {
             float k = 1.0f - dmin / (float)BELT_FIELD_SOUTH;
             *south = k > 0.0f ? (sumS / sumW) * k : 0.0f;
+        }
+        else
+        {
+            /* POL-46 (Lavaridge's north-east, red box: the wall between the north mountain and Route 112's hill):
+             * the field drawn as far south as it is high, as every point of a map's drawing is (Route 112's slope
+             * climbs a level every 2 rows, so in the world it stands far south of its rows): with its own way south
+             * the field met that slope a dozen levels apart at the same place - a wall. Now one rule for both, so
+             * the field's ledges run on into the map's tiers. */
+            *south = *height;
         }
     }
 }
