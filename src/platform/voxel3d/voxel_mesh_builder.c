@@ -4012,7 +4012,10 @@ static void BeltField(int vx, int vy, float *height, float *south)
             exact = true;
             continue;
         }
-        w = 1.0f / (d * d * d);
+        /* 1/d^2 (Brennan 19:18: Lavaridge's north-east "turns into a tall, flat vertical rock wall", Route 118's
+         * mountain's west side "shoots straight up"): 1/d^3 handed one map's edge height to the next's in a few
+         * cells - a tall stack of ledges; 1/d^2 spreads the change wider, the ledges deeper. WJPC_FIELD_W3=1: old */
+        w = getenv("WJPC_FIELD_W3") != NULL ? 1.0f / (d * d * d) : 1.0f / (d * d);
         sumW += w;
         sumE += w * e;
         sumS += w * sd;
@@ -4286,6 +4289,51 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     b->lift = keepLift;
     b->shift = keepShift;
     b->stretchAdd = keepStretch;
+}
+
+/*
+ * POL-46 (Brennan 2026-11-18 19:18: "Place trees on the flat horizontal terrace shelves where a real hillside
+ * forest would grow, avoiding steep cliff faces"; asked where: "Near existing woods"): a land cell of the field
+ * whose four corners lie on one ledge, within BELT_LEDGE_WOOD cells of a wood (the belt's or a map's trees),
+ * carries a small tree (two in three, by its place, so the edge of the wood thins out instead of a straight block).
+ * Its level and way south: the ledge's. WJPC_NO_LEDGE_TREES=1: none.
+ */
+enum { BELT_LEDGE_WOOD = 2 };
+bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
+{
+    float lo = 1e9f, hi = -1e9f, sh = 0.0f, wl, ws;
+    const VoxelMapInstance *ring;
+    bool wood = false;
+
+    if (!FieldOn() || getenv("WJPC_NO_LEDGE_TREES") != NULL || !BorderAt(x, y)
+     || VoxelWorld_GetInstanceAt(x, y) != NULL || BeltIsTree(x, y) || BorderWaterLevel(x, y, &wl, &ws))
+        return false;
+    if ((((unsigned)(x * 73856093) ^ (unsigned)(y * 19349663)) % 3u) == 0u)
+        return false;
+    for (int dy = -BELT_LEDGE_WOOD; dy <= BELT_LEDGE_WOOD && !wood; ++dy)
+        for (int dx = -BELT_LEDGE_WOOD; dx <= BELT_LEDGE_WOOD && !wood; ++dx)
+        {
+            int nx = x + dx, ny = y + dy;
+            wood = VoxelWorld_GetInstanceAt(nx, ny) != NULL ? VoxelTree_PartAt(nx, ny) >= 0
+                 : BorderAt(nx, ny) && BeltIsTree(nx, ny);
+        }
+    if (!wood)
+        return false;
+    for (int k = 0; k < 4; ++k)
+    {
+        float fh, fs;
+        BeltField(x + (k & 1), y + (k >> 1), &fh, &fs);
+        fh = floorf(fh + 1e-4f);
+        lo = fh < lo ? fh : lo;
+        hi = fh > hi ? fh : hi;
+        sh += fs * 0.25f;
+    }
+    if (hi != lo)
+        return false;   /* a wall crosses it: no tree on a cliff face */
+    ring = VoxelWorld_BeltRing(x, y);
+    *level = lo - (ring != NULL ? VoxelRelief_Base(ring) : 0.0f);
+    *shift = sh - (ring != NULL ? VoxelRelief_Base(ring) : 0.0f);
+    return true;
 }
 
 void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)

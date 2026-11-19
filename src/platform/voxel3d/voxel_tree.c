@@ -670,16 +670,23 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 continue;
             metatileId = VoxelWorld_BorderMetatile(x, y);
             part = VoxelTree_Part(art->secondaryTileset, metatileId);
-            if (getenv("WJPC_FIELD_DUMP") != NULL && x > -10 && x < 0)
-                fprintf(stderr, "BTREE %d %d mt %x part %d art (%d,%d)\n", x, y, metatileId, part, art->originX, art->originY);
+            {
+                float level, shift;
+                bool ledge = part < 0 && VoxelMesh_LedgeTree(x, y, &level, &shift);
+
+            if (ledge)
+            {
+                /* POL-46: a small tree on a ledge near a wood (the General's 0C7) */
+                part = VOXEL_TREE_SMALL;
+                metatileId = 0x0C7;
+            }
             if (part >= 0)
             {
-                /* at its map edge's level (VoxelMesh_BorderLevel) */
-                float level, shift;
-
                 float callerBase = builder->base;
 
-                VoxelMesh_BorderLevel(x, y, &level, &shift);
+                /* at its map edge's level (VoxelMesh_BorderLevel) */
+                if (!ledge)
+                    VoxelMesh_BorderLevel(x, y, &level, &shift);
                 builder->lift = level;
                 builder->shift = shift;
                 /* POL-30: over the base of the map the cell stands with (VoxelMesh_EmitBorder) */
@@ -691,6 +698,7 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 builder->base = callerBase;
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
+            }
             }
         }
 }

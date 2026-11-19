@@ -911,3 +911,8 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   sides down to the water.
 - Brennan 19:19 answers: ledge trees "Near existing woods" (flat ledges within a few squares of a wood, never on
   cliff faces); audit pictures: "Fix zoom first"; order: Route 119, then Lavaridge/Route 118, then the audit.
+- Brennan 21:09: "the forest west of the institute looks good now" (woods lie on the terraced field in their grass,
+  trees on the ledges; `POL-46_route119_woods_2.png`).
+- Lavaridge NE / Route 118 sides (19:18): field weights 1/d^3 -> 1/d^2 (WJPC_FIELD_W3=1 old) so heights change over
+  more cells (deeper ledges, no tall stack); ledge trees (VoxelMesh_LedgeTree, voxel_tree.c VoxelTree_EmitBorder):
+  a small tree (General 0C7) on flat field cells within 2 cells of a wood, 2 in 3 by place (WJPC_NO_LEDGE_TREES=1).
