@@ -1096,3 +1096,8 @@ Numbered here POL-49..; status kept below as work goes.
   the sides or underneath). Align the bottom step flush with the lower grass and the top step flush with the upper
   grass so there is no floating white bar and no grass clipping through the steps." Plus (2) the upper terrace's right
   rock wall and (3) the island coastline as the original, both still open.
+- Brennan 17:23 on `POL-51_stairs_solid.png`: right rock wall "looks great now". Stairs: they "stick out too far into
+  the walkable path" - "Recess every staircase back into the cliff footprint so the top step meets the upper grass edge
+  and the bottom step ends cleanly at the cliff base line - zero protrusion onto the lower grass path", as Route 115's;
+  "Use the exact same uniform tile-grid step formula ... consistent step height, tread depth, and clean stone shading";
+  and the coastline still to restore.

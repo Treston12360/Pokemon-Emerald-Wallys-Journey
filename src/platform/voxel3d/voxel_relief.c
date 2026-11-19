@@ -280,14 +280,15 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
  * kept (sLaid) so the builder closes its sides down to its foot (VoxelRelief_FlightSide). WJPC_STAIRS_HALF=1: half
  * out, half into the cliff top, as before (POL-47).
  */
-static bool sFlightOut;
+static bool sFlightOut, sFlightIn;
 #define MAX_LAID 256
 #define MAX_PROFILE 65
 typedef struct
 {
     uint16_t layoutId;
     uint8_t x0, x1, row, rows;
-    int16_t bottom;
+    int16_t bottom, rise;
+    bool in;
     uint8_t n;
     int16_t z[MAX_PROFILE], h[MAX_PROFILE];   /* layout pixels: z = v + depth (world, as far south), h height */
 } LaidFlight;
@@ -295,7 +296,7 @@ static LaidFlight sLaid[MAX_LAID];
 static unsigned sLaidCount;
 
 bool VoxelRelief_FlightSide(const VoxelMapInstance *inst, int x, int y, int *side, unsigned *n,
-                            float *z, float *h, float *foot)
+                            float *z, float *h, float *foot, float *topH, bool *in)
 {
     int lx, ly;
 
@@ -316,6 +317,8 @@ bool VoxelRelief_FlightSide(const VoxelMapInstance *inst, int x, int y, int *sid
             h[q] = L->h[q] / 16.0f;
         }
         *foot = L->bottom / 16.0f;
+        *topH = (L->bottom + L->rise) / 16.0f;
+        *in = L->in;
         return true;
     }
     return false;
@@ -455,11 +458,19 @@ static bool StairFlights(ReliefLayout *l)
         if (getenv("WJPC_STAIRS_DUMP") != NULL)
             fprintf(stderr, "STAIRS layout %u x %d-%d row %d rows %d bottom %d rise %d\n", l->layoutId, found[f].x0,
                     found[f].x1, found[f].row, found[f].rows, found[f].bottom, found[f].rise);
-        sFlightOut = getenv("WJPC_STAIRS_HALF") == NULL;
-        if (!LayFlight(l, found[f].x0, found[f].x1, found[f].row, found[f].rows, found[f].bottom, found[f].rise,
-                       sFlightOut ? 0 : 2))
-            return false;
-        sFlightOut = false;
+        /* POL-51 (Brennan 17:23: "Recess every staircase back into the cliff footprint so the top step meets the
+         * upper grass edge and the bottom step ends cleanly at the cliff base line - zero protrusion"): wholly into
+         * the cliff top (sFlightIn), the ground above shortened to make room. WJPC_STAIRS_OUT=1: wholly out (16:4x
+         * try); WJPC_STAIRS_HALF=1: half and half (POL-47). */
+        sFlightOut = getenv("WJPC_STAIRS_OUT") != NULL;
+        sFlightIn = !sFlightOut && getenv("WJPC_STAIRS_HALF") == NULL;
+        {
+            int run = 8 * ((found[f].rise + 4) / 8);
+            int lip = sFlightOut ? 0 : sFlightIn ? run / 16 + 2 : 2;
+            if (!LayFlight(l, found[f].x0, found[f].x1, found[f].row, found[f].rows, found[f].bottom, found[f].rise, lip))
+                return false;
+        }
+        sFlightOut = sFlightIn = false;
     }
     return true;
 }
@@ -470,9 +481,9 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
 {
     int steps = (rise + 4) / 8, top = 16 * row, n_all = rows * (VOXEL_RELIEF_SIDE - 1);
     /* the face stood at v + h = top + bottom + rise (as drawn); the top tread starts half a flight back */
-    int z0 = top + bottom + rise - (sFlightOut ? 0 : (8 * steps) / 2);
+    int z0 = top + bottom + rise - (sFlightOut ? 0 : sFlightIn ? 8 * steps : (8 * steps) / 2);
     LaidFlight *laid = NULL;
-    if (sFlightOut && sLaidCount < MAX_LAID && n_all + 1 <= MAX_PROFILE)
+    if ((sFlightOut || sFlightIn) && sLaidCount < MAX_LAID && n_all + 1 <= MAX_PROFILE)
     {
         laid = &sLaid[sLaidCount++];
         laid->layoutId = l->layoutId;
@@ -481,6 +492,8 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
         laid->row = (uint8_t)row;
         laid->rows = (uint8_t)rows;
         laid->bottom = (int16_t)bottom;
+        laid->rise = (int16_t)rise;
+        laid->in = sFlightIn;
         laid->n = (uint8_t)(n_all + 1);
     }
     int16_t *depths = DepthsOf(l);
@@ -508,7 +521,7 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
                     z = z0 + 8 * step + (s2 % 2) * 8;
                     if (h < bottom) h = bottom;
                     /* (out: the last point comes down to the ground below - the lowest step's front closed) */
-                    if (sFlightOut && nn == n_all)
+                    if ((sFlightOut || sFlightIn) && nn == n_all)
                         h = bottom;
                     if (laid != NULL && x == x0 && nn <= n_all)
                     {

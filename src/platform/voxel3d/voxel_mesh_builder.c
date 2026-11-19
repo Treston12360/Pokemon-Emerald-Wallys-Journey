@@ -2218,12 +2218,19 @@ static void EmitSafetyFloor(VoxelBuilder *b, const VoxelMapInstance *inst, int x
  */
 static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
 {
-    float z[65], h[65], foot, u0, v0, u1, v1;
+    float z[65], h[65], foot, topH, u0, v0, u1, v1;
     unsigned n;
     int side, face;
+    bool in;
 
-    if (getenv("WJPC_STAIRS_OPEN_SIDES") != NULL || !VoxelRelief_FlightSide(inst, x, y, &side, &n, z, h, &foot))
+    if (getenv("WJPC_STAIRS_OPEN_SIDES") != NULL
+     || !VoxelRelief_FlightSide(inst, x, y, &side, &n, z, h, &foot, &topH, &in))
         return;
+    /* recessed (Brennan 17:23): the cliff beside the flight closed from the steps up to the ground above, facing in */
+    if (in)
+    {
+        foot = topH;   /* the band from the steps up to the top: its quads wound the other way, facing in */
+    }
     face = VoxelRelief_FaceTile(inst);
     if (face < 0 || !MetatileUV(b, face, &u0, &v0, &u1, &v1))
         if (!VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1))
@@ -2237,7 +2244,7 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
         for (unsigned q = 0; q + 1 < n; ++q)
         {
             float ha = h[q], hb = h[q + 1];
-            float ta = ha - foot, tb = hb - foot;
+            float ta = fabsf(ha - foot), tb = fabsf(hb - foot);
             if (ta <= 0.01f && tb <= 0.01f)
                 continue;
             if (fabsf(z[q + 1] - z[q]) < 1e-4f)
