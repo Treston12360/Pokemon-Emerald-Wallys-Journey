@@ -1090,3 +1090,9 @@ Numbered here POL-49..; status kept below as work goes.
   3. "Revert the outer island shoreline/cliff-to-water boundary back to how it was structured in the original
      (BEFORE) layout so the brown mountain cliffs meet the ocean water cleanly" (no dark wall into the sea on the
      west, no blocky square overhangs on the east).
+- Brennan 16:4x on `POL-51_stairs_A_vs_B.png` (A stepped LayFlight, B the generator's slope): "Neither A nor B is
+  acceptable". Wanted, Option C: "Keep the 3D stepped stair treads from A, but fill in the entire volume underneath
+  and on the left/right sides down into the terrain so they are solid 3D staircase blocks (zero see-through gaps from
+  the sides or underneath). Align the bottom step flush with the lower grass and the top step flush with the upper
+  grass so there is no floating white bar and no grass clipping through the steps." Plus (2) the upper terrace's right
+  rock wall and (3) the island coastline as the original, both still open.
