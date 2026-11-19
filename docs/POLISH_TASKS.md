@@ -953,3 +953,12 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
 - 23:49 done (`POL-46_lavaridge_north_rugged.png`): the lumps had been clipped flat by the drawn map's own cap (the
   peak there was exactly edge + d/2, rings of identical steps); the lumps now go on the land and its cap alike. Trees:
   a few scattered on the north mountain; far-west bowl bare.
+- Brennan 2026-11-19 00:12: "this wavy warping is wrong - please undo"; use the north-east peak's rock look and
+  relief on the north-west, and a few scattered trees. Done (`POL-46_lavaridge_north_ledges.png`): lumps off by
+  default (WJPC_FIELD_LUMPS=1 on); north of a drawn-belt map the peak climbs a level every 3 cells
+  (BELT_PEAK_RATE; was 2 - with the field drawn as far south as it is high that left one-row shelves, a grid of short
+  walls; WJPC_PEAK_RATE2=1 old); the field there takes the rock (top and cliff face) of the map beside it along the
+  row - Route 112 - which turns out to be the same Lavaridge tiles (WJPC_FIELD_OWN_ROCK=1 off); single trees
+  scattered by a mixed hash, about 12 in 100 shelf cells (TreeScatter); ledge trees need only their own corners flat.
+  Still different from the NE peak: its colour - the NE peak is Route 112's own drawn map art (darker red rock), ours
+  is the tiled rock.

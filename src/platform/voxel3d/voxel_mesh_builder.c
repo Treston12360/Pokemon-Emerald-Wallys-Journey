@@ -3955,7 +3955,7 @@ static void BeltCloseSeams(VoxelBuilder *builder, int x, int y, unsigned drawn, 
  * field crosses a whole level a wall a level high stands along the crossing (straight, or across the cell at 45
  * degrees where the levels turn a corner - the chamfer). WJPC_BELT_BLOCKS_OLD=1: the cell-by-cell belt as before.
  */
-enum { BELT_FIELD_REACH = 16, BELT_FIELD_RATE = 2, BELT_FIELD_RISE = 6, BELT_FIELD_SOUTH = 3, BELT_FIELD_PEAK = 14 };
+enum { BELT_FIELD_REACH = 16, BELT_FIELD_RATE = 2, BELT_FIELD_RISE = 6, BELT_FIELD_SOUTH = 3, BELT_FIELD_PEAK = 14, BELT_PEAK_RATE = 3 };
 
 static bool FieldOn(void)
 {
@@ -4033,7 +4033,8 @@ static void BeltField(int vx, int vy, float *height, float *south)
          * two squares deep; where a high edge (Route 112's) stands over that, its edge's own cliff (EdgeOverBelt,
          * rock tiled a level a tile) makes up the rest. WJPC_FIELD_NO_CAP=1: off. */
         {
-            float cap = e + d / (float)BELT_FIELD_RATE;
+            float cap = e + d / (VoxelRelief_Belt(m) != 0 && vy < oy && vx >= ox - 6 && vx <= ox + m->width + 6
+                                 && getenv("WJPC_PEAK_RATE2") == NULL ? (float)BELT_PEAK_RATE : (float)BELT_FIELD_RATE);
             if (VoxelRelief_Belt(m) != 0)
                 capMin = cap < capMin ? cap : capMin;
             else
@@ -4067,12 +4068,16 @@ static void BeltField(int vx, int vy, float *height, float *south)
          * belt from it (the bare benches north of Lavaridge, 22:39 picture: Route 111's south edge pulled it down) */
         if (VoxelRelief_Belt(m) != 0 && getenv("WJPC_FIELD_NO_PEAK") == NULL && !(vy >= oy + m->height))
         {
-            float r = d / (float)BELT_FIELD_RATE, pk = e + (r < (float)BELT_FIELD_PEAK ? r : (float)BELT_FIELD_PEAK);
+            /* (north of the map, a level every BELT_PEAK_RATE cells: drawn as far south as it is high, a level every 2
+             * left one-row shelves - a grid of short walls - where Route 112's peak beside it has deeper ones) */
+            float rate = vy < oy && vx >= ox - 6 && vx <= ox + m->width + 6 && getenv("WJPC_PEAK_RATE2") == NULL
+                       ? (float)BELT_PEAK_RATE : (float)BELT_FIELD_RATE;
+            float r = d / rate, pk = e + (r < (float)BELT_FIELD_PEAK ? r : (float)BELT_FIELD_PEAK);
             /* POL-46 (Brennan 23:49: the north-west "looks too uniform and blocky - like straight rows of identical
              * stair bricks"; wants "irregular rocky terrain relief, varied ledge step widths, and broken-up cliff
              * outcrops" as the north-east peak): north of the map a smooth lumpy relief (FieldLumps), faded in
              * over 4 rows from the edge and over 6 columns past its sides (the far-west bowl stays as it is) */
-            if (vy < oy && getenv("WJPC_FIELD_NO_LUMPS") == NULL)
+            if (vy < oy && getenv("WJPC_FIELD_LUMPS") != NULL)
             {
                 float fy = (float)(oy - vy) / 4.0f, fx = 1.0f;
                 if (vx < ox) fx = 1.0f - (float)(ox - vx) / 6.0f;
@@ -4303,9 +4308,48 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     bool wall;
     const float keepBase = b->base, keepLift = b->lift, keepShift = b->shift, keepStretch = b->stretchAdd;
 
+    int top = BeltIsTree(x, y) ? BeltTreeGround(x, y) : BeltMetatileFor(x, y, y);
+
+    /* POL-46 (Brennan 2026-11-19 00:12: "use the exact same rocky mountain block/voxel texture and relief as the
+     * north-east mountain peak right next to it"): north of a map whose belt is its drawing (Lavaridge), the field
+     * takes the rock of the nearest map beside it along the row (Route 112's peak): its top drawing and its cliff
+     * face. WJPC_FIELD_OWN_ROCK=1: the cell's own. */
+    if (!BeltIsTree(x, y) && getenv("WJPC_FIELD_OWN_ROCK") == NULL)
+    {
+        const VoxelMapInstance *drawnMap = NULL, *beside = NULL;
+        int bestD = 1 << 30;
+        for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+        {
+            const VoxelMapInstance *m = VoxelWorld_Instance(i);
+            if (m != NULL && m->layout != NULL && !m->indoor && VoxelRelief_Belt(m) != 0 && y < m->originY
+             && y >= m->originY - 24 && x >= m->originX - 2 && x < m->originX + m->width + 2)
+                drawnMap = m;
+        }
+        for (unsigned i = 0; drawnMap != NULL && i < VoxelWorld_InstanceCount(); ++i)
+        {
+            const VoxelMapInstance *m = VoxelWorld_Instance(i);
+            int dx;
+            if (m == NULL || m == drawnMap || m->layout == NULL || m->indoor || VoxelRelief_Belt(m) != 0
+             || y < m->originY || y >= m->originY + m->height)
+                continue;
+            dx = x < m->originX ? m->originX - x : x >= m->originX + m->width ? x - (m->originX + m->width - 1) : 0;
+            if (dx > 0 && dx < bestD && dx <= 24)
+            {
+                bestD = dx;
+                beside = m;
+            }
+        }
+        if (beside != NULL)
+        {
+            int t = BeltTopTile(beside), f = VoxelRelief_FaceTile(beside);
+            if (t >= 0)
+                top = t;
+            if (f >= 0)
+                face = f;
+        }
+    }
     /* (a wood's cell: the field under its trees, in its grass - BeltTreeGround) */
-    if (getenv("WJPC_FIELD_NONE") != NULL
-     || !MetatileUV(b, BeltIsTree(x, y) ? BeltTreeGround(x, y) : BeltMetatileFor(x, y, y), &tu0, &tv0, &tu1, &tv1))
+    if (getenv("WJPC_FIELD_NONE") != NULL || !MetatileUV(b, top, &tu0, &tv0, &tu1, &tv1))
         return;
     wall = (face >= 0 && MetatileUV(b, face, &wu0, &wv0, &wu1, &wv1))
         || MetatileUV(b, BeltMetatileFor(x, y, y), &wu0, &wv0, &wu1, &wv1);
@@ -4453,6 +4497,15 @@ bool VoxelMesh_TreeOverDrop(int x, int y)
 }
 
 enum { BELT_LEDGE_WOOD = 2 };
+/* a well-mixed 0..99 per cell (the scatter of single trees: no columns or rows) */
+static unsigned TreeScatter(int x, int y)
+{
+    unsigned h = (unsigned)x * 0x9E3779B1u ^ ((unsigned)y + 0x7F4A7C15u) * 0x85EBCA77u;
+    h ^= h >> 15;
+    h *= 0x2C1B3C6Du;
+    h ^= h >> 12;
+    return h % 100u;
+}
 bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
 {
     float lo = 1e9f, hi = -1e9f, sh = 0.0f, wl, ws;
@@ -4495,7 +4548,7 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
         wood = r != NULL && VoxelRelief_Belt(r) != 0 && y < r->originY
             && x >= r->originX - 2 && x < r->originX + r->width + 2
             && fh >= VoxelRelief_Base(r) + (float)VoxelRelief_Belt(r) + 2.0f
-            && ((patch < 2u && ((unsigned)(x * 2654435761u) >> 30) == 0u) || getenv("WJPC_PEAK_TREES_ALL") != NULL);
+            && (TreeScatter(x, y) < 12u || getenv("WJPC_PEAK_TREES_ALL") != NULL);
     }
     if (!wood)
         return false;
@@ -4503,7 +4556,7 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
      * - a tree on a shelf's edge cell hung its crown over the drop) */
     /* (its own corners and the next row's south of it: the shelf in front of the trunk, where the crown leans;
      * a 3x3 flat patch was too much for 2-square shelves - no trees at all on them) */
-    for (int vy = y; vy <= y + 2; ++vy)
+    for (int vy = y; vy <= y + 1; ++vy)
         for (int vx = x; vx <= x + 1; ++vx)
         {
             float fh, fs;
