@@ -4062,6 +4062,26 @@ static void BeltField(int vx, int vy, float *height, float *south)
         g = VoxelRelief_Cell(m, cx, cy);
         dg = VoxelRelief_Depth(m, cx, cy);
         e = VoxelRelief_Base(m) + (g != NULL ? g[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
+        /* POL-56 (Brennan 2026-11-19 14:23, Route 120 south-west: a sky triangle at the map's south edge): a point
+         * on the edge between two of the map's cells is either cell's corner; a step between them (a cut tile beside
+         * the grass) put the field at the lower one and left the higher cell's corner over open sky. The higher of
+         * the two. WJPC_FIELD_ONE_CELL=1: the one cell, as before. */
+        if (getenv("WJPC_FIELD_ONE_CELL") == NULL)
+        {
+            int ax = gi == 0 && cx > ox ? cx - 1 : -1, ay = gj == 0 && cy > oy ? cy - 1 : -1;
+            if (ax >= 0)
+            {
+                const int16_t *g2 = VoxelRelief_Cell(m, ax, cy);
+                float e2 = VoxelRelief_Base(m) + (g2 != NULL ? g2[gj * VOXEL_RELIEF_SIDE + VOXEL_RELIEF_SIDE - 1] / 16.0f : 0.0f);
+                e = e2 > e ? e2 : e;
+            }
+            if (ay >= 0)
+            {
+                const int16_t *g2 = VoxelRelief_Cell(m, cx, ay);
+                float e2 = VoxelRelief_Base(m) + (g2 != NULL ? g2[(VOXEL_RELIEF_SIDE - 1) * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
+                e = e2 > e ? e2 : e;
+            }
+        }
         sd = VoxelRelief_Base(m) + (dg != NULL ? dg[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f
                                     : g != NULL ? g[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
         /* POL-46 (Brennan 2026-11-18, Lavaridge's north-east: "Option 2 (One cliff + ledges)"): no point climbs
