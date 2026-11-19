@@ -3973,7 +3973,8 @@ static void BeltField(int vx, int vy, float *height, float *south)
      * with distance, no cliff where a map drops out of reach (both made walls of columns, 2026-11-18). */
     float sumW = 0.0f, sumE = 0.0f, sumS = 0.0f, sumBack = 0.0f, dmin = 1e9f;
     float exactE = 0.0f, exactS = 0.0f, capMin = 1e9f, sumRise = 0.0f, nearE = 0.0f;
-    bool nearSouth = false;
+    bool nearSouth = false, nearDrawnSouth = false;
+    float capOther = 1e9f;
     float drawnPeak = -1e9f;
     bool exact = false;
 
@@ -4010,7 +4011,10 @@ static void BeltField(int vx, int vy, float *height, float *south)
          * rock tiled a level a tile) makes up the rest. WJPC_FIELD_NO_CAP=1: off. */
         {
             float cap = e + d / (float)BELT_FIELD_RATE;
-            capMin = cap < capMin ? cap : capMin;
+            if (VoxelRelief_Belt(m) != 0)
+                capMin = cap < capMin ? cap : capMin;
+            else
+                capOther = cap < capOther ? cap : capOther;
         }
         if (d < 1e-4f)
         {
@@ -4047,9 +4051,18 @@ static void BeltField(int vx, int vy, float *height, float *south)
         {
             nearE = e;
             nearSouth = vy >= oy + m->height && vx >= ox && vx <= ox + m->width;
+            /* (Brennan 23:31: the south ridge "horizontally straight to the left edge": south of a drawn-belt map,
+             * west and east of it too) */
+            nearDrawnSouth = vy >= oy + m->height && VoxelRelief_Belt(m) != 0;
         }
         dmin = d < dmin ? d : dmin;
     }
+    /* POL-46 (Brennan 23:31: "mirror its stepped rock shape across to the left (north-west) half ... one huge,
+     * continuous mountain (removing the flat bench wall in the middle)"): the other maps' caps held the peak behind
+     * a drawn belt down to the low west edge of Route 112 beside it (the flat benches); where that peak stands, only
+     * the drawn map's own cap holds. Exactly on a map's edge the field is still that edge. */
+    if (drawnPeak < -1e8f || getenv("WJPC_FIELD_PEAK_CAPPED") != NULL)
+        capMin = capOther < capMin ? capOther : capMin;
     if (getenv("WJPC_FIELD_NO_CAP") != NULL)
         capMin = 1e9f;
     if (exact)
@@ -4075,6 +4088,8 @@ static void BeltField(int vx, int vy, float *height, float *south)
          * never dips under the map's edge - the blend with farther, lower maps took it to 5.9 under an edge of 6.0,
          * a whole level down in places (sawtooth steps, a gap). WJPC_FIELD_SOUTH_DIP=1: as before. */
         if (nearSouth && *height < nearE && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
+            *height = nearE;
+        if (nearDrawnSouth && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
             *height = nearE;
         if (*height > capMin)
             *height = capMin;
@@ -4424,9 +4439,12 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
         /* in clumps, as the east slope's (a tree on every shelf read as an orchard): 3x3-cell patches, about half
          * of them wooded */
         unsigned patch = ((unsigned)((x >> 2) * 83492791) ^ (unsigned)((y >> 1) * 2971215073u)) % 5u;
-        wood = r != NULL && VoxelRelief_Belt(r) != 0 && y < r->originY + r->height   /* (not in front of it) */
+        /* (Brennan 23:31: none on the far-west curved terraces - "a bare volcanic rock mountain"; on the mountain
+         * north of the town "only a few scattered trees on each step ... not neat rows") */
+        wood = r != NULL && VoxelRelief_Belt(r) != 0 && y < r->originY
+            && x >= r->originX - 2 && x < r->originX + r->width + 2
             && fh >= VoxelRelief_Base(r) + (float)VoxelRelief_Belt(r) + 2.0f
-            && (patch < 2u || getenv("WJPC_PEAK_TREES_ALL") != NULL);
+            && ((patch < 2u && ((unsigned)(x * 2654435761u) >> 30) == 0u) || getenv("WJPC_PEAK_TREES_ALL") != NULL);
     }
     if (!wood)
         return false;

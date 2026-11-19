@@ -939,3 +939,8 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   extra ledge trees - "Keep them". West tree amount: no answer - assumed clumps like the east slope (about 2 in 5
   patches of 4x2 cells wooded; WJPC_PEAK_TREES_ALL=1 every shelf). North middle block of drawn shelves (Lavaridge's
   own drawn rock): "[No preference]" - left as is.
+- Brennan 23:31 (`BREN_2331_POL-46_lavaridge.png`): "do NOT put trees on the far-west curved terraces" - they stay
+  bare volcanic rock. South-west corner of the foreground ridge: flat and horizontal straight to the left edge.
+  North mountain behind the town: mirror the north-east stepped peak across to the north-west so it is one huge
+  continuous mountain (no flat bench wall in the middle), with only a few scattered trees on each step (not rows).
+  (Supersedes the clumps assumption above.)
