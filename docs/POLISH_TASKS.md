@@ -965,3 +965,13 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
 - Brennan 2026-11-19 00:3x: "lets put this behind and work on other things, move on to the next task lets work on this
   last after everything else it complete." Lavaridge north (rock colour vs Route 112's darker drawn rock) PARKED until
   the end. Next: the Batch 1 audit (zoom pictures now work: WJPC_TEST_3D_ZOOM).
+
+## Hoenn 3D audit (Brennan 2026-11-18 19:12) - Batch 1
+Pictures: `docs/polish_reports/AUDIT_B1_sheet0-2.png` (zoomed out, WJPC_TEST_3D_ZOOM=28, from one spot per map, two for
+the long maps). Test: one run warping to each (spots with no collision near the map's middle / quarters).
+- Seen: Littleroot, Oldale, Petalburg, Route 101, 102, 103, 104, Rustboro. Route 115 / 116: the game ended at the
+  Route 115 warp (0 30 20 20); retrying other spots.
+- Flags (for Brennan): (1) blue sky at the far corners of every zoomed-out picture - the belt is built only 40 cells
+  round the player (BELT_RADIUS) and this test camera sees further than the game's widest zoom; (2) the background
+  woods round Littleroot, Oldale, Route 101/102/104 climb as tall walls of crowns (they stand on the field, which
+  climbs up to 6 levels off a map's north/west/east sides); (3) Route 103's bare rock strips north of the pond.
