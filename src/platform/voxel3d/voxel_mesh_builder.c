@@ -2787,6 +2787,8 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
 static bool BeltIsTree(int x, int y);
 enum { BELT_TIER_DEPTH = 2 };
 static bool TerracesOn(void);
+static bool FieldOn(void);
+static void BeltField(int vx, int vy, float *height, float *south);
 
 /*
  * POL-13 / POL-40 (Brennan 2026-11-16: "the rock still shows pillars ... just make a mountain round itself out
@@ -3046,6 +3048,24 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
      * round every map (BeltTerraces) */
     if (BeltTerraces(x, y, ring, level, shift))
         return true;
+    /* POL-46 rule B (Brennan 2026-11-17 22:07: "align the ground elevation beneath the trees with the adjacent cliff
+     * terraces so trees sit on continuous grass/dirt plateaus rather than floating or sitting on disconnected black
+     * shelves"): a wood of the belt stands on the field (BeltField) - the ledge under its middle, as far south as the
+     * field there - so the trees and the terraces beside them are one ground. WJPC_BELT_TREES_OWN=1: as before. */
+    if (FieldOn() && BeltIsTree(x, y) && getenv("WJPC_BELT_TREES_OWN") == NULL)
+    {
+        float h = 0.0f, sh = 0.0f;
+        for (int k = 0; k < 4; ++k)
+        {
+            float fh, fs;
+            BeltField(x + (k & 1), y + (k >> 1), &fh, &fs);
+            h += fh * 0.25f;
+            sh += fs * 0.25f;
+        }
+        *level = floorf(h + 1e-4f) - VoxelRelief_Base(ring);
+        *shift = sh - VoxelRelief_Base(ring);
+        return true;
+    }
     /* a fill the map's fixes give a height stands its top there, laid on
      * from the map's edge as it is drawn (BorderWaterLevel) */
     if (VoxelRelief_EdgeFillAt(ring, x, y, &fill) && fill.hasTop && !fill.water)
