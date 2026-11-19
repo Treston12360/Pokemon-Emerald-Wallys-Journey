@@ -39,7 +39,11 @@ static bool FortreeWood(int metatileId)
         || (metatileId >= 0x23B && metatileId <= 0x23F)
         || metatileId == 0x243
         || (metatileId >= 0x245 && metatileId <= 0x247)
-        || metatileId == 0x256;
+        || metatileId == 0x256
+        /* POL-46 (Brennan 2026-11-18 19:08, Route 119 west of the Weather Institute: "dark flat 2D tree sprites
+         * are still visible ... Populate interior forest tiles with 3D trees"): 2DC-2DE, the same small crown
+         * over the wood's edge along the rock there, were laid flat */
+        || (metatileId >= 0x2DC && metatileId <= 0x2DE);
 }
 
 /* Where a small trunk's ground is packed: the General one's at 48,32,

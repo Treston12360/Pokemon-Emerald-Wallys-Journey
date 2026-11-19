@@ -3391,6 +3391,21 @@ static void EmitBorderNorth(VoxelBuilder *b, int x, int y, float low, float lowS
  * up from the top there (EmitBorderNorth). */
 /* A belt cell drawn as a tree (VoxelTree_EmitBorder): it stands on the level itself, with no ground laid and
  * not the belt's courses higher as every other belt cell's top is. */
+/* POL-46 (Brennan 2026-11-18 19:08: "dark flat 2D tree sprites are still visible on the ground plane beneath and
+ * between the 3D voxel trees ... Replace 2D tree ground tiles with plain grass"): the ground laid under a wood's
+ * edge is the tree's own ground (VoxelTree_GroundMetatile: the grass it stands on), not its drawing laid flat.
+ * WJPC_BELT_TREE_ART_GROUND=1: the drawing, as before. */
+static int BeltTreeGround(int x, int y)
+{
+    const VoxelMapInstance *art = VoxelWorld_BorderArtMap(x, y);
+    int mt = VoxelWorld_BorderMetatile(x, y), g;
+
+    if (art == NULL || getenv("WJPC_BELT_TREE_ART_GROUND") != NULL)
+        return mt;
+    g = VoxelTree_GroundMetatile(art->secondaryTileset, mt);
+    return g >= 0 ? g : mt;
+}
+
 static bool BeltIsTree(int x, int y)
 {
     const VoxelMapInstance *current = VoxelWorld_BorderArtMap(x, y);
@@ -4374,8 +4389,12 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 
                 if (!drawn && (besideMap || !BeltIsTree(x - 1, y) || !BeltIsTree(x + 1, y) || !BeltIsTree(x, y - 1)
                                || !BeltIsTree(x, y + 1))
-                 && MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+                 && MetatileUV(builder, BeltTreeGround(x, y), &u0, &v0, &u1, &v1))
                 {
+                    if (getenv("WJPC_FIELD_DUMP") != NULL)
+                        fprintf(stderr, "TREEGROUND %d %d besideMap %d n %d%d%d%d\n", x, y, (int)besideMap,
+                                (int)BeltIsTree(x - 1, y), (int)BeltIsTree(x + 1, y), (int)BeltIsTree(x, y - 1),
+                                (int)BeltIsTree(x, y + 1));
                     VoxelMesh_Top(builder, wx, wz, lift, 0.0f, u0, v0, u1, v1, SHADE_TOP);
                     if (besideMap)
                         BeltTreeSeam(builder, x, y, lift, wz - (float)y, u0, v0, u1, v1);

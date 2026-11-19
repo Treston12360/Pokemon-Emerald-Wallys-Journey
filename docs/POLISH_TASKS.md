@@ -897,3 +897,17 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   (`POL-46_route119_woods.png`); some crowns there are darker in squares - they are crowns in the shadow of taller
   ones, not holes (same with floored or smooth ground). Lilycove (Dept. Store spot): sea to the north, nothing open.
   Test note: `set zoom 5` in the script did not zoom out in these runs.
+- Brennan 2026-11-18 19:08 (Route 119 red box): flat dark 2D tree tiles between the 3D trees west of the Weather
+  Institute ("Replace 2D tree ground tiles with plain grass"; "Populate interior forest tiles with 3D trees"); a thin
+  black line where the brown rock mound meets the grass/trees. Found: Fortree's 2DC-2DE (small crowns over the wood's
+  edge along the rock) were not tree parts - added to FortreeWood (voxel_tree.c). Belt woods' edge ground is now the
+  tree's ground metatile, not its drawing (BeltTreeGround; WJPC_BELT_TREE_ART_GROUND=1 old).
+- Brennan 19:12: region-wide 3D audit in batches with PNGs (Batch 1: Littleroot, Oldale, Petalburg, Petalburg Woods
+  outside, Rustboro, Routes 101-104 and 115-116; then Central, Eastern, Seas), each batch ending with a list: clean /
+  fixed / flagged with PNGs.
+- Brennan 19:18: Lavaridge - the north-east turns into a tall flat rock wall: step it in ledges into both sides; trees
+  onto the ledges of the east slope, not a straight block. Route 118 - the tree line / sea / mountain meet in a sharp
+  triangle: bring trees across the hillside's base; the mountain's west side shoots up like a block wall: step both
+  sides down to the water.
+- Brennan 19:19 answers: ledge trees "Near existing woods" (flat ledges within a few squares of a wood, never on
+  cliff faces); audit pictures: "Fix zoom first"; order: Route 119, then Lavaridge/Route 118, then the audit.
