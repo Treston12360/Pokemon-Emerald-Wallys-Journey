@@ -978,3 +978,10 @@ the long maps). Test: one run warping to each (spots with no collision near the 
 - Brennan: far-corner sky "Test-only, skip". Woods: "Keep woods flat" - done: a field corner touching a belt wood
   does not climb (FieldCornerWood), except woods within 12 cells of the belt's sea (Route 118's approved wooded hill)
   (WJPC_WOODS_CLIMB=1 old).
+- Batch 1 after "Keep woods flat" (`AUDIT_B1_flatwoods_sheet0-2.png`, `AUDIT_B1_route115_116.png`):
+  - Fixed: background woods flat round Littleroot, Oldale, Petalburg, Route 101-104, Rustboro (no tall crown walls).
+  - Clean in these views: Littleroot, Oldale, Petalburg, Route 101, 102, 104, Rustboro, Route 116.
+  - For Brennan to look at: Route 103 (bare rock strips north of its pond, east end); Route 115 (its own map's grey
+    mountain, dark in this light - map art, not the background). Far-corner sky: test camera only (skipped).
+  - Not covered: Petalburg Woods (inside map), close-ups of buildings/bridges/stairs.
+  - Test note: warping to Route 115 after Rustboro in one run ends the game (2nd time); a run of its own works.
