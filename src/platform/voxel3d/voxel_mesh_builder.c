@@ -3965,6 +3965,29 @@ static bool FieldOn(void)
     return sOn != 0;
 }
 
+/* smooth value noise, -2.5..+2.5 levels: two octaves on 6- and 3-cell lattices of hashed values */
+static float FieldLumpAt(int gx, int gy)
+{
+    unsigned h = (unsigned)gx * 374761393u + (unsigned)gy * 668265263u;
+    h = (h ^ (h >> 13)) * 1274126177u;
+    return (float)((h ^ (h >> 16)) & 0xFFFF) / 65535.0f * 2.0f - 1.0f;
+}
+
+static float FieldLumpOctave(int vx, int vy, int cell)
+{
+    int gx = vx >= 0 ? vx / cell : -((-vx + cell - 1) / cell), gy = vy >= 0 ? vy / cell : -((-vy + cell - 1) / cell);
+    float tx = (float)(vx - gx * cell) / (float)cell, ty = (float)(vy - gy * cell) / (float)cell;
+    float a = FieldLumpAt(gx, gy), b = FieldLumpAt(gx + 1, gy), c = FieldLumpAt(gx, gy + 1), d = FieldLumpAt(gx + 1, gy + 1);
+    tx = tx * tx * (3.0f - 2.0f * tx);
+    ty = ty * ty * (3.0f - 2.0f * ty);
+    return (a + (b - a) * tx) + ((c + (d - c) * tx) - (a + (b - a) * tx)) * ty;
+}
+
+static float FieldLumps(int vx, int vy)
+{
+    return 1.7f * FieldLumpOctave(vx, vy, 6) + 0.8f * FieldLumpOctave(vx + 101, vy + 57, 3);
+}
+
 static void BeltField(int vx, int vy, float *height, float *south)
 {
     /* blended over the maps by 1/d^3 (the nearest map's edge wins near it, exactly on it): the edge's height, its way
@@ -4045,6 +4068,19 @@ static void BeltField(int vx, int vy, float *height, float *south)
         if (VoxelRelief_Belt(m) != 0 && getenv("WJPC_FIELD_NO_PEAK") == NULL && !(vy >= oy + m->height))
         {
             float r = d / (float)BELT_FIELD_RATE, pk = e + (r < (float)BELT_FIELD_PEAK ? r : (float)BELT_FIELD_PEAK);
+            /* POL-46 (Brennan 23:49: the north-west "looks too uniform and blocky - like straight rows of identical
+             * stair bricks"; wants "irregular rocky terrain relief, varied ledge step widths, and broken-up cliff
+             * outcrops" as the north-east peak): north of the map a smooth lumpy relief (FieldLumps), faded in
+             * over 4 rows from the edge and over 6 columns past its sides (the far-west bowl stays as it is) */
+            if (vy < oy && getenv("WJPC_FIELD_NO_LUMPS") == NULL)
+            {
+                float fy = (float)(oy - vy) / 4.0f, fx = 1.0f;
+                if (vx < ox) fx = 1.0f - (float)(ox - vx) / 6.0f;
+                if (vx > ox + m->width) fx = 1.0f - (float)(vx - ox - m->width) / 6.0f;
+                fy = fy > 1.0f ? 1.0f : fy;
+                fx = fx < 0.0f ? 0.0f : fx;
+                pk += fx * fy * FieldLumps(vx, vy);
+            }
             drawnPeak = pk > drawnPeak ? pk : drawnPeak;
         }
         if (d < dmin)
@@ -4433,8 +4469,17 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
      * whose belt is its drawing (Lavaridge), its shelves two levels or more over the map's rock carry trees too */
     if (!wood && getenv("WJPC_FIELD_NO_PEAK") == NULL)
     {
-        const VoxelMapInstance *r = VoxelWorld_BeltRing(x, y);
+        /* (the drawn-belt map north of which it stands - not the cell's ring, which up there is the nearer map
+         * across the belt: no trees came, 23:31 picture) */
+        const VoxelMapInstance *r = NULL;
         float fh, fs;
+        for (unsigned i = 0; i < VoxelWorld_InstanceCount() && r == NULL; ++i)
+        {
+            const VoxelMapInstance *m = VoxelWorld_Instance(i);
+            if (m != NULL && m->layout != NULL && !m->indoor && VoxelRelief_Belt(m) != 0 && y < m->originY
+             && y >= m->originY - 24 && x >= m->originX - 2 && x < m->originX + m->width + 2)
+                r = m;
+        }
         BeltField(x, y, &fh, &fs);
         /* in clumps, as the east slope's (a tree on every shelf read as an orchard): 3x3-cell patches, about half
          * of them wooded */

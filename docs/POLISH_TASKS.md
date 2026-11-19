@@ -944,3 +944,9 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   North mountain behind the town: mirror the north-east stepped peak across to the north-west so it is one huge
   continuous mountain (no flat bench wall in the middle), with only a few scattered trees on each step (not rows).
   (Supersedes the clumps assumption above.)
+- Brennan 23:49: west terraces bare and the flat south ridge "look great". Last for Lavaridge: the north-west half of
+  the north mountain is "too uniform and blocky - like straight rows of identical stair bricks"; match the north-east
+  peak's irregular relief, varied ledge widths, broken outcrops; a few scattered trees on its shelves (far-west bowl
+  stays bare). Doing: FieldLumps (smooth 2-octave value noise, +-2.5 levels) on the drawn-belt peak north of the map,
+  faded in over 4 rows and 6 columns past its sides (WJPC_FIELD_NO_LUMPS=1 off); peak trees looked up from the
+  drawn-belt map north of which the cell stands (the ring there is the other map - why none came).
