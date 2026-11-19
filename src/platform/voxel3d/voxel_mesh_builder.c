@@ -4421,8 +4421,12 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
         const VoxelMapInstance *r = VoxelWorld_BeltRing(x, y);
         float fh, fs;
         BeltField(x, y, &fh, &fs);
+        /* in clumps, as the east slope's (a tree on every shelf read as an orchard): 3x3-cell patches, about half
+         * of them wooded */
+        unsigned patch = ((unsigned)((x >> 2) * 83492791) ^ (unsigned)((y >> 1) * 2971215073u)) % 5u;
         wood = r != NULL && VoxelRelief_Belt(r) != 0 && y < r->originY + r->height   /* (not in front of it) */
-            && fh >= VoxelRelief_Base(r) + (float)VoxelRelief_Belt(r) + 2.0f;
+            && fh >= VoxelRelief_Base(r) + (float)VoxelRelief_Belt(r) + 2.0f
+            && (patch < 2u || getenv("WJPC_PEAK_TREES_ALL") != NULL);
     }
     if (!wood)
         return false;

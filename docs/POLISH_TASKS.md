@@ -935,3 +935,7 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   peak and the staggered shelf trees across to the west so the forested ridge wraps the whole north. South red box:
   a small blue triangle under the two red-roofed houses (seal it); the foreground ridge's left side dips in sawtooth
   steps with dark cracks - make its top level and flush left to right.
+- Lavaridge west now climbs in curved terraces with shelf trees (`POL-46_lavaridge_wrap.png`). Brennan: Route 118's few
+  extra ledge trees - "Keep them". West tree amount: no answer - assumed clumps like the east slope (about 2 in 5
+  patches of 4x2 cells wooded; WJPC_PEAK_TREES_ALL=1 every shelf). North middle block of drawn shelves (Lavaridge's
+  own drawn rock): "[No preference]" - left as is.
