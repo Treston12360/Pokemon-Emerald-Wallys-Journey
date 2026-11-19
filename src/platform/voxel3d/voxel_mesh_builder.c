@@ -3054,12 +3054,14 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
      * field there - so the trees and the terraces beside them are one ground. WJPC_BELT_TREES_OWN=1: as before. */
     if (FieldOn() && BeltIsTree(x, y) && getenv("WJPC_BELT_TREES_OWN") == NULL)
     {
-        float h = 0.0f, sh = 0.0f;
+        float h = 1e9f, sh = 0.0f;
+        /* the lowest of its corners (the mean stood a wood beside a map a quarter level over the map's edge, a
+         * dark skirt down to it along the wood: Brennan 19:08 "thin black crack/line along the boundary") */
         for (int k = 0; k < 4; ++k)
         {
             float fh, fs;
             BeltField(x + (k & 1), y + (k >> 1), &fh, &fs);
-            h += fh * 0.25f;
+            h = fh < h ? fh : h;
             sh += fs * 0.25f;
         }
         /* (not floored to the ledge: a wood rising a whole level at once showed the dark ground under the higher
@@ -3403,6 +3405,9 @@ static int BeltTreeGround(int x, int y)
     if (art == NULL || getenv("WJPC_BELT_TREE_ART_GROUND") != NULL)
         return mt;
     g = VoxelTree_GroundMetatile(art->secondaryTileset, mt);
+    /* the General's small trees (016-017, 0C6-0C7) name no ground of their own: its plain grass, 001 */
+    if (g == mt && (mt == 0x016 || mt == 0x017 || mt == 0x0C6 || mt == 0x0C7))
+        g = 0x001;
     return g >= 0 ? g : mt;
 }
 
@@ -4362,7 +4367,11 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 
                 if (sBeltSlopes < 0)
                     sBeltSlopes = getenv("WJPC_BELT_BLOCKS") == NULL && getenv("WJPC_BELT_TIERS_ALL") == NULL;
-                if (VoxelMesh_BorderLevel(x, y, &edge, &edgeShift))
+                if (VoxelMesh_BorderLevel(x, y, &edge, &edgeShift)
+                 /* POL-46: a wood on the field (its ground eased with the field's) stood step faces of its own
+                  * tree drawing between neighbours a fraction of a level apart: the dark flat tree squares
+                  * between the crowns west of Route 119's Weather Institute. The crowns cover the rise. */
+                 && !(FieldOn() && BeltIsTree(x, y) && getenv("WJPC_BELT_TREES_OWN") == NULL))
                 {
                     if (!(sBeltSlopes && !drawn && !BeltIsTree(x, y) && !TerraceBand(x, y)))
                         EmitBorderSteps(builder, x, y, edge, edgeShift);
@@ -4387,7 +4396,10 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 bool besideMap = VoxelWorld_GetInstanceAt(x - 1, y) || VoxelWorld_GetInstanceAt(x + 1, y)
                               || VoxelWorld_GetInstanceAt(x, y - 1) || VoxelWorld_GetInstanceAt(x, y + 1);
 
-                if (!drawn && (besideMap || !BeltIsTree(x - 1, y) || !BeltIsTree(x + 1, y) || !BeltIsTree(x, y - 1)
+                /* (POL-46: under every tree of a wood on the field, its grass - the crowns at eased heights left
+                 * the sky showing between them; laid only at a wood's edges before) */
+                if (!drawn && ((FieldOn() && getenv("WJPC_BELT_TREES_OWN") == NULL) || besideMap
+                               || !BeltIsTree(x - 1, y) || !BeltIsTree(x + 1, y) || !BeltIsTree(x, y - 1)
                                || !BeltIsTree(x, y + 1))
                  && MetatileUV(builder, BeltTreeGround(x, y), &u0, &v0, &u1, &v1))
                 {

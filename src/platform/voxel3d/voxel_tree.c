@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include <stddef.h>
 #include "voxel_tree.h"
 #include "voxel_relief.h"
@@ -43,7 +45,7 @@ static bool FortreeWood(int metatileId)
         /* POL-46 (Brennan 2026-11-18 19:08, Route 119 west of the Weather Institute: "dark flat 2D tree sprites
          * are still visible ... Populate interior forest tiles with 3D trees"): 2DC-2DE, the same small crown
          * over the wood's edge along the rock there, were laid flat */
-        || (metatileId >= 0x2DC && metatileId <= 0x2DE);
+        || (getenv("WJPC_TREE_NO_2DC") == NULL && metatileId >= 0x2DC && metatileId <= 0x2DE);
 }
 
 /* Where a small trunk's ground is packed: the General one's at 48,32,
@@ -651,6 +653,8 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     const VoxelMapInstance *current = VoxelWorld_Instance(0);
 
+    if (getenv("WJPC_DEBUG_NO_BELT_TREES") != NULL)
+        return;
     for (int y = y0; y < y1; ++y)
         for (int x = x0; x < x1; ++x)
         {
@@ -666,6 +670,8 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 continue;
             metatileId = VoxelWorld_BorderMetatile(x, y);
             part = VoxelTree_Part(art->secondaryTileset, metatileId);
+            if (getenv("WJPC_FIELD_DUMP") != NULL && x > -10 && x < 0)
+                fprintf(stderr, "BTREE %d %d mt %x part %d art (%d,%d)\n", x, y, metatileId, part, art->originX, art->originY);
             if (part >= 0)
             {
                 /* at its map edge's level (VoxelMesh_BorderLevel) */
