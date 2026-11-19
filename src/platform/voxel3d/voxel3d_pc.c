@@ -93,6 +93,18 @@ int Port_LayoutMetatile(int id, int x, int y)
     return l->map[y * l->width + x] & MAPGRID_METATILE_ID_MASK;
 }
 
+// POL-51 (Brennan 2026-11-19 14:23, Mt Pyre summit's bottom stairs): a stair drawn by a secondary tileset - its id
+// means other art on other tile sets, so it is asked with the layout's own. Facility (Mt Pyre summit): 330, 331.
+extern const struct Tileset gTileset_Facility;
+bool Port_LayoutSecondaryStair(int id, int metatile)
+{
+    const struct MapLayout *l = id <= 0 ? NULL : gMapLayouts[id - 1];
+
+    if (l == NULL)
+        return false;
+    return l->secondaryTileset == &gTileset_Facility && (metatile == 0x330 || metatile == 0x331);
+}
+
 // POL-47 (voxel_relief.c DetectFlights): a layout cell's collision (0 walkable), -1 outside it / no layout
 int Port_LayoutCollision(int id, int x, int y)
 {

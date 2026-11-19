@@ -189,10 +189,12 @@ extern int Port_LayoutMetatile(int id, int x, int y);
 
 /* the stair metatiles: the General tileset's stone flight (0AF left half, 0CF right half - Routes 112, 115, 116 ...).
  * (Found by their walkable steep relief alone, ledges and slopes came too.) */
-static bool StairMetatile(int mt)
+extern bool Port_LayoutSecondaryStair(int id, int metatile);
+static bool StairMetatileOf(int layoutId, int mt)
 {
-    return mt == 0x0AF || mt == 0x0CF;
+    return mt == 0x0AF || mt == 0x0CF || Port_LayoutSecondaryStair(layoutId, mt);
 }
+#define StairMetatile(mt) StairMetatileOf(l->layoutId, (mt))
 #define MAX_FOUND_FLIGHTS 96
 typedef struct
 {
@@ -229,9 +231,20 @@ static unsigned DetectFlights(const ReliefLayout *l, FoundFlight *out)
                 botH = b;
                 ++y;
             }
+            if (y == y0 && getenv("WJPC_STAIRS_DUMP") != NULL && StairMetatile(Port_LayoutMetatile(l->layoutId, x, y)))
+            {
+                int kk = FindIn(l, x, y);
+                int16_t tt = 0, bb = 0;
+                int rr = kk >= 0 ? CellRise(l, kk, &tt, &bb) : -999;
+                fprintf(stderr, "STAIRSKIP layout %u x %d y %d cell %d rise %d top %d bot %d\n", l->layoutId, x, y, kk, rr, tt, bb);
+            }
             /* (two rows at least: a one-row drop the player walks onto is a ledge, jumped down, not stairs) */
             if (y - y0 < 1 || topH - botH < 8)
+            {
+                if (y > y0 && getenv("WJPC_STAIRS_DUMP") != NULL)
+                    fprintf(stderr, "STAIRLOW layout %u x %d rows %d-%d top %d bot %d\n", l->layoutId, x, y0, y - 1, topH, botH);
                 continue;
+            }
             /* the same run in the column to the west: one flight */
             {
                 bool merged = false;
