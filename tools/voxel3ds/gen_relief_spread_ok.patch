@@ -1,0 +1,15 @@
+Wally's Journey patch to Emerald 3DS's 3ds_port/scripts/gen_voxel_relief.py (session 014PwRDj, 2026-11-19).
+Brennan 15:37 gave permission to upgrade the generator. world_levels() drops a drawn group whose ground spreads over
+many levels (GROUND_SPREAD 5%) and lays its maps level - Mt Pyre outside (12.7%) got no relief at all.
+VOXEL_SPREAD_OK=group,group keeps those groups. Used:
+  VOXEL_SPREAD_OK=mt_pyre_exterior python3 scripts/gen_voxel_relief.py --layouts LAYOUT_MT_PYRE_EXTERIOR --output X.bin
+  python3 tools/voxel3ds/splice_relief.py pc_data/voxel/relief.bin X.bin OUT.bin 302
+
+--- a/3ds_port/scripts/gen_voxel_relief.py
++++ b/3ds_port/scripts/gen_voxel_relief.py
+@@ world_levels
+-        bad = [g for g in groups if _QUALITY[g] > GROUND_SPREAD]
++        # Wally's Journey (Brennan 2026-11-19 15:37: upgrade the generator so maps it leaves flat get height data):
++        # VOXEL_SPREAD_OK=group,group keeps those groups placed whatever their ground spread
++        keep = set(filter(None, os.environ.get("VOXEL_SPREAD_OK", "").split(",")))
++        bad = [g for g in groups if _QUALITY[g] > GROUND_SPREAD and g not in keep]

@@ -57,6 +57,13 @@ def main():
             r, d = drows[lid]
             r = bytearray(r)
         rows.append((lid, r, d))
+    # (2026-11-19, Mt Pyre outside: a layout the donor has and ours lacks is added, rows kept in layout order)
+    have = {lid for lid, _, _ in rows}
+    for lid in sorted(take - have):
+        if lid in drows:
+            r, d = drows[lid]
+            rows.append((lid, bytearray(r), d))
+    rows.sort(key=lambda t: t[0])
     # cut variants: all of ours stay where they are (cells of other maps may use them), then the
     # donor's that the taken layouts' cut cells use, appended (indices remapped)
     variants = list(ours['variants'])
@@ -78,7 +85,10 @@ def main():
     cells = [fix(c, remap_ours) for c in ours['cells'] if lid_of(c) not in take]
     cells += [fix(c, remap_donor) for c in donor['cells'] if lid_of(c) in take]
     cells.sort(key=lambda c: (lid_of(c), c[2], c[3]))  # the reader binary-searches (layout, x, y)
-    edges = [e for e in ours['edges'] if lid_of(e) not in take] + [e for e in donor['edges'] if lid_of(e) in take]
+    # (a taken layout's edges are the donor's; when the donor has none for it, ours stay - add_relief_edge.py's)
+    dedge = {lid_of(e) for e in donor['edges']}
+    edges = [e for e in ours['edges'] if lid_of(e) not in take or lid_of(e) not in dedge] \
+          + [e for e in donor['edges'] if lid_of(e) in take]
     # write
     blob = bytearray(ours['head'])
     data_at = 8 + ROW * len(rows)
