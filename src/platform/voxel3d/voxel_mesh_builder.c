@@ -3064,9 +3064,8 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
             h = fh < h ? fh : h;
             sh += fs * 0.25f;
         }
-        /* (not floored to the ledge: a wood rising a whole level at once showed the dark ground under the higher
-         * crowns in squares; the crowns hide a gentle rise) */
-        *level = h - VoxelRelief_Base(ring);
+        /* on the ledge it lies on (the field's terraces, EmitFieldCell) */
+        *level = floorf(h + 1e-4f) - VoxelRelief_Base(ring);
         *shift = sh - VoxelRelief_Base(ring);
         return true;
     }
@@ -4167,7 +4166,9 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     bool wall;
     const float keepBase = b->base, keepLift = b->lift, keepShift = b->shift, keepStretch = b->stretchAdd;
 
-    if (getenv("WJPC_FIELD_NONE") != NULL || !MetatileUV(b, BeltMetatileFor(x, y, y), &tu0, &tv0, &tu1, &tv1))
+    /* (a wood's cell: the field under its trees, in its grass - BeltTreeGround) */
+    if (getenv("WJPC_FIELD_NONE") != NULL
+     || !MetatileUV(b, BeltIsTree(x, y) ? BeltTreeGround(x, y) : BeltMetatileFor(x, y, y), &tu0, &tv0, &tu1, &tv1))
         return;
     wall = (face >= 0 && MetatileUV(b, face, &wu0, &wv0, &wu1, &wv1))
         || MetatileUV(b, BeltMetatileFor(x, y, y), &wu0, &wv0, &wu1, &wv1);
@@ -4245,8 +4246,9 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
 
             if (VoxelWorld_GetInstanceAt(nx, ny) != NULL || !BorderAt(nx, ny))
                 continue;   /* a map: its edge closes it (EdgeOverBelt, EmitSeamSkirt) */
-            if (!BeltIsTree(nx, ny) && !BorderWaterLevel(nx, ny, &wl, &ws))
-                continue;   /* the field: the same corners, nothing open */
+            if (BorderWaterLevel(nx, ny, &wl, &ws) ? false
+                : !BeltIsTree(nx, ny) || getenv("WJPC_BELT_TREES_OWN") == NULL)
+                continue;   /* the field (woods lie on it too): the same corners, nothing open */
             floorH = BeltBase(nx, ny) - 1.0f;
             /* the side, cut where the field crosses a whole level: each stretch one level of ledge */
             cut[n++] = a;
@@ -4396,9 +4398,14 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 bool besideMap = VoxelWorld_GetInstanceAt(x - 1, y) || VoxelWorld_GetInstanceAt(x + 1, y)
                               || VoxelWorld_GetInstanceAt(x, y - 1) || VoxelWorld_GetInstanceAt(x, y + 1);
 
-                /* (POL-46: under every tree of a wood on the field, its grass - the crowns at eased heights left
-                 * the sky showing between them; laid only at a wood's edges before) */
-                if (!drawn && ((FieldOn() && getenv("WJPC_BELT_TREES_OWN") == NULL) || besideMap
+                /* POL-46: a wood on the field lies on the field itself (EmitFieldCell, in its grass): one ground
+                 * with no gaps between cells - flat quads at eased heights showed the sky between them */
+                if (!drawn && FieldOn() && getenv("WJPC_BELT_TREES_OWN") == NULL)
+                {
+                    EmitFieldCell(builder, x, y);
+                    continue;
+                }
+                if (!drawn && (besideMap
                                || !BeltIsTree(x - 1, y) || !BeltIsTree(x + 1, y) || !BeltIsTree(x, y - 1)
                                || !BeltIsTree(x, y + 1))
                  && MetatileUV(builder, BeltTreeGround(x, y), &u0, &v0, &u1, &v1))
