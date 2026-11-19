@@ -985,3 +985,12 @@ the long maps). Test: one run warping to each (spots with no collision near the 
     mountain, dark in this light - map art, not the background). Far-corner sky: test camera only (skipped).
   - Not covered: Petalburg Woods (inside map), close-ups of buildings/bridges/stairs.
   - Test note: warping to Route 115 after Rustboro in one run ends the game (2nd time); a run of its own works.
+
+## POL-47: stairs everywhere as real 3D steps (Brennan 2026-11-19 01:52)
+"every staircase is pasted flat onto a 90-degree vertical cliff wall ... every stair metatile across the entire region
+is built as a true 3D sloped staircase" (Routes 115 and 116 pictured); sealed side cheeks, steps' textures not
+stretched. Doing (testing): voxel_relief.c DetectFlights - a stair cell = walkable (collision 0, Port_LayoutCollision)
+whose relief climbs 12+ px over the cell, in a column run of 2+ rows (a 1-row drop is a ledge); neighbouring columns
+with the same run = one flight; each laid by LayFlight as POL-44's (half out, half into the cliff top, 8 px treads and
+risers, 2 lip rows). Table flights (Route 112) unchanged. WJPC_STAIRS_LISTED=1: only the table; WJPC_STAIRS_DUMP=1
+prints the flights found. Not yet: side-facing (east/west) stairs; side cheeks.

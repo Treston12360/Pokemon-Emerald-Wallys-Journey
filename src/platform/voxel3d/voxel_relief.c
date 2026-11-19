@@ -175,39 +175,139 @@ static int FindIn(const ReliefLayout *l, int x, int y)
     return -1;
 }
 
+/*
+ * POL-47 (Brennan 2026-11-19 01:52, Routes 115 and 116: "every staircase is pasted flat onto a 90-degree vertical
+ * cliff wall ... update our global terrain/metatile mesher so that every stair metatile across the entire region is
+ * built as a true 3D sloped staircase"): stairs found, not listed. A stair cell is one the player walks on (collision
+ * 0) whose relief climbs steeply up its rows - 12 px or more over the cell, as only a flight drawn up a face does
+ * (walkable slopes climb a few px). A column's run of them is a flight; neighbouring columns with the same run one
+ * flight. Each is laid as POL-44's Route 112 flight: half out, half into the cliff top (Brennan 2026-11-17 "Half and
+ * half"). WJPC_STAIRS_LISTED=1: only the table.
+ */
+extern int Port_LayoutCollision(int id, int x, int y);
+#define MAX_FOUND_FLIGHTS 96
+typedef struct
+{
+    uint8_t x0, x1, row, rows;
+    int16_t bottom, rise;     /* px: the flight's foot's height, its climb */
+} FoundFlight;
+
+static int CellRise(const ReliefLayout *l, int k, int16_t *topH, int16_t *botH)
+{
+    const int16_t *g = l->heights + (unsigned)k * GRID;
+    int mid = VOXEL_RELIEF_SIDE / 2;
+    *topH = g[mid];
+    *botH = g[(VOXEL_RELIEF_SIDE - 1) * VOXEL_RELIEF_SIDE + mid];
+    return *topH - *botH;
+}
+
+static unsigned DetectFlights(const ReliefLayout *l, FoundFlight *out)
+{
+    unsigned n = 0;
+
+    if (getenv("WJPC_STAIRS_LISTED") != NULL)
+        return 0;
+    for (int x = 0; x < l->width; ++x)
+        for (int y = 0; y < l->height; ++y)
+        {
+            int16_t t, b, topH = 0, botH = 0;
+            int y0 = y, k;
+
+            while (y < l->height && Port_LayoutCollision(l->layoutId, x, y) == 0 && (k = FindIn(l, x, y)) >= 0
+                   && CellRise(l, k, &t, &b) >= 12)
+            {
+                if (y == y0)
+                    topH = t;
+                botH = b;
+                ++y;
+            }
+            /* (two rows at least: a one-row drop the player walks onto is a ledge, jumped down, not stairs) */
+            if (y - y0 < 2 || topH - botH < 16)
+                continue;
+            /* the same run in the column to the west: one flight */
+            if (n > 0 && out[n - 1].x1 == x - 1 && out[n - 1].row == y0 && out[n - 1].rows == y - y0)
+            {
+                out[n - 1].x1 = (uint8_t)x;
+                continue;
+            }
+            if (n < MAX_FOUND_FLIGHTS)
+            {
+                out[n].x0 = out[n].x1 = (uint8_t)x;
+                out[n].row = (uint8_t)y0;
+                out[n].rows = (uint8_t)(y - y0);
+                out[n].bottom = botH;
+                out[n].rise = (int16_t)(topH - botH);
+                ++n;
+            }
+        }
+    return n;
+}
+
+static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bottom, int rise, int lip);
+
 static bool StairFlights(ReliefLayout *l)
 {
     const char *env = getenv("WJPC_STAIRS_UPRIGHT");
+    FoundFlight found[MAX_FOUND_FLIGHTS];
+    unsigned nf;
+    bool listed = false;
 
     if (env != NULL && env[0] == '1')
         return true;
     for (unsigned f = 0; f < sizeof(sStairFlights) / sizeof(sStairFlights[0]); ++f)
     {
         const StairFlight *s = &sStairFlights[f];
-        int rise = 8 * s->steps, top = 16 * s->row;
-        /* the face stood at v + h = top + rise; the flight's top tread starts half a flight back */
-        int z0 = top + rise - rise / 2;
-        int16_t *depths;
-
         if (l->layoutId != s->layout)
             continue;
-        depths = DepthsOf(l);
-        if (depths == NULL)
+        listed = true;
+        if (!LayFlight(l, s->x0, s->x1, s->row, (8 * s->steps + 15) / 16, 0, 8 * s->steps, s->lip))
             return false;
-        for (int x = s->x0; x <= s->x1; ++x)
+    }
+    if (listed)
+        return true;
+    nf = DetectFlights(l, found);
+    for (unsigned f = 0; f < nf; ++f)
+    {
+        if (getenv("WJPC_STAIRS_DUMP") != NULL)
+            fprintf(stderr, "STAIRS layout %u x %d-%d row %d rows %d bottom %d rise %d\n", l->layoutId, found[f].x0,
+                    found[f].x1, found[f].row, found[f].rows, found[f].bottom, found[f].rise);
+        if (!LayFlight(l, found[f].x0, found[f].x1, found[f].row, found[f].rows, found[f].bottom, found[f].rise, 2))
+            return false;
+    }
+    return true;
+}
+
+/* a flight: `rows` cells from `row` down, from bottom+rise px at its top to `bottom` at its foot, as steps (8 px tread,
+ * 8 px riser); half out onto the ground, half into the cliff top; `lip` cells north of it laid back to its top tread */
+static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bottom, int rise, int lip)
+{
+    int steps = (rise + 4) / 8, top = 16 * row, n_all = rows * (VOXEL_RELIEF_SIDE - 1);
+    /* the face stood at v + h = top + bottom + rise (as drawn); the top tread starts half a flight back */
+    int z0 = top + bottom + rise - (8 * steps) / 2;
+    int16_t *depths = DepthsOf(l);
+
+    if (depths == NULL)
+        return false;
+    if (steps < 1)
+        return true;
+    for (int x = x0; x <= x1; ++x)
+    {
         {
-            /* the flight: lattice rows 4 px apart, two to a step (tread, riser) */
-            for (int r = 0; r < (rise + 15) / 16; ++r)
+            for (int r = 0; r < rows; ++r)
             {
-                int k = FindIn(l, x, s->row + r);
+                int k = FindIn(l, x, row + r);
                 if (k < 0)
                     continue;
                 for (int j = 0; j < VOXEL_RELIEF_SIDE; ++j)
                 {
-                    int n = r * (VOXEL_RELIEF_SIDE - 1) + j;      /* the flight's lattice row */
-                    int step = n / 2, v = top + 4 * n;
-                    int h = rise - 8 * step, z = z0 + 8 * step + (n % 2) * 8;
-                    if (h < 0) h = 0;
+                    int nn = r * (VOXEL_RELIEF_SIDE - 1) + j;
+                    int s2 = n_all > 0 ? nn * 2 * steps / n_all : 0;   /* tread / riser, two lattice slots a step */
+                    int step, v = top + 4 * nn, h, z;
+                    if (s2 > 2 * steps - 1) s2 = 2 * steps - 1;
+                    step = s2 / 2;
+                    h = bottom + rise - 8 * step;
+                    z = z0 + 8 * step + (s2 % 2) * 8;
+                    if (h < bottom) h = bottom;
                     for (int i = 0; i < VOXEL_RELIEF_SIDE; ++i)
                     {
                         l->heights[k * GRID + j * VOXEL_RELIEF_SIDE + i] = (int16_t)h;
@@ -217,11 +317,11 @@ static bool StairFlights(ReliefLayout *l)
             }
             /* the lip: its cells' rows laid evenly from where they started to the top tread */
             {
-                int lipTop = top - 16 * s->lip;
-                int zTop = lipTop + rise;   /* as the drawing has it */
-                for (int r = 0; r < s->lip; ++r)
+                int lipTop = top - 16 * lip;
+                int zTop = lipTop + bottom + rise;   /* as the drawing has it */
+                for (int r = 0; r < lip; ++r)
                 {
-                    int k = FindIn(l, x, s->row - s->lip + r);
+                    int k = FindIn(l, x, row - lip + r);
                     if (k < 0)
                         continue;
                     for (int j = 0; j < VOXEL_RELIEF_SIDE; ++j)

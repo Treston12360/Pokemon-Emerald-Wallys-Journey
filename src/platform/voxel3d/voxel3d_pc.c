@@ -83,6 +83,16 @@ const struct MapLayout *Port_GetMapLayoutById(u16 id)
     return id == 0 ? NULL : gMapLayouts[id - 1];
 }
 
+// POL-47 (voxel_relief.c DetectFlights): a layout cell's collision (0 walkable), -1 outside it / no layout
+int Port_LayoutCollision(int id, int x, int y)
+{
+    const struct MapLayout *l = id <= 0 ? NULL : gMapLayouts[id - 1];
+
+    if (l == NULL || l->map == NULL || x < 0 || y < 0 || x >= l->width || y >= l->height)
+        return -1;
+    return (l->map[y * l->width + x] & MAPGRID_COLLISION_MASK) >> 10;
+}
+
 u32 Port_GetSpriteFrameSize(const void *data, u32 size)
 {
     return size;
