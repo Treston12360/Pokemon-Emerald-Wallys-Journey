@@ -962,3 +962,6 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   scattered by a mixed hash, about 12 in 100 shelf cells (TreeScatter); ledge trees need only their own corners flat.
   Still different from the NE peak: its colour - the NE peak is Route 112's own drawn map art (darker red rock), ours
   is the tiled rock.
+- Brennan 2026-11-19 00:3x: "lets put this behind and work on other things, move on to the next task lets work on this
+  last after everything else it complete." Lavaridge north (rock colour vs Route 112's darker drawn rock) PARKED until
+  the end. Next: the Batch 1 audit (zoom pictures now work: WJPC_TEST_3D_ZOOM).
