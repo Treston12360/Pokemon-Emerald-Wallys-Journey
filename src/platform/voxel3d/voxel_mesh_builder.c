@@ -4157,8 +4157,13 @@ static void BeltField(int vx, int vy, float *height, float *south)
          * walls of crowns - "Keep woods flat"): a corner of a wood of the belt does not climb; the rock beside it
          * still does. Route 118's wooded hill by its river (Brennan's "Wooded hill", locked in) keeps climbing: a wood
          * within 12 cells of the belt's sea. WJPC_WOODS_CLIMB=1: woods climb everywhere. */
-        if (getenv("WJPC_WOODS_CLIMB") == NULL && FieldCornerWood(vx, vy))
+        bool woodFlat = getenv("WJPC_WOODS_CLIMB") == NULL && FieldCornerWood(vx, vy);
+        if (woodFlat)
             rise = 0.0f;
+        /* (Audit batch 2: nor up a drawn map's peak where that map is not the nearest - the woods north of Route 113
+         * climbed Route 111's) */
+        if (woodFlat && !nearDrawn && getenv("WJPC_PEAK_NO_REACH") == NULL)
+            drawnPeak = -1e9f;
         r = r < rise ? r : rise;
         *height = sumE / sumW + r * (sumBack / sumW);
         if (*height < drawnPeak)
