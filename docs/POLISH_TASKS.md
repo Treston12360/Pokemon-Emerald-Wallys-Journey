@@ -892,3 +892,8 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   So zoomed-out shots work too. (3DS limits do not apply: PC game, NO LIMITS; BELT_LAYERS/PAIRS raised 4 -> 16.)
 - Left: tree belt ground not yet on the field (rule B), seas (rule C), the small dark notch north-west of Lavaridge's
   hot spring, Lilycove / Route 119 not checked yet.
+- Rule B (forests): belt woods stand on the field (BorderLevel: mean of BeltField's 4 corners, not floored;
+  WJPC_BELT_TREES_OWN=1 old). Route 119 west of the Weather Institute: the black box is gone
+  (`POL-46_route119_woods.png`); some crowns there are darker in squares - they are crowns in the shadow of taller
+  ones, not holes (same with floored or smooth ground). Lilycove (Dept. Store spot): sea to the north, nothing open.
+  Test note: `set zoom 5` in the script did not zoom out in these runs.
