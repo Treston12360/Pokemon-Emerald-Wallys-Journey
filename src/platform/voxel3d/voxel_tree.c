@@ -321,6 +321,8 @@ static void EmitGround(VoxelBuilder *builder, const VoxelMapInstance *inst, int 
  * its floor (96,32), every cell of a patch alike. The tuft of the cell south
  * of a walker stands in front of it up to its shoulders, as the GBA's grass
  * covers all but its head. */
+static bool sNoGround; /* POL-48: the crown alone, on ground already drawn */
+
 static void EmitSmallCell(VoxelBuilder *builder, const VoxelMapInstance *inst, int x, int y,
                           const void *secondaryTileset, int metatileId, int part, bool rock)
 {
@@ -347,7 +349,8 @@ static void EmitSmallCell(VoxelBuilder *builder, const VoxelMapInstance *inst, i
      * 0.15, so its crown stands over the shadow drawn on its sand. */
     float baseZ = wz + (dewford ? 0.975f : 0.825f);
 
-    EmitGround(builder, inst, x, y, TEX_U(tx), TEX_V(ty), TEX_U(tx + 16), TEX_V(ty + 16));
+    if (!sNoGround)
+        EmitGround(builder, inst, x, y, TEX_U(tx), TEX_V(ty), TEX_U(tx + 16), TEX_V(ty + 16));
     builder->rounded = true;
     VoxelBuilder_Quad(builder,
         /* POL (Brennan 2026-11-15: "a white line going across the top of the trees", Route 111): the card's top
@@ -704,4 +707,28 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             }
             }
         }
+}
+
+/*
+ * POL-48 (Brennan 2026-11-19: a Ninja Boy's tree disguise should "Look like the 3D trees"): the General's small
+ * tree (0C7) standing on the cell, its crown only - the ground under it is the map's own, already drawn.
+ * World coordinates (the builder's origin 0).
+ */
+void VoxelTree_EmitDisguise(VoxelBuilder *builder, int x, int y)
+{
+    const VoxelMapInstance *inst = VoxelWorld_GetInstanceAt(x, y);
+    float base = builder->base;
+
+    if (inst == NULL)
+        return;
+    builder->base = VoxelRelief_Base(inst);
+    builder->lift = VoxelRelief_CellLift(inst, x, y);
+    builder->shift = VoxelRelief_CellShift(inst, x, y);
+    sNoGround = true;
+    EmitSmallCell(builder, inst, x, y, inst->secondaryTileset, 0x0C7, VOXEL_TREE_SMALL,
+                  AgainstRock(inst, x, y, builder->lift));
+    sNoGround = false;
+    builder->lift = 0.0f;
+    builder->shift = 0.0f;
+    builder->base = base;
 }

@@ -1041,3 +1041,8 @@ Pictures at the game's widest zoom (Brennan 12:41): `AUDIT_B3_sheet0-2.png`, `AU
   the map; Route 121 north-east (belt coast north of Route 121, x 70-79, y -10..-1, by Lilycove's west edge): a
   long thin strip of sky along the belt's shoreline. Fortree east: sky at the far top-right corner even at the
   game's own zoom.
+- POL-48 Ninja Boy tree disguise -> 3D tree (testing, `POL-48_ninja_tree.png`): voxel_entities.c - while a
+  MOVEMENT_TYPE_TREE_DISGUISE object's disguise sprite is still (state 0), the boy and the disguise card are not
+  drawn and the cell is noted; voxel_gl.c draws VoxelTree_EmitDisguise there each frame (the General's small tree
+  0C7, crown only). The shake-off animation and the boy after it are cards as before. WJPC_DISGUISE_CARD=1: old.
+  NOT yet seen: the reveal itself (test runs have battles off) - check by walking up to one.

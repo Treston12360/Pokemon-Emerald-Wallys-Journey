@@ -3717,6 +3717,24 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                     MeshDraw(&sBeltTerrain[l][p], sBeltDrawn[l]->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
         MeshDraw(&sBeltTrees, sTreeTex, (float)sBeltShiftX, 0, (float)sBeltShiftZ);
     }
+    // POL-48: Ninja Boys hidden as a tree, as the 3D small tree (voxel_entities.c noted their cells this frame)
+    {
+        static Mesh sDisguiseMesh;
+        static VoxelVertex sDisguiseVerts[16 * 12];
+        const int (*cells)[2];
+        unsigned n = VoxelEntities_DisguiseTrees(&cells);
+        VoxelBuilder b;
+
+        VoxelBuilder_Init(&b, sDisguiseVerts, (unsigned)(sizeof sDisguiseVerts / sizeof sDisguiseVerts[0]));
+        VoxelBuilder_SetOrigin(&b, 0, 0);
+        for (unsigned i = 0; i < n; i++)
+            VoxelTree_EmitDisguise(&b, cells[i][0], cells[i][1]);
+        if (b.count > 0)
+        {
+            MeshSetQuantised(&sDisguiseMesh, sDisguiseVerts, b.count, GL_DYNAMIC_DRAW);
+            MeshDraw(&sDisguiseMesh, sTreeTex, 0, 0, 0);
+        }
+    }
 
     // Shadows and reflections under the cards, then the cards.
     // As on the 3DS: blended, without writing depth.

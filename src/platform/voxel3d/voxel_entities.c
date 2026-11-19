@@ -774,6 +774,56 @@ static bool DisguiseShown(const struct Sprite *sprite)
 }
 
 /*
+ * POL-48 (Brennan 2026-11-19, audit batch 3: Routes 119 and 120's Ninja Boys hiding as a tree stood as a bright green
+ * panel - the disguise's grass background, upright with its card - "Look like the 3D trees"): while a tree disguise
+ * is still (state 0, not shaking off), neither it nor the boy under it is a card; its cell is noted and voxel_gl.c
+ * draws the 3D small tree there (VoxelTree_EmitDisguise). The reveal's animation and the boy after it are the cards
+ * as before. WJPC_DISGUISE_CARD=1: the card as before.
+ */
+#define VOXEL_DISGUISE_MAX 16
+static int sDisguiseTrees[VOXEL_DISGUISE_MAX][2];
+static unsigned sDisguiseCount;
+
+static bool DisguiseAsTree(void)
+{
+    static int sOn = -1;
+
+    if (sOn < 0)
+        sOn = getenv("WJPC_DISGUISE_CARD") == NULL;
+    return sOn != 0;
+}
+
+/* The tree disguise sprite of this object, still (not shaking off), or NULL. */
+static const struct Sprite *StillTreeDisguise(const struct ObjectEvent *obj)
+{
+    const struct Sprite *d;
+
+    if (!DisguiseAsTree() || obj->movementType != MOVEMENT_TYPE_TREE_DISGUISE || obj->directionSequenceIndex != 1
+     || obj->fieldEffectSpriteId >= MAX_SPRITES)
+        return NULL;
+    d = &gSprites[obj->fieldEffectSpriteId];
+    if (!d->inUse || d->callback != UpdateDisguiseFieldEffect || d->data[1] != FLDEFF_TREE_DISGUISE || d->data[0] != 0)
+        return NULL;
+    return d;
+}
+
+static void NoteDisguiseTree(float worldX, float worldZ)
+{
+    if (sDisguiseCount < VOXEL_DISGUISE_MAX)
+    {
+        sDisguiseTrees[sDisguiseCount][0] = (int)floorf(worldX);
+        sDisguiseTrees[sDisguiseCount][1] = (int)floorf(worldZ);
+        sDisguiseCount++;
+    }
+}
+
+unsigned VoxelEntities_DisguiseTrees(const int (**cells)[2])
+{
+    *cells = sDisguiseTrees;
+    return sDisguiseCount;
+}
+
+/*
  * POL-17 (Brennan 2026-11-16 19:12: "the seeds sitting back behind off of the dirt, the seeds should be remaining in
  * the middle of the dirt as if they were planted"): a card stands on its cell's centre with its feet (the standing
  * pose's lowest row) there - right for people, half a tile north of where the GBA draws them. A berry plant's soil
@@ -1836,6 +1886,7 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
 
     /* A card tilted to face the swoop's camera is seen square on: nothing
      * to make up (upright at a top-down pose it was a hair wide, seven tall). */
+    sDisguiseCount = 0; /* POL-48: noted again this frame */
     sLay = camera->lay;
     narrow = 1.0f + (narrow - 1.0f) * (1.0f - sLay);
     stretch = 1.0f / narrow;
@@ -1903,6 +1954,12 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
             continue;
 
         GetObjectWorldPos(obj, sprite, &worldX, &worldZ);
+        /* POL-48: hidden in a tree - the 3D tree is drawn instead (its disguise card is skipped below) */
+        if (StillTreeDisguise(obj) != NULL)
+        {
+            NoteDisguiseTree(worldX, worldZ);
+            continue;
+        }
         /* Object coordinates are map-local; the mesh is in world space. */
         if (VoxelWorld_InstanceCount() > 0)
         {
@@ -1996,6 +2053,10 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
          * blinking one's off frames) is hidden here too. */
         if (!sprite->inUse || (sprite->invisible && !DisguiseShown(sprite)) || !sprite->coordOffsetEnabled
          || objectSprite[id])
+            continue;
+        /* POL-48: a still tree disguise is the 3D tree its object noted */
+        if (DisguiseAsTree() && sprite->callback == UpdateDisguiseFieldEffect && sprite->data[1] == FLDEFF_TREE_DISGUISE
+         && sprite->data[0] == 0)
             continue;
         cloud = CtrSprite_IsVoxelCloud(sprite);
         if (IsTemplate(sprite->template, FLDEFFOBJ_SHADOW_S, FLDEFFOBJ_SHADOW_XL)

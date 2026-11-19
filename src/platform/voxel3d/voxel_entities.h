@@ -95,4 +95,7 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas,
 /* POL-26b: builders for the night-light sprites' cards and their lamps' pools (NULL: with the others / none) */
 void VoxelEntities_SetLampBuilders(VoxelBuilder *glows, VoxelBuilder *pools, VoxelBuilder *glass);
 
+/* POL-48: the cells of Ninja Boys hidden as a tree this frame (drawn as 3D trees). */
+unsigned VoxelEntities_DisguiseTrees(const int (**cells)[2]);
+
 #endif
