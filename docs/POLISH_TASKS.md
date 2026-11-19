@@ -929,3 +929,9 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   mountain and the eastern hill so the terraces curve round the inside corner (a concave corner / saddle) and join
   the eastern tiers; foothill ledges wrapping diagonally from the northern cliff into the eastern slope, with
   staggered trees on them.
+- Brennan 22:39: "Route 118 ... looks awesome now ... ready to lock in" (`POL-46_zoomed_lavaridge_route118.png`) - do not
+  change Route 118's look. Lavaridge (`BREN_2239_*`): north red box - the east half (stepped peak, trees on shelves)
+  looks natural; the west half is a bare amphitheater of flat benches with a ridge where they meet: mirror the stepped
+  peak and the staggered shelf trees across to the west so the forested ridge wraps the whole north. South red box:
+  a small blue triangle under the two red-roofed houses (seal it); the foreground ridge's left side dips in sawtooth
+  steps with dark cracks - make its top level and flush left to right.

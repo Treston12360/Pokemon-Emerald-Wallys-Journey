@@ -4247,10 +4247,12 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
                             m->originX, m->originY, m->width, m->height, (int)m->indoor, (const void *)m->layout,
                             VoxelRelief_Base(m));
             }
-            for (int vy = -16; vy <= 2; ++vy)
+            int gy0 = getenv("WJPC_GRID_Y0") ? atoi(getenv("WJPC_GRID_Y0")) : -16;
+            int gx0 = getenv("WJPC_GRID_X0") ? atoi(getenv("WJPC_GRID_X0")) : -8;
+            for (int vy = gy0; vy <= gy0 + 18; ++vy)
             {
                 fprintf(stderr, "GRID %3d:", vy);
-                for (int vx = -8; vx <= 28; ++vx)
+                for (int vx = gx0; vx <= gx0 + 36; ++vx)
                 {
                     float fh, fs;
                     BeltField(vx, vy, &fh, &fs);
