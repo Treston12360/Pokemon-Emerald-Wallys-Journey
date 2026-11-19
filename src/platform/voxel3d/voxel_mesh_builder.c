@@ -1313,7 +1313,14 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
             }
             continue;
         }
-        if (other == NULL && d == 1 && !inst->indoor && TreeBeltAt(nx, ny))
+        /* POL-56 (Brennan 2026-11-19 14:23, Route 120 south-west: "a light-blue skybox triangle is bleeding through
+         * the trees/ground seam"): a grass strip of the belt there, not a tree - the same slope of the edge's drawing
+         * closes any land belt under the edge, not only a wood. WJPC_SOUTH_SKIRT_TREES=1: trees only. */
+        static int sTreesOnly = -1;
+        if (sTreesOnly < 0)
+            sTreesOnly = getenv("WJPC_SOUTH_SKIRT_TREES") != NULL;
+        if (other == NULL && d == 1 && !inst->indoor
+         && (TreeBeltAt(nx, ny) || (!sTreesOnly && VoxelWorld_BorderMetatile(nx, ny) >= 0 && !VoxelWorld_BorderIsWater(nx, ny))))
         {
             /*
              * South of the last map, a belt of trees: no wall stands in
