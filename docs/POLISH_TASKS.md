@@ -1081,3 +1081,12 @@ Numbered here POL-49..; status kept below as work goes.
   Falls, Sootopolis have it. Summit's two flights (rows 17, 31) still flat - next.
 - POL-56 Route 120 south-west triangle: two tries (south seam over any land belt; edge corner = higher of two cells)
   did NOT close it - still open.
+- Brennan 16:30 on `POL-51_mt_pyre_terraces.png` (his marks: `BREN_1630_mt_pyre.png`):
+  1. Stairs: "thin floating slabs, so you can see dark hollow gaps underneath the stairs"; at the landings "the stair
+     mesh clips through the grass ground and leaves a detached white/grey step bar floating at the top". Fix: "a
+     solid, enclosed 3D wedge/stepped block all the way down to the underlying terrain (with closed side stringers and
+     solid risers ...), and align the top and bottom steps flush with the upper and lower grass plateaus".
+  2. Mt Pyre east, upper terrace: the right-side rock wall "disappeared into a flat/hollow strip" - mirror the left.
+  3. "Revert the outer island shoreline/cliff-to-water boundary back to how it was structured in the original
+     (BEFORE) layout so the brown mountain cliffs meet the ocean water cleanly" (no dark wall into the sea on the
+     west, no blocky square overhangs on the east).
