@@ -674,6 +674,9 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 float level, shift;
                 bool ledge = part < 0 && VoxelMesh_LedgeTree(x, y, &level, &shift);
 
+            if (part >= 0 && VoxelMesh_TreeOverDrop(x, y))
+                continue;
+
             if (ledge)
             {
                 /* POL-46: a small tree on a ledge near a wood (the General's 0C7) */

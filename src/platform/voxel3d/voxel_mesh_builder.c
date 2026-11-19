@@ -3972,7 +3972,7 @@ static void BeltField(int vx, int vy, float *height, float *south)
      * then the climb, by the distance to the nearest map. One smooth function: no map's cone outgrowing another's
      * with distance, no cliff where a map drops out of reach (both made walls of columns, 2026-11-18). */
     float sumW = 0.0f, sumE = 0.0f, sumS = 0.0f, sumBack = 0.0f, dmin = 1e9f;
-    float exactE = 0.0f, exactS = 0.0f;
+    float exactE = 0.0f, exactS = 0.0f, capMin = 1e9f;
     bool exact = false;
 
     for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
@@ -4002,6 +4002,14 @@ static void BeltField(int vx, int vy, float *height, float *south)
         e = VoxelRelief_Base(m) + (g != NULL ? g[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
         sd = VoxelRelief_Base(m) + (dg != NULL ? dg[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f
                                     : g != NULL ? g[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
+        /* POL-46 (Brennan 2026-11-18, Lavaridge's north-east: "Option 2 (One cliff + ledges)"): no point climbs
+         * faster than a level every BELT_FIELD_RATE cells from ANY map's edge - from the low town the ledges stay
+         * two squares deep; where a high edge (Route 112's) stands over that, its edge's own cliff (EdgeOverBelt,
+         * rock tiled a level a tile) makes up the rest. WJPC_FIELD_NO_CAP=1: off. */
+        {
+            float cap = e + d / (float)BELT_FIELD_RATE;
+            capMin = cap < capMin ? cap : capMin;
+        }
         if (d < 1e-4f)
         {
             if (!exact || e > exactE)
@@ -4022,9 +4030,11 @@ static void BeltField(int vx, int vy, float *height, float *south)
         sumBack += w * (vy >= oy + m->height ? 0.0f : 1.0f);
         dmin = d < dmin ? d : dmin;
     }
+    if (getenv("WJPC_FIELD_NO_CAP") != NULL)
+        capMin = 1e9f;
     if (exact)
     {
-        *height = exactE;
+        *height = exactE < capMin ? exactE : capMin;
         *south = exactS;
         return;
     }
@@ -4038,12 +4048,14 @@ static void BeltField(int vx, int vy, float *height, float *south)
         float r = dmin / (float)BELT_FIELD_RATE;
         r = r < (float)BELT_FIELD_RISE ? r : (float)BELT_FIELD_RISE;
         *height = sumE / sumW + r * (sumBack / sumW);
+        if (*height > capMin)
+            *height = capMin;
         /* POL-46 (Brennan 2026-11-18 19:18: "Step the mountain down on BOTH sides toward the water"): within
          * BELT_FIELD_SHORE cells of the belt's sea the land comes down to it a level every BELT_FIELD_RATE cells - no
          * sheer wall from the hilltop into the water. WJPC_FIELD_NO_SHORE=1: off. */
         if (getenv("WJPC_FIELD_NO_SHORE") == NULL)
         {
-            enum { BELT_FIELD_SHORE = 5 };
+            enum { BELT_FIELD_SHORE = 12 };  /* (5 levelled the land behind Route 118's river: "bring it back") */
             float best = 1e9f;
             for (int dy = -BELT_FIELD_SHORE; dy < BELT_FIELD_SHORE; ++dy)
                 for (int dx = -BELT_FIELD_SHORE; dx < BELT_FIELD_SHORE; ++dx)
@@ -4325,6 +4337,24 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
  * carries a small tree (two in three, by its place, so the edge of the wood thins out instead of a straight block).
  * Its level and way south: the ledge's. WJPC_NO_LEDGE_TREES=1: none.
  */
+/* POL-46: TRUE when a wood cell of the belt lies across a wall of the field (its corners on two ledges): its tree
+ * would straddle the drop, so it stands none (its grass is the field's). */
+bool VoxelMesh_TreeOverDrop(int x, int y)
+{
+    float lo = 1e9f, hi = -1e9f;
+    if (!FieldOn() || getenv("WJPC_BELT_TREES_OWN") != NULL || getenv("WJPC_TREES_ON_DROPS") != NULL)
+        return false;
+    for (int k = 0; k < 4; ++k)
+    {
+        float fh, fs;
+        BeltField(x + (k & 1), y + (k >> 1), &fh, &fs);
+        fh = floorf(fh + 1e-4f);
+        lo = fh < lo ? fh : lo;
+        hi = fh > hi ? fh : hi;
+    }
+    return hi != lo;
+}
+
 enum { BELT_LEDGE_WOOD = 2 };
 bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
 {
@@ -4346,17 +4376,21 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
         }
     if (!wood)
         return false;
-    for (int k = 0; k < 4; ++k)
-    {
-        float fh, fs;
-        BeltField(x + (k & 1), y + (k >> 1), &fh, &fs);
-        fh = floorf(fh + 1e-4f);
-        lo = fh < lo ? fh : lo;
-        hi = fh > hi ? fh : hi;
-        sh += fs * 0.25f;
-    }
+    /* the shelf all round it flat too (Brennan: "Snap tree positions onto the flat centers of the terrace shelves"
+     * - a tree on a shelf's edge cell hung its crown over the drop) */
+    for (int vy = y - 1; vy <= y + 2; ++vy)
+        for (int vx = x - 1; vx <= x + 2; ++vx)
+        {
+            float fh, fs;
+            BeltField(vx, vy, &fh, &fs);
+            fh = floorf(fh + 1e-4f);
+            lo = fh < lo ? fh : lo;
+            hi = fh > hi ? fh : hi;
+            if (vx >= x && vx <= x + 1 && vy >= y && vy <= y + 1)
+                sh += fs * 0.25f;
+        }
     if (hi != lo)
-        return false;   /* a wall crosses it: no tree on a cliff face */
+        return false;   /* a wall crosses it or its neighbours: no tree on or over a cliff face */
     ring = VoxelWorld_BeltRing(x, y);
     *level = lo - (ring != NULL ? VoxelRelief_Base(ring) : 0.0f);
     *shift = sh - (ring != NULL ? VoxelRelief_Base(ring) : 0.0f);
