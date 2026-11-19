@@ -16,6 +16,8 @@
 #include "constants/field_effects.h"
 #include "constants/event_objects.h"
 #include "event_data.h"
+#include "berry.h"
+#include "constants/berry.h"
 #include "palette.h"
 #include "constants/event_object_movement.h"
 #include "gba/io_reg.h"
@@ -864,6 +866,19 @@ static bool MoundObject(u16 graphicsId)
         return false;
     return graphicsId == OBJ_EVENT_GFX_BREAKABLE_ROCK || graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER
         || graphicsId == OBJ_EVENT_GFX_BREAKABLE_ROCK_FRLG || graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER_FRLG;
+}
+
+static bool SeedMound(const struct ObjectEvent *obj)
+{
+    static int sOff = -1;
+    u8 stage;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_BERRY_SEED_CARD") != NULL;
+    if (sOff || !BerryPlant(obj->graphicsId))
+        return false;
+    stage = GetStageByBerryTreeId(obj->trainerRange_berryTreeId);
+    return stage == BERRY_STAGE_PLANTED || stage == BERRY_STAGE_SPROUTED;
 }
 
 #define VOXEL_MOUND_CROWN 0.5f   /* the crown's height, of the column's rows */
@@ -1954,8 +1969,13 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
             continue;
 
         GetObjectWorldPos(obj, sprite, &worldX, &worldZ);
-        /* POL-48: hidden in a tree - the 3D tree is drawn instead (its disguise card is skipped below) */
-        if (StillTreeDisguise(obj) != NULL)
+        /* POL-48: hidden in a tree - the 3D tree is drawn instead (its disguise card is skipped below).
+         * POL-50 (Brennan 2026-11-19 14:23: "Replace all cuttable trees region-wide with 3D voxel shrub/tree models
+         * sitting cleanly on grass ground"): a cuttable tree standing (its first animation; Cut plays
+         * ANIM_REMOVE_OBSTACLE, and that is the card as before). WJPC_CUT_TREE_CARD=1: the card. */
+        if (StillTreeDisguise(obj) != NULL
+         || ((obj->graphicsId == OBJ_EVENT_GFX_CUTTABLE_TREE || obj->graphicsId == OBJ_EVENT_GFX_CUTTABLE_TREE_FRLG) && sprite->animNum == 0 && DisguiseAsTree()
+             && getenv("WJPC_CUT_TREE_CARD") == NULL))
         {
             NoteDisguiseTree(worldX, worldZ);
             continue;
@@ -2222,6 +2242,16 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
             EmitReflection(reflections, &sSlots[i], i, card->worldX, card->worldZ,
                            rightX, rightZ, stretch);
         unsigned first = builder->count;
+        /* POL-49 (Brennan 2026-11-19 14:23: "Convert all Berry seeds and early sprouts across the entire region into
+         * small 3D voxel models centered naturally inside the dirt soil patches"): a berry plant planted or just
+         * sprouted is a mound of its own drawing (as the rocks, POL-22), where its card stood (POL-17's spot, the
+         * soil's middle). WJPC_BERRY_SEED_CARD=1: the card. */
+        if (SeedMound(&gObjectEvents[i]) && card->deck <= 0.0f)
+        {
+            EmitMound(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + VOXEL_BERRY_STAND, rise,
+                      rightX, rightZ, card->shade * dusk);
+            continue;
+        }
         if (MoundObject(gObjectEvents[i].graphicsId) && card->deck <= 0.0f)
         {
             EmitMound(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f, rise,
