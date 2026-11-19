@@ -1066,3 +1066,10 @@ Numbered here POL-49..; status kept below as work goes.
 - POL-60 Mt Pyre summit: sky tear on the top-right outer rock edge; black vertical streaks on rock walls (left trench,
   right terraced corner).
 - (and from 13:30: sea all round Mt Pyre.)
+- Brennan 2026-11-19 15:37 (Mt Pyre height data): "You have full permission to research, modify, or replace the 3D
+  data extraction/generation tool ... if building or upgrading the tool gives you cleaner, more reliable 3D height
+  data across the region." For Mt Pyre Exterior and Summit "manually or programmatically reconstruct the elevation
+  heightmap for the cliff tiers and stairways so the cliff terraces have real 3D depth and all stair flights (bottom
+  entrance, mid terraces, and upper summit flight) stand out as true 3D staggered steps." Also: "Check if any other
+  maps in Hoenn (such as Sky Pillar, Jagged Pass, Meteor Falls, or Sootopolis) are also being skipped or left flat by
+  that legacy 3D data tool, and upgrade the generator so it handles them properly too." Then the to-do order.
