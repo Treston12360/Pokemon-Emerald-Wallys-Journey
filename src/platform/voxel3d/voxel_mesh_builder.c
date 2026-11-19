@@ -4018,7 +4018,7 @@ static void BeltField(int vx, int vy, float *height, float *south)
      * with distance, no cliff where a map drops out of reach (both made walls of columns, 2026-11-18). */
     float sumW = 0.0f, sumE = 0.0f, sumS = 0.0f, sumBack = 0.0f, dmin = 1e9f;
     float exactE = 0.0f, exactS = 0.0f, capMin = 1e9f, sumRise = 0.0f, nearE = 0.0f;
-    bool nearSouth = false, nearDrawnSouth = false;
+    bool nearSouth = false, nearDrawnSouth = false, nearDrawn = false;
     float capOther = 1e9f;
     float drawnPeak = -1e9f, lumpAdd = 0.0f;
     bool exact = false;
@@ -4095,6 +4095,13 @@ static void BeltField(int vx, int vy, float *height, float *south)
             float rate = vy < oy && vx >= ox - 6 && vx <= ox + m->width + 6 && getenv("WJPC_PEAK_RATE2") == NULL
                        ? (float)BELT_PEAK_RATE : (float)BELT_FIELD_RATE;
             float r = d / rate, pk = e + (r < (float)BELT_FIELD_PEAK ? r : (float)BELT_FIELD_PEAK);
+            /* Audit batch 2 (Route 113 / Fallarbor: one flat wall of rock 15 levels tall north of the maps; Route
+             * 111's east side): the peak held its full height at ANY distance, so Route 111's (6 + 14 = 20) stood
+             * over the whole north of the world, a cell from Route 113's edge at 5. Past its own climb (BELT_FIELD_PEAK
+             * levels at its rate) it comes down again at the same rate - a ridge, not a plateau; Lavaridge's peak
+             * (within that reach) is as it was. WJPC_PEAK_NO_REACH=1: as before. */
+            if (getenv("WJPC_PEAK_NO_REACH") == NULL && d > (float)BELT_FIELD_PEAK * rate)
+                pk -= (d - (float)BELT_FIELD_PEAK * rate) / rate;
             /* POL-46 (Brennan 23:49: the north-west "looks too uniform and blocky - like straight rows of identical
              * stair bricks"; wants "irregular rocky terrain relief, varied ledge step widths, and broken-up cliff
              * outcrops" as the north-east peak): north of the map a smooth lumpy relief (FieldLumps), faded in
@@ -4117,6 +4124,7 @@ static void BeltField(int vx, int vy, float *height, float *south)
             /* (Brennan 23:31: the south ridge "horizontally straight to the left edge": south of a drawn-belt map,
              * west and east of it too) */
             nearDrawnSouth = vy >= oy + m->height && VoxelRelief_Belt(m) != 0;
+            nearDrawn = VoxelRelief_Belt(m) != 0;
         }
         dmin = d < dmin ? d : dmin;
     }
@@ -4124,7 +4132,10 @@ static void BeltField(int vx, int vy, float *height, float *south)
      * continuous mountain (removing the flat bench wall in the middle)"): the other maps' caps held the peak behind
      * a drawn belt down to the low west edge of Route 112 beside it (the flat benches); where that peak stands, only
      * the drawn map's own cap holds. Exactly on a map's edge the field is still that edge. */
-    if (drawnPeak < -1e8f || getenv("WJPC_FIELD_PEAK_CAPPED") != NULL)
+    /* (Audit batch 2: only where the drawn map is the nearest - north of Route 113, by Route 111's corner, Route
+     * 113's own low edge holds the land down; WJPC_PEAK_NO_REACH=1: as before) */
+    if (drawnPeak < -1e8f || getenv("WJPC_FIELD_PEAK_CAPPED") != NULL
+     || (!nearDrawn && getenv("WJPC_PEAK_NO_REACH") == NULL))
         capMin = capOther < capMin ? capOther : capMin;
     if (getenv("WJPC_FIELD_NO_CAP") != NULL)
         capMin = 1e9f;
