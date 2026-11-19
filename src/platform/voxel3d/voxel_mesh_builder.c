@@ -3998,7 +3998,7 @@ static void BeltField(int vx, int vy, float *height, float *south)
     float exactE = 0.0f, exactS = 0.0f, capMin = 1e9f, sumRise = 0.0f, nearE = 0.0f;
     bool nearSouth = false, nearDrawnSouth = false;
     float capOther = 1e9f;
-    float drawnPeak = -1e9f;
+    float drawnPeak = -1e9f, lumpAdd = 0.0f;
     bool exact = false;
 
     for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
@@ -4079,7 +4079,7 @@ static void BeltField(int vx, int vy, float *height, float *south)
                 if (vx > ox + m->width) fx = 1.0f - (float)(vx - ox - m->width) / 6.0f;
                 fy = fy > 1.0f ? 1.0f : fy;
                 fx = fx < 0.0f ? 0.0f : fx;
-                pk += fx * fy * FieldLumps(vx, vy);
+                lumpAdd = fx * fy * FieldLumps(vx, vy);
             }
             drawnPeak = pk > drawnPeak ? pk : drawnPeak;
         }
@@ -4119,6 +4119,12 @@ static void BeltField(int vx, int vy, float *height, float *south)
         *height = sumE / sumW + r * (sumBack / sumW);
         if (*height < drawnPeak)
             *height = drawnPeak;
+        /* (on the land itself, whichever pull made it - added to the peak alone it changed nothing: the blend stood
+         * over the peak there) */
+        *height += lumpAdd;
+        /* (and the drawn map's own cap with it: the peak there IS that cap - edge + d/2, rings of identical steps -
+         * so the lumps were clipped flat again) */
+        capMin += lumpAdd;
         /* POL-46 (Brennan 22:39, Lavaridge's south: "Make the Top of the Bottom Mountain Flush & Level Across the
          * Whole Width"; a blue triangle under the red-roofed houses): in front of a map (south of it) the land
          * never dips under the map's edge - the blend with farther, lower maps took it to 5.9 under an edge of 6.0,

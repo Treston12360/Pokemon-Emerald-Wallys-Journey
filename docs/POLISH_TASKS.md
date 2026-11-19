@@ -950,3 +950,6 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   stays bare). Doing: FieldLumps (smooth 2-octave value noise, +-2.5 levels) on the drawn-belt peak north of the map,
   faded in over 4 rows and 6 columns past its sides (WJPC_FIELD_NO_LUMPS=1 off); peak trees looked up from the
   drawn-belt map north of which the cell stands (the ring there is the other map - why none came).
+- 23:49 done (`POL-46_lavaridge_north_rugged.png`): the lumps had been clipped flat by the drawn map's own cap (the
+  peak there was exactly edge + d/2, rings of identical steps); the lumps now go on the land and its cap alike. Trees:
+  a few scattered on the north mountain; far-west bowl bare.
