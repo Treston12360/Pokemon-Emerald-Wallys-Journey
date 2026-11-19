@@ -4038,6 +4038,33 @@ static void BeltField(int vx, int vy, float *height, float *south)
         float r = dmin / (float)BELT_FIELD_RATE;
         r = r < (float)BELT_FIELD_RISE ? r : (float)BELT_FIELD_RISE;
         *height = sumE / sumW + r * (sumBack / sumW);
+        /* POL-46 (Brennan 2026-11-18 19:18: "Step the mountain down on BOTH sides toward the water"): within
+         * BELT_FIELD_SHORE cells of the belt's sea the land comes down to it a level every BELT_FIELD_RATE cells - no
+         * sheer wall from the hilltop into the water. WJPC_FIELD_NO_SHORE=1: off. */
+        if (getenv("WJPC_FIELD_NO_SHORE") == NULL)
+        {
+            enum { BELT_FIELD_SHORE = 5 };
+            float best = 1e9f;
+            for (int dy = -BELT_FIELD_SHORE; dy < BELT_FIELD_SHORE; ++dy)
+                for (int dx = -BELT_FIELD_SHORE; dx < BELT_FIELD_SHORE; ++dx)
+                {
+                    int cx = vx + dx, cy = vy + dy;
+                    float wl, ws, dd, cap;
+
+                    if (VoxelWorld_GetInstanceAt(cx, cy) != NULL || !BorderAt(cx, cy) || !BorderWaterLevel(cx, cy, &wl, &ws))
+                        continue;
+                    /* the distance from the corner to the water cell's nearest point */
+                    {
+                        float qx = (float)vx < (float)cx ? (float)cx : (float)vx > (float)cx + 1.0f ? (float)cx + 1.0f : (float)vx;
+                        float qy = (float)vy < (float)cy ? (float)cy : (float)vy > (float)cy + 1.0f ? (float)cy + 1.0f : (float)vy;
+                        dd = sqrtf(((float)vx - qx) * ((float)vx - qx) + ((float)vy - qy) * ((float)vy - qy));
+                    }
+                    cap = BeltBase(cx, cy) + wl + dd / (float)BELT_FIELD_RATE;
+                    best = cap < best ? cap : best;
+                }
+            if (*height > best)
+                *height = best;
+        }
         /* the way south only where the belt meets a map (to meet its edge exactly), gone over BELT_FIELD_SOUTH cells:
          * a mountain drawn as far south as it is high stood rows away from where it is, over the belt's sea and
          * trees beside it (which lie at their own rows), and left a hole of sky where it should have been */
