@@ -1027,3 +1027,4 @@ Route 117 0 32, Mt Chimney 24 12 (20,30), Jagged Pass 24 13. Five maps a run is 
 - Batch 3 started: Fortree, Route 119 north, Route 120, 121, Lilycove, Route 122, 123, Mt Pyre outside and summit
   (cx run_b6.sh; spots picked walkable, not water).
 - Brennan 11:4x on the Route 108 shallow-water squares: "Keep original look". Closed, nothing changed.
+- Brennan 12:41: audit pictures at the game's widest zoom (cfg zoom=7), not the test zoom 28: "take zoomed photos to the max of what we can zoom out as so it gives me a good idea of what it will look like in our eyes". Batch 3 restarted that way.

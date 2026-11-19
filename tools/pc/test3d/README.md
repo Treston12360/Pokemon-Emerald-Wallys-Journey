@@ -9,5 +9,7 @@ them for your machine. The save (`bren3.sav`) and settings (`bren2r0.cfg`) are B
   pictures folder first next time before starting a batch so we dont have to restart a whole batch because of this").
 - End a body with `wait 60` after the last `winshot`, or the last picture is lost.
 - `clean.sh`: kills the game / wine / X by name (not `pkill -f`, which kills its own shell).
-- Env: `WJPC_TEST_3D_ZOOM=28` (camera further out, for audit pictures), `WJPC_FIELD_DUMP=1` (field heights to the log).
+- Audit pictures: at the game's own widest zoom (`zoom=7` in the cfg), NOT `WJPC_TEST_3D_ZOOM` (Brennan 2026-11-19
+  12:41: "the zoom is out a little too far, take zoomed photos to the max of what we can zoom out as so it gives me a
+  good idea of what it will look like in our eyes"). Env: `WJPC_FIELD_DUMP=1` (field heights to the log).
 - About 5 warps per run fit in a 1500 s timeout. Screenshots are raw PPM despite `.png`; convert with PIL.
