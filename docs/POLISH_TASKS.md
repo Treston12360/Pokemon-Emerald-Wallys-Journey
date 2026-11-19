@@ -1018,3 +1018,11 @@ Route 117 0 32, Mt Chimney 24 12 (20,30), Jagged Pass 24 13. Five maps a run is 
   (weather) covers the desert in these pictures; the far-corner sky (test camera only, his "skip").
 - Lavaridge north: still PARKED until everything else is done (Brennan 2026-11-19 00:12).
 - Next: Batch 3 (Fortree, Lilycove, Mt. Pyre, Routes 118-123 not yet seen), then Batch 4 (seas and islands).
+- Brennan 2026-11-19 11:16: "try and fix the route 119 rock, then move onto batch 3" (taken as the Route 109 rock
+  flagged above). Checked: the pale squares are Route 108's shallow-water tiles (metatiles 0x15E/15F/16E/16F/1AE,
+  behaviour MB_SHALLOW_WATER) round some rocks just west of Route 109; the original 2D art draws the same squares
+  (`AUDIT_B2_route108_shallow_water.png`: art drawn from the tileset beside the 3D picture). Not changed - asked
+  Brennan whether to keep the original look or blend them. Also seen there (for Batch 4, seas): a thin white line and
+  dark dashes across the sea at Route 108/109.
+- Batch 3 started: Fortree, Route 119 north, Route 120, 121, Lilycove, Route 122, 123, Mt Pyre outside and summit
+  (cx run_b6.sh; spots picked walkable, not water).
