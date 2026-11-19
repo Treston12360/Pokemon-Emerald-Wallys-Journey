@@ -996,3 +996,25 @@ risers, 2 lip rows). Table flights (Route 112) unchanged. WJPC_STAIRS_LISTED=1: 
 prints the flights found. Not yet: side-facing (east/west) stairs; side cheeks.
 - POL-47 Brennan 02:21: stairs "look good for now"; "move on to the next batch". (Other stair styles, side cheeks,
   walking up them: later if he asks.)
+
+## Hoenn 3D audit - Batch 2: central Hoenn (session 014PwRDj, 2026-11-19)
+Brennan 02:21: "move on to the next batch". Pictures (zoomed out, WJPC_TEST_3D_ZOOM=28): `AUDIT_B2_sheet0-2.png`
+(clean maps), `AUDIT_B2_fix_route113.png`, `AUDIT_B2_fix_fallarbor_route111.png`, `AUDIT_B2_fix_south_edges.png`
+(before / after). Warps used: Slateport 0 1, Mauville 0 2, Verdanturf 0 14, Fallarbor 0 13, Routes 109-114 0 24-29,
+Route 117 0 32, Mt Chimney 24 12 (20,30), Jagged Pass 24 13. Five maps a run is about the most before the 1500 s limit.
+- Clean: Slateport, Mauville, Verdanturf, Routes 109, 110, 114, 117, Mt. Chimney (top), Jagged Pass.
+- Fixed (commits 096af7fd, a3fabdb9, 5fba7d05; testing until Brennan sees them):
+  1. Route 113 / Fallarbor / Route 111 east: ONE tall flat rock wall ("curtain") instead of terraces. Cause: the
+     drawn-belt peak (BELT_FIELD_PEAK) held full height at ANY distance - Route 111's (edge 6 + 14 = 20) stood over
+     the whole north of the world, one cell from Route 113's edge at 2-5. Now the peak comes back down past its own
+     reach at the same rate, and other maps' caps are dropped only where the drawn map is the NEAREST one (Lavaridge,
+     unchanged in the test picture). WJPC_PEAK_NO_REACH=1: old.
+  2. Woods north of Route 113 then climbed Route 111's peak: a wood corner no longer takes a drawn peak unless that
+     map is the nearest (Brennan's batch 1 "Keep woods flat").
+  3. Mt. Chimney / Route 112 south edges: small blue triangles of sky. The land in front of a map's south edge can be
+     capped below the edge, and EdgeOverBelt never closed the south side. Now it does (the edge's cliff down to the
+     belt's ground). WJPC_EDGE_SOUTH_OLD=1: old.
+- Flagged for Brennan (not changed): Route 109 - a pale square round one sea rock (west side); Route 111's sandstorm
+  (weather) covers the desert in these pictures; the far-corner sky (test camera only, his "skip").
+- Lavaridge north: still PARKED until everything else is done (Brennan 2026-11-19 00:12).
+- Next: Batch 3 (Fortree, Lilycove, Mt. Pyre, Routes 118-123 not yet seen), then Batch 4 (seas and islands).
