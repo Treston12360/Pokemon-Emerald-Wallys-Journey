@@ -3988,6 +3988,28 @@ static float FieldLumps(int vx, int vy)
     return 1.7f * FieldLumpOctave(vx, vy, 6) + 0.8f * FieldLumpOctave(vx + 101, vy + 57, 3);
 }
 
+static bool BorderWaterLevel(int x, int y, float *level, float *shift);
+/* TRUE when a grid corner touches a wood cell of the belt and no belt water lies within 12 cells (see BeltField) */
+static bool FieldCornerWood(int vx, int vy)
+{
+    bool wood = false;
+    float wl, ws;
+
+    for (int k = 0; k < 4 && !wood; ++k)
+    {
+        int cx = vx - 1 + (k & 1), cy = vy - 1 + (k >> 1);
+        wood = VoxelWorld_GetInstanceAt(cx, cy) == NULL && BorderAt(cx, cy) && BeltIsTree(cx, cy);
+    }
+    if (!wood)
+        return false;
+    for (int dy = -12; dy <= 12; dy += 2)
+        for (int dx = -12; dx <= 12; dx += 2)
+            if (VoxelWorld_GetInstanceAt(vx + dx, vy + dy) == NULL && BorderAt(vx + dx, vy + dy)
+             && BorderWaterLevel(vx + dx, vy + dy, &wl, &ws))
+                return false;
+    return true;
+}
+
 static void BeltField(int vx, int vy, float *height, float *south)
 {
     /* blended over the maps by 1/d^3 (the nearest map's edge wins near it, exactly on it): the edge's height, its way
@@ -4120,6 +4142,12 @@ static void BeltField(int vx, int vy, float *height, float *south)
     }
     {
         float r = dmin / (float)BELT_FIELD_RATE, rise = sumRise / sumW;
+        /* Audit batch 1 (Brennan 2026-11-19: the woods round Littleroot, Oldale, Routes 101/102/104 climbing as tall
+         * walls of crowns - "Keep woods flat"): a corner of a wood of the belt does not climb; the rock beside it
+         * still does. Route 118's wooded hill by its river (Brennan's "Wooded hill", locked in) keeps climbing: a wood
+         * within 12 cells of the belt's sea. WJPC_WOODS_CLIMB=1: woods climb everywhere. */
+        if (getenv("WJPC_WOODS_CLIMB") == NULL && FieldCornerWood(vx, vy))
+            rise = 0.0f;
         r = r < rise ? r : rise;
         *height = sumE / sumW + r * (sumBack / sumW);
         if (*height < drawnPeak)

@@ -975,3 +975,6 @@ the long maps). Test: one run warping to each (spots with no collision near the 
   round the player (BELT_RADIUS) and this test camera sees further than the game's widest zoom; (2) the background
   woods round Littleroot, Oldale, Route 101/102/104 climb as tall walls of crowns (they stand on the field, which
   climbs up to 6 levels off a map's north/west/east sides); (3) Route 103's bare rock strips north of the pond.
+- Brennan: far-corner sky "Test-only, skip". Woods: "Keep woods flat" - done: a field corner touching a belt wood
+  does not climb (FieldCornerWood), except woods within 12 cells of the belt's sea (Route 118's approved wooded hill)
+  (WJPC_WOODS_CLIMB=1 old).
