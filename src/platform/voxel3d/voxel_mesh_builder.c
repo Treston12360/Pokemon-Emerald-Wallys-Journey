@@ -3974,6 +3974,7 @@ static void BeltField(int vx, int vy, float *height, float *south)
     float sumW = 0.0f, sumE = 0.0f, sumS = 0.0f, sumBack = 0.0f, dmin = 1e9f;
     float exactE = 0.0f, exactS = 0.0f, capMin = 1e9f, sumRise = 0.0f, nearE = 0.0f;
     bool nearSouth = false;
+    float drawnPeak = -1e9f;
     bool exact = false;
 
     for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
@@ -4035,6 +4036,13 @@ static void BeltField(int vx, int vy, float *height, float *south)
          * locked in 22:39, unchanged). Blended by the same weights, so no seam where one map's pull gives way. */
         sumRise += w * (float)(VoxelRelief_Belt(m) != 0 && getenv("WJPC_FIELD_NO_PEAK") == NULL ? BELT_FIELD_PEAK
                                                                                             : BELT_FIELD_RISE);
+        /* the peak behind a drawn belt's map stands on its own, not halved by the blend with the map across the
+         * belt from it (the bare benches north of Lavaridge, 22:39 picture: Route 111's south edge pulled it down) */
+        if (VoxelRelief_Belt(m) != 0 && getenv("WJPC_FIELD_NO_PEAK") == NULL && !(vy >= oy + m->height))
+        {
+            float r = d / (float)BELT_FIELD_RATE, pk = e + (r < (float)BELT_FIELD_PEAK ? r : (float)BELT_FIELD_PEAK);
+            drawnPeak = pk > drawnPeak ? pk : drawnPeak;
+        }
         if (d < dmin)
         {
             nearE = e;
@@ -4060,6 +4068,8 @@ static void BeltField(int vx, int vy, float *height, float *south)
         float r = dmin / (float)BELT_FIELD_RATE, rise = sumRise / sumW;
         r = r < rise ? r : rise;
         *height = sumE / sumW + r * (sumBack / sumW);
+        if (*height < drawnPeak)
+            *height = drawnPeak;
         /* POL-46 (Brennan 22:39, Lavaridge's south: "Make the Top of the Bottom Mountain Flush & Level Across the
          * Whole Width"; a blue triangle under the red-roofed houses): in front of a map (south of it) the land
          * never dips under the map's edge - the blend with farther, lower maps took it to 5.9 under an edge of 6.0,
@@ -4411,7 +4421,7 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
         const VoxelMapInstance *r = VoxelWorld_BeltRing(x, y);
         float fh, fs;
         BeltField(x, y, &fh, &fs);
-        wood = r != NULL && VoxelRelief_Belt(r) != 0
+        wood = r != NULL && VoxelRelief_Belt(r) != 0 && y < r->originY + r->height   /* (not in front of it) */
             && fh >= VoxelRelief_Base(r) + (float)VoxelRelief_Belt(r) + 2.0f;
     }
     if (!wood)
