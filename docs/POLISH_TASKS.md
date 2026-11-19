@@ -994,3 +994,5 @@ whose relief climbs 12+ px over the cell, in a column run of 2+ rows (a 1-row dr
 with the same run = one flight; each laid by LayFlight as POL-44's (half out, half into the cliff top, 8 px treads and
 risers, 2 lip rows). Table flights (Route 112) unchanged. WJPC_STAIRS_LISTED=1: only the table; WJPC_STAIRS_DUMP=1
 prints the flights found. Not yet: side-facing (east/west) stairs; side cheeks.
+- POL-47 Brennan 02:21: stairs "look good for now"; "move on to the next batch". (Other stair styles, side cheeks,
+  walking up them: later if he asks.)
