@@ -916,3 +916,10 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
 - Lavaridge NE / Route 118 sides (19:18): field weights 1/d^3 -> 1/d^2 (WJPC_FIELD_W3=1 old) so heights change over
   more cells (deeper ledges, no tall stack); ledge trees (VoxelMesh_LedgeTree, voxel_tree.c VoxelTree_EmitBorder):
   a small tree (General 0C7) on flat field cells within 2 cells of a wood, 2 in 3 by place (WJPC_NO_LEDGE_TREES=1).
+- Brennan 2026-11-18 (on `POL-46_lavaridge_route118_2.png`): Lavaridge NE: "Option 2 (One cliff + ledges)" - wide
+  2-square ledges where they fit, then a taller rock cliff (tiled rock, no stretching) to Route 112, joined cleanly
+  left and right; forest trees onto the wide shelves. Also Lavaridge: dark crease where rock terraces meet the tree
+  slope (upper right); trees half off ledge drops - snap to flat shelf centres; flat empty green strip at the bottom
+  below the two red-roofed houses - continue the southern border. Route 118: the northern mountain range behind the
+  upper forest was replaced with water - bring it back, stepped on both sides; trees on the steep rock steps right of
+  the purple-roofed house - only on flat ground; chamfer the central rock mound's square corners.
