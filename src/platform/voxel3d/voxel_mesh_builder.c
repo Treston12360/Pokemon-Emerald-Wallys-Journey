@@ -1132,18 +1132,25 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     unsigned drawn;
     int face;
 
+    static int sSouthOld = -1;
     if (sOpen < 0)
         sOpen = getenv("WJPC_EDGE_OPEN") != NULL;
-    if (sOpen || grid == NULL || d == 1 || !BeltTopWorld(nx, ny, &beltTop, &beltZ, &drawn))
+    if (sSouthOld < 0)
+        sSouthOld = getenv("WJPC_EDGE_SOUTH_OLD") != NULL;
+    /* Audit batch 2 (Mt. Chimney's and Route 112's south edges: little triangles of sky): the land in front of a
+     * map's south edge is held under the edge where another map's cap reaches it (a level every 2 cells), and the
+     * south side was the one never closed. Now it is, as the others: the edge's own cliff down to the belt's ground
+     * (under the land in front, where that stands higher). WJPC_EDGE_SOUTH_OLD=1: open as before. */
+    if (sOpen || grid == NULL || (d == 1 && sSouthOld) || !BeltTopWorld(nx, ny, &beltTop, &beltZ, &drawn))
         return;
     /* down to the belt's ground: the belt cell beside the wall's foot is drawn rows away (each stands as far south
      * as it is high), so the wall goes to the ground and the belt in front hides what is under its tops */
     beltTop = BeltBase(nx, ny) - base;
     for (unsigned k = 0; k < VOXEL_RELIEF_SIDE; ++k)
     {
-        unsigned i = d == 0 ? k : k * VOXEL_RELIEF_SIDE + (d == 2 ? 0 : last);
+        unsigned i = d == 0 ? k : d == 1 ? last * VOXEL_RELIEF_SIDE + k : k * VOXEL_RELIEF_SIDE + (d == 2 ? 0 : last);
         h[k] = grid[i] / 16.0f;
-        z[k] = (float)y + (d == 0 ? 0.0f : k / (float)last) + (depth ? depth[i] : grid[i]) / 16.0f;
+        z[k] = (float)y + (d == 0 ? 0.0f : d == 1 ? 1.0f : k / (float)last) + (depth ? depth[i] : grid[i]) / 16.0f;
         if (h[k] > top)
             top = h[k];
     }
@@ -1169,10 +1176,10 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     }
     for (unsigned k = 0; k < last; ++k)
     {
-        float xa = d == 0 ? (float)x + k / (float)last : d == 2 ? (float)x : (float)x + 1.0f;
-        float xb = d == 0 ? (float)x + (k + 1) / (float)last : xa;
+        float xa = d <= 1 ? (float)x + k / (float)last : d == 2 ? (float)x : (float)x + 1.0f;
+        float xb = d <= 1 ? (float)x + (k + 1) / (float)last : xa;
         float hi = h[k] > h[k + 1] ? h[k] : h[k + 1];
-        float shade = d == 0 ? SHADE_NORTH : d == 2 ? SHADE_WEST : SHADE_EAST;
+        float shade = d == 0 ? SHADE_NORTH : d == 1 ? SHADE_SOUTH : d == 2 ? SHADE_WEST : SHADE_EAST;
         float ua = u0 + (u1 - u0) * k / (float)last, ub = u0 + (u1 - u0) * (k + 1) / (float)last;
 
         /* a band a level of the face at a time, by world height */
@@ -1216,7 +1223,7 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
          && nx < inst->originX + inst->width && ny < inst->originY + inst->height)
             continue;
         other = VoxelWorld_GetInstanceAt(nx, ny);
-        if (other == NULL && !inst->indoor && d != 1)
+        if (other == NULL && !inst->indoor)
             EdgeOverBelt(b, inst, x, y, d, nx, ny);
         if (other == NULL && !inst->indoor && d != 1)
         {
