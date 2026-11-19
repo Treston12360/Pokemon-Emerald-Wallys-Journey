@@ -1046,3 +1046,23 @@ Pictures at the game's widest zoom (Brennan 12:41): `AUDIT_B3_sheet0-2.png`, `AU
   drawn and the cell is noted; voxel_gl.c draws VoxelTree_EmitDisguise there each frame (the General's small tree
   0C7, crown only). The shake-off animation and the boy after it are cards as before. WJPC_DISGUISE_CARD=1: old.
   NOT yet seen: the reveal itself (test runs have battles off) - check by walking up to one.
+
+## Brennan 2026-11-19 14:23 - Batch 3 feedback (his full text: `docs/brennan/2026-11-19_1423_batch3_feedback.md`;
+## his marked pictures: `polish_reports/BREN_1423_*.png`)
+Numbered here POL-49..; status kept below as work goes.
+- POL-49 berry seeds / early sprouts region-wide -> small 3D models centred in the soil (Routes 120, 121).
+- POL-50 cuttable trees (HM01 Cut) region-wide -> 3D small tree on grass (Route 121).
+- POL-51 stairs still flat or doubled: Mt Pyre outside (2), Mt Pyre summit (bottom), Route 121 (doubled, to the
+  pier) - every staircase one clean 3D flight (follows POL-47).
+- POL-52 Fortree: the 5 wide fern/palm clumps (red boxes) -> taller, larger 3D trees standing above the canopy.
+- POL-53 Route 119 north river stands/walkways: lower, thin wooden posts into the water; all rivers using them.
+- POL-54 Route 120 north: sky gap and a doubled bridge under the main bridge over the pond.
+- POL-55 Route 120: large wide shrubs flat on the ground (2 red boxes, by the tall grass and by the trees) -> 3D bushes.
+- POL-56 Route 120 south-west: sky triangle at the tree / ground seam (found by the audit too).
+- POL-57 Route 121 south coast (west and east): trees standing in the sea -> open sea.
+- POL-58 Route 121 east: fences lying flat -> upright; sky leak by the sea rocks (top right, the strip the audit
+  found); northern woods' trees mismatched -> the same 3D forest tree as the woods round them.
+- POL-59 Mt Pyre outside: gravestones -> 3D upright stones.
+- POL-60 Mt Pyre summit: sky tear on the top-right outer rock edge; black vertical streaks on rock walls (left trench,
+  right terraced corner).
+- (and from 13:30: sea all round Mt Pyre.)
