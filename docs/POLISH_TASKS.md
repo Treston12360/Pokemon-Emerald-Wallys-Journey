@@ -923,3 +923,9 @@ renderer, src/platform/voxel3d, no 3DS limits.) Asked: stepped or rounded? "Show
   below the two red-roofed houses - continue the southern border. Route 118: the northern mountain range behind the
   upper forest was replaced with water - bring it back, stepped on both sides; trees on the steep rock steps right of
   the purple-roofed house - only on flat ground; chamfer the central rock mound's square corners.
+- Brennan answers: Route 118 north of the river: "Option 2 (Wooded hill)" - a forested hill climbing in wide 2-square
+  ledges, trees centred on the flat shelves (never over drops), both ends tapering down to the water. Lavaridge NE
+  (red box, `POL-46_lavaridge_route118_3.png`): no east-facing vertical cliff down the middle - blend the northern
+  mountain and the eastern hill so the terraces curve round the inside corner (a concave corner / saddle) and join
+  the eastern tiers; foothill ledges wrapping diagonally from the northern cliff into the eastern slope, with
+  staggered trees on them.
