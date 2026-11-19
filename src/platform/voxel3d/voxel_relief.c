@@ -185,6 +185,14 @@ static int FindIn(const ReliefLayout *l, int x, int y)
  * half"). WJPC_STAIRS_LISTED=1: only the table.
  */
 extern int Port_LayoutCollision(int id, int x, int y);
+extern int Port_LayoutMetatile(int id, int x, int y);
+
+/* the stair metatiles: the General tileset's stone flight (0AF left half, 0CF right half - Routes 112, 115, 116 ...).
+ * (Found by their walkable steep relief alone, ledges and slopes came too.) */
+static bool StairMetatile(int mt)
+{
+    return mt == 0x0AF || mt == 0x0CF;
+}
 #define MAX_FOUND_FLIGHTS 96
 typedef struct
 {
@@ -213,8 +221,8 @@ static unsigned DetectFlights(const ReliefLayout *l, FoundFlight *out)
             int16_t t, b, topH = 0, botH = 0;
             int y0 = y, k;
 
-            while (y < l->height && Port_LayoutCollision(l->layoutId, x, y) == 0 && (k = FindIn(l, x, y)) >= 0
-                   && CellRise(l, k, &t, &b) >= 12)
+            while (y < l->height && StairMetatile(Port_LayoutMetatile(l->layoutId, x, y)) && (k = FindIn(l, x, y)) >= 0
+                   && CellRise(l, k, &t, &b) >= 4)
             {
                 if (y == y0)
                     topH = t;
@@ -222,13 +230,19 @@ static unsigned DetectFlights(const ReliefLayout *l, FoundFlight *out)
                 ++y;
             }
             /* (two rows at least: a one-row drop the player walks onto is a ledge, jumped down, not stairs) */
-            if (y - y0 < 2 || topH - botH < 16)
+            if (y - y0 < 1 || topH - botH < 8)
                 continue;
             /* the same run in the column to the west: one flight */
-            if (n > 0 && out[n - 1].x1 == x - 1 && out[n - 1].row == y0 && out[n - 1].rows == y - y0)
             {
-                out[n - 1].x1 = (uint8_t)x;
-                continue;
+                bool merged = false;
+                for (unsigned f = 0; f < n && !merged; ++f)
+                    if (out[f].x1 == x - 1 && out[f].row == y0 && out[f].rows == y - y0)
+                    {
+                        out[f].x1 = (uint8_t)x;
+                        merged = true;
+                    }
+                if (merged)
+                    continue;
             }
             if (n < MAX_FOUND_FLIGHTS)
             {
