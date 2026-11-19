@@ -1028,3 +1028,16 @@ Route 117 0 32, Mt Chimney 24 12 (20,30), Jagged Pass 24 13. Five maps a run is 
   (cx run_b6.sh; spots picked walkable, not water).
 - Brennan 11:4x on the Route 108 shallow-water squares: "Keep original look". Closed, nothing changed.
 - Brennan 12:41: audit pictures at the game's widest zoom (cfg zoom=7), not the test zoom 28: "take zoomed photos to the max of what we can zoom out as so it gives me a good idea of what it will look like in our eyes". Batch 3 restarted that way.
+
+## Hoenn 3D audit - Batch 3: Fortree, Lilycove, Mt Pyre, Routes 119 north-123 (session 014PwRDj, 2026-11-19)
+Pictures at the game's widest zoom (Brennan 12:41): `AUDIT_B3_sheet0-2.png`, `AUDIT_B3_ninja_disguise.png`.
+- Clean: Fortree, Route 119 north, Route 120 (north, middle), Route 121 west, Lilycove (its east shallow-water art
+  is the original's), Route 122, Route 123.
+- Brennan's answers (2026-11-19 ~13:30):
+  - Ninja Boy tree disguise (Routes 119 x2, 120: a bright green panel - the disguise card's grass background stood
+    upright): "Look like the 3D trees".
+  - Mt Pyre outside / summit (float in plain sky, joined to no map): "Sea all round".
+- Found, being fixed: Route 120's south edge (12,99): a small triangle of sky where the belt's grass strip meets
+  the map; Route 121 north-east (belt coast north of Route 121, x 70-79, y -10..-1, by Lilycove's west edge): a
+  long thin strip of sky along the belt's shoreline. Fortree east: sky at the far top-right corner even at the
+  game's own zoom.
