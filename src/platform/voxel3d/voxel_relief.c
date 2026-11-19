@@ -272,6 +272,163 @@ static unsigned DetectFlights(const ReliefLayout *l, FoundFlight *out)
 
 static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bottom, int rise, int lip);
 
+/*
+ * POL-51 (Brennan 2026-11-19 16:4x, Mt Pyre, "Option C": solid stepped stairs, "zero see-through gaps from the sides
+ * or underneath", "the top step flush with the upper grass ... no floating white bar"): a found flight is laid
+ * wholly out in front of its face (sFlightOut): its top tread starts at the face, level with the ground above it,
+ * nothing is cut back into that ground (no lip), and its last point comes down to the ground below. Its profile is
+ * kept (sLaid) so the builder closes its sides down to its foot (VoxelRelief_FlightSide). WJPC_STAIRS_HALF=1: half
+ * out, half into the cliff top, as before (POL-47).
+ */
+static bool sFlightOut;
+#define MAX_LAID 256
+#define MAX_PROFILE 65
+typedef struct
+{
+    uint16_t layoutId;
+    uint8_t x0, x1, row, rows;
+    int16_t bottom;
+    uint8_t n;
+    int16_t z[MAX_PROFILE], h[MAX_PROFILE];   /* layout pixels: z = v + depth (world, as far south), h height */
+} LaidFlight;
+static LaidFlight sLaid[MAX_LAID];
+static unsigned sLaidCount;
+
+bool VoxelRelief_FlightSide(const VoxelMapInstance *inst, int x, int y, int *side, unsigned *n,
+                            float *z, float *h, float *foot)
+{
+    int lx, ly;
+
+    if (inst == NULL)
+        return false;
+    lx = x - inst->originX;
+    ly = y - inst->originY;
+    for (unsigned f = 0; f < sLaidCount; ++f)
+    {
+        const LaidFlight *L = &sLaid[f];
+        if (L->layoutId != (uint16_t)inst->layoutId || ly != L->row || (lx != L->x0 && lx != L->x1))
+            continue;
+        *side = (lx == L->x0 ? 1 : 0) | (lx == L->x1 ? 2 : 0);
+        *n = L->n;
+        for (unsigned q = 0; q < L->n; ++q)
+        {
+            z[q] = (float)inst->originY + L->z[q] / 16.0f;
+            h[q] = L->h[q] / 16.0f;
+        }
+        *foot = L->bottom / 16.0f;
+        return true;
+    }
+    return false;
+}
+
+/*
+ * POL-51 (Brennan 2026-11-19, Mt Pyre, "Option C": "Keep the 3D stepped stair treads ... fill in the entire volume
+ * underneath and on the left/right sides ... Align the bottom step flush with the lower grass and the top step flush
+ * with the upper grass so there is no floating white bar"): a flight whose relief is already a slope in the world
+ * (the generator's ramp, Mt Pyre outside: its top and bottom edges lie apart in the world, not one upright face) is
+ * stepped inside that same footprint - its top edge stays the upper ground's (height and place), its bottom edge the
+ * lower ground's, and between them treads and upright risers (8 px each) at even spacing. Nothing is moved out of or
+ * into the cliff (LayFlight's half and half, made for a flight drawn upright on a face). Column by column, each
+ * column's own top and bottom. Returns false (LayFlight lays it) for an upright flight. WJPC_STAIRS_RAMP_OLD=1: off.
+ */
+static bool LayRampFlight(ReliefLayout *l, int x0, int x1, int row, int rows)
+{
+    enum { MAXP = 4 * 16 + 1 };
+    const int P = rows * (VOXEL_RELIEF_SIDE - 1) + 1;
+    int16_t *depths = DepthsOf(l);
+    bool ramp = false;
+
+    if (getenv("WJPC_STAIRS_RAMP_OLD") != NULL || depths == NULL || P > MAXP || rows < 1)
+        return false;
+    /* a ramp: the column's top and bottom edges are apart in the world (z = v + depth) */
+    {
+        int kt = FindIn(l, x0, row), kb = FindIn(l, x0, row + rows - 1);
+        const int mid = VOXEL_RELIEF_SIDE / 2, last = VOXEL_RELIEF_SIDE - 1;
+        if (kt < 0 || kb < 0)
+            return false;
+        int zt = 16 * row + depths[kt * GRID + mid];
+        int zb = 16 * (row + rows) + depths[kb * GRID + last * VOXEL_RELIEF_SIDE + mid];
+        ramp = zb - zt > 6;
+    }
+    if (getenv("WJPC_STAIRS_DUMP") != NULL)
+    {
+        int kt = FindIn(l, x0, row), kb = FindIn(l, x0, row + rows - 1);
+        fprintf(stderr, "RAMP? layout %u x %d-%d row %d rows %d ramp %d zt %d zb %d\n", l->layoutId, x0, x1, row, rows,
+                (int)ramp, 16 * row + depths[kt * GRID + 2], 16 * (row + rows) + depths[kb * GRID + 22]);
+    }
+    if (!ramp)
+        return false;
+    for (int x = x0; x <= x1; ++x)
+        for (int i = 0; i < VOXEL_RELIEF_SIDE; ++i)
+        {
+            int hs[MAXP], zs[MAXP], n = 0;
+            int kt = FindIn(l, x, row), kb = FindIn(l, x, row + rows - 1);
+            const int last = VOXEL_RELIEF_SIDE - 1;
+            if (kt < 0 || kb < 0)
+                continue;
+            int T = l->heights[kt * GRID + i], B = l->heights[kb * GRID + last * VOXEL_RELIEF_SIDE + i];
+            int zt = 16 * row + depths[kt * GRID + i];
+            int zb = 16 * (row + rows) + depths[kb * GRID + last * VOXEL_RELIEF_SIDE + i];
+            int steps = (T - B + 4) / 8;
+            if (steps < 1 || zb <= zt)
+                continue;
+            if (2 * steps + 1 > P)
+                steps = (P - 1) / 2;
+            /* the profile: (zt, T), then per step its riser down and its tread on, the last tread to (zb, B) */
+            {
+                float L = (float)(zb - zt) / (float)steps;
+                hs[n] = T; zs[n] = zt; ++n;
+                for (int s2 = 0; s2 < steps; ++s2)
+                {
+                    int zr = zt + (int)(L * s2 + 0.5f);
+                    int hd = s2 == steps - 1 ? B : T - (T - B) * (s2 + 1) / steps;
+                    if (s2 > 0) { hs[n] = hs[n - 1]; zs[n] = zr; ++n; }   /* the tread's end, at the riser */
+                    hs[n] = hd; zs[n] = zr; ++n;                          /* the riser's foot */
+                }
+                hs[n] = B; zs[n] = zb; ++n;
+                if (zs[0] == zs[1]) { /* the first riser at the top edge: keep the top's own point first */ }
+            }
+            /* more lattice points than the profile has: split the longest tread */
+            while (n < P)
+            {
+                int best = -1, bl = 0;
+                for (int q = 0; q + 1 < n; ++q)
+                    if (hs[q] == hs[q + 1] && zs[q + 1] - zs[q] > bl)
+                        bl = zs[q + 1] - zs[q], best = q;
+                if (best < 0)
+                    best = n - 2;
+                for (int q = n; q > best + 1; --q)
+                    hs[q] = hs[q - 1], zs[q] = zs[q - 1];
+                hs[best + 1] = hs[best];
+                zs[best + 1] = (zs[best] + zs[best + 2]) / 2;
+                ++n;
+            }
+            for (int q = 0; q < P && q < n; ++q)
+            {
+                int r = q / last, j = q % last;
+                if (q == P - 1)
+                    r = rows - 1, j = last;
+                int k = FindIn(l, x, row + r);
+                int v = 16 * (row + r) + 4 * j;
+                if (k < 0)
+                    continue;
+                l->heights[k * GRID + j * VOXEL_RELIEF_SIDE + i] = (int16_t)hs[q];
+                depths[k * GRID + j * VOXEL_RELIEF_SIDE + i] = (int16_t)(zs[q] - v);
+                /* a row's first point is the row above's last: the same */
+                if (j == 0 && r > 0)
+                {
+                    int kp = FindIn(l, x, row + r - 1);
+                    if (kp >= 0)
+                    {
+                        l->heights[kp * GRID + last * VOXEL_RELIEF_SIDE + i] = (int16_t)hs[q];
+                        depths[kp * GRID + last * VOXEL_RELIEF_SIDE + i] = (int16_t)(zs[q] - (v));
+                    }
+                }
+            }
+        }
+    return true;
+}
+
 static bool StairFlights(ReliefLayout *l)
 {
     const char *env = getenv("WJPC_STAIRS_UPRIGHT");
@@ -298,8 +455,11 @@ static bool StairFlights(ReliefLayout *l)
         if (getenv("WJPC_STAIRS_DUMP") != NULL)
             fprintf(stderr, "STAIRS layout %u x %d-%d row %d rows %d bottom %d rise %d\n", l->layoutId, found[f].x0,
                     found[f].x1, found[f].row, found[f].rows, found[f].bottom, found[f].rise);
-        if (!LayFlight(l, found[f].x0, found[f].x1, found[f].row, found[f].rows, found[f].bottom, found[f].rise, 2))
+        sFlightOut = getenv("WJPC_STAIRS_HALF") == NULL;
+        if (!LayFlight(l, found[f].x0, found[f].x1, found[f].row, found[f].rows, found[f].bottom, found[f].rise,
+                       sFlightOut ? 0 : 2))
             return false;
+        sFlightOut = false;
     }
     return true;
 }
@@ -310,7 +470,19 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
 {
     int steps = (rise + 4) / 8, top = 16 * row, n_all = rows * (VOXEL_RELIEF_SIDE - 1);
     /* the face stood at v + h = top + bottom + rise (as drawn); the top tread starts half a flight back */
-    int z0 = top + bottom + rise - (8 * steps) / 2;
+    int z0 = top + bottom + rise - (sFlightOut ? 0 : (8 * steps) / 2);
+    LaidFlight *laid = NULL;
+    if (sFlightOut && sLaidCount < MAX_LAID && n_all + 1 <= MAX_PROFILE)
+    {
+        laid = &sLaid[sLaidCount++];
+        laid->layoutId = l->layoutId;
+        laid->x0 = (uint8_t)x0;
+        laid->x1 = (uint8_t)x1;
+        laid->row = (uint8_t)row;
+        laid->rows = (uint8_t)rows;
+        laid->bottom = (int16_t)bottom;
+        laid->n = (uint8_t)(n_all + 1);
+    }
     int16_t *depths = DepthsOf(l);
 
     if (depths == NULL)
@@ -335,6 +507,14 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
                     h = bottom + rise - 8 * step;
                     z = z0 + 8 * step + (s2 % 2) * 8;
                     if (h < bottom) h = bottom;
+                    /* (out: the last point comes down to the ground below - the lowest step's front closed) */
+                    if (sFlightOut && nn == n_all)
+                        h = bottom;
+                    if (laid != NULL && x == x0 && nn <= n_all)
+                    {
+                        laid->z[nn] = (int16_t)z;
+                        laid->h[nn] = (int16_t)h;
+                    }
                     for (int i = 0; i < VOXEL_RELIEF_SIDE; ++i)
                     {
                         l->heights[k * GRID + j * VOXEL_RELIEF_SIDE + i] = (int16_t)h;
@@ -455,6 +635,7 @@ bool VoxelRelief_Init(void)
             }
         }
     }
+    sLaidCount = 0;   /* POL-51: laid again with the table */
     sLayoutCount = U16(sBlob + 4);
     if (8 + (unsigned long)ROW_BYTES * sLayoutCount > (unsigned long)size)
         goto fail;

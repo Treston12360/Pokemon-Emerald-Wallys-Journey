@@ -2210,6 +2210,54 @@ static void EmitSafetyFloor(VoxelBuilder *b, const VoxelMapInstance *inst, int x
     b->shift = 0.0f;
 }
 
+/*
+ * POL-51 (Brennan 2026-11-19, Mt Pyre "Option C": "fill in the entire volume underneath and on the left/right sides
+ * down into the terrain so they are solid 3D staircase blocks"): a flight laid out from its face
+ * (voxel_relief.c LayFlight) closed on its west and east sides, from its profile down to its foot, in the map's rock
+ * (its cliff face tile; else the cell's own drawing). WJPC_STAIRS_OPEN_SIDES=1: open.
+ */
+static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    float z[65], h[65], foot, u0, v0, u1, v1;
+    unsigned n;
+    int side, face;
+
+    if (getenv("WJPC_STAIRS_OPEN_SIDES") != NULL || !VoxelRelief_FlightSide(inst, x, y, &side, &n, z, h, &foot))
+        return;
+    face = VoxelRelief_FaceTile(inst);
+    if (face < 0 || !MetatileUV(b, face, &u0, &v0, &u1, &v1))
+        if (!VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1))
+            return;
+    for (int s = 0; s < 2; ++s)
+    {
+        float wx;
+        if (!(side & (1 << s)))
+            continue;
+        wx = s == 0 ? (float)x : (float)x + 1.0f;
+        for (unsigned q = 0; q + 1 < n; ++q)
+        {
+            float ha = h[q], hb = h[q + 1];
+            float ta = ha - foot, tb = hb - foot;
+            if (ta <= 0.01f && tb <= 0.01f)
+                continue;
+            if (fabsf(z[q + 1] - z[q]) < 1e-4f)
+                continue;   /* a riser: the side's outline goes straight down there, no area */
+            if (s == 0) /* faces west */
+                VoxelBuilder_Quad(b,
+                    &(VoxelVertex){wx, foot, z[q + 1], u0, v1, SHADE_WEST},
+                    &(VoxelVertex){wx, foot, z[q],     u1, v1, SHADE_WEST},
+                    &(VoxelVertex){wx, ha,   z[q],     u1, v1 - (v1 - v0) * (ta < 1.0f ? ta : 1.0f), SHADE_WEST},
+                    &(VoxelVertex){wx, hb,   z[q + 1], u0, v1 - (v1 - v0) * (tb < 1.0f ? tb : 1.0f), SHADE_WEST});
+            else        /* faces east */
+                VoxelBuilder_Quad(b,
+                    &(VoxelVertex){wx, foot, z[q],     u0, v1, SHADE_EAST},
+                    &(VoxelVertex){wx, foot, z[q + 1], u1, v1, SHADE_EAST},
+                    &(VoxelVertex){wx, hb,   z[q + 1], u1, v1 - (v1 - v0) * (tb < 1.0f ? tb : 1.0f), SHADE_EAST},
+                    &(VoxelVertex){wx, ha,   z[q],     u0, v1 - (v1 - v0) * (ta < 1.0f ? ta : 1.0f), SHADE_EAST});
+        }
+    }
+}
+
 void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst,
                              int x0, int x1, int y)
 {
@@ -2219,6 +2267,8 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
         if (x == inst->originX || x == inst->originX + inst->width - 1
          || y == inst->originY || y == inst->originY + inst->height - 1)
             EmitSeamSkirt(builder, inst, x, y);
+    for (int x = x0; x < x1; ++x)
+        EmitFlightSides(builder, inst, x, y);
     for (int x = x0; x < x1; ++x)
     {
         VoxelVisualShape shape = VoxelMesh_Classify(x, y);

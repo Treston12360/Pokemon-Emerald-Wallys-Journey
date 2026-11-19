@@ -65,6 +65,10 @@ unsigned VoxelRelief_Belt(const VoxelMapInstance *inst);
  * tile), -1 if none: what a back's north face is drawn with when its own
  * record names no wall. */
 int VoxelRelief_FaceTile(const VoxelMapInstance *inst);
+/* POL-51: a found stair flight's side at its top row's cell (x, y) in world cells: side bit 1 its west, 2 its east;
+ * its profile n points (world z as far south, height over the map's base, cells) and its foot's height. */
+bool VoxelRelief_FlightSide(const VoxelMapInstance *inst, int x, int y, int *side, unsigned *n,
+                            float *z, float *h, float *foot);
 
 /*
  * What a map's fixes fill past one of its edges with (relief_fixes.json
