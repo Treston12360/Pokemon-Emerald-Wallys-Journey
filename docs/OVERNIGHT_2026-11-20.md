@@ -71,8 +71,8 @@ Pictures: `polish_reports/OVN_04_evergrande_post_BEFORE_AFTER.png` (close-up), `
 - Berry seeds (POL-49): in the game, but my test save has none planted, so not seen yet.
 - Q6 Ever Grande City east side (Batch 4, `OVN_Q6_evergrande_ridges.png`): dark striped walls stand in the rock
   slopes (red boxes, both sides). Cause: the generator gave the diagonal rock slope (metatiles 074/07D/075, x34-38
-  rows 43-53 and the matching west side) a jagged mix of heights - single cells at 0..+16 px among rock at -80..-96,
-  each with its own cliff walls. Options: (a) re-lay those slopes as smooth steps falling to the sea (like the Mt Pyre
+  rows 43-53) a jagged mix of heights - single cells at 0..+16 px among rock at -80..-96,
+  each with its own cliff walls. (The dark slots on the west side look alike; their data is not checked yet.) Options: (a) re-lay those slopes as smooth steps falling to the sea (like the Mt Pyre
   corner, region by region; changes how Ever Grande's mountain sides look); (b) only flatten the worst single spikes
   (fewer dark walls, the slope stays bumpy); (c) leave it. Affects only Ever Grande's mountain sides.
 - Q7 Mossdeep south (`OVN_Q7_mossdeep_trees_water.png`): the trees by the south shore stand on light water. The map
