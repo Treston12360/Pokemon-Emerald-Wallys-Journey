@@ -488,7 +488,11 @@ static bool StairFlights(ReliefLayout *l)
                     if (!ok)
                         break;
                 }
-                lip = flat;
+                /* (Brennan 21:17: "a full 1-tile-wide flat green grass landing/walkway at the top of the stairs
+                 * before the next cliff wall rises": the last flat row is never cut back) */
+                lip = flat > 0 ? flat - 1 : 0;
+                if (lip > run / 16 + 2)
+                    lip = run / 16 + 2;
                 if (16 * lip - 4 < sRecess)
                     sRecess = 16 * lip - 4 > 0 ? 16 * lip - 4 : 0;
                 if (getenv("WJPC_STAIRS_DUMP") != NULL)

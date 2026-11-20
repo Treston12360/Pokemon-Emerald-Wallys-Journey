@@ -1126,3 +1126,10 @@ Numbered here POL-49..; status kept below as work goes.
   notch. Mt Pyre outside got flat relief cells at x24-26 rows 19-20 (tools/voxel3ds/add_relief_cells.py). Checked in
   close-ups: no rock through any step, nothing grey above the grass, steps inside the opening, side walls rock.
   Steeper where the flat ground is short: Mt Pyre west long flight (44 of 80 px), x24-26 (28/48), x27-29 (28/64).
+- Brennan 21:17 on `POL-51_notch_stairs.png` (marks: `BREN_2117_stair_landings.png`): notch "looks way better - zero
+  brown rock clipping". (1) The notch goes "1 tile too far north into the upper terrace ... leaving no flat grass
+  walkway at the top of the stairs" - restore "a full 1-tile-wide flat green grass landing/walkway at the top of the
+  stairs before the next cliff wall rises". (2) Mt Pyre west, bottom-right flight: its top step "sits slightly
+  below/behind a overhanging lip of green grass" - flush with zero lip.
+  Done as: the cut-back always leaves the last flat row before the next rise untouched (lip <= flat rows - 1); with
+  less room the treads are steeper, still no protrusion onto the path below (17:23).
