@@ -110,3 +110,11 @@ Pictures: `polish_reports/OVN_05_mtpyre_summit_trench_BEFORE_AFTER.png` (close-u
 Recorded in docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md ("Brennan's answers to the overnight questions").
 Q2 leave, Q3 round leafy, Q4 (a) cutouts like the trees, Q5 OK, Q6 (a) smooth steps, Q7 keep, Q8 keep, Q9 (a) flat at
 Route 109's level, Q10 Route 121 east fence upright + coast dirt/sky, Q11 berry seeds 3D in the middle of the dirt.
+
+## Daytime fixes after Brennan's answers (2026-11-20)
+### 6. Route 121 east railing corner standing (Q10, Brennan 12:27)
+Pictures: `polish_reports/Q10_route121_fence_BEFORE_AFTER.png`.
+- Cause: cell (73,4), metatile 0x341 (Lilycove tileset: the railing piece where the rail turns down the column), was
+  not in Emerald 3DS's railing spec, so it was drawn flat on the ground.
+- Fix: 0x341 added to the spec, Route 121's models regenerated and spliced in (tools/voxel3ds/README.md, "Route 121
+  railing corner"). The corner now stands with the rails on both sides.

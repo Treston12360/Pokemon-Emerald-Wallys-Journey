@@ -50,3 +50,12 @@ whole room: every piece, a page of its own). relief.bin: `patch_relief_cells.py 
 Spec change in `tools/voxel3ds/game_corner_spec.py` (the three "plant" cards and the purple machine painted on
 the wall become one box, as the arcade cabinets beside them). Spliced: `splice_buildings.py --layout
 pc_data/voxel/buildings.bin DONOR OUT 91` (DONOR = a full gen_voxel_buildings.py --output with the spec).
+
+## Route 121 railing corner (Q10, 2026-11-20, session 014PwRDj)
+Brennan 12:27: "one of the fences knocked over, this needs to be upright" (Route 121, cell 73,4, metatile 0x341 of
+gTileset_Lilycove: a railing piece with the post that turns down the column). The spec "railing_lilycove" in
+`3ds_port/scripts/voxel_building_specs.py` lacked 0x341, so the cell was drawn flat. Change (make it in any regenerated
+spec): `"tiles": {0x249, 0x250, 0x251, 0x252, 0x258, 0x25A, 0x341}`. Generated a full donor
+(`gen_voxel_buildings.py --output DONOR`, 6 min) and spliced Route 121 whole: `splice_buildings.py --layout
+pc_data/voxel/buildings.bin DONOR OUT 37`. Checked first that the donor's Route 121 differs from ours only in the railing
+blocks (7 of ours -> 3 donor 4x4 blocks at 64,4 / 68,4 / 72,4; the other 49 placements at the same places).
