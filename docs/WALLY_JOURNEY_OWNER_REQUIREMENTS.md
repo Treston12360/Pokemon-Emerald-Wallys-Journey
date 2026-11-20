@@ -706,3 +706,12 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
 - Brennan 12:30, on the three extra items: Mt Pyre summit green square on a wall top: "make it rock". Mt Pyre outside
   sea colour (0x0A1, lighter): "its fine". Wider background reach (BELT_RADIUS 64) speed: "i will let you know if it
   slows down or not." Next: "work on route 122 and slateport after fixing the above questions from last night."
+- Brennan 2026-11-20 16:11 (Route 120 shrubs picture `docs/brennan/2026-11-20_1611_route120_shrubs.png`): the two red
+  boxes are the wide shrubs to make 3D. Route 119 walkways (Q5) = "long thin grey/white rails over the river".
+- Brennan 2026-11-20 16:19: railing (Q10 fence) "looks good, close"; Route 108 "good, close"; summit square "looks better,
+  close"; Ever Grande east "looks good", west still needs fixing (`docs/brennan/2026-11-20_1619_evergrande_west.png`, red
+  box: the notch by the flower ledge); Fortree palms "much better, close"; Route 121 north woods "still has many
+  overlapping trees ... they should be standalone trees making up a forest"; berries "much better, just make sure this
+  rule applies to all other berries in the region"; Route 121/Lilycove coast (`docs/brennan/2026-11-20_1619_lilycove_coast.png`):
+  "still blue sky showing and the black squares on the bottom of rocks, as well as 2 random tops of trees that need to be
+  removed".
