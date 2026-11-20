@@ -472,6 +472,19 @@ static bool StairFlights(ReliefLayout *l)
                 return false;
         }
         sFlightOut = sFlightIn = false;
+        if (getenv("WJPC_STAIRS_CELLS") != NULL && atoi(getenv("WJPC_STAIRS_CELLS")) == (int)l->layoutId)
+        {
+            int16_t *dd = DepthsOf(l);
+            for (int yy = found[f].row - 5; yy < found[f].row + found[f].rows + 1; ++yy)
+                for (int xx = found[f].x0 - 1; xx <= found[f].x1 + 1; ++xx)
+                {
+                    int kk = FindIn(l, xx, yy);
+                    fprintf(stderr, "CELL %d,%d k%d:", xx, yy, kk);
+                    for (int jj = 0; kk >= 0 && jj < 5; ++jj)
+                        fprintf(stderr, " %d/%d", l->heights[kk * GRID + jj * 5 + 2], 16 * yy + 4 * jj + dd[kk * GRID + jj * 5 + 2]);
+                    fprintf(stderr, "\n");
+                }
+        }
     }
     return true;
 }
