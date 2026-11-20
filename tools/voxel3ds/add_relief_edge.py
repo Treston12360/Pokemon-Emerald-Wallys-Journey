@@ -17,7 +17,7 @@ the sea; and 13:30: "Sea all round" Mt Pyre).
 """
 import struct, sys
 
-WATER = {0x170}
+WATER = {0x170, 0x0A1}   # 0x0A1: Mt Pyre's own sea (its border block)
 EDGES = {'W': 1, 'E': 2, 'N': 4, 'S': 8}
 
 
