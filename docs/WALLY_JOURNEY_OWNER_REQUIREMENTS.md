@@ -685,3 +685,21 @@ These are **wishlist items, not claims of implementation**. Adapt the design pri
 | 2026-11-13 | "I noticed in Hoenn that you got lazy with the trainers... they would say a random sentence and then battle... no normal person is gonna say 'Roxanne teaches at the school, battle'... we need to go through every trainer and add different dialogue that makes sense for the world" | Every trainer (Hoenn and Kanto) needs their own believable lines that fit who they are; no fact-then-"battle!" filler. Longer dialogue is fine when it helps. Hoenn trainers = polish lane (owner's friend); Kanto = ARIA lane. |
 
 - 2026-11-14 (owner): music tracks may be MP3 files (task ENG-MP3). Sprites have no colour limit, but keep the same sizes as FireRed/Emerald so they don't stick out (task ENG-SPRITES).
+
+## Brennan's answers to the overnight questions (Project Polish, 2026-11-20 12:27, session 014PwRDj)
+Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
+- Q2 Route 121 pier stairs: "C, Leave it."
+- Q3 Route 121 northern woods: "Round leafy trees".
+- Q4 Fortree ferns / Route 120 shrubs: "A, Same style as the current 3D trees: flat cutouts of the original art,
+  leaning like the trees."
+- Q5 Route 119 walkways lower with posts (rebuild those building models): "Ok to do that".
+- Q6 Ever Grande mountain sides: "A, Rebuild the slopes as smooth steps down to the sea, area by area, like the Mt
+  Pyre corner."
+- Q7 Mossdeep trees in the shallows: "A, Keep it".
+- Q8 Route 126 crater floor / red waterline: "no , keep it".
+- Q9 Route 108 sea line: "(a) Make Route 108's sea flat, at Route 109's level."
+- Q10 Route 121 east (picture docs/brennan/2026-11-20_1227_route121_fence_coast.png): "one of the fences knocked
+  over, this needs to be upright. also try fixing the big red box, it shows the ground underneath dirt not covered up
+  by sea water and also blue sky showing through."
+- Q11 Berry seeds: "make sure the seeds are 3D models sitting in the middle of the dirt as if they would be planted
+  naturally."

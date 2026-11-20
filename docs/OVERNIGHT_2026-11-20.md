@@ -105,3 +105,8 @@ Pictures: `polish_reports/OVN_05_mtpyre_summit_trench_BEFORE_AFTER.png` (close-u
   (b) give Route 108's background sea a height that follows its ramp (a code change in how the background sea is laid
   for a map with a sloped sea - only such maps change; the owner chose a flat background sea in DLX-26 to avoid steps,
   so this is a design point); (c) leave it.
+
+## Brennan's answers (2026-11-20 12:27)
+Recorded in docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md ("Brennan's answers to the overnight questions").
+Q2 leave, Q3 round leafy, Q4 (a) cutouts like the trees, Q5 OK, Q6 (a) smooth steps, Q7 keep, Q8 keep, Q9 (a) flat at
+Route 109's level, Q10 Route 121 east fence upright + coast dirt/sky, Q11 berry seeds 3D in the middle of the dirt.
