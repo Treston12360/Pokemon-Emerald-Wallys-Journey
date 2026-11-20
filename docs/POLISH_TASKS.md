@@ -1101,3 +1101,8 @@ Numbered here POL-49..; status kept below as work goes.
   and the bottom step ends cleanly at the cliff base line - zero protrusion onto the lower grass path", as Route 115's;
   "Use the exact same uniform tile-grid step formula ... consistent step height, tread depth, and clean stone shading";
   and the coastline still to restore.
+- POL-51 after 17:23 (`POL-51_recessed_coast.png`): stairs recessed into the cliff (sFlightIn), Route 115's too;
+  Mt Pyre's sea at -256 px (its lowest edge) lies there (BorderWaterLevel: fill top first) - the dark strip is gone,
+  brown cliffs into the sea; the belt built 64 cells out (was 40) so that low sea reaches the horizon. Lavaridge and
+  Route 119 checked unchanged. Speed with the wider belt NOT measured here (test machine renders in software) -
+  Brennan to tell if it feels slower. Seen still: a small grey bar by one west flight's top.
