@@ -137,3 +137,8 @@ Picture: `polish_reports/Q6_evergrande_east_BEFORE_AFTER.png` (warp `0 8 18 41`)
   edge side held at the straight line between rows 32 and 54). The generator's single raised cells and their dark
   walls are gone; their cut records keep their ground but lose their walls (as on the even slope of rows 14-32).
 - West side next (its dark slots have another cause).
+### 10. Fortree's palms bigger, rising above the wood (Q4 (a) / POL-52)
+Picture: `polish_reports/Q4_fortree_palms_BEFORE_AFTER.png` (warp `0 4 19 11`).
+- The palms stay Emerald 3DS's leaning cutout of the original art; the card is 1.5 times as big about the trunk's foot
+  (voxel_fortree.py palm(), WJ_PALM_SCALE), so the five palms stand above the trees round them. Generated and spliced
+  as tools/voxel3ds/README.md "Fortree palms bigger" says.

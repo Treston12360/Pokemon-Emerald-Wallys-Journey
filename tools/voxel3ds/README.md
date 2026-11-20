@@ -60,7 +60,7 @@ spec): `"tiles": {0x249, 0x250, 0x251, 0x252, 0x258, 0x25A, 0x341}`. Generated a
 pc_data/voxel/buildings.bin DONOR OUT 37`. Checked first that the donor's Route 121 differs from ours only in the railing
 blocks (7 of ours -> 3 donor 4x4 blocks at 64,4 / 68,4 / 72,4; the other 49 placements at the same places).
 
-## Fortree palms bigger (Q4, 2026-11-20, session 014PwRDj) - IN TEST
+## Fortree palms bigger (Q4, 2026-11-20, session 014PwRDj) - APPLIED
 Brennan (POL-52, 2026-11-19): Fortree's palms "taller, larger ... so they rise above the surrounding regular trees";
 Q4 answer 2026-11-20: "flat cutouts of the original art, leaning like the trees". Change in
 `3ds_port/scripts/voxel_fortree.py` `palm()`: the card (PALM_TILT, the drawing projected) is emitted as
