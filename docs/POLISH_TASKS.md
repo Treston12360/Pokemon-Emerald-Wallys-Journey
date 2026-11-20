@@ -1118,3 +1118,11 @@ Numbered here POL-49..; status kept below as work goes.
   with the lower walkway, top tread ends at Y_top, left/right brown rock retaining walls sloping down to the steps, normal
   lighting. Verify on Mt Pyre and Route 115: no rock through any step, no grey above the upper grass, steps inside the
   opening with natural lighting.
+- POL-51 after 19:07 (`POL-51_notch_stairs.png`): what was wrong, found by turning parts off one at a time:
+  (a) Route 115's rock through the top steps = the safety floor plate (EmitSafetyFloor, laid at the lowest of a cell and
+  its neighbours) - now none inside a stair notch; (b) Mt Pyre's hole by the short flight = the cut-back (lip) reaching
+  5 rows into a rock mound - now the lip is only the flat rows above at the flight's top height, and with less room the
+  treads are shallower (steeper), never out past the cliff foot; (c) no cut record (rock layer, cliff walls) inside a
+  notch. Mt Pyre outside got flat relief cells at x24-26 rows 19-20 (tools/voxel3ds/add_relief_cells.py). Checked in
+  close-ups: no rock through any step, nothing grey above the grass, steps inside the opening, side walls rock.
+  Steeper where the flat ground is short: Mt Pyre west long flight (44 of 80 px), x24-26 (28/48), x27-29 (28/64).
