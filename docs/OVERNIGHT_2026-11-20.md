@@ -124,3 +124,9 @@ Pictures: `polish_reports/Q9_route108_sea_line_BEFORE_AFTER.png` (warp `0 23 45 
 - Route 108's relief (sea and land alike) rose in steps from -16 px in the west to 0 in the east; now laid flat at 0,
   Route 109's level (`tools/voxel3ds/flat_relief_layout.py relief.bin 24 0`). Its background sea is at 0 too, so the
   step against Route 109's background sea (the zig-zag) is gone. The Route 107 side checked: no line at the seam.
+### 8. Mt Pyre summit: green square on the ridge end made rock (Brennan 12:30 "make it rock")
+Picture: `polish_reports/MTPYRE_summit_green_square_BEFORE_AFTER.png` (warp `24 22 25 22`, +6 h clock).
+- Cells (27,15) 068 and (27,16) 078, the ridge's west end east of the upper stairs, are drawn as the ridge's rock
+  (kArtSwap in VoxelMesh_TileUV; the map itself is unchanged) and laid between their neighbours
+  (`blend_relief_region.py 303 27 27 15 16`). The green slope is gone; a faint light line is left at the foot of the
+  wall behind it (smaller than before).
