@@ -136,7 +136,7 @@ Picture: `polish_reports/Q6_evergrande_east_BEFORE_AFTER.png` (warp `0 8 18 41`)
   (`tools/voxel3ds/smooth_relief_region.py relief.bin 9 32 39 33 53`: a harmonic fill on the relief lattice; the map
   edge side held at the straight line between rows 32 and 54). The generator's single raised cells and their dark
   walls are gone; their cut records keep their ground but lose their walls (as on the even slope of rows 14-32).
-- West side next (its dark slots have another cause).
+- West side: done the same way (fix 12).
 ### 10. Fortree's palms bigger, rising above the wood (Q4 (a) / POL-52)
 Picture: `polish_reports/Q4_fortree_palms_BEFORE_AFTER.png` (warp `0 4 19 11`).
 - The palms stay Emerald 3DS's leaning cutout of the original art; the card is 1.5 times as big about the trunk's foot
@@ -150,3 +150,8 @@ Pictures: `polish_reports/Q3_route121_woods_BEFORE_AFTER.png` (warp `0 36 65 4`)
   own round tree (1D4/1D5/1DC/1DD), so the two met in a diagonal.
 - Fix: Route 120's east edge (the stretch beside Route 121, rows 20-79) is filled with Route 121's round tree
   (`add_relief_edge.py relief.bin 36 E 0x1d4,0x1d5,0x1dc,0x1dd 20 79`). Route 120's own trees are unchanged.
+### 12. Ever Grande west mountain side smoothed too (Q6 (a))
+Picture: `polish_reports/Q6_evergrande_west_BEFORE_AFTER.png`.
+- Its dark slots were walled cut records on a stepped slope (wall 07C/073, all sides). Cells x0-6 rows 38-56 re-laid
+  smooth (`smooth_relief_region.py relief.bin 9 0 6 38 56`), their cut records without walls. One small dark notch is
+  left by the flower ledge at the slope's top (outside the block).
