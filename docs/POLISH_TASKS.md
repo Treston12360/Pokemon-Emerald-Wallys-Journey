@@ -1110,3 +1110,11 @@ Numbered here POL-49..; status kept below as work goes.
   stone slab/block sticking up on top of the upper grass terrace right at the top of the stairs" (Mt Pyre x2, Route
   115 x2) - "the highest step meets the green grass edge completely flush"; (2) the recessed cutout's side walls are
   "bright white/light-grey" - "Apply the surrounding brown cliff rock texture"; (3) the same for every recessed stair.
+- Brennan 19:07 on `POL-51_flush_tops.png`: "worse than before because the brown cliff rock is now clipping straight
+  through the middle of the grey steps" (Mt Pyre east, west, Route 115); the bottom west flight "a dark sunken slot".
+  "Stop guessing with offsets." Method he set: (1) "Carve an Open Notch Out of the Cliff First (Omit Cliff Wall Faces on
+  Stair Tiles)"; (2) "Interpolate Elevation Linearly Across the Stair Footprint" from Y_bottom at the front edge of the
+  lowest stair tile to Y_top at the back edge of the highest, treads and risers along that plane; (3) bottom step flush
+  with the lower walkway, top tread ends at Y_top, left/right brown rock retaining walls sloping down to the steps, normal
+  lighting. Verify on Mt Pyre and Route 115: no rock through any step, no grey above the upper grass, steps inside the
+  opening with natural lighting.
