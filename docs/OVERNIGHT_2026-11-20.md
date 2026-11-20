@@ -30,3 +30,15 @@ Picture: `polish_reports/OVN_02_route120_sw_gap.png`.
 - Checked unchanged: Lavaridge, Route 115 (side by side; Route 115's colour difference is the test's fixed midday
   clock, not this change).
 - Revert switch: WJPC_EDGE_SKIP_WOODS=1. Commit f18189f1.
+### 3. Route 121 east: strip of sky by the sea (POL-58 part, Brennan 14:23)
+Picture: `polish_reports/OVN_03_route121_sea_edge.png`.
+- Cause: Lilycove's west edge stands over the background sea north of Route 121; the wall that closes a map edge
+  over the background refused sea cells, so the edge was open down to the water. Now an edge over the sea is closed
+  down to the water's level.
+- This touches every map edge over sea, so it was compared with it on/off at Route 121, Mt Pyre outside (both
+  coasts) and Route 109: only Route 121's strip changed (Mt Pyre / Route 109 identical but for the moving sea).
+- Revert switch: WJPC_EDGE_SKIP_WATER=1. Commit 2cce44aa.
+
+## Questions / proposals held for Brennan (so far)
+- Q1 Route 120 north bridge (POL-54): at midday I could not find the sky gap or doubled bridge under the main bridge
+  over the pond; the dark band under it looks like the bridge's own shadow. Where exactly is it (a picture with a box)?
