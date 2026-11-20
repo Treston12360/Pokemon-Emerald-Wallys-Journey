@@ -1129,6 +1129,18 @@ static bool BeltIsTree(int x, int y);
  * under the belt had a wall. It stands a wall of the map's cliff face from the belt's top up to the edge, point by
  * point of the edge, a tile of the face a level (by world height, never stretched). WJPC_EDGE_OPEN=1: as before.
  */
+/* Q10 (Brennan 2026-11-20 12:27, Route 121 east, Lilycove's west edge over the sea: "it shows the ground underneath
+ * dirt not covered up by sea water"): a wall closed down to belt water (EdgeOverBelt) is the map's own coast cliff,
+ * drawn with the map's own cliff face (Lilycove's brown rock), not the face of another map's belt terraces (a dark
+ * one). WJPC_EDGE_WATER_FACE_OLD=1: as before. */
+static bool WaterFaceOld(void)
+{
+    static int sOld = -1;
+    if (sOld < 0)
+        sOld = getenv("WJPC_EDGE_WATER_FACE_OLD") != NULL;
+    return sOld != 0;
+}
+
 static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y, int d, int nx, int ny)
 {
     static int sOpen = -1;
@@ -1188,8 +1200,9 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     if (top <= beltTop + 0.05f)
         return;
     face = VoxelRelief_FaceTile(inst);
-    /* beside the drawn belt's terraces, its rock (one mountain): the drawn map's cliff face */
-    for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+    /* beside the drawn belt's terraces, its rock (one mountain): the drawn map's cliff face - not for a coast over
+     * the sea, which is this map's own cliff (Q10 below) */
+    for (unsigned i = 0; i < VoxelWorld_InstanceCount() && !(overWater && face >= 0 && !WaterFaceOld()); ++i)
     {
         const VoxelMapInstance *m = VoxelWorld_Instance(i);
         if (m != NULL && m->layout != NULL && !m->indoor && VoxelRelief_Belt(m) != 0
