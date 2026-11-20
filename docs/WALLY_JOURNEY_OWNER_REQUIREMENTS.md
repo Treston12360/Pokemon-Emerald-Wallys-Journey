@@ -728,3 +728,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
 - Brennan 16:23: "Foretree palms look much better, i would raise the 3 in the red box as the trunk of the palm tree
   still hides behind the forest trees" (`docs/brennan/2026-11-20_1623_fortree_short_palms.png`: the three short palms,
   spec fortree_palm_short).
+- Brennan 17:01 (`docs/brennan/2026-11-20_1701_woods_coast.png`, `..._1701_rails.png`):
+  Route 121 north woods still "squished, overlapped, and bunched together" - "Space out and rebuild those forest trees
+  using the full, unclipped 3D tree model (matching the clean, individual 3D trees used in standard Hoenn forests)".
+  Coast: "Seal that corner vertex completely so zero blue sky shows through, and extend the bottom of the brown rock
+  cliff flush into the water/shore so those black base boxes disappear."
+  Route 119 rails: remove the "long, thin black lines/bars" beside the rails; "Flatten all river water tiles underneath
+  and around the Acro Bike rails to the exact same uniform water elevation"; rail ends must "connect flush with the
+  top grass bank ... or terminate cleanly on a support post - never stabbing sideways through the brown cliff rock".
