@@ -673,6 +673,9 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 continue;
             metatileId = VoxelWorld_BorderMetatile(x, y);
             part = VoxelTree_Part(art->secondaryTileset, metatileId);
+            if (getenv("WJPC_TREE_DUMP") != NULL)
+                fprintf(stderr, "BELTTREE %d %d art %d,%d mt %03x part %d\n", x, y, art->originX, art->originY,
+                        metatileId, part);
             {
                 float level, shift;
                 bool ledge = part < 0 && VoxelMesh_LedgeTree(x, y, &level, &shift);

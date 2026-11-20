@@ -26,6 +26,7 @@
 #include "battle_setup.h"
 #include "battle_transition.h"
 #include "constants/characters.h"
+#include "berry.h"
 #include "constants/event_objects.h"
 #include "sprite.h"
 #include "platform/null_guard.h"
@@ -473,6 +474,15 @@ static bool TestStep(void)
             for (size_t k = 0; k < ARRAY_COUNT(names); k++)
                 if (!strcmp(arg1, names[k]))
                     Platform_SetSetting(ids[k], n); // applied as the Settings menu does
+            continue;
+        }
+        if (!strcmp(cmd, "plant"))
+        {
+            // plant TREE_ID STAGE (test aid, POL-49/Q11: see a planted or sprouted berry in 3D): plants berry 1 in
+            // the berry tree TREE_ID (include/constants/berry.h) at that stage; warp afterwards to see it.
+            int tree, stage;
+            if (sscanf(line, "%*s %d %d", &tree, &stage) == 2)
+                PlantBerryTree((u8)tree, 1, (u8)stage, FALSE);
             continue;
         }
         if (!strcmp(cmd, "warp"))

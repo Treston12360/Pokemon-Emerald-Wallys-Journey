@@ -2248,7 +2248,12 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
          * soil's middle). WJPC_BERRY_SEED_CARD=1: the card. */
         if (SeedMound(&gObjectEvents[i]) && card->deck <= 0.0f)
         {
-            EmitMound(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + VOXEL_BERRY_STAND, rise,
+            /* Q11 (Brennan 2026-11-20 12:27: "make sure the seeds are 3D models sitting in the middle of the dirt
+             * as if they would be planted naturally"): centred in its soil cell, as the rocks' mounds are - not on
+             * the cell's south edge where the taller plants' cards stand (VOXEL_BERRY_STAND).
+             * WJPC_BERRY_SEED_EDGE=1: on the south edge as before. */
+            EmitMound(builder, &sSlots[i], i, card->worldX + 0.5f,
+                      card->worldZ + (getenv("WJPC_BERRY_SEED_EDGE") != NULL ? VOXEL_BERRY_STAND : 0.5f), rise,
                       rightX, rightZ, card->shade * dusk);
             continue;
         }
