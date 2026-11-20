@@ -187,3 +187,7 @@ Picture: `polish_reports/Q5_route119_rails_BEFORE_AFTER.png` (warp `0 34 20 11`)
   cell now stands 4 px over the water nearest it, the cells drawn under a rail (its side, its posts' drawing) lie at the
   water, and the walls' feet go down to the water (`tools/voxel3ds/lower_rails.py relief.bin`, 82 cells). Thin dark
   edge lines are left at a few rail ends. Separate 3D posts are not added yet (the drawn posts show under the rails).
+### 18. Route 119/120 wide shrubs stand as 3D bushes; Fortree's short palms raised (Q4)
+Pictures: `polish_reports/Q4_route120_shrubs_BEFORE_AFTER.png` (warp `0 35 19 23`, Brennan's two boxes),
+`Q4_fortree_short_palms_raised_BEFORE_AFTER.png` (warp `0 4 19 11`). How: tools/voxel3ds/README.md "Route 119/120
+shrubs and taller short palms".

@@ -74,3 +74,10 @@ gen_voxel_relief.py's DRAWN_EXCLUDED has "route122" ("a massif of one band tile:
 Patch: `drawn_ok()` and the candidates list accept `VOXEL_DRAWN_OK=group,group`. Run:
 `VOXEL_DRAWN_OK=route122 VOXEL_SPREAD_OK=route122 python3 scripts/gen_voxel_relief.py --layouts LAYOUT_ROUTE122
 --output X.bin` (about 6 min), then `splice_relief.py pc_data/voxel/relief.bin X.bin OUT.bin 38`.
+
+## Route 119/120 shrubs and taller short palms (2026-11-20, session 014PwRDj) - APPLIED
+Brennan 16:11 (shrubs picture) / 16:23 (short palms "raise the 3 ... the trunk ... still hides behind the forest
+trees"). In `3ds_port/scripts`: `voxel_fortree.shrub(layout)` (the Fortree shrub 281-283 over 270-272 as one leaning
+card of its upper layer, grass pixels clear) with one spec per shrub (`wj_shrub_*`, 5 on Route 120, 4 on Route 119;
+Route 119's two wider 270-271-271 ones not done); `palm(..., extra_trunk=1)` for fortree_palm_short (one more trunk
+cell, 0x273's lower layer, foot kept on the rect's last row). Full donor; spliced `--layout` 5, 35, 36.
