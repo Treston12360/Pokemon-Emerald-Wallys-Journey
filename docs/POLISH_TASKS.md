@@ -1175,3 +1175,15 @@ Numbered here POL-49..; status kept below as work goes.
   affects).
 - Every fix: an annotated changelog entry (map, POL, what and why) plus labelled BEFORE/AFTER PNGs.
 Overnight log: docs/OVERNIGHT_2026-11-20.md.
+
+## Hoenn 3D audit - Batch 4: seas and islands (session 014PwRDj, overnight 2026-11-20)
+20 places at midday (WJPC_RTC_EPOCH=1795089600), game's widest zoom, exe p118: Dewford, Routes 105-108, Mossdeep,
+Sootopolis, Pacifidlog, Ever Grande, Routes 124-134. Sheets: `polish_reports/AUDIT_B4_sheet1-4.png`. Bodies and
+runner: scratch `cx/body_b7_0..3.txt`, `run_b7.sh` (warps listed in the overnight log).
+- Clean: Dewford, Routes 105, 107, 124 (one light patch at the right edge = shallow water, left), 125, 128-134,
+  Sootopolis, Pacifidlog. Shallow-water patches kept as the original (Brennan's answer for Route 108).
+- Fixed: Ever Grande east edge rock post (overnight fix 4).
+- Held as questions: Ever Grande east ridges (Q6), Mossdeep trees in water (Q7), Route 126 crater (Q8), Route 108
+  dark diagonal line in the sea (being checked).
+- Small, not touched: tiny dark notches at cliff feet on Routes 106 (x~500,500 of its picture), 127 (left cliff
+  foot) and 133 (left island).
