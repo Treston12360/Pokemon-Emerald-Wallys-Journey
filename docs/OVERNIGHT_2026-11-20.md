@@ -81,3 +81,15 @@ Pictures: `polish_reports/OVN_04_evergrande_post_BEFORE_AFTER.png` (close-up), `
 - Q8 Route 126 (`OVN_Q8_route126_crater.png`): the floor inside Sootopolis's crater is a dark purple surface (it is
   the map's own tile, cloud shadows cross it, not sky), and a thin red line runs along the crater's west wall at the
   water. Both look like the original tiles; say if either looks wrong to you.
+- Q9 Route 108 / 109 (`OVN_Q9_route108_sea_line.png`; also in the Batch 2 notes as "dark dashes across the sea"):
+  a dark zig-zag line runs across the open sea north of Route 108. Cause (measured with WJPC_FIELD_DUMP): the
+  background sea round each map lies flat at one level, the level most of that map's own sea has (DLX-26). Route 108's
+  own sea is not flat: its relief rises in 3-column steps from -15 px in the west to about 0 in the east, every step
+  equally common, so its background sea took the first, -15 px. Route 109's background sea is at 0. Where the two
+  meet (a diagonal halfway between the two maps' edges) the 15 px step shows as the dark zig-zag; it has nothing to
+  do with the models (same with them hidden).
+  Options: (a) lay Route 108's own sea flat at Route 109's level (one data change to Route 108 only; the line goes,
+  but the Route 107 side of Route 108 would no longer slope; not yet checked what that does at the 107/108 seam);
+  (b) give Route 108's background sea a height that follows its ramp (a code change in how the background sea is laid
+  for a map with a sloped sea - only such maps change; the owner chose a flat background sea in DLX-26 to avoid steps,
+  so this is a design point); (c) leave it.
