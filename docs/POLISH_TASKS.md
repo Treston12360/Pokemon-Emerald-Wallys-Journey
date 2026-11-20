@@ -1139,3 +1139,4 @@ Numbered here POL-49..; status kept below as work goes.
   `BREN_2141_east_hole.png`): (1) upper-right rock ridge "split down the middle by a deep dark vertical gap", the outer
   wall "pinched/collapsed inward" - a solid continuous terrace; (2) right of the upper staircase behind the small round
   rock, "a missing chunk / dark jagged hole in the brown cliff wall" - seal it.
+- Brennan 21:5x: east ridges "Keep two ridges" (sand strip stays raised, done); right of the small round rock "That spot, smooth it". Tried flattening cells x30-32 rows 21-25 (whole-cell heights): it opened new dark gaps and a stray grass square - reverted, NOT done. Those cells are the generator's cut cliff tiles; smoothing them needs the cliff walls rebuilt, not cell heights. Open.
