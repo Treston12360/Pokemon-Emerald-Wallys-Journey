@@ -703,3 +703,6 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   by sea water and also blue sky showing through."
 - Q11 Berry seeds: "make sure the seeds are 3D models sitting in the middle of the dirt as if they would be planted
   naturally."
+- Brennan 12:30, on the three extra items: Mt Pyre summit green square on a wall top: "make it rock". Mt Pyre outside
+  sea colour (0x0A1, lighter): "its fine". Wider background reach (BELT_RADIUS 64) speed: "i will let you know if it
+  slows down or not." Next: "work on route 122 and slateport after fixing the above questions from last night."
