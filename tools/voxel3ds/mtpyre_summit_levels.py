@@ -26,6 +26,7 @@ from splice_relief import parse, ROW
 
 LID, W, H = 303, 50, 37
 OFFSET = {}
+ONE_FACE = set()
 
 def main():
     path = sys.argv[1]
@@ -51,6 +52,16 @@ def main():
                 wx = x + i / 4.0
                 return 1.0 if wx <= 32 else 0.0 if wx >= 36 else (36 - wx) / 4.0
             for (x, y), v in g.items():
+                # (Brennan 23:56: a second rock ledge part-way down the cliff line north of row 15 - the row-14 face
+                # ended at the old ground and a further 16 px step stood at the row 14/15 seam. Row 14's face now
+                # runs on down to the lowered ground: its lattice rows stepped down by up to 16 px, south edge
+                # -16 - except above the landing and the flight at x18-28, and faded out east as the rest)
+                if y == 14 and not (18 <= x <= 28):
+                    orig = list(v)
+                    for j in range(5):
+                        for i in range(5):
+                            v[j * 5 + i] = int(round(orig[j * 5 + i] - 16 * j / 4.0 * fade(x, i)))
+                    continue
                 if y < 15 or landing(x, y):
                     continue
                 orig = list(v)
@@ -73,6 +84,28 @@ def main():
                         q = j * 5 + i
                         v[q] = int(round(orig[q] + (v[q] - orig[q]) * fade(x, i)))
                 OFFSET[(x, y)] = v[12] - orig[12] if y != 17 and y != 31 else v[22] - orig[22]
+            # (Brennan 23:56: west and east of the landing the cliff line north of row 18 is two rock bands with a
+            # shelf between - row 14's face, then the ridge of rows 15-16 and its face at row 17. One wall instead:
+            # rows 14-17 of those columns laid as one straight face from row 14's top to row 17's foot, lattice row
+            # by lattice row. Cut records of those cells dropped below (no rock layer / walls of the old shelf).)
+            ONE_FACE.clear()
+            for (x0f, x1f) in ((13, 20), (29, 33)):
+              for x in range(x0f, x1f):
+                if not all((x, y) in g for y in (14, 15, 16, 17)):
+                    continue
+                for i in range(5):
+                    # (faded to the cells beside the range over its outer column, so its edges meet them exactly:
+                    # a seam of sky stood at the range's end)
+                    wx = x + i / 4.0
+                    wgt = max(0.0, min(1.0, wx - x0f, x1f - wx))
+                    A, B = g[(x, 14)][i], g[(x, 17)][20 + i]
+                    for y in (14, 15, 16, 17):
+                        for j in range(5):
+                            t = ((y - 14) + j / 4.0) / 4.0
+                            old = g[(x, y)][j * 5 + i]
+                            g[(x, y)][j * 5 + i] = int(round(old + (A + (B - A) * t - old) * wgt))
+                for y in (14, 15, 16, 17):
+                    ONE_FACE.add((x, y))
             recs = sorted(g.items(), key=lambda kv: (kv[0][1], kv[0][0]))
             d = b''.join(bytes([x, y]) + struct.pack('<25b', *[max(-128, min(127, q // unit)) for q in v])
                          for (x, y), v in recs)
@@ -91,6 +124,8 @@ def main():
     cells_out = []
     for c in p['cells']:
         lid, x, y = struct.unpack_from('<HBB', c, 0)
+        if lid == LID and (x, y) in ONE_FACE:
+            continue
         if lid == LID and (x, y) in OFFSET:
             c = bytearray(c)
             foot = struct.unpack_from('<h', c, 6)[0]
