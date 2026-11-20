@@ -1154,3 +1154,7 @@ Numbered here POL-49..; status kept below as work goes.
   summit at -64 px; sea fills now drawn as far south as they are low again (default; WJPC_FILL_SEA_FLAT_ROWS=1 at its
   rows) - at its rows a band of sky showed under the summit's low south edge; with BELT_RADIUS 64 Mt Pyre outside's
   north is still sea to the horizon (checked). Open: the summit's top-right flat teal patch / rock edge, dark streaks.
+- Brennan 23:28 (`BREN_2328_summit_east.png`): centre stairs "look great now"; the east rock formations (red boxes) got
+  sky tears and dark cracks vs the original (blue boxes). Cause: lowering rows 15-30 / 32-36 against the unchanged
+  rows north of 15 in the east. Now the lowering fades out from x32 to x36 (none east of x36): the east terraces are as
+  the generator made them (`MTPYRE_summit_east_fix.png`: original / last / now). Centre stairs unchanged.

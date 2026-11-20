@@ -13,6 +13,9 @@ map's own elevation bits are all 3 (no help). Read from the drawing instead:
   - row 17 x19-27 (the face with the flight at x22-24) and row 31 (the face along the whole width, a ramp at x6-10):
     each lattice row stepped from the level above to the level below, so the stair finder lays its steps;
   - rows 32-36: two levels down (-32 px).
+  - (Brennan 23:28: the east rock formations got sky tears and dark cracks - lowered against the unchanged ground
+    north of row 15 there. East of x32 the lowering fades out over x32..36 (lattice by lattice) and is none from x36:
+    the east terraces stay as the generator made them.)
 """
 import struct, sys, os
 sys.path.insert(0, os.path.dirname(__file__))
@@ -40,9 +43,13 @@ def main():
                     g.setdefault((x, y), [0] * 25)
             def landing(x, y):
                 return 15 <= y <= 16 and 18 <= x <= 28
+            def fade(x, i):
+                wx = x + i / 4.0
+                return 1.0 if wx <= 32 else 0.0 if wx >= 36 else (36 - wx) / 4.0
             for (x, y), v in g.items():
                 if y < 15 or landing(x, y):
                     continue
+                orig = list(v)
                 if y == 17 and 19 <= x <= 27:
                     for j in range(5):
                         for i in range(5):
@@ -57,6 +64,10 @@ def main():
                 else:
                     for q in range(25):
                         v[q] -= 32
+                for j in range(5):
+                    for i in range(5):
+                        q = j * 5 + i
+                        v[q] = int(round(orig[q] + (v[q] - orig[q]) * fade(x, i)))
             recs = sorted(g.items(), key=lambda kv: (kv[0][1], kv[0][0]))
             d = b''.join(bytes([x, y]) + struct.pack('<25b', *[max(-128, min(127, q // unit)) for q in v])
                          for (x, y), v in recs)
