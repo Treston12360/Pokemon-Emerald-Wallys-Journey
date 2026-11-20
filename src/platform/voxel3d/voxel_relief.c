@@ -288,6 +288,7 @@ typedef struct
     uint16_t layoutId;
     uint8_t x0, x1, row, rows;
     int16_t bottom, rise;
+    uint8_t lip;
     bool in;
     uint8_t n;
     int16_t z[MAX_PROFILE], h[MAX_PROFILE];   /* layout pixels: z = v + depth (world, as far south), h height */
@@ -494,6 +495,7 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
         laid->bottom = (int16_t)bottom;
         laid->rise = (int16_t)rise;
         laid->in = sFlightIn;
+        laid->lip = (uint8_t)lip;
         laid->n = (uint8_t)(n_all + 1);
     }
     int16_t *depths = DepthsOf(l);
@@ -1034,9 +1036,31 @@ int VoxelRelief_CutFringe(const uint8_t *rows, const uint16_t clear[16], int x, 
     return -1;
 }
 
+/* POL-51 (Brennan 2026-11-19 19:07: "Carve an Open Notch Out of the Cliff First (Omit Cliff Wall Faces on Stair
+ * Tiles)"): a cell of a laid flight - its rows, and the cells of the ground above cut back for it (its lip) - is in
+ * the notch: no cut record (no flat rock layer, no cliff walls) is drawn there. WJPC_STAIRS_KEEP_CUTS=1: kept. */
+static bool InLaidNotch(int layoutId, int lx, int ly)
+{
+    static int sKeep = -1;
+    if (sKeep < 0)
+        sKeep = getenv("WJPC_STAIRS_KEEP_CUTS") != NULL;
+    if (sKeep)
+        return false;
+    for (unsigned f = 0; f < sLaidCount; ++f)
+    {
+        const LaidFlight *L = &sLaid[f];
+        if (L->layoutId == (uint16_t)layoutId && lx >= L->x0 && lx <= L->x1
+         && ly >= (int)L->row - (int)L->lip && ly < (int)L->row + (int)L->rows)
+            return true;
+    }
+    return false;
+}
+
 int VoxelRelief_Cut(const VoxelMapInstance *inst, int x, int y, float *foot, int *ground,
                     int *wall, unsigned *sides)
 {
+    if (inst != NULL && InLaidNotch(inst->layoutId, x - inst->originX, y - inst->originY))
+        return -1;
     unsigned lo = 0, hi = sCutCellCount, key;
     const uint8_t *c;
     CutMemo *memo;
