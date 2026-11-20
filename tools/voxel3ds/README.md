@@ -59,3 +59,18 @@ spec): `"tiles": {0x249, 0x250, 0x251, 0x252, 0x258, 0x25A, 0x341}`. Generated a
 (`gen_voxel_buildings.py --output DONOR`, 6 min) and spliced Route 121 whole: `splice_buildings.py --layout
 pc_data/voxel/buildings.bin DONOR OUT 37`. Checked first that the donor's Route 121 differs from ours only in the railing
 blocks (7 of ours -> 3 donor 4x4 blocks at 64,4 / 68,4 / 72,4; the other 49 placements at the same places).
+
+## Fortree palms bigger (Q4, 2026-11-20, session 014PwRDj) - IN TEST
+Brennan (POL-52, 2026-11-19): Fortree's palms "taller, larger ... so they rise above the surrounding regular trees";
+Q4 answer 2026-11-20: "flat cutouts of the original art, leaning like the trees". Change in
+`3ds_port/scripts/voxel_fortree.py` `palm()`: the card (PALM_TILT, the drawing projected) is emitted as
+`ScaledProjPoly`, grown `PALM_SCALE` times (env `WJ_PALM_SCALE`, default 1.5) about the trunk's foot (W/2, 0, H), each
+corner keeping the unscaled texel (u = x, v = z - y). Donor generated in full; Fortree (layout 5) spliced whole
+(`splice_buildings.py --layout ... 5`; donor's Fortree has the same 66 placements as ours).
+
+## Route 122 relief (2026-11-20, session 014PwRDj) - IN TEST
+Brennan 12:30: "work on route 122 and slateport". Route 122 (Mt Pyre's island seen from the route) was left flat:
+gen_voxel_relief.py's DRAWN_EXCLUDED has "route122" ("a massif of one band tile: counted a level a band it spikes").
+Patch: `drawn_ok()` and the candidates list accept `VOXEL_DRAWN_OK=group,group`. Run:
+`VOXEL_DRAWN_OK=route122 VOXEL_SPREAD_OK=route122 python3 scripts/gen_voxel_relief.py --layouts LAYOUT_ROUTE122
+--output X.bin` (about 6 min), then `splice_relief.py pc_data/voxel/relief.bin X.bin OUT.bin 38`.
