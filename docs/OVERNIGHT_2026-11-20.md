@@ -42,3 +42,20 @@ Picture: `polish_reports/OVN_03_route121_sea_edge.png`.
 ## Questions / proposals held for Brennan (so far)
 - Q1 Route 120 north bridge (POL-54): at midday I could not find the sky gap or doubled bridge under the main bridge
   over the pond; the dark band under it looks like the bridge's own shadow. Where exactly is it (a picture with a box)?
+- Q2 Route 121 pier stairs (POL-51 "doubled stairs", `OVN_Q2_route121_pier_stairs.png`): the original map has two
+  flights (rows 10-11 and row 13) with ONE row of grass between them. Your 21:17 rule keeps one grass row at the top
+  of every flight, so the lower flight has no room to be set back into the cliff and lies as a flat pale face.
+  Options: (a) treat both as one flight from the top grass to the pier, the middle grass row becoming steps (one
+  clean staircase, but the middle grass landing is gone in 3D only; walking is unchanged); (b) let only this lower
+  flight cut into the landing row (no top landing for it); (c) leave it. Affects only this spot.
+- Q3 Route 121 northern woods (POL-58 "mismatched northern trees", `OVN_Q3_route121_north_trees.png`): the woods
+  north of Route 121 mix the tall pine-like trees (left) and round leafy trees (right). Which one should the whole
+  wood use? Changing the background's tree type is a look decision, so I left it.
+- Q4 Fortree's big fern/palm clumps (POL-52) and Route 120's wide shrubs (POL-55): these need new 3D models (taller
+  ferns, 3D bushes) - a design job. Do you want me to model them in the same style as the existing 3D trees (cards
+  of the original art, leant like the trees), or something else?
+- Q5 Route 119 walkways (POL-53): making them lower with thin posts means changing those building models (a
+  model regeneration, Emerald 3DS's generator). OK to do that?
+- Fences on Route 121 east (POL-58): at midday they already stand upright (`OVN_03_route121_sea_edge.png`). If you
+  still see flat ones, where?
+- Berry seeds (POL-49): in the game, but my test save has none planted, so not seen yet.
