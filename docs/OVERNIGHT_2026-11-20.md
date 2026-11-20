@@ -168,3 +168,16 @@ Picture: `polish_reports/Q10_route121_coast_BEFORE_AFTER.png` (warp `0 36 65 4`)
 - Left: a small light triangle at the wall's north-west corner, at the waterline. Tried drawing the north wall from
   both sides: no change (reverted). WJPC_EDGE_DUMP shows the wall itself closed down to the water there; cause not
   found yet.
+
+## After Brennan's 16:22 review
+Closed by Brennan: railing (6), Route 108 (7), summit square (8), Ever Grande east (9).
+### 15. Ever Grande west: the stepped block at the slope's top (his red box)
+Picture: `polish_reports/Q6_evergrande_west_top_BEFORE_AFTER.png`. `smooth_relief_region.py relief.bin 9 7 12 35 43`
+(the flower ledge and the rock round it, one slope now; cell 8,40 has no relief record and was left).
+### 16. Background woods: each large tree drawn whole at one height
+Picture: `polish_reports/R121_woods_whole_trees_BEFORE_AFTER.png` (Route 121 north woods, warp `0 36 65 4`).
+- Brennan: "many overlapping trees ... they should be standalone trees making up a forrest"; at the coast "2 random
+  tops of trees". Each quarter of a large belt tree stood at its own cell's belt height, so on slopes a tree came
+  apart into rows over its neighbours, and at the sea's edge a tree cut in half stood alone. Now a large belt tree is
+  drawn only when its four quarters are all there, all at the tree's top-left cell's height (voxel_tree.c
+  VoxelTree_EmitBorder; WJPC_BELT_TREE_CELLWISE=1 reverts). Applies to every background wood.
