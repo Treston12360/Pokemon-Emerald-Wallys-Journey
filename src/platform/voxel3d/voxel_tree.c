@@ -689,13 +689,39 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 part = VOXEL_TREE_SMALL;
                 metatileId = 0x0C7;
             }
+            /* Brennan 2026-11-20 16:22 (Route 121's north woods: "many overlapping trees ... they should be
+             * standalone trees making up a forrest"; the coast: "2 random tops of trees that need to be removed"):
+             * a large tree's four cells each stood at their own cell's belt level, so on the belt's slopes one tree
+             * came apart into rows at different heights over its neighbours, and where the wood meets the sea a tree
+             * cut by the seam stood as a lone half. A large tree of the belt is drawn only whole (its four cells are
+             * its four parts), all four at its top-left cell's level. WJPC_BELT_TREE_CELLWISE=1: as before. */
+            static int sCellwise = -1;
+            int ox = x, oy = y;
+            if (sCellwise < 0)
+                sCellwise = getenv("WJPC_BELT_TREE_CELLWISE") != NULL;
+            if (!ledge && !sCellwise && part >= 0 && part <= 3)
+            {
+                bool whole = true;
+
+                ox = x - (part & 1);
+                oy = y - (part >> 1);
+                for (int k = 0; k < 4 && whole; ++k)
+                {
+                    int cx = ox + (k & 1), cy = oy + (k >> 1);
+                    const VoxelMapInstance *ca = VoxelWorld_GetInstanceAt(cx, cy) == NULL ? VoxelWorld_BorderArtMap(cx, cy) : NULL;
+
+                    whole = ca != NULL && VoxelTree_Part(ca->secondaryTileset, VoxelWorld_BorderMetatile(cx, cy)) == k;
+                }
+                if (!whole)
+                    continue;
+            }
             if (part >= 0)
             {
                 float callerBase = builder->base;
 
                 /* at its map edge's level (VoxelMesh_BorderLevel) */
                 if (!ledge)
-                    VoxelMesh_BorderLevel(x, y, &level, &shift);
+                    VoxelMesh_BorderLevel(ox, oy, &level, &shift);
                 builder->lift = level;
                 builder->shift = shift;
                 /* POL-30: over the base of the map the cell stands with (VoxelMesh_EmitBorder) */

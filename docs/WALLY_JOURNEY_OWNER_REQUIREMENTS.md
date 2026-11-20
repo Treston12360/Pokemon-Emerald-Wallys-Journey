@@ -725,3 +725,6 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   trees making up a forrest"; berries "look much better, just make sure this rule applies to all other berries in the
   region"; Route 121/Lilycove coast (`docs/brennan/2026-11-20_1622_route121_coast.png`): "there is still blue sky
   showing and the black squares on the bottom of rocks, as well as 2 random tops of trees that need to be removed".
+- Brennan 16:23: "Foretree palms look much better, i would raise the 3 in the red box as the trunk of the palm tree
+  still hides behind the forest trees" (`docs/brennan/2026-11-20_1623_fortree_short_palms.png`: the three short palms,
+  spec fortree_palm_short).
