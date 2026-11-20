@@ -715,3 +715,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   rule applies to all other berries in the region"; Route 121/Lilycove coast (`docs/brennan/2026-11-20_1619_lilycove_coast.png`):
   "still blue sky showing and the black squares on the bottom of rocks, as well as 2 random tops of trees that need to be
   removed".
+- Brennan 16:11: Route 120 shrubs picture `docs/brennan/2026-11-20_1611_route120_shrubs.png` (two red boxes: the wide
+  flat shrubs, Fortree tileset 281-283 over 270-272). Route 119 walkways (Q5) = "long thin grey/white rails over the
+  river" (the Acro Bike rails).
+- Brennan 16:22 review: railing "looks good we can close that one out"; Route 108 "good, we can close that"; summit
+  square "looks better, can close this out"; Ever Grande "east side looks good just need to fix the west side of the
+  mountain" (`docs/brennan/2026-11-20_1622_evergrande_west.png`, red box: the stepped block at the west slope's top by
+  the flower ledge); Route 121 north woods "still has many overlapping trees fix this as they should be standalone
+  trees making up a forrest"; berries "look much better, just make sure this rule applies to all other berries in the
+  region"; Route 121/Lilycove coast (`docs/brennan/2026-11-20_1622_route121_coast.png`): "there is still blue sky
+  showing and the black squares on the bottom of rocks, as well as 2 random tops of trees that need to be removed".
