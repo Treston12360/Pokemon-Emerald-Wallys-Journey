@@ -67,6 +67,8 @@ unsigned VoxelRelief_Belt(const VoxelMapInstance *inst);
 int VoxelRelief_FaceTile(const VoxelMapInstance *inst);
 /* POL-51: a found stair flight's side at its top row's cell (x, y) in world cells: side bit 1 its west, 2 its east;
  * its profile n points (world z as far south, height over the map's base, cells) and its foot's height. */
+/* POL-51: a cell of a laid stair flight or of the ground cut back for it (the notch). */
+bool VoxelRelief_InNotch(const VoxelMapInstance *inst, int x, int y);
 bool VoxelRelief_FlightSide(const VoxelMapInstance *inst, int x, int y, int *side, unsigned *n,
                             float *z, float *h, float *foot, float *topH, bool *in);
 

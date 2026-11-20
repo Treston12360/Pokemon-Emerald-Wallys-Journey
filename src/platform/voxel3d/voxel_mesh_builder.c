@@ -2187,6 +2187,15 @@ static void EmitSafetyFloor(VoxelBuilder *b, const VoxelMapInstance *inst, int x
         sOff = getenv("WJPC_NO_SAFETY_FLOOR") != NULL;
     if (sOff || !VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1))
         return;
+    /* POL-51 (Route 115's flight: a slab of the ground drawn through its top steps - this plate, laid at the lowest
+     * of the cell and its neighbours): none in or beside a stair notch, where the steps and their side walls close
+     * everything. Found by turning it off (WJPC_NO_SAFETY_FLOOR=1). */
+    for (int d = 0; d < 5; ++d)
+    {
+        int nx = x + kDir[d][0], ny = y + kDir[d][1];
+        if (VoxelWorld_GetInstanceAt(nx, ny) == inst && VoxelRelief_InNotch(inst, nx, ny))
+            return;
+    }
     for (int d = 0; d < 5; ++d)
     {
         int nx = x + kDir[d][0], ny = y + kDir[d][1];

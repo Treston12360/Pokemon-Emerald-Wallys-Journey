@@ -1069,6 +1069,11 @@ static bool InLaidNotch(int layoutId, int lx, int ly)
     return false;
 }
 
+bool VoxelRelief_InNotch(const VoxelMapInstance *inst, int x, int y)
+{
+    return inst != NULL && InLaidNotch(inst->layoutId, x - inst->originX, y - inst->originY);
+}
+
 int VoxelRelief_Cut(const VoxelMapInstance *inst, int x, int y, float *foot, int *ground,
                     int *wall, unsigned *sides)
 {
