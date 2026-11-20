@@ -130,3 +130,10 @@ Picture: `polish_reports/MTPYRE_summit_green_square_BEFORE_AFTER.png` (warp `24 
   (kArtSwap in VoxelMesh_TileUV; the map itself is unchanged) and laid between their neighbours
   (`blend_relief_region.py 303 27 27 15 16`). The green slope is gone; a faint light line is left at the foot of the
   wall behind it (smaller than before).
+### 9. Ever Grande east mountain side: smooth slope down to the sea (Q6 (a), Brennan 12:27)
+Picture: `polish_reports/Q6_evergrande_east_BEFORE_AFTER.png` (warp `0 8 18 41`).
+- Cells x32-39 rows 33-53 (layout 9) re-laid as one smooth surface between the rock round them
+  (`tools/voxel3ds/smooth_relief_region.py relief.bin 9 32 39 33 53`: a harmonic fill on the relief lattice; the map
+  edge side held at the straight line between rows 32 and 54). The generator's single raised cells and their dark
+  walls are gone; their cut records keep their ground but lose their walls (as on the even slope of rows 14-32).
+- West side next (its dark slots have another cause).
