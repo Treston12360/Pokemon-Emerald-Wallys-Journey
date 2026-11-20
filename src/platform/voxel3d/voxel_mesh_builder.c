@@ -1194,9 +1194,14 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     {
         bool open = !BorderAt(nx, ny) || VoxelWorld_GetInstanceAt(nx, ny) != NULL;
         overWater = !open && !sSkipWater && BorderWaterLevel(nx, ny, &wl, &ws);
+        if (getenv("WJPC_EDGE_DUMP") != NULL && !overWater)
+            fprintf(stderr, "EDGESKIP %d %d d%d over %d,%d open %d tree %d\n", x, y, d, nx, ny, (int)open,
+                    (int)BeltIsTree(nx, ny));
         if (!overWater && (sSkipWoods || d != 1 || open || !BeltIsTree(nx, ny)))
             return;
     }
+    else if (getenv("WJPC_EDGE_DUMP") != NULL)
+        fprintf(stderr, "EDGELAND %d %d d%d over %d,%d beltTop %.2f drawn %u\n", x, y, d, nx, ny, beltTop, drawn);
     /* down to the belt's ground: the belt cell beside the wall's foot is drawn rows away (each stands as far south
      * as it is high), so the wall goes to the ground and the belt in front hides what is under its tops */
     beltTop = BeltBase(nx, ny) - base + (overWater ? wl - 1.0f : 0.0f);
@@ -1208,6 +1213,9 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
         if (h[k] > top)
             top = h[k];
     }
+    if (getenv("WJPC_EDGE_DUMP") != NULL)
+        fprintf(stderr, "EDGEBELT %d %d d%d over %d,%d water %d wl %.2f beltTop %.2f top %.2f h %.2f %.2f %.2f %.2f %.2f\n",
+                x, y, d, nx, ny, (int)overWater, wl, beltTop, top, h[0], h[1], h[2], h[3], h[4]);
     if (top <= beltTop + 0.05f)
         return;
     face = VoxelRelief_FaceTile(inst);
