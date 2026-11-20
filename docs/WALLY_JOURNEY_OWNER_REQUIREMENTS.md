@@ -736,3 +736,8 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Route 119 rails: remove the "long, thin black lines/bars" beside the rails; "Flatten all river water tiles underneath
   and around the Acro Bike rails to the exact same uniform water elevation"; rail ends must "connect flush with the
   top grass bank ... or terminate cleanly on a support post - never stabbing sideways through the brown cliff rock".
+- Brennan 17:15: "send me the most recent Zip file of the build whenever the recent fixes get pushed."
+- Brennan 17:50 (`docs/brennan/2026-11-20_1750_coast.png`): sky triangle gone; still "two cut-off, half-rendered green
+  tree canopies floating over the blue water ... Completely remove those"; and "pitch-black rectangular boxes/gaps
+  running along the bottom base of every brown rock cliff wall where it meets the green grass" - weld the cliff base
+  to the grass across the whole formation.

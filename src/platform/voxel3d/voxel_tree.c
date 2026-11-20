@@ -608,6 +608,14 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
         {
             int metatileId = VoxelWorld_GetMetatileId(x, y);
             int part = VoxelTree_Part(inst->secondaryTileset, metatileId);
+            /* Brennan 2026-11-20 17:50 (Lilycove's north edge over the sea: "two cut-off, half-rendered green tree
+             * canopies floating over the blue water ... Completely remove those"): a large tree's lower row on a
+             * map's north edge whose crown row is past the edge, where no tree's upper row stands (the sea), is
+             * half a tree: not drawn (its ground is). WJPC_KEEP_HALF_TREES=1: as before. */
+            if ((part == 2 || part == 3) && y == inst->originY && getenv("WJPC_KEEP_HALF_TREES") == NULL
+             && !(metatileId >= SECONDARY_ID && OwnLargePart(inst->secondaryTileset, metatileId, NULL) >= 0)
+             && VoxelTree_PartAt(x, y - 1) != (part ^ 2))
+                continue;
             if (part >= 0)
             {
                 float lift = VoxelRelief_CellLift(inst, x, y);
