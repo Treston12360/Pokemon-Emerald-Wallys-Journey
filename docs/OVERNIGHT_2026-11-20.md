@@ -198,3 +198,8 @@ lowered: the raised/odd squares); each rail's last cell ramps up onto the bank's
 ### 20. Woods of large trees on their own flat ground (Brennan 17:01: "full, unclipped 3D tree model ... individual")
 voxel_mesh_builder.c BeltTreeOwn: a background wood of four-cell trees stands at its edge's level like the woods inside
 maps, not on the terraced field (POL-46 rule B kept for small-tree woods). WJPC_LARGE_TREES_ON_FIELD=1 reverts.
+### 21. Lilycove / Route 121 coast corner sealed (Brennan 17:01)
+Picture: `polish_reports/Q10_coast_corner_sealed_BEFORE_AFTER.png`. The sky triangle was a strip under Lilycove's
+north-west wall (the wall stands as far south as it is high) where the belt laid no sea; the sea is now laid into it
+(EdgeOverBelt; WJPC_EDGE_SEA_STRIP_OFF=1 reverts). The black squares at the wall's foot are gone with it. Tried the
+wall in faces 0A9 (same look) and 075 (striped, worse): kept the map's own 07C.
