@@ -1146,3 +1146,11 @@ Numbered here POL-49..; status kept below as work goes.
   is gone (`MTPYRE_east_corner_contour.png`: left before, right after). Left: the grass tile at x31 row 23 (grass in the
   original art) now on the slope; a thin dark slit at the small round rock's right side (was there before).
 - Brennan 22:30: grass square "change it to rock" (3D only: x31 row 23 drawn as 0x071 in VoxelMesh_TileUV, map unchanged; WJPC_NO_ART_SWAP=1 off) and "fix the dark line" (the generator's cut records at x30 rows 25-26, x31 rows 24-25 - cliff face 0x0A9 on every side - removed with tools/voxel3ds/drop_relief_cuts.py). Seen: both gone (`MTPYRE_east_corner_final.png`).
+- Mt Pyre summit stairs (POL-51, 2026-11-19 night, `POL-51_summit_stairs.png`): the generator (also with
+  VOXEL_SPREAD_OK) laid all of rows 15-36 at one level, so the flights at rows 17 and 31 joined equal ground; the map's
+  elevation bits are all 3. New tools/voxel3ds/mtpyre_summit_levels.py reads the levels from the drawing: the landing
+  rows 15-16 x18-28 stays 0, the rest of rows 15-30 -16 px, rows 32-36 -32 px, faces at row 17 (x19-27) and row 31
+  stepped; missing cells added (1206 -> 1681). Both flights now found and laid as notch stairs. Sea fills round the
+  summit at -64 px; sea fills now drawn as far south as they are low again (default; WJPC_FILL_SEA_FLAT_ROWS=1 at its
+  rows) - at its rows a band of sky showed under the summit's low south edge; with BELT_RADIUS 64 Mt Pyre outside's
+  north is still sea to the horizon (checked). Open: the summit's top-right flat teal patch / rock edge, dark streaks.

@@ -2767,7 +2767,7 @@ static bool BorderWaterLevel(int x, int y, float *level, float *shift)
         /* (drawn at its own rows, not as far south as it is low: 16 levels down it stood 16 rows south of the
          * built belt's north end, and the sky showed past it. Flat water: no edge to line up. WJPC_FILL_SEA_SHIFT=1:
          * shifted.) */
-        *shift = getenv("WJPC_FILL_SEA_SHIFT") != NULL ? *level : 0.0f;
+        *shift = getenv("WJPC_FILL_SEA_FLAT_ROWS") == NULL ? *level : 0.0f;   /* (with BELT_RADIUS 64 the far end is out of view again; at its rows it left the sky between it and a map's low south edge: the summit) */
         return true;
     }
     /* DLX-26 (owner's choice 2026-11-13, replaces the skirt walls): the whole belt of sea lies flat, at one
