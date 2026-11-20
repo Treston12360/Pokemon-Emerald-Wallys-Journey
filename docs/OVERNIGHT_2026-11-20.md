@@ -161,3 +161,10 @@ Picture: `polish_reports/Q11_berry_seeds_BEFORE_AFTER.png` (test: `plant 51 1`, 
   is drawn over two cells, so the sprout's stem sank out of sight), 0.85 and 0.75; 0.75 puts the seed and the sprout
   in the middle of the dirt with the whole stem showing. WJPC_BERRY_SEED_Z / WJPC_BERRY_SEED_EDGE to test others.
 - New test command: `plant TREE_ID STAGE` (sdl2.c).
+### 14. Route 121 east / Lilycove coast wall: brown rock instead of dark dirt (Q10, Brennan 12:27)
+Picture: `polish_reports/Q10_route121_coast_BEFORE_AFTER.png` (warp `0 36 65 4`).
+- The wall that closes Lilycove's west edge down to the sea took the cliff face of another map's background terraces
+  (a dark one). Over the sea it now uses the map's own cliff face (EdgeOverBelt; WJPC_EDGE_WATER_FACE_OLD=1 reverts).
+- Left: a small light triangle at the wall's north-west corner, at the waterline. Tried drawing the north wall from
+  both sides: no change (reverted). WJPC_EDGE_DUMP shows the wall itself closed down to the water there; cause not
+  found yet.

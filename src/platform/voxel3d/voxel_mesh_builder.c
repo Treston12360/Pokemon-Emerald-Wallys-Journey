@@ -1261,16 +1261,6 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
                 &(VoxelVertex){xb, b0, z[k + 1], ub, v1 - (v1 - v0) * fa0, shade},
                 &(VoxelVertex){xb, tb, z[k + 1], ub, v1 - (v1 - v0) * fb1, shade},
                 &(VoxelVertex){xa, ta, z[k],     ua, v1 - (v1 - v0) * fa1, shade});
-            /* Q10 (the sky triangle at Lilycove's north-west corner over the sea): a north edge stands as far
-             * south as it is high, and between the map's own edge and its foot the belt draws no water (the
-             * cell is the map's) - the camera saw the sky there, past the back of this wall. Over the sea the
-             * north wall is drawn from both sides. WJPC_EDGE_WATER_FACE_OLD=1: one side. */
-            if (overWater && d == 0 && !WaterFaceOld())
-                VoxelBuilder_Quad(b,
-                    &(VoxelVertex){xa, ta, z[k],     ua, v1 - (v1 - v0) * fa1, SHADE_SOUTH},
-                    &(VoxelVertex){xb, tb, z[k + 1], ub, v1 - (v1 - v0) * fb1, SHADE_SOUTH},
-                    &(VoxelVertex){xb, b0, z[k + 1], ub, v1 - (v1 - v0) * fa0, SHADE_SOUTH},
-                    &(VoxelVertex){xa, b0, z[k],     ua, v1 - (v1 - v0) * fa0, SHADE_SOUTH});
         }
     }
 }
