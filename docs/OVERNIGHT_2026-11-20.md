@@ -181,3 +181,9 @@ Picture: `polish_reports/R121_woods_whole_trees_BEFORE_AFTER.png` (Route 121 nor
   apart into rows over its neighbours, and at the sea's edge a tree cut in half stood alone. Now a large belt tree is
   drawn only when its four quarters are all there, all at the tree's top-left cell's height (voxel_tree.c
   VoxelTree_EmitBorder; WJPC_BELT_TREE_CELLWISE=1 reverts). Applies to every background wood.
+### 17. Route 119's Acro Bike rails lowered to just over the river (Q5 / POL-53)
+Picture: `polish_reports/Q5_route119_rails_BEFORE_AFTER.png` (warp `0 34 20 11`).
+- Not building models: they were relief cells at the bank's height (16 px over the water) with walled sides. Each rail
+  cell now stands 4 px over the water nearest it, the cells drawn under a rail (its side, its posts' drawing) lie at the
+  water, and the walls' feet go down to the water (`tools/voxel3ds/lower_rails.py relief.bin`, 82 cells). Thin dark
+  edge lines are left at a few rail ends. Separate 3D posts are not added yet (the drawn posts show under the rails).
