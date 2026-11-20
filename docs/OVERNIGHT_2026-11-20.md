@@ -118,3 +118,9 @@ Pictures: `polish_reports/Q10_route121_fence_BEFORE_AFTER.png`.
   not in Emerald 3DS's railing spec, so it was drawn flat on the ground.
 - Fix: 0x341 added to the spec, Route 121's models regenerated and spliced in (tools/voxel3ds/README.md, "Route 121
   railing corner"). The corner now stands with the rails on both sides.
+### 7. Route 108: dark zig-zag line across the sea gone (Q9 (a), Brennan 12:27)
+Pictures: `polish_reports/Q9_route108_sea_line_BEFORE_AFTER.png` (warp `0 23 45 6`), `Q9_route108_107seam_BEFORE_AFTER.png`
+(warp `0 23 4 8`, the Route 107 side).
+- Route 108's relief (sea and land alike) rose in steps from -16 px in the west to 0 in the east; now laid flat at 0,
+  Route 109's level (`tools/voxel3ds/flat_relief_layout.py relief.bin 24 0`). Its background sea is at 0 too, so the
+  step against Route 109's background sea (the zig-zag) is gone. The Route 107 side checked: no line at the seam.
