@@ -2232,13 +2232,15 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
         foot = topH;   /* the band from the steps up to the top: its quads wound the other way, facing in */
     }
     face = VoxelRelief_FaceTile(inst);
-    if (face < 0 || !MetatileUV(b, face, &u0, &v0, &u1, &v1))
-        if (!VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1))
-            return;
     for (int s = 0; s < 2; ++s)
     {
         float wx;
         if (!(side & (1 << s)))
+            continue;
+        /* (Brennan 18:31: the cutout's sides "bright white/light-grey" - the stair cell's own drawing: the rock of
+         * the cliff beside the flight instead, the cell next to it in its row; the map's face tile, else) */
+        if (!VoxelMesh_TileUV(b, s == 0 ? x - 1 : x + 1, y, &u0, &v0, &u1, &v1)
+         && (face < 0 || !MetatileUV(b, face, &u0, &v0, &u1, &v1)))
             continue;
         wx = s == 0 ? (float)x : (float)x + 1.0f;
         for (unsigned q = 0; q + 1 < n; ++q)

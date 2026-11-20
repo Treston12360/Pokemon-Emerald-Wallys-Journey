@@ -519,6 +519,25 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
                     step = s2 / 2;
                     h = bottom + rise - 8 * step;
                     z = z0 + 8 * step + (s2 % 2) * 8;
+                    /* (recessed, Brennan 18:31: "the highest step meets the green grass edge completely flush" - no
+                     * top tread of the stairs' grey level with the grass: the first riser is at the grass's edge,
+                     * every tread a step lower, the last at the foot) */
+                    if (sFlightIn)
+                    {
+                        /* the profile's points: 0 the grass edge; 2k+1 the foot of step k's riser (upright, at the
+                         * same z as the tread above it ends); 2k+2 the end of step k's tread. A lattice point takes
+                         * the nearest (a short flight's few points no longer make its first riser a slope - the
+                         * grey slab Brennan saw on the one-row flights) */
+                        int pp = n_all > 0 ? (nn * 2 * steps + n_all / 2) / n_all : 0, kk;
+                        if (pp > 2 * steps) pp = 2 * steps;
+                        if (pp == 0)
+                            h = bottom + rise, z = z0;
+                        else if (pp & 1)
+                            kk = (pp - 1) / 2, h = bottom + rise - 8 * (kk + 1), z = z0 + 8 * kk;
+                        else
+                            kk = (pp - 2) / 2, h = bottom + rise - 8 * (kk + 1), z = z0 + 8 * (kk + 1);
+                        if (h < bottom) h = bottom;
+                    }
                     if (h < bottom) h = bottom;
                     /* (out: the last point comes down to the ground below - the lowest step's front closed) */
                     if ((sFlightOut || sFlightIn) && nn == n_all)

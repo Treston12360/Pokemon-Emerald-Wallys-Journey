@@ -1106,3 +1106,7 @@ Numbered here POL-49..; status kept below as work goes.
   brown cliffs into the sea; the belt built 64 cells out (was 40) so that low sea reaches the horizon. Lavaridge and
   Route 119 checked unchanged. Speed with the wider belt NOT measured here (test machine renders in software) -
   Brennan to tell if it feels slower. Seen still: a small grey bar by one west flight's top.
+- Brennan 18:31 on `POL-51_recessed_coast.png`: Mt Pyre coast "completely solved". Recessed stairs: (1) "a flat grey
+  stone slab/block sticking up on top of the upper grass terrace right at the top of the stairs" (Mt Pyre x2, Route
+  115 x2) - "the highest step meets the green grass edge completely flush"; (2) the recessed cutout's side walls are
+  "bright white/light-grey" - "Apply the surrounding brown cliff rock texture"; (3) the same for every recessed stair.
