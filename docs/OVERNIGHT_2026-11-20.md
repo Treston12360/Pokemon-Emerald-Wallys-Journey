@@ -155,3 +155,9 @@ Picture: `polish_reports/Q6_evergrande_west_BEFORE_AFTER.png`.
 - Its dark slots were walled cut records on a stepped slope (wall 07C/073, all sides). Cells x0-6 rows 38-56 re-laid
   smooth (`smooth_relief_region.py relief.bin 9 0 6 38 56`), their cut records without walls. One small dark notch is
   left by the flower ledge at the slope's top (outside the block).
+### 13. Berry seeds and sprouts sit in the middle of the soil (Q11, Brennan 12:27)
+Picture: `polish_reports/Q11_berry_seeds_BEFORE_AFTER.png` (test: `plant 51 1`, `plant 54 2`, warp `0 36 65 11`).
+- The 3D seed mound (POL-49) stood on its cell's south edge, at the soil's front. Tried 0.5 (cell middle: the soil bed
+  is drawn over two cells, so the sprout's stem sank out of sight), 0.85 and 0.75; 0.75 puts the seed and the sprout
+  in the middle of the dirt with the whole stem showing. WJPC_BERRY_SEED_Z / WJPC_BERRY_SEED_EDGE to test others.
+- New test command: `plant TREE_ID STAGE` (sdl2.c).

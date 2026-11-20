@@ -877,7 +877,7 @@ static float BerrySeedZ(void)
     if (sZ < 0.0f)
     {
         const char *z = getenv("WJPC_BERRY_SEED_Z");
-        sZ = getenv("WJPC_BERRY_SEED_EDGE") != NULL ? VOXEL_BERRY_STAND : z != NULL ? (float)atof(z) : VOXEL_BERRY_STAND;
+        sZ = getenv("WJPC_BERRY_SEED_EDGE") != NULL ? VOXEL_BERRY_STAND : z != NULL ? (float)atof(z) : 0.75f;
     }
     return sZ;
 }
