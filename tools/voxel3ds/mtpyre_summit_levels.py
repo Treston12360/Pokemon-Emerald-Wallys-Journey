@@ -47,7 +47,7 @@ def main():
                 for x in range(W):
                     g.setdefault((x, y), [0] * 25)
             def landing(x, y):
-                return 15 <= y <= 16 and 18 <= x <= 28
+                return 15 <= y <= 16 and 20 <= x <= 26   # (the drawing: rock ridges at x<=19 and x>=27; Brennan 00:43, the chunk right of the stairs was x27-28 left at 0)
             def fade(x, i):
                 wx = x + i / 4.0
                 return 1.0 if wx <= 32 else 0.0 if wx >= 36 else (36 - wx) / 4.0
@@ -89,7 +89,7 @@ def main():
             # rows 14-17 of those columns laid as one straight face from row 14's top to row 17's foot, lattice row
             # by lattice row. Cut records of those cells dropped below (no rock layer / walls of the old shelf).)
             ONE_FACE.clear()
-            for (x0f, x1f) in ((13, 20), (29, 33)):
+            for (x0f, x1f) in ((13, 20), (27, 33)):
               for x in range(x0f, x1f):
                 if not all((x, y) in g for y in (14, 15, 16, 17)):
                     continue
