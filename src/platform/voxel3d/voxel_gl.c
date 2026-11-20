@@ -1075,7 +1075,7 @@ typedef struct
 
 static InstanceMesh sInstanceMeshes[MAX_INSTANCES];
 
-#define SCRATCH_VERTS (1u << 21)
+#define SCRATCH_VERTS (1u << 22) // (BELT_RADIUS 64)
 static VoxelVertex *sScratch;
 static VoxelVertex *sSorted;
 static VoxelStaticDraw sChunkStatics[64];
@@ -1333,7 +1333,7 @@ static bool sBeltRedo;
 static Atlas *sBeltCacheAtlas;
 static uint32_t sBorderRemadeKey; // POL-30, see the belt in Voxel3D_Render
 static uint32_t sBeltCacheGen;
-#define BELT_RADIUS 40
+#define BELT_RADIUS 64 // POL-51 (Mt Pyre: a sea 16 levels down ended in view): was 40
 
 // The belt is made of CHUNK x CHUNK pieces in world cells (origin 0,0), so a piece is the same wherever the
 // player stands. Pieces are kept in a cache: walking on only builds the new ones, a few a frame, and the
@@ -1348,7 +1348,7 @@ typedef struct
     bool valid;
 } BeltChunk;
 
-#define BELT_CACHE 256
+#define BELT_CACHE 640 // (BELT_RADIUS 64: 256 pieces in view)
 #define BELT_CHUNKS_PER_FRAME 10
 static BeltChunk sBeltCache[BELT_CACHE];
 static unsigned sBeltUse;
