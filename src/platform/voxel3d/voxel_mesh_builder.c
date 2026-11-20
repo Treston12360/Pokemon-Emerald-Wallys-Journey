@@ -246,6 +246,12 @@ bool VoxelMesh_TileUV(VoxelBuilder *builder, int x, int y,
         const VoxelMapInstance *inst = VoxelWorld_GetInstanceAt(x, y);
         if (VoxelWorld_UsesTreeSprites(inst))
             metatile = VoxelTree_GroundMetatile(inst->secondaryTileset, metatile);
+        /* Mt Pyre outside (Brennan 2026-11-19 22:30, the grass square on the rebuilt east corner: "change it to
+         * rock"): drawn in 3D as the rock round it (General 0x071); the map itself (2D, walking) is unchanged.
+         * WJPC_NO_ART_SWAP=1: as drawn. */
+        if (inst != NULL && inst->layoutId == 302 && x - inst->originX == 31 && y - inst->originY == 23
+         && getenv("WJPC_NO_ART_SWAP") == NULL)
+            metatile = 0x071;
     }
     slot = builder->atlas->slotOf[metatile];
 

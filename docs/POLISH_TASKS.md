@@ -1145,3 +1145,4 @@ Numbered here POL-49..; status kept below as work goes.
   x33 west edge), so the block welds to both and falls -16 -> -64 with them. The generator's rock spike (-16..0 px)
   is gone (`MTPYRE_east_corner_contour.png`: left before, right after). Left: the grass tile at x31 row 23 (grass in the
   original art) now on the slope; a thin dark slit at the small round rock's right side (was there before).
+- Brennan 22:30: grass square "change it to rock" (3D only: x31 row 23 drawn as 0x071 in VoxelMesh_TileUV, map unchanged; WJPC_NO_ART_SWAP=1 off) and "fix the dark line" (the generator's cut records at x30 rows 25-26, x31 rows 24-25 - cliff face 0x0A9 on every side - removed with tools/voxel3ds/drop_relief_cuts.py). Seen: both gone (`MTPYRE_east_corner_final.png`).
