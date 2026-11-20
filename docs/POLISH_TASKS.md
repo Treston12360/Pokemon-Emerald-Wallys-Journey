@@ -1133,3 +1133,4 @@ Numbered here POL-49..; status kept below as work goes.
   below/behind a overhanging lip of green grass" - flush with zero lip.
   Done as: the cut-back always leaves the last flat row before the next rise untouched (lip <= flat rows - 1); with
   less room the treads are steeper, still no protrusion onto the path below (17:23).
+- 21:17 fix seen (`POL-51_landings.png`): a grass landing row above every flight; Mt Pyre west's bottom-right flight (x27-29 row 38) meets its landing flush in a close-up. Steeper: Mt Pyre x9-10 (28/80 px), x24-26 (12/48), x26-27 (12/16), x27-29 (12/64); Route 115 x27-28 (12/16).
