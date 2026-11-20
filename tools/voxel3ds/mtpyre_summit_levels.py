@@ -26,6 +26,10 @@ from splice_relief import parse, ROW
 
 LID, W, H = 303, 50, 37
 OFFSET = {}
+# (Brennan 01:29 'fix whats left': the fade over x32-36 left sloped ground meeting rock feet - dark notches at the
+# boulder and between the east ridges. It now happens inside the wall column x42 (072/070 down rows 14-30): every
+# terrace west of it is lowered whole, the wall takes the step.)
+FADE0, FADE1 = 42.0, 43.0
 WATER_CELLS = set()
 ONE_FACE = set()
 
@@ -67,7 +71,7 @@ def main():
                 return 15 <= y <= 16 and 20 <= x <= 26   # (the drawing: rock ridges at x<=19 and x>=27; Brennan 00:43, the chunk right of the stairs was x27-28 left at 0)
             def fade(x, i):
                 wx = x + i / 4.0
-                return 1.0 if wx <= 32 else 0.0 if wx >= 36 else (36 - wx) / 4.0
+                return 1.0 if wx <= FADE0 else 0.0 if wx >= FADE1 else (FADE1 - wx) / (FADE1 - FADE0)
             for (x, y), v in g.items():
                 # (Brennan 23:56: a second rock ledge part-way down the cliff line north of row 15 - the row-14 face
                 # ended at the old ground and a further 16 px step stood at the row 14/15 seam. Row 14's face now
@@ -106,7 +110,7 @@ def main():
             # rows 14-17 of those columns laid as one straight face from row 14's top to row 17's foot, lattice row
             # by lattice row. Cut records of those cells dropped below (no rock layer / walls of the old shelf).)
             ONE_FACE.clear()
-            for (x0f, x1f) in ((13, 20), (27, 33)):
+            for (x0f, x1f) in ((13, 20), (27, 35)):
               for x in range(x0f, x1f):
                 if not all((x, y) in g for y in (14, 15, 16, 17)):
                     continue
@@ -122,7 +126,8 @@ def main():
                             old = g[(x, y)][j * 5 + i]
                             g[(x, y)][j * 5 + i] = int(round(old + (A + (B - A) * t - old) * wgt))
                 for y in (14, 15, 16, 17):
-                    ONE_FACE.add((x, y))
+                    if True:
+                        ONE_FACE.add((x, y))
             # (Brennan 00:43 / POL-60: a flat teal square of sea at the summit's north-east - the map's own water
             # tiles along its north, drawn at the map's base, 64 px over the sea round it. Laid at the sea's -64.)
             for (x, y) in WATER_CELLS:
