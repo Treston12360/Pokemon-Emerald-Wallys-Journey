@@ -22,4 +22,6 @@ for i in range(n):
             struct.pack_into('<b',b,at[(49,9)]+j*5+k,int(round((west[j]+(-48-west[j])*k/4.0)/2)))
 open(p,'wb').write(b)
 PY
+# overnight 5 (2026-11-20): summit NW trench, x3 rows 7-12 (dark slanted panel, POL-60 "left trench")
+python3 tools/voxel3ds/blend_relief_region.py pc_data/voxel/relief.bin 303 3 3 7 12
 [ -n "$TESTDIR" ] && cp pc_data/voxel/relief.bin "$TESTDIR/voxel/" || true

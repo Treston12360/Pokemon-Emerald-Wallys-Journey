@@ -48,6 +48,18 @@ Pictures: `polish_reports/OVN_04_evergrande_post_BEFORE_AFTER.png` (close-up), `
   neighbour). Only these two cells changed; the edge is closed (no sky) in the after picture.
 - Checked first that my edge changes (fixes 2 and 3) were not the cause: the post is the same with
   WJPC_EDGE_SKIP_WOODS=1, and the relief data shows the spike directly.
+### 5. Mt Pyre summit north-west trench: dark slanted panel (POL-60 "black vertical streaks ... left trench")
+Pictures: `polish_reports/OVN_05_mtpyre_summit_trench_BEFORE_AFTER.png` (close-up), `OVN_05_..._BEFORE.png`,
+`OVN_05_..._AFTER.png` (warp `24 22 12 24`, clock +6 h from the midday test clock, nearer the light of Brennan's
+00:43 picture).
+- Cause: in the generator's data, cell column x3 rows 7-12 (metatile 070, between two rock ridges) starts 24 px below
+  the ridge west of it and dips to -28 px, a V-trench; its west side stood as a dark slanted wall.
+- Fix: those six cells re-laid as one slope between the ridge on each side (`blend_relief_region.py 303 3 3 7 12`;
+  added to `rebuild_mtpyre_relief.sh`, which still reproduces relief.bin byte for byte).
+- Tried also row 13: it opened a small sky sliver at row 14, so row 13 was left as it was. A small dark triangle stays
+  at the foot of the trench (row 13).
+- The rest of the summit at this hour (centre, east): no black streaks seen (`OVN_05_..._BEFORE.png` covers the west;
+  centre and east pictures are in the scratch folder, nothing to fix).
 
 ## Questions / proposals held for Brennan (so far)
 - Q1 Route 120 north bridge (POL-54): at midday I could not find the sky gap or doubled bridge under the main bridge
