@@ -4,7 +4,6 @@ Rules (his 02:48 message): safe POL fixes only, BEFORE/AFTER PNG for each, quest
 
 ## Changelog
 
-## Questions / proposals held for Brennan
 ### 1. Mt Pyre summit cleanup (POL-51 / POL-60, Brennan 00:43 red boxes, 01:29 "fix whats left on the summit")
 Picture: `polish_reports/OVN_01_mtpyre_summit_cleanup.png` (all at midday - his 00:43 picture was evening light,
 which darkens wall bases).
@@ -38,6 +37,17 @@ Picture: `polish_reports/OVN_03_route121_sea_edge.png`.
 - This touches every map edge over sea, so it was compared with it on/off at Route 121, Mt Pyre outside (both
   coasts) and Route 109: only Route 121's strip changed (Mt Pyre / Route 109 identical but for the moving sea).
 - Revert switch: WJPC_EDGE_SKIP_WATER=1. Commit 2cce44aa.
+### 4. Ever Grande City east edge: thin rock frame standing out of the sea (Batch 4 audit)
+Pictures: `polish_reports/OVN_04_evergrande_post_BEFORE_AFTER.png` (close-up), `OVN_04_evergrande_BEFORE.png`,
+`OVN_04_evergrande_AFTER.png` (whole view, warp `0 8 18 41`, midday).
+- Cause: two relief cells on the map's east edge, (38,25) and (39,24) (metatile 0x0BE), were left by the generator at
+  0 px while all the rock round them has fallen to -96..-112 px. Their cliff walls stood up as a thin post and bar
+  over the sea.
+- Fix: both laid as one surface with their neighbours (`blend_relief_region.py 9 38 38 25 25`, and for the edge cell
+  `blend_relief_region.py 9 39 39 24 24 --cols`, new option: blends down the column, as the edge cell has no east
+  neighbour). Only these two cells changed; the edge is closed (no sky) in the after picture.
+- Checked first that my edge changes (fixes 2 and 3) were not the cause: the post is the same with
+  WJPC_EDGE_SKIP_WOODS=1, and the relief data shows the spike directly.
 
 ## Questions / proposals held for Brennan (so far)
 - Q1 Route 120 north bridge (POL-54): at midday I could not find the sky gap or doubled bridge under the main bridge
