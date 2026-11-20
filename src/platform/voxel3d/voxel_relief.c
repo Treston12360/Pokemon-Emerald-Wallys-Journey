@@ -281,6 +281,7 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
  * out, half into the cliff top, as before (POL-47).
  */
 static bool sFlightOut, sFlightIn;
+static int sRecess;   /* recessed: how far into the cliff top, px (<= the run) */
 #define MAX_LAID 256
 #define MAX_PROFILE 65
 typedef struct
@@ -468,6 +469,32 @@ static bool StairFlights(ReliefLayout *l)
         {
             int run = 8 * ((found[f].rise + 4) / 8);
             int lip = sFlightOut ? 0 : sFlightIn ? run / 16 + 2 : 2;
+            /* (the ground cut back for it is only the flat ground above the flight at its top's height: five rows
+             * back it took in Mt Pyre's rock mound - a hole. Fewer flat rows: recessed as far as they let it) */
+            sRecess = run;
+            if (sFlightIn)
+            {
+                int flat = 0, topH = found[f].bottom + found[f].rise;
+                for (int r = found[f].row - 1; r >= 0 && flat < lip; --r, ++flat)
+                {
+                    bool ok = true;
+                    for (int x = found[f].x0; x <= found[f].x1 && ok; ++x)
+                    {
+                        int k = FindIn(l, x, r);
+                        if (k < 0) { ok = false; break; }
+                        for (int g = 0; g < GRID && ok; ++g)
+                            ok = l->heights[k * GRID + g] == topH;
+                    }
+                    if (!ok)
+                        break;
+                }
+                lip = flat;
+                if (16 * lip - 4 < sRecess)
+                    sRecess = 16 * lip - 4 > 0 ? 16 * lip - 4 : 0;
+                if (getenv("WJPC_STAIRS_DUMP") != NULL)
+                    fprintf(stderr, "RECESS layout %u x %d-%d row %d: flat rows %d, recess %d of %d\n", l->layoutId,
+                            found[f].x0, found[f].x1, found[f].row, flat, sRecess, run);
+            }
             if (!LayFlight(l, found[f].x0, found[f].x1, found[f].row, found[f].rows, found[f].bottom, found[f].rise, lip))
                 return false;
         }
@@ -495,7 +522,8 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
 {
     int steps = (rise + 4) / 8, top = 16 * row, n_all = rows * (VOXEL_RELIEF_SIDE - 1);
     /* the face stood at v + h = top + bottom + rise (as drawn); the top tread starts half a flight back */
-    int z0 = top + bottom + rise - (sFlightOut ? 0 : sFlightIn ? 8 * steps : (8 * steps) / 2);
+    int recessUsed = sRecess < 8 * steps ? sRecess : 8 * steps;
+    int z0 = top + bottom + rise - (sFlightOut ? 0 : sFlightIn ? recessUsed : (8 * steps) / 2);
     LaidFlight *laid = NULL;
     if ((sFlightOut || sFlightIn) && sLaidCount < MAX_LAID && n_all + 1 <= MAX_PROFILE)
     {
@@ -547,10 +575,12 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
                         if (pp > 2 * steps) pp = 2 * steps;
                         if (pp == 0)
                             h = bottom + rise, z = z0;
+                        /* (treads 8 px deep, or shallower where the flat ground above leaves less room: steeper, never
+                         * out past the cliff's foot - Brennan 17:23 "zero protrusion") */
                         else if (pp & 1)
-                            kk = (pp - 1) / 2, h = bottom + rise - 8 * (kk + 1), z = z0 + 8 * kk;
+                            kk = (pp - 1) / 2, h = bottom + rise - 8 * (kk + 1), z = z0 + recessUsed * kk / steps;
                         else
-                            kk = (pp - 2) / 2, h = bottom + rise - 8 * (kk + 1), z = z0 + 8 * (kk + 1);
+                            kk = (pp - 2) / 2, h = bottom + rise - 8 * (kk + 1), z = z0 + recessUsed * (kk + 1) / steps;
                         if (h < bottom) h = bottom;
                     }
                     if (h < bottom) h = bottom;
