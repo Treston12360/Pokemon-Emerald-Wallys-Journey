@@ -2969,6 +2969,7 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
 }
 
 static bool BeltIsTree(int x, int y);
+static bool BeltTreeOwn(int x, int y);
 enum { BELT_TIER_DEPTH = 2 };
 static bool TerracesOn(void);
 static bool FieldOn(void);
@@ -3236,7 +3237,7 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
      * terraces so trees sit on continuous grass/dirt plateaus rather than floating or sitting on disconnected black
      * shelves"): a wood of the belt stands on the field (BeltField) - the ledge under its middle, as far south as the
      * field there - so the trees and the terraces beside them are one ground. WJPC_BELT_TREES_OWN=1: as before. */
-    if (FieldOn() && BeltIsTree(x, y) && getenv("WJPC_BELT_TREES_OWN") == NULL)
+    if (FieldOn() && BeltIsTree(x, y) && !BeltTreeOwn(x, y))
     {
         float h = 1e9f, sh = 0.0f;
         /* the lowest of its corners (the mean stood a wood beside a map a quarter level over the map's edge, a
@@ -3600,6 +3601,32 @@ static bool BeltIsTree(int x, int y)
 
     return current != NULL && VoxelWorld_UsesTreeSprites(current)
         && VoxelTree_Part(current->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) >= 0;
+}
+
+/* Brennan 2026-11-20 17:01 (Route 121's north woods: "squished, overlapped, and bunched together ... Space out and
+ * rebuild those forest trees using the full, unclipped 3D tree model (matching the clean, individual 3D trees used in
+ * standard Hoenn forests)"): a wood of LARGE trees (four-cell trees, the round leafy ones) stands on its own flat
+ * ground at its edge's level, as the woods inside the maps do, not on the field's terraces (POL-46 rule B, which stays
+ * for the small trees). WJPC_BELT_TREES_OWN=1: every wood so; WJPC_LARGE_TREES_ON_FIELD=1: large ones too on the
+ * field, as before. */
+static bool BeltTreeOwn(int x, int y)
+{
+    static int sAll = -1, sField = -1;
+    const VoxelMapInstance *art;
+    int part;
+
+    if (sAll < 0)
+    {
+        sAll = getenv("WJPC_BELT_TREES_OWN") != NULL;
+        sField = getenv("WJPC_LARGE_TREES_ON_FIELD") != NULL;
+    }
+    if (sAll)
+        return true;
+    if (sField)
+        return false;
+    art = VoxelWorld_BorderArtMap(x, y);
+    part = art != NULL ? VoxelTree_Part(art->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) : -1;
+    return part >= 0 && part <= 3;
 }
 
 /*
@@ -4678,7 +4705,7 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
             if (VoxelWorld_GetInstanceAt(nx, ny) != NULL || !BorderAt(nx, ny))
                 continue;   /* a map: its edge closes it (EdgeOverBelt, EmitSeamSkirt) */
             if (BorderWaterLevel(nx, ny, &wl, &ws) ? false
-                : !BeltIsTree(nx, ny) || getenv("WJPC_BELT_TREES_OWN") == NULL)
+                : !BeltIsTree(nx, ny) || !BeltTreeOwn(nx, ny))
                 continue;   /* the field (woods lie on it too): the same corners, nothing open */
             floorH = BeltBase(nx, ny) - 1.0f;
             /* the side, cut where the field crosses a whole level: each stretch one level of ledge */
@@ -4731,7 +4758,7 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
 bool VoxelMesh_TreeOverDrop(int x, int y)
 {
     float lo = 1e9f, hi = -1e9f;
-    if (!FieldOn() || getenv("WJPC_BELT_TREES_OWN") != NULL || getenv("WJPC_TREES_ON_DROPS") != NULL)
+    if (!FieldOn() || BeltTreeOwn(x, y) || getenv("WJPC_TREES_ON_DROPS") != NULL)
         return false;
     for (int k = 0; k < 4; ++k)
     {
@@ -4908,7 +4935,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                  /* POL-46: a wood on the field (its ground eased with the field's) stood step faces of its own
                   * tree drawing between neighbours a fraction of a level apart: the dark flat tree squares
                   * between the crowns west of Route 119's Weather Institute. The crowns cover the rise. */
-                 && !(FieldOn() && BeltIsTree(x, y) && getenv("WJPC_BELT_TREES_OWN") == NULL))
+                 && !(FieldOn() && BeltIsTree(x, y) && !BeltTreeOwn(x, y)))
                 {
                     if (!(sBeltSlopes && !drawn && !BeltIsTree(x, y) && !TerraceBand(x, y)))
                         EmitBorderSteps(builder, x, y, edge, edgeShift);
@@ -4935,7 +4962,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 
                 /* POL-46: a wood on the field lies on the field itself (EmitFieldCell, in its grass): one ground
                  * with no gaps between cells - flat quads at eased heights showed the sky between them */
-                if (!drawn && FieldOn() && getenv("WJPC_BELT_TREES_OWN") == NULL)
+                if (!drawn && FieldOn() && !BeltTreeOwn(x, y))
                 {
                     EmitFieldCell(builder, x, y);
                     continue;

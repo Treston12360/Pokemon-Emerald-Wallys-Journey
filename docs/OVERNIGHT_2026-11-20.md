@@ -191,3 +191,10 @@ Picture: `polish_reports/Q5_route119_rails_BEFORE_AFTER.png` (warp `0 34 20 11`)
 Pictures: `polish_reports/Q4_route120_shrubs_BEFORE_AFTER.png` (warp `0 35 19 23`, Brennan's two boxes),
 `Q4_fortree_short_palms_raised_BEFORE_AFTER.png` (warp `0 4 19 11`). How: tools/voxel3ds/README.md "Route 119/120
 shrubs and taller short palms".
+### 19. Route 119 rails v2 (Brennan 17:01 boxes)
+Picture: `polish_reports/Q5_route119_rails_v2_BEFORE_AFTER.png`. lower_rails.py v2 on the pre-rails relief: the black
+bars (the rail cells' walls) gone; the bank's cliff cells drawn with a rail's end stay at bank height (they had been
+lowered: the raised/odd squares); each rail's last cell ramps up onto the bank's top instead of running into the cliff.
+### 20. Woods of large trees on their own flat ground (Brennan 17:01: "full, unclipped 3D tree model ... individual")
+voxel_mesh_builder.c BeltTreeOwn: a background wood of four-cell trees stands at its edge's level like the woods inside
+maps, not on the terraced field (POL-46 rule B kept for small-tree woods). WJPC_LARGE_TREES_ON_FIELD=1 reverts.
