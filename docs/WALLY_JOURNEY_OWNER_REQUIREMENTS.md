@@ -741,3 +741,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   tree canopies floating over the blue water ... Completely remove those"; and "pitch-black rectangular boxes/gaps
   running along the bottom base of every brown rock cliff wall where it meets the green grass" - weld the cliff base
   to the grass across the whole formation.
+- Brennan 17:53 (`docs/brennan/2026-11-20_1753_rails_v2.png`): raised water squares by the east bank, a black pole,
+  chopped hop-rails, rail ends into the cliff. Answers: rail ends -> "Build real 3D rail models" (thin rails with
+  posts, level with the grass banks, like a bridge); hop rails -> "Keep separate, tidy them" (same clean look and
+  posts as the long rails).
