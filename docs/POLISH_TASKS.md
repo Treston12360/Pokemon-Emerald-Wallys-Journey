@@ -1163,3 +1163,15 @@ Numbered here POL-49..; status kept below as work goes.
 - Brennan 00:43 (`BREN_0043_summit_boxes.png`): the chunk right of the upper stairs = cells x27-28 rows 15-16 (rock ridge in the drawing) counted as the landing and left high; landing is now x20-26 and the one-wall range x27-32 (`MTPYRE_summit_stair_corner.png`). His 'pitch-black boxes' at wall bases: his picture was evening light; at midday (WJPC_RTC_EPOCH test clock) the bases are brown rock - one real dark notch at the round boulder by the flower bed, still to fix. Still open: a tiny sky sliver at the top of that corner, the flat teal sea square at the NE corner and the hanging rock flap there.
 - Summit NE teal square: the map's own water tiles (north rows 0-8) were at the map base, 64 px over the sea; laid at -64 (`MTPYRE_summit_ne_sea.png`). Left: a thin teal strip along that north edge and the rock flap at the NE corner; dark notch at the boulder by the flower bed; ridge cracks.
 - Summit NE rock flap (Brennan 00:43): cells (48,8) blended between (47,8) and (49,8) with its cut record dropped (blend_relief_region.py, drop_relief_cuts.py), and (49,9) re-laid by hand from (48,9)'s east edge to -48 px (its NE corner stood at 0 over the -64 sea: the spike). Gone in the midday test. NOTE: these three edits are on top of mtpyre_summit_levels.py's output - re-running that tool needs them again (302/303 sea fills too).
+
+## Brennan 2026-11-20 02:48 - overnight rules (his words, condensed)
+- Keep working through the remaining POL list (finish Mt Pyre cleanup, then the next pending POL items), "clean,
+  predictable fixes" to the standards set (flush ground-to-rock bases, zero skybox bleeds, solid 3D stairs/props, no
+  floating or protruding geometry).
+- "Do NOT make any drastic architectural changes, major terrain redesigns, or risky global overrides" without his
+  approval; a problem needing a structural change / risky trade-off / creative decision: pause that item, leave it
+  intact, go to the next safe one.
+- Keep a list of questions and proposals; present them when he says "I am awake now" (issue, options, what each
+  affects).
+- Every fix: an annotated changelog entry (map, POL, what and why) plus labelled BEFORE/AFTER PNGs.
+Overnight log: docs/OVERNIGHT_2026-11-20.md.
