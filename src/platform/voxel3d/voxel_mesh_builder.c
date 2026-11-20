@@ -249,9 +249,20 @@ bool VoxelMesh_TileUV(VoxelBuilder *builder, int x, int y,
         /* Mt Pyre outside (Brennan 2026-11-19 22:30, the grass square on the rebuilt east corner: "change it to
          * rock"): drawn in 3D as the rock round it (General 0x071); the map itself (2D, walking) is unchanged.
          * WJPC_NO_ART_SWAP=1: as drawn. */
-        if (inst != NULL && inst->layoutId == 302 && x - inst->originX == 31 && y - inst->originY == 23
-         && getenv("WJPC_NO_ART_SWAP") == NULL)
-            metatile = 0x071;
+        /* Mt Pyre summit (Brennan 2026-11-20 12:30, the green square on the ridge end east of the upper stairs:
+         * "make it rock"): the ridge's west-end cells (27,15) 068 and (27,16) 078 drawn as the ridge's own rock. */
+        static const struct { uint16_t layout; uint8_t x, y; uint16_t as; } kArtSwap[] = {
+            { 302, 31, 23, 0x071 },
+            { 303, 27, 15, 0x069 },
+            { 303, 27, 16, 0x07C },
+        };
+        static int sNoSwap = -1;
+        if (sNoSwap < 0)
+            sNoSwap = getenv("WJPC_NO_ART_SWAP") != NULL;
+        for (unsigned i = 0; inst != NULL && !sNoSwap && i < sizeof(kArtSwap) / sizeof(kArtSwap[0]); ++i)
+            if (inst->layoutId == kArtSwap[i].layout && x - inst->originX == kArtSwap[i].x
+             && y - inst->originY == kArtSwap[i].y)
+                metatile = kArtSwap[i].as;
     }
     slot = builder->atlas->slotOf[metatile];
 

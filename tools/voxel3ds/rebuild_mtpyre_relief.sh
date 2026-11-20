@@ -24,4 +24,7 @@ open(p,'wb').write(b)
 PY
 # overnight 5 (2026-11-20): summit NW trench, x3 rows 7-12 (dark slanted panel, POL-60 "left trench")
 python3 tools/voxel3ds/blend_relief_region.py pc_data/voxel/relief.bin 303 3 3 7 12
+# 2026-11-20 12:30 (Brennan: "make it rock"): the ridge end east of the upper stairs, laid between its neighbours
+# (drawn as rock: voxel_mesh_builder.c kArtSwap)
+python3 tools/voxel3ds/blend_relief_region.py pc_data/voxel/relief.bin 303 27 27 15 16
 [ -n "$TESTDIR" ] && cp pc_data/voxel/relief.bin "$TESTDIR/voxel/" || true
