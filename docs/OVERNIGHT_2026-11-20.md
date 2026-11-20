@@ -142,3 +142,11 @@ Picture: `polish_reports/Q4_fortree_palms_BEFORE_AFTER.png` (warp `0 4 19 11`).
 - The palms stay Emerald 3DS's leaning cutout of the original art; the card is 1.5 times as big about the trunk's foot
   (voxel_fortree.py palm(), WJ_PALM_SCALE), so the five palms stand above the trees round them. Generated and spliced
   as tools/voxel3ds/README.md "Fortree palms bigger" says.
+### 11. Route 121 northern woods: all round leafy trees (Q3, Brennan 12:27 "Round leafy trees")
+Pictures: `polish_reports/Q3_route121_woods_BEFORE_AFTER.png` (warp `0 36 65 4`), `Q3_route121_woods_west_AFTER.png`
+(warp `0 36 20 4`).
+- Cause (WJPC_TREE_DUMP): the background wood north of Route 121 is drawn from the nearest map's border. Its west
+  part is nearest Route 120, whose border is the pine-like small tree (0C6/0C7); the east part takes Route 121's
+  own round tree (1D4/1D5/1DC/1DD), so the two met in a diagonal.
+- Fix: Route 120's east edge (the stretch beside Route 121, rows 20-79) is filled with Route 121's round tree
+  (`add_relief_edge.py relief.bin 36 E 0x1d4,0x1d5,0x1dc,0x1dd 20 79`). Route 120's own trees are unchanged.
