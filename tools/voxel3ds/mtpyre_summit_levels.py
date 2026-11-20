@@ -16,12 +16,16 @@ map's own elevation bits are all 3 (no help). Read from the drawing instead:
   - (Brennan 23:28: the east rock formations got sky tears and dark cracks - lowered against the unchanged ground
     north of row 15 there. East of x32 the lowering fades out over x32..36 (lattice by lattice) and is none from x36:
     the east terraces stay as the generator made them.)
+  - (Brennan 23:41: dark lines round the foot of every rock in the lowered part - the cut records' feet (the rock's
+    foot height, px) were left at the old level. Each cut cell's foot moves with its cell: the same offset as the
+    lattice's centre point.)
 """
 import struct, sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from splice_relief import parse, ROW
 
 LID, W, H = 303, 50, 37
+OFFSET = {}
 
 def main():
     path = sys.argv[1]
@@ -68,6 +72,7 @@ def main():
                     for i in range(5):
                         q = j * 5 + i
                         v[q] = int(round(orig[q] + (v[q] - orig[q]) * fade(x, i)))
+                OFFSET[(x, y)] = v[12] - orig[12] if y != 17 and y != 31 else v[22] - orig[22]
             recs = sorted(g.items(), key=lambda kv: (kv[0][1], kv[0][0]))
             d = b''.join(bytes([x, y]) + struct.pack('<25b', *[max(-128, min(127, q // unit)) for q in v])
                          for (x, y), v in recs)
@@ -83,9 +88,18 @@ def main():
         blob[8 + ROW * i: 8 + ROW * (i + 1)] = r
         blob += d
     at = len(blob)
-    blob += struct.pack('<HH', len(p['variants']), len(p['cells']))
+    cells_out = []
+    for c in p['cells']:
+        lid, x, y = struct.unpack_from('<HBB', c, 0)
+        if lid == LID and (x, y) in OFFSET:
+            c = bytearray(c)
+            foot = struct.unpack_from('<h', c, 6)[0]
+            struct.pack_into('<h', c, 6, foot + OFFSET[(x, y)])
+            c = bytes(c)
+        cells_out.append(c)
+    blob += struct.pack('<HH', len(p['variants']), len(cells_out))
     for v in p['variants']: blob += v
-    for c in p['cells']: blob += c
+    for c in cells_out: blob += c
     if p['edges']:
         head = bytearray(p['edge_head'])
         struct.pack_into('<H', head, 4, len(p['edges']))

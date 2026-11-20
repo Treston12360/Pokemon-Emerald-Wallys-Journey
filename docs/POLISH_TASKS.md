@@ -1158,3 +1158,4 @@ Numbered here POL-49..; status kept below as work goes.
   sky tears and dark cracks vs the original (blue boxes). Cause: lowering rows 15-30 / 32-36 against the unchanged
   rows north of 15 in the east. Now the lowering fades out from x32 to x36 (none east of x36): the east terraces are as
   the generator made them (`MTPYRE_summit_east_fix.png`: original / last / now). Centre stairs unchanged.
+- Brennan 23:41: dark lines round the foot of every rock in the lowered summit, and two tiny sky slivers. Cause of the lines: the cut records' foot heights were not moved with their cells; mtpyre_summit_levels.py now moves each cut cell's foot by its cell's offset (`MTPYRE_summit_rock_feet.png`). Sky slivers: not seen in these pictures - asked Brennan to check.
