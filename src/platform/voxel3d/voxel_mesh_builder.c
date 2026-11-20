@@ -1232,10 +1232,40 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
             break;
         }
     }
+    if (overWater && getenv("WJPC_EDGE_WATER_FACE") != NULL)
+        face = (int)strtol(getenv("WJPC_EDGE_WATER_FACE"), NULL, 16);   /* test aid: the face over the sea */
+    if (getenv("WJPC_EDGE_DUMP") != NULL)
+        fprintf(stderr, "EDGEFACE %d %d d%d face %03x water %d\n", x, y, d, face, (int)overWater);
     if (face < 0 || !MetatileUV(b, face, &u0, &v0, &u1, &v1))
     {
         if (!VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1))
             return;
+    }
+    /* Q10 (Brennan 2026-11-20 16:22, "there is still blue sky showing" at Lilycove's north-west corner): a north
+     * edge stands as far south as it is high, and the strip between the map's own edge (z = y) and its wall (z[k])
+     * belongs to the map, so the belt lays no sea there - over the sea it was a slot of sky, seen past the corner.
+     * The sea is laid on into it, at its own level. WJPC_EDGE_SEA_STRIP_OFF=1: as before. */
+    {
+        static int sStripOff = -1;
+        float su0, sv0, su1, sv1;
+        if (sStripOff < 0)
+            sStripOff = getenv("WJPC_EDGE_SEA_STRIP_OFF") != NULL;
+        if (overWater && d == 0 && !sStripOff
+         && MetatileUV(b, VoxelWorld_BorderMetatile(nx, ny), &su0, &sv0, &su1, &sv1))
+            for (unsigned k = 0; k < last; ++k)
+            {
+                float xa = (float)x + k / (float)last, xb = (float)x + (k + 1) / (float)last;
+                float sa = su0 + (su1 - su0) * k / (float)last, sb = su0 + (su1 - su0) * (k + 1) / (float)last;
+                float wy = beltTop + 1.0f;
+
+                if (z[k] <= (float)y && z[k + 1] <= (float)y)
+                    continue;
+                VoxelBuilder_Quad(b,
+                    &(VoxelVertex){xa, wy, (float)y, sa, sv0, SHADE_TOP},
+                    &(VoxelVertex){xb, wy, (float)y, sb, sv0, SHADE_TOP},
+                    &(VoxelVertex){xb, wy, z[k + 1], sb, sv1, SHADE_TOP},
+                    &(VoxelVertex){xa, wy, z[k],     sa, sv1, SHADE_TOP});
+            }
     }
     for (unsigned k = 0; k < last; ++k)
     {
