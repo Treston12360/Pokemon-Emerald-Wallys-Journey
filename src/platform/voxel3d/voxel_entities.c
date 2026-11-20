@@ -868,6 +868,20 @@ static bool MoundObject(u16 graphicsId)
         || graphicsId == OBJ_EVENT_GFX_BREAKABLE_ROCK_FRLG || graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER_FRLG;
 }
 
+/* Q11: where in its cell a seed's mound stands, north to south (WJPC_BERRY_SEED_Z overrides, for tests;
+ * WJPC_BERRY_SEED_EDGE=1: the south edge, as before) */
+static float BerrySeedZ(void)
+{
+    static float sZ = -1.0f;
+
+    if (sZ < 0.0f)
+    {
+        const char *z = getenv("WJPC_BERRY_SEED_Z");
+        sZ = getenv("WJPC_BERRY_SEED_EDGE") != NULL ? VOXEL_BERRY_STAND : z != NULL ? (float)atof(z) : VOXEL_BERRY_STAND;
+    }
+    return sZ;
+}
+
 static bool SeedMound(const struct ObjectEvent *obj)
 {
     static int sOff = -1;
@@ -2253,7 +2267,7 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
              * the cell's south edge where the taller plants' cards stand (VOXEL_BERRY_STAND).
              * WJPC_BERRY_SEED_EDGE=1: on the south edge as before. */
             EmitMound(builder, &sSlots[i], i, card->worldX + 0.5f,
-                      card->worldZ + (getenv("WJPC_BERRY_SEED_EDGE") != NULL ? VOXEL_BERRY_STAND : 0.5f), rise,
+                      card->worldZ + BerrySeedZ(), rise,
                       rightX, rightZ, card->shade * dusk);
             continue;
         }
