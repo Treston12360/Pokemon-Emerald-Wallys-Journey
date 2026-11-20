@@ -2744,6 +2744,19 @@ static bool BorderWaterLevel(int x, int y, float *level, float *shift)
     if (ring == NULL || ring->indoor || VoxelRelief_Belt(ring) != 0
      || !VoxelWorld_BorderIsWater(x, y))
         return false;
+    /* POL-51 (Brennan 2026-11-19: Mt Pyre's coast "a dark-grey/black vertical wall strip dropping into the sea"):
+     * a sea fill given its own height (tools/voxel3ds/add_relief_edge.py --top) lies there, before the flat sea of
+     * the map's own water - Mt Pyre outside has none, so the sea stood at its base, over the island's low south
+     * edge, a wall up to it. WJPC_FILL_TOP_LATE=1: as before. */
+    if (getenv("WJPC_FILL_TOP_LATE") == NULL && VoxelRelief_EdgeFillAt(ring, x, y, &fill) && fill.hasTop && fill.water)
+    {
+        *level = (float)fill.top / 16.0f;
+        /* (drawn at its own rows, not as far south as it is low: 16 levels down it stood 16 rows south of the
+         * built belt's north end, and the sky showed past it. Flat water: no edge to line up. WJPC_FILL_SEA_SHIFT=1:
+         * shifted.) */
+        *shift = getenv("WJPC_FILL_SEA_SHIFT") != NULL ? *level : 0.0f;
+        return true;
+    }
     /* DLX-26 (owner's choice 2026-11-13, replaces the skirt walls): the whole belt of sea lies flat, at one
      * level - the level most of the map's own sea lies at - so no steps (and no lines) between belt cells. */
     if (getenv("WJPC_BELT_SEA_STEPS") == NULL)
