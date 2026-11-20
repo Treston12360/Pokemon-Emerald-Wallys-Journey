@@ -1119,6 +1119,8 @@ static void SeamEdge(const VoxelMapInstance *inst, int x, int y, int d,
 }
 
 static bool BeltTopWorld(int x, int y, float *top, float *z, unsigned *drawnOut);
+static bool BorderAt(int x, int y);
+static bool BeltIsTree(int x, int y);
 
 /*
  * POL-46 (Brennan 2026-11-17 21:00: "Completely eliminate the blue triangle gap at the seam"; "tile the rock texture
@@ -1147,7 +1149,17 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
      * map's south edge is held under the edge where another map's cap reaches it (a level every 2 cells), and the
      * south side was the one never closed. Now it is, as the others: the edge's own cliff down to the belt's ground
      * (under the land in front, where that stands higher). WJPC_EDGE_SOUTH_OLD=1: open as before. */
-    if (sOpen || grid == NULL || (d == 1 && sSouthOld) || !BeltTopWorld(nx, ny, &beltTop, &beltZ, &drawn))
+    /* POL-56 (Brennan 2026-11-19 14:23, Route 120 south-west: "a light-blue skybox triangle"): the edge there slopes
+     * a level down across one cell (48 -> 32 px) over a belt WOOD cell, which BeltTopWorld turns down - the triangle
+     * between the sloped edge and the wood's flat ground stayed open. A wood cell south of the edge is closed the
+     * same way (its ground is the belt's base). WJPC_EDGE_SKIP_WOODS=1: as before. */
+    static int sSkipWoods = -1;
+    if (sSkipWoods < 0)
+        sSkipWoods = getenv("WJPC_EDGE_SKIP_WOODS") != NULL;
+    if (sOpen || grid == NULL || (d == 1 && sSouthOld))
+        return;
+    if (!BeltTopWorld(nx, ny, &beltTop, &beltZ, &drawn)
+     && (sSkipWoods || d != 1 || !BorderAt(nx, ny) || VoxelWorld_GetInstanceAt(nx, ny) != NULL || !BeltIsTree(nx, ny)))
         return;
     /* down to the belt's ground: the belt cell beside the wall's foot is drawn rows away (each stands as far south
      * as it is high), so the wall goes to the ground and the belt in front hides what is under its tops */
