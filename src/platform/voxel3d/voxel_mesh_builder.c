@@ -1158,12 +1158,25 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
         sSkipWoods = getenv("WJPC_EDGE_SKIP_WOODS") != NULL;
     if (sOpen || grid == NULL || (d == 1 && sSouthOld))
         return;
-    if (!BeltTopWorld(nx, ny, &beltTop, &beltZ, &drawn)
-     && (sSkipWoods || d != 1 || !BorderAt(nx, ny) || VoxelWorld_GetInstanceAt(nx, ny) != NULL || !BeltIsTree(nx, ny)))
-        return;
+    /* POL-58 (Brennan 2026-11-19 14:23, Route 121 east: "Blue Skybox Leak Around Sea Rocks"): Lilycove's west edge
+     * stands over the belt's sea north of Route 121 - BeltTopWorld turns water down, so the edge was open down to
+     * the sea, a slanted strip of sky. An edge over belt water is closed down to the water's level.
+     * WJPC_EDGE_SKIP_WATER=1: as before. */
+    static int sSkipWater = -1;
+    float wl = 0.0f, ws = 0.0f;
+    bool overWater = false;
+    if (sSkipWater < 0)
+        sSkipWater = getenv("WJPC_EDGE_SKIP_WATER") != NULL;
+    if (!BeltTopWorld(nx, ny, &beltTop, &beltZ, &drawn))
+    {
+        bool open = !BorderAt(nx, ny) || VoxelWorld_GetInstanceAt(nx, ny) != NULL;
+        overWater = !open && !sSkipWater && BorderWaterLevel(nx, ny, &wl, &ws);
+        if (!overWater && (sSkipWoods || d != 1 || open || !BeltIsTree(nx, ny)))
+            return;
+    }
     /* down to the belt's ground: the belt cell beside the wall's foot is drawn rows away (each stands as far south
      * as it is high), so the wall goes to the ground and the belt in front hides what is under its tops */
-    beltTop = BeltBase(nx, ny) - base;
+    beltTop = BeltBase(nx, ny) - base + (overWater ? wl - 1.0f : 0.0f);
     for (unsigned k = 0; k < VOXEL_RELIEF_SIDE; ++k)
     {
         unsigned i = d == 0 ? k : d == 1 ? last * VOXEL_RELIEF_SIDE + k : k * VOXEL_RELIEF_SIDE + (d == 2 ? 0 : last);
