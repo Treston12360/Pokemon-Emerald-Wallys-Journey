@@ -26,10 +26,27 @@ from splice_relief import parse, ROW
 
 LID, W, H = 303, 50, 37
 OFFSET = {}
+WATER_CELLS = set()
 ONE_FACE = set()
+
+def load_water():
+    import json
+    root = os.path.join(os.path.dirname(__file__), '..', '..')
+    L = {e['id']: e for e in json.load(open(os.path.join(root, 'data/layouts/layouts.json')))['layouts'] if 'id' in e}
+    l = L['LAYOUT_MT_PYRE_SUMMIT']
+    v = struct.unpack('<%dH' % (W * H), open(os.path.join(root, l['blockdata_filepath']), 'rb').read())
+    a1 = open(os.path.join(root, 'data/tilesets/primary/general/metatile_attributes.bin'), 'rb').read()
+    a2 = open(os.path.join(root, 'data/tilesets/secondary/facility/metatile_attributes.bin'), 'rb').read()
+    for y in range(H):
+        for x in range(W):
+            m = v[y * W + x] & 0x3FF
+            a, i = (a1, m) if m < 512 else (a2, m - 512)
+            if 0x10 <= (struct.unpack_from('<H', a, 2 * i)[0] & 0xFF) <= 0x1A:
+                WATER_CELLS.add((x, y))
 
 def main():
     path = sys.argv[1]
+    load_water()
     p = parse(path)
     side = p['side']
     rows = []
@@ -106,6 +123,10 @@ def main():
                             g[(x, y)][j * 5 + i] = int(round(old + (A + (B - A) * t - old) * wgt))
                 for y in (14, 15, 16, 17):
                     ONE_FACE.add((x, y))
+            # (Brennan 00:43 / POL-60: a flat teal square of sea at the summit's north-east - the map's own water
+            # tiles along its north, drawn at the map's base, 64 px over the sea round it. Laid at the sea's -64.)
+            for (x, y) in WATER_CELLS:
+                g[(x, y)] = [-64] * 25
             recs = sorted(g.items(), key=lambda kv: (kv[0][1], kv[0][0]))
             d = b''.join(bytes([x, y]) + struct.pack('<25b', *[max(-128, min(127, q // unit)) for q in v])
                          for (x, y), v in recs)
