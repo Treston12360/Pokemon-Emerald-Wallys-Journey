@@ -200,6 +200,7 @@ static void ApplyChangedWindowSettings(void);
 static void CloseSaveFile(void);
 
 static void UpdateInternalClock(void);
+static void ResetInternalClock(void); // (the clock set up before the game thread starts)
 
 #ifdef __ANDROID__
 static void HandleTouchEvent(const SDL_TouchFingerEvent *event);
@@ -302,6 +303,11 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
                     SDL_GetRendererOutputSize(sdlRenderer, &ow, &oh);
                     fprintf(f, "SDL renderer: %s, drawing %dx%d, anti-aliasing asked %u\n", info.name, ow, oh, sAntiAlias);
                 }
+                /* (Brennan 2026-11-21 16:26: "The internal battery has run dry" - the clock as the game found it at
+                 * start: 0 = fine; otherwise rtc.h RTC_ERR_* bits) */
+                fprintf(f, "Clock: 20%02X-%02X-%02X %02X:%02X, the game's clock check at start: %s (flags 0x%04X)\n",
+                        internalClock.year, internalClock.month, internalClock.day, internalClock.hour, internalClock.minute,
+                        (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK) ? "FAILED" : "ok", (unsigned)RtcGetErrorStatus());
             }
             fclose(f);
         }
@@ -1624,13 +1630,15 @@ int main(int argc, char **argv)
 #ifndef __ANDROID__
     VDraw(sdlTexture);
 #endif
+    /* Brennan 2026-11-21 16:26 ("The internal battery has run dry" on boot): the clock was set up here AFTER the game
+     * thread started, so the game's RtcInit could read it first - status 0 (a 12-hour clock) or month 0 - and take it
+     * for a dead battery (rtc.c RtcCheckInfo -> main_menu.c's message). 21h's 100 ms clock reading made it likelier:
+     * the reading taken before this memset was kept, so the zeroed date stayed for up to 100 ms. Set up first now,
+     * with a fresh reading. */
+    ResetInternalClock();
     mainLoopThread = SDL_CreateThread(DoMain, "AgbMain", NULL);
 
     double accumulator = 0.0;
-
-    memset(&internalClock, 0, sizeof(internalClock));
-    internalClock.status = SIIRTCINFO_24HOUR;
-    UpdateInternalClock();
 
     while (isRunning)
     {
@@ -3625,6 +3633,14 @@ void Platform_SetStatus(struct SiiRtcInfo *rtc)
 }
 
 static bool sClockRead; // UpdateInternalClock's reading is current (a Set... clears it: the next read is the device's)
+static void UpdateInternalClock(void);
+static void ResetInternalClock(void)
+{
+    memset(&internalClock, 0, sizeof(internalClock));
+    internalClock.status = SIIRTCINFO_24HOUR;
+    sClockRead = false;
+    UpdateInternalClock();
+}
 static void UpdateInternalClock(void)
 {
     /* Brennan 2026-11-21 11:01 (21g: every second LAGGY, frame 28 ms): the 3D stand-ins ask each neighbouring

@@ -166,7 +166,9 @@ bool8 SiiRtcReset(void)
     sLocked = TRUE;
 
 #ifdef PORTABLE
-    // TODO
+    /* (Brennan 2026-11-21 16:26, battery message: the PC reset kept the clock locked - the GBA path unlocks below -
+     * so SiiRtcSetStatus and every later read failed: the probe then reported no clock at all) */
+    sLocked = FALSE;
 #else
     GPIO_PORT_DATA = SCK_HI;
     GPIO_PORT_DATA = SCK_HI | CS_HI;

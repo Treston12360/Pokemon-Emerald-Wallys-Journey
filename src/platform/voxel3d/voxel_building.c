@@ -1473,7 +1473,24 @@ bool VoxelBuildings_StaticModel(unsigned pageModel, const VoxelVertex **vertices
 
 void VoxelBuildings_InsetTriUV(VoxelVertex *t)
 {
-    const float inset = 1.0f / 32.0f;
+    /* Brennan 2026-11-21 (21j, RTX 3080: F10 hid every thin black line on the ground beside Route 110's white fence):
+     * the fences' flat pieces lying on the ground (their drawn shadow, 1/32 tile up, a whole cell wide) read the
+     * texels just outside their own picture along their north and south edges on his GPU - the fence art's dark
+     * shadow pixels there - a one-pixel dark line a cell long. The test machine draws the same lines when those
+     * faces are read 1/10 pixel outside (WJPC_MODEL_UV_INSET=-0.1). 1/32 pixel in (Emerald 3DS's inset) is not
+     * enough there: such ground-level flat faces are read a quarter pixel in (any position inside the edge texel
+     * reads the same texel; the rest of the face's pixels move by under a quarter). Walls and roofs keep 1/32
+     * (a quarter there moved texel edges across whole houses). WJPC_MODEL_UV_INSET=x: every face x (test);
+     * WJPC_GROUND_DECAL_INSET=x: the ground pieces x. */
+    static float sInset = -100.0f, sGroundInset;
+    if (sInset < -99.0f)
+    {
+        sInset = getenv("WJPC_MODEL_UV_INSET") ? (float)atof(getenv("WJPC_MODEL_UV_INSET")) : 1.0f / 32.0f;
+        sGroundInset = getenv("WJPC_GROUND_DECAL_INSET") ? (float)atof(getenv("WJPC_GROUND_DECAL_INSET"))
+                     : getenv("WJPC_MODEL_UV_INSET") ? sInset : 0.25f;
+    }
+    const bool groundFlat = t[0].y == t[1].y && t[1].y == t[2].y && t[0].y < 0.125f;
+    const float inset = groundFlat ? sGroundInset : sInset;
     float u0 = t[0].u, u1 = t[0].u, v0 = t[0].v, v1 = t[0].v;
 
     for (unsigned j = 1; j < 3; ++j)

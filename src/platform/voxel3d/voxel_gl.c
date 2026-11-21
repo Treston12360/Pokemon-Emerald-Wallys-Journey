@@ -1094,6 +1094,19 @@ static GLuint LoadBuildingPage(int page, bool reload)
     // colours, keeps them. Now the formula sees the page's own colours, as 2D does (and as the trees already did).
     VoxelWorld_SeasonTexels(sPageScratch, (size_t)w * h);
     VoxelGrade_Texels(sPageScratch, (unsigned)(w * h));
+    if (getenv("WJPC_DUMP_PAGES") != NULL) /* test aid: <dir>/page<N>_<w>x<th>.raw, the texels as uploaded (RGBA5551, row 0 first) */
+    {
+        char name[512];
+        FILE *pf;
+        snprintf(name, sizeof(name), "%s\\page%d_%ux%u.raw", getenv("WJPC_DUMP_PAGES"), page, w, th);
+        if ((pf = fopen(name, "wb")) != NULL)
+        {
+            for (unsigned y = 0; y < th; y++)
+                for (unsigned x = 0; x < w; x++)
+                    fwrite(&sPageScratch[CtrVideo_Texel(x, y, w)], sizeof(uint16_t), 1, pf);
+            fclose(pf);
+        }
+    }
     extern unsigned gVoxel3DPages;
     if (sPageTex[page] == 0)
         gVoxel3DPages++; // (stall log)
@@ -1523,6 +1536,36 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
     }
     MeshSet(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
     MeshSet(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
+    if (getenv("WJPC_DUMP_TERRAIN") && inst->mapGroup == atoi(getenv("WJPC_DUMP_TERRAIN")) / 100
+     && inst->mapNum == atoi(getenv("WJPC_DUMP_TERRAIN")) % 100)
+    {
+        /* (test aid: the models too - <file>.models: the small models' vertices as built (VoxelVertex, map
+         * cells); <file>.statics: per big model "pageModel x y z" then its vertices as text) */
+        char name[256];
+        FILE *f;
+        snprintf(name, sizeof(name), "%s.models", getenv("WJPC_DUMP_TERRAIN_FILE") ? getenv("WJPC_DUMP_TERRAIN_FILE") : "terrain.bin");
+        if ((f = fopen(name, "wb")) != NULL)
+        {
+            fwrite(pb->v[2], sizeof(VoxelVertex), pb->n[2], f);
+            fclose(f);
+        }
+        snprintf(name, sizeof(name), "%s.statics", getenv("WJPC_DUMP_TERRAIN_FILE") ? getenv("WJPC_DUMP_TERRAIN_FILE") : "terrain.bin");
+        if ((f = fopen(name, "w")) != NULL)
+        {
+            for (unsigned i = 0; i < pb->staticCount; i++)
+            {
+                const VoxelStaticDraw *d = &pb->statics[i];
+                const VoxelVertex *v;
+                unsigned count;
+                float ox, oy, su, sv;
+                fprintf(f, "static %u %g %g %g\n", d->pageModel, d->x, d->y, d->z);
+                if (VoxelBuildings_StaticModel(d->pageModel, &v, &count, &ox, &oy, &su, &sv))
+                    for (unsigned k = 0; k < count; k++)
+                        fprintf(f, "v %g %g %g %g %g %g\n", v[k].x, v[k].y, v[k].z, v[k].u, v[k].v, v[k].shade);
+            }
+            fclose(f);
+        }
+    }
     memcpy(m->statics, pb->statics, pb->staticCount * sizeof(VoxelStaticDraw));
     m->staticCount = pb->staticCount;
     m->buildingPage = VoxelBuildings_PageOf(inst);
@@ -1799,6 +1842,17 @@ static void BeltAssemble(Atlas *atlas, int cx, int cy)
         total += count[p];
     }
     MeshSetQuantised(&sBeltTrees, sTreeBuf, sTreeCount, GL_STATIC_DRAW);
+    if (getenv("WJPC_DUMP_BELT_TREES")) /* test aid: every assembly's belt trees appended: count, then the vertices */
+    {
+        FILE *f = fopen(getenv("WJPC_DUMP_BELT_TREES"), "ab");
+        if (f != NULL)
+        {
+            uint32_t n = sTreeCount;
+            fwrite(&n, 4, 1, f);
+            fwrite(sTreeBuf, sizeof(VoxelVertex), sTreeCount, f);
+            fclose(f);
+        }
+    }
     sBeltAtlas = atlas;
     for (unsigned l = 1; l < BELT_LAYERS; l++)
     {

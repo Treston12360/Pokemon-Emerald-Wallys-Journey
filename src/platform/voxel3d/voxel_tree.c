@@ -295,6 +295,15 @@ static bool OneLevelSlope(const int16_t *g)
     return hi - lo == 16;
 }
 
+/* Brennan 2026-11-21 16:26 (21j: F9 and F12 each stopped it - the shadows under the far ring's trees flicker as the
+ * camera moves): a ring tree lays its own ground (roots and shadow) as a map's tree does, and the ring's ground
+ * (VoxelMesh_EmitBorder) lays its cell too, at the very same height - two faces in one place, which the depth
+ * buffer decides differently from frame to frame (test machine, Route 110 by Mauville: 11498 of the ring trees'
+ * ground points share a height with the ring's ground; a map's own ground leaves its trees' cells to them).
+ * A ring tree's ground now lies 1/64 tile over it (a quarter of a game pixel) and always shows.
+ * WJPC_BELT_TREE_GROUND_LEVEL=1: as before. */
+static VOXEL_TLS float sGroundRaise;
+
 static void EmitGround(VoxelBuilder *builder, const VoxelMapInstance *inst, int x, int y,
                        float u0, float v0, float u1, float v1)
 {
@@ -305,7 +314,7 @@ static void EmitGround(VoxelBuilder *builder, const VoxelMapInstance *inst, int 
         return;
     if (inst == NULL || !OneLevelSlope(VoxelRelief_Cell(inst, x, y)))
     {
-        VoxelMesh_Top(builder, (float)x, (float)y, 0.0f, 0.0f, u0, v0, u1, v1, 1.0f);
+        VoxelMesh_Top(builder, (float)x, (float)y, inst == NULL ? sGroundRaise : 0.0f, 0.0f, u0, v0, u1, v1, 1.0f);
         return;
     }
     builder->lift = 0.0f;
@@ -738,8 +747,15 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 /* (POL-24/43: always the cell's own map's now, as voxel_mesh_builder.c's drawn belt) */
                 if (VoxelRelief_Belt(current) == 0 || getenv("WJPC_BELT_DRAWN_GLOBAL") == NULL)
                     builder->base = VoxelRelief_Base(VoxelWorld_BeltRing(x, y));
+                {
+                    static int sLevel = -1;
+                    if (sLevel < 0)
+                        sLevel = getenv("WJPC_BELT_TREE_GROUND_LEVEL") != NULL;
+                    sGroundRaise = sLevel ? 0.0f : 1.0f / 64.0f;
+                }
                 EmitCell(builder, NULL, art->secondaryTileset, x, y, part, metatileId, false);
                 EmitMissingRow(builder, NULL, art->secondaryTileset, x, y, part, metatileId, false);
+                sGroundRaise = 0.0f;
                 builder->base = callerBase;
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
