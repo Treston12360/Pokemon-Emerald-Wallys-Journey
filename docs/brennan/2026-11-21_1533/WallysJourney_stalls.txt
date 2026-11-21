@@ -1,0 +1,87 @@
+Wally's Journey stall log. Build Nov 21 2026 12:22:07. Lines: a trip round the main loop over 150 ms,
+and one line a minute. Times in ms. Send this file with a freeze or crash report.
+GPU: NVIDIA Corporation | NVIDIA GeForce RTX 3080/PCIe/SSE2 | OpenGL 4.6.0 NVIDIA 621.24
+SDL renderer: opengl, drawing 1280x720, anti-aliasing asked 4
+   34.2s LAGGY  37 of 37 trips over 20 ms, worst 32 (thread CPU 31): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 10: maps 3, belt 1, drawing 6), screen 3, present 0 | map 0:25, belt layers 5, belt rebuilds 3
+   35.2s LAGGY  39 of 39 trips over 20 ms, worst 32 (thread CPU 31): game 0, frame 30 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 8: maps 2, belt 2, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   36.2s LAGGY  36 of 36 trips over 20 ms, worst 33 (thread CPU 16): game 0, frame 32 (1 drawn, 2D picture 1 at 576x324, GL waits 1, 3D 8: maps 4, belt 1, drawing 3), screen 1, present 0 | map 0:2, belt layers 7, belt rebuilds 5
+   37.2s LAGGY  39 of 39 trips over 20 ms, worst 30 (thread CPU 31): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 0, belt 2, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 2
+   38.2s LAGGY  39 of 39 trips over 20 ms, worst 30 (thread CPU 31): game 0, frame 29 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 7: maps 2, belt 2, drawing 3), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 4
+   39.2s LAGGY  39 of 39 trips over 20 ms, worst 31 (thread CPU 31): game 0, frame 29 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 7: maps 2, belt 1, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   40.3s LAGGY  40 of 40 trips over 20 ms, worst 28 (thread CPU 31): game 1, frame 26 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 3: maps 0, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   41.3s LAGGY  38 of 38 trips over 20 ms, worst 31 (thread CPU 0): game 1, frame 29 (1 drawn, 2D picture 2 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   42.3s LAGGY  39 of 39 trips over 20 ms, worst 30 (thread CPU 31): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   43.3s LAGGY  38 of 38 trips over 20 ms, worst 29 (thread CPU 16): game 1, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 4: maps 0, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   44.3s LAGGY  37 of 37 trips over 20 ms, worst 33 (thread CPU 31): game 0, frame 31 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 10: maps 0, belt 7, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   45.3s LAGGY  37 of 37 trips over 20 ms, worst 30 (thread CPU 31): game 1, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 9: maps 3, belt 3, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   46.3s LAGGY  38 of 38 trips over 20 ms, worst 31 (thread CPU 16): game 1, frame 29 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   47.3s LAGGY  38 of 38 trips over 20 ms, worst 30 (thread CPU 16): game 1, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 0, belt 3, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 4
+   48.3s LAGGY  38 of 38 trips over 20 ms, worst 29 (thread CPU 31): game 0, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 0, belt 1, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   49.4s LAGGY  39 of 39 trips over 20 ms, worst 30 (thread CPU 31): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 3), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   50.4s LAGGY  39 of 39 trips over 20 ms, worst 29 (thread CPU 31): game 1, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   51.4s LAGGY  39 of 39 trips over 20 ms, worst 29 (thread CPU 31): game 1, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 3: maps 0, belt 0, drawing 4), screen 1, present 1 | map 0:25, belt layers 5, belt rebuilds 0
+   52.4s LAGGY  40 of 40 trips over 20 ms, worst 27 (thread CPU 16): game 1, frame 26 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 4: maps 0, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    53.6s F6: crack fill OFF
+   53.4s LAGGY  40 of 40 trips over 20 ms, worst 30 (thread CPU 0): game 1, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   54.4s LAGGY  40 of 40 trips over 20 ms, worst 29 (thread CPU 31): game 1, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   55.4s LAGGY  39 of 39 trips over 20 ms, worst 30 (thread CPU 16): game 0, frame 29 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   56.5s LAGGY  39 of 39 trips over 20 ms, worst 29 (thread CPU 16): game 0, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    57.6s F7: magenta background (gap test) ON
+   57.5s LAGGY  40 of 40 trips over 20 ms, worst 29 (thread CPU 0): game 0, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   58.5s LAGGY  40 of 40 trips over 20 ms, worst 29 (thread CPU 31): game 1, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 3), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   59.5s LAGGY  40 of 40 trips over 20 ms, worst 29 (thread CPU 16): game 0, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 3), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   60.0s minute     24: game 0, frame 23 (3D 4: maps 2, belt 0, drawing 2), screen 1, present 0 | map 0:25, 3D 1, meshes 15, pages 15, free memory 1065 MB, loops 6795
+   60.5s LAGGY  41 of 41 trips over 20 ms, worst 28 (thread CPU 31): game 0, frame 26 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 4: maps 0, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    61.3s F7: magenta background (gap test) off again
+    61.7s F7: magenta background (gap test) ON
+    62.0s F6: crack fill on again
+   61.5s LAGGY  40 of 40 trips over 20 ms, worst 28 (thread CPU 16): game 1, frame 26 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 4: maps 0, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    62.2s F6: crack fill OFF
+   62.5s LAGGY  39 of 39 trips over 20 ms, worst 29 (thread CPU 16): game 0, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    63.2s F1: cloud shadows OFF
+   63.5s LAGGY  40 of 40 trips over 20 ms, worst 29 (thread CPU 31): game 1, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   64.6s LAGGY  40 of 40 trips over 20 ms, worst 29 (thread CPU 31): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   65.6s LAGGY  38 of 38 trips over 20 ms, worst 29 (thread CPU 31): game 1, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 3: maps 0, belt 0, drawing 4), screen 2, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   66.6s LAGGY  38 of 38 trips over 20 ms, worst 29 (thread CPU 0): game 1, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 4: maps 0, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   67.6s LAGGY  39 of 39 trips over 20 ms, worst 28 (thread CPU 31): game 0, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 3), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    68.1s F1: cloud shadows on again
+    68.5s F2: glow (bloom) OFF
+   68.6s LAGGY  39 of 39 trips over 20 ms, worst 29 (thread CPU 31): game 1, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    69.4s F2: glow (bloom) on again
+    69.9s F2: glow (bloom) OFF
+   69.6s LAGGY  39 of 39 trips over 20 ms, worst 29 (thread CPU 31): game 1, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    70.6s F3: anti-aliasing OFF
+   70.6s LAGGY  39 of 39 trips over 20 ms, worst 30 (thread CPU 31): game 1, frame 29 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 7: maps 3, belt 0, drawing 5), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   71.6s LAGGY  39 of 39 trips over 20 ms, worst 30 (thread CPU 31): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 3, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    72.6s F3: anti-aliasing on again
+   72.6s LAGGY  40 of 40 trips over 20 ms, worst 28 (thread CPU 16): game 1, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 4: maps 0, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    73.3s F4: 3D every refresh OFF
+    73.9s F4: 3D every refresh on again
+   73.7s LAGGY  40 of 40 trips over 20 ms, worst 29 (thread CPU 16): game 0, frame 29 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 3), screen 0, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    74.7s F5: depth blur OFF
+   74.7s LAGGY  39 of 39 trips over 20 ms, worst 30 (thread CPU 31): game 1, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    75.3s F5: depth blur on again
+    75.9s F6: crack fill on again
+   75.7s LAGGY  40 of 40 trips over 20 ms, worst 29 (thread CPU 16): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    76.2s F6: crack fill OFF
+    76.7s F6: crack fill on again
+   76.7s LAGGY  40 of 40 trips over 20 ms, worst 29 (thread CPU 31): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    77.7s F7: magenta background (gap test) off again
+   77.7s LAGGY  41 of 41 trips over 20 ms, worst 30 (thread CPU 31): game 1, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+    78.3s F7: magenta background (gap test) ON
+   78.7s LAGGY  41 of 41 trips over 20 ms, worst 28 (thread CPU 31): game 0, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 3), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   79.7s LAGGY  42 of 42 trips over 20 ms, worst 29 (thread CPU 16): game 0, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   80.7s LAGGY  40 of 40 trips over 20 ms, worst 29 (thread CPU 31): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 5: maps 2, belt 0, drawing 3), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   81.8s LAGGY  39 of 39 trips over 20 ms, worst 30 (thread CPU 31): game 0, frame 29 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   82.8s LAGGY  37 of 37 trips over 20 ms, worst 31 (thread CPU 31): game 1, frame 30 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 7: maps 0, belt 3, drawing 4), screen 1, present 0 | map 0:2, belt layers 7, belt rebuilds 2
+   83.8s LAGGY  39 of 39 trips over 20 ms, worst 31 (thread CPU 31): game 1, frame 29 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 7: maps 2, belt 2, drawing 4), screen 1, present 0 | map 0:2, belt layers 7, belt rebuilds 0
+   84.8s LAGGY  39 of 39 trips over 20 ms, worst 29 (thread CPU 31): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 7: maps 2, belt 1, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 2
+   85.8s LAGGY  38 of 38 trips over 20 ms, worst 31 (thread CPU 31): game 0, frame 29 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 0, belt 3, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   86.8s LAGGY  37 of 37 trips over 20 ms, worst 32 (thread CPU 16): game 0, frame 31 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 8: maps 0, belt 5, drawing 3), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   87.8s LAGGY  38 of 38 trips over 20 ms, worst 31 (thread CPU 31): game 0, frame 29 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   88.8s LAGGY  37 of 37 trips over 20 ms, worst 30 (thread CPU 31): game 0, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 1, 3D 5: maps 2, belt 1, drawing 2), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   89.9s LAGGY  41 of 41 trips over 20 ms, worst 27 (thread CPU 16): game 0, frame 25 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 4: maps 2, belt 0, drawing 2), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   90.9s LAGGY  40 of 40 trips over 20 ms, worst 28 (thread CPU 0): game 0, frame 27 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 4: maps 2, belt 0, drawing 2), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   91.9s LAGGY  41 of 41 trips over 20 ms, worst 28 (thread CPU 16): game 0, frame 26 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 4: maps 2, belt 0, drawing 2), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   92.9s LAGGY  40 of 40 trips over 20 ms, worst 28 (thread CPU 31): game 1, frame 26 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 4: maps 0, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
+   93.9s LAGGY  38 of 38 trips over 20 ms, worst 30 (thread CPU 31): game 1, frame 28 (1 drawn, 2D picture 1 at 576x324, GL waits 0, 3D 6: maps 2, belt 0, drawing 4), screen 1, present 0 | map 0:25, belt layers 5, belt rebuilds 0
