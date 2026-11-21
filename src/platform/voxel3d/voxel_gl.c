@@ -189,6 +189,46 @@ static GLuint UploadTiled(GLuint tex, const uint16_t *tiled, unsigned w, unsigne
     return tex;
 }
 
+/*
+ * Brennan 2026-11-21 02:12 (240 fps; audit docs/polish_reports/PERF_AUDIT_2026-11-21.md step 2): the animated tiles
+ * re-graded and re-uploaded whole atlas pages every 16 game frames (~4 ms of "maps" standing still). Only the rows of
+ * slots that changed (bit r: slots 32r..32r+31, VOXEL_ATLAS_ROW_BYTES of the tiled page each) are uploaded: the
+ * texture rows that hold them, in runs, with glTexSubImage2D. `tiled` need only hold those rows.
+ */
+static void UploadTiledRows(GLuint tex, const uint16_t *tiled, unsigned w, unsigned h, unsigned rows)
+{
+    const unsigned chunk = VOXEL_ATLAS_ROW_BYTES / 2u; /* texels in a row of slots */
+    int run = -1;
+
+    if (sUntileSize < (size_t)w * h)
+    {
+        free(sUntile);
+        sUntileSize = (size_t)w * h;
+        sUntile = malloc(sUntileSize * sizeof(uint16_t));
+    }
+    wj_glBindTexture(GL_TEXTURE_2D, tex);
+    wj_glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
+    wj_glPixelStorei(0x0CF2 /* GL_UNPACK_ROW_LENGTH */, 0);
+    for (unsigned y = 0; y <= h; y++)
+    {
+        bool in = y < h && ((rows >> (CtrVideo_Texel(0, y, w) / chunk)) & 1u);
+
+        if (in)
+        {
+            for (unsigned x = 0; x < w; x++)
+                sUntile[y * w + x] = tiled[CtrVideo_Texel(x, y, w)];
+            if (run < 0)
+                run = (int)y;
+        }
+        else if (run >= 0)
+        {
+            wj_glTexSubImage2D(GL_TEXTURE_2D, 0, 0, run, w, y - (unsigned)run, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1,
+                               &sUntile[(unsigned)run * w]);
+            run = -1;
+        }
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Shader: texture x the vertex's shade, alpha tested; a palette fade and distance haze on top.
 
@@ -901,9 +941,29 @@ static void AnimateAtlasTiles(const VoxelMapInstance *inst)
                     sAtlasStaging = malloc(VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
                 if (sAtlasStaging == NULL || (sJobSlot != NULL && sAtlasJob.active))
                     continue; // the staging page is a job's right now: this page waits for the next change
-                memcpy(sAtlasStaging, a->raw[p], VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
-                VoxelGrade_Texels(sAtlasStaging, VOXEL_ATLAS_PIXELS);
-                UploadTiled(a->tex[p], sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
+                {
+                    static int sWhole = -1;
+                    if (sWhole < 0)
+                        sWhole = getenv("WJPC_ANIM_WHOLE_PAGES") != NULL; // (as before: the whole page)
+                    if (sWhole || rows == 0)
+                    {
+                        memcpy(sAtlasStaging, a->raw[p], VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
+                        VoxelGrade_Texels(sAtlasStaging, VOXEL_ATLAS_PIXELS);
+                        UploadTiled(a->tex[p], sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
+                    }
+                    else
+                    {
+                        const unsigned chunk = VOXEL_ATLAS_ROW_BYTES / 2u;
+
+                        for (unsigned r = 0; r < 32; r++)
+                            if ((rows >> r) & 1u && (r + 1) * chunk <= VOXEL_ATLAS_PIXELS)
+                            {
+                                memcpy(sAtlasStaging + r * chunk, a->raw[p] + r * chunk, chunk * sizeof(uint16_t));
+                                VoxelGrade_Texels(sAtlasStaging + r * chunk, chunk);
+                            }
+                        UploadTiledRows(a->tex[p], sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H, rows);
+                    }
+                }
                 {
                     static unsigned sLogged;
                     if (sLogged++ < 20)
