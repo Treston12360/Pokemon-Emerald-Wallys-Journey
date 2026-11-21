@@ -2758,6 +2758,18 @@ static void InitObjectEventsLocal(void)
 static void InitObjectEventsReturnToField(void)
 {
     SpawnObjectEventsOnReturnToField(0, 0);
+#ifdef PORTABLE
+    // Brennan 2026-11-21 (his save, Mauville): after Continue, the people who had been in the live slots past the
+    // saved 16 (wj_limits.c) were missing until the player took a step (TrySpawnObjectEvents runs on camera
+    // moves). They load now, as a step would load them. Only after a load: a return from a battle or menu keeps
+    // those slots as they were.
+    if (gWjPcSpawnAfterLoad)
+    {
+        gWjPcSpawnAfterLoad = FALSE;
+        if (getenv("WJPC_SPAWN_AFTER_LOAD_OFF") == NULL)
+            TrySpawnObjectEvents(0, 0);
+    }
+#endif
     RotatingGate_InitPuzzleAndGraphics();
     RunOnReturnToFieldMapScript();
 }

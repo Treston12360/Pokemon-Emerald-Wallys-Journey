@@ -17,6 +17,7 @@
 #include "constants/event_objects.h"
 #include "event_data.h"
 #include "berry.h"
+#include "wally_journey.h"
 #include "constants/berry.h"
 #include "palette.h"
 #include "constants/event_object_movement.h"
@@ -2005,7 +2006,7 @@ static bool RefreshStandIn(unsigned index, const struct ObjectEventGraphicsInfo 
 /* Finds and decodes this frame's stand-ins near the camera; their slots are all claimed. */
 static unsigned GatherStandIns(const VoxelCamera *camera, uint16_t *atlas, bool *claimed)
 {
-    static int sOff = -1;
+    static int sOff = -1, sAwayOff = -1;
     unsigned updates = 0;
 
     sStandInFrame++;
@@ -2037,6 +2038,15 @@ static unsigned GatherStandIns(const VoxelCamera *camera, uint16_t *atlas, bool 
             u32 frame;
 
             if (t->kind == OBJ_KIND_CLONE || (t->flagId != 0 && FlagGet(t->flagId)))
+                continue;
+            /* Brennan 2026-11-21 01:56 (images 8-9: three Mauville people seen from Route 110 "completely vanish the
+             * moment you step north across the Mauville City border"): those were townsfolk gone home for the night
+             * (WallyJourney_IsNpcAway: night, evening, rain). The live spawn (TrySpawnObjectEventTemplate) leaves
+             * them out; their stand-ins here did not, so a neighbour showed people its own map has not got. The
+             * stand-in now asks the same. WJPC_STANDIN_AWAY_OFF=1: as before. */
+            if (sAwayOff < 0)
+                sAwayOff = getenv("WJPC_STANDIN_AWAY_OFF") != NULL;
+            if (!sAwayOff && WallyJourney_IsNpcAway(t))
                 continue;
             if (t->graphicsId == OBJ_EVENT_GFX_BERRY_TREE || t->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE
              || (t->graphicsId & OBJ_EVENT_MON))

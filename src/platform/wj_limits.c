@@ -12,6 +12,8 @@
 //    they stand; the last two saved slots are left for a follower while there is room higher up.
 #define RESERVED_FOR_FOLLOWERS 2
 
+bool8 gWjPcSpawnAfterLoad; // set by LoadObjectEvents (global.fieldmap.h), used once by overworld.c
+
 u32 WJPC_PickObjectEventSlot(u32 firstFree, u16 localId)
 {
     u32 i;
