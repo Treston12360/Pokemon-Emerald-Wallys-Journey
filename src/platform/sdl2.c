@@ -62,6 +62,11 @@ SDL_Texture *sdlUiTexture;      // UI layer (text boxes, menus, map name pop-up)
 #include "../platform/voxel3d/voxel_gl.h"
 #include "../platform/voxel3d/voxel_battle.h"
 static bool s3DWanted, s3DReady, s3DFrame;
+/* Audit step 5 (Brennan 2026-11-21 02:12, 240 fps): the 3D field drawn on every refresh (Voxel3D_Redraw, eased
+ * between game frames) rather than once a game frame - with a frame rate over 60 (Settings), outside battles and
+ * battle transitions. WJPC_3D_EVERY_REFRESH_OFF=1: once a game frame, as before; WJPC_3D_EVERY_REFRESH=1: on at any
+ * frame rate (tests). */
+static bool s3DEveryRefresh;
 // DLX-6: 3D can be turned on and off in Settings. The renderer is OpenGL whenever the 3D data is there
 // (s3DAvailable), and the 3D world loads the first time it is wanted (s3DInitTried), so no restart.
 static bool s3DAvailable, s3DInitTried;
@@ -384,6 +389,7 @@ static u16 TestKeyMask(const char *keys)
 }
 
 static char sTestWinShot[512];
+static double sTestWinShotT = -1.0; // "winshot FILE T": drawn t of the way between game frames (step 5 tests)
 static void TestWriteShot(const char *path)
 {
     FILE *f = fopen(path, "wb");
@@ -462,6 +468,10 @@ static bool TestStep(void)
         if (!strcmp(cmd, "winshot"))
         {
             SDL_snprintf(sTestWinShot, sizeof(sTestWinShot), "%s", arg1);
+            {
+                char extra[32];
+                sTestWinShotT = sscanf(line, "%*s %*s %31s", extra) == 1 ? atof(extra) : -1.0;
+            }
             continue;
         }
         if (!strcmp(cmd, "set"))
@@ -845,6 +855,22 @@ static void DrawFieldScene(double t, int outW, int outH)
     SDL_Rect full = {0, 0, cw + 2 * m, ch + 2 * m};
     SDL_FRect mapDest = {baseX + shiftX * z, baseY + shiftY * z, (float)full.w * z, (float)full.h * z};
     SDL_FRect stillDest = {baseX, baseY, (float)full.w * z, (float)full.h * z};
+    if (s3DFrame && s3DEveryRefresh && sdl3DTexture != NULL)
+    {
+        // step 5: the world drawn for this refresh, t of the way from the game frame before to the last one
+        SDL_RenderFlush(sdlRenderer);
+        unsigned id = Voxel3D_TextureId(sdl3DTexture);
+        if (id != 0)
+        {
+            SDL_Texture *was = SDL_GetRenderTarget(sdlRenderer);
+            Uint64 r0 = SDL_GetPerformanceCounter();
+            Voxel3D_Redraw(id, s3DW, s3DH, (float)t);
+            sStall3D += SDL_GetPerformanceCounter() - r0;
+            // SDL caches its GL state: switching targets makes it send viewport and target again.
+            SDL_SetRenderTarget(sdlRenderer, sdl3DTexture);
+            SDL_SetRenderTarget(sdlRenderer, was);
+        }
+    }
     if (s3DFrame)
     {
         // The 3D world fills the screen; the UI layer goes over it below.
@@ -1572,7 +1598,7 @@ int main(int argc, char **argv)
                 if (sTestWinShot[0] != '\0')
                 {
                     int ww, wh;
-                    DrawScreen(getenv("WJPC_WINSHOT_T") ? atof(getenv("WJPC_WINSHOT_T")) : 1.0);
+                    DrawScreen(sTestWinShotT >= 0.0 ? sTestWinShotT : getenv("WJPC_WINSHOT_T") ? atof(getenv("WJPC_WINSHOT_T")) : 1.0);
                     SDL_GetRendererOutputSize(sdlRenderer, &ww, &wh);
                     uint8_t *px = malloc((size_t)ww * wh * 3);
                     if (px != NULL && SDL_RenderReadPixels(sdlRenderer, NULL, SDL_PIXELFORMAT_RGB24, px, ww * 3) == 0)
@@ -3256,9 +3282,23 @@ void VDraw(SDL_Texture *texture)
                 }
                 Voxel3D_SetGammaLight(sGammaWanted);
                 Voxel3D_SetAntiAlias((int)sAntiAlias);
+                {
+                    int rate = gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT];
+                    static int sOff = -1, sForce = -1;
+                    if (sOff < 0)
+                    {
+                        sOff = getenv("WJPC_3D_EVERY_REFRESH_OFF") != NULL;
+                        sForce = getenv("WJPC_3D_EVERY_REFRESH") != NULL;
+                    }
+                    s3DEveryRefresh = !sOff && (rate > 60 || sForce) && !s3DBattleFrame && !s3DTransition
+                                   && sFrameInfo.mode == WIDE_VIEW_FIELD;
+                    Voxel3D_SetUpdateOnly(s3DEveryRefresh);
+                }
                 Uint64 r0 = SDL_GetPerformanceCounter();
                 s3DFrame = Voxel3D_Render(id, w, h);
                 sStall3D += SDL_GetPerformanceCounter() - r0;
+                if (!s3DFrame)
+                    s3DEveryRefresh = false;
                 // SDL caches its GL state: switching targets makes it send viewport and target again.
                 STALL_GL(SDL_SetRenderTarget(sdlRenderer, sdl3DTexture));
                 STALL_GL(SDL_SetRenderTarget(sdlRenderer, was));

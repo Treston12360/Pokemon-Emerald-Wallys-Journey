@@ -89,6 +89,9 @@ int VoxelEntities_PlayerVertexFirst(void);
  * cast shadow: one quad (VOXEL_CAST_SHADOW_VERTICES), alpha in `shade`.
  * Returns the number of slots re-decoded this frame.
  */
+/* Audit step 5 (240 fps): the last Emit's people and effects moved `back` (0..1) of their move since the game frame
+ * before back towards where they were, in copies of its three builders' vertices (voxel_gl.c Voxel3D_Redraw). */
+void VoxelEntities_Interpolate(VoxelVertex *sprites, VoxelVertex *shadows, VoxelVertex *reflections, float back);
 unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas,
                             const VoxelCamera *camera, VoxelBuilder *shadows,
                             VoxelBuilder *reflections);

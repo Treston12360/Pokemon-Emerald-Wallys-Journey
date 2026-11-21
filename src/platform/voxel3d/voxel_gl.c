@@ -3300,6 +3300,438 @@ static void DrawSandBanks(const float *proj, const float *view, const float fade
     wj_glUseProgram(sProgram);
 }
 
+/*
+ * Audit step 5 (Brennan 2026-11-21 02:12, 240 fps): the world drawn from what the last game frame's update left
+ * (meshes, belt, people), so it can be drawn again on the refreshes between game frames (Voxel3D_Redraw) with the
+ * camera and the people part of the way to where they are going. `in` holds what the update read from the game
+ * (its backdrop colour, time-of-day tint, screen fade): read on a full frame, kept for the redraws - the game runs
+ * on its own thread meanwhile, so a redraw reads nothing of it.
+ */
+typedef struct
+{
+    const VoxelMapInstance *inst0;
+    float playerX, playerZ;
+    bool windowsLit;
+    uint16_t backdrop;
+    bool tintOk, fadeOk;
+    float fadeAmount, fadeRgb[3];
+} WorldDrawInputs;
+
+static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, WorldDrawInputs *in, bool redraw)
+{
+    const VoxelMapInstance *inst0 = in->inst0;
+    float playerX = in->playerX, playerZ = in->playerZ;
+    bool windowsLit = in->windowsLit;
+    float proj[16], view[16], mvp[16];
+    float fadeAmount = 0.0f, fadeRgb[3] = {0, 0, 0};
+    bool fieldFadeInShader = false;
+    uint16_t backdrop;
+
+    // Target: the caller's texture, with a depth buffer of our own.
+    if (sFbo == 0)
+        wj_glGenFramebuffers(1, &sFbo);
+    if (sDepth == 0 || sDepthW != w || sDepthH != h)
+    {
+        if (sDepth != 0)
+            wj_glDeleteRenderbuffers(1, &sDepth);
+        wj_glGenRenderbuffers(1, &sDepth);
+        wj_glBindRenderbuffer(GL_RENDERBUFFER, sDepth);
+        wj_glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, w, h);
+        sDepthW = w;
+        sDepthH = h;
+    }
+    wj_glBindFramebuffer(GL_FRAMEBUFFER, sFbo);
+    wj_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
+    wj_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, sDepth);
+    if (wj_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        Voxel3D_Log("[3D] framebuffer incomplete");
+        RestoreGl(savedP);
+        return false;
+    }
+
+    if (gVoxelGammaLight && !PostBeginScene(w, h))
+        Voxel3D_SetGammaLight(false);
+    wj_glViewport(0, 0, w, h);
+    wj_glDepthMask(GL_TRUE);
+    if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
+        Voxel3D_Log("[3D] saved viewport %d %d %d %d fbo %d", savedP->viewport[0], savedP->viewport[1], savedP->viewport[2], savedP->viewport[3], savedP->fbo);
+    if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
+    {
+        const InstanceMesh *m = NULL;
+        for (int i = 0; i < MAX_INSTANCES; i++)
+            if (sInstanceMeshes[i].used) { m = &sInstanceMeshes[i]; break; }
+        Voxel3D_Log("[3D] frame %u %dx%d tex %u cam (%.1f %.1f %.1f) -> (%.1f %.1f %.1f) fov %.1f player %.1f,%.1f",
+                    sFrame, w, h, colorTexture, sCamera.x, sCamera.y, sCamera.z, sCamera.targetX, sCamera.targetY,
+                    sCamera.targetZ, sCamera.fov, playerX, playerZ);
+        if (m != NULL)
+        {
+            for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+                if (m->terrain[p].count)
+                    Voxel3D_Log("[3D]   map %d:%d page %u: %u verts, tex %u", m->mapGroup, m->mapNum, p, m->terrain[p].count, m->atlas->tex[p]);
+        }
+        Voxel3D_Log("[3D]   ground sample (%.2f %.2f %.2f) uv %.3f %.3f shade %.2f; sprites %u",
+                    sTerrainBuf[0].x, sTerrainBuf[0].y, sTerrainBuf[0].z, sTerrainBuf[0].u, sTerrainBuf[0].v, sTerrainBuf[0].shade, sSpriteMesh.count);
+    }
+    if (!redraw)
+        in->backdrop = *(const uint16_t *)PLTT;
+    backdrop = in->backdrop;
+    {
+        float r = (backdrop & 31) / 31.0f, g = ((backdrop >> 5) & 31) / 31.0f, b = ((backdrop >> 10) & 31) / 31.0f;
+        if (!inst0->indoor && !inst0->underground)
+        {
+            // Outdoors: a sky colour, not the GBA backdrop (a cave keeps its backdrop, as indoors and the 3DS).
+            r = 0.55f; g = 0.75f; b = 0.95f;
+        }
+        // POL-26b (Treston: 3D night, "Match our 2D"): the 2D game's time-of-day colour for the world this frame
+        if (!redraw)
+            in->tintOk = VoxelWorld_TimeTint(sTintMul, sTintAdd);
+        if (sBattleMode || !in->tintOk)
+        {
+            sTintMul[0] = sTintMul[1] = sTintMul[2] = 1.0f;
+            sTintAdd[0] = sTintAdd[1] = sTintAdd[2] = 0.0f;
+        }
+        if (!inst0->indoor && !inst0->underground)
+        {
+            r = r * sTintMul[0] + sTintAdd[0];
+            g = g * sTintMul[1] + sTintAdd[1];
+            b = b * sTintMul[2] + sTintAdd[2];
+        }
+        if (gVoxelGammaLight)
+        {   /* backdrop in linear light, so the screen pass returns it unchanged in look */
+            r = r * r / sExposure; g = g * g / sExposure; b = b * b / sExposure;
+        }
+        wj_glClearColor(r, g, b, 1.0f);
+    }
+    wj_glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    wj_glEnable(GL_DEPTH_TEST);
+    wj_glDepthFunc(GL_LEQUAL);
+    wj_glDisable(GL_BLEND);
+    wj_glDisable(GL_CULL_FACE);
+    wj_glDisable(GL_SCISSOR_TEST);
+    wj_glUseProgram(sProgram);
+    wj_glUniform1i(sUniTex, 0);
+    wj_glUniform1f(sUniMode, 0.0f);
+    wj_glUniform1f(sUniAlphaMin, getenv("WJPC_3D_UV") ? -10.0f : getenv("WJPC_3D_NOALPHA") ? -1.0f : 0.5f);
+    wj_glActiveTexture(GL_TEXTURE0);
+    wj_glEnableVertexAttribArray(0);
+    wj_glEnableVertexAttribArray(1);
+    wj_glEnableVertexAttribArray(2);
+
+    if (sBattle.on)
+    {
+        // Emerald 3DS's battle view is its 400x240 top screen with the GBA picture on it at 1.4x, the
+        // picture's (120, 112) on (200, 192); this draws the part of it the GBA picture covers.
+        float l = (200.0f + (0.0f - 120.0f) * CTR_BATTLE_ZOOM - 200.0f) / 200.0f;
+        float r = (200.0f + (240.0f - 120.0f) * CTR_BATTLE_ZOOM - 200.0f) / 200.0f;
+        float tp = (120.0f - (192.0f + (0.0f - 112.0f) * CTR_BATTLE_ZOOM)) / 120.0f;
+        float bt = (120.0f - (192.0f + (160.0f - 112.0f) * CTR_BATTLE_ZOOM)) / 120.0f;
+        Perspective(proj, sCamera.fov, (float)CTR_GAME_WIDTH / (float)CTR_GAME_HEIGHT, 0.5f, 400.0f);
+        proj[0] *= 2.0f / (r - l);
+        proj[8] += (r + l) / (r - l);
+        proj[5] *= 2.0f / (tp - bt);
+        proj[9] += (tp + bt) / (tp - bt);
+    }
+    else
+    Perspective(proj, sCamera.fov, (float)w / (float)h, 0.5f, 400.0f);
+    // SDL shows render targets as they are stored: draw upside down so it comes out right.
+    proj[1] = -proj[1]; proj[5] = -proj[5]; proj[9] = -proj[9]; proj[13] = -proj[13];
+    LookAt(view, sCamera.x, sCamera.y, sCamera.z, sCamera.targetX, sCamera.targetY, sCamera.targetZ);
+    Multiply(mvp, proj, view);
+    memcpy(sFieldMvp, mvp, sizeof(sFieldMvp));
+    if (getenv("WJPC_DUMP_MVP"))
+    {
+        FILE *f = fopen(getenv("WJPC_DUMP_MVP"), "wb");
+        if (f != NULL)
+        {
+            float extra[4] = {(float)sBeltShiftX, (float)sBeltShiftZ, (float)w, (float)h};
+            fwrite(mvp, sizeof(float), 16, f);
+            fwrite(extra, sizeof(float), 4, f);
+            fclose(f);
+        }
+    }
+    sHaveFieldMvp = !sBattleMode;
+    wj_glUniformMatrix4fv(sUniMvp, 1, GL_FALSE, mvp);
+    wj_glUniform3f(sUniCam, sCamera.x, sCamera.y, sCamera.z);
+    /*
+     * POL-16 (Brennan: "When walking into doors all npcs turn black and disappear then reappear"): the screen
+     * fades of the field (doors, warps) now fade the 3D world too, as Emerald 3DS does (VoxelWorld_ScreenFade,
+     * ctr_voxel.c PrepareFades: sWorldFade). Before, only the people faded (their colours come from the faded
+     * palettes) and the world stayed lit, so they turned to black figures. As on the 3DS the people get no fade
+     * of their own on top (sSpriteFade = none): their palettes already carry it (see the sprite pass below).
+     * With Gamma lighting the fade is done in the screen pass (PostFinish), after the tone curve, as for battles:
+     * done in the world shader the curve squashed it (a lit room stayed bright half the fade) and the people's
+     * haze stayed blue at black. The people's pass then undoes their palette fade first (`unfade`), so the
+     * screen pass fades them once, like the world.
+     */
+    if (!redraw)
+        in->fadeOk = VoxelWorld_ScreenFade(&in->fadeAmount, in->fadeRgb);
+    fadeAmount = in->fadeAmount;
+    fadeRgb[0] = in->fadeRgb[0];
+    fadeRgb[1] = in->fadeRgb[1];
+    fadeRgb[2] = in->fadeRgb[2];
+    fieldFadeInShader = in->fadeOk && !gVoxelGammaLight;
+    wj_glUniform3f(sUniTintMul, sTintMul[0], sTintMul[1], sTintMul[2]);
+    wj_glUniform3f(sUniTintAdd, sTintAdd[0], sTintAdd[1], sTintAdd[2]);
+    wj_glUniform3f(sUniHazeMul, sTintMul[0] + sTintAdd[0], sTintMul[1] + sTintAdd[1], sTintMul[2] + sTintAdd[2]);
+    // the lit window colour in the Gamma path's linear light: c * c / exposure comes out of the screen pass as
+    // c (as the backdrop above)
+    wj_glUniform3f(sUniGlowLin, 1.0f / sExposure, 0.847f * 0.847f / sExposure, 0.627f * 0.627f / sExposure);
+    if (fieldFadeInShader)
+        wj_glUniform4f(sUniFade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount);
+    else
+        wj_glUniform4f(sUniFade, 0, 0, 0, 0);
+    sIndoorNow = inst0->indoor;
+    // Haze, outdoors only: starts well past the player, the sky's colour.
+    if (inst0->indoor || inst0->underground)
+        wj_glUniform2f(sUniFog, 1.0e6f, 2.0e6f);
+    else
+        wj_glUniform2f(sUniFog, sFogNear, sFogFar);
+    wj_glUniform3f(sUniFogColor, 0.55f * sTintMul[0] + sTintAdd[0], 0.75f * sTintMul[1] + sTintAdd[1],
+                   0.95f * sTintMul[2] + sTintAdd[2]); // POL-26b: the sky's colour at this time of day
+    GammaLightUniforms();
+    // Gamma's cloud shadows are its sun's light function: none where the sun does not reach (indoors, caves)
+    wj_glUniform1f(wj_glGetUniformLocation(sProgram, "cloudsOn"), inst0->indoor || inst0->underground || getenv("WJPC_3D_NOCLOUDS") != NULL ? 0.0f : 1.0f);   /* WJPC_3D_NOCLOUDS: test aid */
+    {
+        int sx, sy;
+        VoxelWorld_SteadyOrigin(&sx, &sy);
+        // (wrapped well inside a float's whole numbers; the pattern repeats every 5000/64*... tiles anyway)
+        wj_glUniform2f(wj_glGetUniformLocation(sProgram, "steady"), (float)(sx % 100000), (float)(sy % 100000));
+    }
+
+    // Ground, trees and models of every map.
+    for (int i = 0; i < MAX_INSTANCES; i++)
+    {
+        InstanceMesh *m = &sInstanceMeshes[i];
+        if (!m->used || !m->shown)
+            continue;
+        int skip = getenv("WJPC_3D_SKIP") ? atoi(getenv("WJPC_3D_SKIP")) : 0; /* debug: 1 terrain 2 trees 4 models */
+        for (unsigned p = 0; p < VOXEL_ATLAS_PAGES && !(skip & 1); p++)
+            MeshDraw(&m->terrain[p], m->atlas->tex[p], (float)m->originX, 0, (float)m->originY);
+        if (!(skip & 2))
+            MeshDraw(&m->trees, sTreeTex, (float)m->originX, 0, (float)m->originY);
+        if (m->buildingPage >= 0 && !(skip & 4))
+        {
+            GLuint page = BuildingPage(m->buildingPage);
+            if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
+                Voxel3D_Log("[3D]   map %d:%d buildings page %d tex %u, %u chunk verts, %u statics, first model %p", m->mapGroup, m->mapNum, m->buildingPage, page, m->buildings.count, m->staticCount, m->staticCount ? (const void *)StaticModel(m->statics[0].pageModel, m->statics[0].lit) : NULL);
+            GLuint glow = windowsLit ? GlowPage(m->buildingPage) : 0; // POL-26b
+            if (glow != 0)
+            {
+                wj_glActiveTexture(GL_TEXTURE0 + GLOW_UNIT);
+                wj_glBindTexture(GL_TEXTURE_2D, glow);
+                wj_glActiveTexture(GL_TEXTURE0);
+                wj_glUniform1f(sUniGlowStrength, 1.0f);
+            }
+            MeshDraw(&m->buildings, page, (float)m->originX, 0, (float)m->originY);
+            for (unsigned s = 0; s < m->staticCount; s++)
+            {
+                const VoxelStaticDraw *d = &m->statics[s];
+                const Mesh *mesh = StaticModel(d->pageModel, d->lit);
+                if (mesh != NULL)
+                    MeshDraw(mesh, page, d->x + (float)m->originX, d->y, d->z + (float)m->originY);
+            }
+            if (glow != 0)
+                wj_glUniform1f(sUniGlowStrength, 0.0f);
+        }
+    }
+    if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground && !(getenv("WJPC_3D_SKIP") && (atoi(getenv("WJPC_3D_SKIP")) & 8)))
+    {
+        for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+            MeshDraw(&sBeltTerrain[0][p], sBeltAtlas->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
+        // (POL-30: the other layers, each with the atlas it was built with - not one made again since)
+        for (unsigned l = 1; l < BELT_LAYERS; l++)
+            if (sBeltDrawn[l] != NULL && sBeltDrawn[l]->valid && sBeltDrawn[l]->layoutGen <= sBeltDrawnGen[l])
+                for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+                    MeshDraw(&sBeltTerrain[l][p], sBeltDrawn[l]->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
+        MeshDraw(&sBeltTrees, sTreeTex, (float)sBeltShiftX, 0, (float)sBeltShiftZ);
+    }
+    // POL-48: Ninja Boys hidden as a tree, as the 3D small tree (voxel_entities.c noted their cells this frame)
+    {
+        static Mesh sDisguiseMesh;
+        static VoxelVertex sDisguiseVerts[16 * 12];
+        const int (*cells)[2];
+        unsigned n = VoxelEntities_DisguiseTrees(&cells);
+        VoxelBuilder b;
+
+        VoxelBuilder_Init(&b, sDisguiseVerts, (unsigned)(sizeof sDisguiseVerts / sizeof sDisguiseVerts[0]));
+        VoxelBuilder_SetOrigin(&b, 0, 0);
+        for (unsigned i = 0; i < n; i++)
+            VoxelTree_EmitDisguise(&b, cells[i][0], cells[i][1]);
+        if (b.count > 0)
+        {
+            MeshSetQuantised(&sDisguiseMesh, sDisguiseVerts, b.count, GL_DYNAMIC_DRAW);
+            MeshDraw(&sDisguiseMesh, sTreeTex, 0, 0, 0);
+        }
+    }
+
+    // Shadows and reflections under the cards, then the cards.
+    // As on the 3DS: blended, without writing depth.
+    wj_glEnable(GL_BLEND);
+    wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    wj_glDepthMask(GL_FALSE);
+    if (!sBattleMode)
+    {
+        // POL-16: the people's palettes are faded already (3DS sSpriteFade = none)
+        wj_glUniform4f(sUniFade, 0, 0, 0, 0);
+        // POL-26b: and carry the time of day already (the game tints sprite palettes too)
+        wj_glUniform3f(sUniTintMul, 1, 1, 1);
+        wj_glUniform3f(sUniTintAdd, 0, 0, 0);
+        if (gVoxelGammaLight && fadeAmount > 0.0f)
+            wj_glUniform4f(sUniUnfade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount); // the screen pass fades them
+    }
+    wj_glUniform1f(sUniMode, 2.0f);
+    if (getenv("WJPC_3D_NOREFLECT") == NULL)
+        MeshDraw(&sReflectMesh, sSpriteTex, 0, 0, 0);
+    wj_glUniform1f(sUniMode, 1.0f);
+    if (getenv("WJPC_3D_NOSHADOW") == NULL)
+        MeshDraw(&sShadowMesh, sSpriteTex, 0, 0, 0);
+    wj_glDepthMask(GL_TRUE);
+    wj_glDisable(GL_BLEND);
+    wj_glUniform1f(sUniMode, 0.0f);
+    {
+        int chunky = getenv("WJPC_3D_CHUNKY") ? atoi(getenv("WJPC_3D_CHUNKY")) : 0;
+        if (chunky > 0)
+        {
+            /* Slices from the back to the front, half a sprite pixel apart, along the camera's horizontal
+             * direction (cards face the camera). Sprite pixel = 1/16 tile. Back slices a little darker so
+             * the sides read. */
+            float dx = sCamera.x - sCamera.targetX, dz = sCamera.z - sCamera.targetZ;
+            float len = sqrtf(dx * dx + dz * dz);
+            dx /= len > 0.0f ? len : 1.0f;
+            dz /= len > 0.0f ? len : 1.0f;
+            wj_glUniform2f(sUniAtlasTexel, 1.0f / VOXEL_SPRITE_ATLAS_W, 1.0f / VOXEL_SPRITE_ATLAS_H);
+            for (int k = -8; k <= 8; k++)
+            {
+                float d = k * 0.5f; /* sprite pixels */
+                wj_glUniform3f(sUniChunky, (float)chunky, d, 0.0f);
+                MeshDraw(&sSpriteMesh, sSpriteTex, dx * d / 16.0f, 0, dz * d / 16.0f);
+            }
+            wj_glUniform3f(sUniChunky, 0.0f, 0.0f, 0.0f);
+        }
+        else
+            MeshDraw(&sSpriteMesh, sSpriteTex, 0, 0, 0);
+    }
+    if (!sBattleMode && (sPoolMesh.count != 0 || sGlowMesh.count != 0 || sGlassMesh.count != 0))
+    {
+        // POL-26b: the lamps - pools on the ground first (3DS: 0.5 x glow x 255,150,60; glow 1 while the game
+        // shows its lights), then the night-light cards over them, both blended, depth tested, not written
+        wj_glEnable(GL_BLEND);
+        wj_glDepthMask(GL_FALSE);
+        if (sPoolMesh.count != 0 && sPoolTex != 0)
+        {
+            wj_glBlendFunc(GL_DST_COLOR, GL_ONE);
+            wj_glUniform1f(sUniMode, 4.0f);
+            wj_glUniform4f(sUniLamp, 0.5f, 0.5f * 150.0f / 255.0f, 0.5f * 60.0f / 255.0f, 1.0f / sExposure);
+            MeshDraw(&sPoolMesh, sPoolTex, 0, 0.02f, 0); // just over the ground it lies on
+        }
+        if (sGlassMesh.count != 0)
+        {   // the 3DS's lit glass (LampTexEnv): 255,191,107 at alpha 220/255 over the lantern
+            wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            wj_glUniform1f(sUniMode, 5.0f);
+            wj_glUniform4f(sUniLamp, 1.0f, 191.0f / 255.0f, 107.0f / 255.0f, 1.0f / sExposure);
+            MeshDraw(&sGlassMesh, sPoolTex, 0, 0, 0);
+        }
+        if (sGlowMesh.count != 0 && !gVoxelGammaLight) // Gamma lighting: over the finished picture, below
+        {
+            wj_glBlendFunc(GL_ONE, GL_SRC_ALPHA);
+            wj_glUniform1f(sUniMode, 3.0f);
+            wj_glUniform4f(sUniLamp, 0, 0, 0, 1.0f / sExposure);
+            MeshDraw(&sGlowMesh, sSpriteTex, 0, 0, 0);
+        }
+        wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        wj_glUniform1f(sUniMode, 0.0f);
+        wj_glDepthMask(GL_TRUE);
+        wj_glDisable(GL_BLEND);
+    }
+    wj_glUniform4f(sUniUnfade, 0, 0, 0, 0);
+
+    if (!sBattleMode && !inst0->indoor)
+    {
+        // POL-23: rain, sand and ash over the finished world (3DS: DrawWeather after the world)
+        float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fieldFadeInShader ? fadeAmount : 0.0f};
+        DrawSandBanks(proj, view, fd); // POL-38: the dust under the streaks, as 3DS draws its banks first
+        DrawWeather(proj, view, fd);
+    }
+    if (gVoxelGammaLight)
+    {
+        float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fieldFadeInShader ? 0.0f : fadeAmount};
+        float dx = sCamera.x - sCamera.targetX, dy = sCamera.y - sCamera.targetY, dz = sCamera.z - sCamera.targetZ;
+        MsaaResolve();
+        PostFinish(sFbo, w, h, fd, sqrtf(dx * dx + dy * dy + dz * dz));
+        if (!sBattleMode && sGlowMesh.count != 0 && sHdrDepth != 0)
+        {
+            /*
+             * POL-26b (Treston, 2026-11-15: "look at how the 2D looks"): with Gamma lighting the night-light
+             * glows go over the finished picture, as the GBA blends them over its finished picture (scene x
+             * 12/16 + glow x 7/16). Added to the scene's linear light before the tone curve, the glow swamped
+             * the night's dark colours and washed the lamp's head out. The scene's own depth (sHdrDepth) is put
+             * on the output for it, so what stands in front of a lamp still hides its glow.
+             */
+            wj_glBindFramebuffer(GL_FRAMEBUFFER, sFbo);
+            wj_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, sHdrDepth, 0);
+            wj_glViewport(0, 0, w, h);
+            wj_glUseProgram(sProgram);
+            wj_glEnableVertexAttribArray(0);
+            wj_glEnableVertexAttribArray(1);
+            wj_glEnableVertexAttribArray(2);
+            wj_glActiveTexture(GL_TEXTURE0);
+            wj_glEnable(GL_DEPTH_TEST);
+            wj_glDepthFunc(GL_LEQUAL);
+            wj_glDepthMask(GL_FALSE);
+            wj_glEnable(GL_BLEND);
+            wj_glBlendFunc(GL_ONE, GL_SRC_ALPHA);
+            wj_glUniform1f(sUniGamma, 0.0f);
+            wj_glUniform1f(sUniMode, 3.0f);
+            wj_glUniform4f(sUniUnfade, 0, 0, 0, 0);
+            wj_glUniform3f(sUniTintMul, 1, 1, 1);
+            wj_glUniform3f(sUniTintAdd, 0, 0, 0);
+            MeshDraw(&sGlowMesh, sSpriteTex, 0, 0, 0);
+            wj_glUniform1f(sUniMode, 0.0f);
+            wj_glUniform1f(sUniGamma, 1.0f);
+            wj_glDisable(GL_BLEND);
+            wj_glDepthMask(GL_TRUE);
+            wj_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, sDepth);
+        }
+    }
+    if (sBattle.on)
+        BattleZoomBlur(w, h);
+
+    if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
+    {
+        unsigned char px[4] = {0};
+        GLint tw = 0, th = 0, target = 0;
+        wj_glReadPixels(w / 2, h / 2, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, px);
+        Voxel3D_Log("[3D]   centre pixel %u %u %u, GL error 0x%x", px[0], px[1], px[2], wj_glGetError());
+        if (getenv("WJPC_VOXEL_DUMP") != NULL)
+        {
+            unsigned char *all = malloc((size_t)w * h * 3);
+            FILE *f = fopen("fbo.ppm", "wb");
+            wj_glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            wj_glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, all);
+            if (f) { fprintf(f, "P6 %d %d 255\n", w, h); fwrite(all, 1, (size_t)w * h * 3, f); fclose(f); }
+            free(all);
+        }
+    }
+    if (sStallDrawStart != 0)
+        gVoxel3DDrawMs = (SDL_GetPerformanceCounter() - sStallDrawStart) * 1000.0 / SDL_GetPerformanceFrequency();
+    RestoreGl(savedP);
+    return true;
+}
+
+static WorldDrawInputs sLastDraw;
+static bool sLastDrawValid;
+/* step 5: the camera before and after the last update (a redraw eases from one to the other); the update alone,
+ * without drawing, while the refreshes draw (Voxel3D_SetUpdateOnly) */
+static VoxelCamera sCamPrev, sCamCur;
+static bool sUpdateOnly;
+static VoxelVertex *sInterpVerts; // copies of the people's vertices, moved for a redraw
+
+void Voxel3D_SetUpdateOnly(bool on)
+{
+    sUpdateOnly = on;
+}
+
 bool Voxel3D_Render(unsigned colorTexture, int w, int h)
 {
     SavedGl saved;
@@ -3329,6 +3761,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         }
     }
     uint16_t backdrop;
+    VoxelCamera camStart = sCamera;   // (step 5: where the camera was before this game frame)
+    bool camStartValid = sCameraValid;
 
     if (!sInited)
         return false;
@@ -3843,386 +4277,82 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         MeshSet(&sReflectMesh, sReflectVerts, reflections.count, GL_STREAM_DRAW);
     }
 
-    // Target: the caller's texture, with a depth buffer of our own.
-    if (sFbo == 0)
-        wj_glGenFramebuffers(1, &sFbo);
-    if (sDepth == 0 || sDepthW != w || sDepthH != h)
+    sLastDraw.inst0 = inst0;
+    sLastDraw.playerX = playerX;
+    sLastDraw.playerZ = playerZ;
+    sLastDraw.windowsLit = windowsLit;
+    sLastDrawValid = true;
+    sCamCur = sCamera;
+    sCamPrev = camStartValid ? camStart : sCamera;
+    if (fabsf(sCamCur.x - sCamPrev.x) > 1.5f || fabsf(sCamCur.z - sCamPrev.z) > 1.5f
+     || fabsf(sCamCur.y - sCamPrev.y) > 1.5f || sCamCur.fov != sCamPrev.fov)
+        sCamPrev = sCamCur; // (a crossing's shift, a snap, a warp: not eased)
+    if (sUpdateOnly)
     {
-        if (sDepth != 0)
-            wj_glDeleteRenderbuffers(1, &sDepth);
-        wj_glGenRenderbuffers(1, &sDepth);
-        wj_glBindRenderbuffer(GL_RENDERBUFFER, sDepth);
-        wj_glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, w, h);
-        sDepthW = w;
-        sDepthH = h;
-    }
-    wj_glBindFramebuffer(GL_FRAMEBUFFER, sFbo);
-    wj_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
-    wj_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, sDepth);
-    if (wj_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    {
-        Voxel3D_Log("[3D] framebuffer incomplete");
+        /* the refreshes draw it (Voxel3D_Redraw); read now what a redraw may not read from the game */
+        sLastDraw.backdrop = *(const uint16_t *)PLTT;
+        sLastDraw.tintOk = !sBattleMode && VoxelWorld_TimeTint(sTintMul, sTintAdd);
+        sLastDraw.fadeOk = VoxelWorld_ScreenFade(&sLastDraw.fadeAmount, sLastDraw.fadeRgb);
         RestoreGl(&saved);
+        return true;
+    }
+    return DrawWorld(colorTexture, w, h, &saved, &sLastDraw, false);
+}
+
+/*
+ * Audit step 5 (Brennan 2026-11-21 02:12: a locked 240 fps; the 3D world was drawn once a game frame, 60 times a
+ * second, the refreshes between showing the same picture): the world drawn again on a refresh between game frames,
+ * `t` (0..1) of the way from the last game frame's predecessor to it - the camera eased between where it was and
+ * where it is, every person and effect likewise (VoxelEntities_Interpolate). Nothing of the game is read (it runs
+ * on its own thread meanwhile): only what the last update left. False if there is nothing to draw yet.
+ */
+bool Voxel3D_Redraw(unsigned colorTexture, int w, int h, float t)
+{
+    SavedGl saved;
+    VoxelCamera keep = sCamera;
+    float back;
+    bool ok;
+
+    if (!sInited || !sLastDrawValid)
         return false;
+    if (t < 0.0f) t = 0.0f;
+    if (t > 1.0f) t = 1.0f;
+    back = 1.0f - t;
+    SaveGl(&saved);
+    {
+        VoxelCamera c = sCamCur;
+        c.x = sCamPrev.x + (sCamCur.x - sCamPrev.x) * t;
+        c.y = sCamPrev.y + (sCamCur.y - sCamPrev.y) * t;
+        c.z = sCamPrev.z + (sCamCur.z - sCamPrev.z) * t;
+        c.targetX = sCamPrev.targetX + (sCamCur.targetX - sCamPrev.targetX) * t;
+        c.targetY = sCamPrev.targetY + (sCamCur.targetY - sCamPrev.targetY) * t;
+        c.targetZ = sCamPrev.targetZ + (sCamCur.targetZ - sCamPrev.targetZ) * t;
+        sCamera = c;
     }
+    if (sInterpVerts == NULL)
+        sInterpVerts = malloc(3u * SPRITE_VERTS * sizeof(VoxelVertex));
+    if (sInterpVerts != NULL && back > 0.0f)
+    {
+        VoxelVertex *sp = sInterpVerts, *sh = sInterpVerts + SPRITE_VERTS, *rf = sInterpVerts + 2u * SPRITE_VERTS;
+        unsigned ns = sSpriteMesh.count, nh = sShadowMesh.count, nr = sReflectMesh.count;
 
-    if (gVoxelGammaLight && !PostBeginScene(w, h))
-        Voxel3D_SetGammaLight(false);
-    wj_glViewport(0, 0, w, h);
-    wj_glDepthMask(GL_TRUE);
-    if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
-        Voxel3D_Log("[3D] saved viewport %d %d %d %d fbo %d", saved.viewport[0], saved.viewport[1], saved.viewport[2], saved.viewport[3], saved.fbo);
-    if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
-    {
-        const InstanceMesh *m = NULL;
-        for (int i = 0; i < MAX_INSTANCES; i++)
-            if (sInstanceMeshes[i].used) { m = &sInstanceMeshes[i]; break; }
-        Voxel3D_Log("[3D] frame %u %dx%d tex %u cam (%.1f %.1f %.1f) -> (%.1f %.1f %.1f) fov %.1f player %.1f,%.1f",
-                    sFrame, w, h, colorTexture, sCamera.x, sCamera.y, sCamera.z, sCamera.targetX, sCamera.targetY,
-                    sCamera.targetZ, sCamera.fov, playerX, playerZ);
-        if (m != NULL)
-        {
-            for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
-                if (m->terrain[p].count)
-                    Voxel3D_Log("[3D]   map %d:%d page %u: %u verts, tex %u", m->mapGroup, m->mapNum, p, m->terrain[p].count, m->atlas->tex[p]);
-        }
-        Voxel3D_Log("[3D]   ground sample (%.2f %.2f %.2f) uv %.3f %.3f shade %.2f; sprites %u",
-                    sTerrainBuf[0].x, sTerrainBuf[0].y, sTerrainBuf[0].z, sTerrainBuf[0].u, sTerrainBuf[0].v, sTerrainBuf[0].shade, sSpriteMesh.count);
-    }
-    backdrop = *(const uint16_t *)PLTT;
-    {
-        float r = (backdrop & 31) / 31.0f, g = ((backdrop >> 5) & 31) / 31.0f, b = ((backdrop >> 10) & 31) / 31.0f;
-        if (!inst0->indoor && !inst0->underground)
-        {
-            // Outdoors: a sky colour, not the GBA backdrop (a cave keeps its backdrop, as indoors and the 3DS).
-            r = 0.55f; g = 0.75f; b = 0.95f;
-        }
-        // POL-26b (Treston: 3D night, "Match our 2D"): the 2D game's time-of-day colour for the world this frame
-        if (sBattleMode || !VoxelWorld_TimeTint(sTintMul, sTintAdd))
-        {
-            sTintMul[0] = sTintMul[1] = sTintMul[2] = 1.0f;
-            sTintAdd[0] = sTintAdd[1] = sTintAdd[2] = 0.0f;
-        }
-        if (!inst0->indoor && !inst0->underground)
-        {
-            r = r * sTintMul[0] + sTintAdd[0];
-            g = g * sTintMul[1] + sTintAdd[1];
-            b = b * sTintMul[2] + sTintAdd[2];
-        }
-        if (gVoxelGammaLight)
-        {   /* backdrop in linear light, so the screen pass returns it unchanged in look */
-            r = r * r / sExposure; g = g * g / sExposure; b = b * b / sExposure;
-        }
-        wj_glClearColor(r, g, b, 1.0f);
-    }
-    wj_glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    wj_glEnable(GL_DEPTH_TEST);
-    wj_glDepthFunc(GL_LEQUAL);
-    wj_glDisable(GL_BLEND);
-    wj_glDisable(GL_CULL_FACE);
-    wj_glDisable(GL_SCISSOR_TEST);
-    wj_glUseProgram(sProgram);
-    wj_glUniform1i(sUniTex, 0);
-    wj_glUniform1f(sUniMode, 0.0f);
-    wj_glUniform1f(sUniAlphaMin, getenv("WJPC_3D_UV") ? -10.0f : getenv("WJPC_3D_NOALPHA") ? -1.0f : 0.5f);
-    wj_glActiveTexture(GL_TEXTURE0);
-    wj_glEnableVertexAttribArray(0);
-    wj_glEnableVertexAttribArray(1);
-    wj_glEnableVertexAttribArray(2);
-
-    if (sBattle.on)
-    {
-        // Emerald 3DS's battle view is its 400x240 top screen with the GBA picture on it at 1.4x, the
-        // picture's (120, 112) on (200, 192); this draws the part of it the GBA picture covers.
-        float l = (200.0f + (0.0f - 120.0f) * CTR_BATTLE_ZOOM - 200.0f) / 200.0f;
-        float r = (200.0f + (240.0f - 120.0f) * CTR_BATTLE_ZOOM - 200.0f) / 200.0f;
-        float tp = (120.0f - (192.0f + (0.0f - 112.0f) * CTR_BATTLE_ZOOM)) / 120.0f;
-        float bt = (120.0f - (192.0f + (160.0f - 112.0f) * CTR_BATTLE_ZOOM)) / 120.0f;
-        Perspective(proj, sCamera.fov, (float)CTR_GAME_WIDTH / (float)CTR_GAME_HEIGHT, 0.5f, 400.0f);
-        proj[0] *= 2.0f / (r - l);
-        proj[8] += (r + l) / (r - l);
-        proj[5] *= 2.0f / (tp - bt);
-        proj[9] += (tp + bt) / (tp - bt);
+        memcpy(sp, sSpriteVerts, ns * sizeof(VoxelVertex));
+        memcpy(sh, sShadowVerts, nh * sizeof(VoxelVertex));
+        memcpy(rf, sReflectVerts, nr * sizeof(VoxelVertex));
+        VoxelEntities_Interpolate(sp, sh, rf, back);
+        MeshSet(&sSpriteMesh, sp, ns, GL_STREAM_DRAW);
+        MeshSet(&sShadowMesh, sh, nh, GL_STREAM_DRAW);
+        MeshSet(&sReflectMesh, rf, nr, GL_STREAM_DRAW);
     }
     else
-    Perspective(proj, sCamera.fov, (float)w / (float)h, 0.5f, 400.0f);
-    // SDL shows render targets as they are stored: draw upside down so it comes out right.
-    proj[1] = -proj[1]; proj[5] = -proj[5]; proj[9] = -proj[9]; proj[13] = -proj[13];
-    LookAt(view, sCamera.x, sCamera.y, sCamera.z, sCamera.targetX, sCamera.targetY, sCamera.targetZ);
-    Multiply(mvp, proj, view);
-    memcpy(sFieldMvp, mvp, sizeof(sFieldMvp));
-    if (getenv("WJPC_DUMP_MVP"))
     {
-        FILE *f = fopen(getenv("WJPC_DUMP_MVP"), "wb");
-        if (f != NULL)
-        {
-            float extra[4] = {(float)sBeltShiftX, (float)sBeltShiftZ, (float)w, (float)h};
-            fwrite(mvp, sizeof(float), 16, f);
-            fwrite(extra, sizeof(float), 4, f);
-            fclose(f);
-        }
+        MeshSet(&sSpriteMesh, sSpriteVerts, sSpriteMesh.count, GL_STREAM_DRAW);
+        MeshSet(&sShadowMesh, sShadowVerts, sShadowMesh.count, GL_STREAM_DRAW);
+        MeshSet(&sReflectMesh, sReflectVerts, sReflectMesh.count, GL_STREAM_DRAW);
     }
-    sHaveFieldMvp = !sBattleMode;
-    wj_glUniformMatrix4fv(sUniMvp, 1, GL_FALSE, mvp);
-    wj_glUniform3f(sUniCam, sCamera.x, sCamera.y, sCamera.z);
-    /*
-     * POL-16 (Brennan: "When walking into doors all npcs turn black and disappear then reappear"): the screen
-     * fades of the field (doors, warps) now fade the 3D world too, as Emerald 3DS does (VoxelWorld_ScreenFade,
-     * ctr_voxel.c PrepareFades: sWorldFade). Before, only the people faded (their colours come from the faded
-     * palettes) and the world stayed lit, so they turned to black figures. As on the 3DS the people get no fade
-     * of their own on top (sSpriteFade = none): their palettes already carry it (see the sprite pass below).
-     * With Gamma lighting the fade is done in the screen pass (PostFinish), after the tone curve, as for battles:
-     * done in the world shader the curve squashed it (a lit room stayed bright half the fade) and the people's
-     * haze stayed blue at black. The people's pass then undoes their palette fade first (`unfade`), so the
-     * screen pass fades them once, like the world.
-     */
-    fieldFadeInShader = VoxelWorld_ScreenFade(&fadeAmount, fadeRgb) && !gVoxelGammaLight;
-    wj_glUniform3f(sUniTintMul, sTintMul[0], sTintMul[1], sTintMul[2]);
-    wj_glUniform3f(sUniTintAdd, sTintAdd[0], sTintAdd[1], sTintAdd[2]);
-    wj_glUniform3f(sUniHazeMul, sTintMul[0] + sTintAdd[0], sTintMul[1] + sTintAdd[1], sTintMul[2] + sTintAdd[2]);
-    // the lit window colour in the Gamma path's linear light: c * c / exposure comes out of the screen pass as
-    // c (as the backdrop above)
-    wj_glUniform3f(sUniGlowLin, 1.0f / sExposure, 0.847f * 0.847f / sExposure, 0.627f * 0.627f / sExposure);
-    if (fieldFadeInShader)
-        wj_glUniform4f(sUniFade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount);
-    else
-        wj_glUniform4f(sUniFade, 0, 0, 0, 0);
-    sIndoorNow = inst0->indoor;
-    // Haze, outdoors only: starts well past the player, the sky's colour.
-    if (inst0->indoor || inst0->underground)
-        wj_glUniform2f(sUniFog, 1.0e6f, 2.0e6f);
-    else
-        wj_glUniform2f(sUniFog, sFogNear, sFogFar);
-    wj_glUniform3f(sUniFogColor, 0.55f * sTintMul[0] + sTintAdd[0], 0.75f * sTintMul[1] + sTintAdd[1],
-                   0.95f * sTintMul[2] + sTintAdd[2]); // POL-26b: the sky's colour at this time of day
-    GammaLightUniforms();
-    // Gamma's cloud shadows are its sun's light function: none where the sun does not reach (indoors, caves)
-    wj_glUniform1f(wj_glGetUniformLocation(sProgram, "cloudsOn"), inst0->indoor || inst0->underground || getenv("WJPC_3D_NOCLOUDS") != NULL ? 0.0f : 1.0f);   /* WJPC_3D_NOCLOUDS: test aid */
-    {
-        int sx, sy;
-        VoxelWorld_SteadyOrigin(&sx, &sy);
-        // (wrapped well inside a float's whole numbers; the pattern repeats every 5000/64*... tiles anyway)
-        wj_glUniform2f(wj_glGetUniformLocation(sProgram, "steady"), (float)(sx % 100000), (float)(sy % 100000));
-    }
-
-    // Ground, trees and models of every map.
-    for (int i = 0; i < MAX_INSTANCES; i++)
-    {
-        InstanceMesh *m = &sInstanceMeshes[i];
-        if (!m->used || !m->shown)
-            continue;
-        int skip = getenv("WJPC_3D_SKIP") ? atoi(getenv("WJPC_3D_SKIP")) : 0; /* debug: 1 terrain 2 trees 4 models */
-        for (unsigned p = 0; p < VOXEL_ATLAS_PAGES && !(skip & 1); p++)
-            MeshDraw(&m->terrain[p], m->atlas->tex[p], (float)m->originX, 0, (float)m->originY);
-        if (!(skip & 2))
-            MeshDraw(&m->trees, sTreeTex, (float)m->originX, 0, (float)m->originY);
-        if (m->buildingPage >= 0 && !(skip & 4))
-        {
-            GLuint page = BuildingPage(m->buildingPage);
-            if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
-                Voxel3D_Log("[3D]   map %d:%d buildings page %d tex %u, %u chunk verts, %u statics, first model %p", m->mapGroup, m->mapNum, m->buildingPage, page, m->buildings.count, m->staticCount, m->staticCount ? (const void *)StaticModel(m->statics[0].pageModel, m->statics[0].lit) : NULL);
-            GLuint glow = windowsLit ? GlowPage(m->buildingPage) : 0; // POL-26b
-            if (glow != 0)
-            {
-                wj_glActiveTexture(GL_TEXTURE0 + GLOW_UNIT);
-                wj_glBindTexture(GL_TEXTURE_2D, glow);
-                wj_glActiveTexture(GL_TEXTURE0);
-                wj_glUniform1f(sUniGlowStrength, 1.0f);
-            }
-            MeshDraw(&m->buildings, page, (float)m->originX, 0, (float)m->originY);
-            for (unsigned s = 0; s < m->staticCount; s++)
-            {
-                const VoxelStaticDraw *d = &m->statics[s];
-                const Mesh *mesh = StaticModel(d->pageModel, d->lit);
-                if (mesh != NULL)
-                    MeshDraw(mesh, page, d->x + (float)m->originX, d->y, d->z + (float)m->originY);
-            }
-            if (glow != 0)
-                wj_glUniform1f(sUniGlowStrength, 0.0f);
-        }
-    }
-    if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground && !(getenv("WJPC_3D_SKIP") && (atoi(getenv("WJPC_3D_SKIP")) & 8)))
-    {
-        for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
-            MeshDraw(&sBeltTerrain[0][p], sBeltAtlas->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
-        // (POL-30: the other layers, each with the atlas it was built with - not one made again since)
-        for (unsigned l = 1; l < BELT_LAYERS; l++)
-            if (sBeltDrawn[l] != NULL && sBeltDrawn[l]->valid && sBeltDrawn[l]->layoutGen <= sBeltDrawnGen[l])
-                for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
-                    MeshDraw(&sBeltTerrain[l][p], sBeltDrawn[l]->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
-        MeshDraw(&sBeltTrees, sTreeTex, (float)sBeltShiftX, 0, (float)sBeltShiftZ);
-    }
-    // POL-48: Ninja Boys hidden as a tree, as the 3D small tree (voxel_entities.c noted their cells this frame)
-    {
-        static Mesh sDisguiseMesh;
-        static VoxelVertex sDisguiseVerts[16 * 12];
-        const int (*cells)[2];
-        unsigned n = VoxelEntities_DisguiseTrees(&cells);
-        VoxelBuilder b;
-
-        VoxelBuilder_Init(&b, sDisguiseVerts, (unsigned)(sizeof sDisguiseVerts / sizeof sDisguiseVerts[0]));
-        VoxelBuilder_SetOrigin(&b, 0, 0);
-        for (unsigned i = 0; i < n; i++)
-            VoxelTree_EmitDisguise(&b, cells[i][0], cells[i][1]);
-        if (b.count > 0)
-        {
-            MeshSetQuantised(&sDisguiseMesh, sDisguiseVerts, b.count, GL_DYNAMIC_DRAW);
-            MeshDraw(&sDisguiseMesh, sTreeTex, 0, 0, 0);
-        }
-    }
-
-    // Shadows and reflections under the cards, then the cards.
-    // As on the 3DS: blended, without writing depth.
-    wj_glEnable(GL_BLEND);
-    wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    wj_glDepthMask(GL_FALSE);
-    if (!sBattleMode)
-    {
-        // POL-16: the people's palettes are faded already (3DS sSpriteFade = none)
-        wj_glUniform4f(sUniFade, 0, 0, 0, 0);
-        // POL-26b: and carry the time of day already (the game tints sprite palettes too)
-        wj_glUniform3f(sUniTintMul, 1, 1, 1);
-        wj_glUniform3f(sUniTintAdd, 0, 0, 0);
-        if (gVoxelGammaLight && fadeAmount > 0.0f)
-            wj_glUniform4f(sUniUnfade, fadeRgb[0], fadeRgb[1], fadeRgb[2], fadeAmount); // the screen pass fades them
-    }
-    wj_glUniform1f(sUniMode, 2.0f);
-    if (getenv("WJPC_3D_NOREFLECT") == NULL)
-        MeshDraw(&sReflectMesh, sSpriteTex, 0, 0, 0);
-    wj_glUniform1f(sUniMode, 1.0f);
-    if (getenv("WJPC_3D_NOSHADOW") == NULL)
-        MeshDraw(&sShadowMesh, sSpriteTex, 0, 0, 0);
-    wj_glDepthMask(GL_TRUE);
-    wj_glDisable(GL_BLEND);
-    wj_glUniform1f(sUniMode, 0.0f);
-    {
-        int chunky = getenv("WJPC_3D_CHUNKY") ? atoi(getenv("WJPC_3D_CHUNKY")) : 0;
-        if (chunky > 0)
-        {
-            /* Slices from the back to the front, half a sprite pixel apart, along the camera's horizontal
-             * direction (cards face the camera). Sprite pixel = 1/16 tile. Back slices a little darker so
-             * the sides read. */
-            float dx = sCamera.x - sCamera.targetX, dz = sCamera.z - sCamera.targetZ;
-            float len = sqrtf(dx * dx + dz * dz);
-            dx /= len > 0.0f ? len : 1.0f;
-            dz /= len > 0.0f ? len : 1.0f;
-            wj_glUniform2f(sUniAtlasTexel, 1.0f / VOXEL_SPRITE_ATLAS_W, 1.0f / VOXEL_SPRITE_ATLAS_H);
-            for (int k = -8; k <= 8; k++)
-            {
-                float d = k * 0.5f; /* sprite pixels */
-                wj_glUniform3f(sUniChunky, (float)chunky, d, 0.0f);
-                MeshDraw(&sSpriteMesh, sSpriteTex, dx * d / 16.0f, 0, dz * d / 16.0f);
-            }
-            wj_glUniform3f(sUniChunky, 0.0f, 0.0f, 0.0f);
-        }
-        else
-            MeshDraw(&sSpriteMesh, sSpriteTex, 0, 0, 0);
-    }
-    if (!sBattleMode && (sPoolMesh.count != 0 || sGlowMesh.count != 0 || sGlassMesh.count != 0))
-    {
-        // POL-26b: the lamps - pools on the ground first (3DS: 0.5 x glow x 255,150,60; glow 1 while the game
-        // shows its lights), then the night-light cards over them, both blended, depth tested, not written
-        wj_glEnable(GL_BLEND);
-        wj_glDepthMask(GL_FALSE);
-        if (sPoolMesh.count != 0 && sPoolTex != 0)
-        {
-            wj_glBlendFunc(GL_DST_COLOR, GL_ONE);
-            wj_glUniform1f(sUniMode, 4.0f);
-            wj_glUniform4f(sUniLamp, 0.5f, 0.5f * 150.0f / 255.0f, 0.5f * 60.0f / 255.0f, 1.0f / sExposure);
-            MeshDraw(&sPoolMesh, sPoolTex, 0, 0.02f, 0); // just over the ground it lies on
-        }
-        if (sGlassMesh.count != 0)
-        {   // the 3DS's lit glass (LampTexEnv): 255,191,107 at alpha 220/255 over the lantern
-            wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            wj_glUniform1f(sUniMode, 5.0f);
-            wj_glUniform4f(sUniLamp, 1.0f, 191.0f / 255.0f, 107.0f / 255.0f, 1.0f / sExposure);
-            MeshDraw(&sGlassMesh, sPoolTex, 0, 0, 0);
-        }
-        if (sGlowMesh.count != 0 && !gVoxelGammaLight) // Gamma lighting: over the finished picture, below
-        {
-            wj_glBlendFunc(GL_ONE, GL_SRC_ALPHA);
-            wj_glUniform1f(sUniMode, 3.0f);
-            wj_glUniform4f(sUniLamp, 0, 0, 0, 1.0f / sExposure);
-            MeshDraw(&sGlowMesh, sSpriteTex, 0, 0, 0);
-        }
-        wj_glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        wj_glUniform1f(sUniMode, 0.0f);
-        wj_glDepthMask(GL_TRUE);
-        wj_glDisable(GL_BLEND);
-    }
-    wj_glUniform4f(sUniUnfade, 0, 0, 0, 0);
-
-    if (!sBattleMode && !inst0->indoor)
-    {
-        // POL-23: rain, sand and ash over the finished world (3DS: DrawWeather after the world)
-        float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fieldFadeInShader ? fadeAmount : 0.0f};
-        DrawSandBanks(proj, view, fd); // POL-38: the dust under the streaks, as 3DS draws its banks first
-        DrawWeather(proj, view, fd);
-    }
-    if (gVoxelGammaLight)
-    {
-        float fd[4] = {fadeRgb[0], fadeRgb[1], fadeRgb[2], fieldFadeInShader ? 0.0f : fadeAmount};
-        float dx = sCamera.x - sCamera.targetX, dy = sCamera.y - sCamera.targetY, dz = sCamera.z - sCamera.targetZ;
-        MsaaResolve();
-        PostFinish(sFbo, w, h, fd, sqrtf(dx * dx + dy * dy + dz * dz));
-        if (!sBattleMode && sGlowMesh.count != 0 && sHdrDepth != 0)
-        {
-            /*
-             * POL-26b (Treston, 2026-11-15: "look at how the 2D looks"): with Gamma lighting the night-light
-             * glows go over the finished picture, as the GBA blends them over its finished picture (scene x
-             * 12/16 + glow x 7/16). Added to the scene's linear light before the tone curve, the glow swamped
-             * the night's dark colours and washed the lamp's head out. The scene's own depth (sHdrDepth) is put
-             * on the output for it, so what stands in front of a lamp still hides its glow.
-             */
-            wj_glBindFramebuffer(GL_FRAMEBUFFER, sFbo);
-            wj_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, sHdrDepth, 0);
-            wj_glViewport(0, 0, w, h);
-            wj_glUseProgram(sProgram);
-            wj_glEnableVertexAttribArray(0);
-            wj_glEnableVertexAttribArray(1);
-            wj_glEnableVertexAttribArray(2);
-            wj_glActiveTexture(GL_TEXTURE0);
-            wj_glEnable(GL_DEPTH_TEST);
-            wj_glDepthFunc(GL_LEQUAL);
-            wj_glDepthMask(GL_FALSE);
-            wj_glEnable(GL_BLEND);
-            wj_glBlendFunc(GL_ONE, GL_SRC_ALPHA);
-            wj_glUniform1f(sUniGamma, 0.0f);
-            wj_glUniform1f(sUniMode, 3.0f);
-            wj_glUniform4f(sUniUnfade, 0, 0, 0, 0);
-            wj_glUniform3f(sUniTintMul, 1, 1, 1);
-            wj_glUniform3f(sUniTintAdd, 0, 0, 0);
-            MeshDraw(&sGlowMesh, sSpriteTex, 0, 0, 0);
-            wj_glUniform1f(sUniMode, 0.0f);
-            wj_glUniform1f(sUniGamma, 1.0f);
-            wj_glDisable(GL_BLEND);
-            wj_glDepthMask(GL_TRUE);
-            wj_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, sDepth);
-        }
-    }
-    if (sBattle.on)
-        BattleZoomBlur(w, h);
-
-    if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
-    {
-        unsigned char px[4] = {0};
-        GLint tw = 0, th = 0, target = 0;
-        wj_glReadPixels(w / 2, h / 2, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, px);
-        Voxel3D_Log("[3D]   centre pixel %u %u %u, GL error 0x%x", px[0], px[1], px[2], wj_glGetError());
-        if (getenv("WJPC_VOXEL_DUMP") != NULL)
-        {
-            unsigned char *all = malloc((size_t)w * h * 3);
-            FILE *f = fopen("fbo.ppm", "wb");
-            wj_glPixelStorei(GL_PACK_ALIGNMENT, 1);
-            wj_glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, all);
-            if (f) { fprintf(f, "P6 %d %d 255\n", w, h); fwrite(all, 1, (size_t)w * h * 3, f); fclose(f); }
-            free(all);
-        }
-    }
-    if (sStallDrawStart != 0)
-        gVoxel3DDrawMs = (SDL_GetPerformanceCounter() - sStallDrawStart) * 1000.0 / SDL_GetPerformanceFrequency();
-    RestoreGl(&saved);
-    return true;
+    ok = DrawWorld(colorTexture, w, h, &saved, &sLastDraw, true);
+    sCamera = keep;
+    return ok;
 }
 
 /*

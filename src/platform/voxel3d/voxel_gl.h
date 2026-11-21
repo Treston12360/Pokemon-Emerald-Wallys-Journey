@@ -5,6 +5,10 @@
 bool Voxel3D_Init(const char *dataDir);
 // Draws the 3D world into GL texture `colorTexture` (w x h). False: nothing drawn (not a map).
 bool Voxel3D_Render(unsigned colorTexture, int w, int h);
+/* Audit step 5 (240 fps): Render only updates the world (no drawing) while on; the refreshes then draw it with
+ * Voxel3D_Redraw, eased `t` (0..1) from the game frame before to the last one. */
+void Voxel3D_SetUpdateOnly(bool on);
+bool Voxel3D_Redraw(unsigned colorTexture, int w, int h, float t);
 unsigned Voxel3D_TextureId(void *sdlTexture);
 bool Voxel3D_ProjectPictureTile(float tileX, float tileY, float *outX, float *outY);
 void Voxel3D_SetSettings(bool on, int pitch, int zoom);

@@ -2107,6 +2107,128 @@ void VoxelEntities_SetLampBuilders(VoxelBuilder *glows, VoxelBuilder *pools, Vox
     sGlassBuilder = glass; /* the 3DS's lit lantern glass (VoxelSign_LanternGlass) */
 }
 
+/*
+ * Audit step 5 (Brennan 2026-11-21 02:12, 240 fps): the people and their effects are emitted once a game frame; on
+ * the refreshes between game frames (voxel_gl.c Voxel3D_Redraw) each is drawn part of the way from where it was
+ * the frame before. Each emitted thing (an object, an effect) is a record: its vertices in the three builders and a
+ * key (the object's slot and who is in it; an effect's sprite and its callback). Its move is the change of the
+ * middle of its own vertices since the last game frame (so it holds whatever placed it); a move of half a tile or
+ * more (a warp, a jump to another map's coordinates, a new picture size) is not eased.
+ */
+#define INTERP_RECORDS 256
+typedef struct
+{
+    uint32_t key, who;
+    unsigned v0, v1, s0, s1, r0, r1; // ranges in sprites, shadows, reflections
+    float cx, cz;                    // the middle of its vertices
+    float dx, dz;                    // its move since the last game frame
+} InterpRecord;
+static InterpRecord sInterp[2][INTERP_RECORDS];
+static unsigned sInterpCount[2], sInterpCur;
+static bool sInterpOpen;
+static const VoxelBuilder *sInterpB[3];
+
+static void InterpClose(void)
+{
+    InterpRecord *r;
+    unsigned n = 0;
+    float sx = 0.0f, sz = 0.0f;
+
+    if (!sInterpOpen)
+        return;
+    sInterpOpen = false;
+    r = &sInterp[sInterpCur][sInterpCount[sInterpCur]];
+    r->v1 = sInterpB[0] != NULL ? sInterpB[0]->count : 0;
+    r->s1 = sInterpB[1] != NULL ? sInterpB[1]->count : 0;
+    r->r1 = sInterpB[2] != NULL ? sInterpB[2]->count : 0;
+    for (unsigned k = r->v0; k < r->v1; k++, n++)
+    {
+        sx += sInterpB[0]->vertices[k].x;
+        sz += sInterpB[0]->vertices[k].z;
+    }
+    if (n == 0)
+        for (unsigned k = r->s0; k < r->s1; k++, n++)
+        {
+            sx += sInterpB[1]->vertices[k].x;
+            sz += sInterpB[1]->vertices[k].z;
+        }
+    if (n == 0)
+        for (unsigned k = r->r0; k < r->r1; k++, n++)
+        {
+            sx += sInterpB[2]->vertices[k].x;
+            sz += sInterpB[2]->vertices[k].z;
+        }
+    if (n == 0)
+        return; // nothing emitted: no record
+    r->cx = sx / (float)n;
+    r->cz = sz / (float)n;
+    r->dx = r->dz = 0.0f;
+    {
+        const InterpRecord *prev = sInterp[sInterpCur ^ 1];
+
+        for (unsigned i = 0; i < sInterpCount[sInterpCur ^ 1]; i++)
+            if (prev[i].key == r->key && prev[i].who == r->who)
+            {
+                float dx = r->cx - prev[i].cx, dz = r->cz - prev[i].cz;
+                if (fabsf(dx) < 0.5f && fabsf(dz) < 0.5f)
+                {
+                    r->dx = dx;
+                    r->dz = dz;
+                }
+                break;
+            }
+    }
+    sInterpCount[sInterpCur]++;
+}
+
+static void InterpOpen(uint32_t key, uint32_t who)
+{
+    InterpRecord *r;
+
+    InterpClose();
+    if (sInterpCount[sInterpCur] >= INTERP_RECORDS)
+        return;
+    r = &sInterp[sInterpCur][sInterpCount[sInterpCur]];
+    r->key = key;
+    r->who = who;
+    r->v0 = sInterpB[0] != NULL ? sInterpB[0]->count : 0;
+    r->s0 = sInterpB[1] != NULL ? sInterpB[1]->count : 0;
+    r->r0 = sInterpB[2] != NULL ? sInterpB[2]->count : 0;
+    sInterpOpen = true;
+}
+
+/* Moves the vertices of this game frame's records `back` (0..1) of their move back towards where they were. */
+void VoxelEntities_Interpolate(VoxelVertex *sprites, VoxelVertex *shadows, VoxelVertex *reflections, float back)
+{
+    const InterpRecord *rec = sInterp[sInterpCur];
+
+    for (unsigned i = 0; i < sInterpCount[sInterpCur]; i++)
+    {
+        float ox = -rec[i].dx * back, oz = -rec[i].dz * back;
+
+        if (ox == 0.0f && oz == 0.0f)
+            continue;
+        if (sprites != NULL)
+            for (unsigned k = rec[i].v0; k < rec[i].v1; k++)
+            {
+                sprites[k].x += ox;
+                sprites[k].z += oz;
+            }
+        if (shadows != NULL)
+            for (unsigned k = rec[i].s0; k < rec[i].s1; k++)
+            {
+                shadows[k].x += ox;
+                shadows[k].z += oz;
+            }
+        if (reflections != NULL)
+            for (unsigned k = rec[i].r0; k < rec[i].r1; k++)
+            {
+                reflections[k].x += ox;
+                reflections[k].z += oz;
+            }
+    }
+}
+
 unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelCamera *camera,
                             VoxelBuilder *shadows, VoxelBuilder *reflections)
 {
@@ -2128,6 +2250,12 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
     /* A card tilted to face the swoop's camera is seen square on: nothing
      * to make up (upright at a top-down pose it was a hair wide, seven tall). */
     sDisguiseCount = 0; /* POL-48: noted again this frame */
+    sInterpCur ^= 1;    /* (step 5: this frame's records; last frame's kept to measure the moves) */
+    sInterpCount[sInterpCur] = 0;
+    sInterpOpen = false;
+    sInterpB[0] = builder;
+    sInterpB[1] = shadows;
+    sInterpB[2] = reflections;
     sLay = camera->lay;
     narrow = 1.0f + (narrow - 1.0f) * (1.0f - sLay);
     stretch = 1.0f / narrow;
@@ -2445,8 +2573,11 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
         VoxelObjectCard *card = &objects[i];
         float rise, dusk;
 
+        InterpClose();
         if (!card->drawn)
             continue;
+        InterpOpen(0x10000u | i, (uint32_t)gObjectEvents[i].localId | (uint32_t)gObjectEvents[i].mapNum << 8
+                                 | (uint32_t)gObjectEvents[i].mapGroup << 16 | (uint32_t)gObjectEvents[i].graphicsId << 24);
         /* Through an open door: gone, shadow and all. */
         dusk = DoorLight(doors, card->worldX + 0.5f, card->worldZ + 0.5f);
         if (dusk <= 0.0f)
@@ -2502,6 +2633,7 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
         if (i == gPlayerAvatar.objectEventId && builder->count == first + 6)
             sPlayerVertexFirst = (int)first;
     }
+    InterpClose();
 #ifdef VOXEL_STANDIN_FIRST
     for (unsigned k = 0; k < VOXEL_STANDIN_SLOTS; ++k)
     {
@@ -2530,6 +2662,8 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
         const struct Sprite *sprite = effect->sprite;
         const VoxelObjectCard *reference;
         int h, x, base;
+
+        InterpOpen((uint32_t)(uintptr_t)sprite, (uint32_t)(uintptr_t)sprite->callback);
 
         if (RefreshSlot(effect->slot, sprite, NULL, atlas))
             ++updates;
@@ -2707,5 +2841,6 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
                           reference->shade, SpriteScale(sprite));
         }
     }
+    InterpClose();
     return updates;
 }
