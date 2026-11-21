@@ -3662,7 +3662,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                    0.95f * sTintMul[2] + sTintAdd[2]); // POL-26b: the sky's colour at this time of day
     GammaLightUniforms();
     // Gamma's cloud shadows are its sun's light function: none where the sun does not reach (indoors, caves)
-    wj_glUniform1f(wj_glGetUniformLocation(sProgram, "cloudsOn"), inst0->indoor || inst0->underground ? 0.0f : 1.0f);
+    wj_glUniform1f(wj_glGetUniformLocation(sProgram, "cloudsOn"), inst0->indoor || inst0->underground || getenv("WJPC_3D_NOCLOUDS") != NULL ? 0.0f : 1.0f);   /* WJPC_3D_NOCLOUDS: test aid */
     {
         int sx, sy;
         VoxelWorld_SteadyOrigin(&sx, &sy);

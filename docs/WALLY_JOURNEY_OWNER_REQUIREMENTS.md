@@ -746,3 +746,4 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   posts, level with the grass banks, like a bridge); hop rails -> "Keep separate, tidy them" (same clean look and
   posts as the long rails).
 - Brennan 17:59 (`docs/brennan/2026-11-20_1759_woods_edge.png`): woods "look great now"; along the wood/sea diagonal "a jagged staircase row of flat 2D tree tops/sprites sticking out behind the back row of 3D trees" - remove them.
+- Brennan 18:0x: cliff-base dark strips -> "Lighter cliff shadows" (keep shadows, lighter/softer so they do not read as black boxes). NOTE: WJPC_3D_NOSHADOW only hides character shadows; the cause is being re-tested (clouds off / Gamma lighting off).
