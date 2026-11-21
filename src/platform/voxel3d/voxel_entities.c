@@ -2617,7 +2617,15 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
         if (PlantModel(&gObjectEvents[i]) && card->deck <= 0.0f)
         {
             /* (as tall on screen as its card: stretched up as the cards are for the camera's pitch) */
-            EmitVoxelPlant(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f, rise,
+            /* Brennan 2026-11-21 01:56 (Route 121 east: "the 3D Berry plants ... are shifted slightly north (up)
+             * out of the center of the brown dirt soil patch. Center all 3D Berry models squarely in the middle"):
+             * a plant two tiles tall standing on its cell's middle reads as standing on the soil's north half (its
+             * leaves cover the soil behind). It stands where the seeds' mounds do (BerrySeedZ, Q11: "the middle of
+             * the dirt" as Brennan saw it). WJPC_BERRY_PLANT_Z=z: elsewhere in the cell (tests). */
+            static float sPlantZ = -1.0f;
+            if (sPlantZ < 0.0f)
+                sPlantZ = getenv("WJPC_BERRY_PLANT_Z") ? (float)atof(getenv("WJPC_BERRY_PLANT_Z")) : BerrySeedZ();
+            EmitVoxelPlant(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + sPlantZ, rise,
                            rightX, rightZ, stretch, card->shade * dusk);
             continue;
         }

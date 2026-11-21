@@ -454,6 +454,12 @@ static bool TestStep(void)
             {
                 fprintf(f, "%s frame %u objects %d (in saved 16: %d, highest slot %d, player/follower max slot %d) sprites %d (highest %d)\n",
                         arg1, sTestFrame, objs, saved, hiObj, pl, sprs, hiSpr);
+                for (int i = 0; i < OBJECT_EVENTS_COUNT; i++)
+                    if (gObjectEvents[i].active)
+                        fprintf(f, "  slot %d: map %d:%d local %d gfx %d at %d,%d%s\n", i, gObjectEvents[i].mapGroup,
+                                gObjectEvents[i].mapNum, gObjectEvents[i].localId, gObjectEvents[i].graphicsId,
+                                gObjectEvents[i].currentCoords.x - 7, gObjectEvents[i].currentCoords.y - 7,
+                                gObjectEvents[i].invisible ? " (invisible)" : "");
                 fclose(f);
             }
             continue;
