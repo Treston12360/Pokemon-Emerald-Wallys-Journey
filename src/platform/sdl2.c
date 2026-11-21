@@ -914,6 +914,47 @@ extern bool32 Vol_StartMenu_IsSwshOpen(void);
 // Overworld: the map at the zoom scale, edge to edge; the UI layer (text boxes, menus) at the
 // biggest whole size the GBA screen fits, bottom-centred like on the GBA; the map name pop-up
 // always in the top-left corner of the screen.
+/* Brennan 2026-11-21 17:42 (21k: the small trees' bases "flickering/strobing when moving" on every route; they share
+ * no height with the ground - checked on Routes 110, 112, 117, Verdanturf): his "resolution" setting draws the
+ * picture at 3840x2160 and the window is 1280x720. The plain linear shrink reads 4 of every 9 pixels, so a thin dark
+ * edge (a tree base's outline) is read in one frame and missed in the next as the camera slides - strobing. Shrunk
+ * more than 1.5 times, the picture is now averaged 2x2 first (its half-size mipmap), then shrunk linearly, so every
+ * pixel counts.
+ * WJPC_RES_PLAIN_SHRINK=1: as before. */
+static void ResTargetAverage(SDL_Texture *texture, int texW, int outW)
+{
+    typedef void (APIENTRY *GenMipFn)(unsigned int);
+    typedef void (APIENTRY *TexParamFn)(unsigned int, unsigned int, int);
+    static GenMipFn sGenMip;
+    static TexParamFn sTexParam;
+    static int sState = -1; // -1 not looked, 0 off, 1 on
+    float tw, th;
+
+    if (sState < 0)
+    {
+        SDL_RendererInfo info;
+        sState = 0;
+        if (getenv("WJPC_RES_PLAIN_SHRINK") == NULL && SDL_GetRendererInfo(sdlRenderer, &info) == 0
+         && !strcmp(info.name, "opengl"))
+        {
+            sGenMip = (GenMipFn)SDL_GL_GetProcAddress("glGenerateMipmap");
+            sTexParam = (TexParamFn)SDL_GL_GetProcAddress("glTexParameteri");
+            sState = sGenMip != NULL && sTexParam != NULL;
+        }
+    }
+    if (sState != 1 || outW <= 0 || texW * 2 < outW * 3)
+        return;
+    SDL_RenderFlush(sdlRenderer); // (the picture drawn into it is finished first)
+    if (SDL_GL_BindTexture(texture, &tw, &th) != 0)
+        return;
+    /* only the half-size level (every 2x2 averaged), read linearly: every pixel counts, without the trilinear blur
+     * of a smaller level (21l test: trilinear at 3x was visibly soft) */
+    sTexParam(0x0DE1 /* GL_TEXTURE_2D */, 0x813D /* GL_TEXTURE_MAX_LEVEL */, 1);
+    sGenMip(0x0DE1);
+    sTexParam(0x0DE1, 0x2801 /* GL_TEXTURE_MIN_FILTER */, 0x2701 /* GL_LINEAR_MIPMAP_NEAREST */);
+    SDL_GL_UnbindTexture(texture);
+}
+
 static void DrawFieldScene(double t, int outW, int outH)
 {
     float z = sFieldZ;
@@ -1309,6 +1350,7 @@ static void DrawScreen(double t)
             }
             SDL_Rect dst = {(winW - fw) / 2, (winH - fh) / 2, fw, fh};
             SDL_SetTextureScaleMode(sResTarget, SDL_ScaleModeLinear);
+            ResTargetAverage(sResTarget, w, fw);
             SDL_RenderCopy(sdlRenderer, sResTarget, NULL, &dst);
             return;
         }
