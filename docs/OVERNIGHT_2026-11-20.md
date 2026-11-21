@@ -207,3 +207,8 @@ wall in faces 0A9 (same look) and 075 (striped, worse): kept the map's own 07C.
 Picture: `polish_reports/Q5_route119_river_flat_BEFORE_AFTER.png`. Water cells (16,16) and (16,17) stood at the bank's
 height with walls (the raised square and the pole); every water cell x3-21 rows 3-23 is at the river's 128 px now and
 water cut records there are dropped. Rail ends / hop rails: 3D rail models next (Brennan's answer).
+### 23. Route 119 rails as 3D models (Brennan 17:53 / 18:57)
+Pictures: `polish_reports/Q5_route119_3D_rails_BEFORE_AFTER.png`, `Q5_route119_rail_posts_BEFORE_AFTER.png`.
+Rail cells flat at the river and drawn as river (lower_rails.py OVER_PX 0; art swap to 0x206); each rail cell over the
+water gets a 3 px bar at the bank's height (the drawing's white bar for its top) and a dark grey post (the drawing's
+post grey) down to the water (voxel_mesh_builder.c EmitRailCell; WJPC_RAIL_OLD=1 off). Hop rails stay separate.
