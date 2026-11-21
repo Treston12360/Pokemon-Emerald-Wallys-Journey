@@ -115,7 +115,7 @@ Aria_Ch4_Echo::
 	msgbox Aria_Ch4_Text_Echo3, MSGBOX_DEFAULT
 	closemessage
 	@ owner 2026-11-20: the echo repeats the last thing it did in the Tower - the cry, then it runs to her,
-	@ along the floor beside the LEFT STATUE (x9), then behind its top edge (9,2) - where it goes stays hidden. Ch. 13 shows this same corner from
+	@ along the floor beside the LEFT STATUE (x9), then turns behind its edge and is gone - where it goes stays hidden. Ch. 13 shows this same corner from
 	@ Aria's side (she is waiting in that nook). Keep this path in sync with the finale.
 	applymovement LOCALID_POKEMON_TOWER_7F_ARIA_CLEFAIRY, Aria_Ch4_Movement_EchoRuns
 	waitmovement 0
@@ -291,9 +291,12 @@ Aria_Ch4_Text_Call2::
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
 
-Aria_Ch4_Movement_EchoRuns: @ (11,4) -> along the floor beside the left statue's pedestal -> behind its top edge (9,2)
+Aria_Ch4_Movement_EchoRuns: @ (11,4) -> along the floor beside the left statue's pedestal (10,3) -> turns toward
+	@ the gap behind it and is gone at its edge. (Sliding it INTO the statue tile draws it on top of the statue in
+	@ 2D - checked 2026-11-21 - so it vanishes at the edge instead; where it goes stays hidden until ch. 13.)
 	walk_fast_left
 	walk_fast_up
-	walk_fast_up
-	walk_fast_left
+	face_left
+	delay_4
+	set_invisible
 	step_end
