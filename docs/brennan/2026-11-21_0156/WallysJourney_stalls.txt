@@ -1,0 +1,29 @@
+Wally's Journey stall log. Build Nov 20 2026 20:57:59. Lines: a trip round the main loop over 150 ms,
+and one line a minute. Times in ms. Send this file with a freeze or crash report.
+   60.0s minute     14: game 0, frame 14 (3D 3: maps 0, belt 0, drawing 3), screen 0, present 0 | map 0:36, 3D 1, meshes 10, pages 10, free memory 1072 MB, loops 6893
+  120.0s minute      6: game 0, frame 0 (3D 0: maps 0, belt 0, drawing 0), screen 0, present 5 | map 0:36, 3D 1, meshes 10, pages 10, free memory 1057 MB, loops 14004
+  180.0s minute     11: game 0, frame 11 (3D 3: maps 0, belt 0, drawing 2), screen 0, present 0 | map 0:36, 3D 1, meshes 10, pages 10, free memory 1056 MB, loops 21050
+  240.0s minute     13: game 0, frame 13 (3D 3: maps 0, belt 0, drawing 3), screen 0, present 0 | map 0:36, 3D 1, meshes 10, pages 10, free memory 1056 MB, loops 28486
+  244.6s LAGGY  14 of 60 trips over 20 ms, worst 91 (thread CPU 94): game 0, frame 90 (1 drawn, 2D picture 7 at 576x324, GL waits 1, 3D 79: maps 72, belt 3, drawing 4), screen 0, present 1 | map 0:36, belt layers 3, belt rebuilds 7
+  300.0s minute     12: game 0, frame 11 (3D 3: maps 0, belt 0, drawing 3), screen 0, present 0 | map 0:35, 3D 1, meshes 12, pages 12, free memory 1039 MB, loops 34389
+  360.0s minute     15: game 0, frame 14 (3D 5: maps 0, belt 0, drawing 5), screen 0, present 1 | map 0:35, 3D 1, meshes 12, pages 12, free memory 1039 MB, loops 40213
+  420.1s minute     12: game 0, frame 11 (3D 3: maps 0, belt 0, drawing 3), screen 0, present 0 | map 0:35, 3D 1, meshes 12, pages 12, free memory 1039 MB, loops 46227
+  480.1s minute     14: game 0, frame 14 (3D 3: maps 0, belt 0, drawing 3), screen 0, present 0 | map 0:35, 3D 1, meshes 12, pages 12, free memory 1039 MB, loops 51758
+  540.1s minute     12: game 0, frame 11 (3D 3: maps 0, belt 0, drawing 3), screen 0, present 0 | map 0:35, 3D 1, meshes 12, pages 12, free memory 1039 MB, loops 57950
+  600.1s minute     14: game 0, frame 13 (3D 4: maps 0, belt 0, drawing 4), screen 0, present 0 | map 0:35, 3D 1, meshes 12, pages 12, free memory 1038 MB, loops 63820
+  660.1s minute      3: game 0, frame 0 (3D 0: maps 0, belt 0, drawing 1), screen 0, present 3 | map 0:35, 3D 1, meshes 12, pages 12, free memory 1039 MB, loops 70567
+  720.1s minute     18: game 0, frame 17 (3D 7: maps 5, belt 0, drawing 2), screen 0, present 1 | map 0:35, 3D 1, meshes 12, pages 12, free memory 1039 MB, loops 77834
+  777.2s LAGGY  14 of 74 trips over 20 ms, worst 31 (thread CPU 31): game 0, frame 30 (1 drawn, 2D picture 7 at 576x324, GL waits 1, 3D 20: maps 16, belt 2, drawing 3), screen 0, present 0 | map 0:4, belt layers 3, belt rebuilds 4
+  778.2s LAGGY  15 of 52 trips over 20 ms, worst 32 (thread CPU 31): game 0, frame 32 (1 drawn, 2D picture 7 at 576x324, GL waits 1, 3D 21: maps 17, belt 1, drawing 3), screen 0, present 0 | map 0:4, belt layers 3, belt rebuilds 3
+  779.2s LAGGY  15 of 51 trips over 20 ms, worst 33 (thread CPU 16): game 0, frame 33 (1 drawn, 2D picture 8 at 576x324, GL waits 1, 3D 21: maps 17, belt 2, drawing 3), screen 0, present 0 | map 0:4, belt layers 3, belt rebuilds 3
+  780.1s minute     22: game 0, frame 21 (3D 11: maps 8, belt 2, drawing 1), screen 0, present 0 | map 0:4, 3D 1, meshes 12, pages 12, free memory 1067 MB, loops 84564
+  780.2s LAGGY  12 of 58 trips over 20 ms, worst 28 (thread CPU 0): game 0, frame 28 (1 drawn, 2D picture 7 at 576x324, GL waits 1, 3D 17: maps 12, belt 2, drawing 3), screen 0, present 1 | map 0:4, belt layers 3, belt rebuilds 0
+  782.2s LAGGY  14 of 57 trips over 20 ms, worst 37 (thread CPU 47): game 0, frame 36 (1 drawn, 2D picture 8 at 576x324, GL waits 1, 3D 26: maps 22, belt 1, drawing 2), screen 0, present 0 | map 0:34, belt layers 3, belt rebuilds 0
+  840.1s minute     14: game 0, frame 13 (3D 3: maps 0, belt 0, drawing 3), screen 0, present 1 | map 0:34, 3D 1, meshes 15, pages 15, free memory 1038 MB, loops 91509
+  900.1s minute      3: game 0, frame 0 (3D 0: maps 0, belt 0, drawing 3), screen 0, present 3 | map 0:27, 3D 1, meshes 24, pages 24, free memory 1039 MB, loops 98162
+  960.1s minute      5: game 0, frame 1 (3D 0: maps 0, belt 0, drawing 1), screen 0, present 4 | map 0:27, 3D 1, meshes 24, pages 24, free memory 1039 MB, loops 105000
+ 1020.1s minute     21: game 0, frame 20 (3D 11: maps 8, belt 0, drawing 3), screen 0, present 0 | map 0:12, 3D 1, meshes 24, pages 24, free memory 1037 MB, loops 111015
+ 1080.1s minute      6: game 0, frame 1 (3D 0: maps 0, belt 0, drawing 0), screen 0, present 4 | map 0:26, 3D 1, meshes 24, pages 24, free memory 1040 MB, loops 118034
+ 1125.3s LAGGY  18 of 53 trips over 20 ms, worst 31 (thread CPU 31): game 0, frame 30 (1 drawn, 2D picture 7 at 576x324, GL waits 1, 3D 19: maps 15, belt 1, drawing 3), screen 0, present 1 | map 0:25, belt layers 5, belt rebuilds 2
+ 1140.1s minute     15: game 0, frame 14 (3D 2: maps 0, belt 0, drawing 2), screen 0, present 1 | map 0:25, 3D 1, meshes 28, pages 28, free memory 1039 MB, loops 124920
+ 1200.1s minute     14: game 0, frame 13 (3D 3: maps 0, belt 0, drawing 3), screen 0, present 0 | map 0:2, 3D 1, meshes 28, pages 28, free memory 1042 MB, loops 130914
