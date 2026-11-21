@@ -268,6 +268,10 @@ chapter. He's cold at first; respect builds over these meetings until you invest
 ---
 
 ## Chapter 3 — Cerulean / Bill's cottage: the man from the fire  · APPROVED (owner 2026-11-14) · IN GAME
+> **2026-11-20 (owner): the text below is the OLD version, still what's in the game.** The canon is now the newer
+> Kiyoshi draft: Varnell genuinely tries to save him, the player helps, and Kiyoshi's connection to his own time gives
+> out during the rescue (nobody seals it on him). Rewrite pending owner approval of the exact lines
+> (KANTO_NARRATIVE_SCENES_DRAFT.md; data/scripts/aria_ch3.inc).
 Owner direction 2026-11-14: a monk from the Brass Tower fire (Ecruteak, ~150 years ago), pulled through by
 accident; begs you not to close it; Varnell says you must; he fades screaming "It burns!"; Varnell is
 excited and hides it. Name below is a placeholder (owner to choose). His team: old Ecruteak Pokémon
