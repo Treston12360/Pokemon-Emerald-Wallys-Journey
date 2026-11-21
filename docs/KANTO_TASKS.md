@@ -235,6 +235,11 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       Test scripts: route 25 with `state var 0x50FF 11` + `state flag 0x12F4 1` (Kiyoshi already battled) ->
       warp 37 44 52 7, step right; Vermilion `state var 0x50FF 12`, warp 37 5 22 2, step down; tower
       `state var 0x50FF 16`, warp 35 94 11 8, step up. Celadon on hold until this sequence is approved + tested.
+      **Tested 2026-11-21 (Windows build under Wine, 2D):** Route 25 rescue + Bill + Varnell's callback, Blue's new
+      opener, the Lavender resident, Fuji's new line + flute — every box shows, right speakers, no crash. Tower
+      echo run checked in 2D and 3D. Side finding, NOT from these changes: just warping into Vermilion (no ARIA
+      scene) logs one `WJPC: skipped a bad memory access ... address 00000000` from the frame callback — engine
+      issue to look at separately.
       **Unresolved blocking:** decide who forced young Varnell outside, exact placement and
       mechanism of Clefairy's escape from the Rocket member, and why the historical body
       cannot be identified by surviving effects. These details are DRAFT, not in game.
