@@ -914,6 +914,7 @@ gStdScripts_End::
 	.include "data/maps/CeladonCity_Gym_Frlg/scripts.inc"
 	.include "data/maps/CeladonCity_Restaurant_Frlg/scripts.inc"
 	.include "data/maps/CeladonCity_House1_Frlg/scripts.inc"
+	.include "data/maps/CeladonCity_VarnellOffice/scripts.inc"
 	.include "data/maps/CeladonCity_Hotel_Frlg/scripts.inc"
 	.include "data/maps/FuchsiaCity_SafariZone_Entrance_Frlg/scripts.inc"
 	.include "data/maps/FuchsiaCity_Mart_Frlg/scripts.inc"
@@ -1059,6 +1060,7 @@ gStdScripts_End::
 	.include "data/scripts/aria_ch3.inc"
 	.include "data/scripts/aria_ch3b.inc"
 	.include "data/scripts/aria_ch4.inc"
+	.include "data/scripts/aria_ch5.inc"
 	.include "data/scripts/hall_of_fame.inc"
 	.include "data/scripts/hall_of_fame_frlg.inc"
 

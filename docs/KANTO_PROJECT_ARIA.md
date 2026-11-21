@@ -121,6 +121,16 @@ a reveal or a choice, not just a gym.
     a beat before the collapse.
   - No doc should promise a repeated run around the statue; the run happens once, in ch. 13 only.
 
+### Owner decisions, 2026-11-21 — Celadon office (forwarded wording)
+- "Yes to the building and layout. Use 'Varnell Research Office' on the fence sign. Put it beside the entrance path,
+  check that I can walk straight in from the street, and make sure I can reach the drawing and inspect it myself.
+  Keep it optional during the report-back with Blue." Keep the 13x11 interior; reception desk by the entrance,
+  Blue by the meeting table. Finding the lowercase "aria" signature should feel like something the player chose
+  to investigate.
+- Built: door at Celadon (45,21); the old sign tile at (45,23) is now path, the sign moved to (46,23); the drawing
+  hangs at the top wall (8..9, 0..1) with clear floor under it at (8,2)/(9,2); Varnell's desk moved right (10..12).
+  Picture: `docs/kanto_mockups/ch5_celadon_office_v2.png`.
+
 **Remaining dialogue is DRAFT:** newly suggested Lavender resident text, the Kiyoshi rescue rewrite, Blue's warning, and the rest of the finale dialogue still require separate owner approval. The existing executable scripts are not updated by these decisions. See `docs/KANTO_NARRATIVE_AUDIT.md` for the causal timeline and verification checklist.
 
 ### How the name hides in plain sight

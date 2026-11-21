@@ -490,6 +490,16 @@ the Rockets.
 Design doc: first visit to Varnell's public office in Celadon (only reachable through Lavender); the report-back
 with Blue ("Like the project"); Erika; both Snorlax woken with the Poké Flute; Varnell's staff start acting cagey.
 
+*(2026-11-21: 5.1–5.3 IN GAME — `data/scripts/aria_ch5.inc`, new map `CeladonCity_VarnellOffice`. Owner approved the
+building and 13x11 layout; sign on the fence beside the path reads "Varnell Research Office".)*
+
+**5.0 Extras (2026-11-21)**
+> SIGN (Celadon, beside the office path): Varnell Research Office   *(owner wording)*
+> THE DRAWING (office wall; optional, read from the tile under it): A child's drawing. A girl holding a Clefairy. /
+> In the corner, in crayon: "aria".   *(DRAFT — Claude's wording from the bible line "a child's drawing signed
+> 'aria' in lowercase — a girl holding a Clefairy"; waiting for owner approval)*
+> VARNELL (talked to after the scene): Erika's Gym is just down the street.   *(reuses his approved 5.2 line)*
+
 **5.1 Varnell's office (Celadon) — first visit**
 > RECEPTIONIST: Welcome to the Varnell Research Office. ...Oh! You're the trainer from Hoenn. The Director's
 > expecting you. Go on through.

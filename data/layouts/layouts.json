@@ -6764,6 +6764,19 @@
       "layout_version": "frlg"
     },
     {
+      "id": "LAYOUT_CELADON_CITY_VARNELL_OFFICE",
+      "name": "CeladonCity_VarnellOffice_Layout",
+      "width": 13,
+      "height": 11,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_BuildingFrlg",
+      "secondary_tileset": "gTileset_Condominiums",
+      "border_filepath": "data/layouts/CeladonCity_VarnellOffice/border.bin",
+      "blockdata_filepath": "data/layouts/CeladonCity_VarnellOffice/map.bin",
+      "layout_version": "frlg"
+    },
+    {
       "id": "LAYOUT_CELADON_CITY_CONDOMINIUMS_ROOF",
       "name": "CeladonCity_Condominiums_Roof_Layout",
       "width": 14,

@@ -206,6 +206,14 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       Leaders with their own story, longer is fine). Drafts go in `docs/KANTO_SCRIPT.md` for approval first.
 - [x] Ch. 2, 3, 3b, 4 in game (2026-11-14). Script: `docs/KANTO_SCRIPT.md` (status per chapter).
 - [ ] Ch. 5 (Celadon office — new building, show owner a picture first), then ch. 6+.
+      **Progress 2026-11-21:** office building + layout approved (owner); map `CeladonCity_VarnellOffice`
+      (MAP 44.20, layout `LAYOUT_CELADON_CITY_VARNELL_OFFICE`, Condominiums tiles) built by
+      `tools/aria_celadon_office_map.py` (also writes Celadon's door + path + moved sign into
+      `data/layouts/CeladonCity_Frlg/map.bin`; idempotent). Scenes 5.1+5.2 play on entering at VAR_ARIA_STORY 19
+      -> 20; staff lines 5.3; drawing = bg events (8,1)/(9,1). Exit = the middle mat tile (6,9) (south arrow warp,
+      as in the FireRed Condominiums; the side mat tiles don't exit there either). Test: `state var 0x50FF 19`,
+      `warp 37 6 45 25`, hold UP into the door. Left: 5.4 Blue at the Snorlax (Route 16), Erika, drawing wording
+      approval.
 - [x] **S-ARIA-CANON-LOCK (DOCUMENTATION ONLY — owner 2026-11-15):** Three historical points locked
       in `docs/KANTO_PROJECT_ARIA.md` and `docs/KANTO_NARRATIVE_AUDIT.md`: (1) young Varnell was **forced
       outside Pokémon Tower** during Rocket's raid; (2) Clefairy remained **captive with a Rocket member
