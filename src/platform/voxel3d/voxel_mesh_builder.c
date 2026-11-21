@@ -1437,13 +1437,26 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
             const unsigned last = (VOXEL_RELIEF_SIDE - 1) * VOXEL_RELIEF_SIDE;
             float belt = (VoxelRelief_Base(ring) - VoxelRelief_Base(inst)) * 16.0f;
             /* (the belt as far south as its base is high, as the map is) */
-            const float beltZ = (float)y + 1.0f + belt / 16.0f;
+            float beltZ = (float)y + 1.0f + belt / 16.0f;
             float level, shift;
+            static int sSkirtZOld = -1;
 
+            if (sSkirtZOld < 0)
+                sSkirtZOld = getenv("WJPC_SOUTH_SKIRT_Z_OLD") != NULL;
             if (oursH == NULL || VoxelRelief_Belt(ring) != 0)
                 continue;
             if (VoxelMesh_BorderLevel(nx, ny, &level, &shift))
+            {
                 belt += level * 16.0f;
+                /* Brennan 2026-11-21 01:56 (image 7, Route 112: "massive stretched vertical pillars ... shooting
+                 * straight up into the sky"): the belt's top is drawn as far south as its own shift says
+                 * (EmitBorderNorth: y + shift), not at our edge. Where the belt stands levels over the edge (south of
+                 * Route 112: 6-11), the skirt rose straight up from the edge to the belt's height - a wall of the
+                 * edge cell's drawing (trees, rock) eleven tiles tall. Its top now meets the belt where the belt is
+                 * drawn. WJPC_SOUTH_SKIRT_Z_OLD=1: as before. */
+                if (!sSkirtZOld)
+                    beltZ += shift;
+            }
             if (!uv && !(uv = VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1)))
                 return;
             for (unsigned k = 0; k + 1 < VOXEL_RELIEF_SIDE; ++k)
