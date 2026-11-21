@@ -98,6 +98,15 @@ a reveal or a choice, not just a gym.
    **The room on Aria's side stays intact and quiet right up to that instant. The first crack after he crosses is
    what lets the player understand the loop.**
 
+### Owner decisions, 2026-11-21 — the Tower corner (forwarded wording)
+- **The corner = the LEFT statue on Pokémon Tower 7F; Aria waits in the nook to its left (7..8, 3).**
+- **Ch. 4:** hear the cry and see where Clefairy goes — it runs along the floor beside the pedestal, turns behind its
+  edge and disappears — but **its destination stays hidden** (it must not look like it jumps onto the statue).
+- **Ch. 13:** hold on Aria facing that same empty gap. Varnell crosses first. The first crack hits. Then the familiar
+  cry, and this time **Clefairy comes out from behind the statue and reaches her. Both sprites stay visible together
+  for a beat before the collapse takes them.**
+- Show a short clip of the revised ch. 4 movement in 2D and 3D before Celadon.
+
 **Remaining dialogue is DRAFT:** newly suggested Lavender resident text, the Kiyoshi rescue rewrite, Blue's warning, and the rest of the finale dialogue still require separate owner approval. The existing executable scripts are not updated by these decisions. See `docs/KANTO_NARRATIVE_AUDIT.md` for the causal timeline and verification checklist.
 
 ### How the name hides in plain sight
