@@ -357,7 +357,7 @@ and should be scary — the Clefairy's cry building up ("Ar...." → "Ari....").
 
 **3b.1 Blue — as you walk into Vermilion from Route 6 (owner 2026-11-14)**
 > BLUE: ......Oh. It's you.
-> You closed the one out by Bill's place. I heard. ...Bill told me what happened.
+> Bill told me what happened up at the cape.   *(owner 2026-11-20; was "You closed the one out by Bill's place. I heard. ...Bill told me what happened.")*
 > ......
 > Look. You're working with Varnell now, so you should probably know something.
 > He had a daughter. She was killed in the Rocket attacks. Years ago, before any of this.
@@ -420,9 +420,13 @@ home (the Volunteer House), not held in the tower.
 **4.2 Lavender locals (talk)**
 > WOMAN (Pokémon Center): Everyone in Lavender knows someone who's buried in that tower.
 > Some people say they can hear crying up there at night. ...It's been worse lately.
-> OLD MAN (by the tower): Years ago, when Team Rocket came through, they tore that tower apart.
-> A little girl died up there. Nobody here ever learned her name.
-> They never caught the ones who did it, either.
+> OLD MAN (by the tower) — **replaced 2026-11-20 by the approved resident draft (IN GAME):**
+> I remember when Team Rocket came through the tower. Terrible day.
+> There was a little girl looking for her Clefairy. Someone had taken it, so they said.
+> They say she stopped all of a sudden, like something caught her attention. Then part of the ceiling came down.
+> Nobody ever found out exactly what happened. Most figured Rocket must've been doing something up there.
+> They found a man in the rubble too. His body was so badly damaged nobody could recognize him. Some thought he was one of the Rockets.
+> Awful thing, what they did to this town.
 > LITTLE GIRL: Mommy says not to go in the tower. She says there's a girl in there who's still looking for
 > her friend.
 
@@ -449,12 +453,17 @@ home (the Volunteer House), not held in the tower.
 > ...Aria...
 > *sniffle*
 > (It looks up at you. For a moment it looks like it's waiting for someone else.)
-> (Then it fades, little by little, into the cold air.)
+> (Then it turns, and runs.)   *(2026-11-20: was "Then it fades, little by little, into the cold air.")*
+> *(Scripted: it runs left, round the LEFT STATUE into the nook behind it (7..8, 3), then is gone. Ch. 13 shows this
+> same corner from Aria's side — she is in that nook. Pictures: docs/kanto_mockups/tower_corner_ch4.png and
+> tower_corner_ch13_mock.png. Corner choice waiting for the owner.)*
 > (The Rift Scanner reads... then goes quiet.)
 
 **4.5 Mr. Fuji, after — the Poké Flute**
 > MR. FUJI: The crying stopped. I heard it stop, all the way down here.
-> ......Thank you. I think it was waiting for someone who was never going to come.
+> ......
+> ...Thank you.   *(2026-11-20: "I think it was waiting for someone who was never going to come." removed — owner:
+> keep the meaning of the corner for the finale)*
 > Take this. An old flute. Its song wakes even the deepest sleeper.
 > I'm too old to go wandering the roads with it. You'll find a use for it, I think.
 > {PLAYER} received the POKé FLUTE!

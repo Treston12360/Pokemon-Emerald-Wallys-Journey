@@ -114,14 +114,12 @@ Aria_Ch4_Echo::
 	delay 40
 	msgbox Aria_Ch4_Text_Echo3, MSGBOX_DEFAULT
 	closemessage
-	hideobjectat LOCALID_POKEMON_TOWER_7F_ARIA_CLEFAIRY, MAP_POKEMON_TOWER_7F
-	delay 16
-	showobjectat LOCALID_POKEMON_TOWER_7F_ARIA_CLEFAIRY, MAP_POKEMON_TOWER_7F
-	delay 24
-	hideobjectat LOCALID_POKEMON_TOWER_7F_ARIA_CLEFAIRY, MAP_POKEMON_TOWER_7F
-	delay 32
-	showobjectat LOCALID_POKEMON_TOWER_7F_ARIA_CLEFAIRY, MAP_POKEMON_TOWER_7F
-	delay 40
+	@ owner 2026-11-20: the echo repeats the last thing it did in the Tower - the cry, then it runs to her,
+	@ around the LEFT STATUE (x9) into the nook behind it (7..8, 3). Ch. 13 shows this same corner from
+	@ Aria's side (she is waiting in that nook). Keep this path in sync with the finale.
+	applymovement LOCALID_POKEMON_TOWER_7F_ARIA_CLEFAIRY, Aria_Ch4_Movement_EchoRuns
+	waitmovement 0
+	delay 30
 	removeobject LOCALID_POKEMON_TOWER_7F_ARIA_CLEFAIRY
 	delay 40
 	playse SE_SELECT
@@ -170,13 +168,26 @@ Aria_Ch4_Text_Woman::
 	.string "up there at night. ...It's been\l"
 	.string "worse lately.$"
 
-Aria_Ch4_Text_OldMan::
-	.string "Years ago, when Team Rocket came\n"
-	.string "through, they tore that tower apart.\p"
-	.string "A little girl died up there. Nobody\n"
-	.string "here ever learned her name.\p"
-	.string "They never caught the ones who did\n"
-	.string "it, either.$"
+Aria_Ch4_Text_OldMan:: @ owner-approved resident draft 2026-11-20 (optional clue; locals' belief, not fact)
+	.string "I remember when Team Rocket came\n"
+	.string "through the tower. Terrible day.\p"
+	.string "There was a little girl looking for\n"
+	.string "her Clefairy. Someone had taken it,\l"
+	.string "so they said.\p"
+	.string "They say she stopped all of a\n"
+	.string "sudden, like something caught her\l"
+	.string "attention. Then part of the ceiling\l"
+	.string "came down.\p"
+	.string "Nobody ever found out exactly what\n"
+	.string "happened. Most figured Rocket\l"
+	.string "must've been doing something up\l"
+	.string "there.\p"
+	.string "They found a man in the rubble too.\n"
+	.string "His body was so badly damaged nobody\l"
+	.string "could recognize him. Some thought he\l"
+	.string "was one of the Rockets.\p"
+	.string "Awful thing, what they did to this\n"
+	.string "town.$"
 
 Aria_Ch4_Text_LittleGirl::
 	.string "Mommy says not to go in the tower.\p"
@@ -242,8 +253,7 @@ Aria_Ch4_Text_Echo3::
 	.string "It looks up at you. For a moment it\n"
 	.string "looks like it's waiting for someone\l"
 	.string "else.\p"
-	.string "Then it fades, little by little,\n"
-	.string "into the cold air.$"
+	.string "Then it turns, and runs.$"
 
 Aria_Ch4_Text_Echo4::
 	.string "The Rift Scanner reads... then goes\n"
@@ -252,9 +262,8 @@ Aria_Ch4_Text_Echo4::
 Aria_Ch4_Text_Fuji3::
 	.string "The crying stopped. I heard it stop,\n"
 	.string "all the way down here.\p"
-	.string "......Thank you. I think it was\n"
-	.string "waiting for someone who was never\l"
-	.string "going to come.\p"
+	.string "......\p"
+	.string "...Thank you.\p"
 	.string "Take this. An old flute. Its song\n"
 	.string "wakes even the deepest sleeper.\p"
 	.string "I'm too old to go wandering the\n"
@@ -282,3 +291,10 @@ Aria_Ch4_Text_Call2::
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
 
+Aria_Ch4_Movement_EchoRuns: @ (11,4) -> round the left statue -> the nook behind it
+	walk_fast_left
+	walk_fast_up
+	walk_fast_left
+	walk_fast_left
+	walk_in_place_faster_left
+	step_end

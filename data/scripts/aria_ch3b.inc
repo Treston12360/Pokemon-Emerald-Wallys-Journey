@@ -121,9 +121,8 @@ Aria_Ch3b_Hiker::
 
 Aria_Ch3b_Text_Blue::
 	.string "......Oh. It's you.\p"
-	.string "You closed the one out by Bill's\n"
-	.string "place. I heard. ...Bill told me what\l"
-	.string "happened.\p"
+	.string "Bill told me what happened up at the\n"
+	.string "cape.\p"
 	.string "......\p"
 	.string "Look. You're working with Varnell\n"
 	.string "now, so you should probably know\l"

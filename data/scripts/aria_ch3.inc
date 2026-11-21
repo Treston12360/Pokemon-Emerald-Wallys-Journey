@@ -1,5 +1,7 @@
 @ Project ARIA — chapter 3 "The man from the fire" (docs/KANTO_SCRIPT.md, APPROVED 2026-11-14).
-@ VAR_ARIA_STORY 9 (after Blue at Mt. Moon) -> 10 officer in Cerulean -> 11 Bill -> 12 tear sealed + Varnell.
+@ 3.4-3.6 replaced 2026-11-20 by the owner-approved Kiyoshi rescue (docs/KANTO_NARRATIVE_SCENES_DRAFT.md):
+@ Varnell tries to save him, the connection gives out by itself; the player never seals it.
+@ VAR_ARIA_STORY 9 (after Blue at Mt. Moon) -> 10 officer in Cerulean -> 11 Bill -> 12 Kiyoshi lost + Varnell (flag name FLAG_ARIA_TEAR_ROUTE25_SEALED kept: it means 'the tear is gone').
 @ Route 25 tear: the open grass by the water east of Bill's garden, (56..58, 5..7); Kiyoshi stands at (55,8).
 @ Kiyoshi: TRAINER_SAGE_KIYOSHI, weak on purpose (owner), not in level scaling. Story lines come after the
 @ battle on the map (owner rule: never only in the skippable defeat text).
@@ -105,25 +107,54 @@ Aria_Ch3_KiyoshiStop::
 	closemessage
 	delay 30
 Aria_Ch3_CloseTear::
-	@ the Rift Scanner starts beeping
-	playse SE_SELECT @ the Rift Scanner beeping
-	delay 30
+	@ 3.4 (owner 2026-11-20: the rescue draft is canon) - Varnell tries to save him; the connection
+	@ gives out on its own. No player choice to seal, no "sealed" text.
+	setspeaker SP_NAME_KIYOSHI
+	msgbox Aria_Ch3_Text_KiyoshiTwoPlaces, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_ROUTE25_ARIA_BILL, Common_Movement_FaceRight
+	waitmovement 0
+	setspeaker SP_NAME_BILL
+	msgbox Aria_Ch3_Text_BillFading, MSGBOX_DEFAULT
+	closemessage
 	playse SE_SELECT @ the Rift Scanner beeping
 	delay 20
-	setspeaker SP_NAME_KIYOSHI
-	msgbox Aria_Ch3_Text_KiyoshiPlead, MSGBOX_DEFAULT
-	closemessage
-	@ Varnell calls
 	setspeaker SP_NAME_VARNELL
 	pokenavcall Aria_Ch3_Text_Varnell1
 	waitmessage
-	delay 20
-	delay 30
-	msgbox Aria_Ch3_Text_Silence, MSGBOX_DEFAULT
-	msgbox Aria_Ch3_Text_HeldUp, MSGBOX_DEFAULT
+	setspeaker SP_NAME_BILL
+	msgbox Aria_Ch3_Text_BillCanYouStop, MSGBOX_DEFAULT
+	setspeaker SP_NAME_VARNELL @ still on the same call - shown as normal lines so the PokéNav doesn't re-dial
+	msgbox Aria_Ch3_Text_Varnell1b, MSGBOX_DEFAULT
+	setspeaker SP_NAME_NONE @ no name box: narration
+	msgbox Aria_Ch3_Text_PointScanner, MSGBOX_DEFAULT
+	closemessage
+	@ the pulses briefly slow: long gaps between beeps
+	playse SE_SELECT
+	delay 60
+	playse SE_SELECT
+	delay 60
 	setspeaker SP_NAME_KIYOSHI
-	msgbox Aria_Ch3_Text_KiyoshiNo, MSGBOX_DEFAULT
-	msgbox Aria_Ch3_Text_Reading, MSGBOX_DEFAULT
+	msgbox Aria_Ch3_Text_KiyoshiQuieter, MSGBOX_DEFAULT
+	setspeaker SP_NAME_VARNELL @ still on the same call - shown as normal lines so the PokéNav doesn't re-dial
+	msgbox Aria_Ch3_Text_Varnell1c, MSGBOX_DEFAULT
+	closemessage
+	@ a brief silence, then the pulses speed up again
+	delay 60
+	playse SE_SELECT
+	delay 12
+	playse SE_SELECT
+	delay 8
+	playse SE_SELECT
+	delay 6
+	playse SE_SELECT
+	delay 10
+	setspeaker SP_NAME_BILL
+	msgbox Aria_Ch3_Text_BillWontStay, MSGBOX_DEFAULT
+	setspeaker SP_NAME_VARNELL @ still on the same call - shown as normal lines so the PokéNav doesn't re-dial
+	msgbox Aria_Ch3_Text_Varnell1d, MSGBOX_DEFAULT
+	setspeaker SP_NAME_KIYOSHI
+	msgbox Aria_Ch3_Text_KiyoshiHeat, MSGBOX_DEFAULT
 	closemessage
 	setvar VAR_0x8004, 3
 	setvar VAR_0x8005, 3
@@ -136,6 +167,7 @@ Aria_Ch3_CloseTear::
 	waitstate
 	waitbuttonpress
 	closemessage
+	@ the connection expires by itself
 	playse SE_M_REFLECT
 	fadescreenspeed FADE_TO_WHITE, 4
 	setflag FLAG_ARIA_TEAR_ROUTE25_SEALED
@@ -242,82 +274,84 @@ Aria_Ch3_Text_KiyoshiStory::
 	.string "still the tower burns, somewhere\l"
 	.string "behind that light.$"
 
-Aria_Ch3_Text_KiyoshiPlead::
-	.string "What is that? What are you doing?\p"
-	.string "No. No, no - please. If you close\n"
-	.string "it, I go back. Back into the fire.\p"
-	.string "I can feel it pulling at me. I can\n"
-	.string "still feel the heat. Please. Let me\l"
-	.string "stay.$"
+Aria_Ch3_Text_KiyoshiTwoPlaces::
+	.string "I can still feel the heat. Even\n"
+	.string "here. As though I'm standing in two\l"
+	.string "places.$"
 
-Aria_Ch3_Text_Varnell1:: @ PokéNav call (owner 2026-11-14: Varnell talks to you through the PokéNav)
+Aria_Ch3_Text_BillFading::
+	.string "The signal is fading. There's\n"
+	.string "something pulling him back through.$"
+
+Aria_Ch3_Text_Varnell1:: @ PokéNav call (owner 2026-11-14); one call, split around Bill and Kiyoshi's lines
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "{PLAYER}, I'm seeing\n"
-	.string "your readings. Listen to me very\l"
-	.string "carefully.\p"
-	.string "I know what he's asking. I know\n"
-	.string "how it sounds.\p"
-	.string "But he isn't supposed to be\n"
-	.string "here. If he stays, everything he\l"
-	.string "would have done, everything that\l"
-	.string "came after him... We cannot\l"
-	.string "change time. Not even for one\l"
-	.string "man. It could be catastrophic.\p"
-	.string "Close it. Please.\p"
-	.string "… … … … … …\n"
-	.string "… … … … … Click!$"
+	.string "{PLAYER}, I'm receiving your\n"
+	.string "readings. That man - he's not\l"
+	.string "coming through from somewhere\l"
+	.string "else in Kanto.\p"
+	.string "The years don't match. Not\n"
+	.string "remotely.$"
 
-Aria_Ch3_Text_Silence::
-	.string "......$"
+Aria_Ch3_Text_BillCanYouStop::
+	.string "Can you stop it?$"
 
-Aria_Ch3_Text_HeldUp::
-	.string "{PLAYER} held up the Rift Scanner.$"
+Aria_Ch3_Text_Varnell1b::
+	.string "I'm trying. The scanner may be able\n"
+	.string "to hold the opening steady.\l"
+	.string "{PLAYER}, point it toward the tear.\l"
+	.string "Don't close it.$"
 
-Aria_Ch3_Text_KiyoshiNo::
-	.string "No... please...$"
+Aria_Ch3_Text_PointScanner::
+	.string "{PLAYER} pointed the Rift Scanner\n"
+	.string "toward the tear.$"
 
-Aria_Ch3_Text_Reading::
-	.string "...Reading...$"
+Aria_Ch3_Text_KiyoshiQuieter::
+	.string "It's quieter.\p"
+	.string "...Please. Don't let it take me\n"
+	.string "back.$"
+
+Aria_Ch3_Text_Varnell1c::
+	.string "Hold steady. I'm adjusting the field\n"
+	.string "from here.$"
+
+Aria_Ch3_Text_BillWontStay::
+	.string "It won't stay open!$"
+
+Aria_Ch3_Text_Varnell1d::
+	.string "I know. I know. Give me another\n"
+	.string "moment.$"
+
+Aria_Ch3_Text_KiyoshiHeat::
+	.string "No... the heat... I can feel it\n"
+	.string "again.$"
 
 Aria_Ch3_Text_Burns::
 	.string "It burns! IT BURNS! AHHHHH!.....$"
 
 Aria_Ch3_Text_BillAfter::
-	.string "......\p"
-	.string "He knew. The whole time, he knew\n"
-	.string "where he was going back to.\p"
-	.string "I've spent my whole life building\n"
-	.string "machines that move things from one\l"
-	.string "place to another.\p"
-	.string "I never once thought about what it's\n"
-	.string "like to be the thing that gets\l"
-	.string "moved.\p"
-	.string "...Go on. I need to sit down for a\n"
-	.string "while.$"
+	.string "We didn't send him back.\p"
+	.string "It just... stopped holding him here.\p"
+	.string "I thought if I understood where he\n"
+	.string "came from, I could help him stay. I\l"
+	.string "didn't know there was a difference.$"
 
 Aria_Ch3_Text_Varnell2:: @ PokéNav call (owner 2026-11-14: Varnell talks to you through the PokéNav)
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "{PLAYER}. Are you all right?\p"
-	.string "I'm sorry you had to be the one\n"
-	.string "to do that. I mean that.\p"
-	.string "......\p"
-	.string "But do you understand what we\n"
-	.string "just saw? A living person.\l"
-	.string "Carried a hundred and fifty\l"
-	.string "years, whole. Breathing.\l"
-	.string "Speaking. Himself.\p"
-	.string "I've read every theory there is,\n"
-	.string "and every one of them said it\l"
-	.string "couldn't be done.\p"
-	.string "...Forgive me. A man suffered\n"
-	.string "tonight, and here I am talking\l"
-	.string "about theories. It's been a long\l"
-	.string "night.\p"
-	.string "Misty's Gym is in Cerulean, if\n"
-	.string "you're ready for it. I'll be in\l"
-	.string "touch.\p"
+	.string "{PLAYER}. I'm sorry. I thought\n"
+	.string "we could hold the connection\l"
+	.string "longer.\p"
+	.string "I keep thinking about what he\n"
+	.string "said. A person, taken out of his\l"
+	.string "own time. Whole. Alive.\p"
+	.string "And yet we couldn't keep him\n"
+	.string "here for even a few minutes.\p"
+	.string "Bill's right to be upset. So am\n"
+	.string "I. ...I'll see what can be\l"
+	.string "learned from the readings.\p"
+	.string "For now, go see Misty. You've\n"
+	.string "done more than enough today.\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
 

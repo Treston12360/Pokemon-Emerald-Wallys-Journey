@@ -30,7 +30,7 @@
 
 After he jumps, the wrong-direction mass/energy overload at the **past endpoint** begins shaking the structure. The Rocket member loses hold of Clefairy in the panic (exact escape mechanic not locked); Clefairy runs to Aria as the roof falls; future Varnell is near them; all three are caught. A flash/cut to present ends the view. **Do not add a fourth dead Rocket without separate approval.** Do not show Varnell's badly damaged body on-screen; the earlier anonymous casualty does that work through inference.
 
-## Chapter 3 — Kiyoshi: revised scenes 3.4–3.6 (DRAFT REPLACEMENT)
+## Chapter 3 — Kiyoshi: revised scenes 3.4–3.6 — **APPROVED 2026-11-20 (Treston) · IN GAME** (data/scripts/aria_ch3.inc)
 
 **Reason for change:** The currently implemented version has Varnell command the player to close a tear and knowingly return Kiyoshi to a fire; owner later specified Varnell tries to save him and the unanchored time connection expires by itself. Preserve Kiyoshi's fragility, his connection to the Brass Tower fire, his weak trainer fight, and his owner's original last cry.
 
@@ -90,7 +90,7 @@ VARNELL: For now, go see Misty. You've done more than enough today.
 
 **Second-playthrough truth:** Varnell genuinely tried to rescue Kiyoshi AND learned that uncontrolled time travel exists; this is the first reason he realizes he must control **when**, hence Dialga. No on-screen Dialga name.
 
-## Chapter 4 — Lavender ordinary resident (DRAFT REPLACEMENT)
+## Chapter 4 — Lavender ordinary resident — **APPROVED 2026-11-20 (Treston) · IN GAME** (Aria_Ch4_Text_OldMan)
 
 **At an ordinary street NPC, not a highlighted mandatory cutscene.** No music sting or quest marker.
 

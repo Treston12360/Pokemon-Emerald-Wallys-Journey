@@ -225,6 +225,16 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       is captive → Varnell jumps backward → FIRST shaking / roof fall → Clefairy escapes
       Rocket's custody and runs to Aria DURING the collapse → Aria, Clefairy and future
       Varnell die together. **Owner-locked motivation 2026-11-16:** Varnell believes the historically recorded time of Aria's death is almost here; she will not leave without Clefairy, so he jumps because he thinks he must save her himself. He does not know his jump causes the death he fears. Never start shaking or release Clefairy before Varnell jumps. Exact countdown/portal-time behavior and spoken wording remain DRAFT.
+      **Progress 2026-11-21 (owner approved the exact wording 2026-11-20):** (a) Kiyoshi rescue 3.4–3.6 is IN GAME
+      (`aria_ch3.inc`; Varnell's lines after the first ring are normal name-boxed lines on the same call so the
+      PokéNav doesn't re-dial); Blue's Vermilion opener now "Bill told me what happened up at the cape."
+      (`aria_ch3b.inc`); (b) the Lavender resident draft is IN GAME (`Aria_Ch4_Text_OldMan`); Fuji after the
+      tower: "The crying stopped... ...... ...Thank you." then the flute (his "waiting for someone" line removed).
+      Tower 7F: the echo now cries, then **runs round the LEFT STATUE into the nook (7..8, 3)** and is gone —
+      corner **waiting for owner approval** (pictures `docs/kanto_mockups/tower_corner_ch4.png`, `..._ch13_mock.png`).
+      Test scripts: route 25 with `state var 0x50FF 11` + `state flag 0x12F4 1` (Kiyoshi already battled) ->
+      warp 37 44 52 7, step right; Vermilion `state var 0x50FF 12`, warp 37 5 22 2, step down; tower
+      `state var 0x50FF 16`, warp 35 94 11 8, step up. Celadon on hold until this sequence is approved + tested.
       **Unresolved blocking:** decide who forced young Varnell outside, exact placement and
       mechanism of Clefairy's escape from the Rocket member, and why the historical body
       cannot be identified by surviving effects. These details are DRAFT, not in game.
