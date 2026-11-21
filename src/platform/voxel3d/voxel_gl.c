@@ -617,6 +617,13 @@ typedef struct
     bool grow;          // POL-15: a loaded map uses metatiles it has no slot for: grown (PrepareAtlas)
     bool valid;
     uint16_t *raw[VOXEL_ATLAS_PAGES]; // POL-12: each page as composed, before VoxelGrade_Texels (tiled order)
+    /* Audit step 2b (Brennan 2026-11-21 02:12; Ever Grande's waterfalls: ~180 ms in the GL driver every few frames
+     * on the test box): changing a texture the last frame drew with makes the driver wait for that frame. The
+     * animated tiles go into another texture of the page, the one drawn with longest ago (a ring of three: tex, then
+     * spare[0] last frame's, spare[1] the one before - a driver may still be drawing the last frame), which is then
+     * drawn with; spareStale: the rows of slots each lacks (~0: all). */
+    GLuint spare[VOXEL_ATLAS_PAGES][2];
+    unsigned spareStale[VOXEL_ATLAS_PAGES][2];
 } Atlas;
 
 static uint32_t sAtlasGen;
@@ -775,6 +782,8 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
         {
             wj_glDeleteTextures(VOXEL_ATLAS_PAGES, slot->tex);
             memset(slot->tex, 0, sizeof(slot->tex));
+            wj_glDeleteTextures(2 * VOXEL_ATLAS_PAGES, &slot->spare[0][0]);
+            memset(slot->spare, 0, sizeof(slot->spare));
             AtlasFreeRaw(slot);
         }
         slot->valid = false;
@@ -812,6 +821,7 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
         VoxelGrade_Texels(sAtlasStaging, VOXEL_ATLAS_PIXELS);
         // (grown: into the page's own texture, the meshes drawn from it see the same slots)
         slot->tex[sAtlasJob.page] = UploadTiled(sJobGrow ? slot->tex[sAtlasJob.page] : 0, sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
+        slot->spareStale[sAtlasJob.page][0] = slot->spareStale[sAtlasJob.page][1] = ~0u; // (its other textures: out of date)
         if (getenv("WJPC_VOXEL_DUMP") != NULL && sAtlasJob.page == 0)
         {
             char name[64];
@@ -875,6 +885,7 @@ static uint8_t sAnimDirty[128];
 static bool sAnimHaveVram, sAnimAnyDirty;
 static const void *sAnimPrimary, *sAnimSecondary;
 
+static Uint64 sAnimComposeTicks, sAnimUploadTicks; // (the log: where an animation pass's time goes)
 static void AnimateAtlasTiles(const VoxelMapInstance *inst)
 {
     const uint8_t *vram = VRAM_; // BG char block 0: the overworld's two tile sets (3DS: CtrVideo_GetBgVram)
@@ -934,9 +945,12 @@ static void AnimateAtlasTiles(const VoxelMapInstance *inst)
                 unsigned rows = 0;
                 if (a->raw[p] == NULL || a->tex[p] == 0)
                     continue;
+                Uint64 tc0 = SDL_GetPerformanceCounter();
                 if (VoxelAtlas_RefreshAnimatedPageRows(&pair, &a->map, p, a->raw[p], vram,
                                                        same ? sAnimDirty : primaryOnly, &rows) == 0)
                     continue;
+                sAnimComposeTicks += SDL_GetPerformanceCounter() - tc0;
+                Uint64 tu0 = SDL_GetPerformanceCounter();
                 if (sAtlasStaging == NULL)
                     sAtlasStaging = malloc(VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
                 if (sAtlasStaging == NULL || (sJobSlot != NULL && sAtlasJob.active))
@@ -954,16 +968,40 @@ static void AnimateAtlasTiles(const VoxelMapInstance *inst)
                     else
                     {
                         const unsigned chunk = VOXEL_ATLAS_ROW_BYTES / 2u;
+                        static int sOneTexture = -1;
+                        if (sOneTexture < 0)
+                            sOneTexture = getenv("WJPC_ANIM_ONE_TEXTURE") != NULL; // (as before: into the drawn one)
+                        unsigned want = sOneTexture ? rows : rows | a->spareStale[p][1];
 
                         for (unsigned r = 0; r < 32; r++)
-                            if ((rows >> r) & 1u && (r + 1) * chunk <= VOXEL_ATLAS_PIXELS)
+                            if ((want >> r) & 1u && (r + 1) * chunk <= VOXEL_ATLAS_PIXELS)
                             {
                                 memcpy(sAtlasStaging + r * chunk, a->raw[p] + r * chunk, chunk * sizeof(uint16_t));
                                 VoxelGrade_Texels(sAtlasStaging + r * chunk, chunk);
                             }
-                        UploadTiledRows(a->tex[p], sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H, rows);
+                        if (sOneTexture)
+                            UploadTiledRows(a->tex[p], sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H, rows);
+                        else
+                        {
+                            GLuint oldest = a->spare[p][1];
+
+                            if (oldest == 0)
+                            {
+                                /* first time: made whole (every row graded above: want = ~0) */
+                                oldest = UploadTiled(0, sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
+                            }
+                            else
+                                UploadTiledRows(oldest, sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H, want);
+                            /* the ring turns: the oldest is drawn now; the others lack this change */
+                            a->spare[p][1] = a->spare[p][0];
+                            a->spareStale[p][1] = a->spareStale[p][0] | rows;
+                            a->spare[p][0] = a->tex[p];
+                            a->spareStale[p][0] = rows;
+                            a->tex[p] = oldest;
+                        }
                     }
                 }
+                sAnimUploadTicks += SDL_GetPerformanceCounter() - tu0;
                 {
                     static unsigned sLogged;
                     if (sLogged++ < 20)
@@ -1139,7 +1177,7 @@ static InstanceMesh sInstanceMeshes[MAX_INSTANCES];
 #define SCRATCH_VERTS (1u << 22) // (BELT_RADIUS 64)
 static VoxelVertex *sScratch;
 static VoxelVertex *sSorted;
-static VoxelStaticDraw sChunkStatics[64];
+static VOXEL_TLS VoxelStaticDraw sChunkStatics[64]; // (per thread: maps are built on the worker too)
 
 static void InstanceFree(InstanceMesh *m)
 {
@@ -1185,6 +1223,8 @@ typedef struct
     VoxelStaticDraw statics[MAX_INST_STATICS];
     unsigned staticCount, frames;
     double ms;
+    uint32_t atlasGen;              // the atlas's generation when the build began (what the mesh is laid on)
+    const VoxelAtlasMap *map;       // the slots it is laid with: the atlas's own, or the worker's copy of it
 } InstanceBuild;
 
 static InstanceBuild sBackBuild, sNowBuild;
@@ -1220,6 +1260,8 @@ static void BuildBegin(InstanceBuild *pb, const VoxelMapInstance *inst, Atlas *a
     pb->lift = inst->lift;
     pb->signature = sig;
     pb->atlas = atlas;
+    pb->atlasGen = atlas->gen;
+    pb->map = &atlas->map;
     pb->nextX = pb->nextY = 0;
     pb->n[0] = pb->n[1] = pb->n[2] = 0;
     pb->staticCount = 0;
@@ -1237,7 +1279,7 @@ static bool BuildIsFor(const InstanceBuild *pb, const VoxelMapInstance *inst)
 // Chunks until `deadline` (0: to the end), at least one. TRUE when the whole map is done.
 static bool BuildSteps(InstanceBuild *pb, const VoxelMapInstance *inst, Uint64 deadline)
 {
-    static VoxelVertex *chunkVerts;
+    static VOXEL_TLS VoxelVertex *chunkVerts;
     Uint64 t0 = SDL_GetPerformanceCounter();
     bool first = true;
     VoxelBuilder b;
@@ -1266,7 +1308,7 @@ static bool BuildSteps(InstanceBuild *pb, const VoxelMapInstance *inst, Uint64 d
         VoxelBuilder_Init(&b, chunkVerts, CHUNK_VERTS);
         b.statics = sChunkStatics;
         b.staticCapacity = ARRAY_COUNT(sChunkStatics);
-        VoxelBuilder_SetAtlas(&b, &pb->atlas->map);
+        VoxelBuilder_SetAtlas(&b, pb->map);
         // In the map's own frame: crossing a border moves the maps, not their meshes.
         VoxelBuilder_SetOrigin(&b, inst->originX, inst->originY);
         b.base = VoxelRelief_Base(inst);
@@ -1302,6 +1344,86 @@ static bool BuildSteps(InstanceBuild *pb, const VoxelMapInstance *inst, Uint64 d
     }
     pb->ms += (SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency();
     return true;
+}
+
+/*
+ * Brennan 2026-11-21 02:12 (audit step 4, docs/polish_reports/PERF_AUDIT_2026-11-21.md: "Parse and build all map
+ * vertex/index data completely on a background worker thread"): the background build (sBackBuild) runs on a worker
+ * thread. The main thread picks the map and readies its atlas as before, then hands the worker a snapshot of the
+ * world (VoxelWorld_SnapshotTake: the maps placed and the live map grid) and a copy of the atlas's slots; the worker
+ * lays the whole map from those (its caches are its own, voxel_thread.h) and says when it is done; the main thread
+ * then sorts and uploads it (BuildFinish). While it works, the old mesh, if any, is drawn. A build whose map changed
+ * or left the view meanwhile is thrown away when it comes back. WJPC_BUILD_THREAD_OFF=1: on the main thread, a few
+ * ms a frame, as before.
+ */
+static struct
+{
+    SDL_Thread *thread;
+    SDL_sem *go;
+    SDL_atomic_t busy;        // 1 from the hand-over until the worker has finished
+    VoxelWorldState *snap;
+    unsigned index;           // the map's place in the snapshot's instances
+    VoxelAtlasMap map;        // the atlas's slots when the build began
+    bool failed;
+} sWorker;
+
+static int WorkerMain(void *arg)
+{
+    (void)arg;
+    for (;;)
+    {
+        SDL_SemWait(sWorker.go);
+        VoxelWorld_UseSnapshot(sWorker.snap);
+        VoxelWorld_BeginBatch();
+        {
+            const VoxelMapInstance *inst = VoxelWorld_Instance(sWorker.index);
+
+            if (inst != NULL)
+                BuildSteps(&sBackBuild, inst, 0);
+        }
+        SDL_AtomicSet(&sWorker.busy, 0);
+    }
+    return 0;
+}
+
+static bool WorkerOn(void)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_BUILD_THREAD_OFF") != NULL;
+    if (sOff || sWorker.failed)
+        return false;
+    if (sWorker.thread == NULL)
+    {
+        sWorker.go = SDL_CreateSemaphore(0);
+        sWorker.snap = VoxelWorld_SnapshotNew();
+        if (sWorker.go != NULL && sWorker.snap != NULL)
+            sWorker.thread = SDL_CreateThreadWithStackSize(WorkerMain, "voxel-build", 16u << 20, NULL);
+        if (sWorker.thread == NULL)
+        {
+            sWorker.failed = true;
+            Voxel3D_Log("[3D] map-building thread not started: maps built on the main thread");
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool WorkerBusy(void)
+{
+    return sWorker.thread != NULL && SDL_AtomicGet(&sWorker.busy) != 0;
+}
+
+/* Hands sBackBuild (begun for `inst`, the `index`th map) to the worker. */
+static void WorkerStart(unsigned index)
+{
+    VoxelWorld_SnapshotTake(sWorker.snap);
+    sWorker.index = index;
+    sWorker.map = *sBackBuild.map;
+    sBackBuild.map = &sWorker.map;
+    SDL_AtomicSet(&sWorker.busy, 1);
+    SDL_SemPost(sWorker.go);
 }
 
 // The finished build into `m` (freed first if it held a mesh), which is then one of this frame's maps.
@@ -1354,7 +1476,7 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
     m->staticCount = pb->staticCount;
     m->buildingPage = VoxelBuildings_PageOf(inst);
     m->atlas = pb->atlas;
-    m->atlasGen = pb->atlas->gen;
+    m->atlasGen = pb->atlasGen; // (grown meanwhile: laid again, its new metatiles were not in this build)
     m->primary = pb->atlas->primary;
     m->secondary = pb->atlas->secondary;
     m->used = true;
@@ -3290,6 +3412,9 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         Uint64 deadline = SDL_GetPerformanceCounter() + (Uint64)(budget * freq / 1000.0);
         const VoxelMapInstance *backInst = NULL;
         bool asked = false;
+        bool threaded = WorkerOn();
+        bool workerBusy = threaded && WorkerBusy();
+        int backIndex = -1;
 
         if (getenv("WJPC_3D_BUILD_MS") != NULL)
             deadline = SDL_GetPerformanceCounter() + (Uint64)(atof(getenv("WJPC_3D_BUILD_MS")) * freq / 1000.0);
@@ -3317,8 +3442,15 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 sBackBuild.active = false; // (the map underfoot comes first: another map's build waits)
             if (i == 0 && stale && atlas != NULL && !keepOld)
             {
-                // Underfoot: now. A background build of it is finished rather than begun again.
-                InstanceBuild *pb = backInst == inst ? &sBackBuild : &sNowBuild;
+                // Underfoot: now. A background build of it is finished rather than begun again (on the main
+                // thread; one on the worker is left to it and thrown away).
+                InstanceBuild *pb = backInst == inst && !threaded ? &sBackBuild : &sNowBuild;
+
+                if (threaded && backInst == inst)
+                {
+                    sBackBuild.active = false;
+                    backInst = NULL;
+                }
 
                 if (pb == &sNowBuild)
                     BuildBegin(pb, inst, atlas, sig);
@@ -3330,7 +3462,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 if (pb == &sBackBuild)
                     backInst = NULL;
             }
-            else if (stale && !sBackBuild.active && !asked)
+            else if (stale && !sBackBuild.active && !asked && !workerBusy)
             {
                 // The first one in need: its tile sheet (over frames), then its mesh.
                 asked = true;
@@ -3339,6 +3471,11 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 {
                     BuildBegin(&sBackBuild, inst, atlas, sig);
                     backInst = inst;
+                    if (threaded)
+                    {
+                        WorkerStart(i);
+                        workerBusy = true;
+                    }
                 }
             }
             if (m != NULL && MeshAtlasOk(m))
@@ -3350,8 +3487,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             }
         }
         if (backInst == NULL)
-            sBackBuild.active = false; // its map left the view or moved: dropped
-        else if (BuildSteps(&sBackBuild, backInst, deadline))
+            sBackBuild.active = false; // its map left the view or moved: dropped (the worker's, when it is done)
+        else if (threaded ? !workerBusy : BuildSteps(&sBackBuild, backInst, deadline))
         {
             InstanceMesh *m = MeshSlotFor(backInst->mapGroup, backInst->mapNum);
             if (m != NULL)
@@ -3361,7 +3498,19 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     }
 
     if (!sBattleMode)
+    {
+        Uint64 anim0 = SDL_GetPerformanceCounter();
+        if (getenv("WJPC_PROFILE_ANIM"))
+            gVoxelProfileOn = 1;
         AnimateAtlasTiles(inst0); // POL-12
+        gVoxelProfileOn = 0;
+        double animMs = (SDL_GetPerformanceCounter() - anim0) * 1000.0 / SDL_GetPerformanceFrequency();
+        if (animMs > 4.0)
+            Voxel3D_Log("[3D] animated tiles took %.1f ms (frame %u): composing %.1f, uploading %.1f", animMs, sFrame,
+                        sAnimComposeTicks * 1000.0 / SDL_GetPerformanceFrequency(),
+                        sAnimUploadTicks * 1000.0 / SDL_GetPerformanceFrequency());
+        sAnimComposeTicks = sAnimUploadTicks = 0;
+    }
     Uint64 workMaps = SDL_GetPerformanceCounter();
     // Camera follows the player.
     VoxelWorld_GetPlayerWorldCoords(&playerX, &playerZ);
