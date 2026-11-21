@@ -203,3 +203,7 @@ Picture: `polish_reports/Q10_coast_corner_sealed_BEFORE_AFTER.png`. The sky tria
 north-west wall (the wall stands as far south as it is high) where the belt laid no sea; the sea is now laid into it
 (EdgeOverBelt; WJPC_EDGE_SEA_STRIP_OFF=1 reverts). The black squares at the wall's foot are gone with it. Tried the
 wall in faces 0A9 (same look) and 075 (striped, worse): kept the map's own 07C.
+### 22. Route 119 river: raised water squares flattened, black pole gone (Brennan 17:53)
+Picture: `polish_reports/Q5_route119_river_flat_BEFORE_AFTER.png`. Water cells (16,16) and (16,17) stood at the bank's
+height with walls (the raised square and the pole); every water cell x3-21 rows 3-23 is at the river's 128 px now and
+water cut records there are dropped. Rail ends / hop rails: 3D rail models next (Brennan's answer).
