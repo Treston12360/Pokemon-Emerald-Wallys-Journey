@@ -212,3 +212,9 @@ Pictures: `polish_reports/Q5_route119_3D_rails_BEFORE_AFTER.png`, `Q5_route119_r
 Rail cells flat at the river and drawn as river (lower_rails.py OVER_PX 0; art swap to 0x206); each rail cell over the
 water gets a 3 px bar at the bank's height (the drawing's white bar for its top) and a dark grey post (the drawing's
 post grey) down to the water (voxel_mesh_builder.c EmitRailCell; WJPC_RAIL_OLD=1 off). Hop rails stay separate.
+### 24. Region-wide rollout (Brennan 19:31)
+- Acro Bike rails: by metatile behaviour (MB_*_RAIL) Hoenn has only Route 119 and Safari Zone South. Safari Zone
+  South's rails (Lilycove 312-321, the General drawing) now 3D the same way, on its grass floor
+  (`polish_reports/RAILS_safari_zone_south_3D.png`; relief: rail cells at the floor, walls dropped).
+- Wide shrubs: the Fortree shrub tile is only on Routes 119/120: all 11 are 3D.
+- Item balls: drawn as a 3D mound of their own drawing, like the rocks (`polish_reports/ITEM_BALL_3D_route119.png`).
