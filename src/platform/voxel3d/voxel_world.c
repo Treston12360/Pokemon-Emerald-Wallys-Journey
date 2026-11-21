@@ -1917,7 +1917,7 @@ bool VoxelWorld_BeltBorderOf(unsigned i, int ids[4])
  * gives, and the same from either side of a crossing. Past an edge filled
  * for the current map (VoxelRelief_EdgeFill), its fill.
  */
-int VoxelWorld_BorderMetatile(int worldX, int worldY)
+static int BorderMetatileRaw(int worldX, int worldY)
 {
     const uint16_t *border;
     const void *source, *resolved;
@@ -1957,6 +1957,50 @@ int VoxelWorld_BorderMetatile(int worldX, int worldY)
     if (border == NULL)
         return -1;
     return (int)(border[index] & MAPGRID_METATILE_ID_MASK);
+}
+
+static bool RawIsWater(int x, int y, int *mt)
+{
+    *mt = BorderMetatileRaw(x, y);
+    return *mt >= 0 && VoxelWorld_GetInstanceAt(x, y) == NULL
+        && BehaviorShape(UNPACK_BEHAVIOR(GetMetatileAttribute(VoxelWorld_BorderArtMap(x, y), *mt))) == VOXEL_SHAPE_WATER;
+}
+
+/*
+ * Brennan 2026-11-20 19:48 (Route 121's woods over the sea: "a jagged diagonal staircase of flat green grass blocks
+ * sticking out behind the back row of 3D trees ... only the blue sea water renders behind the back row"): where the
+ * belt's wood (a map's border of large trees) meets another map's sea along a diagonal, the trees cut by it are not
+ * drawn (voxel_tree.c, whole trees only) and their cells stood as ground. Such a cell - a General large tree's part
+ * whose tree is not whole, beside the sea - is the sea. WJPC_BELT_HALF_TREE_GROUND=1: as before.
+ */
+int VoxelWorld_BorderMetatile(int worldX, int worldY)
+{
+    static const int kDir[4][2] = { {0, -1}, {1, 0}, {-1, 0}, {0, 1} };
+    static int sOld = -1;
+    int mt = BorderMetatileRaw(worldX, worldY), part, ox, oy, w;
+
+    if (sOld < 0)
+        sOld = getenv("WJPC_BELT_HALF_TREE_GROUND") != NULL;
+    if (sOld || mt < 0x1D4 || mt > 0x1FD)
+        return mt;
+    part = VoxelTree_Part(NULL, mt);
+    if (part < 0 || part > 3)
+        return mt;
+    ox = worldX - (part & 1);
+    oy = worldY - (part >> 1);
+    for (int k = 0; k < 4; ++k)
+    {
+        int m = BorderMetatileRaw(ox + (k & 1), oy + (k >> 1));
+
+        if (VoxelWorld_GetInstanceAt(ox + (k & 1), oy + (k >> 1)) != NULL || m < 0 || VoxelTree_Part(NULL, m) != k)
+            goto half;
+    }
+    return mt;
+half:
+    for (int d = 0; d < 4; ++d)
+        if (RawIsWater(worldX + kDir[d][0], worldY + kDir[d][1], &w))
+            return w;
+    return mt;
 }
 
 bool VoxelWorld_BorderIsWater(int worldX, int worldY)
