@@ -135,3 +135,15 @@ build/upload work from the main thread. Step 5 is what makes 3D motion 240 fps.
 - Route 120: shadow flicker (video), black lines round tall grass, pond water squares and sky leaks, half
   under-bridge mesh.
 - Route 112 stretched spikes.
+
+## Results (steps 1-5 done 2026-11-21, test box: wine + software GL; GPU time not measurable here)
+| Step | Change | Measured |
+|---|---|---|
+| 1 | 2D pass under 3D: UI only | 2D picture 4.8 -> 1.3 ms; pictures identical |
+| 2 | animated tiles: changed rows only | the 4.2-5.7 ms every 16 frames -> ~0 |
+| 2b | animated pages in a ring of 3 textures | Ever Grande waterfalls: ~180 ms/update stays on the test box (its software GL waits on any texture upload, before these changes too); expected to help real drivers - check with a stall log there |
+| 3 | map underfoot keeps its mesh, laid again in the background | Route 121's 72 ms case (atlas growth) off the main thread |
+| 4 | map builds on a worker thread (world snapshot, per-thread caches); finish = upload only; warp destination built on it behind the fade | maps behind warps 16-69 ms -> < 6 ms; finishing a map 2-17 -> 0.1-1.8 ms |
+| 5 | 3D drawn on every refresh, camera/people eased between game frames | frame N+1 at t=0 == frame N at t=1 (pixel-identical); t=1 shots identical to before |
+Every step has a WJPC_..._OFF style switch back to the old behaviour (see the commits).
+Not done: persistent mapped buffers (finished maps are one glBufferData each, 0.1-1.8 ms); GL timer queries in the stall log.
