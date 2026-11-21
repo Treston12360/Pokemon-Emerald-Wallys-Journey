@@ -1225,6 +1225,11 @@ typedef struct
     double ms;
     uint32_t atlasGen;              // the atlas's generation when the build began (what the mesh is laid on)
     const VoxelAtlasMap *map;       // the slots it is laid with: the atlas's own, or the worker's copy of it
+    /* (step 4c) the ground split by atlas page, and every vertex quantised (QuantisePos), ready to upload: done
+     * on the worker after the build (BuildPrepare), so the main thread only uploads */
+    VoxelVertex *pageV[VOXEL_ATLAS_PAGES];
+    unsigned pageN[VOXEL_ATLAS_PAGES], pageCap[VOXEL_ATLAS_PAGES];
+    bool prepared;
 } InstanceBuild;
 
 static InstanceBuild sBackBuild, sNowBuild;
@@ -1263,6 +1268,7 @@ static void BuildBegin(InstanceBuild *pb, const VoxelMapInstance *inst, Atlas *a
     pb->atlasGen = atlas->gen;
     pb->map = &atlas->map;
     pb->nextX = pb->nextY = 0;
+    pb->prepared = false;
     pb->n[0] = pb->n[1] = pb->n[2] = 0;
     pb->staticCount = 0;
     pb->frames = 0;
@@ -1346,6 +1352,56 @@ static bool BuildSteps(InstanceBuild *pb, const VoxelMapInstance *inst, Uint64 d
     return true;
 }
 
+static void QuantiseInPlace(VoxelVertex *v, unsigned count)
+{
+    for (unsigned i = 0; i < count; i++)
+    {
+        v[i].x = QuantisePos(v[i].x);
+        v[i].y = QuantisePos(v[i].y);
+        v[i].z = QuantisePos(v[i].z);
+    }
+}
+
+/* Audit step 4c: the finished build made ready to upload - the ground split by atlas page (u = 2 * page + u in
+ * page) and every position quantised (DLX-22, as MeshSetQuantised did at upload). CPU only: run on the worker. */
+static void BuildPrepare(InstanceBuild *pb)
+{
+    unsigned ground = pb->n[0] < SCRATCH_VERTS ? pb->n[0] : SCRATCH_VERTS;
+    const VoxelVertex *groundV = pb->v[0];
+
+    for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+        pb->pageN[p] = 0;
+    for (unsigned i = 0; i + 2 < ground; i += 3)
+    {
+        unsigned p = (unsigned)(groundV[i].u * 0.5f);
+
+        if (p >= VOXEL_ATLAS_PAGES)
+            continue;
+        if (pb->pageN[p] + 3 > pb->pageCap[p])
+        {
+            unsigned cap = pb->pageCap[p] ? pb->pageCap[p] * 2 : 65536u;
+            VoxelVertex *nv = realloc(pb->pageV[p], cap * sizeof(VoxelVertex));
+
+            if (nv == NULL)
+                continue;
+            pb->pageV[p] = nv;
+            pb->pageCap[p] = cap;
+        }
+        for (int k = 0; k < 3; k++)
+        {
+            VoxelVertex *d = &pb->pageV[p][pb->pageN[p]++];
+
+            *d = groundV[i + k];
+            d->u -= 2.0f * p;
+        }
+    }
+    for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+        QuantiseInPlace(pb->pageV[p], pb->pageN[p]);
+    QuantiseInPlace(pb->v[1], pb->n[1]);
+    QuantiseInPlace(pb->v[2], pb->n[2]);
+    pb->prepared = true;
+}
+
 /*
  * Brennan 2026-11-21 02:12 (audit step 4, docs/polish_reports/PERF_AUDIT_2026-11-21.md: "Parse and build all map
  * vertex/index data completely on a background worker thread"): the background build (sBackBuild) runs on a worker
@@ -1379,7 +1435,10 @@ static int WorkerMain(void *arg)
             const VoxelMapInstance *inst = VoxelWorld_Instance(sWorker.index);
 
             if (inst != NULL)
+            {
                 BuildSteps(&sBackBuild, inst, 0);
+                BuildPrepare(&sBackBuild);
+            }
         }
         SDL_AtomicSet(&sWorker.busy, 0);
     }
@@ -1429,31 +1488,20 @@ static void WorkerStart(unsigned index)
 // The finished build into `m` (freed first if it held a mesh), which is then one of this frame's maps.
 static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, InstanceMesh *m)
 {
-    unsigned ground = pb->n[0] < SCRATCH_VERTS ? pb->n[0] : SCRATCH_VERTS;
-    const VoxelVertex *groundV = pb->v[0];
     Uint64 finish0 = SDL_GetPerformanceCounter();
 
+    if (!pb->prepared)
+        BuildPrepare(pb); // (a build on the main thread: here; the worker's is ready)
     if (m->used)
         InstanceFree(m);
-    // Terrain split by atlas page (u = 2 * page + u in page).
+    // Terrain split by atlas page (BuildPrepare), positions already quantised: uploaded as they are.
     for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
     {
-        unsigned n = 0;
-        for (unsigned i = 0; i + 2 < ground; i += 3)
-        {
-            unsigned page = (unsigned)(groundV[i].u * 0.5f);
-            if (page != p)
-                continue;
-            for (int k = 0; k < 3; k++)
-            {
-                sSorted[n] = groundV[i + k];
-                sSorted[n].u -= 2.0f * p;
-                n++;
-            }
-        }
+        unsigned n = pb->pageN[p];
+
         if (n != 0)
         {
-            MeshSetQuantised(&m->terrain[p], sSorted, n, GL_STATIC_DRAW);
+            MeshSet(&m->terrain[p], pb->pageV[p], n, GL_STATIC_DRAW);
             if (getenv("WJPC_DUMP_TERRAIN") && inst->mapGroup == atoi(getenv("WJPC_DUMP_TERRAIN")) / 100
              && inst->mapNum == atoi(getenv("WJPC_DUMP_TERRAIN")) % 100)
             {
@@ -1462,7 +1510,7 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
                 snprintf(name, sizeof(name), "%s.%u", getenv("WJPC_DUMP_TERRAIN_FILE") ? getenv("WJPC_DUMP_TERRAIN_FILE") : "terrain.bin", p);
                 if ((f = fopen(name, "wb")) != NULL)
                 {
-                    fwrite(sSorted, sizeof(VoxelVertex), n, f);
+                    fwrite(pb->pageV[p], sizeof(VoxelVertex), n, f);
                     fclose(f);
                 }
             }
@@ -1470,8 +1518,8 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
         else
             MeshFree(&m->terrain[p]);
     }
-    MeshSetQuantised(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
-    MeshSetQuantised(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
+    MeshSet(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
+    MeshSet(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
     memcpy(m->statics, pb->statics, pb->staticCount * sizeof(VoxelStaticDraw));
     m->staticCount = pb->staticCount;
     m->buildingPage = VoxelBuildings_PageOf(inst);
