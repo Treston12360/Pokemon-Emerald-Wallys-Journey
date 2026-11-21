@@ -572,6 +572,18 @@ static bool TestStep(void)
             }
             continue;
         }
+        if (!strcmp(cmd, "wildbattle"))
+        {
+            // wildbattle SPECIES LEVEL (test aid, Brennan 2026-11-21 quick run): a wild battle from the field.
+            extern void ZeroEnemyPartyMons(void);
+            extern void BattleSetup_StartWildBattle(void);
+            int species = 0, level = 5;
+            sscanf(line, "%*s %d %d", &species, &level);
+            ZeroEnemyPartyMons();
+            CreateMon(&gEnemyParty[0], (enum Species)species, (u8)level, 0x12345678u, OTID_STRUCT_RANDOM_NO_SHINY);
+            BattleSetup_StartWildBattle();
+            continue;
+        }
         if (!strcmp(cmd, "trainerbattle"))
         {
             // trainerbattle ID (test aid): start that trainer's battle from the field, as a script would.

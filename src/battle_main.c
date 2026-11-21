@@ -5366,7 +5366,8 @@ static void HandleEndTurn_RanFromBattle(void)
         switch (gProtectStructs[gBattlerAttacker].fleeType)
         {
         default:
-            gBattlescriptCurrInstr = BattleScript_GotAwaySafely;
+            // Wally's Journey (Brennan 2026-11-21): a run started with L leaves at once (no message, no wait)
+            gBattlescriptCurrInstr = gWJQuickRun == 2 ? BattleScript_GotAwayQuick : BattleScript_GotAwaySafely;
             break;
         case FLEE_ITEM:
             gBattlescriptCurrInstr = BattleScript_SmokeBallEscape;

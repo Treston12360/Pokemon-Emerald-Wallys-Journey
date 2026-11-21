@@ -3033,6 +3033,12 @@ BattleScript_GotAwaySafely::
 	waitmessage B_WAIT_TIME_LONG
 	end
 
+@ Wally's Journey (Brennan 2026-11-21 01:56: "When triggering auto-run from a battle, the game pauses for ~1 second,
+@ pulls up the text box, and then exits. Make auto-run trigger and exit battles immediately"): a run started with L
+@ (gWJQuickRun 2) that works ends the battle at once, without "Got away safely!" and its wait.
+BattleScript_GotAwayQuick::
+	end
+
 BattleScript_WildMonFled::
 	printstring STRINGID_WILDPKMNFLED
 	waitmessage B_WAIT_TIME_LONG
