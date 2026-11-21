@@ -1309,6 +1309,7 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
 {
     unsigned ground = pb->n[0] < SCRATCH_VERTS ? pb->n[0] : SCRATCH_VERTS;
     const VoxelVertex *groundV = pb->v[0];
+    Uint64 finish0 = SDL_GetPerformanceCounter();
 
     if (m->used)
         InstanceFree(m);
@@ -1366,9 +1367,11 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
     m->signature = pb->signature;
     m->lastUse = sFrame;
     pb->active = false;
-    Voxel3D_Log("[3D] built %d:%d (%dx%d): %u ground, %u tree, %u model vertices, %u big models; %.1f ms over %u frame%s",
+    Voxel3D_Log("[3D] built %d:%d (%dx%d): %u ground, %u tree, %u model vertices, %u big models; %.1f ms over %u frame%s"
+                " (+ %.1f ms sorting and uploading)",
                 inst->mapGroup, inst->mapNum, inst->width, inst->height, pb->n[0], pb->n[1], pb->n[2],
-                m->staticCount, pb->ms, pb->frames, pb->frames == 1 ? "" : "s");
+                m->staticCount, pb->ms, pb->frames, pb->frames == 1 ? "" : "s",
+                (SDL_GetPerformanceCounter() - finish0) * 1000.0 / SDL_GetPerformanceFrequency());
 }
 
 // ---------------------------------------------------------------------------
@@ -3274,7 +3277,16 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     {
         Uint64 freq = SDL_GetPerformanceFrequency();
         float dark = 0.0f, rgb[3];
-        double budget = VoxelWorld_ScreenFade(&dark, rgb) && dark >= 0.5f ? 40.0 : 3.0;
+        bool fadedOut = VoxelWorld_ScreenFade(&dark, rgb) && dark >= 0.5f;
+        double budget = fadedOut ? 40.0 : 3.0;
+        /* Brennan 2026-11-21 02:12 (audit step 3, docs/polish_reports/PERF_AUDIT_2026-11-21.md; his 72 ms "maps" on
+         * Route 121 was its atlas growing, then the map underfoot laid again, both at once): the map underfoot that
+         * needs laying again while it still has a mesh that draws keeps that mesh on screen and is laid again in
+         * the background, before any other map (its atlas grown over frames too). Laid at once only with nothing
+         * of it to draw, or behind a warp's fade. WJPC_UNDERFOOT_NOW=1: always at once, as before. */
+        static int sUnderfootNow = -1;
+        if (sUnderfootNow < 0)
+            sUnderfootNow = getenv("WJPC_UNDERFOOT_NOW") != NULL;
         Uint64 deadline = SDL_GetPerformanceCounter() + (Uint64)(budget * freq / 1000.0);
         const VoxelMapInstance *backInst = NULL;
         bool asked = false;
@@ -3288,7 +3300,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             const VoxelMapInstance *inst = VoxelWorld_Instance(i);
             InstanceMesh *m = MeshOf(inst->mapGroup, inst->mapNum);
             uint32_t sig = VoxelBuildings_LiveSignature(inst);
-            Atlas *atlas = i == 0 ? GetAtlas(inst) : FindAtlas(inst);
+            bool keepOld = i == 0 && !sUnderfootNow && !fadedOut && m != NULL && MeshAtlasOk(m);
+            Atlas *atlas = i == 0 && !keepOld ? GetAtlas(inst) : FindAtlas(inst);
             bool stale = m == NULL || m->signature != sig || m->lift != inst->lift || atlas == NULL
                       || m->atlas != atlas || !MeshAtlasOk(m)
                       || m->atlasGen != atlas->gen || atlas->grow; // (POL-15: laid again once it has grown)
@@ -3300,7 +3313,9 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 else
                     backInst = inst;
             }
-            if (i == 0 && stale && atlas != NULL)
+            if (i == 0 && stale && keepOld && backInst != inst)
+                sBackBuild.active = false; // (the map underfoot comes first: another map's build waits)
+            if (i == 0 && stale && atlas != NULL && !keepOld)
             {
                 // Underfoot: now. A background build of it is finished rather than begun again.
                 InstanceBuild *pb = backInst == inst ? &sBackBuild : &sNowBuild;
