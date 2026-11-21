@@ -453,10 +453,8 @@ home (the Volunteer House), not held in the tower.
 > ...Aria...
 > *sniffle*
 > (It looks up at you. For a moment it looks like it's waiting for someone else.)
-> (Then it turns, and runs.)   *(2026-11-20: was "Then it fades, little by little, into the cold air.")*
-> *(Scripted: it runs left, round the LEFT STATUE into the nook behind it (7..8, 3), then is gone. Ch. 13 shows this
-> same corner from Aria's side — she is in that nook. Pictures: docs/kanto_mockups/tower_corner_ch4.png and
-> tower_corner_ch13_mock.png. Corner choice waiting for the owner.)*
+> *(2026-11-21, owner: no run — "it can just stay in spot then the white flash then it's gone". The old last line
+> "Then it fades, little by little, into the cold air." is removed; a white flash ends the scene.)*
 > (The Rift Scanner reads... then goes quiet.)
 
 **4.5 Mr. Fuji, after — the Poké Flute**

@@ -106,6 +106,9 @@ a reveal or a choice, not just a gym.
   cry, and this time **Clefairy comes out from behind the statue and reaches her. Both sprites stay visible together
   for a beat before the collapse takes them.**
 - Show a short clip of the revised ch. 4 movement in 2D and 3D before Celadon.
+- **Superseded the same day (owner):** "the clefairy doesn't need to run before the white flash it can just stay in
+  spot then the white flash then it's gone." → In ch. 4 the echo stays where it is, a white flash, gone. The ch. 13
+  staging above (Clefairy comes out from behind the left statue to Aria) is unchanged.
 
 **Remaining dialogue is DRAFT:** newly suggested Lavender resident text, the Kiyoshi rescue rewrite, Blue's warning, and the rest of the finale dialogue still require separate owner approval. The existing executable scripts are not updated by these decisions. See `docs/KANTO_NARRATIVE_AUDIT.md` for the causal timeline and verification checklist.
 
