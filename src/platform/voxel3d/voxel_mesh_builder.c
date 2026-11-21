@@ -2452,6 +2452,7 @@ static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     const int16_t *grid;
     int mt, kind;
     float u0, v0, u1, v1, water, top, bot, shift;
+    float pu0, pv0, pu1, pv1;
 
     if (!RailsOn(inst))
         return;
@@ -2462,6 +2463,12 @@ static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     grid = VoxelRelief_Cell(inst, x, y);
     if (grid == NULL || !MetatileUV(b, mt, &u0, &v0, &u1, &v1))
         return;
+    /* the posts (Brennan 18:57: "Restore the dark grey/wooden-brown color and darker underwater shading on all the
+     * vertical support poles"): the drawing's own dark post grey, 0F5's left column rows 0-2 */
+    if (!MetatileUV(b, 0x0F5, &pu0, &pv0, &pu1, &pv1))
+        pu0 = u0, pv0 = v0, pu1 = u1, pv1 = v1;
+    else
+        pu1 = pu0 + (pu1 - pu0) * 1.0f / 16.0f, pv1 = pv0 + (pv1 - pv0) * 3.0f / 16.0f;
     water = grid[0] / 16.0f;
     top = water + 1.0f;          /* the bank's height: a level over the river */
     bot = top - 3.0f * p;
@@ -2477,7 +2484,7 @@ static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
         RailBox(b, xa, xb, za, zb, top, bot, RU(w ? 0 : 1), RV(12), RU(e ? 16 : 15), RV(16), !w, !e, true, true, 1.0f);
         /* a post at the cell's middle, down to the river */
         RailBox(b, (float)x + 7.0f * p, (float)x + 9.0f * p, zb - 2.0f * p, zb, bot, water,
-                RU(7), RV(13), RU(9), RV(15), true, true, true, true, 0.45f);
+                pu0, pv0, pu1, pv1, true, true, true, true, 0.7f);
     }
     else
     {
@@ -2487,7 +2494,7 @@ static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
 
         RailBox(b, xa, xb, za, zb, top, bot, RU(5), RV(n ? 0 : 1), RU(10), RV(s2 ? 16 : 15), true, true, !s2, !n, 1.0f);
         RailBox(b, (float)x + 6.5f * p, (float)x + 8.5f * p, (za + zb) * 0.5f - p, (za + zb) * 0.5f + p, bot, water,
-                RU(6), RV(7), RU(8), RV(9), true, true, true, true, 0.45f);
+                pu0, pv0, pu1, pv1, true, true, true, true, 0.7f);
     }
 #undef RU
 #undef RV
