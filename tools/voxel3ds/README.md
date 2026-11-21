@@ -79,5 +79,5 @@ Patch: `drawn_ok()` and the candidates list accept `VOXEL_DRAWN_OK=group,group`.
 Brennan 16:11 (shrubs picture) / 16:23 (short palms "raise the 3 ... the trunk ... still hides behind the forest
 trees"). In `3ds_port/scripts`: `voxel_fortree.shrub(layout)` (the Fortree shrub 281-283 over 270-272 as one leaning
 card of its upper layer, grass pixels clear) with one spec per shrub (`wj_shrub_*`, 5 on Route 120, 4 on Route 119;
-Route 119's two wider 270-271-271 ones not done); `palm(..., extra_trunk=1)` for fortree_palm_short (one more trunk
+Route 119's two wider ones done too as wj_shrub4_*, voxel_fortree.shrub(layout, 4), spliced --layout 35 2026-11-20 19:3x); `palm(..., extra_trunk=1)` for fortree_palm_short (one more trunk
 cell, 0x273's lower layer, foot kept on the rect's last row). Full donor; spliced `--layout` 5, 35, 36.
