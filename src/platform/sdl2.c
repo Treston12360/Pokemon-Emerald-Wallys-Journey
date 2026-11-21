@@ -3569,6 +3569,7 @@ void Platform_SetStatus(struct SiiRtcInfo *rtc)
     internalClock.status = rtc->status;
 }
 
+static bool sClockRead; // UpdateInternalClock's reading is current (a Set... clears it: the next read is the device's)
 static void UpdateInternalClock(void)
 {
     /* Brennan 2026-11-21 11:01 (21g: every second LAGGY, frame 28 ms): the 3D stand-ins ask each neighbouring
@@ -3576,12 +3577,15 @@ static void UpdateInternalClock(void)
      * cost about half a millisecond on his PC (6 ms under wine). The clock is read at most every 100 ms now; the
      * game shows seconds at most. */
     static Uint32 sReadAt;
-    static bool sRead;
     Uint32 now = SDL_GetTicks();
 
-    if (sRead && now - sReadAt < 100)
+    static int sNoCache = -1;
+
+    if (sNoCache < 0)
+        sNoCache = getenv("WJPC_CLOCK_CACHE_OFF") != NULL; // (as before: read every time)
+    if (sClockRead && now - sReadAt < 100 && !sNoCache)
         return;
-    sRead = true;
+    sClockRead = true;
     sReadAt = now;
     if (getenv("WJPC_RTC_EPOCH"))
     {
@@ -3639,6 +3643,7 @@ void Platform_GetDateTime(struct SiiRtcInfo *rtc)
 
 void Platform_SetDateTime(struct SiiRtcInfo *rtc)
 {
+    sClockRead = false;
     internalClock.month = rtc->month;
     internalClock.day = rtc->day;
     internalClock.dayOfWeek = rtc->dayOfWeek;
@@ -3659,6 +3664,7 @@ void Platform_GetTime(struct SiiRtcInfo *rtc)
 
 void Platform_SetTime(struct SiiRtcInfo *rtc)
 {
+    sClockRead = false;
     internalClock.hour = rtc->hour;
     internalClock.minute = rtc->minute;
     internalClock.second = rtc->second;

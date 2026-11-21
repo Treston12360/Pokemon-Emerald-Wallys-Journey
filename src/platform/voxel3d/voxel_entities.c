@@ -2005,7 +2005,8 @@ static bool RefreshStandIn(unsigned index, const struct ObjectEventGraphicsInfo 
     return true;
 }
 
-/* WallyJourney_IsNpcAway for a stand-in, remembered for 10 s (600 frames): it reads the clock (GetTimeOfDay,
+/* WallyJourney_IsNpcAway for a stand-in, remembered for half a second (30 frames; longer kept a wrong answer
+ * asked while a warp was still loading the map): it reads the clock (GetTimeOfDay,
  * the RTC) and the weather each call, and asking it for every neighbouring person every frame cost 22 ms a frame on
  * Brennan's PC (21g stall log, 2026-11-21 11:01: every second LAGGY, frame 28 ms) and 170 ms under wine. The answer
  * only changes with the hour or the weather. */
@@ -2025,7 +2026,7 @@ static bool StandInAway(const struct ObjectEventTemplate *t)
             break;
         }
     }
-    if (sMemo[k].t != t || sStandInFrame - sMemo[k].frame >= 600u)
+    if (sMemo[k].t != t || sStandInFrame - sMemo[k].frame >= 30u)
     {
         /* (it also sets the game's clock globals as it reads the clock: put back as they were, so the frame
          * drawn sees the same time as the game frame it shows) */
@@ -2033,7 +2034,7 @@ static bool StandInAway(const struct ObjectEventTemplate *t)
         u8 keepTimeOfDay = gTimeOfDay;
 
         sMemo[k].t = t;
-        sMemo[k].frame = sStandInFrame - (k * 7u % 600u); /* refreshes spread over the 10 s, not all in one frame */
+        sMemo[k].frame = sStandInFrame - (k * 7u % 30u); /* refreshes spread over the half second, not all in one frame */
         sMemo[k].away = WallyJourney_IsNpcAway(t);
         gLocalTime = keepTime;
         gTimeOfDay = keepTimeOfDay;
