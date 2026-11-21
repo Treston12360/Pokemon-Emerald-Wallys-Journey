@@ -1,0 +1,7 @@
+Wally's Journey stall log. Build Nov 21 2026 04:16:43. Lines: a trip round the main loop over 150 ms,
+and one line a minute. Times in ms. Send this file with a freeze or crash report.
+   60.0s minute      6: game 0, frame 5 (3D 3: maps 0, belt 0, drawing 3), screen 1, present 0 | map 0:25, 3D 1, meshes 18, pages 18, free memory 1022 MB, loops 10620
+  120.0s minute      8: game 0, frame 7 (3D 3: maps 0, belt 0, drawing 3), screen 1, present 0 | map 0:25, 3D 1, meshes 18, pages 18, free memory 1050 MB, loops 21393
+  180.0s minute      3: game 0, frame 0 (3D 1: maps 0, belt 0, drawing 6), screen 3, present 0 | map 0:25, 3D 1, meshes 18, pages 18, free memory 1050 MB, loops 32146
+  240.0s minute      7: game 0, frame 5 (3D 3: maps 0, belt 0, drawing 4), screen 1, present 1 | map 0:25, 3D 1, meshes 18, pages 18, free memory 1022 MB, loops 42869
+  300.0s minute      6: game 0, frame 0 (3D 0: maps 0, belt 0, drawing 9), screen 0, present 5 | map 0:4, 3D 1, meshes 21, pages 21, free memory 1021 MB, loops 53553
