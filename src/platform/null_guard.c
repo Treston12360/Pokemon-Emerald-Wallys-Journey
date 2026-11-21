@@ -34,6 +34,7 @@
 static __thread void **tGuardBuf;
 static __thread uintptr_t tFaultAddr;
 static __thread unsigned tFaultCode;
+static __thread uintptr_t tFaultIp; // the instruction that faulted (logged as exe+offset: the exact place)
 
 #define MAX_LOGGED 64
 static const void *sLogged[MAX_LOGGED];
@@ -56,9 +57,10 @@ static void LogOnce(const void *fn)
     if (f != NULL)
     {
 #ifdef _WIN32
-        fprintf(f, "skipped: callback %p (exe+%lx), code %x, address %p, callback2 exe+%lx\n", fn,
+        fprintf(f, "skipped: callback %p (exe+%lx), code %x, address %p, callback2 exe+%lx, at exe+%lx, build " __DATE__ " " __TIME__ "\n", fn,
                 (unsigned long)((uintptr_t)fn - (uintptr_t)GetModuleHandleA(NULL)), tFaultCode, (void *)tFaultAddr,
-                (unsigned long)((uintptr_t)gMain.callback2 - (uintptr_t)GetModuleHandleA(NULL)));
+                (unsigned long)((uintptr_t)gMain.callback2 - (uintptr_t)GetModuleHandleA(NULL)),
+                (unsigned long)(tFaultIp - (uintptr_t)GetModuleHandleA(NULL)));
 #else
         fprintf(f, "skipped: callback %p, code %x, address %p, callback2 %p\n", fn, tFaultCode,
                 (void *)tFaultAddr, (void *)gMain.callback2);
@@ -135,6 +137,7 @@ static LONG CALLBACK Handler(EXCEPTION_POINTERS *info)
       || code == EXCEPTION_ARRAY_BOUNDS_EXCEEDED || code == EXCEPTION_IN_PAGE_ERROR))
     {
         tFaultCode = code;
+        tFaultIp = (uintptr_t)info->ExceptionRecord->ExceptionAddress;
         tFaultAddr = info->ExceptionRecord->NumberParameters >= 2
                    ? info->ExceptionRecord->ExceptionInformation[1]
                    : (uintptr_t)info->ExceptionRecord->ExceptionAddress;

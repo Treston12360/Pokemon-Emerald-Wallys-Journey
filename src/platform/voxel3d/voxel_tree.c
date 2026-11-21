@@ -304,10 +304,28 @@ static bool OneLevelSlope(const int16_t *g)
  * WJPC_BELT_TREE_GROUND_LEVEL=1: as before. */
 static VOXEL_TLS float sGroundRaise;
 
+/* Brennan 2026-11-21 17:25 (21k: "the bigger 3D trees have the exact same thin black border/edge line underneath/
+ * around them that the fences had"): a tree's ground square read its picture right up to the texel edges, and his
+ * GPU read the next square's pixels there (the fence lines' cause, 21k). A quarter texel in on each side (any
+ * position inside the edge texel reads that texel). WJPC_TREE_GROUND_INSET=x texels: another inset (0: as before). */
+static void InsetGroundUV(float *u0, float *v0, float *u1, float *v1)
+{
+    static float sIn = -1.0f;
+    if (sIn < 0.0f)
+        sIn = getenv("WJPC_TREE_GROUND_INSET") ? (float)atof(getenv("WJPC_TREE_GROUND_INSET")) : 0.25f;
+    const float d = sIn / VOXEL_TREE_TEXTURE_DIM;
+    *u0 += *u0 < *u1 ? d : -d;
+    *u1 += *u0 < *u1 ? -d : d;
+    *v0 += *v0 < *v1 ? d : -d;
+    *v1 += *v0 < *v1 ? -d : d;
+}
+
 static void EmitGround(VoxelBuilder *builder, const VoxelMapInstance *inst, int x, int y,
                        float u0, float v0, float u1, float v1)
 {
     float lift = builder->lift, shift = builder->shift;
+
+    InsetGroundUV(&u0, &v0, &u1, &v1);
 
     /* on a mountain's rock the ground pass lays the rock (EmitTreeStep) */
     if (inst != NULL && VoxelMesh_TreeOnRock(inst, x, y))
@@ -472,7 +490,10 @@ static void EmitCell(VoxelBuilder *builder, const VoxelMapInstance *inst, const 
     /* over the water: its roots and shadow just off the surface, where the
      * water shows through and keeps its animation */
     if (art->decal)
+    {
+        InsetGroundUV(&u0, &v0, &u1, &v1);
         VoxelMesh_Top(builder, (float)x, (float)y, 0.02f, 0.0f, u0, v0, u1, v1, 1.0f);
+    }
     else
         EmitGround(builder, inst, x, y, u0, v0, u1, v1);
     EmitCrownCard(builder, art, x, y, col, row,

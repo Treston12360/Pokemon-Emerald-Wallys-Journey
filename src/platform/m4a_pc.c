@@ -703,6 +703,8 @@ void m4aMPlayStop(struct MusicPlayerInfo *mplayInfo)
     s32 i;
     struct MusicPlayerTrack *track;
 
+    if (mplayInfo == NULL) // (StopCry before any cry has played: gMPlay_PokemonCry is NULL)
+        return;
     if (mplayInfo->ident != ID_NUMBER)
         return;
 
@@ -1785,8 +1787,15 @@ void SetPokemonCryProgress(u32 val)
 
 bool32 IsPokemonCryPlaying(struct MusicPlayerInfo *mplayInfo)
 {
-    struct MusicPlayerTrack *track = mplayInfo->tracks;
+    struct MusicPlayerTrack *track;
 
+    /* Brennan 2026-11-21 (WallysJourney_errors.txt on every boot: "skipped: callback exe+198bf0 ... address
+     * 0000002c" = Task_HandleExpansionIntro): a key pressed in the boot intro asks whether a cry is playing before
+     * any cry has played - gMPlay_PokemonCry is still NULL and its tracks (offset 0x2c) were read through it. The
+     * guard skipped the rest of that frame's intro task. src/m4a.c has this check, but the PC build uses this file. */
+    if (mplayInfo == NULL || mplayInfo->tracks == NULL)
+        return FALSE;
+    track = mplayInfo->tracks;
     if (track->chan && track->chan->track == track)
         return TRUE;
     else

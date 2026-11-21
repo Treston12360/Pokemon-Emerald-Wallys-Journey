@@ -1,0 +1,35 @@
+Great job on the three fixes in `21k`—the **fence black lines are completely gone**, the **Route 110 ring-tree shadow flicker is gone**, the **RTC clock check says `ok` on startup**, and the stall log has **zero `STALL` or `LAGGY` warnings** across 9 minutes of testing! (Note: I also attached a minor `skipped: callback 01198bf0 (exe+198bf0), code c0000005` log line that triggered during the session so you can inspect that pointer guard.)
+
+Now that we see how cleanly your UV-inset and height-bias fixes worked, here is the full list of remaining issues across our screenshots to fix and add to our **POL checklist**:
+
+---
+
+### 1. Global Fixes (Apply Region-Wide)
+- **Apply the Fence UV-Inset Fix to All Large 3D Trees (`Image 1` — Center Red Box):**
+  - Now that the fence black lines are gone, notice in `Image 1` (center red box around the Berry patch trees) that the **bigger 3D trees have the exact same thin black border/edge line** underneath/around them that the fences had. Apply the same UV edge-inset fix to the large tree ground/shadow sheets across the region.
+- **Audit All Tree Types Region-Wide for Shadow Flickering:**
+  - Your fix stopped the flickering on Route 110's ring trees, **but other tree variants around the region are still flickering** when moving. Apply that same ground-patch elevation offset (`+epsilon` above terrain) globally to **every tree model/variant across the entire region**.
+- **Fix Seasonal Falling Leaves During Fast-Forward:**
+  - When fast-forwarding the game, the seasonal falling leaves speed up erratically and then disappear completely. Decouple falling leaf particle physics/spawning from fast-forward multiplier so leaves **always fall at normal, smooth speed and never vanish** when sped up.
+
+---
+
+### 2. Route-by-Route Fixes From Attached Screenshots
+- **Route 117 (`Images 1, 2, & 7`):**
+  - **Replace Southern Forest With Sea (`Image 2` — Bottom-Right Panel `Route 117 with the sea`):** Make the entire southern border forest of Route 117 **open blue sea** exactly as mocked up in `Route 117 with the sea` (matching `Route 110 with the sea`).
+  - **Seal Blue Sky Hole (`Image 1` — Top-Left Red Box):** Behind the small rock mound on the north-west side, there is a **light-blue skybox gap** showing through between the trees and rock. Weld/seal those vertices.
+  - **Fill Missing Forest Strip & Flatten Raised East Grass (`Images 1 & 7` — Red Boxes):**
+    - In `Image 7` (tall vertical red box on the north-west woods), a strip of **raised bright-green grass** cuts straight up through the woods instead of trees—fill that strip with full 3D trees to complete the forest.
+    - In `Image 1` & `Image 7` (top-right red box), there is a **raised/tilted green grass block** sticking up higher than the surrounding ground—flatten it flush with the surrounding terrain.
+- **Route 111 — Trainer Hill (`Image 3` — Red Box):**
+  - Look at the top-center of the **Trainer Hill entrance door** (inside the red box): the top middle edge of the door frame **flickers/Z-fights** with the surrounding wall. Give the door frame a clean depth offset so it sits solid without flickering.
+- **Route 112 (`Images 4 & 5` — Red Boxes):**
+  - **South Border Sky-High Rock/Tree Spikes (`Image 4` — Wide Bottom Red Box):** Along the bottom edge of Route 112, stretched walls of rock and trees are shooting straight up into the sky—level/clamp them flush with the surrounding terrain.
+  - **Blue Sky Showing Through Side of Stairs (`Image 4` — Small Top-Center Red Box):** On the left side of the staircase, a **light-blue skybox gap** is peeking through the side of the steps. Seal that stair-to-cliff side seam.
+  - **Convert 2D Cable Car & Cable Line to 3D (`Image 5` — Large Top-Left Red Box):** Both the **cable car tower/pylon** and the **diagonal cable line** running up Mt. Chimney are still flat 2D sprites/lines—rebuild them as proper **3D models**.
+- **Fiery Path (`Image 6` — 3 Red Boxes):**
+  - **Remove Horizontal Black Grid Lines (`Image 6` — Red Boxes):** Inside Fiery Path, thin **horizontal black lines** cut across the cave floor and walls at regular intervals. Remove those tile-seam black lines.
+  - **Convert Fiery Path From 2D to Full 3D:** Fiery Path's cave walls, ledges, and boulders are still rendering flat in 2D—upgrade Fiery Path into full **3D cave walls, raised ledges, and 3D boulders** (matching the 3D overworld style).
+- **Verdanturf Town (`Image 8` — 5 Red Boxes):**
+  - **Convert Flat 2D Flowers to 3D (`Image 8` — 4 Red Boxes Around Flower Beds):** All the red/yellow flower patches in Verdanturf Town are still flat 2D ground tiles—convert them to **3D flower models** (matching the 3D flowers used elsewhere).
+  - **Seal Small Blue Sky Gap (`Image 8` — Small Red Box Right of Pokémon Center):** Right next to the Pokémon Center's east wall/fence corner, a tiny **blue sky sliver** is peeking through—seal that gap.

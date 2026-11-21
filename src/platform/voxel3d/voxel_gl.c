@@ -1549,6 +1549,12 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
             fwrite(pb->v[2], sizeof(VoxelVertex), pb->n[2], f);
             fclose(f);
         }
+        snprintf(name, sizeof(name), "%s.trees", getenv("WJPC_DUMP_TERRAIN_FILE") ? getenv("WJPC_DUMP_TERRAIN_FILE") : "terrain.bin");
+        if ((f = fopen(name, "wb")) != NULL)
+        {
+            fwrite(pb->v[1], sizeof(VoxelVertex), pb->n[1], f);
+            fclose(f);
+        }
         snprintf(name, sizeof(name), "%s.statics", getenv("WJPC_DUMP_TERRAIN_FILE") ? getenv("WJPC_DUMP_TERRAIN_FILE") : "terrain.bin");
         if ((f = fopen(name, "w")) != NULL)
         {
