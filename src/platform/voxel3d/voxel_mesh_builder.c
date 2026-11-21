@@ -4069,8 +4069,14 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
         /* POL-30: over this cell's base, and as far south */
         low += BeltBase(x, y - 1) - BeltBase(x, y);
         otherShift += BeltBase(x, y - 1) - BeltBase(x, y);
-        EmitBorderNorth(builder, x, y, low, otherShift, level + (float)VOXEL_BORDER_COURSES, shift,
-                        u0, v0, u1, v1);
+        /* Brennan 2026-11-21 01:23 (Route 121's north woods: "a dark green square tile/box sticking out" behind
+         * each tree of a diagonal row): where the wood's ground steps (its cells as far south as they are high),
+         * a wood cell stood a wall two courses over its own ground at its north edge, above the crowns. Between
+         * two wood cells the wall reaches only this cell's ground. WJPC_BELT_WOOD_NORTH_COURSES=1: as before. */
+        float top = level + (float)VOXEL_BORDER_COURSES;
+        if (BeltIsTree(x, y) && BeltIsTree(x, y - 1) && getenv("WJPC_BELT_WOOD_NORTH_COURSES") == NULL)
+            top = level;
+        EmitBorderNorth(builder, x, y, low, otherShift, top, shift, u0, v0, u1, v1);
     }
 }
 
