@@ -55,6 +55,7 @@
 #include "voxel_relief.h"
 #include "voxel_file.h"
 #include "voxel_env.h" // cached test switches (last include)
+#include "voxel_thread.h"
 
 #ifndef VOXEL_RELIEF_PATH
 #define VOXEL_RELIEF_PATH "voxel/relief.bin"
@@ -113,7 +114,7 @@ typedef struct
     int16_t x, y;
     int k;
 } FindMemo;
-static FindMemo sFindMemo[FIND_MEMO_SIDE * FIND_MEMO_SIDE];
+static VOXEL_TLS FindMemo sFindMemo[FIND_MEMO_SIDE * FIND_MEMO_SIDE]; /* (per thread: audit step 4) */
 
 static int Find(const ReliefLayout *l, const VoxelMapInstance *inst, int x, int y);
 
@@ -654,7 +655,7 @@ typedef struct
     int16_t x, y;
     int record;            /* index into sCutCells, -1: not cut */
 } CutMemo;
-static CutMemo sCutMemo[FIND_MEMO_SIDE * FIND_MEMO_SIDE];
+static VOXEL_TLS CutMemo sCutMemo[FIND_MEMO_SIDE * FIND_MEMO_SIDE]; /* (per thread: audit step 4) */
 
 /* floorf as a conversion and one correction: the library call it replaces was
  * made at every step of every shadow ray over a mountain. */

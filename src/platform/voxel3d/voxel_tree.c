@@ -6,6 +6,7 @@
 #include "voxel_regions.h"
 #include "voxel_building.h"
 #include "voxel_env.h" // cached test switches (last include)
+#include "voxel_thread.h"
 
 struct Tileset;
 extern const struct Tileset gTileset_Dewford;
@@ -322,7 +323,7 @@ static void EmitGround(VoxelBuilder *builder, const VoxelMapInstance *inst, int 
  * its floor (96,32), every cell of a patch alike. The tuft of the cell south
  * of a walker stands in front of it up to its shoulders, as the GBA's grass
  * covers all but its head. */
-static bool sNoGround; /* POL-48: the crown alone, on ground already drawn */
+static VOXEL_TLS bool sNoGround; /* POL-48: the crown alone, on ground already drawn */
 
 static void EmitSmallCell(VoxelBuilder *builder, const VoxelMapInstance *inst, int x, int y,
                           const void *secondaryTileset, int metatileId, int part, bool rock)

@@ -59,8 +59,82 @@ extern const struct Tileset gTileset_GenericBuilding;
 #include <string.h>
 #include "voxel_env.h" // cached test switches (last include)
 
-static VoxelMapInstance sInstances[MAX_VOXEL_MAP_INSTANCES];
-static unsigned sInstanceCount;
+#include "voxel_thread.h"
+
+/*
+ * The world as placed (the maps, the walk's places, the belt's tile sets, Kanto's tile sets) - one struct, reached
+ * through a per-thread pointer: the main world everywhere but on the map-building worker, which builds from a
+ * snapshot of it (VoxelWorld_SnapshotTake / VoxelWorld_UseSnapshot) so the main thread can place maps meanwhile.
+ * Brennan 2026-11-21 02:12, audit step 4.
+ */
+#define VOXEL_PLACED_MAX 32
+#define BELT_PAIRS 16  /* POL-46: was 4 (BELT_LAYERS) */
+struct VoxelWorldState
+{
+    VoxelMapInstance instances[MAX_VOXEL_MAP_INSTANCES];
+    unsigned instanceCount;
+    VoxelMapInstance placed[VOXEL_PLACED_MAX];
+    unsigned placedCount;
+    unsigned cellGen;
+    const void *frlgTilesets[192];
+    unsigned frlgTilesetCount;
+    const void *beltPairs[BELT_PAIRS][2];
+    unsigned beltPairCount;
+    /* a snapshot's copy of the live map grid (gBackupMapLayout) for instance 0; NULL: the live one */
+    uint16_t *liveMap;
+    int liveW, liveH;
+    unsigned liveCap;
+};
+static struct VoxelWorldState sMainWorld = { .cellGen = 1 };
+static VOXEL_TLS struct VoxelWorldState *sWorldP = &sMainWorld;
+#define sInstances (sWorldP->instances)
+#define sInstanceCount (sWorldP->instanceCount)
+#define sPlaced (sWorldP->placed)
+#define sPlacedCount (sWorldP->placedCount)
+#define sCellGen (sWorldP->cellGen)
+#define sFrlgTilesets (sWorldP->frlgTilesets)
+#define sFrlgTilesetCount (sWorldP->frlgTilesetCount)
+#define sBeltPairs (sWorldP->beltPairs)
+#define sBeltPairCount (sWorldP->beltPairCount)
+
+VoxelWorldState *VoxelWorld_SnapshotNew(void)
+{
+    return calloc(1, sizeof(VoxelWorldState));
+}
+
+void VoxelWorld_SnapshotTake(VoxelWorldState *snap)
+{
+    uint16_t *keep = snap->liveMap;
+    unsigned cap = snap->liveCap, n = (unsigned)(gBackupMapLayout.width * gBackupMapLayout.height);
+
+    *snap = sMainWorld;
+    snap->liveMap = keep;
+    snap->liveCap = cap;
+    if (gBackupMapLayout.map == NULL || n == 0)
+    {
+        snap->liveW = snap->liveH = 0;
+        return;
+    }
+    if (snap->liveCap < n)
+    {
+        uint16_t *grown = realloc(snap->liveMap, n * sizeof(uint16_t));
+        if (grown == NULL)
+        {
+            snap->liveW = snap->liveH = 0;
+            return;
+        }
+        snap->liveMap = grown;
+        snap->liveCap = n;
+    }
+    memcpy(snap->liveMap, gBackupMapLayout.map, n * sizeof(uint16_t));
+    snap->liveW = gBackupMapLayout.width;
+    snap->liveH = gBackupMapLayout.height;
+}
+
+void VoxelWorld_UseSnapshot(VoxelWorldState *snap)
+{
+    sWorldP = snap != NULL ? snap : &sMainWorld;
+}
 
 /*
  * Memo for the current batch. Small and linear on purpose: there are at most a
@@ -77,7 +151,7 @@ struct VoxelMemo
     unsigned count;
 };
 
-static struct VoxelMemo sAttributeMemo, sMapMemo, sBorderMemo;
+static VOXEL_TLS struct VoxelMemo sAttributeMemo, sMapMemo, sBorderMemo; /* (per thread, audit step 4) */
 
 void VoxelWorld_BeginBatch(void)
 {
@@ -157,8 +231,8 @@ const uint16_t *Voxel_ResolveAttributes(const void *tilesetPtr)
  * winter, spring blossom), not as stored; kept for the last few tilesets. */
 const uint16_t *Voxel_ResolvePalettes(const void *tilesetPtr)
 {
-    static struct { const void *tileset; u32 key; u16 colors[16 * 16]; } sSeasonal[12];
-    static unsigned sNext;
+    static VOXEL_TLS struct { const void *tileset; u32 key; u16 colors[16 * 16]; } sSeasonal[12];
+    static VOXEL_TLS unsigned sNext;
     const struct Tileset *tileset = tilesetPtr;
     const u16 *raw;
     u32 key;
@@ -189,8 +263,8 @@ uint32_t VoxelWorld_SeasonKey(void)
  * palettes), anything else goes through the season formula. Rebuilt when the season key changes. */
 void VoxelWorld_SeasonTexels(uint16_t *texels, size_t count)
 {
-    static u16 *sLut;
-    static u32 sLutKey;
+    static VOXEL_TLS u16 *sLut;
+    static VOXEL_TLS u32 sLutKey;
     u32 key = WallyJourney_FoliageKey();
 
     if ((key & 0xF) == 1 && !(key & 0x100)) /* FOLIAGE_NONE and no hand-made palettes: nothing to do */
@@ -224,7 +298,6 @@ void VoxelWorld_SeasonTexels(uint16_t *texels, size_t count)
  * the same questions of a cell (which map is nearest, whose border, which fill) dozens of times while building it -
  * NearestBeltMap alone was 39% of the belt's time (a sampling profile, WJPC_PROFILE). The answers are kept per cell
  * (CellMemo) until the maps placed or the belt's tile sets change (sCellGen). WJPC_NO_CELL_MEMO=1: asked every time. */
-static unsigned sCellGen = 1;
 typedef struct { int x, y; unsigned gen; int value; const void *ptr; } CellMemoEntry;
 #define CELL_MEMO_SIZE 32768u
 static bool CellMemoOff(void)
@@ -257,15 +330,13 @@ static void CellMemoPut(CellMemoEntry *e, int x, int y, int value, const void *p
 }
 
 /* Project ARIA (K2): the tile sets of Kanto's maps, noted as maps are placed (see voxel_world.h). */
-static const void *sFrlgTilesets[192];
-static unsigned sFrlgTilesetCount;
 
 bool Voxel_IsFrlg(const void *tileset)
 {
     /* (the last answer kept: asked for the same tile set over and over while the belt is built) */
-    static const void *sLast;
-    static unsigned sLastCount = ~0u;
-    static bool sLastAnswer;
+    static VOXEL_TLS const void *sLast;
+    static VOXEL_TLS unsigned sLastCount = ~0u;
+    static VOXEL_TLS bool sLastAnswer;
 
     if (tileset == sLast && sLastCount == sFrlgTilesetCount && tileset != NULL)
         return sLastAnswer;
@@ -601,11 +672,8 @@ static bool ConnectionOrigin(const struct MapConnection *conn, const struct MapH
  * among them: each is a place the walk goes on from, so that a map within
  * reach is found even where the way to it leads through one that is not.
  */
-#define VOXEL_PLACED_MAX 32
 #define VOXEL_WALK_REACH (2 * VOXEL_WORLD_REACH)
 
-static VoxelMapInstance sPlaced[VOXEL_PLACED_MAX];
-static unsigned sPlacedCount;
 
 /* Tiles between two rectangles, the larger of the two axes; 0 touching. */
 static int RectGap(const VoxelMapInstance *a, int x, int y, int width, int height)
@@ -892,6 +960,13 @@ static u16 GetRawBlock(int worldX, int worldY, const VoxelMapInstance **outInst)
         int bx = localX + MAP_OFFSET;
         int by = localY + MAP_OFFSET;
 
+        if (sWorldP->liveMap != NULL)
+        {
+            /* (a snapshot: its own copy) */
+            if (bx >= 0 && bx < sWorldP->liveW && by >= 0 && by < sWorldP->liveH)
+                return sWorldP->liveMap[bx + sWorldP->liveW * by];
+            return 0;
+        }
         if (bx >= 0 && bx < gBackupMapLayout.width
          && by >= 0 && by < gBackupMapLayout.height)
             return gBackupMapLayout.map[bx + gBackupMapLayout.width * by];
@@ -1504,7 +1579,9 @@ static bool BeltPairDrawn(const VoxelMapInstance *m);
 static int EdgeFillAtUncached(int worldX, int worldY, const VoxelMapInstance **art);
 static int EdgeFillAt(int worldX, int worldY, const VoxelMapInstance **art)
 {
-    static CellMemoEntry sMemo[CELL_MEMO_SIZE];
+    VOXEL_TLS_TABLE(CellMemoEntry, sMemo, CELL_MEMO_SIZE);
+    if (sMemo == NULL)
+        return EdgeFillAtUncached(worldX, worldY, art);
     CellMemoEntry *e = CellMemoSlot(sMemo, worldX, worldY);
 
     if (!CellMemoHit(e, worldX, worldY))
@@ -1785,8 +1862,8 @@ uint32_t VoxelWorld_BlockHash(int x0, int y0, int x1, int y1)
 static bool BorderIsPrimaryOnlyUncached(const VoxelMapInstance *m);
 static bool BorderIsPrimaryOnly(const VoxelMapInstance *m)
 {
-    static unsigned sGen[MAX_VOXEL_MAP_INSTANCES];
-    static bool sAnswer[MAX_VOXEL_MAP_INSTANCES];
+    static VOXEL_TLS unsigned sGen[MAX_VOXEL_MAP_INSTANCES];
+    static VOXEL_TLS bool sAnswer[MAX_VOXEL_MAP_INSTANCES];
 
     if (m >= sInstances && m < sInstances + MAX_VOXEL_MAP_INSTANCES && !CellMemoOff())
     {
@@ -1835,9 +1912,6 @@ static bool BorderIsPrimaryOnlyUncached(const VoxelMapInstance *m)
  * (voxel_gl.c, belt layers) and says here which tile set pairs it has ready. A map on one of them gives the
  * belt its border like any other; VoxelWorld_BorderArtMap says whose tile sets a cell's metatile is of.
  */
-#define BELT_PAIRS 16  /* POL-46: was 4 (BELT_LAYERS) */
-static const void *sBeltPairs[BELT_PAIRS][2];
-static unsigned sBeltPairCount;
 
 void VoxelWorld_SetBeltPairs(const void *const (*pairs)[2], unsigned count)
 {
@@ -1871,8 +1945,10 @@ bool VoxelWorld_BeltOld(void)
 static const VoxelMapInstance *NearestBeltMapUncached(int worldX, int worldY, bool art);
 static const VoxelMapInstance *NearestBeltMap(int worldX, int worldY, bool art)
 {
-    static CellMemoEntry sMemo[2][CELL_MEMO_SIZE];
-    CellMemoEntry *e = CellMemoSlot(sMemo[art], worldX, worldY);
+    VOXEL_TLS_TABLE(CellMemoEntry, sMemo, 2 * CELL_MEMO_SIZE);
+    if (sMemo == NULL)
+        return NearestBeltMapUncached(worldX, worldY, art);
+    CellMemoEntry *e = CellMemoSlot(sMemo + (art ? CELL_MEMO_SIZE : 0), worldX, worldY);
 
     if (!CellMemoHit(e, worldX, worldY))
         CellMemoPut(e, worldX, worldY, 0, NearestBeltMapUncached(worldX, worldY, art));
@@ -1940,7 +2016,9 @@ const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY)
 static const VoxelMapInstance *BorderArtMapUncached(int worldX, int worldY);
 const VoxelMapInstance *VoxelWorld_BorderArtMap(int worldX, int worldY)
 {
-    static CellMemoEntry sMemo[CELL_MEMO_SIZE];
+    VOXEL_TLS_TABLE(CellMemoEntry, sMemo, CELL_MEMO_SIZE);
+    if (sMemo == NULL)
+        return BorderArtMapUncached(worldX, worldY);
     CellMemoEntry *e = CellMemoSlot(sMemo, worldX, worldY);
 
     if (!CellMemoHit(e, worldX, worldY))
@@ -2080,7 +2158,9 @@ static bool RawIsWater(int x, int y, int *mt)
 static int BorderMetatileUncached(int worldX, int worldY);
 int VoxelWorld_BorderMetatile(int worldX, int worldY)
 {
-    static CellMemoEntry sMemo[CELL_MEMO_SIZE];
+    VOXEL_TLS_TABLE(CellMemoEntry, sMemo, CELL_MEMO_SIZE);
+    if (sMemo == NULL)
+        return BorderMetatileUncached(worldX, worldY);
     CellMemoEntry *e = CellMemoSlot(sMemo, worldX, worldY);
 
     if (!CellMemoHit(e, worldX, worldY))

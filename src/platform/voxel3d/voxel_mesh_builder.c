@@ -52,7 +52,9 @@ int VoxelMesh_RailFloorArt(const VoxelMapInstance *inst);
 #define SOLID_BACK VOXEL_FACE_SHADE(0.88f)
 #define SOLID_SIDE VOXEL_FACE_SHADE(0.91f)
 
-static int sWindowX0, sWindowY0, sWindowW, sWindowH;
+#include "voxel_thread.h"
+/* (the window, its shapes and the builder's caches are per thread: maps are built on a worker too, audit step 4) */
+static VOXEL_TLS int sWindowX0, sWindowY0, sWindowW, sWindowH;
 
 /*
  * Classification of each tile in the window, computed at most once per
@@ -64,7 +66,7 @@ static int sWindowX0, sWindowY0, sWindowW, sWindowH;
  * for itself, and once as the neighbour of each of its four neighbours when
  * they decide which faces to cull.
  */
-static uint8_t sShapes[VOXEL_WINDOW_MAX * VOXEL_WINDOW_MAX];
+static VOXEL_TLS uint8_t sShapes[VOXEL_WINDOW_MAX * VOXEL_WINDOW_MAX];
 
 VoxelVisualShape VoxelMesh_Classify(int x, int y)
 {
@@ -1803,7 +1805,7 @@ static void EmitCliffWalls(VoxelBuilder *b, const VoxelMapInstance *inst, int x,
             /* beside a bridge's thin deck: the water under it runs up to
              * this cell's side, walled down to the water (seen past the
              * deck's edge, the gap under it showed the void) */
-            static int16_t under[VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE];
+            static VOXEL_TLS int16_t under[VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE];
             float nfoot;
             int ng, nw;
             unsigned ns = 0;
@@ -3003,8 +3005,12 @@ static bool BorderWaterLevel(int x, int y, float *level, float *shift)
 {
     /* (kept per cell, as BeltField) */
     enum { N = 32768 };
-    static struct { int x, y; unsigned gen; bool ok; float l, s; } sMemo[N];
+    typedef struct { int x, y; unsigned gen; bool ok; float l, s; } WaterMemo;
+    VOXEL_TLS_TABLE(WaterMemo, sMemo, N);
     unsigned gen = VoxelWorld_CellGen(), k = ((unsigned)x * 73856093u) ^ ((unsigned)y * 19349663u);
+
+    if (sMemo == NULL)
+        return BorderWaterLevelUncached(x, y, level, shift);
 
     k = (k ^ (k >> 15)) & (N - 1);
     if (gen == 0 || sMemo[k].gen != gen || sMemo[k].x != x || sMemo[k].y != y)
@@ -3053,9 +3059,9 @@ static bool BorderWaterLevelUncached(int x, int y, float *level, float *shift)
     if (getenv("WJPC_BELT_SEA_STEPS") == NULL)
     {
         /* (POL-30: one entry per map the belt stands with, not one in all) */
-        static int sKeys[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
-        static float sLevels[8], sShifts[8];
-        static unsigned sNext;
+        static VOXEL_TLS int sKeys[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
+        static VOXEL_TLS float sLevels[8], sShifts[8];
+        static VOXEL_TLS unsigned sNext;
         int key = (ring->mapGroup << 8 | ring->mapNum) ^ (ring->lift << 16);
         unsigned slot;
         for (slot = 0; slot < 8 && sKeys[slot] != key; ++slot)
@@ -3916,7 +3922,7 @@ static bool BeltTreeOwn(int x, int y)
  * current map's, and those of loaded maps on other tile sets whose border the belt shows (voxel_gl.c's belt
  * layers). A pass only lays the cells whose metatile is of its tile sets.
  */
-static const void *sBeltPassPrimary, *sBeltPassSecondary;
+static VOXEL_TLS const void *sBeltPassPrimary, *sBeltPassSecondary;
 
 void VoxelMesh_SetBeltPass(const void *primaryTileset, const void *secondaryTileset)
 {
@@ -4133,8 +4139,8 @@ static void BeltWaterSkirts(VoxelBuilder *b, int x, int y, float wx, float wz, f
  */
 static int BeltTopTile(const VoxelMapInstance *ring)
 {
-    static const VoxelMapInstance *sRing[8];
-    static int sTile[8], sNext;
+    static VOXEL_TLS const VoxelMapInstance *sRing[8];
+    static VOXEL_TLS int sTile[8], sNext;
     static int sOff = -1;
     int counts[1024];
     int best = -1, bestN = 0;
@@ -4535,8 +4541,15 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south);
 static void BeltField(int vx, int vy, float *height, float *south)
 {
     enum { N = 32768 };
-    static struct { int x, y; unsigned gen; float h, s; } sMemo[N];
+    typedef struct { int x, y; unsigned gen; float h, s; } FieldMemo;
+    VOXEL_TLS_TABLE(FieldMemo, sMemo, N);
     unsigned gen = VoxelWorld_CellGen(), k = ((unsigned)vx * 73856093u) ^ ((unsigned)vy * 19349663u);
+
+    if (sMemo == NULL)
+    {
+        BeltFieldUncached(vx, vy, height, south);
+        return;
+    }
 
     k = (k ^ (k >> 15)) & (N - 1);
     if (gen == 0 || sMemo[k].gen != gen || sMemo[k].x != vx || sMemo[k].y != vy)

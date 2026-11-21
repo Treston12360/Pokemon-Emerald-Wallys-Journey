@@ -63,6 +63,7 @@
 #include "voxel_grade.h"
 #include "voxel_lighting.h"
 #include "voxel_relief.h"
+#include "voxel_thread.h"
 
 #ifndef VOXEL_BUILDINGS_PATH
 #define VOXEL_BUILDINGS_PATH "voxel/buildings.bin"
@@ -135,8 +136,8 @@ static float sMaxTop;
 static FILE *sPageFile;
 /* The placements last looked up: a build or a shadow ray asks about every
  * cell it touches, nearly always of the layout it asked about last. */
-static int sLastLayout = -1;
-static unsigned sLastFirst, sLastCount;
+static VOXEL_TLS int sLastLayout = -1; /* (this file's caches are per thread: audit step 4) */
+static VOXEL_TLS unsigned sLastFirst, sLastCount;
 
 /*
  * The current map as it stands. Its placements were found in its layout's
@@ -186,7 +187,7 @@ typedef struct
     FrontFace face[FRONT_FACES];
 } FrontCell;
 
-static FrontCell sFrontCells[FRONT_SETS];
+static VOXEL_TLS FrontCell sFrontCells[FRONT_SETS];
 /* Said once: a chunk with more static models than its list holds. */
 static bool sStaticsFullLogged;
 
@@ -242,8 +243,8 @@ typedef struct
     unsigned age;
     uint32_t bits[BAND_COUNT][BAND_WORDS];
 } PlacementBands;
-static PlacementBands sBands[BAND_SLOTS];
-static unsigned sBandClock;
+static VOXEL_TLS PlacementBands sBands[BAND_SLOTS];
+static VOXEL_TLS unsigned sBandClock;
 
 static unsigned U16(const uint8_t *p) { return (unsigned)p[0] | ((unsigned)p[1] << 8); }
 static uint32_t U32(const uint8_t *p)
@@ -861,9 +862,9 @@ static bool PlacementLive(const VoxelMapInstance *inst, const BuildingPlacement 
 
 float VoxelBuildings_LayoutTop(const VoxelMapInstance *inst)
 {
-    static int sTopLayout[LAYOUT_TOPS]; /* layout + 1; 0 is empty */
-    static float sTop[LAYOUT_TOPS];
-    static unsigned sTopNext;
+    static VOXEL_TLS int sTopLayout[LAYOUT_TOPS]; /* layout + 1; 0 is empty */
+    static VOXEL_TLS float sTop[LAYOUT_TOPS];
+    static VOXEL_TLS unsigned sTopNext;
     unsigned count;
     const BuildingPlacement *p;
     float top = 0.0f;
@@ -960,8 +961,8 @@ typedef struct
     uint16_t *cells;
 } CellGrid;
 
-static CellGrid sCellGrids[CELL_GRIDS];
-static unsigned sCellGridNext;
+static VOXEL_TLS CellGrid sCellGrids[CELL_GRIDS];
+static VOXEL_TLS unsigned sCellGridNext;
 
 /*
  * The placements whose rectangle reaches each row of a layout, in placement
@@ -981,8 +982,8 @@ typedef struct
     uint16_t *placements;
 } RowIndex;
 
-static RowIndex sRowIndexes[ROW_INDEXES];
-static unsigned sRowIndexNext;
+static VOXEL_TLS RowIndex sRowIndexes[ROW_INDEXES];
+static VOXEL_TLS unsigned sRowIndexNext;
 
 static void FreeRowIndex(RowIndex *r)
 {

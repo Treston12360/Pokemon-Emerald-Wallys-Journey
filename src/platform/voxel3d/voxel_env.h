@@ -6,12 +6,13 @@
  * literal), the environment does not change while the game runs. Included last in the files that build scenery. */
 #include <stdlib.h>
 #include <stdint.h>
+#include "voxel_thread.h"
 
 static inline const char *VoxelEnv(const char *name)
 {
     enum { N = 256 };
-    static const char *sName[N];
-    static const char *sValue[N];
+    static VOXEL_TLS const char *sName[N];  /* (per thread: audit step 4) */
+    static VOXEL_TLS const char *sValue[N];
     unsigned h = (unsigned)(((uintptr_t)name >> 2) * 2654435761u) >> 24;
 
     for (unsigned i = 0; i < N; i++, h = (h + 1) & (N - 1))

@@ -126,6 +126,12 @@ const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY); /* POL-30 *
 /* Changes whenever the maps placed or the belt's tile sets change: answers about a belt cell kept with an older one
  * are stale. 0: keep nothing (WJPC_NO_CELL_MEMO=1). (Brennan 2026-11-20 20:15, belt stalls) */
 unsigned VoxelWorld_CellGen(void);
+/* Audit step 4 (Brennan 2026-11-21 02:12): the world as placed, copied for the map-building worker thread. Take on
+ * the main thread (copies the maps placed and the live map grid); Use on the worker (NULL: the main world). */
+typedef struct VoxelWorldState VoxelWorldState;
+VoxelWorldState *VoxelWorld_SnapshotNew(void);
+void VoxelWorld_SnapshotTake(VoxelWorldState *snap);
+void VoxelWorld_UseSnapshot(VoxelWorldState *snap);
 const VoxelMapInstance *VoxelWorld_BorderArtMap(int worldX, int worldY); /* POL-30 */
 void VoxelWorld_SetBeltPairs(const void *const (*pairs)[2], unsigned count); /* POL-30 */
 bool VoxelWorld_BeltOld(void); /* POL-30: WJPC_BELT_OLD=1 */
