@@ -18,6 +18,8 @@
 #include "event_data.h"
 #include "berry.h"
 #include "wally_journey.h"
+#include "rtc.h"
+#include "overworld.h"
 #include "constants/berry.h"
 #include "palette.h"
 #include "constants/event_object_movement.h"
@@ -2003,6 +2005,42 @@ static bool RefreshStandIn(unsigned index, const struct ObjectEventGraphicsInfo 
     return true;
 }
 
+/* WallyJourney_IsNpcAway for a stand-in, remembered for 10 s (600 frames): it reads the clock (GetTimeOfDay,
+ * the RTC) and the weather each call, and asking it for every neighbouring person every frame cost 22 ms a frame on
+ * Brennan's PC (21g stall log, 2026-11-21 11:01: every second LAGGY, frame 28 ms) and 170 ms under wine. The answer
+ * only changes with the hour or the weather. */
+static bool StandInAway(const struct ObjectEventTemplate *t)
+{
+    static struct { const struct ObjectEventTemplate *t; uint32_t frame; bool away; } sMemo[4096];
+    unsigned h = (unsigned)(((uint32_t)(uintptr_t)t * 2654435761u) >> 20), k = h; /* (high bits: templates are 24 bytes apart) */
+
+    /* a few places on: two templates on one place took turns there every frame */
+    for (unsigned probe = 0; probe < 8u; probe++)
+    {
+        unsigned q = (h + probe) & 4095u;
+
+        if (sMemo[q].t == t || sMemo[q].t == NULL)
+        {
+            k = q;
+            break;
+        }
+    }
+    if (sMemo[k].t != t || sStandInFrame - sMemo[k].frame >= 600u)
+    {
+        /* (it also sets the game's clock globals as it reads the clock: put back as they were, so the frame
+         * drawn sees the same time as the game frame it shows) */
+        struct Time keepTime = gLocalTime;
+        u8 keepTimeOfDay = gTimeOfDay;
+
+        sMemo[k].t = t;
+        sMemo[k].frame = sStandInFrame - (k * 7u % 600u); /* refreshes spread over the 10 s, not all in one frame */
+        sMemo[k].away = WallyJourney_IsNpcAway(t);
+        gLocalTime = keepTime;
+        gTimeOfDay = keepTimeOfDay;
+    }
+    return sMemo[k].away;
+}
+
 /* Finds and decodes this frame's stand-ins near the camera; their slots are all claimed. */
 static unsigned GatherStandIns(const VoxelCamera *camera, uint16_t *atlas, bool *claimed)
 {
@@ -2046,7 +2084,7 @@ static unsigned GatherStandIns(const VoxelCamera *camera, uint16_t *atlas, bool 
              * stand-in now asks the same. WJPC_STANDIN_AWAY_OFF=1: as before. */
             if (sAwayOff < 0)
                 sAwayOff = getenv("WJPC_STANDIN_AWAY_OFF") != NULL;
-            if (!sAwayOff && WallyJourney_IsNpcAway(t))
+            if (!sAwayOff && StandInAway(t))
                 continue;
             if (t->graphicsId == OBJ_EVENT_GFX_BERRY_TREE || t->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE
              || (t->graphicsId & OBJ_EVENT_MON))

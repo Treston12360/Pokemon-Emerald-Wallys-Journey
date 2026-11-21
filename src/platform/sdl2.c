@@ -3571,6 +3571,18 @@ void Platform_SetStatus(struct SiiRtcInfo *rtc)
 
 static void UpdateInternalClock(void)
 {
+    /* Brennan 2026-11-21 11:01 (21g: every second LAGGY, frame 28 ms): the 3D stand-ins ask each neighbouring
+     * person whether they have gone home (WallyJourney_IsNpcAway), and each asks the clock. Reading the clock
+     * cost about half a millisecond on his PC (6 ms under wine). The clock is read at most every 100 ms now; the
+     * game shows seconds at most. */
+    static Uint32 sReadAt;
+    static bool sRead;
+    Uint32 now = SDL_GetTicks();
+
+    if (sRead && now - sReadAt < 100)
+        return;
+    sRead = true;
+    sReadAt = now;
     if (getenv("WJPC_RTC_EPOCH"))
     {
         // Test (GBA vs PC comparison): a fixed clock, like the mGBA harness (local time).
@@ -3622,12 +3634,7 @@ void Platform_GetDateTime(struct SiiRtcInfo *rtc)
     rtc->hour = internalClock.hour;
     rtc->minute = internalClock.minute;
     rtc->second = internalClock.second;
-    DBGPRINTF("GetDateTime: %d-%02d-%02d %02d:%02d:%02d\n", ConvertBcdToBinary(rtc->year),
-                                                         ConvertBcdToBinary(rtc->month),
-                                                         ConvertBcdToBinary(rtc->day),
-                                                         ConvertBcdToBinary(rtc->hour),
-                                                         ConvertBcdToBinary(rtc->minute),
-                                                         ConvertBcdToBinary(rtc->second));
+    /* (no DBGPRINTF here: the clock is read many times a frame - Brennan 2026-11-21 11:01) */
 }
 
 void Platform_SetDateTime(struct SiiRtcInfo *rtc)
@@ -3647,9 +3654,7 @@ void Platform_GetTime(struct SiiRtcInfo *rtc)
     rtc->hour = internalClock.hour;
     rtc->minute = internalClock.minute;
     rtc->second = internalClock.second;
-    DBGPRINTF("GetTime: %02d:%02d:%02d\n", ConvertBcdToBinary(rtc->hour),
-                                        ConvertBcdToBinary(rtc->minute),
-                                        ConvertBcdToBinary(rtc->second));
+    /* (no DBGPRINTF here: the clock is read many times a frame - Brennan 2026-11-21 11:01) */
 }
 
 void Platform_SetTime(struct SiiRtcInfo *rtc)
