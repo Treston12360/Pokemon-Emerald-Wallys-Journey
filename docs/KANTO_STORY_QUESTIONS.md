@@ -27,7 +27,7 @@ No question blocks writing other chapters' drafts. See
 - **2026-11-20 (Treston), partial answers to 2 and 4, plus the bible review:** forged transfer order chosen; Blue's
   call line "I just spoke to the League. Nobody authorized that transfer. Who gave you the order?"; Varnell's last
   line draft "I know what time she died, Blue. If I wait any longer, I'll lose her again."; Kiyoshi rescue = canon;
-  Clefairy's echo repeats one action (cry + running round a corner, paid off from Aria's side); Marowak kept as
+  Clefairy's echo repeats one action (the cry — revised 2026-11-21: no run in ch. 4; the same cry is answered from Aria's side in ch. 13); Marowak kept as
   Lavender history laid to rest by Red. All copied into KANTO_PROJECT_ARIA.md ("Owner decisions, 2026-11-20").
   **Still open in 2:** whose authorization is forged and what audit finds it. **Still open in 4:** the rest of the
   finale/Kiyoshi/Lavender lines.

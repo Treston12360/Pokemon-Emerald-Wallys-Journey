@@ -83,9 +83,10 @@ a reveal or a choice, not just a gym.
    rewritten. Why (owner): "This matters for Varnell's arc. When he asks the player to trust him later, they've
    already seen him do everything he could for a stranger."
 2. **Clefairy's echo — no separation lore.** Keep the moment Clefairy reaches Aria. The echo repeats the last thing
-   it did in the Tower: calling for her and running to her — shown as **one repeated action**. Ch. 4: the player
-   hears the cry and sees the ghost **run around a corner**. Finale: the same cry, and Clefairy rounds **that same
-   corner, this time seen from Aria's side** — "we finally see who was waiting for it." No extra explanation.
+   it did in the Tower: calling for her and running to her — shown as **one repeated action**. ~~Ch. 4: the player
+   hears the cry and sees the ghost run around a corner. Finale: Clefairy rounds that same corner.~~ **Superseded
+   2026-11-21 (see below): the callback is the same CRY, not a run.** "We finally see who was waiting for it."
+   No extra explanation.
 3. **The Orb — forged transfer order** (owner's preference). The player has a credible reason to believe they're
    collecting the Orb legitimately. Blue's call opens with a line he can stand behind whatever the player knew:
    > Blue: "I just spoke to the League. Nobody authorized that transfer. Who gave you the order?"
@@ -109,6 +110,16 @@ a reveal or a choice, not just a gym.
 - **Superseded the same day (owner):** "the clefairy doesn't need to run before the white flash it can just stay in
   spot then the white flash then it's gone." → In ch. 4 the echo stays where it is, a white flash, gone. The ch. 13
   staging above (Clefairy comes out from behind the left statue to Aria) is unchanged.
+- **Continuity, owner 2026-11-21 (forwarded) — the callback is the same CRY:**
+  - **Ch. 4 (in game):** the player hears Clefairy's cry and sees it **waiting** in place (beside the left statue);
+    a white flash and it is gone. **No run anywhere in ch. 4.** "...looks like it's waiting for someone else." is the
+    **narrator's** observation, not Clefairy's words — **Clefairy's own last audible words (its cry) are what the
+    finale echoes.**
+  - **Ch. 13:** after Varnell crosses and the first crack hits, the player hears **that same cry** and finally sees
+    Aria answer it. Clefairy breaks free and runs to Aria **only after Varnell jumps and the collapse starts**
+    (matches the LOCKED CAUSAL ORDER of 2026-11-16). It comes out from behind the left statue to her; both visible
+    a beat before the collapse.
+  - No doc should promise a repeated run around the statue; the run happens once, in ch. 13 only.
 
 **Remaining dialogue is DRAFT:** newly suggested Lavender resident text, the Kiyoshi rescue rewrite, Blue's warning, and the rest of the finale dialogue still require separate owner approval. The existing executable scripts are not updated by these decisions. See `docs/KANTO_NARRATIVE_AUDIT.md` for the causal timeline and verification checklist.
 
@@ -205,7 +216,7 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 2 | **Mt. Moon** | The "meteorite anomaly" is the first tear. Closing it with Varnell's device feels heroic. (It's really feeding ARIA.) Fossils kept. | Brock (Pewter) |
 | 3 | **Cerulean** | **Canon 2026-11-20:** Sage Kiyoshi is pulled by accident out of the Brass Tower fire; Varnell genuinely tries to save him, the player helps, and his connection to his own time gives out during the rescue. First sign the tears hurt people — and the player sees Varnell do everything he could for a stranger. (The version in the game now is the older one — Varnell orders the tear closed — until the scene is rewritten.) | Misty |
 | 3b | **Vermilion (on foot, as in FireRed)** | First real visit to Vermilion (the arrival was only the dock). | Lt. Surge (3rd Gym) |
-| 4 | **Lavender** | The ghost: an echo of a lost **Clefairy** searching the tower and crying out **"Aria"** (Aria's Pokémon; the player doesn't know who Aria is) — the echo repeats its last act: the cry, then it **runs around a corner** (paid off in the finale from Aria's side, 2026-11-20). Not Marowak: Marowak's story is Lavender history, already laid to rest by Red; Lavender remembers both losses. Varnell's "calibration lens" assignment (= Silph Scope) reveals it. Mr. Fuji's clue about the grieving father. Poké Flute. | — |
+| 4 | **Lavender** | The ghost: an echo of a lost **Clefairy** searching the tower and crying out **"Aria"** (Aria's Pokémon; the player doesn't know who Aria is) — the echo repeats its last act: **the cry** — it waits by the left statue, a white flash, gone (owner 2026-11-21; no run). The same cry is the finale callback, answered from Aria's side. Not Marowak: Marowak's story is Lavender history, already laid to rest by Red; Lavender remembers both losses. Varnell's "calibration lens" assignment (= Silph Scope) reveals it. Mr. Fuji's clue about the grieving father. Poké Flute. | — |
 | 5 | **Celadon / Snorlax** | Snorlax ×2 woken with the flute. Varnell's staff start acting cagey. | Erika |
 | 6 | **Saffron quarantine** | An ARIA containment machine malfunctions inside Silph Co.; the building warps (Silph's teleport maze). City sealed by Jenny and Silph security until you're cleared. You clear it; Master Ball. (Blue does NOT suspect Varnell — owner 2026-11-14.) | **Mimi / Copycat (Normal)** — updated owner 2026-11-15; implementation pending S-LEAGUE2 |
 | 7 | **Fuchsia** | Blue shares what he's found, coldly. Safari side quest. | Janine |
@@ -217,7 +228,7 @@ Order is fixed by road blocks (§4). Each chapter = a place, a Varnell assignmen
 | 11 | **Victory Road / Elite Four** | Elite Four **Koga → Lorelei → Bruno → Sabrina** (owner 2026-11-15); Champion **Lance**. Hall of Fame. After Lance leaves, the player opens the vault with their clearance and takes the **Griseous Orb**. Exact access/authorization must be finalized in S-ARIA-LOOP-IMPLEMENTATION; the player must not knowingly steal it. | E4 + Lance |
 | 11b | **The call** | Varnell calls on the PokéNav — panicked, a little out of character. The player doesn't think much of it. | — |
 | 12 | **The handover → the reveal** | At his facility on the Sevii Islands (old Rocket Warehouse; owner 2026-11-14) the player hands over the Orb; he thanks them ("up a week straight trying to get to the bottom of this"). As the player walks out, **Blue calls** — owner line 2026-11-20 (forged transfer order): "I just spoke to the League. Nobody authorized that transfer. Who gave you the order?" → "......" (the silent player explaining) → "...Varnell asked you for it?" (the player realizes what Varnell did at the same moment Blue does; the older "You stole from the League!" draft is replaced) → "Don't move. I'll be right there." Blue arrives; together they go back in and find **a secret door that was never open before**, leading down to the holding chamber. Varnell, alone, talking to himself: "Finally... Giratina. I have every piece." Confrontation. Blue to Varnell: "That's why you brought them in. You knew not to ask me, because I'd start questioning your motives." Later, breaking: "After everything you did for me... I can't believe you'd betray me." **This must be a gut-wrenching moment for Blue.** Varnell (owner-approved): "I'm sorry, Blue. But she matters more." Then **the reveal** (Aria, the project, "a world without her isn't worth having"). | — |
-| 13 | **The ARIA chamber — Varnell** | Holding bay, Red Alert. A **Volo-style** final battle with the legendary Pokémon he captured. The prepared **one-way retrieval gateway** opens to Aria, alive in the historic Tower raid; Clefairy remains captive inside, so she refuses to leave it. Blue warns against reverse travel. Varnell (owner draft 2026-11-20): "I know what time she died, Blue. If I wait any longer, I'll lose her again." The room on Aria's side stays intact and quiet until that instant. **Only after Varnell jumps does the rift overload and the historic ceiling collapse** — the first crack after he crosses is how the player understands the loop. Clefairy rounds the same corner the ch. 4 echo ran around, seen from Aria's side. His identity as the old unidentified victim is left for players to infer. Final dialogue and event blocking remain **DRAFT / not implemented**. | Varnell |
+| 13 | **The ARIA chamber — Varnell** | Holding bay, Red Alert. A **Volo-style** final battle with the legendary Pokémon he captured. The prepared **one-way retrieval gateway** opens to Aria, alive in the historic Tower raid; Clefairy remains captive inside, so she refuses to leave it. Blue warns against reverse travel. Varnell (owner draft 2026-11-20): "I know what time she died, Blue. If I wait any longer, I'll lose her again." The room on Aria's side stays intact and quiet until that instant. **Only after Varnell jumps does the rift overload and the historic ceiling collapse** — the first crack after he crosses is how the player understands the loop. The player hears the **same cry** as the ch. 4 echo; Clefairy breaks free and runs to Aria (out from behind the left statue) only after the jump, as the collapse starts — Aria answers it (owner 2026-11-21). His identity as the old unidentified victim is left for players to infer. Final dialogue and event blocking remain **DRAFT / not implemented**. | Varnell |
 | 14 | **Aftermath** | Oak's grief. Blue's thanks. A last echo of a little girl's voice in the empty chamber. The freed legendaries can be found and **captured by the player** later. Ship home to Hoenn → title defenses unlock. | — |
 
 Open: which chapter Hoopa is first taken in (suggest before ch. 1, shown in a cold open).

@@ -455,6 +455,9 @@ home (the Volunteer House), not held in the tower.
 > (It looks up at you. For a moment it looks like it's waiting for someone else.)
 > *(2026-11-21, owner: no run — "it can just stay in spot then the white flash then it's gone". The old last line
 > "Then it fades, little by little, into the cold air." is removed; a white flash ends the scene.)*
+> *(2026-11-21, owner continuity: the "waiting for someone else" line is the NARRATOR's observation. Clefairy's own
+> last audible words — its cry — are what ch. 13 echoes: after Varnell crosses and the first crack hits, the same cry,
+> and Aria answers it.)*
 > (The Rift Scanner reads... then goes quiet.)
 
 **4.5 Mr. Fuji, after — the Poké Flute**

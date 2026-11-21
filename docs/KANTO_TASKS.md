@@ -230,8 +230,9 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       PokéNav doesn't re-dial); Blue's Vermilion opener now "Bill told me what happened up at the cape."
       (`aria_ch3b.inc`); (b) the Lavender resident draft is IN GAME (`Aria_Ch4_Text_OldMan`); Fuji after the
       tower: "The crying stopped... ...... ...Thank you." then the flute (his "waiting for someone" line removed).
-      Tower 7F: the echo now cries, then **runs round the LEFT STATUE into the nook (7..8, 3)** and is gone —
-      corner **waiting for owner approval** (pictures `docs/kanto_mockups/tower_corner_ch4.png`, `..._ch13_mock.png`).
+      Tower 7F: ~~the echo runs round the LEFT STATUE~~ → **owner 2026-11-21: the echo stays in place, white flash,
+      gone (no run). Approved; clips `docs/kanto_mockups/tower_echo_ch4_2d.gif` / `_3d.gif`.** The callback to ch. 13
+      is the same cry (see KANTO_PROJECT_ARIA.md "Continuity, owner 2026-11-21").
       Test scripts: route 25 with `state var 0x50FF 11` + `state flag 0x12F4 1` (Kiyoshi already battled) ->
       warp 37 44 52 7, step right; Vermilion `state var 0x50FF 12`, warp 37 5 22 2, step down; tower
       `state var 0x50FF 16`, warp 35 94 11 8, step up. Celadon on hold until this sequence is approved + tested.
