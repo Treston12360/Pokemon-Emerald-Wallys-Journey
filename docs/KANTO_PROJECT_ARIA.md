@@ -131,6 +131,14 @@ a reveal or a choice, not just a gym.
   hangs at the top wall (8..9, 0..1) with clear floor under it at (8,2)/(9,2); Varnell's desk moved right (10..12).
   Picture: `docs/kanto_mockups/ch5_celadon_office_v2.png`.
 
+### Owner decisions, 2026-11-21 — order of work, Johto
+- "Yes fix the house color thing for now 1, then we can continue on with the story of kanto finish it then work on
+  johto after." → Kanto story first; **Johto only after Kanto is finished.**
+- Johto ideas discussed (NOT decided): port from the fan game Pokémon Heart & Soul (open source GBA, Modern
+  Emerald base; ask its team first, credit its asset makers); a new Johto League / Elite Four (Will, Karen free;
+  Silver as an Elite Four member was the owner's idea); bring Wally back (race through Johto and/or a Champions'
+  match); level plan must finish at 100 (Kanto ends ~78-80). Snow on roofs is fine (owner).
+
 **Remaining dialogue is DRAFT:** newly suggested Lavender resident text, the Kiyoshi rescue rewrite, Blue's warning, and the rest of the finale dialogue still require separate owner approval. The existing executable scripts are not updated by these decisions. See `docs/KANTO_NARRATIVE_AUDIT.md` for the causal timeline and verification checklist.
 
 ### How the name hides in plain sight

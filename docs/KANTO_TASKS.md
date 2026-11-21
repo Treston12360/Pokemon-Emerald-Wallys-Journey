@@ -205,6 +205,9 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 - [ ] **S-TALK. New dialogue for every Kanto NPC and trainer** (owner: each trainer unique and believable, Gym
       Leaders with their own story, longer is fine). Drafts go in `docs/KANTO_SCRIPT.md` for approval first.
 - [x] Ch. 2, 3, 3b, 4 in game (2026-11-14). Script: `docs/KANTO_SCRIPT.md` (status per chapter).
+- [x] **Season colours on Kanto buildings** (owner 2026-11-21, option 1): buildings keep their colours, only
+      nature changes; roofs that share path colours get snow (owner OK). Option 2 (hand-made Kanto season
+      palettes) not started. Details in `docs/TASKS.md`.
 - [ ] Ch. 5 (Celadon office — new building, show owner a picture first), then ch. 6+.
       **Progress 2026-11-21:** office building + layout approved (owner); map `CeladonCity_VarnellOffice`
       (MAP 44.20, layout `LAYOUT_CELADON_CITY_VARNELL_OFFICE`, Condominiums tiles) built by

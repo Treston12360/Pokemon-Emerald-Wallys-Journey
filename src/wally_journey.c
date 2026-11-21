@@ -1232,6 +1232,20 @@ static s32 WJ_RealClockHour(void)
 enum WallySeason WallyJourney_GetSeason(void)
 {
     s32 hours;
+#ifdef PORTABLE
+    {
+        // Test harness only: WJPC_TEST_SEASON=0..3 (spring, summer, autumn, winter) fixes the season.
+        extern char *getenv(const char *name);
+        static s32 sTestSeason = -2;
+        if (sTestSeason == -2)
+        {
+            const char *e = getenv("WJPC_TEST_SEASON");
+            sTestSeason = (e != NULL && e[0] >= '0' && e[0] <= '3') ? e[0] - '0' : -1;
+        }
+        if (sTestSeason >= 0)
+            return sTestSeason;
+    }
+#endif
     if (RtcGetErrorStatus() & RTC_ERR_FLAG_MASK)
         return WALLY_SEASON_SUMMER; // no or broken clock: plain Hoenn summer, no tint surprises
     hours = WJ_RealClockHour() + WALLY_SEASON_PHASE_HOURS;
@@ -1784,12 +1798,78 @@ static const u16 (*GeneralSeasonPalettes(void))[16]
     }
 }
 
+// Project ARIA (owner 2026-11-21, "fix the house color thing", option 1): Kanto's buildings keep their
+// colours through the seasons; only nature (trees, grass, rocks, sand, paths) changes. Snow on roofs that
+// share the path/sand colours is fine (owner 2026-11-21). Model + pictures: tools/aria_season_protect.py.
+//  * General_Frlg: slots 0, 1, 4, 5 are nature; 2, 3 are buildings (Pokémon Centers, Marts, gates, roofs).
+//  * Kanto secondary tilesets: buildings, except the nature slots listed below.
+//  * A kept slot's exact General_Frlg grass/path colour (slots 0 and 5) still changes, so the grass fringe
+//    drawn round a building matches the grass beside it.
+extern const struct Tileset gTileset_ViridianForest;
+extern const struct Tileset gTileset_BerryForest;
+extern const struct Tileset gTileset_IndigoPlateau;
+static const struct { const struct Tileset *tileset; u16 natureSlots; } sKantoSeasonTilesets[] =
+{
+    { &gTileset_General_Frlg,    (1 << 0) | (1 << 1) | (1 << 4) | (1 << 5) },
+    { &gTileset_PalletTown,      (1 << 11) | (1 << 12) },
+    { &gTileset_ViridianCity,    0 },
+    { &gTileset_PewterCity,      0 },
+    { &gTileset_CeruleanCity,    0 },
+    { &gTileset_VermilionCity,   0 },
+    { &gTileset_LavenderTown,    0 },
+    { &gTileset_CeladonCity,     0 },
+    { &gTileset_SaffronCity,     0 },
+    { &gTileset_FuchsiaCity,     (1 << 11) },                         // Safari Zone trees
+    { &gTileset_CinnabarIsland,  0 },
+    { &gTileset_IndigoPlateau,   0 },
+    { &gTileset_ViridianForest,  (1 << 8) | (1 << 10) },
+    { &gTileset_BerryForest,     (1 << 8) | (1 << 10) | (1 << 11) },
+    { &gTileset_SeviiIslands123, (1 << 12) },                         // rocks / mountain
+    { &gTileset_SeviiIslands45,  0 },
+    { &gTileset_SeviiIslands67,  (1 << 10) },                         // rocks / ground
+};
+
+// The Kanto tileset whose palette table is `palettes`, or -1.
+static s32 KantoSeasonTilesetIndex(const void *palettes)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sKantoSeasonTilesets); i++)
+        if (palettes != NULL && (const void *)sKantoSeasonTilesets[i].tileset->palettes == palettes)
+            return i;
+    return -1;
+}
+
+// TRUE when this colour of `slot` in Kanto tileset `index` keeps its colour in every season.
+static bool32 KantoSeasonKeeps(s32 index, u32 slot, u16 color)
+{
+    const u16 (*general)[16] = gTileset_General_Frlg.palettes;
+    u32 k;
+
+    if (index < 0 || (sKantoSeasonTilesets[index].natureSlots & (1 << slot)))
+        return FALSE;
+    color &= 0x7FFF;
+    for (k = 1; k < 16; k++)
+        if (color == (general[0][k] & 0x7FFF) || color == (general[5][k] & 0x7FFF))
+            return FALSE;
+    return TRUE;
+}
+
 // Recolour BG palettes [palStart, palStart + palCount) just loaded from a tileset.
 void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFaded, bool32 isPrimary)
 {
     u32 mode = CurrentFoliageMode();
     u32 slot, c, k;
     const u16 (*handmade)[16] = isPrimary ? GeneralSeasonPalettes() : NULL;
+    s32 kanto = -1;
+
+    // Which Kanto tileset these slots came from (none for the battle background's call).
+    if (gMapHeader.mapLayout != NULL)
+    {
+        if (isPrimary)
+            kanto = KantoSeasonTilesetIndex(gMapHeader.mapLayout->primaryTileset ? gMapHeader.mapLayout->primaryTileset->palettes : NULL);
+        else if (palStart == GetNumPalsInPrimary(gMapHeader.mapLayout))
+            kanto = KantoSeasonTilesetIndex(gMapHeader.mapLayout->secondaryTileset ? gMapHeader.mapLayout->secondaryTileset->palettes : NULL);
+    }
     if (isPrimary)
         sPrimaryFoliagePlus1 = mode + 1;
     if (handmade != NULL)
@@ -1813,6 +1893,8 @@ void WallyJourney_ApplySeasonalFoliage(u32 palStart, u32 palCount, bool32 alsoFa
         for (c = 1; c < 16; c++)
         {
             u16 *col = &gPlttBufferUnfaded[slot * 16 + c];
+            if (KantoSeasonKeeps(kanto, slot, *col))
+                continue;
             *col = SeasonalColor(*col, mode, slot);
             if (alsoFaded)
                 gPlttBufferFaded[slot * 16 + c] = *col;
@@ -1849,6 +1931,7 @@ void WallyJourney_SeasonalTilesetPalettes(const u16 *src, u16 *dst, bool32 isPri
     u32 mode = CurrentFoliageMode();
     u32 slot, c, k;
     const u16 (*handmade)[16] = isPrimary ? GeneralSeasonPalettes() : NULL;
+    s32 kanto = KantoSeasonTilesetIndex(src); // ARIA: Kanto buildings keep their colours (above)
 
     CpuCopy16(src, dst, 16 * 16 * sizeof(u16));
     if (handmade != NULL)
@@ -1861,7 +1944,8 @@ void WallyJourney_SeasonalTilesetPalettes(const u16 *src, u16 *dst, bool32 isPri
         if (handmade != NULL && (slot == 1 || slot == 2 || slot == 3 || slot == 5))
             continue;
         for (c = 1; c < 16; c++)
-            dst[slot * 16 + c] = SeasonalColor(dst[slot * 16 + c], mode, slot);
+            if (!KantoSeasonKeeps(kanto, slot, dst[slot * 16 + c]))
+                dst[slot * 16 + c] = SeasonalColor(dst[slot * 16 + c], mode, slot);
     }
 }
 #endif
