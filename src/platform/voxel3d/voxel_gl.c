@@ -3488,7 +3488,36 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             }
             if (i == 0 && stale && keepOld && backInst != inst)
                 sBackBuild.active = false; // (the map underfoot comes first: another map's build waits)
-            if (i == 0 && stale && atlas != NULL && !keepOld)
+            /* Audit step 4d (Brennan 2026-11-21 02:12): behind a warp's fade the map underfoot, with nothing of it to
+             * draw yet, is built on the worker while the screen is dark (nothing drawn of it meanwhile); once the
+             * fade lifts, a build of it still on the worker is waited for (not begun again on this thread).
+             * WJPC_UNDERFOOT_ON_WORKER_OFF=1: built here at once, as before. */
+            static int sUnderfootWorkerOff = -1;
+            if (sUnderfootWorkerOff < 0)
+                sUnderfootWorkerOff = getenv("WJPC_UNDERFOOT_ON_WORKER_OFF") != NULL;
+            if (i == 0 && stale && atlas != NULL && !keepOld && threaded && !sUnderfootWorkerOff
+             && (backInst == inst || (fadedOut && !workerBusy)))
+            {
+                if (backInst != inst)
+                {
+                    BuildBegin(&sBackBuild, inst, atlas, sig);
+                    backInst = inst;
+                    WorkerStart(i);
+                    workerBusy = true;
+                    asked = true;
+                }
+                if (!fadedOut && workerBusy)
+                {
+                    Uint64 w0 = SDL_GetPerformanceCounter();
+                    while (WorkerBusy())
+                        SDL_Delay(0);
+                    workerBusy = false;
+                    Voxel3D_Log("[3D] waited %.1f ms for the worker's build of %d:%d (the fade lifted)",
+                                (SDL_GetPerformanceCounter() - w0) * 1000.0 / SDL_GetPerformanceFrequency(),
+                                inst->mapGroup, inst->mapNum);
+                }
+            }
+            else if (i == 0 && stale && atlas != NULL && !keepOld)
             {
                 // Underfoot: now. A background build of it is finished rather than begun again (on the main
                 // thread; one on the worker is left to it and thrown away).
