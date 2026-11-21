@@ -755,3 +755,4 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   "every flat 2D wide shrub/bush tile across the entire region"; (3) overworld item Poke Balls as "a proper 3D
   voxel/spherical Poke Ball model sitting cleanly on the ground" everywhere.
 - Brennan 19:48 (`docs/brennan/2026-11-20_1948_woods_edge.png`): remove the diagonal green grass blocks over the sea behind the woods - "only the blue sea water renders behind the back row of 3D trees".
+- Brennan 20:00 (`docs/brennan/2026-11-20_2000_woods_edge.png`): "ZERO green ground/grass visible behind or sticking out around the back row of standing trees" - put the sea under that whole back row.

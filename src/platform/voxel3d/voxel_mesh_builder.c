@@ -3135,6 +3135,8 @@ void VoxelMesh_SetBorderFollowsEdge(bool on)
 
 static bool BeltIsTree(int x, int y);
 static bool BeltTreeOwn(int x, int y);
+static bool BorderWaterLevel(int x, int y, float *level, float *shift);
+static bool ShoreTree(int x, int y, int *wx, int *wy);
 enum { BELT_TIER_DEPTH = 2 };
 static bool TerracesOn(void);
 static bool FieldOn(void);
@@ -3453,28 +3455,10 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
      * a wood on its own ground (BeltTreeOwn) that touches the belt's sea stands at the sea's level, all four cells
      * alike - the wood's ground there was a level over the sea, a green step along the shore. WJPC_SHORE_TREES_HIGH=1:
      * as before. */
-    if (BeltIsTree(x, y) && BeltTreeOwn(x, y) && getenv("WJPC_SHORE_TREES_HIGH") == NULL)
     {
-        const VoxelMapInstance *art = VoxelWorld_BorderArtMap(x, y);
-        int part = art != NULL ? VoxelTree_Part(art->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) : -1;
-        int ox = x - (part & 1), oy = y - (part >> 1);
-
-        for (int k = 0; part >= 0 && part <= 3 && k < 16; ++k)
-        {
-            /* the ring of cells round the tree's 2x2 (corners included) */
-            static const int kRing[16][2] = { {-1,-1},{0,-1},{1,-1},{2,-1},{-1,0},{2,0},{-1,1},{2,1},
-                                              {-1,2},{0,2},{1,2},{2,2},{0,0},{0,0},{0,0},{0,0} };
-            float wl, ws;
-            if (k >= 12)
-                break;
-            if (VoxelWorld_GetInstanceAt(ox + kRing[k][0], oy + kRing[k][1]) == NULL
-             && BorderWaterLevel(ox + kRing[k][0], oy + kRing[k][1], &wl, &ws))
-            {
-                *level = wl;
-                *shift = ws;
-                return true;
-            }
-        }
+        int wx, wy;
+        if (ShoreTree(x, y, &wx, &wy) && BorderWaterLevel(wx, wy, level, shift))
+            return true;
     }
     if (BeltIsTree(x, y) && getenv("WJPC_BELT_TREE_STEPS") == NULL)
     {
@@ -3773,6 +3757,37 @@ static void EmitBorderNorth(VoxelBuilder *b, int x, int y, float low, float lowS
  * between the 3D voxel trees ... Replace 2D tree ground tiles with plain grass"): the ground laid under a wood's
  * edge is the tree's own ground (VoxelTree_GroundMetatile: the grass it stands on), not its drawing laid flat.
  * WJPC_BELT_TREE_ART_GROUND=1: the drawing, as before. */
+/* Brennan 2026-11-20 19:48 / 20:00 ("ZERO green ground/grass visible behind or sticking out around the back row of
+ * standing trees ... Extend the blue sea water ground plane directly underneath that entire back row"): a large
+ * tree of a wood on its own ground (BeltTreeOwn) whose ring of cells round its 2x2 touches the belt's sea is a shore
+ * tree: it stands at the sea's level (VoxelMesh_BorderLevel) on the sea itself (BeltTreeGround). (wx, wy): that sea
+ * cell. WJPC_SHORE_TREES_HIGH=1: as before. */
+static bool ShoreTree(int x, int y, int *wx, int *wy)
+{
+    static const int kRing[12][2] = { {-1,-1},{0,-1},{1,-1},{2,-1},{-1,0},{2,0},{-1,1},{2,1},{-1,2},{0,2},{1,2},{2,2} };
+    const VoxelMapInstance *art;
+    int part, ox, oy;
+    float wl, ws;
+
+    if (getenv("WJPC_SHORE_TREES_HIGH") != NULL || !BeltIsTree(x, y) || !BeltTreeOwn(x, y))
+        return false;
+    art = VoxelWorld_BorderArtMap(x, y);
+    part = art != NULL ? VoxelTree_Part(art->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) : -1;
+    if (part < 0 || part > 3)
+        return false;
+    ox = x - (part & 1);
+    oy = y - (part >> 1);
+    for (int k = 0; k < 12; ++k)
+        if (VoxelWorld_GetInstanceAt(ox + kRing[k][0], oy + kRing[k][1]) == NULL
+         && BorderWaterLevel(ox + kRing[k][0], oy + kRing[k][1], &wl, &ws))
+        {
+            *wx = ox + kRing[k][0];
+            *wy = oy + kRing[k][1];
+            return true;
+        }
+    return false;
+}
+
 static int BeltTreeGround(int x, int y)
 {
     const VoxelMapInstance *art = VoxelWorld_BorderArtMap(x, y);
@@ -3780,6 +3795,11 @@ static int BeltTreeGround(int x, int y)
 
     if (art == NULL || getenv("WJPC_BELT_TREE_ART_GROUND") != NULL)
         return mt;
+    {
+        int wx, wy;
+        if (ShoreTree(x, y, &wx, &wy))
+            return VoxelWorld_BorderMetatile(wx, wy);   /* the sea under a shore tree */
+    }
     g = VoxelTree_GroundMetatile(art->secondaryTileset, mt);
     /* the General's small trees (016-017, 0C6-0C7) name no ground of their own: its plain grass, 001 */
     if (g == mt && (mt == 0x016 || mt == 0x017 || mt == 0x0C6 || mt == 0x0C7))
