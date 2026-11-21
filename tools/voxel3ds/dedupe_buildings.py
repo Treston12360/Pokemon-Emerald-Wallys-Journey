@@ -46,8 +46,8 @@ def dedupe(f):
         struct.pack_into('<I', m, 4, take(first, count) if count else 0)
     for p in f['places']:
         first, count = place_run(p)
-        if count:
-            struct.pack_into('<I', p, 12, take(first, count))
+        # (none: 0 - the loader checks extraFirst against the vertex count even then, TakePlacement)
+        struct.pack_into('<I', p, 12, take(first, count) if count else 0)
     f['verts'] = new
 
 
@@ -94,9 +94,11 @@ def verify(a_path, b_path):
         (fa, ca), (fb, cb) = model_run(ma), model_run(mb)
         assert ca == cb and va(a, fa, ca) == va(b, fb, cb)
         assert ma[:4] == mb[:4] and ma[8:] == mb[8:]
+        assert fb + cb <= len(b['verts'])
     for pa, pb in zip(a['places'], b['places']):
         (fa, ca), (fb, cb) = place_run(pa), place_run(pb)
         assert ca == cb and va(a, fa, ca) == va(b, fb, cb) and pa[:12] == pb[:12]
+        assert fb + cb <= len(b['verts'])
     for i, (ta, tb) in enumerate(zip(a['texels'], b['texels'])):
         assert bytes(ta) == bytes(tb), 'page %d' % i
     for k in ('pms', 'heights', 'foot', 'masks', 'quarters', 'variants', 'decks', 'conds', 'anim'):
