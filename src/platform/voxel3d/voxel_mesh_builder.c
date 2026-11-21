@@ -2413,37 +2413,37 @@ static bool RailJoins(const VoxelMapInstance *inst, int x, int y, int kind)
 }
 
 static void RailBox(VoxelBuilder *b, float xa, float xb, float za, float zb, float ytop, float ybot,
-                    float u0, float v0, float u1, float v1, bool west, bool east, bool south, bool north)
+                    float u0, float v0, float u1, float v1, bool west, bool east, bool south, bool north, float k)
 {
     VoxelBuilder_Quad(b,
-        &(VoxelVertex){xa, ytop, za, u0, v0, SHADE_TOP},
-        &(VoxelVertex){xb, ytop, za, u1, v0, SHADE_TOP},
-        &(VoxelVertex){xb, ytop, zb, u1, v1, SHADE_TOP},
-        &(VoxelVertex){xa, ytop, zb, u0, v1, SHADE_TOP});
+        &(VoxelVertex){xa, ytop, za, u0, v0, SHADE_TOP * k},
+        &(VoxelVertex){xb, ytop, za, u1, v0, SHADE_TOP * k},
+        &(VoxelVertex){xb, ytop, zb, u1, v1, SHADE_TOP * k},
+        &(VoxelVertex){xa, ytop, zb, u0, v1, SHADE_TOP * k});
     if (south)
         VoxelBuilder_Quad(b,
-            &(VoxelVertex){xa, ybot, zb, u0, v1, SHADE_SOUTH},
-            &(VoxelVertex){xb, ybot, zb, u1, v1, SHADE_SOUTH},
-            &(VoxelVertex){xb, ytop, zb, u1, v0, SHADE_SOUTH},
-            &(VoxelVertex){xa, ytop, zb, u0, v0, SHADE_SOUTH});
+            &(VoxelVertex){xa, ybot, zb, u0, v1, SHADE_SOUTH * k},
+            &(VoxelVertex){xb, ybot, zb, u1, v1, SHADE_SOUTH * k},
+            &(VoxelVertex){xb, ytop, zb, u1, v0, SHADE_SOUTH * k},
+            &(VoxelVertex){xa, ytop, zb, u0, v0, SHADE_SOUTH * k});
     if (north)
         VoxelBuilder_Quad(b,
-            &(VoxelVertex){xb, ybot, za, u1, v1, SHADE_NORTH},
-            &(VoxelVertex){xa, ybot, za, u0, v1, SHADE_NORTH},
-            &(VoxelVertex){xa, ytop, za, u0, v0, SHADE_NORTH},
-            &(VoxelVertex){xb, ytop, za, u1, v0, SHADE_NORTH});
+            &(VoxelVertex){xb, ybot, za, u1, v1, SHADE_NORTH * k},
+            &(VoxelVertex){xa, ybot, za, u0, v1, SHADE_NORTH * k},
+            &(VoxelVertex){xa, ytop, za, u0, v0, SHADE_NORTH * k},
+            &(VoxelVertex){xb, ytop, za, u1, v0, SHADE_NORTH * k});
     if (west)
         VoxelBuilder_Quad(b,
-            &(VoxelVertex){xa, ybot, za, u0, v1, SHADE_WEST},
-            &(VoxelVertex){xa, ybot, zb, u1, v1, SHADE_WEST},
-            &(VoxelVertex){xa, ytop, zb, u1, v0, SHADE_WEST},
-            &(VoxelVertex){xa, ytop, za, u0, v0, SHADE_WEST});
+            &(VoxelVertex){xa, ybot, za, u0, v1, SHADE_WEST * k},
+            &(VoxelVertex){xa, ybot, zb, u1, v1, SHADE_WEST * k},
+            &(VoxelVertex){xa, ytop, zb, u1, v0, SHADE_WEST * k},
+            &(VoxelVertex){xa, ytop, za, u0, v0, SHADE_WEST * k});
     if (east)
         VoxelBuilder_Quad(b,
-            &(VoxelVertex){xb, ybot, zb, u1, v1, SHADE_EAST},
-            &(VoxelVertex){xb, ybot, za, u0, v1, SHADE_EAST},
-            &(VoxelVertex){xb, ytop, za, u0, v0, SHADE_EAST},
-            &(VoxelVertex){xb, ytop, zb, u1, v0, SHADE_EAST});
+            &(VoxelVertex){xb, ybot, zb, u1, v1, SHADE_EAST * k},
+            &(VoxelVertex){xb, ybot, za, u0, v1, SHADE_EAST * k},
+            &(VoxelVertex){xb, ytop, za, u0, v0, SHADE_EAST * k},
+            &(VoxelVertex){xb, ytop, zb, u1, v0, SHADE_EAST * k});
 }
 
 static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
@@ -2474,10 +2474,10 @@ static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
         float xa = (float)x + (w ? 0.0f : p), xb = (float)x + 1.0f - (e ? 0.0f : p);
         float za = (float)y + 12.0f * p + shift, zb = (float)y + 1.0f + shift;
 
-        RailBox(b, xa, xb, za, zb, top, bot, RU(w ? 0 : 1), RV(12), RU(e ? 16 : 15), RV(16), !w, !e, true, true);
+        RailBox(b, xa, xb, za, zb, top, bot, RU(w ? 0 : 1), RV(12), RU(e ? 16 : 15), RV(16), !w, !e, true, true, 1.0f);
         /* a post at the cell's middle, down to the river */
         RailBox(b, (float)x + 7.0f * p, (float)x + 9.0f * p, zb - 2.0f * p, zb, bot, water,
-                RU(7), RV(13), RU(9), RV(15), true, true, true, true);
+                RU(7), RV(13), RU(9), RV(15), true, true, true, true, 0.45f);
     }
     else
     {
@@ -2485,9 +2485,9 @@ static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
         float xa = (float)x + 5.0f * p, xb = (float)x + 10.0f * p;
         float za = (float)y + (n ? 0.0f : p) + shift, zb = (float)y + (s2 ? 1.0f : 15.0f * p) + shift;
 
-        RailBox(b, xa, xb, za, zb, top, bot, RU(5), RV(n ? 0 : 1), RU(10), RV(s2 ? 16 : 15), true, true, !s2, !n);
+        RailBox(b, xa, xb, za, zb, top, bot, RU(5), RV(n ? 0 : 1), RU(10), RV(s2 ? 16 : 15), true, true, !s2, !n, 1.0f);
         RailBox(b, (float)x + 6.5f * p, (float)x + 8.5f * p, (za + zb) * 0.5f - p, (za + zb) * 0.5f + p, bot, water,
-                RU(6), RV(7), RU(8), RV(9), true, true, true, true);
+                RU(6), RV(7), RU(8), RV(9), true, true, true, true, 0.45f);
     }
 #undef RU
 #undef RV
