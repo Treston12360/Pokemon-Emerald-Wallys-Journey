@@ -756,3 +756,4 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   voxel/spherical Poke Ball model sitting cleanly on the ground" everywhere.
 - Brennan 19:48 (`docs/brennan/2026-11-20_1948_woods_edge.png`): remove the diagonal green grass blocks over the sea behind the woods - "only the blue sea water renders behind the back row of 3D trees".
 - Brennan 20:00 (`docs/brennan/2026-11-20_2000_woods_edge.png`): "ZERO green ground/grass visible behind or sticking out around the back row of standing trees" - put the sea under that whole back row.
+- Brennan 20:15 (stall log from build 20b): stutter/freezes biking, entering/leaving towns, crossing map borders; `belt` 150-1680 ms a frame. Asked: remove the synchronous belt stalls, keep belt work under ~1.5 ms a frame (worker thread if needed), dedupe buildings.bin (53 MB), pre-warm neighbour maps, verify under 1-2 ms biking. Work and numbers: `docs/polish_reports/PERF_BELT_2026-11-20.md`.

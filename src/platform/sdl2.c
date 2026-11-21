@@ -1220,8 +1220,63 @@ static void DrawScreen(double t)
 #endif
 }
 
+#ifdef _WIN32
+/* Test aid (session 014PwRDj, Brennan 2026-11-20 20:15 belt stalls): WJPC_PROFILE=1 - a sampling profiler. A thread
+ * looks at where the main thread is every millisecond while gVoxelProfileOn is set (the belt's building) and writes
+ * the addresses seen to WallysJourney_profile.txt at the end (count, address; llvm-addr2line names them). */
+volatile int gVoxelProfileOn;
+static HANDLE sProfMain;
+static unsigned sProfAddr[1 << 16], sProfCount[1 << 16];
+static DWORD WINAPI ProfThread(LPVOID arg)
+{
+    (void)arg;
+    for (;;)
+    {
+        Sleep(1);
+        if (!gVoxelProfileOn)
+            continue;
+        if (SuspendThread(sProfMain) == (DWORD)-1)
+            continue;
+        CONTEXT c;
+        c.ContextFlags = CONTEXT_CONTROL;
+        if (GetThreadContext(sProfMain, &c))
+        {
+            unsigned a = (unsigned)c.Eip, h = (a * 2654435761u) >> 16;
+            while (sProfAddr[h] != 0 && sProfAddr[h] != a)
+                h = (h + 1) & 0xFFFF;
+            sProfAddr[h] = a;
+            sProfCount[h]++;
+        }
+        ResumeThread(sProfMain);
+    }
+    return 0;
+}
+static void ProfDump(void)
+{
+    FILE *f = fopen("WallysJourney_profile.txt", "w");
+    if (f == NULL)
+        return;
+    for (unsigned i = 0; i < 0x10000; i++)
+        if (sProfCount[i])
+            fprintf(f, "%u %08x\n", sProfCount[i], sProfAddr[i]);
+    fclose(f);
+}
+static void ProfStart(void)
+{
+    if (getenv("WJPC_PROFILE") == NULL)
+        return;
+    DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(), &sProfMain, 0, FALSE, DUPLICATE_SAME_ACCESS);
+    CreateThread(NULL, 0, ProfThread, NULL, 0, NULL);
+    atexit(ProfDump);
+}
+#else
+volatile int gVoxelProfileOn;
+static void ProfStart(void) {}
+#endif
+
 int main(int argc, char **argv)
 {
+    ProfStart();
     // Open an output console on Windows
 #ifdef _WIN32
     if (getenv("WJPC_CONSOLE") || getenv("WJPC_SCRIPT"))

@@ -24,6 +24,7 @@
 #include "voxel_sign.h"
 #include "voxel_building.h"
 #include "voxel_relief.h"
+#include "voxel_env.h" // cached test switches (last include)
 
 /*
  * Face shades, from the greys the reference gives its untextured side faces.
@@ -2997,7 +2998,32 @@ static bool BorderAt(int x, int y)
 /* How far along a map's edge a belt of water looks for the map's sea. */
 #define VOXEL_BORDER_SEA_SEARCH 12
 
+static bool BorderWaterLevelUncached(int x, int y, float *level, float *shift);
 static bool BorderWaterLevel(int x, int y, float *level, float *shift)
+{
+    /* (kept per cell, as BeltField) */
+    enum { N = 32768 };
+    static struct { int x, y; unsigned gen; bool ok; float l, s; } sMemo[N];
+    unsigned gen = VoxelWorld_CellGen(), k = ((unsigned)x * 73856093u) ^ ((unsigned)y * 19349663u);
+
+    k = (k ^ (k >> 15)) & (N - 1);
+    if (gen == 0 || sMemo[k].gen != gen || sMemo[k].x != x || sMemo[k].y != y)
+    {
+        sMemo[k].l = sMemo[k].s = 0.0f;
+        sMemo[k].ok = BorderWaterLevelUncached(x, y, &sMemo[k].l, &sMemo[k].s);
+        sMemo[k].x = x;
+        sMemo[k].y = y;
+        sMemo[k].gen = gen;
+    }
+    if (sMemo[k].ok)
+    {
+        *level = sMemo[k].l;
+        if (shift != NULL)
+            *shift = sMemo[k].s;
+    }
+    return sMemo[k].ok;
+}
+static bool BorderWaterLevelUncached(int x, int y, float *level, float *shift)
 {
     /* POL-30: over the base of the map the cell stands with (BeltBase), at that map's sea's level - it was
      * always the current map's, so the belt beside the next map moved at the crossing. */
@@ -3137,6 +3163,7 @@ static bool BeltIsTree(int x, int y);
 static bool BeltTreeOwn(int x, int y);
 static bool BorderWaterLevel(int x, int y, float *level, float *shift);
 static bool ShoreTree(int x, int y, int *wx, int *wy);
+static bool SeaWood(int x, int y, int *wx, int *wy);
 enum { BELT_TIER_DEPTH = 2 };
 static bool TerracesOn(void);
 static bool FieldOn(void);
@@ -3458,6 +3485,10 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
     {
         int wx, wy;
         if (ShoreTree(x, y, &wx, &wy) && BorderWaterLevel(wx, wy, level, shift))
+            return true;
+        /* (and the rest of such a wood near the sea, the same level: Brennan 20:00, a shore row lowered alone left
+         * the next row's ground standing a level over it - green steps again) */
+        if (SeaWood(x, y, &wx, &wy) && BorderWaterLevel(wx, wy, level, shift))
             return true;
     }
     if (BeltIsTree(x, y) && getenv("WJPC_BELT_TREE_STEPS") == NULL)
@@ -3785,6 +3816,40 @@ static bool ShoreTree(int x, int y, int *wx, int *wy)
             *wy = oy + kRing[k][1];
             return true;
         }
+    return false;
+}
+
+/* A large tree of a wood on its own ground with the belt's sea within SEA_WOOD_REACH cells of its 2x2: (wx, wy) the
+ * nearest sea cell found. WJPC_SHORE_TREES_HIGH=1: none. */
+enum { SEA_WOOD_REACH = 10 };
+static bool SeaWood(int x, int y, int *wx, int *wy)
+{
+    const VoxelMapInstance *art;
+    int part, ox, oy;
+    float wl, ws;
+
+    if (getenv("WJPC_SHORE_TREES_HIGH") != NULL || !BeltIsTree(x, y) || !BeltTreeOwn(x, y))
+        return false;
+    art = VoxelWorld_BorderArtMap(x, y);
+    part = art != NULL ? VoxelTree_Part(art->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) : -1;
+    if (part < 0 || part > 3)
+        return false;
+    ox = x - (part & 1);
+    oy = y - (part >> 1);
+    for (int r = 1; r <= SEA_WOOD_REACH; ++r)
+        for (int dy = -r; dy <= r + 1; ++dy)
+            for (int dx = -r; dx <= r + 1; ++dx)
+            {
+                int cx = ox + dx, cy = oy + dy;
+                if (dx > -r && dx < r + 1 && dy > -r && dy < r + 1)
+                    continue;   /* the ring at distance r only */
+                if (VoxelWorld_GetInstanceAt(cx, cy) == NULL && BorderWaterLevel(cx, cy, &wl, &ws))
+                {
+                    *wx = cx;
+                    *wy = cy;
+                    return true;
+                }
+            }
     return false;
 }
 
@@ -4443,7 +4508,27 @@ static bool FieldCornerWood(int vx, int vy)
     return true;
 }
 
+/* (Brennan 2026-11-20 20:15, belt stalls: BeltField walks every placed map for a point, and the belt asks it for the
+ * same points many times - kept per point until the maps change, VoxelWorld_CellGen) */
+static void BeltFieldUncached(int vx, int vy, float *height, float *south);
 static void BeltField(int vx, int vy, float *height, float *south)
+{
+    enum { N = 32768 };
+    static struct { int x, y; unsigned gen; float h, s; } sMemo[N];
+    unsigned gen = VoxelWorld_CellGen(), k = ((unsigned)vx * 73856093u) ^ ((unsigned)vy * 19349663u);
+
+    k = (k ^ (k >> 15)) & (N - 1);
+    if (gen == 0 || sMemo[k].gen != gen || sMemo[k].x != vx || sMemo[k].y != vy)
+    {
+        BeltFieldUncached(vx, vy, &sMemo[k].h, &sMemo[k].s);
+        sMemo[k].x = vx;
+        sMemo[k].y = vy;
+        sMemo[k].gen = gen;
+    }
+    *height = sMemo[k].h;
+    *south = sMemo[k].s;
+}
+static void BeltFieldUncached(int vx, int vy, float *height, float *south)
 {
     /* blended over the maps by 1/d^3 (the nearest map's edge wins near it, exactly on it): the edge's height, its way
      * south, and whether the point is off a side the mountain climbs from (north, west, east) or in front (south);

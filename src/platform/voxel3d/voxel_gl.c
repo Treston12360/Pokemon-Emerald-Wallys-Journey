@@ -30,6 +30,7 @@
 #include "voxel_lighting.h"
 #include "voxel_sprite_slots.h"
 #include "voxel_gl.h"
+#include "voxel_env.h" // cached test switches (after the includes)
 
 void Voxel3D_Log(const char *fmt, ...);
 
@@ -1333,7 +1334,12 @@ static bool sBeltRedo;
 static Atlas *sBeltCacheAtlas;
 static uint32_t sBorderRemadeKey; // POL-30, see the belt in Voxel3D_Render
 static uint32_t sBeltCacheGen;
-#define BELT_RADIUS 64 // POL-51 (Mt Pyre: a sea 16 levels down ended in view): was 40
+// Brennan 2026-11-20 20:15 (stall log: "belt" 150-1680 ms a frame biking and crossing maps round Lavaridge): the
+// 64-cell belt (POL-51, for Mt Pyre's sea 16 levels down) is 2.56 times the pieces of the 40-cell one. 64 only on the
+// maps that need it (Mt Pyre outside and summit), 40 elsewhere; chosen when a map's belt is built whole.
+// WJPC_BELT_RADIUS=n: that, everywhere.
+static int sBeltRadius = 40;
+#define BELT_RADIUS sBeltRadius
 
 // The belt is made of CHUNK x CHUNK pieces in world cells (origin 0,0), so a piece is the same wherever the
 // player stands. Pieces are kept in a cache: walking on only builds the new ones, a few a frame, and the
@@ -1443,9 +1449,17 @@ static void BeltCache_Build(const VoxelMapInstance *inst0, Atlas *atlas, int x0,
 
 // Build up to `budget` missing pieces of the window round (cx, cy) (budget < 0: all of them).
 // TRUE when every piece is ready (with a budget: and none had to be built this time).
+static unsigned sBeltBuilt; // pieces built this frame (the log)
+extern volatile int gVoxelProfileOn; // sdl2.c WJPC_PROFILE
 static bool BeltBuildStep(const VoxelMapInstance *inst0, Atlas *atlas, int cx, int cy, int budget)
 {
     bool ready = true;
+    static double sBudgetMs = -1.0;
+    Uint64 deadline;
+
+    if (sBudgetMs < 0.0)
+        sBudgetMs = getenv("WJPC_BELT_BUDGET_MS") ? atof(getenv("WJPC_BELT_BUDGET_MS")) : 1.0;
+    deadline = SDL_GetPerformanceCounter() + (Uint64)(sBudgetMs * SDL_GetPerformanceFrequency() / 1000.0);
 
     for (int y0 = cy - BELT_RADIUS; y0 < cy + BELT_RADIUS; y0 += CHUNK)
         for (int x0 = cx - BELT_RADIUS; x0 < cx + BELT_RADIUS; x0 += CHUNK)
@@ -1457,11 +1471,18 @@ static bool BeltBuildStep(const VoxelMapInstance *inst0, Atlas *atlas, int cx, i
                 ready = false;
                 continue;
             }
+            gVoxelProfileOn = 1;
             BeltCache_Build(inst0, atlas, x0, y0, cx, cy);
+            gVoxelProfileOn = 0;
+            sBeltBuilt++;
             if (budget > 0)
             {
                 budget--;
                 ready = false; // put it together next frame, so building and uploading never share one
+                /* (Brennan 20:15: no more than a few ms of pieces a frame - the old belt stays up meanwhile.
+                 * WJPC_BELT_BUDGET_MS=n, default 1) */
+                if (SDL_GetPerformanceCounter() >= deadline)
+                    budget = 0;
             }
         }
     return ready;
@@ -3124,7 +3145,16 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             if (sInstanceMeshes[i].used)
                 sInstanceMeshes[i].signature ^= 1; // rebuild below
         sBackBuild.active = false;
-        sBeltX = 0x7FFFFFFF;
+        /* Brennan 2026-11-20 20:15 (stall log: "belt" up to 1680 ms in one frame walking in and out of towns): maps
+         * coming into reach or going out of it rebuilt the whole belt in that frame. Now its pieces again a few a
+         * frame, the old belt up meanwhile (as at a crossing). WJPC_BELT_FULL_ON_WORLD=1: as before. */
+        if (sBeltX != 0x7FFFFFFF && getenv("WJPC_BELT_FULL_ON_WORLD") == NULL)
+        {
+            BeltCache_Flush();
+            sBeltRedo = true;
+        }
+        else
+            sBeltX = 0x7FFFFFFF;
     }
     sLastDigest = digest;
 
@@ -3406,6 +3436,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             if (full)
             {
                 // New map, new world or new atlas: start again and build it all now (as before).
+                sBeltRadius = getenv("WJPC_BELT_RADIUS") ? atoi(getenv("WJPC_BELT_RADIUS"))
+                            : (inst0->layoutId == 302 || inst0->layoutId == 303) ? 64 : 40;
                 BeltCache_Flush();
                 BeltBuildStep(inst0, atlas0, cx, cy, -1);
                 BeltAssemble(atlas0, cx, cy);
@@ -3432,7 +3464,9 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             }
             double ms = (SDL_GetPerformanceCounter() - t0) * 1000.0 / SDL_GetPerformanceFrequency();
             if (ms > 0.5)
-                Voxel3D_Log("[3D] belt %s %.1f ms", full ? "full" : "step", ms);
+                Voxel3D_Log("[3D] belt %s %.1f ms, %u pieces (map layout %d)", full ? "full" : "step", ms, sBeltBuilt,
+                            inst0->layoutId);
+            sBeltBuilt = 0;
         }
     }
 

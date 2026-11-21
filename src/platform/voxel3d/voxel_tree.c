@@ -5,6 +5,7 @@
 #include "voxel_relief.h"
 #include "voxel_regions.h"
 #include "voxel_building.h"
+#include "voxel_env.h" // cached test switches (last include)
 
 struct Tileset;
 extern const struct Tileset gTileset_Dewford;

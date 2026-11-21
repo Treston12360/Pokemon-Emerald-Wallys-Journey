@@ -57,6 +57,7 @@ extern const struct Tileset gTileset_Fortree;
 extern const struct Tileset gTileset_GenericBuilding;
 
 #include <string.h>
+#include "voxel_env.h" // cached test switches (last include)
 
 static VoxelMapInstance sInstances[MAX_VOXEL_MAP_INSTANCES];
 static unsigned sInstanceCount;
@@ -219,15 +220,61 @@ void VoxelWorld_SeasonTexels(uint16_t *texels, size_t count)
     }
 }
 
+/* Brennan 2026-11-20 20:15 (stall log: "belt" 150-1680 ms a frame biking and crossing maps): the belt's builder asks
+ * the same questions of a cell (which map is nearest, whose border, which fill) dozens of times while building it -
+ * NearestBeltMap alone was 39% of the belt's time (a sampling profile, WJPC_PROFILE). The answers are kept per cell
+ * (CellMemo) until the maps placed or the belt's tile sets change (sCellGen). WJPC_NO_CELL_MEMO=1: asked every time. */
+static unsigned sCellGen = 1;
+typedef struct { int x, y; unsigned gen; int value; const void *ptr; } CellMemoEntry;
+#define CELL_MEMO_SIZE 32768u
+static bool CellMemoOff(void)
+{
+    static int sOff = -1;
+    if (sOff < 0)
+        sOff = getenv("WJPC_NO_CELL_MEMO") != NULL;
+    return sOff;
+}
+unsigned VoxelWorld_CellGen(void)
+{
+    return CellMemoOff() ? 0 : sCellGen;
+}
+static inline CellMemoEntry *CellMemoSlot(CellMemoEntry *table, int x, int y)
+{
+    unsigned h = ((unsigned)x * 73856093u) ^ ((unsigned)y * 19349663u);
+    return &table[(h ^ (h >> 15)) & (CELL_MEMO_SIZE - 1)];
+}
+static inline bool CellMemoHit(const CellMemoEntry *e, int x, int y)
+{
+    return e->gen == sCellGen && e->x == x && e->y == y;
+}
+static void CellMemoPut(CellMemoEntry *e, int x, int y, int value, const void *ptr)
+{
+    e->x = x;
+    e->y = y;
+    e->gen = CellMemoOff() ? 0 : sCellGen; /* (never kept: never found) */
+    e->value = value;
+    e->ptr = ptr;
+}
+
 /* Project ARIA (K2): the tile sets of Kanto's maps, noted as maps are placed (see voxel_world.h). */
 static const void *sFrlgTilesets[192];
 static unsigned sFrlgTilesetCount;
 
 bool Voxel_IsFrlg(const void *tileset)
 {
+    /* (the last answer kept: asked for the same tile set over and over while the belt is built) */
+    static const void *sLast;
+    static unsigned sLastCount = ~0u;
+    static bool sLastAnswer;
+
+    if (tileset == sLast && sLastCount == sFrlgTilesetCount && tileset != NULL)
+        return sLastAnswer;
+    sLast = tileset;
+    sLastCount = sFrlgTilesetCount;
+    sLastAnswer = false;
     for (unsigned i = 0; i < sFrlgTilesetCount; ++i)
         if (sFrlgTilesets[i] == tileset)
-            return true;
+            return sLastAnswer = true;
     return false;
 }
 
@@ -765,6 +812,7 @@ void VoxelWorld_BuildInstances(void)
 #endif
     sInstanceCount = 0;
     sPlacedCount = 0;
+    sCellGen++;
     if (gMapHeader.mapLayout == NULL)
         return;
 
@@ -790,6 +838,7 @@ void VoxelWorld_BuildInstances(void)
         AddConnections(&sPlaced[i], false, i < near);
     for (unsigned i = 0; i < sInstanceCount; ++i)
         RememberLift(&sInstances[i]);
+    sCellGen++;
 }
 
 unsigned VoxelWorld_InstanceCount(void)
@@ -1452,7 +1501,23 @@ const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY);
 
 static bool BeltPairDrawn(const VoxelMapInstance *m);
 
+static int EdgeFillAtUncached(int worldX, int worldY, const VoxelMapInstance **art);
 static int EdgeFillAt(int worldX, int worldY, const VoxelMapInstance **art)
+{
+    static CellMemoEntry sMemo[CELL_MEMO_SIZE];
+    CellMemoEntry *e = CellMemoSlot(sMemo, worldX, worldY);
+
+    if (!CellMemoHit(e, worldX, worldY))
+    {
+        const VoxelMapInstance *a = NULL;
+        int v = EdgeFillAtUncached(worldX, worldY, &a);
+        CellMemoPut(e, worldX, worldY, v, a);
+    }
+    if (art != NULL && e->value >= 0)
+        *art = e->ptr;
+    return e->value;
+}
+static int EdgeFillAtUncached(int worldX, int worldY, const VoxelMapInstance **art)
 {
     VoxelEdgeFill fill;
 
@@ -1717,7 +1782,25 @@ uint32_t VoxelWorld_BlockHash(int x0, int y0, int x1, int y1)
 }
 
 /* A map's 2x2 border block made of the primary tile set's metatiles only. */
+static bool BorderIsPrimaryOnlyUncached(const VoxelMapInstance *m);
 static bool BorderIsPrimaryOnly(const VoxelMapInstance *m)
+{
+    static unsigned sGen[MAX_VOXEL_MAP_INSTANCES];
+    static bool sAnswer[MAX_VOXEL_MAP_INSTANCES];
+
+    if (m >= sInstances && m < sInstances + MAX_VOXEL_MAP_INSTANCES && !CellMemoOff())
+    {
+        unsigned i = (unsigned)(m - sInstances);
+        if (sGen[i] != sCellGen)
+        {
+            sAnswer[i] = BorderIsPrimaryOnlyUncached(m);
+            sGen[i] = sCellGen;
+        }
+        return sAnswer[i];
+    }
+    return BorderIsPrimaryOnlyUncached(m);
+}
+static bool BorderIsPrimaryOnlyUncached(const VoxelMapInstance *m)
 {
     const void *source = ((const struct MapLayout *)m->layout)->border, *resolved;
     const uint16_t *border;
@@ -1759,6 +1842,7 @@ static unsigned sBeltPairCount;
 void VoxelWorld_SetBeltPairs(const void *const (*pairs)[2], unsigned count)
 {
     sBeltPairCount = count > BELT_PAIRS ? BELT_PAIRS : count;
+    sCellGen++;
     for (unsigned i = 0; i < sBeltPairCount; ++i)
     {
         sBeltPairs[i][0] = pairs[i][0];
@@ -1784,7 +1868,17 @@ bool VoxelWorld_BeltOld(void)
     return sOld;
 }
 
+static const VoxelMapInstance *NearestBeltMapUncached(int worldX, int worldY, bool art);
 static const VoxelMapInstance *NearestBeltMap(int worldX, int worldY, bool art)
+{
+    static CellMemoEntry sMemo[2][CELL_MEMO_SIZE];
+    CellMemoEntry *e = CellMemoSlot(sMemo[art], worldX, worldY);
+
+    if (!CellMemoHit(e, worldX, worldY))
+        CellMemoPut(e, worldX, worldY, 0, NearestBeltMapUncached(worldX, worldY, art));
+    return e->ptr;
+}
+static const VoxelMapInstance *NearestBeltMapUncached(int worldX, int worldY, bool art)
 {
     const VoxelMapInstance *best = NULL;
     int bestD = 0x7FFFFFFF;
@@ -1843,7 +1937,17 @@ const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY)
 
 /* POL-30: the loaded map whose tile sets (and atlas) a belt cell's metatile (VoxelWorld_BorderMetatile) is of:
  * the current map, unless the cell is another tile set pair's map's border and not the shared primary set's. */
+static const VoxelMapInstance *BorderArtMapUncached(int worldX, int worldY);
 const VoxelMapInstance *VoxelWorld_BorderArtMap(int worldX, int worldY)
+{
+    static CellMemoEntry sMemo[CELL_MEMO_SIZE];
+    CellMemoEntry *e = CellMemoSlot(sMemo, worldX, worldY);
+
+    if (!CellMemoHit(e, worldX, worldY))
+        CellMemoPut(e, worldX, worldY, 0, BorderArtMapUncached(worldX, worldY));
+    return e->ptr;
+}
+static const VoxelMapInstance *BorderArtMapUncached(int worldX, int worldY)
 {
     const VoxelMapInstance *best;
 
@@ -1973,7 +2077,17 @@ static bool RawIsWater(int x, int y, int *mt)
  * drawn (voxel_tree.c, whole trees only) and their cells stood as ground. Such a cell - a General large tree's part
  * whose tree is not whole, beside the sea - is the sea. WJPC_BELT_HALF_TREE_GROUND=1: as before.
  */
+static int BorderMetatileUncached(int worldX, int worldY);
 int VoxelWorld_BorderMetatile(int worldX, int worldY)
+{
+    static CellMemoEntry sMemo[CELL_MEMO_SIZE];
+    CellMemoEntry *e = CellMemoSlot(sMemo, worldX, worldY);
+
+    if (!CellMemoHit(e, worldX, worldY))
+        CellMemoPut(e, worldX, worldY, BorderMetatileUncached(worldX, worldY), NULL);
+    return e->value;
+}
+static int BorderMetatileUncached(int worldX, int worldY)
 {
     static const int kDir[4][2] = { {0, -1}, {1, 0}, {-1, 0}, {0, 1} };
     static int sOld = -1;

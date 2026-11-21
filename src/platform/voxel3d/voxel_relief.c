@@ -54,6 +54,7 @@
 
 #include "voxel_relief.h"
 #include "voxel_file.h"
+#include "voxel_env.h" // cached test switches (last include)
 
 #ifndef VOXEL_RELIEF_PATH
 #define VOXEL_RELIEF_PATH "voxel/relief.bin"

@@ -123,6 +123,9 @@ int VoxelWorld_BorderMetatile(int worldX, int worldY);
 bool VoxelWorld_BeltBorderOf(unsigned i, int ids[4]); /* POL-30 */
 bool VoxelWorld_BeltFillOf(unsigned i, unsigned k, int *metatile); /* POL-30 */
 const VoxelMapInstance *VoxelWorld_BeltRing(int worldX, int worldY); /* POL-30 */
+/* Changes whenever the maps placed or the belt's tile sets change: answers about a belt cell kept with an older one
+ * are stale. 0: keep nothing (WJPC_NO_CELL_MEMO=1). (Brennan 2026-11-20 20:15, belt stalls) */
+unsigned VoxelWorld_CellGen(void);
 const VoxelMapInstance *VoxelWorld_BorderArtMap(int worldX, int worldY); /* POL-30 */
 void VoxelWorld_SetBeltPairs(const void *const (*pairs)[2], unsigned count); /* POL-30 */
 bool VoxelWorld_BeltOld(void); /* POL-30: WJPC_BELT_OLD=1 */

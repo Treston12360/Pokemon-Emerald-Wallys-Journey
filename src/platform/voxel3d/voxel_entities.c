@@ -34,6 +34,7 @@
 #include "voxel_world.h"
 #include "voxel_lighting.h"
 #include "voxel_sign.h"
+#include "voxel_env.h" // cached test switches (last include)
 
 /* 16 pixels of sprite is one world tile, as in the reference renderer. */
 #define VOXEL_PIXELS_PER_TILE 16.0f
