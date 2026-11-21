@@ -67,6 +67,7 @@ static bool s3DWanted, s3DReady, s3DFrame;
  * battle transitions. WJPC_3D_EVERY_REFRESH_OFF=1: once a game frame, as before; WJPC_3D_EVERY_REFRESH=1: on at any
  * frame rate (tests). */
 static bool s3DEveryRefresh;
+static void ToggleFx(unsigned k); // F1-F6 (below)
 // DLX-6: 3D can be turned on and off in Settings. The renderer is OpenGL whenever the 3D data is there
 // (s3DAvailable), and the 3D world loads the first time it is wanted (s3DInitTried), so no restart.
 static bool s3DAvailable, s3DInitTried;
@@ -276,6 +277,26 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
         {
             fprintf(f, "Wally's Journey stall log. Build " __DATE__ " " __TIME__ ". Lines: a trip round the main loop over 150 ms,\n"
                        "and one line a minute. Times in ms. Send this file with a freeze or crash report.\n");
+            /* Brennan 2026-11-21 10:34: "Print GL_VENDOR, GL_RENDERER, and GL_VERSION at startup so any logs from my PC
+             * immediately show you my exact GPU and OpenGL driver state." */
+            {
+                typedef const unsigned char *(APIENTRY *GetStringFn)(unsigned int);
+                GetStringFn getString = (GetStringFn)SDL_GL_GetProcAddress("glGetString");
+                SDL_RendererInfo info;
+                int ow = 0, oh = 0;
+
+                if (getString != NULL)
+                {
+                    const unsigned char *vendor = getString(0x1F00), *renderer = getString(0x1F01), *version = getString(0x1F02);
+                    fprintf(f, "GPU: %s | %s | OpenGL %s\n", vendor ? (const char *)vendor : "?",
+                            renderer ? (const char *)renderer : "?", version ? (const char *)version : "?");
+                }
+                if (sdlRenderer != NULL && SDL_GetRendererInfo(sdlRenderer, &info) == 0)
+                {
+                    SDL_GetRendererOutputSize(sdlRenderer, &ow, &oh);
+                    fprintf(f, "SDL renderer: %s, drawing %dx%d, anti-aliasing asked %u\n", info.name, ow, oh, sAntiAlias);
+                }
+            }
             fclose(f);
         }
         return; // the first trip loads everything
@@ -712,6 +733,13 @@ static bool TestStep(void)
                 fprintf(f, "5/0=%d 5%%0=%d -7/0=%d 9u/0=%u 9u%%0=%u\n", q1, r1, q2, q3, r3);
                 fclose(f);
             }
+            continue;
+        }
+        if (!strcmp(cmd, "fxkey"))
+        {
+            // "fxkey N": as pressing F<N> (ToggleFx)
+            if (atoi(arg1) >= 1 && atoi(arg1) <= 6)
+                ToggleFx((unsigned)atoi(arg1) - 1);
             continue;
         }
         if (!strcmp(cmd, "typekey"))
@@ -1378,7 +1406,15 @@ int main(int argc, char **argv)
     SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight");
 #endif
 #if defined(NATIVE_LINUX) || defined(_WIN32)
-    sdlWindow = SDL_CreateWindow("Pokemon Wally's Journey", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+    {
+        /* Test aid: WJPC_WINDOW=WxH opens the window at that size (a later SDL_SetWindowSize left the test machine's
+         * X server - no window manager - drawing into the old 1280x720 corner; Brennan 2026-11-21 10:34 asked for
+         * 1080p test pictures) */
+        int ww = 1280, wh = 720;
+        if (getenv("WJPC_WINDOW") && sscanf(getenv("WJPC_WINDOW"), "%dx%d", &ww, &wh) != 2)
+            ww = 1280, wh = 720;
+        sdlWindow = SDL_CreateWindow("Pokemon Wally's Journey", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ww, wh, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+    }
 #else
     sdlWindow = SDL_CreateWindow("pokeemerald", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DISPLAY_WIDTH * videoScale, DISPLAY_HEIGHT * videoScale, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 #endif
@@ -2517,6 +2553,33 @@ static void HandleBoundKey(SDL_Keycode key, bool8 down, bool8 repeat)
     }
 }
 
+/* Brennan 2026-11-21 10:34 ("put toggles on F1-F4 if you want me to verify each one live on Route 110"): F1-F6 each
+ * switch one 3D effect off / on again (voxel_gl.h VOXEL_FX_*); the change goes to the stall log and the window title.
+ * Not saved. (test script: "fxkey N") */
+static void ToggleFx(unsigned k)
+{
+    static const char *const kNames[6] = { "cloud shadows", "glow (bloom)", "anti-aliasing",
+                                           "3D every refresh", "depth blur", "crack fill" };
+    char title[256];
+    int at;
+    FILE *lf;
+
+    gVoxelFxOff ^= 1u << k;
+    at = snprintf(title, sizeof(title), "Pokemon Wally's Journey");
+    for (unsigned b = 0; b < 6; b++)
+        if (gVoxelFxOff & (1u << b))
+            at += snprintf(title + at, sizeof(title) - (size_t)at, "%s F%u %s off",
+                           at == 23 ? " -" : ",", b + 1, kNames[b]);
+    SDL_SetWindowTitle(sdlWindow, title);
+    lf = fopen("WallysJourney_stalls.txt", "a");
+    if (lf != NULL)
+    {
+        fprintf(lf, "%8.1fs F%u: %s %s\n", SDL_GetTicks() / 1000.0, k + 1, kNames[k],
+                (gVoxelFxOff & (1u << k)) ? "OFF" : "on again");
+        fclose(lf);
+    }
+}
+
 static void CaptureKey(SDL_Keycode key)
 {
     int bind = SDL_AtomicGet(&sKeyCapture);
@@ -2659,6 +2722,9 @@ void ProcessEvents(void)
             case SDLK_EQUALS:
             case SDLK_KP_PLUS:
                 ZoomStep(-1); // zoom in
+                break;
+            case SDLK_F1: case SDLK_F2: case SDLK_F3: case SDLK_F4: case SDLK_F5: case SDLK_F6:
+                ToggleFx((unsigned)(event.key.keysym.sym - SDLK_F1));
                 break;
             case SDLK_F11:
             {
@@ -3308,7 +3374,7 @@ void VDraw(SDL_Texture *texture)
                         sOff = getenv("WJPC_3D_EVERY_REFRESH_OFF") != NULL;
                         sForce = getenv("WJPC_3D_EVERY_REFRESH") != NULL;
                     }
-                    s3DEveryRefresh = !sOff && (rate > 60 || sForce) && !s3DBattleFrame && !s3DTransition
+                    s3DEveryRefresh = !sOff && !(gVoxelFxOff & VOXEL_FX_REFRESH) && (rate > 60 || sForce) && !s3DBattleFrame && !s3DTransition
                                    && sFrameInfo.mode == WIDE_VIEW_FIELD;
                     Voxel3D_SetUpdateOnly(s3DEveryRefresh);
                 }

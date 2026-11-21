@@ -2185,6 +2185,10 @@ static GLuint sMsFbo, sMsColor, sMsDepth;
 static int sMsW, sMsH, sMsSamples, sMsWanted = -1;
 static bool sMsActive, sMsLooked;
 
+/* Brennan 2026-11-21 10:34 ("put toggles on F1-F4 if you want me to verify each one live on Route 110"): effects
+ * switched off live by F1-F6 (sdl2.c), as the WJPC_ test switches do at start-up. VOXEL_FX_* in voxel_gl.h. */
+unsigned gVoxelFxOff;
+
 void Voxel3D_SetAntiAlias(int samples)
 {
     sMsWanted = samples < 0 ? 0 : samples > 8 ? 8 : samples;
@@ -2195,6 +2199,9 @@ static int MsaaSamples(void)
     const char *e = getenv("WJPC_MSAA");
     int n = e != NULL ? atoi(e) : sMsWanted >= 0 ? sMsWanted : 4;
     GLint most = 0;
+
+    if (gVoxelFxOff & VOXEL_FX_ANTIALIAS)
+        return 0;
 
     if (n <= 1)
         return 0;
@@ -2378,7 +2385,7 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
             /* POL-31: New Mauville's (room 4) white walls bloomed into a halo over the dark - a third of it there */
             float roomBloom = WideView_GammaRoom() == 4 ? 0.35f : 1.0f;
 
-            wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") ? 0.0f
+            wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") || (gVoxelFxOff & VOXEL_FX_BLOOM) ? 0.0f
                            : 6.0f * roomBloom * (sIndoorNow ? IndoorBloomScale() : 1.0f), 0.4f);
         }
         wj_glUniform1fv(wj_glGetUniformLocation(sPostProg, "tint"), 6, tint);
@@ -2416,14 +2423,14 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
             const float f = 450.0f / (2.0f * 1.19175359f), A = f / 1.7442f;
             float S = playerDist * 640.0f;
             float k = A * f / ((S - f) > 1.0f ? (S - f) : 1.0f) / 450.0f * (float)w;
-            wj_glUniform4f(sPU_coc, getenv("WJPC_3D_NODOF") ? 0.0f : k, S, 0.5f, 400.0f);
+            wj_glUniform4f(sPU_coc, getenv("WJPC_3D_NODOF") || (gVoxelFxOff & VOXEL_FX_DOF) ? 0.0f : k, S, 0.5f, 400.0f);
         }
         {
             static int sNoFill = -1;   /* the crack fill in the final pass (POL-2/3/8/28) */
 
             if (sNoFill < 0)
                 sNoFill = getenv("WJPC_NO_CRACK_FILL") != NULL;
-            wj_glUniform1f(sPU_radius, sNoFill ? 0.0f : 1.0f);
+            wj_glUniform1f(sPU_radius, sNoFill || (gVoxelFxOff & VOXEL_FX_CRACKFILL) ? 0.0f : 1.0f);
         }
         wj_glUniform1f(sPU_mode, 2.0f);
         PostQuad();
@@ -3491,7 +3498,7 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
                    0.95f * sTintMul[2] + sTintAdd[2]); // POL-26b: the sky's colour at this time of day
     GammaLightUniforms();
     // Gamma's cloud shadows are its sun's light function: none where the sun does not reach (indoors, caves)
-    wj_glUniform1f(wj_glGetUniformLocation(sProgram, "cloudsOn"), inst0->indoor || inst0->underground || getenv("WJPC_3D_NOCLOUDS") != NULL ? 0.0f : 1.0f);   /* WJPC_3D_NOCLOUDS: test aid */
+    wj_glUniform1f(wj_glGetUniformLocation(sProgram, "cloudsOn"), inst0->indoor || inst0->underground || getenv("WJPC_3D_NOCLOUDS") != NULL || (gVoxelFxOff & VOXEL_FX_CLOUDS) ? 0.0f : 1.0f);   /* WJPC_3D_NOCLOUDS: test aid */
     {
         int sx, sy;
         VoxelWorld_SteadyOrigin(&sx, &sy);

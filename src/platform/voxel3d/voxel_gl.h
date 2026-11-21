@@ -18,6 +18,14 @@ void Voxel3D_SetBattle(bool on);
 void Voxel3D_SetGammaLight(bool on);
 /* Polish option 5: anti-aliasing samples a pixel (0/1 off, 2, 4, 8; Gamma lighting's path). */
 void Voxel3D_SetAntiAlias(int samples);
+/* Effects switched off live (F1-F6 in sdl2.c; Brennan 2026-11-21 10:34): a bit each. */
+#define VOXEL_FX_CLOUDS     1u  /* F1: cloud shadows */
+#define VOXEL_FX_BLOOM      2u  /* F2: glow */
+#define VOXEL_FX_ANTIALIAS  4u  /* F3: anti-aliasing */
+#define VOXEL_FX_REFRESH    8u  /* F4: 3D drawn every refresh (off: once a game frame, 60 a second) */
+#define VOXEL_FX_DOF       16u  /* F5: depth blur */
+#define VOXEL_FX_CRACKFILL 32u  /* F6: the final pass's crack fill */
+extern unsigned gVoxelFxOff;
 /* Emerald 3DS's battle frame: the intro is sliding its scenery in (the camera glides then), and BG3's scroll
  * from rest in GBA pixels (a move shaking the scenery; 0 while sliding or with a move's background). */
 void Voxel3D_SetBattleFrame(bool introSliding, float shakeX, float shakeY);
