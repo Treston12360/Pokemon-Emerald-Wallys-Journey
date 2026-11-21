@@ -26,6 +26,12 @@ void Voxel3D_SetAntiAlias(int samples);
 #define VOXEL_FX_DOF       16u  /* F5: depth blur */
 #define VOXEL_FX_CRACKFILL 32u  /* F6: the final pass's crack fill */
 #define VOXEL_FX_GAPS      64u  /* F7 (on, not off): the 3D background magenta, so a gap through the ground shows */
+/* Brennan 2026-11-21 15:33 (21i, F7: the black lines stay black, so something draws them): one kind of 3D piece left
+ * out at a time, to find which draws the lines (and which strobes under the trees) */
+#define VOXEL_FX_GROUND   128u  /* F8: the ground of the maps (their own terrain) */
+#define VOXEL_FX_TREES    256u  /* F9: the trees */
+#define VOXEL_FX_MODELS   512u  /* F10: models - fences, buildings, signs, rocks */
+#define VOXEL_FX_RING    1024u  /* F12: the ring of far ground round the loaded maps (the "belt"), its trees too */
 extern unsigned gVoxelFxOff;
 /* Emerald 3DS's battle frame: the intro is sliding its scenery in (the camera glides then), and BG3's scroll
  * from rest in GBA pixels (a move shaking the scenery; 0 while sliding or with a move's background). */

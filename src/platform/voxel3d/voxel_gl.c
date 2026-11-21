@@ -1486,9 +1486,12 @@ static void WorkerStart(unsigned index)
 }
 
 // The finished build into `m` (freed first if it held a mesh), which is then one of this frame's maps.
+unsigned gVoxel3DMapBuilds; // maps laid (built and sent), counted for the stall log (Brennan 2026-11-21 15:33: shadow blocks strobing)
 static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, InstanceMesh *m)
 {
     Uint64 finish0 = SDL_GetPerformanceCounter();
+
+    gVoxel3DMapBuilds++;
 
     if (!pb->prepared)
         BuildPrepare(pb); // (a build on the main thread: here; the worker's is ready)
@@ -3514,7 +3517,11 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
         InstanceMesh *m = &sInstanceMeshes[i];
         if (!m->used || !m->shown)
             continue;
-        int skip = getenv("WJPC_3D_SKIP") ? atoi(getenv("WJPC_3D_SKIP")) : 0; /* debug: 1 terrain 2 trees 4 models */
+        static int sSkipEnv = -1;
+        if (sSkipEnv < 0)
+            sSkipEnv = getenv("WJPC_3D_SKIP") ? atoi(getenv("WJPC_3D_SKIP")) : 0; /* debug: 1 terrain 2 trees 4 models 8 belt */
+        int skip = sSkipEnv | ((gVoxelFxOff & VOXEL_FX_GROUND) ? 1 : 0) | ((gVoxelFxOff & VOXEL_FX_TREES) ? 2 : 0)
+                 | ((gVoxelFxOff & VOXEL_FX_MODELS) ? 4 : 0); /* F8, F9, F10 */
         for (unsigned p = 0; p < VOXEL_ATLAS_PAGES && !(skip & 1); p++)
             MeshDraw(&m->terrain[p], m->atlas->tex[p], (float)m->originX, 0, (float)m->originY);
         if (!(skip & 2))
@@ -3544,7 +3551,8 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
                 wj_glUniform1f(sUniGlowStrength, 0.0f);
         }
     }
-    if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground && !(getenv("WJPC_3D_SKIP") && (atoi(getenv("WJPC_3D_SKIP")) & 8)))
+    if (sBeltAtlas != NULL && !inst0->indoor && !inst0->underground && !(getenv("WJPC_3D_SKIP") && (atoi(getenv("WJPC_3D_SKIP")) & 8))
+     && !(gVoxelFxOff & VOXEL_FX_RING)) /* F12 */
     {
         for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
             MeshDraw(&sBeltTerrain[0][p], sBeltAtlas->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);

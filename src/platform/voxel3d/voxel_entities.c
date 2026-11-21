@@ -2005,6 +2005,11 @@ static bool RefreshStandIn(unsigned index, const struct ObjectEventGraphicsInfo 
     return true;
 }
 
+/* The stand-ins' time this trip round the main loop (sdl2.c's stall log, "people nearby"; Brennan 2026-11-21 15:33).
+ * (SDL's timer declared here: SDL.h does not build in this file) */
+extern unsigned long long SDL_GetPerformanceCounter(void);
+unsigned long long gVoxelStandInTicks;
+
 /* WallyJourney_IsNpcAway for a stand-in, remembered for half a second (30 frames; longer kept a wrong answer
  * asked while a warp was still loading the map): it reads the clock (GetTimeOfDay,
  * the RTC) and the weather each call, and asking it for every neighbouring person every frame cost 22 ms a frame on
@@ -2554,7 +2559,11 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
     }
 
 #ifdef VOXEL_STANDIN_FIRST
-    updates += GatherStandIns(camera, atlas, claimed);
+    {
+        unsigned long long t0 = SDL_GetPerformanceCounter();
+        updates += GatherStandIns(camera, atlas, claimed);
+        gVoxelStandInTicks += SDL_GetPerformanceCounter() - t0;
+    }
 #endif
     /* All but the door's slot. */
     dropped = VoxelSlots_Assign(requests, candidateCount, sSlotEffect, claimed, reset,

@@ -229,6 +229,12 @@ static Uint64 sStallVDraw, sStall3D, sStall2D; // (2D: the GBA/wide picture draw
 // POL-15: time spent in the SDL/GL calls of a frame that can wait for the graphics card (texture uploads, flushes,
 // render-target switches) - where a full GPU queue shows up.
 static Uint64 sStallGl;
+/* Brennan 2026-11-21 15:33 (21i: every second LAGGY, frame 28 ms though 2D 1 and 3D 6): the picture's drawing in
+ * parts, so the stall log names where the rest goes - before the 2D picture, after it (pictures converted and sent),
+ * the 3D world's update, and after it (menus layer, smooth-motion layer, in-betweens). People nearby: the 3D
+ * stand-ins for the neighbouring maps' people (inside the 3D update). */
+static Uint64 sVdSetup, sVdAfter2D, sVd3DBlock, sVdEnd;
+extern Uint64 gVoxelStandInTicks; // voxel_entities.c
 // POL-15: the main thread's own CPU time during a trip (Windows), against the clock: much less means the thread
 // was waiting for a CPU (another program, power saving) rather than working.
 static double StallThreadCpuMs(void)
@@ -244,7 +250,7 @@ static double sStallCpuStart;
 #define STALL_GL(call) do { Uint64 stallGl0_ = SDL_GetPerformanceCounter(); call; sStallGl += SDL_GetPerformanceCounter() - stallGl0_; } while (0)
 static int sStallFieldW, sStallFieldH;
 extern double gVoxel3DMapMs, gVoxel3DBeltMs, gVoxel3DDrawMs;
-extern unsigned gVoxel3DMeshes, gVoxel3DPages, gVoxel3DBeltLayers, gVoxel3DBeltFlushes;
+extern unsigned gVoxel3DMeshes, gVoxel3DPages, gVoxel3DBeltLayers, gVoxel3DBeltFlushes, gVoxel3DMapBuilds;
 
 static unsigned StallFreeAddressMb(void)
 {
@@ -307,8 +313,9 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
      * took over 20 ms: how many, the worst, and the 3D work of the last one. */
     {
         static Uint64 sSecond;
-        static unsigned sSlow, sTrips, sFlushesAt;
+        static unsigned sSlow, sTrips, sFlushesAt, sBuildsAt;
         static unsigned sWorstDraws;
+        static double sWorstParts[5];
         static double sWorst, sWorstMaps, sWorstBelt, sWorstDraw, sWorstGame, sWorstFrame, sWorst3D, sWorstScreen, sWorstPresent, sWorst2D, sWorstGl, sWorstCpu;
 
         sTrips++;
@@ -328,6 +335,11 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
                 sWorstGl = sStallGl * 1000.0 / freq;
                 sWorstCpu = StallThreadCpuMs() - sStallCpuStart;
                 sWorstDraws = sStallDraws;
+                sWorstParts[0] = sVdSetup * 1000.0 / freq;
+                sWorstParts[1] = sVdAfter2D * 1000.0 / freq;
+                sWorstParts[2] = sVd3DBlock * 1000.0 / freq;
+                sWorstParts[3] = sVdEnd * 1000.0 / freq;
+                sWorstParts[4] = gVoxelStandInTicks * 1000.0 / freq;
                 sWorstScreen = (drawn - batchEnd) * 1000.0 / freq;
                 sWorstPresent = (presented - drawn) * 1000.0 / freq;
             }
@@ -340,19 +352,22 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
             {
                 sLines++;
                 fprintf(f, "%7.1fs LAGGY  %u of %u trips over 20 ms, worst %.0f (thread CPU %.0f): game %.0f, frame %.0f (%u drawn, 2D picture %.0f at %dx%d, GL waits %.0f, 3D %.0f:"
-                           " maps %.0f, belt %.0f, drawing %.0f), screen %.0f, present %.0f | map %d:%d, belt layers %u, belt rebuilds %u\n",
+                           " maps %.0f, belt %.0f, drawing %.0f), screen %.0f, present %.0f | map %d:%d, belt layers %u, belt rebuilds %u, maps laid %u"
+                           " | frame parts: before 2D %.1f, after 2D %.1f, 3D update %.1f, after 3D %.1f, people nearby %.1f\n",
                         (presented - sFirst) / (double)freq, sSlow, sTrips, sWorst, sWorstCpu, sWorstGame, sWorstFrame, sWorstDraws, sWorst2D,
                         sStallFieldW, sStallFieldH, sWorstGl, sWorst3D,
                         sWorstMaps, sWorstBelt, sWorstDraw, sWorstScreen, sWorstPresent,
                         gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1,
                         gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapNum : -1,
-                        gVoxel3DBeltLayers, gVoxel3DBeltFlushes - sFlushesAt);
+                        gVoxel3DBeltLayers, gVoxel3DBeltFlushes - sFlushesAt, gVoxel3DMapBuilds - sBuildsAt,
+                        sWorstParts[0], sWorstParts[1], sWorstParts[2], sWorstParts[3], sWorstParts[4]);
                 fclose(f);
             }
             sSecond = presented;
             sSlow = sTrips = 0;
             sWorst = 0.0;
             sFlushesAt = gVoxel3DBeltFlushes;
+            sBuildsAt = gVoxel3DMapBuilds;
         }
     }
     if (total < 150.0 && !minute)
@@ -363,15 +378,20 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
     if (f == NULL)
         return;
     sLines++;
+    static unsigned sLineBuildsAt;
     fprintf(f, "%7.1fs %s %6.0f: game %.0f, frame %.0f (3D %.0f: maps %.0f, belt %.0f, drawing %.0f), screen %.0f, present %.0f"
-               " | map %d:%d, 3D %d, meshes %u, pages %u, free memory %u MB, loops %u\n",
+               " | map %d:%d, 3D %d, meshes %u, pages %u, free memory %u MB, loops %u, maps laid since the last line %u"
+               " | frame parts: before 2D %.1f, after 2D %.1f, 3D update %.1f, after 3D %.1f, people nearby %.1f\n",
             (presented - sFirst) / (double)freq, total >= 150.0 ? "STALL" : "minute", total,
             (batchEnd - start - sStallVDraw) * 1000.0 / freq, sStallVDraw * 1000.0 / freq, sStall3D * 1000.0 / freq,
             gVoxel3DMapMs, gVoxel3DBeltMs, gVoxel3DDrawMs,
             (drawn - batchEnd) * 1000.0 / freq, (presented - drawn) * 1000.0 / freq,
             gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1,
             gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapNum : -1,
-            (int)(s3DReady && s3DWanted), gVoxel3DMeshes, gVoxel3DPages, StallFreeAddressMb(), sLoops);
+            (int)(s3DReady && s3DWanted), gVoxel3DMeshes, gVoxel3DPages, StallFreeAddressMb(), sLoops, gVoxel3DMapBuilds - sLineBuildsAt,
+            sVdSetup * 1000.0 / freq, sVdAfter2D * 1000.0 / freq, sVd3DBlock * 1000.0 / freq, sVdEnd * 1000.0 / freq,
+            gVoxelStandInTicks * 1000.0 / freq);
+    sLineBuildsAt = gVoxel3DMapBuilds;
     fclose(f);
     if (minute)
         sLastMinute = presented;
@@ -738,8 +758,10 @@ static bool TestStep(void)
         if (!strcmp(cmd, "fxkey"))
         {
             // "fxkey N": as pressing F<N> (ToggleFx)
-            if (atoi(arg1) >= 1 && atoi(arg1) <= 7)
+            if (atoi(arg1) >= 1 && atoi(arg1) <= 10)
                 ToggleFx((unsigned)atoi(arg1) - 1);
+            else if (atoi(arg1) == 12)
+                ToggleFx(10);
             continue;
         }
         if (!strcmp(cmd, "typekey"))
@@ -1701,6 +1723,8 @@ int main(int argc, char **argv)
         Uint64 stallLoopStart = SDL_GetPerformanceCounter();
         sStallCpuStart = StallThreadCpuMs();
         sStallVDraw = sStall3D = sStall2D = sStallGl = 0;
+        sVdSetup = sVdAfter2D = sVd3DBlock = sVdEnd = 0;
+        gVoxelStandInTicks = 0;
         sStallDraws = 0;
 
         if (!paused)
@@ -1749,7 +1773,14 @@ int main(int argc, char **argv)
                     if ((!speedUp && sDrawEvery) || lastOfBatch || outOfTime)
                     {
                         Uint64 v0 = SDL_GetPerformanceCounter();
+                        static int sProfVDraw = -1;
+                        if (sProfVDraw < 0)
+                            sProfVDraw = getenv("WJPC_PROFILE_VDRAW") != NULL; // (test: the profiler samples the picture's drawing)
+                        if (sProfVDraw)
+                            gVoxelProfileOn = 2;
                         VDraw(sdlTexture);
+                        if (sProfVDraw)
+                            gVoxelProfileOn = 0;
                         sStallDraws++;
                         sStallVDraw += SDL_GetPerformanceCounter() - v0;
                         sDrewFrame = true;
@@ -2558,23 +2589,26 @@ static void HandleBoundKey(SDL_Keycode key, bool8 down, bool8 repeat)
  * Not saved. (test script: "fxkey N") */
 static void ToggleFx(unsigned k)
 {
-    static const char *const kNames[7] = { "cloud shadows", "glow (bloom)", "anti-aliasing",
-                                           "3D every refresh", "depth blur", "crack fill", "magenta background (gap test)" };
+    /* (k: the bit in gVoxelFxOff, VOXEL_FX_*; F8, F9, F10, F12 are bits 7-10 - F11 is full screen) */
+    static const char *const kNames[11] = { "cloud shadows", "glow (bloom)", "anti-aliasing",
+                                            "3D every refresh", "depth blur", "crack fill", "magenta background (gap test)",
+                                            "ground", "trees", "models (fences, buildings)", "far ground ring (belt)" };
+    static const unsigned kKey[11] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12 };
     char title[256];
     int at;
     FILE *lf;
 
     gVoxelFxOff ^= 1u << k;
     at = snprintf(title, sizeof(title), "Pokemon Wally's Journey");
-    for (unsigned b = 0; b < 7; b++)
+    for (unsigned b = 0; b < 11 && at < (int)sizeof(title) - 1; b++)
         if (gVoxelFxOff & (1u << b))
             at += snprintf(title + at, sizeof(title) - (size_t)at, b == 6 ? "%s F%u %s on" : "%s F%u %s off",
-                           at == 23 ? " -" : ",", b + 1, kNames[b]);
+                           at == 23 ? " -" : ",", kKey[b], kNames[b]);
     SDL_SetWindowTitle(sdlWindow, title);
     lf = fopen("WallysJourney_stalls.txt", "a");
     if (lf != NULL)
     {
-        fprintf(lf, "%8.1fs F%u: %s %s\n", SDL_GetTicks() / 1000.0, k + 1, kNames[k],
+        fprintf(lf, "%8.1fs F%u: %s %s\n", SDL_GetTicks() / 1000.0, kKey[k], kNames[k],
                 (gVoxelFxOff & (1u << k)) ? (k == 6 ? "ON" : "OFF") : (k == 6 ? "off again" : "on again"));
         fclose(lf);
     }
@@ -2724,7 +2758,11 @@ void ProcessEvents(void)
                 ZoomStep(-1); // zoom in
                 break;
             case SDLK_F1: case SDLK_F2: case SDLK_F3: case SDLK_F4: case SDLK_F5: case SDLK_F6: case SDLK_F7:
+            case SDLK_F8: case SDLK_F9: case SDLK_F10:
                 ToggleFx((unsigned)(event.key.keysym.sym - SDLK_F1));
+                break;
+            case SDLK_F12:
+                ToggleFx(10); // the far ground ring (F11 is full screen)
                 break;
             case SDLK_F11:
             {
@@ -3078,6 +3116,7 @@ void VDraw(SDL_Texture *texture)
     static uint32_t uiImage[TEX_W * TEX_H];
     static uint32_t lastImage[TEX_W * TEX_H];
     static int lastW, lastH;
+    Uint64 vdStart = SDL_GetPerformanceCounter(), vdMark;
     bool smooth = sPlatformSettings[PLATFORM_SETTING_SMOOTH] && (sTestScript == NULL || sScriptRealtime) && sdlOverlayTexture != NULL;
     int prevW = sFrameInfo.width, prevH = sFrameInfo.height, prevMargin = sFrameInfo.margin;
 
@@ -3111,6 +3150,7 @@ void VDraw(SDL_Texture *texture)
     WideView_SetUiOverlay(sdlUiTexture != NULL ? uiLayer : NULL);
     sVDrawImage = gbaImage;
     Uint64 stall2D = SDL_GetPerformanceCounter();
+    sVdSetup += stall2D - vdStart;
     if (!PcGuard_Call0(DrawFrameGuarded))
     {
         // The wide view hit a bad memory access: fall back to the normal picture for good.
@@ -3118,7 +3158,8 @@ void VDraw(SDL_Texture *texture)
         sVDrawImage = gbaImage;
         PcGuard_Call0(DrawFrameGuarded);
     }
-    sStall2D += SDL_GetPerformanceCounter() - stall2D;
+    vdMark = SDL_GetPerformanceCounter();
+    sStall2D += vdMark - stall2D;
     sStallFieldW = sFrameInfo.width;
     sStallFieldH = sFrameInfo.height;
     if (getenv("WJPC_VDRAW_TIME") != NULL) // test aid: the CPU picture's cost, every 60 frames
@@ -3210,6 +3251,9 @@ void VDraw(SDL_Texture *texture)
         STALL_GL(SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32)));
     if (fullW == DISPLAY_WIDTH && fullH == DISPLAY_HEIGHT)
         memcpy(sLastUploaded, image, sizeof(sLastUploaded));
+    else if (uiOnlyField && getenv("WJPC_FADE_FIT_UNDER_3D") == NULL)
+        ; /* Brennan 2026-11-21 15:33 (21i lag): under the 3D world the 2D field picture this fitted and sent every
+           * frame is not shown (nor made: its copy here is an old one). WJPC_FADE_FIT_UNDER_3D=1: as before */
     else
     {
         // The transitions also fade by palette (flashes, fades to black or white): the GBA picture's map
@@ -3330,6 +3374,11 @@ void VDraw(SDL_Texture *texture)
             s3DBattleFrame = sdl3DBattleTexture != NULL;
         }
     }
+    {
+        Uint64 now = SDL_GetPerformanceCounter();
+        sVdAfter2D += now - vdMark;
+        vdMark = now;
+    }
     if (s3DReady && ((s3DWanted && (sFrameInfo.mode == WIDE_VIEW_FIELD || s3DTransition)) || s3DBattleFrame))
     {
         // The 3D world, while the game thread still waits on this frame.
@@ -3388,6 +3437,11 @@ void VDraw(SDL_Texture *texture)
                 STALL_GL(SDL_SetRenderTarget(sdlRenderer, was));
             }
         }
+    }
+    {
+        Uint64 now = SDL_GetPerformanceCounter();
+        sVd3DBlock += now - vdMark;
+        vdMark = now;
     }
     if (s3DBattleFrame)
     {
@@ -3531,6 +3585,7 @@ void VDraw(SDL_Texture *texture)
         }
     }
     REG_VCOUNT = 161; // prep for being in VBlank period
+    sVdEnd += SDL_GetPerformanceCounter() - vdMark;
 }
 
 int DoMain(void *data)
