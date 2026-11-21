@@ -747,3 +747,4 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   posts as the long rails).
 - Brennan 17:59 (`docs/brennan/2026-11-20_1759_woods_edge.png`): woods "look great now"; along the wood/sea diagonal "a jagged staircase row of flat 2D tree tops/sprites sticking out behind the back row of 3D trees" - remove them.
 - Brennan 18:0x: cliff-base dark strips -> "Lighter cliff shadows" (keep shadows, lighter/softer so they do not read as black boxes). NOTE: WJPC_3D_NOSHADOW only hides character shadows; the cause is being re-tested (clouds off / Gamma lighting off).
+- Brennan 18:33 (`docs/brennan/2026-11-20_1833_river.png`): river step lines by the east bank and at the left vertical rail foot; Route 119 4-wide shrub still flat; hop rails "chopped"; rail end into the cliff (top-centre) and a V notch where the vertical rail meets the upper-left bank.

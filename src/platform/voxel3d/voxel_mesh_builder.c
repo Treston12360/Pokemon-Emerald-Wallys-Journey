@@ -36,6 +36,7 @@
 #define SHADE_NORTH VOXEL_FACE_SHADE(0.50f)
 #define SHADE_WEST VOXEL_FACE_SHADE(0.65f)
 #define SHADE_EAST VOXEL_FACE_SHADE(0.55f)
+bool VoxelMesh_RailWaterArt(const VoxelMapInstance *inst, int x, int y);
 
 /*
  * Solid furniture parts barely vary with facing. The shades above are meant
@@ -259,6 +260,8 @@ bool VoxelMesh_TileUV(VoxelBuilder *builder, int x, int y,
         static int sNoSwap = -1;
         if (sNoSwap < 0)
             sNoSwap = getenv("WJPC_NO_ART_SWAP") != NULL;
+        if (!sNoSwap && VoxelMesh_RailWaterArt(inst, x, y))
+            metatile = 0x206;   /* Route 119's river under its 3D rails (EmitRailCell) */
         for (unsigned i = 0; inst != NULL && !sNoSwap && i < sizeof(kArtSwap) / sizeof(kArtSwap[0]); ++i)
             if (inst->layoutId == kArtSwap[i].layout && x - inst->originX == kArtSwap[i].x
              && y - inst->originY == kArtSwap[i].y)
@@ -2365,9 +2368,136 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
     }
 }
 
+/*
+ * Route 119's Acro Bike rails as 3D models (Brennan 2026-11-20 17:53: "Build real 3D rail models" - thin rails with
+ * posts, level with the grass banks at both ends; the hop rails kept separate, tidied). The rail cells' relief lies
+ * flat at the river (tools/voxel3ds/lower_rails.py, OVER_PX 0) and is drawn as the river (RailWaterArt); on it each
+ * rail cell over the water stands a bar at the bank's height - where the drawing puts it, its top the drawing's
+ * white bar (horizontal: rows 12-15, columns 1-14; vertical: columns 5-9), 3 px thick - and a post down to the
+ * water. The bank cells with a rail's end drawn on them (0EC, 0F0, 0F2) are the bank, and the bar meets them flush.
+ * WJPC_RAIL_OLD=1: no models (and the cells drawn as they are).
+ */
+static bool RailsOn(const VoxelMapInstance *inst)
+{
+    static int sOld = -1;
+    if (sOld < 0)
+        sOld = getenv("WJPC_RAIL_OLD") != NULL;
+    return !sOld && inst != NULL && inst->layoutId == 35;
+}
+
+static int RailKind(int mt)   /* 1 horizontal bar, 2 vertical bar, 3 under a rail (posts, side), 0 none */
+{
+    switch (mt)
+    {
+    case 0x0ED: case 0x0F1: case 0x0FD: case 0x0FB: return 1;
+    case 0x0F3: case 0x0F4: case 0x0F7: return 2;
+    case 0x0F5: case 0x0F9: case 0x0FC: return 3;
+    default: return 0;
+    }
+}
+
+bool VoxelMesh_RailWaterArt(const VoxelMapInstance *inst, int x, int y)
+{
+    return RailsOn(inst) && RailKind(VoxelWorld_GetMetatileId(x, y)) != 0;
+}
+
+static bool RailJoins(const VoxelMapInstance *inst, int x, int y, int kind)
+{
+    int mt = VoxelWorld_GetMetatileId(x, y);
+    if (VoxelWorld_GetInstanceAt(x, y) != inst)
+        return false;
+    if (RailKind(mt) == kind)
+        return true;
+    /* the bank's cells with the rail's end drawn on them */
+    return kind == 1 ? (mt == 0x0F0 || mt == 0x0F2) : (mt == 0x0EC);
+}
+
+static void RailBox(VoxelBuilder *b, float xa, float xb, float za, float zb, float ytop, float ybot,
+                    float u0, float v0, float u1, float v1, bool west, bool east, bool south, bool north)
+{
+    VoxelBuilder_Quad(b,
+        &(VoxelVertex){xa, ytop, za, u0, v0, SHADE_TOP},
+        &(VoxelVertex){xb, ytop, za, u1, v0, SHADE_TOP},
+        &(VoxelVertex){xb, ytop, zb, u1, v1, SHADE_TOP},
+        &(VoxelVertex){xa, ytop, zb, u0, v1, SHADE_TOP});
+    if (south)
+        VoxelBuilder_Quad(b,
+            &(VoxelVertex){xa, ybot, zb, u0, v1, SHADE_SOUTH},
+            &(VoxelVertex){xb, ybot, zb, u1, v1, SHADE_SOUTH},
+            &(VoxelVertex){xb, ytop, zb, u1, v0, SHADE_SOUTH},
+            &(VoxelVertex){xa, ytop, zb, u0, v0, SHADE_SOUTH});
+    if (north)
+        VoxelBuilder_Quad(b,
+            &(VoxelVertex){xb, ybot, za, u1, v1, SHADE_NORTH},
+            &(VoxelVertex){xa, ybot, za, u0, v1, SHADE_NORTH},
+            &(VoxelVertex){xa, ytop, za, u0, v0, SHADE_NORTH},
+            &(VoxelVertex){xb, ytop, za, u1, v0, SHADE_NORTH});
+    if (west)
+        VoxelBuilder_Quad(b,
+            &(VoxelVertex){xa, ybot, za, u0, v1, SHADE_WEST},
+            &(VoxelVertex){xa, ybot, zb, u1, v1, SHADE_WEST},
+            &(VoxelVertex){xa, ytop, zb, u1, v0, SHADE_WEST},
+            &(VoxelVertex){xa, ytop, za, u0, v0, SHADE_WEST});
+    if (east)
+        VoxelBuilder_Quad(b,
+            &(VoxelVertex){xb, ybot, zb, u1, v1, SHADE_EAST},
+            &(VoxelVertex){xb, ybot, za, u0, v1, SHADE_EAST},
+            &(VoxelVertex){xb, ytop, za, u0, v0, SHADE_EAST},
+            &(VoxelVertex){xb, ytop, zb, u1, v0, SHADE_EAST});
+}
+
+static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    const float p = 1.0f / 16.0f;
+    const int16_t *grid;
+    int mt, kind;
+    float u0, v0, u1, v1, water, top, bot, shift;
+
+    if (!RailsOn(inst))
+        return;
+    mt = VoxelWorld_GetMetatileId(x, y);
+    kind = RailKind(mt);
+    if (kind != 1 && kind != 2)
+        return;
+    grid = VoxelRelief_Cell(inst, x, y);
+    if (grid == NULL || !MetatileUV(b, mt, &u0, &v0, &u1, &v1))
+        return;
+    water = grid[0] / 16.0f;
+    top = water + 1.0f;          /* the bank's height: a level over the river */
+    bot = top - 3.0f * p;
+    shift = top;                 /* as far south as it is high (the relief's rule: depth = height) */
+#define RU(c) (u0 + (u1 - u0) * (c) / 16.0f)
+#define RV(r) (v0 + (v1 - v0) * (r) / 16.0f)
+    if (kind == 1)
+    {
+        bool w = RailJoins(inst, x - 1, y, 1), e = RailJoins(inst, x + 1, y, 1);
+        float xa = (float)x + (w ? 0.0f : p), xb = (float)x + 1.0f - (e ? 0.0f : p);
+        float za = (float)y + 12.0f * p + shift, zb = (float)y + 1.0f + shift;
+
+        RailBox(b, xa, xb, za, zb, top, bot, RU(w ? 0 : 1), RV(12), RU(e ? 16 : 15), RV(16), !w, !e, true, true);
+        /* a post at the cell's middle, down to the river */
+        RailBox(b, (float)x + 7.0f * p, (float)x + 9.0f * p, zb - 2.0f * p, zb, bot, water,
+                RU(7), RV(13), RU(9), RV(15), true, true, true, true);
+    }
+    else
+    {
+        bool n = RailJoins(inst, x, y - 1, 2), s2 = RailJoins(inst, x, y + 1, 2);
+        float xa = (float)x + 5.0f * p, xb = (float)x + 10.0f * p;
+        float za = (float)y + (n ? 0.0f : p) + shift, zb = (float)y + (s2 ? 1.0f : 15.0f * p) + shift;
+
+        RailBox(b, xa, xb, za, zb, top, bot, RU(5), RV(n ? 0 : 1), RU(10), RV(s2 ? 16 : 15), true, true, !s2, !n);
+        RailBox(b, (float)x + 6.5f * p, (float)x + 8.5f * p, (za + zb) * 0.5f - p, (za + zb) * 0.5f + p, bot, water,
+                RU(6), RV(7), RU(8), RV(9), true, true, true, true);
+    }
+#undef RU
+#undef RV
+}
+
 void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst,
                              int x0, int x1, int y)
 {
+    for (int x = x0; x < x1; ++x)
+        EmitRailCell(builder, inst, x, y);
     for (int x = x0; x < x1; ++x)
         EmitSafetyFloor(builder, inst, x, y);
     for (int x = x0; x < x1; ++x)

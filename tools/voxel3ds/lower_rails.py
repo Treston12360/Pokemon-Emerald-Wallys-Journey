@@ -2,6 +2,8 @@
 """Lay Route 119's Acro Bike rails just over the river, in place.
 
 usage: lower_rails.py RELIEF.bin [LAYOUT_ID=35] [OVER_PX=4]
+  OVER_PX 0 (Brennan 17:53 "Build real 3D rail models"): every rail cell flat at the water, no ramps - the rails
+  are drawn as 3D models over it (voxel_mesh_builder.c EmitRailCell).
 
 Brennan 2026-11-19 (POL-53): the river stands on Route 119 "look like thick raised blocks sitting high out of the
 water with exposed boxy side walls. Lower their height profile closer to the water surface"; 2026-11-20 16:11: they
@@ -58,7 +60,7 @@ def main():
     for (x, y), wl in level.items():
         px = wl if mt(x, y) in UNDER else wl + over
         g = [[px] * 5 for _ in range(5)]
-        if mt(x, y) in TOP:
+        if mt(x, y) in TOP and over > 0:
             for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
                 nx, ny = x + dx, y + dy
                 if (nx, ny) not in at or mt(nx, ny) in WATER or mt(nx, ny) in RAIL:
