@@ -37,6 +37,7 @@
 #define SHADE_WEST VOXEL_FACE_SHADE(0.65f)
 #define SHADE_EAST VOXEL_FACE_SHADE(0.55f)
 bool VoxelMesh_RailWaterArt(const VoxelMapInstance *inst, int x, int y);
+int VoxelMesh_RailFloorArt(const VoxelMapInstance *inst);
 
 /*
  * Solid furniture parts barely vary with facing. The shades above are meant
@@ -261,7 +262,7 @@ bool VoxelMesh_TileUV(VoxelBuilder *builder, int x, int y,
         if (sNoSwap < 0)
             sNoSwap = getenv("WJPC_NO_ART_SWAP") != NULL;
         if (!sNoSwap && VoxelMesh_RailWaterArt(inst, x, y))
-            metatile = 0x206;   /* Route 119's river under its 3D rails (EmitRailCell) */
+            metatile = VoxelMesh_RailFloorArt(inst);   /* the river / grass under the 3D rails (EmitRailCell) */
         for (unsigned i = 0; inst != NULL && !sNoSwap && i < sizeof(kArtSwap) / sizeof(kArtSwap[0]); ++i)
             if (inst->layoutId == kArtSwap[i].layout && x - inst->originX == kArtSwap[i].x
              && y - inst->originY == kArtSwap[i].y)
@@ -2382,7 +2383,28 @@ static bool RailsOn(const VoxelMapInstance *inst)
     static int sOld = -1;
     if (sOld < 0)
         sOld = getenv("WJPC_RAIL_OLD") != NULL;
-    return !sOld && inst != NULL && inst->layoutId == 35;
+    /* Brennan 2026-11-20 19:31: "Apply this exact 3D rail + dark support post model ... to every other Acro Bike rail
+     * section across the entire region". By metatile behaviour (MB_*_RAIL) Hoenn has two: Route 119 (General
+     * 0EC-0FD over the river) and Safari Zone South (Lilycove 312-322, the same drawing, over the grass floor). */
+    return !sOld && inst != NULL && (inst->layoutId == 35 || inst->layoutId == 241);
+}
+
+/* Safari Zone South's copy of the General rail drawing, as the General's metatile (and its floor: grass) */
+static int RailGeneral(const VoxelMapInstance *inst, int mt)
+{
+    if (inst == NULL || inst->layoutId != 241)
+        return mt;
+    switch (mt)
+    {
+    case 0x312: return 0x0F0;
+    case 0x313: return 0x0F1;
+    case 0x314: return 0x0F2;
+    case 0x316: case 0x31E: return 0x0FB;
+    case 0x31D: return 0x0FD;
+    case 0x315: return 0x0F5;
+    case 0x321: return 0x0F9;
+    default: return -1;
+    }
 }
 
 static int RailKind(int mt)   /* 1 horizontal bar, 2 vertical bar, 3 under a rail (posts, side), 0 none */
@@ -2398,12 +2420,18 @@ static int RailKind(int mt)   /* 1 horizontal bar, 2 vertical bar, 3 under a rai
 
 bool VoxelMesh_RailWaterArt(const VoxelMapInstance *inst, int x, int y)
 {
-    return RailsOn(inst) && RailKind(VoxelWorld_GetMetatileId(x, y)) != 0;
+    return RailsOn(inst) && RailKind(RailGeneral(inst, VoxelWorld_GetMetatileId(x, y))) != 0;
+}
+
+/* what is drawn under a rail: Route 119's river, Safari Zone South's grass */
+int VoxelMesh_RailFloorArt(const VoxelMapInstance *inst)
+{
+    return inst != NULL && inst->layoutId == 241 ? 0x001 : 0x206;
 }
 
 static bool RailJoins(const VoxelMapInstance *inst, int x, int y, int kind)
 {
-    int mt = VoxelWorld_GetMetatileId(x, y);
+    int mt = RailGeneral(inst, VoxelWorld_GetMetatileId(x, y));
     if (VoxelWorld_GetInstanceAt(x, y) != inst)
         return false;
     if (RailKind(mt) == kind)
@@ -2457,7 +2485,7 @@ static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     if (!RailsOn(inst))
         return;
     mt = VoxelWorld_GetMetatileId(x, y);
-    kind = RailKind(mt);
+    kind = RailKind(RailGeneral(inst, mt));
     if (kind != 1 && kind != 2)
         return;
     grid = VoxelRelief_Cell(inst, x, y);
@@ -2465,7 +2493,7 @@ static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
         return;
     /* the posts (Brennan 18:57: "Restore the dark grey/wooden-brown color and darker underwater shading on all the
      * vertical support poles"): the drawing's own dark post grey, 0F5's left column rows 0-2 */
-    if (!MetatileUV(b, 0x0F5, &pu0, &pv0, &pu1, &pv1))
+    if (!MetatileUV(b, inst->layoutId == 241 ? 0x315 : 0x0F5, &pu0, &pv0, &pu1, &pv1))
         pu0 = u0, pv0 = v0, pu1 = u1, pv1 = v1;
     else
         pu1 = pu0 + (pu1 - pu0) * 1.0f / 16.0f, pv1 = pv0 + (pv1 - pv0) * 3.0f / 16.0f;

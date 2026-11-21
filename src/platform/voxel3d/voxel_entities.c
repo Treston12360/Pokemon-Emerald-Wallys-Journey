@@ -864,6 +864,14 @@ static bool MoundObject(u16 graphicsId)
         sOff = getenv("WJPC_FLAT_ROCKS") != NULL;
     if (sOff)
         return false;
+    /* Brennan 2026-11-20 19:31: overworld item Poke Balls "as a proper 3D voxel/spherical Poke Ball model sitting
+     * cleanly on the ground" - the same mound of the ball's own drawing as the rocks (a dome, its crown under the
+     * drawing's). WJPC_FLAT_ITEM_BALLS=1: the card. */
+    static int sFlatBalls = -1;
+    if (sFlatBalls < 0)
+        sFlatBalls = getenv("WJPC_FLAT_ITEM_BALLS") != NULL;
+    if (!sFlatBalls && graphicsId == OBJ_EVENT_GFX_ITEM_BALL)
+        return true;
     return graphicsId == OBJ_EVENT_GFX_BREAKABLE_ROCK || graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER
         || graphicsId == OBJ_EVENT_GFX_BREAKABLE_ROCK_FRLG || graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER_FRLG;
 }
