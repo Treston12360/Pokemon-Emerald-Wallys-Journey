@@ -115,12 +115,17 @@ Aria_Ch4_Echo::
 	msgbox Aria_Ch4_Text_Echo3, MSGBOX_DEFAULT
 	closemessage
 	@ owner 2026-11-20: the echo repeats the last thing it did in the Tower - the cry, then it runs to her,
-	@ along the floor beside the LEFT STATUE (x9), then turns behind its edge and is gone - where it goes stays hidden. Ch. 13 shows this same corner from
+	@ along the floor beside the LEFT STATUE (x9), then turns toward the gap behind it; a white flash and it is gone - where it goes stays hidden. Ch. 13 shows this same corner from
 	@ Aria's side (she is waiting in that nook). Keep this path in sync with the finale.
 	applymovement LOCALID_POKEMON_TOWER_7F_ARIA_CLEFAIRY, Aria_Ch4_Movement_EchoRuns
 	waitmovement 0
-	delay 30
+	@ owner 2026-11-21: "a white flash and have the Clefairy disappear"
+	playse SE_M_REFLECT
+	fadescreenspeed FADE_TO_WHITE, 1
 	removeobject LOCALID_POKEMON_TOWER_7F_ARIA_CLEFAIRY
+	delay 8
+	fadescreenspeed FADE_FROM_WHITE, 2
+	delay 30
 	delay 40
 	playse SE_SELECT
 	msgbox Aria_Ch4_Text_Echo4, MSGBOX_DEFAULT
@@ -291,12 +296,10 @@ Aria_Ch4_Text_Call2::
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
 
-Aria_Ch4_Movement_EchoRuns: @ (11,4) -> along the floor beside the left statue's pedestal (10,3) -> turns toward
-	@ the gap behind it and is gone at its edge. (Sliding it INTO the statue tile draws it on top of the statue in
-	@ 2D - checked 2026-11-21 - so it vanishes at the edge instead; where it goes stays hidden until ch. 13.)
+Aria_Ch4_Movement_EchoRuns: @ (11,4) -> along the floor beside the left statue's pedestal (10,3), turns toward the gap
+	@ behind it; the script then flashes white and it is gone (owner 2026-11-21). Destination stays hidden till ch. 13.
 	walk_fast_left
 	walk_fast_up
 	face_left
 	delay_4
-	set_invisible
 	step_end
