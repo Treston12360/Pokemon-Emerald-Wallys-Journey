@@ -214,6 +214,11 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       as in the FireRed Condominiums; the side mat tiles don't exit there either). Test: `state var 0x50FF 19`,
       `warp 37 6 45 25`, hold UP into the door. Left: 5.4 Blue at the Snorlax (Route 16), Erika, drawing wording
       approval.
+      **Tested 2026-11-21 (Windows build under Wine), 2D and 3D:** holding UP from the street at (45,25) walks
+      straight through the opened fence into the office; 5.1 + 5.2 play with the right name boxes, Blue walks out,
+      VAR -> 20; the drawing reads from (8,2)/(9,2) facing up; leaving by the middle mat works; the sign reads
+      "Varnell Research Office". No bad-memory-access lines in the logs. In 3D the office is flat like the rest of
+      Kanto (K7 paused). Note: the follower Pokémon can take the mat tile, so test inputs must step round it.
 - [x] **S-ARIA-CANON-LOCK (DOCUMENTATION ONLY — owner 2026-11-15):** Three historical points locked
       in `docs/KANTO_PROJECT_ARIA.md` and `docs/KANTO_NARRATIVE_AUDIT.md`: (1) young Varnell was **forced
       outside Pokémon Tower** during Rocket's raid; (2) Clefairy remained **captive with a Rocket member
