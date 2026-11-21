@@ -997,6 +997,209 @@ static void EmitMound(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsign
 }
 
 /*
+ * Brennan 2026-11-20 23:18 (Route 121's berry patch: "the grown Berry plants ... are still rendering as flat 2D
+ * sprites/billboards ... Convert all Berry growth stages ... into true 3D voxel models (with 3D foliage and 3D
+ * berries hanging on the branches) centered cleanly in the dirt patches"): a berry plant past its sprout (taller,
+ * flowering, berries) is its own drawing built of voxels - each opaque pixel a block a pixel wide and high, as deep
+ * as it is far inside the plant's outline (rounded: thin at the edges, up to VOXEL_PLANT_DEPTH pixels through the
+ * middle), standing upright on the middle of its soil cell. Faces only where a block is deeper than its neighbour
+ * (no hidden faces); the top faces lit, the sides and back darker. Every face is the pixel's own colour, so the
+ * berries and leaves of the drawing are the model's. The seeds and sprouts stay their mounds (POL-49, Q11).
+ * WJPC_BERRY_PLANT_CARD=1: the card, as before.
+ */
+#define VOXEL_PLANT_DEPTH 8   /* pixels through the thickest part */
+#define WJ_PMIN(a, b) ((a) < (b) ? (a) : (b))
+
+static bool PlantModel(const struct ObjectEvent *obj)
+{
+    static int sOff = -1;
+    u8 stage;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_BERRY_PLANT_CARD") != NULL;
+    if (sOff || !BerryPlant(obj->graphicsId))
+        return false;
+    stage = GetStageByBerryTreeId(obj->trainerRange_berryTreeId);
+    return stage == BERRY_STAGE_TALLER || stage == BERRY_STAGE_FLOWERING || stage == BERRY_STAGE_BERRIES;
+}
+
+static void EmitVoxelPlant(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigned index,
+                           float cx, float cz, float rise, float rightX, float rightZ, float stretch, float shade)
+{
+    enum { MAXW = 64, MAXH = 64 };
+    unsigned baseX = (index % VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM;
+    unsigned baseY = (index / VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM;
+    const float p = 1.0f / VOXEL_PIXELS_PER_TILE;
+    int rows = VisibleRows(slot), w = slot->width, low = -1;
+    static unsigned char depth[MAXH][MAXW];
+    float lift = VoxelRelief_LiftAt(cx, cz) + rise;
+    float fx, fz, len;
+
+    cz += VoxelRelief_ShiftAt(cx, cz); /* where the ground is drawn (as the mounds' front) */
+
+    {
+        static int sSaid;
+        if (sSaid < 8 && getenv("WJPC_PLANT_DUMP"))
+        {
+            sSaid++;
+            fprintf(stderr, "PLANT w %d h %d rows %d atlasW %d c256 %d at %.2f %.2f lift %.2f n %u\n", w, slot->height,
+                    rows, slot->atlasWidth, slot->color256, cx, cz, VoxelRelief_LiftAt(cx, cz) + rise, builder->count);
+        }
+    }
+    if (slot->atlasWidth != slot->width || slot->color256 || w > MAXW || rows > MAXH)
+        return;
+    len = sqrtf(rightX * rightX + rightZ * rightZ);
+    if (len > 0.0f)
+    {
+        rightX /= len;
+        rightZ /= len;
+    }
+    /* towards the camera: the right vector turned a quarter (as the cards face it) */
+    fx = rightZ;
+    fz = -rightX;
+    if (fz < 0.0f)
+    {
+        fx = -fx;
+        fz = -fz;
+    }
+    /* the mask, then each pixel's distance in from the outline (city-block, two passes) */
+    for (int y = 0; y < rows; ++y)
+        for (int x = 0; x < w; ++x)
+        {
+            unsigned sx = (unsigned)(slot->flipX ? w - 1 - x : x);
+            unsigned sy = (unsigned)(slot->flipY ? slot->height - 1 - y : y);
+            bool on = VoxelSlots_TilePixel(slot->source, (unsigned)w, sx, sy, false) != 0;
+
+            depth[y][x] = on ? 200 : 0;
+            if (on)
+                low = y;
+        }
+    if (getenv("WJPC_PLANT_DUMP"))
+        fprintf(stderr, "PLANT low %d src %p\n", low, (const void *)slot->source);
+    if (low < 0)
+        return;
+    for (int y = 0; y < rows; ++y)
+        for (int x = 0; x < w; ++x)
+            if (depth[y][x])
+            {
+                int d = depth[y][x];
+                d = WJ_PMIN(d, (x > 0 ? depth[y][x - 1] : 0) + 1);
+                d = WJ_PMIN(d, (y > 0 ? depth[y - 1][x] : 0) + 1);
+                depth[y][x] = (unsigned char)d;
+            }
+    for (int y = rows - 1; y >= 0; --y)
+        for (int x = w - 1; x >= 0; --x)
+            if (depth[y][x])
+            {
+                int d = depth[y][x];
+                d = WJ_PMIN(d, (x + 1 < w ? depth[y][x + 1] : 0) + 1);
+                d = WJ_PMIN(d, (y + 1 < rows ? depth[y + 1][x] : 0) + 1);
+                depth[y][x] = (unsigned char)d;
+            }
+    /* thickness in pixels: 2 at the outline, 2 more a pixel further in, up to VOXEL_PLANT_DEPTH (even: centred) */
+    for (int y = 0; y < rows; ++y)
+        for (int x = 0; x < w; ++x)
+            if (depth[y][x])
+                depth[y][x] = (unsigned char)WJ_PMIN(VOXEL_PLANT_DEPTH, 2 * depth[y][x]);
+
+    float halfW = w * p * 0.5f;
+#define PLANT_PT(px, py, pd) (VoxelVertex){ cx + rightX * ((px) * p - halfW) + fx * (pd) * p, \
+        lift + (low + 1 - (py)) * p * stretch, cz + rightZ * ((px) * p - halfW) + fz * (pd) * p, u, v, k }
+#define PLANT_DEPTH(xx, yy) ((xx) >= 0 && (xx) < w && (yy) >= 0 && (yy) < rows ? depth[yy][xx] : 0)
+    for (int y = 0; y < rows; ++y)
+    {
+        float v = 1.0f - (baseY + (unsigned)y + 0.5f) / (float)VOXEL_SPRITE_ATLAS_H, k;
+
+        /* front, back, top and bottom: runs of the row alike (one quad each, its texture across the run) */
+        for (int pass = 0; pass < 3; ++pass)
+            for (int x = 0; x < w;)
+            {
+                int d = depth[y][x], n = pass == 1 ? PLANT_DEPTH(x, y - 1) : pass == 2 ? PLANT_DEPTH(x, y + 1) : 0;
+                int e = x + 1;
+
+                if (d == 0 || n >= d || (pass == 2 && y == low))
+                {
+                    x++;
+                    continue;
+                }
+                while (e < w && depth[y][e] == d
+                       && (pass == 0 || (pass == 1 ? PLANT_DEPTH(e, y - 1) : PLANT_DEPTH(e, y + 1)) == n))
+                    e++;
+                float u0 = (baseX + (unsigned)x) / (float)VOXEL_SPRITE_ATLAS_W;
+                float u1 = (baseX + (unsigned)e) / (float)VOXEL_SPRITE_ATLAS_W;
+                float mid = ((x + e) * 0.5f) / (float)w * 2.0f - 1.0f;
+                float edge = 1.0f - 0.12f * mid * mid, h = d * 0.5f, a = n * 0.5f, u;
+
+                if (pass == 0)
+                {
+                    k = shade * edge * 0.94f;
+                    u = u0;
+                    VoxelVertex q0 = PLANT_PT(x, y + 1, h), q3 = PLANT_PT(x, y, h);
+                    u = u1;
+                    VoxelVertex q1 = PLANT_PT(e, y + 1, h), q2 = PLANT_PT(e, y, h);
+                    VoxelBuilder_Quad(builder, &q0, &q1, &q2, &q3);
+                    k = shade * edge * 0.66f;
+                    u = u0;
+                    q0 = PLANT_PT(x, y + 1, -h);
+                    q3 = PLANT_PT(x, y, -h);
+                    u = u1;
+                    q1 = PLANT_PT(e, y + 1, -h);
+                    q2 = PLANT_PT(e, y, -h);
+                    VoxelBuilder_Quad(builder, &q0, &q1, &q2, &q3);
+                }
+                else
+                {
+                    int yy = pass == 1 ? y : y + 1;
+                    k = shade * edge * (pass == 1 ? 1.06f : 0.6f);
+                    for (int side = 1; side >= -1; side -= 2)
+                    {
+                        u = u0;
+                        VoxelVertex q0 = PLANT_PT(x, yy, side * a), q3 = PLANT_PT(x, yy, side * h);
+                        u = u1;
+                        VoxelVertex q1 = PLANT_PT(e, yy, side * a), q2 = PLANT_PT(e, yy, side * h);
+                        VoxelBuilder_Quad(builder, &q0, &q1, &q2, &q3);
+                    }
+                }
+                x = e;
+            }
+        /* the sides: where the next pixel along is thinner */
+        for (int x = 0; x < w; ++x)
+        {
+            int d = depth[y][x];
+
+            if (d == 0)
+                continue;
+            float u = (baseX + (unsigned)x + 0.5f) / (float)VOXEL_SPRITE_ATLAS_W;
+            float side = (x + 0.5f) / (float)w * 2.0f - 1.0f;
+            float h = d * 0.5f;
+
+            k = shade * (1.0f - 0.12f * side * side) * 0.8f;
+            for (int dir = -1; dir <= 1; dir += 2)
+            {
+                int nd = PLANT_DEPTH(x + dir, y), sx = dir < 0 ? x : x + 1;
+                float a = nd * 0.5f;
+
+                if (nd >= d)
+                    continue;
+                VoxelVertex q0 = PLANT_PT(sx, y + 1, a), q1 = PLANT_PT(sx, y + 1, h), q2 = PLANT_PT(sx, y, h),
+                            q3 = PLANT_PT(sx, y, a);
+                VoxelBuilder_Quad(builder, &q0, &q1, &q2, &q3);
+                q0 = PLANT_PT(sx, y + 1, -h);
+                q1 = PLANT_PT(sx, y + 1, -a);
+                q2 = PLANT_PT(sx, y, -a);
+                q3 = PLANT_PT(sx, y, -h);
+                VoxelBuilder_Quad(builder, &q0, &q1, &q2, &q3);
+            }
+        }
+    }
+#undef PLANT_DEPTH
+    if (getenv("WJPC_PLANT_DUMP"))
+        fprintf(stderr, "PLANT verts now %u (cap %u) at %.2f %.2f lift %.2f f %.2f %.2f r %.2f %.2f\n", builder->count,
+                builder->capacity, cx, cz, lift, fx, fz, rightX, rightZ);
+#undef PLANT_PT
+}
+
+/*
  * A mark on the ground (a ripple, footprints, tyre tracks) lies on it: a
  * card standing up would be a wall of footprints. The top of the picture is
  * north, as on the GBA screen.
@@ -2278,6 +2481,13 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
             EmitMound(builder, &sSlots[i], i, card->worldX + 0.5f,
                       card->worldZ + BerrySeedZ(), rise,
                       rightX, rightZ, card->shade * dusk);
+            continue;
+        }
+        if (PlantModel(&gObjectEvents[i]) && card->deck <= 0.0f)
+        {
+            /* (as tall on screen as its card: stretched up as the cards are for the camera's pitch) */
+            EmitVoxelPlant(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f, rise,
+                           rightX, rightZ, stretch, card->shade * dusk);
             continue;
         }
         if (MoundObject(gObjectEvents[i].graphicsId) && card->deck <= 0.0f)

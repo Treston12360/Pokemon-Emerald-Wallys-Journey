@@ -1574,7 +1574,7 @@ static void BeltAssemble(Atlas *atlas, int cx, int cy)
 // ---------------------------------------------------------------------------
 // Sprites (people, Pokemon, field effects) as cards, rebuilt every frame.
 
-#define SPRITE_VERTS 8192u
+#define SPRITE_VERTS 65536u // (was 8192: Brennan 2026-11-20 23:18, berry plants as voxel models)
 static VoxelVertex *sSpriteVerts, *sShadowVerts, *sReflectVerts;
 static uint16_t *sSpriteAtlas;
 static GLuint sSpriteTex;

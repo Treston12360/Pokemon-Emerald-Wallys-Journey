@@ -4007,6 +4007,23 @@ static void BeltFlatSteps(VoxelBuilder *builder, int x, int y, float level, floa
     }
 }
 
+/* The art of a belt cell's sides (its steps). Brennan 2026-11-20 17:59 (Route 121's woods over the sea: "flat 2D
+ * tree tops/sprites sticking out behind the back row of 3D trees"): a wood cell's sides by the sea are its ground's
+ * (the grass under the trees), not the tree's drawing. Brennan 23:18 (the same woods, inland: "flat bright-green
+ * square ground tiles are sticking out" in a diagonal row - the steps where the belt's ground rises inside the wood):
+ * inside a wood (no sea within SeaWood's reach) the sides are the tree's drawing again, so they read as the wood.
+ * WJPC_BELT_TREE_FACE_ART=1: the tree's drawing everywhere; WJPC_BELT_TREE_FACE_GROUND=1: the ground everywhere. */
+static int BeltStepArt(int x, int y)
+{
+    int wx, wy;
+
+    if (!BeltIsTree(x, y) || getenv("WJPC_BELT_TREE_FACE_ART") != NULL)
+        return VoxelWorld_BorderMetatile(x, y);
+    if (getenv("WJPC_BELT_TREE_FACE_GROUND") != NULL || SeaWood(x, y, &wx, &wy) || ShoreTree(x, y, &wx, &wy))
+        return BeltTreeGround(x, y);
+    return VoxelWorld_BorderMetatile(x, y);
+}
+
 static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, float shift)
 {
     /* POL-30 (Brennan 2026-11-15: blue saw teeth past Fallarbor, where its filled edge meets Route 113's
@@ -4021,8 +4038,7 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
     /* Brennan 2026-11-20 17:59 (Route 121's woods over the sea: "flat 2D tree tops/sprites sticking out behind the
      * back row of 3D trees"): a wood cell's sides are its ground's (the grass under the trees), not the tree's
      * drawing. WJPC_BELT_TREE_FACE_ART=1: as before. */
-    if (!MetatileUV(builder, BeltIsTree(x, y) && getenv("WJPC_BELT_TREE_FACE_ART") == NULL
-                             ? BeltTreeGround(x, y) : VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+    if (!MetatileUV(builder, BeltStepArt(x, y), &u0, &v0, &u1, &v1))
         return;
     for (int d = 0; d < 3; ++d)
     {
@@ -4195,8 +4211,7 @@ static void BeltSlopeSteps(VoxelBuilder *builder, int x, int y, float level, flo
     float u0, v0, u1, v1, other, otherShift, t[2], z[2], t0, s0;
 
     (void)level; (void)shift;
-    if (!MetatileUV(builder, BeltIsTree(x, y) && getenv("WJPC_BELT_TREE_FACE_ART") == NULL
-                             ? BeltTreeGround(x, y) : VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+    if (!MetatileUV(builder, BeltStepArt(x, y), &u0, &v0, &u1, &v1))
         return;
     for (int d = 0; d < 4; ++d)
     {
@@ -5274,7 +5289,19 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                     EmitFieldCell(builder, x, y);
                     continue;
                 }
-                if (!drawn && (besideMap
+                /* Brennan 2026-11-20 23:18 (Route 121's west woods: "a light-blue skybox sliver is bleeding
+                 * through the seam between the western trees"): inside a wood (trees all round) the cells had no
+                 * ground - the crowns were meant to cover it, and where two columns of trees stand a little apart
+                 * the sky showed between them in thin lines. Every wood cell has its ground now, shaded as the
+                 * floor under a wood (darker than open grass). WJPC_BELT_WOOD_NO_FLOOR=1: as before. */
+                static int sNoFloor = -1;
+                bool inner = !besideMap && BeltIsTree(x - 1, y) && BeltIsTree(x + 1, y) && BeltIsTree(x, y - 1)
+                          && BeltIsTree(x, y + 1);
+                if (sNoFloor < 0)
+                    sNoFloor = getenv("WJPC_BELT_WOOD_NO_FLOOR") != NULL;
+                if (!drawn && inner && !sNoFloor && MetatileUV(builder, BeltTreeGround(x, y), &u0, &v0, &u1, &v1))
+                    VoxelMesh_Top(builder, wx, wz, lift, 0.0f, u0, v0, u1, v1, VOXEL_FACE_SHADE(0.55f));
+                else if (!drawn && (besideMap
                                || !BeltIsTree(x - 1, y) || !BeltIsTree(x + 1, y) || !BeltIsTree(x, y - 1)
                                || !BeltIsTree(x, y + 1))
                  && MetatileUV(builder, BeltTreeGround(x, y), &u0, &v0, &u1, &v1))
