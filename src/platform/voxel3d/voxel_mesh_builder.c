@@ -3736,7 +3736,11 @@ static void EmitBorderSteps(VoxelBuilder *builder, int x, int y, float level, fl
     static const int kDir[3][2] = { {0, 1}, {1, 0}, {-1, 0} };
     float u0, v0, u1, v1, other, otherShift;
 
-    if (!MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+    /* Brennan 2026-11-20 17:59 (Route 121's woods over the sea: "flat 2D tree tops/sprites sticking out behind the
+     * back row of 3D trees"): a wood cell's sides are its ground's (the grass under the trees), not the tree's
+     * drawing. WJPC_BELT_TREE_FACE_ART=1: as before. */
+    if (!MetatileUV(builder, BeltIsTree(x, y) && getenv("WJPC_BELT_TREE_FACE_ART") == NULL
+                             ? BeltTreeGround(x, y) : VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
         return;
     for (int d = 0; d < 3; ++d)
     {
@@ -3909,7 +3913,8 @@ static void BeltSlopeSteps(VoxelBuilder *builder, int x, int y, float level, flo
     float u0, v0, u1, v1, other, otherShift, t[2], z[2], t0, s0;
 
     (void)level; (void)shift;
-    if (!MetatileUV(builder, VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
+    if (!MetatileUV(builder, BeltIsTree(x, y) && getenv("WJPC_BELT_TREE_FACE_ART") == NULL
+                             ? BeltTreeGround(x, y) : VoxelWorld_BorderMetatile(x, y), &u0, &v0, &u1, &v1))
         return;
     for (int d = 0; d < 4; ++d)
     {

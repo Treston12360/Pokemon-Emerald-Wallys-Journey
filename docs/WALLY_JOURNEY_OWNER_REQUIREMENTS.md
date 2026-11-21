@@ -745,3 +745,4 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   chopped hop-rails, rail ends into the cliff. Answers: rail ends -> "Build real 3D rail models" (thin rails with
   posts, level with the grass banks, like a bridge); hop rails -> "Keep separate, tidy them" (same clean look and
   posts as the long rails).
+- Brennan 17:59 (`docs/brennan/2026-11-20_1759_woods_edge.png`): woods "look great now"; along the wood/sea diagonal "a jagged staircase row of flat 2D tree tops/sprites sticking out behind the back row of 3D trees" - remove them.
