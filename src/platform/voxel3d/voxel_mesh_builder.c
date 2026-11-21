@@ -3449,6 +3449,33 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
      * cells along the edge over +-BELT_TREE_SPAN cells (the nearer the heavier; water left out): the wood rises
      * with the edge a little a row, and its crowns hide the rise.
      */
+    /* Brennan 2026-11-20 19:48 ("only the blue sea water renders behind the back row of 3D trees"): a large tree of
+     * a wood on its own ground (BeltTreeOwn) that touches the belt's sea stands at the sea's level, all four cells
+     * alike - the wood's ground there was a level over the sea, a green step along the shore. WJPC_SHORE_TREES_HIGH=1:
+     * as before. */
+    if (BeltIsTree(x, y) && BeltTreeOwn(x, y) && getenv("WJPC_SHORE_TREES_HIGH") == NULL)
+    {
+        const VoxelMapInstance *art = VoxelWorld_BorderArtMap(x, y);
+        int part = art != NULL ? VoxelTree_Part(art->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) : -1;
+        int ox = x - (part & 1), oy = y - (part >> 1);
+
+        for (int k = 0; part >= 0 && part <= 3 && k < 16; ++k)
+        {
+            /* the ring of cells round the tree's 2x2 (corners included) */
+            static const int kRing[16][2] = { {-1,-1},{0,-1},{1,-1},{2,-1},{-1,0},{2,0},{-1,1},{2,1},
+                                              {-1,2},{0,2},{1,2},{2,2},{0,0},{0,0},{0,0},{0,0} };
+            float wl, ws;
+            if (k >= 12)
+                break;
+            if (VoxelWorld_GetInstanceAt(ox + kRing[k][0], oy + kRing[k][1]) == NULL
+             && BorderWaterLevel(ox + kRing[k][0], oy + kRing[k][1], &wl, &ws))
+            {
+                *level = wl;
+                *shift = ws;
+                return true;
+            }
+        }
+    }
     if (BeltIsTree(x, y) && getenv("WJPC_BELT_TREE_STEPS") == NULL)
     {
         enum { BELT_TREE_SPAN = 4 };
