@@ -738,7 +738,7 @@ static bool TestStep(void)
         if (!strcmp(cmd, "fxkey"))
         {
             // "fxkey N": as pressing F<N> (ToggleFx)
-            if (atoi(arg1) >= 1 && atoi(arg1) <= 6)
+            if (atoi(arg1) >= 1 && atoi(arg1) <= 7)
                 ToggleFx((unsigned)atoi(arg1) - 1);
             continue;
         }
@@ -2558,24 +2558,24 @@ static void HandleBoundKey(SDL_Keycode key, bool8 down, bool8 repeat)
  * Not saved. (test script: "fxkey N") */
 static void ToggleFx(unsigned k)
 {
-    static const char *const kNames[6] = { "cloud shadows", "glow (bloom)", "anti-aliasing",
-                                           "3D every refresh", "depth blur", "crack fill" };
+    static const char *const kNames[7] = { "cloud shadows", "glow (bloom)", "anti-aliasing",
+                                           "3D every refresh", "depth blur", "crack fill", "magenta background (gap test)" };
     char title[256];
     int at;
     FILE *lf;
 
     gVoxelFxOff ^= 1u << k;
     at = snprintf(title, sizeof(title), "Pokemon Wally's Journey");
-    for (unsigned b = 0; b < 6; b++)
+    for (unsigned b = 0; b < 7; b++)
         if (gVoxelFxOff & (1u << b))
-            at += snprintf(title + at, sizeof(title) - (size_t)at, "%s F%u %s off",
+            at += snprintf(title + at, sizeof(title) - (size_t)at, b == 6 ? "%s F%u %s on" : "%s F%u %s off",
                            at == 23 ? " -" : ",", b + 1, kNames[b]);
     SDL_SetWindowTitle(sdlWindow, title);
     lf = fopen("WallysJourney_stalls.txt", "a");
     if (lf != NULL)
     {
         fprintf(lf, "%8.1fs F%u: %s %s\n", SDL_GetTicks() / 1000.0, k + 1, kNames[k],
-                (gVoxelFxOff & (1u << k)) ? "OFF" : "on again");
+                (gVoxelFxOff & (1u << k)) ? (k == 6 ? "ON" : "OFF") : (k == 6 ? "off again" : "on again"));
         fclose(lf);
     }
 }
@@ -2723,7 +2723,7 @@ void ProcessEvents(void)
             case SDLK_KP_PLUS:
                 ZoomStep(-1); // zoom in
                 break;
-            case SDLK_F1: case SDLK_F2: case SDLK_F3: case SDLK_F4: case SDLK_F5: case SDLK_F6:
+            case SDLK_F1: case SDLK_F2: case SDLK_F3: case SDLK_F4: case SDLK_F5: case SDLK_F6: case SDLK_F7:
                 ToggleFx((unsigned)(event.key.keysym.sym - SDLK_F1));
                 break;
             case SDLK_F11:

@@ -3408,6 +3408,8 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
         {   /* backdrop in linear light, so the screen pass returns it unchanged in look */
             r = r * r / sExposure; g = g * g / sExposure; b = b * b / sExposure;
         }
+        if (gVoxelFxOff & VOXEL_FX_GAPS)
+            r = 1.0f, g = 0.0f, b = 1.0f; /* F7: whatever nothing is drawn on shows magenta */
         wj_glClearColor(r, g, b, 1.0f);
     }
     wj_glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -25,6 +25,7 @@ void Voxel3D_SetAntiAlias(int samples);
 #define VOXEL_FX_REFRESH    8u  /* F4: 3D drawn every refresh (off: once a game frame, 60 a second) */
 #define VOXEL_FX_DOF       16u  /* F5: depth blur */
 #define VOXEL_FX_CRACKFILL 32u  /* F6: the final pass's crack fill */
+#define VOXEL_FX_GAPS      64u  /* F7 (on, not off): the 3D background magenta, so a gap through the ground shows */
 extern unsigned gVoxelFxOff;
 /* Emerald 3DS's battle frame: the intro is sliding its scenery in (the camera glides then), and BG3's scroll
  * from rest in GBA pixels (a move shaking the scenery; 0 while sliding or with a move's background). */

@@ -7,6 +7,7 @@
 #include "voxel_building.h"
 #include "voxel_relief.h"
 #include "voxel_sign.h"
+#include "voxel_thread.h"
 
 #if CTR_VOXEL_LIGHTING
 /*
@@ -46,7 +47,14 @@ typedef struct
     bool clearKnown;  /* `clear` worked out (ShiftedClear) */
     const uint16_t *mask; /* a model over part of the cell: its footprint */
 } LightCell;
-static LightCell sCells[CELL_CACHE_SIZE];
+/* Brennan 2026-11-21 12:15 (video: "entire rectangular blocks of dark shadow and bright yellow ground lighting
+ * underneath the tree sprites are rapidly strobing/popping on and off", "a recent regression"): since the audit's
+ * step 4 (21c) maps are lit on the worker thread while the main thread lights the belt and the map underfoot, and
+ * these caches were one set for both - each overwrote the other's cells, samples and generations mid-ray, so a
+ * chunk could be lit from another place's casters (a block of wrong shadow or light, gone when it was built
+ * again). Every cache here is per thread now (VOXEL_TLS); a reset or a new sun reaches each thread through the
+ * shared epochs below (Sync). WJPC_LIGHT_SHARED is not offered: there is no safe way back. */
+static VOXEL_TLS LightCell sCells[CELL_CACHE_SIZE];
 
 /* Adjacent ground quads share their half-tile samples. Cache the final ray/AO
  * result as well as casters; exact coordinates keep walls and sloped crowns
@@ -60,19 +68,22 @@ typedef struct
     bool rayCast;  /* lit is known: not for a point only its contact was asked of */
     uint32_t generation;
 } LightSample;
-static LightSample sSamples[SAMPLE_CACHE_SIZE];
+static VOXEL_TLS LightSample sSamples[SAMPLE_CACHE_SIZE];
 #define SAMPLE_WAYS 4u
 #define SAMPLE_SETS (SAMPLE_CACHE_SIZE / SAMPLE_WAYS)
-static uint8_t sSampleNext[SAMPLE_SETS];
-static uint32_t sGeneration;
-static uint32_t sSampleGeneration;
+static VOXEL_TLS uint8_t sSampleNext[SAMPLE_SETS];
+static VOXEL_TLS uint32_t sGeneration;
+static VOXEL_TLS uint32_t sSampleGeneration;
+/* shared: bumped by VoxelLighting_Reset / _SetSun (main thread); each thread catches up in Sync */
+static volatile uint32_t sEpochWorld = 1, sEpochSun = 1;
+static VOXEL_TLS uint32_t sSeenWorld, sSeenSun;
 VoxelSun gVoxelSun = {0.85f, 0.55f, 1.0f, 0};
 int gVoxelGammaLight = 0;
 static float sAmbient = VOXEL_AMBIENT;
 static float sStepInverseX = 4.0f / 0.85f, sStepInverseZ = 4.0f / 0.55f;
-static unsigned sRays;
+static VOXEL_TLS unsigned sRays;
 /* Lit without the blocks' bound (VoxelLighting_SampleAlone). */
-static bool sAlone;
+static VOXEL_TLS bool sAlone;
 
 /*
  * No caster anywhere on screen is taller than this, so a ray that has climbed
@@ -80,7 +91,7 @@ static bool sAlone;
  * is what most rays reach long before VOXEL_LIGHT_REACH - a street of two-
  * storey houses tops out at a quarter of the reach - and it changes no answer.
  */
-static float sCeiling;
+static VOXEL_TLS float sCeiling;
 #define CROWN_TOP 1.62f
 /* The least the ceiling is ever set to: the tallest sign or lamp drawing. */
 #define PROP_TOP 2.0f
@@ -91,8 +102,8 @@ static float sCeiling;
  * on a route of trees it stops at their height rather than at that of the
  * tallest building in the game. Every answer is the same.
  */
-static float sMapCeiling[MAX_VOXEL_MAP_INSTANCES];
-static unsigned sMapCeilings;
+static VOXEL_TLS float sMapCeiling[MAX_VOXEL_MAP_INSTANCES];
+static VOXEL_TLS unsigned sMapCeilings;
 
 /*
  * And finer still, block by block: the tallest caster of each 4x4 cells. A
@@ -114,7 +125,7 @@ typedef struct
     float ceiling;    /* world height; -1000 where nothing casts */
     uint32_t generation;
 } LightBlock;
-static LightBlock sBlocks[BLOCK_CACHE_SIZE];
+static VOXEL_TLS LightBlock sBlocks[BLOCK_CACHE_SIZE];
 /*
  * The tallest of a block and the two blocks west and north of it (3x3): all
  * a ray from inside the block can reach (VOXEL_LIGHT_REACH runs 6.8 cells
@@ -139,13 +150,13 @@ static int DrawnReach(const VoxelMapInstance *inst)
 
     return (int)ceilf(reach) + (VoxelRelief_IsDrawn(inst) ? SHIFT_ROWS : 0);
 }
-static LightBlock sReach[BLOCK_CACHE_SIZE];
+static VOXEL_TLS LightBlock sReach[BLOCK_CACHE_SIZE];
 /* Read for a ray with more than this left to climb to the map's bound. */
 #define BLOCK_CLIMB 1.0f
 
 /* The work rays do, for the slow chunk log: points marched, and of those (and
  * of the contact tests) how many were tested against a relief's surface. */
-static unsigned sSteps, sSurfaceTests;
+static VOXEL_TLS unsigned sSteps, sSurfaceTests;
 
 static int Tile(float n)
 {
@@ -165,8 +176,8 @@ typedef struct
 {
     float x0, x1, from, to, add;
 } LightStretch;
-static LightStretch sStretches[MAX_VOXEL_MAP_INSTANCES];
-static unsigned sStretchCount, sStretchMaps = ~0u;
+static VOXEL_TLS LightStretch sStretches[MAX_VOXEL_MAP_INSTANCES];
+static VOXEL_TLS unsigned sStretchCount, sStretchMaps = ~0u;
 
 static void ReadStretches(void)
 {
@@ -289,11 +300,12 @@ bool VoxelLighting_SetSun(float dx, float dz, float strength, uint32_t key)
     sAmbient = gVoxelGammaLight ? 0.0f : 1.0f - (1.0f - VOXEL_AMBIENT) * strength;
     sStepInverseX = fabsf(dx) > 0.0001f ? 4.0f / dx : 0.0f;
     sStepInverseZ = fabsf(dz) > 0.0001f ? 4.0f / dz : 0.0f;
-    ResetSamples();
+    if (++sEpochSun == 0)
+        sEpochSun = 1;
     return true;
 }
 
-void VoxelLighting_Reset(void)
+static void LocalReset(void)
 {
     if (++sGeneration == 0)
     {
@@ -305,6 +317,31 @@ void VoxelLighting_Reset(void)
     ResetSamples();
     sCeiling = CasterCeiling();
     MapCeilings();
+}
+
+/* This thread's caches up to date with the last reset / sun (main thread's VoxelLighting_Reset, _SetSun). */
+static void Sync(void)
+{
+    uint32_t world = sEpochWorld, sun = sEpochSun;
+
+    if (sSeenWorld != world || sGeneration == 0)
+    {
+        sSeenWorld = world;
+        sSeenSun = sun;
+        LocalReset();
+    }
+    else if (sSeenSun != sun)
+    {
+        sSeenSun = sun;
+        ResetSamples();
+    }
+}
+
+void VoxelLighting_Reset(void)
+{
+    if (++sEpochWorld == 0)
+        sEpochWorld = 1;
+    Sync();
 }
 
 /*
@@ -714,8 +751,7 @@ static bool Lit(float x, float y, float z)
 
     if (gVoxelSun.strength == 0.0f)
         return true;
-    if (sGeneration == 0)
-        VoxelLighting_Reset();
+    Sync();
     ceiling = RayCeiling(x, z);
     stretched = RayStretched(x, z);
     blocks = !sAlone && VoxelWorld_InstanceCount() == sMapCeilings;
@@ -823,8 +859,7 @@ bool VoxelLighting_Warm(int x0, int z0, int x1, int z1, unsigned *cursor, unsign
 
     if (gVoxelSun.strength == 0.0f)
         return true;
-    if (sGeneration == 0)
-        VoxelLighting_Reset();
+    Sync();
     if (sAlone || VoxelWorld_InstanceCount() != sMapCeilings)
         return true;
     for (unsigned point = *cursor / REGION, first = *cursor % REGION; point < (unsigned)points; ++point, first = 0)
@@ -911,8 +946,7 @@ static LightSample *FindSample(float x, float y, float z)
     unsigned set = hash & (SAMPLE_SETS - 1u);
     LightSample *ways = &sSamples[set * SAMPLE_WAYS], *sample = NULL;
 
-    if (sGeneration == 0)
-        VoxelLighting_Reset();
+    Sync();
     for (unsigned i = 0; i < SAMPLE_WAYS; ++i)
     {
         if (ways[i].generation == sSampleGeneration)
