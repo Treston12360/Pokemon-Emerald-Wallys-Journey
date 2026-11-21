@@ -3729,6 +3729,11 @@ static int BeltTreeGround(int x, int y)
     /* the General's small trees (016-017, 0C6-0C7) name no ground of their own: its plain grass, 001 */
     if (g == mt && (mt == 0x016 || mt == 0x017 || mt == 0x0C6 || mt == 0x0C7))
         g = 0x001;
+    /* nor do its large trees (1D4-1FD: Route 121's woods) - the step faces and the ground at a wood's edge took the
+     * tree's own drawing: the flat dark tree squares over the sea (Brennan 2026-11-20 17:59). WJPC_BELT_TREE_ART_GROUND
+     * =1 above: as before. */
+    if (g == mt && mt >= 0x1D4 && mt <= 0x1FD && VoxelTree_Part(art->secondaryTileset, mt) >= 0)
+        g = 0x001;
     return g >= 0 ? g : mt;
 }
 
