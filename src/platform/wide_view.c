@@ -51,6 +51,12 @@ static bool sEnabled = true;
 
 s16 gWjPcViewPadX, gWjPcViewPadY, gWjPcSpawnPadX, gWjPcSpawnPadY;
 bool8 gWjPc3DField; // the 3D view is on (sdl2.c): people load as far out as it draws them
+/* Brennan 2026-11-21 02:12 (240 fps: "frame" 11-14 ms, the CPU's 2D picture 7 of it): while the 3D world is the
+ * picture (sdl2.c: it was drawn last frame), the screen shows only this picture's UI layer, and only its GBA lines.
+ * Then only the GBA lines are drawn, without the map's layers (BG1-3): BG0 and the sprites, which is what tells the
+ * UI apart. The lines' interrupts and HBlank copies run as before. Set by sdl2.c VDraw; WJPC_FULL_2D_UNDER_3D=1
+ * there keeps it off. */
+bool8 gWjPcUiOnly;
 
 void WideView_SetEnabled(bool enabled)
 {
@@ -1321,6 +1327,8 @@ static void DrawWideScanline(uint16_t *pixels, int vy)
         uint16_t cnt = *(uint16_t *)(REG_ADDR_BG0CNT + bgnum * 2);
         uint16_t hofs = *(uint16_t *)(REG_ADDR_BG0HOFS + bgnum * 4);
         uint16_t vofs = *(uint16_t *)(REG_ADDR_BG0VOFS + bgnum * 4);
+        if (bgnum >= 1 && gWjPcUiOnly)
+            continue; // (the 3D world is the map)
         if (bgnum >= 1)
             RenderMapBgLine(bgnum, cnt, hofs, vofs, gl, line.layers[bgnum]);
         else
@@ -1498,6 +1506,12 @@ static void DrawFieldFrame(uint16_t *out)
             }
         }
 
+        if (gWjPcUiOnly && !gbaLine)
+        {
+            if (sUiOverlay != NULL)
+                memset(&sUiOverlay[vy * sW], 0, sW * sizeof(uint16_t));
+            continue; // (no UI is shown from outside the GBA lines; no interrupts there either)
+        }
         uint16_t backdrop = BackdropColor();
         for (int x = 0; x < sW; x++)
             pixels[x] = backdrop;

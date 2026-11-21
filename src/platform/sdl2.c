@@ -1549,7 +1549,26 @@ int main(int argc, char **argv)
             {
                 // Test aid: draw exactly like a normal frame (zoom, UI layer, screen options),
                 // and with "winshot FILE" save the whole window.
+                Uint64 vd0 = SDL_GetPerformanceCounter();
                 VDraw(sdlTexture);
+                if (getenv("WJPC_VDRAW_TIME") != NULL) // (test aid: the whole game frame's drawing, every 60)
+                {
+                    static double vacc, v3d;
+                    static unsigned vn;
+                    vacc += (SDL_GetPerformanceCounter() - vd0) * 1000.0 / SDL_GetPerformanceFrequency();
+                    v3d += sStall3D * 1000.0 / SDL_GetPerformanceFrequency();
+                    sStall3D = 0;
+                    if (++vn % 60 == 0)
+                    {
+                        FILE *tf = fopen(getenv("WJPC_VDRAW_TIME"), "a");
+                        if (tf != NULL)
+                        {
+                            fprintf(tf, "[vdraw] whole frame %.2f ms (3D %.2f)\n", vacc / 60.0, v3d / 60.0);
+                            fclose(tf);
+                        }
+                        vacc = v3d = 0.0;
+                    }
+                }
                 if (sTestWinShot[0] != '\0')
                 {
                     int ww, wh;
@@ -2964,6 +2983,20 @@ void VDraw(SDL_Texture *texture)
         ComputeFieldView(sw, sh);
         WideView_SetViewSize(sFieldViewW, sFieldViewH);
     }
+    /* Brennan 2026-11-21 02:12 (240 fps; audit docs/polish_reports/PERF_AUDIT_2026-11-21.md): the 3D world was the
+     * field's picture last frame, so this frame's CPU picture is only its UI layer (wide_view.c gWjPcUiOnly): no map
+     * layers, no lines outside the GBA screen, no smooth-motion overlay, and the unused world picture is not
+     * converted, copied or uploaded. WJPC_FULL_2D_UNDER_3D=1: everything drawn, as before. */
+    static int sFull2D = -1;
+    if (sFull2D < 0)
+        sFull2D = getenv("WJPC_FULL_2D_UNDER_3D") != NULL;
+    {
+        extern bool8 gWjPcUiOnly;
+        bool uiOnly = !sFull2D && s3DReady && s3DWanted && s3DFrame && !s3DTransition && sFrameInfo.mode == WIDE_VIEW_FIELD;
+        gWjPcUiOnly = uiOnly;
+        if (uiOnly)
+            smooth = false;
+    }
     WideView_SetSmooth(smooth ? overlay : NULL, SMOOTH_M);
     WideView_SetUiOverlay(sdlUiTexture != NULL ? uiLayer : NULL);
     sVDrawImage = gbaImage;
@@ -2998,7 +3031,11 @@ void VDraw(SDL_Texture *texture)
     WideView_SetUiOverlay(NULL);
 
     int fullW = sFrameInfo.width + 2 * sFrameInfo.margin, fullH = sFrameInfo.height + 2 * sFrameInfo.margin;
-    if (sGammaWanted && sFrameInfo.mode == WIDE_VIEW_FIELD && (!WideView_IsIndoorMap() || WideView_GammaRoom() != 0) && !(s3DReady && s3DWanted))
+    extern bool8 gWjPcUiOnly;
+    bool uiOnlyField = gWjPcUiOnly && sFrameInfo.mode == WIDE_VIEW_FIELD; // (the world picture: not made)
+    if (uiOnlyField)
+        ;
+    else if (sGammaWanted && sFrameInfo.mode == WIDE_VIEW_FIELD && (!WideView_IsIndoorMap() || WideView_GammaRoom() != 0) && !(s3DReady && s3DWanted))
     {
         // DLX-9: Gamma Emerald's daylight on the 2D overworld (same switch as 3D's)
         static unsigned frames;
@@ -3024,7 +3061,9 @@ void VDraw(SDL_Texture *texture)
     else
     for (int i = 0; i < fullW * fullH; i++)
         image[i] = ToArgb(gbaImage[i]);
-    if (sPlatformSettings[PLATFORM_SETTING_INTERFRAME] && lastW == fullW && lastH == fullH)
+    if (uiOnlyField)
+        lastW = 0; // (the next whole picture is not blended with an old one)
+    else if (sPlatformSettings[PLATFORM_SETTING_INTERFRAME] && lastW == fullW && lastH == fullH)
     {
         // Interframe blending (as in mGBA): mix with the previous frame, for effects that flicker.
         for (int i = 0; i < fullW * fullH; i++)
@@ -3038,13 +3077,18 @@ void VDraw(SDL_Texture *texture)
     {
         memcpy(lastImage, image, fullW * fullH * sizeof(uint32_t));
     }
-    lastW = fullW;
-    lastH = fullH;
+    if (!uiOnlyField)
+    {
+        lastW = fullW;
+        lastH = fullH;
+    }
     SDL_Rect area = {0, 0, fullW, fullH};
     s2DTransition = !(s3DReady && s3DWanted) && sHaveLastField && sFrameInfo.mode != WIDE_VIEW_FIELD
                  && WideView_BattleTransitionOnField() && getenv("WJPC_OLD_2D_TRANSITION") == NULL;
     static uint32_t sFieldImage[TEX_W * TEX_H]; // the field picture the transition starts from
-    if (sFrameInfo.mode == WIDE_VIEW_FIELD)
+    if (sFrameInfo.mode == WIDE_VIEW_FIELD && uiOnlyField)
+        sHaveLastField = false; // (no field picture this frame; the 3D world is the transition's start)
+    else if (sFrameInfo.mode == WIDE_VIEW_FIELD)
     {
         sLastField = sFrameInfo;
         sHaveLastField = true;
@@ -3052,7 +3096,7 @@ void VDraw(SDL_Texture *texture)
     }
     else if (!WideView_BattleTransitionOnField())
         sHaveLastField = false; // a battle, a menu: the next transition starts from a new field picture
-    if (!s2DTransition)
+    if (!s2DTransition && !uiOnlyField)
         STALL_GL(SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32)));
     if (fullW == DISPLAY_WIDTH && fullH == DISPLAY_HEIGHT)
         memcpy(sLastUploaded, image, sizeof(sLastUploaded));
@@ -3231,9 +3275,24 @@ void VDraw(SDL_Texture *texture)
     }
     if (sFrameInfo.mode == WIDE_VIEW_FIELD && sdlUiTexture != NULL)
     {
+        if (uiOnlyField)
+        {
+            // only the GBA lines are shown (and drawn): converted and uploaded alone
+            int y0 = sFrameInfo.gbaY, n = DISPLAY_HEIGHT;
+            if (y0 < 0) y0 = 0;
+            if (y0 + n > fullH) n = fullH - y0;
+            for (int i = y0 * fullW; i < (y0 + n) * fullW; i++)
+                uiImage[i] = (uiLayer[i] & 0x8000) ? ToArgb(uiLayer[i]) : 0;
+            SDL_Rect band = {0, y0, fullW, n};
+            if (n > 0)
+                STALL_GL(SDL_UpdateTexture(sdlUiTexture, &band, &uiImage[y0 * fullW], fullW * sizeof(Uint32)));
+        }
+        else
+        {
         for (int i = 0; i < fullW * fullH; i++)
             uiImage[i] = (uiLayer[i] & 0x8000) ? ToArgb(uiLayer[i]) : 0;
         STALL_GL(SDL_UpdateTexture(sdlUiTexture, &area, uiImage, fullW * sizeof(Uint32)));
+        }
     }
     if (sFrameInfo.margin > 0)
     {
