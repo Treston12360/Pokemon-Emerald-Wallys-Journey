@@ -131,6 +131,26 @@ a reveal or a choice, not just a gym.
   hangs at the top wall (8..9, 0..1) with clear floor under it at (8,2)/(9,2); Varnell's desk moved right (10..12).
   Picture: `docs/kanto_mockups/ch5_celadon_office_v2.png`.
 
+### Owner decisions, 2026-11-21 (evening, forwarded) — Fuchsia, Chapter 6, the drawing, the haze
+- **Fuchsia early:** "keep Fuchsia accessible for exploration, but make sure Chapter 7's major events and Gym
+  progression don't trigger before Chapter 6 is completed. Account for both the Route 12–15 entrance and Cycling
+  Road." Reaching Fuchsia early must not trigger later dialogue.
+- **Chapter 6:** "draft the full Saffron storyline and dialogue for approval before implementing it." No Varnell
+  phone call sending us to Saffron: "After Erika, something should naturally draw our attention to Saffron,
+  potentially public news of the Silph Co. incident and the city's quarantine." We hear of it independently of
+  Varnell; he can get involved naturally but must not be the source of every objective. The quarantine needs a
+  believable reason why the player can go in when ordinary people can't. "Make the machine malfunction,
+  quarantine, and Master Ball feel like parts of a coherent mystery. Keep Varnell's characterization subtle,
+  preserve Blue's gradual development, and don't prematurely reveal the truth behind ARIA. Remember that Team
+  Rocket is already disbanded." Chapter 6 should make the player increasingly suspicious that something isn't
+  right with Varnell — "not by having him act blatantly evil, but through small inconsistencies that only make
+  sense in hindsight." Review pacing, motivations and continuity before implementing.
+- **The drawing:** keep it in Varnell's office with the proposed text ("A child's drawing. A girl holding a
+  Clefairy." / "In the corner, in crayon: 'aria'."). **Drop the Chapter 7 photograph** for now.
+- **Haze / levels:** fix the brown haze before moving on, compare against a known earlier build, verify across
+  seasons and both renderers. Snorlax goes in the Kanto level-balancing task (done: L3), balanced with
+  automated progression simulations rather than guessing levels.
+
 ### Owner decisions, 2026-11-21 — order of work, Johto
 - "Yes fix the house color thing for now 1, then we can continue on with the story of kanto finish it then work on
   johto after." → Kanto story first; **Johto only after Kanto is finished.**
@@ -152,6 +172,8 @@ a reveal or a choice, not just a gym.
 **Mid-game photo + the Clefairy (owner, 2026-11-13):** the player finds an unlabelled photo of a little
 girl holding a Clefairy. In Lavender Tower the Clefairy echo calls out "Aria". Only players who put the
 photo and the Clefairy together realise Aria is his daughter — most won't.
+*(2026-11-21: this clue is now the child's drawing signed "aria" in Varnell's Celadon office (ch. 5, optional);
+the separate ch. 7 photograph is dropped for now — owner.)*
 **Built-in misdirection:** even players who do will assume he simply named the project after her out of
 love, to honour her while fixing the anomalies. Nothing tells them he's trying to *bring her back*. Their
 "solved it" guess hides the real twist.

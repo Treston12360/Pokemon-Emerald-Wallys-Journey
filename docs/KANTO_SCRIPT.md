@@ -496,8 +496,8 @@ building and 13x11 layout; sign on the fence beside the path reads "Varnell Rese
 **5.0 Extras (2026-11-21)**
 > SIGN (Celadon, beside the office path): Varnell Research Office   *(owner wording)*
 > THE DRAWING (office wall; optional, read from the tile under it): A child's drawing. A girl holding a Clefairy. /
-> In the corner, in crayon: "aria".   *(DRAFT — Claude's wording from the bible line "a child's drawing signed
-> 'aria' in lowercase — a girl holding a Clefairy"; waiting for owner approval)*
+> In the corner, in crayon: "aria".   *(APPROVED 2026-11-21 — owner: "Keep the drawing in Varnell's office with the
+> proposed text.")*
 > VARNELL (talked to after the scene): Erika's Gym is just down the street.   *(reuses his approved 5.2 line)*
 
 **5.1 Varnell's office (Celadon) — first visit**

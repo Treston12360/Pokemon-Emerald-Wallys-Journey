@@ -61,7 +61,7 @@
 | Lavender Clefairy says "Aria" | Ghost reacts to machine, per Blue's plausible explanation | Calls dead owner by name |
 | Lavender resident: distracted child, collapse, male body, Rocket speculation | Rocket committed terrible acts, unidentified victim might be grunt | Father called child; his reverse entry caused fall; male corpse was future Varnell |
 | Celadon staff protects ARIA settings | Intellectual property / safety | Conceals actual experiment |
-| **Optional** old photo of girl and Clefairy on a later Celadon visit (Ch.7/8) | Possibly a memorial to someone | Varnell's daughter and Tower Clefairy |
+| ~~**Optional** old photo of girl and Clefairy on a later Celadon visit (Ch.7/8)~~ → replaced by the ch. 5 drawing (owner 2026-11-21) | Possibly a memorial to someone | Varnell's daughter and Tower Clefairy |
 | Silph teleport target drift | Public maintenance problem | Lead to Palkia |
 | Power Plant time discrepancies | Anomaly symptoms | Dialga experiments |
 | Impossible geometry during later failed test | Another anomaly | Missing Giratina intermediary |

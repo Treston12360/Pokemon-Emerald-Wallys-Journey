@@ -208,6 +208,10 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
 - [x] **Season colours on Kanto buildings** (owner 2026-11-21, option 1): buildings keep their colours, only
       nature changes; roofs that share path colours get snow (owner OK). Option 2 (hand-made Kanto season
       palettes) not started. Details in `docs/TASKS.md`.
+- [ ] **S-FUCHSIA-EARLY** (owner 2026-11-21): Fuchsia stays reachable early (Routes 12–15 once the Route 12
+      Snorlax is awake, and Cycling Road through Routes 16–18), but the Fuchsia Gym and every ch. 7 event stay
+      locked until ch. 6 is complete, and reaching Fuchsia early must not trigger later dialogue. Build with ch. 6
+      (needs its VAR_ARIA_STORY values) — the Gym's "not yet" wording goes to the owner with the ch. 6 draft.
 - [ ] Ch. 5 (Celadon office — new building, show owner a picture first), then ch. 6+.
       **Progress 2026-11-21:** office building + layout approved (owner); map `CeladonCity_VarnellOffice`
       (MAP 44.20, layout `LAYOUT_CELADON_CITY_VARNELL_OFFICE`, Condominiums tiles) built by

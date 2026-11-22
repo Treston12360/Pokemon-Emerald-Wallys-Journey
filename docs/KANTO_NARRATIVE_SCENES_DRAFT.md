@@ -112,7 +112,7 @@ OLD RESIDENT: Awful thing, what they did to this town.
 
 **Keep the already-drafted Ch.5 conversation:** Blue thinks Clefairy is saying the name of the ARIA machine; Varnell hesitates exactly once, then accepts that explanation. Don't add a guilt close-up. This is a valuable false solution.
 
-**Proposed Ch.7 return:** Varnell's staff request the player to copy a diagnostic export for the next anomaly investigation from an ordinary computer in the public Celadon office. The computer *must* supply useful quest data whether the player checks anything else or not. A separate **optional**, uncaptioned photo of a young girl with Clefairy sits near a staff storage space the player can access on this return, not Blue's normal shared desk. Examine: "An old photograph. A little girl is holding a Clefairy." No reaction animation, no name, no marker. This photo is not the only way the plot makes sense.
+**[2026-11-21 owner: photo DROPPED for now — the ch. 5 drawing is the clue.]** **Proposed Ch.7 return:** Varnell's staff request the player to copy a diagnostic export for the next anomaly investigation from an ordinary computer in the public Celadon office. The computer *must* supply useful quest data whether the player checks anything else or not. A separate **optional**, uncaptioned photo of a young girl with Clefairy sits near a staff storage space the player can access on this return, not Blue's normal shared desk. Examine: "An old photograph. A little girl is holding a Clefairy." No reaction animation, no name, no marker. This photo is not the only way the plot makes sense.
 
 ## Chapter 6 — Saffron: the believable scientific crisis (DRAFT)
 
