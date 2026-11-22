@@ -1190,7 +1190,7 @@ static GLuint LoadBuildingPage(int page, bool reload)
         uint32_t key = WallyJourney_FoliageKey();
         static float sSnow = -1.0f;
         if (sSnow < 0.0f)
-            sSnow = getenv("WJPC_ROOF_SNOW") ? (float)atof(getenv("WJPC_ROOF_SNOW")) : 0.6f;
+            sSnow = getenv("WJPC_ROOF_SNOW") ? (float)atof(getenv("WJPC_ROOF_SNOW")) : 0.85f; /* Brennan: "B: heavy (white)" */
         if (((key >> 4) & 0xF) == WALLY_SEASON_WINTER && sSnow > 0.0f)
             for (size_t i = 0; i < (size_t)w * th; i++)
             {
