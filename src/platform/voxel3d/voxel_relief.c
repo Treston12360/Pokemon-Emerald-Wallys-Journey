@@ -293,11 +293,35 @@ typedef struct
     int16_t bottom, rise;
     uint8_t lip;
     bool in;
+    bool half;      /* laid half out of its face and half into it (a listed flight: Route 112's) */
+    int16_t face;   /* layout pixels: where its face stood (v + h), the line between the two halves */
     uint8_t n;
     int16_t z[MAX_PROFILE], h[MAX_PROFILE];   /* layout pixels: z = v + depth (world, as far south), h height */
 } LaidFlight;
 static LaidFlight sLaid[MAX_LAID];
 static unsigned sLaidCount;
+
+/* a flight laid half and half beside cell (x, y): TRUE, and where its face stood (world z) */
+bool VoxelRelief_FlightHalf(const VoxelMapInstance *inst, int x, int y, float *faceZ)
+{
+    int lx, ly;
+
+    if (inst == NULL)
+        return false;
+    lx = x - inst->originX;
+    ly = y - inst->originY;
+    for (unsigned f = 0; f < sLaidCount; ++f)
+    {
+        const LaidFlight *L = &sLaid[f];
+        if (L->layoutId != (uint16_t)inst->layoutId || ly != L->row || (lx != L->x0 && lx != L->x1))
+            continue;
+        if (!L->half)
+            return false;
+        *faceZ = (float)inst->originY + L->face / 16.0f;
+        return true;
+    }
+    return false;
+}
 
 bool VoxelRelief_FlightSide(const VoxelMapInstance *inst, int x, int y, int *side, unsigned *n,
                             float *z, float *h, float *foot, float *topH, bool *in)
@@ -531,7 +555,14 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
     int recessUsed = sRecess < 8 * steps ? sRecess : 8 * steps;
     int z0 = top + bottom + rise - (sFlightOut ? 0 : sFlightIn ? recessUsed : (8 * steps) / 2);
     LaidFlight *laid = NULL;
-    if ((sFlightOut || sFlightIn) && sLaidCount < MAX_LAID && n_all + 1 <= MAX_PROFILE)
+    /* Brennan 2026-11-21 17:25 (image 4, Route 112: "a light-blue skybox gap is peeking through the side of the
+     * steps"): a flight laid half and half (the listed ones: Route 112's) kept no profile, so its sides were never
+     * closed (EmitFlightSides) - a sliver of sky at every step. It keeps one now, with where its face stood.
+     * WJPC_STAIRS_HALF_OPEN=1: as before. */
+    static int sHalfOpen = -1;
+    if (sHalfOpen < 0)
+        sHalfOpen = getenv("WJPC_STAIRS_HALF_OPEN") != NULL;
+    if ((sFlightOut || sFlightIn || !sHalfOpen) && sLaidCount < MAX_LAID && n_all + 1 <= MAX_PROFILE)
     {
         laid = &sLaid[sLaidCount++];
         laid->layoutId = l->layoutId;
@@ -542,6 +573,8 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
         laid->bottom = (int16_t)bottom;
         laid->rise = (int16_t)rise;
         laid->in = sFlightIn;
+        laid->half = !sFlightIn && !sFlightOut;
+        laid->face = (int16_t)(top + bottom + rise);
         laid->lip = (uint8_t)lip;
         laid->n = (uint8_t)(n_all + 1);
     }

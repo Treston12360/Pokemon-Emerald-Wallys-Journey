@@ -1139,6 +1139,7 @@ static void SeamEdge(const VoxelMapInstance *inst, int x, int y, int d,
 static bool BeltTopWorld(int x, int y, float *top, float *z, unsigned *drawnOut);
 static bool BorderAt(int x, int y);
 static bool BeltIsTree(int x, int y);
+static bool FieldOn(void);
 
 /*
  * POL-46 (Brennan 2026-11-17 21:00: "Completely eliminate the blue triangle gap at the seam"; "tile the rock texture
@@ -1520,6 +1521,23 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
                 if (!sSkirtZOld)
                     beltZ += shift;
             }
+            /* Brennan 2026-11-21 17:25 (image 4, Route 112's south border: "stretched walls of rock and trees are
+             * shooting straight up into the sky"): south of Route 112 the belt is the field's plain land (EmitFieldCell,
+             * BeltField: it meets the map's edge exactly), but this skirt took its top from VoxelMesh_BorderLevel's
+             * edge-fill mountain there - 3 to 11 levels over the edge - and drew the edge cell's grass up to it: long
+             * green slabs five rows out. Beside the field's plain land no skirt, as beside it on the other sides
+             * (21q). WJPC_EDGE_LAND_WALLS=1: as before. */
+            {
+                static int sLandWalls = -1;
+                float wl2, ws2;
+                if (sLandWalls < 0)
+                    sLandWalls = getenv("WJPC_EDGE_LAND_WALLS") != NULL;
+                if (!sLandWalls && FieldOn() && !BeltIsTree(nx, ny) && !BorderWaterLevel(nx, ny, &wl2, &ws2))
+                    continue;
+            }
+            if (getenv("WJPC_EDGE_DUMP") != NULL)
+                fprintf(stderr, "SOUTHSKIRT %d %d belt %.2f beltZ %.2f level %.2f shift %.2f tree %d\n", x, y, belt / 16.0f,
+                        beltZ, level, shift, (int)TreeBeltAt(nx, ny));
             if (!uv && !(uv = VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1)))
                 return;
             for (unsigned k = 0; k + 1 < VOXEL_RELIEF_SIDE; ++k)
@@ -2440,7 +2458,17 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
     if (getenv("WJPC_STAIRS_OPEN_SIDES") != NULL
      || !VoxelRelief_FlightSide(inst, x, y, &side, &n, z, h, &foot, &topH, &in))
         return;
+    if (getenv("WJPC_STAIRS_DUMP") != NULL)
+    {
+        fprintf(stderr, "FLIGHTSIDE %d %d side %d n %u foot %.3f top %.3f in %d:", x, y, side, n, foot, topH, (int)in);
+        for (unsigned q = 0; q < n; ++q)
+            fprintf(stderr, " %.3f/%.3f", z[q], h[q]);
+        fprintf(stderr, "\n");
+    }
     /* recessed (Brennan 17:23): the cliff beside the flight closed from the steps up to the ground above, facing in */
+    float faceZ = 0.0f;
+    bool half = !in && VoxelRelief_FlightHalf(inst, x, y, &faceZ);
+    const float footOut = foot;
     if (in)
     {
         foot = topH;   /* the band from the steps up to the top: its quads wound the other way, facing in */
@@ -2459,6 +2487,10 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
         wx = s == 0 ? (float)x : (float)x + 1.0f;
         for (unsigned q = 0; q + 1 < n; ++q)
         {
+            /* (half and half, Route 112: the part behind where the face stood is cut into the cliff - closed up to the
+             * top, as a recessed flight's; the part in front stands out of it - closed down to the foot) */
+            if (half)
+                foot = 0.5f * (z[q] + z[q + 1]) < faceZ ? topH : footOut;
             float ha = h[q], hb = h[q + 1];
             float ta = fabsf(ha - foot), tb = fabsf(hb - foot);
             if (ta <= 0.01f && tb <= 0.01f)
@@ -4773,6 +4805,8 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
     float capOther = 1e9f;
     float drawnPeak = -1e9f, lumpAdd = 0.0f;
     bool exact = false;
+    const VoxelMapInstance *nearM = NULL;
+    int nearQx = 0;
 
     for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
     {
@@ -4924,6 +4958,8 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
         }
         if (d < dmin)
         {
+            nearM = m;
+            nearQx = (int)qx;
             nearE = e;
             nearSouth = vy >= oy + m->height && vx >= ox && vx <= ox + m->width;
             /* (Brennan 23:31: the south ridge "horizontally straight to the left edge": south of a drawn-belt map,
@@ -4983,7 +5019,31 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
          * Whole Width"; a blue triangle under the red-roofed houses): in front of a map (south of it) the land
          * never dips under the map's edge - the blend with farther, lower maps took it to 5.9 under an edge of 6.0,
          * a whole level down in places (sawtooth steps, a gap). WJPC_FIELD_SOUTH_DIP=1: as before. */
-        if (nearSouth && *height < nearE && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
+        /* Brennan 2026-11-21 17:25 (image 4, Route 112's south border: "stretched walls of rock and trees are
+         * shooting straight up into the sky - level/clamp them flush with the surrounding terrain"): in front of a
+         * map the land stood at its edge point by point - Route 112's south rows are rock ledges three levels over
+         * its woods, and the woods reach the edge between them, so the land in front jumped up and down with them
+         * (walls facing the camera, the woods' skirt a long green slab up to it). In front of a map (not a drawn
+         * belt's; not under a wood - the woods stood well, and levelled a step ran through them: Route 120) it lies level at the LOWEST edge point within BELT_SOUTH_SPAN cells along that edge; the ledges end
+         * in their own rock face (EdgeOverBelt). WJPC_FIELD_SOUTH_EDGE=1: at the edge, as before. */
+        static int sSouthEdge = -1;
+        if (sSouthEdge < 0)
+            sSouthEdge = getenv("WJPC_FIELD_SOUTH_EDGE") != NULL;
+        if (nearSouth && !nearDrawnSouth && !sSouthEdge && nearM != NULL && !FieldCornerWood(vx, vy))
+        {
+            enum { BELT_SOUTH_SPAN = 8 };
+            float lo = nearE;
+            for (int k = -BELT_SOUTH_SPAN; k <= BELT_SOUTH_SPAN; ++k)
+            {
+                float pe, ps;
+                int px = nearQx + k;
+                if (px >= nearM->originX && px <= nearM->originX + nearM->width
+                 && EdgePointHeight(nearM, px, nearM->originY + nearM->height, &pe, &ps) && pe < lo)
+                    lo = pe;
+            }
+            *height = lo;
+        }
+        else if (nearSouth && *height < nearE && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
             *height = nearE;
         if (nearDrawnSouth && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
             *height = nearE;

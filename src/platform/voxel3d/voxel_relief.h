@@ -69,6 +69,7 @@ int VoxelRelief_FaceTile(const VoxelMapInstance *inst);
  * its profile n points (world z as far south, height over the map's base, cells) and its foot's height. */
 /* POL-51: a cell of a laid stair flight or of the ground cut back for it (the notch). */
 bool VoxelRelief_InNotch(const VoxelMapInstance *inst, int x, int y);
+bool VoxelRelief_FlightHalf(const VoxelMapInstance *inst, int x, int y, float *faceZ);
 bool VoxelRelief_FlightSide(const VoxelMapInstance *inst, int x, int y, int *side, unsigned *n,
                             float *z, float *h, float *foot, float *topH, bool *in);
 
