@@ -5208,6 +5208,8 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
 bool VoxelMesh_TreeOverDrop(int x, int y)
 {
     float lo = 1e9f, hi = -1e9f;
+    static int sEdge = -1;
+
     if (!FieldOn() || BeltTreeOwn(x, y) || getenv("WJPC_TREES_ON_DROPS") != NULL)
         return false;
     for (int k = 0; k < 4; ++k)
@@ -5218,7 +5220,30 @@ bool VoxelMesh_TreeOverDrop(int x, int y)
         lo = fh < lo ? fh : lo;
         hi = fh > hi ? fh : hi;
     }
-    return hi != lo;
+    if (hi == lo)
+        return false;
+    /* Brennan 2026-11-21 17:25 (image 7, Route 117's north-west woods: "a strip of raised bright-green grass cuts
+     * straight up through the woods instead of trees - fill that strip with full 3D trees"): the rock mound at the
+     * map's north edge (cells 33-35) raises the field behind it into a ridge two cells wide running north, and every
+     * wood cell either side of it straddled a step - none stood, two lines of bare grass. Deep in a wood (every cell round it
+     * that is the belt's is its wood; a map's cells beside it do not count) the tree stands anyway, on the lower ledge (VoxelMesh_BorderLevel: the lowest
+     * corner), its crown over the step; at a wood's edge, beside open terraces, still none (POL-46: no trees on the
+     * cliff faces). WJPC_NO_TREES_ON_INNER_DROPS=1: none, as before. */
+    if (sEdge < 0)
+        sEdge = getenv("WJPC_NO_TREES_ON_INNER_DROPS") != NULL;
+    if (!sEdge)
+    {
+        bool inner = true;
+        for (int dy = -1; dy <= 1 && inner; ++dy)
+            for (int dx = -1; dx <= 1 && inner; ++dx)
+                if ((dx != 0 || dy != 0) && VoxelWorld_GetInstanceAt(x + dx, y + dy) == NULL)
+                    inner = BorderAt(x + dx, y + dy) && BeltIsTree(x + dx, y + dy);
+        if (getenv("WJPC_TREE_DUMP") != NULL)
+            fprintf(stderr, "DROPTREE %d %d drop %.0f inner %d\n", x, y, hi - lo, (int)inner);
+        if (inner)
+            return false;
+    }
+    return true;
 }
 
 enum { BELT_LEDGE_WOOD = 2 };
