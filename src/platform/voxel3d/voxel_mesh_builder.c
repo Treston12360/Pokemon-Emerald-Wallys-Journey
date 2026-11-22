@@ -4878,7 +4878,9 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
          * woods of the belt; on the edge itself, its cells off the map all woods) the field takes the LOWEST edge point within BELT_WOOD_EDGE_SPAN cells along that edge
          * (and its way south): a bump narrower than that ends at the map, a wider rise still carries on.
          * WJPC_WOOD_FIELD_EDGE_OLD=1: as before. */
-        if (getenv("WJPC_WOOD_FIELD_EDGE_OLD") == NULL
+        /* (north of the map only - the woods there are behind it, the ridge ran under them; beside its west edge
+         * the lowered field opened a speck of sky between the crowns: Verdanturf, 2026-11-22) */
+        if (getenv("WJPC_WOOD_FIELD_EDGE_OLD") == NULL && vy <= oy
          && (d >= 1.0f ? FieldPointDeepWood(vx, vy) : FieldPointEdgeWood(vx, vy)))
         {
             bool alongX = qy == (float)oy || qy == (float)(oy + m->height);

@@ -218,6 +218,17 @@ int VoxelTree_GroundMetatile(const void *secondaryTileset, int metatileId)
 
         if (own >= 0)
             return own;
+        /* Brennan 2026-11-21 17:25 (Verdanturf's flowers in 3D, VoxelTree_EmitInstance): under the Mauville
+         * tileset's flower card the plain grass (0x204), not the tile's own teal square round the drawn flower.
+         * WJPC_MAUVILLE_FLOWERS_FLAT=1: as drawn. */
+        if (secondaryTileset == &gTileset_Mauville && metatileId >= 0x211 && metatileId <= 0x216)
+        {
+            static int sFlat = -1;
+            if (sFlat < 0)
+                sFlat = getenv("WJPC_MAUVILLE_FLOWERS_FLAT") != NULL;
+            if (!sFlat)
+                return 0x204;
+        }
         /* Dewford's crown top over the sand. */
         if (secondaryTileset == &gTileset_Dewford && metatileId == 0x239)
             return 0x124;
@@ -587,12 +598,12 @@ static bool AgainstRock(const VoxelMapInstance *inst, int x, int y, float lift)
  * "the planter boxes ... were 2D") - tools/voxel3ds/add_tree_cards.py made them. The ground
  * stays the ground pass's. Not on a cell a building model stands on or on sloping relief.
  */
-enum { CARD_FLOWER, CARD_TUFT, CARD_PLANTER };
+enum { CARD_FLOWER, CARD_TUFT, CARD_PLANTER, CARD_FLOWER_MAUVILLE };
 
 static void EmitGroundCard(VoxelBuilder *builder, int x, int y, int kind, float at)
 {
-    static const float kLen[] = { 0.75f, 0.30f, 0.45f };  /* the card's length, tiles */
-    static const uint8_t kTx[] = { 0, 16, 32 }, kTh[] = { 16, 8, 8 };
+    static const float kLen[] = { 0.75f, 0.30f, 0.45f, 0.75f };  /* the card's length, tiles */
+    static const uint8_t kTx[] = { 0, 16, 32, 48 }, kTh[] = { 16, 8, 8, 16 };
     const float len = kLen[kind];
     const float rise = 0.766044f * len, run = 0.642788f * len; /* 50 degrees, as the tuft */
     const float baseHeight = -0.02f;
@@ -672,6 +683,20 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
             }
             /* (0x001, the grass's white flowers, stood as tufts too until 2026-11-16: Brennan, "revert back
              * all the white flowers to the 2D form") */
+            /* Brennan 2026-11-21 17:25 (image 8, Verdanturf: "All the red/yellow flower patches ... are still flat 2D
+             * ground tiles - convert them to 3D flower models (matching the 3D flowers used elsewhere)"): the Mauville
+             * tileset's flowers (0x211-0x216: Verdanturf, Mauville, Route 117) as the General's (0x004), their card at
+             * (48,112) (tools/voxel3ds/add_mauville_flower_card.py). WJPC_MAUVILLE_FLOWERS_FLAT=1: flat, as before. */
+            else if (inst->secondaryTileset == &gTileset_Mauville && metatileId >= 0x211 && metatileId <= 0x216
+                  && getenv("WJPC_MAUVILLE_FLOWERS_FLAT") == NULL && FlatRelief(inst, x, y)
+                  && !VoxelBuildings_CellAt(inst, x, y, NULL, NULL))
+            {
+                builder->lift = VoxelRelief_CellLift(inst, x, y);
+                builder->shift = VoxelRelief_CellShift(inst, x, y);
+                EmitGroundCard(builder, x, y, CARD_FLOWER_MAUVILLE, 0.80f);
+                builder->lift = 0.0f;
+                builder->shift = 0.0f;
+            }
             else if ((metatileId == 0x004 || metatileId == 0x007) && FlatRelief(inst, x, y)
                   && !VoxelBuildings_CellAt(inst, x, y, NULL, NULL))
             {
