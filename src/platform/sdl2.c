@@ -3547,14 +3547,38 @@ void VDraw(SDL_Texture *texture)
         sCamMoveValid = false;
     }
     // DLX-3: in-between frames for battles and menus (the GBA picture), like the overworld's smooth
-    // motion. Sprites (matched by OAM slot, same picture) and BG scroll that moved a little since the
-    // last frame are drawn part of the way there; DrawScreen shows them before this frame's picture.
+    // motion. Sprites and BG scroll that moved a little since the last frame are drawn part of the way there;
+    // DrawScreen shows them before this frame's picture.
+    // Brennan 2026-11-22 12:56 ("yes you can add that and pokemon animations and move sprites at 240 fps"):
+    //  - a sprite is matched to itself the frame before (sprite.c gPcOamOwner: which sprite each OAM slot holds),
+    //    not to whatever sprite had its slot, so it slides even when its picture changes (a Pokémon's or a move's
+    //    animation frames), up to 32 px a frame; WJPC_INTERP_SLOTS=1: matched by slot and picture, 16 px, as before.
+    //  - a sprite that grows, shrinks or turns (its affine matrix) is eased between its two matrices;
+    //    WJPC_INTERP_NO_AFFINE=1: stepped as before.
+    //  - the healthboxes (the HP and EXP bars drain inside their pictures) fade from last frame's picture to this
+    //    one's where they stand still, so a bar's edge moves a part of a pixel each refresh; WJPC_INTERP_NO_BARS=1:
+    //    stepped as before.
     {
         extern bool gPcFrameHadLineEffects;
         extern void DrawFramePlain(uint16_t *pixels);
+        extern u16 gPcOamOwner[128];
+        extern u8 gPcOamGen[128];
+        extern u8 gHealthboxSpriteIds[4];
+        extern u8 gPcPixelSource[];
+        extern bool8 PcInBattle(void);
+        enum { SLOTS = OAM_SIZE / (int)sizeof(struct OamData) };
         static unsigned char prevOam[OAM_SIZE];
-        static u16 prevOfs[8];
+        static u16 prevOfs[8], prevOwner[SLOTS];
+        static u8 prevGen[SLOTS];
+        static uint16_t prevPic[DISPLAY_WIDTH * DISPLAY_HEIGHT];
         static bool havePrev;
+        static int sBySlot = -1, sNoAffine, sNoBars, sDbgBoxes, sDbgBar, sDbgChanged, sDbgDiff;
+        if (sBySlot < 0)
+        {
+            sBySlot = getenv("WJPC_INTERP_SLOTS") != NULL;
+            sNoAffine = getenv("WJPC_INTERP_NO_AFFINE") != NULL;
+            sNoBars = getenv("WJPC_INTERP_NO_BARS") != NULL;
+        }
         volatile u16 *ofs = &REG_BG0HOFS;
         int rate = gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT];
         int steps = (rate + 30) / 60;
@@ -3568,34 +3592,127 @@ void VDraw(SDL_Texture *texture)
             steps = INTERP_MAX + 1;
         sInterpCount = 0;
         sInterpShown = -1;
+        u16 curOwner[SLOTS];
+        u8 curGen[SLOTS];
+        memcpy(curOwner, gPcOamOwner, sizeof(curOwner));
+        memcpy(curGen, gPcOamGen, sizeof(curGen));
         if (want && havePrev && steps > 1 && !gPcFrameHadLineEffects)
         {
             static unsigned char curOam[OAM_SIZE];
             static uint16_t pic[DISPLAY_WIDTH * DISPLAY_HEIGHT];
             u16 curOfs[8];
             struct OamData *o = (struct OamData *)OAM, *po = (struct OamData *)prevOam;
-            bool moved = false;
+            const struct OamData *co = (const struct OamData *)curOam;
+            int from[SLOTS];        // the slot each slot's sprite had last frame, -1 none
+            bool bar[SLOTS];        // a healthbox's piece standing still
+            bool anyBar = false;
             memcpy(curOam, OAM, OAM_SIZE);
             for (int i = 0; i < 8; i++)
                 curOfs[i] = ofs[i];
+            {
+                static s16 slotOf[64][16];
+                u8 boxes[12];
+                int nBoxes = 0;
+                for (int i = 0; i < 64; i++)
+                    for (int k = 0; k < 16; k++)
+                        slotOf[i][k] = -1;
+                for (int j = 0; j < SLOTS; j++)
+                    if (prevOwner[j] != 0xFFFF && (prevOwner[j] >> 8) < 64 && (prevOwner[j] & 0xFF) < 16)
+                        slotOf[prevOwner[j] >> 8][prevOwner[j] & 0xFF] = (s16)j;
+                if (PcInBattle() && !sNoBars)
+                    for (int bt = 0; bt < 4; bt++)
+                    {
+                        u8 id = gHealthboxSpriteIds[bt];
+                        if (id >= 64 || !gSprites[id].inUse)
+                            continue;
+                        boxes[nBoxes++] = id;
+                        u16 other = gSprites[id].oam.affineParam, barId = (u16)gSprites[id].data[5];
+                        if (other < 64 && gSprites[other].inUse && gSprites[other].data[5] == id)
+                            boxes[nBoxes++] = (u8)other;
+                        if (barId < 64 && gSprites[barId].inUse && gSprites[barId].data[5] == id)
+                            boxes[nBoxes++] = (u8)barId;
+                    }
+                sDbgBoxes = nBoxes;
+                for (int i = 0; i < SLOTS; i++)
+                {
+                    u16 w = curOwner[i];
+                    from[i] = -1;
+                    bar[i] = false;
+                    if (sBySlot)
+                        from[i] = i;
+                    else if (w != 0xFFFF && (w >> 8) < 64 && (w & 0xFF) < 16)
+                        from[i] = slotOf[w >> 8][w & 0xFF];
+                    if (!sBySlot && from[i] >= 0 && prevGen[from[i]] != curGen[i])
+                        from[i] = -1; // a new sprite in that slot
+                    if (w == 0xFFFF || from[i] < 0)
+                        continue;
+                    for (int n = 0; n < nBoxes; n++)
+                        if ((w >> 8) == boxes[n] && po[from[i]].x == co[i].x && po[from[i]].y == co[i].y)
+                            bar[i] = anyBar = true, sDbgBar++;
+                }
+            }
             for (int k = 1; k < steps; k++)
             {
                 float f = (float)k / steps;
-                for (int i = 0; i < OAM_SIZE / (int)sizeof(struct OamData); i++)
+                bool moved = false;
+                for (int i = 0; i < SLOTS; i++)
                 {
-                    const struct OamData *c = &((const struct OamData *)curOam)[i];
-                    if (po[i].tileNum != c->tileNum || po[i].shape != c->shape || po[i].size != c->size
-                     || po[i].affineMode != c->affineMode)
+                    const struct OamData *c = &co[i];
+                    int j = from[i];
+                    if (j < 0)
                         continue;
-                    int dx = (int)c->x - (int)po[i].x, dy = (int)c->y - (int)po[i].y;
+                    if (po[j].shape != c->shape || po[j].size != c->size || po[j].affineMode != c->affineMode)
+                        continue;
+                    if (sBySlot && po[j].tileNum != c->tileNum)
+                        continue;
+                    int lim = sBySlot ? 16 : 32;
+                    int dx = (int)c->x - (int)po[j].x, dy = (int)c->y - (int)po[j].y;
                     dx = ((dx + 256) & 511) - 256;
                     dy = ((dy + 128) & 255) - 128;
-                    if ((dx == 0 && dy == 0) || abs(dx) > 16 || abs(dy) > 16)
+                    if ((dx == 0 && dy == 0) || abs(dx) > lim || abs(dy) > lim)
                         continue;
+                    if (k == 1 && getenv("WJPC_INTERP_LOG") != NULL)
+                        fprintf(stderr, "SLIDE slot %d owner %04x from %d (%d,%d)->(%d,%d) tile %u->%u aff %d\n", i,
+                                curOwner[i], j, po[j].x, po[j].y, c->x, c->y, po[j].tileNum, c->tileNum, c->affineMode);
                     // drawn at the earlier place plus part of the move (rounded toward where it came from)
-                    o[i].x = (unsigned)((int)po[i].x + (int)(dx * f)) & 511;
-                    o[i].y = (unsigned)((int)po[i].y + (int)(dy * f)) & 255;
+                    o[i].x = (unsigned)((int)po[j].x + (int)(dx * f)) & 511;
+                    o[i].y = (unsigned)((int)po[j].y + (int)(dy * f)) & 255;
                     moved = true;
+                }
+                if (!sNoAffine && !sBySlot)
+                {
+                    // each matrix in use this frame eased from the one its sprite used last frame
+                    bool done[32] = {false};
+                    for (int i = 0; i < SLOTS; i++)
+                    {
+                        const struct OamData *c = &co[i];
+                        int j = from[i];
+                        if (j < 0 || !(c->affineMode & 1) || !(po[j].affineMode & 1))
+                            continue;
+                        unsigned m = c->matrixNum, pm = po[j].matrixNum;
+                        if (done[m])
+                            continue;
+                        done[m] = true;
+                        s16 a[4], b[4];
+                        bool ok = true, diff = false;
+                        for (int e = 0; e < 4; e++)
+                        {
+                            a[e] = (s16)po[pm * 4 + e].affineParam;
+                            b[e] = (s16)co[m * 4 + e].affineParam;
+                            if (abs(b[e] - a[e]) > 0x100)
+                                ok = false; // a jump, not a turn or a growth: shown as it is
+                            if (a[e] != b[e])
+                                diff = true;
+                        }
+                        if (!ok || !diff)
+                            continue;
+                        if (k == 1 && getenv("WJPC_INTERP_LOG") != NULL)
+                            fprintf(stderr, "AFFINE slot %d owner %04x m %u<-%u (%d %d %d %d)->(%d %d %d %d)\n", i, curOwner[i],
+                                    m, pm, a[0], a[1], a[2], a[3], b[0], b[1], b[2], b[3]);
+                        for (int e = 0; e < 4; e++)
+                            o[m * 4 + e].affineParam = (u16)(s16)lroundf(a[e] + (b[e] - a[e]) * f);
+                        moved = true;
+                    }
                 }
                 for (int i = 0; i < 8; i++)
                 {
@@ -3606,9 +3723,86 @@ void VDraw(SDL_Texture *texture)
                         moved = true;
                     }
                 }
-                if (!moved)
+                if (!moved && !anyBar)
                     break;
                 DrawFramePlain(pic);
+                if (anyBar)
+                {
+                    // the healthboxes: last frame's picture faded into this one's, under their standing pieces
+                    bool changed = false;
+                    for (int i = 0; i < SLOTS; i++)
+                    {
+                        if (!bar[i])
+                            continue;
+                        static const u8 kW[3][4] = {{8, 16, 32, 64}, {16, 32, 32, 64}, {8, 8, 16, 32}};
+                        static const u8 kH[3][4] = {{8, 16, 32, 64}, {8, 8, 16, 32}, {16, 32, 32, 64}};
+                        const struct OamData *c = &co[i];
+                        if (c->shape > 2)
+                            continue;
+                        int w = kW[c->shape][c->size], h = kH[c->shape][c->size];
+                        if (c->affineMode == 3)
+                            w *= 2, h *= 2;
+                        int x0 = c->x >= 256 ? (int)c->x - 512 : (int)c->x, y0 = c->y >= 160 ? (int)c->y - 256 : (int)c->y;
+                        int xs = x0 < 0 ? 0 : x0, xe = x0 + w < DISPLAY_WIDTH ? x0 + w : DISPLAY_WIDTH;
+                        for (int y = y0 < 0 ? 0 : y0; y < y0 + h && y < DISPLAY_HEIGHT; y++)
+                        {
+                            const uint16_t *A = &prevPic[y * DISPLAY_WIDTH], *B = &gbaImage[y * DISPLAY_WIDTH];
+                            uint16_t *P = &pic[y * DISPLAY_WIDTH];
+                            for (int x = xs; x < xe; x++)
+                            {
+                                if (A[x] == B[x])
+                                    continue;
+                                // a run of changed pixels: a bar's end moving along it, or a picture changing
+                                int xa = x, xb = x;
+                                while (xb + 1 < xe && A[xb + 1] != B[xb + 1])
+                                    xb++;
+                                x = xb;
+                                int len = xb - xa + 1, mode = 0; // 1: emptied from its right, 2: filled from its left
+                                if (len > 2 && xb + 1 < DISPLAY_WIDTH)
+                                {
+                                    mode = 1;
+                                    for (int q = xa; q <= xb && mode; q++)
+                                        if (B[q] != B[xb + 1] || A[q] != A[xa])
+                                            mode = 0;
+                                }
+                                if (!mode && len > 2 && xa > 0)
+                                {
+                                    mode = 2;
+                                    for (int q = xa; q <= xb && mode; q++)
+                                        if (B[q] != B[xa - 1] || A[q] != A[xb])
+                                            mode = 0;
+                                }
+                                sDbgChanged += len;
+                                changed = true;
+                                if (mode == 1)
+                                {
+                                    // the end moves left: the part already passed shows this frame's picture
+                                    int split = xb + 1 - (int)lroundf(len * f);
+                                    for (int q = xa; q <= xb; q++)
+                                        P[q] = q >= split ? B[q] : A[q];
+                                }
+                                else if (mode == 2)
+                                {
+                                    int split = xa + (int)lroundf(len * f);
+                                    for (int q = xa; q <= xb; q++)
+                                        P[q] = q < split ? B[q] : A[q];
+                                }
+                                else
+                                    for (int q = xa; q <= xb; q++)
+                                    {
+                                        // anything else (a short step, a colour change, the numbers): faded
+                                        uint16_t a0 = A[q], b0 = B[q];
+                                        int r = (a0 & 31) + (int)lroundf(((b0 & 31) - (a0 & 31)) * f);
+                                        int g = ((a0 >> 5) & 31) + (int)lroundf((((b0 >> 5) & 31) - ((a0 >> 5) & 31)) * f);
+                                        int bl = ((a0 >> 10) & 31) + (int)lroundf((((b0 >> 10) & 31) - ((a0 >> 10) & 31)) * f);
+                                        P[q] = (uint16_t)(r | (g << 5) | (bl << 10));
+                                    }
+                            }
+                        }
+                    }
+                    if (!moved && !changed)
+                        break;
+                }
                 if (s3DBattleFrame)
                 {
                     BuildBattleOverlay(pic, sInterpImage[k - 1]);
@@ -3625,6 +3819,34 @@ void VDraw(SDL_Texture *texture)
             memcpy(OAM, curOam, OAM_SIZE);
             for (int i = 0; i < 8; i++)
                 ofs[i] = curOfs[i];
+            if (sInterpCount > 0 && getenv("WJPC_INTERP_DUMP") != NULL && PcInBattle())
+            {
+                // test aid: WJPC_INTERP_DUMP=DIR writes each frame's in-between pictures and its own (PPM, 240x160)
+                static int sDumped;
+                if (sDumped < 1200)
+                    for (int k = 0; k <= sInterpCount; k++)
+                    {
+                        char path[600];
+                        const uint16_t *src = NULL;
+                        static uint8_t rgb[DISPLAY_WIDTH * DISPLAY_HEIGHT * 3];
+                        const uint32_t *img = k < sInterpCount ? sInterpImage[k] : NULL;
+                        snprintf(path, sizeof(path), "%s/%05d_%d.ppm", getenv("WJPC_INTERP_DUMP"), sDumped / 4, k);
+                        for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++)
+                        {
+                            uint32_t c = img != NULL ? img[i] : ToArgb(gbaImage[i]);
+                            rgb[i * 3] = (c >> 16) & 255, rgb[i * 3 + 1] = (c >> 8) & 255, rgb[i * 3 + 2] = c & 255;
+                        }
+                        (void)src;
+                        FILE *f = fopen(path, "wb");
+                        if (f != NULL)
+                        {
+                            fprintf(f, "P6\n%d %d\n255\n", DISPLAY_WIDTH, DISPLAY_HEIGHT);
+                            fwrite(rgb, 1, sizeof(rgb), f);
+                            fclose(f);
+                        }
+                        sDumped++;
+                    }
+            }
             if (sInterpCount > 0)
             {
                 sInterpSteps = steps;
@@ -3632,10 +3854,17 @@ void VDraw(SDL_Texture *texture)
                 memcpy(sInterpCurrent, s3DBattleFrame ? sBattleImage : sLastUploaded, sizeof(sInterpCurrent));
             }
         }
+        if (getenv("WJPC_INTERP_LOG") != NULL && PcInBattle())
+            fprintf(stderr, "INTERP diff %d boxes %d bar %d changed %d mode %d w %d h %d m %d want %d prev %d line %d count %d\n", sDbgDiff, sDbgBoxes, sDbgBar, sDbgChanged, (int)sFrameInfo.mode,
+                    sFrameInfo.width, sFrameInfo.height, sFrameInfo.margin, want, havePrev, gPcFrameHadLineEffects,
+                    sInterpCount);
         havePrev = want;
         if (want)
         {
             memcpy(prevOam, OAM, OAM_SIZE);
+            memcpy(prevOwner, curOwner, sizeof(prevOwner));
+            memcpy(prevGen, curGen, sizeof(prevGen));
+            memcpy(prevPic, gbaImage, sizeof(prevPic));
             for (int i = 0; i < 8; i++)
                 prevOfs[i] = ofs[i];
         }

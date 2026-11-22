@@ -309,6 +309,18 @@ void AnimateSprites(void)
     }
 }
 
+/* Wally's Journey (PC, Brennan 2026-11-22 12:56, battles smoothed at 240 fps): which sprite (gSprites index << 8)
+ * and which of its OAM pieces each OAM slot of the last BuildOamBuffer holds (0xFFFF: none). The PC's in-between
+ * pictures (sdl2.c) match a slot to the same sprite's slot the frame before, as slots move between sprites. */
+#define OAM_SLOT_COUNT 128
+u16 gPcOamOwner[OAM_SLOT_COUNT];
+u8 gPcOamGen[OAM_SLOT_COUNT];   // the sprite's creation count, so a new sprite in a freed slot is not matched
+u8 gPcSpriteGen[MAX_SPRITES];
+bool8 PcInBattle(void)
+{
+    return gMain.inBattle;
+}
+
 void BuildOamBuffer(void)
 {
     bool32 oamLoadDisabled;
@@ -389,9 +401,16 @@ void BuildOamBuffer(void)
 
     for (i = 0, oamIndex = 0; i < toSort; i++)
     {
-        if (AddSpriteToOamBuffer(&gSprites[spritePriorities[i] & 0xFF], &oamIndex))
+        u8 first = oamIndex;
+        bool8 full = AddSpriteToOamBuffer(&gSprites[spritePriorities[i] & 0xFF], &oamIndex);
+        for (u32 k = first; k < oamIndex && k < OAM_SLOT_COUNT; k++)
+            gPcOamOwner[k] = ((spritePriorities[i] & 0xFF) << 8) | (k - first),
+            gPcOamGen[k] = gPcSpriteGen[spritePriorities[i] & 0xFF];
+        if (full)
             break;
     }
+    for (i = oamIndex; i < OAM_SLOT_COUNT; i++)
+        gPcOamOwner[i] = 0xFFFF;
 
     for (i = oamIndex; i < sOamDummyIndex; i++)
         gMain.oamBuffer[i] = gDummyOamData;
@@ -495,6 +514,8 @@ u32 CreateInvisibleSprite(void (*callback)(struct Sprite *))
 
 u32 CreateSpriteAt(u32 index, const struct SpriteTemplate *template, s16 x, s16 y, u32 subpriority)
 {
+    if (index < MAX_SPRITES)
+        gPcSpriteGen[index]++; // (PC: a new sprite in this slot, not the one before - gPcOamGen)
     if (TESTING && template->tileTag > ANIM_SPRITES_START && template->tileTag < ANIM_TAG_COUNT && !IsGfxLoaded(template->tileTag))
     {
         assertf(FALSE, "createsprite with unloaded gfx: %u", template->tileTag);
