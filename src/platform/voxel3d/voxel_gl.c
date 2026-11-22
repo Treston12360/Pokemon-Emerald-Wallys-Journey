@@ -1377,6 +1377,7 @@ static void QuantiseInPlace(VoxelVertex *v, unsigned count)
 
 /* Audit step 4c: the finished build made ready to upload - the ground split by atlas page (u = 2 * page + u in
  * page) and every position quantised (DLX-22, as MeshSetQuantised did at upload). CPU only: run on the worker. */
+static void ModelsOffFlush(InstanceBuild *pb);
 static void BuildPrepare(InstanceBuild *pb)
 {
     unsigned ground = pb->n[0] < SCRATCH_VERTS ? pb->n[0] : SCRATCH_VERTS;
@@ -1412,6 +1413,8 @@ static void BuildPrepare(InstanceBuild *pb)
         QuantiseInPlace(pb->pageV[p], pb->pageN[p]);
     QuantiseInPlace(pb->v[1], pb->n[1]);
     QuantiseInPlace(pb->v[2], pb->n[2]);
+    /* (here, on the build thread: up to 13 ms a map) */
+    ModelsOffFlush(pb);
     pb->prepared = true;
 }
 
@@ -1515,6 +1518,226 @@ static void CullBox(const VoxelMapInstance *inst, VoxelVertex *v, unsigned n)
         if (cx >= x0 && cx <= x1 && cz >= z0 && cz <= z1)
             v[t + 1] = v[t + 2] = v[t];
     }
+}
+
+/*
+ * Brennan 2026-11-21 17:25 (image 3, Route 111's Trainer Hill: "the top middle edge of the door frame
+ * flickers/Z-fights with the surrounding wall. Give the door frame a clean depth offset so it sits solid"): the door
+ * model's front lay in the very plane of the cliff face behind it (z 116, x 30-33), and its frame's sides in the
+ * planes of the cliff's sides - the depth test took either, frame to frame. A model face lying flush on a terrain face
+ * (same plane, same way, overlapping) is moved 1/128 tile out along its facing, with every model corner on that
+ * plane within two cells of it, so the faces beside it stretch to meet it (no crack). Route 111: the door's 6 and 2
+ * more; Route 117: none. WJPC_MODEL_FLUSH_OLD=1: as before.
+ */
+typedef struct { float n[3], d, cx, cy, cz; const VoxelVertex *v; } FlushTri;
+
+static bool FlushPlane(const VoxelVertex *v, float n[3], float *d)
+{
+    float ux = v[1].x - v[0].x, uy = v[1].y - v[0].y, uz = v[1].z - v[0].z;
+    float wx = v[2].x - v[0].x, wy = v[2].y - v[0].y, wz = v[2].z - v[0].z;
+    float l;
+
+    n[0] = uy * wz - uz * wy;
+    n[1] = uz * wx - ux * wz;
+    n[2] = ux * wy - uy * wx;
+    l = sqrtf(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
+    if (l < 1e-9f)
+        return false;
+    n[0] /= l, n[1] /= l, n[2] /= l;
+    *d = n[0] * v[0].x + n[1] * v[0].y + n[2] * v[0].z;
+    return true;
+}
+
+/* is (px,py,pz) strictly inside triangle v, seen along its normal's main axis */
+static bool FlushInside(const VoxelVertex *v, const float n[3], float px, float py, float pz)
+{
+    int ax = fabsf(n[0]) >= fabsf(n[1]) && fabsf(n[0]) >= fabsf(n[2]) ? 0 : fabsf(n[1]) >= fabsf(n[2]) ? 1 : 2;
+    float a[3][2], p[2], s[3];
+
+    for (int i = 0; i < 3; ++i)
+    {
+        float q[3] = { v[i].x, v[i].y, v[i].z };
+        a[i][0] = q[ax == 0 ? 1 : 0];
+        a[i][1] = q[ax == 2 ? 1 : 2];
+    }
+    {
+        float q[3] = { px, py, pz };
+        p[0] = q[ax == 0 ? 1 : 0];
+        p[1] = q[ax == 2 ? 1 : 2];
+    }
+    for (int i = 0; i < 3; ++i)
+    {
+        const float *e0 = a[i], *e1 = a[(i + 1) % 3];
+        s[i] = (e1[0] - e0[0]) * (p[1] - e0[1]) - (e1[1] - e0[1]) * (p[0] - e0[0]);
+    }
+    return (s[0] > 1e-6f && s[1] > 1e-6f && s[2] > 1e-6f) || (s[0] < -1e-6f && s[1] < -1e-6f && s[2] < -1e-6f);
+}
+
+static void ModelsOffFlush(InstanceBuild *pb)
+{
+    static int sOld = -1;
+    VoxelVertex *mv = pb->v[2];
+    unsigned mn = pb->n[2], hits = 0;
+    float x0 = 1e9f, x1 = -1e9f, z0 = 1e9f, z1 = -1e9f;
+    FlushTri *terr = NULL, *hit = NULL;
+    unsigned tn = 0, tcap = 0, hn = 0, hcap = 0;
+    Uint64 t0 = SDL_GetPerformanceCounter();
+
+    if (sOld < 0)
+        sOld = getenv("WJPC_MODEL_FLUSH_OLD") != NULL;
+    if (sOld || mv == NULL || mn < 3)
+        return;
+    for (unsigned i = 0; i < mn; ++i)
+    {
+        x0 = fminf(x0, mv[i].x), x1 = fmaxf(x1, mv[i].x);
+        z0 = fminf(z0, mv[i].z), z1 = fmaxf(z1, mv[i].z);
+    }
+    /* the terrain's triangles about the models */
+    for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; ++p)
+        for (unsigned t = 0; t + 2 < pb->pageN[p]; t += 3)
+        {
+            const VoxelVertex *v = &pb->pageV[p][t];
+            FlushTri f;
+
+            f.cx = (v[0].x + v[1].x + v[2].x) / 3.0f;
+            f.cy = (v[0].y + v[1].y + v[2].y) / 3.0f;
+            f.cz = (v[0].z + v[1].z + v[2].z) / 3.0f;
+            if (f.cx < x0 - 1.0f || f.cx > x1 + 1.0f || f.cz < z0 - 1.0f || f.cz > z1 + 1.0f || !FlushPlane(v, f.n, &f.d))
+                continue;
+            f.v = v;
+            if (tn == tcap)
+            {
+                FlushTri *g = realloc(terr, (tcap = tcap ? tcap * 2 : 4096) * sizeof(*g));
+                if (g == NULL)
+                    goto done;
+                terr = g;
+            }
+            terr[tn++] = f;
+        }
+    /* the model faces flush on one of them: the terrain sorted into a grid of cells (counting sort), each model face
+     * checked against its own cell and the eight round it */
+    {
+        int gx0 = (int)floorf(x0) - 2, gz0 = (int)floorf(z0) - 2;
+        int gw = (int)floorf(x1) + 3 - gx0, gh = (int)floorf(z1) + 3 - gz0;
+        unsigned *start = calloc((size_t)gw * gh + 1, sizeof(unsigned));
+        unsigned *order = malloc((tn ? tn : 1) * sizeof(unsigned));
+
+        if (start == NULL || order == NULL || gw <= 0 || gh <= 0)
+        {
+            free(start);
+            free(order);
+            goto done;
+        }
+#define FLUSH_CELL(fx, fz) ((int)floorf(fz) - gz0) * gw + ((int)floorf(fx) - gx0)
+        for (unsigned k = 0; k < tn; ++k)
+            start[FLUSH_CELL(terr[k].cx, terr[k].cz) + 1]++;
+        for (int c = 0; c < gw * gh; ++c)
+            start[c + 1] += start[c];
+        {
+            unsigned *fill = malloc(((size_t)gw * gh + 1) * sizeof(unsigned));
+            if (fill == NULL)
+            {
+                free(start);
+                free(order);
+                goto done;
+            }
+            memcpy(fill, start, ((size_t)gw * gh + 1) * sizeof(unsigned));
+            for (unsigned k = 0; k < tn; ++k)
+                order[fill[FLUSH_CELL(terr[k].cx, terr[k].cz)]++] = k;
+            free(fill);
+        }
+        for (unsigned t = 0; t + 2 < mn; t += 3)
+        {
+            FlushTri m;
+            bool found = false;
+            int mcx, mcz;
+
+            if (!FlushPlane(&mv[t], m.n, &m.d))
+                continue;
+            m.cx = (mv[t].x + mv[t + 1].x + mv[t + 2].x) / 3.0f;
+            m.cy = (mv[t].y + mv[t + 1].y + mv[t + 2].y) / 3.0f;
+            m.cz = (mv[t].z + mv[t + 1].z + mv[t + 2].z) / 3.0f;
+            mcx = (int)floorf(m.cx) - gx0;
+            mcz = (int)floorf(m.cz) - gz0;
+            for (int dz = -1; dz <= 1 && !found; ++dz)
+                for (int dx = -1; dx <= 1 && !found; ++dx)
+                {
+                    int c = (mcz + dz) * gw + (mcx + dx);
+                    if (mcx + dx < 0 || mcx + dx >= gw || mcz + dz < 0 || mcz + dz >= gh)
+                        continue;
+                    for (unsigned q = start[c]; q < start[c + 1] && !found; ++q)
+                    {
+                        const FlushTri *f = &terr[order[q]];
+
+                        float dot = m.n[0] * f->n[0] + m.n[1] * f->n[1] + m.n[2] * f->n[2];
+
+                        /* (either way round: faces are drawn from both sides) */
+                        if (fabsf(dot) < 0.999f || fabsf(m.d - (dot > 0.0f ? f->d : -f->d)) > 1.0f / 256.0f)
+                            continue;
+                        found = FlushInside(f->v, f->n, m.cx, m.cy, m.cz) || FlushInside(&mv[t], m.n, f->cx, f->cy, f->cz);
+                    }
+                }
+            if (found)
+            {
+                if (hn == hcap)
+                {
+                    FlushTri *g = realloc(hit, (hcap = hcap ? hcap * 2 : 64) * sizeof(*g));
+                    if (g == NULL)
+                        break;
+                    hit = g;
+                }
+                hit[hn++] = m;
+            }
+        }
+#undef FLUSH_CELL
+        free(start);
+        free(order);
+    }
+    /* which way out: toward the camera (up, south) for a face it looks at; an upright face across it (east or west)
+     * away from the model's own body there */
+    for (unsigned h = 0; h < hn; ++h)
+    {
+        FlushTri *m = &hit[h];
+        float toCam = m->n[1] + m->n[2], side;
+
+        if (fabsf(toCam) < 0.05f)
+        {
+            float sx = 0.0f, sy = 0.0f, sz = 0.0f;
+            unsigned c = 0;
+            for (unsigned i = 0; i < mn; ++i)
+                if (fabsf(mv[i].x - m->cx) <= 1.5f && fabsf(mv[i].y - m->cy) <= 1.5f && fabsf(mv[i].z - m->cz) <= 1.5f)
+                    sx += mv[i].x, sy += mv[i].y, sz += mv[i].z, ++c;
+            side = c ? m->n[0] * (m->cx - sx / c) + m->n[1] * (m->cy - sy / c) + m->n[2] * (m->cz - sz / c) : 1.0f;
+        }
+        else
+            side = toCam;
+        if (side < 0.0f)
+        {
+            m->n[0] = -m->n[0], m->n[1] = -m->n[1], m->n[2] = -m->n[2];
+            m->d = -m->d;
+        }
+    }
+    /* every model corner on such a plane near it, out that way */
+    for (unsigned i = 0; i < mn; ++i)
+        for (unsigned h = 0; h < hn; ++h)
+        {
+            const FlushTri *m = &hit[h];
+            if (fabsf(m->n[0] * mv[i].x + m->n[1] * mv[i].y + m->n[2] * mv[i].z - m->d) < 1.0f / 1024.0f
+             && fabsf(mv[i].x - m->cx) <= 2.0f && fabsf(mv[i].y - m->cy) <= 2.0f && fabsf(mv[i].z - m->cz) <= 2.0f)
+            {
+                mv[i].x += m->n[0] / 128.0f;
+                mv[i].y += m->n[1] / 128.0f;
+                mv[i].z += m->n[2] / 128.0f;
+                ++hits;
+                break;
+            }
+        }
+    if (getenv("WJPC_MODEL_FLUSH_DUMP") != NULL)
+        fprintf(stderr, "MODELFLUSH %u faces, %u corners moved, %u terrain, %u model tris, %.2f ms\n", hn, hits, tn,
+                mn / 3, (SDL_GetPerformanceCounter() - t0) * 1000.0 / (double)SDL_GetPerformanceFrequency());
+done:
+    free(terr);
+    free(hit);
 }
 
 // The finished build into `m` (freed first if it held a mesh), which is then one of this frame's maps.
