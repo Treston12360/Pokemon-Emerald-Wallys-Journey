@@ -5527,6 +5527,15 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
         return false;
     if ((((unsigned)(x * 73856093) ^ (unsigned)(y * 19349663)) % 3u) == 0u)
         return false;
+    /* Brennan 2026-11-22 02:10 (Route 112's south, red box: "a small cluster of 3D trees sticking down onto the bare
+     * rocky mountainside below the grass forest line ... Remove those trees ... so the forest ends cleanly at the
+     * grass edge and only the bare rock mountainside remains below it"): no ledge tree in front of a map (a map cell
+     * within 4 rows north of it) - that land is the bare rock the map's edge drops to. WJPC_LEDGE_TREES_SOUTH=1: as
+     * before. */
+    if (getenv("WJPC_LEDGE_TREES_SOUTH") == NULL)
+        for (int k = 1; k <= 4; ++k)
+            if (VoxelWorld_GetInstanceAt(x, y - k) != NULL)
+                return false;
     for (int dy = -BELT_LEDGE_WOOD; dy <= BELT_LEDGE_WOOD && !wood; ++dy)
         for (int dx = -BELT_LEDGE_WOOD; dx <= BELT_LEDGE_WOOD && !wood; ++dx)
         {
