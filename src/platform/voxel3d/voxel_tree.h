@@ -22,6 +22,8 @@ int VoxelTree_Part(const void *secondaryTileset, int metatileId);
 int VoxelTree_PartAt(int x, int y);
 /* Remove the old canopy from the cell above a tree, leaving its ground. */
 int VoxelTree_GroundMetatile(const void *secondaryTileset, int metatileId);
+/* the trees texture's alpha (tiled RGBA5551, as uploaded), kept for the rock mounds' shapes */
+void VoxelTree_KeepAlpha(const uint16_t *tiled);
 /* Does the tree pass lay a tree part's ground? Not for a trunk in water
  * (Mossdeep's shallows): the ground pass lays the water, animated, as
  * VoxelTree_GroundMetatile names it, and the tree its roots over it. */

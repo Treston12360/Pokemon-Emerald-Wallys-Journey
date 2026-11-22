@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stddef.h>
+#include <math.h>
 #include "voxel_tree.h"
 #include "voxel_relief.h"
 #include "voxel_regions.h"
@@ -19,6 +20,7 @@ extern const struct Tileset gTileset_EverGrande;
 extern const struct Tileset gTileset_BattleFrontierOutsideWest;
 extern const struct Tileset gTileset_Mossdeep;
 extern const struct Tileset gTileset_Fallarbor;
+extern const struct Tileset gTileset_RusturfTunnel;
 
 /* Where gen_voxel_trees.py packs each tree, in texels. */
 #define TEX_U(px) ((float)(px) / VOXEL_TREE_TEXTURE_DIM)
@@ -229,6 +231,11 @@ int VoxelTree_GroundMetatile(const void *secondaryTileset, int metatileId)
             if (!sFlat)
                 return 0x204;
         }
+        /* Brennan 2026-11-22 (13:37 list B1): under Rusturf Tunnel's rock mounds (VoxelTree_EmitInstance) its plain
+         * floor (0x202) or rock top (0x211), the drawing's own ground layer. WJPC_FLAT_FLOOR_ROCKS=1: as drawn. */
+        if (secondaryTileset == &gTileset_RusturfTunnel && metatileId >= 0x203 && metatileId <= 0x206
+         && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
+            return metatileId <= 0x204 ? 0x202 : 0x211;
         /* Dewford's crown top over the sand. */
         if (secondaryTileset == &gTileset_Dewford && metatileId == 0x239)
             return 0x124;
@@ -625,6 +632,90 @@ static void EmitGroundCard(VoxelBuilder *builder, int x, int y, int kind, float 
     builder->rounded = false;
 }
 
+/*
+ * Brennan 2026-11-22 13:37 (list B1, Rusturf Tunnel: the floor rocks "still flat 2D ground textures - convert them into
+ * proper 3D rock models"): a rock drawn on the ground stands as a mound of its own drawing (its card in the trees
+ * texture, tools/voxel3ds/add_rock_cards.py; EmitRockMound), as the Rock Smash rocks are mounds of theirs. The ground under it is the cell's plain
+ * ground (VoxelTree_GroundMetatile).
+ */
+static uint8_t sCardAlpha[VOXEL_TREE_TEXTURE_DIM * VOXEL_TREE_TEXTURE_DIM / 8];
+
+static unsigned TreeTexel(unsigned x, unsigned y)
+{
+    unsigned m = (x & 1) | ((y & 1) << 1) | ((x & 2) << 1) | ((y & 2) << 2) | ((x & 4) << 2) | ((y & 4) << 3);
+    return ((y / 8) * (VOXEL_TREE_TEXTURE_DIM / 8) + x / 8) * 64 + m;
+}
+
+void VoxelTree_KeepAlpha(const uint16_t *tiled)
+{
+    for (unsigned y = 0; y < VOXEL_TREE_TEXTURE_DIM; y++)
+        for (unsigned x = 0; x < VOXEL_TREE_TEXTURE_DIM; x++)
+        {
+            unsigned i = y * VOXEL_TREE_TEXTURE_DIM + x;
+            if (tiled[TreeTexel(x, y)] & 1)
+                sCardAlpha[i / 8] |= (uint8_t)(1u << (i % 8));
+            else
+                sCardAlpha[i / 8] &= (uint8_t)~(1u << (i % 8));
+        }
+}
+
+static bool CardPixel(unsigned x, unsigned y)
+{
+    unsigned i = y * VOXEL_TREE_TEXTURE_DIM + x;
+    return (sCardAlpha[i / 8] >> (i % 8)) & 1;
+}
+
+static void EmitRockMound(VoxelBuilder *builder, int x, int y, unsigned tx, unsigned ty)
+{
+    /* a height field over the drawn pixels: each pixel corner as high as it is far inside the rock (0.7 of its
+     * distance to the nearest ground pixel, at most 5 px), every point as far south as it is high - so at 45 degrees
+     * each texel lands where it is drawn, the rock's outline stays on the ground, and neighbouring columns share their
+     * corners (no seams) */
+    const float p = 1.0f / 16.0f;
+    float h[17][17];
+    bool rock[16][16];
+
+    for (int r = 0; r < 16; r++)
+        for (int c = 0; c < 16; c++)
+            rock[r][c] = CardPixel(tx + (unsigned)c, ty + (unsigned)r);
+    for (int j = 0; j <= 16; j++)
+        for (int i = 0; i <= 16; i++)
+        {
+            float best = 99.0f;
+            for (int r = -1; r <= 16; r++)
+                for (int c = -1; c <= 16; c++)
+                {
+                    if (r >= 0 && r < 16 && c >= 0 && c < 16 && rock[r][c])
+                        continue;
+                    float dx = (c + 0.5f) - (float)i, dy = (r + 0.5f) - (float)j, d = sqrtf(dx * dx + dy * dy) - 0.7071f;
+                    if (d < best)
+                        best = d;
+                }
+            best = best < 0.0f ? 0.0f : best * 0.7f;
+            h[j][i] = (best > 5.0f ? 5.0f : best) * p;
+        }
+    for (int r = 0; r < 16; r++)
+        for (int c = 0; c < 16; c++)
+        {
+            if (!rock[r][c])
+                continue;
+            float x0 = (float)x + c * p, x1 = x0 + p, z0 = (float)y + r * p, z1 = z0 + p;
+            float u0 = TEX_U(tx + (unsigned)c + 0.02f), u1 = TEX_U(tx + (unsigned)c + 0.98f);
+            float v0 = TEX_V(ty + (unsigned)r + 0.02f), v1 = TEX_V(ty + (unsigned)r + 0.98f);
+            /* lit by the facing: towards the sun (up and south) brighter */
+            float nz = ((h[r][c] + h[r][c + 1]) - (h[r + 1][c] + h[r + 1][c + 1])) * 0.5f / p;
+            float nx = ((h[r][c] + h[r + 1][c]) - (h[r][c + 1] + h[r + 1][c + 1])) * 0.5f / p;
+            float s = 0.96f - 0.22f * nz + 0.06f * nx;
+            s = s < 0.6f ? 0.6f : s > 1.0f ? 1.0f : s;
+
+            VoxelBuilder_Quad(builder,
+                &(VoxelVertex){x0, h[r][c], z0 + h[r][c], u0, v0, s},
+                &(VoxelVertex){x1, h[r][c + 1], z0 + h[r][c + 1], u1, v0, s},
+                &(VoxelVertex){x1, h[r + 1][c + 1], z1 + h[r + 1][c + 1], u1, v1, s},
+                &(VoxelVertex){x0, h[r + 1][c], z1 + h[r + 1][c], u0, v1, s});
+        }
+}
+
 static bool FlatRelief(const VoxelMapInstance *inst, int x, int y)
 {
     const int16_t *g = VoxelRelief_Cell(inst, x, y);
@@ -694,6 +785,15 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
                 builder->lift = VoxelRelief_CellLift(inst, x, y);
                 builder->shift = VoxelRelief_CellShift(inst, x, y);
                 EmitGroundCard(builder, x, y, CARD_FLOWER_MAUVILLE, 0.80f);
+                builder->lift = 0.0f;
+                builder->shift = 0.0f;
+            }
+            else if (inst->secondaryTileset == &gTileset_RusturfTunnel && metatileId >= 0x203 && metatileId <= 0x206
+                  && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
+            {
+                builder->lift = VoxelRelief_CellLift(inst, x, y);
+                builder->shift = VoxelRelief_CellShift(inst, x, y);
+                EmitRockMound(builder, x, y, 64u + 16u * (unsigned)(metatileId - 0x203), 112u);
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
             }

@@ -2319,6 +2319,7 @@ static bool LoadTrees(void)
     VoxelWorld_SeasonTexels(texels, VOXEL_TREE_TEXTURE_DIM * VOXEL_TREE_TEXTURE_DIM); // DLX-17
     VoxelGrade_Texels(texels, VOXEL_TREE_TEXTURE_DIM * VOXEL_TREE_TEXTURE_DIM);
     sTreeTex = UploadTiled(sTreeTex, texels, VOXEL_TREE_TEXTURE_DIM, VOXEL_TREE_TEXTURE_DIM);
+    VoxelTree_KeepAlpha(texels);
     free(texels);
     return n == VOXEL_TREE_TEXTURE_DIM * VOXEL_TREE_TEXTURE_DIM * sizeof(uint16_t);
 }
