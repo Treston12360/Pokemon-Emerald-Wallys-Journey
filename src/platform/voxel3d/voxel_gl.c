@@ -1857,6 +1857,14 @@ static unsigned sBeltLayers = 1;
 static Atlas *sBeltDrawn[BELT_LAYERS];        // what the uploaded belt was built with
 static uint32_t sBeltDrawnGen[BELT_LAYERS];
 static int sBeltX = 0x7FFFFFFF, sBeltY;
+/* Brennan 2026-11-22 13:42 (stall log: 166-308 ms of "belt" in one frame entering Verdanturf, Littleroot, Oldale,
+ * Petalburg Woods): after a warp (a new map, not a walk across a seam) the whole belt was built in one frame. Now it
+ * is built a few ms a frame (WJPC_BELT_WARP_MS, default 8) while the screen fades in, nearest the player first, and
+ * what is built is shown every third frame. WJPC_BELT_FULL_ON_WARP=1: all in one frame, as before. */
+static unsigned sBeltResetGen, sBeltWarpGen = ~0u;
+static bool sBeltWarpPending, sBeltWarpShown;
+static int sBeltWarpX, sBeltWarpY;
+static double sBeltBudgetOverrideMs;
 // DLX-18: after a crossing the old belt is drawn moved into the new map's coordinates until the new one is
 // ready; sBeltRedo asks for that (all pieces again, a few a frame).
 static int sBeltShiftX, sBeltShiftZ;
@@ -1989,11 +1997,36 @@ static bool BeltBuildStep(const VoxelMapInstance *inst0, Atlas *atlas, int cx, i
 
     if (sBudgetMs < 0.0)
         sBudgetMs = getenv("WJPC_BELT_BUDGET_MS") ? atof(getenv("WJPC_BELT_BUDGET_MS")) : 1.0;
-    deadline = SDL_GetPerformanceCounter() + (Uint64)(sBudgetMs * SDL_GetPerformanceFrequency() / 1000.0);
+    deadline = SDL_GetPerformanceCounter()
+             + (Uint64)((sBeltBudgetOverrideMs > 0.0 ? sBeltBudgetOverrideMs : sBudgetMs) * SDL_GetPerformanceFrequency() / 1000.0);
 
+    // (after a warp: nearest the player first, so the belt shown while it is built is the part in view)
+    static int order[4096][2];
+    int n = 0;
     for (int y0 = cy - BELT_RADIUS; y0 < cy + BELT_RADIUS; y0 += CHUNK)
-        for (int x0 = cx - BELT_RADIUS; x0 < cx + BELT_RADIUS; x0 += CHUNK)
+        for (int x0 = cx - BELT_RADIUS; x0 < cx + BELT_RADIUS && n < 4096; x0 += CHUNK)
         {
+            order[n][0] = x0;
+            order[n][1] = y0;
+            n++;
+        }
+    if (sBeltBudgetOverrideMs > 0.0)
+        for (int i = 1; i < n; i++)
+        {
+            int x = order[i][0], y = order[i][1], j = i;
+            int d = abs(x + CHUNK / 2 - cx) + abs(y + CHUNK / 2 - cy);
+            while (j > 0 && abs(order[j - 1][0] + CHUNK / 2 - cx) + abs(order[j - 1][1] + CHUNK / 2 - cy) > d)
+            {
+                order[j][0] = order[j - 1][0];
+                order[j][1] = order[j - 1][1];
+                j--;
+            }
+            order[j][0] = x;
+            order[j][1] = y;
+        }
+    for (int i = 0; i < n; i++)
+        {
+            int x0 = order[i][0], y0 = order[i][1];
             if (BeltCache_Find(x0, y0) != NULL)
                 continue;
             if (budget == 0)
@@ -3008,6 +3041,7 @@ void Voxel3D_SetGammaLight(bool on)
             InstanceFree(&sInstanceMeshes[i]);
     BeltCache_Flush();
     sBeltX = 0x7FFFFFFF;
+    sBeltResetGen++;
 }
 
 static void BattleZoomBlur(int w, int h);
@@ -4122,6 +4156,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         {
             sCameraValid = false;
             sBeltX = 0x7FFFFFFF;
+            sBeltResetGen++;
+    sBeltResetGen++;
         }
         sLastGroup = group;
         sLastNum = num;
@@ -4144,6 +4180,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
         }
         else
             sBeltX = 0x7FFFFFFF;
+            sBeltResetGen++;
+    sBeltResetGen++;
     }
     sLastDigest = digest;
 
@@ -4490,7 +4528,54 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 sBeltWantY = cy;
                 sBeltRedo = false;
             }
-            if (full)
+            static int sWarpAll = -1;
+            if (sWarpAll < 0)
+                sWarpAll = getenv("WJPC_BELT_FULL_ON_WARP") != NULL;
+            if (full && !sWarpAll)
+            {
+                // New map, new world or new atlas: start again, a few ms a frame; no belt till it is whole
+                if (!sBeltWarpPending || sBeltWarpGen != sBeltResetGen || (sBeltAtlas != NULL && !sBeltWarpShown))
+                {
+                    sBeltRadius = getenv("WJPC_BELT_RADIUS") ? atoi(getenv("WJPC_BELT_RADIUS"))
+                                : (inst0->layoutId == 302 || inst0->layoutId == 303) ? 64 : 40;
+                    BeltCache_Flush();
+                    for (unsigned l = 0; l < BELT_LAYERS; l++)
+                        sBeltDrawn[l] = NULL;
+                    sBeltAtlas = NULL;
+                    sBeltWarpShown = false;
+                    sBeltWarpPending = true;
+                    sBeltWarpGen = sBeltResetGen;
+                    sBeltWarpX = cx;
+                    sBeltWarpY = cy;
+                }
+                {
+                    static double sWarpMs = -1.0;
+                    if (sWarpMs < 0.0)
+                        sWarpMs = getenv("WJPC_BELT_WARP_MS") ? atof(getenv("WJPC_BELT_WARP_MS")) : 8.0;
+                    sBeltBudgetOverrideMs = sWarpMs;
+                }
+                static unsigned sWarpFrames;
+                bool ready = (++sWarpFrames % 3) != 0 && BeltBuildStep(inst0, atlas0, sBeltWarpX, sBeltWarpY, 1 << 20);
+                sBeltBudgetOverrideMs = 0.0;
+                if (!ready && sWarpFrames % 3 == 0)
+                {
+                    // every third frame, what is built so far is shown (nearest first): no sky round the map
+                    BeltAssemble(atlas0, sBeltWarpX, sBeltWarpY);
+                    sBeltShiftX = sBeltShiftZ = 0;
+                    sBeltWarpShown = true;
+                }
+                if (ready)
+                {
+                    BeltAssemble(atlas0, sBeltWarpX, sBeltWarpY);
+                    sBeltX = sBeltWarpX;
+                    sBeltY = sBeltWarpY;
+                    sBeltShiftX = sBeltShiftZ = 0;
+                    sBeltRedo = false;
+                    sBeltWantX = 0x7FFFFFFF;
+                    sBeltWarpPending = false;
+                }
+            }
+            else if (full)
             {
                 // New map, new world or new atlas: start again and build it all now (as before).
                 sBeltRadius = getenv("WJPC_BELT_RADIUS") ? atoi(getenv("WJPC_BELT_RADIUS"))
