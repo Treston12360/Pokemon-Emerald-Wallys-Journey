@@ -16,6 +16,7 @@
 #include "global.h"
 #include "fieldmap.h"
 #include "palette.h"
+#include "wally_journey.h"
 #include "voxel_world.h"
 #include "voxel_atlas.h"
 #include "voxel_mesh_builder.h"
@@ -1048,6 +1049,53 @@ static uint16_t *sPageScratch;
 static size_t sPageScratchSize;
 
 static GLuint LoadBuildingPage(int page, bool reload);
+/*
+ * Brennan 2026-11-22 13:37 (B6) and 13:38 (C2): in winter "keep the front walls, doors, and windows 100% their
+ * original non-winter colors across all seasons. Only the tops/roofs of houses should have white snow on them" (Mr.
+ * Briney's cottage and the Cycling Road gatehouse were washed white - the snow-cover season turns light earth tones
+ * white, as 2D does to the tile sets' palettes; Petalburg's red roofs had no snow). A building page is uploaded three
+ * ways: as drawn (no season: the walls), seasoned (the ground pieces at a model's foot, as the ground round them),
+ * and seasoned with snow laid over in winter (the roofs and tops). A model's faces are split by their facing: upright
+ * ones (walls, doors, windows) and the rest (roofs, tops; ground pieces lying on the ground keep the seasoned page).
+ * WJPC_WINTER_WALLS_OLD=1: one seasoned page for all, as before; WJPC_ROOF_SNOW=x: how white the snow (0..1).
+ */
+enum { FACE_TOP, FACE_WALL, FACE_GROUND, FACE_KINDS };
+static GLuint sPageTexRaw[1024], sPageTexRoof[1024];
+static bool WinterWallsOld(void)
+{
+    static int sOld = -1;
+    if (sOld < 0)
+        sOld = getenv("WJPC_WINTER_WALLS_OLD") != NULL;
+    return sOld;
+}
+static int FaceKind(const VoxelVertex *t)
+{
+    float ax = t[1].x - t[0].x, ay = t[1].y - t[0].y, az = t[1].z - t[0].z;
+    float bx = t[2].x - t[0].x, by = t[2].y - t[0].y, bz = t[2].z - t[0].z;
+    float nx = ay * bz - az * by, ny = az * bx - ax * bz, nz = ax * by - ay * bx;
+    float len = sqrtf(nx * nx + ny * ny + nz * nz);
+    if (len < 1e-9f)
+        return FACE_TOP;
+    if (fabsf(ny) / len < 0.35f)
+        return FACE_WALL;
+    if (t[0].y < 0.13f && t[1].y < 0.13f && t[2].y < 0.13f)
+        return FACE_GROUND;
+    return FACE_TOP;
+}
+/* the triangles of v (count) of one kind into out (the caller's room for count): their number */
+static unsigned FacesOfKind(const VoxelVertex *v, unsigned count, int kind, VoxelVertex *out)
+{
+    unsigned n = 0;
+    for (unsigned t = 0; t + 2 < count; t += 3)
+        if (FaceKind(&v[t]) == kind)
+        {
+            out[n++] = v[t];
+            out[n++] = v[t + 1];
+            out[n++] = v[t + 2];
+        }
+    return n;
+}
+
 
 /* POL-26b: a page's window mask (w x h bytes, tiled like the page), as a one-channel texture; 0 = none. */
 static GLuint sGlowTex[MAX_PAGES];
@@ -1136,6 +1184,37 @@ static GLuint LoadBuildingPage(int page, bool reload)
     if (sPageTex[page] == 0)
         gVoxel3DPages++; // (stall log)
     sPageTex[page] = UploadTiled(sPageTex[page], sPageScratch, w, th);
+    if (!WinterWallsOld())
+    {
+        /* the roofs' page: the seasoned one with snow over it in winter (B6) */
+        uint32_t key = WallyJourney_FoliageKey();
+        static float sSnow = -1.0f;
+        if (sSnow < 0.0f)
+            sSnow = getenv("WJPC_ROOF_SNOW") ? (float)atof(getenv("WJPC_ROOF_SNOW")) : 0.6f;
+        if (((key >> 4) & 0xF) == WALLY_SEASON_WINTER && sSnow > 0.0f)
+            for (size_t i = 0; i < (size_t)w * th; i++)
+            {
+                uint16_t t = sPageScratch[i];
+                if (!(t & 1))
+                    continue;
+                float r = (float)((t >> 11) & 31), g = (float)((t >> 6) & 31), b = (float)((t >> 1) & 31);
+                float y = 0.3f * r + 0.59f * g + 0.11f * b;
+                /* towards a cool white, keeping a little of the drawing's light and dark (its tiles' lines) */
+                float sr = 26.0f + (y - 16.0f) * 0.3f, sg = 28.0f + (y - 16.0f) * 0.3f, sb = 31.0f + (y - 16.0f) * 0.2f;
+                r += (sr - r) * sSnow, g += (sg - g) * sSnow, b += (sb - b) * sSnow;
+                unsigned R = (unsigned)fmaxf(0.0f, fminf(31.0f, r + 0.5f)), G = (unsigned)fmaxf(0.0f, fminf(31.0f, g + 0.5f));
+                unsigned B = (unsigned)fmaxf(0.0f, fminf(31.0f, b + 0.5f));
+                sPageScratch[i] = (uint16_t)(R << 11 | G << 6 | B << 1 | 1u);
+            }
+        sPageTexRoof[page] = UploadTiled(sPageTexRoof[page], sPageScratch, w, th);
+        /* the walls' page: as drawn, no season */
+        memset(sPageScratch, 0, (size_t)w * th * sizeof(uint16_t));
+        if (VoxelBuildings_ReadPage((unsigned)page, 0, w * h, sPageScratch))
+        {
+            VoxelGrade_Texels(sPageScratch, (unsigned)(w * h));
+            sPageTexRaw[page] = UploadTiled(sPageTexRaw[page], sPageScratch, w, th);
+        }
+    }
     return sPageTex[page];
 }
 
@@ -1144,11 +1223,21 @@ typedef struct
     unsigned pageModel;
     bool lit, used;
     Mesh mesh;
+    Mesh kind[FACE_KINDS]; /* (B6: its faces by facing; mesh holds them all, for WJPC_WINTER_WALLS_OLD) */
 } StaticMesh;
 
 #define MAX_STATICS 1024
 static StaticMesh sStatics[MAX_STATICS];
 
+static const Mesh *StaticModel(unsigned pageModel, bool lit);
+static const StaticMesh *StaticModelParts(unsigned pageModel, bool lit)
+{
+    const Mesh *m = StaticModel(pageModel, lit);
+    for (int i = 0; m != NULL && i < MAX_STATICS; i++)
+        if (&sStatics[i].mesh == m)
+            return &sStatics[i];
+    return NULL;
+}
 static const Mesh *StaticModel(unsigned pageModel, bool lit)
 {
     for (int i = 0; i < MAX_STATICS; i++)
@@ -1180,6 +1269,13 @@ static const Mesh *StaticModel(unsigned pageModel, bool lit)
             sStatics[i].pageModel = pageModel;
             sStatics[i].lit = lit;
             MeshSetQuantised(&sStatics[i].mesh, t, count, GL_STATIC_DRAW);
+            {
+                VoxelVertex *k = malloc((size_t)count * sizeof(VoxelVertex));
+                if (k != NULL)
+                    for (int kind = 0; kind < FACE_KINDS; kind++)
+                        MeshSetQuantised(&sStatics[i].kind[kind], k, FacesOfKind(t, count, kind, k), GL_STATIC_DRAW);
+                free(k);
+            }
             free(t);
             return &sStatics[i].mesh;
         }
@@ -1205,6 +1301,7 @@ typedef struct
     uint32_t atlasGen;        // the atlas build it was laid on
     Mesh terrain[VOXEL_ATLAS_PAGES];
     Mesh trees, buildings;
+    Mesh buildingKind[FACE_KINDS]; /* (B6) */
     int buildingPage;
     VoxelStaticDraw statics[MAX_INST_STATICS];
     unsigned staticCount;
@@ -1223,6 +1320,8 @@ static void InstanceFree(InstanceMesh *m)
         MeshFree(&m->terrain[p]);
     MeshFree(&m->trees);
     MeshFree(&m->buildings);
+    for (int kind = 0; kind < FACE_KINDS; kind++)
+        MeshFree(&m->buildingKind[kind]);
     m->used = false;
 }
 
@@ -1806,6 +1905,12 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
     CullBox(inst, pb->v[2], pb->n[2]);
     MeshSet(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
     MeshSet(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
+    {
+        VoxelVertex *k = pb->n[2] ? malloc((size_t)pb->n[2] * sizeof(VoxelVertex)) : NULL;
+        for (int kind = 0; kind < FACE_KINDS; kind++)
+            MeshSet(&m->buildingKind[kind], k, k != NULL ? FacesOfKind(pb->v[2], pb->n[2], kind, k) : 0, GL_STATIC_DRAW);
+        free(k);
+    }
     if (getenv("WJPC_DUMP_TERRAIN") && inst->mapGroup == atoi(getenv("WJPC_DUMP_TERRAIN")) / 100
      && inst->mapNum == atoi(getenv("WJPC_DUMP_TERRAIN")) % 100)
     {
@@ -3904,13 +4009,29 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
                 wj_glActiveTexture(GL_TEXTURE0);
                 wj_glUniform1f(sUniGlowStrength, 1.0f);
             }
-            MeshDraw(&m->buildings, page, (float)m->originX, 0, (float)m->originY);
+            GLuint kindTex[FACE_KINDS] = { page, page, page };
+            bool split = !WinterWallsOld() && sPageTexRaw[m->buildingPage] != 0 && sPageTexRoof[m->buildingPage] != 0;
+            if (split)
+            {
+                kindTex[FACE_TOP] = sPageTexRoof[m->buildingPage];
+                kindTex[FACE_WALL] = sPageTexRaw[m->buildingPage];
+            }
+            if (split)
+                for (int kind = 0; kind < FACE_KINDS; kind++)
+                    MeshDraw(&m->buildingKind[kind], kindTex[kind], (float)m->originX, 0, (float)m->originY);
+            else
+                MeshDraw(&m->buildings, page, (float)m->originX, 0, (float)m->originY);
             for (unsigned s = 0; s < m->staticCount; s++)
             {
                 const VoxelStaticDraw *d = &m->statics[s];
-                const Mesh *mesh = StaticModel(d->pageModel, d->lit);
-                if (mesh != NULL)
-                    MeshDraw(mesh, page, d->x + (float)m->originX, d->y, d->z + (float)m->originY);
+                const StaticMesh *sm = StaticModelParts(d->pageModel, d->lit);
+                if (sm == NULL)
+                    continue;
+                if (split)
+                    for (int kind = 0; kind < FACE_KINDS; kind++)
+                        MeshDraw(&sm->kind[kind], kindTex[kind], d->x + (float)m->originX, d->y, d->z + (float)m->originY);
+                else
+                    MeshDraw(&sm->mesh, page, d->x + (float)m->originX, d->y, d->z + (float)m->originY);
             }
             if (glow != 0)
                 wj_glUniform1f(sUniGlowStrength, 0.0f);
