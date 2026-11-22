@@ -839,3 +839,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - B5 Oldale: black ground-seam lines between Mart, house and sign, still and moving.
   - B6 Winter: house front walls, doors, windows keep their own colours in every season; only roofs snowy (Route 104 Briney's cottage, Petalburg's houses; all buildings).
   - B7 Route 104 west: remove the floating cliff and trees over the water at the west edge - open sea (as Routes 110/117); sea rocks: spikes / dark slivers off their north sides.
+- **Brennan 2026-11-22 13:38** (second list, pictures and his words in `docs/polish_reports/brennan_2026-11-22_1338/`):
+  - C1 Route 103: thin black/dirt seam line on the ground south of the north cliff/trees.
+  - C2 Cycling Road gatehouse (Route 110 / Slateport side): whole building washed white in winter - walls keep their colours, snow on the roof only (same rule as B6, for gatehouses and special buildings).
+  - C3 Dewford north-east: a diagonal wedge of forest and shore in the sea - remove, open sea.
+  - C4 Rustboro east woods: sky hole between the big trees - seal.
+  - C5 Pretty Petal flower shop: three wooden stools and the tall back-wall potted plant flat - 3D stools, 3D plant matching the others.
+  - C6 Shiny Toxtricity: Low Key form (Modest) shows the Amped shiny sprite - each form its own shiny sprite. (Not a 3D job: sprite data; check form tables before touching.)
+  - C7 Route 113 / Fallarbor: background canopy flat 2D tree tops with grid lines - 3D trees; Route 113 north-west: vertical sky gap and cliff cut beside the tree row; bare raised dirt plateau north of Fallarbor - "populate/blend it naturally" (design question); the four rocks left of the Contest Hall flat - 3D rocks.
+  - C8 Route 114 west third: flat 2D trees, river water at different heights with white/sky gaps, jagged cliff - water one height, 3D trees, terrain like the east side.
+  - C9 Meteor Falls: spiked/jagged ledges, broken corners and void holes (incl. under the bridge's right side), two thin upright wall panels above the bottom-left stairs, floor rocks and craters flat - 3D rocks and craters.
