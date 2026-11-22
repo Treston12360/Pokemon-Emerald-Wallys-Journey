@@ -2831,7 +2831,26 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                     art = (int)(VOXEL_CUT_FIRST + (unsigned)cut);
                 else
                     cut = -1;
-                if (cut >= 0)
+                /* Brennan 2026-11-21 23:06 (Route 117's rock mound under the north-west woods: "it should just be
+                 * trees no green tiles"): a cut slope (a drawing with clear pixels) on the map's north row with a wood
+                 * of the belt beyond it is drawn whole in the map's rock face. Its tile is the rock with the wood's crowns
+                 * painted over it (Mauville's 0x235/0x237): laid on the slope, and flat at its foot with the ground
+                 * under its clear pixels (EmitCutGround and the run-on), the crowns were green wedges at the mound's
+                 * back corners. The wood's 3D trees are the crowns. WJPC_EDGE_SLOPE_OWN_ART=1: as before. */
+                int edgeRock = -1;
+                if (art >= (int)VOXEL_CUT_FIRST && y == inst->originY && VoxelRelief_IsSlope(relief)
+                 && getenv("WJPC_EDGE_SLOPE_OWN_ART") == NULL
+                 && VoxelWorld_GetInstanceAt(x, y - 1) == NULL && BorderAt(x, y - 1) && BeltIsTree(x, y - 1))
+                {
+                    int face = VoxelRelief_FaceTile(inst);
+                    float fu0, fv0, fu1, fv1;
+
+                    if (face >= 0 && MetatileUV(builder, face, &fu0, &fv0, &fu1, &fv1))
+                        edgeRock = face;
+                }
+                if (getenv("WJPC_EDGE_DUMP") != NULL && y == inst->originY && VoxelRelief_IsSlope(relief))
+                    fprintf(stderr, "EDGESLOPE %d %d art %d cut %d rock %d\n", x, y, art, cut, edgeRock);
+                if (cut >= 0 && edgeRock < 0)
                 {
                     builder->lift = foot;
                     builder->shift = foot;
@@ -2931,6 +2950,18 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                         builder->shift = 0.0f;
                     }
                     art = canopy;
+                }
+                /* Brennan 2026-11-21 23:06 (Route 117's rock mound under the north-west woods: "it should just be
+                 * trees no green tiles"): a slope on the map's north row with a wood of the belt beyond it is drawn
+                 * in the map's rock face - its tile (and its cut variant: the tile with its clear pixels cut out) is
+                 * the rock with the wood's crowns painted over it (Mauville's 0x235/0x237), and laid on the slope the crowns were green wedges at the mound's back corners. The
+                 * wood's 3D trees are the crowns. WJPC_EDGE_SLOPE_OWN_ART=1: its own drawing, as before. */
+                if (edgeRock >= 0)
+                {
+                    /* (whole: the cut's clear pixels were the crowns, the ground showed through them) */
+                    art = edgeRock;
+                    cut = -1;
+                    cutRows = NULL;
                 }
                 EmitRelief(builder, x, y, relief, VoxelRelief_Depth(inst, x, y),
                            sign ? y + 1 : y, art, cut >= 0, (int)lroundf(foot * 16.0f), cutRows);
@@ -4646,6 +4677,65 @@ static bool FieldCornerWood(int vx, int vy)
 
 /* (Brennan 2026-11-20 20:15, belt stalls: BeltField walks every placed map for a point, and the belt asks it for the
  * same points many times - kept per point until the maps change, VoxelWorld_CellGen) */
+/* a lattice point on map m's border (world, whole cells): its height and its way south, as BeltFieldUncached reads
+ * them (the higher of the two cells meeting there) */
+static bool EdgePointHeight(const VoxelMapInstance *m, int px, int py, float *h, float *s)
+{
+    int cx = px - (px >= m->originX + m->width ? 1 : 0), cy = py - (py >= m->originY + m->height ? 1 : 0);
+    int gi = px - cx == 0 ? 0 : VOXEL_RELIEF_SIDE - 1, gj = py - cy == 0 ? 0 : VOXEL_RELIEF_SIDE - 1;
+    const int16_t *g = VoxelRelief_Cell(m, cx, cy), *dg = VoxelRelief_Depth(m, cx, cy);
+    float e;
+
+    if (cx < m->originX || cy < m->originY || cx >= m->originX + m->width || cy >= m->originY + m->height)
+        return false;
+    e = VoxelRelief_Base(m) + (g != NULL ? g[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
+    if (gi == 0 && cx > m->originX)
+    {
+        const int16_t *g2 = VoxelRelief_Cell(m, cx - 1, cy);
+        float e2 = VoxelRelief_Base(m) + (g2 != NULL ? g2[gj * VOXEL_RELIEF_SIDE + VOXEL_RELIEF_SIDE - 1] / 16.0f : 0.0f);
+        e = e2 > e ? e2 : e;
+    }
+    if (gj == 0 && cy > m->originY)
+    {
+        const int16_t *g2 = VoxelRelief_Cell(m, cx, cy - 1);
+        float e2 = VoxelRelief_Base(m) + (g2 != NULL ? g2[(VOXEL_RELIEF_SIDE - 1) * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
+        e = e2 > e ? e2 : e;
+    }
+    *h = e;
+    *s = VoxelRelief_Base(m) + (dg != NULL ? dg[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f
+                               : g != NULL ? g[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
+    return true;
+}
+
+enum { BELT_WOOD_EDGE_SPAN = 3 };
+/* TRUE when the four cells round a grid point are all woods of the belt (no map, no water, no open field) */
+static bool FieldPointDeepWood(int vx, int vy)
+{
+    for (int k = 0; k < 4; ++k)
+    {
+        int cx = vx - 1 + (k & 1), cy = vy - 1 + (k >> 1);
+        if (VoxelWorld_GetInstanceAt(cx, cy) != NULL || !BorderAt(cx, cy) || !BeltIsTree(cx, cy))
+            return false;
+    }
+    return true;
+}
+
+/* TRUE for a grid point on a map's edge whose cells off the map are all woods of the belt (two of them at least) */
+static bool FieldPointEdgeWood(int vx, int vy)
+{
+    int woods = 0;
+    for (int k = 0; k < 4; ++k)
+    {
+        int cx = vx - 1 + (k & 1), cy = vy - 1 + (k >> 1);
+        if (VoxelWorld_GetInstanceAt(cx, cy) != NULL)
+            continue;
+        if (!BorderAt(cx, cy) || !BeltIsTree(cx, cy))
+            return false;
+        ++woods;
+    }
+    return woods >= 2;
+}
+
 static void BeltFieldUncached(int vx, int vy, float *height, float *south);
 static void BeltField(int vx, int vy, float *height, float *south)
 {
@@ -4731,6 +4821,40 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
         }
         sd = VoxelRelief_Base(m) + (dg != NULL ? dg[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f
                                     : g != NULL ? g[gj * VOXEL_RELIEF_SIDE + gi] / 16.0f : 0.0f);
+        /* Brennan 2026-11-21 23:06 (Route 117's north-west woods, behind the small rock mound at the map's north
+         * edge: "it should just be trees no green tiles on the tops of the tree"): the field took the edge's height
+         * straight across, so the mound's profile (1, 2, 2, 1 over four cells) ran north under the whole wood as a
+         * ridge, its steps' grass showing between the crowns. Under a deep wood (the four cells round the point all
+         * woods of the belt; on the edge itself, its cells off the map all woods) the field takes the LOWEST edge point within BELT_WOOD_EDGE_SPAN cells along that edge
+         * (and its way south): a bump narrower than that ends at the map, a wider rise still carries on.
+         * WJPC_WOOD_FIELD_EDGE_OLD=1: as before. */
+        if (getenv("WJPC_WOOD_FIELD_EDGE_OLD") == NULL
+         && (d >= 1.0f ? FieldPointDeepWood(vx, vy) : FieldPointEdgeWood(vx, vy)))
+        {
+            bool alongX = qy == (float)oy || qy == (float)(oy + m->height);
+            float keepE = e, keepS = sd;
+
+            for (int k = -BELT_WOOD_EDGE_SPAN; k <= BELT_WOOD_EDGE_SPAN; ++k)
+            {
+                int px = alongX ? (int)qx + k : (int)qx, py = alongX ? (int)qy : (int)qy + k;
+                float pe, ps;
+
+                if (k == 0 || px < ox || px > ox + m->width || py < oy || py > oy + m->height)
+                    continue;
+                if (EdgePointHeight(m, px, py, &pe, &ps) && pe < e)
+                {
+                    e = pe;
+                    sd = ps;
+                }
+            }
+            /* (on the edge itself only a bump of a whole level or more: there the map's rock face closes the step
+             * down to the wood - EdgeOverBelt; a gentler rise stays met point by point) */
+            if (d < 1.0f && keepE - e < 1.0f)
+            {
+                e = keepE;
+                sd = keepS;
+            }
+        }
         /* POL-46 (Brennan 2026-11-18, Lavaridge's north-east: "Option 2 (One cliff + ledges)"): no point climbs
          * faster than a level every BELT_FIELD_RATE cells from ANY map's edge - from the low town the ledges stay
          * two squares deep; where a high edge (Route 112's) stands over that, its edge's own cliff (EdgeOverBelt,
@@ -5076,6 +5200,41 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     /* (a wood's cell: the field under its trees, in its grass - BeltTreeGround) */
     if (getenv("WJPC_FIELD_NONE") != NULL || !MetatileUV(b, top, &tu0, &tv0, &tu1, &tv1))
         return;
+    /* Brennan 2026-11-21 23:06 (21q, Route 117's north-east corner: the small flat patch of rock at the foot of the
+     * terraces, "Make it grass"): a ledge of the field lying flat and flush with the ground of a map beside it (the
+     * field there at the map's edge height, no step) is that ground going on - it takes the map edge cell's drawing
+     * (grass there), not the ring's rock. Not when that edge is trees or water. WJPC_FIELD_FLUSH_ROCK=1: as before. */
+    if (!BeltIsTree(x, y) && getenv("WJPC_FIELD_FLUSH_ROCK") == NULL)
+    {
+        static const int kSide[4][2] = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+        float h0, h1, h2, h3, s0;
+
+        BeltField(x, y, &h0, &s0);
+        BeltField(x + 1, y, &h1, &s0);
+        BeltField(x, y + 1, &h2, &s0);
+        BeltField(x + 1, y + 1, &h3, &s0);
+        if (fabsf(h0 - h1) < 0.01f && fabsf(h0 - h2) < 0.01f && fabsf(h0 - h3) < 0.01f)
+            for (int d = 0; d < 4; ++d)
+            {
+                int nx = x + kSide[d][0], ny = y + kSide[d][1], mt;
+                const VoxelMapInstance *m = VoxelWorld_GetInstanceAt(nx, ny);
+                float u0, v0, u1, v1;
+
+                if (m == NULL || m->indoor || VoxelTree_PartAt(nx, ny) >= 0
+                 || VoxelMesh_Classify(nx, ny) == VOXEL_SHAPE_WATER
+                 || fabsf(VoxelRelief_LiftAt((float)nx + 0.5f, (float)ny + 0.5f) - h0) > 0.05f)
+                    continue;
+                mt = VoxelWorld_GetMetatileId(nx, ny);
+                if (mt >= 0 && MetatileUV(b, mt, &u0, &v0, &u1, &v1))
+                {
+                    if (getenv("WJPC_FIELD_DUMP") != NULL)
+                        fprintf(stderr, "FIELDFLUSH %d %d %03x -> %03x (map cell %d,%d)\n", x, y, top, mt, nx, ny);
+                    top = mt;
+                    tu0 = u0, tv0 = v0, tu1 = u1, tv1 = v1;
+                    break;
+                }
+            }
+    }
     wall = (face >= 0 && MetatileUV(b, face, &wu0, &wv0, &wu1, &wv1))
         || MetatileUV(b, BeltMetatileFor(x, y, y), &wu0, &wv0, &wu1, &wv1);
     for (int k = 0; k < 4; ++k)
@@ -5116,8 +5275,8 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
             }
         }
         if (sDump)
-            fprintf(stderr, "FIELD %d %d  %.2f/%.2f %.2f/%.2f %.2f/%.2f %.2f/%.2f  ring=%p\n", x, y, c[0].h, c[0].s,
-                    c[1].h, c[1].s, c[2].h, c[2].s, c[3].h, c[3].s, (const void *)ring);
+            fprintf(stderr, "FIELD %d %d  %.2f/%.2f %.2f/%.2f %.2f/%.2f %.2f/%.2f  ring=%p top %03x\n", x, y, c[0].h, c[0].s,
+                    c[1].h, c[1].s, c[2].h, c[2].s, c[3].h, c[3].s, (const void *)ring, top);
     }
     /* world heights and ways south, as they are */
     b->base = 0.0f;
