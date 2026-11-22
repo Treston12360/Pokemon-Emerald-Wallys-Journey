@@ -849,3 +849,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - C7 Route 113 / Fallarbor: background canopy flat 2D tree tops with grid lines - 3D trees; Route 113 north-west: vertical sky gap and cliff cut beside the tree row; bare raised dirt plateau north of Fallarbor - "populate/blend it naturally" (design question); the four rocks left of the Contest Hall flat - 3D rocks.
   - C8 Route 114 west third: flat 2D trees, river water at different heights with white/sky gaps, jagged cliff - water one height, 3D trees, terrain like the east side.
   - C9 Meteor Falls: spiked/jagged ledges, broken corners and void holes (incl. under the bridge's right side), two thin upright wall panels above the bottom-left stairs, floor rocks and craters flat - 3D rocks and craters.
+- **Brennan 2026-11-22 13:39** (north Route 119, picture `docs/polish_reports/brennan_2026-11-22_1339/image1.png`):
+  - D1 Weather Institute: its east (right) side wall is see-through, with a black seam line on the ground beside it - make it solid.
+  - D2 the row of trees on the brown cliff terrace south of Fortree flickers when moving (same as B4's Route 119 trees) - keep them solid.
+- **Brennan 2026-11-22 13:42** (stall log, 52 minutes, `docs/polish_reports/brennan_2026-11-22_1342/WallysJourney_stalls.txt`; its build line says Nov 21 18:05 = 21n, older than 22a - no belt work since, so the stalls stand): smooth (180-240 fps) but 8 stalls of 180-325 ms, every one the belt inside "3D update" on the main thread: Verdanturf (0:14) x4, Littleroot (0:9) 308 ms, Oldale (0:10) x2, Petalburg Woods (24:11).
+  - E1 build the belt off the main thread / time-sliced, so 3D update stays under 2-4 ms on entering those maps.
+  - E2 meshes and pages grow over a session (14 -> 32 meshes, 39 pages): evict far unused maps so a long session keeps a constant cache.
