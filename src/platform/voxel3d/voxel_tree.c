@@ -952,6 +952,46 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 /* (POL-24/43: always the cell's own map's now, as voxel_mesh_builder.c's drawn belt) */
                 if (VoxelRelief_Belt(current) == 0 || getenv("WJPC_BELT_DRAWN_GLOBAL") == NULL)
                     builder->base = VoxelRelief_Base(VoxelWorld_BeltRing(x, y));
+                /* Brennan 2026-11-22 17:01 (Verdanturf's west woods on 22b's one floor: "half-buried tree tops poking
+                 * out of that open grass patch ... Fill that entire red-box area with full-height 3D trees"): a tree
+                 * stood at its own cell's level, the floor (voxel_mesh_builder.c) through the mean of the trees round
+                 * each corner - where the wood climbs, trees sank into it. A tree now stands on the floor under it: the
+                 * mean of the floor's corners over its cells. WJPC_BELT_TREE_OWN_LEVEL=1: as before. */
+                {
+                    static int sOwn = -1;
+                    if (sOwn < 0)
+                        sOwn = getenv("WJPC_BELT_TREE_OWN_LEVEL") != NULL || getenv("WJPC_WOOD_BLOCKS") != NULL;
+                    const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y);
+                    if (!sOwn && !ledge && ring != NULL && VoxelRelief_Belt(ring) == 0)
+                    {
+                        int span = (part >= 0 && part <= 3) ? 2 : 1;
+                        float sum = 0.0f, ssum = 0.0f;
+                        int n = 0;
+                        for (int vy = oy; vy <= oy + span; vy++)
+                            for (int vx = ox; vx <= ox + span; vx++)
+                                for (int q = 0; q < 4; q++)
+                                {
+                                    int cx = vx - 1 + (q & 1), cy = vy - 1 + (q >> 1);
+                                    const VoxelMapInstance *ca;
+                                    float e, es;
+                                    if (VoxelWorld_GetInstanceAt(cx, cy) != NULL)
+                                        continue;
+                                    ca = VoxelWorld_BorderArtMap(cx, cy);
+                                    if (ca == NULL || !VoxelWorld_UsesTreeSprites(ca)
+                                     || VoxelTree_Part(ca->secondaryTileset, VoxelWorld_BorderMetatile(cx, cy)) < 0
+                                     || !VoxelMesh_BorderLevel(cx, cy, &e, &es))
+                                        continue;
+                                    sum += VoxelRelief_Base(VoxelWorld_BeltRing(cx, cy)) - builder->base + e;
+                                    ssum += es;
+                                    n++;
+                                }
+                        if (n > 0)
+                        {
+                            builder->lift = sum / (float)n;
+                            builder->shift = ssum / (float)n;
+                        }
+                    }
+                }
                 {
                     static int sLevel = -1;
                     if (sLevel < 0)
