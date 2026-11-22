@@ -210,4 +210,6 @@ bool VoxelMesh_BeltCell(int x, int y, int *metatile, int *height16); /* POL-30 t
  * at the base, as it was. */
 void VoxelMesh_SetBorderFollowsEdge(bool on);
 
+int VoxelMesh_CableArtPlain(int metatile); /* the cable car: the plain rock under its drawn line (Lavaridge set) */
+
 #endif

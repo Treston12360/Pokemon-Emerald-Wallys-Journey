@@ -15,6 +15,7 @@
 #include "3ds_video.h"
 #include "voxel_atlas.h"
 #include "voxel_building.h"
+#include "voxel_mesh_builder.h"
 #include "voxel_grade.h"
 #include "voxel_relief.h"
 
@@ -89,6 +90,9 @@ static const uint16_t sSolidColors[VOXEL_SOLID_COUNT] = {
     [VOXEL_SOLID_GREY]      = RGB2(14, 14, 15), /* set stand    */
     [VOXEL_SOLID_BLACK]     = RGB2(8, 8, 9),    /* set body     */
     [VOXEL_SOLID_SHEET]     = RGB2(26, 24, 22), /* bedding      */
+    [VOXEL_SOLID_PYLON]     = RGB2(14, 23, 29), /* cable car pylon: the drawing's 73BDEE */
+    [VOXEL_SOLID_PYLON_DARK] = RGB2(8, 9, 13),  /* its outline 414A6A */
+    [VOXEL_SOLID_CABLE]     = RGB2(10, 10, 12), /* the cable: dark grey */
 };
 
 static void FillSolidSlots(uint16_t *dest)
@@ -171,8 +175,14 @@ static void InitMorton(void)
 }
 
 /* The metatile's entry table, or NULL if this id has no composable data. */
+extern const struct Tileset gTileset_Lavaridge;
 static const uint16_t *MetatileEntries(const struct AtlasSource *src, unsigned m)
 {
+    /* the cable car's drawn line and posts: the plain rock (VoxelMesh_CableArtPlain - the 3D pylons and cable stand
+     * there instead) */
+    if (m >= src->splitMetatiles && src->secondaryMetatiles != NULL
+     && src->secondaryMetatiles == Voxel_ResolveMetatiles(&gTileset_Lavaridge))
+        m = (unsigned)VoxelMesh_CableArtPlain((int)m);
     if (m < src->splitMetatiles)
     {
         if (src->primaryMetatiles == NULL || m >= src->primaryCount)

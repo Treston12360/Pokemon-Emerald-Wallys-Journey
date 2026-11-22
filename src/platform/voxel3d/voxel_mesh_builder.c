@@ -249,6 +249,7 @@ bool VoxelMesh_MetatileUV(VoxelBuilder *builder, int metatileId,
     return MetatileUV(builder, metatileId, u0, v0, u1, v1);
 }
 
+int VoxelMesh_CableArtSwap(const VoxelMapInstance *inst, int metatile);
 bool VoxelMesh_TileUV(VoxelBuilder *builder, int x, int y,
                    float *u0, float *v0, float *u1, float *v1)
 {
@@ -284,6 +285,13 @@ bool VoxelMesh_TileUV(VoxelBuilder *builder, int x, int y,
             sNoSwap = getenv("WJPC_NO_ART_SWAP") != NULL;
         if (!sNoSwap && VoxelMesh_RailWaterArt(inst, x, y))
             metatile = VoxelMesh_RailFloorArt(inst);   /* the river / grass under the 3D rails (EmitRailCell) */
+        /* the plain rock under the cable car's drawn line and posts (the 3D ones, EmitCableCell) - if the atlas has it */
+        {
+            int plain = VoxelMesh_CableArtSwap(inst, metatile);
+            if (plain != metatile && builder->atlas->slotOf[plain] != 0 && builder->atlas->slotOf[plain] != VOXEL_SLOT_PENDING
+             && builder->atlas->slotOf[plain] != VOXEL_SLOT_ABSENT)
+                metatile = plain;
+        }
         for (unsigned i = 0; inst != NULL && !sNoSwap && i < sizeof(kArtSwap) / sizeof(kArtSwap[0]); ++i)
             if (inst->layoutId == kArtSwap[i].layout && x - inst->originX == kArtSwap[i].x
              && y - inst->originY == kArtSwap[i].y)
@@ -2717,11 +2725,218 @@ static void EmitRailCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
 #undef RV
 }
 
+
+/*
+ * The cable car in 3D (Brennan 2026-11-21 17:25, image 5: "Both the cable car tower/pylon and the diagonal cable line
+ * running up Mt. Chimney are still flat 2D ... rebuild them as proper 3D models"; his choices, 2026-11-22: pylons "Match
+ * the 2D T posts", cable "Slight sag", no cabin). The 3DS reference has none (its VOXEL_STATUS: "the cable car's cables
+ * are flat"). The line and posts are drawn on Route 112's and Mt. Chimney's rock (Lavaridge 0x250-0x265): in 3D those
+ * cells are their plain rock (CableArtSwap, each drawing's exact match without the line), and the pylons stand as T
+ * posts where the posts' feet are drawn - their height the drawing's (crossbar to foot: 2.28 tiles, 36.5 px), their
+ * light blue and slate the drawing's - with the cable strung through their crossbars to the stations and on past the
+ * maps' edges, a little slack between them. WJPC_CABLE_CAR_FLAT=1: flat, as drawn.
+ */
+typedef struct { uint16_t layout; int8_t px[3], py[3]; uint8_t n; float westX, eastX; int8_t westOff, eastOff; } CableLine;
+/* pylon feet (cells, the bottom of the drawn post), and the line's ends: x, and whether it goes on off the map there
+ * (its slope the drawing's, 0.5 rows a column) or ends level at a station's wall */
+static const CableLine kCableLines[] = {
+    { 28, { 4, 12, 24 }, { 17, 21, 26 }, 3, -8.0f, 27.1f, 1, 0 },   /* Route 112: up the mountain west, the station east */
+    { 136, { 28 }, { 35 }, 1, 20.0f, 47.0f, 0, 1 },                  /* Mt. Chimney: the station west, down the mountain east */
+};
+enum { CABLE_SWAPS = 14 };
+static const uint16_t kCableArt[CABLE_SWAPS][2] = {
+    { 0x250, 0x272 }, { 0x251, 0x272 }, { 0x252, 0x271 }, { 0x253, 0x271 }, { 0x254, 0x271 }, { 0x255, 0x271 },
+    { 0x259, 0x272 }, { 0x25A, 0x271 }, { 0x25B, 0x271 }, { 0x25C, 0x271 }, { 0x25D, 0x271 }, { 0x261, 0x27B },
+    { 0x264, 0x271 }, { 0x265, 0x271 },
+};
+static bool CableOn(const VoxelMapInstance *inst, const CableLine **line)
+{
+    static int sFlat = -1;
+    if (sFlat < 0)
+        sFlat = getenv("WJPC_CABLE_CAR_FLAT") != NULL;
+    if (sFlat || inst == NULL)
+        return false;
+    for (unsigned i = 0; i < sizeof(kCableLines) / sizeof(kCableLines[0]); ++i)
+        if (inst->layoutId == kCableLines[i].layout)
+        {
+            if (line != NULL)
+                *line = &kCableLines[i];
+            return true;
+        }
+    return false;
+}
+
+/* the plain rock under a drawn line or post (Lavaridge tile set), or the metatile as it is - for the atlas: every
+ * picture of those tiles in 3D (tops, cut edges, cliff faces) is the plain rock's. The 14 ids are drawn only on Route
+ * 112 and Mt. Chimney (checked over every layout on the Lavaridge set). */
+int VoxelMesh_CableArtPlain(int metatile)
+{
+    static int sFlat = -1;
+    if (sFlat < 0)
+        sFlat = getenv("WJPC_CABLE_CAR_FLAT") != NULL;
+    if (sFlat)
+        return metatile;
+    for (unsigned i = 0; i < CABLE_SWAPS; ++i)
+        if (kCableArt[i][0] == metatile)
+            return kCableArt[i][1];
+    return metatile;
+}
+
+/* the plain rock under a drawn line or post, or the metatile as it is */
+int VoxelMesh_CableArtSwap(const VoxelMapInstance *inst, int metatile)
+{
+    if (!CableOn(inst, NULL))
+        return metatile;
+    for (unsigned i = 0; i < CABLE_SWAPS; ++i)
+        if (kCableArt[i][0] == metatile)
+            return kCableArt[i][1];
+    return metatile;
+}
+
+enum { CABLE_POST_H_16THS = 36 };   /* foot to crossbar top, px */
+static void CableBox(VoxelBuilder *b, float xa, float xb, float za, float zb, float yb, float yt, VoxelSolidColor c,
+                     float k)
+{
+    float u0, v0, u1, v1;
+    VoxelAtlas_SolidUV(c, &u0, &v0, &u1, &v1);
+    RailBox(b, xa, xb, za, zb, yt, yb, u0, v0, u1, v1, true, true, true, true, k);
+}
+
+/* where a pylon's foot stands: its height and its world z (as far south as it is high) */
+static void CableFoot(const VoxelMapInstance *inst, int x, int y, float *h, float *z)
+{
+    *h = VoxelRelief_CellLift(inst, x, y);
+    *z = (float)y + 0.9f + VoxelRelief_CellShift(inst, x, y);
+}
+
+static void EmitCablePylon(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    const float p = 1.0f / 16.0f, top = CABLE_POST_H_16THS * p;
+    float h, z, cx = (float)x + 0.5f;
+
+    CableFoot(inst, x, y, &h, &z);
+    /* the drawing: a foot 8 px wide a tile tall, the post 6 px wide up to the crossbar, the crossbar 14 px wide and
+     * 5 px thick; the outline's slate a pixel round each */
+    CableBox(b, cx - 4.0f * p, cx + 4.0f * p, z - 4.0f * p, z + 4.0f * p, h - 2.0f * p, h + 1.0f * p,
+             VOXEL_SOLID_PYLON_DARK, 1.0f);
+    CableBox(b, cx - 4.0f * p, cx + 4.0f * p, z - 4.0f * p, z + 4.0f * p, h + 1.0f * p, h + 16.0f * p,
+             VOXEL_SOLID_PYLON, 1.0f);
+    CableBox(b, cx - 3.5f * p, cx + 3.5f * p, z - 3.5f * p, z + 3.5f * p, h + 16.0f * p, h + 17.0f * p,
+             VOXEL_SOLID_PYLON_DARK, 1.0f);
+    CableBox(b, cx - 3.0f * p, cx + 3.0f * p, z - 3.0f * p, z + 3.0f * p, h + 17.0f * p, h + top - 5.0f * p,
+             VOXEL_SOLID_PYLON, 1.0f);
+    CableBox(b, cx - 7.0f * p, cx + 7.0f * p, z - 3.0f * p, z + 3.0f * p, h + top - 5.0f * p, h + top,
+             VOXEL_SOLID_PYLON, 1.0f);
+    CableBox(b, cx - 7.5f * p, cx + 7.5f * p, z - 3.5f * p, z + 3.5f * p, h + top - 6.0f * p, h + top - 5.0f * p,
+             VOXEL_SOLID_PYLON_DARK, 1.0f);
+}
+
+/* a thin cable from a to b (world points), sagging by `sag` at its middle: two crossed ribbons, 1.5 px */
+static void EmitCableSpan(VoxelBuilder *b, const float a[3], const float e[3], float sag)
+{
+    enum { PIECES = 12 };
+    const float w = 0.75f / 16.0f;
+    float u0, v0, u1, v1;
+    float dx = e[0] - a[0], dz = e[2] - a[2], l = sqrtf(dx * dx + dz * dz);
+    float nx = l > 0.0f ? -dz / l * w : w, nz = l > 0.0f ? dx / l * w : 0.0f;
+
+    VoxelAtlas_SolidUV(VOXEL_SOLID_CABLE, &u0, &v0, &u1, &v1);
+    for (int i = 0; i < PIECES; ++i)
+    {
+        float t0 = i / (float)PIECES, t1 = (i + 1) / (float)PIECES, q[2][3];
+        for (int k = 0; k < 2; ++k)
+        {
+            float t = k ? t1 : t0;
+            q[k][0] = a[0] + dx * t;
+            q[k][1] = a[1] + (e[1] - a[1]) * t - sag * 4.0f * t * (1.0f - t);
+            q[k][2] = a[2] + dz * t;
+        }
+        VoxelBuilder_Quad(b, &(VoxelVertex){q[0][0], q[0][1] - w, q[0][2], u0, v0, SHADE_SOUTH},
+                          &(VoxelVertex){q[1][0], q[1][1] - w, q[1][2], u1, v0, SHADE_SOUTH},
+                          &(VoxelVertex){q[1][0], q[1][1] + w, q[1][2], u1, v1, SHADE_SOUTH},
+                          &(VoxelVertex){q[0][0], q[0][1] + w, q[0][2], u0, v1, SHADE_SOUTH});
+        VoxelBuilder_Quad(b, &(VoxelVertex){q[0][0] - nx, q[0][1] + w, q[0][2] - nz, u0, v0, SHADE_TOP},
+                          &(VoxelVertex){q[1][0] - nx, q[1][1] + w, q[1][2] - nz, u1, v0, SHADE_TOP},
+                          &(VoxelVertex){q[1][0] + nx, q[1][1] + w, q[1][2] + nz, u1, v1, SHADE_TOP},
+                          &(VoxelVertex){q[0][0] + nx, q[0][1] + w, q[0][2] + nz, u0, v1, SHADE_TOP});
+    }
+}
+
+static void EmitCableCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    const CableLine *line;
+    int lx, ly;
+
+    if (!CableOn(inst, &line))
+        return;
+    lx = x - inst->originX;
+    ly = y - inst->originY;
+    for (unsigned i = 0; i < line->n; ++i)
+        if (lx == line->px[i] && ly == line->py[i])
+            EmitCablePylon(b, inst, x, y);
+    /* the whole line, once: with the first pylon */
+    if (lx != line->px[0] || ly != line->py[0])
+        return;
+    {
+        const float p = 1.0f / 16.0f;
+        float pt[8][3];
+        unsigned n = 0;
+
+        for (unsigned i = 0; i < line->n; ++i)
+        {
+            float h, z;
+            CableFoot(inst, inst->originX + line->px[i], inst->originY + line->py[i], &h, &z);
+            pt[n][0] = (float)(inst->originX + line->px[i]) + 0.5f;
+            pt[n][1] = h + (CABLE_POST_H_16THS - 2.5f) * p;
+            pt[n][2] = z;
+            ++n;
+        }
+        /* the ends: level to a station's wall, or on off the map down (east) / up (west) the mountain as the drawing
+         * runs, half a row a column, a quarter level a column */
+        {
+            float w[3], e[3], first[3], last[3];
+            memcpy(first, pt[0], sizeof first);
+            memcpy(last, pt[n - 1], sizeof last);
+            w[0] = (float)inst->originX + line->westX;
+            e[0] = (float)inst->originX + line->eastX;
+            if (line->westOff)
+            {
+                float dxw = first[0] - w[0];
+                w[1] = first[1] + 0.25f * dxw;
+                w[2] = first[2] - 0.5f * dxw + 0.25f * dxw;
+            }
+            else
+                w[1] = first[1], w[2] = first[2];
+            if (line->eastOff)
+            {
+                float dxe = e[0] - last[0];
+                e[1] = last[1] - 0.25f * dxe;
+                e[2] = last[2] + 0.5f * dxe - 0.25f * dxe;
+            }
+            else
+                e[1] = last[1], e[2] = last[2];
+            EmitCableSpan(b, w, pt[0], 0.0f);
+            for (unsigned i = 0; i + 1 < n; ++i)
+            {
+                float dx = pt[i + 1][0] - pt[i][0], dz = pt[i + 1][2] - pt[i][2];
+                EmitCableSpan(b, pt[i], pt[i + 1], 0.03f * sqrtf(dx * dx + dz * dz));
+            }
+            {
+                float dx = e[0] - last[0], dz = e[2] - last[2];
+                EmitCableSpan(b, last, e, line->eastOff ? 0.03f * sqrtf(dx * dx + dz * dz) : 0.0f);
+            }
+            (void)p;
+        }
+    }
+}
+
 void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst,
                              int x0, int x1, int y)
 {
     for (int x = x0; x < x1; ++x)
         EmitRailCell(builder, inst, x, y);
+    for (int x = x0; x < x1; ++x)
+        EmitCableCell(builder, inst, x, y);
     for (int x = x0; x < x1; ++x)
         EmitSafetyFloor(builder, inst, x, y);
     for (int x = x0; x < x1; ++x)

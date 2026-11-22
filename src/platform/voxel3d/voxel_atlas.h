@@ -41,6 +41,9 @@ typedef enum
     VOXEL_SOLID_GREY,       /* television stand */
     VOXEL_SOLID_BLACK,      /* television body */
     VOXEL_SOLID_SHEET,      /* bedding */
+    VOXEL_SOLID_PYLON,      /* the cable car's pylons (Route 112, Mt. Chimney): the drawing's light blue */
+    VOXEL_SOLID_PYLON_DARK, /* their outline's slate */
+    VOXEL_SOLID_CABLE,      /* the cable: dark grey */
     VOXEL_SOLID_COUNT
 } VoxelSolidColor;
 
