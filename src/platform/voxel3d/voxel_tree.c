@@ -667,10 +667,12 @@ static bool CardPixel(unsigned x, unsigned y)
 
 static void EmitRockMound(VoxelBuilder *builder, int x, int y, unsigned tx, unsigned ty)
 {
-    /* a height field over the drawn pixels: each pixel corner as high as it is far inside the rock (0.7 of its
-     * distance to the nearest ground pixel, at most 5 px), every point as far south as it is high - so at 45 degrees
-     * each texel lands where it is drawn, the rock's outline stays on the ground, and neighbouring columns share their
-     * corners (no seams) */
+    /* a height field over the drawn pixels, the outline on the ground and neighbouring columns sharing their corners
+     * (no seams). Brennan 2026-11-22 14:55 ("these rocks still look 2D"): with every point as far south as it is high
+     * the texels landed where drawn and the rock looked flat; options B/C/D (docs/polish_reports/
+     * RUSTURF_ROCK_OPTIONS.png), his pick "D: rounded, lower": a dome rising steeply at the outline to 6 px, 3 px in
+     * (WJPC_ROCK_ROUND, WJPC_ROCK_CAP), each point only 0.4 of its height south (WJPC_ROCK_SOUTH; 1 = the first,
+     * flat-looking version, with WJPC_ROCK_ROUND=0 WJPC_ROCK_CAP=5) - so the rock stands up toward the camera */
     const float p = 1.0f / 16.0f;
     float h[17][17];
     bool rock[16][16];
@@ -691,8 +693,31 @@ static void EmitRockMound(VoxelBuilder *builder, int x, int y, unsigned tx, unsi
                     if (d < best)
                         best = d;
                 }
-            best = best < 0.0f ? 0.0f : best * 0.7f;
-            h[j][i] = (best > 5.0f ? 5.0f : best) * p;
+            {
+                static float sK = -1.0f, sCap, sSouth;
+                if (sK < 0.0f)
+                {
+                    sK = getenv("WJPC_ROCK_K") ? (float)atof(getenv("WJPC_ROCK_K")) : 0.7f;
+                    sCap = getenv("WJPC_ROCK_CAP") ? (float)atof(getenv("WJPC_ROCK_CAP")) : 6.0f;
+                    sSouth = getenv("WJPC_ROCK_SOUTH") ? (float)atof(getenv("WJPC_ROCK_SOUTH")) : 1.0f;
+                }
+                static float sRound = -2.0f;
+                if (sRound < -1.0f)
+                    sRound = getenv("WJPC_ROCK_ROUND") ? (float)atof(getenv("WJPC_ROCK_ROUND")) : 3.0f;
+                if (sRound > 0.0f)
+                {
+                    /* a rounded dome: up steeply at the outline, flattening to sCap sRound px inside */
+                    float t = best < 0.0f ? 0.0f : best / sRound;
+                    best = sCap * sinf((t > 1.0f ? 1.0f : t) * 1.5707963f);
+                    h[j][i] = best * p;
+                }
+                else
+                {
+                best = best < 0.0f ? 0.0f : best * sK;
+                h[j][i] = (best > sCap ? sCap : best) * p;
+                }
+                (void)sSouth;
+            }
         }
     for (int r = 0; r < 16; r++)
         for (int c = 0; c < 16; c++)
@@ -708,11 +733,14 @@ static void EmitRockMound(VoxelBuilder *builder, int x, int y, unsigned tx, unsi
             float s = 0.96f - 0.22f * nz + 0.06f * nx;
             s = s < 0.6f ? 0.6f : s > 1.0f ? 1.0f : s;
 
+            static float sSouth = -1.0f;
+            if (sSouth < 0.0f)
+                sSouth = getenv("WJPC_ROCK_SOUTH") ? (float)atof(getenv("WJPC_ROCK_SOUTH")) : 0.4f;
             VoxelBuilder_Quad(builder,
-                &(VoxelVertex){x0, h[r][c], z0 + h[r][c], u0, v0, s},
-                &(VoxelVertex){x1, h[r][c + 1], z0 + h[r][c + 1], u1, v0, s},
-                &(VoxelVertex){x1, h[r + 1][c + 1], z1 + h[r + 1][c + 1], u1, v1, s},
-                &(VoxelVertex){x0, h[r + 1][c], z1 + h[r + 1][c], u0, v1, s});
+                &(VoxelVertex){x0, h[r][c], z0 + sSouth * h[r][c], u0, v0, s},
+                &(VoxelVertex){x1, h[r][c + 1], z0 + sSouth * h[r][c + 1], u1, v0, s},
+                &(VoxelVertex){x1, h[r + 1][c + 1], z1 + sSouth * h[r + 1][c + 1], u1, v1, s},
+                &(VoxelVertex){x0, h[r + 1][c], z1 + sSouth * h[r + 1][c], u0, v1, s});
         }
 }
 
