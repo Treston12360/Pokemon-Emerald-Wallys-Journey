@@ -5,6 +5,7 @@ done (in the same push as the work). Projects: **ARIA** (Treston, branch `kanto-
 
 | Lane | Who / session | File or area | Since | What for |
 |---|---|---|---|---|
+| ARIA | Claude 019khs4X (Treston) | `src/platform/sdl2.c` `VDraw`: ONLY the few lines after `if (!s2DTransition) SDL_UpdateTexture(texture, ...)` (the DLX-4 transition fade-fit `else` that DLX-3 detached) | 2026-11-21 | Brown/grey haze after the Route 16 Snorlax battle (owner: fix before moving on). Will remove the claim when pushed |
 | ARIA | Claude 019khs4X (Treston) | `tools/voxel3ds/` (3DS generator patch) and `pc_data/voxel/` | 2026-11-13 | K7 Kanto in 3D, DLX-28 furniture (paused for story) |
 | ARIA | Claude 019khs4X (Treston) | L1 Hoenn post-game rules: `src/battle_script_commands.c` (EXP), `src/wally_journey.c` (Steven, E4 unlock), `data/scripts/wally_journey.inc` (rival final), Champion's Room defenses | 2026-11-14 | Owner's 2026-11-13 post-game rules before Kanto |
 | ARIA | Claude 019khs4X (Treston) | Hoenn maps: Littleroot (player's houses 1F/2F, town), Birch's lab, Slateport harbour; new `data/scripts/aria_*.inc` | 2026-11-14 | S1 Project ARIA ch. 0 (post-Champion call to Kanto). Only runs after the first Champion win — earlier saves unchanged |
