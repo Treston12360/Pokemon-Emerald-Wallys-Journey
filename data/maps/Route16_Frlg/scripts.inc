@@ -13,6 +13,7 @@ Route16_EventScript_RemoveSnorlax::
 	return
 
 Route16_OnTransition::
+	call Aria_Ch5_Route16OnTransition @ Project ARIA ch. 5.4 (Blue at the Snorlax)
 	call_if_eq VAR_MAP_SCENE_ROUTE16, 1, Route16_OnTransitionCyclingRoad
 	end
 
@@ -44,6 +45,7 @@ Route16_EventScript_Snorlax::
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	dowildbattle
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
+	call Aria_Ch5_Route16AfterSnorlax @ Project ARIA ch. 5.4: Blue walks off
 	specialvar VAR_RESULT, GetBattleOutcome
 	goto_if_eq VAR_RESULT, B_OUTCOME_WON, Route16_EventScript_FoughtSnorlax
 	goto_if_eq VAR_RESULT, B_OUTCOME_RAN, Route16_EventScript_FoughtSnorlax

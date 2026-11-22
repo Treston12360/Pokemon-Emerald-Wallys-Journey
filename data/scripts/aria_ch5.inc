@@ -102,6 +102,65 @@ Aria_Ch5_Movement_BlueLeaves:
 	walk_down
 	step_end
 
+@ ---- 5.4 Blue at the Route 16 Snorlax (approved 2026-11-14), scripted as you walk up from Celadon.
+@ VAR_ARIA_STORY 20 (after the office) -> 21. Blue (FLAG_TEMP_11) stands in front of the Snorlax only at 20.
+@ Coord events at (34, 12..14) catch the player on the way in. After the Snorlax battle Blue walks off
+@ east (no lines: nothing approved there). If the player wakes the Snorlax before the office scene (VAR 19),
+@ FireRed's script runs alone and this scene is skipped.
+Aria_Ch5_Route16OnTransition::
+	setflag FLAG_TEMP_11
+	goto_if_ne VAR_ARIA_STORY, 20, Aria_Ch5_Return
+	goto_if_set FLAG_HIDE_ROUTE_16_SNORLAX, Aria_Ch5_Return
+	clearflag FLAG_TEMP_11
+	return
+
+Aria_Ch5_Route16Blue::
+	lockall
+	goto_if_set FLAG_HIDE_ROUTE_16_SNORLAX, Aria_Ch5_Route16NoBlue
+	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
+	waitmovement 0
+	turnobject LOCALID_ROUTE16_ARIA_BLUE, DIR_EAST
+	setspeaker SP_NAME_BLUE
+	msgbox Aria_Ch5_Text_BlueSnorlax1, MSGBOX_DEFAULT
+	msgbox Aria_Ch5_Text_BlueSnorlax2, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_ROUTE16_ARIA_BLUE, Aria_Ch5_Movement_BlueStandBack
+	waitmovement 0
+	setvar VAR_ARIA_STORY, 21
+	releaseall
+	end
+
+Aria_Ch5_Route16NoBlue::
+	setvar VAR_ARIA_STORY, 21
+	releaseall
+	end
+
+@ Blue (32,13), in the gap in front of the Snorlax: steps out and up to (33,12), watching it
+Aria_Ch5_Movement_BlueStandBack:
+	walk_right
+	walk_up
+	face_left
+	step_end
+
+@ called from Route16's FireRed Snorlax script once the Snorlax is gone
+Aria_Ch5_Route16AfterSnorlax::
+	goto_if_ne VAR_ARIA_STORY, 21, Aria_Ch5_Return
+	goto_if_set FLAG_TEMP_11, Aria_Ch5_Return
+	applymovement LOCALID_ROUTE16_ARIA_BLUE, Aria_Ch5_Movement_BlueWalksOff
+	waitmovement 0
+	removeobject LOCALID_ROUTE16_ARIA_BLUE
+	return
+
+Aria_Ch5_Movement_BlueWalksOff:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	step_end
+
 @ ---- talking to people afterwards
 Aria_Ch5_Varnell::
 	lock
@@ -232,4 +291,24 @@ Aria_Ch5_Text_Drawing::
 
 Aria_Ch5_Text_OfficeSign::
 	.string "Varnell Research Office$"
+
+Aria_Ch5_Text_BlueSnorlax1::
+	.string "Oh, great. Not again.\p"
+	.string "Yeah, this happens all the time in\n"
+	.string "Kanto. Unfortunately the local\l"
+	.string "Snorlax love these spots for a nap -\l"
+	.string "right in the sun, right in the\l"
+	.string "middle of the road.\p"
+	.string "Last time one of them parked here\n"
+	.string "for a month. They had to reroute the\l"
+	.string "whole Cycling Road.$"
+
+Aria_Ch5_Text_BlueSnorlax2::
+	.string "......You've got a Poké Flute?\n"
+	.string "Where'd you get that?\p"
+	.string "...Fuji. Of course. That old man\n"
+	.string "gives everything away.\p"
+	.string "Well, go on. Play it. Just stand\n"
+	.string "back when it wakes up. They're\l"
+	.string "always cranky.$"
 

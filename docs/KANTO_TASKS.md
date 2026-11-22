@@ -222,6 +222,18 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       VAR -> 20; the drawing reads from (8,2)/(9,2) facing up; leaving by the middle mat works; the sign reads
       "Varnell Research Office". No bad-memory-access lines in the logs. In 3D the office is flat like the rest of
       Kanto (K7 paused). Note: the follower Pokémon can take the mat tile, so test inputs must step round it.
+      **5.4 IN GAME 2026-11-21:** Blue stands in front of the Route 16 Snorlax (32,13) at VAR 20; coord events at
+      (34,12..14) start his approved lines as you walk up from Celadon; he steps aside to (33,12); the flute and
+      battle are FireRed's script; after it he walks off east (no lines). VAR -> 21. If the player wakes the
+      Snorlax before the office scene (VAR 19), FireRed's script runs alone. Test: `state var 0x50FF 20`,
+      `state flag 0x1136 1` (Poké Flute), `state flag 0x1055 0` (Snorlax shown), `warp 37 34 38 13`, hold LEFT.
+      Tested 2D + 3D under Wine (scene, flute, battle).
+      **BUG found while testing (NOT from this work — same with Blue absent and with the season fix switched
+      off):** in autumn (`WJPC_TEST_SEASON=2`), after the Route 16 Snorlax battle the field comes back washed out
+      in a flat brown haze and stays that way (seen 10+ s later). Kanto is not in the live-weather regions
+      (WREGION_NONE), so not that. Not yet checked: other seasons (the summer test was blocked by the season
+      notice), ordinary wild battles, Hoenn. Suspect the season/day tint being applied on top of a palette fade
+      after `dowildbattle`. Repro: the test above with var 21, KO the Snorlax.
 - [x] **S-ARIA-CANON-LOCK (DOCUMENTATION ONLY — owner 2026-11-15):** Three historical points locked
       in `docs/KANTO_PROJECT_ARIA.md` and `docs/KANTO_NARRATIVE_AUDIT.md`: (1) young Varnell was **forced
       outside Pokémon Tower** during Rocket's raid; (2) Clefairy remained **captive with a Rocket member
@@ -301,6 +313,7 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       owner to say what the Champion's Room does on a repeat run before Kanto is beaten.
 - [ ] **L2. Re-run `tools/exp_curve_full.py`** with L1's rules; update the arrival level in the design doc.
 - [ ] **L3. Kanto trainer and wild levels** per the design doc; check with `tools/exp_curve_kanto.py`.
+      Include the two Snorlax (Routes 12 and 16, still FireRed's level 30) and the other one-off encounters.
 - [ ] **L4. Kanto Gym Leaders / Elite Four / important teams** (Kanto families only, no regional forms) —
       show the owner before adding.
 

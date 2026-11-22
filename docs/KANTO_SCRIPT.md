@@ -536,7 +536,7 @@ building and 13x11 layout; sign on the fence beside the path reads "Varnell Rese
 > SCIENTIST: Shipments go out every week. Where to? ...You'd have to ask the Director.
 > SCIENTIST: Sorry, that door's staff only. — No, I don't have the key either.
 
-**5.4 Blue at the Snorlax (Route 16, west of Celadon), scripted as you walk up**
+**5.4 Blue at the Snorlax (Route 16, west of Celadon), scripted as you walk up**  · IN GAME 2026-11-21 (`aria_ch5.inc`, VAR_ARIA_STORY 20 -> 21)
 (Owner 2026-11-14: Blue meets you at the Snorlax.)
 > BLUE: Oh, great. Not again.
 > Yeah, this happens all the time in Kanto. Unfortunately the local Snorlax love these spots for a nap —
