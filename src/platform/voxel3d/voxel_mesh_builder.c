@@ -5669,7 +5669,7 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
                 {
                     static float sShade = -1.0f;
                     if (sShade < 0.0f)
-                        sShade = getenv("WJPC_WOOD_FLOOR_SHADE") ? (float)atof(getenv("WJPC_WOOD_FLOOR_SHADE")) : 0.5f;
+                        sShade = getenv("WJPC_WOOD_FLOOR_SHADE") ? (float)atof(getenv("WJPC_WOOD_FLOOR_SHADE")) : 0.35f;
                     v[k].shade = SHADE_TOP * sShade; /* the wood's floor, in the crowns' shade */
                 }
             }
@@ -6020,7 +6020,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                             v[k].v = k >> 1 ? v1f : v0f;
                             static float sWoodShade = -1.0f;
                             if (sWoodShade < 0.0f)
-                                sWoodShade = getenv("WJPC_WOOD_FLOOR_SHADE") ? (float)atof(getenv("WJPC_WOOD_FLOOR_SHADE")) : 0.5f;
+                                sWoodShade = getenv("WJPC_WOOD_FLOOR_SHADE") ? (float)atof(getenv("WJPC_WOOD_FLOOR_SHADE")) : 0.35f;
                             v[k].shade = SHADE_TOP * sWoodShade; /* the floor under a wood, in its shade (also with Gamma lighting) */
                         }
                         VoxelBuilder_Tri(builder, &v[0], &v[3], &v[1]);

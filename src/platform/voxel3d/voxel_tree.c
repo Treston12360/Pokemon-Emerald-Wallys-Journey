@@ -326,6 +326,7 @@ static bool OneLevelSlope(const int16_t *g)
  * A ring tree's ground now lies 1/64 tile over it (a quarter of a game pixel) and always shows.
  * WJPC_BELT_TREE_GROUND_LEVEL=1: as before. */
 static VOXEL_TLS float sGroundRaise;
+static VOXEL_TLS bool sBeltNoGround;
 
 /* Brennan 2026-11-21 17:25 (21k: "the bigger 3D trees have the exact same thin black border/edge line underneath/
  * around them that the fences had"): a tree's ground square read its picture right up to the texel edges, and his
@@ -352,6 +353,12 @@ static void EmitGround(VoxelBuilder *builder, const VoxelMapInstance *inst, int 
 
     /* on a mountain's rock the ground pass lays the rock (EmitTreeStep) */
     if (inst != NULL && VoxelMesh_TreeOnRock(inst, x, y))
+        return;
+    /* Brennan 2026-11-22 16:35 (Verdanturf's west woods, after 22b's floor: "jagged, overlapping grey ground shards
+     * ... around and between the bases of the 3D trees"): a belt tree's own ground square stood at its tree's level,
+     * over the wood's smooth floor (voxel_mesh_builder.c) - squares at many levels between the crowns. The floor is
+     * the ground now; the belt's trees lay none (sBeltNoGround). WJPC_BELT_TREE_SQUARES=1: as before. */
+    if (inst == NULL && sBeltNoGround)
         return;
     if (inst == NULL || !OneLevelSlope(VoxelRelief_Cell(inst, x, y)))
     {
@@ -951,8 +958,25 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                         sLevel = getenv("WJPC_BELT_TREE_GROUND_LEVEL") != NULL;
                     sGroundRaise = sLevel ? 0.0f : 1.0f / 64.0f;
                 }
+                {
+                    static int sSquares = -1;
+                    if (sSquares < 0)
+                        sSquares = getenv("WJPC_BELT_TREE_SQUARES") != NULL || getenv("WJPC_WOOD_BLOCKS") != NULL;
+                    const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y);
+                    sBeltNoGround = !sSquares && !ledge && ring != NULL && VoxelRelief_Belt(ring) == 0;
+                    /* (at the wood's edge - the sea, a field, a map beside it - the square stays: it closed the seam
+                     * there, a line of sky through the water without it) */
+                    for (int k = 0; k < 4 && sBeltNoGround; k++)
+                    {
+                        int nx = x + (k == 0) - (k == 1), ny = y + (k == 2) - (k == 3);
+                        const VoxelMapInstance *na = VoxelWorld_GetInstanceAt(nx, ny) == NULL ? VoxelWorld_BorderArtMap(nx, ny) : NULL;
+                        sBeltNoGround = na != NULL && VoxelWorld_UsesTreeSprites(na)
+                                     && VoxelTree_Part(na->secondaryTileset, VoxelWorld_BorderMetatile(nx, ny)) >= 0;
+                    }
+                }
                 EmitCell(builder, NULL, art->secondaryTileset, x, y, part, metatileId, false);
                 EmitMissingRow(builder, NULL, art->secondaryTileset, x, y, part, metatileId, false);
+                sBeltNoGround = false;
                 sGroundRaise = 0.0f;
                 builder->base = callerBase;
                 builder->lift = 0.0f;
