@@ -714,6 +714,29 @@ static bool AtlasReady(const VoxelMapInstance *inst)
 // over frames, one job at a time, and NULL is returned until it is done. With no deadline it is finished now
 // (a job for another map's tile sets is dropped for it). The slot the job fills is invalid until then.
 static Atlas *sJobSlot;
+/* Brennan 2026-11-22 (13:37 list B1, answer "Tone it down"): Rusturf Tunnel's green is the original game's (its
+ * palettes byte for byte pret's pokeemerald), but in 3D it read neon. Its atlas is drawn less saturated and a little
+ * darker: each texel 45% of the way to its grey, then 88% bright. WJPC_RUSTURF_NEON=1: as before. */
+extern const struct Tileset gTileset_RusturfTunnel;
+static void CaveToneDown(uint16_t *texels, unsigned count)
+{
+    static int sOff = -1;
+    if (sOff < 0)
+        sOff = getenv("WJPC_RUSTURF_NEON") != NULL;
+    if (sOff)
+        return;
+    for (unsigned i = 0; i < count; ++i)
+    {
+        uint16_t t = texels[i];
+        float r = (float)((t >> 11) & 31), g = (float)((t >> 6) & 31), b = (float)((t >> 1) & 31);
+        float y = 0.299f * r + 0.587f * g + 0.114f * b;
+        r = (r + (y - r) * 0.45f) * 0.88f;
+        g = (g + (y - g) * 0.45f) * 0.88f;
+        b = (b + (y - b) * 0.45f) * 0.88f;
+        unsigned R = (unsigned)lroundf(r), G = (unsigned)lroundf(g), B = (unsigned)lroundf(b);
+        texels[i] = (uint16_t)((R > 31 ? 31 : R) << 11 | (G > 31 ? 31 : G) << 6 | (B > 31 ? 31 : B) << 1 | (t & 1u));
+    }
+}
 static const void *sJobPrimary, *sJobSecondary; // the job's own copies are cleared when it ends
 
 static Atlas *FindAtlas(const VoxelMapInstance *inst)
@@ -819,6 +842,8 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
         if (slot->raw[sAtlasJob.page] != NULL)
             memcpy(slot->raw[sAtlasJob.page], sAtlasStaging, VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
         VoxelGrade_Texels(sAtlasStaging, VOXEL_ATLAS_PIXELS);
+        if (sJobSecondary == (const void *)&gTileset_RusturfTunnel)
+            CaveToneDown(sAtlasStaging, VOXEL_ATLAS_PIXELS);
         // (grown: into the page's own texture, the meshes drawn from it see the same slots)
         slot->tex[sAtlasJob.page] = UploadTiled(sJobGrow ? slot->tex[sAtlasJob.page] : 0, sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
         slot->spareStale[sAtlasJob.page][0] = slot->spareStale[sAtlasJob.page][1] = ~0u; // (its other textures: out of date)
