@@ -2198,6 +2198,10 @@ static void EmitTreeStep(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     if (relief == NULL)
         return;
     cut = VoxelRelief_Cut(inst, x, y, &foot, &ground, &wall, &sides);
+    if (getenv("WJPC_TREESTEP_DUMP") != NULL) /* test aid */
+        fprintf(stderr, "TREESTEP %d %d (local %d %d) mt %03x cut %d ground %03x wall %03x sides %02x foot %.3f rock %d\n", x, y,
+                x - inst->originX, y - inst->originY, VoxelWorld_GetMetatileId(x, y), cut, ground & 0xFFF, wall & 0xFFF,
+                sides, foot, (int)VoxelMesh_TreeOnRock(inst, x, y));
     if (cut == -1)
         return;
     if (cut == VOXEL_RELIEF_NO_VARIANT && ground >= 0 && MetatileUV(b, ground, &u0, &v0, &u1, &v1))

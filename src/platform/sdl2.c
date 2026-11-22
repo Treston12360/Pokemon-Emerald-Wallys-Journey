@@ -235,6 +235,7 @@ static Uint64 sStallGl;
  * the 3D world's update, and after it (menus layer, smooth-motion layer, in-betweens). People nearby: the 3D
  * stand-ins for the neighbouring maps' people (inside the 3D update). */
 static Uint64 sVdSetup, sVdAfter2D, sVd3DBlock, sVdEnd;
+static unsigned g2DFieldShown; // refreshes that showed the 2D field picture with 3D on (DrawFieldScene)
 extern Uint64 gVoxelStandInTicks; // voxel_entities.c
 // POL-15: the main thread's own CPU time during a trip (Windows), against the clock: much less means the thread
 // was waiting for a CPU (another program, power saving) rather than working.
@@ -386,7 +387,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
     sLines++;
     static unsigned sLineBuildsAt;
     fprintf(f, "%7.1fs %s %6.0f: game %.0f, frame %.0f (3D %.0f: maps %.0f, belt %.0f, drawing %.0f), screen %.0f, present %.0f"
-               " | map %d:%d, 3D %d, meshes %u, pages %u, free memory %u MB, loops %u, maps laid since the last line %u"
+               " | map %d:%d, 3D %d, meshes %u, pages %u, free memory %u MB, loops %u, maps laid since the last line %u, 2D field shown %u"
                " | frame parts: before 2D %.1f, after 2D %.1f, 3D update %.1f, after 3D %.1f, people nearby %.1f\n",
             (presented - sFirst) / (double)freq, total >= 150.0 ? "STALL" : "minute", total,
             (batchEnd - start - sStallVDraw) * 1000.0 / freq, sStallVDraw * 1000.0 / freq, sStall3D * 1000.0 / freq,
@@ -394,7 +395,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
             (drawn - batchEnd) * 1000.0 / freq, (presented - drawn) * 1000.0 / freq,
             gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapGroup : -1,
             gSaveBlock1Ptr != NULL ? gSaveBlock1Ptr->location.mapNum : -1,
-            (int)(s3DReady && s3DWanted), gVoxel3DMeshes, gVoxel3DPages, StallFreeAddressMb(), sLoops, gVoxel3DMapBuilds - sLineBuildsAt,
+            (int)(s3DReady && s3DWanted), gVoxel3DMeshes, gVoxel3DPages, StallFreeAddressMb(), sLoops, gVoxel3DMapBuilds - sLineBuildsAt, g2DFieldShown,
             sVdSetup * 1000.0 / freq, sVdAfter2D * 1000.0 / freq, sVd3DBlock * 1000.0 / freq, sVdEnd * 1000.0 / freq,
             gVoxelStandInTicks * 1000.0 / freq);
     sLineBuildsAt = gVoxel3DMapBuilds;
@@ -920,7 +921,8 @@ extern bool32 Vol_StartMenu_IsSwshOpen(void);
  * edge (a tree base's outline) is read in one frame and missed in the next as the camera slides - strobing. Shrunk
  * more than 1.5 times, the picture is now averaged 2x2 first (its half-size mipmap), then shrunk linearly, so every
  * pixel counts.
- * WJPC_RES_PLAIN_SHRINK=1: as before. */
+ * Brennan 2026-11-21 17:54: "i do not like the softer look, use old sharpness" - off again; WJPC_RES_AVERAGE=1 turns
+ * it on (tests). */
 static void ResTargetAverage(SDL_Texture *texture, int texW, int outW)
 {
     typedef void (APIENTRY *GenMipFn)(unsigned int);
@@ -934,7 +936,7 @@ static void ResTargetAverage(SDL_Texture *texture, int texW, int outW)
     {
         SDL_RendererInfo info;
         sState = 0;
-        if (getenv("WJPC_RES_PLAIN_SHRINK") == NULL && SDL_GetRendererInfo(sdlRenderer, &info) == 0
+        if (getenv("WJPC_RES_AVERAGE") != NULL && SDL_GetRendererInfo(sdlRenderer, &info) == 0
          && !strcmp(info.name, "opengl"))
         {
             sGenMip = (GenMipFn)SDL_GL_GetProcAddress("glGenerateMipmap");
@@ -994,6 +996,10 @@ static void DrawFieldScene(double t, int outW, int outH)
     }
     else
     {
+    /* (Brennan 2026-11-21 17:54, Route 111: "the flat 2D sprite version of those trees is popping on and off": the
+     * stall log counts the refreshes that show the 2D field picture while 3D is on) */
+    if (s3DReady && s3DWanted)
+        g2DFieldShown++;
     SDL_SetTextureScaleMode(sdlTexture, SDL_ScaleModeNearest);
     SDL_RenderCopyF(sdlRenderer, sdlTexture, &full, &mapDest);
     if (m > 0)
