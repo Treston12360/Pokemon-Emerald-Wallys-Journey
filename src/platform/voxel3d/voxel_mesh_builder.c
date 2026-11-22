@@ -1066,6 +1066,7 @@ void VoxelMesh_BeginWindow(int x0, int y0, int x1, int y1)
  * low wall and never a gap onto the clear colour.
  */
 static bool BorderWaterLevel(int x, int y, float *level, float *shift);
+static int BeltMetatileFor(int x, int wantY, int y);
 /* POL-30: the base a cell of the belt is built over - its own map's (VoxelWorld_BeltRing), not instance 0's. */
 static float BeltBase(int x, int y)
 {
@@ -1242,6 +1243,23 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     }
     if (overWater && getenv("WJPC_EDGE_WATER_FACE") != NULL)
         face = (int)strtol(getenv("WJPC_EDGE_WATER_FACE"), NULL, 16);   /* test aid: the face over the sea */
+    /* Brennan 2026-11-22 02:04 (Route 112's south border, two red boxes: the cliff faces "textured with a bright
+     * red-and-white striped rock texture that clashes sharply with the rest of the mountainside ... Replace [it] with
+     * the exact earthy tan/brown rocky cliff texture shown inside the blue box" - the land in front): a map's edge
+     * standing over the field's plain land drops to it in that land's own drawing (the field cell's top, as
+     * EmitFieldCell lays it), not the map's or the drawn belt's cliff face - one rock for the mountainside.
+     * WJPC_EDGE_FACE_OWN=1: as before. */
+    {
+        float wl3, ws3;
+        if (!overWater && FieldOn() && BorderAt(nx, ny) && !BeltIsTree(nx, ny) && !BorderWaterLevel(nx, ny, &wl3, &ws3)
+         && getenv("WJPC_EDGE_FACE_OWN") == NULL)
+        {
+            int land = BeltMetatileFor(nx, ny, ny);
+            float lu0, lv0, lu1, lv1;
+            if (land >= 0 && MetatileUV(b, land, &lu0, &lv0, &lu1, &lv1))
+                face = land;
+        }
+    }
     if (getenv("WJPC_EDGE_DUMP") != NULL)
         fprintf(stderr, "EDGEFACE %d %d d%d face %03x water %d\n", x, y, d, face, (int)overWater);
     if (face < 0 || !MetatileUV(b, face, &u0, &v0, &u1, &v1))
@@ -4805,8 +4823,6 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
     float capOther = 1e9f;
     float drawnPeak = -1e9f, lumpAdd = 0.0f;
     bool exact = false;
-    const VoxelMapInstance *nearM = NULL;
-    int nearQx = 0;
 
     for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
     {
@@ -4889,6 +4905,36 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
                 sd = keepS;
             }
         }
+        /* Brennan 2026-11-21 17:25 (image 4, Route 112's south border: "stretched walls of rock and trees are
+         * shooting straight up into the sky - level/clamp them flush with the surrounding terrain"): in front of a
+         * map the land took its edge point by point - Route 112's south rows are rock ledges three levels over its
+         * woods, and the woods reach the edge between them, so the land in front jumped with them (walls facing the
+         * camera). In front of a map (not a drawn belt's; not under a wood - levelled, a step ran through Route
+         * 120's) its edge counts as the LOWEST edge point within BELT_SOUTH_SPAN cells along it; the ledges end in
+         * their own rock face (EdgeOverBelt). Fed into the blend with the other maps (Brennan 2026-11-22 01:12
+         * "smooth those ones too, they are too dark": set outright, the land jumped where the nearest map changed -
+         * a dark wall line toward the camera by Route 111). WJPC_FIELD_SOUTH_EDGE=1: as before. */
+        {
+            static int sSouthEdge = -1;
+            if (sSouthEdge < 0)
+                sSouthEdge = getenv("WJPC_FIELD_SOUTH_EDGE") != NULL;
+            if (!sSouthEdge && d >= 1.0f && vy > oy + m->height && vx >= ox && vx <= ox + m->width
+             && VoxelRelief_Belt(m) == 0 && !FieldCornerWood(vx, vy))
+            {
+                enum { BELT_SOUTH_SPAN = 8 };
+                for (int k = -BELT_SOUTH_SPAN; k <= BELT_SOUTH_SPAN; ++k)
+                {
+                    float pe, ps;
+                    int px = (int)qx + k;
+                    if (k != 0 && px >= ox && px <= ox + m->width
+                     && EdgePointHeight(m, px, oy + m->height, &pe, &ps) && pe < e)
+                    {
+                        e = pe;
+                        sd = ps;
+                    }
+                }
+            }
+        }
         /* POL-46 (Brennan 2026-11-18, Lavaridge's north-east: "Option 2 (One cliff + ledges)"): no point climbs
          * faster than a level every BELT_FIELD_RATE cells from ANY map's edge - from the low town the ledges stay
          * two squares deep; where a high edge (Route 112's) stands over that, its edge's own cliff (EdgeOverBelt,
@@ -4958,8 +5004,6 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
         }
         if (d < dmin)
         {
-            nearM = m;
-            nearQx = (int)qx;
             nearE = e;
             nearSouth = vy >= oy + m->height && vx >= ox && vx <= ox + m->width;
             /* (Brennan 23:31: the south ridge "horizontally straight to the left edge": south of a drawn-belt map,
@@ -5019,31 +5063,7 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
          * Whole Width"; a blue triangle under the red-roofed houses): in front of a map (south of it) the land
          * never dips under the map's edge - the blend with farther, lower maps took it to 5.9 under an edge of 6.0,
          * a whole level down in places (sawtooth steps, a gap). WJPC_FIELD_SOUTH_DIP=1: as before. */
-        /* Brennan 2026-11-21 17:25 (image 4, Route 112's south border: "stretched walls of rock and trees are
-         * shooting straight up into the sky - level/clamp them flush with the surrounding terrain"): in front of a
-         * map the land stood at its edge point by point - Route 112's south rows are rock ledges three levels over
-         * its woods, and the woods reach the edge between them, so the land in front jumped up and down with them
-         * (walls facing the camera, the woods' skirt a long green slab up to it). In front of a map (not a drawn
-         * belt's; not under a wood - the woods stood well, and levelled a step ran through them: Route 120) it lies level at the LOWEST edge point within BELT_SOUTH_SPAN cells along that edge; the ledges end
-         * in their own rock face (EdgeOverBelt). WJPC_FIELD_SOUTH_EDGE=1: at the edge, as before. */
-        static int sSouthEdge = -1;
-        if (sSouthEdge < 0)
-            sSouthEdge = getenv("WJPC_FIELD_SOUTH_EDGE") != NULL;
-        if (nearSouth && !nearDrawnSouth && !sSouthEdge && nearM != NULL && !FieldCornerWood(vx, vy))
-        {
-            enum { BELT_SOUTH_SPAN = 8 };
-            float lo = nearE;
-            for (int k = -BELT_SOUTH_SPAN; k <= BELT_SOUTH_SPAN; ++k)
-            {
-                float pe, ps;
-                int px = nearQx + k;
-                if (px >= nearM->originX && px <= nearM->originX + nearM->width
-                 && EdgePointHeight(nearM, px, nearM->originY + nearM->height, &pe, &ps) && pe < lo)
-                    lo = pe;
-            }
-            *height = lo;
-        }
-        else if (nearSouth && *height < nearE && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
+        if (nearSouth && *height < nearE && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
             *height = nearE;
         if (nearDrawnSouth && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
             *height = nearE;
@@ -5297,6 +5317,27 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     }
     wall = (face >= 0 && MetatileUV(b, face, &wu0, &wv0, &wu1, &wv1))
         || MetatileUV(b, BeltMetatileFor(x, y, y), &wu0, &wv0, &wu1, &wv1);
+    /* Brennan 2026-11-22 01:19 (Route 112's south, 21u: the walls "textured with a bright red-and-white striped rock
+     * texture that clashes ... Replace [it] with the exact earthy tan/brown rocky cliff texture shown inside the blue
+     * box" - the level land in front): in front of a map (its first rows south of it) the field drops from the map's
+     * edge to its level land, and those ledges were faced in the ring's cliff tile (Route 112's red stripes) over a
+     * top of the border's rock. They are faced in their own top's drawing now: one rock. WJPC_FIELD_FRONT_FACE_OLD=1:
+     * as before. */
+    if (wall && getenv("WJPC_FIELD_FRONT_FACE_OLD") == NULL && !BeltIsTree(x, y))
+    {
+        bool front = false;
+        for (unsigned i = 0; i < VoxelWorld_InstanceCount() && !front; ++i)
+        {
+            const VoxelMapInstance *m = VoxelWorld_Instance(i);
+            front = m != NULL && m->layout != NULL && !m->indoor && VoxelRelief_Belt(m) == 0
+                 && y >= m->originY + m->height && y < m->originY + m->height + 3
+                 && x >= m->originX - 1 && x <= m->originX + m->width;
+        }
+        if (front)
+        {
+            wu0 = tu0, wv0 = tv0, wu1 = tu1, wv1 = tv1;
+        }
+    }
     for (int k = 0; k < 4; ++k)
     {
         int vx = x + (k & 1), vy = y + (k >> 1);
