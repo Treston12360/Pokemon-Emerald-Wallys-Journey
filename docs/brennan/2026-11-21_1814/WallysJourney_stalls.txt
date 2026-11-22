@@ -1,0 +1,8 @@
+Wally's Journey stall log. Build Nov 21 2026 18:05:35. Lines: a trip round the main loop over 150 ms,
+and one line a minute. Times in ms. Send this file with a freeze or crash report.
+GPU: NVIDIA Corporation | NVIDIA GeForce RTX 3080/PCIe/SSE2 | OpenGL 4.6.0 NVIDIA 621.24
+SDL renderer: opengl, drawing 1280x720, anti-aliasing asked 4
+Clock: 2026-11-21 18:10, the game's clock check at start: ok (flags 0x0000)
+    33.5s F9: trees OFF
+   60.0s minute      6: game 0, frame 0 (3D 1: maps 0, belt 0, drawing 11), screen 1, present 5 | map 0:26, 3D 1, meshes 17, pages 17, free memory 1036 MB, loops 10704, maps laid since the last line 24, 2D field shown 0 | frame parts: before 2D 0.0, after 2D 0.0, 3D update 0.0, after 3D 0.0, people nearby 0.0
+    98.3s F9: trees on again

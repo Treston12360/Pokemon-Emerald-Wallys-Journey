@@ -2302,8 +2302,34 @@ static void EmitSafetyFloor(VoxelBuilder *b, const VoxelMapInstance *inst, int x
 
     if (sOff < 0)
         sOff = getenv("WJPC_NO_SAFETY_FLOOR") != NULL;
-    if (sOff || !VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1))
+    if (sOff)
         return;
+    /* Brennan 2026-11-21 18:14 (Route 111, F9 - the 3D trees hidden - "leaving behind the flat 2D ... sheets on the
+     * ground - and those ground sheets kept strobing"): under a tree the cell's own drawing is the 2D tree, and this
+     * plate laid it flat; and it lay at exactly the height of the ground run on under a tree's step (EmitTreeStep),
+     * so the two took turns on his GPU (Route 111: 333 cells of the map laid twice at one height). Under a tree it
+     * is the tree's plain ground now (VoxelTree_GroundMetatile; none where that is the tree's drawing itself - the
+     * tree's own ground covers the cell), and it lies 5/512 tile lower again, a height no other ground piece takes.
+     * WJPC_SAFETY_FLOOR_OLD=1: as before. */
+    static int sOld = -1;
+    if (sOld < 0)
+        sOld = getenv("WJPC_SAFETY_FLOOR_OLD") != NULL;
+    if (!sOld && VoxelWorld_UsesTreeSprites(inst))
+    {
+        int mt = VoxelWorld_GetMetatileId(x, y);
+
+        if (VoxelTree_Part(inst->secondaryTileset, mt) >= 0)
+        {
+            int ground = VoxelTree_GroundMetatile(inst->secondaryTileset, mt);
+
+            if (ground == mt || !MetatileUV(b, ground, &u0, &v0, &u1, &v1))
+                return;
+            goto haveUV;
+        }
+    }
+    if (!VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1))
+        return;
+haveUV:
     /* POL-51 (Route 115's flight: a slab of the ground drawn through its top steps - this plate, laid at the lowest
      * of the cell and its neighbours): none in a stair notch (beside one it closed a hole: Mt Pyre), where the steps and their side walls close
      * everything. Found by turning it off (WJPC_NO_SAFETY_FLOOR=1). */
@@ -2325,7 +2351,10 @@ static void EmitSafetyFloor(VoxelBuilder *b, const VoxelMapInstance *inst, int x
         for (int i = 0; i < VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE; ++i)
             low = fminf(low, g[i] / 16.0f);
     }
-    b->lift = low - 1.0f / 16.0f;
+    /* (5/512 tile lower again: the ground's levels are whole 1/16ths and EmitGroundRunOn's floors 2 or 2 1/8 pixels
+     * under them - 1/64 more landed on those (Route 111 still had 261 doubled cells); a 5/512 step never can,
+     * positions being kept in 1/512ths) */
+    b->lift = low - 1.0f / 16.0f - (sOld ? 0.0f : 5.0f / 512.0f);
     b->shift = b->lift;
     VoxelMesh_Top(b, (float)x, (float)y, 0.0f, 0.0f, u0, v0, u1, v1, SHADE_TOP);
     b->lift = 0.0f;
