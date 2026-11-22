@@ -25,8 +25,22 @@
 #define TILES_PER_TILESET 512u
 #define SUBTILE_PX 8u
 
-/* In texels; see VoxelAtlas_SlotUV. */
-#define VOXEL_ATLAS_EDGE_INSET (1.0f / 32.0f)
+/* In texels; see VoxelAtlas_SlotUV. Brennan 2026-11-21 17:25 / 2026-11-22 02:38 (Fiery Path: "thin horizontal black
+ * lines cut across the cave floor and walls", "they move with the ground like they flutter when walking"): a
+ * thirty-second was not enough on his GPU (RTX 3080, scene drawn at 4K and shrunk) - the same edge reads as the
+ * fences' and the trees' ground lines (21k, 21l: a quarter texel fixed those). A quarter texel now.
+ * WJPC_ATLAS_EDGE_INSET=<texels>: another (0.03125 as before). */
+static float AtlasEdgeInset(void)
+{
+    static float sInset = -1.0f;
+    if (sInset < 0.0f)
+    {
+        const char *e = getenv("WJPC_ATLAS_EDGE_INSET");
+        sInset = e != NULL ? (float)atof(e) : 0.25f;
+    }
+    return sInset;
+}
+#define VOXEL_ATLAS_EDGE_INSET AtlasEdgeInset()
 
 void VoxelAtlas_SlotUV(unsigned slot, float *u0, float *v0, float *u1, float *v1)
 {

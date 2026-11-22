@@ -165,6 +165,24 @@ void VoxelBuilder_Tri(VoxelBuilder *builder, const VoxelVertex *a,
 void VoxelBuilder_Quad(VoxelBuilder *builder, const VoxelVertex *a, const VoxelVertex *b,
                        const VoxelVertex *c, const VoxelVertex *d)
 {
+    {
+        /* test aid: WJPC_QUAD_TRACE="x z y": who lays a quad over world point (x, z) at height y */
+        static int sOn = -1;
+        static float tx, tz, ty;
+        if (sOn < 0)
+            sOn = getenv("WJPC_QUAD_TRACE") != NULL && sscanf(getenv("WJPC_QUAD_TRACE"), "%f %f %f", &tx, &tz, &ty) == 3;
+        if (sOn)
+        {
+            float x0 = fminf(fminf(a->x, b->x), fminf(c->x, d->x)), x1 = fmaxf(fmaxf(a->x, b->x), fmaxf(c->x, d->x));
+            float z0 = fminf(fminf(a->z, b->z), fminf(c->z, d->z)) + builder->shift;
+            float z1 = fmaxf(fmaxf(a->z, b->z), fmaxf(c->z, d->z)) + builder->shift;
+            float y = a->y + builder->lift + builder->base;
+            float zz = VoxelBuilder_StretchZ(builder, z0) - builder->originZ, zz1 = VoxelBuilder_StretchZ(builder, z1) - builder->originZ;
+            if (tx > x0 - builder->originX && tx < x1 - builder->originX && tz > zz && tz < zz1 && fabsf(y - ty) < 0.004f
+             && a->y == b->y && b->y == c->y)
+                fprintf(stderr, "QUADTRACE %p y %.4f z %.3f-%.3f x %.3f-%.3f\n", __builtin_return_address(0), y, zz, zz1, x0, x1);
+        }
+    }
 #if CTR_VOXEL_LIGHTING
     if (builder->lighting)
     {
@@ -2245,8 +2263,17 @@ static void EmitNorthFace(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
         if (!ground)
             continue;
         b->lightingConstant = 1.0f;
-        for (int e = 0; e < 2; ++e)
-            bot[e] -= 1.0f;
+        /* (Brennan's doubled-ground cells - Route 111 28-30,86-87 and 29-32,119-120, Route 112's 14 - were this ground
+         * and a cut tile's fill run on under the same cell from beside it (EmitRunOn: foot - 1/16 .. 1.5/16, not two
+         * under as said above) in one plane: the depth test took either. Half a pixel under now, over every fill.
+         * WJPC_NORTH_GROUND_OLD=1: a pixel, as before.) */
+        {
+            static int sOld = -1;
+            if (sOld < 0)
+                sOld = getenv("WJPC_NORTH_GROUND_OLD") != NULL;
+            for (int e = 0; e < 2; ++e)
+                bot[e] -= sOld ? 1.0f : 0.5f;
+        }
         {
             float za = fminf(zb[0], zb[1]), zz = fmaxf(zt[0], zt[1]);
 
