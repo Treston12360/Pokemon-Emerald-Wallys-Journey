@@ -1352,12 +1352,14 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
             const unsigned last = VOXEL_RELIEF_SIDE - 1;
             float footH[VOXEL_RELIEF_SIDE], footZ[VOXEL_RELIEF_SIDE], along[VOXEL_RELIEF_SIDE];
             float lowest, level, shift;
+            bool water;
 
             if (ring == NULL || VoxelRelief_Belt(ring) != 0)
                 continue;
             /* a belt of water lies at its own level (BorderWaterLevel), a
              * belt of land at its edge's (VoxelMesh_BorderLevel) */
-            if (BorderWaterLevel(nx, ny, &level, &shift) || VoxelMesh_BorderLevel(nx, ny, &level, &shift))
+            water = BorderWaterLevel(nx, ny, &level, &shift);
+            if (water || VoxelMesh_BorderLevel(nx, ny, &level, &shift))
                 belt += level;
             lowest = belt;
             for (unsigned k = 0; k < VOXEL_RELIEF_SIDE; ++k)
@@ -1372,6 +1374,32 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
             }
             if (lowest >= belt - 0.05f)
                 continue;
+            /* Brennan 2026-11-21 21:31 (21p's upright rock step on Route 111's west edge by Route 117: "Remove that
+             * steep upright rock slab ... continue the horizontal stepped brown cliff tiers"; and Route 117's own
+             * north-east corner cell, a wall two levels up to the ring's rock): beside the belt's plain land no wall
+             * is drawn - the belt's own ground closes those seams (its risers run on along the edge). Beside the SEA
+             * and beside a WOOD they stay: without them a sliver opens (Ever Grande's east cliff over the sea; Route
+             * 104's west edge, a level under its wood, seen from Route 105). Checked with the magenta gap test (F7):
+             * every outdoor map's west and east edges (200 views) at 1280x720, the 18 views where those walls show at
+             * 1920x1080 and 2560x1440, every outdoor map's north edge (100 views) at 1920x1080 and 2560x1440
+             * (Brennan 21:53: test at his resolutions). WJPC_EDGE_LAND_WALLS=1: drawn as before;
+             * WJPC_EDGE_SIDE_WALLS_OFF=1 (test aid): none at all. */
+            {
+                static int sLandWalls = -1, sNone = -1;
+                if (sLandWalls < 0)
+                {
+                    sLandWalls = getenv("WJPC_EDGE_LAND_WALLS") != NULL;
+                    sNone = getenv("WJPC_EDGE_SIDE_WALLS_OFF") != NULL;
+                }
+                bool plain = !water && !BeltIsTree(nx, ny);
+
+                if (getenv("WJPC_EDGE_DUMP") != NULL)
+                    fprintf(stderr, "EDGELAND %d %d d%d water %d tree %d foot %.2f..%.2f belt %.2f drawn %d\n", x, y, d,
+                            (int)water, (int)BeltIsTree(nx, ny), footH[0], footH[last], belt,
+                            (int)!(sNone || (plain && !sLandWalls)));
+                if (sNone || (plain && !sLandWalls))
+                    continue;
+            }
             /* Brennan 2026-11-21 17:25 (image 7, the same slab, below): the wall was the edge cell's own drawing -
              * grass, a green wall. It is the map's cliff face (VoxelRelief_FaceTile) now, a rock cliff where the ground
              * meets higher land. WJPC_EDGE_WALL_OWN_DRAWING=1: the cell's drawing, as before. */

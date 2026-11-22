@@ -721,7 +721,11 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 bool ledge = part < 0 && VoxelMesh_LedgeTree(x, y, &level, &shift);
 
             if (part >= 0 && VoxelMesh_TreeOverDrop(x, y))
+            {
+                if (getenv("WJPC_TREE_DUMP") != NULL)
+                    fprintf(stderr, "BELTTREE %d %d over a drop: none\n", x, y);
                 continue;
+            }
 
             if (ledge)
             {
