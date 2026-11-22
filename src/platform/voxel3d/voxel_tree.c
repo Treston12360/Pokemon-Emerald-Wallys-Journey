@@ -67,6 +67,11 @@ static int SmallTrunkGround(const void *secondaryTileset, int metatileId)
         return 3;
     if (secondaryTileset == &gTileset_Mauville && metatileId == 0x226)
         return 1; /* tree_small_trunk_grass_road.png at 80,16 */
+    /* Brennan 2026-11-22 13:37 (B2, Verdanturf: "there is still a flat 2D tree graphic lying on the ground"): 2C9,
+     * Mauville's small trunk on its grass (Verdanturf 19,4 and 0,8, under 2C1/0C7 crowns), was laid flat as ground.
+     * It stands as the General's small tree on grass. WJPC_FLAT_2C9=1: flat, as before. */
+    if (secondaryTileset == &gTileset_Mauville && metatileId == 0x2C9 && getenv("WJPC_FLAT_2C9") == NULL)
+        return TRUNK_GENERAL;
     /* At a wood's way in, on the darker grass of its path: Rustboro's 307
      * (Route 104, Southern Island, Faraway Island) and Lavaridge's 201
      * (Route 112) */

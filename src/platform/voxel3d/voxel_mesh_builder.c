@@ -6018,7 +6018,10 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                             v[k].z = (float)(y + (k >> 1)) + cs[k];
                             v[k].u = k & 1 ? u1f : u0f;
                             v[k].v = k >> 1 ? v1f : v0f;
-                            v[k].shade = VOXEL_FACE_SHADE(0.55f); /* the floor under a wood, as the inner floor */
+                            static float sWoodShade = -1.0f;
+                            if (sWoodShade < 0.0f)
+                                sWoodShade = getenv("WJPC_WOOD_FLOOR_SHADE") ? (float)atof(getenv("WJPC_WOOD_FLOOR_SHADE")) : 0.5f;
+                            v[k].shade = SHADE_TOP * sWoodShade; /* the floor under a wood, in its shade (also with Gamma lighting) */
                         }
                         VoxelBuilder_Tri(builder, &v[0], &v[3], &v[1]);
                         VoxelBuilder_Tri(builder, &v[0], &v[2], &v[3]);
