@@ -1498,6 +1498,25 @@ static void WorkerStart(unsigned index)
     SDL_SemPost(sWorker.go);
 }
 
+/* test aid: WJPC_CULL_BOX="group*100+num x0 x1 z0 z1" - that map's triangles with their centre in the box (map
+ * cells) are not drawn, to find which map draws a face */
+static void CullBox(const VoxelMapInstance *inst, VoxelVertex *v, unsigned n)
+{
+    const char *e = getenv("WJPC_CULL_BOX");
+    int map;
+    float x0, x1, z0, z1;
+
+    if (e == NULL || sscanf(e, "%d %f %f %f %f", &map, &x0, &x1, &z0, &z1) != 5
+     || inst->mapGroup != map / 100 || inst->mapNum != map % 100)
+        return;
+    for (unsigned t = 0; t + 2 < n; t += 3)
+    {
+        float cx = (v[t].x + v[t + 1].x + v[t + 2].x) / 3.0f, cz = (v[t].z + v[t + 1].z + v[t + 2].z) / 3.0f;
+        if (cx >= x0 && cx <= x1 && cz >= z0 && cz <= z1)
+            v[t + 1] = v[t + 2] = v[t];
+    }
+}
+
 // The finished build into `m` (freed first if it held a mesh), which is then one of this frame's maps.
 unsigned gVoxel3DMapBuilds; // maps laid (built and sent), counted for the stall log (Brennan 2026-11-21 15:33: shadow blocks strobing)
 static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, InstanceMesh *m)
@@ -1517,6 +1536,7 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
 
         if (n != 0)
         {
+            CullBox(inst, pb->pageV[p], n);
             MeshSet(&m->terrain[p], pb->pageV[p], n, GL_STATIC_DRAW);
             if (getenv("WJPC_DUMP_TERRAIN") && inst->mapGroup == atoi(getenv("WJPC_DUMP_TERRAIN")) / 100
              && inst->mapNum == atoi(getenv("WJPC_DUMP_TERRAIN")) % 100)
@@ -1534,6 +1554,8 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
         else
             MeshFree(&m->terrain[p]);
     }
+    CullBox(inst, pb->v[1], pb->n[1]);
+    CullBox(inst, pb->v[2], pb->n[2]);
     MeshSet(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
     MeshSet(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
     if (getenv("WJPC_DUMP_TERRAIN") && inst->mapGroup == atoi(getenv("WJPC_DUMP_TERRAIN")) / 100

@@ -1372,8 +1372,42 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
             }
             if (lowest >= belt - 0.05f)
                 continue;
+            /* Brennan 2026-11-21 17:25 (image 7, the same slab, below): the wall was the edge cell's own drawing -
+             * grass, a green wall. It is the map's cliff face (VoxelRelief_FaceTile) now, a rock cliff where the ground
+             * meets higher land. WJPC_EDGE_WALL_OWN_DRAWING=1: the cell's drawing, as before. */
+            if (!uv)
+            {
+                static int sOwn = -1;
+                int face;
+
+                if (sOwn < 0)
+                    sOwn = getenv("WJPC_EDGE_WALL_OWN_DRAWING") != NULL;
+                face = sOwn ? -1 : VoxelRelief_FaceTile(inst);
+                /* (a map with no cliff of its own - Route 117 - meets the ring's rock: the ring's face tile, when the
+                 * two share their tilesets, so the atlas has it) */
+                if (face < 0 && !sOwn && ring->primaryTileset == inst->primaryTileset
+                 && ring->secondaryTileset == inst->secondaryTileset)
+                    face = VoxelRelief_FaceTile(ring);
+                uv = face >= 0 && MetatileUV(b, face, &u0, &v0, &u1, &v1);
+                if (getenv("WJPC_EDGE_DUMP") != NULL)
+                    fprintf(stderr, "EDGEWALL %d %d d%d foot %.2f..%.2f footZ %.2f lowest %.2f belt %.2f beltZ %.2f level %.2f shift %.2f instFace %d ringFace %d tiles %d/%d vs %d/%d uv %d\n",
+                            x, y, d, footH[0], footH[last], footZ[0], lowest, belt, beltZ, level, shift, VoxelRelief_FaceTile(inst), VoxelRelief_FaceTile(ring),
+                            (int)inst->primaryTileset, (int)inst->secondaryTileset,
+                            (int)ring->primaryTileset, (int)ring->secondaryTileset, (int)uv);
+            }
             if (!uv && !(uv = VoxelMesh_TileUV(b, x, y, &u0, &v0, &u1, &v1)))
                 return;
+            /* Brennan 2026-11-21 17:25 (image 7, Route 117 by the house: "a raised/tilted green grass block sticking up
+             * higher than the surrounding ground"): Route 111's west edge south of its cliffs lies two levels under
+             * the ring, and is drawn two rows north (its depth). The wall's foot was there, its top at the edge's own
+             * row: it leant two tiles south, over the ring's lower terraces - the green slab. The top now stands over
+             * the foot, an upright wall where the edge is drawn. (The ring's own shift there would do as well, but
+             * beside Route 112 it differs from the map's by two rows: a saw-tooth of leaning walls.)
+             * WJPC_EDGE_WALL_TOP_OLD=1: as before. */
+            static int sTopOld = -1;
+            if (sTopOld < 0)
+                sTopOld = getenv("WJPC_EDGE_WALL_TOP_OLD") != NULL;
+#define TOPZ(i, old) (sTopOld ? (old) : footZ[i])
             for (unsigned k = 0; k < last; ++k)
             {
                 float hA = belt - footH[k], hB = belt - footH[k + 1];
@@ -1389,12 +1423,12 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
                     VoxelBuilder_Quad(b,
                         &(VoxelVertex){xa, footH[k],     footZ[k],     ua, v0 + (v1 - v0) * fA, SHADE_SOUTH},
                         &(VoxelVertex){xb, footH[k + 1], footZ[k + 1], ub, v0 + (v1 - v0) * fB, SHADE_SOUTH},
-                        &(VoxelVertex){xb, belt,         (float)y + beltZ, ub, v0,              SHADE_SOUTH},
-                        &(VoxelVertex){xa, belt,         (float)y + beltZ, ua, v0,              SHADE_SOUTH});
+                        &(VoxelVertex){xb, belt,         TOPZ(k + 1, (float)y + beltZ), ub, v0, SHADE_SOUTH},
+                        &(VoxelVertex){xa, belt,         TOPZ(k, (float)y + beltZ),     ua, v0, SHADE_SOUTH});
                 }
                 else
                 {
-                    float za = (float)y + along[k] + beltZ, zb = (float)y + along[k + 1] + beltZ;
+                    float za = TOPZ(k, (float)y + along[k] + beltZ), zb = TOPZ(k + 1, (float)y + along[k + 1] + beltZ);
                     float va = v0 + (v1 - v0) * along[k], vb = v0 + (v1 - v0) * along[k + 1];
 
                     if (d == 2) /* faces east, on the west edge */
@@ -1411,6 +1445,7 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
                             &(VoxelVertex){wx + 1.0f, footH[k],     footZ[k],     u1 - (u1 - u0) * fA, va, SHADE_WEST});
                 }
             }
+#undef TOPZ
             continue;
         }
         /* POL-56 (Brennan 2026-11-19 14:23, Route 120 south-west: "a light-blue skybox triangle is bleeding through
