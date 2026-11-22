@@ -5628,6 +5628,60 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     b->lift = 0.0f;
     b->shift = 0.0f;
     b->stretchAdd = 0.0f;
+    /* Brennan 2026-11-22 13:37 (B2, Verdanturf's west woods: "grey/snow-covered cliff blocks are jutting straight
+     * through the middle of the 3D trees"): under a wood climbing a slope the field's ledges stood as blocks of grass
+     * between the crowns. Under a cell of the woods the field is laid as one
+     * smooth slope (no ledges, no walls), in the crowns' shade; the trees on it hide it. WJPC_WOOD_FIELD_LEDGES=1: ledges, as before. */
+    {
+        static int sLedges = -1;
+        if (sLedges < 0)
+            sLedges = getenv("WJPC_WOOD_FIELD_LEDGES") != NULL;
+        float lo = c[0].h, hi = c[0].h;
+        for (int k = 1; k < 4; ++k)
+            lo = c[k].h < lo ? c[k].h : lo, hi = c[k].h > hi ? c[k].h : hi;
+        if (!sLedges && BeltIsTree(x, y))
+        {
+            VoxelVertex v[4];
+            for (int k = 0; k < 4; ++k)
+            {
+                /* each corner through the trees' own levels round it (VoxelMesh_BorderLevel, over their base), so
+                 * the trees stand on it - at the field's own height a tree on a ledge was buried to its crown */
+                int vx = x + (k & 1), vy = y + (k >> 1), n = 0;
+                float sh = 0.0f, ss = 0.0f;
+                bool open = false;
+                for (int q = 0; q < 4; ++q)
+                {
+                    int cx = vx - 1 + (q & 1), cy = vy - 1 + (q >> 1);
+                    float e, es;
+                    if (VoxelWorld_GetInstanceAt(cx, cy) == NULL && BorderAt(cx, cy) && BeltIsTree(cx, cy)
+                     && VoxelMesh_BorderLevel(cx, cy, &e, &es))
+                        sh += BeltBase(cx, cy) + e, ss += es, ++n;
+                    else
+                        open = true; /* the wood's edge: the field's own height there, which its neighbour meets */
+                }
+                if (n > 0 && !open)
+                    c[k].h = sh / (float)n, c[k].s = ss / (float)n;
+                v[k].x = c[k].x;
+                v[k].y = c[k].h;
+                v[k].z = c[k].y + c[k].s;
+                v[k].u = k & 1 ? tu1 : tu0;
+                v[k].v = k >> 1 ? tv1 : tv0;
+                {
+                    static float sShade = -1.0f;
+                    if (sShade < 0.0f)
+                        sShade = getenv("WJPC_WOOD_FLOOR_SHADE") ? (float)atof(getenv("WJPC_WOOD_FLOOR_SHADE")) : 0.5f;
+                    v[k].shade = SHADE_TOP * sShade; /* the wood's floor, in the crowns' shade */
+                }
+            }
+            VoxelBuilder_Tri(b, &v[0], &v[3], &v[1]);
+            VoxelBuilder_Tri(b, &v[0], &v[2], &v[3]);
+            b->base = keepBase;
+            b->lift = keepLift;
+            b->shift = keepShift;
+            b->stretchAdd = keepStretch;
+            return;
+        }
+    }
     /* the diagonal along the corner that differs most from the others' mean - the chamfer runs across a turn */
     if (fabsf(c[0].h - c[3].h) <= fabsf(c[1].h - c[2].h))
     {
@@ -5913,6 +5967,64 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             {
                 EmitFieldCell(builder, x, y);
                 continue;
+            }
+            /* Brennan 2026-11-22 13:37 (B2, Verdanturf's west woods: "grey/snow-covered cliff blocks are jutting
+             * straight through the middle of the 3D trees"): a wood of large trees stood on its own flat ground at
+             * its edge's level, a block a cell with step faces - on a slope (the woods climbing north-west of
+             * Verdanturf) the blocks stood up between the crowns. Its floor is the field's now, laid as one smooth
+             * slope in the crowns' shade (EmitFieldCell); the trees keep their own level. WJPC_WOOD_BLOCKS=1: blocks. */
+            {
+                static int sBlocks = -1;
+                if (sBlocks < 0)
+                    sBlocks = getenv("WJPC_WOOD_BLOCKS") != NULL;
+                if (!sBlocks && !drawn && FieldOn() && BeltIsTree(x, y) && BeltTreeOwn(x, y))
+                {
+                    /* each corner the mean of the trees' levels round it (as they stand: VoxelMesh_BorderLevel) */
+                    float ch[4], cs[4];
+                    bool ok = true;
+                    for (int k = 0; k < 4 && ok; ++k)
+                    {
+                        int vx = x + (k & 1), vy = y + (k >> 1), n = 0;
+                        float sh = 0.0f, ss = 0.0f;
+                        for (int q = 0; q < 4; ++q)
+                        {
+                            int cx = vx - 1 + (q & 1), cy = vy - 1 + (q >> 1);
+                            float e, es;
+                            /* (every wood cell round it, over its own base: the field's woods' floor meets it) */
+                            if (VoxelWorld_GetInstanceAt(cx, cy) == NULL && BorderAt(cx, cy) && BeltIsTree(cx, cy)
+                             && VoxelMesh_BorderLevel(cx, cy, &e, &es))
+                                sh += BeltBase(cx, cy) - builder->base + e, ss += es, ++n;
+                        }
+                        ok = n > 0;
+                        if (ok)
+                            ch[k] = sh / (float)n, cs[k] = ss / (float)n;
+                        if (ok && n < 4)
+                        {
+                            /* the wood's edge: the field's own height there, which its neighbour meets */
+                            float fh, fs;
+                            BeltField(vx, vy, &fh, &fs);
+                            ch[k] = fh - builder->base;
+                            cs[k] = fs;
+                        }
+                    }
+                    float u0f, v0f, u1f, v1f;
+                    if (ok && MetatileUV(builder, BeltTreeGround(x, y), &u0f, &v0f, &u1f, &v1f))
+                    {
+                        VoxelVertex v[4];
+                        for (int k = 0; k < 4; ++k)
+                        {
+                            v[k].x = (float)(x + (k & 1));
+                            v[k].y = ch[k];
+                            v[k].z = (float)(y + (k >> 1)) + cs[k];
+                            v[k].u = k & 1 ? u1f : u0f;
+                            v[k].v = k >> 1 ? v1f : v0f;
+                            v[k].shade = VOXEL_FACE_SHADE(0.55f); /* the floor under a wood, as the inner floor */
+                        }
+                        VoxelBuilder_Tri(builder, &v[0], &v[3], &v[1]);
+                        VoxelBuilder_Tri(builder, &v[0], &v[2], &v[3]);
+                        continue;
+                    }
+                }
             }
             {
                 float edge, edgeShift;

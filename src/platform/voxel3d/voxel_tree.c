@@ -910,7 +910,22 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                     whole = ca != NULL && VoxelTree_Part(ca->secondaryTileset, VoxelWorld_BorderMetatile(cx, cy)) == k;
                 }
                 if (!whole)
-                    continue;
+                {
+                    /* Brennan 2026-11-22 13:37 (B2, Verdanturf's west woods): where two borders' woods meet on a
+                     * diagonal (Route 116's large trees, Verdanturf's small ones) the large trees the seam cuts in
+                     * half were left out, a bare strip of ground through the wood. A cut large tree's cells stand as
+                     * small trees (the General's 0C7, as the ledge trees) at their own level. WJPC_CUT_TREES_BARE=1:
+                     * left out, as before. */
+                    static int sBare = -1;
+                    if (sBare < 0)
+                        sBare = getenv("WJPC_CUT_TREES_BARE") != NULL;
+                    if (sBare)
+                        continue;
+                    part = VOXEL_TREE_SMALL;
+                    metatileId = 0x0C7;
+                    ox = x;
+                    oy = y;
+                }
             }
             if (part >= 0)
             {

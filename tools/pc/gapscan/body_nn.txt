@@ -1,0 +1,400 @@
+warp 0 0 7 3
+wait 150
+winshot f/NAME/0_7_3.png
+wait 3
+warp 0 0 22 3
+wait 150
+winshot f/NAME/0_22_3.png
+wait 3
+warp 0 1 10 3
+wait 150
+winshot f/NAME/1_10_3.png
+wait 3
+warp 0 1 30 3
+wait 150
+winshot f/NAME/1_30_3.png
+wait 3
+warp 0 2 10 3
+wait 150
+winshot f/NAME/2_10_3.png
+wait 3
+warp 0 2 30 3
+wait 150
+winshot f/NAME/2_30_3.png
+wait 3
+warp 0 3 10 3
+wait 150
+winshot f/NAME/3_10_3.png
+wait 3
+warp 0 3 30 3
+wait 150
+winshot f/NAME/3_30_3.png
+wait 3
+warp 0 4 10 3
+wait 150
+winshot f/NAME/4_10_3.png
+wait 3
+warp 0 4 30 3
+wait 150
+winshot f/NAME/4_30_3.png
+wait 3
+warp 0 5 20 3
+wait 150
+winshot f/NAME/5_20_3.png
+wait 3
+warp 0 5 60 3
+wait 150
+winshot f/NAME/5_60_3.png
+wait 3
+warp 0 6 20 3
+wait 150
+winshot f/NAME/6_20_3.png
+wait 3
+warp 0 6 60 3
+wait 150
+winshot f/NAME/6_60_3.png
+wait 3
+warp 0 7 15 3
+wait 150
+winshot f/NAME/7_15_3.png
+wait 3
+warp 0 7 45 3
+wait 150
+winshot f/NAME/7_45_3.png
+wait 3
+warp 0 8 10 3
+wait 150
+winshot f/NAME/8_10_3.png
+wait 3
+warp 0 8 30 3
+wait 150
+winshot f/NAME/8_30_3.png
+wait 3
+warp 0 9 5 3
+wait 150
+winshot f/NAME/9_5_3.png
+wait 3
+warp 0 9 15 3
+wait 150
+winshot f/NAME/9_15_3.png
+wait 3
+warp 0 10 5 3
+wait 150
+winshot f/NAME/10_5_3.png
+wait 3
+warp 0 10 15 3
+wait 150
+winshot f/NAME/10_15_3.png
+wait 3
+warp 0 11 5 3
+wait 150
+winshot f/NAME/11_5_3.png
+wait 3
+warp 0 11 15 3
+wait 150
+winshot f/NAME/11_15_3.png
+wait 3
+warp 0 12 5 3
+wait 150
+winshot f/NAME/12_5_3.png
+wait 3
+warp 0 12 15 3
+wait 150
+winshot f/NAME/12_15_3.png
+wait 3
+warp 0 13 5 3
+wait 150
+winshot f/NAME/13_5_3.png
+wait 3
+warp 0 13 15 3
+wait 150
+winshot f/NAME/13_15_3.png
+wait 3
+warp 0 14 5 3
+wait 150
+winshot f/NAME/14_5_3.png
+wait 3
+warp 0 14 15 3
+wait 150
+winshot f/NAME/14_15_3.png
+wait 3
+warp 0 15 5 3
+wait 150
+winshot f/NAME/15_5_3.png
+wait 3
+warp 0 15 15 3
+wait 150
+winshot f/NAME/15_15_3.png
+wait 3
+warp 0 16 5 3
+wait 150
+winshot f/NAME/16_5_3.png
+wait 3
+warp 0 16 15 3
+wait 150
+winshot f/NAME/16_15_3.png
+wait 3
+warp 0 17 12 3
+wait 150
+winshot f/NAME/17_12_3.png
+wait 3
+warp 0 17 37 3
+wait 150
+winshot f/NAME/17_37_3.png
+wait 3
+warp 0 18 20 3
+wait 150
+winshot f/NAME/18_20_3.png
+wait 3
+warp 0 18 60 3
+wait 150
+winshot f/NAME/18_60_3.png
+wait 3
+warp 0 19 10 3
+wait 150
+winshot f/NAME/19_10_3.png
+wait 3
+warp 0 19 30 3
+wait 150
+winshot f/NAME/19_30_3.png
+wait 3
+warp 0 20 10 3
+wait 150
+winshot f/NAME/20_10_3.png
+wait 3
+warp 0 20 30 3
+wait 150
+winshot f/NAME/20_30_3.png
+wait 3
+warp 0 21 22 3
+wait 150
+winshot f/NAME/21_22_3.png
+wait 3
+warp 0 21 67 3
+wait 150
+winshot f/NAME/21_67_3.png
+wait 3
+warp 0 22 15 3
+wait 150
+winshot f/NAME/22_15_3.png
+wait 3
+warp 0 22 45 3
+wait 150
+winshot f/NAME/22_45_3.png
+wait 3
+warp 0 23 15 3
+wait 150
+winshot f/NAME/23_15_3.png
+wait 3
+warp 0 23 45 3
+wait 150
+winshot f/NAME/23_45_3.png
+wait 3
+warp 0 24 10 3
+wait 150
+winshot f/NAME/24_10_3.png
+wait 3
+warp 0 24 30 3
+wait 150
+winshot f/NAME/24_30_3.png
+wait 3
+warp 0 25 10 3
+wait 150
+winshot f/NAME/25_10_3.png
+wait 3
+warp 0 25 30 3
+wait 150
+winshot f/NAME/25_30_3.png
+wait 3
+warp 0 26 10 3
+wait 150
+winshot f/NAME/26_10_3.png
+wait 3
+warp 0 26 30 3
+wait 150
+winshot f/NAME/26_30_3.png
+wait 3
+warp 0 27 10 3
+wait 150
+winshot f/NAME/27_10_3.png
+wait 3
+warp 0 27 30 3
+wait 150
+winshot f/NAME/27_30_3.png
+wait 3
+warp 0 28 25 3
+wait 150
+winshot f/NAME/28_25_3.png
+wait 3
+warp 0 28 75 3
+wait 150
+winshot f/NAME/28_75_3.png
+wait 3
+warp 0 29 10 3
+wait 150
+winshot f/NAME/29_10_3.png
+wait 3
+warp 0 29 30 3
+wait 150
+winshot f/NAME/29_30_3.png
+wait 3
+warp 0 30 10 3
+wait 150
+winshot f/NAME/30_10_3.png
+wait 3
+warp 0 30 30 3
+wait 150
+winshot f/NAME/30_30_3.png
+wait 3
+warp 0 31 25 3
+wait 150
+winshot f/NAME/31_25_3.png
+wait 3
+warp 0 31 75 3
+wait 150
+winshot f/NAME/31_75_3.png
+wait 3
+warp 0 32 15 3
+wait 150
+winshot f/NAME/32_15_3.png
+wait 3
+warp 0 32 45 3
+wait 150
+winshot f/NAME/32_45_3.png
+wait 3
+warp 0 33 20 3
+wait 150
+winshot f/NAME/33_20_3.png
+wait 3
+warp 0 33 60 3
+wait 150
+winshot f/NAME/33_60_3.png
+wait 3
+warp 0 34 10 3
+wait 150
+winshot f/NAME/34_10_3.png
+wait 3
+warp 0 34 30 3
+wait 150
+winshot f/NAME/34_30_3.png
+wait 3
+warp 0 35 10 3
+wait 150
+winshot f/NAME/35_10_3.png
+wait 3
+warp 0 35 30 3
+wait 150
+winshot f/NAME/35_30_3.png
+wait 3
+warp 0 36 20 3
+wait 150
+winshot f/NAME/36_20_3.png
+wait 3
+warp 0 36 60 3
+wait 150
+winshot f/NAME/36_60_3.png
+wait 3
+warp 0 37 10 3
+wait 150
+winshot f/NAME/37_10_3.png
+wait 3
+warp 0 37 30 3
+wait 150
+winshot f/NAME/37_30_3.png
+wait 3
+warp 0 38 35 3
+wait 150
+winshot f/NAME/38_35_3.png
+wait 3
+warp 0 38 105 3
+wait 150
+winshot f/NAME/38_105_3.png
+wait 3
+warp 0 39 20 3
+wait 150
+winshot f/NAME/39_20_3.png
+wait 3
+warp 0 39 60 3
+wait 150
+winshot f/NAME/39_60_3.png
+wait 3
+warp 0 40 20 3
+wait 150
+winshot f/NAME/40_20_3.png
+wait 3
+warp 0 40 60 3
+wait 150
+winshot f/NAME/40_60_3.png
+wait 3
+warp 0 41 20 3
+wait 150
+winshot f/NAME/41_20_3.png
+wait 3
+warp 0 41 60 3
+wait 150
+winshot f/NAME/41_60_3.png
+wait 3
+warp 0 42 20 3
+wait 150
+winshot f/NAME/42_20_3.png
+wait 3
+warp 0 42 60 3
+wait 150
+winshot f/NAME/42_60_3.png
+wait 3
+warp 0 43 30 3
+wait 150
+winshot f/NAME/43_30_3.png
+wait 3
+warp 0 43 90 3
+wait 150
+winshot f/NAME/43_90_3.png
+wait 3
+warp 0 44 20 3
+wait 150
+winshot f/NAME/44_20_3.png
+wait 3
+warp 0 44 60 3
+wait 150
+winshot f/NAME/44_60_3.png
+wait 3
+warp 0 45 20 3
+wait 150
+winshot f/NAME/45_20_3.png
+wait 3
+warp 0 45 60 3
+wait 150
+winshot f/NAME/45_60_3.png
+wait 3
+warp 0 46 15 3
+wait 150
+winshot f/NAME/46_15_3.png
+wait 3
+warp 0 46 45 3
+wait 150
+winshot f/NAME/46_45_3.png
+wait 3
+warp 0 47 20 3
+wait 150
+winshot f/NAME/47_20_3.png
+wait 3
+warp 0 47 60 3
+wait 150
+winshot f/NAME/47_60_3.png
+wait 3
+warp 0 48 20 3
+wait 150
+winshot f/NAME/48_20_3.png
+wait 3
+warp 0 48 60 3
+wait 150
+winshot f/NAME/48_60_3.png
+wait 3
+warp 0 49 20 3
+wait 150
+winshot f/NAME/49_20_3.png
+wait 3
+warp 0 49 60 3
+wait 150
+winshot f/NAME/49_60_3.png
+wait 3

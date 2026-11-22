@@ -1,0 +1,343 @@
+warp 0 0 7 26
+wait 150
+winshot f/NAME/0_7_26.png
+warp 0 0 22 26
+wait 150
+winshot f/NAME/0_22_26.png
+warp 0 1 10 56
+wait 150
+winshot f/NAME/1_10_56.png
+warp 0 1 30 56
+wait 150
+winshot f/NAME/1_30_56.png
+warp 0 2 10 16
+wait 150
+winshot f/NAME/2_10_16.png
+warp 0 2 30 16
+wait 150
+winshot f/NAME/2_30_16.png
+warp 0 3 10 56
+wait 150
+winshot f/NAME/3_10_56.png
+warp 0 3 30 56
+wait 150
+winshot f/NAME/3_30_56.png
+warp 0 4 10 16
+wait 150
+winshot f/NAME/4_10_16.png
+warp 0 4 30 16
+wait 150
+winshot f/NAME/4_30_16.png
+warp 0 5 20 36
+wait 150
+winshot f/NAME/5_20_36.png
+warp 0 5 60 36
+wait 150
+winshot f/NAME/5_60_36.png
+warp 0 6 20 36
+wait 150
+winshot f/NAME/6_20_36.png
+warp 0 6 60 36
+wait 150
+winshot f/NAME/6_60_36.png
+warp 0 7 15 56
+wait 150
+winshot f/NAME/7_15_56.png
+warp 0 7 45 56
+wait 150
+winshot f/NAME/7_45_56.png
+warp 0 8 10 76
+wait 150
+winshot f/NAME/8_10_76.png
+warp 0 8 30 76
+wait 150
+winshot f/NAME/8_30_76.png
+warp 0 9 5 16
+wait 150
+winshot f/NAME/9_5_16.png
+warp 0 9 15 16
+wait 150
+winshot f/NAME/9_15_16.png
+warp 0 10 5 16
+wait 150
+winshot f/NAME/10_5_16.png
+warp 0 10 15 16
+wait 150
+winshot f/NAME/10_15_16.png
+warp 0 11 5 16
+wait 150
+winshot f/NAME/11_5_16.png
+warp 0 11 15 16
+wait 150
+winshot f/NAME/11_15_16.png
+warp 0 12 5 16
+wait 150
+winshot f/NAME/12_5_16.png
+warp 0 12 15 16
+wait 150
+winshot f/NAME/12_15_16.png
+warp 0 13 5 16
+wait 150
+winshot f/NAME/13_5_16.png
+warp 0 13 15 16
+wait 150
+winshot f/NAME/13_15_16.png
+warp 0 14 5 16
+wait 150
+winshot f/NAME/14_5_16.png
+warp 0 14 15 16
+wait 150
+winshot f/NAME/14_15_16.png
+warp 0 15 5 36
+wait 150
+winshot f/NAME/15_5_36.png
+warp 0 15 15 36
+wait 150
+winshot f/NAME/15_15_36.png
+warp 0 16 5 16
+wait 150
+winshot f/NAME/16_5_16.png
+warp 0 16 15 16
+wait 150
+winshot f/NAME/16_15_16.png
+warp 0 17 12 16
+wait 150
+winshot f/NAME/17_12_16.png
+warp 0 17 37 16
+wait 150
+winshot f/NAME/17_37_16.png
+warp 0 18 20 18
+wait 150
+winshot f/NAME/18_20_18.png
+warp 0 18 60 18
+wait 150
+winshot f/NAME/18_60_18.png
+warp 0 19 10 76
+wait 150
+winshot f/NAME/19_10_76.png
+warp 0 19 30 76
+wait 150
+winshot f/NAME/19_30_76.png
+warp 0 20 10 76
+wait 150
+winshot f/NAME/20_10_76.png
+warp 0 20 30 76
+wait 150
+winshot f/NAME/20_30_76.png
+warp 0 21 22 16
+wait 150
+winshot f/NAME/21_22_16.png
+warp 0 21 67 16
+wait 150
+winshot f/NAME/21_67_16.png
+warp 0 22 15 16
+wait 150
+winshot f/NAME/22_15_16.png
+warp 0 22 45 16
+wait 150
+winshot f/NAME/22_45_16.png
+warp 0 23 15 16
+wait 150
+winshot f/NAME/23_15_16.png
+warp 0 23 45 16
+wait 150
+winshot f/NAME/23_45_16.png
+warp 0 24 10 59
+wait 150
+winshot f/NAME/24_10_59.png
+warp 0 24 30 59
+wait 150
+winshot f/NAME/24_30_59.png
+warp 0 25 10 96
+wait 150
+winshot f/NAME/25_10_96.png
+warp 0 25 30 96
+wait 150
+winshot f/NAME/25_30_96.png
+warp 0 26 10 136
+wait 150
+winshot f/NAME/26_10_136.png
+warp 0 26 30 136
+wait 150
+winshot f/NAME/26_30_136.png
+warp 0 27 10 56
+wait 150
+winshot f/NAME/27_10_56.png
+warp 0 27 30 56
+wait 150
+winshot f/NAME/27_30_56.png
+warp 0 28 25 16
+wait 150
+winshot f/NAME/28_25_16.png
+warp 0 28 75 16
+wait 150
+winshot f/NAME/28_75_16.png
+warp 0 29 10 76
+wait 150
+winshot f/NAME/29_10_76.png
+warp 0 29 30 76
+wait 150
+winshot f/NAME/29_30_76.png
+warp 0 30 10 76
+wait 150
+winshot f/NAME/30_10_76.png
+warp 0 30 30 76
+wait 150
+winshot f/NAME/30_30_76.png
+warp 0 31 25 16
+wait 150
+winshot f/NAME/31_25_16.png
+warp 0 31 75 16
+wait 150
+winshot f/NAME/31_75_16.png
+warp 0 32 15 16
+wait 150
+winshot f/NAME/32_15_16.png
+warp 0 32 45 16
+wait 150
+winshot f/NAME/32_45_16.png
+warp 0 33 20 16
+wait 150
+winshot f/NAME/33_20_16.png
+warp 0 33 60 16
+wait 150
+winshot f/NAME/33_60_16.png
+warp 0 34 10 136
+wait 150
+winshot f/NAME/34_10_136.png
+warp 0 34 30 136
+wait 150
+winshot f/NAME/34_30_136.png
+warp 0 35 10 96
+wait 150
+winshot f/NAME/35_10_96.png
+warp 0 35 30 96
+wait 150
+winshot f/NAME/35_30_96.png
+warp 0 36 20 16
+wait 150
+winshot f/NAME/36_20_16.png
+warp 0 36 60 16
+wait 150
+winshot f/NAME/36_60_16.png
+warp 0 37 10 36
+wait 150
+winshot f/NAME/37_10_36.png
+warp 0 37 30 36
+wait 150
+winshot f/NAME/37_30_36.png
+warp 0 38 35 16
+wait 150
+winshot f/NAME/38_35_16.png
+warp 0 38 105 16
+wait 150
+winshot f/NAME/38_105_16.png
+warp 0 39 20 76
+wait 150
+winshot f/NAME/39_20_76.png
+warp 0 39 60 76
+wait 150
+winshot f/NAME/39_60_76.png
+warp 0 40 20 36
+wait 150
+winshot f/NAME/40_20_36.png
+warp 0 40 60 36
+wait 150
+winshot f/NAME/40_60_36.png
+warp 0 41 20 76
+wait 150
+winshot f/NAME/41_20_76.png
+warp 0 41 60 76
+wait 150
+winshot f/NAME/41_60_76.png
+warp 0 42 20 76
+wait 150
+winshot f/NAME/42_20_76.png
+warp 0 42 60 76
+wait 150
+winshot f/NAME/42_60_76.png
+warp 0 43 30 36
+wait 150
+winshot f/NAME/43_30_36.png
+warp 0 43 90 36
+wait 150
+winshot f/NAME/43_90_36.png
+warp 0 44 20 36
+wait 150
+winshot f/NAME/44_20_36.png
+warp 0 44 60 36
+wait 150
+winshot f/NAME/44_60_36.png
+warp 0 45 20 36
+wait 150
+winshot f/NAME/45_20_36.png
+warp 0 45 60 36
+wait 150
+winshot f/NAME/45_60_36.png
+warp 0 46 15 36
+wait 150
+winshot f/NAME/46_15_36.png
+warp 0 46 45 36
+wait 150
+winshot f/NAME/46_45_36.png
+warp 0 47 20 36
+wait 150
+winshot f/NAME/47_20_36.png
+warp 0 47 60 36
+wait 150
+winshot f/NAME/47_60_36.png
+warp 0 48 20 36
+wait 150
+winshot f/NAME/48_20_36.png
+warp 0 48 60 36
+wait 150
+winshot f/NAME/48_60_36.png
+warp 0 49 20 36
+wait 150
+winshot f/NAME/49_20_36.png
+warp 0 49 60 36
+wait 150
+winshot f/NAME/49_60_36.png
+warp 0 50 20 76
+wait 150
+winshot f/NAME/50_20_76.png
+warp 0 50 60 76
+wait 150
+winshot f/NAME/50_60_76.png
+warp 0 51 20 76
+wait 150
+winshot f/NAME/51_20_76.png
+warp 0 51 60 76
+wait 150
+winshot f/NAME/51_60_76.png
+warp 0 52 20 76
+wait 150
+winshot f/NAME/52_20_76.png
+warp 0 52 60 76
+wait 150
+winshot f/NAME/52_60_76.png
+warp 0 53 30 36
+wait 150
+winshot f/NAME/53_30_36.png
+warp 0 53 90 36
+wait 150
+winshot f/NAME/53_90_36.png
+warp 0 54 20 36
+wait 150
+winshot f/NAME/54_20_36.png
+warp 0 54 60 36
+wait 150
+winshot f/NAME/54_60_36.png
+warp 0 55 10 76
+wait 150
+winshot f/NAME/55_10_76.png
+warp 0 55 30 76
+wait 150
+winshot f/NAME/55_30_76.png
+warp 0 56 20 36
+wait 150
+winshot f/NAME/56_20_36.png
+warp 0 56 60 36
+wait 150
+winshot f/NAME/56_60_36.png
+wait 3
