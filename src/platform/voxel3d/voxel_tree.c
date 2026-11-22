@@ -330,7 +330,7 @@ static void InsetGroundUV(float *u0, float *v0, float *u1, float *v1)
 {
     static float sIn = -1.0f;
     if (sIn < 0.0f)
-        sIn = getenv("WJPC_TREE_GROUND_INSET") ? (float)atof(getenv("WJPC_TREE_GROUND_INSET")) : 0.25f;
+        sIn = getenv("WJPC_TREE_GROUND_INSET") ? (float)atof(getenv("WJPC_TREE_GROUND_INSET")) : 0.45f; /* (22b: 0.25 -> 0.45, Route 102) */
     const float d = sIn / VOXEL_TREE_TEXTURE_DIM;
     *u0 += *u0 < *u1 ? d : -d;
     *u1 += *u0 < *u1 ? -d : d;

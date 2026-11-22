@@ -1491,7 +1491,7 @@ void VoxelBuildings_InsetTriUV(VoxelVertex *t)
     {
         sInset = getenv("WJPC_MODEL_UV_INSET") ? (float)atof(getenv("WJPC_MODEL_UV_INSET")) : 1.0f / 8.0f;
         sGroundInset = getenv("WJPC_GROUND_DECAL_INSET") ? (float)atof(getenv("WJPC_GROUND_DECAL_INSET"))
-                     : getenv("WJPC_MODEL_UV_INSET") ? sInset : 0.25f;
+                     : getenv("WJPC_MODEL_UV_INSET") ? sInset : 0.45f; /* (22b: 0.25 -> 0.45) */
         /* test aid: WJPC_UV_SIM_ERROR=e reads every face e pixel further out, as his GPU does (0.1 drew his lines) */
         if (getenv("WJPC_UV_SIM_ERROR"))
         {

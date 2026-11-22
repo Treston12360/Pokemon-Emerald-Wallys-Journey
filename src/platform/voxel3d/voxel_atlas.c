@@ -30,14 +30,17 @@
  * lines cut across the cave floor and walls", "they move with the ground like they flutter when walking"): a
  * thirty-second was not enough on his GPU (RTX 3080, scene drawn at 4K and shrunk) - the same edge reads as the
  * fences' and the trees' ground lines (21k, 21l: a quarter texel fixed those). A quarter texel now.
- * WJPC_ATLAS_EDGE_INSET=<texels>: another (0.03125 as before). */
+ * Brennan 2026-11-22 15:22 (Route 102, on 22a with the quarter: "black lines again and around base of trees" - a line
+ * across the dirt patch west of the woods, the test machine draws it there with faces read 0.1 texel out): 0.45 texel
+ * (nearest sampling still reads the edge texel anywhere inside it; the most margin before the art shifts a texel).
+ * WJPC_ATLAS_EDGE_INSET=<texels>: another (0.25: 22a; 0.03125: before 22a). */
 static float AtlasEdgeInset(void)
 {
     static float sInset = -1.0f;
     if (sInset < 0.0f)
     {
         const char *e = getenv("WJPC_ATLAS_EDGE_INSET");
-        sInset = e != NULL ? (float)atof(e) : 0.25f;
+        sInset = e != NULL ? (float)atof(e) : 0.45f;
     }
     return sInset;
 }
