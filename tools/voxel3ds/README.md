@@ -81,3 +81,10 @@ trees"). In `3ds_port/scripts`: `voxel_fortree.shrub(layout)` (the Fortree shrub
 card of its upper layer, grass pixels clear) with one spec per shrub (`wj_shrub_*`, 5 on Route 120, 4 on Route 119;
 Route 119's two wider ones done too as wj_shrub4_*, voxel_fortree.shrub(layout, 4), spliced --layout 35 2026-11-20 19:3x); `palm(..., extra_trunk=1)` for fortree_palm_short (one more trunk
 cell, 0x273's lower layer, foot kept on the rect's last row). Full donor; spliced `--layout` 5, 35, 36.
+
+## Fiery Path in 3D (2026-11-22, session 014PwRDj) - IN TEST
+Brennan: Fiery Path "into full 3D cave walls, raised ledges and 3D boulders". Emerald 3DS has no 3D Fiery Path and its
+drawn-relief solver does not know the cave's tiles (Lavaridge 0x268-0x313), so the cells are made by
+`tools/voxel3ds/fiery_path_relief.py pc_data/voxel/relief.bin` (needs 3ds_port/scripts for voxel_relief_fixes; replaces
+layout 293's cells, sets its belt to 32 px and its drawn flag). **Re-run it after regenerating relief.bin.** Options:
+--face (px a cell of face, 16), --belt (32), --boulder (10).
