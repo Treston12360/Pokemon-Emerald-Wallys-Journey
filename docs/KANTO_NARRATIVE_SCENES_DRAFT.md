@@ -116,6 +116,8 @@ OLD RESIDENT: Awful thing, what they did to this town.
 
 ## Chapter 6 — Saffron: the believable scientific crisis (DRAFT)
 
+**2026-11-21: superseded by the full draft in `docs/KANTO_CH6_DRAFT.md` (owner's brief: no Varnell call as the hook, public bulletin, believable quarantine access, hindsight-only Varnell inconsistencies). The notes below are kept as history.**
+
 **What happens:** League and Silph staff isolate a malfunctioning teleport facility; Mimi's Normal Gym remains available only when the quarantine clears. Varnell's public stabilization hardware and Silph's real teleport experiments overlap. Secretly, a hidden Hoopa chamber uses Silph's endpoint measurements to draw and contain Palkia; that strain causes the building's warped teleport maze. The player fixes the public-facing symptoms without seeing Palkia. Blue is sincerely helping, not suspicious.
 
 **Scene, with Silph scientist:**
