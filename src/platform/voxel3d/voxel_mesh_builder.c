@@ -5472,6 +5472,18 @@ static void FieldTriangle(VoxelBuilder *b, int cellX, int cellY, FieldPt p0, Fie
     }
 }
 
+/* Brennan 2026-11-22 17:01/17:14 (Verdanturf's west woods: "There shouldn't be open grass/snow blocks sitting in the
+ * middle of that forest corner ... Fill that entire red-box area with full-height 3D trees"): where the wood climbs, its
+ * floor shows between the rows of crowns. The floor under a wood is the wood's own drawing (its crowns, the cell's
+ * border metatile), so what shows between the trees is forest. WJPC_WOOD_FLOOR_GRASS=1: the grass, as before. */
+static int WoodFloorTile(int x, int y)
+{
+    static int sGrass = -1;
+    if (sGrass < 0)
+        sGrass = getenv("WJPC_WOOD_FLOOR_GRASS") != NULL;
+    return sGrass ? BeltTreeGround(x, y) : VoxelWorld_BorderMetatile(x, y);
+}
+
 static void EmitFieldCell(VoxelBuilder *b, int x, int y)
 {
     FieldPt c[4];
@@ -5481,7 +5493,7 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     bool wall;
     const float keepBase = b->base, keepLift = b->lift, keepShift = b->shift, keepStretch = b->stretchAdd;
 
-    int top = BeltIsTree(x, y) ? BeltTreeGround(x, y) : BeltMetatileFor(x, y, y);
+    int top = BeltIsTree(x, y) ? WoodFloorTile(x, y) : BeltMetatileFor(x, y, y);
 
     /* POL-46 (Brennan 2026-11-19 00:12: "use the exact same rocky mountain block/voxel texture and relief as the
      * north-east mountain peak right next to it"): north of a map whose belt is its drawing (Lavaridge), the field
@@ -5522,8 +5534,11 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
         }
     }
     /* (a wood's cell: the field under its trees, in its grass - BeltTreeGround) */
-    if (getenv("WJPC_FIELD_NONE") != NULL || !MetatileUV(b, top, &tu0, &tv0, &tu1, &tv1))
+    if (getenv("WJPC_FIELD_NONE") != NULL)
         return;
+    if (!MetatileUV(b, top, &tu0, &tv0, &tu1, &tv1)
+     && !(BeltIsTree(x, y) && MetatileUV(b, top = BeltTreeGround(x, y), &tu0, &tv0, &tu1, &tv1)))
+        return; /* (a wood's drawing not in this atlas: its grass, which is) */
     /* Brennan 2026-11-21 23:06 (21q, Route 117's north-east corner: the small flat patch of rock at the foot of the
      * terraces, "Make it grass"): a ledge of the field lying flat and flush with the ground of a map beside it (the
      * field there at the map's edge height, no step) is that ground going on - it takes the map edge cell's drawing
@@ -6008,7 +6023,8 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                         }
                     }
                     float u0f, v0f, u1f, v1f;
-                    if (ok && MetatileUV(builder, BeltTreeGround(x, y), &u0f, &v0f, &u1f, &v1f))
+                    if (ok && (MetatileUV(builder, WoodFloorTile(x, y), &u0f, &v0f, &u1f, &v1f)
+                            || MetatileUV(builder, BeltTreeGround(x, y), &u0f, &v0f, &u1f, &v1f)))
                     {
                         VoxelVertex v[4];
                         for (int k = 0; k < 4; ++k)

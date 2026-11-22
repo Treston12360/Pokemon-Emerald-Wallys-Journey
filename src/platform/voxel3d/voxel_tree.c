@@ -960,9 +960,16 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 {
                     static int sOwn = -1;
                     if (sOwn < 0)
-                        sOwn = getenv("WJPC_BELT_TREE_OWN_LEVEL") != NULL || getenv("WJPC_WOOD_BLOCKS") != NULL;
+                        sOwn = getenv("WJPC_BELT_TREE_ON_FLOOR") == NULL; /* (17:14: off - with the floor in the wood's own drawing
+                         * the trees keep their level, and on the floor's the far woods opened the sky at Littleroot) */
                     const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y);
-                    if (!sOwn && !ledge && ring != NULL && VoxelRelief_Belt(ring) == 0)
+                    bool nearMap = false;
+                    for (int dy = -6; dy <= 6 && !nearMap; dy += 2)
+                        for (int dx = -6; dx <= 6 && !nearMap; dx += 2)
+                            nearMap = VoxelWorld_GetInstanceAt(x + dx, y + dy) != NULL;
+                    /* (near a map only, where the floor climbs with it: far out the woods kept their own level, and
+                     * on the floor's level the woods at the window's edge opened the sky at the horizon) */
+                    if (!sOwn && !ledge && nearMap && ring != NULL && VoxelRelief_Belt(ring) == 0)
                     {
                         int span = (part >= 0 && part <= 3) ? 2 : 1;
                         float sum = 0.0f, ssum = 0.0f;
@@ -985,10 +992,14 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                                     ssum += es;
                                     n++;
                                 }
-                        if (n > 0)
+                        /* (never lower than its own level: lowered with the floor where the wood falls away from
+                         * the maps, the far woods sank and opened the sky at the horizon - Littleroot, Route 101) */
+                        if (n > 0 && sum / (float)n > builder->lift)
                         {
+                            /* (its way south with it: each point stands as far south as it is high) */
+                            builder->shift += sum / (float)n - builder->lift;
                             builder->lift = sum / (float)n;
-                            builder->shift = ssum / (float)n;
+                            (void)ssum;
                         }
                     }
                 }
