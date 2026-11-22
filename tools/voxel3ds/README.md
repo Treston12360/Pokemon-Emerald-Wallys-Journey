@@ -88,3 +88,9 @@ drawn-relief solver does not know the cave's tiles (Lavaridge 0x268-0x313), so t
 `tools/voxel3ds/fiery_path_relief.py pc_data/voxel/relief.bin` (needs 3ds_port/scripts for voxel_relief_fixes; replaces
 layout 293's cells, sets its belt to 32 px and its drawn flag). **Re-run it after regenerating relief.bin.** Options:
 --face (px a cell of face, 16), --belt (32), --boulder (10).
+
+## 3ds_port script changes (3ds_port/ is not in git) - 2026-11-22, session 014PwRDj
+`tools/voxel3ds/wj_2026-11-22.patch` is every change this session's 3ds_port/scripts has over Emerald 3DS's (diff -u
+against a fresh clone): VOXEL_DRAWN_OK / VOXEL_SPREAD_OK (Route 122, 2026-11-20), VOXEL_DRAWN_EXTRA (tried for Fiery
+Path; not used in the end), and the sea stack without its corner tile (voxel_props.py, B7 Route 104 slivers - needed by
+whoever regenerates buildings.bin). Apply with `patch -p0` in 3ds_port/scripts.

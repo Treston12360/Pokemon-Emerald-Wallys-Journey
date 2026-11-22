@@ -1,0 +1,63 @@
+--- /tmp/claude-0/-home-claude/3dd33a7e-e6c0-5d8c-8a91-9dc994dcd499/scratchpad/emerald-3ds/3ds_port/scripts/voxel_props.py	2026-11-22 03:03:54.002019328 -0600
++++ voxel_props.py	2026-11-22 16:57:39.483935016 -0600
+@@ -45,10 +45,13 @@
+         "grid": ((88, 89),
+                  (104, 105)),
+     },
++    # Wally's Journey (Brennan 2026-11-22 13:37, B7 Route 104: "sharp spikes / dark jagged slivers sticking off
++    # their north/side edges into the water"): the optional corner (tile 69 in palette 0, the water's outline drawn
++    # over a shallow) stood as a thin grey sliver off the stack's north-east; WJ_SEA_STACK_CORNER=1 keeps it.
+     "sea_stack": {
+         "tileset": "gTileset_General",
+         "palette": 3,
+-        "grid": ((None, 65, 68, (69, True, 0)),
++        "grid": ((None, 65, 68, (69, True, 0) if os.environ.get("WJ_SEA_STACK_CORNER") else None),
+                  (80, 81, 84, 85),
+                  (128, 129, 132, 133),
+                  (144, 145, 148, 149)),
+--- /tmp/claude-0/-home-claude/3dd33a7e-e6c0-5d8c-8a91-9dc994dcd499/scratchpad/emerald-3ds/3ds_port/scripts/gen_voxel_relief.py	2026-11-22 03:03:53.998376347 -0600
++++ gen_voxel_relief.py	2026-11-22 12:46:09.211560104 -0600
+@@ -718,7 +718,9 @@
+         if a:
+             ms = [a[0].get(m, m) for m in ms]
+         n = sum(1 for m in ms if m in ROCK_TILES)
+-        if n and lid in outdoor:
++        # Wally's Journey (Brennan 2026-11-22: Fiery Path in full 3D): VOXEL_DRAWN_EXTRA=LAYOUT_X,LAYOUT_Y reads
++        # a cave drawn with the overworld's cliff art (General + Lavaridge) as if it were outdoors
++        if n and (lid in outdoor or lid in set(filter(None, os.environ.get("VOXEL_DRAWN_EXTRA", "").split(",")))):
+             blocks[lid] = ms
+             if n >= DRAWN_MIN:
+                 seeds.add(lid)
+@@ -843,7 +845,9 @@
+ 
+ 
+ def drawn_ok(name):
+-    if name in DRAWN_EXCLUDED:
++    # Wally's Journey (Brennan 2026-11-20 12:30: "work on route 122 and slateport"): VOXEL_DRAWN_OK=group,group
++    # solves an excluded group all the same, to look at its terraces
++    if name in DRAWN_EXCLUDED and name not in set(filter(None, os.environ.get("VOXEL_DRAWN_OK", "").split(","))):
+         return False
+     return name in world_levels()["regions"]
+ 
+@@ -1079,7 +1083,8 @@
+             for e in json.load(open(os.path.join(vb.ROOT, "data", "layouts", "layouts.json"),
+                                     encoding="utf-8"))["layouts"] if e.get("id")}
+     links = map_links()
+-    candidates = [g for g in DRAWN if g not in DRAWN_EXCLUDED]
++    candidates = [g for g in DRAWN if g not in DRAWN_EXCLUDED
++                  or g in set(filter(None, os.environ.get("VOXEL_DRAWN_OK", "").split(",")))]
+     # the groups placed by voxel_terraces.py's count of their levels
+     import voxel_terraces
+     terraced = {g for g in candidates if g in COUNTED_GROUPS
+@@ -1185,7 +1190,10 @@
+         regions, base, broken = solve(groups)
+         for g in groups:
+             _QUALITY[g] = spread(g, regions)
+-        bad = [g for g in groups if _QUALITY[g] > GROUND_SPREAD]
++        # Wally's Journey (Brennan 2026-11-19 15:37: upgrade the generator so maps it leaves flat get height data):
++        # VOXEL_SPREAD_OK=group,group keeps those groups placed whatever their ground spread
++        keep = set(filter(None, os.environ.get("VOXEL_SPREAD_OK", "").split(",")))
++        bad = [g for g in groups if _QUALITY[g] > GROUND_SPREAD and g not in keep]
+         if not bad:
+             break
+         groups = [g for g in groups if g not in bad]
