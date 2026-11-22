@@ -1481,13 +1481,23 @@ void VoxelBuildings_InsetTriUV(VoxelVertex *t)
      * enough there: such ground-level flat faces are read a quarter pixel in (any position inside the edge texel
      * reads the same texel; the rest of the face's pixels move by under a quarter). Walls and roofs keep 1/32
      * (a quarter there moved texel edges across whole houses). WJPC_MODEL_UV_INSET=x: every face x (test);
-     * WJPC_GROUND_DECAL_INSET=x: the ground pieces x. */
+     * WJPC_GROUND_DECAL_INSET=x: the ground pieces x.
+     * Brennan 2026-11-22 15:12 (Verdanturf's Pokemon Center: thin black lines on the walls, the escalator, the
+     * cushions and the table, standing still; F10 hid them, F8 not - "on the objects themselves"): the same bleed on
+     * every model face; the test machine draws them where his pictures show with faces read 0.1 pixel out. Every face
+     * is read 1/8 pixel in now (WJPC_MODEL_UV_INSET=0.03125: as before), the ground pieces still a quarter. */
     static float sInset = -100.0f, sGroundInset;
     if (sInset < -99.0f)
     {
-        sInset = getenv("WJPC_MODEL_UV_INSET") ? (float)atof(getenv("WJPC_MODEL_UV_INSET")) : 1.0f / 32.0f;
+        sInset = getenv("WJPC_MODEL_UV_INSET") ? (float)atof(getenv("WJPC_MODEL_UV_INSET")) : 1.0f / 8.0f;
         sGroundInset = getenv("WJPC_GROUND_DECAL_INSET") ? (float)atof(getenv("WJPC_GROUND_DECAL_INSET"))
                      : getenv("WJPC_MODEL_UV_INSET") ? sInset : 0.25f;
+        /* test aid: WJPC_UV_SIM_ERROR=e reads every face e pixel further out, as his GPU does (0.1 drew his lines) */
+        if (getenv("WJPC_UV_SIM_ERROR"))
+        {
+            sInset -= (float)atof(getenv("WJPC_UV_SIM_ERROR"));
+            sGroundInset -= (float)atof(getenv("WJPC_UV_SIM_ERROR"));
+        }
     }
     const bool groundFlat = t[0].y == t[1].y && t[1].y == t[2].y && t[0].y < 0.125f;
     const float inset = groundFlat ? sGroundInset : sInset;
