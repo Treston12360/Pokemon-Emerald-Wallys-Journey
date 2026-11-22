@@ -232,8 +232,9 @@ Owner's handoff list for the Kanto expansion. To hand work to any AI, say:
       Snorlax before the office scene (VAR 19), FireRed's script runs alone. Test: `state var 0x50FF 20`,
       `state flag 0x1136 1` (Poké Flute), `state flag 0x1055 0` (Snorlax shown), `warp 37 34 38 13`, hold LEFT.
       Tested 2D + 3D under Wine (scene, flute, battle).
-      **BUG found while testing (NOT from this work — same with Blue absent and with the season fix switched
-      off):** in autumn (`WJPC_TEST_SEASON=2`), after the Route 16 Snorlax battle the field comes back washed out
+      **FIXED 2026-11-21 (see docs/TASKS.md, `sdl2.c` VDraw; was in every build since 2026-11-13, proven on the
+      Nov 15 build). Original note:** **BUG found while testing (NOT from this work — same with Blue absent and
+      with the season fix switched off):** in autumn (`WJPC_TEST_SEASON=2`), after the Route 16 Snorlax battle the field comes back washed out
       in a flat brown haze and stays that way (seen 10+ s later). Kanto is not in the live-weather regions
       (WREGION_NONE), so not that. Not yet checked: other seasons (the summer test was blocked by the season
       notice), ordinary wild battles, Hoenn. Suspect the season/day tint being applied on top of a palette fade

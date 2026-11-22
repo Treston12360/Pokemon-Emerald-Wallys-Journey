@@ -2987,10 +2987,14 @@ void VDraw(SDL_Texture *texture)
     }
     else if (!WideView_BattleTransitionOnField())
         sHaveLastField = false; // a battle, a menu: the next transition starts from a new field picture
-    if (!s2DTransition)
-        STALL_GL(SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32)));
     if (fullW == DISPLAY_WIDTH && fullH == DISPLAY_HEIGHT)
         memcpy(sLastUploaded, image, sizeof(sLastUploaded));
+    // ARIA 2026-11-21: this `else` belongs to `if (!s2DTransition)` (as DLX-4 wrote it). DLX-3 put the
+    // sLastUploaded copy between the two, so the transition fade-fit ran on every wide frame; after a
+    // battle gPcPixelSource still holds the battle screen's layers, the fit came out ~0.1x + a flat
+    // colour and the field stayed washed out (brown by day, grey at night) until the next transition.
+    if (!s2DTransition)
+        STALL_GL(SDL_UpdateTexture(texture, &area, image, fullW * sizeof(Uint32)));
     else
     {
         // The transitions also fade by palette (flashes, fades to black or white): the GBA picture's map
