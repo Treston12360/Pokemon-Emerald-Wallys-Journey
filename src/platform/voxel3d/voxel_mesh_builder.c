@@ -2944,6 +2944,60 @@ static void EmitCableCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
     }
 }
 
+/*
+ * Brennan 2026-11-22 13:38 (C9, Meteor Falls: "the circular floor craters ... are still flat 2D textures - convert
+ * them into proper 3D ... crater models"): a crater (Meteor Falls 0x282 0x283 / 0x28A 0x28B, a 2x2 block) has its
+ * rim raised round the bowl - a ring of its own drawing, up to CRATER_CAP px, each point 0.4 of its height south as
+ * the rock mounds (his pick D). WJPC_FLAT_CRATERS=1: flat.
+ */
+extern const struct Tileset gTileset_MeteorFalls;
+static void EmitCraterRim(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    static int sOff = -1;
+    static const float kR = 12.0f, kW = 3.5f, kCap = 4.0f;
+    const float p = 1.0f / 16.0f;
+    float u0, v0, u1, v1, h[17][17];
+    int mt, k;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_FLAT_CRATERS") != NULL;
+    if (sOff || inst->secondaryTileset != &gTileset_MeteorFalls)
+        return;
+    mt = VoxelWorld_GetMetatileId(x, y);
+    k = mt == 0x282 ? 0 : mt == 0x283 ? 1 : mt == 0x28A ? 2 : mt == 0x28B ? 3 : -1;
+    if (k < 0 || !MetatileUV(b, mt, &u0, &v0, &u1, &v1))
+        return;
+    for (int j = 0; j <= 16; j++)
+        for (int i = 0; i <= 16; i++)
+        {
+            float dx = (float)((k & 1) * 16 + i) - 16.0f, dy = (float)((k >> 1) * 16 + j) - 15.5f;
+            float t = 1.0f - fabsf(sqrtf(dx * dx + dy * dy) - kR) / kW;
+            h[j][i] = t > 0.0f ? kCap * sinf(t * 1.5707963f) * p : 0.0f;
+        }
+    b->lift = VoxelRelief_CellLift(inst, x, y);
+    b->shift = VoxelRelief_CellShift(inst, x, y);
+    for (int r = 0; r < 16; r++)
+        for (int c = 0; c < 16; c++)
+        {
+            if (h[r][c] <= 0.0f && h[r][c + 1] <= 0.0f && h[r + 1][c] <= 0.0f && h[r + 1][c + 1] <= 0.0f)
+                continue;
+            float x0 = (float)x + c * p, x1 = x0 + p, z0 = (float)y + r * p, z1 = z0 + p;
+            float cu0 = u0 + (u1 - u0) * (c + 0.02f) / 16.0f, cu1 = u0 + (u1 - u0) * (c + 0.98f) / 16.0f;
+            float cv0 = v0 + (v1 - v0) * (r + 0.02f) / 16.0f, cv1 = v0 + (v1 - v0) * (r + 0.98f) / 16.0f;
+            float nz = ((h[r][c] + h[r][c + 1]) - (h[r + 1][c] + h[r + 1][c + 1])) * 0.5f / p;
+            float nx = ((h[r][c] + h[r + 1][c]) - (h[r][c + 1] + h[r + 1][c + 1])) * 0.5f / p;
+            float s = 0.96f - 0.22f * nz + 0.06f * nx;
+            s = s < 0.6f ? 0.6f : s > 1.0f ? 1.0f : s;
+            VoxelBuilder_Quad(b,
+                &(VoxelVertex){x0, h[r][c], z0 + 0.4f * h[r][c], cu0, cv0, s},
+                &(VoxelVertex){x1, h[r][c + 1], z0 + 0.4f * h[r][c + 1], cu1, cv0, s},
+                &(VoxelVertex){x1, h[r + 1][c + 1], z1 + 0.4f * h[r + 1][c + 1], cu1, cv1, s},
+                &(VoxelVertex){x0, h[r + 1][c], z1 + 0.4f * h[r + 1][c], cu0, cv1, s});
+        }
+    b->lift = 0.0f;
+    b->shift = 0.0f;
+}
+
 void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst,
                              int x0, int x1, int y)
 {
@@ -2951,6 +3005,8 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
         EmitRailCell(builder, inst, x, y);
     for (int x = x0; x < x1; ++x)
         EmitCableCell(builder, inst, x, y);
+    for (int x = x0; x < x1; ++x)
+        EmitCraterRim(builder, inst, x, y);
     for (int x = x0; x < x1; ++x)
         EmitSafetyFloor(builder, inst, x, y);
     for (int x = x0; x < x1; ++x)

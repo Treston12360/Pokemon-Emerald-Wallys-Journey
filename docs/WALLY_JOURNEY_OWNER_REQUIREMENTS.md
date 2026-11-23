@@ -956,3 +956,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   under them (voxel_tree.c; WJPC_FLAT_FLOOR_ROCKS=1: flat). The "Route 113 north-west sky gap and cliff cut" of his
   picture 7 is Fallarbor's north edge on 22b - closed by 22d's wood floor fix and N01. Picture
   docs/polish_reports/2026-11-22_N03_fallarbor_contest_rocks.png.
+- 2026-11-22 C9 Meteor Falls (1F 1R, his picture 10): spikes - each cell of a diagonal ledge was its own east-west
+  ramp and the next row's ramp started a cell further west, so their shared edges differed by 2-8 px and the renderer
+  stood a thin triangle in each seam; welded: a lattice point shared by cells within 8 px takes the highest, only
+  round the ledge tiles (tools/voxel3ds/weld_relief_seams.py --tiles 212,213,21a,232,23f,23e,216,22a,215,228;
+  unrestricted it stood new fins at the south-west drips). Floor rocks (0x20E, 0x20F, 0x21F) are rock mounds (cards
+  16,32 and 0,48). Craters (0x282/283/28A/28B) have their rim raised round the bowl (voxel_mesh_builder.c
+  EmitCraterRim; WJPC_FLAT_CRATERS=1: flat). Not yet: the void under the bridge's east end, the dark upright panels
+  by the south-west drips. Picture docs/polish_reports/2026-11-22_N04_meteor_falls.png.

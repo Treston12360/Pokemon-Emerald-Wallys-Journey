@@ -26,6 +26,15 @@ CARDS = [('LAYOUT_RUSTURF_TUNNEL', 0x203, 64, True), ('LAYOUT_RUSTURF_TUNNEL', 0
 # card at (0, 32), not toned. Written with --only-new (the Rusturf cards already there).
 CARDS_ROW = {('LAYOUT_FALLARBOR_TOWN', 0x223): 32}
 CARDS += [('LAYOUT_FALLARBOR_TOWN', 0x223, 0, False)]
+# C9: Meteor Falls' floor rocks 0x20E at (16, 32), 0x20F at (0, 48) (0x21F, the same rocks on the darker floor, uses
+# 0x20F's card)
+CARDS_ROW.update({('LAYOUT_METEOR_FALLS_1F_1R', 0x20E): 32, ('LAYOUT_METEOR_FALLS_1F_1R', 0x20F): 48})
+CARDS += [('LAYOUT_METEOR_FALLS_1F_1R', 0x20E, 16, False), ('LAYOUT_METEOR_FALLS_1F_1R', 0x20F, 0, False)]
+
+
+def slot_free(d, x0, y0):
+    return all(struct.unpack_from('<H', d, 2 * tex(x, y))[0] & 1 == 0 for y in range(y0, y0 + 16)
+               for x in range(x0, x0 + 16))
 
 
 def tone(c):
@@ -41,7 +50,7 @@ def main():
     only_new = '--only-new' in sys.argv
     for layout, m, x0, toned in CARDS:
         y0 = CARDS_ROW.get((layout, m), 112)
-        if only_new and (layout, m) not in CARDS_ROW:
+        if only_new and ((layout, m) not in CARDS_ROW or not slot_free(d, x0, CARDS_ROW[(layout, m)])):
             continue
         assert all(struct.unpack_from('<H', d, 2 * tex(x, y))[0] & 1 == 0 for y in range(y0, y0 + 16)
                    for x in range(x0, x0 + 16)), 'slot %d,%d not free' % (x0, y0)

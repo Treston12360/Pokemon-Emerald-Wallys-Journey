@@ -29,5 +29,16 @@ Picture: `2026-11-22_N03_fallarbor_contest_rocks.png`
   with plain soil under it. The rest of C7 (the sky gap and cut by the tree row north of Fallarbor) was closed by
   22d and N01.
 
+### N04 Meteor Falls: ledge spikes, 3D rocks, 3D craters (C9)
+Picture: `2026-11-22_N04_meteor_falls.png`
+- Spikes - cause: along each diagonal ledge every cell was its own little ramp, and the next row's ramp started one
+  cell further over, so where two rows met their edges were up to 8 px apart; the game stood a thin triangle in each
+  of those seams. Change: those seams are welded to one height round the ledge tiles; real cliffs are untouched.
+- Rocks: the small floor rocks stand as rock mounds (your style D).
+- Craters: their rim now rises round the bowl.
+- Still to do here: the dark hole under the east end of the bridge and the two thin dark upright panels by the
+  bottom-left drips.
+
 ## Questions (numbered, for when you are awake)
 1. N02 Route 114 west: the plateau west of Route 114 is plain mountain ground. You asked for scattered mountain trees on it too - want a few (like the thinned woods at its north end), or keep it plain?
+2. N04 Meteor Falls: the 3D floor rocks come out darker than the flat drawing was (they are lit like the Rusturf ones). Keep them darker, or brighten them to the drawing's own grey?

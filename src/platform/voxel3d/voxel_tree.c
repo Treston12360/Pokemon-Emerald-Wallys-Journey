@@ -20,6 +20,7 @@ extern const struct Tileset gTileset_EverGrande;
 extern const struct Tileset gTileset_BattleFrontierOutsideWest;
 extern const struct Tileset gTileset_Mossdeep;
 extern const struct Tileset gTileset_Fallarbor;
+extern const struct Tileset gTileset_MeteorFalls;
 extern const struct Tileset gTileset_RusturfTunnel;
 
 /* Where gen_voxel_trees.py packs each tree, in texels. */
@@ -254,6 +255,10 @@ int VoxelTree_GroundMetatile(const void *secondaryTileset, int metatileId)
         if (secondaryTileset == &gTileset_RusturfTunnel && metatileId >= 0x203 && metatileId <= 0x206
          && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
             return metatileId <= 0x204 ? 0x202 : 0x211;
+        /* C9: under Meteor Falls' floor rocks, the floor (0x21F: the darker floor) */
+        if (secondaryTileset == &gTileset_MeteorFalls && (metatileId == 0x20E || metatileId == 0x20F || metatileId == 0x21F)
+         && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
+            return metatileId == 0x21F ? 0x229 : 0x201;
         /* Brennan 2026-11-22 (C7): under the rocks by Fallarbor's Contest Hall (0x223), the soil. */
         if (secondaryTileset == &gTileset_Fallarbor && metatileId == 0x223 && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
             return 0x279;
@@ -856,6 +861,18 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
             /* Brennan 2026-11-22 13:38 (C7: "the four small rocks ... immediately to the left of the Fallarbor Contest
              * Hall are still flat 2D ground tiles - convert them to 3D rock models"): Fallarbor's boulder (0x223) a rock
              * mound as Rusturf's (his pick D), its card at (0,32). WJPC_FLAT_FLOOR_ROCKS=1: flat. */
+            /* Brennan 2026-11-22 13:38 (C9, Meteor Falls: "the small floor rocks ... still flat 2D textures"): rock
+             * mounds as Rusturf's, cards (16,32) 0x20E and (0,48) 0x20F / 0x21F. WJPC_FLAT_FLOOR_ROCKS=1: flat. */
+            else if (inst->secondaryTileset == &gTileset_MeteorFalls
+                  && (metatileId == 0x20E || metatileId == 0x20F || metatileId == 0x21F)
+                  && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
+            {
+                builder->lift = VoxelRelief_CellLift(inst, x, y);
+                builder->shift = VoxelRelief_CellShift(inst, x, y);
+                EmitRockMound(builder, x, y, metatileId == 0x20E ? 16u : 0u, metatileId == 0x20E ? 32u : 48u);
+                builder->lift = 0.0f;
+                builder->shift = 0.0f;
+            }
             else if (inst->secondaryTileset == &gTileset_Fallarbor && metatileId == 0x223
                   && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
             {
