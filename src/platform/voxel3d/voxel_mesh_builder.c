@@ -5476,6 +5476,25 @@ static void FieldTriangle(VoxelBuilder *b, int cellX, int cellY, FieldPt p0, Fie
  * middle of that forest corner ... Fill that entire red-box area with full-height 3D trees"): where the wood climbs, its
  * floor shows between the rows of crowns. The floor under a wood is the wood's own drawing (its crowns, the cell's
  * border metatile), so what shows between the trees is forest. WJPC_WOOD_FLOOR_GRASS=1: the grass, as before. */
+/* Brennan 2026-11-22 13:39 (D2, Route 119 south of Fortree: "that row of 3D trees is flickering/strobing when
+ * moving"; B4 the same on Route 119's middle-west terrace): the belt trees' ground squares (1/64 tile over their level)
+ * and the wood's floor under them at that level fought in the depth buffer far from the camera - speckled dark feet
+ * that change as the camera moves. Fixed by raising the squares (voxel_tree.c, 1/16); lowering the floor instead
+ * opened sky at the horizon. WJPC_WOOD_FLOOR_DROP=x tiles: lower it anyway (test). */
+static float WoodFloorDrop(void)
+{
+    static float sDrop = -1.0f;
+    if (sDrop < 0.0f)
+        sDrop = getenv("WJPC_WOOD_FLOOR_DROP") ? (float)atof(getenv("WJPC_WOOD_FLOOR_DROP")) : 0.0f;
+    return sDrop;
+}
+
+bool VoxelMesh_BeltWater(int x, int y)
+{
+    float l, sh;
+    return VoxelWorld_GetInstanceAt(x, y) == NULL && BorderAt(x, y) && BorderWaterLevel(x, y, &l, &sh);
+}
+
 static int WoodFloorTile(int x, int y)
 {
     static int sGrass = -1;
@@ -5677,7 +5696,7 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
                 if (n > 0 && !open)
                     c[k].h = sh / (float)n, c[k].s = ss / (float)n;
                 v[k].x = c[k].x;
-                v[k].y = c[k].h;
+                v[k].y = c[k].h - WoodFloorDrop();
                 v[k].z = c[k].y + c[k].s;
                 v[k].u = k & 1 ? tu1 : tu0;
                 v[k].v = k >> 1 ? tv1 : tv0;
@@ -6030,7 +6049,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                         for (int k = 0; k < 4; ++k)
                         {
                             v[k].x = (float)(x + (k & 1));
-                            v[k].y = ch[k];
+                            v[k].y = ch[k] - WoodFloorDrop(); /* (under the trees' own ground: no fighting) */
                             v[k].z = (float)(y + (k >> 1)) + cs[k];
                             v[k].u = k & 1 ? u1f : u0f;
                             v[k].v = k >> 1 ? v1f : v0f;

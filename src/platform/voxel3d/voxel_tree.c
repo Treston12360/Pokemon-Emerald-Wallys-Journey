@@ -1007,7 +1007,20 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                     static int sLevel = -1;
                     if (sLevel < 0)
                         sLevel = getenv("WJPC_BELT_TREE_GROUND_LEVEL") != NULL;
-                    sGroundRaise = sLevel ? 0.0f : 1.0f / 64.0f;
+                    /* (Brennan 2026-11-22 13:39 D2/B4, Route 119: the squares at 1/64 over the wood's floor still fought
+                     * with it far from the camera - flickering tree rows; 1/16 now. WJPC_BELT_TREE_RAISE=x tiles) */
+                    static float sRaise = -1.0f;
+                    if (sRaise < 0.0f)
+                        sRaise = getenv("WJPC_BELT_TREE_RAISE") ? (float)atof(getenv("WJPC_BELT_TREE_RAISE")) : 1.0f / 16.0f;
+                    /* (by the water only the old 1/64: raised more, the square stood open over the sea - slits of sky
+                     * along Route 104's woods) */
+                    bool byWater = false;
+                    for (int k = 0; k < 8 && !byWater; k++)
+                    {
+                        static const int d8[8][2] = {{1,0},{-1,0},{0,1},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}};
+                        byWater = VoxelMesh_BeltWater(x + d8[k][0], y + d8[k][1]);
+                    }
+                    sGroundRaise = sLevel ? 0.0f : byWater ? 1.0f / 64.0f : sRaise;
                 }
                 {
                     static int sSquares = -1;
