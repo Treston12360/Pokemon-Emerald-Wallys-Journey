@@ -897,3 +897,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   the menu and forced off when the settings file is read) and "move 3D battles, 3D World, Gamma lighting into a
   folder named 'Looks'" (new Looks section after Video).
 - **2026-11-22 19:45**: zip `WallysJourney-Polish-2026-11-22c.zip` sent (whole folder; exe and pc_data/voxel at b40e7869): 3D buildings back, Settings Looks section. Asked about the checkerboard blocks (19:34 report) - waiting on his answer.
+- 2026-11-22 19:55 (Brennan): quick run (L) "pauses ... either makes it not auto run because of the shiny sprite or if
+  something is intimidated". Cause: L only counted during a message or at the action choice, so an L pressed while a
+  shiny sparkle or an ability pop-up (Intimidate) played was dropped. Now L pressed any time outside the action choice
+  queues the run, and the messages before the choice move on by themselves once it is queued (battle_main.c,
+  text.c). Picture: docs/polish_reports/2026-11-22_quickrun_shiny_intimidate.png. (The ~2 s hold after "Go! X!" is
+  the same with or without a shiny: not changed.)

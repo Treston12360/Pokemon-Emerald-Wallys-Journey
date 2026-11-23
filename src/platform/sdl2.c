@@ -635,7 +635,23 @@ static bool TestStep(void)
             sscanf(line, "%*s %d %d", &species, &level);
             ZeroEnemyPartyMons();
             CreateMon(&gEnemyParty[0], (enum Species)species, (u8)level, 0x12345678u, OTID_STRUCT_RANDOM_NO_SHINY);
+            {   /* (2026-11-22: it came in with 0 HP - fainted before the first turn) */
+                u32 hp;
+                CalculateMonStats(&gEnemyParty[0]);
+                hp = GetMonData(&gEnemyParty[0], MON_DATA_MAX_HP);
+                SetMonData(&gEnemyParty[0], MON_DATA_HP, &hp);
+            }
             BattleSetup_StartWildBattle();
+            continue;
+        }
+        if (!strcmp(cmd, "partyshiny"))
+        {
+            // partyshiny SLOT [0|1] (test aid, Brennan 2026-11-22 quick run with a shiny): that party Pokémon shiny (or not).
+            bool32 shiny = TRUE;
+            int slot = 0, on = 1;
+            if (sscanf(line, "%*s %d %d", &slot, &on) == 2)
+                shiny = on != 0;
+            SetMonData(&gPlayerParty[slot], MON_DATA_IS_SHINY, &shiny);
             continue;
         }
         if (!strcmp(cmd, "trainerbattle"))

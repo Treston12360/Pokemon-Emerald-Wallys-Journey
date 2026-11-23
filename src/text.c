@@ -1427,7 +1427,9 @@ void SetResultWithButtonPress(bool32 *result)
     }
     // Wally's Journey (owner 2026-11-09): in a wild battle L also moves the text on and
     // runs at the next action choice; once running, messages don't wait for a button.
-    else if (gWJQuickRun == 2 && gMain.inBattle)
+    // (Brennan 2026-11-22: also once L has queued the run - 1 - so the messages before the choice don't wait for
+    // more presses: a shiny's or an Intimidate's messages used to hold it up)
+    else if (gWJQuickRun != 0 && gMain.inBattle)
     {
         *result = TRUE;
     }

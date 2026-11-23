@@ -1746,6 +1746,17 @@ void BattleMainCB2(void)
     UpdatePaletteFade();
     RunTasks();
 
+    // Wally's Journey (Brennan 2026-11-22 19:55: quick run "pauses ... it either makes it not auto run because of the
+    // shiny sprite or if something is intimidated"): L was only seen during a message (text.c) or at the action
+    // choice, so an L pressed while a shiny's sparkle or an ability's pop-up (Intimidate) played was lost. Now L
+    // pressed any time outside the action choice (its menus handle L themselves) queues the run for the next choice.
+    if (gWJQuickRun == 0 && JOY_NEW(L_BUTTON) && gBattleMainFunc != HandleTurnActionSelectionState
+     && WJ_QuickRunAllowed())
+    {
+        gWJQuickRun = 1;
+        PlaySE(SE_SELECT);
+    }
+
     // Wally's Journey: battle speed-up. Extra logic passes inside one frame;
     // button presses only count once so menus never double-select.
     // Guards adapted from Pokemon Emerald Rogue (Pokabbie): run at 1x while the
