@@ -952,11 +952,20 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 continue;
             }
 
+            /* Brennan 2026-11-23 07:39 (Route 114's west plateau: "match the trees with the surrounding ones"): a
+             * tree scattered on a flat fill (VoxelMesh_PlateauTree) is the map's own lone tree where its tileset has
+             * one - Fallarbor's (20E-20F), two cells wide, on the plateau's own ground (no soil square).
+             * WJPC_PLATEAU_TREES_SMALL=1: the General's small tree. */
+            bool plateauOwn = false;
             if (ledge)
             {
+                static int sPlateauSmall = -1;
+                if (sPlateauSmall < 0)
+                    sPlateauSmall = getenv("WJPC_PLATEAU_TREES_SMALL") != NULL;
+                plateauOwn = !sPlateauSmall && art->secondaryTileset == &gTileset_Fallarbor && VoxelMesh_PlateauTree(x, y);
                 /* POL-46: a small tree on a ledge near a wood (the General's 0C7) */
-                part = VOXEL_TREE_SMALL;
-                metatileId = 0x0C7;
+                part = plateauOwn ? 2 : VOXEL_TREE_SMALL;
+                metatileId = plateauOwn ? 0x20E : 0x0C7;
             }
             /* Brennan 2026-11-20 16:22 (Route 121's north woods: "many overlapping trees ... they should be
              * standalone trees making up a forrest"; the coast: "2 random tops of trees that need to be removed"):
@@ -979,7 +988,7 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 sOwnSmall = getenv("WJPC_BELT_OWN_TREES_SMALL") != NULL;
             bool ownWood = !sOwnSmall && metatileId >= SECONDARY_ID && OwnLargePart(art->secondaryTileset, metatileId, NULL) >= 0;
             /* (a thinned wood: this tree left out - its left cell's, VoxelMesh_WoodGap) */
-            if (ownWood && VoxelMesh_WoodGap(x - (part & 1), y))
+            if (ownWood && !plateauOwn && VoxelMesh_WoodGap(x - (part & 1), y))
                 continue;
             if (!ledge && !sCellwise && !ownWood && part >= 0 && part <= 3)
             {
@@ -1111,8 +1120,16 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                                      && VoxelTree_Part(na->secondaryTileset, VoxelWorld_BorderMetatile(nx, ny)) >= 0;
                     }
                 }
+                if (plateauOwn)
+                    sBeltNoGround = true;
                 EmitCell(builder, NULL, art->secondaryTileset, x, y, part, metatileId, false);
                 EmitMissingRow(builder, NULL, art->secondaryTileset, x, y, part, metatileId, false);
+                if (plateauOwn)
+                {
+                    /* (its right half, on the next cell) */
+                    EmitCell(builder, NULL, art->secondaryTileset, x + 1, y, 3, 0x20F, false);
+                    EmitMissingRow(builder, NULL, art->secondaryTileset, x + 1, y, 3, 0x20F, false);
+                }
                 sBeltNoGround = false;
                 sGroundRaise = 0.0f;
                 builder->base = callerBase;

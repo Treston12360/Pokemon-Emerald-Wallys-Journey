@@ -202,6 +202,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
  * base, and its depth: its map edge's (false, both 0: at the base). */
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift);
 bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift); /* POL-46: a tree on a ledge near a wood */
+bool VoxelMesh_PlateauTree(int x, int y); /* the left cell of a tree scattered on a flat fill (Route 114's west plateau) */
 bool VoxelMesh_BeltWater(int x, int y); /* a belt cell of water (BorderWaterLevel) */
 bool VoxelMesh_WoodGap(int tx, int ty); /* a thinned wood's tree left out (Fallarbor's north woods) */
 bool VoxelMesh_WoodScatter(int x, int y); /* a scattered fill's belt cell (Route 114's west plateau) */

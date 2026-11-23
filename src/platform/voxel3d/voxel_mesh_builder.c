@@ -6038,6 +6038,42 @@ static unsigned TreeScatter(int x, int y)
     h ^= h >> 12;
     return h % 100u;
 }
+/*
+ * Brennan 2026-11-23 06:28 (Route 114's west plateau: "Scatter some trees, let me see what it looks like"; 07:39 "match
+ * the trees with the surrounding ones ... I like the grouping"): on a flat fill of plain ground flagged scatter
+ * (relief.bin, add_relief_edge.py --scatter) trees stand in loose groups - the map's own lone tree where its tileset
+ * has one (Fallarbor's, two cells wide: voxel_tree.c), else the General's small tree. Whether (x, y) is such a tree's
+ * left cell: 4x3-cell patches, about two in five of them wooded; never within two cells of another map's belt or a fill
+ * of another height (the seam's ground steps: a wood fill made stretched trees down it, 2026-11-23). VoxelMesh_LedgeTree
+ * keeps them off steps. WJPC_NO_PLATEAU_TREES=1: none.
+ */
+bool VoxelMesh_PlateauTree(int x, int y)
+{
+    static int sOff = -1;
+    VoxelEdgeFill f;
+    const VoxelMapInstance *r;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_NO_PLATEAU_TREES") != NULL;
+    if (sOff || (x & 1) != 0 || VoxelWorld_GetInstanceAt(x, y) != NULL || (r = VoxelWorld_BeltRing(x, y)) == NULL
+     || !VoxelRelief_EdgeFillAt(r, x, y, &f) || !f.scatter || !f.flat || !f.hasTop || f.water)
+        return false;
+    if (WoodHash(x >> 2, y / 3) % 5u >= 2u || TreeScatter(x, y) >= 50u)
+        return false;
+    for (int dy = -2; dy <= 2; ++dy)
+        for (int dx = -2; dx <= 3; ++dx)
+        {
+            const VoxelMapInstance *nr;
+            VoxelEdgeFill nf;
+            if (VoxelWorld_GetInstanceAt(x + dx, y + dy) != NULL)
+                continue;
+            nr = VoxelWorld_BeltRing(x + dx, y + dy);
+            if (nr != r || !VoxelRelief_EdgeFillAt(nr, x + dx, y + dy, &nf) || !nf.flat || nf.top != f.top)
+                return false;
+        }
+    return true;
+}
+
 bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
 {
     float lo = 1e9f, hi = -1e9f, sh = 0.0f, wl, ws;
@@ -6091,32 +6127,9 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
             && fh >= VoxelRelief_Base(r) + (float)VoxelRelief_Belt(r) + 2.0f
             && (TreeScatter(x, y) < 12u || getenv("WJPC_PEAK_TREES_ALL") != NULL);
     }
-    /* Brennan 2026-11-23 06:28 (Route 114's west plateau: "Scatter some trees, let me see what it looks like"): on a
-     * flat fill of plain ground flagged scatter (relief.bin, add_relief_edge.py --scatter) a few small trees stand in
-     * loose groups - on the fill's own flat ground (the field, FlatFillPoint), never on a step (below). Not within two
-     * cells of another map's belt (the seam's ground steps: a wood fill made stretched trees down it, 2026-11-23).
-     * WJPC_NO_PLATEAU_TREES=1: none. */
-    if (!wood && getenv("WJPC_NO_PLATEAU_TREES") == NULL)
-    {
-        VoxelEdgeFill f;
-        const VoxelMapInstance *r = VoxelWorld_BeltRing(x, y);
-        if (r != NULL && VoxelRelief_EdgeFillAt(r, x, y, &f) && f.scatter && f.flat && f.hasTop && !f.water)
-        {
-            /* groups: 4x3-cell patches, about two in five of them wooded, a third of their cells a tree */
-            unsigned patch = WoodHash(x >> 2, y / 3) % 5u;
-            wood = patch < 2u && TreeScatter(x, y) < 34u;
-            for (int dy = -2; dy <= 2 && wood; ++dy)
-                for (int dx = -2; dx <= 2 && wood; ++dx)
-                {
-                    const VoxelMapInstance *nr;
-                    VoxelEdgeFill nf;
-                    if (VoxelWorld_GetInstanceAt(x + dx, y + dy) != NULL)
-                        continue;
-                    nr = VoxelWorld_BeltRing(x + dx, y + dy);
-                    wood = nr == r && VoxelRelief_EdgeFillAt(nr, x + dx, y + dy, &nf) && nf.flat && nf.top == f.top;
-                }
-        }
-    }
+    /* Brennan 2026-11-23 06:28 (Route 114's west plateau: "Scatter some trees") - VoxelMesh_PlateauTree */
+    bool plateau = !wood && VoxelMesh_PlateauTree(x, y);
+    wood = wood || plateau;
     if (!wood)
         return false;
     /* the shelf all round it flat too (Brennan: "Snap tree positions onto the flat centers of the terrace shelves"
@@ -6124,7 +6137,7 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
     /* (its own corners and the next row's south of it: the shelf in front of the trunk, where the crown leans;
      * a 3x3 flat patch was too much for 2-square shelves - no trees at all on them) */
     for (int vy = y; vy <= y + 1; ++vy)
-        for (int vx = x; vx <= x + 1; ++vx)
+        for (int vx = x; vx <= x + (plateau ? 2 : 1); ++vx)
         {
             float fh, fs;
             BeltField(vx, vy, &fh, &fs);

@@ -1011,3 +1011,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   (tools/voxel3ds/raise_relief_run.py, relief.bin): now flush, the pool lying on the floor. The jog left of col 3 and
   right of col 9 stays - the 2D map draws the cliff edge a row further south there. Picture
   docs/polish_reports/2026-11-23_N11_meteor_falls_drips.png.
+- 2026-11-23 07:39 (Brennan on N10: "match the trees with the surrounding ones so it looks the same. I like the
+  grouping"): the plateau's scattered trees are Fallarbor's own lone tree (20E-20F, two cells wide, as Route 114's
+  own), same groups, on the plateau's ground (no soil square) - voxel_mesh_builder.c VoxelMesh_PlateauTree (left
+  cells on even columns, flat over both cells), voxel_tree.c (WJPC_PLATEAU_TREES_SMALL=1: N10's small trees).
+  Picture docs/polish_reports/2026-11-23_N12_route114_plateau_own_trees.png.
+- 2026-11-23 07:39 (Brennan): 10 falling leaves - closed. Meteor Falls pale bridge rock - good. B3/B4/B5 marked off
+  until he brings them up again. C1/C4/D1: try again as on his GPU; if not found he will look later.
