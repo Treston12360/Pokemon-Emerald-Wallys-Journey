@@ -1053,3 +1053,12 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     (voxel_tree.c VoxelTree_OwnLoneLedge, as N12's plateau trees; not Route 113's ashen map).
   - left: the plateau's own drawn cliff corners by the river (Route 114's map, cols 0-6) are its own ledges.
   Picture docs/polish_reports/2026-11-23_N14_route114_west_level.png.
+- 2026-11-23 13:00 (Brennan, on N14's picture, red box by the river at Route 114's north-west: "Looks to be some
+  mountain overhang ... This needs fixed"): the plateau (3.5 levels) meets Route 114's west edge where the map
+  stands at another height - its mountain corner (7, rows 0-14) and the river's bank (2, rows 15-19). The field's one
+  cell between them was a steep ramp, top and foot each at their own way south, leaning out over the bank. Now a
+  flat fill's cell stays level to the map's edge and a wall of rock stands there from the map's ground to the fill's,
+  each end where it stands (as the map's own walls) - over the map by more than a quarter level, or under it by more
+  than one (a half-level lip stays a gentle ramp). Judged by every map cell at a corner so the two cells sharing it
+  agree. voxel_mesh_builder.c FlatEdgeRise (field cells and the wood floor); WJPC_FLAT_EDGE_RAMP=1: the ramp, as
+  before. Picture docs/polish_reports/2026-11-23_N15_route114_overhang.png.

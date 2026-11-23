@@ -5606,6 +5606,41 @@ static bool FlatFillCell(int cx, int cy, float *height);
  * the field's one point there is the higher of the two map cells it touches across a step in the map's edge, and
  * the cell beside the lower one stood a sliver of ledges up to it (the "spikes" by Route 114's west cliff); else the
  * field's point. (Brennan 2026-11-23 12:18, FlatStepsOn) */
+/* Brennan 2026-11-23 13:00 (Route 114's west by the river: "mountain overhang"): whether corner (vx, vy) of a flat
+ * fill's cell (cx, cy) lies on a map's edge whose ground there stands well over the fill (*top: the fill's, world
+ * height; *edge, *edgeS: the map's ground and its way south at the corner, in this cell's own row or column). */
+static bool FlatEdgeRise(int cx, int cy, int vx, int vy, float *top, float *edge, float *edgeS)
+{
+    static int sRamp = -1;
+    float px = (float)vx + (vx > cx ? 0.01f : -0.01f), py = (float)vy + (vy > cy ? -0.01f : 0.01f);
+    float qx = (float)vx + (vx > cx ? -0.01f : 0.01f), qy = (float)vy + (vy > cy ? 0.01f : -0.01f);
+    float fp;
+
+    if (sRamp < 0)
+        sRamp = getenv("WJPC_FLAT_EDGE_RAMP") != NULL;
+    if (sRamp || !FlatFillCell(cx, cy, top) || FlatFillPoint(vx, vy, &fp))
+        return false;
+    if (VoxelWorld_GetInstanceAt((int)floorf(px), (int)floorf(py)) != NULL)
+        *edge = VoxelRelief_LiftAt(px, py), *edgeS = VoxelRelief_ShiftAt(px, py);
+    else if (VoxelWorld_GetInstanceAt((int)floorf(qx), (int)floorf(qy)) != NULL)
+        *edge = VoxelRelief_LiftAt(qx, qy), *edgeS = VoxelRelief_ShiftAt(qx, qy);
+    else
+        return false;
+    /* (over it by more than a quarter level: the "overhang"; under it by more than a level - the river's bank - a
+     * leaning ramp too; a half level under, the plateau's own lip over the route's ground, stays a gentle ramp).
+     * Judged by every map cell at the corner, so the two fill cells sharing it agree (a crack between them else). */
+    for (int dq = 0; dq < 4; ++dq)
+    {
+        float sx = (float)vx + ((dq & 1) ? 0.01f : -0.01f), sy = (float)vy + ((dq & 2) ? 0.01f : -0.01f), l;
+        if (VoxelWorld_GetInstanceAt((int)floorf(sx), (int)floorf(sy)) == NULL)
+            continue;
+        l = VoxelRelief_LiftAt(sx, sy);
+        if (l > *top + 0.25f || l < *top - 1.0f)
+            return true;
+    }
+    return false;
+}
+
 static FieldPt FlatCellCorner(int cx, int cy, int vx, int vy, float top, bool *own)
 {
     FieldPt p;
@@ -5911,6 +5946,107 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     if (flatCell)
         for (int k = 0; k < 4; ++k)
             c[k] = FlatCellCorner(x, y, x + (k & 1), y + (k >> 1), ownTop, &flatOwn[k]);
+    /* Brennan 2026-11-23 13:00 (Route 114's west, by the river: "Looks to be some mountain overhang ... This needs
+     * fixed"): where a map's ground at its edge stands well over the fill (Route 114's mountain corner, 7 levels down
+     * to 4, over the plateau's 3.5), the field's one cell from the fill up to the map's edge was a steep ramp of
+     * squeezed ledges leaning out over the plateau. The fill stays level to the map's edge, a wall of rock rising
+     * there straight up to the map's ground (in this cell's own row). WJPC_FLAT_EDGE_RAMP=1: the ramp, as before. */
+    bool edgeWall[4] = { false, false, false, false };
+    float edgeTop[4] = { 0 }, edgeS[4] = { 0 };
+    {
+        static int sRamp = -1;
+        if (sRamp < 0)
+            sRamp = getenv("WJPC_FLAT_EDGE_RAMP") != NULL;
+        /* (a wood's cell of the fill too: its floor - Route 114's west woods by the mountain corner) */
+        float anyTop = ownTop;
+        bool anyFlat = flatCell || (FlatStepsOn() && BeltIsTree(x, y) && FlatFillCell(x, y, &anyTop));
+        if (anyFlat && !flatCell)
+            ownTop = anyTop;
+        for (int k = 0; anyFlat && !sRamp && k < 4; ++k)
+        {
+            float t;
+            edgeTop[k] = -1e9f;
+            if (FlatEdgeRise(x, y, x + (k & 1), y + (k >> 1), &t, &edgeTop[k], &edgeS[k]))
+            {
+                c[k].h = c[k].s = ownTop;
+                edgeWall[k] = true;
+            }
+        }
+        /* the wall on the side facing the map, where both its corners rose */
+        {
+            static const int kSide[4][2] = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+            static const int kCorner[4][2] = { {1, 0}, {2, 3}, {0, 2}, {3, 1} };
+            for (int d = 0; d < 4; ++d)
+            {
+                int ka = kCorner[d][0], ke = kCorner[d][1];
+                if ((!edgeWall[ka] && !edgeWall[ke]) || VoxelWorld_GetInstanceAt(x + kSide[d][0], y + kSide[d][1]) == NULL)
+                    continue;
+                /* (a corner where the map and the fill nearly meet: the wall there from the map's ground to the field's
+                 * point - or, with no map's ground found, closing to that point) */
+                bool nearA = !edgeWall[ka] && edgeTop[ka] > -1e8f, nearE = !edgeWall[ke] && edgeTop[ke] > -1e8f;
+                {
+                    float shade = d == 0 ? SHADE_NORTH : d == 1 ? SHADE_SOUTH : d == 2 ? SHADE_WEST : SHADE_EAST;
+                    float su0 = wall ? wu0 : tu0, sv0 = wall ? wv0 : tv0, su1 = wall ? wu1 : tu1, sv1 = wall ? wv1 : tv1;
+                    float base0 = flatCell ? ownTop : ownTop - WoodFloorDrop();
+                    float loA = edgeTop[ka] < base0 ? edgeTop[ka] : base0, hiA = edgeTop[ka] < base0 ? base0 : edgeTop[ka];
+                    float loE = edgeTop[ke] < base0 ? edgeTop[ke] : base0, hiE = edgeTop[ke] < base0 ? base0 : edgeTop[ke];
+                    if (!edgeWall[ka])
+                        loA = nearA && edgeTop[ka] < c[ka].h ? edgeTop[ka] : c[ka].h, hiA = nearA && edgeTop[ka] > c[ka].h ? edgeTop[ka] : c[ka].h;
+                    if (!edgeWall[ke])
+                        loE = nearE && edgeTop[ke] < c[ke].h ? edgeTop[ke] : c[ke].h, hiE = nearE && edgeTop[ke] > c[ke].h ? edgeTop[ke] : c[ke].h;
+                    /* (down to the map's lowest ground at each corner - a step in the map's own edge there, both of
+                     * its sides: no slit of sky under the wall) */
+                    for (int q = 0; q < 2; ++q)
+                    {
+                        FieldPt cp = q == 0 ? c[ka] : c[ke];
+                        float *lo = q == 0 ? &loA : &loE;
+                        for (int dq = 0; dq < 4; ++dq)
+                        {
+                            float sx = cp.x + ((dq & 1) ? 0.01f : -0.01f), sy = cp.y + ((dq & 2) ? 0.01f : -0.01f);
+                            if (VoxelWorld_GetInstanceAt((int)floorf(sx), (int)floorf(sy)) != NULL)
+                            {
+                                float l = VoxelRelief_LiftAt(sx, sy);
+                                if (l < *lo)
+                                    *lo = l;
+                            }
+                        }
+                    }
+                    float bot = loA < loE ? loA : loE, topH = hiA > hiE ? hiA : hiE;
+                    FieldPt a = c[ka], e = c[ke];
+                    /* (each corner's wall from the lower side's point to the higher's, each where it stands: the
+                     * map's ground at its own way south, the fill's at its own - a wall as the map's walls are) */
+                    float slA = loA < (edgeWall[ka] ? (edgeTop[ka] < base0 ? edgeTop[ka] : ownTop) : (nearA && edgeTop[ka] < c[ka].h ? edgeTop[ka] : c[ka].h)) - 0.01f ? loA
+                              : edgeWall[ka] ? (edgeTop[ka] < base0 ? edgeS[ka] : ownTop)
+                              : nearA && edgeTop[ka] < c[ka].h ? edgeS[ka] : c[ka].s;
+                    float shA = edgeWall[ka] ? (edgeTop[ka] < base0 ? ownTop : edgeS[ka])
+                              : nearA && edgeTop[ka] > c[ka].h ? edgeS[ka] : c[ka].s;
+                    float slE = loE < (edgeWall[ke] ? (edgeTop[ke] < base0 ? edgeTop[ke] : ownTop) : (nearE && edgeTop[ke] < c[ke].h ? edgeTop[ke] : c[ke].h)) - 0.01f ? loE
+                              : edgeWall[ke] ? (edgeTop[ke] < base0 ? edgeS[ke] : ownTop)
+                              : nearE && edgeTop[ke] < c[ke].h ? edgeS[ke] : c[ke].s;
+                    float shE = edgeWall[ke] ? (edgeTop[ke] < base0 ? ownTop : edgeS[ke])
+                              : nearE && edgeTop[ke] > c[ke].h ? edgeS[ke] : c[ke].s;
+#define WALL_S(h, lo, hi, sl, sh) ((hi) - (lo) < 0.001f ? (sl) : (sl) + ((sh) - (sl)) * (((h) - (lo)) / ((hi) - (lo))))
+                    for (float lo = bot; lo < topH - 0.01f; lo += 1.0f)
+                    {
+                        float hi = lo + 1.0f < topH ? lo + 1.0f : topH;
+                        float a0 = lo < loA ? loA : lo > hiA ? hiA : lo, a1 = hi < loA ? loA : hi > hiA ? hiA : hi;
+                        float e0 = lo < loE ? loE : lo > hiE ? hiE : lo, e1 = hi < loE ? loE : hi > hiE ? hiE : hi;
+                        VoxelVertex q0 = { a.x, a0, a.y + WALL_S(a0, loA, hiA, slA, shA), su0, sv1, shade };
+                        VoxelVertex q1 = { e.x, e0, e.y + WALL_S(e0, loE, hiE, slE, shE), su1, sv1, shade };
+                        VoxelVertex q2 = { e.x, e1, e.y + WALL_S(e1, loE, hiE, slE, shE), su1, sv1 + (sv0 - sv1) * (e1 - e0), shade };
+                        VoxelVertex q3 = { a.x, a1, a.y + WALL_S(a1, loA, hiA, slA, shA), su0, sv1 + (sv0 - sv1) * (a1 - a0), shade };
+                        if (a1 - a0 < 0.001f && e1 - e0 < 0.001f)
+                            continue;
+                        VoxelBuilder_Quad(b, &q0, &q1, &q2, &q3);
+                        VoxelBuilder_Quad(b, &q3, &q2, &q1, &q0);   /* (either way: it faces the camera from a side) */
+                    }
+#undef WALL_S
+                    /* (its foot stands as far south as the map's ground is high: on the fill's ground of the rows
+                     * south of this one) */
+                }
+            }
+        }
+    }
     {
         static int sDump = -1;
         if (sDump < 0)
@@ -5983,6 +6119,8 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
                 }
                 if (n > 0 && !open)
                     c[k].h = sh / (float)n, c[k].s = ss / (float)n;
+                if (edgeWall[k])
+                    c[k].h = c[k].s = ownTop;   /* (the fill level to the map's edge: the wall above) */
                 v[k].x = c[k].x;
                 v[k].y = c[k].h - WoodFloorDrop();
                 v[k].z = c[k].y + c[k].s;
@@ -6439,8 +6577,10 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                         if (ok && n < 4)
                         {
                             /* the wood's edge: the field's own height there, which its neighbour meets */
-                            float fh, fs;
+                            float fh, fs, ft, fe, fes;
                             BeltField(vx, vy, &fh, &fs);
+                            if (FlatEdgeRise(x, y, vx, vy, &ft, &fe, &fes))
+                                fh = fs = ft;   /* (by a map's higher edge: the fill level to it, a wall above) */
                             ch[k] = fh - builder->base;
                             cs[k] = fs - (sWoodZOld ? 0.0f : builder->base);
                         }
