@@ -4035,6 +4035,20 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
     {
         *level = (float)fill.top / 16.0f - (float)VOXEL_BORDER_COURSES;
         *shift = VoxelRelief_CellShift(ring, ex, ey);
+        /* Brennan 2026-11-23 08:20 (south-west of Fallarbor: trees "falling", cut by straight lines): a flat fill
+         * lower than the map's edge beside it (Route 114's east, its edge climbing 2 -> 4 levels over the fill's 2)
+         * took the edge's way south, its trees rows off their ground, stretched: there it goes only as far south as it
+         * is high, as its ground does (FlatFillPoint). (Not everywhere - as far south as the fill's own height, Route
+         * 114's west woods opened slits of sky at their far end, 2026-11-23: the thinned
+         * woods - Route 114's west, Fallarbor's and Route 113's north, checked as they are - keep the edge's.)
+         * WJPC_FLAT_FILL_EDGE_SHIFT=1: the edge's always, as before. */
+        {
+            static int sEdgeShift = -1;
+            if (sEdgeShift < 0)
+                sEdgeShift = getenv("WJPC_FLAT_FILL_EDGE_SHIFT") != NULL;
+            if (fill.flat && !fill.sparse && !sEdgeShift && *shift > *level)
+                *shift = *level;
+        }
         /* POL-40 (Route 118's north: the fill stood the mountain's whole height out to the horizon, its side to
          * the sea a stair of tall dark walls): rounded off as the belt's own mountain is (WJPC_BELT_COLUMNS=1 not) */
         if (getenv("WJPC_BELT_COLUMNS") == NULL && !NearDrawnBelt(x, y, 8))

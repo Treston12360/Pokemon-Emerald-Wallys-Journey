@@ -1024,3 +1024,15 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Route 103 x 66-72 y 12; Rustboro 32,57 / 31,58 / 30,56; Route 119 institute 9-14,33-35): no sky pixel anywhere, no
   line on the snow under Route 103's cliff stairs, the institute's east end solid. Rustboro's pale strips between the
   crowns are the snow floor in the light. Left for him to bring up again with a closer shot.
+- 2026-11-23 08:20 (Brennan, on N06's picture, circle south-west of Fallarbor: "The slope mountain doesn't look
+  natural it looks like it's falling this needs to be horizontal just like the rest. There's also a few trees that
+  weren't changed. Change these to the surrounding trees"): the woods south of Fallarbor are split on a diagonal
+  between Fallarbor's belt (rounded off, falling to 1.5 levels under the town) and Route 114's (following its
+  mountain edge up to 2.8 levels over) - the halves of trees on the diagonal stood at different heights, the cut
+  lines. relief.bin: Fallarbor's south fill flat at the town's level (32 px, flags 8); a new Route 114 east fill (rows
+  20-79, Fallarbor's wood, 64 px = the same height, flat). A flat fill lower than its map's edge (Route 114's
+  mountain climbing to 4 levels) no longer takes the edge's way south (its trees stood stretched off their ground;
+  the thinned woods keep it, voxel_mesh_builder.c VoxelMesh_BorderLevel, WJPC_FLAT_FILL_EDGE_SHIFT=1: as before).
+  Every tree there now level and alike. Gap test (6 views, 1920x1080 and 2560x1440): no new gaps, two fewer.
+  Picture docs/polish_reports/2026-11-23_N13_fallarbor_sw_level.png. Asked which "3 red boxes" (one circle came).
+- 2026-11-23 08:20 (Brennan): C1, C4, D1 closed for now - he brings them up again if they come back.
