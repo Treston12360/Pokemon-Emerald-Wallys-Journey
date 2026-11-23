@@ -20,6 +20,7 @@
 int VoxelTree_Part(const void *secondaryTileset, int metatileId);
 /* The same at a world cell: this map's, the next map's or the border's. */
 int VoxelTree_PartAt(int x, int y);
+bool VoxelTree_OwnLoneLedge(int x, int y); /* a belt tree at (x, y) is the map's own lone tree, two cells wide */
 /* Remove the old canopy from the cell above a tree, leaving its ground. */
 int VoxelTree_GroundMetatile(const void *secondaryTileset, int metatileId);
 /* the trees texture's alpha (tiled RGBA5551, as uploaded), kept for the rock mounds' shapes */

@@ -917,6 +917,21 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
         }
 }
 
+/* Whether a tree the belt stands at (x, y) (a ledge or plateau tree: VoxelMesh_LedgeTree) is the map's own lone
+ * tree, two cells wide: its art map is drawn with Fallarbor's tileset and not Route 113's ash (its own trees ashen). */
+bool VoxelTree_OwnLoneLedge(int x, int y)
+{
+    static int sSmall = -1;
+    const VoxelMapInstance *art;
+
+    if (sSmall < 0)
+        sSmall = getenv("WJPC_PLATEAU_TREES_SMALL") != NULL;
+    if (sSmall)
+        return false;
+    art = VoxelWorld_BorderArtMap(x, y);
+    return art != NULL && art->secondaryTileset == &gTileset_Fallarbor && art->layoutId != 29;
+}
+
 void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     const VoxelMapInstance *current = VoxelWorld_Instance(0);
@@ -952,17 +967,15 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 continue;
             }
 
-            /* Brennan 2026-11-23 07:39 (Route 114's west plateau: "match the trees with the surrounding ones"): a
-             * tree scattered on a flat fill (VoxelMesh_PlateauTree) is the map's own lone tree where its tileset has
-             * one - Fallarbor's (20E-20F), two cells wide, on the plateau's own ground (no soil square).
-             * WJPC_PLATEAU_TREES_SMALL=1: the General's small tree. */
+            /* Brennan 2026-11-23 07:39 (Route 114's west plateau: "match the trees with the surrounding ones"; 12:18
+             * the same for the ledge trees by its woods): a tree scattered on a flat fill or on a ledge by a wood is
+             * the map's own lone tree where its tileset has one - Fallarbor's (20E-20F), two cells wide, on the belt's
+             * own ground (no soil square). VoxelTree_OwnLoneLedge; WJPC_PLATEAU_TREES_SMALL=1: the General's small
+             * tree. */
             bool plateauOwn = false;
             if (ledge)
             {
-                static int sPlateauSmall = -1;
-                if (sPlateauSmall < 0)
-                    sPlateauSmall = getenv("WJPC_PLATEAU_TREES_SMALL") != NULL;
-                plateauOwn = !sPlateauSmall && art->secondaryTileset == &gTileset_Fallarbor && VoxelMesh_PlateauTree(x, y);
+                plateauOwn = VoxelTree_OwnLoneLedge(x, y);
                 /* POL-46: a small tree on a ledge near a wood (the General's 0C7) */
                 part = plateauOwn ? 2 : VOXEL_TREE_SMALL;
                 metatileId = plateauOwn ? 0x20E : 0x0C7;

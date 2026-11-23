@@ -8,6 +8,7 @@ usage: add_relief_edge.py RELIEF.bin LAYOUT_ID EDGE METATILE [FIRST LAST] [--top
   --flat: its top stays level out to the horizon (not rounded off); --sparse: a wood of it thinned; --scatter: only a few trees.
   Fills are looked up first match first: a ranged fill must come before a whole-edge one of the same edge
   (this script puts ranged fills first).
+  --reach N: only N cells out from the edge (a fill without one covers the cells past it).
   --top PX: where the fill's top stands, pixels over the map's base (default: water at the map's own sea level,
             anything else as the border is).
 
@@ -41,6 +42,12 @@ def main():
         i = args.index('--top')
         top = int(args[i + 1])
         del args[i:i + 2]
+    reach = 0
+    if '--reach' in args:     # top bits 10-14: only this many cells out from the edge (Brennan 2026-11-23 12:18)
+        i = args.index('--reach')
+        reach = int(args[i + 1])
+        del args[i:i + 2]
+        assert 1 <= reach <= 31
     path, lid, edge, mts = args[0], int(args[1]), EDGES[args[2].upper()], args[3]
     mt = [int(m, 0) for m in mts.split(',')]
     if len(mt) == 1:
@@ -58,24 +65,29 @@ def main():
     for k in range(4):
         if mt[k] in WATER:
             flags |= 1 << (4 + k)
-    rec = struct.pack('<HBBhhh4H', lid, edge, flags, first, last, top or 0, *mt)
+    assert (top or 0) < 1024 and (reach == 0 or (top or 0) >= 0)
+    rec = struct.pack('<HBBhhH4H', lid, edge, flags, first, last, ((top or 0) | reach << 10) & 0xFFFF, *mt)
     for k in range(count):
         o = i + 8 + 18 * k
         l, e = struct.unpack_from('<HB', b, o)
-        f, la = struct.unpack_from('<hh', b, o + 4)
-        if l == lid and e == edge and f == first and la == last:
+        f, la, tp = struct.unpack_from('<hhH', b, o + 4)
+        if l == lid and e == edge and f == first and la == last and (0 if tp & 0x8000 else tp >> 10) == reach:
             b[o:o + 18] = rec
             break
     else:
         b[end:end] = rec
         struct.pack_into('<H', b, i + 4, count + 1)
-    # ranged fills first: the game takes the first fill of an edge that covers a cell (voxel_relief.c)
+    # ranged fills first, those with a reach before them: the game takes the first fill of an edge that covers a cell
+    # (voxel_relief.c)
     count = struct.unpack_from('<H', b, i + 4)[0]
     ents = [bytes(b[i + 8 + 18 * k:i + 26 + 18 * k]) for k in range(count)]
-    ents.sort(key=lambda e: struct.unpack_from('<h', e, 4)[0] < 0)
+    def reach_of(e):
+        tp = struct.unpack_from('<H', e, 8)[0]
+        return 0 if tp & 0x8000 else tp >> 10
+    ents.sort(key=lambda e: (reach_of(e) == 0, struct.unpack_from('<h', e, 4)[0] < 0))
     b[i + 8:i + 8 + 18 * count] = b''.join(ents)
     open(path, 'wb').write(b)
-    print('ok', lid, args[2], [hex(m) for m in mt], first, last, top)
+    print('ok', lid, args[2], [hex(m) for m in mt], first, last, top, 'reach', reach)
 
 
 if __name__ == '__main__':

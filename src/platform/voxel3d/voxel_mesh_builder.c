@@ -5250,6 +5250,38 @@ static bool FlatFillPoint(int vx, int vy, float *height)
     return true;
 }
 
+/* A belt cell of a flat fill near its map (FlatFillPoint's): its own top, world height. */
+static bool FlatFillCell(int cx, int cy, float *height)
+{
+    const VoxelMapInstance *ring;
+    VoxelEdgeFill fill;
+    int ex, ey;
+
+    if (VoxelWorld_GetInstanceAt(cx, cy) != NULL || (ring = VoxelWorld_BeltRing(cx, cy)) == NULL
+     || !VoxelRelief_EdgeFillAt(ring, cx, cy, &fill) || !fill.flat || !fill.hasTop || fill.water)
+        return false;
+    ex = cx < ring->originX ? ring->originX - cx : cx >= ring->originX + ring->width ? cx - (ring->originX + ring->width - 1) : 0;
+    ey = cy < ring->originY ? ring->originY - cy : cy >= ring->originY + ring->height ? cy - (ring->originY + ring->height - 1) : 0;
+    if ((ex > ey ? ex : ey) > 24)
+        return false;
+    *height = VoxelRelief_Base(ring) + (float)fill.top / 16.0f - (float)VOXEL_BORDER_COURSES;
+    return true;
+}
+
+/* Brennan 2026-11-23 12:18 (Route 114's west: "The slope mountain doesn't look natural it looks like it's falling
+ * this needs to be horizontal"): where two flat fills of different heights meet, each cell keeps its own fill's top,
+ * standing where a cell of that height stands (its way south its height, as the 2D map's rows), a wall of rock down
+ * to the lower one - the field's one-cell ramp between them stood as a band of squeezed ledges. A lower cell with a
+ * higher one south of it reaches under that one's edge (no hole behind the step). WJPC_FLAT_STEP_RAMP=1: the ramp,
+ * as before. */
+static bool FlatStepsOn(void)
+{
+    static int sOn = -1;
+    if (sOn < 0)
+        sOn = getenv("WJPC_FLAT_STEP_RAMP") == NULL;
+    return sOn != 0;
+}
+
 static void BeltFieldUncached(int vx, int vy, float *height, float *south)
 {
     if (FlatFillPoint(vx, vy, height))
@@ -5566,6 +5598,51 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
 
 typedef struct { float x, y, h, s; } FieldPt;   /* grid position (cells), field height, way south */
 
+static bool FlatFillPoint(int vx, int vy, float *height);
+static bool FlatFillCell(int cx, int cy, float *height);
+
+/* A flat fill cell's corner (vx, vy), its top `top`: on the fill (FlatFillPoint) its own top, standing where a cell of
+ * that height stands (*own); on a map's edge that map's ground at the corner in this cell's own row (or column) -
+ * the field's one point there is the higher of the two map cells it touches across a step in the map's edge, and
+ * the cell beside the lower one stood a sliver of ledges up to it (the "spikes" by Route 114's west cliff); else the
+ * field's point. (Brennan 2026-11-23 12:18, FlatStepsOn) */
+static FieldPt FlatCellCorner(int cx, int cy, int vx, int vy, float top, bool *own)
+{
+    FieldPt p;
+    float fh;
+    float px = (float)vx + (vx > cx ? 0.01f : -0.01f), py = (float)vy + (vy > cy ? -0.01f : 0.01f);
+    float qx = (float)vx + (vx > cx ? -0.01f : 0.01f), qy = (float)vy + (vy > cy ? 0.01f : -0.01f);
+
+    p.x = (float)vx;
+    p.y = (float)vy;
+    BeltField(vx, vy, &p.h, &p.s);
+    *own = false;
+    if (FlatFillPoint(vx, vy, &fh))
+    {
+        p.h = p.s = top;
+        *own = true;
+        return p;
+    }
+    /* (only a cell by a step of the fills: elsewhere the map's edge and the field's point agree, and a corner moved off
+     * that point opened sky between them - Route 114's west cliff, 2026-11-23) */
+    {
+        static const int kN[4][2] = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+        bool step = false;
+        for (int d = 0; d < 4 && !step; ++d)
+        {
+            float t;
+            step = FlatFillCell(cx + kN[d][0], cy + kN[d][1], &t) && fabsf(t - top) > 0.01f;
+        }
+        if (!step)
+            return p;
+    }
+    if (VoxelWorld_GetInstanceAt((int)floorf(px), (int)floorf(py)) != NULL)
+        p.h = VoxelRelief_LiftAt(px, py), p.s = VoxelRelief_ShiftAt(px, py);
+    else if (VoxelWorld_GetInstanceAt((int)floorf(qx), (int)floorf(qy)) != NULL)
+        p.h = VoxelRelief_LiftAt(qx, qy), p.s = VoxelRelief_ShiftAt(qx, qy);
+    return p;
+}
+
 static FieldPt FieldLerp(FieldPt a, FieldPt b, float level)
 {
     float t = (level - a.h) / (b.h - a.h);
@@ -5827,6 +5904,13 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
         c[k].y = (float)vy;
         BeltField(vx, vy, &c[k].h, &c[k].s);
     }
+    /* a flat fill's cell where it meets another's of another height: its own top (FlatStepsOn, FlatCellCorner) */
+    bool flatOwn[4] = { false, false, false, false };
+    float ownTop = 0.0f;
+    bool flatCell = FlatStepsOn() && !BeltIsTree(x, y) && FlatFillCell(x, y, &ownTop);
+    if (flatCell)
+        for (int k = 0; k < 4; ++k)
+            c[k] = FlatCellCorner(x, y, x + (k & 1), y + (k >> 1), ownTop, &flatOwn[k]);
     {
         static int sDump = -1;
         if (sDump < 0)
@@ -5930,6 +6014,68 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     {
         FieldTriangle(b, x, y, c[0], c[1], c[2], tu0, tv0, tu1, tv1, wall, wu0, wv0, wu1, wv1);
         FieldTriangle(b, x, y, c[1], c[3], c[2], tu0, tv0, tu1, tv1, wall, wu0, wv0, wu1, wv1);
+    }
+    /* the step down to a lower flat fill beside it: a wall of rock from that fill's ground up to this one's, where a
+     * cell of this height stands, and the lower land's ground on from its own edge to the wall's foot (the higher
+     * land stands further south by its height: behind a step facing away a strip of the lower land shows, under one
+     * facing the camera it is hidden). Each side corner: the lower cell's point there (lo) and this one's (hi). */
+    if (flatCell)
+    {
+        static const int kStepSide[4][2] = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+        static const int kStepCorner[4][2] = { {1, 0}, {2, 3}, {0, 2}, {3, 1} };
+        for (int d = 0; d < 4; ++d)
+        {
+            float nTop;
+            int nx = x + kStepSide[d][0], ny = y + kStepSide[d][1];
+            int ka = kStepCorner[d][0], ke = kStepCorner[d][1];
+            bool oa, oe;
+            FieldPt ha = c[ka], he = c[ke], la, le;
+            if ((!flatOwn[ka] && !flatOwn[ke]) || BeltIsTree(nx, ny) || !FlatFillCell(nx, ny, &nTop) || nTop >= ownTop - 0.01f)
+                continue;
+            la = FlatCellCorner(nx, ny, (int)ha.x, (int)ha.y, nTop, &oa);
+            le = FlatCellCorner(nx, ny, (int)he.x, (int)he.y, nTop, &oe);
+            if (la.h > ha.h) la.h = ha.h;
+            if (le.h > he.h) le.h = he.h;
+            {
+                float shade = d == 0 ? SHADE_NORTH : d == 1 ? SHADE_SOUTH : d == 2 ? SHADE_WEST : SHADE_EAST;
+                float su0 = wall ? wu0 : tu0, sv0 = wall ? wv0 : tv0, su1 = wall ? wu1 : tu1, sv1 = wall ? wv1 : tv1;
+                float bottom = la.h < le.h ? la.h : le.h, topH = ha.h > he.h ? ha.h : he.h;
+                /* the wall, a course at a time, at this cell's corners (each corner clamped to its own lo..hi) */
+                for (float lo = bottom; lo < topH - 0.01f; lo += 1.0f)
+                {
+                    float hi = lo + 1.0f < topH ? lo + 1.0f : topH;
+                    float a0 = lo < la.h ? la.h : lo > ha.h ? ha.h : lo, a1 = hi < la.h ? la.h : hi > ha.h ? ha.h : hi;
+                    float e0 = lo < le.h ? le.h : lo > he.h ? he.h : lo, e1 = hi < le.h ? le.h : hi > he.h ? he.h : hi;
+                    if (a1 - a0 < 0.001f && e1 - e0 < 0.001f)
+                        continue;
+                    {
+                        VoxelVertex q0 = { ha.x, a0, ha.y + ha.s, su0, sv1, shade };
+                        VoxelVertex q1 = { he.x, e0, he.y + he.s, su1, sv1, shade };
+                        VoxelVertex q2 = { he.x, e1, he.y + he.s, su1, sv1 + (sv0 - sv1) * (e1 - e0), shade };
+                        VoxelVertex q3 = { ha.x, a1, ha.y + ha.s, su0, sv1 + (sv0 - sv1) * (a1 - a0), shade };
+                        VoxelBuilder_Quad(b, &q0, &q1, &q2, &q3);
+                    }
+                }
+                /* the lower land's strip from its edge to the wall's foot (north or south sides), a cell at a time */
+                if (d <= 1)
+                {
+                    float za0 = la.y + la.s, za1 = ha.y + ha.s, ze0 = le.y + le.s, ze1 = he.y + he.s;
+                    float len = fabsf(za1 - za0) > fabsf(ze1 - ze0) ? fabsf(za1 - za0) : fabsf(ze1 - ze0);
+                    int steps = (int)ceilf(len - 0.01f);
+                    for (int st = 0; st < steps; ++st)
+                    {
+                        float t0 = (float)st / (float)steps, t1 = (float)(st + 1) / (float)steps;
+                        float va = tv0 + (tv1 - tv0) * (len / (float)steps);
+                        VoxelVertex f0 = { ha.x, la.h, za0 + (za1 - za0) * t0, tu0, tv0, SHADE_TOP };
+                        VoxelVertex f1 = { he.x, le.h, ze0 + (ze1 - ze0) * t0, tu1, tv0, SHADE_TOP };
+                        VoxelVertex f2 = { he.x, le.h, ze0 + (ze1 - ze0) * t1, tu1, va, SHADE_TOP };
+                        VoxelVertex f3 = { ha.x, la.h, za0 + (za1 - za0) * t1, tu0, va, SHADE_TOP };
+                        VoxelBuilder_Quad(b, &f0, &f1, &f2, &f3);
+                        VoxelBuilder_Quad(b, &f3, &f2, &f1, &f0);   /* (either way up: it may be seen from below) */
+                    }
+                }
+            }
+        }
     }
     /* its sides on what is not the field (the belt's sea and trees, a map): a wall of rock from the ground up to
      * the ledges along that side, each stretch of the side at its whole level - the field's edge stood open over
@@ -6146,12 +6292,18 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
     wood = wood || plateau;
     if (!wood)
         return false;
+    /* Brennan 2026-11-23 12:18 (Route 114: "a few trees that weren't changed. Change these to the surrounding trees"):
+     * where the map's own lone tree stands instead (VoxelTree_OwnLoneLedge: two cells wide) a tree starts only on an
+     * even column, the shelf flat under both its cells */
+    bool wide = plateau || VoxelTree_OwnLoneLedge(x, y);
+    if (wide && (x & 1) != 0)
+        return false;
     /* the shelf all round it flat too (Brennan: "Snap tree positions onto the flat centers of the terrace shelves"
      * - a tree on a shelf's edge cell hung its crown over the drop) */
     /* (its own corners and the next row's south of it: the shelf in front of the trunk, where the crown leans;
      * a 3x3 flat patch was too much for 2-square shelves - no trees at all on them) */
     for (int vy = y; vy <= y + 1; ++vy)
-        for (int vx = x; vx <= x + (plateau ? 2 : 1); ++vx)
+        for (int vx = x; vx <= x + (wide ? 2 : 1); ++vx)
         {
             float fh, fs;
             BeltField(vx, vy, &fh, &fs);

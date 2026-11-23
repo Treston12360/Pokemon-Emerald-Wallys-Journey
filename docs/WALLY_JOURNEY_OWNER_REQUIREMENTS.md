@@ -1036,3 +1036,20 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Every tree there now level and alike. Gap test (6 views, 1920x1080 and 2560x1440): no new gaps, two fewer.
   Picture docs/polish_reports/2026-11-23_N13_fallarbor_sw_level.png. Asked which "3 red boxes" (one circle came).
 - 2026-11-23 08:20 (Brennan): C1, C4, D1 closed for now - he brings them up again if they come back.
+- 2026-11-23 12:18 (Brennan, on N12's picture, 3 red boxes, Route 114's west: "The slope mountain doesn't look natural
+  it looks like it's falling this needs to be horizontal just like the rest. There's also a few trees that weren't
+  changed. Change these to the surrounding trees"):
+  - the slope: west of Route 114 two maps' fills met on a diagonal - Route 115's north (9 levels) and Route 114's
+    plateau (3.5) - a long ramp falling across it. Route 115's north fill is now the plateau's height (relief.bin
+    31 N cols 16-39: 56 px) except its first rows by Route 115 (reach 4: 128 px = Route 114's mountain, 8; reach 5:
+    112 px = 7), and Route 114's west fill row 35 at 7 (144 px): the plateau level to row 34, then two straight
+    ledges up to the mountain in line with Route 114's own (row 35 at 7, 36 on at 8). New: an edge fill's top u16
+    holds its reach in bits 10-14 (voxel_relief.c EdgeFillOut; add_relief_edge.py --reach).
+  - where two flat fills of different heights meet each cell keeps its own top, a wall of rock up the step and the
+    lower land's ground to its foot (voxel_mesh_builder.c FlatFillCell, FlatCellCorner; WJPC_FLAT_STEP_RAMP=1: the
+    old one-cell ramp, a band of squeezed ledges). By a map's edge such a cell's corner takes the map's ground in its
+    own row: the "spikes" by Route 114's west cliff (a sliver of ledges up to the higher of two map cells) gone.
+  - the trees: the ledge trees by the plateau's woods (the General's small pine) are Fallarbor's own lone tree too
+    (voxel_tree.c VoxelTree_OwnLoneLedge, as N12's plateau trees; not Route 113's ashen map).
+  - left: the plateau's own drawn cliff corners by the river (Route 114's map, cols 0-6) are its own ledges.
+  Picture docs/polish_reports/2026-11-23_N14_route114_west_level.png.

@@ -890,16 +890,26 @@ void VoxelRelief_Shutdown(void)
     sEdgeCount = 0;
 }
 
-bool VoxelRelief_EdgeFill(unsigned layoutId, unsigned edge, int along, unsigned index, VoxelEdgeFill *fill)
+/* Brennan 2026-11-23 12:18 (Route 114's west, "The slope mountain doesn't look natural it looks like it's falling
+ * this needs to be horizontal"): a fill's top u16, when not negative, is its height in px (bits 0-9) and, in bits 10-14, how many cells
+ * out from the edge it reaches (0: all the way) - so a map's fill can stand a cliff's foot along its edge and the
+ * plateau further out, the cliff running on in line with the next map's instead of along the diagonal where the two
+ * maps' fills meet. A record with a reach is looked at only that far out (out: 1 is the first cell past the edge;
+ * 0 when the caller does not know - VoxelRelief_EdgeFills - takes any). */
+static bool EdgeFillOut(unsigned layoutId, unsigned edge, int along, int out, unsigned index, VoxelEdgeFill *fill)
 {
     for (unsigned i = 0; i < sEdgeCount; ++i)
     {
         const uint8_t *e = sEdges + EDGE_BYTES * i;
         int first = (int16_t)U16(e + 4), last = (int16_t)U16(e + 6);
+        unsigned raw = U16(e + 8);
+        int reach = (raw & 0x8000u) != 0 ? 0 : (int)(raw >> 10 & 31u);   /* (a top under the base: no reach) */
 
         if (U16(e) != layoutId || e[2] != edge)
             continue;
         if (first >= 0 && (along < first || along > last))
+            continue;
+        if (reach != 0 && out > reach)
             continue;
         index &= 3u;
         fill->metatile = (int)U16(e + 10 + 2 * index);
@@ -908,10 +918,15 @@ bool VoxelRelief_EdgeFill(unsigned layoutId, unsigned edge, int along, unsigned 
         fill->flat = (e[3] & 8) != 0;
         fill->sparse = (e[3] & 4) != 0;
         fill->scatter = (e[3] & 1) != 0;
-        fill->top = (int16_t)U16(e + 8);
+        fill->top = (raw & 0x8000u) != 0 ? (int)(int16_t)raw : (int)(raw & 0x3FFu);
         return true;
     }
     return false;
+}
+
+bool VoxelRelief_EdgeFill(unsigned layoutId, unsigned edge, int along, unsigned index, VoxelEdgeFill *fill)
+{
+    return EdgeFillOut(layoutId, edge, along, 0, index, fill);
 }
 
 bool VoxelRelief_EdgeFillAt(const VoxelMapInstance *ring, int worldX, int worldY, VoxelEdgeFill *fill)
@@ -930,13 +945,13 @@ bool VoxelRelief_EdgeFillAt(const VoxelMapInstance *ring, int worldX, int worldY
     index = (unsigned)(lx & 1) | ((unsigned)(ly & 1) << 1);
     /* a corner past two edges: the west or east edge's first, then the
      * north or south one's */
-    if (lx < 0 && VoxelRelief_EdgeFill((unsigned)ring->layoutId, 1, cy, index, fill))
+    if (lx < 0 && EdgeFillOut((unsigned)ring->layoutId, 1, cy, -lx, index, fill))
         return true;
-    if (lx >= ring->width && VoxelRelief_EdgeFill((unsigned)ring->layoutId, 2, cy, index, fill))
+    if (lx >= ring->width && EdgeFillOut((unsigned)ring->layoutId, 2, cy, lx - ring->width + 1, index, fill))
         return true;
-    if (ly < 0 && VoxelRelief_EdgeFill((unsigned)ring->layoutId, 4, cx, index, fill))
+    if (ly < 0 && EdgeFillOut((unsigned)ring->layoutId, 4, cx, -ly, index, fill))
         return true;
-    if (ly >= ring->height && VoxelRelief_EdgeFill((unsigned)ring->layoutId, 8, cx, index, fill))
+    if (ly >= ring->height && EdgeFillOut((unsigned)ring->layoutId, 8, cx, ly - ring->height + 1, index, fill))
         return true;
     return false;
 }
