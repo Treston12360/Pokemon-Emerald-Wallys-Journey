@@ -909,3 +909,5 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   behind the edge (voxel_mesh_builder.c; WJPC_EDGE_NORTH_IN_PLANE=1 restores). Gap test, every outdoor map's north
   edge (34 views) at 1920x1080 and 2560x1440: no new gaps (identical, one 2560 view 5119 -> 0). Picture:
   docs/polish_reports/2026-11-22_fierypath_backwall_flicker.png.
+- 2026-11-22 20:50 (Brennan): checkerboard blocks "have stopped ... we can close that for now" (closed, no change).
+  "Speed & Looks" renamed "Speed" ("yes it can be changed"). Picture: docs/polish_reports/2026-11-22_settings_speed_renamed.png.
