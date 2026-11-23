@@ -211,7 +211,7 @@ def main():
     new_extra = len(ours['verts'])
     ours['verts'] += [bytearray(v) for v in donor['verts'][extra_first:extra_first + extra_n]]
     struct.pack_into('<H', place, 2, new_pm)
-    struct.pack_into('<I', place, 12, new_extra if extra_n else extra_first)
+    struct.pack_into('<I', place, 12, new_extra if extra_n else 0)  # (none: 0 - the donor's own number is past OURS's vertices, and the loader checks it even then; 22b bug)
     # placements stay sorted by layout; conditions name placements by index
     at = len(ours['places'])
     for i, p in enumerate(ours['places']):
@@ -287,7 +287,7 @@ def splice_layout(ours, donor, lid):
         ne = len(ours['verts'])
         ours['verts'] += [bytearray(v) for v in donor['verts'][extra_first:extra_first + extra_n]]
         struct.pack_into('<H', place, 2, pm_map[dpi])
-        struct.pack_into('<I', place, 12, ne if extra_n else extra_first)
+        struct.pack_into('<I', place, 12, ne if extra_n else 0)  # (none: 0 - the donor's own number is past OURS's vertices, and the loader checks it even then; 22b bug)
         added.append(place)
     # rebuild the placement list: OURS's others in order, the layout's new ones where its old ones were
     old_index = {}

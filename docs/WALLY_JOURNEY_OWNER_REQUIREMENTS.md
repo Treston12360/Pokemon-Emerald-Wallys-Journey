@@ -885,3 +885,14 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - 22b C5 flower shop: the three wooden stools turned models (round="lathe", as the Mart's jars) and the tall plant by the shelf a standing card (3ds_port voxel_building_specs.py flower_shop_room; in tools/voxel3ds/wj_2026-11-22.patch); room layout 117 spliced whole from a full donor. At the game's camera they look as drawn (the models are fitted to the drawing); they stand up when the camera turns. Pictures `docs/polish_reports/FLOWER_SHOP_STOOLS_before_after.png`, `FLOWER_SHOP_STOOLS_3d_view.png`.
   - C4 Rustboro sky hole: not reproduced (35 camera spots round the east woods, 1920x1080, current build and 22a: no hole inside the picture).
 - **2026-11-22 19:20**: zip `WallysJourney-Polish-2026-11-22b.zip` sent (whole folder; exe and pc_data/voxel at ad75a690). Everything since 22a above is in it.
+
+- 2026-11-22 19:31 (Brennan, zip 22b): "every single building across the entire game has suddenly reverted to flat 2D".
+  Cause: the sea-stack splice (9aab9889, 17:04) and the flower-shop splice (ad75a690) copied the donor file's
+  ground-patch start number on placements with no ground patches; that number was past our file's vertices, so the
+  game's loader turned the whole buildings.bin down and every building fell back to its flat drawing. Fixed:
+  splice_buildings.py writes 0 there (as dedupe_buildings.py already does), the 1777 bad numbers in buildings.bin set
+  to 0, and the file deduplicated again (48.3 -> 43.7 MB, dedupe --verify passed). Before/after:
+  docs/polish_reports/2026-11-22_buildings_restored_*.png.
+- 2026-11-22 19:27 (Brennan): Settings - "remove ... Integer scaling, bilinear filter, interframe blend" (removed from
+  the menu and forced off when the settings file is read) and "move 3D battles, 3D World, Gamma lighting into a
+  folder named 'Looks'" (new Looks section after Video).

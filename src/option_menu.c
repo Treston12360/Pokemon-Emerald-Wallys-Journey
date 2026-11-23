@@ -102,6 +102,7 @@ enum
     MENUITEM_PC_SECTION_KEYBOARD,
     MENUITEM_PC_SECTION_AUDIO,
     MENUITEM_PC_SECTION_VIDEO,
+    MENUITEM_PC_SECTION_LOOKS, // Brennan 2026-11-22 19:27: 3D World, 3D Battles, Gamma Lighting
     MENUITEM_PC_RELOAD, // top page: reload the last save (A twice)
 #endif
     MENUITEM_CANCEL,
@@ -294,6 +295,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_PC_KEY_FIRST + KEYBIND_FAST_FORWARD] = COMPOUND_STRING("Key fast fwd"),
     [MENUITEM_PC_SECTION_AUDIO]    = COMPOUND_STRING("Audio"),
     [MENUITEM_PC_SECTION_VIDEO]    = COMPOUND_STRING("Video"),
+    [MENUITEM_PC_SECTION_LOOKS]    = COMPOUND_STRING("Looks"),
     [MENUITEM_PC_RELOAD]           = COMPOUND_STRING("Reload save"),
 #endif
     [MENUITEM_CANCEL]      = COMPOUND_STRING("Cancel"),
@@ -1101,7 +1103,7 @@ static void RedrawVisibleOptions(u8 taskId)
         for (i = MENUITEM_PC_WINDOWSIZE; i <= MENUITEM_PC_LAST; i++)
             if (ITEM_VISIBLE(i))
                 PcOption_Draw(i);
-        for (i = MENUITEM_PC_SECTION_GAMEPLAY; i <= MENUITEM_PC_SECTION_VIDEO; i++)
+        for (i = MENUITEM_PC_SECTION_GAMEPLAY; i <= MENUITEM_PC_SECTION_LOOKS; i++)
             if (ITEM_VISIBLE(i))
                 PcSection_Draw(i);
         if (ITEM_VISIBLE(MENUITEM_PC_RELOAD))
@@ -1294,9 +1296,11 @@ static const u8 sPcSectionGameplay[] = {MENUITEM_TEXTSPEED, MENUITEM_BATTLESCENE
 static const u8 sPcSectionControls[] = {MENUITEM_BUTTONMODE, MENUITEM_PC_PAD_A, MENUITEM_PC_PAD_B, MENUITEM_PC_PAD_START,
     MENUITEM_PC_PAD_SELECT, MENUITEM_PC_PAD_L, MENUITEM_PC_PAD_R, MENUITEM_PC_PAD_FF};
 static const u8 sPcSectionAudio[] = {MENUITEM_SOUND, MENUITEM_PC_VOLUME, MENUITEM_PC_MUSICVOL, MENUITEM_PC_SOUNDVOL};
+/* Brennan 2026-11-22 19:27: "remove in the settings options; Integer scaling, bilinear filter, interframe blend" (they stay
+ * off - sdl2.c ignores them in the cfg) and "move 3D battles, 3D World, Gamma lighting into a folder named Looks" */
 static const u8 sPcSectionVideo[] = {MENUITEM_PC_WINDOWSIZE, MENUITEM_PC_FULLSCREEN, MENUITEM_PC_RESOLUTION, MENUITEM_PC_ZOOM,
-    MENUITEM_PC_LOCKASPECT, MENUITEM_PC_SHARP, MENUITEM_PC_BILINEAR, MENUITEM_PC_INTERFRAME, MENUITEM_PC_LOCKFRAME,
-    MENUITEM_PC_WIDESCREEN, MENUITEM_PC_SMOOTH, MENUITEM_PC_FILTER, MENUITEM_PC_WORLD3D, MENUITEM_PC_BATTLE3D, MENUITEM_PC_GAMMALIGHT};
+    MENUITEM_PC_LOCKASPECT, MENUITEM_PC_LOCKFRAME, MENUITEM_PC_WIDESCREEN, MENUITEM_PC_SMOOTH, MENUITEM_PC_FILTER};
+static const u8 sPcSectionLooks[] = {MENUITEM_PC_WORLD3D, MENUITEM_PC_BATTLE3D, MENUITEM_PC_GAMMALIGHT};
 
 static void PcMenu_AddRow(u8 item)
 {
@@ -1321,7 +1325,7 @@ static void PcMenu_SetPage(u8 page)
     switch (page)
     {
     case 0:
-        for (i = MENUITEM_PC_SECTION_GAMEPLAY; i <= MENUITEM_PC_SECTION_VIDEO; i++)
+        for (i = MENUITEM_PC_SECTION_GAMEPLAY; i <= MENUITEM_PC_SECTION_LOOKS; i++)
             PcMenu_AddRow(i);
         PcMenu_AddRow(MENUITEM_PC_RELOAD);
         break;
@@ -1349,6 +1353,9 @@ static void PcMenu_SetPage(u8 page)
         break;
     case MENUITEM_PC_SECTION_VIDEO:
         PcMenu_AddRows(sPcSectionVideo, ARRAY_COUNT(sPcSectionVideo));
+        break;
+    case MENUITEM_PC_SECTION_LOOKS:
+        PcMenu_AddRows(sPcSectionLooks, ARRAY_COUNT(sPcSectionLooks));
         break;
     }
     PcMenu_AddRow(MENUITEM_CANCEL);
@@ -1426,7 +1433,7 @@ static bool32 PcMenu_HandleNavigation(u8 taskId)
             CopyWindowToVram(WIN_OPTIONS, COPYWIN_GFX);
             return TRUE;
         }
-        if (item >= MENUITEM_PC_SECTION_GAMEPLAY && item <= MENUITEM_PC_SECTION_VIDEO)
+        if (item >= MENUITEM_PC_SECTION_GAMEPLAY && item <= MENUITEM_PC_SECTION_LOOKS)
         {
             PlaySE(SE_SELECT);
             PcMenu_OpenPage(taskId, item, 0);
@@ -1473,6 +1480,7 @@ static void PcSection_Draw(u8 item)
         COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Keys"),
         COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Sound, volume"),
         COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}Window, size"),
+        COMPOUND_STRING("{COLOR GREEN}{SHADOW LIGHT_GREEN}3D, lighting"),
     };
     u8 y = ITEM_Y(item);
     FillWindowPixelRect(WIN_OPTIONS, PIXEL_FILL(1), 104, y, 96, 16);

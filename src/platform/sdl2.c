@@ -1997,8 +1997,8 @@ static void ReadConfigFile(void)
             sPlatformSettings[PLATFORM_SETTING_FULLSCREEN] = value != 0;
         else if (sscanf(line, "windowScale=%u", &value) == 1 && value >= 1 && value <= 12)
             sPlatformSettings[PLATFORM_SETTING_WINDOW_SCALE] = value;
-        else if (sscanf(line, "integerScale=%u", &value) == 1)
-            sPlatformSettings[PLATFORM_SETTING_INTEGER_SCALE] = value != 0;
+        else if (sscanf(line, "integerScale=%u", &value) == 1) /* (Brennan 2026-11-22: setting removed - always off) */
+            sPlatformSettings[PLATFORM_SETTING_INTEGER_SCALE] = 0;
         else if (sscanf(line, "vsync=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_VSYNC] = value != 0;
         else if (sscanf(line, "border=%u", &value) == 1)
@@ -2035,14 +2035,14 @@ static void ReadConfigFile(void)
         }
         else if (sscanf(line, "zoom=%u", &value) == 1 && value < ZOOM_COUNT)
             sPlatformSettings[PLATFORM_SETTING_ZOOM] = value;
-        else if (sscanf(line, "bilinear=%u", &value) == 1)
-            sPlatformSettings[PLATFORM_SETTING_SMOOTHING] = value != 0;
+        else if (sscanf(line, "bilinear=%u", &value) == 1) /* (Brennan 2026-11-22: setting removed - always off) */
+            sPlatformSettings[PLATFORM_SETTING_SMOOTHING] = 0;
         else if (sscanf(line, "resolution=%u", &value) == 1 && value < RESOLUTION_COUNT)
             sPlatformSettings[PLATFORM_SETTING_RESOLUTION] = value;
         else if (sscanf(line, "lockAspect=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_LOCK_ASPECT] = value != 0;
-        else if (sscanf(line, "interframe=%u", &value) == 1)
-            sPlatformSettings[PLATFORM_SETTING_INTERFRAME] = value != 0;
+        else if (sscanf(line, "interframe=%u", &value) == 1) /* (Brennan 2026-11-22: setting removed - always off) */
+            sPlatformSettings[PLATFORM_SETTING_INTERFRAME] = 0;
         else if (sscanf(line, "lockFrameSize=%u", &value) == 1)
             sPlatformSettings[PLATFORM_SETTING_LOCK_FRAME] = value != 0;
         else if (sscanf(line, "filter=%u", &value) == 1 && value <= 2)
