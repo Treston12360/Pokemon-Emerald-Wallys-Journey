@@ -98,6 +98,7 @@ void Platform_GetKeyBindName(u8 bind, u8 *dst, u32 size);
 
 u8 Platform_GetSetting(enum PlatformSetting setting);
 bool8 Platform_Is3DAvailable(void); // the 3D data (voxel folder) and OpenGL are there
+u32 Platform_GameSpeedQ8(void); // game frames per real 60th of a second x256 (fast-forward: 512 .. 5120)
 void Platform_SetSetting(enum PlatformSetting setting, u8 value);
 void Platform_GetStatus(struct SiiRtcInfo *rtc);
 void Platform_SetStatus(struct SiiRtcInfo *rtc);

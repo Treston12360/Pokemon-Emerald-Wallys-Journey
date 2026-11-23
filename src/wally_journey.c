@@ -1930,6 +1930,23 @@ static const struct SpriteTemplate sFallingLeafTemplate =
 #define tLeafSpeedY data[1]
 #define tLeafWave   data[2]
 #define tLeafDrift  data[3]
+#define tLeafFrac   data[4] // (PC) what is left of the fall below 1/128 px, x256
+#define tLeafWaveQ  data[5] // (PC) the sway's phase below one step, x256
+#define tLeafBreeze data[6] // (PC) real frames toward the next pixel of breeze, x256
+
+/* POLISH (Brennan 2026-11-21 17:25: "When fast-forwarding the game, the seasonal falling leaves speed up erratically
+ * and then disappear completely ... leaves always fall at normal, smooth speed and never vanish when sped up"; taken
+ * over from ARIA 2026-11-23 06:28, the falling leaves only). The leaves move by real time: each game frame they go
+ * 1/speed of a normal frame's way (Platform_GameSpeedQ8, 256 = normal). Sped up, the game ran them 2-20 times as
+ * fast, and the fast-forward batches (several game frames per picture, as many as the PC manages) made that speed
+ * jump about; at 20x a leaf crossed the screen in under half a second, so new ones (one every 16 game frames, a
+ * quarter second of real time at 4x) could not keep six on screen - they thinned out and were gone. */
+#ifdef PORTABLE
+#include "platform.h"
+#define LEAF_SPEED_Q8() Platform_GameSpeedQ8()
+#else
+#define LEAF_SPEED_Q8() 256u
+#endif
 
 static void ResetFallingLeaf(struct Sprite *sprite, bool32 anywhere)
 {
@@ -1940,17 +1957,32 @@ static void ResetFallingLeaf(struct Sprite *sprite, bool32 anywhere)
     sprite->tLeafSpeedY = 40 + (r >> 16) % 40;
     sprite->tLeafWave = (r >> 20) & 0xFF;
     sprite->tLeafDrift = 1 + ((r >> 28) & 1);
+    sprite->tLeafFrac = 0;
+    sprite->tLeafWaveQ = 0;
+    sprite->tLeafBreeze = 0;
 }
 
 static void UpdateFallingLeaf(struct Sprite *sprite)
 {
     s16 x, y;
-    sprite->tLeafPosY += sprite->tLeafSpeedY;
+    u32 speed = LEAF_SPEED_Q8();
+    s32 step;
+    // a normal frame's fall (tLeafSpeedY 128ths of a pixel) divided by the speed, the rest kept for the next frame
+    step = sprite->tLeafSpeedY * 256 + sprite->tLeafFrac * (s32)speed / 256;
+    sprite->tLeafPosY += step / (s32)speed;
+    sprite->tLeafFrac = (step % (s32)speed) * 256 / (s32)speed;
     sprite->y = sprite->tLeafPosY >> 7;
-    sprite->tLeafWave = (sprite->tLeafWave + sprite->tLeafDrift) & 0xFF;
+    step = sprite->tLeafDrift * 256 * 256 / (s32)speed + sprite->tLeafWaveQ;
+    sprite->tLeafWave = (sprite->tLeafWave + step / 256) & 0xFF;
+    sprite->tLeafWaveQ = step % 256;
     sprite->x2 = gSineTable[sprite->tLeafWave] / 32;
-    if ((gMain.vblankCounter1 & 3) == 0)
-        sprite->x--; // the breeze carries them westward
+    // the breeze carries them westward: a pixel every 4 normal frames
+    sprite->tLeafBreeze += 256 * 256 / (s32)speed;
+    if (sprite->tLeafBreeze >= 4 * 256)
+    {
+        sprite->tLeafBreeze -= 4 * 256;
+        sprite->x--;
+    }
     x = (sprite->x + sprite->centerToCornerVecX + gSpriteCoordOffsetX) & 0x1FF;
     if (x & 0x100)
         x |= -0x100;
@@ -1984,8 +2016,14 @@ void WallyJourney_UpdateFallingLeaves(void)
 {
     u32 i, count = 0;
     bool32 wanted;
-    if ((gMain.vblankCounter1 & 15) != 0)
+    // (a new leaf every 16 normal frames, by real time: POLISH, fast-forward)
+    static u32 sLeafClock;
+    sLeafClock += 256u * 256u / LEAF_SPEED_Q8();
+    if (sLeafClock < 16u * 256u)
         return;
+    sLeafClock -= 16u * 256u;
+    if (sLeafClock >= 16u * 256u)
+        sLeafClock = 0;
     wanted = FallingLeavesWanted();
     for (i = 0; i < MAX_SPRITES; i++)
     {
@@ -2028,6 +2066,27 @@ void WallyJourney_UpdateFallingLeaves(void)
 #undef tLeafSpeedY
 #undef tLeafWave
 #undef tLeafDrift
+#undef tLeafFrac
+#undef tLeafWaveQ
+#undef tLeafBreeze
+
+#ifdef PORTABLE
+// (test aid, POLISH: the falling leaves on screen, for the test script's "leaflog")
+u32 WallyJourney_FallingLeafLog(s16 *xy, u32 max)
+{
+    u32 i, n = 0;
+    for (i = 0; i < MAX_SPRITES && n < max; i++)
+    {
+        if (gSprites[i].inUse && gSprites[i].callback == UpdateFallingLeaf)
+        {
+            xy[2 * n] = gSprites[i].x + gSprites[i].x2 + gSprites[i].centerToCornerVecX + gSpriteCoordOffsetX;
+            xy[2 * n + 1] = gSprites[i].y + gSprites[i].centerToCornerVecY + gSpriteCoordOffsetY;
+            n++;
+        }
+    }
+    return n;
+}
+#endif
 
 // ------------------------------------------------------ townspeople routines
 // Outdoor flavour NPCs (see tools/gen_wally_ambient_npcs.py) go home at

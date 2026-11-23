@@ -721,6 +721,23 @@ static bool TestStep(void)
             }
             continue;
         }
+        if (!strcmp(cmd, "leaflog"))
+        {
+            // leaflog FILE (test aid, falling leaves): the frame and every leaf's screen position
+            extern u32 WallyJourney_FallingLeafLog(s16 *xy, u32 max);
+            s16 xy[64];
+            u32 n = WallyJourney_FallingLeafLog(xy, 32);
+            FILE *lf = fopen(arg1, "a");
+            if (lf != NULL)
+            {
+                fprintf(lf, "%u %u", sTestFrame, n);
+                for (u32 k = 0; k < n; k++)
+                    fprintf(lf, " %d,%d", xy[2 * k], xy[2 * k + 1]);
+                fprintf(lf, "\n");
+                fclose(lf);
+            }
+            continue;
+        }
         if (!strcmp(cmd, "fixtox"))
         {
             WJ_FixToxtricityForms(); // (test aid, C6: as loading a save does)
@@ -885,6 +902,12 @@ static bool TestStep(void)
 
 static bool sDrewFrame;
 static int sGameFramesCounted; // test aid (WJPC_FPS_LOG)
+/* Brennan 2026-11-21 17:25 / 2026-11-23 06:28 (falling leaves under fast-forward): how many game frames run per
+ * real 60th of a second, x256 (256 = normal speed), measured over about a quarter second - fast-forward's chosen
+ * speed is only what the PC aims for (a slow PC stops a batch early). Platform_GameSpeedQ8. */
+static int sSpeedFrames;
+static Uint64 sSpeedStamp;
+static u32 sGameSpeedQ8 = 256;
 
 // ---- Clean scaling / 4K / screen filters ------------------------------------------
 static SDL_Texture *sGameTarget;   // the game at a whole-number size
@@ -1945,6 +1968,7 @@ int main(int argc, char **argv)
                         REG_VCOUNT = 161;
                     }
                     sGameFramesCounted++;
+                    sSpeedFrames++;
                     SDL_AtomicSet(&isFrameAvailable, 0);
 
                     REG_DISPSTAT |= INTR_FLAG_VBLANK;
@@ -1973,6 +1997,25 @@ int main(int argc, char **argv)
         }
 
         Uint64 stallBatchEnd = SDL_GetPerformanceCounter();
+        {
+            Uint64 freq = SDL_GetPerformanceFrequency();
+            if (sSpeedStamp == 0)
+                sSpeedStamp = stallBatchEnd;
+            if (!speedUp || paused)
+            {
+                sGameSpeedQ8 = 256;
+                sSpeedFrames = 0;
+                sSpeedStamp = stallBatchEnd;
+            }
+            else if (stallBatchEnd - sSpeedStamp >= freq / 4)
+            {
+                double ticks = (double)(stallBatchEnd - sSpeedStamp) / (double)freq * 60.0;
+                double q = sSpeedFrames / ticks * 256.0;
+                sGameSpeedQ8 = q < 256.0 ? 256u : q > 256.0 * 24 ? 256u * 24 : (u32)q;
+                sSpeedFrames = 0;
+                sSpeedStamp = stallBatchEnd;
+            }
+        }
 #ifndef __ANDROID__
         // Draw every loop (every monitor refresh with vsync). With smooth motion the map is slid
         // part of the way between the last two game frames.
@@ -3060,6 +3103,18 @@ bool8 Platform_SoundFrameDue(void)
     }
     sSoundFrameSkipped = !due;
     return due;
+}
+
+u32 Platform_GameSpeedQ8(void)
+{
+    static int sOld = -1;
+    if (sOld < 0)
+        sOld = getenv("WJPC_LEAVES_GAME_SPEED") != NULL; // (the leaves by game frames, as before)
+    if (sOld)
+        return 256u;
+    if (sTestScript != NULL && !sScriptRealtime)
+        return sTestFfSpeed > 1 ? 256u * sTestFfSpeed : 256u; // (scripts: "ff N")
+    return sGameSpeedQ8;
 }
 
 bool8 Platform_SoundFrameSkipped(void)

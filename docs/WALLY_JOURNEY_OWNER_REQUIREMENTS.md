@@ -966,3 +966,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   by the south-west drips. Picture docs/polish_reports/2026-11-22_N04_meteor_falls.png.
 - **2026-11-23 06:30**: zip `WallysJourney-Polish-2026-11-23a.zip` sent (whole folder; exe and pc_data/voxel at 62ba7667): the overnight fixes N01-N04.
 - **Brennan 2026-11-23 06:28** (on the overnight pictures): (1) Route 114 west plateau: "Scatter some trees, let me see what it looks like." (2) Meteor Falls rocks: brighten them, to a darker grey (lighter than now, still grey); "the stairs are shooting upright. These need to be fixed to be actual stairs." (3) Meteor Falls dark diagonal rock pieces: "Try redrawing them to plain lighter rock." (4) "Take over the falling leaves speeding up from Project Aria. This will be the only thing we take over from Project Aria." (5) Fallarbor, red arrow (the ground behind the town's north-east cliff): raise it level with the top of the front cliff wall, no drop behind the ridge, flat and seamless, and thin its forest as the circled (already thinned) area.
+- 2026-11-23 N05 falling leaves under fast-forward (taken over from ARIA, only this - WORK_CLAIMS): the leaves moved
+  one step per game frame, so fast-forward ran them 2-20x as fast, and its batches (as many game frames per picture
+  as the PC manages) made that speed jump about. They now move by real time: each game frame 1/speed of a normal
+  frame's fall, sway and breeze, a new one every 16 normal frames of real time (wally_journey.c, leaves only;
+  Platform_GameSpeedQ8 in sdl2.c measures the game frames per real 60th over a quarter second;
+  WJPC_LEAVES_GAME_SPEED=1: as before). Measured (test "leaflog"): fall per real frame 0.62 px at 1x, 0.62 at 4x,
+  0.61 at 10x (before: 0.62 / 2.49 / 6.22); six leaves on screen throughout. Picture
+  docs/polish_reports/2026-11-23_N05_falling_leaves_ff.png.
