@@ -1003,3 +1003,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   114 W rows 10-79 and Route 115 N cols 16-39 flagged. The ground is untouched (a first try that turned the fill into
   a wood made the ground rise in a ridge with stretched trees at the Route 114/115 seam). Picture
   docs/polish_reports/2026-11-23_N10_route114_plateau_trees.png.
+- 2026-11-23 C9 rest (Brennan 2026-11-22, Meteor Falls lower-left box: "two thin upright vertical wall panels are
+  sticking out sideways from the cliff - remove/align them flush with the rock wall"): the yellow drips on the cliff
+  by the south-west stairs (1F 1R cols 1-3 and 8-9, rows 23-26) had their wall face one row late - the drip's top row
+  flat, its pool row the face's bottom - so each stood a row out from the wall beside it, its dark sides the panels.
+  Every other drip in the cave starts its face on its first row. Those five columns take the next row's heights
+  (tools/voxel3ds/raise_relief_run.py, relief.bin): now flush, the pool lying on the floor. The jog left of col 3 and
+  right of col 9 stays - the 2D map draws the cliff edge a row further south there. Picture
+  docs/polish_reports/2026-11-23_N11_meteor_falls_drips.png.
