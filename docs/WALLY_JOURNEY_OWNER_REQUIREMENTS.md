@@ -896,3 +896,4 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
 - 2026-11-22 19:27 (Brennan): Settings - "remove ... Integer scaling, bilinear filter, interframe blend" (removed from
   the menu and forced off when the settings file is read) and "move 3D battles, 3D World, Gamma lighting into a
   folder named 'Looks'" (new Looks section after Video).
+- **2026-11-22 19:45**: zip `WallysJourney-Polish-2026-11-22c.zip` sent (whole folder; exe and pc_data/voxel at b40e7869): 3D buildings back, Settings Looks section. Asked about the checkerboard blocks (19:34 report) - waiting on his answer.
