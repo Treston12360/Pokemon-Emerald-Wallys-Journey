@@ -941,3 +941,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
 - 2026-11-22 22:03 (Brennan): overnight - work through every remaining fix; for each a BEFORE/AFTER picture and a
   short explanation; hold questions in a numbered list until he says "I am awake". Log: docs/polish_reports/
   OVERNIGHT_2026-11-22.md.
+- 2026-11-22 21:56 (Brennan, Route 114 west, three red boxes: diagonal stretched cliff ribbons, a drop into open
+  water, a sky gap; "Extend the snowy mountain plateau and scattered mountain trees smoothly outward to the west at
+  matching elevations"). C8 too. Cause: Route 114's west border was its own border block (Fallarbor's wood) with no
+  edge fill - the belt's rounded mountain blended Route 114's 32-128 px edge with Route 115's sea level (Route 115's
+  border is the sea): long stretched slopes down into the water. Change: Route 114 west fills (relief.bin) - rows
+  0-9 its wood, rows 10-34 the mountain ground 0x241, both 56 px, rows 35-79 0x241 at 128 px, all flat; Route 115's
+  north edge (cols 16-39) 0x241 at 112 px; a field point under a flat fill stands at its top (voxel_mesh_builder.c
+  FlatFillPoint, WJPC_FLAT_FILL_FIELD_OFF=1: as before); flat fills level for 24 rows (was 10). Gap test 34 north +
+  38 south views 1920x1080: Route 114/115 unchanged; Fallarbor and Littleroot vary run to run (checked: same with
+  and without). Picture docs/polish_reports/2026-11-22_N02_route114_west.png.

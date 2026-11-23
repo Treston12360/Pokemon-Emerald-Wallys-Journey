@@ -3951,7 +3951,7 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 
             /* (a flat fill: level for its first FLAT_FILL_ROWS rows, then rounded off - level out to the window's
              * edge, the wood's end stood against the sky at the horizon) */
-            enum { FLAT_FILL_ROWS = 10 };
+            enum { FLAT_FILL_ROWS = 24 };
             if (fill.flat)
                 d = d > FLAT_FILL_ROWS ? d - FLAT_FILL_ROWS : 0;
             if (d > 0 || !fill.flat)
@@ -5110,8 +5110,48 @@ static void BeltField(int vx, int vy, float *height, float *south)
     *height = sMemo[k].h;
     *south = sMemo[k].s;
 }
+/* Brennan 2026-11-22 21:56 (Route 114's west: "diagonal stretched cliff ribbons ... extend the snowy mountain plateau
+ * ... smoothly outward to the west at matching elevations"): the field is a blend of the maps' edges, so a fill set
+ * level (flags flat) lay under it only where it stood trees. A field point whose four cells are all of one flat fill
+ * (within FLAT_FILL_ROWS of the map, never on the map's edge) stands at the fill's top: the plateau runs on level.
+ * WJPC_FLAT_FILL_FIELD_OFF=1: the blend, as before. */
+static bool FlatFillPoint(int vx, int vy, float *height)
+{
+    static int sOff = -1;
+    float sum = 0.0f;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_FLAT_FILL_FIELD_OFF") != NULL;
+    if (sOff)
+        return false;
+    for (int k = 0; k < 4; ++k)
+    {
+        int cx = vx - 1 + (k & 1), cy = vy - 1 + (k >> 1), ex, ey, d;
+        const VoxelMapInstance *ring;
+        VoxelEdgeFill fill;
+
+        if (VoxelWorld_GetInstanceAt(cx, cy) != NULL || (ring = VoxelWorld_BeltRing(cx, cy)) == NULL
+         || !VoxelRelief_EdgeFillAt(ring, cx, cy, &fill) || !fill.flat || !fill.hasTop || fill.water)
+            return false;
+        ex = cx < ring->originX ? ring->originX - cx : cx >= ring->originX + ring->width ? cx - (ring->originX + ring->width - 1) : 0;
+        ey = cy < ring->originY ? ring->originY - cy : cy >= ring->originY + ring->height ? cy - (ring->originY + ring->height - 1) : 0;
+        d = ex > ey ? ex : ey;
+        if (d > 24)
+            return false;
+        sum += VoxelRelief_Base(ring) + (float)fill.top / 16.0f - (float)VOXEL_BORDER_COURSES;
+    }
+    *height = sum / 4.0f;
+    return true;
+}
+
 static void BeltFieldUncached(int vx, int vy, float *height, float *south)
 {
+    if (FlatFillPoint(vx, vy, height))
+    {
+        *south = *height;
+        return;
+    }
+    {
     /* blended over the maps by 1/d^3 (the nearest map's edge wins near it, exactly on it): the edge's height, its way
      * south, and whether the point is off a side the mountain climbs from (north, west, east) or in front (south);
      * then the climb, by the distance to the nearest map. One smooth function: no map's cone outgrowing another's
@@ -5414,6 +5454,7 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
              * the field's ledges run on into the map's tiers. */
             *south = *height;
         }
+    }
     }
 }
 
