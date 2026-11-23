@@ -1060,5 +1060,6 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   flat fill's cell stays level to the map's edge and a wall of rock stands there from the map's ground to the fill's,
   each end where it stands (as the map's own walls) - over the map by more than a quarter level, or under it by more
   than one (a half-level lip stays a gentle ramp). Judged by every map cell at a corner so the two cells sharing it
-  agree. voxel_mesh_builder.c FlatEdgeRise (field cells and the wood floor); WJPC_FLAT_EDGE_RAMP=1: the ramp, as
-  before. Picture docs/polish_reports/2026-11-23_N15_route114_overhang.png.
+  agree; only beside a map's west or east edge (by Route 115's north edge, and on the woods' floor, walls opened sky -
+  the gap test). voxel_mesh_builder.c FlatEdgeRise; WJPC_FLAT_EDGE_RAMP=1: the ramp, as before. Gap test (12 views at
+  1920x1080 and 2560x1440, 34 north + 38 south edge views at 2560): no new gaps but 3-7 px at the new wall's foot. Picture docs/polish_reports/2026-11-23_N15_route114_overhang.png.

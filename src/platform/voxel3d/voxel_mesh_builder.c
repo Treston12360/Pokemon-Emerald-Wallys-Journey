@@ -5620,6 +5620,10 @@ static bool FlatEdgeRise(int cx, int cy, int vx, int vy, float *top, float *edge
         sRamp = getenv("WJPC_FLAT_EDGE_RAMP") != NULL;
     if (sRamp || !FlatFillCell(cx, cy, top) || FlatFillPoint(vx, vy, &fp))
         return false;
+    /* (only beside a map's west or east edge, where the slant showed: by a north or south edge the ramp is the
+     * map's own way south - a wall there opened slits of sky by Route 115's north, 2026-11-23) */
+    if (VoxelWorld_GetInstanceAt(cx - 1, cy) == NULL && VoxelWorld_GetInstanceAt(cx + 1, cy) == NULL)
+        return false;
     if (VoxelWorld_GetInstanceAt((int)floorf(px), (int)floorf(py)) != NULL)
         *edge = VoxelRelief_LiftAt(px, py), *edgeS = VoxelRelief_ShiftAt(px, py);
     else if (VoxelWorld_GetInstanceAt((int)floorf(qx), (int)floorf(qy)) != NULL)
@@ -6577,10 +6581,8 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                         if (ok && n < 4)
                         {
                             /* the wood's edge: the field's own height there, which its neighbour meets */
-                            float fh, fs, ft, fe, fes;
+                            float fh, fs;
                             BeltField(vx, vy, &fh, &fs);
-                            if (FlatEdgeRise(x, y, vx, vy, &ft, &fe, &fes))
-                                fh = fs = ft;   /* (by a map's higher edge: the fill level to it, a wall above) */
                             ch[k] = fh - builder->base;
                             cs[k] = fs - (sWoodZOld ? 0.0f : builder->base);
                         }
