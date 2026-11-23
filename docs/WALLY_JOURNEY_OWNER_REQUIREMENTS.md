@@ -929,3 +929,15 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   217 -> 156, Route 113 south 494 -> 37; worse: Route 115 north 69 -> 379 px (a speck at the very top corner of the
   screen, the far horizon). Picture: docs/polish_reports/2026-11-22_fallarbor_woods.png.
 - **2026-11-22 21:47**: zip `WallysJourney-Polish-2026-11-22d.zip` sent (whole folder; exe and pc_data/voxel at c561716b): quick run with shiny/Intimidate, Fiery Path back wall, Settings "Speed", Toxtricity Low Key form, Fallarbor woods and 3D background forest. Checked the zipped exe starts with 3D buildings.
+- 2026-11-22 21:54 (Brennan, Fallarbor north red box): "Raise the entire section ... level and flush with the top of
+  the surrounding mountain plateau" and "Thin out & scatter the northern trees naturally ... small open patches".
+  Done: Fallarbor's north fill top 32 -> 64 px (the cliff top's own height) and flagged flat (level for 10 rows, then
+  rounded off as before) and sparse; Route 113's north fill sparse too. Edge-fill flags 8 (flat) and 4 (sparse) are
+  new (voxel_relief.h/.c, add_relief_edge.py --flat --sparse). A sparse wood leaves out about half its trees by
+  place, 6x3-cell clearings and single trees, never in the first rows by the map (voxel_mesh_builder.c
+  VoxelMesh_WoodGap; WJPC_WOOD_DENSE=1: all); the clearings' floor is the wood's own soil/ash in the light
+  (VoxelTree_OwnWoodGround). Gap test 34 north views 1920x1080: identical. Picture:
+  docs/polish_reports/2026-11-22_N01_fallarbor_north_woods.png.
+- 2026-11-22 22:03 (Brennan): overnight - work through every remaining fix; for each a BEFORE/AFTER picture and a
+  short explanation; hold questions in a numbered list until he says "I am awake". Log: docs/polish_reports/
+  OVERNIGHT_2026-11-22.md.

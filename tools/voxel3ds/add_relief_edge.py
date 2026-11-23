@@ -5,6 +5,7 @@ usage: add_relief_edge.py RELIEF.bin LAYOUT_ID EDGE METATILE [FIRST LAST] [--top
   LAYOUT_ID: the layout's number in data/layouts/layouts.json, counted from 1 (Rustboro = 4).
   EDGE: W, E, N or S.  METATILE: hex or decimal; one id, or four comma-separated (the 2x2 block).
   FIRST LAST: the cells along the edge it covers (default: all of it).
+  --flat: its top stays level out to the horizon (not rounded off); --sparse: a wood of it thinned.
   --top PX: where the fill's top stands, pixels over the map's base (default: water at the map's own sea level,
             anything else as the border is).
 
@@ -24,6 +25,13 @@ EDGES = {'W': 1, 'E': 2, 'N': 4, 'S': 8}
 def main():
     args = sys.argv[1:]
     top = None
+    extra = 0
+    if '--flat' in args:      # flags 8: its top level out to the horizon (Brennan 2026-11-22 21:54, Fallarbor's woods)
+        extra |= 8
+        args.remove('--flat')
+    if '--sparse' in args:    # flags 4: a wood of it thinned, open patches between the trees (VoxelMesh_WoodGap)
+        extra |= 4
+        args.remove('--sparse')
     if '--top' in args:
         i = args.index('--top')
         top = int(args[i + 1])
@@ -41,7 +49,7 @@ def main():
     count = struct.unpack_from('<H', b, i + 4)[0]
     end = i + 8 + 18 * count
     assert end == tail, 'EDGE block is not last before the trailer'
-    flags = (2 if top is not None else 0)
+    flags = (2 if top is not None else 0) | extra
     for k in range(4):
         if mt[k] in WATER:
             flags |= 1 << (4 + k)

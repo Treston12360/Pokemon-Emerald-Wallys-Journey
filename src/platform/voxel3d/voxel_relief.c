@@ -902,6 +902,8 @@ bool VoxelRelief_EdgeFill(unsigned layoutId, unsigned edge, int along, unsigned 
         fill->metatile = (int)U16(e + 10 + 2 * index);
         fill->water = (e[3] >> (4u + index) & 1u) != 0;
         fill->hasTop = (e[3] & 2) != 0;
+        fill->flat = (e[3] & 8) != 0;
+        fill->sparse = (e[3] & 4) != 0;
         fill->top = (int16_t)U16(e + 8);
         return true;
     }

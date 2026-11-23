@@ -129,6 +129,19 @@ static int OwnLargePart(const void *secondaryTileset, int metatileId, int *groun
     return part;
 }
 
+/* The plain ground a secondary tileset's own wood stands on (Fallarbor's: the brown soil 279, the ash 218); -1 for
+ * any other cell. For a thinned wood's open patches (VoxelMesh_WoodGap, Brennan 2026-11-22 21:54). */
+int VoxelTree_OwnWoodGround(const void *secondaryTileset, int metatileId)
+{
+    int kind;
+
+    if (metatileId < SECONDARY_ID || OwnLargePart(secondaryTileset, metatileId, &kind) < 0)
+        return -1;
+    if (secondaryTileset == &gTileset_Fallarbor)
+        return kind == OWN_ASH ? 0x218 : kind == OWN_SOIL ? 0x279 : -1;
+    return -1;
+}
+
 /* The plain ground under such a tree's cell: the tile its lower layer is.
  * -1 for any other. */
 static int OwnLargeGround(const void *secondaryTileset, int metatileId)
@@ -918,6 +931,9 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             if (sOwnSmall < 0)
                 sOwnSmall = getenv("WJPC_BELT_OWN_TREES_SMALL") != NULL;
             bool ownWood = !sOwnSmall && metatileId >= SECONDARY_ID && OwnLargePart(art->secondaryTileset, metatileId, NULL) >= 0;
+            /* (a thinned wood: this tree left out - its left cell's, VoxelMesh_WoodGap) */
+            if (ownWood && VoxelMesh_WoodGap(x - (part & 1), y))
+                continue;
             if (!ledge && !sCellwise && !ownWood && part >= 0 && part <= 3)
             {
                 bool whole = true;

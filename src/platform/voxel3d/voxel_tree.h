@@ -37,4 +37,6 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 /* POL-48: a Ninja Boy's tree disguise as the 3D small tree, world coordinates. */
 void VoxelTree_EmitDisguise(VoxelBuilder *builder, int x, int y);
 
+int VoxelTree_OwnWoodGround(const void *secondaryTileset, int metatileId);
+
 #endif

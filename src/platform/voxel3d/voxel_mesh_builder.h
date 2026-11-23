@@ -203,6 +203,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift);
 bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift); /* POL-46: a tree on a ledge near a wood */
 bool VoxelMesh_BeltWater(int x, int y); /* a belt cell of water (BorderWaterLevel) */
+bool VoxelMesh_WoodGap(int tx, int ty); /* a thinned wood's tree left out (Fallarbor's north woods) */
 bool VoxelMesh_TreeOverDrop(int x, int y); /* POL-46: a belt wood cell across a field wall */
 void VoxelMesh_SetBeltPass(const void *primaryTileset, const void *secondaryTileset); /* POL-30 */
 bool VoxelMesh_BeltCell(int x, int y, int *metatile, int *height16); /* POL-30 test aid */

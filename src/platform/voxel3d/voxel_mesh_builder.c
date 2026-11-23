@@ -3859,6 +3859,43 @@ static bool BeltTerraces(int x, int y, const VoxelMapInstance *ring, float *leve
     return true;
 }
 
+/*
+ * Brennan 2026-11-22 21:54 (the woods north of Fallarbor: "packed wall-to-wall in a tight, uniform grid ... scatter
+ * them out naturally with small open patches of ground between them"): in a wood of an edge fill flagged sparse,
+ * whether the tree whose top-left cell is (tx, ty) is left out - about half, fixed by place: clearings of
+ * 6x3 cells and single trees. The tree emitter skips it (voxel_tree.c) and the floor there is laid in the light (EmitBorder).
+ * WJPC_WOOD_DENSE=1: every tree.
+ */
+static uint32_t WoodHash(int x, int y)
+{
+    uint32_t h = (uint32_t)x * 0x8DA6B343u ^ (uint32_t)y * 0xD8163841u;
+    h ^= h >> 13;
+    h *= 0x85EBCA6Bu;
+    h ^= h >> 16;
+    return h;
+}
+
+bool VoxelMesh_WoodGap(int tx, int ty)
+{
+    static int sDense = -1;
+    const VoxelMapInstance *ring;
+    VoxelEdgeFill fill;
+    uint32_t a, b;
+
+    if (sDense < 0)
+        sDense = getenv("WJPC_WOOD_DENSE") != NULL;
+    if (sDense || VoxelWorld_GetInstanceAt(tx, ty) != NULL || (ring = VoxelWorld_BeltRing(tx, ty)) == NULL
+     || !VoxelRelief_EdgeFillAt(ring, tx, ty, &fill) || !fill.sparse)
+        return false;
+    /* not in the first rows by the map: the edge's own line of trees stays whole */
+    if (ty >= ring->originY - 2 && ty < ring->originY + ring->height + 2 && tx >= ring->originX - 2
+     && tx < ring->originX + ring->width + 2)
+        return false;
+    a = WoodHash(tx / 6, ty / 3) & 1023u;   /* clearings: a 6x3 patch of the wood */
+    b = WoodHash(tx, ty) & 1023u;           /* and single trees */
+    return a < 330u || b < 250u;
+}
+
 bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
 {
     const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y); /* POL-30: was instance 0 (see BorderWaterLevel) */
@@ -3910,9 +3947,15 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
          * the sea a stair of tall dark walls): rounded off as the belt's own mountain is (WJPC_BELT_COLUMNS=1 not) */
         if (getenv("WJPC_BELT_COLUMNS") == NULL && !NearDrawnBelt(x, y, 8))
         {
-            int fdx = x > ex ? x - ex : ex - x, fdy = y > ey ? y - ey : ey - y;
+            int fdx = x > ex ? x - ex : ex - x, fdy = y > ey ? y - ey : ey - y, d = fdx > fdy ? fdx : fdy;
 
-            BeltRoundOff(x, y, fdx > fdy ? fdx : fdy, *level, *shift, level, shift);
+            /* (a flat fill: level for its first FLAT_FILL_ROWS rows, then rounded off - level out to the window's
+             * edge, the wood's end stood against the sky at the horizon) */
+            enum { FLAT_FILL_ROWS = 10 };
+            if (fill.flat)
+                d = d > FLAT_FILL_ROWS ? d - FLAT_FILL_ROWS : 0;
+            if (d > 0 || !fill.flat)
+                BeltRoundOff(x, y, d, *level, *shift, level, shift);
         }
         return true;
     }
@@ -6065,7 +6108,22 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                         }
                     }
                     float u0f, v0f, u1f, v1f;
-                    if (ok && (MetatileUV(builder, WoodFloorTile(x, y), &u0f, &v0f, &u1f, &v1f)
+                    /* (the tree on this cell left out: VoxelMesh_WoodGap, by the tree's left cell - own woods' trees
+                     * are two cells wide, a trunk's half each) */
+                    bool gapHere = false;
+                    {
+                        const VoxelMapInstance *ga = VoxelWorld_BorderArtMap(x, y);
+                        int gp = ga != NULL ? VoxelTree_Part(ga->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) : -1;
+                        gapHere = gp >= 2 && gp <= 3 && VoxelMesh_WoodGap(x - (gp & 1), y);
+                    }
+                    int gapGround = -1;
+                    if (gapHere)
+                    {
+                        const VoxelMapInstance *ga = VoxelWorld_BorderArtMap(x, y);
+                        gapGround = ga != NULL ? VoxelTree_OwnWoodGround(ga->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) : -1;
+                    }
+                    if (ok && ((gapGround >= 0 && MetatileUV(builder, gapGround, &u0f, &v0f, &u1f, &v1f))
+                            || MetatileUV(builder, WoodFloorTile(x, y), &u0f, &v0f, &u1f, &v1f)
                             || MetatileUV(builder, BeltTreeGround(x, y), &u0f, &v0f, &u1f, &v1f)))
                     {
                         VoxelVertex v[4];
@@ -6080,10 +6138,12 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                             if (sWoodShade < 0.0f)
                                 sWoodShade = getenv("WJPC_WOOD_FLOOR_SHADE") ? (float)atof(getenv("WJPC_WOOD_FLOOR_SHADE")) : 0.35f;
                             v[k].shade = SHADE_TOP * sWoodShade; /* the floor under a wood, in its shade (also with Gamma lighting) */
+                            if (gapHere)
+                                v[k].shade = SHADE_TOP * 0.85f; /* (an open patch of a thinned wood: in the light) */
                         }
                         if (getenv("WJPC_WOOD_DUMP") != NULL) /* test aid: the wood floor's corners */
-                            fprintf(stderr, "WOODFLOOR %d %d base %.3f y %.3f %.3f %.3f %.3f z %.3f %.3f %.3f %.3f\n", x, y,
-                                    builder->base, v[0].y, v[1].y, v[2].y, v[3].y, v[0].z, v[1].z, v[2].z, v[3].z);
+                            fprintf(stderr, "WOODFLOOR %d %d gap %d base %.3f y %.3f %.3f %.3f %.3f z %.3f %.3f %.3f %.3f\n", x, y,
+                                    (int)gapHere, builder->base, v[0].y, v[1].y, v[2].y, v[3].y, v[0].z, v[1].z, v[2].z, v[3].z);
                         VoxelBuilder_Tri(builder, &v[0], &v[3], &v[1]);
                         VoxelBuilder_Tri(builder, &v[0], &v[2], &v[3]);
 #undef ZBase
