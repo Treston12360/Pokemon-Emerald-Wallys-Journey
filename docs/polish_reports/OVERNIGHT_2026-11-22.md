@@ -39,6 +39,20 @@ Picture: `2026-11-22_N04_meteor_falls.png`
 - Still to do here: the dark hole under the east end of the bridge and the two thin dark upright panels by the
   bottom-left drips.
 
+## Where every list item stands (checked tonight against the notes)
+Done before tonight (in 22b/22c/22d): B1 Rusturf tint and 3D rocks, B2 Verdanturf woods, B6 winter walls, B7 Route
+104, C2 gatehouse winter walls, C3 Dewford sea, C5 flower shop, C6 Toxtricity, D2 Route 119 tree rows, E1/E2 stalls,
+the `exe+198bf0` intro error (NULL check in m4a_pc.c), the 3D cable car and line, the 3D Fiery Path and its back
+wall, Route 117 / Route 112 / Trainer Hill / Verdanturf items of the 17:25 list.
+Done tonight: N01-N04 above (Fallarbor woods, Route 114 west = C8, Contest Hall rocks = rest of C7, Meteor Falls = C9).
+Waiting on your eyes (fixed on the test machine, your GPU decides): B3 Pokémon Center lines and B5 Oldale lines
+(the 1/8-pixel texture inset in 22b), B4 Route 119 grass lines.
+Not reproduced here, need a closer picture from you: C1 Route 103 line, C4 Rustboro sky hole, D1 Weather Institute
+east end (reproduced on 22a, solid since).
+Blocked: falling leaves with fast-forward - that code is ARIA's file (src/wally_journey.c), the request is written
+in docs/WORK_CLAIMS.md for Treston.
+
 ## Questions (numbered, for when you are awake)
 1. N02 Route 114 west: the plateau west of Route 114 is plain mountain ground. You asked for scattered mountain trees on it too - want a few (like the thinned woods at its north end), or keep it plain?
 2. N04 Meteor Falls: the 3D floor rocks come out darker than the flat drawing was (they are lit like the Rusturf ones). Keep them darker, or brighten them to the drawing's own grey?
+3. N04 Meteor Falls: the dark patches by the east end of the bridge and the two dark upright panels by the bottom-left drips are the cave's own diagonal rock drawings (dark blue with black in the 2D map) standing as slopes; I tried flattening and welding them and it only made new slivers, so I left them. Do you want them redrawn lighter (as plain rock), or left as the 2D map draws them?
