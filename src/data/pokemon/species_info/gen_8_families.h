@@ -3681,7 +3681,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .levelUpLearnset = sToxtricityLowKeyLevelUpLearnset,
         .teachableLearnset = sToxtricityLowKeyTeachableLearnset,
         .formSpeciesIdTable = sToxtricityFormSpeciesIdTable,
-        .formChangeTable = sToxtricityAmpedFormChangeTable,
+        .formChangeTable = sToxtricityLowKeyFormChangeTable, // (Wally's Journey C6: was the Amped table - every battle's end turned Low Key into Amped)
     },
 
 #if P_GIGANTAMAX_FORMS
@@ -3735,7 +3735,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .levelUpLearnset = sToxtricityLowKeyLevelUpLearnset,
         .teachableLearnset = sToxtricityLowKeyTeachableLearnset,
         .formSpeciesIdTable = sToxtricityFormSpeciesIdTable,
-        .formChangeTable = sToxtricityAmpedFormChangeTable,
+        .formChangeTable = sToxtricityLowKeyFormChangeTable, // (Wally's Journey C6: was the Amped table - every battle's end turned Low Key into Amped)
     },
 #endif //P_GIGANTAMAX_FORMS
 #endif //P_FAMILY_TOXEL

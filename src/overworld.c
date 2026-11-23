@@ -2244,6 +2244,7 @@ void CB2_ContinueSavedGame(void)
 
     LoadSaveblockMapHeader();
     WallyJourney_SanitizeParty();
+    WJ_FixToxtricityForms(); // (C6: Toxtricity's form by its shown nature)
     WallyJourney_ResetEVsForStatPoints();
     WallyJourney_GrantStarterStones();
     WJ_OutfitOnLoad();

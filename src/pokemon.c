@@ -4287,10 +4287,7 @@ bool32 DoesMonMeetAdditionalConditions(struct Pokemon *mon, const struct Evoluti
                 currentCondition = TRUE;
             break;
         case IF_AMPED_NATURE:
-            // Wally's Journey (Brennan 2026-11-22, C6: a shiny Modest Toxel became an Amped Toxtricity): the form goes
-            // by the nature the player sees (the summary's, MON_DATA_HIDDEN_NATURE), not the personality's - a
-            // personality changed afterwards (UpdateMonPersonality keeps the shown nature) no longer matches it.
-            switch (GetMonData(mon, MON_DATA_HIDDEN_NATURE))
+            switch (nature)
             {
             case NATURE_HARDY:
             case NATURE_BRAVE:
@@ -4310,7 +4307,7 @@ bool32 DoesMonMeetAdditionalConditions(struct Pokemon *mon, const struct Evoluti
             }
             break;
         case IF_LOW_KEY_NATURE:
-            switch (GetMonData(mon, MON_DATA_HIDDEN_NATURE)) // (C6: the shown nature, as IF_AMPED_NATURE)
+            switch (nature)
             {
             case NATURE_LONELY:
             case NATURE_BOLD:
@@ -6458,6 +6455,49 @@ u32 GetMonAffectionHearts(struct Pokemon *pokemon)
         return AFFECTION_ONE_HEART;
 
     return AFFECTION_NO_HEARTS;
+}
+
+// Wally's Journey (Brennan 2026-11-22 20:59: "my shiny toxtricity shows to be amped form, but he is modest and should
+// reflect low key form"): Low Key Toxtricity had the Amped form-change table (gen_8_families.h), so the end of every
+// battle turned it into Amped. Each Toxtricity in the party and the boxes is set back to its nature's form (the
+// nature the summary shows, the personality's - as evolution picks it); run on loading a save. (Both forms have the
+// same stats; the ability slot stays, Plus <-> Minus.)
+static bool32 WJ_IsLowKeyNature(u32 nature)
+{
+    switch (nature)
+    {
+    case NATURE_LONELY: case NATURE_BOLD: case NATURE_RELAXED: case NATURE_TIMID: case NATURE_SERIOUS: case NATURE_MODEST:
+    case NATURE_MILD: case NATURE_QUIET: case NATURE_BASHFUL: case NATURE_CALM: case NATURE_GENTLE: case NATURE_CAREFUL:
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static bool32 WJ_FixToxtricityBoxMon(struct BoxPokemon *boxMon)
+{
+    u32 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
+    u32 want;
+
+    if (species != SPECIES_TOXTRICITY_AMPED && species != SPECIES_TOXTRICITY_LOW_KEY)
+        return FALSE;
+    want = WJ_IsLowKeyNature(GetBoxMonData(boxMon, MON_DATA_PERSONALITY) % NUM_NATURES) ? SPECIES_TOXTRICITY_LOW_KEY
+                                                                             : SPECIES_TOXTRICITY_AMPED;
+    if (want == species)
+        return FALSE;
+    SetBoxMonData(boxMon, MON_DATA_SPECIES, &want);
+    return TRUE;
+}
+
+void WJ_FixToxtricityForms(void)
+{
+    u32 i, j;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+        if (WJ_FixToxtricityBoxMon(&gPlayerParty[i].box))
+            CalculateMonStats(&gPlayerParty[i]);
+    for (i = 0; i < TOTAL_BOXES_COUNT; i++)
+        for (j = 0; j < IN_BOX_COUNT; j++)
+            WJ_FixToxtricityBoxMon(GetBoxedMonPtr(i, j));
 }
 
 void UpdateMonPersonality(struct BoxPokemon *boxMon, u32 personality)

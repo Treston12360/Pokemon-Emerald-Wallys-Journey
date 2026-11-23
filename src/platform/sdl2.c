@@ -48,6 +48,7 @@
 #include "constants/field_effects.h"
 #include "constants/event_objects.h"
 #include "script.h"
+#include "pokemon_storage_system.h"
 
 extern void (*const gIntrTable[])(void);
 
@@ -684,6 +685,45 @@ static bool TestStep(void)
                         (unsigned)GetEvolutionTargetSpecies(m, EVO_MODE_NORMAL, ITEM_NONE, NULL, NULL, CHECK_EVO));
                 fclose(ef);
             }
+            continue;
+        }
+        if (!strcmp(cmd, "dumptox"))
+        {
+            // dumptox FILE (test aid, C6): every Toxel/Toxtricity in the party and boxes: where, species, natures
+            FILE *ef = fopen(arg1, "a");
+            if (ef != NULL)
+            {
+                for (int b = -1; b < TOTAL_BOXES_COUNT; b++)
+                    for (int k = 0; k < (b < 0 ? PARTY_SIZE : IN_BOX_COUNT); k++)
+                    {
+                        struct BoxPokemon *bm = b < 0 ? &gPlayerParty[k].box : GetBoxedMonPtr(b, k);
+                        u32 sp = GetBoxMonData(bm, MON_DATA_SPECIES);
+                        if (sp == SPECIES_TOXEL || sp == SPECIES_TOXTRICITY_AMPED || sp == SPECIES_TOXTRICITY_LOW_KEY)
+                            fprintf(ef, "box %d slot %d species %u personality %08x nature %u shown %u shiny %u\n", b, k, sp,
+                                    (unsigned)GetBoxMonData(bm, MON_DATA_PERSONALITY),
+                                    (unsigned)(GetBoxMonData(bm, MON_DATA_PERSONALITY) % NUM_NATURES),
+                                    (unsigned)GetBoxMonData(bm, MON_DATA_HIDDEN_NATURE), (unsigned)GetBoxMonData(bm, MON_DATA_IS_SHINY));
+                    }
+                fclose(ef);
+            }
+            continue;
+        }
+        if (!strcmp(cmd, "partylevel"))
+        {
+            // partylevel SLOT LEVEL (test aid, C6): that level, one experience point short of the next
+            int slot = 0, lv = 5;
+            if (sscanf(line, "%*s %d %d", &slot, &lv) == 2)
+            {
+                struct Pokemon *m = &gPlayerParty[slot];
+                u32 exp = gExperienceTables[gSpeciesInfo[GetMonData(m, MON_DATA_SPECIES)].growthRate][lv + 1] - 1;
+                SetMonData(m, MON_DATA_EXP, &exp);
+                CalculateMonStats(m);
+            }
+            continue;
+        }
+        if (!strcmp(cmd, "fixtox"))
+        {
+            WJ_FixToxtricityForms(); // (test aid, C6: as loading a save does)
             continue;
         }
         if (!strcmp(cmd, "partyshiny"))
