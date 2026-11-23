@@ -1064,3 +1064,14 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   the gap test). voxel_mesh_builder.c FlatEdgeRise; WJPC_FLAT_EDGE_RAMP=1: the ramp, as before. Gap test (12 views at
   1920x1080 and 2560x1440, 34 north + 38 south edge views at 2560): no new gaps; the last 3-7 px at the new wall's
   foot closed 2026-11-23 16:22+ (the wall reaches an eighth of a level under the ground it meets). Picture docs/polish_reports/2026-11-23_N15_route114_overhang.png.
+- 2026-11-23 16:44 (Brennan, "fix them yes", three small spots from the sea-route sweep):
+  - Route 127 (relief 43, rock at x34-35): the rock's south tip rows 27-28 were laid falling the wrong way (under the
+    sea, -16 px) against row 26's ridge - its walls stood as a dark green band. Rows 27-28 now carry row 26's ridge
+    on and round it off into the sea.
+  - Route 133 (relief 49, left rock): the rock was two levels (x12-20 at 32 px, x20-25 rows 7-9 at 16) and the
+    corner cells between them were ramps facing the wrong ways - dark slanted faces and a green-topped box. The
+    rock is one level now (the east part's heights doubled, cells (20,9)/(20,10) re-laid to meet both sides, cut
+    (20,8) as its west neighbour's).
+  - Route 106 (x41 row 17 notch under the cliff): the dark patch is the shadow of the tree right in front (the
+    lighting's crown at x41 row 18; the only open rock its shadow lands on). Left as is; asked.
+  Gap test (5 views, 1920x1080 and 2560x1440): no sky. Picture docs/polish_reports/2026-11-23_N17_sea_rocks.png.
