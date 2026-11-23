@@ -6030,6 +6030,13 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
                     float shE = edgeWall[ke] ? (edgeTop[ke] < base0 ? ownTop : edgeS[ke])
                               : nearE && edgeTop[ke] > c[ke].h ? edgeS[ke] : c[ke].s;
 #define WALL_S(h, lo, hi, sl, sh) ((hi) - (lo) < 0.001f ? (sl) : (sl) + ((sh) - (sl)) * (((h) - (lo)) / ((hi) - (lo))))
+                    /* (its foot an eighth of a level under the ground it meets, hidden: a 3-7 px speck of sky showed
+                     * at the foot by Route 114's river bank, 2026-11-23) */
+                    if (hiA - loA > 0.01f)
+                        loA -= 0.125f;
+                    if (hiE - loE > 0.01f)
+                        loE -= 0.125f;
+                    bot = loA < loE ? loA : loE;
                     for (float lo = bot; lo < topH - 0.01f; lo += 1.0f)
                     {
                         float hi = lo + 1.0f < topH ? lo + 1.0f : topH;
