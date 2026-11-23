@@ -1877,7 +1877,7 @@ bool32 WallyJourney_PrimaryFoliageStale(void)
 // Autumn leaves and spring blossom petals drift across the screen on outdoor
 // maps in fair weather (not on the open sea or in the desert). A handful of
 // small sprites, recreated automatically after battles and map changes.
-#define FALLING_LEAF_COUNT   6
+#define FALLING_LEAF_COUNT   10 // (POLISH, Brennan 2026-11-23 07:00: "Add a little bit more falling leaves" - was 6)
 #define TAG_WALLY_FALLING_LEAF 0x5A11
 
 static const u32 sFallingLeafGfx[] = INCGFX_U32("graphics/wally/falling_leaf.png", ".4bpp");

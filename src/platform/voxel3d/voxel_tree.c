@@ -622,6 +622,18 @@ static bool AgainstRock(const VoxelMapInstance *inst, int x, int y, float lift)
     int part = VoxelTree_Part(inst->secondaryTileset, VoxelWorld_GetMetatileId(x, y));
     bool large = part != VOXEL_TREE_SMALL && part != VOXEL_TREE_GRASS;
 
+    /* Brennan 2026-11-23 06:59 ("below Fallarbor ... trees are spiked"): Route 114's staggered wood of Fallarbor's
+     * own trees is marked cliff/shelf in its regions although it is level ground (the relief), so its trees leant
+     * steep while Fallarbor's beside them at the seam stood normally - the two crowns crossed, cut straight down the
+     * seam. An own tree with trees behind it leans steep only for ground that really climbs (the relief, below).
+     * WJPC_OWN_TREE_ROLES=1: as before. */
+    static int sRoles = -1;
+    if (sRoles < 0)
+        sRoles = getenv("WJPC_OWN_TREE_ROLES") != NULL;
+    if (!sRoles && part >= 0 && VoxelWorld_GetMetatileId(x, y) >= SECONDARY_ID
+     && OwnLargePart(inst->secondaryTileset, VoxelWorld_GetMetatileId(x, y), NULL) >= 0
+     && VoxelTree_PartAt(x, y - 1) >= 0)
+        behind = over = VOXEL_ROLE_FLOOR;
     if (behind == VOXEL_ROLE_CLIFF || behind == VOXEL_ROLE_SHELF)
         return true;
     if (large && (over == VOXEL_ROLE_CLIFF || over == VOXEL_ROLE_SHELF))

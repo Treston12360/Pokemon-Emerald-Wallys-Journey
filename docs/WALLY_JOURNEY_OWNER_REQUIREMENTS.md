@@ -987,3 +987,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   pit in the narrow rock). Dark diagonal rock by the bridge's east end (8 cells, 0x215/0x228/0x218) drawn as the plain
   rock 0x23C (voxel_mesh_builder.c kArtSwap). Floor rocks' cards 1.3x brighter (add_rock_cards.py BRIGHT, --redo).
   Picture docs/polish_reports/2026-11-23_N07_meteor_falls_stairs_rock.png.
+- 2026-11-23 06:59 (Brennan, south-west of Fallarbor: "looks like trees are spiked"; there in 22d too): Route 114's
+  staggered wood of Fallarbor's own trees is marked cliff/shelf in its regions though the relief is level, so its
+  trees leant steep ("against rock") while Fallarbor's beside them stood normally - the crowns crossed and showed
+  straight cut lines along the map seam. An own tree with a tree behind it now leans steep only for relief that
+  climbs (voxel_tree.c AgainstRock; WJPC_OWN_TREE_ROLES=1: as before). Picture
+  docs/polish_reports/2026-11-23_N08_fallarbor_sw_trees.png.
+- 2026-11-23 07:00 (Brennan): "Add a little bit more falling leaves" - 6 -> 10 on screen (wally_journey.c
+  FALLING_LEAF_COUNT, POLISH's leaves); measured 9.5 on screen at 4x fast-forward.
