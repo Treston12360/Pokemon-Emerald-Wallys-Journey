@@ -1018,3 +1018,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Picture docs/polish_reports/2026-11-23_N12_route114_plateau_own_trees.png.
 - 2026-11-23 07:39 (Brennan): 10 falling leaves - closed. Meteor Falls pale bridge rock - good. B3/B4/B5 marked off
   until he brings them up again. C1/C4/D1: try again as on his GPU; if not found he will look later.
+- 2026-11-23 C1/C4/D1 re-checked "as on his GPU": his cfg (resolution=4 supersampling, 4x anti-aliasing), the crack
+  fill off (WJPC_NO_CRACK_FILL=1, so any sub-pixel crack shows), model faces read 0.1 px out (WJPC_UV_SIM_ERROR=0.1),
+  winter, 1920x1080 and 2560x1440, sky shown magenta (F7), from his own framings (found from his 13:38 pictures:
+  Route 103 x 66-72 y 12; Rustboro 32,57 / 31,58 / 30,56; Route 119 institute 9-14,33-35): no sky pixel anywhere, no
+  line on the snow under Route 103's cliff stairs, the institute's east end solid. Rustboro's pale strips between the
+  crowns are the snow floor in the light. Left for him to bring up again with a closer shot.
