@@ -951,3 +951,8 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   FlatFillPoint, WJPC_FLAT_FILL_FIELD_OFF=1: as before); flat fills level for 24 rows (was 10). Gap test 34 north +
   38 south views 1920x1080: Route 114/115 unchanged; Fallarbor and Littleroot vary run to run (checked: same with
   and without). Picture docs/polish_reports/2026-11-22_N02_route114_west.png.
+- 2026-11-22 C7 rest: the four rocks by Fallarbor's Contest Hall (Fallarbor 0x223, at 5,6 5,7 11,6 11,7) are rock
+  mounds as Rusturf's (his pick D), card at (0,32) of trees.rgba5551 (add_rock_cards.py --only-new), soil 0x279
+  under them (voxel_tree.c; WJPC_FLAT_FLOOR_ROCKS=1: flat). The "Route 113 north-west sky gap and cliff cut" of his
+  picture 7 is Fallarbor's north edge on 22b - closed by 22d's wood floor fix and N01. Picture
+  docs/polish_reports/2026-11-22_N03_fallarbor_contest_rocks.png.

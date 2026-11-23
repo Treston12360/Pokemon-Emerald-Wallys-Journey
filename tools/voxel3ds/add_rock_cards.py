@@ -9,7 +9,7 @@ rock on the rock tops), 112 0x206 (grey rocks). A rock pixel is one where the me
 ground (the whole drawing differs from its ground layer alone). Rusturf's colours toned as voxel_gl.c CaveToneDown
 tones its atlas (45% to grey, 88% bright).
 
-usage: add_rock_cards.py TREES.rgba5551 (rewritten in place; needs 3ds_port/scripts)
+usage: add_rock_cards.py TREES.rgba5551 [--only-new] (rewritten in place; needs 3ds_port/scripts)
 """
 import os
 import struct
@@ -22,6 +22,10 @@ from add_tree_cards import tex, pack  # noqa: E402
 
 CARDS = [('LAYOUT_RUSTURF_TUNNEL', 0x203, 64, True), ('LAYOUT_RUSTURF_TUNNEL', 0x204, 80, True),
          ('LAYOUT_RUSTURF_TUNNEL', 0x205, 96, True), ('LAYOUT_RUSTURF_TUNNEL', 0x206, 112, True)]
+# Brennan 2026-11-22 (C7): the four rocks by Fallarbor's Contest Hall (Fallarbor 0x223, a mossy boulder on the soil),
+# card at (0, 32), not toned. Written with --only-new (the Rusturf cards already there).
+CARDS_ROW = {('LAYOUT_FALLARBOR_TOWN', 0x223): 32}
+CARDS += [('LAYOUT_FALLARBOR_TOWN', 0x223, 0, False)]
 
 
 def tone(c):
@@ -34,9 +38,13 @@ def main():
     from voxel_building import LayoutArt
     path = sys.argv[1]
     d = bytearray(open(path, 'rb').read())
+    only_new = '--only-new' in sys.argv
     for layout, m, x0, toned in CARDS:
-        assert all(struct.unpack_from('<H', d, 2 * tex(x, y))[0] & 1 == 0 for y in range(112, 128)
-                   for x in range(x0, x0 + 16)), 'slot %d,112 not free' % x0
+        y0 = CARDS_ROW.get((layout, m), 112)
+        if only_new and (layout, m) not in CARDS_ROW:
+            continue
+        assert all(struct.unpack_from('<H', d, 2 * tex(x, y))[0] & 1 == 0 for y in range(y0, y0 + 16)
+                   for x in range(x0, x0 + 16)), 'slot %d,%d not free' % (x0, y0)
         a = LayoutArt(layout)
         base = a.cell_image(m, layers=(0,)).convert('RGB')
         full = a.cell_image(m).convert('RGB')
@@ -54,7 +62,7 @@ def main():
             for x in range(16):
                 c = full.getpixel((x, y))
                 rock = (x, y) not in out
-                struct.pack_into('<H', d, 2 * tex(x0 + x, 112 + y), pack((tone(c) if toned else c) if rock else None))
+                struct.pack_into('<H', d, 2 * tex(x0 + x, y0 + y), pack((tone(c) if toned else c) if rock else None))
     open(path, 'wb').write(d)
     print('%d rock cards written' % len(CARDS))
 

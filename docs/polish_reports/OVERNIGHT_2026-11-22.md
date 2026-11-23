@@ -22,5 +22,12 @@ Picture: `2026-11-22_N02_route114_west.png`
   wood at the north end at the same level, thinned), and a field point under such a fill stands at its height.
   Gap test: no new gaps on Route 114/115.
 
+### N03 Fallarbor Contest Hall rocks in 3D (C7)
+Picture: `2026-11-22_N03_fallarbor_contest_rocks.png`
+- Cause: the four mossy boulders beside the Contest Hall are part of the ground drawing, so they lay flat.
+- Change: each stands as a rounded rock mound in the same style you picked for Rusturf Tunnel (D: rounded, lower),
+  with plain soil under it. The rest of C7 (the sky gap and cut by the tree row north of Fallarbor) was closed by
+  22d and N01.
+
 ## Questions (numbered, for when you are awake)
 1. N02 Route 114 west: the plateau west of Route 114 is plain mountain ground. You asked for scattered mountain trees on it too - want a few (like the thinned woods at its north end), or keep it plain?

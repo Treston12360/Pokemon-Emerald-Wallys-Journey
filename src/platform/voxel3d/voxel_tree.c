@@ -254,6 +254,9 @@ int VoxelTree_GroundMetatile(const void *secondaryTileset, int metatileId)
         if (secondaryTileset == &gTileset_RusturfTunnel && metatileId >= 0x203 && metatileId <= 0x206
          && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
             return metatileId <= 0x204 ? 0x202 : 0x211;
+        /* Brennan 2026-11-22 (C7): under the rocks by Fallarbor's Contest Hall (0x223), the soil. */
+        if (secondaryTileset == &gTileset_Fallarbor && metatileId == 0x223 && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
+            return 0x279;
         /* Dewford's crown top over the sand. */
         if (secondaryTileset == &gTileset_Dewford && metatileId == 0x239)
             return 0x124;
@@ -847,6 +850,18 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
                 builder->lift = VoxelRelief_CellLift(inst, x, y);
                 builder->shift = VoxelRelief_CellShift(inst, x, y);
                 EmitRockMound(builder, x, y, 64u + 16u * (unsigned)(metatileId - 0x203), 112u);
+                builder->lift = 0.0f;
+                builder->shift = 0.0f;
+            }
+            /* Brennan 2026-11-22 13:38 (C7: "the four small rocks ... immediately to the left of the Fallarbor Contest
+             * Hall are still flat 2D ground tiles - convert them to 3D rock models"): Fallarbor's boulder (0x223) a rock
+             * mound as Rusturf's (his pick D), its card at (0,32). WJPC_FLAT_FLOOR_ROCKS=1: flat. */
+            else if (inst->secondaryTileset == &gTileset_Fallarbor && metatileId == 0x223
+                  && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
+            {
+                builder->lift = VoxelRelief_CellLift(inst, x, y);
+                builder->shift = VoxelRelief_CellShift(inst, x, y);
+                EmitRockMound(builder, x, y, 0u, 32u);
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
             }
