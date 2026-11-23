@@ -981,3 +981,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   are taken first match first: add_relief_edge.py now puts ranged fills before whole-edge ones. Gap test 34 north
   views 2560x1440: 4758 -> 4759 (Fallarbor's run-to-run speck). Picture
   docs/polish_reports/2026-11-23_N06_fallarbor_ne_level.png.
+- 2026-11-23 N07 Meteor Falls (06:28 answers 2 and 3): stairs - its one-wide rock stairs (0x202, 10 flights in 1F 1R)
+  were not known as stairs, so each stood as a steep upright slab; now found as flights (voxel3d_pc.c
+  Port_LayoutSecondaryStair) and stood out in front of their face (Port_LayoutStairsOut: recessed, each was a dark
+  pit in the narrow rock). Dark diagonal rock by the bridge's east end (8 cells, 0x215/0x228/0x218) drawn as the plain
+  rock 0x23C (voxel_mesh_builder.c kArtSwap). Floor rocks' cards 1.3x brighter (add_rock_cards.py BRIGHT, --redo).
+  Picture docs/polish_reports/2026-11-23_N07_meteor_falls_stairs_rock.png.

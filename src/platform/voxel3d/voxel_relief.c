@@ -192,6 +192,7 @@ extern int Port_LayoutMetatile(int id, int x, int y);
 /* the stair metatiles: the General tileset's stone flight (0AF left half, 0CF right half - Routes 112, 115, 116 ...).
  * (Found by their walkable steep relief alone, ledges and slopes came too.) */
 extern bool Port_LayoutSecondaryStair(int id, int metatile);
+extern bool Port_LayoutStairsOut(int id);
 static bool StairMetatileOf(int layoutId, int mt)
 {
     return mt == 0x0AF || mt == 0x0CF || Port_LayoutSecondaryStair(layoutId, mt);
@@ -490,7 +491,9 @@ static bool StairFlights(ReliefLayout *l)
          * upper grass edge and the bottom step ends cleanly at the cliff base line - zero protrusion"): wholly into
          * the cliff top (sFlightIn), the ground above shortened to make room. WJPC_STAIRS_OUT=1: wholly out (16:4x
          * try); WJPC_STAIRS_HALF=1: half and half (POL-47). */
-        sFlightOut = getenv("WJPC_STAIRS_OUT") != NULL;
+        /* (Meteor Falls' one-wide rock stairs stand out in front of their face - Brennan 2026-11-23 06:28 "fixed
+         * to be actual stairs": recessed, each was a dark pit in the narrow rock; Port_LayoutStairsOut) */
+        sFlightOut = getenv("WJPC_STAIRS_OUT") != NULL || Port_LayoutStairsOut((int)l->layoutId);
         sFlightIn = !sFlightOut && getenv("WJPC_STAIRS_HALF") == NULL;
         {
             int run = 8 * ((found[f].rise + 4) / 8);

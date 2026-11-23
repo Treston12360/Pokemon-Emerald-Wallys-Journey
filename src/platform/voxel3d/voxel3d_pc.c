@@ -110,6 +110,14 @@ bool Port_LayoutSecondaryStair(int id, int metatile)
     return l->secondaryTileset == &gTileset_Facility && (metatile == 0x330 || metatile == 0x331);
 }
 
+// the layout's stair flights stand wholly out in front of their face (Meteor Falls' rock stairs)
+bool Port_LayoutStairsOut(int id)
+{
+    const struct MapLayout *l = id <= 0 ? NULL : gMapLayouts[id - 1];
+
+    return l != NULL && l->secondaryTileset == &gTileset_MeteorFalls;
+}
+
 // POL-47 (voxel_relief.c DetectFlights): a layout cell's collision (0 walkable), -1 outside it / no layout
 int Port_LayoutCollision(int id, int x, int y)
 {
