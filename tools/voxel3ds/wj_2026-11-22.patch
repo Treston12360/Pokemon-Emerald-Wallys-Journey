@@ -61,3 +61,491 @@
          if not bad:
              break
          groups = [g for g in groups if g not in bad]
+--- /tmp/claude-0/-home-claude/3dd33a7e-e6c0-5d8c-8a91-9dc994dcd499/scratchpad/emerald-3ds/3ds_port/scripts/voxel_building_specs.py	2026-11-22 03:03:54.002019328 -0600
++++ voxel_building_specs.py	2026-11-22 18:58:41.662537398 -0600
+@@ -2478,7 +2478,12 @@
+     portal = lambda u, v: 40 <= u < 72 and 32 <= v < 72
+     # its flanks, 8 deep: the west post's own 8 columns (outline, brown,
+     # the column of bulbs), not its outline folded back dark
+-    parts.append(HeightSolid("portal", tex, art.size[1],
++    # Wally's Journey (POL-9, Brennan 2026-11-16: "you can still walk through the columns at the front of the game
++    # corner"; asked, he chose "Pull the porch back"): the portal stood 8 px forward, its posts on row 14's cells,
++    # which the cartridge lets you walk on. Now it is the facade's own (flush), the posts' feet (rows 64-71) left
++    # painted on the ground.
++    if False:
++      parts.append(HeightSolid("portal", tex, art.size[1],
+                              Volume().profile([(64, 0), (72, 0), (72, 40), (64, 32)], 40, 72),
+                              depth=(0.0, 80.0), step=2, mirror_z=68,
+                              mask=lambda u, v: not portal(u, v), side=(40, 48, 72)))
+@@ -3708,6 +3713,15 @@
+     ] + rack("rack_1", 96) + rack("rack_2", 112) + rack("rack_e", 224) + [
+         planter("planter_n1", 176, 48, 64), planter("planter_n2", 192, 48, 64),
+         piece("shelf", [(112, 24, 152, 56)], 18, leave=SHOP_WALL + fl, back=42),
++        # Wally's Journey (Brennan 2026-11-22 13:38, C5: "The three wooden stools ... are still flat 2D sprites -
++        # convert them to 3D stool models. The tall potted plant against the back wall (next to the display shelf)
++        # is still flat 2D - convert it to a 3D potted plant model matching the others in the shop"): each stool
++        # turned (a lathe fitted to its drawing, as the Mart's jars), the plant a card standing on the floor at the
++        # wall as the racks' plants are.
++        piece("stool_w", [(2, 48, 14, 62)], 6, leave=fl, round="lathe"),
++        piece("stool_c", [(98, 48, 110, 62)], 6, leave=fl, round="lathe"),
++        piece("stool_e", [(162, 48, 174, 62)], 6, leave=fl, round="lathe"),
++        piece("plant_tall", [(152, 16, 160, 40)], 22, leave=SHOP_WALL + fl, card=True),
+     ] + back_table("table_w", 160) + back_table("table_e", 192) + [
+         piece("wall", [(0, 0, 240, 32)], 32, fill=16, foot=32, side=side),
+         piece("side_w", [], 32, side=side, walls=[((0, 144), (0, 32))]),
+@@ -4859,12 +4873,16 @@
+ def mauville_game_corner():
+     fl = GAME_CORNER_FLOOR
+     side = (200, 0, 216, 32)
+-    plants = [piece("plant_%d" % k, [(x, 20, x + 16, 47)], 27, card=True,
+-                    leave=fl + GAME_CORNER_WALL) for k, x in enumerate((80, 96, 112))]
++    # Wally's Journey (POL-9, Brennan 2026-11-14: "the gatcha machines need to be fixed as they are in parts or
++    # not fully 3D"): the four prize machines against the back wall (pixels 80-143, rows 16-47) were three
++    # cards ("plant_0..2") and the fourth (purple) left painted on the wall. One box, as the arcade cabinets
++    # beside them are.
++    plants = [piece("gacha", [(80, 16, 144, 48)], 24, leave=fl + GAME_CORNER_WALL, against=32,
++                    side=(82, 17, 94, 20))]
+     return plants + [
+         piece("bin_w", [(33, 30, 47, 48)], 17, round="lathe", leave=fl + GAME_CORNER_WALL),
+         piece("bin_e", [(337, 65, 351, 80)], 15, round="lathe", leave=fl),
+-        piece("arcade", [(0, 18, 32, 48)], 14, leave=fl + GAME_CORNER_WALL, against=32,
++        piece("arcade", [(0, 18, 32, 48)], 22, leave=fl + GAME_CORNER_WALL, against=32,
+               side=(2, 19, 14, 26)),
+         # the islands' sides are their side rails' light grey
+         piece("slots_w", [(32, 80, 64, 160)], 10, leave=fl, solid=True,
+@@ -5337,6 +5355,223 @@
+ 
+ 
+ 
++
++# Wally's Journey (POL-31, Brennan 2026-11-15: New Mauville "the models inside are still 2D whenever in 3D";
++# 2026-11-17, asked what: the machines and computers, the electric barriers, the floor switches, and the walls -
++# "Too short ... They just look flat like 2D and not 3D"). Emerald 3DS never modelled New Mauville (VOXEL_STATUS:
++# not started). Its walls are Mossdeep's gym's kind (mossdeep_gym): every blocked cell of the walls - their cream
++# tops, their olive faces, the long strips running back - a run down its column, a piece to each rectangle
++# (run_rects), 24 px: the face drawn from the top cell's 9th row down the face cell (21f over 227). The props
++# standing in the rooms and against the walls are left out of the walls and stand as their own boxes, one to
++# each group of their cells; the barriers and switches are not in this first pass.
++
++NEW_MAUVILLE_FLOOR = ("cdcdcd", "acbdac", "d5ded5", "83948b", "000000")
++NEW_MAUVILLE_VOID = {0x208}
++# the barriers (x, y of the Top cell, lit Top metatile): a column of 4 cells - Top (the north wall's top),
++# TopMid (its face), BottomMid (the corridor), Bottom (the corridor's last rows and the south wall's top edge).
++# The bar is the left 8 px of the column. The scripts hide them (setmetatile: Top -> 0x269, TopMid -> 0x271,
++# BottomMid -> 0x26d, Bottom -> 0x281) and light them (Blue 2b7/2bf/2c7/2cf, Green 2b6/2be/2c6/2ce)
++NEW_MAUVILLE_BARRIERS = [(10, 0, 0x2b7), (21, 2, 0x2b6), (10, 16, 0x2b7), (28, 22, 0x2b6), (10, 24, 0x2b6),
++                         (37, 33, 0x2b6), (23, 34, 0x2b7)]
++NEW_MAUVILLE_BARRIER = {0x2c6, 0x2c7}  # the corridor's barrier cells: not walls
++# the floor switches (x, y, metatile as drawn): blue 236, green 22e, the generator's red 23e; pressed 24f
++NEW_MAUVILLE_BUTTONS = [(33, 6, 0x23e), (13, 10, 0x236), (17, 10, 0x22e), (2, 11, 0x22e), (6, 11, 0x236),
++                        (25, 18, 0x22e), (16, 22, 0x236), (4, 26, 0x236), (18, 36, 0x22e), (30, 38, 0x236)]
++# every barrier hidden: the drawing new_mauville_inside_alt reads its hidden wall halves from
++NEW_MAUVILLE_HIDDEN = {}
++for _x, _y, _m in NEW_MAUVILLE_BARRIERS:
++    NEW_MAUVILLE_HIDDEN.update({(_x, _y): 0x269, (_x, _y + 1): 0x271, (_x, _y + 2): 0x26d, (_x, _y + 3): 0x281})
++# props, by kind: (metatiles, face height px)
++NEW_MAUVILLE_PROPS = [
++    ({0x2a1, 0x2a2, 0x2a9, 0x2aa}, 20),                      # parts shelves
++    ({0x2d6, 0x2d7, 0x2de, 0x2df}, 16),                      # computers
++    ({0x2b0, 0x2b1, 0x2b8, 0x2b9}, 14),                      # cabinets
++    ({0x2c0, 0x2c1, 0x2c2, 0x2c3, 0x2b2, 0x2b3, 0x2ba, 0x2bb, 0x2a3, 0x2a4}, 10),  # crates
++    ({0x2d4, 0x2d5, 0x2dc, 0x2dd, 0x2e4, 0x2e5}, 24),        # tank machines
++    ({0x2d0, 0x2d1, 0x2d2, 0x2d3, 0x2d8, 0x2d9, 0x2da, 0x2db, 0x2e0, 0x2e1, 0x2e2, 0x2e3,
++      0x2e8, 0x2e9, 0x2ea, 0x2eb}, 24),                      # the generator
++    ({0x2ab, 0x2ac}, 8),                                     # bench
++]
++NEW_MAUVILLE_SIDE = (64, 24, 80, 32)  # a stretch of a wall's face (cell (4, 1), 227)
++
++
++def new_mauville_inside():
++    lay = LayoutArt("LAYOUT_NEW_MAUVILLE_INSIDE")
++    blocked = lambda x, y: (lay.blocks[y * lay.w + x] >> 10) & 3
++    kind = {}
++    for k, (ms, h) in enumerate(NEW_MAUVILLE_PROPS):
++        for m in ms:
++            kind[m] = k
++    column = {(x, y + k) for (x, y, _) in NEW_MAUVILLE_BARRIERS for k in (0, 1)}
++    # (Brennan 2026-11-17 17:06: "to the south of each switched walls the wall to the bottom of it is still a
++    # half wall") the barrier's Bottom cell is the south wall's top band (its rows 4-15) with the bar's end over
++    # rows 0-3: the south wall's column there starts below it, its band taken as a 0x237's is (`ext`)
++    bottoms = {(x, y + 3) for (x, y, _) in NEW_MAUVILLE_BARRIERS}
++    # ... and the south wall under the bar is a wall like the rest, its whole cell, in both states (the bar had
++    # taken its west half: the dark notch south of each barrier)
++    walls = [(x, y) for y in range(lay.h) for x in range(lay.w)
++             if blocked(x, y) and lay.metatile(x, y) not in NEW_MAUVILLE_VOID
++             and lay.metatile(x, y) not in NEW_MAUVILLE_BARRIER and lay.metatile(x, y) not in kind
++             and (x, y) not in column]
++    # POL-31 (Brennan 2026-11-17 16:00, with his picture: "the wall is short and cut off ... make this a full wall";
++    # "The cabinet is cut of at the top of it along with the wall behind being short, make the cabinet 3D model
++    # and raise the back wall to align with the rest across the top"; "raise them to be even across the top"):
++    # a prop standing against a wall (its top row in the wall's face row: the wall cell north of it) leaves that
++    # row to the wall, so the wall runs whole behind it; and every wall stands its whole 24 px (rect_pieces
++    # whole=True) - a run a single cell tall stood 12, cut short.
++    wallset = set(walls)
++    against = set()
++    for y in range(lay.h):
++        for x in range(lay.w):
++            if lay.metatile(x, y) in kind and blocked(x, y) and (x, y - 1) in wallset:
++                against.add((x, y))
++    walls += sorted(against)
++    pieces = []
++    # the barriers, lit (while their corridor cell holds the lit bar): the bar a solid strip 8 px wide from the
++    # north wall's top to the south wall, 24 px tall as the walls; the column's east half of wall stands always
++    for (x, y, top) in NEW_MAUVILLE_BARRIERS:
++        mid = top + 0x10  # 2b6/2b7 -> 2c6/2c7
++        pieces.append(piece("bar_%d_%d" % (x, y), [(x * 16, y * 16, x * 16 + 8, (y + 3) * 16 + 4)], 24,
++                            solid=True, when=(x, y + 2, mid)))
++        pieces.append(piece("block_bar_%d_%d" % (x, y), [(x * 16 + 8, y * 16, x * 16 + 16, (y + 2) * 16)], 24,
++                            side=NEW_MAUVILLE_SIDE, solid=True))
++    # the switches: a low round button, while it is drawn up (pressed: flat, as drawn)
++    for (x, y, m) in (NEW_MAUVILLE_BUTTONS if os.environ.get("NM_RAISED_BUTTONS") else ()):
++        pieces.append(piece("button_%d_%d" % (x, y), [(x * 16 + 2, y * 16 + 1, x * 16 + 15, y * 16 + 15)], 3,
++                            leave=NEW_MAUVILLE_FLOOR, side=(x * 16 + 6, y * 16 + 6, x * 16 + 10, y * 16 + 10),
++                            when=(x, y, m)))
++    # props first (front first): groups of neighbouring prop cells
++    seen = set()
++    for y in range(lay.h):
++        for x in range(lay.w):
++            m = lay.metatile(x, y)
++            if m not in kind or (x, y) in seen:
++                continue
++            group, todo = [], [(x, y)]
++            seen.add((x, y))
++            while todo:
++                cx, cy = todo.pop()
++                group.append((cx, cy))
++                for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
++                    if 0 <= nx < lay.w and 0 <= ny < lay.h and (nx, ny) not in seen \
++                       and lay.metatile(nx, ny) in kind:
++                        seen.add((nx, ny))
++                        todo.append((nx, ny))
++            x0 = min(c[0] for c in group); x1 = max(c[0] for c in group) + 1
++            y0 = min(c[1] for c in group); y1 = max(c[1] for c in group) + 1
++            h = max(NEW_MAUVILLE_PROPS[kind[lay.metatile(*c)]][1] for c in group)
++            hh = min(h, (y1 - y0) * 16 - 4)
++            backed = any((cx, cy) in against for (cx, cy) in group)
++            # its sides a patch of its own front, inside its outline (not the dark outline the generator
++            # otherwise takes: "dark sides" in the interior lint)
++            fx = (x0 * 16 + x1 * 16) // 2
++            pieces.append(piece("prop_%d_%d" % (x0, y0), [(x0 * 16, y0 * 16, x1 * 16, y1 * 16)], hh,
++                                leave=NEW_MAUVILLE_FLOOR, against=(y0 + 1) * 16 if backed else None,
++                                side=(fx - 2, y1 * 16 - hh + 3, fx + 2, y1 * 16 - 4)))
++    # a wall whose top is drawn on the walkable cell north of it (0x237 and its kind: the wall's top band and
++    # the top of its face on a floor cell - the cartridge lets you walk there, behind the wall) takes those
++    # rows too: its drawing from the band down, as a wall whose top cell is blocked has it (Brennan's red boxes
++    # 1 and 4: those walls stood with their top cut off). `ext`: the north cell's bottom rows that are not floor.
++    floor_rgb = set(NEW_MAUVILLE_FLOOR[:4])
++
++    def ext(x, y):
++        if (x, y) in bottoms:
++            return 12
++        if y < 0 or blocked(x, y):
++            return 0
++        im = lay.cell_image(lay.metatile(x, y)).convert("RGB")
++        px = im.load()
++        n = 0
++        for r in range(15, -1, -1):
++            if any("%02x%02x%02x" % px[c, r] not in floor_rgb for c in range(16)):
++                n += 1
++            else:
++                break
++        return n if n < 16 else 0
++    # and a run whose first cell's top rows are the black past the walls (0x21f: rows 0-3) starts below them,
++    # so every wall's top is its cream band, the same depth everywhere ("check every wall in new mauville and
++    # check if their tops align with one another make it make sense and look clean")
++    def black_top(x, y):
++        im = lay.cell_image(lay.metatile(x, y)).convert("RGB")
++        px = im.load()
++        n = 0
++        for r in range(16):
++            if all(px[c, r] == (0, 0, 0) for c in range(16)):
++                n += 1
++            else:
++                break
++        return n if n < 16 else 0
++    # POL-31 (Brennan 2026-11-17 17:06: "check every wall in new mauville and check if their tops align with one
++    # another make it make sense and look clean"): the walls are built in half cells, 8 px wide, as drawn - a thin
++    # wall running north-south is drawn 8 px wide down one half of its cells (0x26a/272/27a/282, the other half
++    # the black past the walls), and where it meets an east-west wall the cell is half each (0x28e/296). Whole
++    # cells had stood a thin wall a whole cell wide over the black, and one column's run went on from an
++    # east-west wall down the thin wall, the east-west wall's face laid flat as its top (the dark "half walls"
++    # south of the barriers). Now: a half that is all black is no wall; a half's run ends at its foot (its face
++    # down to the outline in row 15: the wall's front), so every wall's front is its drawn face, 24 px up.
++    pix = {}
++
++    def half(x, y, h):
++        m = lay.metatile(x, y)
++        if m not in pix:
++            im = lay.cell_image(m).convert("RGB")
++            px = im.load()
++            pix[m] = [["%02x%02x%02x" % px[c, r] for c in range(16)] for r in range(16)]
++        return [row[h * 8:h * 8 + 8] for row in pix[m]]
++    FACE = {"acac8b", "947b6a"}
++
++    def black(rows):
++        return all(c == "000000" for row in rows for c in row)
++
++    def foot(rows):
++        return all(c == "414a6a" for c in rows[15][1:7]) and any(c in FACE for c in rows[14])
++
++    def black_top_h(rows):
++        n = 0
++        for row in rows:
++            if all(c == "000000" for c in row):
++                n += 1
++            else:
++                break
++        return n if n < 16 else 0
++    halves = [(2 * x + h, y) for (x, y) in walls for h in (0, 1) if not black(half(x, y, h))]
++    split = []
++    for (hx, y0, y1) in runs_of(halves):
++        start = y0
++        for y in range(y0, y1 + 1):
++            if y < y1 and foot(half(hx // 2, y, hx % 2)):
++                split.append((hx, start, y))
++                start = y + 1
++        split.append((hx, start, y1))
++    rows = {}
++    for (hx, y0, y1) in split:
++        x = hx // 2
++        if (x, y0) in bottoms:
++            e = -4   # the barrier's Bottom cell: the bar's end over rows 0-3, the south wall's band from row 4
++        else:
++            e = ext(x, y0 - 1) or -black_top_h(half(x, y0, hx % 2))
++        rows.setdefault((y0, y1, e), []).append(hx)
++    for (y0, y1, e), xs in sorted(rows.items()):
++        xs.sort()
++        start = prev = xs[0]
++        for hx in xs[1:] + [None]:
++            if hx is None or hx != prev + 1:
++                pieces.append(piece("block_%d_%d_%d" % (start, y0, prev), [(start * 8, y0 * 16 - e, (prev + 1) * 8,
++                                                                            (y1 + 1) * 16)], 24,
++                                    side=NEW_MAUVILLE_SIDE, solid=True))
++                start = hx
++            if hx is not None:
++                prev = hx
++    return pieces
++
++
++
++def new_mauville_inside_alt():
++    """The barriers hidden: each column's west half of wall, as the hidden drawing has it."""
++    return [piece("block_hid_%d_%d" % (x, y), [(x * 16, y * 16, x * 16 + 8, (y + 2) * 16)], 24,
++                  side=NEW_MAUVILLE_SIDE, solid=True, when=(x, y, 0x269))
++            for (x, y, _) in NEW_MAUVILLE_BARRIERS]
++
+ # Fortree's gym: a maze of green columns on a grass floor, the rotating
+ # gates between them (sprites, src/rotating_gate.c: no tile of the floor
+ # changes). The three rails across the east side stand 4 px; the leader's
+@@ -5863,6 +6098,43 @@
+     return parts
+ 
+ 
++
++def wj_rounded_plan(x0, x1, z0, z1, rx, rz, seg=6, rz_back=None):
++    """Wally's Journey: a rectangle (x0..x1, z0..z1) with elliptical corners
++    (rx across, rz deep), as a plan for PlanPrism, in the order the space
++    block's plan runs: the back west to east, then the front east to west."""
++    pts = []
++    rb = rz if rz_back is None else rz_back
++    corners = [(x1 - rx, z0 + rb, -90.0, 0.0, rb), (x1 - rx, z1 - rz, 0.0, 90.0, rz),
++               (x0 + rx, z1 - rz, 90.0, 180.0, rz), (x0 + rx, z0 + rb, 180.0, 270.0, rb)]
++    for cx, cz, a0, a1, r in corners:
++        for k in range(seg + 1):
++            a = math.radians(a0 + (a1 - a0) * k / seg)
++            pts.append((cx + rx * math.cos(a), cz + r * math.sin(a)))
++    return pts
++
++
++def weather_institute():
++    """Wally's Journey (POL-36, Brennan 2026-11-15): Route 119's Weather
++    Institute (rect cells 1..11 x 26..33, 176 x 128 px). Emerald 3DS has no
++    model for it and drew it flat on the ground. Read off the drawing:
++
++        a rounded body x 8-168, its glass ends standing on row 98, its wall
++        51 px tall (the glass from row 47), the roof back to row 5;
++        a portico x 48-128 standing out to row 119, 62 px tall (its pillar
++        tops at row 57); two domes on the roof, centred x 32 and 144.
++
++    Every face reads the drawing projected (PlanPrism, ProjDome): the
++    model only has to stand where the drawing shows it."""
++    body_h, porch_h = 51, 62
++    body = PlanPrism("body", wj_rounded_plan(8, 168, 56, 112, 40, 14, rz_back=10), 0, body_h,
++                     (10, 30, 98))
++    porch = PlanPrism("porch", [(48, 100), (128, 100), (128, 119), (48, 119)], 0, porch_h,
++                      (50, 58, 119))
++    domes = [ProjDome("dome_w", 32, 79, 13, 7, 20, y0=body_h),
++             ProjDome("dome_e", 144, 79, 13, 7, 20, y0=body_h)]
++    return [body, porch] + domes
++
+ SPECS = [
+     {
+         "name": "littleroot_house_w",
+@@ -5934,6 +6206,51 @@
+         "exact": kit_house_exact(80),
+     },
+     {
++        # Wally's Journey: Emerald 3DS has no model for Lavaridge's gym (its
++        # art did not match any spec, so the gym was drawn flat). Same gym
++        # as Petalburg's: the bottom row is porch and the town's own ground.
++        "name": "lavaridge_gym_exterior",
++        "layout": "LAYOUT_LAVARIDGE_TOWN",
++        "rect": (2, 11, 6, 5),
++        "match_rows": (0, 4),
++        "ground": [GRASS],
++        "parts": gym,
++        "exact": GYM_EXACT,
++    },
++    {
++        # Wally's Journey (POL-36): the Weather Institute on Route 119, drawn
++        # flat in Emerald 3DS. Its rectangle's corner cells that are rock,
++        # trees, grass or the sign are not the model's.
++        "name": "weather_institute_exterior",
++        "layout": "LAYOUT_ROUTE119",
++        "rect": (1, 26, 11, 8),
++        "ground": [GRASS],
++        "owned": {(i, j) for i in range(11) for j in range(8)}
++                 - {(0, 0), (10, 0), (0, 6), (0, 7), (1, 7), (2, 7), (8, 7), (9, 7), (10, 7)},
++        "parts": weather_institute,
++    },
++    {
++        # Wally's Journey (POL-5, Brennan 2026-11-14: "Trainer hill entrance is
++        # missing the top of the door"): the doorway cut into the cliff under
++        # Route 111's Trainer Hill (cells 30..32 x 112..113): its green cap
++        # (rows 3-9) is drawn on the cliff's face cells and was lost to the
++        # relief. A frame 29 px tall standing on the row the door's cells end,
++        # 4 deep; above its foot row the cliff stays the relief's.
++        "name": "trainer_hill_door",
++        "layout": "LAYOUT_ROUTE111",
++        "relief_bare": True,
++        "rect": (30, 112, 3, 2),
++        "ground": [0x1D1],
++        "ground_px": True,
++        # the cliff face beside the door's foot (cells 30 and 32 of row 113:
++        # its rock and the posts' feet) stands as the relief stood it, a
++        # pixel behind the frame: its cells are the model's, not the relief's
++        # (both from 1 px up: a face reaching the ground read the row under the drawing - a light line
++        # along the foot)
++        "parts": lambda: [PlanPrism("face", [(0, 31.5), (48, 31.5), (48, 32), (0, 32)], 1, 16, (0, 8, 32)),
++                          PlanPrism("door", [(12, 28), (36, 28), (36, 32), (12, 32)], 1, 29, (12, 14, 32))],
++    },
++    {
+         "name": "dewford_gym_exterior",
+         "layout": "LAYOUT_DEWFORD_TOWN",
+         "rect": (5, 13, 6, 5),
+@@ -6357,10 +6674,10 @@
+         "layout": "LAYOUT_MAUVILLE_CITY",
+         "rect": (5, 10, 7, 5),
+         "ground": [GRASS, 0x004],
+-        "keep": [(0, 0, 112, 64), (40, 64, 48, 72), (64, 64, 72, 72)],
++        "keep": [(0, 0, 112, 64)],
+         "parts_art": game_corner,
+         # its front corners are drawn rounded off at the top
+-        "exact": [(8, 3, 104, 9), (0, 9, 112, 64), (40, 64, 48, 72), (64, 64, 72, 72)],
++        "exact": [(8, 3, 104, 9), (0, 9, 112, 64)],
+     },
+     {
+         # Rydel's parked bicycles, two to a three-cell stand, drawn side on:
+@@ -7317,7 +7634,9 @@
+         "name": "railing_lilycove",
+         "components": {
+             "secondary": "gTileset_Lilycove",
+-            "tiles": {0x249, 0x250, 0x251, 0x252, 0x258, 0x25A},
++            # 0x341: Route 121's railing corner (a rail with the post that turns down the column) - left out, it
++            # lay flat on the ground (Brennan 2026-11-20 12:27, Q10: "one of the fences knocked over")
++            "tiles": {0x249, 0x250, 0x251, 0x252, 0x258, 0x25A, 0x341},
+             "height": 12, "hull": 12, "bridge": 3, "block": 4,
+             "upper": True,
+             "flank": 0x251,
+@@ -7539,6 +7858,29 @@
+         "parts_art": flat_art(lambda art: voxel_fortree.treehouse(art, 64, 32)),
+         "exact": voxel_fortree.treehouse_exact(64, 32),
+     },
++    # Wally's Journey (POL-55 / Q4): Route 119/120's wide shrubs, a leaning card of their drawing (voxel_fortree.shrub).
++    # One spec a shrub: what is drawn round them differs (tall grass, a tree's trunks), so no two match.
++    *[{
++        "name": "wj_shrub_%s_%d_%d" % (lay[7:].lower(), x, y),
++        "layout": lay,
++        "rect": (x, y, 3, 2),
++        "owned": [(i, j) for j in range(2) for i in range(3)],
++        "ground": [GRASS],
++        "parts_art": voxel_fortree.shrub(lay),
++        "exact": [(0, 0, 48, 32)],
++    } for lay, x, y in [("LAYOUT_ROUTE120", 25, 9), ("LAYOUT_ROUTE120", 30, 22), ("LAYOUT_ROUTE120", 37, 53),
++                        ("LAYOUT_ROUTE120", 4, 75), ("LAYOUT_ROUTE120", 28, 84), ("LAYOUT_ROUTE119", 33, 23),
++                        ("LAYOUT_ROUTE119", 30, 72), ("LAYOUT_ROUTE119", 3, 88), ("LAYOUT_ROUTE119", 6, 100)]],
++    # Route 119's two wider ones, four cells (Brennan 2026-11-20 18:33: "the row of green shrubs ... still flat")
++    *[{
++        "name": "wj_shrub4_route119_%d_%d" % (x, y),
++        "layout": "LAYOUT_ROUTE119",
++        "rect": (x, y, 4, 2),
++        "owned": [(i, j) for j in range(2) for i in range(4)],
++        "ground": [GRASS],
++        "parts_art": voxel_fortree.shrub("LAYOUT_ROUTE119", 4),
++        "exact": [(0, 0, 64, 32)],
++    } for x, y in [(3, 14), (4, 1)]],
+     {
+         # the tall palms, their trunks two cells (the other at (28, 6))
+         "name": "fortree_palm",
+@@ -7560,7 +7902,7 @@
+         "owned": [(i, j) for j in range(2) for i in range(3)] + [(1, 2)],
+         "ground": FORTREE_GROUND,
+         "ground_fixed": True,
+-        "parts_art": lambda art: voxel_fortree.palm(art, [(1, 2, 0x25C)]),
++        "parts_art": lambda art: voxel_fortree.palm(art, [(1, 2, 0x25C)], extra_trunk=1),
+         "exact": [(0, 0, 48, 48)],
+     },
+     {
+@@ -8102,6 +8444,16 @@
+                      "draw": MAUVILLE_GYM_ALT, "pieces": mauville_gym_alt()},
+     },
+     {
++        "name": "new_mauville_inside",
++        "interior": {"layout": "LAYOUT_NEW_MAUVILLE_INSIDE", "ground": [0x210],
++                     "pieces": own_shell(new_mauville_inside())},
++    },
++    {
++        "name": "new_mauville_inside_alt",
++        "interior": {"layout": "LAYOUT_NEW_MAUVILLE_INSIDE", "ground": [0x210],
++                     "draw": NEW_MAUVILLE_HIDDEN, "pieces": new_mauville_inside_alt()},
++    },
++    {
+         "name": "mossdeep_gym",
+         "interior": {"layout": "LAYOUT_MOSSDEEP_CITY_GYM", "ground": [0x20a],
+                      "pieces": own_shell(mossdeep_gym())},
+@@ -8618,20 +8970,29 @@
+ 
+ def trainer_hill_entrance():
+     shaft = (128, 0, 144, 32)
+-    lobby = (48, 112, 64, 128)
++    # Wally's Journey (POL-5, Brennan: "the back wall looks crunched and cut off like the back wall is
++    # down too far"): the lobby's back wall is drawn rows 112-143 (its green panels down to the floor
++    # behind the counters: its panels end on row 131, the counters' tops start on 133), not 112-127 -
++    # it stands 20 tall on row 132 (was 16 on row 128: the panels' last rows lay on the floor)
++    lobby = (48, 112, 64, 132)
+     # the west arm's sides dressed with its own teal (projected, its dark
+     # outline)
+-    return kw_pieces("counter", TRAINER_HILL_COUNTERS, 12,
++    # Wally's Journey (POL-5, Brennan: "the top of the healing station ... looks crunched"): the
++    # healing machine sits in the west counter (x 31-63, rows 128-157), drawn as its tray seen from
++    # above; it was painted flat on the counter's top. A box 6 tall on the counter (12), its tray its
++    # top, its front the band over the counter's front edge (rows 151-157).
++    healer = [piece("healer", [(31, 128, 64, 158)], 6, base=12, foot=158, leave=("62c5b4",))]
++    return healer + kw_pieces("counter", TRAINER_HILL_COUNTERS, 12,
+                      {"counter_8_4": {"solid": True, "side": (128, 64, 134, 70)}}) + rect_pieces(
+         "benches", runs_of(cell_runs((1, 15, 15), (2, 15, 15), (3, 15, 15), (15, 15, 15),
+                                      (16, 15, 15), (17, 15, 15))), 12) + [
+         piece("wall", [(112, 0, 192, 32)], 32, fill=16, foot=32, side=shaft),
+         piece("side_shaft_w", [], 32, side=shaft, walls=[((112, 112), (112, 32))]),
+         piece("side_shaft_e", [], 32, side=shaft, walls=[((192, 32), (192, 112))]),
+-        piece("wall_w", [(0, 112, 112, 128)], 16, fill=8, foot=128, side=lobby),
+-        piece("wall_e", [(192, 112, 304, 128)], 16, fill=8, foot=128, side=lobby),
+-        piece("side_w", [], 16, side=lobby, walls=[((0, 272), (0, 128))]),
+-        piece("side_e", [], 16, side=lobby, walls=[((304, 128), (304, 272))]),
++        piece("wall_w", [(0, 112, 112, 132)], 20, fill=8, foot=132, side=lobby),
++        piece("wall_e", [(192, 112, 304, 132)], 20, fill=8, foot=132, side=lobby),
++        piece("side_w", [], 20, side=lobby, walls=[((0, 272), (0, 132))]),
++        piece("side_e", [], 20, side=lobby, walls=[((304, 132), (304, 272))]),
+     ]
+ 
+ 
