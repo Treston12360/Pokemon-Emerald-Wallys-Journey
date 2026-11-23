@@ -995,3 +995,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   docs/polish_reports/2026-11-23_N08_fallarbor_sw_trees.png.
 - 2026-11-23 07:00 (Brennan): "Add a little bit more falling leaves" - 6 -> 10 on screen (wally_journey.c
   FALLING_LEAF_COUNT, POLISH's leaves); measured 9.5 on screen at 4x fast-forward.
+- 2026-11-23 06:28 item 1 (Brennan, Route 114 west plateau: "Scatter some trees, let me see what it looks like"):
+  small trees (the General's 0C7, as the ledge trees - snowy conifers in winter) stand in loose groups on the plateau
+  (4x3-cell patches, about two in five wooded, a third of their cells a tree), only where the ground is flat, never
+  within two cells of another map's belt or a fill of another height. Edge-fill flag 1 (scatter) on a plain ground
+  fill now means this (voxel_mesh_builder.c VoxelMesh_LedgeTree; WJPC_NO_PLATEAU_TREES=1: none). relief.bin: Route
+  114 W rows 10-79 and Route 115 N cols 16-39 flagged. The ground is untouched (a first try that turned the fill into
+  a wood made the ground rise in a ridge with stretched trees at the Route 114/115 seam). Picture
+  docs/polish_reports/2026-11-23_N10_route114_plateau_trees.png.
