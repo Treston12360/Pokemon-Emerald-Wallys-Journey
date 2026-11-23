@@ -974,3 +974,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   WJPC_LEAVES_GAME_SPEED=1: as before). Measured (test "leaflog"): fall per real frame 0.62 px at 1x, 0.62 at 4x,
   0.61 at 10x (before: 0.62 / 2.49 / 6.22); six leaves on screen throughout. Picture
   docs/polish_reports/2026-11-23_N05_falling_leaves_ff.png.
+- 2026-11-23 N06 Fallarbor north-east (06:28 red arrow): the ground behind the ridge was Route 113's north fill
+  (its ash wood at 32 px, level 0) behind Route 113's west plateau (48 px) - a drop of three levels; Fallarbor's own
+  north fill stood a level under its cliff top (64 for 80: top = (cliff + 2 courses) x 16). Now Fallarbor N 80 px
+  and Route 113 N cols 0-12 (its plateau) Fallarbor's soil wood at 80 px, flat and thinned (relief.bin). Edge fills
+  are taken first match first: add_relief_edge.py now puts ranged fills before whole-edge ones. Gap test 34 north
+  views 2560x1440: 4758 -> 4759 (Fallarbor's run-to-run speck). Picture
+  docs/polish_reports/2026-11-23_N06_fallarbor_ne_level.png.
