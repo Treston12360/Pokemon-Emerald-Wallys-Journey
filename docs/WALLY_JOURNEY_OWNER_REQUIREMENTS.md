@@ -1075,3 +1075,18 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - Route 106 (x41 row 17 notch under the cliff): the dark patch is the shadow of the tree right in front (the
     lighting's crown at x41 row 18; the only open rock its shadow lands on). Left as is; asked.
   Gap test (5 views, 1920x1080 and 2560x1440): no sky. Picture docs/polish_reports/2026-11-23_N17_sea_rocks.png.
+- N18 2026-11-23 17:17 (Brennan, picture of 17_sea_rocks with two red boxes on Route 133's left rock: "fix these two
+  things in the red boxes they still persist"):
+  - Big box (dark band along the base of the rock's south face): the south row (relief 49, cells x15-19 row 10)
+    stepped 32 -> 16 -> 0 and the walls of the 16 -> 0 step came out fully dark. That row now slopes straight from the
+    rock top (32) into the sea (0); (20,10) re-laid to meet it. (Tested first: not the sea's reflection, not shadow.)
+  - Small box (blue dashes along the rock's north edge under the round boulder): the north-edge cuts on row 8 (x15-20,
+    variant 257) carry a strip of sea along their top, seen as a blue line where the boulder stands behind. Those
+    cells are now plain block-wall cuts and draw the plain rock top (0x0DF, kArtSwap in voxel_mesh_builder.c); the
+    rock's north-east corner moved one cell west to (19,7) (relief 32 + the old (20,7) cut, art 0x15E) and (20,7)
+    takes the edge art 0x157 and (21,7)'s cut. WJPC_NO_ART_SWAP=1 shows the old art.
+  - Left: a few pixels of light glint at the boulder's own lower-left foot (the boulder model meeting the sea). Raising
+    row 7 under it made a large blue wedge instead, so not done; asked.
+  Gap test (5 sea views + 4 views round the rock, 1920x1080 and 2560x1440): no new sky. One view from the rock's east
+  (warp 48 26 9, after another warp) shows magenta in the screen's far top-right corner - the same with the old data,
+  so not from this change. Picture docs/polish_reports/2026-11-23_N18_route133_boxes.png.

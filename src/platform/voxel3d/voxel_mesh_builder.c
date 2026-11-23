@@ -283,6 +283,12 @@ bool VoxelMesh_TileUV(VoxelBuilder *builder, int x, int y,
              * them to plain lighter rock"): the dark diagonal rock (0x215, 0x228, 0x218) drawn as its plain rock 0x23C */
             { 125, 23, 13, 0x23C }, { 125, 22, 14, 0x23C }, { 125, 23, 14, 0x23C }, { 125, 22, 15, 0x23C },
             { 125, 23, 15, 0x23C }, { 125, 22, 16, 0x23C }, { 125, 23, 16, 0x23C }, { 125, 22, 17, 0x23C },
+            /* Route 133 (Brennan 2026-11-23 17:17, the left rock's north edge under the round boulder: blue slivers
+             * "still persist"): the rock's north-edge art (0x157) carries a strip of sea along its top, seen as a blue
+             * line where the boulder stands behind instead of the sea - drawn as the plain rock top (0x0DF) there */
+            { 49, 15, 8, 0x0DF }, { 49, 16, 8, 0x0DF }, { 49, 17, 8, 0x0DF }, { 49, 18, 8, 0x0DF }, { 49, 19, 8, 0x0DF },
+            { 49, 20, 8, 0x0DF },
+            { 49, 19, 7, 0x15E }, { 49, 20, 7, 0x157 },   /* (the rock's north-east corner one cell west: relief.bin) */
         };
         static int sNoSwap = -1;
         if (sNoSwap < 0)
