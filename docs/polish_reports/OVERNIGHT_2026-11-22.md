@@ -52,6 +52,11 @@ east end (reproduced on 22a, solid since).
 Blocked: falling leaves with fast-forward - that code is ARIA's file (src/wally_journey.c), the request is written
 in docs/WORK_CLAIMS.md for Treston.
 
+## Gap test of everything tonight (2560x1440, 34 north + 38 south edge views, 22d vs now)
+North: 10243 -> 4758 gap pixels (Verdanturf 5119 -> 0, Route 115 675 -> 0, Route 103 941 -> 564; Fallarbor varies
+run to run). South: one view differs, Route 101 (0 -> 1108), but 22d shows the same 1519 px on a second run - a
+one-pixel row at the very top of the screen (the far horizon), not a hole. No new gaps.
+
 ## Questions (numbered, for when you are awake)
 1. N02 Route 114 west: the plateau west of Route 114 is plain mountain ground. You asked for scattered mountain trees on it too - want a few (like the thinned woods at its north end), or keep it plain?
 2. N04 Meteor Falls: the 3D floor rocks come out darker than the flat drawing was (they are lit like the Rusturf ones). Keep them darker, or brighten them to the drawing's own grey?
