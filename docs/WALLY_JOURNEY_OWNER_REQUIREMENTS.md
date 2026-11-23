@@ -928,3 +928,4 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   WJPC_WOOD_Z_OLD=1 restores). Gap test 1920x1080, 34 north + 38 south views: Fallarbor 1430 -> 1383, Route 113
   217 -> 156, Route 113 south 494 -> 37; worse: Route 115 north 69 -> 379 px (a speck at the very top corner of the
   screen, the far horizon). Picture: docs/polish_reports/2026-11-22_fallarbor_woods.png.
+- **2026-11-22 21:47**: zip `WallysJourney-Polish-2026-11-22d.zip` sent (whole folder; exe and pc_data/voxel at c561716b): quick run with shiny/Intimidate, Fiery Path back wall, Settings "Speed", Toxtricity Low Key form, Fallarbor woods and 3D background forest. Checked the zipped exe starts with 3D buildings.
