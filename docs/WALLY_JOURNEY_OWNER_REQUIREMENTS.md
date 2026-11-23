@@ -903,3 +903,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   queues the run, and the messages before the choice move on by themselves once it is queued (battle_main.c,
   text.c). Picture: docs/polish_reports/2026-11-22_quickrun_shiny_intimidate.png. (The ~2 s hold after "Go! X!" is
   the same with or without a shiny: not changed.)
+- 2026-11-22 19:55 (Brennan): Fiery Path "this back wall flickers when walking". Cause: the wall the renderer stands
+  along a map's north edge (EdgeOverBelt, down to the far ground) stood in exactly the plane of Fiery Path's upright
+  back cliff (two cells of face), so the two z-fought as the camera moved. The north edge wall now stands half a pixel
+  behind the edge (voxel_mesh_builder.c; WJPC_EDGE_NORTH_IN_PLANE=1 restores). Gap test, every outdoor map's north
+  edge (34 views) at 1920x1080 and 2560x1440: no new gaps (identical, one 2560 view 5119 -> 0). Picture:
+  docs/polish_reports/2026-11-22_fierypath_backwall_flicker.png.

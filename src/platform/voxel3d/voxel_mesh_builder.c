@@ -1248,6 +1248,20 @@ static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
         if (h[k] > top)
             top = h[k];
     }
+    /* Brennan 2026-11-22 19:55 (Fiery Path: "this back wall flickers when walking"): its north row is the top of an
+     * upright cliff face (two cells of face stood as far south as they are high), so this wall stood in the face's
+     * own plane, from the ground up - the two fought (z-fighting) as the camera moved: stripes over the lower half.
+     * A north edge's wall now stands half a pixel behind the edge (north): hidden behind the map's own face where
+     * there is one, and from the south no gap opens between them (the wall runs on down behind the edge).
+     * WJPC_EDGE_NORTH_IN_PLANE=1: in the plane, as before. */
+    {
+        static int sInPlane = -1;
+        if (sInPlane < 0)
+            sInPlane = getenv("WJPC_EDGE_NORTH_IN_PLANE") != NULL;
+        if (d == 0 && !sInPlane)
+            for (unsigned k = 0; k < VOXEL_RELIEF_SIDE; ++k)
+                z[k] -= 1.0f / 32.0f;
+    }
     if (getenv("WJPC_EDGE_DUMP") != NULL)
         fprintf(stderr, "EDGEBELT %d %d d%d over %d,%d water %d wl %.2f beltTop %.2f top %.2f h %.2f %.2f %.2f %.2f %.2f\n",
                 x, y, d, nx, ny, (int)overWater, wl, beltTop, top, h[0], h[1], h[2], h[3], h[4]);
