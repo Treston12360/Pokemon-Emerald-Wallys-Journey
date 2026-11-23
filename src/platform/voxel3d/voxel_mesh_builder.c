@@ -6027,6 +6027,15 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                     sBlocks = getenv("WJPC_WOOD_BLOCKS") != NULL;
                 if (!sBlocks && !drawn && FieldOn() && BeltIsTree(x, y) && BeltTreeOwn(x, y))
                 {
+                    /* Brennan 2026-11-22 (C7, the woods north of Fallarbor: a slit of sky down the wood's floor): a point
+                     * stands as far south as it is high, the map's base counted (VoxelBuilder_StretchZ adds the cell's
+                     * base to z) - two wood cells over different maps' bases (Fallarbor's 2, the belt west of it 0) put
+                     * their shared corner rows apart. Each corner's way south is over this cell's base now, as its
+                     * height already was. WJPC_WOOD_Z_OLD=1: as before. */
+                    static int sWoodZOld = -1;
+                    if (sWoodZOld < 0)
+                        sWoodZOld = getenv("WJPC_WOOD_Z_OLD") != NULL;
+#define ZBase(cx, cy) (sWoodZOld ? 0.0f : BeltBase(cx, cy) - builder->base)
                     /* each corner the mean of the trees' levels round it (as they stand: VoxelMesh_BorderLevel) */
                     float ch[4], cs[4];
                     bool ok = true;
@@ -6041,7 +6050,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                             /* (every wood cell round it, over its own base: the field's woods' floor meets it) */
                             if (VoxelWorld_GetInstanceAt(cx, cy) == NULL && BorderAt(cx, cy) && BeltIsTree(cx, cy)
                              && VoxelMesh_BorderLevel(cx, cy, &e, &es))
-                                sh += BeltBase(cx, cy) - builder->base + e, ss += es, ++n;
+                                sh += BeltBase(cx, cy) - builder->base + e, ss += es + ZBase(cx, cy), ++n;
                         }
                         ok = n > 0;
                         if (ok)
@@ -6052,7 +6061,7 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                             float fh, fs;
                             BeltField(vx, vy, &fh, &fs);
                             ch[k] = fh - builder->base;
-                            cs[k] = fs;
+                            cs[k] = fs - (sWoodZOld ? 0.0f : builder->base);
                         }
                     }
                     float u0f, v0f, u1f, v1f;
@@ -6072,8 +6081,12 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                                 sWoodShade = getenv("WJPC_WOOD_FLOOR_SHADE") ? (float)atof(getenv("WJPC_WOOD_FLOOR_SHADE")) : 0.35f;
                             v[k].shade = SHADE_TOP * sWoodShade; /* the floor under a wood, in its shade (also with Gamma lighting) */
                         }
+                        if (getenv("WJPC_WOOD_DUMP") != NULL) /* test aid: the wood floor's corners */
+                            fprintf(stderr, "WOODFLOOR %d %d base %.3f y %.3f %.3f %.3f %.3f z %.3f %.3f %.3f %.3f\n", x, y,
+                                    builder->base, v[0].y, v[1].y, v[2].y, v[3].y, v[0].z, v[1].z, v[2].z, v[3].z);
                         VoxelBuilder_Tri(builder, &v[0], &v[3], &v[1]);
                         VoxelBuilder_Tri(builder, &v[0], &v[2], &v[3]);
+#undef ZBase
                         continue;
                     }
                 }

@@ -918,4 +918,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   loading: every Toxtricity in the party and boxes takes its nature's form (pokemon.c WJ_FixToxtricityForms, from
   CB2_ContinueSavedGame). (A first guess, that the shown nature differed from the one evolution uses, was wrong and
   undone.) Checked on his save: Low Key after loading and after a battle. Test aids: partyspecies, partynature,
-  partylevel, evocheck, dumptox, fixtox. Picture: docs/polish_reports/2026-11-22_toxtricity_form.png.
+  partylevel, evocheck, dumptox, fixtox. Picture: docs/polish_reports/2026-11-22_toxtricity_form.png.- 2026-11-22 21:17 (Brennan, C7): Fallarbor plateau "c, woods" (ideas picture fallarbor_plateau_ideas.png: A grove /
+  B rocky / C woods / D mixed). Done: Fallarbor's north edge fill is its own soil wood (0x26B/26C/273/274, top 32 px,
+  relief.bin via add_relief_edge.py). C7 background canopy: Fallarbor-tileset woods (Fallarbor, Route 113, Route 114
+  borders) were flat 2D (22a) / a mat of small crowns (22b) - their cells are lower-row tree parts only (trunks
+  with the next crown), never a whole 4-cell tree; they now stand cell by cell as inside a map (voxel_tree.c
+  ownWood; WJPC_BELT_OWN_TREES_SMALL=1 restores 22b). A slit of sky down the new wood's floor: wood floor corners'
+  way south was not over the cell's base where two maps' belts meet (bases 0 and 2) - fixed (voxel_mesh_builder.c;
+  WJPC_WOOD_Z_OLD=1 restores). Gap test 1920x1080, 34 north + 38 south views: Fallarbor 1430 -> 1383, Route 113
+  217 -> 156, Route 113 south 494 -> 37; worse: Route 115 north 69 -> 379 px (a speck at the very top corner of the
+  screen, the far horizon). Picture: docs/polish_reports/2026-11-22_fallarbor_woods.png.

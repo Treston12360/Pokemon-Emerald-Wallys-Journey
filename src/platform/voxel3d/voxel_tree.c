@@ -908,7 +908,17 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
             int ox = x, oy = y;
             if (sCellwise < 0)
                 sCellwise = getenv("WJPC_BELT_TREE_CELLWISE") != NULL;
-            if (!ledge && !sCellwise && part >= 0 && part <= 3)
+            /* Brennan 2026-11-22 (C7, Route 113's and Fallarbor's background woods: "flat 2D tiled tree tops with
+             * visible grid lines"): a wood of a secondary tileset's own trees (Fallarbor's soil and ash trees) is drawn
+             * in the 2D game as rows of trunks, each with the next tree's crown top - its cells are lower-row parts
+             * only, never a whole four, so they were left out (22a: the flat drawing showed) or stood as small trees
+             * (22b: a mat of little crowns). They stand cell by cell, as inside a map (the trunk adds its crown row,
+             * EmitMissingRow). WJPC_BELT_OWN_TREES_SMALL=1: as 22b. */
+            static int sOwnSmall = -1;
+            if (sOwnSmall < 0)
+                sOwnSmall = getenv("WJPC_BELT_OWN_TREES_SMALL") != NULL;
+            bool ownWood = !sOwnSmall && metatileId >= SECONDARY_ID && OwnLargePart(art->secondaryTileset, metatileId, NULL) >= 0;
+            if (!ledge && !sCellwise && !ownWood && part >= 0 && part <= 3)
             {
                 bool whole = true;
 
