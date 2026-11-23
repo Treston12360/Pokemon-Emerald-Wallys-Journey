@@ -911,3 +911,8 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   docs/polish_reports/2026-11-22_fierypath_backwall_flicker.png.
 - 2026-11-22 20:50 (Brennan): checkerboard blocks "have stopped ... we can close that for now" (closed, no change).
   "Speed & Looks" renamed "Speed" ("yes it can be changed"). Picture: docs/polish_reports/2026-11-22_settings_speed_renamed.png.
+- 2026-11-22 C6 (Brennan 13:38, summary picture: shiny Modest Toxtricity No. 0849 shows Amped): the sprites were right -
+  it really was the Amped form. Toxel's evolution went by the personality's nature, the summary shows the "hidden"
+  nature (a mint's, kept when the personality changes), and the two differed. IF_AMPED_NATURE / IF_LOW_KEY_NATURE now
+  use the shown nature (pokemon.c). Checked with test aids partynature / evocheck (sdl2.c). His existing Toxtricity is
+  still the Amped form (asked what he wants). Picture: docs/polish_reports/2026-11-22_toxtricity_form.png.

@@ -644,6 +644,48 @@ static bool TestStep(void)
             BattleSetup_StartWildBattle();
             continue;
         }
+        if (!strcmp(cmd, "partyspecies"))
+        {
+            // partyspecies SLOT SPECIES (test aid, Brennan's C6 shiny Toxtricity Low Key): that party Pokémon becomes
+            // SPECIES (stats worked out again).
+            int slot = 0, sp = 0;
+            if (sscanf(line, "%*s %d %d", &slot, &sp) == 2)
+            {
+                u16 s16 = (u16)sp;
+                SetMonData(&gPlayerParty[slot], MON_DATA_SPECIES, &s16);
+                CalculateMonStats(&gPlayerParty[slot]);
+            }
+            continue;
+        }
+        if (!strcmp(cmd, "partynature"))
+        {
+            // partynature SLOT NATURE (test aid, C6): the nature the summary shows (a mint's)
+            int slot = 0, nat = 0;
+            if (sscanf(line, "%*s %d %d", &slot, &nat) == 2)
+            {
+                u32 n32 = (u32)nat;
+                SetMonData(&gPlayerParty[slot], MON_DATA_HIDDEN_NATURE, &n32);
+            }
+            continue;
+        }
+        if (!strcmp(cmd, "evocheck"))
+        {
+            // evocheck SLOT FILE (test aid, C6): writes "species personality-nature shown-nature level -> target"
+            int slot = 0;
+            char out[256] = "evocheck.txt";
+            sscanf(line, "%*s %d %255s", &slot, out);
+            FILE *ef = fopen(out, "a");
+            if (ef != NULL)
+            {
+                struct Pokemon *m = &gPlayerParty[slot];
+                fprintf(ef, "%u %u %u %u -> %u\n", (unsigned)GetMonData(m, MON_DATA_SPECIES),
+                        (unsigned)(GetMonData(m, MON_DATA_PERSONALITY) % NUM_NATURES),
+                        (unsigned)GetMonData(m, MON_DATA_HIDDEN_NATURE), (unsigned)GetMonData(m, MON_DATA_LEVEL),
+                        (unsigned)GetEvolutionTargetSpecies(m, EVO_MODE_NORMAL, ITEM_NONE, NULL, NULL, CHECK_EVO));
+                fclose(ef);
+            }
+            continue;
+        }
         if (!strcmp(cmd, "partyshiny"))
         {
             // partyshiny SLOT [0|1] (test aid, Brennan 2026-11-22 quick run with a shiny): that party Pokémon shiny (or not).

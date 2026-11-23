@@ -4287,7 +4287,10 @@ bool32 DoesMonMeetAdditionalConditions(struct Pokemon *mon, const struct Evoluti
                 currentCondition = TRUE;
             break;
         case IF_AMPED_NATURE:
-            switch (nature)
+            // Wally's Journey (Brennan 2026-11-22, C6: a shiny Modest Toxel became an Amped Toxtricity): the form goes
+            // by the nature the player sees (the summary's, MON_DATA_HIDDEN_NATURE), not the personality's - a
+            // personality changed afterwards (UpdateMonPersonality keeps the shown nature) no longer matches it.
+            switch (GetMonData(mon, MON_DATA_HIDDEN_NATURE))
             {
             case NATURE_HARDY:
             case NATURE_BRAVE:
@@ -4307,7 +4310,7 @@ bool32 DoesMonMeetAdditionalConditions(struct Pokemon *mon, const struct Evoluti
             }
             break;
         case IF_LOW_KEY_NATURE:
-            switch (nature)
+            switch (GetMonData(mon, MON_DATA_HIDDEN_NATURE)) // (C6: the shown nature, as IF_AMPED_NATURE)
             {
             case NATURE_LONELY:
             case NATURE_BOLD:
