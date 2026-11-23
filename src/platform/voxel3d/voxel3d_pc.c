@@ -96,12 +96,17 @@ int Port_LayoutMetatile(int id, int x, int y)
 // POL-51 (Brennan 2026-11-19 14:23, Mt Pyre summit's bottom stairs): a stair drawn by a secondary tileset - its id
 // means other art on other tile sets, so it is asked with the layout's own. Facility (Mt Pyre summit): 330, 331.
 extern const struct Tileset gTileset_Facility;
+extern const struct Tileset gTileset_MeteorFalls;
 bool Port_LayoutSecondaryStair(int id, int metatile)
 {
     const struct MapLayout *l = id <= 0 ? NULL : gMapLayouts[id - 1];
 
     if (l == NULL)
         return false;
+    /* (Brennan 2026-11-23 06:28, Meteor Falls: "the stairs are shooting upright. These need to be fixed to be
+     * actual stairs": its one-wide rock stairs 0x202) */
+    if (l->secondaryTileset == &gTileset_MeteorFalls && metatile == 0x202)
+        return true;
     return l->secondaryTileset == &gTileset_Facility && (metatile == 0x330 || metatile == 0x331);
 }
 

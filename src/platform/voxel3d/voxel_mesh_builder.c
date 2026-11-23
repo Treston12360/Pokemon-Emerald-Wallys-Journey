@@ -279,6 +279,10 @@ bool VoxelMesh_TileUV(VoxelBuilder *builder, int x, int y,
             { 302, 31, 23, 0x071 },
             { 303, 27, 15, 0x069 },
             { 303, 27, 16, 0x07C },
+            /* Meteor Falls 1F (Brennan 2026-11-23 06:28, the dark patches by the bridge's east end: "Try redrawing
+             * them to plain lighter rock"): the dark diagonal rock (0x215, 0x228, 0x218) drawn as its plain rock 0x23C */
+            { 125, 23, 13, 0x23C }, { 125, 22, 14, 0x23C }, { 125, 23, 14, 0x23C }, { 125, 22, 15, 0x23C },
+            { 125, 23, 15, 0x23C }, { 125, 22, 16, 0x23C }, { 125, 23, 16, 0x23C }, { 125, 22, 17, 0x23C },
         };
         static int sNoSwap = -1;
         if (sNoSwap < 0)
@@ -3931,6 +3935,16 @@ static uint32_t WoodHash(int x, int y)
     return h;
 }
 
+/* whether the belt cell (x, y) is of a scattered fill (its open ground is the plateau's, not the wood's soil) */
+bool VoxelMesh_WoodScatter(int x, int y)
+{
+    const VoxelMapInstance *ring;
+    VoxelEdgeFill fill;
+
+    return VoxelWorld_GetInstanceAt(x, y) == NULL && (ring = VoxelWorld_BeltRing(x, y)) != NULL
+        && VoxelRelief_EdgeFillAt(ring, x, y, &fill) && fill.scatter;
+}
+
 bool VoxelMesh_WoodGap(int tx, int ty)
 {
     static int sDense = -1;
@@ -3943,12 +3957,34 @@ bool VoxelMesh_WoodGap(int tx, int ty)
     if (sDense || VoxelWorld_GetInstanceAt(tx, ty) != NULL || (ring = VoxelWorld_BeltRing(tx, ty)) == NULL
      || !VoxelRelief_EdgeFillAt(ring, tx, ty, &fill) || !fill.sparse)
         return false;
+    a = WoodHash(tx / 6, ty / 3) & 1023u;   /* clearings: a 6x3 patch of the wood */
+    b = WoodHash(tx, ty) & 1023u;           /* and single trees */
+    if (fill.scatter)                       /* (scattered: about one tree in six, in loose groups) */
+    {
+        /* none by a step between two fills (Route 114's 88 / 160 px rows): the ground slopes there and its trees
+         * stood stretched down it in a line */
+        /* (and none within two cells of another map's belt: where two maps' belts meet, a diagonal, the ground
+         * steps and its trees stood stretched down it - Route 114's west against Route 115's north) */
+        for (int dy = -2; dy <= 3; dy++)
+            for (int dx = -2; dx <= 3; dx++)
+            {
+                VoxelEdgeFill nf;
+                const VoxelMapInstance *nr;
+                if (VoxelWorld_GetInstanceAt(tx + dx, ty + dy) == NULL
+                 && (nr = VoxelWorld_BeltRing(tx + dx, ty + dy)) != NULL && nr != ring)
+                    return true;
+                if (VoxelWorld_GetInstanceAt(tx + dx, ty + dy) == NULL
+                 && (nr = VoxelWorld_BeltRing(tx + dx, ty + dy)) != NULL
+                 && (!VoxelRelief_EdgeFillAt(nr, tx + dx, ty + dy, &nf) || !nf.hasTop
+                     || VoxelRelief_Base(nr) * 16 + nf.top != VoxelRelief_Base(ring) * 16 + fill.top))
+                    return true;
+            }
+        return a < 600u || b < 700u;
+    }
     /* not in the first rows by the map: the edge's own line of trees stays whole */
     if (ty >= ring->originY - 2 && ty < ring->originY + ring->height + 2 && tx >= ring->originX - 2
      && tx < ring->originX + ring->width + 2)
         return false;
-    a = WoodHash(tx / 6, ty / 3) & 1023u;   /* clearings: a 6x3 patch of the wood */
-    b = WoodHash(tx, ty) & 1023u;           /* and single trees */
     return a < 330u || b < 250u;
 }
 
@@ -6217,7 +6253,8 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                     if (gapHere)
                     {
                         const VoxelMapInstance *ga = VoxelWorld_BorderArtMap(x, y);
-                        gapGround = ga != NULL ? VoxelTree_OwnWoodGround(ga->secondaryTileset, VoxelWorld_BorderMetatile(x, y)) : -1;
+                        gapGround = ga != NULL ? VoxelTree_OwnWoodGround(ga->secondaryTileset, VoxelWorld_BorderMetatile(x, y),
+                                                                         VoxelMesh_WoodScatter(x, y)) : -1;
                     }
                     if (ok && ((gapGround >= 0 && MetatileUV(builder, gapGround, &u0f, &v0f, &u1f, &v1f))
                             || MetatileUV(builder, WoodFloorTile(x, y), &u0f, &v0f, &u1f, &v1f)

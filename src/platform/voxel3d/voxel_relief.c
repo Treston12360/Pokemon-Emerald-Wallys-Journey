@@ -904,6 +904,7 @@ bool VoxelRelief_EdgeFill(unsigned layoutId, unsigned edge, int along, unsigned 
         fill->hasTop = (e[3] & 2) != 0;
         fill->flat = (e[3] & 8) != 0;
         fill->sparse = (e[3] & 4) != 0;
+        fill->scatter = (e[3] & 1) != 0;
         fill->top = (int16_t)U16(e + 8);
         return true;
     }

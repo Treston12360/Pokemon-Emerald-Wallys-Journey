@@ -92,6 +92,9 @@ typedef struct
      * to the horizon (not rounded off as the belt's mountain); flags 4 - a wood of it is thinned, open patches of
      * ground between its trees (VoxelMesh_WoodGap) */
     bool flat, sparse;
+    /* flags 1 (Brennan 2026-11-23 06:28, Route 114's west plateau: "Scatter some trees"): a wood of it keeps only
+     * a few trees, the plateau's own ground between them (VoxelMesh_WoodGap, VoxelTree_OwnWoodGround) */
+    bool scatter;
 } VoxelEdgeFill;
 bool VoxelRelief_EdgeFill(unsigned layoutId, unsigned edge, int along, unsigned index, VoxelEdgeFill *fill);
 /* The fill past instance `ring`'s edges at a world cell outside it, if any. */

@@ -132,12 +132,15 @@ static int OwnLargePart(const void *secondaryTileset, int metatileId, int *groun
 
 /* The plain ground a secondary tileset's own wood stands on (Fallarbor's: the brown soil 279, the ash 218); -1 for
  * any other cell. For a thinned wood's open patches (VoxelMesh_WoodGap, Brennan 2026-11-22 21:54). */
-int VoxelTree_OwnWoodGround(const void *secondaryTileset, int metatileId)
+int VoxelTree_OwnWoodGround(const void *secondaryTileset, int metatileId, bool scattered)
 {
     int kind;
 
     if (metatileId < SECONDARY_ID || OwnLargePart(secondaryTileset, metatileId, &kind) < 0)
         return -1;
+    /* (a scattered wood on Fallarbor's mountain: its mountain ground 0x241, Route 114's west plateau) */
+    if (scattered && secondaryTileset == &gTileset_Fallarbor)
+        return 0x241;
     if (secondaryTileset == &gTileset_Fallarbor)
         return kind == OWN_ASH ? 0x218 : kind == OWN_SOIL ? 0x279 : -1;
     return -1;

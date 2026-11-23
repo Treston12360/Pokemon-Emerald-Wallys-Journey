@@ -5,7 +5,9 @@ usage: add_relief_edge.py RELIEF.bin LAYOUT_ID EDGE METATILE [FIRST LAST] [--top
   LAYOUT_ID: the layout's number in data/layouts/layouts.json, counted from 1 (Rustboro = 4).
   EDGE: W, E, N or S.  METATILE: hex or decimal; one id, or four comma-separated (the 2x2 block).
   FIRST LAST: the cells along the edge it covers (default: all of it).
-  --flat: its top stays level out to the horizon (not rounded off); --sparse: a wood of it thinned.
+  --flat: its top stays level out to the horizon (not rounded off); --sparse: a wood of it thinned; --scatter: only a few trees.
+  Fills are looked up first match first: a ranged fill must come before a whole-edge one of the same edge
+  (this script puts ranged fills first).
   --top PX: where the fill's top stands, pixels over the map's base (default: water at the map's own sea level,
             anything else as the border is).
 
@@ -29,6 +31,9 @@ def main():
     if '--flat' in args:      # flags 8: its top level out to the horizon (Brennan 2026-11-22 21:54, Fallarbor's woods)
         extra |= 8
         args.remove('--flat')
+    if '--scatter' in args:   # flags 1|4: a wood of it keeps only a few trees, the plateau's ground between them
+        extra |= 5
+        args.remove('--scatter')
     if '--sparse' in args:    # flags 4: a wood of it thinned, open patches between the trees (VoxelMesh_WoodGap)
         extra |= 4
         args.remove('--sparse')
@@ -64,6 +69,11 @@ def main():
     else:
         b[end:end] = rec
         struct.pack_into('<H', b, i + 4, count + 1)
+    # ranged fills first: the game takes the first fill of an edge that covers a cell (voxel_relief.c)
+    count = struct.unpack_from('<H', b, i + 4)[0]
+    ents = [bytes(b[i + 8 + 18 * k:i + 26 + 18 * k]) for k in range(count)]
+    ents.sort(key=lambda e: struct.unpack_from('<h', e, 4)[0] < 0)
+    b[i + 8:i + 8 + 18 * count] = b''.join(ents)
     open(path, 'wb').write(b)
     print('ok', lid, args[2], [hex(m) for m in mt], first, last, top)
 

@@ -37,6 +37,15 @@ def slot_free(d, x0, y0):
                for x in range(x0, x0 + 16))
 
 
+# Brennan 2026-11-23 06:28 (Meteor Falls' 3D rocks came out darker than the drawing): "brighter them to darker grey"
+# - its cards' colours lifted BRIGHT x (still a grey darker than the floor). Applied as the cards are written.
+BRIGHT = {('LAYOUT_METEOR_FALLS_1F_1R', 0x20E): 1.3, ('LAYOUT_METEOR_FALLS_1F_1R', 0x20F): 1.3}
+
+
+def bright(c, k):
+    return tuple(min(255, int(round(v * k))) for v in c)
+
+
 def tone(c):
     r, g, b = c
     y = 0.299 * r + 0.587 * g + 0.114 * b
@@ -48,8 +57,20 @@ def main():
     path = sys.argv[1]
     d = bytearray(open(path, 'rb').read())
     only_new = '--only-new' in sys.argv
+    # --redo LAYOUT:HEX[,LAYOUT:HEX]: write just these cards again over their slots
+    only = None
+    if '--redo' in sys.argv:
+        only = {(a.split(':')[0], int(a.split(':')[1], 16)) for a in sys.argv[sys.argv.index('--redo') + 1].split(',')}
+        for (lay, mm) in only:
+            x0 = [c[2] for c in CARDS if c[0] == lay and c[1] == mm][0]
+            y0 = CARDS_ROW.get((lay, mm), 112)
+            for yy in range(y0, y0 + 16):
+                for xx in range(x0, x0 + 16):
+                    struct.pack_into('<H', d, 2 * tex(xx, yy), 0)
     for layout, m, x0, toned in CARDS:
         y0 = CARDS_ROW.get((layout, m), 112)
+        if only and (layout, m) not in only:
+            continue
         if only_new and ((layout, m) not in CARDS_ROW or not slot_free(d, x0, CARDS_ROW[(layout, m)])):
             continue
         assert all(struct.unpack_from('<H', d, 2 * tex(x, y))[0] & 1 == 0 for y in range(y0, y0 + 16)
@@ -71,7 +92,8 @@ def main():
             for x in range(16):
                 c = full.getpixel((x, y))
                 rock = (x, y) not in out
-                struct.pack_into('<H', d, 2 * tex(x0 + x, y0 + y), pack((tone(c) if toned else c) if rock else None))
+                c = tone(c) if toned else bright(c, BRIGHT.get((layout, m), 1.0))
+                struct.pack_into('<H', d, 2 * tex(x0 + x, y0 + y), pack(c if rock else None))
     open(path, 'wb').write(d)
     print('%d rock cards written' % len(CARDS))
 
