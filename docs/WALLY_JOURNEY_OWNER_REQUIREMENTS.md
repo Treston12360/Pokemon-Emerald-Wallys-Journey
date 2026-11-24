@@ -1117,3 +1117,15 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     standing pose stood a row up. Now each frame's own feet stand on the ground (voxel_entities.c FrameFootPad; only
     frames within a row of the standing pose; WJPC_FOOT_BOB=1: as before). Every walker (player, people) alike.
     Picture docs/polish_reports/2026-11-23_N21_feet_running.png.
+  - Region audit, first results (report page "Hoenn 3D Audit" sent to Brennan; scratchpad report/build_items.py):
+    sweep of all 518 Hoenn maps (body: tools/pc/gapscan + maps list; gapscan.py now also writes holes inside the scene,
+    <name>.cnt.holes) at 1920x1080, outdoor again at 2560x1440. Holes found (not fixed yet): Ever Grande east cliff over
+    the sea (seam with the terraces east of the map, x 38-40 rows 53-55; relief edits there do not reach it - renderer
+    edge join), Route 131 rock-wall seam, Route 118 two slits at tree bases by a cliff edge, Route 112 diagonal slit
+    (the 11-22 pinholes), Route 103 north woods wedge and south woods slit, Mauville tree-base slits, Pacifidlog sliver.
+    Far screen corners show sky at his widest zoom (asked again; 11-18 he said test-only). Crossing 8 map edges: no
+    empty-sky flash. Double-surface scan of every map (tools/voxel3ds/coplanar_all.py): room props' backs against walls
+    (hidden), water layers (intended), a few rock-mound rims / tree squares at ground height. 2D-to-3D: rooms have
+    furniture models (the 3DS "walls only" list is out of date for us); most caves, underwater maps, secret bases,
+    Battle Pyramid, Navel Rock, Oceanic Museum, Champion's room, Trainer Hill floors have no 3D (no relief, no models) -
+    asked his order. Old POLs 2/3/4/8/11/13/14/24/28/30/37/40/41/43/44/45 never ticked: asked to close.
