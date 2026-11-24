@@ -1885,6 +1885,19 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
         {
             CullBox(inst, pb->pageV[p], n);
             MeshSet(&m->terrain[p], pb->pageV[p], n, GL_STATIC_DRAW);
+            /* (test aid, 2026-11-23 region audit: WJPC_DUMP_TERRAIN_ALL=DIR writes every map's terrain as it is
+             * built, DIR/<group>_<num>.<page>, and its trees DIR/<group>_<num>.trees - tools/voxel3ds/coplanar_check.py) */
+            if (getenv("WJPC_DUMP_TERRAIN_ALL"))
+            {
+                char name[256];
+                FILE *f;
+                snprintf(name, sizeof(name), "%s/%u_%u.%u", getenv("WJPC_DUMP_TERRAIN_ALL"), inst->mapGroup, inst->mapNum, p);
+                if ((f = fopen(name, "wb")) != NULL)
+                {
+                    fwrite(pb->pageV[p], sizeof(VoxelVertex), n, f);
+                    fclose(f);
+                }
+            }
             if (getenv("WJPC_DUMP_TERRAIN") && inst->mapGroup == atoi(getenv("WJPC_DUMP_TERRAIN")) / 100
              && inst->mapNum == atoi(getenv("WJPC_DUMP_TERRAIN")) % 100)
             {
@@ -1905,6 +1918,23 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
     CullBox(inst, pb->v[2], pb->n[2]);
     MeshSet(&m->trees, pb->v[1], pb->n[1], GL_STATIC_DRAW);
     MeshSet(&m->buildings, pb->v[2], pb->n[2], GL_STATIC_DRAW);
+    if (getenv("WJPC_DUMP_TERRAIN_ALL"))
+    {
+        char name[256];
+        FILE *f;
+        snprintf(name, sizeof(name), "%s/%u_%u.trees", getenv("WJPC_DUMP_TERRAIN_ALL"), inst->mapGroup, inst->mapNum);
+        if ((f = fopen(name, "wb")) != NULL)
+        {
+            fwrite(pb->v[1], sizeof(VoxelVertex), pb->n[1], f);
+            fclose(f);
+        }
+        snprintf(name, sizeof(name), "%s/%u_%u.models", getenv("WJPC_DUMP_TERRAIN_ALL"), inst->mapGroup, inst->mapNum);
+        if ((f = fopen(name, "wb")) != NULL)
+        {
+            fwrite(pb->v[2], sizeof(VoxelVertex), pb->n[2], f);
+            fclose(f);
+        }
+    }
     {
         VoxelVertex *k = pb->n[2] ? malloc((size_t)pb->n[2] * sizeof(VoxelVertex)) : NULL;
         for (int kind = 0; kind < FACE_KINDS; kind++)
