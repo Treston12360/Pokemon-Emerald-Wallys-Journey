@@ -828,13 +828,118 @@ static void EmitReliefUV(VoxelBuilder *b, int x, int y, const int16_t *g, const 
                          float u0, float v0, float u1, float v1,
                          bool onFloor, int floor, const uint8_t *rows);
 
+/*
+ * Brennan 2026-11-24 13:14 (Shoal Cave: "The stairs ... don't look 3D ... Check and make sure stairs are 3D and that
+ * they are accessible to go up and down them"): a cave's flight of stairs (the Cave tileset's 0x204, Shoal Cave's
+ * icy 0x363) on its raised rock. Laid as its relief, every point as far south as it is high, a flight a rock's height
+ * up one cell is an upright wall with the steps drawn on it. Here it is real steps: one a quarter of its rise (4 px
+ * of a 16 px climb), tread and riser, from the floor at its top to the floor at its foot; where that is steeper than
+ * the player's path (one cell up per cell along), its foot runs on over the floor below, half a cell. The drawing
+ * is laid on it by the 45-degree screen key (z - y): its drawn steps where the real ones are. Treads lit full, risers
+ * a little darker, the flight's sides darker still. WJPC_CAVE_STAIRS_FLAT=1: the relief's wall, as before.
+ */
+extern const struct Tileset gTileset_Cave;
+
+static bool CaveStairCell(int x, int y, const VoxelMapInstance **out)
+{
+    static int sOff = -1;
+    const VoxelMapInstance *inst;
+    int m;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_CAVE_STAIRS_FLAT") != NULL;
+    if (sOff || (inst = VoxelWorld_GetInstanceAt(x, y)) == NULL || !inst->underground
+     || inst->secondaryTileset != (const void *)&gTileset_Cave)
+        return false;
+    m = VoxelWorld_GetMetatileId(x, y);
+    *out = inst;
+    return m == 0x204 || m == 0x363;
+}
+
+static void StairVertex(VoxelVertex *v, float x, float h, float z, float u, float q0, float q1,
+                        float v0, float v1, float shade)
+{
+    float q = z - h, t = q1 > q0 ? (q - q0) / (q1 - q0) : 0.0f;
+
+    t = t < 0.0f ? 0.0f : t > 1.0f ? 1.0f : t;
+    *v = (VoxelVertex){ x, h, z, u, v0 + (v1 - v0) * t, shade + 4.0f };
+}
+
+static bool EmitCaveStairs(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y, const int16_t *g,
+                           const int16_t *s, float u0, float v0, float u1, float v1)
+{
+    const int n5 = VOXEL_RELIEF_SIDE;
+    float hn = g[2] / 16.0f, hs = g[(n5 - 1) * n5 + 2] / 16.0f;
+    float zn = y + s[2] / 16.0f, zs = y + 1.0f + s[(n5 - 1) * n5 + 2] / 16.0f;
+    float rise = hn - hs, run, q0, q1;
+    int steps;
+    bool lighting = b->lighting;
+
+    if (rise < 2.0f / 16.0f)
+        return false;
+    run = zs - zn;
+    /* steeper than the path: on over the floor at its foot, if there is floor there */
+    if (run < rise * 0.5f)
+    {
+        const int16_t *below = VoxelRelief_Cell(inst, x, y + 1);
+        float fb = below != NULL ? below[2] / 16.0f : 0.0f;
+
+        if (fabsf(fb - hs) < 1.0f / 16.0f)
+            run = rise * 0.5f;
+    }
+    if (run < 1.0f / 16.0f)
+        return false;
+    zs = zn + run;
+    steps = (int)lroundf(rise * 4.0f);
+    steps = steps < 1 ? 1 : steps;
+    q0 = zn - hn;
+    q1 = zs - hs;
+    b->lighting = false;  /* (their own shades: a cave has no sun) */
+    for (int k = 0; k < steps; ++k)
+    {
+        float ht = hn - rise * k / steps, hb = hn - rise * (k + 1) / steps;
+        float za = zn + run * k / steps, zb = zn + run * (k + 1) / steps;
+        VoxelVertex p[4];
+
+        /* tread */
+        StairVertex(&p[0], x, ht, za, u0, q0, q1, v0, v1, 1.0f);
+        StairVertex(&p[1], x + 1, ht, za, u1, q0, q1, v0, v1, 1.0f);
+        StairVertex(&p[2], x + 1, ht, zb, u1, q0, q1, v0, v1, 1.0f);
+        StairVertex(&p[3], x, ht, zb, u0, q0, q1, v0, v1, 1.0f);
+        VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+        /* riser */
+        StairVertex(&p[0], x, ht, zb, u0, q0, q1, v0, v1, 0.84f);
+        StairVertex(&p[1], x + 1, ht, zb, u1, q0, q1, v0, v1, 0.84f);
+        StairVertex(&p[2], x + 1, hb, zb, u1, q0, q1, v0, v1, 0.84f);
+        StairVertex(&p[3], x, hb, zb, u0, q0, q1, v0, v1, 0.84f);
+        VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+        /* the sides: the step's block down to the foot's floor, in the flight's edge columns */
+        for (int e = 0; e < 2; ++e)
+        {
+            float sx = (float)(x + e), su = e == 0 ? u0 + (u1 - u0) / 32.0f : u1 - (u1 - u0) / 32.0f;
+
+            StairVertex(&p[0], sx, ht, za, su, q0, q1, v0, v1, 0.68f);
+            StairVertex(&p[1], sx, ht, zb, su, q0, q1, v0, v1, 0.68f);
+            StairVertex(&p[2], sx, hs, zb, su, q0, q1, v0, v1, 0.68f);
+            StairVertex(&p[3], sx, hs, za, su, q0, q1, v0, v1, 0.68f);
+            VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+        }
+    }
+    b->lighting = lighting;
+    return true;
+}
+
 static void EmitRelief(VoxelBuilder *b, int x, int y, const int16_t *g, const int16_t *s,
                        int artY, int metatile, bool onFloor, int floor, const uint8_t *rows)
 {
     float u0, v0, u1, v1;
+    const VoxelMapInstance *stairs = NULL;
 
     if (metatile >= 0 ? !MetatileUV(b, metatile, &u0, &v0, &u1, &v1)
                       : !VoxelMesh_TileUV(b, x, artY, &u0, &v0, &u1, &v1))
+        return;
+    if (artY == y && b->lift == 0.0f && CaveStairCell(x, y, &stairs)
+     && EmitCaveStairs(b, stairs, x, y, g, s, u0, v0, u1, v1))
         return;
     EmitReliefUV(b, x, y, g, s, u0, v0, u1, v1, onFloor, floor, rows);
 }

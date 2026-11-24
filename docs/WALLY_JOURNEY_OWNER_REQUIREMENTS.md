@@ -1297,3 +1297,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     vertices saw no sun: under Gamma lighting a cave's ground is now all in the light), and small holes / dark
     stretched steps where two rock cells met at different heights (cave_relief.py: they share their edge now). Upper
     floors (Shoal Cave's elevations 4 and 5) stand a rock's height up each.
+- 2026-11-24 13:14 Brennan (Shoal Cave picture): "The stairs inside of shoal cave don't look 3D. It also looks like there
+  is no pathing to go up or down them? Check and make sure stairs are 3D and that they are accessible to go up and down
+  them." Found: (1) Shoal Cave's elevation numbers are not in height order (stairs join floor 3 to floor 3, 4 to 4), so
+  N36 put floors at heights its stairs did not climb between - a cliff where the path went on. cave_relief.py now
+  sets every floor's height from its stairs (each flight one rock's height per cell of it; checked: no flight in any
+  cave disagrees). (2) A one-cell flight laid as relief is an upright wall with the steps drawn on it. N37: the Cave
+  tileset's stairs (0x204, icy 0x363) are real steps in the renderer (voxel_mesh_builder.c EmitCaveStairs; 4 steps a
+  rock's height, the foot running half a cell over the floor below; WJPC_CAVE_STAIRS_FLAT=1: as before). Walk test:
+  the player climbs from floor to floor (Shoal Cave, Victory Road B1F). Open: 9 flights (8 in Shoal Cave, 1 Artisan?)
+  end in solid rock in the game's own walking data - asked Brennan.

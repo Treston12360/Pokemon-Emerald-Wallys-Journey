@@ -43,6 +43,128 @@ DETAILS = {0x202, 0x203, 0x250, 0x262, 0x266, 0x330, 0x2D5, 0x35A, 0x21F, 0x227,
            0x217, 0x37F, 0x35B}
 
 
+STAIRS = {0x204, 0x363}   # the Cave tileset's flights of stairs (rock; Shoal Cave's ice)
+
+
+def cave_levels(W, H, mt, elev, kind, face_px):
+    """Brennan 2026-11-24 13:14 (Shoal Cave: "The stairs ... don't look 3D ... there is no pathing to go up or down
+    them"): a floor's height from how it is reached, not from its elevation number. Shoal Cave's elevations are not
+    in height order (its stairs join floors of the same number, 3 to 3, 4 to 4), so floors stood at heights their
+    stairs did not climb between - flat stairs, a cliff where the path went on. Here the floor is cut into the
+    regions a player walks without stairs (a bridge belongs to the floor at its ends); every flight of stairs (STAIRS)
+    lifts the region at its top a rock's height over the region at its foot; a region beside a bridge's length (the
+    floor it crosses) is a rock's height under the bridge. Worked out from the largest region at 0, then the lowest
+    set to 0. Returns the floor cells' heights (stairs: None) and, for a flight with rock at its foot, the heights of
+    its foot's corners."""
+    P = {c for c, k in kind.items() if k == "F"}
+    stairs = {c for c in P if mt[c[1] * W + c[0]] in STAIRS}
+    e = {c: elev[c[1] * W + c[0]] for c in P}
+    # a bridge's cells (15) take the elevation at their ends
+    seen = set()
+    for c in P:
+        if e[c] != 15 or c in seen:
+            continue
+        group, todo = [], [c]
+        seen.add(c)
+        while todo:
+            q = todo.pop()
+            group.append(q)
+            for n in ((q[0] + 1, q[1]), (q[0] - 1, q[1]), (q[0], q[1] + 1), (q[0], q[1] - 1)):
+                if n in P and e[n] == 15 and n not in seen:
+                    seen.add(n)
+                    todo.append(n)
+        xs, ys = [q[0] for q in group], [q[1] for q in group]
+        wide = max(xs) - min(xs) >= max(ys) - min(ys)
+        ends = [e[n] for q in group for n in (((q[0] - 1, q[1]), (q[0] + 1, q[1])) if wide else
+                                               ((q[0], q[1] - 1), (q[0], q[1] + 1)))
+                if n in P and e[n] not in (15,) and n not in stairs]
+        ev = max(set(ends), key=ends.count) if ends else 0
+        for q in group:
+            e[q] = ev
+            e[("bridge", q)] = wide
+    parent = {c: c for c in P if c not in stairs}
+
+    def find(c):
+        while parent[c] != c:
+            parent[c] = parent[parent[c]]
+            c = parent[c]
+        return c
+    for c in parent:
+        for n in ((c[0] + 1, c[1]), (c[0], c[1] + 1)):
+            if n in parent and (e[c] == e[n] or e[c] == 0 or e[n] == 0):
+                parent[find(c)] = find(n)
+    regions = {}
+    for c in parent:
+        regions.setdefault(find(c), []).append(c)
+    # constraints: (region a, region b, h(a) - h(b))
+    edges = []
+    runs = []
+    for c in stairs:
+        if (c[0], c[1] - 1) in stairs:
+            continue
+        run = [c]
+        while (run[-1][0], run[-1][1] + 1) in stairs:
+            run.append((run[-1][0], run[-1][1] + 1))
+        north, south = (c[0], c[1] - 1), (run[-1][0], run[-1][1] + 1)
+        runs.append((run, north, south))
+        # (a rock's height for each cell of the flight: Artisan Cave's three-cell flight climbs three - its drawn
+        # face is three cells tall)
+        if north in parent and south in parent:
+            edges.append((find(north), find(south), face_px * len(run)))
+    n_stair_edges = len(edges)
+    for c in parent:
+        if ("bridge", c) not in e:
+            continue
+        side = ((c[0], c[1] - 1), (c[0], c[1] + 1)) if e[("bridge", c)] else ((c[0] - 1, c[1]), (c[0] + 1, c[1]))
+        for n in side:
+            if n in parent and ("bridge", n) not in e and find(n) != find(c):
+                edges.append((find(c), find(n), face_px))
+    # the stairs first (they are how the player goes up and down); a bridge's "over the floor it crosses" only for
+    # the floors no stairs placed (Shoal Cave's sand under its long bridge is where its stairs climb from: level)
+    h = {}
+    for group in (edges[:n_stair_edges], edges):
+        adj = {}
+        for a, b, d in group:
+            adj.setdefault(a, []).append((b, -d))
+            adj.setdefault(b, []).append((a, d))
+        for r in sorted(regions, key=lambda r: (r not in h, -len(regions[r]))):
+            if r in h and group is edges:
+                todo = [r]
+            elif r in h:
+                continue
+            else:
+                if group is not edges and r not in adj:
+                    continue
+                h[r] = 0
+                todo = [r]
+            while todo:
+                q = todo.pop()
+                for n, d in adj.get(q, ()):
+                    # (d: h(n) - h(q))
+                    if n not in h:
+                        h[n] = h[q] + d
+                        todo.append(n)
+    for r in regions:
+        h.setdefault(r, 0)
+    for a, b, d in edges[:n_stair_edges]:
+        if h[a] - h[b] != d:
+            print("   (stairs between floors %s and %s: %d px, not %d)" % (a, b, h[a] - h[b], d))
+    low = min(h.values()) if h else 0
+    base = {}
+    for r, cells in regions.items():
+        for c in cells:
+            base[c] = h[r] - low
+    for c in stairs:
+        base[c] = None
+    # a flight with no floor at its foot: its foot a rock's height under its top
+    stair_south = {}
+    for run, north, south in runs:
+        if north in base and base[north] is not None and south not in parent:
+            for cx in (south[0], south[0] + 1):
+                stair_south[(cx, south[1])] = max(0, base[north] - face_px * len(run))
+    return base, stair_south
+
+
 def build(entry, face_px, belt_px):
     W, H = entry["width"], entry["height"]
     raw = open(os.path.join(ROOT, entry["blockdata_filepath"]), "rb").read()
@@ -68,6 +190,10 @@ def build(entry, face_px, belt_px):
             kind[(x, y)] = "F" if (not blocked[i] or (mt[i] in DETAILS and cave_set)) else "T"
             if kind[(x, y)] == "F":
                 base[(x, y)] = None if (elev[i] == 0 and not blocked[i]) else level(elev[i])
+    if cave_set:
+        base, stair_south = cave_levels(W, H, mt, elev, kind, face_px)
+    else:
+        stair_south = {}
     for (x, y), k in list(kind.items()):
         if k == "T" and kind.get((x, y + 1)) == "F":
             kind[(x, y)] = "A"
@@ -101,6 +227,9 @@ def build(entry, face_px, belt_px):
             nb = [val[n] for n in ((i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)) if n in val]
             val[(i, j)] = sum(nb) / len(nb)
 
+    # a flight of stairs with no floor at its foot (Shoal Cave's, down into the rock): its foot a rock's height down
+    for c, h in stair_south.items():
+        fh[c] = h
     # the stairs' corners: between the floor's and the bridge's, smoothly
     stair = [c for c in floor_c if c not in fh]
     for c in stair:
