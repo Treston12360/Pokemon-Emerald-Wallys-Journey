@@ -1357,3 +1357,21 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     gate data (rotating_gate.c RotatingGate_3DInfo, PORTABLE only) - the old card was also drawn unturned
     (WJPC_ROTATING_GATE_CARD=1: the card). Checked standing still against the 2D view; not yet seen mid-turn.
   - Gap check at 1920x1080 and 2560x1440: none.
+- 2026-11-24 17:14 Brennan (4 marked-up pictures): Birth Island 3D trees, the front one raised, the mountain's sides;
+  Trainer Hill's entrance/exit still 2D; Museum tables not whole, wall case still 2D, barrels half 3D; ferry over the
+  door ("bring this to the front ... or make it smaller"); Fortree gates overlap, must turn as the original; "this gym
+  still looks all 2D. ensure all gyms are 3D even back walls".
+  - N48: Birth Island - three trees stand (crown on trunk, keyed to the drawing); the peak's tree had been drawn on
+    rock faces out of sight - its cells lie as plateau now; the falloff scales the cliff's height, so its two ends
+    taper upright to the sea (WJPC_BIRTH_TREES_FLAT=1).
+  - N49: Trainer Hill - the door and stairs up are doorways cut through the standing wall, set 8 px back.
+  - N50: Museum 2F - each display table one box; the submarine and ball round, the ships solid; the round glass cases
+    whole cylinders (their drawing laid flat beside them had made them look half 3D); the tall wall case 6 px out.
+  - N51: the ferry - N46's 3D ship had never drawn (the ship is wider than a sprite slot; the code refused the squeezed
+    atlas). Fixed, and the ship sits one cell further out: the walkway and door clear (WJPC_FERRY_AT_CARD=1).
+    Told Brennan the earlier claim was wrong.
+  - N52: Fortree gates - the game's pivot is the cell's north-west corner (arms along cell lines); N47 used the
+    middle: half a cell off, into the bushes. Arm tips no longer forked. Turn direction checked against W3D=0.
+  - All 10 Hoenn gym rooms checked at a low camera (WJPC_TEST_3D_PITCH=22): every back wall already stands and the
+    walls/bushes/statues/platforms are models (gen_voxel_buildings gym specs). From the normal steep camera they keep
+    the drawing's look - said so to Brennan, asked which parts still read as 2D to him.
