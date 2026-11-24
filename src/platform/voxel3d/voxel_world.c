@@ -634,6 +634,8 @@ static void FillInstance(VoxelMapInstance *inst, const struct MapHeader *header,
     inst->indoor = header->mapType == MAP_TYPE_INDOOR
                 || header->mapType == MAP_TYPE_SECRET_BASE;
     inst->underground = header->mapType == MAP_TYPE_UNDERGROUND;
+    inst->sky = header->mapType == MAP_TYPE_TOWN || header->mapType == MAP_TYPE_CITY
+             || header->mapType == MAP_TYPE_ROUTE || header->mapType == MAP_TYPE_OCEAN_ROUTE;
     inst->lift = 0;
 }
 

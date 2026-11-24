@@ -1262,4 +1262,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   AND indoors (Brendan's house: table, chairs, sink, TV). Now the split is only for maps under the sky
   (WJPC_INSIDE_MODELS_SPLIT=1: as before). Cave floors were already right (the 2D game gives inside maps no season).
   Cave entrances are on the outside maps, which keep their winter.
+  - 07:42: "Check the pokemon centers for white tops. Any place inside should not have white tops when it's winter."
+    Checked in winter: Oldale and Lavaridge Pokemon Centers (counter, seats, table), Petalburg Mart, Birch's lab and
+    Rustboro Gym (maze walls) all had white tops before N32 and none after. The rule is now "only maps under the sky"
+    (town, city, route, ocean route - the types the 2D game gives seasons), so underwater maps are covered too. An
+    outside city (Slateport) in winter is pixel-for-pixel the same as before: its roofs keep their snow.
 - Brennan 2026-11-24 07:36: "Yes do the 3D stairs for all" (Mt. Pyre's flights drawn on wall faces).

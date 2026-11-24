@@ -4149,12 +4149,14 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
             /* (#29, only under the sky: the split is for winter snow on roofs. Brennan 2026-11-24 07:36: "Caves
              * shouldn't be turning white in winter. Only stuff outside should be as caves are inside" - a cave's
              * rocks and crystals, and a house's table, chairs, sink and TV, came out with white tops in winter;
-             * the 2D game gives inside maps no season. WJPC_INSIDE_MODELS_SPLIT: split there too, as before) */
+             * the 2D game gives inside maps no season. 07:42: "Any place inside should not have white tops when
+             * it's winter" - so only maps under the sky (MapHasNaturalLight's types): not indoors, caves, secret
+             * bases, underwater. WJPC_INSIDE_MODELS_SPLIT: split there too, as before) */
             static int sInsideSplit = -1;
             if (sInsideSplit < 0)
                 sInsideSplit = getenv("WJPC_INSIDE_MODELS_SPLIT") != NULL;
             bool split = !WinterWallsOld() && sPageTexRaw[m->buildingPage] != 0 && sPageTexRoof[m->buildingPage] != 0
-                      && (!(inst0->underground || inst0->indoor) || sInsideSplit);
+                      && (inst0->sky || sInsideSplit);
             if (split)
             {
                 kindTex[FACE_TOP] = sPageTexRoof[m->buildingPage];
