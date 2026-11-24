@@ -36,7 +36,12 @@ MAPS = {
 }
 
 
-def build(entry, stairs, plateau, rocky=()):
+# cells the collision blocks that lie as the plateau: Birth Island's peak, under its tree's crown (17:14: the tree
+# stands there in 3D; the crown's drawing had stood up as rock round its foot)
+LEVEL = {404: {(14, 3), (15, 3), (16, 3), (14, 4), (15, 4), (16, 4)}}
+
+
+def build(entry, stairs, plateau, rocky=(), level_cells=()):
     W, H = entry["width"], entry["height"]
     raw = open(os.path.join(ROOT, entry["blockdata_filepath"]), "rb").read()
     v = struct.unpack("<%dH" % (len(raw) // 2), raw)
@@ -55,6 +60,7 @@ def build(entry, stairs, plateau, rocky=()):
         todo += [(c[0] + 1, c[1]), (c[0] - 1, c[1]), (c[0], c[1] + 1), (c[0], c[1] - 1)]
     stair = {(x, y) for y in range(H) for x in range(W) if mt(x, y) in stairs}
     walk = {(x, y) for y in range(H) for x in range(W) if not blocked(x, y) and (x, y) not in stair and (x, y) not in rocky}
+    walk |= set(level_cells)
     # the pier: walkable cells joined to the island's stairs' foot going south (below the lowest stair)
     low = max(y for (_, y) in stair)
     pier = {c for c in walk if c[1] > low}
@@ -99,7 +105,10 @@ def build(entry, stairs, plateau, rocky=()):
         d = max(0.0, d2 ** 0.5 - 0.5)
         t = min(1.0, d / FALL)
         t = t * t * (3 - 2 * t)
-        corner[(cx, cy)] = min(h, int(round(top * t)))
+        # Brennan 2026-11-24 17:14 ("the right and left side of the mountain need fixed"): cut off at the falloff,
+        # the cliff's courses stood as a lumpy stair at its two ends. The whole height is scaled down instead -
+        # the cliff tapers to the sea at its ends, still upright, its courses together.
+        corner[(cx, cy)] = int(round(h * t))
     cells = {}
     for y in range(H):
         for x in range(W):
@@ -121,7 +130,7 @@ def main():
                                               "cells": {}})
         t["flags"] |= vrf.DRAWN
         t["belt"] = 0
-        t["cells"] = build(entry, stairs, plateau, rocky)
+        t["cells"] = build(entry, stairs, plateau, rocky, LEVEL.get(lid, ()))
         print("%s: %d cells lifted" % (entry["id"], len(t["cells"])))
     open(sys.argv[1], "wb").write(vrf.pack(relief))
 

@@ -1316,6 +1316,198 @@ static void EmitKeyedBox(VoxelBuilder *b, const VoxelMapInstance *inst, const Ke
     b->lighting = lighting;
 }
 
+/*
+ * A model laid on the map's own drawing (any shape): its points in the drawing's pixels - x across, z the row its
+ * foot is drawn on, h up - each showing the drawing's pixel at its 45-degree screen key (row z - h); stood on the
+ * ground at its foot (lift `lift`, the relief's shift `shift`: a point drawn on row r stands lifted and shifted, its
+ * key still r). Each triangle is cut where it crosses the drawing's cells, each piece from its own cell.
+ */
+typedef struct
+{
+    const VoxelMapInstance *inst;
+    float lift, shift;   /* tiles */
+    bool lighting;
+} KeyedSpace;
+
+static void EmitKeyedTri(VoxelBuilder *b, const KeyedSpace *k, const float p[3][3], float shade)
+{
+    /* p: x, h, z (drawing pixels); screen: sx = x / 16, sq = (z - h) / 16 (cells) */
+    float sx[3], sq[3], minx = 1e9f, maxx = -1e9f, minq = 1e9f, maxq = -1e9f;
+    float area;
+
+    for (int i = 0; i < 3; ++i)
+    {
+        sx[i] = p[i][0] / 16.0f;
+        sq[i] = (p[i][2] - p[i][1]) / 16.0f;
+        minx = fminf(minx, sx[i]); maxx = fmaxf(maxx, sx[i]);
+        minq = fminf(minq, sq[i]); maxq = fmaxf(maxq, sq[i]);
+    }
+    area = (sx[1] - sx[0]) * (sq[2] - sq[0]) - (sx[2] - sx[0]) * (sq[1] - sq[0]);
+    for (int cy = (int)floorf(minq); cy <= (int)floorf(maxq - 1e-5f); ++cy)
+        for (int cx = (int)floorf(minx); cx <= (int)floorf(maxx - 1e-5f); ++cx)
+        {
+            /* the triangle's part in this cell: (sx, sq) and its 3D point, clipped against the cell's 4 sides */
+            float poly[2][12][5];
+            int n = 3, cur = 0;
+            float u0, v0, u1, v1;
+            int mx = cx < 0 ? 0 : cx >= k->inst->width ? k->inst->width - 1 : cx;
+            int my = cy < 0 ? 0 : cy >= k->inst->height ? k->inst->height - 1 : cy;
+
+            if (fabsf(area) < 1e-6f)
+            {
+                /* edge-on to the camera: one cell, its middle's */
+                if (cx != (int)floorf((sx[0] + sx[1] + sx[2]) / 3.0f) || cy != (int)floorf((sq[0] + sq[1] + sq[2]) / 3.0f))
+                    continue;
+                for (int i = 0; i < 3; ++i)
+                {
+                    poly[0][i][0] = fminf(fmaxf(sx[i], (float)cx), cx + 1.0f);
+                    poly[0][i][1] = fminf(fmaxf(sq[i], (float)cy), cy + 1.0f);
+                    poly[0][i][2] = p[i][0]; poly[0][i][3] = p[i][1]; poly[0][i][4] = p[i][2];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 3; ++i)
+                {
+                    poly[0][i][0] = sx[i]; poly[0][i][1] = sq[i];
+                    poly[0][i][2] = p[i][0]; poly[0][i][3] = p[i][1]; poly[0][i][4] = p[i][2];
+                }
+                for (int side = 0; side < 4 && n > 0; ++side)
+                {
+                    int axis = side < 2 ? 0 : 1, m = 0;
+                    float lim = side == 0 ? (float)cx : side == 1 ? cx + 1.0f : side == 2 ? (float)cy : cy + 1.0f;
+                    bool keepAbove = side == 0 || side == 2;
+
+                    for (int i = 0; i < n && m < 11; ++i)
+                    {
+                        const float *a = poly[cur][i], *e = poly[cur][(i + 1) % n];
+                        bool ina = keepAbove ? a[axis] >= lim : a[axis] <= lim;
+                        bool ine = keepAbove ? e[axis] >= lim : e[axis] <= lim;
+
+                        if (ina)
+                        {
+                            for (int c = 0; c < 5; ++c) poly[1 - cur][m][c] = a[c];
+                            ++m;
+                        }
+                        if (ina != ine && m < 11)
+                        {
+                            float t = (lim - a[axis]) / (e[axis] - a[axis]);
+
+                            for (int c = 0; c < 5; ++c) poly[1 - cur][m][c] = a[c] + (e[c] - a[c]) * t;
+                            poly[1 - cur][m][axis] = lim;
+                            ++m;
+                        }
+                    }
+                    n = m;
+                    cur = 1 - cur;
+                }
+                if (n < 3)
+                    continue;
+            }
+            if (!MetatileUV(b, VoxelWorld_GetMetatileId(k->inst->originX + mx, k->inst->originY + my), &u0, &v0, &u1, &v1))
+                continue;
+            for (int i = 1; i + 1 < n; ++i)
+            {
+                VoxelVertex t[3];
+                int idx[3] = { 0, i, i + 1 };
+
+                for (int j = 0; j < 3; ++j)
+                {
+                    const float *q = poly[cur][idx[j]];
+                    float fx = fminf(fmaxf(q[0] - cx, 0.0f), 1.0f), fy = fminf(fmaxf(q[1] - cy, 0.0f), 1.0f);
+
+                    t[j] = (VoxelVertex){ k->inst->originX + q[2] / 16.0f, k->lift + q[3] / 16.0f,
+                                          k->inst->originY + q[4] / 16.0f + k->shift,
+                                          u0 + (u1 - u0) * fx, v0 + (v1 - v0) * fy, shade + 4.0f };
+                }
+                VoxelBuilder_Tri(b, &t[0], &t[1], &t[2]);
+            }
+        }
+}
+
+/* an upright ellipsoid (centre x, h, z; radii rx, ry up, rz) - or with ry < 0, an upright cylinder from h to h - ry -
+ * laid on the drawing; lit from above: the top in full light, the underside and the back darker */
+static void EmitKeyedRound(VoxelBuilder *b, const KeyedSpace *k, float cx, float ch, float cz, float rx, float ry,
+                           float rz, int lon, int lat, bool cylinder, float h1)
+{
+    for (int i = 0; i < lon; ++i)
+    {
+        float a0 = 6.2831853f * i / lon, a1 = 6.2831853f * (i + 1) / lon;
+
+        if (cylinder)
+        {
+            float p0[3] = { cx + rx * cosf(a0), ch, cz + rz * sinf(a0) }, p1[3] = { cx + rx * cosf(a1), ch, cz + rz * sinf(a1) };
+            float am = (a0 + a1) * 0.5f, sh = 0.78f + 0.18f * fmaxf(0.0f, sinf(am));
+            float A[3][3] = { { p1[0], h1, p1[2] }, { p0[0], h1, p0[2] }, { p0[0], ch, p0[2] } };
+            float B[3][3] = { { p1[0], h1, p1[2] }, { p0[0], ch, p0[2] }, { p1[0], ch, p1[2] } };
+
+            EmitKeyedTri(b, k, (const float (*)[3])A, sh);
+            EmitKeyedTri(b, k, (const float (*)[3])B, sh);
+            continue;
+        }
+        for (int j = 0; j < lat; ++j)
+        {
+            float b0 = 3.14159265f * j / lat - 1.5707963f, b1 = 3.14159265f * (j + 1) / lat - 1.5707963f;
+            /* (b: from the top (-pi/2) down) */
+            float P[4][3];
+            float bm = (b0 + b1) * 0.5f, am = (a0 + a1) * 0.5f;
+            float up = -sinf(bm), front = cosf(bm) * sinf(am);
+            float sh = 0.66f + 0.24f * fmaxf(0.0f, up) + 0.12f * fmaxf(0.0f, front);
+            float bb[4] = { b0, b0, b1, b1 }, aa[4] = { a1, a0, a0, a1 };
+
+            for (int q = 0; q < 4; ++q)
+            {
+                P[q][0] = cx + rx * cosf(bb[q]) * cosf(aa[q]);
+                P[q][1] = ch - ry * sinf(bb[q]);
+                P[q][2] = cz + rz * cosf(bb[q]) * sinf(aa[q]);
+            }
+            {
+                float A[3][3] = { { P[0][0], P[0][1], P[0][2] }, { P[1][0], P[1][1], P[1][2] }, { P[2][0], P[2][1], P[2][2] } };
+                float B[3][3] = { { P[0][0], P[0][1], P[0][2] }, { P[2][0], P[2][1], P[2][2] }, { P[3][0], P[3][1], P[3][2] } };
+
+                if (j > 0)
+                    EmitKeyedTri(b, k, (const float (*)[3])A, sh);
+                if (j < lat - 1)
+                    EmitKeyedTri(b, k, (const float (*)[3])B, sh);
+            }
+        }
+    }
+}
+
+/* Brennan 2026-11-24 17:14 ("Birth island needs 3D trees and the one at the front needs to be brought up as its
+ * below the ground"): its three trees (Dewford's big tree, drawn over 4 x 3 cells: a crown 46 px across over a short
+ * trunk in its round shadow) were drawn on the ground - the peak's on the rock's slope, out of sight. Each now stands:
+ * a crown 46 x 26 x 25 px (its round drawing from the game's camera) on a trunk 9 px across, at its shadow's middle.
+ * Drawing pixels of the trunk's foot. WJPC_BIRTH_TREES_FLAT=1: drawn on the ground, as before. */
+static const int16_t sBirthTrees[3][2] = { { 144, 264 }, { 352, 264 }, { 248, 88 } };
+
+static void EmitBirthTrees(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_BIRTH_TREES_FLAT") != NULL;
+    if (sOff || inst == NULL || inst->layoutId != 404)
+        return;
+    for (int i = 0; i < 3; ++i)
+    {
+        float tx = sBirthTrees[i][0], tz = sBirthTrees[i][1];
+        float wx = inst->originX + tx / 16.0f, wz = inst->originY + tz / 16.0f;
+        KeyedSpace k = { inst, 0, 0, false };
+        bool lighting = b->lighting;
+
+        if (inst->originX + (int)(tx / 16) != x || inst->originY + (int)(tz / 16) != y)
+            continue;
+        k.lift = VoxelRelief_LiftAt(wx, wz);
+        k.shift = VoxelRelief_ShiftAt(wx, wz);
+        b->lighting = false;
+        /* the trunk, then the crown: its middle over the trunk, its drawing's rows 224-259 (key 241.5 = z - h) */
+        EmitKeyedRound(b, &k, tx, 0.0f, tz - 2.0f, 4.5f, -1.0f, 3.0f, 12, 0, true, 12.0f);
+        EmitKeyedRound(b, &k, tx, tz - 2.0f - (tz - 22.5f), tz - 2.0f, 23.0f, 12.5f, 13.0f, 20, 10, false, 0.0f);
+        b->lighting = lighting;
+    }
+}
+
 static void EmitMuseumProps(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
 {
     if (!Museum2F(inst))
@@ -3935,6 +4127,7 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
             continue;
         }
         EmitMuseumProps(builder, inst, x, y);
+        EmitBirthTrees(builder, inst, x, y);
         if (shape == VOXEL_SHAPE_VOID)
             continue;
         {
