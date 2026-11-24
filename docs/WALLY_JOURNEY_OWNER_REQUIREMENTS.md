@@ -1126,9 +1126,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     Far screen corners show sky at his widest zoom (asked again; 11-18 he said test-only). Crossing 8 map edges: no
     empty-sky flash. Double-surface scan of every map (tools/voxel3ds/coplanar_all.py): room props' backs against walls
     (hidden), water layers (intended), a few rock-mound rims / tree squares at ground height. 2D-to-3D: rooms have
-    furniture models (the 3DS "walls only" list is out of date for us); most caves, underwater maps, secret bases,
-    Battle Pyramid, Navel Rock, Oceanic Museum, Champion's room, Trainer Hill floors have no 3D (no relief, no models) -
-    asked his order. Old POLs 2/3/4/8/11/13/14/24/28/30/37/40/41/43/44/45 never ticked: asked to close.
+    furniture models (the 3DS "walls only" list is out of date for us); caves and underwater maps have no hand-made
+    relief or models but their walls, ledges and trenches stand in 3D (built from their tiles - checked in the sweep
+    pictures); still flat inside: detail (Mt. Pyre's gravestones, floor rocks, seaweed). No models at all: Oceanic
+    Museum, Champion's room, Fossil Maniac's tunnel, Trainer Hill floors, Southern Island, Birth Island harbor. Asked. Old POLs 2/3/4/8/11/13/14/24/28/30/37/40/41/43/44/45 never ticked: asked to close.
   - N22 Route 118 (audit): two slits of sky by the tree bases on the grass terrace west of the river (south edge view
     20,16). Found with the new pick tool (tools/pc/gapscan/pick.py: which 3D faces lie round a pixel, from
     WJPC_DUMP_TERRAIN_ALL + WJPC_DUMP_MVP; the game now also writes <mvp>.origins, where each map is drawn): cells
