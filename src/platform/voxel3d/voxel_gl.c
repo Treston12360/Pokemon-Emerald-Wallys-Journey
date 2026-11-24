@@ -1915,10 +1915,26 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
         {
             /* (and all in the light: under Gamma's lighting a ground vertex's shade is how much of the sun it sees,
              * 0 for a slope turned from it - a dark blur where a rock top sloped down beside a face) */
+            /* Brennan 2026-11-24 14:28 ("Naval rock looks 2D"): all at the floor's light the raised rock read as
+             * flat - the cave's walls as bright as its floor (Navel Rock's pale rock above all). An upright face a
+             * little darker than the floor (by its slope: 0.8 for a wall), never black. WJPC_CAVE_FACES_FLAT=1: no. */
+            static int sFacesFlat = -1;
+            if (sFacesFlat < 0)
+                sFacesFlat = getenv("WJPC_CAVE_FACES_FLAT") != NULL;
             for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
-                for (unsigned k = 0; k < pb->pageN[p]; k++)
-                    if (pb->pageV[p][k].shade < 3.0f)
-                        pb->pageV[p][k].shade = gVoxelGammaLight ? 5.0f : pb->pageV[p][k].shade + 4.0f;
+                for (unsigned k = 0; k + 2 < pb->pageN[p]; k += 3)
+                {
+                    VoxelVertex *t = &pb->pageV[p][k];
+                    float ax = t[1].x - t[0].x, ay = t[1].y - t[0].y, az = t[1].z - t[0].z;
+                    float bx = t[2].x - t[0].x, by = t[2].y - t[0].y, bz = t[2].z - t[0].z;
+                    float nx = ay * bz - az * by, ny = az * bx - ax * bz, nz = ax * by - ay * bx;
+                    float len = sqrtf(nx * nx + ny * ny + nz * nz);
+                    float f = sFacesFlat || len <= 0.0f ? 1.0f : 0.8f + 0.2f * fabsf(ny) / len;
+
+                    for (int j = 0; j < 3; j++)
+                        if (t[j].shade < 3.0f)
+                            t[j].shade = gVoxelGammaLight ? 4.0f + f : t[j].shade * f + 4.0f;
+                }
         }
     }
     // Terrain split by atlas page (BuildPrepare), positions already quantised: uploaded as they are.

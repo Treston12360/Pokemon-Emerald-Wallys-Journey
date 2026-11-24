@@ -1329,3 +1329,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     - every blocked cell a block of its own drawing, 12 px; the Oceanic Museum 1F/2F - back wall stood upright,
     cases and benches 12 px blocks; the islands' harbor (Birth Island / Navel Rock / Faraway) - wall upright, fences
     10 px; the Champion's Room - its walls and dais 20 px. WJPC_RAISED_ROOMS_FLAT=1: flat, as before.
+  - N41: Navel Rock inside - its rock raised twice as high (cave_relief.py 422-428 --face 32 --belt 40) and, in every
+    cave, an upright face a little darker than the floor (0.8 for a wall, by its slope; WJPC_CAVE_FACES_FLAT=1: all as
+    the floor) - all at the floor's light, its pale rock read flat. (Navel Rock is drawn washed out in 2D too.)
+  - Open: Sootopolis Gym "dark shadows walls" and Fortree Gym "looks 2D" - asked Brennan which part (circle).
