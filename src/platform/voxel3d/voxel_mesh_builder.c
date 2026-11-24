@@ -1640,6 +1640,18 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
             theirH[k] += rebase16;
             any = any || ourH[k] - theirH[k] > 0.8f;
         }
+        if (getenv("WJPC_SEAM_DUMP") != NULL) // (test aid: each seam cell's two edges, point by point)
+        {
+            fprintf(stderr, "SEAM %d:%d %d %d d%d other %d:%d stands %x any %d lay %d/%d grid %d/%d ours", inst->mapGroup, inst->mapNum, x, y, d,
+                    other->mapGroup, other->mapNum, stands, (int)any, inst->layoutId, other->layoutId,
+                    VoxelRelief_Cell(inst, x, y) != NULL, VoxelRelief_Cell(other, nx, ny) != NULL);
+            for (unsigned k = 0; k < VOXEL_RELIEF_SIDE; ++k)
+                fprintf(stderr, " %.1f", ourH[k]);
+            fprintf(stderr, " theirs");
+            for (unsigned k = 0; k < VOXEL_RELIEF_SIDE; ++k)
+                fprintf(stderr, " %.1f", theirH[k]);
+            fprintf(stderr, "\n");
+        }
         if (d == 1)
         {
             /*
@@ -1770,6 +1782,51 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
                         &(VoxelVertex){wx + 1.0f, ta, za, u1,                 va, SHADE_EAST},
                         &(VoxelVertex){wx + 1.0f, la, za, u1 - (u1 - u0) * fa, va, SHADE_EAST},
                         &(VoxelVertex){wx + 1.0f, lb, zb, u1 - (u1 - u0) * fb, vb, SHADE_EAST});
+            }
+        }
+        /* Audit #20 (Brennan 2026-11-23 21:03, Route 131 / Pacifidlog: "fix this issue, use the sea around it"): down a
+         * west or east seam each row's wall stands where its row is drawn, as far south as it is high; where the next
+         * row south is a level higher it is drawn a row further south, and the slope of ground between the two rows
+         * (a cliff's face, Pacifidlog's east rocks at rows 33-34) had no wall under it: a gap onto the sky down to the
+         * sea beside it. The wall goes on from this row's south end to the next row's north end, down to the other
+         * map's edge (the sea's level there). WJPC_SEAM_ROW_GAP_OPEN=1: as before. */
+        if ((d == 2 || d == 3) && y + 1 < inst->originY + inst->height && VoxelWorld_GetInstanceAt(nx, ny + 1) == other)
+        {
+            static int sOpen = -1;
+            float nH[VOXEL_RELIEF_SIDE], nZ[VOXEL_RELIEF_SIDE], tH[VOXEL_RELIEF_SIDE], tZ[VOXEL_RELIEF_SIDE];
+            const unsigned last = VOXEL_RELIEF_SIDE - 1;
+            float zEnd, zNext;
+
+            if (sOpen < 0)
+                sOpen = getenv("WJPC_SEAM_ROW_GAP_OPEN") != NULL;
+            if (sOpen)
+                continue;
+            SeamEdge(inst, x, y + 1, d, nH, nZ, NULL);
+            SeamEdge(other, nx, ny + 1, d ^ 1, tH, tZ, NULL);
+            zEnd = (float)y + 1.0f + ourZ[last];
+            zNext = (float)y + 1.0f + nZ[0];
+            if (zNext - zEnd > 0.02f)
+            {
+                float ta = ourH[last] / 16.0f, tb = nH[0] / 16.0f;
+                float la = fminf(theirH[last], ourH[last]) / 16.0f, lb = fminf(tH[0] + rebase16, nH[0]) / 16.0f;
+                float fa = fminf(1.0f, ta - la), fb = fminf(1.0f, tb - lb);
+                float ex = d == 2 ? wx : wx + 1.0f;
+
+                if (ta - la > 0.05f || tb - lb > 0.05f)
+                {
+                    if (d == 2)
+                        VoxelBuilder_Quad(b,
+                            &(VoxelVertex){ex, ta, zEnd,  u0,                  v1, SHADE_WEST},
+                            &(VoxelVertex){ex, tb, zNext, u0,                  v1, SHADE_WEST},
+                            &(VoxelVertex){ex, lb, zNext, u0 + (u1 - u0) * fb, v1, SHADE_WEST},
+                            &(VoxelVertex){ex, la, zEnd,  u0 + (u1 - u0) * fa, v1, SHADE_WEST});
+                    else
+                        VoxelBuilder_Quad(b,
+                            &(VoxelVertex){ex, tb, zNext, u1,                  v1, SHADE_EAST},
+                            &(VoxelVertex){ex, ta, zEnd,  u1,                  v1, SHADE_EAST},
+                            &(VoxelVertex){ex, la, zEnd,  u1 - (u1 - u0) * fa, v1, SHADE_EAST},
+                            &(VoxelVertex){ex, lb, zNext, u1 - (u1 - u0) * fb, v1, SHADE_EAST});
+                }
             }
         }
     }

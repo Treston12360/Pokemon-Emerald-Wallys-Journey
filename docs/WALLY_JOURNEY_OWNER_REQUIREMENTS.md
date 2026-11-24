@@ -1192,3 +1192,16 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     and the player up to 8 px ahead of the view; new 3.9-4.1, player on the view. Test aids: WJPC_EASE_LOG=file
     (each refresh's game frame, span, easing), script "ff N" with WJPC_SCRIPT_REALTIME=1 (the real loop's fast forward).
     Picture docs/polish_reports/2026-11-23_N25_ff_smooth.png (the worked-out loop, not a screenshot).
+- 2026-11-23 N26 / #20 done (Route 131 / Pacifidlog seam, "use the sea around it"): after Sky Pillar opens Route 131
+  is drawn with LAYOUT_ROUTE131_SKY_PILLAR (relief.bin layout 319, Brennan's save has it). Its metatiles are Route
+  131's everywhere but the Sky Pillar (x 23-51, rows 0-22), but its relief was generated apart: the rock shoal by
+  Pacifidlog lay flat at sea level while Pacifidlog's half (and Route 131's own layout 47) rises in 16/32 px terraces -
+  a cliff straight down the map seam, with sky through its side. Layout 47's relief cells and cut records copied to
+  319 for the shoal (x 0-12 rows 30-37, x 0-17 rows 38-39, same metatiles only; tools/voxel3ds/
+  relief_copy_same_cells.py). Not the whole map: 47's narrow sea inlet east of the shoal (x 13-15 rows 36-37,
+  lowered water) drew dark slabs and holes, so 319 keeps its own there. Also: two pre-existing slivers at the shoal's
+  south-east end (cells 16-18, 38-39) gone. Renderer: a west/east seam's walls now also close the stretch between two
+  rows where the next row south is drawn a row further south (voxel_mesh_builder.c EmitSeamSkirt;
+  WJPC_SEAM_ROW_GAP_OPEN=1: as before) - that alone closed the hole, the relief makes the shoal one piece.
+  WJPC_SEAM_DUMP=1 (test aid) prints each seam cell's two edges. Gap test, 5 views round the shoal, 1920x1080 and
+  2560x1440: 0. Picture docs/polish_reports/2026-11-23_N26_route131_seam.png.
