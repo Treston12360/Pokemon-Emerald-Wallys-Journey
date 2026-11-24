@@ -1279,3 +1279,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   models (they cast a sun shadow in a cave) and a thin grey-green line on their sides (lit by facing).
   - 09:21 Brennan: "Why are pictures so low quality it is hard for me to see detail in them." I had shrunk them to
     half size (and some as JPG). From now on: full-size PNGs, before above after, close-ups at 2-3x.
+- 2026-11-24 10:50 Brennan: "Stairs, ladders, pokeballs in caves should be 3D".
+  - N35: item Poke Balls are a real sphere (voxel_entities.c EmitBall), as wide as the drawn ball, resting on the
+    ground, the drawing's red top / band / button / white underside where the drawing has them. Everywhere (the same
+    object outside), not only in caves. WJPC_ITEM_BALL_MOUND=1: the half-height mound from 2026-11-20.

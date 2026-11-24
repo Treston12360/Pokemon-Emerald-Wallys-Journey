@@ -1033,6 +1033,104 @@ static void EmitMound(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsign
 }
 
 /*
+ * Brennan 2026-11-24 10:50: "Stairs, ladders, pokeballs in caves should be 3D". The item ball's mound (POL-22's
+ * rule, 2026-11-20) is a dome half its drawing's height: from the game's camera it still read as a flat drawing. Now
+ * a sphere, as wide as the drawn ball, resting on the ground where the drawing's ball touched it. Each point of it
+ * shows the drawing's pixel at the same place across (its right/left) and the same 45-degree screen key (its
+ * toward-the-camera minus its up, z - y): the red top, the band, the button and the white underside fall where the
+ * drawing has them. Lit by its facing, as the mounds. WJPC_ITEM_BALL_MOUND=1: the mound, as before.
+ */
+static bool BallObject(u16 graphicsId)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_ITEM_BALL_MOUND") != NULL || getenv("WJPC_FLAT_ITEM_BALLS") != NULL;
+    return !sOff && graphicsId == OBJ_EVENT_GFX_ITEM_BALL;
+}
+
+#define VOXEL_BALL_LON 20
+#define VOXEL_BALL_LAT 12
+
+static bool EmitBall(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigned index,
+                     float cx, float cz, float rise, float rightX, float rightZ, float shade)
+{
+    unsigned baseX = (index % VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM;
+    unsigned baseY = (index / VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM;
+    const float p = 1.0f / VOXEL_PIXELS_PER_TILE;
+    int rows = VisibleRows(slot), w = slot->width;
+    int x0 = w, x1 = -1, y0 = rows, y1 = -1;
+    float lift = VoxelRelief_LiftAt(cx, cz) + rise;
+    float front = cz + VoxelRelief_ShiftAt(cx, cz);
+    float len, tx, tz, r, ccx, ccy, ccz, dw, dh;
+    VoxelVertex vtx[VOXEL_BALL_LAT + 1][VOXEL_BALL_LON + 1];
+
+    if (slot->atlasWidth != slot->width || slot->color256)
+        return false;
+    for (int y = 0; y < rows; ++y)
+        for (int x = 0; x < w; ++x)
+        {
+            unsigned sx = (unsigned)(slot->flipX ? w - 1 - x : x), sy = (unsigned)(slot->flipY ? slot->height - 1 - y : y);
+
+            if (VoxelSlots_TilePixel(slot->source, (unsigned)w, sx, sy, false) != 0)
+            {
+                x0 = x < x0 ? x : x0, x1 = x > x1 ? x : x1;
+                y0 = y < y0 ? y : y0, y1 = y > y1 ? y : y1;
+            }
+        }
+    if (x1 < 0)
+        return false;
+    len = sqrtf(rightX * rightX + rightZ * rightZ);
+    if (len <= 0.0f)
+        return false;
+    rightX /= len, rightZ /= len;
+    tx = -rightZ, tz = rightX; /* towards the camera */
+    dw = (float)(x1 + 1 - x0), dh = (float)(y1 + 1 - y0);
+    r = dw * p * 0.5f;
+    /* across: the drawn ball's middle; down: its lowest screen key (the drawing's bottom row, on the ground) is the
+     * sphere's, sqrt(2) r ahead of the centre's key - the centre a little behind where the drawing touched */
+    {
+        float mid = ((float)(x0 + x1 + 1) * 0.5f - (float)w * 0.5f) * p;
+        float touch = front - (float)(rows - (y1 + 1)) * p;
+
+        ccx = cx + rightX * mid;
+        ccz = rightZ * mid + touch - (1.41421356f - 1.0f) * r;
+        ccy = lift + r;
+        (void)tz;
+    }
+    for (int a = 0; a <= VOXEL_BALL_LAT; ++a)
+    {
+        float lat = -1.5707963f + 3.1415927f * (float)a / VOXEL_BALL_LAT;
+        float cl = cosf(lat), sl = sinf(lat);
+
+        for (int b = 0; b <= VOXEL_BALL_LON; ++b)
+        {
+            float lon = 6.2831853f * (float)b / VOXEL_BALL_LON;
+            float nr = cl * sinf(lon), nt = cl * cosf(lon), nu = sl;   /* right, towards the camera, up */
+            float nx = rightX * nr + tx * nt, nz = rightZ * nr + tz * nt;
+            float key = (nt - nu) * 0.70710678f;                       /* -1 (top) .. 1 (bottom-front) */
+            float px = (float)x0 + (nr * 0.5f + 0.5f) * dw;
+            float py = (float)y0 + (key * 0.5f + 0.5f) * dh;
+            float lit = 0.8f * nu + 0.6f * nt;
+            float sx, sy;
+
+            px = px < (float)x0 + 0.5f ? (float)x0 + 0.5f : px > (float)x1 + 0.5f ? (float)x1 + 0.5f : px;
+            py = py < (float)y0 + 0.5f ? (float)y0 + 0.5f : py > (float)y1 + 0.5f ? (float)y1 + 0.5f : py;
+            sx = slot->flipX ? (float)w - px : px;
+            sy = slot->flipY ? (float)slot->height - py : py;
+            vtx[a][b] = (VoxelVertex){ ccx + nx * r, ccy + nu * r, ccz + nz * r,
+                                       (baseX + sx) / (float)VOXEL_SPRITE_ATLAS_W,
+                                       1.0f - (baseY + sy) / (float)VOXEL_SPRITE_ATLAS_H,
+                                       shade * (0.72f + 0.28f * (lit > 0.0f ? lit : 0.0f)) };
+        }
+    }
+    for (int a = 0; a < VOXEL_BALL_LAT; ++a)
+        for (int b = 0; b < VOXEL_BALL_LON; ++b)
+            VoxelBuilder_Quad(builder, &vtx[a][b], &vtx[a][b + 1], &vtx[a + 1][b + 1], &vtx[a + 1][b]);
+    return true;
+}
+
+/*
  * Brennan 2026-11-20 23:18 (Route 121's berry patch: "the grown Berry plants ... are still rendering as flat 2D
  * sprites/billboards ... Convert all Berry growth stages ... into true 3D voxel models (with 3D foliage and 3D
  * berries hanging on the branches) centered cleanly in the dirt patches"): a berry plant past its sprout (taller,
@@ -2732,6 +2830,10 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
                            rightX, rightZ, stretch, card->shade * dusk);
             continue;
         }
+        if (BallObject(gObjectEvents[i].graphicsId) && card->deck <= 0.0f
+            && EmitBall(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f, rise,
+                        rightX, rightZ, card->shade * dusk))
+            continue;
         if (MoundObject(gObjectEvents[i].graphicsId) && card->deck <= 0.0f)
         {
             EmitMound(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f, rise,
