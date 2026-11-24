@@ -1143,6 +1143,7 @@ typedef struct
 
 static const KeyedBox sMuseum2F[] = {
     { 93, 115, 1.5f, 1.5f, 0.0f, 27.0f / 16.0f, 2.0f, 1 },                 /* the stairs behind the arch */
+    { 93, 115, 1.5f, 2.0f, 0.0f, 0.0f, 2.0f, 2 },                          /* (their foot) */
     { 88, 93, 1.5f, 2.1875f, 0.0f, 27.0f / 16.0f, 2.0f, 1 | 4 | 8 },        /* its posts */
     { 115, 120, 1.5f, 2.1875f, 0.0f, 27.0f / 16.0f, 2.0f, 1 | 4 | 8 },
     { 88, 120, 1.5f, 2.1875f, 27.0f / 16.0f, 2.0f, 2.0f, 1 | 2 | 4 | 8 },   /* its lintel */
@@ -1165,14 +1166,81 @@ static bool Museum2F(const VoxelMapInstance *inst)
     return !sOff && inst != NULL && inst->layoutId == 87;
 }
 
-/* the doorway cut through the 2F's standing wall: world x0..x1, up to hh */
-static bool MuseumHole(const VoxelMapInstance *inst, float *x0, float *x1, float *hh)
+/* Doorways cut through a standing back wall (their stairs or doors set back behind them - sRoomProps): the Museum
+ * 2F's arch; Brennan 2026-11-24 17:14 (Trainer Hill: "the background wall entrance and exit still look 2D"), the
+ * Trainer Hill floors' door and stairs up. Layout pixels across, up to hh cells. */
+typedef struct
 {
-    if (!Museum2F(inst))
+    uint16_t lo, hi;      /* layouts */
+    int16_t x0, x1;
+    float hh;
+} WallHole;
+
+static const WallHole sWallHoles[] = {
+    { 87, 87, 93, 115, 27.0f / 16.0f },
+    { 415, 418, 31, 49, 19.0f / 16.0f },
+    { 415, 418, 191, 209, 19.0f / 16.0f },
+};
+
+static bool HillWallColumn(const VoxelMapInstance *inst, int col, int *foot, int *rise);
+
+static bool WallHoleOn(const VoxelMapInstance *inst, const WallHole *h)
+{
+    int f, r;
+
+    if (inst == NULL || inst->layoutId < h->lo || inst->layoutId > h->hi)
         return false;
-    *x0 = inst->originX + 93.0f / 16.0f;
-    *x1 = inst->originX + 115.0f / 16.0f;
-    *hh = 27.0f / 16.0f;
+    if (h->lo == 87)
+        return Museum2F(inst);
+    return HillWallColumn(inst, h->x0 / 16 + 1, &f, &r);
+}
+
+/* the hole through cell column x (world): world x0..x1, up to hh */
+static bool WallHoleAt(const VoxelMapInstance *inst, int x, float *x0, float *x1, float *hh)
+{
+    for (unsigned i = 0; i < sizeof(sWallHoles) / sizeof(sWallHoles[0]); ++i)
+    {
+        const WallHole *h = &sWallHoles[i];
+        float a = inst->originX + h->x0 / 16.0f, e = inst->originX + h->x1 / 16.0f;
+
+        if (WallHoleOn(inst, h) && x + 1 > a && x < e)
+        {
+            *x0 = a;
+            *x1 = e;
+            *hh = h->hh;
+            return true;
+        }
+    }
+    return false;
+}
+
+/* a standing wall's cell quad (x..x+1, bot..top at z foot), less the hole through it: false if none cuts it */
+static bool EmitHoledWallQuad(VoxelBuilder *b, const VoxelMapInstance *inst, int x, float top, float bot, float foot,
+                              float u0, float v0, float u1, float v1, float shade)
+{
+    float hx0, hx1, hh;
+
+    if (!WallHoleAt(inst, x, &hx0, &hx1, &hh) || bot >= hh)
+        return false;
+    {
+        float cx0 = hx0 > x ? hx0 : (float)x, cx1 = hx1 < x + 1 ? hx1 : (float)(x + 1);
+        float pieces[3][4] = { { (float)x, cx0, bot, top }, { cx1, (float)(x + 1), bot, top },
+                               { cx0, cx1, hh > bot ? hh : bot, top } };
+
+        for (int k = 0; k < 3; ++k)
+        {
+            float a0 = pieces[k][0], a1 = pieces[k][1], h0 = pieces[k][2], h1 = pieces[k][3];
+            float ua = u0 + (u1 - u0) * (a0 - x), ub = u0 + (u1 - u0) * (a1 - x);
+            float va = v0 + (v1 - v0) * (top - h1), vb = v0 + (v1 - v0) * (top - h0);
+
+            if (a1 - a0 < 0.001f || h1 - h0 < 0.001f)
+                continue;
+            VoxelBuilder_Quad(b, &(VoxelVertex){ a0, h1, foot, ua, va, shade },
+                              &(VoxelVertex){ a1, h1, foot, ub, va, shade },
+                              &(VoxelVertex){ a1, h0, foot, ub, vb, shade },
+                              &(VoxelVertex){ a0, h0, foot, ua, vb, shade });
+        }
+    }
     return true;
 }
 
@@ -1508,13 +1576,34 @@ static void EmitBirthTrees(VoxelBuilder *b, const VoxelMapInstance *inst, int x,
     }
 }
 
+/* each doorway's way in, set back 8 px: the drawing inside it on its back, its floor, its jambs (the wall's edge) */
+static const KeyedBox sHillDoorways[] = {
+    { 31, 49, 1.5f, 1.5f, 0.0f, 19.0f / 16.0f, 2.0f, 1 },
+    { 31, 49, 1.5f, 2.0f, 0.0f, 0.0f, 2.0f, 2 },
+    { 29, 31, 1.5f, 2.0f, 0.0f, 19.0f / 16.0f, 2.0f, 8 },
+    { 49, 51, 1.5f, 2.0f, 0.0f, 19.0f / 16.0f, 2.0f, 4 },
+    { 191, 209, 1.5f, 1.5f, 0.0f, 19.0f / 16.0f, 2.0f, 1 },
+    { 191, 209, 1.5f, 2.0f, 0.0f, 0.0f, 2.0f, 2 },
+    { 189, 191, 1.5f, 2.0f, 0.0f, 19.0f / 16.0f, 2.0f, 8 },
+    { 209, 211, 1.5f, 2.0f, 0.0f, 19.0f / 16.0f, 2.0f, 4 },
+};
+
 static void EmitMuseumProps(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
 {
-    if (!Museum2F(inst))
-        return;
-    for (unsigned i = 0; i < sizeof(sMuseum2F) / sizeof(sMuseum2F[0]); ++i)
+    const KeyedBox *list = sMuseum2F;
+    unsigned n = sizeof(sMuseum2F) / sizeof(sMuseum2F[0]);
+    int f, r;
+
+    if (inst != NULL && inst->layoutId >= 415 && inst->layoutId <= 418 && HillWallColumn(inst, 2, &f, &r))
     {
-        const KeyedBox *k = &sMuseum2F[i];
+        list = sHillDoorways;
+        n = sizeof(sHillDoorways) / sizeof(sHillDoorways[0]);
+    }
+    else if (!Museum2F(inst))
+        return;
+    for (unsigned i = 0; i < n; ++i)
+    {
+        const KeyedBox *k = &list[i];
         int ax = inst->originX + k->x0 / 16, ay = inst->originY + (int)floorf(k->zb - 0.001f);
 
         if (ax == x && ay == y)
@@ -1531,32 +1620,10 @@ static void EmitStandingWall(VoxelBuilder *b, const VoxelMapInstance *inst, int 
     bool lighting = b->lighting;
 
     b->lighting = false;
+    if (EmitHoledWallQuad(b, inst, x, top, bot, foot, u0, v0, u1, v1, 1.0f))
     {
-        /* (a doorway cut through it - MuseumHole: the wall round it, in up to three pieces) */
-        float hx0, hx1, hh;
-
-        if (MuseumHole(inst, &hx0, &hx1, &hh) && x + 1 > hx0 && x < hx1 && bot < hh)
-        {
-            float cx0 = hx0 > x ? hx0 : (float)x, cx1 = hx1 < x + 1 ? hx1 : (float)(x + 1);
-            float pieces[3][4] = { { (float)x, cx0, bot, top }, { cx1, (float)(x + 1), bot, top },
-                                   { cx0, cx1, hh > bot ? hh : bot, top } };
-
-            for (int k = 0; k < 3; ++k)
-            {
-                float a0 = pieces[k][0], a1 = pieces[k][1], h0 = pieces[k][2], h1 = pieces[k][3];
-                float ua = u0 + (u1 - u0) * (a0 - x), ub = u0 + (u1 - u0) * (a1 - x);
-                float va = v0 + (v1 - v0) * (top - h1), vb = v0 + (v1 - v0) * (top - h0);
-
-                if (a1 - a0 < 0.001f || h1 - h0 < 0.001f)
-                    continue;
-                VoxelBuilder_Quad(b, &(VoxelVertex){ a0, h1, foot, ua, va, 1.0f },
-                                  &(VoxelVertex){ a1, h1, foot, ub, va, 1.0f },
-                                  &(VoxelVertex){ a1, h0, foot, ub, vb, 1.0f },
-                                  &(VoxelVertex){ a0, h0, foot, ua, vb, 1.0f });
-            }
-            b->lighting = lighting;
-            return;
-        }
+        b->lighting = lighting;
+        return;
     }
     VoxelBuilder_Quad(b, &(VoxelVertex){ (float)x, top, foot, u0, v0, 1.0f },
                       &(VoxelVertex){ (float)x + 1, top, foot, u1, v0, 1.0f },
@@ -1798,10 +1865,11 @@ static void EmitHillWall(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     {
         float zf = (float)inst->originY + foot, top = (float)(foot - r), bot = top - 1.0f;
 
-        VoxelBuilder_Quad(b, &(VoxelVertex){ (float)x, top, zf, u0, v0, 5.0f },
-                          &(VoxelVertex){ (float)x + 1, top, zf, u1, v0, 5.0f },
-                          &(VoxelVertex){ (float)x + 1, bot, zf, u1, v1, 5.0f },
-                          &(VoxelVertex){ (float)x, bot, zf, u0, v1, 5.0f });
+        if (!EmitHoledWallQuad(b, inst, x, top, bot, zf, u0, v0, u1, v1, 5.0f))
+            VoxelBuilder_Quad(b, &(VoxelVertex){ (float)x, top, zf, u0, v0, 5.0f },
+                              &(VoxelVertex){ (float)x + 1, top, zf, u1, v0, 5.0f },
+                              &(VoxelVertex){ (float)x + 1, bot, zf, u1, v1, 5.0f },
+                              &(VoxelVertex){ (float)x, bot, zf, u0, v1, 5.0f });
         /* its sides, this row's band of them (h bot..top): where the neighbour's wall does not stand */
         for (int e = 0; e < 2; ++e)
         {
