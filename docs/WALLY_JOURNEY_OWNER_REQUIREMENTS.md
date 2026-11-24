@@ -1205,3 +1205,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   WJPC_SEAM_ROW_GAP_OPEN=1: as before) - that alone closed the hole, the relief makes the shoal one piece.
   WJPC_SEAM_DUMP=1 (test aid) prints each seam cell's two edges. Gap test, 5 views round the shoal, 1920x1080 and
   2560x1440: 0. Picture docs/polish_reports/2026-11-23_N26_route131_seam.png.
+- 2026-11-23 22:13 (Brennan, picture of Pacifidlog's rock shoal, red box round its south front over the sea): "this
+  needs to be the same texture as the surrounding rock". N27: the front is the map's edge closed down to the sea
+  (voxel_mesh_builder.c EdgeOverBelt) in the map's commonest cliff wall (VoxelRelief_FaceTile); Pacifidlog's is
+  0x070, a slope's side with a green edge - tiled along the front, green stripes - while Route 131's part of the same
+  rocks uses the plain cliff face 0x079. Pacifidlog's face is now 0x079 (voxel_relief.c, after the face tiles are
+  counted; WJPC_PACIFIDLOG_FACE_OLD=1: as before). Picture docs/polish_reports/2026-11-23_N27_pacifidlog_rock_face.png.

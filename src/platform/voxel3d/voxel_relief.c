@@ -833,6 +833,14 @@ bool VoxelRelief_Init(void)
                 sLayouts[i].faceTile = (int)walls[best];
         k = end;
     }
+    /* Brennan 2026-11-23 22:13 (Pacifidlog's rock shoal, its south front over the sea, red box: "this needs to be the
+     * same texture as the surrounding rock"): Pacifidlog's commonest cut wall is 0x070, a slope's side with its green
+     * edge - tiled along a front it drew green stripes, beside Route 131's plain cliff face (0x079) on the same rocks.
+     * Pacifidlog's faces are Route 131's. WJPC_PACIFIDLOG_FACE_OLD=1: as before. */
+    if (getenv("WJPC_PACIFIDLOG_FACE_OLD") == NULL)
+        for (unsigned i = 0; i < sLayoutCount; ++i)
+            if (sLayouts[i].layoutId == 16 /* LAYOUT_PACIFIDLOG_TOWN */ && sLayouts[i].faceTile == 0x070)
+                sLayouts[i].faceTile = 0x079;
     for (unsigned i = 0; i < sLayoutCount; ++i)
         if (sLayouts[i].drawn && !BuildSurface(&sLayouts[i]))
         {
