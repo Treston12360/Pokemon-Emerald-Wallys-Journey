@@ -3161,6 +3161,84 @@ static bool MeshAtlasOk(const InstanceMesh *m)
         && m->atlasGen >= m->atlas->layoutGen; // POL-15: laid on an earlier growth of it: the same slots
 }
 
+/* (#28 above) a line in WallysJourney_stalls.txt: the map, the frame, why it is not drawn (at most 300 lines) */
+static void MapHiddenNote(const InstanceMesh *m, const VoxelMapInstance *inst)
+{
+    static unsigned sLines;
+    FILE *f;
+    const char *why = m->atlas == NULL ? "no atlas"
+                    : !m->atlas->valid ? "its atlas is being made again"
+                    : (m->atlas->primary != m->primary || m->atlas->secondary != m->secondary) ? "its atlas slot now holds other tile sets"
+                    : m->atlasGen < m->atlas->layoutGen ? "its atlas was laid out anew"
+                    : "other";
+    if (sLines >= 300 || (f = fopen("WallysJourney_stalls.txt", "a")) == NULL)
+        return;
+    sLines++;
+    fprintf(f, "MAP HIDDEN frame %u: map %d:%d (player on %d:%d) - %s\n", sFrame, m->mapGroup, m->mapNum,
+            VoxelWorld_Instance(0)->mapGroup, VoxelWorld_Instance(0)->mapNum, why);
+    fclose(f);
+    (void)inst;
+}
+
+/* (#28) and the other way it can look: the map ahead not drawn yet while the player is near it ("the area running
+ * into was taking too long to load"). A map the player comes within 16 tiles of while it has nothing drawn is
+ * timed; when it shows up (or leaves the world), one line: how many frames it was missing and how close the player
+ * got. */
+static void MapLateNote(const VoxelMapInstance *inst, const InstanceMesh *m)
+{
+    static struct { int g, n; uint32_t first; float closest; const char *why; } sWait[16];
+    bool shown = m != NULL && m->shown;
+    static unsigned sLines;
+    float px, pz, dx, dz, d;
+    int k, freeK = -1;
+    for (k = 0; k < 16; k++)
+    {
+        if (sWait[k].first != 0 && sWait[k].g == inst->mapGroup && sWait[k].n == inst->mapNum)
+            break;
+        if (sWait[k].first == 0 && freeK < 0)
+            freeK = k;
+    }
+    if (k < 16 && sFrame - sWait[k].first > 1200)
+        sWait[k].first = 0; // left behind long ago without showing: forgotten
+    if (shown)
+    {
+        FILE *f;
+        if (k < 16 && sWait[k].first != 0)
+        {
+            if (sLines < 300 && (f = fopen("WallysJourney_stalls.txt", "a")) != NULL)
+            {
+                sLines++;
+                fprintf(f, "MAP LATE frame %u: map %d:%d drawn after %u frames missing (%s); the player came within %.0f tiles of it\n",
+                        sFrame, inst->mapGroup, inst->mapNum, sFrame - sWait[k].first, sWait[k].why, sWait[k].closest);
+                fclose(f);
+            }
+            sWait[k].first = 0;
+        }
+        return;
+    }
+    VoxelWorld_GetPlayerWorldCoords(&px, &pz);
+    dx = px < inst->originX ? inst->originX - px : px > inst->originX + inst->width ? px - inst->originX - inst->width : 0;
+    dz = pz < inst->originY ? inst->originY - pz : pz > inst->originY + inst->height ? pz - inst->originY - inst->height : 0;
+    d = dx > dz ? dx : dz;
+    if (d > 16.0f)
+        return;
+    if (k == 16)
+    {
+        if (freeK < 0)
+            return;
+        k = freeK;
+        sWait[k].g = inst->mapGroup;
+        sWait[k].n = inst->mapNum;
+        sWait[k].first = sFrame ? sFrame : 1;
+        sWait[k].closest = d;
+        sWait[k].why = m == NULL ? "not built yet" : m->atlas == NULL ? "no atlas" : !m->atlas->valid ? "atlas being made"
+                     : (m->atlas->primary != m->primary || m->atlas->secondary != m->secondary) ? "atlas slot holds other tile sets"
+                     : m->atlasGen < m->atlas->layoutGen ? "atlas laid out anew" : "other";
+    }
+    else if (d < sWait[k].closest)
+        sWait[k].closest = d;
+}
+
 static float sFogNear = 40.0f, sFogFar = 90.0f;
 
 /* Gamma's cloud-shadow textures, loaded once (the lighting can be switched on at any time). */
@@ -4481,10 +4559,47 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
 
         if (getenv("WJPC_3D_BUILD_MS") != NULL)
             deadline = SDL_GetPerformanceCounter() + (Uint64)(atof(getenv("WJPC_3D_BUILD_MS")) * freq / 1000.0);
+        /* Brennan 2026-11-23 21:03 (#28: "going from route to city the right or left side of the screen will be blue
+         * sky for a frame or two then the rest of the map loads"): not reproduced on the test machine (11 crossings
+         * pictured every frame, none). So the stall log says it when it happens: a map drawn on one frame that is not
+         * drawn on the next while it is still one of the world's maps, and why (MapHiddenNote below). */
+        bool wasShown[MAX_INSTANCES];
         for (int i = 0; i < MAX_INSTANCES; i++)
-            sInstanceMeshes[i].shown = false;
-        for (unsigned i = 0; i < count; i++)
         {
+            wasShown[i] = sInstanceMeshes[i].used && sInstanceMeshes[i].shown;
+            sInstanceMeshes[i].shown = false;
+        }
+        /* #28 (Brennan 2026-11-23 21:03: "the area running into was taking too long to load instead of
+         * instantly"): the maps not built yet are built one at a time, and the order was the order of the current
+         * map's connections in its header: after a warp to Route 102's west end, Oldale (20+ tiles away) was built
+         * before Petalburg (7 tiles away), which then showed after the stall log's "MAP LATE" frames. Now the map
+         * underfoot first, then the others nearest the player first. WJPC_BUILD_ORDER_OLD=1: the header's order. */
+        unsigned order[MAX_VOXEL_MAP_INSTANCES];
+        {
+            static int sOrderOld = -1;
+            float gap[MAX_VOXEL_MAP_INSTANCES], px, pz;
+            if (sOrderOld < 0)
+                sOrderOld = getenv("WJPC_BUILD_ORDER_OLD") != NULL;
+            VoxelWorld_GetPlayerWorldCoords(&px, &pz);
+            for (unsigned i = 0; i < count && i < MAX_VOXEL_MAP_INSTANCES; i++)
+            {
+                const VoxelMapInstance *in = VoxelWorld_Instance(i);
+                float dx = px < in->originX ? in->originX - px : px > in->originX + in->width ? px - in->originX - in->width : 0;
+                float dz = pz < in->originY ? in->originY - pz : pz > in->originY + in->height ? pz - in->originY - in->height : 0;
+                unsigned j = i;
+                gap[i] = i == 0 ? -1.0f : dx > dz ? dx : dz;
+                order[i] = i;
+                while (!sOrderOld && j > 1 && gap[order[j - 1]] > gap[i])
+                {
+                    order[j] = order[j - 1];
+                    j--;
+                }
+                order[j] = i;
+            }
+        }
+        for (unsigned oi = 0; oi < count; oi++)
+        {
+            unsigned i = order[oi];
             const VoxelMapInstance *inst = VoxelWorld_Instance(i);
             InstanceMesh *m = MeshOf(inst->mapGroup, inst->mapNum);
             uint32_t sig = VoxelBuildings_LiveSignature(inst);
@@ -4577,6 +4692,16 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 m->originY = inst->originY;
                 m->lastUse = sFrame;
             }
+        }
+        for (unsigned i = 0; i < count; i++)
+        {
+            const VoxelMapInstance *inst = VoxelWorld_Instance(i);
+            InstanceMesh *m = MeshOf(inst->mapGroup, inst->mapNum);
+            int k = m != NULL ? (int)(m - sInstanceMeshes) : -1;
+            if (k >= 0 && wasShown[k] && !m->shown)
+                MapHiddenNote(m, inst);
+            if (i > 0 && !inst->indoor)
+                MapLateNote(inst, m);
         }
         if (backInst == NULL)
             sBackBuild.active = false; // its map left the view or moved: dropped (the worker's, when it is done)
