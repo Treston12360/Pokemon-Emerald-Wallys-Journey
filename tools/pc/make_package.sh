@@ -12,7 +12,9 @@ D="$OUT/$NAME"
 [ -f WallysJourney.exe ] || { echo "no WallysJourney.exe: run make -f Makefile.pc WIN=1 first"; exit 1; }
 rm -rf "$D" "$OUT/$NAME.zip"; mkdir -p "$D"
 cp WallysJourney.exe "$D/"; i686-w64-mingw32-strip "$D/WallysJourney.exe"
-cp "$DEPS/SDL2.dll" "$DEPS/SDL2_image.dll" "$D/"
+# (the LLVM_MINGW=1 build links SDL2 into the exe: no DLLs to copy then; the gcc build needs them next to it)
+DLLS=""
+if [ -f "$DEPS/SDL2.dll" ]; then cp "$DEPS/SDL2.dll" "$DEPS/SDL2_image.dll" "$D/"; DLLS="SDL2.dll SDL2_image.dll"; fi
 cp -r pc_data/voxel "$D/voxel"        # the 3D data (regenerate with tools/voxel3ds/README.md, then copy here)
 cp -r pc_data/music "$D/music"        # ENG-MP3: MP3 songs (music/MUS_NAME.mp3) + how-to README
 printf '@echo off\r\ncd /d "%%~dp0"\r\nset WJPC_3D=1\r\nstart "" WallysJourney.exe\r\n' > "$D/Play in 3D.bat"
@@ -27,7 +29,7 @@ Your files: copy your WallysJourney.cfg (settings) and WallysJourney.sav (save) 
 Old GBA .sav files import: name it WallysJourney.sav and put it next to the exe.
 R
 (cd "$OUT" && zip -qr "$NAME.zip" "$NAME")
-for f in WallysJourney.exe SDL2.dll SDL2_image.dll voxel/buildings.bin voxel/relief.bin voxel/regions.bin \
+for f in WallysJourney.exe $DLLS voxel/buildings.bin voxel/relief.bin voxel/regions.bin \
          voxel/signposts.bin voxel/trees.rgba5551 voxel/gamma_clouds.bin README.txt music/README.txt; do
     [ -e "$D/$f" ] || { echo "MISSING $f"; exit 1; }
 done
