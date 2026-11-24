@@ -1934,6 +1934,13 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
             fwrite(pb->v[2], sizeof(VoxelVertex), pb->n[2], f);
             fclose(f);
         }
+        /* where the map is drawn (MeshDraw's offset), for tools/pc/gapscan/pick.py with WJPC_DUMP_MVP */
+        snprintf(name, sizeof(name), "%s/%u_%u.origin", getenv("WJPC_DUMP_TERRAIN_ALL"), inst->mapGroup, inst->mapNum);
+        if ((f = fopen(name, "w")) != NULL)
+        {
+            fprintf(f, "%d %d\n", inst->originX, inst->originY);
+            fclose(f);
+        }
     }
     {
         VoxelVertex *k = pb->n[2] ? malloc((size_t)pb->n[2] * sizeof(VoxelVertex)) : NULL;
@@ -3960,6 +3967,21 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
             fwrite(mvp, sizeof(float), 16, f);
             fwrite(extra, sizeof(float), 4, f);
             fclose(f);
+        }
+        /* (with it, where each shown map is drawn this frame: "<mvp file>.origins", lines "group num x z",
+         * for tools/pc/gapscan/pick.py - a map's origin moves when the world is recentred) */
+        {
+            char name[256];
+            snprintf(name, sizeof(name), "%s.origins", getenv("WJPC_DUMP_MVP"));
+            f = fopen(name, "w");
+            if (f != NULL)
+            {
+                for (int i = 0; i < MAX_INSTANCES; i++)
+                    if (sInstanceMeshes[i].used && sInstanceMeshes[i].shown)
+                        fprintf(f, "%d %d %d %d\n", sInstanceMeshes[i].mapGroup, sInstanceMeshes[i].mapNum,
+                                sInstanceMeshes[i].originX, sInstanceMeshes[i].originY);
+                fclose(f);
+            }
         }
     }
     sHaveFieldMvp = !sBattleMode;

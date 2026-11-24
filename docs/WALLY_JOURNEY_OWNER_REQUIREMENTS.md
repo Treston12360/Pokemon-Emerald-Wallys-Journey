@@ -1129,3 +1129,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     furniture models (the 3DS "walls only" list is out of date for us); most caves, underwater maps, secret bases,
     Battle Pyramid, Navel Rock, Oceanic Museum, Champion's room, Trainer Hill floors have no 3D (no relief, no models) -
     asked his order. Old POLs 2/3/4/8/11/13/14/24/28/30/37/40/41/43/44/45 never ticked: asked to close.
+  - N22 Route 118 (audit): two slits of sky by the tree bases on the grass terrace west of the river (south edge view
+    20,16). Found with the new pick tool (tools/pc/gapscan/pick.py: which 3D faces lie round a pixel, from
+    WJPC_DUMP_TERRAIN_ALL + WJPC_DUMP_MVP; the game now also writes <mvp>.origins, where each map is drawn): cells
+    (4,13) and (6,14) are small relief bumps (0-6 px) under trees; a tree's ground square replaces the cell's ground and
+    lies flat at the cell's centre height, so beside the flat neighbours it floated open. Both cells flat now
+    (relief.bin layout 34). Gap test Route 118 (7 views, 1920x1080 and 2560x1440): 0 everywhere (was 276 and 187).
+    Picture docs/polish_reports/2026-11-23_N22_route118_slits.png.
