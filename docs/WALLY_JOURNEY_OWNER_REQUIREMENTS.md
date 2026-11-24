@@ -1232,3 +1232,5 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     at x=38. WJPC_BELT_TREE_STEPS=1 / WJPC_FIELD_SOUTH_OLD=1 shrink it (716 -> 421 / 320 px), others no change. A wall
     from an own-wood floor up to the field (WoodFieldWalls) had no effect: the flat strip is not an own-wood floor and
     EmitFieldCell's dump (WJPC_FIELD_DUMP) prints no cells there - what lays it is still to find.
+- 2026-11-23 23:15 Brennan (asked: keep digging at #22/#23 or move on): "Move on, come back later" - #29 caves and
+  #30 rooms now, #22/#23 afterwards.
