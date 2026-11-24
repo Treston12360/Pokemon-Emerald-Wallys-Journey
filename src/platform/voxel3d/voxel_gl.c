@@ -4099,6 +4099,28 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
             if (sBeltDrawn[l] != NULL && sBeltDrawn[l]->valid && sBeltDrawn[l]->layoutGen <= sBeltDrawnGen[l])
                 for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
                     MeshDraw(&sBeltTerrain[l][p], sBeltDrawn[l]->tex[p], (float)sBeltShiftX, 0, (float)sBeltShiftZ);
+        if (getenv("WJPC_DUMP_MVP")) /* (test aid: each belt layer's state this frame, "<mvp>.belt": layer, its mesh's
+                                      * vertices per page, whether drawn and why not) */
+        {
+            char name[256];
+            FILE *bf;
+            snprintf(name, sizeof(name), "%s.belt", getenv("WJPC_DUMP_MVP"));
+            if ((bf = fopen(name, "w")) != NULL)
+            {
+                for (unsigned l = 0; l < BELT_LAYERS; l++)
+                {
+                    unsigned n = 0;
+                    for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+                        n += sBeltTerrain[l][p].count;
+                    fprintf(bf, "layer %u verts %u atlas %s valid %d layoutGen %u drawnGen %u\n", l, n,
+                            l == 0 ? (sBeltAtlas ? "yes" : "no") : (sBeltDrawn[l] ? "yes" : "no"),
+                            l == 0 ? 1 : (sBeltDrawn[l] ? sBeltDrawn[l]->valid : -1),
+                            l == 0 ? 0u : (sBeltDrawn[l] ? (unsigned)sBeltDrawn[l]->layoutGen : 0u),
+                            (unsigned)sBeltDrawnGen[l]);
+                }
+                fclose(bf);
+            }
+        }
         MeshDraw(&sBeltTrees, sTreeTex, (float)sBeltShiftX, 0, (float)sBeltShiftZ);
     }
     // POL-48: Ninja Boys hidden as a tree, as the 3D small tree (voxel_entities.c noted their cells this frame)
