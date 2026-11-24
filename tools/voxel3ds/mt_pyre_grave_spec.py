@@ -45,6 +45,10 @@
 #          deep = 12 if kind == "door" else 16
 #          pieces.append(stairwell("stairwell_%s_%s_%d" % (tag, kind, x), x + 7, x + 39, foot, foot - deep, 21,
 #                                  (x + 7, y0 + 12, x + 39, foot), y0))
+#          if kind == "stairs":
+#              # (Brennan 2026-11-24 07:36 "Yes do the 3D stairs for all": the flight in the alcove, drawn in its
+#              # opening's 20 rows under the lintel, as 4 real steps rising to the alcove's back)
+#              pieces += mt_pyre_steps("%s_%d" % (tag, x), x + 7, x + 39, foot, rise=3, tread=2, back=foot - deep)
 #      edge = x0
 #      for a, b in stand + [(x1, x1)]:
 #          if a > edge:
@@ -60,12 +64,14 @@
 #      return pieces
 #  
 #  
-#  def mt_pyre_steps(tag, x0, x1, foot, steps=4, rise=3, tread=5):
+#  def mt_pyre_steps(tag, x0, x1, foot, steps=4, rise=3, tread=5, back=None):
 #      """(#29 look test, Brennan 2026-11-24 07:15: "show me what 3D stairs would look like" at Mt. Pyre): a flight
 #      drawn on a wall's face (x0..x1, its bottom on row `foot`) stood as real steps: each a slab `rise` px tall whose
 #      front is the drawing's dark band and whose top (`tread` px deep) its light one, so the GBA's 45-degree view of
-#      them is the drawing, row for row (v = z - y): steps x (rise + tread) rows of it."""
-#      back = foot - steps * tread
+#      them is the drawing, row for row (v = z - y): steps x (rise + tread) rows of it. `back`: the Z they all run
+#      back to (a stairway alcove's back wall; the top step's top is then deep, under the lintel), else the last
+#      step's."""
+#      back = foot - steps * tread if back is None else back
 #      return [piece("steps_%s" % tag, [(x0, foot - steps * (rise + tread), x1, foot)], steps * rise,
 #                    plan=[("step%d" % k, [(x0, back), (x1, back), (x1, foot - k * tread), (x0, foot - k * tread)],
 #                           k * rise, (k + 1) * rise, (x0, x1, foot)) for k in range(steps)])]
@@ -91,7 +97,8 @@
 #
 #    (4) 2026-11-24 07:36 Brennan: "Yes do the 3D stairs for all": the flights drawn on the 4F/5F/6F front walls
 #    stand as real steps (mt_pyre_steps; the wall leaves those stretches to them: `steps=`). The 1F hall's and
-#    the 4F/5F upper walls' `solid` stretches are wall ends, not stairs.
+#    the 4F/5F upper walls' `solid` stretches are wall ends, not stairs. The stairways up (the alcoves, `stairs=`, on
+#    1F-5F) too: 4 steps, 3 px rise / 2 px tread, the top one running back to the alcove's back wall.
 #
 #    and in SPECS, before the "mt_pyre_grave" entry:
 #    ] + [

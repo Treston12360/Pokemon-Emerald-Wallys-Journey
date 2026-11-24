@@ -1270,3 +1270,5 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
 - Brennan 2026-11-24 07:36: "Yes do the 3D stairs for all" (Mt. Pyre's flights drawn on wall faces).
   - N33: done for the three flights drawn on wall faces - 4F front (wide), 5F front and 6F front (narrow): each 4
     real steps (tools/voxel3ds/mt_pyre_grave_spec.py, mt_pyre_steps). Pictures sent.
+  - N33b: and the stairways up to the next floor (the alcoves on 1F-5F): 4 real steps each, rising to the alcove's
+    back wall (3 px rise, 2 px tread: the alcove's 20 drawn rows). Mt. Pyre has no other drawn stairs.
