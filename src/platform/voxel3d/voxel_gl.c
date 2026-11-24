@@ -4146,14 +4146,15 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
                 wj_glUniform1f(sUniGlowStrength, 1.0f);
             }
             GLuint kindTex[FACE_KINDS] = { page, page, page };
-            /* (#29, not in a cave: the split is for winter snow on roofs under the sky - a cave's rocks and
-             * crystals would have come out with white tops in winter, its floor not (the 2D game gives caves no
-             * season). WJPC_CAVE_MODELS_SPLIT: split as a town's) */
-            static int sCaveSplit = -1;
-            if (sCaveSplit < 0)
-                sCaveSplit = getenv("WJPC_CAVE_MODELS_SPLIT") != NULL;
+            /* (#29, only under the sky: the split is for winter snow on roofs. Brennan 2026-11-24 07:36: "Caves
+             * shouldn't be turning white in winter. Only stuff outside should be as caves are inside" - a cave's
+             * rocks and crystals, and a house's table, chairs, sink and TV, came out with white tops in winter;
+             * the 2D game gives inside maps no season. WJPC_INSIDE_MODELS_SPLIT: split there too, as before) */
+            static int sInsideSplit = -1;
+            if (sInsideSplit < 0)
+                sInsideSplit = getenv("WJPC_INSIDE_MODELS_SPLIT") != NULL;
             bool split = !WinterWallsOld() && sPageTexRaw[m->buildingPage] != 0 && sPageTexRoof[m->buildingPage] != 0
-                      && (!inst0->underground || sCaveSplit);
+                      && (!(inst0->underground || inst0->indoor) || sInsideSplit);
             if (split)
             {
                 kindTex[FACE_TOP] = sPageTexRoof[m->buildingPage];

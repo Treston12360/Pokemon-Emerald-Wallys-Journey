@@ -1250,9 +1250,16 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   crystals (spec cave_crystal) stand as models in the 14 caves that had none (Granite Cave, Victory Road 1F/B1F,
   Desert Underpass, Cave of Origin, Seafloor Cavern Room 2, Shoal Cave stairs room, Artisan, Terra, Altering Cave):
   tools/voxel3ds/cave_detail_spec.py. A cave's models are not lit by the sun's facing (voxel_building.c UnlitCave:
-  they came out black), and their tops do not take the winter roof snow (voxel_gl.c). Known: the models read a
+  they came out black). Known: the models read a
   little paler than the same rock painted on the floor (Victory Road, Desert Underpass) - the floor's colour is not
   coming from the season (caves have none) nor the light (checked: the same shade); still to find.
 - 2026-11-24 07:15 Brennan: "Can you show me what 3D stairs would look like Mt pyre?" - test made on 4F's wide flight
   (mt_pyre_steps: 4 slabs, 3 px rise / 5 px tread, so the 45-degree view is the drawing row for row); pictures sent,
   not committed until he says.
+- 2026-11-24 07:36 Brennan: "Caves shouldn't be turning white in winter. Only stuff outside should be as caves are
+  inside. Only thing that should maybe be white with snow would be around the entrances of caves." Found in winter
+  (season 3) tests: the winter roof snow (voxel_gl.c, B6 split) whitened the tops of models in caves (the new rocks)
+  AND indoors (Brendan's house: table, chairs, sink, TV). Now the split is only for maps under the sky
+  (WJPC_INSIDE_MODELS_SPLIT=1: as before). Cave floors were already right (the 2D game gives inside maps no season).
+  Cave entrances are on the outside maps, which keep their winter.
+- Brennan 2026-11-24 07:36: "Yes do the 3D stairs for all" (Mt. Pyre's flights drawn on wall faces).
