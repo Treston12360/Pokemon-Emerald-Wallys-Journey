@@ -1048,6 +1048,8 @@ static int HillPlainFloor(int m)
     return -1;
 }
 
+static bool MuseumPropCell(const VoxelMapInstance *inst, int x, int y, bool *carpet);
+#define MUSEUM_CARPET 7
 #define HILL_STONE 4
 #define HILL_PILLAR 5
 #define HILL_CAP 6
@@ -1063,6 +1065,12 @@ static int RaisedBlockCell(const VoxelMapInstance *inst, int x, int y, float *he
 
     if (r == NULL)
         return 0;
+    {
+        bool carpet;
+
+        if (MuseumPropCell(inst, x, y, &carpet))
+            return carpet ? MUSEUM_CARPET : 0;
+    }
     if (HillWallColumn(inst, x - inst->originX, &foot, &rise) && y - inst->originY < foot)
     {
         *height = (float)rise;
@@ -1117,6 +1125,211 @@ static int RaisedBlockCell(const VoxelMapInstance *inst, int x, int y, float *he
     return 1;
 }
 
+/* Brennan 2026-11-24 14:55 (the Oceanic Museum 2F circled: the door arch, the pillar, the cases on the wall "flat on
+ * the back wall", the computers "cut off"). Each a box read off the drawing - from the game's camera each point shows
+ * the drawing's pixel at its 45-degree screen key (q = z - h), so a box whose front and top are where the drawing's
+ * front and top are: the case on the wall 8 px deep and 16 tall (its glass top, then its front and its base), the
+ * pillar the wall's height and 2 cells deep (its white top, its lilac front), each computer's desk 7 px tall with its
+ * top back to the monitor, and the monitor on it. The arch: a doorway cut through the standing wall, its stairs
+ * 8 px behind it, the frame's posts and lintel standing 3 px out. Layout pixels (x) and cells (z, h).
+ * WJPC_MUSEUM_FLAT=1: as N40. */
+typedef struct
+{
+    int16_t x0, x1;        /* layout pixels */
+    float za, zb, h0, h1;  /* cells from the map's north edge; up */
+    float zKey;            /* the front's drawing as if it stood here (0: at zb) */
+    uint8_t faces;         /* 1 front, 2 top, 4 west, 8 east */
+} KeyedBox;
+
+static const KeyedBox sMuseum2F[] = {
+    { 93, 115, 1.5f, 1.5f, 0.0f, 27.0f / 16.0f, 2.0f, 1 },                 /* the stairs behind the arch */
+    { 88, 93, 1.5f, 2.1875f, 0.0f, 27.0f / 16.0f, 2.0f, 1 | 4 | 8 },        /* its posts */
+    { 115, 120, 1.5f, 2.1875f, 0.0f, 27.0f / 16.0f, 2.0f, 1 | 4 | 8 },
+    { 88, 120, 1.5f, 2.1875f, 27.0f / 16.0f, 2.0f, 2.0f, 1 | 2 | 4 | 8 },   /* its lintel */
+    { 128, 160, 2.0f, 2.5f, 0.0f, 1.0f, 0.0f, 1 | 2 | 4 | 8 },              /* the cases on the wall */
+    { 240, 272, 2.0f, 2.5f, 0.0f, 1.0f, 0.0f, 1 | 2 | 4 | 8 },
+    { 288, 320, 2.0f, 2.5f, 0.0f, 1.0f, 0.0f, 1 | 2 | 4 | 8 },
+    { 160, 176, 2.0f, 4.0f, 0.0f, 2.0f, 0.0f, 1 | 2 | 4 | 8 },              /* the pillar */
+    { 192, 216, 4.1875f, 5.0f, 0.0f, 7.0f / 16.0f, 0.0f, 1 | 2 | 4 | 8 },   /* the computers: desk, monitor */
+    { 195, 207, 4.5f, 4.6875f, 7.0f / 16.0f, 1.0f, 0.0f, 1 | 2 | 4 | 8 },
+    { 240, 264, 4.1875f, 5.0f, 0.0f, 7.0f / 16.0f, 0.0f, 1 | 2 | 4 | 8 },
+    { 243, 255, 4.5f, 4.6875f, 7.0f / 16.0f, 1.0f, 0.0f, 1 | 2 | 4 | 8 },
+};
+
+static bool Museum2F(const VoxelMapInstance *inst)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_MUSEUM_FLAT") != NULL || getenv("WJPC_RAISED_ROOMS_FLAT") != NULL;
+    return !sOff && inst != NULL && inst->layoutId == 87;
+}
+
+/* the doorway cut through the 2F's standing wall: world x0..x1, up to hh */
+static bool MuseumHole(const VoxelMapInstance *inst, float *x0, float *x1, float *hh)
+{
+    if (!Museum2F(inst))
+        return false;
+    *x0 = inst->originX + 93.0f / 16.0f;
+    *x1 = inst->originX + 115.0f / 16.0f;
+    *hh = 27.0f / 16.0f;
+    return true;
+}
+
+/* the computers' cells: the plain carpet (each is drawn by its desk and monitor) */
+static bool MuseumPropCell(const VoxelMapInstance *inst, int x, int y, bool *carpet)
+{
+    int c = x - inst->originX, r = y - inst->originY;
+
+    if (!Museum2F(inst))
+        return false;
+    *carpet = (r == 3 || r == 4) && (c == 12 || c == 13 || c == 15 || c == 16);
+    return *carpet || (c == 10 && (r == 2 || r == 3));   /* (the pillar's: inside it) */
+}
+
+/* a rectangle of a face cut where it crosses the drawing's cells: `pt(s, t)` its point, `key(s, t)` its pixel column
+ * and screen row; s splits at sCuts, t at tCuts (both sorted, ends included) */
+typedef struct
+{
+    float x0, x1, z0, z1, h0, h1;   /* world */
+    int kind;                       /* 0 front (s: x, t: h), 1 top (s: x, t: z), 2 side (s: z, t: h) */
+    float pxEdge, zKey, hTop;
+} KeyedFace;
+
+static void KeyedFacePoint(const KeyedFace *f, const VoxelMapInstance *inst, float s, float t, VoxelVertex *v,
+                           float *px, float *q)
+{
+    if (f->kind == 0)
+    {
+        *v = (VoxelVertex){ s, t, f->z0, 0, 0, 0 };
+        *px = (s - inst->originX) * 16.0f;
+        *q = f->zKey - inst->originY - t;
+    }
+    else if (f->kind == 1)
+    {
+        *v = (VoxelVertex){ s, f->hTop, t, 0, 0, 0 };
+        *px = (s - inst->originX) * 16.0f;
+        *q = t - inst->originY - f->hTop;
+    }
+    else
+    {
+        *v = (VoxelVertex){ f->x0, t, s, 0, 0, 0 };
+        *px = f->pxEdge;
+        *q = f->zKey - inst->originY - t;   /* (the front's edge at the same height, stretched back) */
+    }
+}
+
+static int CutsBetween(float a, float e, float off, float *out, int max)
+{
+    int n = 0;
+
+    out[n++] = a;
+    for (float k = floorf(a - off) + 1.0f; k + off < e - 0.0005f && n < max - 1; k += 1.0f)
+        if (k + off > a + 0.0005f)
+            out[n++] = k + off;
+    out[n++] = e;
+    return n;
+}
+
+static void EmitKeyedFace(VoxelBuilder *b, const VoxelMapInstance *inst, const KeyedFace *f, float s0, float s1,
+                          float t0, float t1, float sOff, float tOff, bool flip, float shade)
+{
+    float sc[24], tc[24];
+    int ns = CutsBetween(s0, s1, sOff, sc, 24), nt = CutsBetween(t0, t1, tOff, tc, 24);
+
+    for (int i = 0; i + 1 < ns; ++i)
+        for (int j = 0; j + 1 < nt; ++j)
+        {
+            float sm = (sc[i] + sc[i + 1]) * 0.5f, tm = (tc[j] + tc[j + 1]) * 0.5f, pxm, qm;
+            VoxelVertex p[4], dummy;
+            float ss[4] = { sc[i], sc[i + 1], sc[i + 1], sc[i] }, tt[4] = { tc[j + 1], tc[j + 1], tc[j], tc[j] };
+            int cx, cy;
+            float u0, v0, u1, v1;
+
+            /* the cell this piece reads (its middle's) */
+            KeyedFacePoint(f, inst, sm, tm, &dummy, &pxm, &qm);
+            cx = (int)floorf(pxm / 16.0f);
+            cy = (int)floorf(qm < 0.0f ? 0.0f : qm);
+            if (cx < 0) cx = 0;
+            if (cx >= inst->width) cx = inst->width - 1;
+            if (cy >= inst->height) cy = inst->height - 1;
+            if (!MetatileUV(b, VoxelWorld_GetMetatileId(inst->originX + cx, inst->originY + cy), &u0, &v0, &u1, &v1))
+                continue;
+            for (int k = 0; k < 4; ++k)
+            {
+                float px, q, fx, fy;
+
+                KeyedFacePoint(f, inst, ss[k], tt[k], &p[k], &px, &q);
+                fx = px / 16.0f - cx;
+                fy = q - cy;
+                fx = fx < 0.0f ? 0.0f : fx > 1.0f ? 1.0f : fx;
+                fy = fy < 0.0f ? 0.0f : fy > 1.0f ? 1.0f : fy;
+                p[k].u = u0 + (u1 - u0) * fx;
+                p[k].v = v0 + (v1 - v0) * fy;
+                p[k].shade = shade + 4.0f;
+            }
+            if (flip)
+                VoxelBuilder_Quad(b, &p[1], &p[0], &p[3], &p[2]);
+            else
+                VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+        }
+}
+
+static void EmitKeyedBox(VoxelBuilder *b, const VoxelMapInstance *inst, const KeyedBox *k)
+{
+    float ox = (float)inst->originX, oy = (float)inst->originY;
+    float x0 = ox + k->x0 / 16.0f, x1 = ox + k->x1 / 16.0f, za = oy + k->za, zb = oy + k->zb;
+    float zKey = oy + (k->zKey > 0.0f ? k->zKey : k->zb);
+    bool lighting = b->lighting;
+
+    b->lighting = false;
+    if (k->faces & 1)
+    {
+        /* front: s = x (cut at cells), t = h (cut where q = zKey - h crosses a row: h = zKey - oy - n) */
+        KeyedFace f = { x0, x1, zb, zb, k->h0, k->h1, 0, 0, zKey, 0 };
+        float tOff = zKey - oy - floorf(zKey - oy);
+
+        EmitKeyedFace(b, inst, &f, x0, x1, k->h0, k->h1, ox - floorf(ox), tOff, false, 1.0f);
+    }
+    if ((k->faces & 2) && k->zb > k->za)
+    {
+        /* top: s = x, t = z (cut where q = z - oy - h crosses a row) */
+        KeyedFace f = { x0, x1, za, zb, k->h1, k->h1, 1, 0, zKey, k->h1 };
+        float tOff = oy + k->h1 - floorf(oy + k->h1);
+
+        EmitKeyedFace(b, inst, &f, x0, x1, za, zb, ox - floorf(ox), tOff, true, 1.0f);
+    }
+    for (int e = 0; e < 2; ++e)
+    {
+        float tOff = zKey - oy - floorf(zKey - oy);
+
+        if (!(k->faces & (e == 0 ? 4 : 8)) || k->zb <= k->za)
+            continue;
+        {
+            /* a side: s = z, t = h; the front's edge column stretched back */
+            KeyedFace f = { e == 0 ? x0 : x1, e == 0 ? x0 : x1, za, zb, k->h0, k->h1, 2,
+                            e == 0 ? k->x0 + 0.5f : k->x1 - 0.5f, zKey, 0 };
+
+            EmitKeyedFace(b, inst, &f, za, zb, k->h0, k->h1, 0.0f, tOff, e == 1, e == 0 ? 0.86f : 0.78f);
+        }
+    }
+    b->lighting = lighting;
+}
+
+static void EmitMuseumProps(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    if (!Museum2F(inst))
+        return;
+    for (unsigned i = 0; i < sizeof(sMuseum2F) / sizeof(sMuseum2F[0]); ++i)
+    {
+        const KeyedBox *k = &sMuseum2F[i];
+        int ax = inst->originX + k->x0 / 16, ay = inst->originY + (int)floorf(k->zb - 0.001f);
+
+        if (ax == x && ay == y)
+            EmitKeyedBox(b, inst, k);
+    }
+}
+
 /* a cell of a room's back wall, stood upright at the wall's foot (row `rows`): its drawing's rows as they rise */
 static void EmitStandingWall(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y, float rows,
                              float u0, float v0, float u1, float v1)
@@ -1126,6 +1339,33 @@ static void EmitStandingWall(VoxelBuilder *b, const VoxelMapInstance *inst, int 
     bool lighting = b->lighting;
 
     b->lighting = false;
+    {
+        /* (a doorway cut through it - MuseumHole: the wall round it, in up to three pieces) */
+        float hx0, hx1, hh;
+
+        if (MuseumHole(inst, &hx0, &hx1, &hh) && x + 1 > hx0 && x < hx1 && bot < hh)
+        {
+            float cx0 = hx0 > x ? hx0 : (float)x, cx1 = hx1 < x + 1 ? hx1 : (float)(x + 1);
+            float pieces[3][4] = { { (float)x, cx0, bot, top }, { cx1, (float)(x + 1), bot, top },
+                                   { cx0, cx1, hh > bot ? hh : bot, top } };
+
+            for (int k = 0; k < 3; ++k)
+            {
+                float a0 = pieces[k][0], a1 = pieces[k][1], h0 = pieces[k][2], h1 = pieces[k][3];
+                float ua = u0 + (u1 - u0) * (a0 - x), ub = u0 + (u1 - u0) * (a1 - x);
+                float va = v0 + (v1 - v0) * (top - h1), vb = v0 + (v1 - v0) * (top - h0);
+
+                if (a1 - a0 < 0.001f || h1 - h0 < 0.001f)
+                    continue;
+                VoxelBuilder_Quad(b, &(VoxelVertex){ a0, h1, foot, ua, va, 1.0f },
+                                  &(VoxelVertex){ a1, h1, foot, ub, va, 1.0f },
+                                  &(VoxelVertex){ a1, h0, foot, ub, vb, 1.0f },
+                                  &(VoxelVertex){ a0, h0, foot, ua, vb, 1.0f });
+            }
+            b->lighting = lighting;
+            return;
+        }
+    }
     VoxelBuilder_Quad(b, &(VoxelVertex){ (float)x, top, foot, u0, v0, 1.0f },
                       &(VoxelVertex){ (float)x + 1, top, foot, u1, v0, 1.0f },
                       &(VoxelVertex){ (float)x + 1, bot, foot, u1, v1, 1.0f },
@@ -3694,6 +3934,7 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
             EmitTreeStep(builder, inst, x, y);
             continue;
         }
+        EmitMuseumProps(builder, inst, x, y);
         if (shape == VOXEL_SHAPE_VOID)
             continue;
         {
@@ -3712,6 +3953,20 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                     EmitHillPillar(builder, inst, x, y, u0, v0, u1, v1);
                 else if (raised == HILL_CAP)
                     EmitHillFloor(builder, inst, x, y, u0, v0, u1, v1);
+                else if (raised == MUSEUM_CARPET)
+                {
+                    bool lighting = builder->lighting;
+
+                    if (MetatileUV(builder, 0x201, &u0, &v0, &u1, &v1))
+                    {
+                        builder->lighting = false;
+                        VoxelBuilder_Quad(builder, &(VoxelVertex){ (float)x, 0.0f, (float)y, u0, v0, 5.0f },
+                                          &(VoxelVertex){ (float)x + 1, 0.0f, (float)y, u1, v0, 5.0f },
+                                          &(VoxelVertex){ (float)x + 1, 0.0f, (float)y + 1, u1, v1, 5.0f },
+                                          &(VoxelVertex){ (float)x, 0.0f, (float)y + 1, u0, v1, 5.0f });
+                        builder->lighting = lighting;
+                    }
+                }
                 else
                     EmitStandingWall(builder, inst, x, y, rh, u0, v0, u1, v1);
                 continue;
