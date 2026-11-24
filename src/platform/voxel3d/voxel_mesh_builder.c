@@ -841,6 +841,7 @@ static void EmitReliefUV(VoxelBuilder *b, int x, int y, const int16_t *g, const 
 extern const struct Tileset gTileset_Cave;
 extern const struct Tileset gTileset_MeteorFalls;
 extern const struct Tileset gTileset_NavelRock;
+extern const struct Tileset gTileset_Dewford;
 
 static bool CaveStairCell(int x, int y, const VoxelMapInstance **out)
 {
@@ -850,10 +851,17 @@ static bool CaveStairCell(int x, int y, const VoxelMapInstance **out)
 
     if (sOff < 0)
         sOff = getenv("WJPC_CAVE_STAIRS_FLAT") != NULL;
-    if (sOff || (inst = VoxelWorld_GetInstanceAt(x, y)) == NULL || !inst->underground)
+    if (sOff || (inst = VoxelWorld_GetInstanceAt(x, y)) == NULL)
         return false;
     m = VoxelWorld_GetMetatileId(x, y);
     *out = inst;
+    /* (Brennan 2026-11-24 14:28: "Stairs in birth island ... should be 3D": Birth Island's and Navel Rock's stone
+     * flights, General tiles, on their islands' relief - tools/voxel3ds/island_relief.py) */
+    if (inst->secondaryTileset == (const void *)&gTileset_Dewford
+     && (inst->layoutId == 404 || inst->layoutId == 421))  /* LAYOUT_BIRTH_ISLAND_EXTERIOR, LAYOUT_NAVEL_ROCK_EXTERIOR */
+        return m == 0x0AF || m == 0x0CF;
+    if (!inst->underground)
+        return false;
     /* (and Meteor Falls' flights, Navel Rock's: the same in their own tiles - cave_relief.py STAIRS_BY_SET) */
     if (inst->secondaryTileset == (const void *)&gTileset_Cave)
         return m == 0x204 || m == 0x363;

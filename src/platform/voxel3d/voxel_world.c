@@ -636,6 +636,22 @@ static void FillInstance(VoxelMapInstance *inst, const struct MapHeader *header,
     inst->underground = header->mapType == MAP_TYPE_UNDERGROUND;
     inst->sky = header->mapType == MAP_TYPE_TOWN || header->mapType == MAP_TYPE_CITY
              || header->mapType == MAP_TYPE_ROUTE || header->mapType == MAP_TYPE_OCEAN_ROUTE;
+    /* Brennan 2026-11-24 14:28 ("Fawaway island all looks 2D", "birth island still looks 2D", "Naval rock exterior
+     * looks 2D"): the islands the event tickets reach are outside, under the sky, but the game types them
+     * MAP_TYPE_INDOOR - so they were laid as a room: no 3D trees, no sky, no sun. Here they are outside.
+     * WJPC_ISLANDS_INDOOR=1: as rooms, as before. */
+    {
+        static int sOld = -1;
+        if (sOld < 0)
+            sOld = getenv("WJPC_ISLANDS_INDOOR") != NULL;
+        if (!sOld && (mapGroup << 8 | mapNum) != 0
+         && ((mapGroup << 8 | mapNum) == MAP_FARAWAY_ISLAND_ENTRANCE || (mapGroup << 8 | mapNum) == MAP_FARAWAY_ISLAND_INTERIOR
+          || (mapGroup << 8 | mapNum) == MAP_BIRTH_ISLAND_EXTERIOR || (mapGroup << 8 | mapNum) == MAP_NAVEL_ROCK_EXTERIOR))
+        {
+            inst->indoor = false;
+            inst->sky = true;
+        }
+    }
     inst->lift = 0;
 }
 

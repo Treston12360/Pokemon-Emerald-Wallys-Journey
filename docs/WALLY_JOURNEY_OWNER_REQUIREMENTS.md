@@ -1316,3 +1316,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   and statues already stand as models in every room checked. Left flat on purpose: rugs and door mats, floor
   patterns (Mossdeep Gym's spin tiles), and pictures, windows and posters on walls. Asked Brennan to point at
   anything he still sees as flat.
+- 2026-11-24 14:28 Brennan's list ("All should be 3D"): Navel Rock, Birth Island + its stairs, Birth Island Harbor
+  fences and wall, Champion's Room, Faraway Island, Fortree Gym, Navel Rock exterior, Oceanic Museum, Sootopolis Gym
+  ("dark shadows walls"), Trainer Hill inside.
+  - N39: the event islands (Faraway Island entrance + interior, Birth Island, Navel Rock exterior) are typed
+    MAP_TYPE_INDOOR by the game, so they were laid as rooms (no 3D trees, no sky). Now drawn as outside maps
+    (voxel_world.c; WJPC_ISLANDS_INDOOR=1: as before): Faraway Island's woods are 3D trees. Birth Island and Navel
+    Rock's islands raised (tools/voxel3ds/island_relief.py: Birth Island's cliff three courses under its grass,
+    Navel Rock's sand a course up, its rock ring and peak over it) and their stone stairs real steps.
