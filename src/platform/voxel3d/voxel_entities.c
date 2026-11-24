@@ -17,6 +17,7 @@
 #include "constants/event_objects.h"
 #include "event_data.h"
 #include "berry.h"
+#include "rotating_gate.h"
 #include "wally_journey.h"
 #include "rtc.h"
 #include "overworld.h"
@@ -1128,6 +1129,107 @@ static bool EmitBall(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigne
         for (int b = 0; b < VOXEL_BALL_LON; ++b)
             VoxelBuilder_Quad(builder, &vtx[a][b], &vtx[a][b + 1], &vtx[a + 1][b + 1], &vtx[a + 1][b]);
     return true;
+}
+
+/*
+ * Brennan 2026-11-24 14:55 (Fortree Gym: "the moving gates need to be 3D"): a rotating gate's picture (seen from
+ * above: a hub and its bars) lay as a card, and unturned - the 3D view drew its picture as stored, not through the
+ * OAM matrix that turns it. Now a gate in the round, from the game's own data (rotating_gate.c RotatingGate_3DInfo):
+ * a post 14 px tall on its pivot, and each arm a barrier 4 px thick and 12 tall reaching one or two cells, turned as
+ * the game turns it, mid-turn too. Each face shows the gate's own picture: the hub's, and the bar's pixels along
+ * the arm drawn north of the hub. WJPC_ROTATING_GATE_CARD=1: the card, as before.
+ */
+static bool GateSprite(const struct Sprite *sprite, s16 *x, s16 *y, u8 *arms, float *degrees)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_ROTATING_GATE_CARD") != NULL;
+    s16 c, sn;
+
+    if (sOff || !RotatingGate_3DInfo(sprite, x, y, arms, &c, &sn))
+        return false;
+    *degrees = atan2f((float)sn, (float)c) * (180.0f / 3.14159265f);
+    return true;
+}
+
+typedef struct
+{
+    float baseX, baseY, cx, cy;   /* the picture's slot, its hub's pixel */
+} GatePicture;
+
+static VoxelVertex GateVertex(const GatePicture *g, float x, float y, float z, float px, float py, float shade)
+{
+    return (VoxelVertex){ x, y, z, (g->baseX + px) / (float)VOXEL_SPRITE_ATLAS_W,
+                          1.0f - (g->baseY + py) / (float)VOXEL_SPRITE_ATLAS_H, shade };
+}
+
+/* a box on the ground from radius r0 to r1 along (dx, dz), w either side of it, h tall; its faces from the picture's
+ * column pu (across: pu - pw .. pu + pw) at rows py0 (at r0) .. py1 (at r1) */
+static void EmitGateBar(VoxelBuilder *b, const GatePicture *g, float ox, float oy, float oz, float dx, float dz,
+                        float r0, float r1, float w, float h, float pu, float pw, float py0, float py1, float shade)
+{
+    float px = -dz, pz = dx;   /* across: to the right of the bar's way */
+    float c[4][2] = { { ox + dx * r0 - px * w, oz + dz * r0 - pz * w }, { ox + dx * r1 - px * w, oz + dz * r1 - pz * w },
+                      { ox + dx * r1 + px * w, oz + dz * r1 + pz * w }, { ox + dx * r0 + px * w, oz + dz * r0 + pz * w } };
+    float cu[4] = { pu - pw, pu - pw, pu + pw, pu + pw }, cv[4] = { py0, py1, py1, py0 };
+    VoxelVertex q[4];
+
+    /* the top: wound clockwise seen from above when (dx, dz) runs north (0, -1) */
+    for (int k = 0; k < 4; ++k)
+        q[k] = GateVertex(g, c[k][0], oy + h, c[k][1], cu[k], cv[k], shade);
+    VoxelBuilder_Quad(b, &q[0], &q[1], &q[2], &q[3]);
+    /* the four sides, darker by how far each faces from the light (from the south and above) */
+    for (int k = 0; k < 4; ++k)
+    {
+        int j = (k + 1) % 4;
+        float ex = c[j][0] - c[k][0], ez = c[j][1] - c[k][1], len = sqrtf(ex * ex + ez * ez);
+        float nz = len > 0.0f ? ex / len : 0.0f;   /* the outward normal's z (clockwise winding: (ez, -ex)/len...) */
+        float sh = shade * (0.74f + 0.14f * (nz < 0.0f ? -nz : 0.0f));
+
+        q[0] = GateVertex(g, c[k][0], oy + h, c[k][1], cu[k], cv[k], sh);
+        q[1] = GateVertex(g, c[j][0], oy + h, c[j][1], cu[j], cv[j], sh);
+        q[2] = GateVertex(g, c[j][0], oy, c[j][1], cu[j], cv[j], sh);
+        q[3] = GateVertex(g, c[k][0], oy, c[k][1], cu[k], cv[k], sh);
+        VoxelBuilder_Quad(b, &q[1], &q[0], &q[3], &q[2]);
+    }
+}
+
+static void EmitGate(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigned index, s16 mx, s16 my,
+                     const u8 *arms, float degrees, float shade)
+{
+    const float p = 1.0f / VOXEL_PIXELS_PER_TILE;
+    GatePicture g;
+    float ox, oz, oy;
+
+    if (VoxelWorld_InstanceCount() == 0)
+        return;
+    g.baseX = (float)((index % VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
+    g.baseY = (float)((index / VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
+    g.cx = slot->width * 0.5f;
+    g.cy = slot->height * 0.5f - 0.5f;
+    ox = (float)(mx + VoxelWorld_Instance(0)->originX) + 0.5f;
+    oz = (float)(my + VoxelWorld_Instance(0)->originY) + 0.5f;
+    oy = VoxelRelief_LiftAt(ox, oz);
+    for (int a = 0; a < 4; ++a)
+    {
+        float t = (degrees + 90.0f * a) * (3.14159265f / 180.0f);
+        float dx = sinf(t), dz = -cosf(t);   /* north turned clockwise */
+
+        for (int j = 0; j < 2; ++j)
+        {
+            float r0 = j == 0 ? 3.0f : 15.0f, r1 = j == 0 ? 15.0f : 31.0f;
+
+            if (!arms[2 * a + j] || r1 > g.cy)
+                continue;
+            /* (the picture's north arm, unturned: its rows g.cy - r) */
+            EmitGateBar(builder, &g, ox, oy, oz, dx, dz, r0 * p, r1 * p, 2.0f * p, 12.0f * p,
+                        g.cx, 1.5f, g.cy - r0, g.cy - r1 + 0.5f, shade);
+        }
+    }
+    /* the post on the pivot: its hub's pixels */
+    EmitGateBar(builder, &g, ox, oy, oz, 0.0f, -1.0f, -3.0f * p, 3.0f * p, 3.0f * p, 14.0f * p,
+                g.cx, 2.5f, g.cy + 2.5f, g.cy - 2.5f, shade);
 }
 
 /*
@@ -3010,6 +3112,20 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
             ++updates;
         if (!sSlots[effect->slot].valid)
             continue;
+        {
+            s16 gx, gy;
+            u8 arms[8];
+            float turn;
+
+            if (GateSprite(sprite, &gx, &gy, arms, &turn))
+            {
+                float shade = gPlayerAvatar.objectEventId < OBJECT_EVENTS_COUNT && objects[gPlayerAvatar.objectEventId].drawn
+                            ? objects[gPlayerAvatar.objectEventId].shade : 1.0f;
+
+                EmitGate(builder, &sSlots[effect->slot], effect->slot, gx, gy, arms, turn, shade);
+                continue;
+            }
+        }
         h = sSlots[effect->slot].height;
         x = sprite->x + sprite->x2;
         base = sprite->y + sprite->centerToCornerVecY + h;

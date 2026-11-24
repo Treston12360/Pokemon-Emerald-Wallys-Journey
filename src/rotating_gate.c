@@ -1029,3 +1029,38 @@ bool32 CheckForRotatingGatePuzzleCollisionWithoutAnimation(enum Direction direct
     }
     return FALSE;
 }
+
+#ifdef PORTABLE
+// Wally's Journey PC 3D view (Brennan 2026-11-24 14:55, Fortree Gym: "the moving gates need to be 3D"): a gate's
+// sprite told apart by its callback; its turn read off its OAM matrix while it rotates (the matrix maps the screen
+// onto the picture: a turn clockwise by t is a = cos t, b = sin t), else its orientation.
+bool8 RotatingGate_3DInfo(const struct Sprite *sprite, s16 *x, s16 *y, u8 *arms, s16 *cosine, s16 *sine)
+{
+    u8 gateId, i;
+
+    if (sprite == NULL || sprite->callback != SpriteCallback_RotatingGate || sRotatingGate_PuzzleConfig == NULL)
+        return FALSE;
+    gateId = sprite->data[0];
+    if (gateId >= sRotatingGate_PuzzleCount)
+        return FALSE;
+    *x = sRotatingGate_PuzzleConfig[gateId].x;
+    *y = sRotatingGate_PuzzleConfig[gateId].y;
+    for (i = 0; i < 8; i++)
+        arms[i] = sRotatingGate_ArmLayout[sRotatingGate_PuzzleConfig[gateId].shape][i];
+    if (sprite->oam.affineMode & ST_OAM_AFFINE_ON_MASK)
+    {
+        const struct OamMatrix *m = &gOamMatrices[sprite->oam.matrixNum & (OAM_MATRIX_COUNT - 1)];
+
+        *cosine = m->a;
+        *sine = m->b;
+    }
+    else
+    {
+        static const s16 sCos[4] = { 256, 0, -256, 0 }, sSin[4] = { 0, 256, 0, -256 };
+
+        *cosine = sCos[RotatingGate_GetGateOrientation(gateId) & 3];
+        *sine = sSin[RotatingGate_GetGateOrientation(gateId) & 3];
+    }
+    return TRUE;
+}
+#endif
