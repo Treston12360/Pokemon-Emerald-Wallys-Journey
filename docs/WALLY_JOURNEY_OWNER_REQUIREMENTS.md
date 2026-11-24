@@ -1106,4 +1106,5 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   north tile above it. Left: a hairline of shadow where the slope's foot meets the shallow water (there before too).
   Gap test (15 views, 1920x1080 and 2560x1440): no new sky. One view from warp 48 38 31 shows 89 px of sky (161 at
   2560) by the two small rocks in the shallows further east - exactly the same with the old data; asked.
+  Brennan 18:18: "thats all on that one" - Route 133 closed; the small-rocks sliver and the hairline left as they are.
   Picture docs/polish_reports/2026-11-23_N20_route133_panel.png.
