@@ -1293,3 +1293,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     (WJPC_CAVE_TERRAIN_NORMAL_LIT=1: by facing) and nothing casts the sun's shadow (WJPC_CAVE_SHADOWS=1: as before),
     so the walls show the drawing's own colours, no dark patches. The maps' west/east/south edges come down to the
     floor at the edge (no tall stretched cut face around the map).
+    N36b: the dark patches that were left: a dark blur where a rock top sloped down beside a face (its ground
+    vertices saw no sun: under Gamma lighting a cave's ground is now all in the light), and small holes / dark
+    stretched steps where two rock cells met at different heights (cave_relief.py: they share their edge now). Upper
+    floors (Shoal Cave's elevations 4 and 5) stand a rock's height up each.

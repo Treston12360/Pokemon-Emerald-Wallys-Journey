@@ -1913,10 +1913,12 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
             sNormalLit = getenv("WJPC_CAVE_TERRAIN_NORMAL_LIT") != NULL;
         if (inst != NULL && inst->underground && !sNormalLit)
         {
+            /* (and all in the light: under Gamma's lighting a ground vertex's shade is how much of the sun it sees,
+             * 0 for a slope turned from it - a dark blur where a rock top sloped down beside a face) */
             for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
                 for (unsigned k = 0; k < pb->pageN[p]; k++)
                     if (pb->pageV[p][k].shade < 3.0f)
-                        pb->pageV[p][k].shade += 4.0f;
+                        pb->pageV[p][k].shade = gVoxelGammaLight ? 5.0f : pb->pageV[p][k].shade + 4.0f;
         }
     }
     // Terrain split by atlas page (BuildPrepare), positions already quantised: uploaded as they are.
