@@ -1108,3 +1108,12 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   2560) by the two small rocks in the shallows further east - exactly the same with the old data; asked.
   Brennan 18:18: "thats all on that one" - Route 133 closed; the small-rocks sliver and the hairline left as they are.
   Picture docs/polish_reports/2026-11-23_N20_route133_panel.png.
+- 2026-11-23 18:34 (Brennan, region-wide audit request; his full list: terrain/sky gaps, player grounding, flicker /
+  shadows / seams, 2D-to-3D, area transitions; plus a numbered list of every open item with a picture each).
+  - N21 player grounding: "the player's feet sink into the ground while running and then pop back out when standing
+    still. Keep the player's feet cleanly on top of the surface both in motion and while stationary." Cause: a card
+    ended at the standing picture's feet for every frame; Brendan/May's walk and run strides draw the feet a row
+    lower (pads walk 1,1,1,0,0,0,0,0,0, run 2,2,1,1,1,0,0,0,0), so a stride's feet were cut off, and the run's own
+    standing pose stood a row up. Now each frame's own feet stand on the ground (voxel_entities.c FrameFootPad; only
+    frames within a row of the standing pose; WJPC_FOOT_BOB=1: as before). Every walker (player, people) alike.
+    Picture docs/polish_reports/2026-11-23_N21_feet_running.png.

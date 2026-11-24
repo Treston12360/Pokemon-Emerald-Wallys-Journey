@@ -87,8 +87,11 @@ typedef struct
     int drawnWidth, drawnHeight;
     /* Empty rows under the feet of the standing pose: the art's feet sit this
      * far up the cell, and the card leaves them out to put them on the
-     * ground (VisibleRows). Measured once per picture table (StandingFootPad). */
+     * ground (VisibleRows). For an object, the frame showing's (FrameFootPad);
+     * for a field effect, its standing pose's. */
     int footPad;
+    /* The standing pose's, measured once per picture table (StandingFootPad). */
+    int standFootPad;
     const struct SpriteFrameImage *footPadImages;
     /* Measured on the standing pose itself; else, until that picture is in
      * memory, on the frame the object first showed (StandingFootPad). */
@@ -483,6 +486,36 @@ static int StandingFootPad(const struct ObjectEventGraphicsInfo *info,
     if (size < (u32)(tilesX * tilesY) * TILE_SIZE_4BPP)
         return 0;
     return FootPadOf(tiles, info->width, info->height);
+}
+
+/*
+ * The feet of the frame showing (Brennan 2026-11-23 18:34: "the player's feet sink into the ground while running and
+ * then pop back out when standing still. Keep the player's feet cleanly on top of the surface both in motion and
+ * while stationary"). The art draws a walk's and a run's strides a row lower than the standing pose (Brendan/May
+ * walking: pads 1,1,1,0,0,0,0,0,0; running 2,2,1,1,1,0,0,0,0) - the GBA's bob. With the card cut at the standing
+ * pose's feet a stride's feet were cut off (sunk) and the run's own standing pose stood a row over the ground. Now
+ * each frame's feet are the card's foot. Only a frame within a row of the standing pose: art drawn higher on purpose
+ * (a hop in the drawing) keeps its lift. WJPC_FOOT_BOB=1: the standing pose's feet for every frame, as before.
+ */
+static int FrameFootPad(const VoxelSpriteSlot *slot, const struct ObjectEventGraphicsInfo *info)
+{
+    static int bob = -1;
+    int pad;
+
+    if (bob < 0)
+    {
+        const char *env = getenv("WJPC_FOOT_BOB");
+
+        bob = env != NULL && env[0] == '1';
+    }
+    if (bob || slot->color256 || slot->flipY || info == NULL
+     || slot->width != info->width || slot->height != info->height
+     || slot->sourceBytes < (u32)((info->width / 8) * (info->height / 8)) * TILE_SIZE_4BPP)
+        return slot->standFootPad;
+    pad = FootPadOf(slot->source, info->width, info->height);
+    if (pad < slot->standFootPad - 1 || pad > slot->standFootPad + 1)
+        return slot->standFootPad;
+    return pad;
 }
 
 /*
@@ -2001,6 +2034,7 @@ static bool RefreshStandIn(unsigned index, const struct ObjectEventGraphicsInfo 
         const u8 *standTiles = Port_PeekSpriteFramePointer(stand->data, standSize, 0);
 
         slot->footPad = standTiles != NULL && standSize >= bytes ? FootPadOf(standTiles, w, h) : 0;
+        slot->standFootPad = slot->footPad;
     }
     return true;
 }
@@ -2420,9 +2454,10 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
                 /* A provisional pad is taken once, never from each frame of a
                  * walk: that would undo its bob. */
                 if (changed || exact)
-                    sSlots[i].footPad = pad;
+                    sSlots[i].standFootPad = pad;
                 sSlots[i].footPadExact = exact;
             }
+            sSlots[i].footPad = FrameFootPad(&sSlots[i], info);
         }
         /* POL-17: a berry plant shows its whole frame (its art is the plant, from the soil up), see BerryPlant */
         if (BerryPlant(obj->graphicsId))
@@ -2586,6 +2621,7 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
             continue;
         sSlots[s].valid = false;
         sSlots[s].footPad = 0;
+        sSlots[s].standFootPad = 0;
         sSlots[s].footPadImages = NULL;
     }
     /* In sprite order, as they were drawn before. */
