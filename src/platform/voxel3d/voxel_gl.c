@@ -2043,7 +2043,11 @@ static uint32_t sBeltCacheGen;
 // 64-cell belt (POL-51, for Mt Pyre's sea 16 levels down) is 2.56 times the pieces of the 40-cell one. 64 only on the
 // maps that need it (Mt Pyre outside and summit), 40 elsewhere; chosen when a map's belt is built whole.
 // WJPC_BELT_RADIUS=n: that, everywhere.
-static int sBeltRadius = 40;
+// #25 (Brennan 2026-11-23 21:03: "build the background further out, so that no sky is shown"): 56 elsewhere (was
+// 40). At 40 the far top corner showed sky running east on Route 121 (up to 11,000 px a frame at 1920x1080) and Ever
+// Grande's north view; at 56 none. The belt is built a few pieces a frame, so no frame took longer on the test box
+// (worst belt frame 23 ms at 56 vs 36 ms at 40); it takes about twice as many frames to finish.
+static int sBeltRadius = 56;
 #define BELT_RADIUS sBeltRadius
 
 // The belt is made of CHUNK x CHUNK pieces in world cells (origin 0,0), so a piece is the same wherever the
@@ -4883,7 +4887,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 if (!sBeltWarpPending || sBeltWarpGen != sBeltResetGen || (sBeltAtlas != NULL && !sBeltWarpShown))
                 {
                     sBeltRadius = getenv("WJPC_BELT_RADIUS") ? atoi(getenv("WJPC_BELT_RADIUS"))
-                                : (inst0->layoutId == 302 || inst0->layoutId == 303) ? 64 : 40;
+                                : (inst0->layoutId == 302 || inst0->layoutId == 303) ? 64 : 56;
                     BeltCache_Flush();
                     for (unsigned l = 0; l < BELT_LAYERS; l++)
                         sBeltDrawn[l] = NULL;
@@ -4925,7 +4929,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             {
                 // New map, new world or new atlas: start again and build it all now (as before).
                 sBeltRadius = getenv("WJPC_BELT_RADIUS") ? atoi(getenv("WJPC_BELT_RADIUS"))
-                            : (inst0->layoutId == 302 || inst0->layoutId == 303) ? 64 : 40;
+                            : (inst0->layoutId == 302 || inst0->layoutId == 303) ? 64 : 56;
                 BeltCache_Flush();
                 BeltBuildStep(inst0, atlas0, cx, cy, -1);
                 BeltAssemble(atlas0, cx, cy);

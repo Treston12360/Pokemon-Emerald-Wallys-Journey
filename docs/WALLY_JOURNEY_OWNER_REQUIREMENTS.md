@@ -1153,3 +1153,17 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     (POL-24/30/43, POL-28, POL-37, POL-41, POL-44) - "if it pops up again i will let you know". Open: #13
     (POL-13/40/45 background mountains) "keep this open for now".
   - "after these send me the newest zip file".
+  - 21:05: "send me a zip file before you do #29, #30 on the list, make the bigger projects for last." 21:37: "you
+    can send the zip file right now, then continue onto everything else as you have been." Sent
+    WallysJourney-2026-11-23-audit.zip at 21:40 (build c14b19d6 + make_package fix: feet, Route 118, Route 133, #28).
+  - #28 done (c14b19d6): not reproduced on walking crossings here (11 crossings pictured every frame). After a warp
+    the maps not built yet were built in the order of the current map's connections, not by distance (Route 102's
+    west end: Oldale built before Petalburg 7 tiles away). Now the map underfoot, then nearest the player first
+    (WJPC_BUILD_ORDER_OLD=1: old order). WallysJourney_stalls.txt now writes "MAP HIDDEN" (a drawn map dropped for a
+    frame, with the reason) and "MAP LATE" (a map within 16 tiles drawn late, frames and reason), so his log says
+    what happens on his PC if he sees it again.
+  - N23 / #25 done: the background (belt) is built 56 tiles out instead of 40 (Mt Pyre stays 64). Running east on
+    Route 121 at 1920x1080 the top-right corner showed sky in 16 of 25 frames at 40, none at 56; Ever Grande's north
+    corners gone (only the #19 hole is left). Corner views at 1920x1080 and 2560x1440: 0 everywhere except that hole.
+    Cost: about twice the belt pieces, built a few a frame; the worst belt frame on the test box was not higher (23 ms
+    vs 36 ms). Picture docs/polish_reports/2026-11-23_N23_background_further.png.
