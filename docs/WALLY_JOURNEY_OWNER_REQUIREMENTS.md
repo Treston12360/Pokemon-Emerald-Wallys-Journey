@@ -1137,3 +1137,19 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     lies flat at the cell's centre height, so beside the flat neighbours it floated open. Both cells flat now
     (relief.bin layout 34). Gap test Route 118 (7 views, 1920x1080 and 2560x1440): 0 everywhere (was 276 and 187).
     Picture docs/polish_reports/2026-11-23_N22_route118_slits.png.
+- 2026-11-23 21:03 (Brennan, answers on the "Hoenn 3D Audit" report, his words):
+  - #19 Ever Grande east cliff hole: "fix this issue". #20 Route 131/Pacifidlog seam: "fix this issue, use the sea
+    around it." #22 Route 112 west-edge slit: "fix this make it form naturally". #23 Route 103 north wedge + south
+    slit: "fix both of these issues, making the forest look natural still."
+  - #25 far screen corners: "build the background further out, so that no sky is shown."
+  - #26 Verdanturf snow lanes: "if you cant spot it we can move past it." #27 flicker: he keeps an eye out.
+  - #28 transitions: "sometimes when going from route to city the right or left side of the screen will be blue sky
+    for a frame or two then the rest of the map loads, this needs to be seamless when running from area to area so
+    there is no missing frames or skipping of any kind. what i was noticing the area running into was taking too long
+    to load instead of instantly."
+  - #29 caves: "make all detail inside caves 3D, hand tune all of them." #30 rooms: "just make sure any thing in a room
+    or house is 3D." #31 underwater seaweed: "stand them up like tall grass."
+  - Closed: #1-#12 (B3, B4, B5, C1, C4, D1, Meteor Falls stairs, POL-2, POL-3, POL-4, POL-8, POL-11/14) and #14-#18
+    (POL-24/30/43, POL-28, POL-37, POL-41, POL-44) - "if it pops up again i will let you know". Open: #13
+    (POL-13/40/45 background mountains) "keep this open for now".
+  - "after these send me the newest zip file".
