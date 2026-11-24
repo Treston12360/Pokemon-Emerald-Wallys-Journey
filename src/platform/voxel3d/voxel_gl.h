@@ -8,6 +8,8 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h);
 /* Audit step 5 (240 fps): Render only updates the world (no drawing) while on; the refreshes then draw it with
  * Voxel3D_Redraw, eased `t` (0..1) from the game frame before to the last one. */
 void Voxel3D_SetUpdateOnly(bool on);
+/* game frames since the last drawn one (fast forward draws one of several): the eased moves span that many */
+void Voxel3D_SetDrawSpan(unsigned frames);
 bool Voxel3D_Redraw(unsigned colorTexture, int w, int h, float t);
 unsigned Voxel3D_TextureId(void *sdlTexture);
 bool Voxel3D_ProjectPictureTile(float tileX, float tileY, float *outX, float *outY);

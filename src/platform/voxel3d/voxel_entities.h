@@ -91,6 +91,7 @@ int VoxelEntities_PlayerVertexFirst(void);
  */
 /* Audit step 5 (240 fps): the last Emit's people and effects moved `back` (0..1) of their move since the game frame
  * before back towards where they were, in copies of its three builders' vertices (voxel_gl.c Voxel3D_Redraw). */
+void VoxelEntities_SetDrawSpan(unsigned frames);
 void VoxelEntities_Interpolate(VoxelVertex *sprites, VoxelVertex *shadows, VoxelVertex *reflections, float back);
 unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas,
                             const VoxelCamera *camera, VoxelBuilder *shadows,

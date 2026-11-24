@@ -1173,3 +1173,22 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     colours) leant back at the tall grass's 50 degrees, one tile long, so a diver in it is covered to the waist from
     the front. The floor under it is the trench floor next to the patches (0x216 / 0x2A9). voxel_tree.c
     EmitSeaweedCard. WJPC_SEAWEED_FLAT=1: flat, as before. Picture docs/polish_reports/2026-11-23_N24_seaweed.png.
+- 2026-11-23 21:46 (Brennan, new bug): at 4x fast forward "the player character skips/jitters rapidly back and forth
+  instead of moving smoothly across tiles - it looks like the player model is chasing its own shadow ... at 1x, 2x,
+  3x, or 4x gameplay speed, the player (and camera/shadow) must advance 100% smoothly and continuously forward at that
+  exact speed multiplier - with zero backward snapping, rubber-banding, or shadow-chasing jitter."
+  - N25 cause (sdl2.c main loop, voxel_gl.c Voxel3D_Redraw, voxel_entities.c InterpClose): fast forward draws only
+    the last game frame of each batch (4 at 4x on a 60 Hz screen), and the refreshes ease between the last two drawn
+    frames - but by how far into ONE game frame the clock is (accumulator / dt), so each refresh landed anywhere in
+    the batch: uneven steps. And a person moving half a tile or more between drawn frames was not eased at all (taken
+    for a warp) - running at 4x is exactly half a tile per 4 frames - while the camera was eased: the player lurched
+    ahead of the view and back on each refresh.
+  - Fix: sdl2.c counts the game frames between drawn frames (sDrawSpan); the refresh is eased
+    (span - 1 + t) / span of the way, a steady one game frame behind the game at any speed (span 1, normal speed: as
+    before). The camera's and the people's "jump, don't ease" limits grow with the span (voxel_gl.c
+    Voxel3D_SetDrawSpan, voxel_entities.c VoxelEntities_SetDrawSpan). WJPC_FF_EASE_OLD=1: the old easing.
+  - Not reproduced on the test machine (software 3D under Wine: too slow to run 4x with a high refresh rate). The
+    loop was worked out refresh by refresh (60/144/240 Hz, 1x-4x): old steps 0.1-8 game frames a refresh at 60 Hz 4x
+    and the player up to 8 px ahead of the view; new 3.9-4.1, player on the view. Test aids: WJPC_EASE_LOG=file
+    (each refresh's game frame, span, easing), script "ff N" with WJPC_SCRIPT_REALTIME=1 (the real loop's fast forward).
+    Picture docs/polish_reports/2026-11-23_N25_ff_smooth.png (the worked-out loop, not a screenshot).

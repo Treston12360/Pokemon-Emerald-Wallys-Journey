@@ -2215,6 +2215,14 @@ static InterpRecord sInterp[2][INTERP_RECORDS];
 static unsigned sInterpCount[2], sInterpCur;
 static bool sInterpOpen;
 static const VoxelBuilder *sInterpB[3];
+/* game frames the moves are measured over (fast forward draws one of several: voxel_gl.c Voxel3D_SetDrawSpan): a
+ * walker's or a bike's move over them is eased, half a tile a game frame or more is a jump */
+static unsigned sInterpSpan = 1;
+
+void VoxelEntities_SetDrawSpan(unsigned frames)
+{
+    sInterpSpan = frames < 1 ? 1 : frames;
+}
 
 static void InterpClose(void)
 {
@@ -2258,7 +2266,8 @@ static void InterpClose(void)
             if (prev[i].key == r->key && prev[i].who == r->who)
             {
                 float dx = r->cx - prev[i].cx, dz = r->cz - prev[i].cz;
-                if (fabsf(dx) < 0.5f && fabsf(dz) < 0.5f)
+                float jump = 0.5f * (float)sInterpSpan;
+                if (fabsf(dx) < jump && fabsf(dz) < jump)
                 {
                     r->dx = dx;
                     r->dz = dz;

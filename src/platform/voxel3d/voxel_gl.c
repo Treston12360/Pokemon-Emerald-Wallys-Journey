@@ -4391,6 +4391,16 @@ void Voxel3D_SetUpdateOnly(bool on)
     sUpdateOnly = on;
 }
 
+/* (Brennan 2026-11-23 21:46, 4x fast forward jitter: sdl2.c sDrawSpan) the camera and the people are eased over that
+ * many game frames: what counts as a jump not eased (a warp, a crossing's shift) grows with it */
+static unsigned sDrawSpan = 1;
+
+void Voxel3D_SetDrawSpan(unsigned frames)
+{
+    sDrawSpan = frames < 1 ? 1 : frames > 24 ? 24 : frames;
+    VoxelEntities_SetDrawSpan(sDrawSpan);
+}
+
 bool Voxel3D_Render(unsigned colorTexture, int w, int h)
 {
     SavedGl saved;
@@ -5041,8 +5051,9 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
     sLastDrawValid = true;
     sCamCur = sCamera;
     sCamPrev = camStartValid ? camStart : sCamera;
-    if (fabsf(sCamCur.x - sCamPrev.x) > 1.5f || fabsf(sCamCur.z - sCamPrev.z) > 1.5f
-     || fabsf(sCamCur.y - sCamPrev.y) > 1.5f || sCamCur.fov != sCamPrev.fov)
+    float jump = sDrawSpan > 3 ? 0.5f * (float)sDrawSpan : 1.5f; // (a bike's game frame is at most a quarter tile)
+    if (fabsf(sCamCur.x - sCamPrev.x) > jump || fabsf(sCamCur.z - sCamPrev.z) > jump
+     || fabsf(sCamCur.y - sCamPrev.y) > jump || sCamCur.fov != sCamPrev.fov)
         sCamPrev = sCamCur; // (a crossing's shift, a snap, a warp: not eased)
     if (sUpdateOnly)
     {

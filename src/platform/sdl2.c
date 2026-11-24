@@ -405,6 +405,7 @@ static void StallLog(Uint64 start, Uint64 batchEnd, Uint64 drawn, Uint64 present
         sLastMinute = presented;
 }
 static unsigned int sTestFfSpeed; // test script "ff N": fast forward without a clock (0/1 = off)
+static unsigned int sTestFfRealtime; // the same with WJPC_SCRIPT_REALTIME: the real loop's fast forward at N
 static u16 sTestKeys;
 static int sTestHold;
 static u32 sTestFrame;
@@ -518,6 +519,8 @@ static bool TestStep(void)
             // ff N (test aid): fast forward N times, as the real loop does it: only every Nth
             // frame is drawn and the sound engine runs once every N frames. "ff 0" = off.
             sTestFfSpeed = atoi(arg1);
+            if (sScriptRealtime) // (WJPC_SCRIPT_REALTIME: the real loop's fast forward, as the key turns it on, N times)
+                sTestFfRealtime = sTestFfSpeed;
             continue;
         }
         if (!strcmp(cmd, "winshot"))
@@ -902,6 +905,14 @@ static bool TestStep(void)
 
 static bool sDrewFrame;
 static int sGameFramesCounted; // test aid (WJPC_FPS_LOG)
+/* Brennan 2026-11-23 21:46 (4x fast forward: "the player character skips/jitters rapidly back and forth ... like the
+ * player model is chasing its own shadow"): with fast forward only the last game frame of a batch is drawn, so the
+ * two pictures the refreshes ease between are a whole batch apart (4 game frames at 4x on a 60 Hz screen), but the
+ * easing went by the time into ONE game frame (accumulator / dt): each refresh showed anywhere from the batch's start
+ * to its end - back and forth. sDrawSpan: game frames from the drawn frame before to the last one; the refreshes
+ * now show a steady one game frame behind the game at any speed: (span - 1 + t) / span of the way between the two
+ * pictures (span 1, normal speed: t, as before). WJPC_FF_EASE_OLD=1: as before. */
+static unsigned sFramesSinceDraw, sDrawSpan = 1;
 /* Brennan 2026-11-21 17:25 / 2026-11-23 06:28 (falling leaves under fast-forward): how many game frames run per
  * real 60th of a second, x256 (256 = normal speed), measured over about a quarter second - fast-forward's chosen
  * speed is only what the PC aims for (a slow PC stops a batch early). Platform_GameSpeedQ8. */
@@ -1950,6 +1961,9 @@ int main(int argc, char **argv)
                     if ((!speedUp && sDrawEvery) || lastOfBatch || outOfTime)
                     {
                         Uint64 v0 = SDL_GetPerformanceCounter();
+                        sDrawSpan = sFramesSinceDraw + 1;
+                        sFramesSinceDraw = 0;
+                        Voxel3D_SetDrawSpan(sDrawSpan);
                         static int sProfVDraw = -1;
                         if (sProfVDraw < 0)
                             sProfVDraw = getenv("WJPC_PROFILE_VDRAW") != NULL; // (test: the profiler samples the picture's drawing)
@@ -1966,6 +1980,7 @@ int main(int argc, char **argv)
                     {
                         WideView_SkipFrame();
                         REG_VCOUNT = 161;
+                        sFramesSinceDraw++;
                     }
                     sGameFramesCounted++;
                     sSpeedFrames++;
@@ -2022,7 +2037,23 @@ int main(int argc, char **argv)
         if (sDrewFrame)
         {
             double t = paused ? 1.0 : accumulator / (fixedTimestep / timeScale);
-            DrawScreen(t < 0 ? 0 : t > 1 ? 1 : t);
+            static int sEaseOld = -1;
+            if (sEaseOld < 0)
+                sEaseOld = getenv("WJPC_FF_EASE_OLD") != NULL;
+            t = t < 0 ? 0 : t > 1 ? 1 : t;
+            if (!sEaseOld && sDrawSpan > 1)
+                t = (sDrawSpan - 1 + t) / sDrawSpan; // (the span's last game frame eased in, as at normal speed)
+            if (getenv("WJPC_EASE_LOG")) // (test aid: each refresh's game frame, span and how far it is eased)
+            {
+                FILE *ef = fopen(getenv("WJPC_EASE_LOG"), "a");
+                if (ef != NULL)
+                {
+                    fprintf(ef, "%u %u %.3f %.6f\n", sGameFramesCounted, sDrawSpan, t,
+                            SDL_GetPerformanceCounter() / (double)SDL_GetPerformanceFrequency());
+                    fclose(ef);
+                }
+            }
+            DrawScreen(t);
         }
         Uint64 stallDrawn = SDL_GetPerformanceCounter();
         SDL_RenderPresent(sdlRenderer);
@@ -3064,6 +3095,11 @@ static void ApplyFastForward(void)
             : (SDL_AtomicGet(&sFfKeyHeld) || SDL_AtomicGet(&sFfPadHeld));
     // Fast forward speed: 2x, 4x, 6x ... 20x.
     double scale = on ? 2.0 * (sPlatformSettings[PLATFORM_SETTING_FF_SPEED] % FF_SPEED_COUNT + 1) : 1.0;
+    if (sTestFfRealtime > 1)
+    {
+        on = true;
+        scale = (double)sTestFfRealtime;
+    }
 
     if (on != speedUp || scale != timeScale)
     {
