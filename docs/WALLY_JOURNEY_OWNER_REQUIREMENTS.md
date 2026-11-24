@@ -1283,3 +1283,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - N35: item Poke Balls are a real sphere (voxel_entities.c EmitBall), as wide as the drawn ball, resting on the
     ground, the drawing's red top / band / button / white underside where the drawing has them. Everywhere (the same
     object outside), not only in caves. WJPC_ITEM_BALL_MOUND=1: the half-height mound from 2026-11-20.
+  - Caves were flat (no relief: cliffs, stairs and ladders painted on the floor). Asked how to make stairs/ladders 3D,
+    Brennan: "Raise the cliffs" (start with one cave, show him). Test: tools/voxel3ds/cave_relief.py on Victory
+    Road B1F (layout 285) - rock raised 16 px over the floor (faces upright at the floor's edge), the bridges at the
+    rock's height, the stairs (elevation 0) a climb between. Not in relief.bin yet: pictures sent for his OK.
