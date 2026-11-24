@@ -1311,3 +1311,8 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   and Navel Rock (0x204, 0x37B) set their floors' heights from their stairs and are drawn as real steps (cave_relief.py
   STAIRS_BY_SET, voxel_mesh_builder.c CaveStairCell). Checked every flight: each joins its two floors. Magma Hideout
   has no stairs of this kind (its floors join by ladders and warps); Fiery Path and Rusturf Tunnel keep their own relief.
+- 2026-11-24 #30 ("just make sure any thing in a room or house is 3D"): checked all 134 Hoenn rooms and houses in
+  3D (screenshots sent, rooms_01-17.png). Furniture, machines, counters, shelves, plants, beds, tables, stools, cases
+  and statues already stand as models in every room checked. Left flat on purpose: rugs and door mats, floor
+  patterns (Mossdeep Gym's spin tiles), and pictures, windows and posters on walls. Asked Brennan to point at
+  anything he still sees as flat.
