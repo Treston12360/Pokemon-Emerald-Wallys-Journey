@@ -1254,7 +1254,7 @@ static bool FerryObject(u16 graphicsId)
 typedef struct
 {
     float cx, front, lift, rows, w, shade;
-    float baseX, baseY;
+    float baseX, baseY, squeeze;   /* (the atlas holds the drawing's columns squeezed: atlas width / width) */
     bool flip;
 } FerryFrame;
 
@@ -1265,7 +1265,9 @@ static void FerryVertex(VoxelVertex *v, const FerryFrame *f, float x, float z, f
 
     key = key < 0.5f ? 0.5f : key > f->rows - 0.5f ? f->rows - 0.5f : key;
     *v = (VoxelVertex){ f->cx + (drawn - f->w * 0.5f) * p, f->lift + y * p, f->front + (z - f->rows) * p,
-                        (f->baseX + (x < 0.5f ? 0.5f : x > f->w - 0.5f ? f->w - 0.5f : x)) / (float)VOXEL_SPRITE_ATLAS_W,
+                        /* (the atlas holds the drawing as drawn: flipped already) */
+                        (f->baseX + (drawn < 0.5f ? 0.5f : drawn > f->w - 0.5f ? f->w - 0.5f : drawn) * f->squeeze)
+                            / (float)VOXEL_SPRITE_ATLAS_W,
                         1.0f - (f->baseY + key) / (float)VOXEL_SPRITE_ATLAS_H, f->shade * shade };
 }
 
@@ -1324,12 +1326,18 @@ static bool EmitFerry(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsign
     static const float mast[4][2] = { { 51, 27 }, { 55, 27 }, { 55, 28 }, { 51, 28 } };
     FerryFrame f;
 
-    if (slot->atlasWidth != slot->width || slot->color256 || slot->width != 96 || VisibleRows(slot) < 37)
+    /* (the ship is wider than a slot: the atlas holds it squeezed to atlasWidth columns - N46 had refused that, so
+     * the ship had stayed a card; Brennan 17:14 saw it so) */
+    if (slot->color256 || slot->width != 96 || slot->atlasWidth <= 0 || VisibleRows(slot) < 37)
         return false;
+    f.squeeze = (float)slot->atlasWidth / (float)slot->width;
     f.baseX = (float)((index % VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
     f.baseY = (float)((index / VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
     f.cx = cx;
-    f.front = cz + VoxelRelief_ShiftAt(cx, cz);
+    /* Brennan 2026-11-24 17:14 ("does it cover the whole door? if so bring this to the front more so that you can see
+     * the walkway"): stood where its card stood, the ship's decks reached back over the harbor's walkway to the
+     * door. It sits one cell further out on the water: the walkway clear behind it. */
+    f.front = cz + VoxelRelief_ShiftAt(cx, cz) + (getenv("WJPC_FERRY_AT_CARD") ? 0.0f : 1.0f);
     f.lift = VoxelRelief_LiftAt(cx, cz) + rise;
     f.rows = (float)VisibleRows(slot);
     f.w = (float)slot->width;
