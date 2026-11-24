@@ -945,6 +945,137 @@ static bool EmitCaveStairs(VoxelBuilder *b, const VoxelMapInstance *inst, int x,
     return true;
 }
 
+/*
+ * Brennan 2026-11-24 14:28 ("Trainer hill all inside looks 2D ... All should be 3D"): the Trainer Hill floors' boxes,
+ * pillars and counters. Those floors are laid by the game at run time (each challenge its own: setmetatile from
+ * trainer_hill.c's data), so no model made from the layout's drawing can stand on them. Here every blocked cell of
+ * a Trainer Hill floor (below its back wall's rows) stands as a block of its own drawing, RAISED_BLOCK px tall: its top
+ * set back by its height, its front at the cell's south edge, each point showing the drawing's pixel at the same
+ * 45-degree screen key (z - y) - from the game's camera the drawing, from any other its depth.
+ * WJPC_TRAINER_HILL_FLAT=1: flat, as before.
+ */
+/* (and, 14:28 too, rooms laid as flat drawings: the Oceanic Museum's cases and benches and its back wall, the event
+ * islands' harbor's fences and wall, the Champion's Room's walls and dais). Per layout: its back wall's rows (stood
+ * upright at their foot), the first row of blocks, their height, and which metatiles stand (none listed: every
+ * blocked cell; listed: only those). */
+typedef struct
+{
+    uint16_t layout;
+    uint8_t wallRows, blockFrom;
+    float height;
+    uint16_t only[10];
+} RaisedRoom;
+
+static const RaisedRoom sRaisedRooms[] = {
+    { 415, 0, 6, 12.0f / 16.0f, { 0 } },   /* Trainer Hill 1F-4F: the challenge's boxes, pillars, counters */
+    { 416, 0, 6, 12.0f / 16.0f, { 0 } },
+    { 417, 0, 6, 12.0f / 16.0f, { 0 } },
+    { 418, 0, 6, 12.0f / 16.0f, { 0 } },
+    { 86, 2, 2, 12.0f / 16.0f, { 0 } },    /* Oceanic Museum 1F, 2F */
+    { 87, 2, 2, 12.0f / 16.0f, { 0 } },
+    { 405, 3, 4, 10.0f / 16.0f, { 0x21F, 0x3C1, 0x3C5, 0x22A, 0x22B, 0x22E, 0x3C2, 0x3C3 } },  /* the islands' harbor */
+    { 115, 0, 0, 20.0f / 16.0f, { 0 } },   /* the Champion's Room: its walls and dais */
+};
+
+static const RaisedRoom *RaisedRoomOf(const VoxelMapInstance *inst)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_TRAINER_HILL_FLAT") != NULL || getenv("WJPC_RAISED_ROOMS_FLAT") != NULL;
+    if (sOff || inst == NULL)
+        return NULL;
+    for (unsigned i = 0; i < sizeof(sRaisedRooms) / sizeof(sRaisedRooms[0]); ++i)
+        if (sRaisedRooms[i].layout == inst->layoutId)
+            return &sRaisedRooms[i];
+    return NULL;
+}
+
+/* 1: a block, 2: a cell of the standing back wall, 0: as drawn */
+static int RaisedBlockCell(const VoxelMapInstance *inst, int x, int y, float *height)
+{
+    const RaisedRoom *r = RaisedRoomOf(inst);
+    int m;
+
+    if (r == NULL)
+        return 0;
+    if (y - inst->originY < r->wallRows)
+    {
+        *height = (float)r->wallRows;
+        return 2;
+    }
+    if (y - inst->originY < r->blockFrom || VoxelWorld_GetCollision(x, y) == 0)
+        return 0;
+    m = VoxelWorld_GetMetatileId(x, y);
+    if (m == 0x001 || m == 0x170)
+        return 0;   /* the void, the sea */
+    if (r->only[0] != 0)
+    {
+        bool in = false;
+
+        for (unsigned k = 0; k < 10 && r->only[k] != 0; ++k)
+            in = in || r->only[k] == m;
+        if (!in)
+            return 0;
+    }
+    else if (r->layout >= 415 && r->layout <= 418
+          && (x <= inst->originX || x >= inst->originX + inst->width - 1 || y >= inst->originY + inst->height - 1))
+        return 0;
+    *height = r->height;
+    return 1;
+}
+
+/* a cell of a room's back wall, stood upright at the wall's foot (row `rows`): its drawing's rows as they rise */
+static void EmitStandingWall(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y, float rows,
+                             float u0, float v0, float u1, float v1)
+{
+    float foot = (float)inst->originY + rows, r = (float)(y - inst->originY);
+    float top = rows - r, bot = rows - r - 1.0f;
+    bool lighting = b->lighting;
+
+    b->lighting = false;
+    VoxelBuilder_Quad(b, &(VoxelVertex){ (float)x, top, foot, u0, v0, 1.0f },
+                      &(VoxelVertex){ (float)x + 1, top, foot, u1, v0, 1.0f },
+                      &(VoxelVertex){ (float)x + 1, bot, foot, u1, v1, 1.0f },
+                      &(VoxelVertex){ (float)x, bot, foot, u0, v1, 1.0f });
+    b->lighting = lighting;
+}
+
+static void EmitRaisedBlock(VoxelBuilder *b, int x, int y, float h, float u0, float v0, float u1, float v1)
+{
+    const float z0 = (float)y, z1 = (float)y + 1.0f;
+    const float q0 = z0, q1 = z1;  /* the drawing's rows: screen keys z0 .. z1 */
+    VoxelVertex p[4];
+    bool lighting = b->lighting;
+    float du = (u1 - u0) / 32.0f;
+
+    b->lighting = false;
+    /* top, set back by its height */
+    StairVertex(&p[0], x, h, z0 + h, u0, q0, q1, v0, v1, 1.0f);
+    StairVertex(&p[1], x + 1, h, z0 + h, u1, q0, q1, v0, v1, 1.0f);
+    StairVertex(&p[2], x + 1, h, z1, u1, q0, q1, v0, v1, 1.0f);
+    StairVertex(&p[3], x, h, z1, u0, q0, q1, v0, v1, 1.0f);
+    VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+    /* front */
+    StairVertex(&p[0], x, h, z1, u0, q0, q1, v0, v1, 0.92f);
+    StairVertex(&p[1], x + 1, h, z1, u1, q0, q1, v0, v1, 0.92f);
+    StairVertex(&p[2], x + 1, 0.0f, z1, u1, q0, q1, v0, v1, 0.92f);
+    StairVertex(&p[3], x, 0.0f, z1, u0, q0, q1, v0, v1, 0.92f);
+    VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+    /* the sides, in the drawing's edge columns */
+    for (int e = 0; e < 2; ++e)
+    {
+        float sx = (float)(x + e), su = e == 0 ? u0 + du : u1 - du;
+
+        StairVertex(&p[0], sx, h, z0 + h, su, q0, q1, v0, v1, 0.78f);
+        StairVertex(&p[1], sx, h, z1, su, q0, q1, v0, v1, 0.78f);
+        StairVertex(&p[2], sx, 0.0f, z1, su, q0, q1, v0, v1, 0.78f);
+        StairVertex(&p[3], sx, 0.0f, z0 + h, su, q0, q1, v0, v1, 0.78f);
+        VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+    }
+    b->lighting = lighting;
+}
+
 static void EmitRelief(VoxelBuilder *b, int x, int y, const int16_t *g, const int16_t *s,
                        int artY, int metatile, bool onFloor, int floor, const uint8_t *rows)
 {
@@ -3219,6 +3350,19 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
         }
         if (shape == VOXEL_SHAPE_VOID)
             continue;
+        {
+            float u0, v0, u1, v1, rh;
+            int raised = RaisedBlockCell(inst, x, y, &rh);
+
+            if (raised != 0 && MetatileUV(builder, VoxelWorld_GetMetatileId(x, y), &u0, &v0, &u1, &v1))
+            {
+                if (raised == 1)
+                    EmitRaisedBlock(builder, x, y, rh, u0, v0, u1, v1);
+                else
+                    EmitStandingWall(builder, inst, x, y, rh, u0, v0, u1, v1);
+                continue;
+            }
+        }
         /* A lifted cell lays its own drawing on its relief. A slope - rock,
          * stairs - is nothing but that; a level lifted cell still carries
          * whatever stands on it, drawn below with the same lift. */

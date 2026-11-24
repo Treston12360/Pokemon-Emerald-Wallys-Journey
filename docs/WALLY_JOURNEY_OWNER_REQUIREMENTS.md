@@ -1324,3 +1324,8 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     (voxel_world.c; WJPC_ISLANDS_INDOOR=1: as before): Faraway Island's woods are 3D trees. Birth Island and Navel
     Rock's islands raised (tools/voxel3ds/island_relief.py: Birth Island's cliff three courses under its grass,
     Navel Rock's sand a course up, its rock ring and peak over it) and their stone stairs real steps.
+  - N40: rooms laid as flat drawings get their depth at run time (voxel_mesh_builder.c sRaisedRooms): Trainer Hill
+    1F-4F (its challenge floors are set by the game at run time, so models made from the layout cannot stand there)
+    - every blocked cell a block of its own drawing, 12 px; the Oceanic Museum 1F/2F - back wall stood upright,
+    cases and benches 12 px blocks; the islands' harbor (Birth Island / Navel Rock / Faraway) - wall upright, fences
+    10 px; the Champion's Room - its walls and dais 20 px. WJPC_RAISED_ROOMS_FLAT=1: flat, as before.
