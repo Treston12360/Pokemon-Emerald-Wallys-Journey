@@ -28,7 +28,7 @@
 # 3) 2026-11-24 (Brennan 23:04: Mt. Pyre "still looks to be 2D" - "Back wall painted"; the 2F test: "Yes, do all
 #    floors"): the floors' walls as relief - pillars and door frames at the face, panels 4 px back, doorways recessed
 #    12 px, stairways 16 px. In voxel_building_specs.py, before brendan_1f():
-#  def mt_pyre_wall(tag, y0, x0, x1, doors=(), stairs=(), pillars=(), solid=()):
+#  def mt_pyre_wall(tag, y0, x0, x1, doors=(), stairs=(), pillars=(), solid=(), steps=()):
 #      """Wally's Journey (#29, Brennan 2026-11-23 23:04: Mt. Pyre "still looks to be 2D" - "Back wall painted"; his
 #      pick of the 2F test: "Yes, do all floors"): one of a floor's walls (rows y0..y0+31, standing on row y0+32,
 #      from x0 to x1) stood as relief, not one painted panel. The pillars (8 wide) and the doorways' frames (47 wide:
@@ -38,7 +38,8 @@
 #      steps drawn on it)."""
 #      foot = y0 + 32
 #      frames = [(x, "door") for x in doors] + [(x, "stairs") for x in stairs]
-#      stand = sorted([(x, x + 8) for x in pillars] + [(x, x + 46) for x, _ in frames] + list(solid))
+#      # (`steps`: stretches neither wall nor panel - a flight stood as real steps, mt_pyre_steps)
+#      stand = sorted([(x, x + 8) for x in pillars] + [(x, x + 46) for x, _ in frames] + list(solid) + list(steps))
 #      pieces = []
 #      for x, kind in frames:
 #          deep = 12 if kind == "door" else 16
@@ -59,6 +60,17 @@
 #      return pieces
 #  
 #  
+#  def mt_pyre_steps(tag, x0, x1, foot, steps=4, rise=3, tread=5):
+#      """(#29 look test, Brennan 2026-11-24 07:15: "show me what 3D stairs would look like" at Mt. Pyre): a flight
+#      drawn on a wall's face (x0..x1, its bottom on row `foot`) stood as real steps: each a slab `rise` px tall whose
+#      front is the drawing's dark band and whose top (`tread` px deep) its light one, so the GBA's 45-degree view of
+#      them is the drawing, row for row (v = z - y): steps x (rise + tread) rows of it."""
+#      back = foot - steps * tread
+#      return [piece("steps_%s" % tag, [(x0, foot - steps * (rise + tread), x1, foot)], steps * rise,
+#                    plan=[("step%d" % k, [(x0, back), (x1, back), (x1, foot - k * tread), (x0, foot - k * tread)],
+#                           k * rise, (k + 1) * rise, (x0, x1, foot)) for k in range(steps)])]
+#  
+#  
 #  MT_PYRE_ROOMS = {
 #      "1F": mt_pyre_wall("back", 0, 144, 352, stairs=[161], pillars=[240, 288, 336])
 #            + mt_pyre_wall("hall", 48, 48, 144, pillars=[64, 112], solid=[(128, 144)]),
@@ -66,13 +78,20 @@
 #      "3F": mt_pyre_wall("back", 0, 0, 208, doors=[145], stairs=[17], pillars=[0, 80, 112, 192]),
 #      "4F": mt_pyre_wall("back", 0, 112, 208, stairs=[145], pillars=[112, 200])
 #            + mt_pyre_wall("upper", 32, 0, 112, solid=[(96, 112)])
-#            + mt_pyre_wall("front", 64, 0, 208, doors=[17], pillars=[136, 192], solid=[(144, 192)]),
+#            + mt_pyre_wall("front", 64, 0, 208, doors=[17], pillars=[136, 192], steps=[(144, 192)])
+#            + mt_pyre_steps("4f_front", 144, 192, 96),
 #      "5F": mt_pyre_wall("back", 0, 0, 96, stairs=[17], pillars=[0, 88])
 #            + mt_pyre_wall("upper", 32, 96, 208, solid=[(96, 112)])
-#            + mt_pyre_wall("front", 64, 0, 208, doors=[145], pillars=[24, 48], solid=[(32, 48)]),
+#            + mt_pyre_wall("front", 64, 0, 208, doors=[145], pillars=[24, 48], steps=[(32, 48)])
+#            + mt_pyre_steps("5f_front", 32, 48, 96),
 #      "6F": mt_pyre_wall("back", 0, 0, 208, doors=[17], pillars=[8, 64])
-#            + mt_pyre_wall("front", 96, 0, 208, pillars=[152, 176], solid=[(160, 176)]),
+#            + mt_pyre_wall("front", 96, 0, 208, pillars=[152, 176], steps=[(160, 176)])
+#            + mt_pyre_steps("6f_front", 160, 176, 128),
 #  }
+#
+#    (4) 2026-11-24 07:36 Brennan: "Yes do the 3D stairs for all": the flights drawn on the 4F/5F/6F front walls
+#    stand as real steps (mt_pyre_steps; the wall leaves those stretches to them: `steps=`). The 1F hall's and
+#    the 4F/5F upper walls' `solid` stretches are wall ends, not stairs.
 #
 #    and in SPECS, before the "mt_pyre_grave" entry:
 #    ] + [

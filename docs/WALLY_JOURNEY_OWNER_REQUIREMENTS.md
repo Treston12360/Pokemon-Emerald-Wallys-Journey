@@ -1268,3 +1268,5 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     (town, city, route, ocean route - the types the 2D game gives seasons), so underwater maps are covered too. An
     outside city (Slateport) in winter is pixel-for-pixel the same as before: its roofs keep their snow.
 - Brennan 2026-11-24 07:36: "Yes do the 3D stairs for all" (Mt. Pyre's flights drawn on wall faces).
+  - N33: done for the three flights drawn on wall faces - 4F front (wide), 5F front and 6F front (narrow): each 4
+    real steps (tools/voxel3ds/mt_pyre_grave_spec.py, mt_pyre_steps). Pictures sent.
