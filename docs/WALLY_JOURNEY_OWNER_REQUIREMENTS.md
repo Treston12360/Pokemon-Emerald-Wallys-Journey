@@ -1333,3 +1333,27 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     cave, an upright face a little darker than the floor (0.8 for a wall, by its slope; WJPC_CAVE_FACES_FLAT=1: all as
     the floor) - all at the floor's light, its pale rock read flat. (Navel Rock is drawn washed out in 2D too.)
   - Open: Sootopolis Gym "dark shadows walls" and Fortree Gym "looks 2D" - asked Brennan which part (circle).
+    Answered 14:55 (below).
+- 2026-11-24 14:55 Brennan (7 marked-up pictures): "All things circled needs fixed, they need better 3D models as
+  they're either cut off or not correct, the back walls need to be 3D not flat, the islands need to be natural and not
+  angled blocks, the ferry try remodeling that so that it is an actual 3D ferry model, the moving gates need to be 3D".
+  - N42: Birth Island and Navel Rock (outside) - the sea read by behavior (every MB_OCEAN_WATER metatile; 0x173 is
+    mountain top; the shore edges 0x189/0x190/0x198/0x19A had been lifted as rock: Navel Rock's blue slabs). The land
+    falls to the sea west, east and north over 2.5 tiles on a smooth curve; the drawn south cliffs stay upright
+    (tools/voxel3ds/island_relief.py).
+  - N43: Sootopolis Gym 1F/B1F - the ice walls' inner sides were lit by the sun's facing (dark grey-blue); now lit as
+    the floor, as a cave's models are (VoxelMapInstance.flatModels; WJPC_SOOT_GYM_SUNLIT=1: as before).
+  - N44: Trainer Hill 1F-4F - the back wall each side of the stairs up and the yellow wall round the black well stand
+    upright (per column: foot row and height); the hexagon stones are a prism on the diamond the drawing shows, the
+    round pillars an oval cylinder (WJPC_TRAINER_HILL_WALL_FLAT=1 / WJPC_TRAINER_HILL_BLOCKS=1: as N40). Pillars
+    were checked by drawing the stones as pillars (none on the floors checked).
+  - N45: Oceanic Museum 2F - the door arch a doorway (its stairs set 8 px into the wall, frame 3 px out), the pillar
+    a block the wall's height, the three wall cases 8 px out from the wall, the two computers a desk with the monitor
+    on it (WJPC_MUSEUM_FLAT=1: as N40). 1F not circled - unchanged.
+  - N46: the S.S. Tidal (island harbor) is a 3D ship read off its drawing: hull with raked bow, superstructure, two
+    stacks, mast; shaded sides (WJPC_FERRY_CARD=1: the card). From the normal camera it keeps the drawing's look;
+    a lower camera shows the hull and decks.
+  - N47: Fortree Gym's rotating gates are 3D barriers (post + arms 12 px tall), placed and turned from the game's own
+    gate data (rotating_gate.c RotatingGate_3DInfo, PORTABLE only) - the old card was also drawn unturned
+    (WJPC_ROTATING_GATE_CARD=1: the card). Checked standing still against the 2D view; not yet seen mid-turn.
+  - Gap check at 1920x1080 and 2560x1440: none.
