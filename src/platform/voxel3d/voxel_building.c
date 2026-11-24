@@ -246,6 +246,18 @@ typedef struct
 static VOXEL_TLS PlacementBands sBands[BAND_SLOTS];
 static VOXEL_TLS unsigned sBandClock;
 
+/* Wally's Journey #29 (Brennan 2026-11-23: "all caves should be 3D models"): a cave's models (its rocks, Mt. Pyre's
+ * graves are indoors) were lit by the sun, which is Gamma's light function outdoors - in a cave, where the sun does
+ * not reach (no cloud shadows either: voxel_gl.c), every face turned from it came out black: the rocks' fronts. A
+ * cave's models keep the shades they were drawn with, as a room's do. WJPC_CAVE_MODELS_SUNLIT=1: as before. */
+static bool UnlitCave(const VoxelMapInstance *inst)
+{
+    static int sOld = -1;
+    if (sOld < 0)
+        sOld = getenv("WJPC_CAVE_MODELS_SUNLIT") != NULL;
+    return inst != NULL && inst->underground && !sOld;
+}
+
 static unsigned U16(const uint8_t *p) { return (unsigned)p[0] | ((unsigned)p[1] << 8); }
 static uint32_t U32(const uint8_t *p)
 {
@@ -1572,7 +1584,7 @@ bool VoxelBuildings_EmitSome(VoxelBuilder *builder, const VoxelMapInstance *inst
                 VoxelStaticDraw *s = &builder->statics[builder->staticCount++];
 
                 s->pageModel = p[i].pageModel;
-                s->lit = builder->lighting;
+                s->lit = builder->lighting && !UnlitCave(inst);
                 s->x = wx - builder->originX;
                 s->y = builder->lift + builder->base;
                 s->z = VoxelBuilder_StretchZ(builder, wz + builder->shift) - builder->originZ;
@@ -1627,7 +1639,7 @@ bool VoxelBuildings_EmitSome(VoxelBuilder *builder, const VoxelMapInstance *inst
                 if (step == 6)
                     VoxelBuilder_Quad(builder, &t[0], &t[1], &t[2], &t[5]);
 #if CTR_VOXEL_LIGHTING
-                else if (builder->lighting)
+                else if (builder->lighting && !UnlitCave(inst))
                 {
                     /* Lit by the same sun as the terrain, not by the side
                      * the drawing was made for. */

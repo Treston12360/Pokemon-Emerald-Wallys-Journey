@@ -1246,3 +1246,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     12 px, stairway alcoves 16 px (steps drawn on the alcove's back). Also the inner walls of 4F/5F/6F (the raised
     floors' fronts, the corridor wall on 1F). The wide flights through the 4F/5F/6F walls stay drawn on the face (real
     steps: a follow-up if wanted). Picture docs/polish_reports/2026-11-24_N30_mtpyre_walls.png.
+- 2026-11-24 N31 / #29 the Cave tileset's floor detail: rocks and boulders (spec cave_rock) and Cave of Origin's red
+  crystals (spec cave_crystal) stand as models in the 14 caves that had none (Granite Cave, Victory Road 1F/B1F,
+  Desert Underpass, Cave of Origin, Seafloor Cavern Room 2, Shoal Cave stairs room, Artisan, Terra, Altering Cave):
+  tools/voxel3ds/cave_detail_spec.py. A cave's models are not lit by the sun's facing (voxel_building.c UnlitCave:
+  they came out black), and their tops do not take the winter roof snow (voxel_gl.c). Known: the models read a
+  little paler than the same rock painted on the floor (Victory Road, Desert Underpass) - the floor's colour is not
+  coming from the season (caves have none) nor the light (checked: the same shade); still to find.
+- 2026-11-24 07:15 Brennan: "Can you show me what 3D stairs would look like Mt pyre?" - test made on 4F's wide flight
+  (mt_pyre_steps: 4 slabs, 3 px rise / 5 px tread, so the 45-degree view is the drawing row for row); pictures sent,
+  not committed until he says.
