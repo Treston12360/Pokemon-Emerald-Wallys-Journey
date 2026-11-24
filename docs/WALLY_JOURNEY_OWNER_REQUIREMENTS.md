@@ -1090,3 +1090,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Gap test (5 sea views + 4 views round the rock, 1920x1080 and 2560x1440): no new sky. One view from the rock's east
   (warp 48 26 9, after another warp) shows magenta in the screen's far top-right corner - the same with the old data,
   so not from this change. Picture docs/polish_reports/2026-11-23_N18_route133_boxes.png.
+- N19 2026-11-23 17:55 (Brennan, the N18 "after" picture with two red boxes on Route 133: "fix these sections"):
+  both are a single tile on a rock standing two levels (32 px) where the rest of the rock is one level (16 px) -
+  from the first 3D data (the 0x0B4 tile at the rock's end), no later fix.
+  - Middle rock's east tip (relief 49): (49,16) 32 -> 16; its east ramp (50,16) now 16 -> 0 with (51,17)'s cut;
+    (49,17) and (49,18) re-laid to meet the west ledge (48,17)'s slope and the tip on every side (a dark wall triangle
+    stood there once the tile was lowered).
+  - Bottom rock's west end: (34..36,26) and (36,27) 32 -> 16, (33,26)'s ramp now 0 -> 16 - the raised flat box is gone.
+  Gap test (5 sea views + 4 round the rock + 3 at these tips, 1920x1080 and 2560x1440): no new sky. The view from
+  warp 48 46 20 shows the map's far edge as sky in its top-right corner (10836 px at 1920) - exactly the same with the
+  old data. Picture docs/polish_reports/2026-11-23_N19_route133_tips.png.
