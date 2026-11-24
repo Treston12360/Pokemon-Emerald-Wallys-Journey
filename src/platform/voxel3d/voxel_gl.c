@@ -4245,7 +4245,7 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
                     static int sNormalLit = -1;
                     if (sNormalLit < 0)
                         sNormalLit = getenv("WJPC_CAVE_MODELS_NORMAL_LIT") != NULL;
-                    wj_glUniform1f(sUniFlatLight, inst0->underground && !sNormalLit ? 1.0f : 0.0f);
+                    wj_glUniform1f(sUniFlatLight, inst0->flatModels && !sNormalLit ? 1.0f : 0.0f);
                 }
                 if (split)
                     for (int kind = 0; kind < FACE_KINDS; kind++)

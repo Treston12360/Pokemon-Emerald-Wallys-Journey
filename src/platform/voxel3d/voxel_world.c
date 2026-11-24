@@ -652,6 +652,18 @@ static void FillInstance(VoxelMapInstance *inst, const struct MapHeader *header,
             inst->sky = true;
         }
     }
+    /* Brennan 2026-11-24 14:28 / 14:55 ("Sootopolis gym has dark shadows walls" - circled: the ice walls' inner
+     * sides): a room's models are lit by the sun's facing, so the sides of the gym's walls turned from it came out a
+     * dark grey-blue, as a cave's rocks did (#29). Its walls are lit as its floor, each side keeping the shade it was
+     * drawn with, as a cave's are. WJPC_SOOT_GYM_SUNLIT=1: as before. */
+    {
+        static int sOld = -1;
+        if (sOld < 0)
+            sOld = getenv("WJPC_SOOT_GYM_SUNLIT") != NULL;
+        inst->flatModels = inst->underground
+                        || (!sOld && ((mapGroup << 8 | mapNum) == MAP_SOOTOPOLIS_CITY_GYM_1F
+                                   || (mapGroup << 8 | mapNum) == MAP_SOOTOPOLIS_CITY_GYM_B1F));
+    }
     inst->lift = 0;
 }
 

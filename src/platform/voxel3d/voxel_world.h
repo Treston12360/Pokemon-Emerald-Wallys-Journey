@@ -63,6 +63,7 @@ typedef struct
     bool indoor;
     bool underground; // a cave (MAP_TYPE_UNDERGROUND): drawn closed in like indoors, no sky or belt
     bool sky;         // under the sky (town, city, route, ocean route: the 2D game's seasons and day light)
+    bool flatModels;  // its models lit as its floor, not by the sun's facing (caves; the Sootopolis Gym's ice walls)
     /* Pixels the map stands over its base here, the way it was reached: what
      * the seams walked from the current map ask (VoxelRelief_SeamStep), so it
      * meets each map it was placed from whatever Hoenn's loops add up to. */

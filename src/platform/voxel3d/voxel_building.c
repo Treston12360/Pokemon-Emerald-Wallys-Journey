@@ -255,7 +255,7 @@ static bool UnlitCave(const VoxelMapInstance *inst)
     static int sOld = -1;
     if (sOld < 0)
         sOld = getenv("WJPC_CAVE_MODELS_SUNLIT") != NULL;
-    return inst != NULL && inst->underground && !sOld;
+    return inst != NULL && inst->flatModels && !sOld;
 }
 
 static bool CaveFlatShade(const VoxelMapInstance *inst)
