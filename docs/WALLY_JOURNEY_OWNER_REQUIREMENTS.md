@@ -1234,3 +1234,8 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     EmitFieldCell's dump (WJPC_FIELD_DUMP) prints no cells there - what lays it is still to find.
 - 2026-11-23 23:15 Brennan (asked: keep digging at #22/#23 or move on): "Move on, come back later" - #29 caves and
   #30 rooms now, #22/#23 afterwards.
+- 2026-11-23 N29 / #29 Mt. Pyre inside: the gravestones (Facility tileset 0x2ED/0x2EE/0x326/0x3D7, 264 in 1F-6F)
+  stand as stones 9 px tall - rounded top, engraved front - one model per stone (spec mt_pyre_grave,
+  tools/voxel3ds/mt_pyre_grave_spec.py; buildings.bin layouts 137-142 spliced). The back walls already stand. Left
+  flat on purpose: the red warp mats and the dark floor hole on 2F (both are floor). Picture
+  docs/polish_reports/2026-11-23_N29_mtpyre_graves.png.
