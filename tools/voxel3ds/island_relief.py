@@ -24,7 +24,10 @@ import voxel_relief_fixes as vrf  # noqa: E402
 
 FACE = 16
 MAX = 3
-SEA = {0x170, 0x171, 0x172, 0x173, 0x174}           # (the sea drawn round them: open water, its edges)
+# the sea drawn round them: every General metatile of MB_OCEAN_WATER (its open water and its edges by the rock;
+# 14:55 "the islands need to be natural": a shore edge read as rock stood a blue slab beside Navel Rock)
+SEA = {0x170, 0x172, 0x174, 0x180, 0x181, 0x189, 0x190, 0x192, 0x198, 0x19A}
+FALL = 2.5   # tiles over which the land falls to the sea west, east and north of it (south: its drawn cliff)
 MAPS = {
     # layout id: (stair metatiles, plateau px, walkable cells drawn as rock - the peak's top, which the collision
     # leaves open: stood as the rock it is drawn)
@@ -84,6 +87,19 @@ def build(entry, stairs, plateau, rocky=()):
             for (cx, cy, top) in ((x, y, True), (x + 1, y, True), (x, y + 1, False), (x + 1, y + 1, False)):
                 h = level[c] if c in level else (n[c] if top else s[c])
                 corner[(cx, cy)] = min(corner.get((cx, cy), 1 << 20), h)
+    # Brennan 2026-11-24 14:55 ("the islands need to be natural and not angled blocks"): the land falls to the sea
+    # west, east and north of it smoothly, over FALL tiles - a rounded shore, not a cell-wide ramp and stepped
+    # grass. Only the sea at the same row or north counts: the cliff drawn on the south stays upright.
+    seac = [(sx + 0.5, sy + 0.5) for (sx, sy) in sea]
+    top = max(corner.values()) or 1
+    for (cx, cy), h in list(corner.items()):
+        if h <= 0:
+            continue
+        d2 = min([(cx - sx) ** 2 + (cy - sy) ** 2 for (sx, sy) in seac if sy <= cy + 0.5] or [1e9])
+        d = max(0.0, d2 ** 0.5 - 0.5)
+        t = min(1.0, d / FALL)
+        t = t * t * (3 - 2 * t)
+        corner[(cx, cy)] = min(h, int(round(top * t)))
     cells = {}
     for y in range(H):
         for x in range(W):
