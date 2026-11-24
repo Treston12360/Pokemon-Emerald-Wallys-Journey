@@ -1167,3 +1167,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     corners gone (only the #19 hole is left). Corner views at 1920x1080 and 2560x1440: 0 everywhere except that hole.
     Cost: about twice the belt pieces, built a few a frame; the worst belt frame on the test box was not higher (23 ms
     vs 36 ms). Picture docs/polish_reports/2026-11-23_N23_background_further.png.
+  - N24 / #31 done: the dive areas' seaweed stands up like the tall grass. Only two seaweed metatiles in the game:
+    Underwater tileset 0x201 (Route 126) and 0x281 (Route 124, darker palette); each is a 16x16 card in
+    trees.rgba5551 ((96,48) and (112,48), tools/voxel3ds/add_seaweed_cards.py: the drawing less the trench floor's
+    colours) leant back at the tall grass's 50 degrees, one tile long, so a diver in it is covered to the waist from
+    the front. The floor under it is the trench floor next to the patches (0x216 / 0x2A9). voxel_tree.c
+    EmitSeaweedCard. WJPC_SEAWEED_FLAT=1: flat, as before. Picture docs/polish_reports/2026-11-23_N24_seaweed.png.

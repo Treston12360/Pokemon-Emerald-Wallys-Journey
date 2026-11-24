@@ -22,6 +22,7 @@ extern const struct Tileset gTileset_Mossdeep;
 extern const struct Tileset gTileset_Fallarbor;
 extern const struct Tileset gTileset_MeteorFalls;
 extern const struct Tileset gTileset_RusturfTunnel;
+extern const struct Tileset gTileset_Underwater;
 
 /* Where gen_voxel_trees.py packs each tree, in texels. */
 #define TEX_U(px) ((float)(px) / VOXEL_TREE_TEXTURE_DIM)
@@ -253,6 +254,12 @@ int VoxelTree_GroundMetatile(const void *secondaryTileset, int metatileId)
             if (!sFlat)
                 return 0x204;
         }
+        /* Brennan 2026-11-23 21:03 (audit item 31, seaweed: "stand them up like tall grass"): under the Underwater
+         * tileset's seaweed card (VoxelTree_EmitInstance) the trench floor next to it: 0x216 (Route 126's, 0x201's
+         * palette), 0x2A9 (Route 124's darker one, 0x281's). WJPC_SEAWEED_FLAT=1: as drawn. */
+        if (secondaryTileset == &gTileset_Underwater && (metatileId == 0x201 || metatileId == 0x281)
+         && getenv("WJPC_SEAWEED_FLAT") == NULL)
+            return metatileId == 0x201 ? 0x216 : 0x2A9;
         /* Brennan 2026-11-22 (13:37 list B1): under Rusturf Tunnel's rock mounds (VoxelTree_EmitInstance) its plain
          * floor (0x202) or rock top (0x211), the drawing's own ground layer. WJPC_FLAT_FLOOR_ROCKS=1: as drawn. */
         if (secondaryTileset == &gTileset_RusturfTunnel && metatileId >= 0x203 && metatileId <= 0x206
@@ -680,6 +687,26 @@ static void EmitGroundCard(VoxelBuilder *builder, int x, int y, int kind, float 
     builder->rounded = false;
 }
 
+/* (audit item 31) the dive areas' seaweed: its own drawing less the trench floor (16x16 at (96,48) for 0x201, (112,48)
+ * for 0x281: tools/voxel3ds/add_seaweed_cards.py), stood on the floor and leant back at the tall grass's 50 degrees,
+ * one tile long (a walker in it is covered to the waist from the front, as in long grass), its foot 0.85 into the
+ * cell so the next row's card stands in front of this one's top. */
+static void EmitSeaweedCard(VoxelBuilder *builder, int x, int y, unsigned tx)
+{
+    const float len = 1.0f, rise = 0.766044f * len, run = 0.642788f * len;
+    const float baseHeight = -0.02f, in = 1.0f / 32.0f;
+    const unsigned ty = 48;
+    float wx = (float)x, baseZ = (float)y + 0.85f;
+
+    builder->rounded = true;
+    VoxelBuilder_Quad(builder,
+        &(VoxelVertex){wx,        baseHeight + rise, baseZ - run, TEX_U(tx + in),      TEX_V(ty + 0.25f), 1.0f},
+        &(VoxelVertex){wx + 1.0f, baseHeight + rise, baseZ - run, TEX_U(tx + 16 - in), TEX_V(ty + 0.25f), 1.0f},
+        &(VoxelVertex){wx + 1.0f, baseHeight,        baseZ,       TEX_U(tx + 16 - in), TEX_V(ty + 16 - in), 1.0f},
+        &(VoxelVertex){wx,        baseHeight,        baseZ,       TEX_U(tx + in),      TEX_V(ty + 16 - in), 1.0f});
+    builder->rounded = false;
+}
+
 /*
  * Brennan 2026-11-22 13:37 (list B1, Rusturf Tunnel: the floor rocks "still flat 2D ground textures - convert them into
  * proper 3D rock models"): a rock drawn on the ground stands as a mound of its own drawing (its card in the trees
@@ -861,6 +888,15 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
                 builder->lift = VoxelRelief_CellLift(inst, x, y);
                 builder->shift = VoxelRelief_CellShift(inst, x, y);
                 EmitGroundCard(builder, x, y, CARD_FLOWER_MAUVILLE, 0.80f);
+                builder->lift = 0.0f;
+                builder->shift = 0.0f;
+            }
+            else if (inst->secondaryTileset == &gTileset_Underwater && (metatileId == 0x201 || metatileId == 0x281)
+                  && getenv("WJPC_SEAWEED_FLAT") == NULL)
+            {
+                builder->lift = VoxelRelief_CellLift(inst, x, y);
+                builder->shift = VoxelRelief_CellShift(inst, x, y);
+                EmitSeaweedCard(builder, x, y, metatileId == 0x201 ? 96u : 112u);
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
             }
