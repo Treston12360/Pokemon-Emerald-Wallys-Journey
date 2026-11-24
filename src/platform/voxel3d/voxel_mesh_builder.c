@@ -991,14 +991,106 @@ static const RaisedRoom *RaisedRoomOf(const VoxelMapInstance *inst)
     return NULL;
 }
 
-/* 1: a block, 2: a cell of the standing back wall, 0: as drawn */
+/* Brennan 2026-11-24 14:55 (Trainer Hill 1F circled: "the back walls need to be 3D not flat", the boxes "cut off or
+ * not correct"). Every Trainer Hill floor (415-418) has the same back: the wall each side of the stairs up (rows 0-1),
+ * and in the middle the black well with the yellow wall round it (its front rows 3-4) and the arrival pad's alcove
+ * (its back, row 3). Per column: the row the wall stands on (its foot) and its height in rows - the drawing's rows
+ * above the foot stand upright, those above them lie on its top (WJPC_TRAINER_HILL_WALL_FLAT=1: flat, as N40). */
+static const uint8_t sHillWallFoot[16] = { 2, 2, 2, 2, 5, 5, 4, 4, 4, 5, 5, 2, 2, 2, 2, 0 };
+static const uint8_t sHillWallRise[16] = { 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 0 };
+
+static bool HillWallColumn(const VoxelMapInstance *inst, int col, int *foot, int *rise)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_TRAINER_HILL_WALL_FLAT") != NULL;
+    if (sOff || inst == NULL || inst->layoutId < 415 || inst->layoutId > 418 || col < 0 || col >= 16
+     || sHillWallFoot[col] == 0)
+        return false;
+    *foot = sHillWallFoot[col];
+    *rise = sHillWallRise[col];
+    return true;
+}
+
+/* Trainer Hill's stone blocks (the hexagonal stack drawn in one cell, every floor's colours: the metatiles whose top
+ * layer is tiles 0x213/0x214) and its round pillars (the body cell, tiles 0x2AF/0x2BF; its cap drawn in the cell
+ * above) - by metatile, as the game lays them at run time. */
+static const uint16_t sHillStones[] = { 0x223, 0x224, 0x22B, 0x22C, 0x233, 0x234, 0x25B, 0x25C, 0x263, 0x264, 0x26B,
+    0x26C, 0x283, 0x284, 0x28B, 0x28C, 0x293, 0x294, 0x2A3, 0x2A4, 0x2AB, 0x2AC, 0x2B4, 0x2B6, 0x2C3, 0x2C4, 0x2CB,
+    0x2CC, 0x2D3, 0x2D4, 0x2E3, 0x2E4, 0x2EB, 0x2EC, 0x2F3, 0x2F4, 0x309 };
+static const uint16_t sHillPillars[] = { 0x237, 0x26F, 0x297, 0x2B7, 0x2D7, 0x2F7 };
+static const uint16_t sHillCaps[] = { 0x227, 0x247, 0x24F, 0x25F, 0x287, 0x2A7, 0x2C7, 0x2E7 };
+
+static bool InList(const uint16_t *list, unsigned n, int m)
+{
+    for (unsigned i = 0; i < n; ++i)
+        if (list[i] == m)
+            return true;
+    return false;
+}
+
+/* the plain floor of a stone's or a pillar's colours (the metatile of nothing but the tile its foot stands on) */
+static int HillPlainFloor(int m)
+{
+    if (m >= 0x220 && m < 0x240)
+        return 0x23B;
+    if (m >= 0x258 && m < 0x270)
+        return 0x273;
+    if (m >= 0x280 && m < 0x2A0)
+        return 0x29B;
+    if (m >= 0x2A0 && m < 0x2C0)
+        return 0x2BB;
+    if (m >= 0x2C0 && m < 0x2E0)
+        return 0x2DB;
+    if (m >= 0x2E0 && m < 0x300)
+        return 0x2FB;
+    return -1;
+}
+
+#define HILL_STONE 4
+#define HILL_PILLAR 5
+#define HILL_CAP 6
+#define HILL_WALL 3
+
+/* 1: a block, 2: a cell of the standing back wall, 3: a cell of a Trainer Hill floor's back wall (HillWallColumn),
+ * 4: a Trainer Hill stone, 5: a pillar, 6: a pillar's cap's cell (floor: the pillar stands in front of it), 0: as
+ * drawn */
 static int RaisedBlockCell(const VoxelMapInstance *inst, int x, int y, float *height)
 {
     const RaisedRoom *r = RaisedRoomOf(inst);
-    int m;
+    int m, foot, rise;
 
     if (r == NULL)
         return 0;
+    if (HillWallColumn(inst, x - inst->originX, &foot, &rise) && y - inst->originY < foot)
+    {
+        *height = (float)rise;
+        return HILL_WALL;
+    }
+    if (r->layout >= 415 && r->layout <= 418 && y - inst->originY >= r->blockFrom - 1)
+    {
+        static int sOff = -1;
+
+        if (sOff < 0)
+            sOff = getenv("WJPC_TRAINER_HILL_BLOCKS") != NULL;
+        m = VoxelWorld_GetMetatileId(x, y);
+        if (!sOff && InList(sHillCaps, sizeof(sHillCaps) / sizeof(sHillCaps[0]), m))
+            return HILL_CAP;
+        /* a floor cell north of a stone carries its top's tip, drawn there: the plain floor (the stone stands) */
+        if (!sOff && VoxelWorld_GetCollision(x, y) == 0 && y + 1 < inst->originY + inst->height
+         && VoxelWorld_GetCollision(x, y + 1) != 0
+         && InList(sHillStones, sizeof(sHillStones) / sizeof(sHillStones[0]), VoxelWorld_GetMetatileId(x, y + 1))
+         && HillPlainFloor(m) >= 0 && HillPlainFloor(m) != m)
+            return HILL_CAP;
+        if (!sOff && VoxelWorld_GetCollision(x, y) != 0 && y - inst->originY >= r->blockFrom)
+        {
+            if (InList(sHillStones, sizeof(sHillStones) / sizeof(sHillStones[0]), m))
+                return HILL_STONE;
+            if (InList(sHillPillars, sizeof(sHillPillars) / sizeof(sHillPillars[0]), m))
+                return HILL_PILLAR;
+        }
+    }
     if (y - inst->originY < r->wallRows)
     {
         *height = (float)r->wallRows;
@@ -1072,6 +1164,260 @@ static void EmitRaisedBlock(VoxelBuilder *b, int x, int y, float h, float u0, fl
         StairVertex(&p[2], sx, 0.0f, z1, su, q0, q1, v0, v1, 0.78f);
         StairVertex(&p[3], sx, 0.0f, z0 + h, su, q0, q1, v0, v1, 0.78f);
         VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+    }
+    b->lighting = lighting;
+}
+
+/* A vertex of a model laid on the drawing by the 45-degree screen key (z - h), in a cell's own pixels (px, pz from its
+ * north-west corner, h up): q = pz - h rows into the cell; above its top (q < 0), the cell north of it (`n`). */
+typedef struct
+{
+    float u0, v0, u1, v1;      /* the cell's drawing */
+    float nu0, nv0, nu1, nv1;  /* the drawing north of it */
+    int x, y;
+} KeyedCell;
+
+static void KeyedVertex(VoxelVertex *v, const KeyedCell *c, float px, float h, float pz, bool north, float shade)
+{
+    float q = pz - h + (north ? 16.0f : 0.0f), t = px / 16.0f;
+
+    q = q < 0.0f ? 0.0f : q > 16.0f ? 16.0f : q;
+    if (north)
+        *v = (VoxelVertex){ c->x + px / 16.0f, h / 16.0f, c->y + pz / 16.0f, c->nu0 + (c->nu1 - c->nu0) * t,
+                            c->nv0 + (c->nv1 - c->nv0) * q / 16.0f, shade + 4.0f };
+    else
+        *v = (VoxelVertex){ c->x + px / 16.0f, h / 16.0f, c->y + pz / 16.0f, c->u0 + (c->u1 - c->u0) * t,
+                            c->v0 + (c->v1 - c->v0) * q / 16.0f, shade + 4.0f };
+}
+
+/* a convex polygon (cell pixels: x, z at height h, flat), cut along the line where q = 0 (z = h): each part from its
+ * own cell's drawing */
+static void EmitKeyedFlat(VoxelBuilder *b, const KeyedCell *c, const float (*pt)[2], int n, float h, float shade)
+{
+    for (int side = 0; side < 2; ++side)
+    {
+        float out[40][2];
+        int m = 0;
+
+        for (int i = 0; i < n && m < 38; ++i)
+        {
+            const float *a = pt[i], *e = pt[(i + 1) % n];
+            bool ina = side == 0 ? a[1] >= h : a[1] < h, ine = side == 0 ? e[1] >= h : e[1] < h;
+
+            if (ina)
+            {
+                out[m][0] = a[0]; out[m][1] = a[1]; ++m;
+            }
+            if (ina != ine)
+            {
+                float t = (h - a[1]) / (e[1] - a[1]);
+
+                out[m][0] = a[0] + (e[0] - a[0]) * t; out[m][1] = h; ++m;
+            }
+        }
+        for (int i = 1; i + 1 < m; ++i)
+        {
+            VoxelVertex p[3];
+
+            KeyedVertex(&p[0], c, out[0][0], h, out[0][1], side == 1, shade);
+            KeyedVertex(&p[1], c, out[i][0], h, out[i][1], side == 1, shade);
+            KeyedVertex(&p[2], c, out[i + 1][0], h, out[i + 1][1], side == 1, shade);
+            VoxelBuilder_Tri(b, &p[0], &p[1], &p[2]);
+        }
+    }
+}
+
+/* an upright face from (xa, za) to (xe, ze), 0..H high, cut where q = 0 (h = z) */
+static void EmitKeyedSide(VoxelBuilder *b, const KeyedCell *c, float xa, float za, float xe, float ze, float H,
+                          float shade)
+{
+    float sa = za < 0.0f ? 0.0f : za > H ? H : za, se = ze < 0.0f ? 0.0f : ze > H ? H : ze;
+    VoxelVertex p[4];
+
+    if (sa > 0.0f || se > 0.0f)
+    {
+        KeyedVertex(&p[0], c, xa, sa, za, false, shade);
+        KeyedVertex(&p[1], c, xe, se, ze, false, shade);
+        KeyedVertex(&p[2], c, xe, 0.0f, ze, false, shade);
+        KeyedVertex(&p[3], c, xa, 0.0f, za, false, shade);
+        VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+    }
+    if (sa < H || se < H)
+    {
+        KeyedVertex(&p[0], c, xa, H, za, true, shade);
+        KeyedVertex(&p[1], c, xe, H, ze, true, shade);
+        KeyedVertex(&p[2], c, xe, se, ze, true, shade);
+        KeyedVertex(&p[3], c, xa, sa, za, true, shade);
+        VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+    }
+}
+
+/* the floor under a stone or a pillar: the plain floor of its colours, else a walkable neighbour's drawing (the
+ * floors are one pattern), else its own */
+static void EmitHillFloor(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y,
+                          float u0, float v0, float u1, float v1)
+{
+    static const int8_t d[4][2] = { { 0, 1 }, { -1, 0 }, { 1, 0 }, { 0, -1 } };
+    bool lighting = b->lighting;
+    int plain = HillPlainFloor(VoxelWorld_GetMetatileId(x, y));
+
+    for (int k = plain >= 0 && MetatileUV(b, plain, &u0, &v0, &u1, &v1) ? 4 : 0; k < 4; ++k)
+    {
+        int nx = x + d[k][0], ny = y + d[k][1], m;
+        float h;
+
+        if (nx < inst->originX || ny < inst->originY || nx >= inst->originX + inst->width
+         || ny >= inst->originY + inst->height || VoxelWorld_GetCollision(nx, ny) != 0
+         || RaisedBlockCell(inst, nx, ny, &h) != 0)
+            continue;
+        m = VoxelWorld_GetMetatileId(nx, ny);
+        if (MetatileUV(b, m, &u0, &v0, &u1, &v1))
+            break;
+    }
+    b->lighting = false;
+    VoxelBuilder_Quad(b, &(VoxelVertex){ (float)x, 0.0f, (float)y, u0, v0, 5.0f },
+                      &(VoxelVertex){ (float)x + 1, 0.0f, (float)y, u1, v0, 5.0f },
+                      &(VoxelVertex){ (float)x + 1, 0.0f, (float)y + 1, u1, v1, 5.0f },
+                      &(VoxelVertex){ (float)x, 0.0f, (float)y + 1, u0, v1, 5.0f });
+    b->lighting = lighting;
+}
+
+/* A stone: the drawing's hexagon is a block turned 45 degrees - its top's corners at rows 3 (west, east) and 7
+ * (front), its upright edges 6.5 px - so a prism on that plan, each point showing the drawing's pixel at its screen
+ * key: from the game's camera, the drawing. */
+static void EmitHillStone(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y,
+                          float u0, float v0, float u1, float v1)
+{
+    static const float plan[4][2] = { { 8.0f, 6.5f }, { 15.0f, 9.5f }, { 8.0f, 13.5f }, { 1.0f, 9.5f } };
+    static const float shade[4] = { 0.8f, 0.94f, 1.0f, 0.8f };
+    const float H = 6.5f;
+    KeyedCell c = { u0, v0, u1, v1, u0, v0, u1, v1, x, y };
+    bool lighting = b->lighting;
+
+    EmitHillFloor(b, inst, x, y, u0, v0, u1, v1);
+    b->lighting = false;
+    EmitKeyedFlat(b, &c, plan, 4, H, 1.0f);
+    for (int i = 0; i < 4; ++i)
+    {
+        const float *a = plan[(i + 1) % 4], *e = plan[i];   /* (wound as a front face: west to east seen from out) */
+
+        EmitKeyedSide(b, &c, a[0], a[1], e[0], e[1], H, shade[i]);
+    }
+    b->lighting = lighting;
+}
+
+/* A pillar: the drawing's round column - its foot's front at row 13 of its cell, its top's back at row 8 of the cell
+ * above, 14 px across - an upright cylinder 12 px tall on an oval 14 x 9 px (the drawing's rounds: from the game's
+ * camera, the drawing), its top and its upper side from the cap drawn above it. */
+static void EmitHillPillar(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y,
+                           float u0, float v0, float u1, float v1)
+{
+    enum { SEGS = 20 };
+    const float H = 12.0f, cx = 8.0f, cz = 8.5f, rx = 7.0f, rz = 4.5f;
+    KeyedCell c = { u0, v0, u1, v1, u0, v0, u1, v1, x, y };
+    float ring[SEGS][2];
+    bool lighting = b->lighting;
+
+    if (y > inst->originY)
+        MetatileUV(b, VoxelWorld_GetMetatileId(x, y - 1), &c.nu0, &c.nv0, &c.nu1, &c.nv1);
+    EmitHillFloor(b, inst, x, y, u0, v0, u1, v1);
+    b->lighting = false;
+    for (int i = 0; i < SEGS; ++i)
+    {
+        float a = 6.2831853f * (float)i / SEGS;
+
+        ring[i][0] = cx + rx * cosf(a);
+        ring[i][1] = cz + rz * sinf(a);
+    }
+    EmitKeyedFlat(b, &c, (const float (*)[2])ring, SEGS, H, 1.0f);
+    for (int i = 0; i < SEGS; ++i)
+    {
+        const float *a = ring[(i + 1) % SEGS], *e = ring[i];  /* (wound as the stone's sides) */
+        float sh = (a[1] + e[1]) * 0.5f > cz ? 1.0f : 0.84f;
+
+        EmitKeyedSide(b, &c, a[0], a[1], e[0], e[1], H, sh);
+    }
+    b->lighting = lighting;
+}
+
+/* A cell of a Trainer Hill floor's back wall (HillWallColumn): above its column's rise, its drawing lies on the
+ * wall's top, set back by its height (as the game's camera sees a top); in the rise, it stands upright on the foot.
+ * The column's sides where its neighbour's wall is shorter or stands further north are its foot's edge columns. */
+static void EmitHillWall(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y,
+                         float u0, float v0, float u1, float v1)
+{
+    int col = x - inst->originX, r = y - inst->originY, foot, rise;
+    bool lighting = b->lighting;
+
+    if (!HillWallColumn(inst, col, &foot, &rise))
+        return;
+    b->lighting = false;
+    if (r < foot - rise)
+    {
+        float z0 = (float)y + rise, z1 = z0 + 1.0f, h = (float)rise;
+
+        VoxelBuilder_Quad(b, &(VoxelVertex){ (float)x, h, z0, u0, v0, 5.0f },
+                          &(VoxelVertex){ (float)x + 1, h, z0, u1, v0, 5.0f },
+                          &(VoxelVertex){ (float)x + 1, h, z1, u1, v1, 5.0f },
+                          &(VoxelVertex){ (float)x, h, z1, u0, v1, 5.0f });
+        b->lighting = lighting;
+        return;
+    }
+    {
+        float zf = (float)inst->originY + foot, top = (float)(foot - r), bot = top - 1.0f;
+
+        VoxelBuilder_Quad(b, &(VoxelVertex){ (float)x, top, zf, u0, v0, 5.0f },
+                          &(VoxelVertex){ (float)x + 1, top, zf, u1, v0, 5.0f },
+                          &(VoxelVertex){ (float)x + 1, bot, zf, u1, v1, 5.0f },
+                          &(VoxelVertex){ (float)x, bot, zf, u0, v1, 5.0f });
+        /* its sides, this row's band of them (h bot..top): where the neighbour's wall does not stand */
+        for (int e = 0; e < 2; ++e)
+        {
+            int nf = 0, nr = 0;
+            float sx = (float)(x + e), su = e == 0 ? u0 + (u1 - u0) / 32.0f : u1 - (u1 - u0) / 32.0f;
+            float zc0 = (float)inst->originY + rise, zc1 = zf, cuts[4][2];
+            int n = 0;
+
+            if (!HillWallColumn(inst, col + (e == 0 ? -1 : 1), &nf, &nr))
+                nf = nr = 0;
+            if (zc1 <= zc0)
+                continue;
+            if (nr < bot + 1.0f - 0.01f || nr == 0)
+            {
+                /* the neighbour's wall is lower than this band: the whole side shows */
+                cuts[n][0] = zc0; cuts[n][1] = zc1; ++n;
+            }
+            else
+            {
+                float a = (float)inst->originY + nr, z = (float)inst->originY + nf;   /* its span: a .. z */
+
+                if (zc0 < a)
+                {
+                    cuts[n][0] = zc0; cuts[n][1] = a < zc1 ? a : zc1; ++n;
+                }
+                if (z < zc1)
+                {
+                    cuts[n][0] = z > zc0 ? z : zc0; cuts[n][1] = zc1; ++n;
+                }
+            }
+            for (int k = 0; k < n; ++k)
+            {
+                float za = cuts[k][0], zb = cuts[k][1];
+
+                if (zb - za < 0.01f)
+                    continue;
+                if (e == 0)
+                    VoxelBuilder_Quad(b, &(VoxelVertex){ sx, top, za, su, v0, 4.8f },
+                                      &(VoxelVertex){ sx, top, zb, su, v0, 4.8f },
+                                      &(VoxelVertex){ sx, bot, zb, su, v1, 4.8f },
+                                      &(VoxelVertex){ sx, bot, za, su, v1, 4.8f });
+                else
+                    VoxelBuilder_Quad(b, &(VoxelVertex){ sx, top, zb, su, v0, 4.8f },
+                                      &(VoxelVertex){ sx, top, za, su, v0, 4.8f },
+                                      &(VoxelVertex){ sx, bot, za, su, v1, 4.8f },
+                                      &(VoxelVertex){ sx, bot, zb, su, v1, 4.8f });
+            }
+        }
     }
     b->lighting = lighting;
 }
@@ -3358,6 +3704,14 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
             {
                 if (raised == 1)
                     EmitRaisedBlock(builder, x, y, rh, u0, v0, u1, v1);
+                else if (raised == HILL_WALL)
+                    EmitHillWall(builder, inst, x, y, u0, v0, u1, v1);
+                else if (raised == HILL_STONE)
+                    EmitHillStone(builder, inst, x, y, u0, v0, u1, v1);
+                else if (raised == HILL_PILLAR)
+                    EmitHillPillar(builder, inst, x, y, u0, v0, u1, v1);
+                else if (raised == HILL_CAP)
+                    EmitHillFloor(builder, inst, x, y, u0, v0, u1, v1);
                 else
                     EmitStandingWall(builder, inst, x, y, rh, u0, v0, u1, v1);
                 continue;
