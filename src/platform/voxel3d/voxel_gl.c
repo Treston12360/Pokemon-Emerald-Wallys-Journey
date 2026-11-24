@@ -2047,6 +2047,8 @@ static uint32_t sBeltCacheGen;
 // 40). At 40 the far top corner showed sky running east on Route 121 (up to 11,000 px a frame at 1920x1080) and Ever
 // Grande's north view; at 56 none. The belt is built a few pieces a frame, so no frame took longer on the test box
 // (worst belt frame 23 ms at 56 vs 36 ms at 40); it takes about twice as many frames to finish.
+// Ever Grande (layout 9, its cliffs 11 levels over the sea: the view from the top reaches further) 64 as Mt Pyre:
+// at 56 the far top-right corner still showed sky from (30,50) - 537 px at 1920x1080, 951 at 2560x1440; at 64 none.
 static int sBeltRadius = 56;
 #define BELT_RADIUS sBeltRadius
 
@@ -4897,7 +4899,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
                 if (!sBeltWarpPending || sBeltWarpGen != sBeltResetGen || (sBeltAtlas != NULL && !sBeltWarpShown))
                 {
                     sBeltRadius = getenv("WJPC_BELT_RADIUS") ? atoi(getenv("WJPC_BELT_RADIUS"))
-                                : (inst0->layoutId == 302 || inst0->layoutId == 303) ? 64 : 56;
+                                : (inst0->layoutId == 302 || inst0->layoutId == 303 || inst0->layoutId == 9) ? 64 : 56;
                     BeltCache_Flush();
                     for (unsigned l = 0; l < BELT_LAYERS; l++)
                         sBeltDrawn[l] = NULL;
@@ -4939,7 +4941,7 @@ bool Voxel3D_Render(unsigned colorTexture, int w, int h)
             {
                 // New map, new world or new atlas: start again and build it all now (as before).
                 sBeltRadius = getenv("WJPC_BELT_RADIUS") ? atoi(getenv("WJPC_BELT_RADIUS"))
-                            : (inst0->layoutId == 302 || inst0->layoutId == 303) ? 64 : 56;
+                            : (inst0->layoutId == 302 || inst0->layoutId == 303 || inst0->layoutId == 9) ? 64 : 56;
                 BeltCache_Flush();
                 BeltBuildStep(inst0, atlas0, cx, cy, -1);
                 BeltAssemble(atlas0, cx, cy);

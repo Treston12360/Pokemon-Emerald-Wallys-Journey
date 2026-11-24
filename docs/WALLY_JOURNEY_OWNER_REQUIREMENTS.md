@@ -1211,3 +1211,12 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   0x070, a slope's side with a green edge - tiled along the front, green stripes - while Route 131's part of the same
   rocks uses the plain cliff face 0x079. Pacifidlog's face is now 0x079 (voxel_relief.c, after the face tiles are
   counted; WJPC_PACIFIDLOG_FACE_OLD=1: as before). Picture docs/polish_reports/2026-11-23_N27_pacifidlog_rock_face.png.
+- 2026-11-23 N28 / #19 done (Ever Grande east cliff, "fix this issue"): the hole is inside Ever Grande (relief.bin
+  layout 9 - the earlier tries were on layout 8, Sootopolis, by a wrong index, and were not kept): cell (39,54) at
+  the map's east edge slopes a level down to the east, the cell south of it (39,55) is flat; a sloped edge is drawn
+  a row further north where it is lower, so a triangle opened between the two at the map edge, over the sea. (39,55)'s
+  north rows now slope as (39,54)'s south row does (-176..-192, then -176..-184, then flat): the two meet. Also: Ever
+  Grande's background radius 64 (as Mt Pyre's, voxel_gl.c): from (30,50) the far top-right corner still showed sky at
+  56 (537 px at 1920x1080, 951 at 2560x1440). Gap test, 6 Ever Grande views, 1920x1080 and 2560x1440: 0, except a
+  pinhole of 2-5 px by the right waterfall (cells 26-27, rows 66-68; a separate small one, open).
+  Picture docs/polish_reports/2026-11-23_N28_evergrande_cliff.png.
