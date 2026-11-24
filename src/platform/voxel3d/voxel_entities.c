@@ -1208,8 +1208,13 @@ static void EmitGate(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigne
     g.baseY = (float)((index / VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
     g.cx = slot->width * 0.5f;
     g.cy = slot->height * 0.5f - 0.5f;
-    ox = (float)(mx + VoxelWorld_Instance(0)->originX) + 0.5f;
-    oz = (float)(my + VoxelWorld_Instance(0)->originY) + 0.5f;
+    /* Brennan 2026-11-24 17:14 ("they overlap some other objects and ensure they turn the ways they are supposed
+     * to based off the original"): the game puts a gate's pivot on its cell's north-west corner (its sprite's
+     * middle at the cell's top-left pixel: GetMapCoordsFromSpritePos), the arms along the lines between cells,
+     * blocking a step across them. Stood on the cell's middle, every arm lay half a cell off - over the cells
+     * beside it, into the trees. */
+    ox = (float)(mx + VoxelWorld_Instance(0)->originX);
+    oz = (float)(my + VoxelWorld_Instance(0)->originY);
     oy = VoxelRelief_LiftAt(ox, oz);
     for (int a = 0; a < 4; ++a)
     {
@@ -1218,13 +1223,14 @@ static void EmitGate(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigne
 
         for (int j = 0; j < 2; ++j)
         {
-            float r0 = j == 0 ? 3.0f : 15.0f, r1 = j == 0 ? 15.0f : 31.0f;
+            float r0 = j == 0 ? 3.0f : 15.0f, r1 = j == 0 ? 15.0f : 30.0f;
 
             if (!arms[2 * a + j] || r1 > g.cy)
                 continue;
-            /* (the picture's north arm, unturned: its rows g.cy - r) */
-            EmitGateBar(builder, &g, ox, oy, oz, dx, dz, r0 * p, r1 * p, 2.0f * p, 12.0f * p,
-                        g.cx, 1.5f, g.cy - r0, g.cy - r1 + 0.5f, shade);
+            /* (the picture's north arm, unturned, its middle rows - its tip's open pixels, drawn on, had shown as a
+             * fork) */
+            EmitGateBar(builder, &g, ox, oy, oz, dx, dz, r0 * p, r1 * p, 1.5f * p, 12.0f * p,
+                        g.cx, 1.5f, g.cy - 6.0f, g.cy - 12.0f, shade);
         }
     }
     /* the post on the pivot: its hub's pixels */
