@@ -1902,6 +1902,23 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
         BuildPrepare(pb); // (a build on the main thread: here; the worker's is ready)
     if (m->used)
         InstanceFree(m);
+    /* Brennan 2026-11-24 12:39 (the caves' rock raised into walls: "fix the dark shadows that show and keep the
+     * textures the same"): a cave's ground and walls are lit as its floor, whatever way they face - their sides,
+     * lit by their facing (no sun in a cave: only the blue sky light) came out darker than the drawing. Marked by
+     * shade + 4 (the shader's vFlat, as the cave's models: voxel_building.c CaveFlatShade).
+     * WJPC_CAVE_TERRAIN_NORMAL_LIT=1: by their facing, as before. */
+    {
+        static int sNormalLit = -1;
+        if (sNormalLit < 0)
+            sNormalLit = getenv("WJPC_CAVE_TERRAIN_NORMAL_LIT") != NULL;
+        if (inst != NULL && inst->underground && !sNormalLit)
+        {
+            for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
+                for (unsigned k = 0; k < pb->pageN[p]; k++)
+                    if (pb->pageV[p][k].shade < 3.0f)
+                        pb->pageV[p][k].shade += 4.0f;
+        }
+    }
     // Terrain split by atlas page (BuildPrepare), positions already quantised: uploaded as they are.
     for (unsigned p = 0; p < VOXEL_ATLAS_PAGES; p++)
     {

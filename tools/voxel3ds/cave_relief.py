@@ -13,6 +13,18 @@ caves were flat, their cliffs only painted on the floor): "Raise the cliffs". Th
   top    every other blocked cell: flat at the rock's height, filled smoothly between the faces' tops and the belt
          at the map's edge; where it meets the floor west, east or south with no face between it drops to the floor
          in that edge (as Fiery Path's)
+The map's west, east and south edges come down to the floor's level at the edge (nothing beyond: a raised edge stood
+a tall stretched cut face along them).
+
+Brennan 2026-11-24 12:39 (the test on Victory Road B1F): "Do all caves this way, but fix the dark shadows that show and
+keep the textures the same". Done 2026-11-24 for (layout ids):
+  Cave tileset: 420 281 401 400 158 162 157 159 160 161 131 389 132 133 134 288 280 413 407 311 147 148 149 150 151
+                152 155 156 304 284 168 169 164 328 165 167 166 320 409 408 163 285 286
+  Meteor Falls: 126 127 128 431 (125 already had its own relief, kept)   Navel Rock: 422-428
+  Seafloor Cavern rooms 6-7 (Pacifidlog tileset): 153 154                 Magma Hideout: 336-341 379 380
+  (Fiery Path 293 and Rusturf Tunnel 129 had relief already.)
+and the renderer: a cave's ground is lit as its floor whatever way it faces, and casts no sun shadow (voxel_gl.c
+BuildFinish, voxel_lighting.c VoxelLighting_Sample) - so its walls carry the drawing's own colours.
 usage: cave_relief.py RELIEF.bin LAYOUT_ID [LAYOUT_ID ...] [--face 16] [--belt 24]
 Needs 3ds_port/scripts (voxel_relief_fixes).
 """
@@ -35,11 +47,12 @@ def build(entry, face_px, belt_px):
     mt = [x & 0x3FF for x in v]
     blocked = [(x >> 10) & 3 != 0 for x in v]
     elev = [(x >> 12) & 0xF for x in v]
+    cave_set = entry["secondary_tileset"] == "gTileset_Cave"   # (DETAILS are its metatiles)
     kind, base = {}, {}
     for y in range(H):
         for x in range(W):
             i = y * W + x
-            kind[(x, y)] = "F" if (not blocked[i] or mt[i] in DETAILS) else "T"
+            kind[(x, y)] = "F" if (not blocked[i] or (mt[i] in DETAILS and cave_set)) else "T"
             if kind[(x, y)] == "F":
                 # the floor's level: a bridge (elevation 4 and up: over the floor, between the rock tops) stands at
                 # the rock's height; stairs (elevation 0, joining them) climb between (None: worked out below)
@@ -125,6 +138,14 @@ def build(entry, face_px, belt_px):
                     r, s = {(-1, 0): (kk, 0), (1, 0): (kk, 4), (0, -1): (0, kk), (0, 1): (4, kk)}[(dx, dy)]
                     rn, sn = {(-1, 0): (kk, 4), (1, 0): (kk, 0), (0, -1): (4, kk), (0, 1): (0, kk)}[(dx, dy)]
                     g[r * 5 + s] = fc[rn * 5 + sn]
+        # the map's west, east and south edges: down to the floor's level at the edge itself - there is nothing
+        # beyond (a cave's black), and a raised edge stood a tall cut face of the rock's drawing, stretched, along
+        # them (the north edge rises behind, never seen)
+        if k != "F":
+            for r in range(5):
+                for s in range(5):
+                    if (x == 0 and s == 0) or (x == W - 1 and s == 4) or (y == H - 1 and r == 4):
+                        g[r * 5 + s] = 0
         cells[(x, y)] = [int(round(h)) for h in g]
     return cells
 

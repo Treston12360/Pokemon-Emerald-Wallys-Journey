@@ -1022,6 +1022,17 @@ unsigned VoxelLighting_SurfaceTests(void)
 
 float VoxelLighting_Sample(float x, float y, float z)
 {
+    /* Brennan 2026-11-24 12:39 ("fix the dark shadows that show"): no sun in a cave - its raised rock cast the
+     * sun's shadow and darkened the floor's corners. A cave's ground is all lit. WJPC_CAVE_SHADOWS=1: as before. */
+    static int sCaveShadows = -1;
+    if (sCaveShadows < 0)
+        sCaveShadows = getenv("WJPC_CAVE_SHADOWS") != NULL;
+    if (!sCaveShadows)
+    {
+        const VoxelMapInstance *inst = VoxelWorld_GetInstanceAt(Tile(x), Tile(z));
+        if (inst != NULL && inst->underground)
+            return 1.0f;
+    }
     const LightSample *sample = CachedSample(x, y, z);
 
     return (sample->lit ? 1.0f : sAmbient) * sample->contact;

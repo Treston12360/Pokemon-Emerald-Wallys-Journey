@@ -1287,3 +1287,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     Brennan: "Raise the cliffs" (start with one cave, show him). Test: tools/voxel3ds/cave_relief.py on Victory
     Road B1F (layout 285) - rock raised 16 px over the floor (faces upright at the floor's edge), the bridges at the
     rock's height, the stairs (elevation 0) a climb between. Not in relief.bin yet: pictures sent for his OK.
+  - 12:39 Brennan: "Do all caves this way, but fix the dark shadows that show and keep the textures the same".
+    N36: every cave raised (tools/voxel3ds/cave_relief.py lists them: the Cave tileset's 43 layouts, Meteor Falls,
+    Navel Rock, Seafloor Cavern 6-7, Magma Hideout). In a cave the ground is lit as its floor whatever way it faces
+    (WJPC_CAVE_TERRAIN_NORMAL_LIT=1: by facing) and nothing casts the sun's shadow (WJPC_CAVE_SHADOWS=1: as before),
+    so the walls show the drawing's own colours, no dark patches. The maps' west/east/south edges come down to the
+    floor at the edge (no tall stretched cut face around the map).
