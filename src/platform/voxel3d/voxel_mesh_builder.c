@@ -1050,6 +1050,7 @@ static int HillPlainFloor(int m)
 
 static bool MuseumPropCell(const VoxelMapInstance *inst, int x, int y, bool *carpet);
 #define MUSEUM_CARPET 7
+#define MUSEUM_FLAT 8   /* drawn flat (a box stands over it; not the counter its behaviour would stand) */
 #define HILL_STONE 4
 #define HILL_PILLAR 5
 #define HILL_CAP 6
@@ -1069,7 +1070,7 @@ static int RaisedBlockCell(const VoxelMapInstance *inst, int x, int y, float *he
         bool carpet;
 
         if (MuseumPropCell(inst, x, y, &carpet))
-            return carpet ? MUSEUM_CARPET : 0;
+            return carpet ? MUSEUM_CARPET : MUSEUM_FLAT;
     }
     if (HillWallColumn(inst, x - inst->originX, &foot, &rise) && y - inst->originY < foot)
     {
@@ -1155,6 +1156,15 @@ static const KeyedBox sMuseum2F[] = {
     { 195, 207, 4.5f, 4.6875f, 7.0f / 16.0f, 1.0f, 0.0f, 1 | 2 | 4 | 8 },
     { 240, 264, 4.1875f, 5.0f, 0.0f, 7.0f / 16.0f, 0.0f, 1 | 2 | 4 | 8 },
     { 243, 255, 4.5f, 4.6875f, 7.0f / 16.0f, 1.0f, 0.0f, 1 | 2 | 4 | 8 },
+    /* Brennan 2026-11-24 17:14 ("the tables with displays are not full tables, the display case on the wall is still
+     * 2D"): each display table one box - its cream top back to the drawing's, its gold front 7 px - not a 12 px block
+     * per cell; the ship models on them low boxes; the tall glass case on the wall standing 6 px out */
+    { 32, 96, 3.3125f, 5.0f, 0.0f, 7.0f / 16.0f, 0.0f, 1 | 2 | 4 | 8 },
+    { 32, 96, 6.3125f, 8.0f, 0.0f, 7.0f / 16.0f, 0.0f, 1 | 2 | 4 | 8 },
+    { 49, 78, 6.8125f, 7.3125f, 7.0f / 16.0f, 13.0f / 16.0f, 0.0f, 1 | 2 | 4 | 8 },
+    { 208, 240, 7.25f, 7.9375f, 0.0f, 9.0f / 16.0f, 0.0f, 1 | 2 | 4 | 8 },
+    { 214, 238, 7.4375f, 7.8125f, 9.0f / 16.0f, 14.0f / 16.0f, 0.0f, 1 | 2 | 4 | 8 },
+    { 192, 224, 2.0f, 2.375f, 0.0f, 2.0f, 2.0f, 1 | 2 | 4 | 8 },
 };
 
 static bool Museum2F(const VoxelMapInstance *inst)
@@ -1251,8 +1261,11 @@ static bool MuseumPropCell(const VoxelMapInstance *inst, int x, int y, bool *car
 
     if (!Museum2F(inst))
         return false;
-    *carpet = (r == 3 || r == 4) && (c == 12 || c == 13 || c == 15 || c == 16);
-    return *carpet || (c == 10 && (r == 2 || r == 3));   /* (the pillar's: inside it) */
+    /* (the plain carpet under each: its drawing laid flat showed beside the box from the camera's side) */
+    *carpet = ((r == 3 || r == 4) && (c == 12 || c == 13 || c == 15 || c == 16))
+           || (c >= 2 && c <= 5 && (r == 3 || r == 4 || r == 6 || r == 7))   /* the tables', the round cases' */
+           || ((c == 13 || c == 14) && (r == 6 || r == 7)) || (c == 18 && (r == 3 || r == 4 || r == 6 || r == 7));
+    return *carpet || (c == 10 && (r == 2 || r == 3));     /* (the pillar's: inside it) */
 }
 
 /* a rectangle of a face cut where it crosses the drawing's cells: `pt(s, t)` its point, `key(s, t)` its pixel column
@@ -1511,6 +1524,12 @@ static void EmitKeyedRound(VoxelBuilder *b, const KeyedSpace *k, float cx, float
 
             EmitKeyedTri(b, k, (const float (*)[3])A, sh);
             EmitKeyedTri(b, k, (const float (*)[3])B, sh);
+            {
+                /* its top */
+                float C[3][3] = { { cx, h1, cz }, { p0[0], h1, p0[2] }, { p1[0], h1, p1[2] } };
+
+                EmitKeyedTri(b, k, (const float (*)[3])C, 1.0f);
+            }
             continue;
         }
         for (int j = 0; j < lat; ++j)
@@ -1601,6 +1620,34 @@ static void EmitMuseumProps(VoxelBuilder *b, const VoxelMapInstance *inst, int x
     }
     else if (!Museum2F(inst))
         return;
+    if (list == sMuseum2F)
+    {
+        /* the round glass cases (a cylinder 16 px across, 19.5 tall: their white tops and glass sides) and, on the
+         * first table, the submarine and the ball - each the drawing's shape in the round */
+        static const float sRounds[4][7] = {
+            /* x, z (drawing px of the foot's middle), rx, rz, h (cylinder) or ry (ellipsoid: -), base h (px) */
+            { 296.0f, 73.5f, 8.0f, 6.0f, 19.5f, 0.0f, 0 },
+            { 296.0f, 121.5f, 8.0f, 6.0f, 19.5f, 0.0f, 0 },
+            { 51.5f, 60.0f, 10.5f, 4.0f, -5.0f, 7.0f, 0 },
+            { 72.0f, 58.0f, 4.5f, 3.0f, -3.5f, 7.0f, 0 },
+        };
+
+        for (int i = 0; i < 4; ++i)
+        {
+            const float *r = sRounds[i];
+            KeyedSpace ks = { inst, r[5] / 16.0f, r[5] / 16.0f, false };
+            bool lighting = b->lighting;
+
+            if (inst->originX + (int)(r[0] / 16) != x || inst->originY + (int)((r[1] + r[5]) / 16) != y)
+                continue;
+            b->lighting = false;
+            if (r[4] > 0.0f)
+                EmitKeyedRound(b, &ks, r[0], 0.0f, r[1], r[2], -1.0f, r[3], 20, 0, true, r[4]);
+            else
+                EmitKeyedRound(b, &ks, r[0], -r[4], r[1], r[2], -r[4], r[3], 16, 8, false, 0.0f);
+            b->lighting = lighting;
+        }
+    }
     for (unsigned i = 0; i < n; ++i)
     {
         const KeyedBox *k = &list[i];
@@ -4214,11 +4261,11 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                     EmitHillPillar(builder, inst, x, y, u0, v0, u1, v1);
                 else if (raised == HILL_CAP)
                     EmitHillFloor(builder, inst, x, y, u0, v0, u1, v1);
-                else if (raised == MUSEUM_CARPET)
+                else if (raised == MUSEUM_CARPET || raised == MUSEUM_FLAT)
                 {
                     bool lighting = builder->lighting;
 
-                    if (MetatileUV(builder, 0x201, &u0, &v0, &u1, &v1))
+                    if (raised == MUSEUM_FLAT || MetatileUV(builder, 0x201, &u0, &v0, &u1, &v1))
                     {
                         builder->lighting = false;
                         VoxelBuilder_Quad(builder, &(VoxelVertex){ (float)x, 0.0f, (float)y, u0, v0, 5.0f },
