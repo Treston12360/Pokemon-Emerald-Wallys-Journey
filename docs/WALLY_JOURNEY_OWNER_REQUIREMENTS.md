@@ -1100,3 +1100,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Gap test (5 sea views + 4 round the rock + 3 at these tips, 1920x1080 and 2560x1440): no new sky. The view from
   warp 48 46 20 shows the map's far edge as sky in its top-right corner (10836 px at 1920) - exactly the same with the
   old data. Picture docs/polish_reports/2026-11-23_N19_route133_tips.png.
+- N20 2026-11-23 18:06 (Brennan, the N19 "after" picture, red box on the bottom rock's south side: "still a section
+  left in red box"): the tile east of the lowered west end, (37,27) in relief 49, still started its east-falling ramp at
+  the old 32 px, so a 16 px wall panel stood up beside (36,27) (16 now). The ramp is 16 -> 0 now, like the ramp on the
+  north tile above it. Left: a hairline of shadow where the slope's foot meets the shallow water (there before too).
+  Gap test (15 views, 1920x1080 and 2560x1440): no new sky. One view from warp 48 38 31 shows 89 px of sky (161 at
+  2560) by the two small rocks in the shallows further east - exactly the same with the old data; asked.
+  Picture docs/polish_reports/2026-11-23_N20_route133_panel.png.
