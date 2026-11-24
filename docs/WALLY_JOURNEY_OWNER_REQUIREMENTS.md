@@ -1220,3 +1220,15 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   56 (537 px at 1920x1080, 951 at 2560x1440). Gap test, 6 Ever Grande views, 1920x1080 and 2560x1440: 0, except a
   pinhole of 2-5 px by the right waterfall (cells 26-27, rows 66-68; a separate small one, open).
   Picture docs/polish_reports/2026-11-23_N28_evergrande_cliff.png.
+- 2026-11-23 23:10 status of #22 / #23 (not fixed yet; notes for whoever picks them up):
+  - #22 Route 112 west edge slit: world x=0 (Route 112's column 0), rows ~14-16.7, at the height of the edge (18
+    levels). Confirmed by projecting the edge onto the picture (tools/pc/gapscan/pick.py's matrix). Beside it the
+    field (EmitFieldCell) at 17.2-17.9 at the cells' middles (EDGELIP debug, removed). Tried, no effect: removing
+    the cut records of (0,15)-(0,17); WJPC_EDGE_LAND_WALLS=1; a lip of the edge's ground run out under the field
+    (EmitSeamSkirt, both windings, sloped to the field's level). Next: find what the field lays at x=-1..0 there
+    (the belt dump holds only part of the belt; WJPC_QUAD_TRACE does not see belt quads).
+  - #23 Route 103 north wedge: belt cells x 38-39, rows -17..-22 (Route 103 at origin). The belt dump shows a strip
+    x 37-38 flat at level 0 and the cells x 38-39 rising from ~0 to 5.7 levels at x=38: a 5.7-level step with no wall
+    at x=38. WJPC_BELT_TREE_STEPS=1 / WJPC_FIELD_SOUTH_OLD=1 shrink it (716 -> 421 / 320 px), others no change. A wall
+    from an own-wood floor up to the field (WoodFieldWalls) had no effect: the flat strip is not an own-wood floor and
+    EmitFieldCell's dump (WJPC_FIELD_DUMP) prints no cells there - what lays it is still to find.
