@@ -1131,6 +1131,131 @@ static bool EmitBall(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigne
 }
 
 /*
+ * Brennan 2026-11-24 14:55 (the islands' harbor: "the ferry try remodeling that so that it is an actual 3D ferry
+ * model"): the S.S. Tidal's drawing (96 x 40, bow to the left) read as a ship. Its hull 7 px above the water - the
+ * bow and stern decks behind its side's portholes and red stripes, the bow raked back 7 px at the waterline - the
+ * superstructure over its middle up to 18 px (its two decks of windows on its side, its slatted roof, the roof's
+ * corners cut as the drawing's), the two round stacks on the stern deck and the mast on the roof. Each point shows the
+ * drawing's pixel at the same place along the ship and the same 45-degree screen key (z - y), so from the game's
+ * camera it is the drawing; from any other, a ship. Drawing pixels: x along it, z its depth (0 = the drawing's top
+ * row's key), y up. WJPC_FERRY_CARD=1: the card, as before.
+ */
+static bool FerryObject(u16 graphicsId)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_FERRY_CARD") != NULL;
+    return !sOff && graphicsId == OBJ_EVENT_GFX_SS_TIDAL;
+}
+
+typedef struct
+{
+    float cx, front, lift, rows, w, shade;
+    float baseX, baseY;
+    bool flip;
+} FerryFrame;
+
+static void FerryVertex(VoxelVertex *v, const FerryFrame *f, float x, float z, float y, float shade)
+{
+    const float p = 1.0f / VOXEL_PIXELS_PER_TILE;
+    float key = z - y, drawn = f->flip ? f->w - x : x;
+
+    key = key < 0.5f ? 0.5f : key > f->rows - 0.5f ? f->rows - 0.5f : key;
+    *v = (VoxelVertex){ f->cx + (drawn - f->w * 0.5f) * p, f->lift + y * p, f->front + (z - f->rows) * p,
+                        (f->baseX + (x < 0.5f ? 0.5f : x > f->w - 0.5f ? f->w - 0.5f : x)) / (float)VOXEL_SPRITE_ATLAS_W,
+                        1.0f - (f->baseY + key) / (float)VOXEL_SPRITE_ATLAS_H, f->shade * shade };
+}
+
+static void FerryQuad(VoxelBuilder *b, const FerryFrame *f, VoxelVertex *q)
+{
+    if (f->flip)
+        VoxelBuilder_Quad(b, &q[1], &q[0], &q[3], &q[2]);
+    else
+        VoxelBuilder_Quad(b, &q[0], &q[1], &q[2], &q[3]);
+}
+
+/* a solid between two outlines of n points (x, z), `lo` at height y0 and `hi` at y1 - both wound clockwise seen from
+ * above: its sides, and its top */
+static void FerryLoft(VoxelBuilder *b, const FerryFrame *f, const float (*lo)[2], const float (*hi)[2], int n,
+                      float y0, float y1)
+{
+    VoxelVertex q[4];
+
+    for (int i = 0; i < n; ++i)
+    {
+        int j = (i + 1) % n;
+        float dx = hi[j][0] - hi[i][0], dz = hi[j][1] - hi[i][1];
+        /* (the tops in full light, the side facing the camera (+z: it runs west) a step darker, the ends darker
+         * again - the light from above, so the ship reads as a solid, not as its drawing) */
+        float sh = dx < -0.01f && fabsf(dz) < fabsf(dx) ? 0.84f : dz > 0.01f ? 0.72f : 0.64f;
+
+        FerryVertex(&q[0], f, hi[j][0], hi[j][1], y1, sh);
+        FerryVertex(&q[1], f, hi[i][0], hi[i][1], y1, sh);
+        FerryVertex(&q[2], f, lo[i][0], lo[i][1], y0, sh);
+        FerryVertex(&q[3], f, lo[j][0], lo[j][1], y0, sh);
+        FerryQuad(b, f, q);
+    }
+    for (int i = 1; i + 1 < n; ++i)
+    {
+        VoxelVertex t[3];
+
+        FerryVertex(&t[0], f, hi[0][0], hi[0][1], y1, 1.0f);
+        FerryVertex(&t[1], f, hi[i][0], hi[i][1], y1, 1.0f);
+        FerryVertex(&t[2], f, hi[i + 1][0], hi[i + 1][1], y1, 1.0f);
+        if (f->flip)
+            VoxelBuilder_Tri(b, &t[1], &t[0], &t[2]);
+        else
+            VoxelBuilder_Tri(b, &t[0], &t[1], &t[2]);
+    }
+}
+
+static bool EmitFerry(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigned index,
+                      float cx, float cz, float rise, float shade)
+{
+    /* the hull: its deck's outline (7 px up) and the waterline's (the bow 7 px further back) */
+    static const float deck[7][2] = { { 9, 15 }, { 90, 15 }, { 95, 20 }, { 95, 36 }, { 5, 36 }, { 0, 31 }, { 0, 20 } };
+    static const float water[7][2] = { { 16, 15 }, { 90, 15 }, { 95, 20 }, { 95, 36 }, { 12, 36 }, { 7, 31 }, { 7, 20 } };
+    /* the superstructure, to the roof's (18 px) */
+    static const float cabin[6][2] = { { 25, 18 }, { 61, 18 }, { 68, 25 }, { 68, 36 }, { 17, 36 }, { 17, 26 } };
+    /* the mast */
+    static const float mast[4][2] = { { 51, 27 }, { 55, 27 }, { 55, 28 }, { 51, 28 } };
+    FerryFrame f;
+
+    if (slot->atlasWidth != slot->width || slot->color256 || slot->width != 96 || VisibleRows(slot) < 37)
+        return false;
+    f.baseX = (float)((index % VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
+    f.baseY = (float)((index / VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
+    f.cx = cx;
+    f.front = cz + VoxelRelief_ShiftAt(cx, cz);
+    f.lift = VoxelRelief_LiftAt(cx, cz) + rise;
+    f.rows = (float)VisibleRows(slot);
+    f.w = (float)slot->width;
+    f.shade = shade;
+    f.flip = slot->flipX;
+    (void)slot->flipY;
+    FerryLoft(builder, &f, water, deck, 7, 0.0f, 7.0f);
+    FerryLoft(builder, &f, cabin, cabin, 6, 7.0f, 18.0f);
+    FerryLoft(builder, &f, mast, mast, 4, 18.0f, 28.0f);
+    /* the stacks: round, 10 px across, on the stern deck to 11 px (the drawing's rings: their tops, rims and sides) */
+    for (int k = 0; k < 2; ++k)
+    {
+        enum { SEG = 16 };
+        float ring[SEG][2], zc = k == 0 ? 19.0f : 30.5f;
+
+        for (int i = 0; i < SEG; ++i)
+        {
+            float a = 6.2831853f * (float)i / SEG;
+
+            ring[i][0] = 75.5f + 5.0f * cosf(a);
+            ring[i][1] = zc + 2.5f * sinf(a);
+        }
+        FerryLoft(builder, &f, (const float (*)[2])ring, (const float (*)[2])ring, SEG, 7.0f, 11.0f);
+    }
+    return true;
+}
+
+/*
  * Brennan 2026-11-20 23:18 (Route 121's berry patch: "the grown Berry plants ... are still rendering as flat 2D
  * sprites/billboards ... Convert all Berry growth stages ... into true 3D voxel models (with 3D foliage and 3D
  * berries hanging on the branches) centered cleanly in the dirt patches"): a berry plant past its sprout (taller,
@@ -2830,6 +2955,9 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
                            rightX, rightZ, stretch, card->shade * dusk);
             continue;
         }
+        if (FerryObject(gObjectEvents[i].graphicsId)
+            && EmitFerry(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f, rise, card->shade * dusk))
+            continue;
         if (BallObject(gObjectEvents[i].graphicsId) && card->deck <= 0.0f
             && EmitBall(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f, rise,
                         rightX, rightZ, card->shade * dusk))
