@@ -237,6 +237,7 @@ static GLuint sProgram;
 static GLint sUniUnfade; // POL-16
 static GLint sUniTintMul, sUniTintAdd, sUniHazeMul; // POL-26b
 static GLint sUniGlowStrength, sUniGlowLin; // POL-26b: lit windows
+static GLint sUniFlatLight; // #29: a cave's models, lit as its floor
 static GLint sUniLamp; // POL-26b: night lamps
 #define GLOW_UNIT 1 // texture unit of a building page's window mask
 static float sTintMul[3] = {1, 1, 1}, sTintAdd[3]; // POL-26b: this frame's time-of-day colour (world)
@@ -253,6 +254,7 @@ static const char *sVertexSrc =
     "attribute float shade;\n"
     "centroid varying vec2 vUv;\n" // (option 5: with anti-aliasing an edge pixel reads its uv inside its own face)
     "varying float vShade;\n"
+    "varying float vFlat;\n"
     "varying float vDist;\n"
     "varying vec3 vWorld;\n"
     "void main() {\n"
@@ -260,7 +262,9 @@ static const char *sVertexSrc =
     "  vWorld = p;\n"
     "  vUv = vec2(uv.x, 1.0 - uv.y);\n" // PICA textures count v from the bottom row
 
-    "  vShade = shade;\n"
+    // #29: a shade over 3 marks a cave's model (voxel_building.c CaveFlatShade): lit as the floor, shade - 4
+    "  vFlat = shade > 3.0 ? 1.0 : 0.0;\n"
+    "  vShade = shade > 3.0 ? shade - 4.0 : shade;\n"
     "  vDist = length(p - cam);\n"
     "  gl_Position = mvp * vec4(p, 1.0);\n"
     "}\n";
@@ -286,6 +290,7 @@ static const char *sFragmentSrc =
     "uniform float time;\n"
     "centroid varying vec2 vUv;\n" // (option 5: with anti-aliasing an edge pixel reads its uv inside its own face)
     "varying float vShade;\n"
+    "varying float vFlat;\n"
     "varying float vDist;\n"
     "varying vec3 vWorld;\n"
     "vec3 toLinear(vec3 c) { return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c)); }\n"
@@ -323,6 +328,7 @@ static const char *sFragmentSrc =
     // mask x strength). glowLin is that colour in the Gamma path's linear light (see Voxel3D_Render).
     "uniform sampler2D glowTex;\n"
     "uniform float glowStrength;\n"
+    "uniform float flatLight;\n"
     "uniform vec3 glowLin;\n"
     // POL-26b lamps: mode 3 a night-light sprite, as the GBA blends it (OBJ blend 7/16 over the scene x 12/16:
     // out = c x 7/16, alpha 12/16, blended ONE, SRC_ALPHA; Gamma path: c in its linear light, c x c x lamp.w);
@@ -354,6 +360,9 @@ static const char *sFragmentSrc =
     "  if (gammaLight > 0.5) {\n"
     "    vec3 n = normalize(cross(dFdx(vWorld), dFdy(vWorld)));\n"
     "    if (dot(n, cam - vWorld) < 0.0) n = -n;\n"
+    // #29: a cave's models lit as the floor round them - no sun in a cave; by their facing, their sides turned
+    // from it took only the blue sky light and came out grey-green against the warm floor
+    "    if (flatLight > 0.5 || vFlat > 0.5) n = vec3(0.0, 1.0, 0.0);\n"
     "    vec3 albedo = toLinear(c.rgb);\n"
     "    vec3 light = sunLight * max(dot(n, sunDir), 0.0) * vShade * clouds(vWorld) + skyTint * max(skyIrr(n), 0.0);\n"
     "    rgb = albedo * light;\n"
@@ -497,6 +506,7 @@ static bool MakeProgram(void)
     sUniTintAdd = wj_glGetUniformLocation(sProgram, "tintAdd");
     sUniHazeMul = wj_glGetUniformLocation(sProgram, "hazeMul");
     sUniGlowStrength = wj_glGetUniformLocation(sProgram, "glowStrength");
+    sUniFlatLight = wj_glGetUniformLocation(sProgram, "flatLight");
     sUniGlowLin = wj_glGetUniformLocation(sProgram, "glowLin");
     sUniLamp = wj_glGetUniformLocation(sProgram, "lamp");
     wj_glUseProgram(sProgram); // uniforms start at 0: no tint is 1, 0
@@ -505,6 +515,7 @@ static bool MakeProgram(void)
     wj_glUniform3f(sUniHazeMul, 1, 1, 1);
     wj_glUniform1i(wj_glGetUniformLocation(sProgram, "glowTex"), GLOW_UNIT);
     wj_glUniform1f(sUniGlowStrength, 0);
+    wj_glUniform1f(sUniFlatLight, 0);
     sUniFog = wj_glGetUniformLocation(sProgram, "fog");
     sUniFogColor = wj_glGetUniformLocation(sProgram, "fogColor");
     sUniMode = wj_glGetUniformLocation(sProgram, "mode");
@@ -1049,6 +1060,19 @@ static uint16_t *sPageScratch;
 static size_t sPageScratchSize;
 
 static GLuint LoadBuildingPage(int page, bool reload);
+/* #29 (Brennan 2026-11-23: "all caves should be 3D models"): the pages of a cave's models. The floor's
+ * colours are graded twice (the atlas's colour table, VoxelAtlas BuildColorTable, and the page as composed); a
+ * model page once - so a cave's rocks came out paler and greyer than the same rock painted on the floor beside
+ * them (Victory Road, Desert Underpass, Artisan Cave). A cave's page is graded as its floor.
+ * WJPC_CAVE_PAGES_ONE_GRADE: once, as before. */
+static bool sPageCave[2048];
+static bool CavePagesOneGrade(void)
+{
+    static int sOld = -1;
+    if (sOld < 0)
+        sOld = getenv("WJPC_CAVE_PAGES_ONE_GRADE") != NULL;
+    return sOld != 0;
+}
 /*
  * Brennan 2026-11-22 13:37 (B6) and 13:38 (C2): in winter "keep the front walls, doors, and windows 100% their
  * original non-winter colors across all seasons. Only the tops/roofs of houses should have white snow on them" (Mr.
@@ -1167,6 +1191,8 @@ static GLuint LoadBuildingPage(int page, bool reload)
     // colours, keeps them. Now the formula sees the page's own colours, as 2D does (and as the trees already did).
     VoxelWorld_SeasonTexels(sPageScratch, (size_t)w * h);
     VoxelGrade_Texels(sPageScratch, (unsigned)(w * h));
+    if (page < 2048 && sPageCave[page])
+        VoxelGrade_Texels(sPageScratch, (unsigned)(w * h));
     if (getenv("WJPC_DUMP_PAGES") != NULL) /* test aid: <dir>/page<N>_<w>x<th>.raw, the texels as uploaded (RGBA5551, row 0 first) */
     {
         char name[512];
@@ -4134,6 +4160,12 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
             MeshDraw(&m->trees, sTreeTex, (float)m->originX, 0, (float)m->originY);
         if (m->buildingPage >= 0 && !(skip & 4))
         {
+            if (inst0->underground && m->buildingPage < 2048 && !sPageCave[m->buildingPage] && !CavePagesOneGrade())
+            {
+                sPageCave[m->buildingPage] = true;
+                if (sPageTex[m->buildingPage] != 0)
+                    LoadBuildingPage(m->buildingPage, true);
+            }
             GLuint page = BuildingPage(m->buildingPage);
             if (getenv("WJPC_VOXEL_LOG") != NULL && (sFrame % 120) == 1)
                 Voxel3D_Log("[3D]   map %d:%d buildings page %d tex %u, %u chunk verts, %u statics, first model %p", m->mapGroup, m->mapNum, m->buildingPage, page, m->buildings.count, m->staticCount, m->staticCount ? (const void *)StaticModel(m->statics[0].pageModel, m->statics[0].lit) : NULL);
@@ -4173,12 +4205,20 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
                 const StaticMesh *sm = StaticModelParts(d->pageModel, d->lit);
                 if (sm == NULL)
                     continue;
+                {
+                    /* #29: a cave's models lit as its floor (WJPC_CAVE_MODELS_NORMAL_LIT: by their facing) */
+                    static int sNormalLit = -1;
+                    if (sNormalLit < 0)
+                        sNormalLit = getenv("WJPC_CAVE_MODELS_NORMAL_LIT") != NULL;
+                    wj_glUniform1f(sUniFlatLight, inst0->underground && !sNormalLit ? 1.0f : 0.0f);
+                }
                 if (split)
                     for (int kind = 0; kind < FACE_KINDS; kind++)
                         MeshDraw(&sm->kind[kind], kindTex[kind], d->x + (float)m->originX, d->y, d->z + (float)m->originY);
                 else
                     MeshDraw(&sm->mesh, page, d->x + (float)m->originX, d->y, d->z + (float)m->originY);
             }
+            wj_glUniform1f(sUniFlatLight, 0.0f);
             if (glow != 0)
                 wj_glUniform1f(sUniGlowStrength, 0.0f);
         }

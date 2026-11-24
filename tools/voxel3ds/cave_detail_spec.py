@@ -3,9 +3,13 @@
 # tileset's floor detail. Put them back in that list (before the mt_pyre_grave entry) to make the models again.
 #
 #   {"name": "cave_rock",
-#    "components": {"secondary": "gTileset_Cave", "tiles": {0x202, 0x203, 0x250, 0x262, 0x266, 0x330},
+#    "components": {"secondary": "gTileset_Cave", "tiles": {0x202, 0x203, 0x250, 0x262, 0x266, 0x330, 0x2D5, 0x35A},
 #                   "height": 6, "block": 1, "upper": True, "single": True},
 #    "ground": [0x211, 0x201]},
+#   {"name": "cave_stalagmite", "components": {"secondary": "gTileset_Cave", "tiles": {0x21F, 0x227}, "height": 10,
+#    "upper": True}, "ground": [0x211, 0x201]},
+#   {"name": "cave_ladder", "components": {"secondary": "gTileset_Cave",
+#    "tiles": {0x20F, 0x217, 0x216, 0x341, 0x377, 0x37F}, "height": 3, "upper": True}, "ground": [0x211, 0x201]},
 #   {"name": "cave_crystal",
 #    "components": {"secondary": "gTileset_Cave", "tiles": {0x31F, 0x326, 0x348, 0x34D, 0x34E},
 #                   "height": 8, "block": 1, "single": True},
@@ -27,3 +31,16 @@
 #
 # Renderer (voxel_building.c UnlitCave): a model in a cave is not lit by the sun's facing - its faces turned from
 # the sun had shade 0 and came out black. WJPC_CAVE_MODELS_SUNLIT=1: as before.
+#
+# Batch 2 (2026-11-24): + 0x2D5 (Ancient Tomb / Desert Ruins / Island Cave boulder) and 0x35A (Shoal Cave's mossy
+# rock) in cave_rock; cave_stalagmite (Artisan Cave's two-cell stalagmites); cave_ladder (ladders leaning on
+# ledges, Shoal Cave's icy one too). Not 0x35B: Shoal Cave's tide pool (water in a ring of stones) - stood up as a
+# rock it lost its water. Spliced (--layout) into 131 132 134 162 163 165 166 167 280 281 285 312 328 389 400. NOT
+# into 286 (Victory Road B2F): it keeps two placements of another model (the rocks in its water) that a whole-layout
+# splice drops - its 2 new ladders wait for a donor that has both.
+#
+# Renderer, with it: a cave's model pages are graded twice like the cave floor (voxel_gl.c sPageCave: graded once
+# they were paler and greyer than the same rock painted beside them); a cave's models cast no sun shadow
+# (voxel_lighting.c: a dark smear beside them); and they are lit as the floor, not by their facing (shade + 4 marks
+# them, voxel_building.c CaveFlatShade -> the shader's vFlat: their sides came out grey-green). Old behaviour:
+# WJPC_CAVE_PAGES_ONE_GRADE, WJPC_CAVE_MODELS_CAST, WJPC_CAVE_MODELS_NORMAL_LIT.

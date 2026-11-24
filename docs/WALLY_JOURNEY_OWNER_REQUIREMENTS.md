@@ -1272,3 +1272,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     real steps (tools/voxel3ds/mt_pyre_grave_spec.py, mt_pyre_steps). Pictures sent.
   - N33b: and the stairways up to the next floor (the alcoves on 1F-5F): 4 real steps each, rising to the alcove's
     back wall (3 px rise, 2 px tread: the alcove's 20 drawn rows). Mt. Pyre has no other drawn stairs.
+- 2026-11-24 N34 / #29 batch 2: Artisan Cave's stalagmites, the leaning ladders, the Ancient Tomb / Desert Ruins /
+  Island Cave boulders and Shoal Cave's mossy rocks are models (tools/voxel3ds/cave_detail_spec.py). And the
+  "models paler than the floor" issue found and fixed: the cave floor's colours are graded twice in the renderer, the
+  models' once - now a cave's models match (same yellow as the painted rock). Also gone: the dark smear beside cave
+  models (they cast a sun shadow in a cave) and a thin grey-green line on their sides (lit by facing).
+  - 09:21 Brennan: "Why are pictures so low quality it is hard for me to see detail in them." I had shrunk them to
+    half size (and some as JPG). From now on: full-size PNGs, before above after, close-ups at 2-3x.

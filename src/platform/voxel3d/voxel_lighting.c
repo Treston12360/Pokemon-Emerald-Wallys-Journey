@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "voxel_lighting.h"
 #include "voxel_tree.h"
@@ -455,8 +456,13 @@ static const LightCell *Cell(int x, int z)
             return cell; /* canopy fringe removed by the tree renderer */
     }
     /* A modelled building casts from its own solid, cell by cell - and a
-     * railing from its line, not from its whole cell. */
-    if (VoxelBuildings_CellAt(inst, x, z, NULL, &cell->top))
+     * railing from its line, not from its whole cell. (#29: not in a cave -
+     * no sun there; its rocks and stalagmites threw a dark smear over the
+     * floor and ledges beside them. WJPC_CAVE_MODELS_CAST: as before.) */
+    static int sCaveCast = -1;
+    if (sCaveCast < 0)
+        sCaveCast = getenv("WJPC_CAVE_MODELS_CAST") != NULL;
+    if ((!inst->underground || sCaveCast) && VoxelBuildings_CellAt(inst, x, z, NULL, &cell->top))
     {
         cell->mask = VoxelBuildings_Footprint(inst, x, z);
         return cell;

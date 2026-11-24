@@ -258,6 +258,14 @@ static bool UnlitCave(const VoxelMapInstance *inst)
     return inst != NULL && inst->underground && !sOld;
 }
 
+static bool CaveFlatShade(const VoxelMapInstance *inst)
+{
+    static int sOld = -1;
+    if (sOld < 0)
+        sOld = getenv("WJPC_CAVE_MODELS_NORMAL_LIT") != NULL;
+    return UnlitCave(inst) && !sOld;
+}
+
 static unsigned U16(const uint8_t *p) { return (unsigned)p[0] | ((unsigned)p[1] << 8); }
 static uint32_t U32(const uint8_t *p)
 {
@@ -1647,7 +1655,15 @@ bool VoxelBuildings_EmitSome(VoxelBuilder *builder, const VoxelMapInstance *inst
                 }
 #endif
                 else
+                {
+                    /* #29: a cave's model is lit as the floor round it, not by its facing (no sun in a cave: its
+                     * sides turned from it took only the blue sky light and came out grey-green against the warm
+                     * floor) - marked by its shade + 4, read by voxel_gl.c's shader */
+                    if (CaveFlatShade(inst))
+                        for (int k = 0; k < 3; k++)
+                            t[k].shade += 4.0f;
                     VoxelBuilder_Tri(builder, &t[0], &t[1], &t[2]);
+                }
             }
         }
         builder->lift = 0.0f;
