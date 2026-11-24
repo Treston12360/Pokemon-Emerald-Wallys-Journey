@@ -839,6 +839,8 @@ static void EmitReliefUV(VoxelBuilder *b, int x, int y, const int16_t *g, const 
  * a little darker, the flight's sides darker still. WJPC_CAVE_STAIRS_FLAT=1: the relief's wall, as before.
  */
 extern const struct Tileset gTileset_Cave;
+extern const struct Tileset gTileset_MeteorFalls;
+extern const struct Tileset gTileset_NavelRock;
 
 static bool CaveStairCell(int x, int y, const VoxelMapInstance **out)
 {
@@ -848,12 +850,18 @@ static bool CaveStairCell(int x, int y, const VoxelMapInstance **out)
 
     if (sOff < 0)
         sOff = getenv("WJPC_CAVE_STAIRS_FLAT") != NULL;
-    if (sOff || (inst = VoxelWorld_GetInstanceAt(x, y)) == NULL || !inst->underground
-     || inst->secondaryTileset != (const void *)&gTileset_Cave)
+    if (sOff || (inst = VoxelWorld_GetInstanceAt(x, y)) == NULL || !inst->underground)
         return false;
     m = VoxelWorld_GetMetatileId(x, y);
     *out = inst;
-    return m == 0x204 || m == 0x363;
+    /* (and Meteor Falls' flights, Navel Rock's: the same in their own tiles - cave_relief.py STAIRS_BY_SET) */
+    if (inst->secondaryTileset == (const void *)&gTileset_Cave)
+        return m == 0x204 || m == 0x363;
+    if (inst->secondaryTileset == (const void *)&gTileset_MeteorFalls)
+        return m == 0x202;
+    if (inst->secondaryTileset == (const void *)&gTileset_NavelRock)
+        return m == 0x204 || m == 0x37B;
+    return false;
 }
 
 static void StairVertex(VoxelVertex *v, float x, float h, float z, float u, float q0, float q1,

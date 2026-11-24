@@ -43,10 +43,14 @@ DETAILS = {0x202, 0x203, 0x250, 0x262, 0x266, 0x330, 0x2D5, 0x35A, 0x21F, 0x227,
            0x217, 0x37F, 0x35B}
 
 
-STAIRS = {0x204, 0x363}   # the Cave tileset's flights of stairs (rock; Shoal Cave's ice)
+# the flights of stairs, by secondary tile set (the Cave tileset's rock and Shoal Cave's ice; Meteor Falls'; Navel
+# Rock's, and its sideways flight 0x37B)
+STAIRS_BY_SET = {"gTileset_Cave": {0x204, 0x363}, "gTileset_MeteorFalls": {0x202},
+                 "gTileset_NavelRock": {0x204, 0x37B}}
+STAIRS = STAIRS_BY_SET["gTileset_Cave"]
 
 
-def cave_levels(W, H, mt, elev, kind, face_px):
+def cave_levels(W, H, mt, elev, kind, face_px, stairs_set=None):
     """Brennan 2026-11-24 13:14 (Shoal Cave: "The stairs ... don't look 3D ... there is no pathing to go up or down
     them"): a floor's height from how it is reached, not from its elevation number. Shoal Cave's elevations are not
     in height order (its stairs join floors of the same number, 3 to 3, 4 to 4), so floors stood at heights their
@@ -57,7 +61,7 @@ def cave_levels(W, H, mt, elev, kind, face_px):
     set to 0. Returns the floor cells' heights (stairs: None) and, for a flight with rock at its foot, the heights of
     its foot's corners."""
     P = {c for c, k in kind.items() if k == "F"}
-    stairs = {c for c in P if mt[c[1] * W + c[0]] in STAIRS}
+    stairs = {c for c in P if mt[c[1] * W + c[0]] in (stairs_set or STAIRS)}
     e = {c: elev[c[1] * W + c[0]] for c in P}
     # a bridge's cells (15) take the elevation at their ends
     seen = set()
@@ -190,8 +194,8 @@ def build(entry, face_px, belt_px):
             kind[(x, y)] = "F" if (not blocked[i] or (mt[i] in DETAILS and cave_set)) else "T"
             if kind[(x, y)] == "F":
                 base[(x, y)] = None if (elev[i] == 0 and not blocked[i]) else level(elev[i])
-    if cave_set:
-        base, stair_south = cave_levels(W, H, mt, elev, kind, face_px)
+    if entry["secondary_tileset"] in STAIRS_BY_SET:
+        base, stair_south = cave_levels(W, H, mt, elev, kind, face_px, STAIRS_BY_SET[entry["secondary_tileset"]])
     else:
         stair_south = {}
     for (x, y), k in list(kind.items()):

@@ -1307,3 +1307,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   rock's height, the foot running half a cell over the floor below; WJPC_CAVE_STAIRS_FLAT=1: as before). Walk test:
   the player climbs from floor to floor (Shoal Cave, Victory Road B1F). Open: 9 flights (8 in Shoal Cave, 1 Artisan?)
   end in solid rock in the game's own walking data - asked Brennan.
+- 2026-11-24 13:34 Brennan: "Continue onto the rest". N38: the other caves' stairs the same way - Meteor Falls (0x202)
+  and Navel Rock (0x204, 0x37B) set their floors' heights from their stairs and are drawn as real steps (cave_relief.py
+  STAIRS_BY_SET, voxel_mesh_builder.c CaveStairCell). Checked every flight: each joins its two floors. Magma Hideout
+  has no stairs of this kind (its floors join by ladders and warps); Fiery Path and Rusturf Tunnel keep their own relief.
