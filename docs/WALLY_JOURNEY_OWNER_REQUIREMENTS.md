@@ -1239,3 +1239,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   tools/voxel3ds/mt_pyre_grave_spec.py; buildings.bin layouts 137-142 spliced). The back walls already stand. Left
   flat on purpose: the red warp mats and the dark floor hole on 2F (both are floor). Picture
   docs/polish_reports/2026-11-23_N29_mtpyre_graves.png.
+- 2026-11-23 23:04 Brennan: "all caves should be 3D models, the mt pyre still looks to be 2D" - asked which parts:
+  "Back wall painted" (from my picture). 2F test sent; his pick: "Yes, do all floors".
+  - N30: Mt. Pyre 1F-6F walls as relief (spec mt_pyre_wall / MT_PYRE_ROOMS, tools/voxel3ds/mt_pyre_grave_spec.py):
+    pillars and doorway frames stand at the wall's face, the lattice panels 4 px back, doorway openings recessed
+    12 px, stairway alcoves 16 px (steps drawn on the alcove's back). Also the inner walls of 4F/5F/6F (the raised
+    floors' fronts, the corridor wall on 1F). The wide flights through the 4F/5F/6F walls stay drawn on the face (real
+    steps: a follow-up if wanted). Picture docs/polish_reports/2026-11-24_N30_mtpyre_walls.png.
