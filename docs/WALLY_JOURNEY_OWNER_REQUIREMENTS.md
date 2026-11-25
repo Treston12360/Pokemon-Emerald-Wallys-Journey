@@ -1435,3 +1435,14 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     (row 19, x 17-38) began 15-29 px below the bridges; it ramps from the bridges' height now
     (victory_road_relief.py). Gap test 10 views, 1920x1080 and 2560x1440: fewer gap pixels in every view but two
     (+1/+2 px, the map's east edge), none new at the stairs.
+- 2026-11-24 22:31 Brennan (1F, circled three flights): "I do not like those stairs. They go all the way up to the edge
+  and you can't go around them. They go too far into the top of the ground. Revert that change and make them go more
+  outwards so that ... you can end up on the top part flat and not on an edge" -> N67, Victory Road 1F and B1F only
+  (B2F as approved at 22:09):
+  - A flight is cut at most two rows into the ledge and its top row is always left flat (most: one row, squeezed).
+  - The rest of its run comes out in front over the floor: the (up to two) floor rows before it are drawn that much
+    shorter (8 px each), so the stairs' foot never stands where the player stands (no knee-deep Wally). Floor with no
+    relief cell gets flat cells (victory_road_relief.py FLOOR_CELLS). WJPC_VR_STAIRS_DEEP=1: as N66.
+  - Their sides: closed down to the floor in front of where the cliff face stood; each tread's side read in 8 pieces;
+    a plate of floor a hair under the shortened rows' edges. Gap test, 10 views x 2 sizes: within a few px of N66
+    (one 6 px sliver at 1F's x 13 flight), B2F unchanged.

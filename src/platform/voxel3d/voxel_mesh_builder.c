@@ -4083,6 +4083,30 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
     face = VoxelRelief_FaceTile(inst);
     const bool sideByZ = in && (inst->layoutId == 163 || inst->layoutId == 285 || inst->layoutId == 286) /* VR */
                       && getenv("WJPC_VR_STAIRS_SIDES_OLD") == NULL;
+    /* (there, each tread's side in 8 pieces, the ground beside read at each: where the rock beside it drops straight
+     * down to the floor, one piece across the drop left a sliver open - the gap test, Victory Road 1F 22:31) */
+    static VOXEL_TLS float zr[64 * 8 + 1], hr[64 * 8 + 1];
+    const unsigned n0 = n;
+    const float zFoot = n > 0 ? z[n - 1] : 0.0f;
+    if (sideByZ && n >= 2 && n <= 65)
+    {
+        unsigned m = 0;
+        for (unsigned q = 0; q + 1 < n; ++q)
+        {
+            int parts = fabsf(z[q + 1] - z[q]) < 1e-4f ? 1 : 8;
+            for (int k = 0; k < parts; ++k)
+            {
+                zr[m] = z[q] + (z[q + 1] - z[q]) * k / parts;
+                hr[m] = h[q] + (h[q + 1] - h[q]) * k / parts;
+                ++m;
+            }
+        }
+        zr[m] = z[n - 1];
+        hr[m] = h[n - 1];
+        ++m;
+        n = m;
+    }
+    const float *pz = sideByZ ? zr : z, *ph = sideByZ ? hr : h;
     for (int s = 0; s < 2; ++s)
     {
         float wx;
@@ -4095,13 +4119,31 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
             continue;
         wx = s == 0 ? (float)x : (float)x + 1.0f;
         const float tu0 = u0, tu1 = u1;
+        /* (Victory Road 1F/B1F, a flight run out in front: the floor rows before it drawn shorter (voxel_relief.c
+         * sOutRows) meet the floor beside them at other points along their shared edge - hairline cracks there, the
+         * sky through them (gap test). A plate of the floor beside, a hair under the floor, under that edge) */
+        if (sideByZ && (inst->layoutId == 163 || inst->layoutId == 285))
+        {
+            int rows = (int)(n0 - 1) / (VOXEL_RELIEF_SIDE - 1), nx = s == 0 ? x - 1 : x + 1;
+            float zF0 = (float)(y + rows) + footOut, pu0, pv0, pu1, pv1;
+            if (zFoot > zF0 + 0.01f && VoxelMesh_TileUV(b, nx, y + rows, &pu0, &pv0, &pu1, &pv1))
+            {
+                float xa = wx - 0.5f, xb = wx + 0.5f, hp = footOut - 1.0f / 64.0f;
+                float za = zF0 - 0.05f, zb = zF0 + 2.05f;
+                VoxelBuilder_Quad(b,
+                    &(VoxelVertex){xa, hp, za, pu0, pv0, SHADE_TOP},
+                    &(VoxelVertex){xb, hp, za, pu1, pv0, SHADE_TOP},
+                    &(VoxelVertex){xb, hp, zb, pu1, pv1, SHADE_TOP},
+                    &(VoxelVertex){xa, hp, zb, pu0, pv1, SHADE_TOP});
+            }
+        }
         for (unsigned q = 0; q + 1 < n; ++q)
         {
             /* (half and half, Route 112: the part behind where the face stood is cut into the cliff - closed up to the
              * top, as a recessed flight's; the part in front stands out of it - closed down to the foot) */
             if (half)
-                foot = 0.5f * (z[q] + z[q + 1]) < faceZ ? topH : footOut;
-            float ha = h[q], hb = h[q + 1];
+                foot = 0.5f * (pz[q] + pz[q + 1]) < faceZ ? topH : footOut;
+            float ha = ph[q], hb = ph[q + 1];
             /* (Victory Road B2F, Brennan 2026-11-24 22:03, the lower flight: "Cut this part of the wall as it's just a
              * straight piece upright" - the rock beside its lower steps slopes down to the floor, and the side stood
              * up to the ledge's top all along, a slab over it. There the side goes up only to the ground beside it) */
@@ -4109,22 +4151,37 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
             if (sideByZ)
             {
                 int nx = s == 0 ? x - 1 : x + 1, ni = s == 0 ? VOXEL_RELIEF_SIDE - 1 : 0;
-                float ga = SideGroundAt(inst, nx, ni, y - 4, y + 6, z[q]);
-                float gb = SideGroundAt(inst, nx, ni, y - 4, y + 6, z[q + 1]);
-                fa = ga < 0.0f ? foot : fminf(fmaxf(ga, ha), foot);
-                fb = gb < 0.0f ? foot : fminf(fmaxf(gb, hb), foot);
+                float ga = SideGroundAt(inst, nx, ni, y - 4, y + 6, pz[q]);
+                float gb = SideGroundAt(inst, nx, ni, y - 4, y + 6, pz[q + 1]);
+                /* (and where the steps stand out over lower ground - Victory Road 1F/B1F's run out in front, 22:31 - the
+                 * side goes down to it: closed below the steps, facing out) */
+                fa = ga < 0.0f ? foot : fminf(fmaxf(ga, footOut), foot);
+                fb = gb < 0.0f ? foot : fminf(fmaxf(gb, footOut), foot);
+                /* (in front of where the face stood (y + its top's height) always down to the foot: the rock beside
+                 * bulges a little past that line, and the side read from it left a gap at the face's foot) */
+                {
+                    const float zFace = (float)y + topH - 1.0f / 256.0f;
+                    if (pz[q] >= zFace) fa = footOut;
+                    if (pz[q + 1] >= zFace) fb = footOut;
+                }
+                if ((fa - ha) * (fb - hb) < 0.0f)
+                {
+                    /* (one end above its step, the other below: both to the side the most of it is on) */
+                    if (fabsf(fa - ha) > fabsf(fb - hb)) fb = hb;
+                    else fa = ha;
+                }
             }
             float ta = fabsf(ha - fa), tb = fabsf(hb - fb);
             if (ta <= 0.01f && tb <= 0.01f)
                 continue;
-            if (fabsf(z[q + 1] - z[q]) < 1e-4f)
+            if (fabsf(pz[q + 1] - pz[q]) < 1e-4f)
                 continue;   /* a riser: the side's outline goes straight down there, no area */
             /* (Victory Road B2F, Brennan 2026-11-24 21:12: its flights cut back into the ledge, their sides showed the
              * rock's whole drawing squeezed into every 4 px stretch - streaks. There the drawing runs along the side
              * a tile a tile, as the rock beside it lies: u by z) */
             if (sideByZ)
             {
-                float zm = floorf(0.5f * (z[q] + z[q + 1])), fa = z[q] - zm, fb = z[q + 1] - zm;
+                float zm = floorf(0.5f * (pz[q] + pz[q + 1])), fa = pz[q] - zm, fb = pz[q + 1] - zm;
                 fa = fa < 0.0f ? 0.0f : fa > 1.0f ? 1.0f : fa;
                 fb = fb < 0.0f ? 0.0f : fb > 1.0f ? 1.0f : fb;
                 float ua = tu0 + (tu1 - tu0) * fa, ub = tu0 + (tu1 - tu0) * fb;
@@ -4133,16 +4190,16 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
             }
             if (s == 0) /* faces west */
                 VoxelBuilder_Quad(b,
-                    &(VoxelVertex){wx, fb, z[q + 1], u0, v1, SHADE_WEST},
-                    &(VoxelVertex){wx, fa, z[q],     u1, v1, SHADE_WEST},
-                    &(VoxelVertex){wx, ha,   z[q],     u1, v1 - (v1 - v0) * (ta < 1.0f ? ta : 1.0f), SHADE_WEST},
-                    &(VoxelVertex){wx, hb,   z[q + 1], u0, v1 - (v1 - v0) * (tb < 1.0f ? tb : 1.0f), SHADE_WEST});
+                    &(VoxelVertex){wx, fb, pz[q + 1], u0, v1, SHADE_WEST},
+                    &(VoxelVertex){wx, fa, pz[q],     u1, v1, SHADE_WEST},
+                    &(VoxelVertex){wx, ha,   pz[q],     u1, v1 - (v1 - v0) * (ta < 1.0f ? ta : 1.0f), SHADE_WEST},
+                    &(VoxelVertex){wx, hb,   pz[q + 1], u0, v1 - (v1 - v0) * (tb < 1.0f ? tb : 1.0f), SHADE_WEST});
             else        /* faces east */
                 VoxelBuilder_Quad(b,
-                    &(VoxelVertex){wx, fa, z[q],     u0, v1, SHADE_EAST},
-                    &(VoxelVertex){wx, fb, z[q + 1], u1, v1, SHADE_EAST},
-                    &(VoxelVertex){wx, hb,   z[q + 1], u1, v1 - (v1 - v0) * (tb < 1.0f ? tb : 1.0f), SHADE_EAST},
-                    &(VoxelVertex){wx, ha,   z[q],     u0, v1 - (v1 - v0) * (ta < 1.0f ? ta : 1.0f), SHADE_EAST});
+                    &(VoxelVertex){wx, fa, pz[q],     u0, v1, SHADE_EAST},
+                    &(VoxelVertex){wx, fb, pz[q + 1], u1, v1, SHADE_EAST},
+                    &(VoxelVertex){wx, hb,   pz[q + 1], u1, v1 - (v1 - v0) * (tb < 1.0f ? tb : 1.0f), SHADE_EAST},
+                    &(VoxelVertex){wx, ha,   pz[q],     u0, v1 - (v1 - v0) * (ta < 1.0f ? ta : 1.0f), SHADE_EAST});
         }
     }
 }

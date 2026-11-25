@@ -286,6 +286,7 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
 static bool sFlightOut, sFlightIn;
 static int sRecess;   /* recessed: how far into the cliff top, px (<= the run) */
 static int sOutToo;   /* recessed, and this far out over the floor in front too, px (Victory Road B2F) */
+static int sOutRows;  /* (Victory Road 1F/B1F) the floor rows in front squeezed to make that room, 0: none */
 #define MAX_LAID 256
 #define MAX_PROFILE 65
 typedef struct
@@ -533,7 +534,39 @@ static bool StairFlights(ReliefLayout *l)
                  * one-tile walkway to the stairs, and the stairs' foot out on it stood the player knee-deep in the bottom
                  * step - kept clear (steeper, ~60 degrees). WJPC_VR_STAIRS_OUT=1: out over it, as N65) */
                 sOutToo = 0;
-                if ((l->layoutId == 163 || l->layoutId == 285 || l->layoutId == 286) /* Victory Road */ && sRecess < run
+                sOutRows = 0;
+                /* (Brennan 2026-11-24 22:31, Victory Road 1F: "I do not like those stairs. They go all the way up to the
+                 * edge and you can't go around them. They go too far into the top of the ground. Revert that change and
+                 * make them go more outwards so that ... you can end up on the top part flat and not on an edge". On
+                 * 1F and B1F a flight is cut at most two rows into the ledge, its top row always left flat; the rest of
+                 * its run is out in front, the floor rows before it (up to two, 8 px each) drawn that much shorter so
+                 * the stairs' foot never stands on the floor the player stands on. WJPC_VR_STAIRS_DEEP=1: as N66) */
+                if ((l->layoutId == 163 || l->layoutId == 285) && getenv("WJPC_VR_STAIRS_DEEP") == NULL)
+                {
+                    int bottomRow = found[f].row + found[f].rows, k = 0;
+                    if (lip > 2)
+                        lip = 2;
+                    sRecess = 16 * lip - 4 > 0 ? (16 * lip - 4 < run ? 16 * lip - 4 : run) : 0;
+                    for (; k < 2 && bottomRow + k < l->height; ++k)
+                    {
+                        bool floor = true;
+                        for (int x = found[f].x0; x <= found[f].x1 && floor; ++x)
+                        {
+                            int c = FindIn(l, x, bottomRow + k);
+                            if (c < 0) { floor = false; break; }
+                            for (int g = 0; g < GRID && floor; ++g)
+                                floor = l->heights[c * GRID + g] == found[f].bottom;
+                        }
+                        if (!floor)
+                            break;
+                    }
+                    if (sRecess < run && k > 0)
+                    {
+                        sOutToo = run - sRecess < 8 * k ? run - sRecess : 8 * k;
+                        sOutRows = k;
+                    }
+                }
+                else if ((l->layoutId == 163 || l->layoutId == 285 || l->layoutId == 286) /* Victory Road */ && sRecess < run
                  && getenv("WJPC_VR_STAIRS_SHALLOW") == NULL)
                 {
                     int bottomRow = found[f].row + found[f].rows;
@@ -551,14 +584,15 @@ static bool StairFlights(ReliefLayout *l)
                         sOutToo = run - sRecess < 12 ? run - sRecess : 12;
                 }
                 if (getenv("WJPC_STAIRS_DUMP") != NULL)
-                    fprintf(stderr, "RECESS layout %u x %d-%d row %d: flat rows %d, recess %d of %d\n", l->layoutId,
-                            found[f].x0, found[f].x1, found[f].row, flat, sRecess, run);
+                    fprintf(stderr, "RECESS layout %u x %d-%d row %d: flat rows %d, recess %d of %d, out %d over %d rows\n",
+                            l->layoutId, found[f].x0, found[f].x1, found[f].row, flat, sRecess, run, sOutToo, sOutRows);
             }
             if (!LayFlight(l, found[f].x0, found[f].x1, found[f].row, found[f].rows, found[f].bottom, found[f].rise, lip))
                 return false;
         }
         sFlightOut = sFlightIn = false;
         sOutToo = 0;
+        sOutRows = 0;
         if (getenv("WJPC_STAIRS_CELLS") != NULL && atoi(getenv("WJPC_STAIRS_CELLS")) == (int)l->layoutId)
         {
             int16_t *dd = DepthsOf(l);
@@ -686,6 +720,26 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
                             depths[k * GRID + j * VOXEL_RELIEF_SIDE + i] = (int16_t)(z - v);
                     }
                 }
+            }
+            /* (Victory Road 1F/B1F: the floor rows in front drawn shorter, from the stairs' foot on - sOutRows) */
+            if (sFlightIn && sOutToo > 0 && sOutRows > 0)
+            {
+                int floorTop = top + 16 * rows, zF0 = floorTop + bottom, zF1 = zF0 + 16 * sOutRows;
+                int zFoot = z0 + span;
+                if (zFoot > zF0 && zFoot < zF1)
+                    for (int r = 0; r < sOutRows; ++r)
+                    {
+                        int k = FindIn(l, x, row + rows + r);
+                        if (k < 0)
+                            continue;
+                        for (int j = 0; j < VOXEL_RELIEF_SIDE; ++j)
+                        {
+                            int v = floorTop + 16 * r + 4 * j, zo = v + bottom;
+                            int z = zFoot + (zo - zF0) * (zF1 - zFoot) / (zF1 - zF0);
+                            for (int i = 0; i < VOXEL_RELIEF_SIDE; ++i)
+                                depths[k * GRID + j * VOXEL_RELIEF_SIDE + i] = (int16_t)(z - v);
+                        }
+                    }
             }
         }
     }
