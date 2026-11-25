@@ -2554,6 +2554,10 @@ FILE *Voxel3D_OpenData(const char *path)
 /* Gamma's camera gives 2^1 x 0.18 / 1 = 0.36; our GBA art is drawn fully lit, so the multiplier is the one
  * that returns sunlit ground to its own colours (fitted through this exact curve): 2.06. */
 static float sExposure = 2.06f;
+/* Brennan 2026-11-24 20:44 ("naval rock is way to bright"): Navel Rock's caves are drawn in a pale, nearly white
+ * yellow; lit as a cave (its floor at full light, graded twice) and bloomed, the whole room glowed. Its rooms are
+ * exposed at sNavelDim (WJPC_NAVEL_EXPOSURE=x: that instead; 1: as before). */
+static float sMapExposure = 1.0f;
 /* DLX-23: indoors the room is unlit (full colour), so outdoor bloom makes every white wall glow. */
 static bool sIndoorNow;
 static float IndoorBloomScale(void)
@@ -2961,7 +2965,7 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
             /* POL-31: New Mauville's (room 4) white walls bloomed into a halo over the dark - a third of it there */
             float roomBloom = WideView_GammaRoom() == 4 ? 0.35f : 1.0f;
 
-            wj_glUniform4f(sPU_misc, sExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") || (gVoxelFxOff & VOXEL_FX_BLOOM) ? 0.0f
+            wj_glUniform4f(sPU_misc, sExposure * sMapExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") || (gVoxelFxOff & VOXEL_FX_BLOOM) ? 0.0f
                            : 6.0f * roomBloom * (sIndoorNow ? IndoorBloomScale() : 1.0f), 0.4f);
         }
         wj_glUniform1fv(wj_glGetUniformLocation(sPostProg, "tint"), 6, tint);
@@ -4161,6 +4165,15 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
     else
         wj_glUniform4f(sUniFade, 0, 0, 0, 0);
     sIndoorNow = inst0->indoor;
+    {
+        static float sNavelDim = -1.0f;
+
+        if (sNavelDim < 0.0f)
+            sNavelDim = getenv("WJPC_NAVEL_EXPOSURE") ? (float)atof(getenv("WJPC_NAVEL_EXPOSURE")) : 0.62f;
+        sMapExposure = inst0->underground && ((inst0->layoutId >= 422 && inst0->layoutId <= 428)
+                                              || (inst0->layoutId >= 746 && inst0->layoutId <= 767))
+                     ? sNavelDim : 1.0f;
+    }
     // Haze, outdoors only: starts well past the player, the sky's colour.
     if (inst0->indoor || inst0->underground)
         wj_glUniform2f(sUniFog, 1.0e6f, 2.0e6f);
