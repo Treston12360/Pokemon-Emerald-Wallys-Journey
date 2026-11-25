@@ -44,3 +44,8 @@
 # (voxel_lighting.c: a dark smear beside them); and they are lit as the floor, not by their facing (shade + 4 marks
 # them, voxel_building.c CaveFlatShade -> the shader's vFlat: their sides came out grey-green). Old behaviour:
 # WJPC_CAVE_PAGES_ONE_GRADE, WJPC_CAVE_MODELS_CAST, WJPC_CAVE_MODELS_NORMAL_LIT.
+#
+# Victory Road B2F (2026-11-24, Brennan 20:40 "move onto the next"): its ladders, with the rocks in its water in the
+# same donor - gen_voxel_buildings.py --only sea_rock,cave_ (a comma list of name prefixes: the script's
+# build_models(tuple(args.only.split(","))) in 3ds_port) - then splice_buildings.py --layout OURS DONOR OUT 286. The
+# donor's layout 286: the two sea rocks (22,12), (23,14) and four ladders, one page.
