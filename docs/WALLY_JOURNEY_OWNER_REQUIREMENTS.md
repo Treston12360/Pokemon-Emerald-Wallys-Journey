@@ -1446,3 +1446,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - Their sides: closed down to the floor in front of where the cliff face stood; each tread's side read in 8 pieces;
     a plate of floor a hair under the shortened rows' edges. Gap test, 10 views x 2 sizes: within a few px of N66
     (one 6 px sliver at 1F's x 13 flight), B2F unchanged.
+- 2026-11-24 22:55 Brennan: "Looks good. Move onto other tasks"; asked what next - "Leave the caves for last" (the
+  other caves' stairs). N68: the Ever Grande pinhole (open since N64's notes) - found by the triangles round it: cell
+  (14, 63), a cliff tile cut along its diagonal, has its drop closed under its north-west corner and under its
+  south-east one but not the strip of wall between them. That strip is drawn now (EmitEverGrandePatch, the map's rock
+  face tile; WJPC_EVER_GRANDE_PINHOLE=1: open). Gap test at (28,70): 52 -> 0 px (1920x1080), 95 -> 0 (2560x1440);
+  126 px of the picture differ, all at the hole.

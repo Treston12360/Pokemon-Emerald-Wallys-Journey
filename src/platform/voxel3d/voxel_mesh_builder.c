@@ -4055,6 +4055,42 @@ static float SideGroundAt(const VoxelMapInstance *inst, int nx, int i, int y0, i
     return best;
 }
 
+/*
+ * Ever Grande City, the cliff west of the right-hand waterfall (the gap test's pinhole under the map-name banner, open
+ * since 2026-11-24 - Brennan 2026-11-24 22:55 "Move onto other tasks", asked: this first). Cell (14, 63) is a cliff
+ * tile cut along its diagonal (cut record: foot -96, wall 117); its walls closed the drop under its north-west corner
+ * (x 14, from -80 to -64 px) and under its south-east one (x 15, -64 to -48) but not the strip of wall between those
+ * two corners - a sliver of sky through the rock. That strip, in the map's rock face tile.
+ * WJPC_EVER_GRANDE_PINHOLE=1: open, as before.
+ */
+static void EmitEverGrandePatch(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    static int sOff = -1;
+    int face;
+    float u0, v0, u1, v1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_EVER_GRANDE_PINHOLE") != NULL;
+    if (sOff || inst == NULL || inst->layoutId != 9 /* LAYOUT_EVER_GRANDE_CITY */
+     || x - inst->originX != 14 || y - inst->originY != 63)
+        return;
+    face = VoxelRelief_FaceTile(inst);
+    if (face < 0 || !MetatileUV(b, face, &u0, &v0, &u1, &v1))
+        return;
+    {
+        const float ox = (float)inst->originX, oz = (float)inst->originY;
+        /* (heights and places as the relief has them: z = row + depth, the cell's own frame) */
+        VoxelVertex p[4] = {
+            { ox + 14.0f, -5.0f, oz + 58.0f, u0, v1, SHADE_WEST },
+            { ox + 14.0f, -4.0f, oz + 59.0f, u0, v0, SHADE_WEST },
+            { ox + 15.0f, -3.0f, oz + 61.0f, u1, v0, SHADE_WEST },
+            { ox + 15.0f, -4.0f, oz + 60.0f, u1, v1, SHADE_WEST },
+        };
+        VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+        VoxelBuilder_Quad(b, &p[3], &p[2], &p[1], &p[0]);
+    }
+}
+
 static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
 {
     float z[65], h[65], foot, topH, u0, v0, u1, v1;
@@ -5005,6 +5041,7 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                 if (wall >= 0)
                     EmitCliffWalls(builder, inst, x, y, relief, VoxelRelief_Depth(inst, x, y), wall,
                                    art, sign ? y + 1 : y, sides, back >= 0 && backStands);
+                EmitEverGrandePatch(builder, inst, x, y);
                 if (back >= 0)
                 {
                     /* its back in its own cliff wall, else the map's */
