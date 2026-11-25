@@ -1375,3 +1375,16 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - All 10 Hoenn gym rooms checked at a low camera (WJPC_TEST_3D_PITCH=22): every back wall already stands and the
     walls/bushes/statues/platforms are models (gen_voxel_buildings gym specs). From the normal steep camera they keep
     the drawing's look - said so to Brennan, asked which parts still read as 2D to him.
+- 2026-11-24 18:18-18:38 Brennan (follow-ups, pictures):
+  - N53/N54/N56 Birth Island: the triangle stone a 3D pyramid on its plinth, 1.4x its drawing ("make stone a little
+    bigger"); no green ghost of the crown under the peak tree; trees 7 px higher on 20 px trunks ("show trunk"); the
+    peak round its tree is the peak's rock, not grass ("there is green this should match the surrounding").
+  - N55 Options > Looks > Camera angle: Top (40 degrees, default - Brennan chose "Keep today's"), Angled (32), Low (26).
+    Brennan 18:38 asked whether the close, flat look in a picture was normal: that picture was a test camera
+    (26 degrees from far off) - the game's own view is the Top setting unless he picks another.
+  - N57 Sootopolis Gym 1F: the line along the wall top by the fountains (a hidden floor step) gone.
+  - N58 Trainer Hill: the blue rails stand 3 px tall; the middle block one solid block (its black well had drawn
+    nothing - a hole with dark walls).
+  - N59 Fortree Gym: the back wall's gap is open with real small bushes in it.
+  - Fortree's columns ("all these pillars look 2D"): they are turned 3D models (gen_voxel_buildings fortree_gym);
+    from the Top camera only their tops show. Asked Brennan whether to make them taller or rely on the camera setting.
