@@ -7909,6 +7909,7 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
     return true;
 }
 
+#define ROUTE103_LAYOUT 19   /* LAYOUT_ROUTE103 */
 void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
 {
     float u0, v0, u1, v1;
@@ -7979,6 +7980,24 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                     BeltFlatSteps(builder, x, y, level, shift, u0, v0, u1, v1);
                 }
                 continue;
+            }
+            /* #23 (Brennan 2026-11-23 21:03, Route 103's north woods: "fix both of these issues, making the forest look
+             * natural still"): where the belt's land stands at two heights with no face between them (a wood's floor
+             * rising beside a flat strip north of Route 103, its cells 30-44 across, 12-26 north of it), a triangle of
+             * sky showed through. Under those cells a floor of their ground lies 4 px under the base level: seen
+             * through the slit, the forest floor, never sky. Only there: everywhere, it lay over belts that sink
+             * under their base (Route 111's lower woods, Route 104's shore). WJPC_BELT_NO_FLOOR=1: none. */
+            {
+                static int sNoFloor = -1;
+                const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y);
+                if (sNoFloor < 0)
+                    sNoFloor = getenv("WJPC_BELT_NO_FLOOR") != NULL;
+                if (!sNoFloor && ring != NULL && ring->layoutId == ROUTE103_LAYOUT
+                 && x - ring->originX >= 30 && x - ring->originX <= 44
+                 && ring->originY - y >= 12 && ring->originY - y <= 26
+                 && MetatileUV(builder, BeltIsTree(x, y) ? BeltTreeGround(x, y) : VoxelWorld_BorderMetatile(x, y),
+                                            &u0, &v0, &u1, &v1))
+                    VoxelMesh_Top(builder, (float)x, (float)y, -0.25f, 0.0f, u0, v0, u1, v1, VOXEL_FACE_SHADE(0.55f));
             }
             if (FieldOn() && !BeltIsTree(x, y))
             {
