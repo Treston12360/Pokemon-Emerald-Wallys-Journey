@@ -285,6 +285,7 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
  */
 static bool sFlightOut, sFlightIn;
 static int sRecess;   /* recessed: how far into the cliff top, px (<= the run) */
+static int sOutToo;   /* recessed, and this far out over the floor in front too, px (Victory Road B2F) */
 #define MAX_LAID 256
 #define MAX_PROFILE 65
 typedef struct
@@ -524,6 +525,28 @@ static bool StairFlights(ReliefLayout *l)
                     lip = run / 16 + 2;
                 if (16 * lip - 4 < sRecess)
                     sRecess = 16 * lip - 4 > 0 ? 16 * lip - 4 : 0;
+                /* (Brennan 2026-11-24 21:12, Victory Road B2F: "stairs ... way to steep and not natural"; asked, "Run
+                 * back into ledge". Its lower flight's ledge is two rows deep: 12 px of a 48 px climb, near upright.
+                 * There the whole ledge is cut back (no landing row: the ledge's own rows each side are it), and
+                 * what is still short runs out over the floor row in front. WJPC_VR_STAIRS_SHALLOW=1: as the rest) */
+                sOutToo = 0;
+                if (l->layoutId == 286 /* LAYOUT_VICTORY_ROAD_B2F */ && sRecess < run
+                 && getenv("WJPC_VR_STAIRS_SHALLOW") == NULL)
+                {
+                    int bottomRow = found[f].row + found[f].rows;
+                    bool floor = bottomRow < l->height;
+                    lip = flat < run / 16 + 2 ? flat : run / 16 + 2;
+                    sRecess = 16 * lip - 4 > 0 ? (16 * lip - 4 < run ? 16 * lip - 4 : run) : 0;
+                    for (int x = found[f].x0; x <= found[f].x1 && floor; ++x)
+                    {
+                        int k = FindIn(l, x, bottomRow);
+                        if (k < 0) { floor = false; break; }
+                        for (int g = 0; g < GRID && floor; ++g)
+                            floor = l->heights[k * GRID + g] == found[f].bottom;
+                    }
+                    if (floor && sRecess < run)
+                        sOutToo = run - sRecess < 12 ? run - sRecess : 12;
+                }
                 if (getenv("WJPC_STAIRS_DUMP") != NULL)
                     fprintf(stderr, "RECESS layout %u x %d-%d row %d: flat rows %d, recess %d of %d\n", l->layoutId,
                             found[f].x0, found[f].x1, found[f].row, flat, sRecess, run);
@@ -532,6 +555,7 @@ static bool StairFlights(ReliefLayout *l)
                 return false;
         }
         sFlightOut = sFlightIn = false;
+        sOutToo = 0;
         if (getenv("WJPC_STAIRS_CELLS") != NULL && atoi(getenv("WJPC_STAIRS_CELLS")) == (int)l->layoutId)
         {
             int16_t *dd = DepthsOf(l);
@@ -556,6 +580,7 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
     int steps = (rise + 4) / 8, top = 16 * row, n_all = rows * (VOXEL_RELIEF_SIDE - 1);
     /* the face stood at v + h = top + bottom + rise (as drawn); the top tread starts half a flight back */
     int recessUsed = sRecess < 8 * steps ? sRecess : 8 * steps;
+    int span = recessUsed + (sFlightIn ? sOutToo : 0);   /* the run of a recessed flight: in, and out (sOutToo) */
     int z0 = top + bottom + rise - (sFlightOut ? 0 : sFlightIn ? recessUsed : (8 * steps) / 2);
     LaidFlight *laid = NULL;
     /* Brennan 2026-11-21 17:25 (image 4, Route 112: "a light-blue skybox gap is peeking through the side of the
@@ -620,9 +645,9 @@ static bool LayFlight(ReliefLayout *l, int x0, int x1, int row, int rows, int bo
                         /* (treads 8 px deep, or shallower where the flat ground above leaves less room: steeper, never
                          * out past the cliff's foot - Brennan 17:23 "zero protrusion") */
                         else if (pp & 1)
-                            kk = (pp - 1) / 2, h = bottom + rise - 8 * (kk + 1), z = z0 + recessUsed * kk / steps;
+                            kk = (pp - 1) / 2, h = bottom + rise - 8 * (kk + 1), z = z0 + span * kk / steps;
                         else
-                            kk = (pp - 2) / 2, h = bottom + rise - 8 * (kk + 1), z = z0 + recessUsed * (kk + 1) / steps;
+                            kk = (pp - 2) / 2, h = bottom + rise - 8 * (kk + 1), z = z0 + span * (kk + 1) / steps;
                         if (h < bottom) h = bottom;
                     }
                     if (h < bottom) h = bottom;

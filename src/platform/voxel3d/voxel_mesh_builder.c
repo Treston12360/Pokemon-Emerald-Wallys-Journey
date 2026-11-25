@@ -1686,6 +1686,119 @@ static void EmitBirthTrees(VoxelBuilder *b, const VoxelMapInstance *inst, int x,
     }
 }
 
+/*
+ * Brennan 2026-11-24 21:12, Victory Road B2F: "the ladders are not straight theyre curved". Its four ladders were
+ * models made from their drawing (N64, cave_ladder) laid over the cliff face and the floor in front - bent where the
+ * one met the other. Each is now a ladder of its own: two straight rails and five rungs, its foot on the floor 6 px
+ * out from the face, its top 2 px over the ledge, leaning on the face (the drawing's rails at columns 3-5 and 10-12;
+ * the rails in the drawing's rail colour, the rungs in its rungs'). Its models are not drawn (voxel_building.c
+ * VoxelBuildings_SkipModel). WJPC_VR_LADDERS_OLD=1: the models, as N64.
+ */
+static bool CaveLaddersOn(const VoxelMapInstance *inst)
+{
+    static int sOld = -1;
+
+    if (sOld < 0)
+        sOld = getenv("WJPC_VR_LADDERS_OLD") != NULL;
+    return !sOld && inst != NULL && inst->layoutId == 286;   /* LAYOUT_VICTORY_ROAD_B2F */
+}
+
+bool VoxelMesh_CaveLadderCell(const VoxelMapInstance *inst, int x, int y)
+{
+    int m = VoxelWorld_GetMetatileId(x, y);
+
+    return CaveLaddersOn(inst) && (m == 0x20F || m == 0x216 || m == 0x217);
+}
+
+/* both windings: seen from either side */
+static void LadderQuad(VoxelBuilder *b, VoxelVertex *p)
+{
+    VoxelBuilder_Quad(b, &p[0], &p[1], &p[2], &p[3]);
+    VoxelBuilder_Quad(b, &p[3], &p[2], &p[1], &p[0]);
+}
+
+/* a bar from (x0..x1) wide, `d` deep (south), along the line from (h0, z0) to (h1, z1); u, v its colour's texel */
+static void LadderBar(VoxelBuilder *b, float x0, float x1, float h0, float z0, float h1, float z1, float d,
+                      float u, float v, float ue, float ve, float shade)
+{
+    VoxelVertex q[4];
+    const float sd = shade * 0.85f, st = shade * 0.92f;
+
+    /* front (south) */
+    q[0] = (VoxelVertex){ x0, h1, z1 + d, u, v, shade + 4.0f };
+    q[1] = (VoxelVertex){ x1, h1, z1 + d, u, v, shade + 4.0f };
+    q[2] = (VoxelVertex){ x1, h0, z0 + d, u, v, shade + 4.0f };
+    q[3] = (VoxelVertex){ x0, h0, z0 + d, u, v, shade + 4.0f };
+    LadderQuad(b, q);
+    /* back */
+    q[0].z = z1; q[1].z = z1; q[2].z = z0; q[3].z = z0;
+    for (int i = 0; i < 4; ++i) q[i].shade = sd + 4.0f;
+    LadderQuad(b, q);
+    /* west, east */
+    for (int e = 0; e < 2; ++e)
+    {
+        float xx = e == 0 ? x0 : x1;
+        q[0] = (VoxelVertex){ xx, h1, z1, ue, ve, sd + 4.0f };
+        q[1] = (VoxelVertex){ xx, h1, z1 + d, ue, ve, sd + 4.0f };
+        q[2] = (VoxelVertex){ xx, h0, z0 + d, ue, ve, sd + 4.0f };
+        q[3] = (VoxelVertex){ xx, h0, z0, ue, ve, sd + 4.0f };
+        LadderQuad(b, q);
+    }
+    /* top, bottom */
+    for (int e = 0; e < 2; ++e)
+    {
+        float hh = e == 0 ? h1 : h0, zz = e == 0 ? z1 : z0, uu = e == 0 ? u : ue, vv = e == 0 ? v : ve;
+        q[0] = (VoxelVertex){ x0, hh, zz, uu, vv, st + 4.0f };
+        q[1] = (VoxelVertex){ x1, hh, zz, uu, vv, st + 4.0f };
+        q[2] = (VoxelVertex){ x1, hh, zz + d, uu, vv, st + 4.0f };
+        q[3] = (VoxelVertex){ x0, hh, zz + d, uu, vv, st + 4.0f };
+        LadderQuad(b, q);
+    }
+}
+
+static void EmitCaveLadder(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
+{
+    const int16_t *face, *top, *floor, *faceDepth;
+    float u0, v0, u1, v1, hf, ht, zFace, zFoot, zTop, hTop;
+    bool lighting = b->lighting;
+
+    if (!CaveLaddersOn(inst) || VoxelWorld_GetMetatileId(x, y) != 0x20F
+     || (face = VoxelRelief_Cell(inst, x, y)) == NULL || (faceDepth = VoxelRelief_Depth(inst, x, y)) == NULL
+     || !MetatileUV(b, 0x20F, &u0, &v0, &u1, &v1))
+        return;
+    top = VoxelRelief_Cell(inst, x, y - 1);
+    floor = VoxelRelief_Cell(inst, x, y + 1);
+    ht = (top != NULL ? top[12] : face[2]) / 16.0f;
+    hf = (floor != NULL ? floor[12] : face[22]) / 16.0f;
+    /* the face: where the cell's south edge stands (its foot), straight up from there */
+    zFace = (float)y + 1.0f + faceDepth[22] / 16.0f;
+    zFoot = zFace + 6.0f / 16.0f;
+    zTop = zFace + 2.0f / 16.0f;
+    hTop = ht + 2.0f / 16.0f;
+    b->lighting = false;
+    {
+        /* the drawing's rail (205,172,123) at (4, 8), its rungs' (255,230,156) at (7, 8) */
+        float ur = u0 + (u1 - u0) * 4.5f / 16.0f, vr = v0 + (v1 - v0) * 8.5f / 16.0f;
+        float ug = u0 + (u1 - u0) * 7.5f / 16.0f, vg = v0 + (v1 - v0) * 8.5f / 16.0f;
+        /* (its sides and undersides the drawing's outline (82,41,49) at (3, 8): the rails and rungs edged as drawn) */
+        float ue = u0 + (u1 - u0) * 3.5f / 16.0f, ve = v0 + (v1 - v0) * 8.5f / 16.0f;
+        const float d = 1.5f / 16.0f;
+        static const float rails[2][2] = { { 3.5f, 5.0f }, { 10.5f, 12.0f } };
+
+        for (int r = 0; r < 2; ++r)
+            LadderBar(b, x + rails[r][0] / 16.0f, x + rails[r][1] / 16.0f, hf, zFoot, hTop, zTop, d, ur, vr, ue, ve, 1.0f);
+        for (int k = 1; k <= 5; ++k)
+        {
+            float t = (k - 0.25f) / 5.5f, hh = hf + (hTop - hf) * t, zz = zFoot + (zTop - zFoot) * t;
+            float t1 = t + 1.0f / 16.0f / (hTop - hf), hh1 = hf + (hTop - hf) * t1, zz1 = zFoot + (zTop - zFoot) * t1;
+
+            LadderBar(b, x + rails[0][1] / 16.0f, x + rails[1][0] / 16.0f, hh, zz + 0.2f / 16.0f, hh1,
+                      zz1 + 0.2f / 16.0f, 1.0f / 16.0f, ug, vg, ue, ve, 1.0f);
+        }
+    }
+    b->lighting = lighting;
+}
+
 /* each doorway's way in, set back 8 px: the drawing inside it on its back, its floor, its jambs (the wall's edge) */
 static const KeyedBox sHillDoorways[] = {
     { 31, 49, 1.5f, 1.5f, 0.0f, 19.0f / 16.0f, 2.0f, 1 },
@@ -3924,6 +4037,8 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
         foot = topH;   /* the band from the steps up to the top: its quads wound the other way, facing in */
     }
     face = VoxelRelief_FaceTile(inst);
+    const bool sideByZ = in && inst->layoutId == 286 /* LAYOUT_VICTORY_ROAD_B2F */
+                      && getenv("WJPC_VR_STAIRS_SIDES_OLD") == NULL;
     for (int s = 0; s < 2; ++s)
     {
         float wx;
@@ -3935,6 +4050,7 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
          && (face < 0 || !MetatileUV(b, face, &u0, &v0, &u1, &v1)))
             continue;
         wx = s == 0 ? (float)x : (float)x + 1.0f;
+        const float tu0 = u0, tu1 = u1;
         for (unsigned q = 0; q + 1 < n; ++q)
         {
             /* (half and half, Route 112: the part behind where the face stood is cut into the cliff - closed up to the
@@ -3947,6 +4063,18 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
                 continue;
             if (fabsf(z[q + 1] - z[q]) < 1e-4f)
                 continue;   /* a riser: the side's outline goes straight down there, no area */
+            /* (Victory Road B2F, Brennan 2026-11-24 21:12: its flights cut back into the ledge, their sides showed the
+             * rock's whole drawing squeezed into every 4 px stretch - streaks. There the drawing runs along the side
+             * a tile a tile, as the rock beside it lies: u by z) */
+            if (sideByZ)
+            {
+                float zm = floorf(0.5f * (z[q] + z[q + 1])), fa = z[q] - zm, fb = z[q + 1] - zm;
+                fa = fa < 0.0f ? 0.0f : fa > 1.0f ? 1.0f : fa;
+                fb = fb < 0.0f ? 0.0f : fb > 1.0f ? 1.0f : fb;
+                float ua = tu0 + (tu1 - tu0) * fa, ub = tu0 + (tu1 - tu0) * fb;
+                if (s == 0) u0 = ub, u1 = ua;
+                else u0 = ua, u1 = ub;
+            }
             if (s == 0) /* faces west */
                 VoxelBuilder_Quad(b,
                     &(VoxelVertex){wx, foot, z[q + 1], u0, v1, SHADE_WEST},
@@ -4414,6 +4542,7 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
         }
         EmitMuseumProps(builder, inst, x, y);
         EmitBirthTrees(builder, inst, x, y);
+        EmitCaveLadder(builder, inst, x, y);
         if (shape == VOXEL_SHAPE_VOID)
         {
             /* (Trainer Hill's middle block: its black well is the void's metatile - drawn nothing, it left a hole

@@ -1547,6 +1547,20 @@ bool VoxelBuildings_DoorWall(const VoxelMapInstance *inst, int x, int y, float *
     return VoxelBuildings_FrontAt(inst, x, y, (float)x + 0.49f, (float)x + 0.51f, 0.5f, z);
 }
 
+/* Victory Road B2F's ladders stand as ladders of their own (voxel_mesh_builder.c EmitCaveLadder): their models (N64)
+ * are not drawn, their ground patches are */
+bool VoxelMesh_CaveLadderCell(const VoxelMapInstance *inst, int x, int y);
+static bool SkipModel(const VoxelMapInstance *inst, const BuildingPlacement *p, const BuildingModel *m)
+{
+    if (inst->layoutId != 286)
+        return false;
+    for (unsigned dy = 0; dy < m->h; ++dy)
+        for (unsigned dx = 0; dx < m->w; ++dx)
+            if (VoxelMesh_CaveLadderCell(inst, inst->originX + p->x + (int)dx, inst->originY + p->y + (int)dy))
+                return true;
+    return false;
+}
+
 bool VoxelBuildings_EmitSome(VoxelBuilder *builder, const VoxelMapInstance *inst,
                              int x0, int y0, int x1, int y1, VoxelBuildingCursor *cursor,
                              unsigned triangles)
@@ -1580,6 +1594,11 @@ bool VoxelBuildings_EmitSome(VoxelBuilder *builder, const VoxelMapInstance *inst
                                              inst->originY + p[i].y + m->h - 1);
         builder->shift = VoxelRelief_CellShift(inst, inst->originX + p[i].x,
                                              inst->originY + p[i].y + m->h - 1);
+        if (cursor->part == 0 && SkipModel(inst, &p[i], m))
+        {
+            cursor->part = 1;
+            cursor->vertex = 0;
+        }
         /* A static model is drawn from its own mesh: the chunk only notes
          * where (in its own frame, as VoxelBuilder_Tri would have put it). */
         /* (not one on a map's eased rows: only its vertices are drawn

@@ -107,6 +107,11 @@ bool Port_LayoutSecondaryStair(int id, int metatile)
      * actual stairs": its one-wide rock stairs 0x202) */
     if (l->secondaryTileset == &gTileset_MeteorFalls && metatile == 0x202)
         return true;
+    /* (Brennan 2026-11-24 21:12, Victory Road B2F: "stairs in victory road are way to steep and not natural" - asked,
+     * "Run back into ledge": its cave stairs 0x204 laid as a flight recessed into the ledge above, as Mt Pyre's.
+     * WJPC_VR_STAIRS_UPRIGHT=1: as before) */
+    if (id == 286 /* LAYOUT_VICTORY_ROAD_B2F */ && metatile == 0x204 && getenv("WJPC_VR_STAIRS_UPRIGHT") == NULL)
+        return true;
     return l->secondaryTileset == &gTileset_Facility && (metatile == 0x330 || metatile == 0x331);
 }
 

@@ -1404,3 +1404,17 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - Victory Road B2F ladders -> N64 (donor with sea_rock + cave_, splice --layout 286).
   - Ever Grande pinhole: still one of ~52 px under the map-name banner at (28,70) (pick: cells 12-15, 66-71; relief
     edits to (14,67)/(14,68) did not change it - not those cells). Left open, small.
+- 2026-11-24 21:11-21:12 Brennan: Route 103 north woods -> N63b (the slit filled with the woods' canopy, no grass
+  blocks). Victory Road B2F: "stairs ... way to steep and not natural and the bridge is meshed into the rock, also the
+  ladders are not straight theyre curved" -> N65:
+  - Stairs: asked where a gentler slope's room comes from - Brennan: "Run back into ledge". Both flights (0x204 at
+    (34,9-11), (40,23-25)) are laid as recessed flights like Mt Pyre's (voxel3d_pc.c Port_LayoutSecondaryStair):
+    the top one 45 degrees, wholly into the ledge; the lower one's ledge is only two rows deep, so the whole ledge
+    is cut back and the rest runs 12 px out over the floor row in front (~50 degrees). Their cut sides show the rock
+    tile by tile (no streaks). As with every recessed flight, the ledge cells right above the stairs are squeezed:
+    walking toward the top step the player moves only a little per step. Old: WJPC_VR_STAIRS_UPRIGHT,
+    WJPC_VR_STAIRS_SHALLOW, WJPC_VR_STAIRS_SIDES_OLD.
+  - Bridge: the rock under its east half (row 20, x 36-39) ramps up from the bridge's height instead of standing
+    54-107 px tall along its edge (tools/voxel3ds/victory_road_relief.py; relief.bin).
+  - Ladders: N64's models (bent where face met floor) are not drawn; each ladder is two straight rails and five rungs
+    leaning on the face, in the drawing's colours (EmitCaveLadder). Old: WJPC_VR_LADDERS_OLD=1.
