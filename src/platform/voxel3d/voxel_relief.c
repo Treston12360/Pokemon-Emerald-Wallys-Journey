@@ -528,7 +528,10 @@ static bool StairFlights(ReliefLayout *l)
                 /* (Brennan 2026-11-24 21:12, Victory Road B2F: "stairs ... way to steep and not natural"; asked, "Run
                  * back into ledge". Its lower flight's ledge is two rows deep: 12 px of a 48 px climb, near upright.
                  * There the whole ledge is cut back (no landing row: the ledge's own rows each side are it), and
-                 * what is still short runs out over the floor row in front. WJPC_VR_STAIRS_SHALLOW=1: as the rest) */
+                 * what is still short runs out over the floor row in front. WJPC_VR_STAIRS_SHALLOW=1: as the rest.
+                 * Brennan 22:02 ("is it walkable? It looks to barely have any room in front"): that floor row is the
+                 * one-tile walkway to the stairs, and the stairs' foot out on it stood the player knee-deep in the bottom
+                 * step - kept clear (steeper, ~60 degrees). WJPC_VR_STAIRS_OUT=1: out over it, as N65) */
                 sOutToo = 0;
                 if (l->layoutId == 286 /* LAYOUT_VICTORY_ROAD_B2F */ && sRecess < run
                  && getenv("WJPC_VR_STAIRS_SHALLOW") == NULL)
@@ -544,7 +547,7 @@ static bool StairFlights(ReliefLayout *l)
                         for (int g = 0; g < GRID && floor; ++g)
                             floor = l->heights[k * GRID + g] == found[f].bottom;
                     }
-                    if (floor && sRecess < run)
+                    if (floor && sRecess < run && getenv("WJPC_VR_STAIRS_OUT") != NULL)
                         sOutToo = run - sRecess < 12 ? run - sRecess : 12;
                 }
                 if (getenv("WJPC_STAIRS_DUMP") != NULL)

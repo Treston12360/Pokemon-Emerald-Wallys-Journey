@@ -1418,3 +1418,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     54-107 px tall along its edge (tools/voxel3ds/victory_road_relief.py; relief.bin).
   - Ladders: N64's models (bent where face met floor) are not drawn; each ladder is two straight rails and five rungs
     leaning on the face, in the drawing's colours (EmitCaveLadder). Old: WJPC_VR_LADDERS_OLD=1.
+- 2026-11-24 22:02-22:03 Brennan, Victory Road B2F lower stairs: "is it walkable? It looks to barely have any room in
+  front" and (circled the left side of the lower steps) "Cut this part of the wall as it's just a straight piece
+  upright" -> N65b. Walkable: the game's map has a one-tile walkway along the bottom from the west, the stairs going
+  up from its east end - unchanged. N65 ran the stairs' foot 12 px out onto that walkway and Wally stood knee-deep in
+  the bottom step: kept off it now (the flight steeper, ~60 degrees; WJPC_VR_STAIRS_OUT=1: as N65). The cut sides of
+  both flights go up only as high as the rock beside them (the left side of the lower steps had stood to the ledge's
+  top over rock sloping down to the floor - a slab).

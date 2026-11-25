@@ -4011,6 +4011,31 @@ haveUV:
  * (voxel_relief.c LayFlight) closed on its west and east sides, from its profile down to its foot, in the map's rock
  * (its cliff face tile; else the cell's own drawing). WJPC_STAIRS_OPEN_SIDES=1: open.
  */
+/* The ground beside a flight where it is seen at world z (its points as drawn: row + depth): the highest of column
+ * nx's edge `i` (0 west, 4 east) over rows y0..y1, -1 where none of it is at z. */
+static float SideGroundAt(const VoxelMapInstance *inst, int nx, int i, int y0, int y1, float z)
+{
+    const int n5 = VOXEL_RELIEF_SIDE;
+    float best = -1.0f;
+
+    for (int ry = y0; ry <= y1; ++ry)
+    {
+        const int16_t *g = VoxelRelief_Cell(inst, nx, ry), *d = VoxelRelief_Depth(inst, nx, ry);
+        if (g == NULL || d == NULL)
+            continue;
+        for (int j = 0; j + 1 < n5; ++j)
+        {
+            float za = ry + j / 4.0f + d[j * n5 + i] / 16.0f, zb = ry + (j + 1) / 4.0f + d[(j + 1) * n5 + i] / 16.0f;
+            float ha = g[j * n5 + i] / 16.0f, hb = g[(j + 1) * n5 + i] / 16.0f, lo = fminf(za, zb), hi = fmaxf(za, zb);
+            if (z < lo - 1e-4f || z > hi + 1e-4f)
+                continue;
+            float hz = hi - lo < 1e-4f ? fmaxf(ha, hb) : ha + (hb - ha) * (z - za) / (zb - za);
+            best = fmaxf(best, hz);
+        }
+    }
+    return best;
+}
+
 static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
 {
     float z[65], h[65], foot, topH, u0, v0, u1, v1;
@@ -4058,7 +4083,19 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
             if (half)
                 foot = 0.5f * (z[q] + z[q + 1]) < faceZ ? topH : footOut;
             float ha = h[q], hb = h[q + 1];
-            float ta = fabsf(ha - foot), tb = fabsf(hb - foot);
+            /* (Victory Road B2F, Brennan 2026-11-24 22:03, the lower flight: "Cut this part of the wall as it's just a
+             * straight piece upright" - the rock beside its lower steps slopes down to the floor, and the side stood
+             * up to the ledge's top all along, a slab over it. There the side goes up only to the ground beside it) */
+            float fa = foot, fb = foot;
+            if (sideByZ)
+            {
+                int nx = s == 0 ? x - 1 : x + 1, ni = s == 0 ? VOXEL_RELIEF_SIDE - 1 : 0;
+                float ga = SideGroundAt(inst, nx, ni, y - 4, y + 6, z[q]);
+                float gb = SideGroundAt(inst, nx, ni, y - 4, y + 6, z[q + 1]);
+                fa = ga < 0.0f ? foot : fminf(fmaxf(ga, ha), foot);
+                fb = gb < 0.0f ? foot : fminf(fmaxf(gb, hb), foot);
+            }
+            float ta = fabsf(ha - fa), tb = fabsf(hb - fb);
             if (ta <= 0.01f && tb <= 0.01f)
                 continue;
             if (fabsf(z[q + 1] - z[q]) < 1e-4f)
@@ -4077,14 +4114,14 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
             }
             if (s == 0) /* faces west */
                 VoxelBuilder_Quad(b,
-                    &(VoxelVertex){wx, foot, z[q + 1], u0, v1, SHADE_WEST},
-                    &(VoxelVertex){wx, foot, z[q],     u1, v1, SHADE_WEST},
+                    &(VoxelVertex){wx, fb, z[q + 1], u0, v1, SHADE_WEST},
+                    &(VoxelVertex){wx, fa, z[q],     u1, v1, SHADE_WEST},
                     &(VoxelVertex){wx, ha,   z[q],     u1, v1 - (v1 - v0) * (ta < 1.0f ? ta : 1.0f), SHADE_WEST},
                     &(VoxelVertex){wx, hb,   z[q + 1], u0, v1 - (v1 - v0) * (tb < 1.0f ? tb : 1.0f), SHADE_WEST});
             else        /* faces east */
                 VoxelBuilder_Quad(b,
-                    &(VoxelVertex){wx, foot, z[q],     u0, v1, SHADE_EAST},
-                    &(VoxelVertex){wx, foot, z[q + 1], u1, v1, SHADE_EAST},
+                    &(VoxelVertex){wx, fa, z[q],     u0, v1, SHADE_EAST},
+                    &(VoxelVertex){wx, fb, z[q + 1], u1, v1, SHADE_EAST},
                     &(VoxelVertex){wx, hb,   z[q + 1], u1, v1 - (v1 - v0) * (tb < 1.0f ? tb : 1.0f), SHADE_EAST},
                     &(VoxelVertex){wx, ha,   z[q],     u0, v1 - (v1 - v0) * (ta < 1.0f ? ta : 1.0f), SHADE_EAST});
         }
