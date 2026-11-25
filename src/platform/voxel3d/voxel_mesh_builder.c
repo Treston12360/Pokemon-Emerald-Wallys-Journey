@@ -1051,6 +1051,84 @@ static int HillPlainFloor(int m)
 static bool MuseumPropCell(const VoxelMapInstance *inst, int x, int y, bool *carpet);
 #define MUSEUM_CARPET 7
 #define MUSEUM_FLAT 8   /* drawn flat (a box stands over it; not the counter its behaviour would stand) */
+/* Brennan 2026-11-24 18:19 (Trainer Hill: the blue bars circled, "the walls should be 3D"): the challenge's low blue
+ * rails (their tiles 0x2C1/0x2D1 a run across, 0x2D0 a run down, 0x2C2 a corner, on every floor colour) lay flat.
+ * Each quarter of a cell they are drawn in stands as a rail 3 px tall - its top the drawing's light and mid blue,
+ * its front the dark rows under them (the drawing's 5 + 3 rows), keyed to the drawing. Per metatile: each quarter's
+ * kind | hflip << 4 | vflip << 5. WJPC_TRAINER_HILL_RAILS_FLAT=1: flat. */
+typedef struct
+{
+    uint16_t metatile;
+    uint8_t q[4];   /* top-left, top-right, bottom-left, bottom-right */
+} HillRail;
+
+static const HillRail sHillRails[] = {
+    { 0x220, { 0x00, 0x03, 0x00, 0x03 } },
+    { 0x221, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x222, { 0x13, 0x00, 0x13, 0x00 } },
+    { 0x228, { 0x00, 0x03, 0x00, 0x02 } },
+    { 0x229, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x22A, { 0x13, 0x00, 0x12, 0x00 } },
+    { 0x230, { 0x00, 0x00, 0x01, 0x02 } },
+    { 0x232, { 0x00, 0x00, 0x12, 0x01 } },
+    { 0x258, { 0x00, 0x03, 0x00, 0x03 } },
+    { 0x259, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x25A, { 0x13, 0x00, 0x13, 0x00 } },
+    { 0x260, { 0x00, 0x03, 0x00, 0x02 } },
+    { 0x261, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x262, { 0x13, 0x00, 0x12, 0x00 } },
+    { 0x268, { 0x00, 0x00, 0x01, 0x02 } },
+    { 0x26A, { 0x00, 0x00, 0x12, 0x01 } },
+    { 0x280, { 0x00, 0x03, 0x00, 0x03 } },
+    { 0x281, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x282, { 0x13, 0x00, 0x13, 0x00 } },
+    { 0x288, { 0x00, 0x03, 0x00, 0x02 } },
+    { 0x289, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x28A, { 0x13, 0x00, 0x12, 0x00 } },
+    { 0x290, { 0x00, 0x00, 0x01, 0x02 } },
+    { 0x292, { 0x00, 0x00, 0x12, 0x01 } },
+    { 0x2A0, { 0x00, 0x03, 0x00, 0x03 } },
+    { 0x2A1, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x2A2, { 0x13, 0x00, 0x13, 0x00 } },
+    { 0x2A8, { 0x00, 0x03, 0x00, 0x02 } },
+    { 0x2A9, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x2AA, { 0x13, 0x00, 0x12, 0x00 } },
+    { 0x2B0, { 0x00, 0x00, 0x01, 0x02 } },
+    { 0x2B2, { 0x00, 0x00, 0x12, 0x01 } },
+    { 0x2C0, { 0x00, 0x03, 0x00, 0x03 } },
+    { 0x2C1, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x2C2, { 0x13, 0x00, 0x13, 0x00 } },
+    { 0x2C8, { 0x00, 0x03, 0x00, 0x02 } },
+    { 0x2C9, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x2CA, { 0x13, 0x00, 0x12, 0x00 } },
+    { 0x2D0, { 0x00, 0x00, 0x01, 0x02 } },
+    { 0x2D2, { 0x00, 0x00, 0x12, 0x01 } },
+    { 0x2E0, { 0x00, 0x03, 0x00, 0x03 } },
+    { 0x2E1, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x2E2, { 0x13, 0x00, 0x13, 0x00 } },
+    { 0x2E8, { 0x00, 0x03, 0x00, 0x02 } },
+    { 0x2E9, { 0x00, 0x00, 0x01, 0x01 } },
+    { 0x2EA, { 0x13, 0x00, 0x12, 0x00 } },
+    { 0x2F0, { 0x00, 0x00, 0x01, 0x02 } },
+    { 0x2F2, { 0x00, 0x00, 0x12, 0x01 } },
+};
+
+static const HillRail *HillRailOf(int m)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_TRAINER_HILL_RAILS_FLAT") != NULL;
+    if (sOff)
+        return NULL;
+    for (unsigned i = 0; i < sizeof(sHillRails) / sizeof(sHillRails[0]); ++i)
+        if (sHillRails[i].metatile == m)
+            return &sHillRails[i];
+    return NULL;
+}
+
+#define HILL_RAIL 9
+
 #define HILL_STONE 4
 #define HILL_PILLAR 5
 #define HILL_CAP 6
@@ -1086,6 +1164,8 @@ static int RaisedBlockCell(const VoxelMapInstance *inst, int x, int y, float *he
         m = VoxelWorld_GetMetatileId(x, y);
         if (!sOff && InList(sHillCaps, sizeof(sHillCaps) / sizeof(sHillCaps[0]), m))
             return HILL_CAP;
+        if (HillRailOf(m) != NULL)
+            return HILL_RAIL;
         /* a floor cell north of a stone carries its top's tip, drawn there: the plain floor (the stone stands) */
         if (!sOff && VoxelWorld_GetCollision(x, y) == 0 && y + 1 < inst->originY + inst->height
          && VoxelWorld_GetCollision(x, y + 1) != 0
@@ -1669,6 +1749,43 @@ static void EmitMuseumProps(VoxelBuilder *b, const VoxelMapInstance *inst, int x
     }
 }
 
+static void EmitHillFloor(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y,
+                          float u0, float v0, float u1, float v1);
+
+static void EmitHillRails(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y,
+                          float u0, float v0, float u1, float v1)
+{
+    const HillRail *r = HillRailOf(VoxelWorld_GetMetatileId(x, y));
+    int px = (x - inst->originX) * 16;
+    float cy = (float)(y - inst->originY);
+
+    EmitHillFloor(b, inst, x, y, u0, v0, u1, v1);
+    if (r == NULL)
+        return;
+    for (int k = 0; k < 4; ++k)
+    {
+        int kind = r->q[k] & 0x0F, flip = (r->q[k] >> 4) & 1;
+        int qx = px + (k & 1) * 8;
+        float qy = cy + (k >> 1) * 0.5f;
+        KeyedBox box;
+
+        if (kind == 0)
+            continue;
+        /* across: the whole quarter (a run across), or the 5 columns the bar is drawn in (down, a corner) */
+        box.x0 = (int16_t)(kind == 1 ? qx : flip ? qx + 3 : qx);
+        box.x1 = (int16_t)(kind == 1 ? qx + 8 : flip ? qx + 8 : qx + 5);
+        /* deep: its top the quarter's rows 0-4 seen 3 px up, its front at the quarter's foot (a run down: all 8
+         * rows on its top, its front where the next quarter's starts) */
+        box.za = qy + 3.0f / 16.0f;
+        box.zb = qy + (kind == 3 ? 11.0f : 8.0f) / 16.0f;
+        box.h0 = 0.0f;
+        box.h1 = 3.0f / 16.0f;
+        box.zKey = 0.0f;
+        box.faces = 1 | 2 | 4 | 8;
+        EmitKeyedBox(b, inst, &box);
+    }
+}
+
 /* a cell of a room's back wall, stood upright at the wall's foot (row `rows`): its drawing's rows as they rise */
 static void EmitStandingWall(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y, float rows,
                              float u0, float v0, float u1, float v1)
@@ -1911,7 +2028,19 @@ static void EmitHillWall(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
     b->lighting = false;
     if (r < foot - rise)
     {
-        float z0 = (float)y + rise, z1 = z0 + 1.0f, h = (float)rise;
+        /* Brennan 2026-11-24 18:19 (Trainer Hill: "what is the middle part it looks out of place and odd. the walls
+         * should be 3D"): the middle block's top (the black well and its white rim, columns 4-10) lay at two heights
+         * - lower over the stairs' alcove - with the dark sides of the higher parts standing round it like a pit.
+         * It lies at one height, the block's (2 rows), over the alcove too: one solid block, the stairs set in its
+         * front. WJPC_TRAINER_HILL_WELL_OLD=1: as N44. */
+        static int sOld = -1;
+        int topRise = rise;
+
+        if (sOld < 0)
+            sOld = getenv("WJPC_TRAINER_HILL_WELL_OLD") != NULL;
+        if (!sOld && col >= 4 && col <= 10)
+            topRise = 2;
+        float z0 = (float)y + topRise, z1 = z0 + 1.0f, h = (float)topRise;
 
         VoxelBuilder_Quad(b, &(VoxelVertex){ (float)x, h, z0, u0, v0, 5.0f },
                           &(VoxelVertex){ (float)x + 1, h, z0, u1, v0, 5.0f },
@@ -4278,7 +4407,16 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
         EmitMuseumProps(builder, inst, x, y);
         EmitBirthTrees(builder, inst, x, y);
         if (shape == VOXEL_SHAPE_VOID)
+        {
+            /* (Trainer Hill's middle block: its black well is the void's metatile - drawn nothing, it left a hole
+             * in the block's top, the walls' dark inner sides standing in it. Its top lies there, black.) */
+            float rh, u0, v0, u1, v1;
+
+            if (getenv("WJPC_TRAINER_HILL_WELL_OLD") == NULL && RaisedBlockCell(inst, x, y, &rh) == HILL_WALL
+             && MetatileUV(builder, VoxelWorld_GetMetatileId(x, y), &u0, &v0, &u1, &v1))
+                EmitHillWall(builder, inst, x, y, u0, v0, u1, v1);
             continue;
+        }
         {
             float u0, v0, u1, v1, rh;
             int raised = RaisedBlockCell(inst, x, y, &rh);
@@ -4295,6 +4433,8 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                     EmitHillPillar(builder, inst, x, y, u0, v0, u1, v1);
                 else if (raised == HILL_CAP)
                     EmitHillFloor(builder, inst, x, y, u0, v0, u1, v1);
+                else if (raised == HILL_RAIL)
+                    EmitHillRails(builder, inst, x, y, u0, v0, u1, v1);
                 else if (raised == MUSEUM_CARPET || raised == MUSEUM_FLAT)
                 {
                     bool lighting = builder->lighting;
