@@ -1394,3 +1394,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   different color"). N61 Fortree gates: an arm along a bush's edge stands 5 px clear of it ("green square" on the left
   gate was the bush poking through). Open, asked Brennan: what "back wall looks flat on the right side" should become
   (the two black squares in the wall top), and what is wrong with the "barrels" (the tall green columns).
+- 2026-11-24 20:40-20:53 Brennan: Fortree/Birth Island "all should be fine for now, move onto the next"; Navel Rock
+  "way to bright" -> N62/N62b: its underground rooms exposed at 0.45 in the screen pass, bloom a tenth
+  (WJPC_NAVEL_EXPOSURE / WJPC_NAVEL_BLOOM); "that looks good".
+  - #23 Route 103 north wedge -> N63 (a floor under that belt patch only; laid everywhere it covered belts that sink
+    under their base - checked 40 views over 20 maps, no change elsewhere). The south slit: not found in 25 views.
+  - #22 Route 112 west-edge slit: no longer shows (15 views at x 2-8, rows 10-22, and the old (6,18) view: 0 gap
+    pixels at 1920x1080) - fixed by later work; nothing changed for it.
+  - Victory Road B2F ladders -> N64 (donor with sea_rock + cave_, splice --layout 286).
+  - Ever Grande pinhole: still one of ~52 px under the map-name banner at (28,70) (pick: cells 12-15, 66-71; relief
+    edits to (14,67)/(14,68) did not change it - not those cells). Left open, small.
