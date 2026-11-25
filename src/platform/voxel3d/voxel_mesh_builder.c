@@ -7992,11 +7992,20 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 const VoxelMapInstance *ring = VoxelWorld_BeltRing(x, y);
                 if (sNoFloor < 0)
                     sNoFloor = getenv("WJPC_BELT_NO_FLOOR") != NULL;
-                if (!sNoFloor && ring != NULL && ring->layoutId == ROUTE103_LAYOUT
-                 && x - ring->originX >= 30 && x - ring->originX <= 44
-                 && ring->originY - y >= 12 && ring->originY - y <= 26
-                 && MetatileUV(builder, BeltIsTree(x, y) ? BeltTreeGround(x, y) : VoxelWorld_BorderMetatile(x, y),
-                                            &u0, &v0, &u1, &v1))
+                /* (Brennan 21:11: "fill this in with trees like the surrounding, also there are grass blocks floating
+                 * in the middle of the trees": the floor only under the slit's own cells, 37-40 across and 15-23 north,
+                 * and drawn as the woods' canopy - a tree's drawing - so through the slit it reads as more trees) */
+                int canopy = -1;
+
+                for (int k = 0; k < 6 && canopy < 0; ++k)
+                    if (BeltIsTree(x + k, y))
+                        canopy = VoxelWorld_BorderMetatile(x + k, y);
+                    else if (BeltIsTree(x - k, y))
+                        canopy = VoxelWorld_BorderMetatile(x - k, y);
+                if (!sNoFloor && ring != NULL && ring->layoutId == ROUTE103_LAYOUT && canopy >= 0
+                 && x - ring->originX >= 37 && x - ring->originX <= 40
+                 && ring->originY - y >= 15 && ring->originY - y <= 23
+                 && MetatileUV(builder, canopy, &u0, &v0, &u1, &v1))
                     VoxelMesh_Top(builder, (float)x, (float)y, -0.25f, 0.0f, u0, v0, u1, v1, VOXEL_FACE_SHADE(0.55f));
             }
             if (FieldOn() && !BeltIsTree(x, y))
