@@ -1388,3 +1388,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - N59 Fortree Gym: the back wall's gap is open with real small bushes in it.
   - Fortree's columns ("all these pillars look 2D"): they are turned 3D models (gen_voxel_buildings fortree_gym);
     from the Top camera only their tops show. Asked Brennan whether to make them taller or rely on the camera setting.
+- 2026-11-24 20:27-20:33 Brennan: N59's open gap in Fortree's back wall "looks too far back" - reverted (buildings.bin
+  back to N58's). N60 Birth Island: the side trees' crown cells grass again (N56's rock range had caught them); the
+  shore sea round Birth Island / Navel Rock lies as open sea (its drawing carries the 2D cliff's dark shadow - "sea is
+  different color"). N61 Fortree gates: an arm along a bush's edge stands 5 px clear of it ("green square" on the left
+  gate was the bush poking through). Open, asked Brennan: what "back wall looks flat on the right side" should become
+  (the two black squares in the wall top), and what is wrong with the "barrels" (the tall green columns).
