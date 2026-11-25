@@ -1261,6 +1261,7 @@ typedef struct
 {
     float cx, front, lift, rows, w, shade;
     float baseX, baseY, squeeze;   /* (the atlas holds the drawing's columns squeezed: atlas width / width) */
+    float scale;                   /* (its size against the drawing's: the triangle stone a little bigger) */
     bool flip;
 } FerryFrame;
 
@@ -1270,7 +1271,8 @@ static void FerryVertex(VoxelVertex *v, const FerryFrame *f, float x, float z, f
     float key = z - y, drawn = f->flip ? f->w - x : x;
 
     key = key < 0.5f ? 0.5f : key > f->rows - 0.5f ? f->rows - 0.5f : key;
-    *v = (VoxelVertex){ f->cx + (drawn - f->w * 0.5f) * p, f->lift + y * p, f->front + (z - f->rows) * p,
+    *v = (VoxelVertex){ f->cx + (drawn - f->w * 0.5f) * p * f->scale, f->lift + y * p * f->scale,
+                        f->front + (z - f->rows) * p * f->scale,
                         /* (the atlas holds the drawing as drawn: flipped already) */
                         (f->baseX + (drawn < 0.5f ? 0.5f : drawn > f->w - 0.5f ? f->w - 0.5f : drawn) * f->squeeze)
                             / (float)VOXEL_SPRITE_ATLAS_W,
@@ -1337,6 +1339,7 @@ static bool EmitFerry(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsign
     if (slot->color256 || slot->width != 96 || slot->atlasWidth <= 0 || VisibleRows(slot) < 37)
         return false;
     f.squeeze = (float)slot->atlasWidth / (float)slot->width;
+    f.scale = 1.0f;
     f.baseX = (float)((index % VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
     f.baseY = (float)((index / VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
     f.cx = cx;
@@ -1400,6 +1403,7 @@ static bool EmitTriangle(VoxelBuilder *builder, const VoxelSpriteSlot *slot, uns
     f.baseX = (float)((index % VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
     f.baseY = (float)((index / VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
     f.squeeze = 1.0f;
+    f.scale = 1.4f;   /* Brennan 18:25: "make stone a little bigger" */
     f.cx = cx;
     f.front = cz + VoxelRelief_ShiftAt(cx, cz);
     f.lift = VoxelRelief_LiftAt(cx, cz) + rise;

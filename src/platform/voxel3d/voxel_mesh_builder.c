@@ -1408,6 +1408,8 @@ typedef struct
     const VoxelMapInstance *inst;
     float lift, shift;   /* tiles */
     bool lighting;
+    bool flatKey;        /* the drawing's row by depth alone (z), not its screen key (z - h): an upright part (a
+                          * trunk) showing the pixels drawn at its foot all the way up */
 } KeyedSpace;
 
 static void EmitKeyedTri(VoxelBuilder *b, const KeyedSpace *k, const float p[3][3], float shade)
@@ -1419,7 +1421,7 @@ static void EmitKeyedTri(VoxelBuilder *b, const KeyedSpace *k, const float p[3][
     for (int i = 0; i < 3; ++i)
     {
         sx[i] = p[i][0] / 16.0f;
-        sq[i] = (p[i][2] - p[i][1]) / 16.0f;
+        sq[i] = (p[i][2] - (k->flatKey ? 0.0f : p[i][1])) / 16.0f;
         minx = fminf(minx, sx[i]); maxx = fmaxf(maxx, sx[i]);
         minq = fminf(minq, sq[i]); maxq = fmaxf(maxq, sq[i]);
     }
@@ -1580,7 +1582,7 @@ static void EmitBirthTrees(VoxelBuilder *b, const VoxelMapInstance *inst, int x,
     {
         float tx = sBirthTrees[i][0], tz = sBirthTrees[i][1];
         float wx = inst->originX + tx / 16.0f, wz = inst->originY + tz / 16.0f;
-        KeyedSpace k = { inst, 0, 0, false };
+        KeyedSpace k = { inst, 0, 0, false, false };
         bool lighting = b->lighting;
 
         if (inst->originX + (int)(tx / 16) != x || inst->originY + (int)(tz / 16) != y)
@@ -1588,9 +1590,18 @@ static void EmitBirthTrees(VoxelBuilder *b, const VoxelMapInstance *inst, int x,
         k.lift = VoxelRelief_LiftAt(wx, wz);
         k.shift = VoxelRelief_ShiftAt(wx, wz);
         b->lighting = false;
-        /* the trunk, then the crown: its middle over the trunk, its drawing's rows 224-259 (key 241.5 = z - h) */
-        EmitKeyedRound(b, &k, tx, 0.0f, tz - 2.0f, 4.5f, -1.0f, 3.0f, 12, 0, true, 12.0f);
-        EmitKeyedRound(b, &k, tx, tz - 2.0f - (tz - 22.5f), tz - 2.0f, 23.0f, 12.5f, 13.0f, 20, 10, false, 0.0f);
+        /* the trunk, then the crown: its middle over the trunk, its drawing's rows 224-259 (key 241.5 = z - h).
+         * Brennan 18:25 ("show trunk on tree raise up a little more"): the crown 7 px higher on a trunk 20 px tall,
+         * the trunk showing its drawn foot's brown all the way up (flatKey); the crown, raised, keyed 7 px further
+         * south so the game's camera still sees its drawing where it was drawn */
+        {
+            KeyedSpace trunk = k;
+
+            trunk.flatKey = true;
+            EmitKeyedRound(b, &trunk, tx, 0.0f, tz - 4.0f, 4.0f, -1.0f, 2.5f, 12, 0, true, 20.0f);
+        }
+        EmitKeyedRound(b, &k, tx, tz - 2.0f - (tz - 22.5f) + 7.0f, tz - 2.0f + 7.0f, 23.0f, 12.5f, 13.0f, 20, 10,
+                       false, 0.0f);
         b->lighting = lighting;
     }
 }
@@ -1635,7 +1646,7 @@ static void EmitMuseumProps(VoxelBuilder *b, const VoxelMapInstance *inst, int x
         for (int i = 0; i < 4; ++i)
         {
             const float *r = sRounds[i];
-            KeyedSpace ks = { inst, r[5] / 16.0f, r[5] / 16.0f, false };
+            KeyedSpace ks = { inst, r[5] / 16.0f, r[5] / 16.0f, false, false };
             bool lighting = b->lighting;
 
             if (inst->originX + (int)(r[0] / 16) != x || inst->originY + (int)((r[1] + r[5]) / 16) != y)
@@ -1967,6 +1978,25 @@ static void EmitHillWall(VoxelBuilder *b, const VoxelMapInstance *inst, int x, i
         }
     }
     b->lighting = lighting;
+}
+
+/* Brennan 2026-11-24 18:19 (Birth Island's peak: "mountain looks green here"): the cells its trees' crowns are drawn
+ * on (Dewford's big tree: its top two rows) lay that drawing on the ground under the 3D trees (N48) - a green ghost of
+ * the crown below the peak's tree. They lie as plain grass (the trunk's row, with its shadow, as drawn).
+ * WJPC_BIRTH_TREES_FLAT=1: as drawn. */
+static int BirthTreeGround(const VoxelMapInstance *inst, int x, int y, int art)
+{
+    static const uint16_t sCrown[] = { 0x328, 0x329, 0x32A, 0x330, 0x331, 0x332, 0x32B, 0x32C, 0x32D, 0x32E, 0x333,
+        0x334, 0x335, 0x336, 0x32F, 0x340, 0x337, 0x348 };
+    int m;
+
+    if (inst == NULL || inst->layoutId != 404 || getenv("WJPC_BIRTH_TREES_FLAT") != NULL)
+        return art;
+    m = VoxelWorld_GetMetatileId(x, y);
+    for (unsigned i = 0; i < sizeof(sCrown) / sizeof(sCrown[0]); ++i)
+        if (sCrown[i] == m)
+            return 0x001;
+    return art;
 }
 
 static void EmitRelief(VoxelBuilder *b, int x, int y, const int16_t *g, const int16_t *s,
@@ -4574,6 +4604,7 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                     cut = -1;
                     cutRows = NULL;
                 }
+                art = BirthTreeGround(inst, x, sign ? y + 1 : y, art);
                 EmitRelief(builder, x, y, relief, VoxelRelief_Depth(inst, x, y),
                            sign ? y + 1 : y, art, cut >= 0, (int)lroundf(foot * 16.0f), cutRows);
                 if (wall >= 0)
