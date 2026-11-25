@@ -2558,6 +2558,7 @@ static float sExposure = 2.06f;
  * yellow; lit as a cave (its floor at full light, graded twice) and bloomed, the whole room glowed. Its rooms are
  * exposed at sNavelDim (WJPC_NAVEL_EXPOSURE=x: that instead; 1: as before). */
 static float sMapExposure = 1.0f;
+static float sMapBloom = 1.0f;   /* (20:50: "the glare needs to be dialed down more": its bloom a tenth, exposure 0.45) */
 /* DLX-23: indoors the room is unlit (full colour), so outdoor bloom makes every white wall glow. */
 static bool sIndoorNow;
 static float IndoorBloomScale(void)
@@ -2966,7 +2967,7 @@ static void PostFinish(GLuint outFbo, int w, int h, const float fade[4], float p
             float roomBloom = WideView_GammaRoom() == 4 ? 0.35f : 1.0f;
 
             wj_glUniform4f(sPU_misc, sExposure * sMapExposure, 1.25f, getenv("WJPC_3D_NOBLOOM") || (gVoxelFxOff & VOXEL_FX_BLOOM) ? 0.0f
-                           : 6.0f * roomBloom * (sIndoorNow ? IndoorBloomScale() : 1.0f), 0.4f);
+                           : 6.0f * roomBloom * sMapBloom * (sIndoorNow ? IndoorBloomScale() : 1.0f), 0.4f);
         }
         wj_glUniform1fv(wj_glGetUniformLocation(sPostProg, "tint"), 6, tint);
         {
@@ -4169,10 +4170,12 @@ static bool DrawWorld(unsigned colorTexture, int w, int h, SavedGl *savedP, Worl
         static float sNavelDim = -1.0f;
 
         if (sNavelDim < 0.0f)
-            sNavelDim = getenv("WJPC_NAVEL_EXPOSURE") ? (float)atof(getenv("WJPC_NAVEL_EXPOSURE")) : 0.62f;
-        sMapExposure = inst0->underground && ((inst0->layoutId >= 422 && inst0->layoutId <= 428)
-                                              || (inst0->layoutId >= 746 && inst0->layoutId <= 767))
-                     ? sNavelDim : 1.0f;
+            sNavelDim = getenv("WJPC_NAVEL_EXPOSURE") ? (float)atof(getenv("WJPC_NAVEL_EXPOSURE")) : 0.45f;
+        bool navel = inst0->underground && ((inst0->layoutId >= 422 && inst0->layoutId <= 428)
+                                            || (inst0->layoutId >= 746 && inst0->layoutId <= 767));
+        sMapExposure = navel ? sNavelDim : 1.0f;
+        sMapBloom = navel && sNavelDim < 1.0f ? (getenv("WJPC_NAVEL_BLOOM") ? (float)atof(getenv("WJPC_NAVEL_BLOOM")) : 0.1f)
+                  : 1.0f;
     }
     // Haze, outdoors only: starts well past the player, the sky's colour.
     if (inst0->indoor || inst0->underground)
