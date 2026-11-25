@@ -4063,6 +4063,29 @@ static float SideGroundAt(const VoxelMapInstance *inst, int nx, int i, int y0, i
  * two corners - a sliver of sky through the rock. That strip, in the map's rock face tile.
  * WJPC_EVER_GRANDE_PINHOLE=1: open, as before.
  */
+/*
+ * Brennan 2026-11-25 07:12, Ever Grande, the cliffs each side of the right-hand waterfall (circled): "Fix these
+ * textures. They should mirror the same around them". Their faces turned to the waterfall (east on the west cliff,
+ * a few on the east one) have no sun at any hour (the sun's way is from the west) and lie in the cliff's own shadow:
+ * the sky's light alone, the rock near black with its lighter streaks gone green-grey under it - not the brown rock
+ * round them. The cells of those two faces are drawn as the rock round them is lit: by their own drawn shades, no
+ * cast shadow, and lit as the ground is (the shader's vFlat). WJPC_EVER_GRANDE_NOOK_LIT=1: lit by the sun, as
+ * before.
+ */
+static bool EverGrandeNook(const VoxelMapInstance *inst, int x, int y)
+{
+    static int sOld = -1;
+    int lx, ly;
+
+    if (sOld < 0)
+        sOld = getenv("WJPC_EVER_GRANDE_NOOK_LIT") != NULL;
+    if (sOld || inst == NULL || inst->layoutId != 9 /* LAYOUT_EVER_GRANDE_CITY */)
+        return false;
+    lx = x - inst->originX;
+    ly = y - inst->originY;
+    return ly >= 54 && ly <= 75 && ((lx >= 9 && lx <= 16) || (lx >= 25 && lx <= 31));
+}
+
 static void EmitEverGrandePatch(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
 {
     static int sOff = -1;
@@ -5036,6 +5059,10 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                 }
                 art = BirthTreeGround(inst, x, sign ? y + 1 : y, art);
                 art = LadderGround(inst, x, sign ? y + 1 : y, art);
+                const bool keepLit = builder->lighting, nook = EverGrandeNook(inst, x, y);
+                const unsigned nookFirst = builder->count;
+                if (nook)
+                    builder->lighting = false;
                 EmitRelief(builder, x, y, relief, VoxelRelief_Depth(inst, x, y),
                            sign ? y + 1 : y, art, cut >= 0, (int)lroundf(foot * 16.0f), cutRows);
                 if (wall >= 0)
@@ -5050,6 +5077,13 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                     EmitNorthFace(builder, inst, x, y, relief, VoxelRelief_Depth(inst, x, y),
                                   backStands ? (face >= 0 ? face : back) : -1, back);
                 }
+                builder->lighting = keepLit;
+                /* (and lit as the ground: the shader lights a face by its facing, the sky's blue alone on one turned
+                 * from the sun - shade + 4, its vFlat, as a cave's faces) */
+                if (nook)
+                    for (unsigned k = nookFirst; k < builder->count; ++k)
+                        if (builder->vertices[k].shade < 3.0f)
+                            builder->vertices[k].shade += 4.0f;
                 if (VoxelRelief_IsSlope(relief))
                 {
                     /* A signpost at the foot of a face stands on the ground

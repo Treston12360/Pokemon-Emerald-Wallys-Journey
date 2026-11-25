@@ -1452,3 +1452,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   south-east one but not the strip of wall between them. That strip is drawn now (EmitEverGrandePatch, the map's rock
   face tile; WJPC_EVER_GRANDE_PINHOLE=1: open). Gap test at (28,70): 52 -> 0 px (1920x1080), 95 -> 0 (2560x1440);
   126 px of the picture differ, all at the hole.
+- 2026-11-25 07:12 Brennan, Ever Grande (circled the cliffs each side of the right waterfall): "Fix these textures.
+  They should mirror the same around them" -> N69. Found: not the tiles (0x7C rock, as round them) - the faces turned
+  from the sun (east on the west cliff, a few on the east one) are lit in the shader by their facing (Gamma lighting:
+  dFdx normal), the sky's blue alone, and lie in the cliff's cast shadow: near black, the rock's light streaks gone
+  green-grey. The cells there (layout x 9-16 and 25-31, rows 54-75) are drawn unlit by the sun (their own drawn
+  shades, no cast shadow) and lit as the ground (shade + 4, the shader's vFlat - as a cave's faces): the same brown
+  rock as round them (EverGrandeNook; WJPC_EVER_GRANDE_NOOK_LIT=1: as before). Checked first: not the people's cast
+  shadows (WJPC_3D_NOSHADOW A/B: the same).
