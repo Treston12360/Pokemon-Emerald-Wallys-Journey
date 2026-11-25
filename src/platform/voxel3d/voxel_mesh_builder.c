@@ -1993,6 +1993,10 @@ static int BirthTreeGround(const VoxelMapInstance *inst, int x, int y, int art)
     if (inst == NULL || inst->layoutId != 404 || getenv("WJPC_BIRTH_TREES_FLAT") != NULL)
         return art;
     m = VoxelWorld_GetMetatileId(x, y);
+    /* (the peak's: the rock of the peak round it - Brennan 18:32, "there is green this should match the
+     * surrounding") */
+    if (m >= 0x328 && m <= 0x332)
+        return 0x073;
     for (unsigned i = 0; i < sizeof(sCrown) / sizeof(sCrown[0]); ++i)
         if (sCrown[i] == m)
             return 0x001;
