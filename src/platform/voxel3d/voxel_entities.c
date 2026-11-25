@@ -1227,9 +1227,33 @@ static void EmitGate(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigne
 
             if (!arms[2 * a + j] || r1 > g.cy)
                 continue;
+            /* Brennan 2026-11-24 20:27 ("on left gate theres a green square"): at rest, an arm lying along the line
+             * between two trees (both cells beside it blocked - the game draws it over them) ran through their
+             * sides, the trees' green showing round it. It is not drawn there: the trees stand closed. */
+            /* An arm along one tree's edge stands just clear of it (the tree is round, its cell's width: an arm on
+             * the line ran through its side, the tree's green poking up through the arm's top). */
+            float sx = 0.0f, sz = 0.0f;
+
+            if (fmodf(fabsf(degrees) + 1.0f, 90.0f) < 2.0f && getenv("WJPC_GATE_ARMS_IN_TREES") == NULL)
+            {
+                float mxw = ox + dx * (j + 0.5f), mzw = oz + dz * (j + 0.5f);
+                int ax = (int)floorf(mxw - dz * 0.5f + 0.0001f), az = (int)floorf(mzw + dx * 0.5f + 0.0001f);
+                int bx = (int)floorf(mxw + dz * 0.5f + 0.0001f), bz = (int)floorf(mzw - dx * 0.5f + 0.0001f);
+                bool ab = VoxelWorld_GetCollision(ax, az) != 0, bb = VoxelWorld_GetCollision(bx, bz) != 0;
+
+                if (ab && bb)
+                    continue;
+                if (ab != bb)
+                {
+                    float d = (ab ? 5.0f : -5.0f) * p;   /* toward the open cell (b's side is (dz, -dx)) */
+
+                    sx = dz * d;
+                    sz = -dx * d;
+                }
+            }
             /* (the picture's north arm, unturned, its middle rows - its tip's open pixels, drawn on, had shown as a
              * fork) */
-            EmitGateBar(builder, &g, ox, oy, oz, dx, dz, r0 * p, r1 * p, 1.5f * p, 12.0f * p,
+            EmitGateBar(builder, &g, ox + sx, oy, oz + sz, dx, dz, r0 * p, r1 * p, 1.5f * p, 12.0f * p,
                         g.cx, 1.5f, g.cy - 6.0f, g.cy - 12.0f, shade);
         }
     }
