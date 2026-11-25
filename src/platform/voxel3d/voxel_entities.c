@@ -1372,6 +1372,48 @@ static bool EmitFerry(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsign
 }
 
 /*
+ * Brennan 2026-11-24 18:18 ("birth island triangle stone in the middle doesnt look 3D"): the Deoxys triangle's
+ * drawing (32 x 32: a grey pyramid on a dark plinth, its tip at row 16) stood as a card. It stands as that shape -
+ * a plinth 15 x 8 px and 2 tall, a four-sided pyramid on it rising to 10.5 px - each point showing the drawing's
+ * pixel at the same place across and the same 45-degree screen key (the ferry's frame: FerryVertex), so from the
+ * game's camera it is the drawing. WJPC_TRIANGLE_CARD=1: the card, as before.
+ */
+static bool TriangleObject(u16 graphicsId)
+{
+    static int sOff = -1;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_TRIANGLE_CARD") != NULL;
+    return !sOff && graphicsId == OBJ_EVENT_GFX_DEOXYS_TRIANGLE;
+}
+
+static bool EmitTriangle(VoxelBuilder *builder, const VoxelSpriteSlot *slot, unsigned index,
+                         float cx, float cz, float rise, float shade)
+{
+    static const float plinth[4][2] = { { 9, 23 }, { 23, 23 }, { 23, 31 }, { 9, 31 } };
+    static const float foot[4][2] = { { 10, 23 }, { 22, 23 }, { 22, 30 }, { 10, 30 } };
+    static const float tip[4][2] = { { 16, 26.5f }, { 16, 26.5f }, { 16, 26.5f }, { 16, 26.5f } };
+    FerryFrame f;
+
+    if (slot->color256 || slot->width != 32 || slot->atlasWidth != slot->width || VisibleRows(slot) < 32)
+        return false;
+    f.baseX = (float)((index % VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
+    f.baseY = (float)((index / VOXEL_SPRITE_COLUMNS) * VOXEL_SPRITE_SLOT_DIM);
+    f.squeeze = 1.0f;
+    f.cx = cx;
+    f.front = cz + VoxelRelief_ShiftAt(cx, cz);
+    f.lift = VoxelRelief_LiftAt(cx, cz) + rise;
+    f.rows = 32.0f;
+    f.w = 32.0f;
+    f.shade = shade;
+    f.flip = slot->flipX;
+    FerryLoft(builder, &f, plinth, plinth, 4, 0.0f, 2.0f);
+    FerryLoft(builder, &f, foot, tip, 4, 2.0f, 10.5f);
+    return true;
+}
+
+
+/*
  * Brennan 2026-11-20 23:18 (Route 121's berry patch: "the grown Berry plants ... are still rendering as flat 2D
  * sprites/billboards ... Convert all Berry growth stages ... into true 3D voxel models (with 3D foliage and 3D
  * berries hanging on the branches) centered cleanly in the dirt patches"): a berry plant past its sprout (taller,
@@ -3071,6 +3113,9 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
                            rightX, rightZ, stretch, card->shade * dusk);
             continue;
         }
+        if (TriangleObject(gObjectEvents[i].graphicsId)
+            && EmitTriangle(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f, rise, card->shade * dusk))
+            continue;
         if (FerryObject(gObjectEvents[i].graphicsId)
             && EmitFerry(builder, &sSlots[i], i, card->worldX + 0.5f, card->worldZ + 0.5f, rise, card->shade * dusk))
             continue;
