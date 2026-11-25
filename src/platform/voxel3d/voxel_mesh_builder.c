@@ -2119,12 +2119,20 @@ static int BirthTreeGround(const VoxelMapInstance *inst, int x, int y, int art)
         0x334, 0x335, 0x336, 0x32F, 0x340, 0x337, 0x348 };
     int m;
 
-    if (inst == NULL || inst->layoutId != 404 || getenv("WJPC_BIRTH_TREES_FLAT") != NULL)
+    if (inst == NULL || (inst->layoutId != 404 && inst->layoutId != 421))
         return art;
     m = VoxelWorld_GetMetatileId(x, y);
+    /* Brennan 2026-11-24 20:33 ("sea is different color"): the sea along the island's foot is drawn with the 2D
+     * cliff's dark shadow on it - beside the standing cliff, a dark band of a different sea. It lies as the open sea
+     * (WJPC_ISLAND_SHORE_DRAWN=1: as drawn). */
+    if ((m == 0x189 || m == 0x190 || m == 0x192 || m == 0x198 || m == 0x19A)
+     && getenv("WJPC_ISLAND_SHORE_DRAWN") == NULL)
+        return 0x170;
+    if (inst->layoutId != 404 || getenv("WJPC_BIRTH_TREES_FLAT") != NULL)
+        return art;
     /* (the peak's: the rock of the peak round it - Brennan 18:32, "there is green this should match the
-     * surrounding") */
-    if (m >= 0x328 && m <= 0x332)
+     * surrounding"; only the peak tree's six cells - 20:33, the side trees' crowns had turned to rock too) */
+    if (m == 0x328 || m == 0x329 || m == 0x32A || m == 0x330 || m == 0x331 || m == 0x332)
         return 0x073;
     for (unsigned i = 0; i < sizeof(sCrown) / sizeof(sCrown[0]); ++i)
         if (sCrown[i] == m)
@@ -4844,6 +4852,17 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                 if (MetatileUV(builder, ground, &u0, &v0, &u1, &v1))
                     VoxelMesh_Top(builder, (float)x, (float)y, 0.0f, 0.0f,
                                   u0, v0, u1, v1, SHADE_TOP);
+                continue;
+            }
+        }
+        {
+            /* (the islands' shore sea laid as the open sea: BirthTreeGround) */
+            int m = VoxelWorld_GetMetatileId(x, y), open = BirthTreeGround(inst, x, y, m);
+            float u0, v0, u1, v1;
+
+            if (open != m && open == 0x170 && MetatileUV(builder, open, &u0, &v0, &u1, &v1))
+            {
+                VoxelMesh_Top(builder, (float)x, (float)y, 0.0f, 0.0f, u0, v0, u1, v1, SHADE_TOP);
                 continue;
             }
         }
