@@ -1700,7 +1700,8 @@ static bool CaveLaddersOn(const VoxelMapInstance *inst)
 
     if (sOld < 0)
         sOld = getenv("WJPC_VR_LADDERS_OLD") != NULL;
-    return !sOld && inst != NULL && inst->layoutId == 286;   /* LAYOUT_VICTORY_ROAD_B2F */
+    /* (and Victory Road 1F/B1F's: 2026-11-24 22:09 "continue") */
+    return !sOld && inst != NULL && (inst->layoutId == 163 || inst->layoutId == 285 || inst->layoutId == 286);
 }
 
 bool VoxelMesh_CaveLadderCell(const VoxelMapInstance *inst, int x, int y)
@@ -1708,6 +1709,24 @@ bool VoxelMesh_CaveLadderCell(const VoxelMapInstance *inst, int x, int y)
     int m = VoxelWorld_GetMetatileId(x, y);
 
     return CaveLaddersOn(inst) && (m == 0x20F || m == 0x216 || m == 0x217);
+}
+
+/* (Victory Road B1F, 2026-11-24: between the 3D ladder's rungs the cells' own drawing showed - the flat ladder painted
+ * on the face, a diagonal stroke behind the rungs. A ladder's cells are drawn as the cell beside them in their row
+ * (the face's rock, the floor), the west one, else the east. WJPC_VR_LADDER_ART=1: as drawn) */
+static int LadderGround(const VoxelMapInstance *inst, int x, int y, int art)
+{
+    static int sDrawn = -1;
+
+    if (sDrawn < 0)
+        sDrawn = getenv("WJPC_VR_LADDER_ART") != NULL;
+    if (sDrawn || !VoxelMesh_CaveLadderCell(inst, x, y))
+        return art;
+    if (!VoxelMesh_CaveLadderCell(inst, x - 1, y) && VoxelWorld_GetInstanceAt(x - 1, y) == inst)
+        return VoxelWorld_GetMetatileId(x - 1, y);
+    if (!VoxelMesh_CaveLadderCell(inst, x + 1, y) && VoxelWorld_GetInstanceAt(x + 1, y) == inst)
+        return VoxelWorld_GetMetatileId(x + 1, y);
+    return art;
 }
 
 /* both windings: seen from either side */
@@ -4062,7 +4081,7 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
         foot = topH;   /* the band from the steps up to the top: its quads wound the other way, facing in */
     }
     face = VoxelRelief_FaceTile(inst);
-    const bool sideByZ = in && inst->layoutId == 286 /* LAYOUT_VICTORY_ROAD_B2F */
+    const bool sideByZ = in && (inst->layoutId == 163 || inst->layoutId == 285 || inst->layoutId == 286) /* VR */
                       && getenv("WJPC_VR_STAIRS_SIDES_OLD") == NULL;
     for (int s = 0; s < 2; ++s)
     {
@@ -4923,6 +4942,7 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                     cutRows = NULL;
                 }
                 art = BirthTreeGround(inst, x, sign ? y + 1 : y, art);
+                art = LadderGround(inst, x, sign ? y + 1 : y, art);
                 EmitRelief(builder, x, y, relief, VoxelRelief_Depth(inst, x, y),
                            sign ? y + 1 : y, art, cut >= 0, (int)lroundf(foot * 16.0f), cutRows);
                 if (wall >= 0)

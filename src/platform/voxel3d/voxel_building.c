@@ -1552,7 +1552,7 @@ bool VoxelBuildings_DoorWall(const VoxelMapInstance *inst, int x, int y, float *
 bool VoxelMesh_CaveLadderCell(const VoxelMapInstance *inst, int x, int y);
 static bool SkipModel(const VoxelMapInstance *inst, const BuildingPlacement *p, const BuildingModel *m)
 {
-    if (inst->layoutId != 286)
+    if (inst->layoutId != 163 && inst->layoutId != 285 && inst->layoutId != 286)   /* Victory Road */
         return false;
     for (unsigned dy = 0; dy < m->h; ++dy)
         for (unsigned dx = 0; dx < m->w; ++dx)

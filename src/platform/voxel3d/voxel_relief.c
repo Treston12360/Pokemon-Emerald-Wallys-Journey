@@ -533,7 +533,7 @@ static bool StairFlights(ReliefLayout *l)
                  * one-tile walkway to the stairs, and the stairs' foot out on it stood the player knee-deep in the bottom
                  * step - kept clear (steeper, ~60 degrees). WJPC_VR_STAIRS_OUT=1: out over it, as N65) */
                 sOutToo = 0;
-                if (l->layoutId == 286 /* LAYOUT_VICTORY_ROAD_B2F */ && sRecess < run
+                if ((l->layoutId == 163 || l->layoutId == 285 || l->layoutId == 286) /* Victory Road */ && sRecess < run
                  && getenv("WJPC_VR_STAIRS_SHALLOW") == NULL)
                 {
                     int bottomRow = found[f].row + found[f].rows;

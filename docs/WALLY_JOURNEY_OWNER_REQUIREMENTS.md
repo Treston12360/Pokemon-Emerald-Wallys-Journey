@@ -1425,3 +1425,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   the bottom step: kept off it now (the flight steeper, ~60 degrees; WJPC_VR_STAIRS_OUT=1: as N65). The cut sides of
   both flights go up only as high as the rock beside them (the left side of the lower steps had stood to the ledge's
   top over rock sloping down to the floor - a slab).
+- 2026-11-24 22:09 Brennan: "Look good continue" -> N66, the rest of Victory Road (1F, B1F) the same as B2F:
+  - Stairs: all 11 flights (1F 7, B1F 4) recessed into the ledge above (most 2 steps, two 3-step ones in 1F; where the
+    ledge is 2 rows deep the whole ledge cut back, never out onto the floor in front). Sides only up to the rock beside.
+  - Ladders: B1F's three straight rails-and-rungs ladders (as B2F). On every Victory Road ladder the flat ladder painted
+    on the face no longer shows between the rungs: its cells are drawn as the cell beside them (WJPC_VR_LADDER_ART=1:
+    as drawn).
+  - 1F's two north bridges: an open seam along their south side (sky showing, gap test) - the rock face under them
+    (row 19, x 17-38) began 15-29 px below the bridges; it ramps from the bridges' height now
+    (victory_road_relief.py). Gap test 10 views, 1920x1080 and 2560x1440: fewer gap pixels in every view but two
+    (+1/+2 px, the map's east edge), none new at the stairs.
