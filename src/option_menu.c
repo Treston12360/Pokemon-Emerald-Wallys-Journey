@@ -91,7 +91,8 @@ enum
     MENUITEM_PC_GAMMALIGHT, // DLX-9
     MENUITEM_PC_MUSICVOL, // POL-29
     MENUITEM_PC_SOUNDVOL, // POL-29
-    MENUITEM_PC_LAST = MENUITEM_PC_SOUNDVOL,
+    MENUITEM_PC_CAMERA, // Brennan 2026-11-24 18:24: the 3D camera's angle
+    MENUITEM_PC_LAST = MENUITEM_PC_CAMERA,
     // Keyboard keys (enum KeyBind order): A opens "Press a key".
     MENUITEM_PC_KEY_FIRST,
     MENUITEM_PC_KEY_LAST = MENUITEM_PC_KEY_FIRST + KEYBIND_COUNT - 1,
@@ -257,6 +258,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_PC_VOLUME]     = COMPOUND_STRING("Volume"),
     [MENUITEM_PC_MUSICVOL]   = COMPOUND_STRING("Music volume"),
     [MENUITEM_PC_SOUNDVOL]   = COMPOUND_STRING("Sound volume"),
+    [MENUITEM_PC_CAMERA]     = COMPOUND_STRING("Camera angle"),
     [MENUITEM_PC_FFSPEED]    = COMPOUND_STRING("Fast forward"),
     [MENUITEM_PC_FFTOGGLE]   = COMPOUND_STRING("Fast fwd button"),
     [MENUITEM_PC_PAD_A]      = COMPOUND_STRING("Pad A"),
@@ -649,6 +651,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
         case MENUITEM_PC_WORLD3D:
         case MENUITEM_PC_BATTLE3D:
         case MENUITEM_PC_GAMMALIGHT:
+        case MENUITEM_PC_CAMERA:
             PcOption_ProcessInput(SEL_ITEM(taskId));
             break;
 #endif
@@ -1179,12 +1182,13 @@ static const u8 sPcRowSetting[] =
     [MENUITEM_PC_GAMMALIGHT - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_GAMMALIGHT,
     [MENUITEM_PC_MUSICVOL   - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_MUSIC_VOLUME,
     [MENUITEM_PC_SOUNDVOL   - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_SOUND_VOLUME,
+    [MENUITEM_PC_CAMERA     - MENUITEM_PC_WINDOWSIZE] = PLATFORM_SETTING_CAMERA_ANGLE,
 };
 #define PAD_MAX (PAD_BUTTON_COUNT - 1)
 static const u8 sPcRowMin[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static const u8 sPcRowMax[] = {12, 1, 1, 10, FF_SPEED_COUNT - 1, 1, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, PAD_MAX, 1, FRAME_RATE_COUNT - 1, 2,
-                               1, 1, 1, 1, 4, 7, 1, 1, 1, 10, 10}; // lock aspect, bilinear, interframe, lock frame, resolution, zoom, 3D world, 3D battles, Gamma lighting, music volume, sound volume
+                               1, 1, 1, 1, 4, 7, 1, 1, 1, 10, 10, 2}; // lock aspect, bilinear, interframe, lock frame, resolution, zoom, 3D world, 3D battles, Gamma lighting, music volume, sound volume, camera angle
 
 static void PcOption_ProcessInput(u8 item)
 {
@@ -1274,6 +1278,9 @@ static void PcOption_Draw(u8 item)
     case MENUITEM_PC_GAMMALIGHT: // 2D and 3D alike
         StringCopy(end, (value ? gText_BattleSceneOn : gText_BattleSceneOff) + 6);
         break;
+    case MENUITEM_PC_CAMERA:
+        StringCopy(end, value == 1 ? COMPOUND_STRING("Angled") : value == 2 ? COMPOUND_STRING("Low") : COMPOUND_STRING("Top"));
+        break;
     case MENUITEM_PC_ZOOM: // shown 1 ... 8
         ConvertIntToDecimalStringN(end, value + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
         break;
@@ -1300,7 +1307,7 @@ static const u8 sPcSectionAudio[] = {MENUITEM_SOUND, MENUITEM_PC_VOLUME, MENUITE
  * off - sdl2.c ignores them in the cfg) and "move 3D battles, 3D World, Gamma lighting into a folder named Looks" */
 static const u8 sPcSectionVideo[] = {MENUITEM_PC_WINDOWSIZE, MENUITEM_PC_FULLSCREEN, MENUITEM_PC_RESOLUTION, MENUITEM_PC_ZOOM,
     MENUITEM_PC_LOCKASPECT, MENUITEM_PC_LOCKFRAME, MENUITEM_PC_WIDESCREEN, MENUITEM_PC_SMOOTH, MENUITEM_PC_FILTER};
-static const u8 sPcSectionLooks[] = {MENUITEM_PC_WORLD3D, MENUITEM_PC_BATTLE3D, MENUITEM_PC_GAMMALIGHT};
+static const u8 sPcSectionLooks[] = {MENUITEM_PC_WORLD3D, MENUITEM_PC_BATTLE3D, MENUITEM_PC_GAMMALIGHT, MENUITEM_PC_CAMERA};
 
 static void PcMenu_AddRow(u8 item)
 {

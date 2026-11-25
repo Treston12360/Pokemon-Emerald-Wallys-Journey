@@ -2177,6 +2177,8 @@ static void ReadConfigFile(void)
             sPlatformSettings[PLATFORM_SETTING_BORDER] = value != 0;
         else if (sscanf(line, "volume=%u", &value) == 1 && value <= 10)
             sPlatformSettings[PLATFORM_SETTING_VOLUME] = value;
+        else if (sscanf(line, "cameraAngle=%u", &value) == 1 && value <= 2)
+            sPlatformSettings[PLATFORM_SETTING_CAMERA_ANGLE] = value;
         else if (sscanf(line, "musicVolume=%u", &value) == 1 && value <= 10)
             sPlatformSettings[PLATFORM_SETTING_MUSIC_VOLUME] = value;
         else if (sscanf(line, "soundVolume=%u", &value) == 1 && value <= 10)
@@ -2267,6 +2269,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "border=%u\n", sPlatformSettings[PLATFORM_SETTING_BORDER]);
     fprintf(configFile, "volume=%u\n", sPlatformSettings[PLATFORM_SETTING_VOLUME]);
     fprintf(configFile, "musicVolume=%u\n", sPlatformSettings[PLATFORM_SETTING_MUSIC_VOLUME]);
+    fprintf(configFile, "cameraAngle=%u\n", sPlatformSettings[PLATFORM_SETTING_CAMERA_ANGLE]);
     fprintf(configFile, "soundVolume=%u\n", sPlatformSettings[PLATFORM_SETTING_SOUND_VOLUME]);
     fprintf(configFile, "fastForward=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_SPEED]);
     fprintf(configFile, "widescreen=%u\n", WideView_IsEnabled() ? 1 : 0);
@@ -3656,7 +3659,11 @@ void VDraw(SDL_Texture *texture)
                     // (test aid, Brennan 2026-11-18 "Fix zoom first" for the 3D audit pictures: WJPC_TEST_3D_ZOOM=percent
                     // takes the camera further out than the widest setting, e.g. 30; WJPC_TEST_3D_PITCH=degrees)
                     const char *tz = getenv("WJPC_TEST_3D_ZOOM"), *tp = getenv("WJPC_TEST_3D_PITCH");
-                    Voxel3D_SetSettings(true, tp != NULL ? atoi(tp) : 0, tz != NULL ? atoi(tz) : 100 * 160 / sZoomHeights[level]);
+                    // Brennan 2026-11-24 18:24 ("make the way you see these areas be more at an angle"; Options > Looks >
+                    // Camera angle): Top 40 degrees (as it was, the default), Angled 32, Low 26
+                    static const int sCameraPitch[3] = {40, 32, 26};
+                    int pitch = sCameraPitch[sPlatformSettings[PLATFORM_SETTING_CAMERA_ANGLE] % 3];
+                    Voxel3D_SetSettings(true, tp != NULL ? atoi(tp) : pitch, tz != NULL ? atoi(tz) : 100 * 160 / sZoomHeights[level]);
                 }
                 Voxel3D_SetGammaLight(sGammaWanted);
                 Voxel3D_SetAntiAlias((int)sAntiAlias);

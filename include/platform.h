@@ -50,6 +50,7 @@ enum PlatformSetting
     PLATFORM_SETTING_GAMMALIGHT, // Gamma Emerald's lighting, 2D and 3D ("gammaLight" in the cfg); kept by sdl2.c (DLX-9)
     PLATFORM_SETTING_MUSIC_VOLUME, // POL-29: music only, 0-10 ("musicVolume"); multiplied with the main Volume
     PLATFORM_SETTING_SOUND_VOLUME, // POL-29: sound effects + cries, 0-10 ("soundVolume"); multiplied with the main Volume
+    PLATFORM_SETTING_CAMERA_ANGLE, // Brennan 2026-11-24 18:24: the 3D camera's tilt, 0 = Top (as before), 1 = Angled, 2 = Low ("cameraAngle")
     PLATFORM_SETTING_COUNT,
 };
 
