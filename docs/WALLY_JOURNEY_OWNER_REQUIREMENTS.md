@@ -1572,4 +1572,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   before it flips off, as the 2D game draws it (the 2D disguise is that green box). Asked Brennan: keep that, or keep
   the 3D tree until the cloth comes off. Pictures: ninja_reveal_3d_full.png, ninja_reveal_3d_frames.png,
   ninja_2d_disguise.png, ninja_walks_up_full.png.
+- 2026-11-26 Brennan (asked about the ninja reveal): "Keep 3D tree, then pop" ("The 3D tree stays until the cloth flies
+  off, then the boy appears. No flat green box."). -> N76: the tree disguise stands as the 3D tree through the reveal's
+  animation too (UpdateDisguiseFieldEffect state 1-2, until its sReadyToEnd): the cloth's card and the boy are not
+  drawn; when it ends the tree is gone and the boy stands there, walks up and talks (voxel_entities.c
+  DisguiseStateIsTree; WJPC_DISGUISE_REVEAL_CARD=1: the cloth's card, as before). The "!" as before. Checked on Route
+  119's Hideo with battles on: tree, "!", tree through the reveal, boy, his intro text. Pictures:
+  ninja_reveal_full.png, ninja_reveal_after_frames.png.
 

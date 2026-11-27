@@ -833,7 +833,31 @@ static bool DisguiseAsTree(void)
     return sOn != 0;
 }
 
-/* The tree disguise sprite of this object, still (not shaking off), or NULL. */
+/* Brennan 2026-11-26 (the reveal watched with battles on: for about half a second the 3D tree turned into the 2D
+ * game's flat green cloth before it flipped off; asked, he picked "Keep 3D tree, then pop": "The 3D tree stays until
+ * the cloth flies off, then the boy appears. No flat green box."): the tree stands through the reveal's animation too
+ * (the disguise's state 1 and 2, UpdateDisguiseFieldEffect) - the cloth's card and the boy are not drawn - and when the
+ * cloth's animation has ended (its sReadyToEnd, data[7]) the tree is gone and the boy stands there. The "!" over him
+ * is drawn as before. WJPC_DISGUISE_REVEAL_CARD=1: the reveal as the cloth's card, as before. */
+static bool RevealAsTree(void)
+{
+    static int sOn = -1;
+
+    if (sOn < 0)
+        sOn = getenv("WJPC_DISGUISE_REVEAL_CARD") == NULL;
+    return sOn != 0;
+}
+
+/* The disguise's state (data[0]) in which it stands as the 3D tree: still, or (RevealAsTree) shaking off until its
+ * animation has ended. */
+static bool DisguiseStateIsTree(const struct Sprite *d)
+{
+    if (d->data[0] == 0)
+        return true;
+    return RevealAsTree() && (d->data[0] == 1 || d->data[0] == 2) && d->data[7] == 0;
+}
+
+/* The tree disguise sprite of this object, still (not shaking off) - or shaking off, RevealAsTree - or NULL. */
 static const struct Sprite *StillTreeDisguise(const struct ObjectEvent *obj)
 {
     const struct Sprite *d;
@@ -842,7 +866,8 @@ static const struct Sprite *StillTreeDisguise(const struct ObjectEvent *obj)
      || obj->fieldEffectSpriteId >= MAX_SPRITES)
         return NULL;
     d = &gSprites[obj->fieldEffectSpriteId];
-    if (!d->inUse || d->callback != UpdateDisguiseFieldEffect || d->data[1] != FLDEFF_TREE_DISGUISE || d->data[0] != 0)
+    if (!d->inUse || d->callback != UpdateDisguiseFieldEffect || d->data[1] != FLDEFF_TREE_DISGUISE
+     || !DisguiseStateIsTree(d))
         return NULL;
     return d;
 }
@@ -2937,7 +2962,7 @@ unsigned VoxelEntities_Emit(VoxelBuilder *builder, uint16_t *atlas, const VoxelC
             continue;
         /* POL-48: a still tree disguise is the 3D tree its object noted */
         if (DisguiseAsTree() && sprite->callback == UpdateDisguiseFieldEffect && sprite->data[1] == FLDEFF_TREE_DISGUISE
-         && sprite->data[0] == 0)
+         && DisguiseStateIsTree(sprite))
             continue;
         cloud = CtrSprite_IsVoxelCloud(sprite);
         if (IsTemplate(sprite->template, FLDEFFOBJ_SHADOW_S, FLDEFFOBJ_SHADOW_XL)
