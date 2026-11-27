@@ -1306,7 +1306,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   tileset's stairs (0x204, icy 0x363) are real steps in the renderer (voxel_mesh_builder.c EmitCaveStairs; 4 steps a
   rock's height, the foot running half a cell over the floor below; WJPC_CAVE_STAIRS_FLAT=1: as before). Walk test:
   the player climbs from floor to floor (Shoal Cave, Victory Road B1F). Open: 9 flights (8 in Shoal Cave, 1 Artisan?)
-  end in solid rock in the game's own walking data - asked Brennan.
+  end in solid rock in the game's own walking data - asked Brennan. (Rechecked 2026-11-26: 8 flights, all in Shoal
+  Cave low tide - entrance room x8 r18, x12 r6, x25 r8; inner room x7 r13, x16 r17, x27 r23, x36 r23, x37 r12 - the
+  cell under the bottom step is rock face 0x219/0x21B/0x20D, collision 1. None in Artisan Cave.)
 - 2026-11-24 13:34 Brennan: "Continue onto the rest". N38: the other caves' stairs the same way - Meteor Falls (0x202)
   and Navel Rock (0x204, 0x37B) set their floors' heights from their stairs and are drawn as real steps (cave_relief.py
   STAIRS_BY_SET, voxel_mesh_builder.c CaveStairCell). Checked every flight: each joins its two floors. Magma Hideout
@@ -1478,3 +1480,8 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     drawn (voxel_mesh_builder.c CaveLaddersOn, voxel_building.c SkipModel). WJPC_CAVE_LADDERS_VR_ONLY=1: Victory
     Road's only, as before. Gap test, the six ladders' views at 1920x1080 and 2560x1440: the same as before; Victory
     Road B2F and Slateport pixel for pixel the same.
+- 2026-11-26 19:17 Brennan: "what all is left?" - sent: waiting on him: N70/N71 look; the 8 Shoal Cave flights that
+  end in rock (leave as the original?). Open: #26 Verdanturf winter snow lanes (seen 11-22, not worked on), #13
+  background mountains (his "keep open"), #23 Route 103 south slit (not found - needs his picture), tiny dark notches
+  at cliff feet on Routes 106/127/133 (11-20, never touched). Watching: #27 flicker (him); the Fortree ninja boys'
+  reveal never watched in a test (battles off). Last zip he has: 2026-11-23 audit.
