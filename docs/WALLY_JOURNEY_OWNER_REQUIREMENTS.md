@@ -1841,3 +1841,6 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   docs/TANDEM_TASKS.md. 15:05 Brennan, asked whether a friend's following Pokemon should show on everyone's screen:
   "yes we do want the pokemon to follow on everyones screen." Done: the place message carries the follower (graphics,
   tile, facing); each friend's Pokemon is drawn and walked behind them (local ids 232-234, spare slots).
+- 2026-11-27 15:34 Brennan: "continue to step 3". T3 done: friends seen across a map border (the next route or town),
+  kept on screen when either player crosses, gone through doors / warps and back when they come out; checked in both
+  regions. The build id in the Tandem same-build check was stuck on the first build (Makefile FORCE not phony) - fixed.

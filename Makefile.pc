@@ -125,6 +125,9 @@ TANDEM_BUILD_H := $(OBJ_DIR)/gen/tandem_build.h
 $(TANDEM_BUILD_H): FORCE
 	@mkdir -p $(dir $@); b=$$(git rev-parse --short=12 HEAD 2>/dev/null || echo unknown)$$(git diff --quiet HEAD -- src include data 2>/dev/null || echo -dirty); \
 	 printf '#define TANDEM_BUILD "%s"\n' "$$b" > $@.tmp; cmp -s $@.tmp $@ && rm -f $@.tmp || mv $@.tmp $@
+# (phony: as a plain empty target make took FORCE for a missing in-between file and never ran the rule above - the
+# build stayed the one of the first build)
+.PHONY: FORCE
 FORCE:
 $(OBJ_DIR)/src/platform/tandem_net.o: src/platform/tandem_net.c src/platform/tandem_net.h $(TANDEM_BUILD_H)
 	$(CC) $(CFLAGS) -I$(OBJ_DIR)/gen -c $< -o $@

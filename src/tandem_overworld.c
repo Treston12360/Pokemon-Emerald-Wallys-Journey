@@ -14,6 +14,7 @@
 #include "event_object_movement.h"
 #include "field_player_avatar.h"
 #include "fieldmap.h"
+#include "overworld.h"
 #include "sprite.h"
 #include "tandem_overworld.h"
 #include "constants/event_object_movement.h"
@@ -141,9 +142,66 @@ static void SendMyPlace(void)
     TandemNet_SetMyState(&me);
 }
 
-static bool8 OnMyMap(const TandemState *st)
+/* Where the friend's map lies from mine (Project Tandem T3): what to add to their coordinates to get mine. Their map is
+ * mine, or one beside it (the map's connections, as the game joins them at a border); else FALSE - another town, a
+ * house, a different region: not seen from here. */
+static bool8 FriendMapShift(u8 mapGroup, u8 mapNum, s16 *dx, s16 *dy)
 {
-    return st->valid && st->mapGroup == gSaveBlock1Ptr->location.mapGroup && st->mapNum == gSaveBlock1Ptr->location.mapNum;
+    const struct MapConnections *connections = gMapHeader.connections;
+    s32 i;
+
+    *dx = *dy = 0;
+    if (mapGroup == gSaveBlock1Ptr->location.mapGroup && mapNum == gSaveBlock1Ptr->location.mapNum)
+        return TRUE;
+    if (connections == NULL || gMapHeader.mapLayout == NULL)
+        return FALSE;
+    for (i = 0; i < connections->count; i++)
+    {
+        const struct MapConnection *c = &connections->connections[i];
+        const struct MapHeader *them;
+
+        if (c->mapGroup != mapGroup || c->mapNum != mapNum)
+            continue;
+        them = Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum);
+        if (them == NULL || them->mapLayout == NULL)
+            return FALSE;
+        /* (as fieldmap.c lays the neighbour beside this map: its top-left corner at ...) */
+        switch (c->direction)
+        {
+        case CONNECTION_SOUTH: *dx = c->offset; *dy = gMapHeader.mapLayout->height; return TRUE;
+        case CONNECTION_NORTH: *dx = c->offset; *dy = -them->mapLayout->height;     return TRUE;
+        case CONNECTION_EAST:  *dx = gMapHeader.mapLayout->width; *dy = c->offset;  return TRUE;
+        case CONNECTION_WEST:  *dx = -them->mapLayout->width;     *dy = c->offset;  return TRUE;
+        default: break;   /* (dive / emerge: under or over the water, not beside) */
+        }
+    }
+    return FALSE;
+}
+
+/* `in` placed on my map (`out`: the friend's and their Pokemon's tiles in my map's coordinates); FALSE: not seen here */
+static bool8 PlaceOnMyMap(const TandemState *in, TandemState *out)
+{
+    s16 dx, dy;
+
+    *out = *in;
+    if (!in->valid || !FriendMapShift(in->mapGroup, in->mapNum, &dx, &dy))
+        return FALSE;
+    out->x += dx;
+    out->y += dy;
+    out->followerX += dx;
+    out->followerY += dy;
+    return TRUE;
+}
+
+/* the area round the player in which the game keeps its people (RemoveObjectEventIfOutsideView, event_object_movement.c:
+ * the same box, widened for the PC's wide and 3D views); a ghost is only made inside it, as the game would remove it
+ * outside - it is made when the friend walks into it, or when I do */
+static bool8 InPeopleView(s16 x, s16 y)
+{
+    s16 left = gSaveBlock1Ptr->pos.x - 2 - WJ_SPAWN_PAD_X, right = gSaveBlock1Ptr->pos.x + 17 + WJ_SPAWN_PAD_X;
+    s16 top = gSaveBlock1Ptr->pos.y - WJ_SPAWN_PAD_Y, bottom = gSaveBlock1Ptr->pos.y + 16 + WJ_SPAWN_PAD_Y;
+
+    return x >= left && x <= right && y >= top && y <= bottom;
 }
 
 /* the next step of a ghost (a friend or their Pokemon) toward x, y (a tile it is at or next to; else it jumps there) */
@@ -185,7 +243,7 @@ static void StepGhost(struct ObjectEvent *ghost, s16 x, s16 y, u8 facing, u8 spe
     ObjectEventTurn(ghost, facing >= DIR_SOUTH && facing <= DIR_EAST ? facing : DIR_SOUTH);
 }
 
-/* the friend's Pokemon: drawn while they have one showing, stepped with them */
+/* the friend's Pokemon: drawn while they have one showing, stepped with them (`to`: placed on my map) */
 static void UpdatePet(unsigned slot, const TandemState *to, bool8 snap)
 {
     struct ObjectEvent *pet = FindPet(slot);
@@ -200,7 +258,11 @@ static void UpdatePet(unsigned slot, const TandemState *to, bool8 snap)
         return;
     if (pet == NULL)
     {
-        u8 id = SpawnGhost(to->followerGfx, TANDEM_FOLLOWER_LOCALID(slot), to->followerX, to->followerY, to->elevation);
+        u8 id;
+
+        if (!InPeopleView(to->followerX, to->followerY))
+            return;
+        id = SpawnGhost(to->followerGfx, TANDEM_FOLLOWER_LOCALID(slot), to->followerX, to->followerY, to->elevation);
         if (id >= OBJECT_EVENTS_COUNT)
         {
             GHOST_LOG("friend %u: Pokemon NOT drawn (gfx %u at %d,%d)\n", slot, to->followerGfx, to->followerX, to->followerY);
@@ -242,7 +304,7 @@ static u16 GhostGfx(u16 gfx)
 
 static void UpdateFriend(unsigned slot)
 {
-    TandemState st;
+    TandemState st, here;
     struct ObjectEvent *ghost;
 
     /* everything that came in, in order: new tiles to walk; the latest place kept */
@@ -251,8 +313,11 @@ static void UpdateFriend(unsigned slot)
         bool8 moved = sLatest[slot].x != st.x || sLatest[slot].y != st.y || sLatest[slot].mapNum != st.mapNum
                    || sLatest[slot].mapGroup != st.mapGroup
                    || sLatest[slot].followerX != st.followerX || sLatest[slot].followerY != st.followerY;
+        if (st.mapGroup != sLatest[slot].mapGroup || st.mapNum != sLatest[slot].mapNum || st.valid != sLatest[slot].valid)
+            GHOST_LOG("friend %u: now on map %u.%u at %d,%d (valid %u; me on %u.%u)\n", slot, st.mapGroup, st.mapNum, st.x, st.y,
+                      st.valid, gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
         sLatest[slot] = st;
-        if (!OnMyMap(&st))
+        if (!PlaceOnMyMap(&st, &here))
             continue;
         if (moved || sPendingLen[slot] == 0)
         {
@@ -266,7 +331,8 @@ static void UpdateFriend(unsigned slot)
         else
             sPending[slot][sPendingLen[slot] - 1] = st;   /* (the same tile: only its facing or look changed) */
     }
-    if (!OnMyMap(&sLatest[slot]))
+    /* (gone through a door, to another town, out of the game's world beside mine: off my screen) */
+    if (!PlaceOnMyMap(&sLatest[slot], &here))
     {
         RemoveGhost(slot);
         return;
@@ -274,16 +340,28 @@ static void UpdateFriend(unsigned slot)
     ghost = FindGhost(slot);
     if (ghost == NULL)
     {
-        u8 id = SpawnGhost(GhostGfx(sLatest[slot].gfx), TANDEM_GHOST_LOCALID(slot), sLatest[slot].x, sLatest[slot].y,
-                           sLatest[slot].elevation);
+        u8 id;
+
+        /* (not made outside the people's area - and when the game removed it there, its Pokemon goes too) */
+        sPendingLen[slot] = 0;
+        if (!InPeopleView(here.x, here.y))
+        {
+            static u32 sNotInView;
+            if (++sNotInView % 120 == 1)
+                GHOST_LOG("friend %u: at %d,%d - outside the people's area round me (%d,%d)\n", slot, here.x, here.y,
+                          gSaveBlock1Ptr->pos.x, gSaveBlock1Ptr->pos.y);
+            RemovePet(slot);
+            return;
+        }
+        id = SpawnGhost(GhostGfx(here.gfx), TANDEM_GHOST_LOCALID(slot), here.x, here.y, here.elevation);
         if (id >= OBJECT_EVENTS_COUNT)
             return;
         ghost = &gObjectEvents[id];
-        GHOST_LOG("friend %u: drawn at %d,%d in slot %u (gfx %u)\n", slot, sLatest[slot].x, sLatest[slot].y, id, sLatest[slot].gfx);
-        ObjectEventTurn(ghost, sLatest[slot].facing >= DIR_SOUTH && sLatest[slot].facing <= DIR_EAST ? sLatest[slot].facing : DIR_SOUTH);
-        sPendingLen[slot] = 0;
+        GHOST_LOG("friend %u: drawn at %d,%d in slot %u (gfx %u, map %u.%u)\n", slot, here.x, here.y, id, here.gfx,
+                  here.mapGroup, here.mapNum);
+        ObjectEventTurn(ghost, here.facing >= DIR_SOUTH && here.facing <= DIR_EAST ? here.facing : DIR_SOUTH);
         RemovePet(slot);
-        UpdatePet(slot, &sLatest[slot], TRUE);
+        UpdatePet(slot, &here, TRUE);
         return;
     }
     {
@@ -293,20 +371,20 @@ static void UpdateFriend(unsigned slot)
                       ghost->currentCoords.x, ghost->currentCoords.y, ghost->active, ghost->invisible, ghost->offScreen,
                       ghost->spriteId, gSprites[ghost->spriteId].invisible, ghost->graphicsId);
     }
-    if (ghost->graphicsId != GhostGfx(sLatest[slot].gfx) && !ObjectEventIsMovementOverridden(ghost))
-        ObjectEventSetGraphicsId(ghost, GhostGfx(sLatest[slot].gfx));
+    if (ghost->graphicsId != GhostGfx(here.gfx) && !ObjectEventIsMovementOverridden(ghost))
+        ObjectEventSetGraphicsId(ghost, GhostGfx(here.gfx));
     /* (far behind: straight to the latest place) */
     if (sPendingLen[slot] > GHOST_CATCH_UP)
     {
         ObjectEventClearHeldMovement(ghost);
-        MoveObjectEventToMapCoords(ghost, sLatest[slot].x, sLatest[slot].y);
+        MoveObjectEventToMapCoords(ghost, here.x, here.y);
         sPendingLen[slot] = 0;
-        UpdatePet(slot, &sLatest[slot], TRUE);
+        UpdatePet(slot, &here, TRUE);
         return;
     }
     /* (their Pokemon came out or went away - a Poke Ball, surfing - with no step) */
-    if ((FindPet(slot) == NULL) != (sLatest[slot].followerGfx == 0) && sPendingLen[slot] == 0)
-        UpdatePet(slot, &sLatest[slot], TRUE);
+    if ((FindPet(slot) == NULL) != (here.followerGfx == 0) && sPendingLen[slot] == 0)
+        UpdatePet(slot, &here, TRUE);
     if (ObjectEventIsMovementOverridden(ghost) && !ObjectEventClearHeldMovementIfFinished(ghost))
         return;   /* (still walking the last step) */
     if (sPendingLen[slot] > 0)
@@ -314,8 +392,11 @@ static void UpdateFriend(unsigned slot)
         st = sPending[slot][0];
         memmove(&sPending[slot][0], &sPending[slot][1], sizeof(TandemState) * (GHOST_QUEUE - 1));
         sPendingLen[slot]--;
-        StepGhost(ghost, st.x, st.y, st.facing, st.speed, st.elevation);
-        UpdatePet(slot, &st, FALSE);
+        /* (placed now, from where my map is now: I may have crossed a border since it came) */
+        if (!PlaceOnMyMap(&st, &here))
+            return;
+        StepGhost(ghost, here.x, here.y, here.facing, here.speed, here.elevation);
+        UpdatePet(slot, &here, FALSE);
     }
 }
 
