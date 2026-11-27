@@ -1680,3 +1680,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   px, 15_40 159 -> 41 (a wedge under 22,27's wall, inside a dark band as before), 21_25 101 -> 0, 3_15 41 -> 1, the
   rest 0. Pictures: docs/polish_reports/2026-11-27_N79_jagged_pass_seams.png. Next: the stairs as 3D steps (first ones
   shown for his OK), the stairs' ends.
+- 2026-11-27 01:03 Brennan (on the N79 pictures, `docs/polish_reports/brennan_2026-11-27_0103_jagged_pass_shadows.png`,
+  three red boxes: the long ledge, the ledges and mound below it, the dirt ridge's top): "get rid of the shadows in the
+  red box makes it not look good. makes it look boxey." (his answer to "lighter ledge faces, or shaded red rock?").
+- 2026-11-27 N80: Jagged Pass's terrain lit as its floor, as a cave's is (voxel_gl.c, the caves' pass after a map's
+  build: every ground point shade + 4, the shader's flat light; an upright face 0.8-0.94 of the floor by its slope,
+  never black): no sun shadow and no turning from the sun on its rock - the black bands under every ledge, the dark
+  ground at the ledges' ends and the dirt ridge's dark edge gone. The clouds' shadows still pass over it; the trees
+  keep their own ground shadows (their drawing); the background mountains round the map are unchanged.
+  WJPC_JAGGED_SUNLIT=1: as before. Only Jagged Pass (layout 292). Gap test (14 Jagged Pass / Mt Chimney views, 1920x1080
+  and 2560x1440) as N79. Pictures: docs/polish_reports/2026-11-27_N80_jagged_pass_no_shadows.png.

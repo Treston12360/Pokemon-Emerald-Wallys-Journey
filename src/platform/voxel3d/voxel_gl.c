@@ -1982,7 +1982,16 @@ static void BuildFinish(InstanceBuild *pb, const VoxelMapInstance *inst, Instanc
         static int sNormalLit = -1;
         if (sNormalLit < 0)
             sNormalLit = getenv("WJPC_CAVE_TERRAIN_NORMAL_LIT") != NULL;
-        if (inst != NULL && inst->underground && !sNormalLit)
+        /* Jagged Pass the same (Brennan 2026-11-27 01:03, red boxes round its ledges' dark bands, the dark ground at
+         * their ends and the dirt ridge's dark edge: "get rid of the shadows in the red box makes it not look good.
+         * makes it look boxey"): its rock faces upright to the south took no sun from above and every ledge had a
+         * black band under it. Lit as its floor, an upright face a little darker; the clouds' shadows still pass
+         * over it. WJPC_JAGGED_SUNLIT=1: by facing and shadow, as before. */
+        static int sJaggedSunlit = -1;
+        if (sJaggedSunlit < 0)
+            sJaggedSunlit = getenv("WJPC_JAGGED_SUNLIT") != NULL;
+        if (inst != NULL && (inst->underground || (inst->layoutId == 292 /* LAYOUT_JAGGED_PASS */ && !sJaggedSunlit))
+         && !sNormalLit)
         {
             /* (and all in the light: under Gamma's lighting a ground vertex's shade is how much of the sun it sees,
              * 0 for a slope turned from it - a dark blur where a rock top sloped down beside a face) */
