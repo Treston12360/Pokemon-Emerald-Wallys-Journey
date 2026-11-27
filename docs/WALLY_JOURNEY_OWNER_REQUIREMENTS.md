@@ -1564,4 +1564,12 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Checked: Route 103 three views (only the front row over the lake and the low rock changed; behind the mountain
   unchanged); 12 winter views elsewhere unchanged; gap test 52 views at 1920x1080 and 2560x1440 identical to N74.
   Pictures: lake_trees_full.png, lake_trees_closeups_3x.png, lake_trees_vs_map_trees.png.
+- 2026-11-26 21:48 Brennan (N75 lake trees): "should be good, continue".
+- #8 Fortree ninja boys (his "check this one out to be sure"): watched with battles on (Route 119's Hideo, TRAINER_HIDEO
+  651, warp 0 34 29 10, walking north; summer and winter). Works: hidden as a 3D tree (POL-48), the "!" shows over it,
+  the reveal plays, the boy walks up and talks ("To hide a tree, use a forest!"), then the battle. Seen: during the
+  reveal (about half a second) the disguise is the 2D cloth sprite - a flat green box standing where the 3D tree was -
+  before it flips off, as the 2D game draws it (the 2D disguise is that green box). Asked Brennan: keep that, or keep
+  the 3D tree until the cloth comes off. Pictures: ninja_reveal_3d_full.png, ninja_reveal_3d_frames.png,
+  ninja_2d_disguise.png, ninja_walks_up_full.png.
 
