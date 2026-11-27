@@ -82,12 +82,31 @@ Owner decisions also go to `docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md`. No Kanto 
 | [ ] | T6 Cloud saves | |
 | [ ] | T7 Launcher that updates the game | |
 
+## Brennan's answers to the T0 questions (2026-11-27 02:55, typed into the audit doc)
+
+1. Friends walk through each other (they never block a door). (The doc's suggested answer; he left it.)
+2. Fast-forward: "Yes while walking, biking, surfing, off during trades and battles with another player."
+3. Players at once: "3 first, we can shoot for more players at a later date once it works flawlessly."
+4. Trades and battles: "anywhere by facing a friend and going through an option menu of trade, playercard, battle,
+   or team up" (no Cable Club trip).
+5. Connecting: "lets try to stick to a free tool to connect." (a free private network such as Tailscale; no paid
+   relay)
+6. Cloud saves: a synced folder is enough to start - "google drive most likely the best option."
+7. The host's clock drives seasons and day/night for everyone while connected: "Yes, from proposal 3."
+8. His new ask: "Can you add in multiplayer to team up and it do double battles except for story battles and gym
+   battles." Answered in the doc (comment, 2026-11-27): yes - the code has two linked players against computer
+   trainers (the Battle Tower's link multi battles, BATTLE_TYPE_TOWER_LINK_MULTI), a linked partner's battler
+   (battle_controller_link_partner.c) and wild double battles (WE_DOUBLE_WILD_*); a regular trainer battle while
+   walking together becomes a double battle, each player controlling their own Pokemon; story and Gym battles stay
+   one-player. A step of its own, after battles between players. Asked him: wild Pokemon too, or trainers only?
+   Story battles = rival, Team Aqua/Magma, Elite Four, Champion - any others?
+
 ## Open questions for Brennan
 
-- Clocks: the host's clock for everyone while connected (proposal 3)?
+- Team-up battles: wild Pokemon too, or trainers only? Which battles count as story battles besides the rival, Team
+  Aqua/Magma, the Elite Four and the Champion?
 - Different story progress: each player sees their own world (proposal 1)?
 - Trades: any check on edited Pokémon coming in?
-- How many players at once?
 
 ## Sources (2026-11-26)
 

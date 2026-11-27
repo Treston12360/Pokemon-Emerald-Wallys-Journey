@@ -1723,3 +1723,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   engine rewrite needed; friends as "ghost" characters (spare object slots, the game's own walking) for walking
   together; trades/battles/cards through Emerald's link screens over a "virtual cable" (the cable layer, not the
   wireless one), tested early; no renderer change. 7 questions for him before T1. Branch `tandem` made from `polish`.
+- 2026-11-27 02:54 Brennan, Route 118 boxes 2 and 3 (the green grass edges by the shore trees, picture
+  r118_boxes23_question.png: the map's own grass edge, 6 px over the sand, a brown edge, square corners in 3D): "A:
+  Round the corners so the brown edge curves the way the 2D map draws it" (not trees on the strip, not lowered).
+- 2026-11-27 02:55 Brennan answered the Project Tandem T0 questions in the audit doc (all in docs/TANDEM_TASKS.md
+  "Brennan's answers"): walk through each other; fast-forward while walking/biking/surfing, off in trades and
+  battles with another player; 3 players first, more later; trade/battle anywhere by facing a friend, a menu of
+  trade, player card, battle, team up; a free tool to connect; cloud saves in a synced folder, Google Drive likely;
+  the host's clock for everyone. New ask: team up for double battles except story and Gym battles (answered yes in
+  the doc, two questions back to him).
+
