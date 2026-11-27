@@ -1763,4 +1763,41 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Littleroot views differed only in how far the far background had built after 150 frames: the same at 400).
   Pictures: docs/polish_reports/2026-11-27_N82_route118_north.jpg; Brennan's marked picture:
   docs/polish_reports/brennan_2026-11-26_2209_route118_red_boxes.png.
+- 2026-11-27 03:48 Brennan (on the N82 pictures): river going north - "love this idea, keep the information on how you
+  completed this and all the steps and fixes incase we want to do this somewhere else as well"; trees on the mountain:
+  "the number of trees is good". So N82 is approved as it is. The note he asked for:
+  - **How it looks:** past the map's edge the water is a lake (where the old triangle was) with curved, uneven
+    shores and a rounded top, narrowing into a river that winds away and ends; a band of trees (1-3 cells) along the
+    shore at the mountain's foot; the mountain's ledges step in and out and vary in depth (some near-cliffs, some
+    wide shelves), with single trees and loose clumps of the woods' own tree on them; the woods across the water keep
+    their look, their edge following the shore.
+  - **How it works (code):** (1) voxel_world.c VoxelWorld_R118North gives every belt cell of the area its part -
+    rock, water, bank trees, woods - from the river's banks (R118NBanks: a list of rows out from the map's edge with
+    the left and right bank at each, joined in straight lines, each bank then wandering by a smooth noise; the mouth
+    rows exact), the bank band's width (R118NBand), a row or two of trees north of the map's own trees, and past the
+    river's end the old straight split coming back. (2) NearestBeltMapUncached returns, for that part, the map whose
+    border draws it - rock: Route 111 (its rock 0x71, its level); water: Route 118 (its sea, its sea level); trees:
+    Route 119 (its woods) - so art, level and base all follow. (3) voxel_mesh_builder.c BeltFieldUncached: on that
+    rock R118FieldJitter (height +-0.9 level, one smooth value every ~6 cells, gone within 3 cells of anything not
+    rock, only rises where the climb is done) and R118FieldRate (a level every 1.1-2.9 cells instead of 2, drifting
+    every ~7 cells) - used for the climb, every map's cap and the cap down to the water. (4) VoxelMesh_LedgeTree:
+    the trees on the rock (TreeScatter under 60 in one 4x3 patch of three, else under 14; only on flat ledges).
+    (5) VoxelMesh_TreeOverDrop and EmitFieldCell: the bank trees stand on the slope's steps, their floor stepped like
+    the rock. (6) Route 118's own grass edges (boxes 2/3): relief.bin hand edits, tools/voxel3ds/README.md.
+  - **Steps to do it somewhere else:** dump the area (WJPC_DUMP_TERRAIN_ALL / _MVP / _BELT; mvp.bin.origins gives each
+    map's origin) and find which map's border draws what there and each map's base; draw the new shape first as a cell
+    map in Python (session tool /tmp/pk/r118n/proto.py - same maths) until it reads right; write a part function like
+    VoxelWorld_R118North for that area with its own keys and hook it into NearestBeltMapUncached; gate the ledge
+    jitter/rate and the trees to that area's rock; check the gap test (1920x1080 and 2560x1440, from every map round
+    it) and the 52-view region set pixel for pixel; send before/after pictures.
+  - **Fixes found on the way (each a trap for next time):** Route 111's layout changes once Mirage Tower falls (27 ->
+    392) - match both or nothing happens. Water must belong to the map whose sea level it should have, or the river
+    steps. Land next to a map's raised rock (the mound) sank into a pit when the lake came within ~6 cells: the cap
+    brings land down to the water a level every 2 cells - keep water right behind such rock (as it was) or far from it.
+    A second, finer noise left one-cell pits and spikes: one smooth octave only, and only rises on flat tops. Trees
+    left off every cell across a ledge made a bank of bare tree-floor slopes: let bank trees stand on the steps. A
+    smooth wood floor beside stepped rock leaves slits of sky along each ledge: step the bank's floor too (gap test
+    362 -> 0 px). A lake shaped like the old triangle still read as a wedge: round its top. Far background in test
+    pictures needs ~400 frames after a warp before pixel comparisons (150 left it half built).
+  - **Switches:** WJPC_R118_NORTH_OLD=1, WJPC_R118_NORTH_FLAT=1, WJPC_R118_NORTH_BARE=1, WJPC_R118_NORTH_BANK_GAPS=1.
 
