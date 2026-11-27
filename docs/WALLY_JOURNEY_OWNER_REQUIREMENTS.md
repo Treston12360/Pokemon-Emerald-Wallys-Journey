@@ -1734,3 +1734,33 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   the doc, two questions back to him).
 - 2026-11-27 03:05 Brennan (Tandem, team-up battles): "only trainers for now"; story battles that stay one-player:
   Gyms, the rival/neighbor, Team Aqua/Magma, Elite Four, Champion, "any turning point battles or major ones".
+- 2026-11-27 N82 (Route 118, 22:09 red boxes; boxes 2/3 answer 02:54 "A"): the belt north of Route 118 between
+  Route 111's east edge and Route 119's west edge (voxel_world.c VoxelWorld_R118North) was each map's border by the
+  nearest map, cut along straight 45-degree lines - Route 111's rock, Route 118's sea as a triangle pointing north
+  (box 1: its point, with a slit of sky by the lone tree there), Route 119's woods. Now:
+  - The water is a lake where the triangle was (still behind the rock mound and the map's trees along the edge), its
+    shores curved and uneven (they wander a cell or so), its top rounded, narrowing into a river that winds away
+    north and ends ~48 rows out (past it the rock/woods line drifts back to the old straight line by 64 rows).
+  - A band of trees (1-3 cells) along the west shore at the mountain's foot, and a row or two of trees north of the
+    map's own trees; they stand on the slope's ledges (crowns over the steps), their floor stepped like the rock
+    beside it (smooth, it left slits of sky along every ledge). The woods east of the water keep their wooded hill,
+    their edge now the curved shore.
+  - The mountain's ledges (the rock, Route 111's border): their height moves up or down by up to 0.9 of a level (one
+    smooth value every ~6 cells; only rises on the flat top, never pits) and the slope climbs a level every 1.1 to 2.9
+    cells instead of every 2 (drifting every ~7 cells): ledge edges step in and out, ledges 1-4 cells deep, some
+    near-cliffs, some wide shelves (voxel_mesh_builder.c R118FieldJitter, R118FieldRate). Not the smooth "wavy
+    warping" lumps Brennan turned down at Lavaridge (2026-11-19).
+  - Trees scattered on the rock's ledges (the woods' small tree): single trees, and loose clumps in about one 4x3
+    patch in three (VoxelMesh_LedgeTree).
+  - Boxes 2 and 3 (Route 118's own grass edges, relief.bin layout 34, tools/voxel3ds/README.md "Route 118 relief hand
+    edits"): their corners rounded - the jog's outer corner, the inner corner (the dark crack across the strip there
+    is gone), and each strip's end slopes down round its corner instead of ending in a square wall.
+  Switches: WJPC_R118_NORTH_OLD=1 (all as before), WJPC_R118_NORTH_FLAT=1 (ledges as before), WJPC_R118_NORTH_BARE=1
+  (no trees on the rock), WJPC_R118_NORTH_BANK_GAPS=1 (bank trees not on steps). Only when Routes 111, 118 and 119 are
+  placed as Hoenn places them (Route 111 either layout, before or after Mirage Tower). Checked: gap test 14 views
+  (Route 118 x7, Mauville x2, Route 119 x3, Route 111 x2) at 1920x1080 and 2560x1440: 0 px everywhere after (before:
+  40/149/74 and 69/257/120 px at Route 118 - the box 1 slit); the 52-view region set pixel for pixel the same (its two
+  Littleroot views differed only in how far the far background had built after 150 frames: the same at 400).
+  Pictures: docs/polish_reports/2026-11-27_N82_route118_north.jpg; Brennan's marked picture:
+  docs/polish_reports/brennan_2026-11-26_2209_route118_red_boxes.png.
+
