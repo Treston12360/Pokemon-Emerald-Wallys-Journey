@@ -4167,7 +4167,8 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
         foot = topH;   /* the band from the steps up to the top: its quads wound the other way, facing in */
     }
     face = VoxelRelief_FaceTile(inst);
-    const bool sideByZ = in && (inst->layoutId == 163 || inst->layoutId == 285 || inst->layoutId == 286) /* VR */
+    const bool sideByZ = in && (inst->layoutId == 163 || inst->layoutId == 285 || inst->layoutId == 286 /* VR */
+                                || inst->layoutId == 292 /* Jagged Pass: laid as Victory Road 1F's */)
                       && getenv("WJPC_VR_STAIRS_SIDES_OLD") == NULL;
     /* (there, each tread's side in 8 pieces, the ground beside read at each: where the rock beside it drops straight
      * down to the floor, one piece across the drop left a sliver open - the gap test, Victory Road 1F 22:31) */
@@ -4208,6 +4209,8 @@ static void EmitFlightSides(VoxelBuilder *b, const VoxelMapInstance *inst, int x
         /* (Victory Road 1F/B1F, a flight run out in front: the floor rows before it drawn shorter (voxel_relief.c
          * sOutRows) meet the floor beside them at other points along their shared edge - hairline cracks there, the
          * sky through them (gap test). A plate of the floor beside, a hair under the floor, under that edge) */
+        /* (not Jagged Pass's: beside its flights the ground is ledges and slopes, not the floor - the plate stood
+         * out over them as pink bands beside the steps; its gap test is clean without) */
         if (sideByZ && (inst->layoutId == 163 || inst->layoutId == 285))
         {
             int rows = (int)(n0 - 1) / (VOXEL_RELIEF_SIDE - 1), nx = s == 0 ? x - 1 : x + 1;

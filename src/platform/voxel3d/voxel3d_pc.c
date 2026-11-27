@@ -97,6 +97,7 @@ int Port_LayoutMetatile(int id, int x, int y)
 // means other art on other tile sets, so it is asked with the layout's own. Facility (Mt Pyre summit): 330, 331.
 extern const struct Tileset gTileset_Facility;
 extern const struct Tileset gTileset_MeteorFalls;
+extern const struct Tileset gTileset_Lavaridge;
 bool Port_LayoutSecondaryStair(int id, int metatile)
 {
     const struct MapLayout *l = id <= 0 ? NULL : gMapLayouts[id - 1];
@@ -113,6 +114,12 @@ bool Port_LayoutSecondaryStair(int id, int metatile)
     /* (2026-11-24 22:09 "Look good continue": all of Victory Road - 1F, B1F, B2F) */
     if ((id == 163 || id == 285 || id == 286) /* LAYOUT_VICTORY_ROAD_1F, _B1F, _B2F */ && metatile == 0x204
      && getenv("WJPC_VR_STAIRS_UPRIGHT") == NULL)
+        return true;
+    /* (Brennan 2026-11-26 22:59, Jagged Pass: "the stairs ... should be angled 3D stepped meshes with treads and
+     * risers": its yellow-edged flights 0x217 and 0x2AF, a level up a row each - the first ones shown for his OK.
+     * WJPC_JAGGED_STAIRS_UPRIGHT=1: as before) */
+    if (id == 292 /* LAYOUT_JAGGED_PASS */ && l->secondaryTileset == &gTileset_Lavaridge
+     && (metatile == 0x217 || metatile == 0x2AF) && getenv("WJPC_JAGGED_STAIRS_UPRIGHT") == NULL)
         return true;
     return l->secondaryTileset == &gTileset_Facility && (metatile == 0x330 || metatile == 0x331);
 }

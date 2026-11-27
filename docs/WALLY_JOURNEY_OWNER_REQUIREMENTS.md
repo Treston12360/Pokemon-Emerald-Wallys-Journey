@@ -1690,3 +1690,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   keep their own ground shadows (their drawing); the background mountains round the map are unchanged.
   WJPC_JAGGED_SUNLIT=1: as before. Only Jagged Pass (layout 292). Gap test (14 Jagged Pass / Mt Chimney views, 1920x1080
   and 2560x1440) as N79. Pictures: docs/polish_reports/2026-11-27_N80_jagged_pass_no_shadows.png.
+- 2026-11-27 N81 (Jagged Pass 22:59 list, item 1 - "the stairs ... angled 3D stepped meshes with treads and risers"):
+  its seven yellow-plank flights (Lavaridge 0x217, 0x2AF; a level up one row each) are stair flights now
+  (voxel3d_pc.c Port_LayoutSecondaryStair), laid by the outdoor-stairs code (voxel_relief.c, POL-44/47/51) as Victory
+  Road 1F's (N67): real steps, one a plank (8 px tread, 8 px riser), sides closed; never cut back into the rock above
+  (most have one flat row above them, nothing to cut into) - each runs out over the floor rows in front, those drawn
+  shorter, so the player in front stands past the foot and walks up the treads. Sides as Victory Road's, without its
+  floor plate (it stood out as pink bands over the ledges beside). The stairs' ends (item 4, "transition cleanly into
+  dirt path") come with it. Switches: WJPC_JAGGED_STAIRS_UPRIGHT=1 (flat, as before), WJPC_JAGGED_STAIRS_RECESS=1 (cut
+  back as Victory Road's). Gap test (14 Jagged Pass / Mt Chimney views, 1920x1080 and 2560x1440): as N80. First ones
+  shown to Brennan for his OK before any other map's stairs. Pictures: docs/polish_reports/2026-11-27_N81_jagged_pass_stairs.png.

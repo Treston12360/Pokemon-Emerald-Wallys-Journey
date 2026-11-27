@@ -541,11 +541,17 @@ static bool StairFlights(ReliefLayout *l)
                  * 1F and B1F a flight is cut at most two rows into the ledge, its top row always left flat; the rest of
                  * its run is out in front, the floor rows before it (up to two, 8 px each) drawn that much shorter so
                  * the stairs' foot never stands on the floor the player stands on. WJPC_VR_STAIRS_DEEP=1: as N66) */
-                if ((l->layoutId == 163 || l->layoutId == 285) && getenv("WJPC_VR_STAIRS_DEEP") == NULL)
+                /* (Jagged Pass the same, 2026-11-27, but never cut back at all: most of its flights have one flat
+                 * row above them, nothing to cut into, and the three that could were sunk in a dark slot beside flights
+                 * standing out. All run out over the floor rows in front alike, those drawn shorter - the player in
+                 * front stands past the foot. WJPC_JAGGED_STAIRS_RECESS=1: cut back as Victory Road's) */
+                if ((l->layoutId == 163 || l->layoutId == 285 || l->layoutId == 292) && getenv("WJPC_VR_STAIRS_DEEP") == NULL)
                 {
                     int bottomRow = found[f].row + found[f].rows, k = 0;
                     if (lip > 2)
                         lip = 2;
+                    if (l->layoutId == 292 && getenv("WJPC_JAGGED_STAIRS_RECESS") == NULL)
+                        lip = 0;
                     sRecess = 16 * lip - 4 > 0 ? (16 * lip - 4 < run ? 16 * lip - 4 : run) : 0;
                     for (; k < 2 && bottomRow + k < l->height; ++k)
                     {
