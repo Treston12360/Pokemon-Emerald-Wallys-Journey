@@ -1833,4 +1833,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Order: "lets work on lavaridge and the rest of these fixes after we start on the Project Tandem audit/beginning."
   So: start Project Tandem (T1) now; Lavaridge wall + bigger pond, then switching the #13 ideas on (cleanup, gap
   tests 1920/2560) come after.
+- 2026-11-27 13:35-13:39 Brennan: zip of the current game before Tandem (sent: WallysJourney-2026-11-27-polish-01349efa,
+  no Tandem code, #13 ideas off). Tandem: each player sees their own world at different story points: "yes"; trades:
+  "trust your friends" (no check on edited Pokemon). T1 (connecting) done on branch `tandem` - docs/TANDEM_TASKS.md.
 

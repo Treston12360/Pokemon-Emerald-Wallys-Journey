@@ -74,13 +74,16 @@ Owner decisions also go to `docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md`. No Kanto 
 | Status | Task | Notes |
 |---|---|---|
 | [x] | **T0** Architecture audit (read-only) + implementation plan for Brennan's review - **done 2026-11-27: `docs/TANDEM_AUDIT.md`** (and Brennan's doc https://claude.ai/artifact/BHzoa527o1EWzCgtTNyVGN, for his comments); waiting for his answers to its 7 questions before T1 | ChatGPT's 10 audit points: build/entry point; movement, coordinates, collision, animation; map loading/transitions/ids; battle architecture; party/inventory/save structures; save/load; rendering and how to keep networking out of it; existing link code; host/relay networking; cloud saves. Exact files and functions per phase. After Polish's Jagged Pass list. |
-| [ ] | **T1** Milestone 1: two players walking on the same map, seeing each other in real time | 2D and 3D; neighbouring maps |
-| [ ] | T2 Same-build check, host clock | |
-| [ ] | T3 A trade through the game's own link code over the network | the lag test |
-| [ ] | T4 Battles between players | |
-| [ ] | T5 Private invitations and a relay | |
-| [ ] | T6 Cloud saves | |
-| [ ] | T7 Launcher that updates the game | |
+(Steps renumbered 2026-11-27 to the audit's plan, TANDEM_AUDIT.md "The plan, step by step".)
+
+| [x] | **T1** Connect two PCs: network module, host/join, build check - **done 2026-11-27** | `src/platform/tandem_net.c/.h` (own thread, TCP, up to 3 players, build = git commit refused if different, hello + pings, log `WallysJourney_tandem.log`, status in the window title); `sdl2.c` (settings `tandemHost`/`tandemJoin`/`tandemName`, start/stop, title); `Makefile.pc` (plain-C rule, build header, `-lws2_32`). Tested: host + 2 games + test clients on one machine (`tools/tandem/`): joins, names, pings 0-3 ms, full game refused (joiner retries), wrong build refused, leaving/rejoining; not configured: 6 views pixel for pixel the same, settings file the same, no log. How to connect: `docs/TANDEM_HOWTO.md`. Not yet tried between two real PCs (Brennan). |
+| [ ] | **T2** (first milestone) See each other on the same map | ghosts (spare object-event slots 16-63, the game's movement actions), never block; positions sent ~each frame; single-player pixel test unchanged |
+| [ ] | T3 Across map changes and neighbours; doors, warps; Kanto | each player's own world (Brennan 13:39: yes) |
+| [ ] | T4 Player cards; the face-a-friend menu (trade, player card, battle, team up) | |
+| [ ] | T5 Trade test, then trades through the game's own link code | the lag test; trust friends' Pokemon (Brennan 13:39) |
+| [ ] | T6 Battles between players; team-up double battles (trainers only, not story/Gym battles) | |
+| [ ] | T7 Host's clock for everyone; save backup in a synced folder (Google Drive) | |
+| [ ] | T8 Relay (free), invites, launcher that updates the game | |
 
 ## Brennan's answers to the T0 questions (2026-11-27 02:55, typed into the audit doc)
 
@@ -106,10 +109,12 @@ Owner decisions also go to `docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md`. No Kanto 
    trainers only (no wild ones for now); one-player battles: Gyms, the neighbor (the rival), Team Aqua/Magma, the
    Elite Four, the Champion and any other turning-point or major battle.
 
+Brennan 2026-11-27 13:39: different story progress - each player sees their own world: "yes"; trades, check
+edited Pokemon or trust friends: "trust your friends".
+
 ## Open questions for Brennan
 
-- Different story progress: each player sees their own world (proposal 1)?
-- Trades: any check on edited Pokémon coming in?
+(none open)
 
 ## Sources (2026-11-26)
 

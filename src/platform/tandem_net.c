@@ -1,0 +1,898 @@
+/*
+ * Project Tandem T1: the network link (tandem_net.h says what and how to set it up).
+ *
+ * Plain C, no game headers (Makefile.pc builds it without the game's text preprocessor, as mp3_music.c): the game's
+ * own headers and Winsock's clash, and nothing here may touch the game's data anyway.
+ *
+ * One thread does all the network work (select() over every socket, a tenth of a second at a time); the game thread
+ * and the main thread only read a status line under a lock. TCP, each message framed as
+ *   u16 length (of what follows), u8 type, payload        (little-endian)
+ * Messages:
+ *   HELLO   joiner -> host: u16 protocol, build[40], name[16]
+ *   WELCOME host -> joiner: u8 your slot (1, 2), u8 players allowed, build[40], host's name[16]
+ *   REFUSE  host -> joiner: text[96] (why), then the host closes
+ *   PEER    host -> everyone: u8 slot, u8 joined (1) or left (0), name[16]
+ *   TEXT    either way: text[96] - the test message (and later, maybe, chat)
+ *   PING    either way: u32 number, u32 sender's ms; PONG: the same back
+ *   BYE     either way: closing on purpose
+ * A connection that sends nothing for TIMEOUT_MS (pings go every PING_MS) is closed.
+ */
+#include "tandem_net.h"
+
+#include <stdarg.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+#include <SDL.h>
+
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+typedef SOCKET TSocket;
+#define TSOCK_BAD INVALID_SOCKET
+#define TCloseSocket closesocket
+#define TSockWouldBlock() (WSAGetLastError() == WSAEWOULDBLOCK || WSAGetLastError() == WSAEINPROGRESS)
+#else
+#include <arpa/inet.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <unistd.h>
+typedef int TSocket;
+#define TSOCK_BAD (-1)
+#define TCloseSocket close
+#define TSockWouldBlock() (errno == EWOULDBLOCK || errno == EAGAIN || errno == EINPROGRESS)
+#endif
+
+#include "tandem_build.h"   /* TANDEM_BUILD: the git commit, made by Makefile.pc */
+
+#define PROTOCOL 1
+#define BUILD_LEN 40
+#define NAME_LEN 16
+#define TEXT_LEN 96
+#define PING_MS 2000
+#define TIMEOUT_MS 15000
+#define CONNECT_TIMEOUT_MS 10000
+#define RETRY_MS 5000
+#define BUF_SIZE 4096
+
+enum { MSG_HELLO = 1, MSG_WELCOME, MSG_REFUSE, MSG_PEER, MSG_TEXT, MSG_PING, MSG_PONG, MSG_BYE };
+enum { MODE_OFF, MODE_HOST, MODE_JOIN };
+
+typedef struct
+{
+    TSocket sock;
+    bool used, hello, connecting;
+    unsigned slot;
+    char name[NAME_LEN];
+    uint8_t in[BUF_SIZE];
+    unsigned inLen;
+    uint32_t lastHeard, lastPing, pingNo, connectStart;
+} Peer;
+
+static int sMode = MODE_OFF;
+static unsigned sPort = TANDEM_DEFAULT_PORT;
+static char sJoinAddr[128];
+static char sName[NAME_LEN] = "Player";
+static char sLogPath[1100];
+static FILE *sLog;
+
+static SDL_Thread *sThread;
+static SDL_atomic_t sQuit;
+static SDL_mutex *sLock;
+static char sStatus[128];
+static unsigned sStatusGen;
+
+static TSocket sListen = TSOCK_BAD;
+static Peer sPeers[TANDEM_MAX_PLAYERS];   /* host: friends in 1..; joiner: the host in 0 */
+static char sPeerNames[TANDEM_MAX_PLAYERS][NAME_LEN];   /* everyone connected, by slot ("" free) */
+static unsigned sMySlot;
+
+/* ── settings ─────────────────────────────────────────────────────────── */
+
+static void CopyName(char *dst, const char *src)
+{
+    unsigned n = 0;
+
+    while (*src == ' ' || *src == '\t')
+        src++;
+    for (; *src != '\0' && *src != '\r' && *src != '\n' && n < NAME_LEN - 1; src++)
+        if ((unsigned char)*src >= 0x20 && (unsigned char)*src < 0x7F)
+            dst[n++] = *src;
+    while (n > 0 && dst[n - 1] == ' ')
+        n--;
+    dst[n] = '\0';
+}
+
+static void SetJoin(const char *value)
+{
+    unsigned n = 0;
+
+    while (*value == ' ')
+        value++;
+    for (; *value != '\0' && *value != '\r' && *value != '\n' && *value != ' ' && n < sizeof(sJoinAddr) - 1; value++)
+        sJoinAddr[n++] = *value;
+    sJoinAddr[n] = '\0';
+    if (n > 0)
+        sMode = MODE_JOIN;
+}
+
+bool TandemNet_ConfigLine(const char *line)
+{
+    unsigned value;
+
+    if (sscanf(line, "tandemHost=%u", &value) == 1)
+    {
+        if (value > 0 && value < 65536)
+        {
+            sPort = value;
+            sMode = MODE_HOST;
+        }
+        return true;
+    }
+    if (strncmp(line, "tandemJoin=", 11) == 0)
+    {
+        SetJoin(line + 11);
+        return true;
+    }
+    if (strncmp(line, "tandemName=", 11) == 0)
+    {
+        char name[NAME_LEN];
+        CopyName(name, line + 11);
+        if (name[0] != '\0')
+            memcpy(sName, name, NAME_LEN);
+        return true;
+    }
+    return false;
+}
+
+void TandemNet_WriteConfig(FILE *configFile)
+{
+    if (sMode == MODE_HOST)
+        fprintf(configFile, "tandemHost=%u\n", sPort);
+    else if (sMode == MODE_JOIN)
+        fprintf(configFile, "tandemJoin=%s\n", sJoinAddr);
+    if (strcmp(sName, "Player") != 0)
+        fprintf(configFile, "tandemName=%s\n", sName);
+}
+
+/* (tests: the same as environment variables, which win over the file) */
+static void ReadEnv(void)
+{
+    const char *e;
+
+    if ((e = getenv("WJPC_TANDEM_NAME")) != NULL)
+    {
+        char name[NAME_LEN];
+        CopyName(name, e);
+        if (name[0] != '\0')
+            memcpy(sName, name, NAME_LEN);
+    }
+    if ((e = getenv("WJPC_TANDEM_HOST")) != NULL && atoi(e) > 0 && atoi(e) < 65536)
+    {
+        sPort = (unsigned)atoi(e);
+        sMode = MODE_HOST;
+    }
+    if ((e = getenv("WJPC_TANDEM_JOIN")) != NULL)
+        SetJoin(e);
+}
+
+/* ── log and status ───────────────────────────────────────────────────── */
+
+static void Log(const char *fmt, ...)
+{
+    char text[512];
+    va_list ap;
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+
+    va_start(ap, fmt);
+    vsnprintf(text, sizeof(text), fmt, ap);
+    va_end(ap);
+    if (sLog == NULL && sLogPath[0] != '\0')
+        sLog = fopen(sLogPath, "a");
+    if (sLog != NULL)
+    {
+        fprintf(sLog, "%02d:%02d:%02d %s\n", t ? t->tm_hour : 0, t ? t->tm_min : 0, t ? t->tm_sec : 0, text);
+        fflush(sLog);
+    }
+    fprintf(stderr, "[Tandem] %s\n", text);
+}
+
+static void SetStatus(const char *fmt, ...)
+{
+    char text[sizeof(sStatus)];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsnprintf(text, sizeof(text), fmt, ap);
+    va_end(ap);
+    SDL_LockMutex(sLock);
+    if (strcmp(text, sStatus) != 0)
+    {
+        memcpy(sStatus, text, sizeof(sStatus));
+        sStatusGen++;
+    }
+    SDL_UnlockMutex(sLock);
+}
+
+const char *TandemNet_StatusText(unsigned *gen)
+{
+    static char copy[sizeof(sStatus)];
+
+    if (sLock == NULL)
+    {
+        if (gen != NULL)
+            *gen = 0;
+        return "";
+    }
+    SDL_LockMutex(sLock);
+    memcpy(copy, sStatus, sizeof(copy));
+    if (gen != NULL)
+        *gen = sStatusGen;
+    SDL_UnlockMutex(sLock);
+    return copy;
+}
+
+bool TandemNet_Active(void)
+{
+    return sThread != NULL;
+}
+
+/* how many are connected, counting me */
+static unsigned CountPlayers(void)
+{
+    unsigned n = 0;
+
+    for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
+        if (sPeerNames[i][0] != '\0')
+            n++;
+    return n;
+}
+
+static void StatusFromPlayers(void)
+{
+    char names[3 * NAME_LEN + 8] = "";
+    unsigned n = CountPlayers();
+
+    for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
+        if (sPeerNames[i][0] != '\0' && i != sMySlot)
+        {
+            if (names[0] != '\0')
+                strcat(names, ", ");
+            strcat(names, sPeerNames[i]);
+        }
+    if (sMode == MODE_HOST && n <= 1)
+        SetStatus("Tandem: hosting on port %u, waiting for friends", sPort);
+    else if (sMode == MODE_HOST)
+        SetStatus("Tandem: hosting on port %u - %u of %u (%s)", sPort, n, TANDEM_MAX_PLAYERS, names);
+    else
+        SetStatus("Tandem: connected - %u of %u (%s)", n, TANDEM_MAX_PLAYERS, names);
+}
+
+/* ── sockets ──────────────────────────────────────────────────────────── */
+
+static void SetNonBlocking(TSocket s)
+{
+#ifdef _WIN32
+    u_long on = 1;
+    ioctlsocket(s, FIONBIO, &on);
+#else
+    fcntl(s, F_SETFL, fcntl(s, F_GETFL, 0) | O_NONBLOCK);
+#endif
+    {
+        int one = 1;
+        setsockopt(s, IPPROTO_TCP, TCP_NODELAY, (const char *)&one, sizeof(one));
+    }
+}
+
+static void PutU16(uint8_t *p, unsigned v) { p[0] = (uint8_t)v; p[1] = (uint8_t)(v >> 8); }
+static void PutU32(uint8_t *p, uint32_t v) { PutU16(p, v & 0xFFFF); PutU16(p + 2, v >> 16); }
+static unsigned GetU16(const uint8_t *p) { return p[0] | (p[1] << 8); }
+static uint32_t GetU32(const uint8_t *p) { return GetU16(p) | ((uint32_t)GetU16(p + 2) << 16); }
+
+/* a fixed-length text field: copied and always ended */
+static void PutText(uint8_t *p, const char *s, unsigned len)
+{
+    memset(p, 0, len);
+    strncpy((char *)p, s, len - 1);
+}
+
+static void GetText(char *dst, const uint8_t *p, unsigned len)
+{
+    memcpy(dst, p, len);
+    dst[len - 1] = '\0';
+    for (unsigned i = 0; dst[i] != '\0'; i++)
+        if ((unsigned char)dst[i] < 0x20 || (unsigned char)dst[i] >= 0x7F)
+            dst[i] = '?';
+}
+
+static void ClosePeer(Peer *p, const char *why);
+
+/* send a whole message (small: the socket's buffer takes it at once; if not, the connection is too far behind) */
+static bool Send(Peer *p, unsigned type, const uint8_t *payload, unsigned len)
+{
+    uint8_t msg[3 + 256];
+    unsigned at = 0, total = 3 + len;
+
+    if (!p->used || p->connecting || len > 256)
+        return false;
+    PutU16(msg, len + 1);
+    msg[2] = (uint8_t)type;
+    if (len > 0)
+        memcpy(msg + 3, payload, len);
+    while (at < total)
+    {
+        int n = send(p->sock, (const char *)msg + at, (int)(total - at), 0);
+        if (n <= 0)
+        {
+            if (n < 0 && TSockWouldBlock())
+            {
+                SDL_Delay(1);
+                continue;
+            }
+            ClosePeer(p, "the connection broke while sending");
+            return false;
+        }
+        at += (unsigned)n;
+    }
+    return true;
+}
+
+static void SendText(Peer *p, const char *fmt, ...)
+{
+    uint8_t payload[TEXT_LEN];
+    char text[TEXT_LEN];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsnprintf(text, sizeof(text), fmt, ap);
+    va_end(ap);
+    PutText(payload, text, TEXT_LEN);
+    Send(p, MSG_TEXT, payload, TEXT_LEN);
+}
+
+static void SendPeerNews(unsigned slot, bool joined)
+{
+    uint8_t payload[2 + NAME_LEN];
+
+    payload[0] = (uint8_t)slot;
+    payload[1] = joined ? 1 : 0;
+    PutText(payload + 2, sPeerNames[slot], NAME_LEN);
+    for (unsigned i = 1; i < TANDEM_MAX_PLAYERS; i++)
+        if (sPeers[i].used && sPeers[i].hello)
+            Send(&sPeers[i], MSG_PEER, payload, sizeof(payload));
+}
+
+static void ClosePeer(Peer *p, const char *why)
+{
+    if (!p->used)
+        return;
+    if (p->hello)
+        Log("%s left (%s)", p->name[0] ? p->name : "a friend", why);
+    else
+        Log("connection closed (%s)", why);
+    TCloseSocket(p->sock);
+    p->used = false;
+    if (sMode == MODE_HOST && p->hello)
+    {
+        unsigned slot = p->slot;
+        p->hello = false;
+        SendPeerNews(slot, false);
+        sPeerNames[slot][0] = '\0';
+        StatusFromPlayers();
+    }
+    else if (sMode == MODE_JOIN)
+    {
+        for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
+            sPeerNames[i][0] = '\0';
+        SetStatus("Tandem: not connected (%s) - trying again", why);
+    }
+    p->hello = false;
+}
+
+/* ── messages ─────────────────────────────────────────────────────────── */
+
+static void Refuse(Peer *p, const char *fmt, ...)
+{
+    uint8_t payload[TEXT_LEN];
+    char text[TEXT_LEN];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsnprintf(text, sizeof(text), fmt, ap);
+    va_end(ap);
+    PutText(payload, text, TEXT_LEN);
+    Send(p, MSG_REFUSE, payload, TEXT_LEN);
+    Log("refused a friend: %s", text);
+    TCloseSocket(p->sock);
+    p->used = false;
+}
+
+static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len)
+{
+    char build[BUILD_LEN], name[NAME_LEN], text[TEXT_LEN];
+
+    p->lastHeard = SDL_GetTicks();
+    switch (type)
+    {
+    case MSG_HELLO:
+        if (sMode != MODE_HOST || p->hello || len < 2 + BUILD_LEN + NAME_LEN)
+            break;
+        GetText(build, d + 2, BUILD_LEN);
+        GetText(name, d + 2 + BUILD_LEN, NAME_LEN);
+        if (GetU16(d) != PROTOCOL)
+        {
+            Refuse(p, "different Tandem version (host %u, you %u) - update the game", PROTOCOL, GetU16(d));
+            return;
+        }
+        if (strcmp(build, TANDEM_BUILD) != 0)
+        {
+            Refuse(p, "different game build: host %s, you %s - both need the same version", TANDEM_BUILD, build);
+            return;
+        }
+        if (name[0] == '\0')
+            strcpy(name, "Player");
+        p->hello = true;
+        memcpy(p->name, name, NAME_LEN);
+        memcpy(sPeerNames[p->slot], name, NAME_LEN);
+        {
+            uint8_t w[2 + BUILD_LEN + NAME_LEN];
+            w[0] = (uint8_t)p->slot;
+            w[1] = TANDEM_MAX_PLAYERS;
+            PutText(w + 2, TANDEM_BUILD, BUILD_LEN);
+            PutText(w + 2 + BUILD_LEN, sName, NAME_LEN);
+            Send(p, MSG_WELCOME, w, sizeof(w));
+        }
+        /* everyone already here, to the newcomer; the newcomer, to everyone */
+        for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
+            if (i != p->slot && sPeerNames[i][0] != '\0')
+            {
+                uint8_t n[2 + NAME_LEN];
+                n[0] = (uint8_t)i;
+                n[1] = 1;
+                PutText(n + 2, sPeerNames[i], NAME_LEN);
+                Send(p, MSG_PEER, n, sizeof(n));
+            }
+        SendPeerNews(p->slot, true);
+        Log("%s joined (player %u of %u, same build %s)", name, p->slot + 1, TANDEM_MAX_PLAYERS, TANDEM_BUILD);
+        SendText(p, "hello from %s, the host", sName);
+        StatusFromPlayers();
+        break;
+    case MSG_WELCOME:
+        if (sMode != MODE_JOIN || p->hello || len < 2 + BUILD_LEN + NAME_LEN)
+            break;
+        GetText(build, d + 2, BUILD_LEN);
+        GetText(name, d + 2 + BUILD_LEN, NAME_LEN);
+        if (strcmp(build, TANDEM_BUILD) != 0)
+        {
+            Log("the host runs a different build (%s, mine %s) - leaving", build, TANDEM_BUILD);
+            ClosePeer(p, "different game build");
+            return;
+        }
+        p->hello = true;
+        sMySlot = d[0] < TANDEM_MAX_PLAYERS ? d[0] : 1;
+        memcpy(p->name, name, NAME_LEN);
+        memcpy(sPeerNames[0], name, NAME_LEN);
+        memcpy(sPeerNames[sMySlot], sName, NAME_LEN);
+        Log("joined %s's game as player %u of %u (same build %s)", name, sMySlot + 1, d[1], TANDEM_BUILD);
+        SendText(p, "hello from %s", sName);
+        StatusFromPlayers();
+        break;
+    case MSG_REFUSE:
+        if (len >= TEXT_LEN)
+        {
+            GetText(text, d, TEXT_LEN);
+            Log("the host refused: %s", text);
+            SetStatus("Tandem: refused - %s", text);
+        }
+        TCloseSocket(p->sock);
+        p->used = false;
+        /* (a different build or version: no retrying, it would be refused again; a full game: try again later) */
+        if (len < TEXT_LEN || strncmp((const char *)d, "the game is full", 16) != 0)
+            sMode = MODE_OFF;
+        break;
+    case MSG_PEER:
+        if (sMode != MODE_JOIN || len < 2 + NAME_LEN || d[0] >= TANDEM_MAX_PLAYERS || d[0] == sMySlot)
+            break;
+        GetText(name, d + 2, NAME_LEN);
+        if (d[1])
+        {
+            memcpy(sPeerNames[d[0]], name, NAME_LEN);
+            Log("%s is here too (player %u)", name, d[0] + 1);
+        }
+        else
+        {
+            Log("%s left", sPeerNames[d[0]][0] ? sPeerNames[d[0]] : name);
+            sPeerNames[d[0]][0] = '\0';
+        }
+        StatusFromPlayers();
+        break;
+    case MSG_TEXT:
+        if (len >= TEXT_LEN)
+        {
+            GetText(text, d, TEXT_LEN);
+            Log("message from %s: \"%s\"", p->name[0] ? p->name : "?", text);
+        }
+        break;
+    case MSG_PING:
+        if (len >= 8)
+            Send(p, MSG_PONG, d, 8);
+        break;
+    case MSG_PONG:
+        if (len >= 8)
+        {
+            uint32_t no = GetU32(d), rtt = SDL_GetTicks() - GetU32(d + 4);
+            /* (every 15th, about every 30 s, to the log: the link's delay) */
+            if (no % 15 == 1)
+                Log("ping %s: %u ms there and back", p->name, (unsigned)rtt);
+        }
+        break;
+    case MSG_BYE:
+        ClosePeer(p, "they closed the game or left");
+        break;
+    default:
+        break;
+    }
+}
+
+/* take every whole message out of what has come in */
+static void ReadPeer(Peer *p)
+{
+    bool ended = false;   /* (the other side closed: what came before still counts - its goodbye) */
+
+    for (;;)
+    {
+        int n;
+
+        if (p->inLen >= BUF_SIZE)
+        {
+            ClosePeer(p, "a message too long");
+            return;
+        }
+        n = recv(p->sock, (char *)p->in + p->inLen, (int)(BUF_SIZE - p->inLen), 0);
+        if (n == 0)
+        {
+            ended = true;
+            break;
+        }
+        if (n < 0)
+        {
+            if (!TSockWouldBlock())
+                ClosePeer(p, "the connection broke");
+            break;
+        }
+        p->inLen += (unsigned)n;
+    }
+    while (p->used && p->inLen >= 2)
+    {
+        unsigned len = GetU16(p->in);
+        if (len == 0 || len > 1024)
+        {
+            ClosePeer(p, "a message that made no sense");
+            return;
+        }
+        if (p->inLen < 2 + len)
+            break;
+        HandleMessage(p, p->in[2], p->in + 3, len - 1);
+        if (!p->used)
+            return;
+        memmove(p->in, p->in + 2 + len, p->inLen - 2 - len);
+        p->inLen -= 2 + len;
+    }
+    if (ended && p->used)
+        ClosePeer(p, "the other side closed the connection");
+}
+
+/* ── hosting ──────────────────────────────────────────────────────────── */
+
+static bool OpenListen(void)
+{
+    struct sockaddr_in a;
+    int one = 1;
+
+    sListen = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sListen == TSOCK_BAD)
+        return false;
+    setsockopt(sListen, SOL_SOCKET, SO_REUSEADDR, (const char *)&one, sizeof(one));
+    memset(&a, 0, sizeof(a));
+    a.sin_family = AF_INET;
+    a.sin_addr.s_addr = htonl(INADDR_ANY);
+    a.sin_port = htons((uint16_t)sPort);
+    if (bind(sListen, (struct sockaddr *)&a, sizeof(a)) != 0 || listen(sListen, 4) != 0)
+    {
+        TCloseSocket(sListen);
+        sListen = TSOCK_BAD;
+        return false;
+    }
+    SetNonBlocking(sListen);
+    return true;
+}
+
+static void AcceptFriend(void)
+{
+    struct sockaddr_in a;
+    socklen_t al = sizeof(a);
+    TSocket s = accept(sListen, (struct sockaddr *)&a, &al);
+    Peer *p = NULL;
+
+    if (s == TSOCK_BAD)
+        return;
+    SetNonBlocking(s);
+    for (unsigned i = 1; i < TANDEM_MAX_PLAYERS && p == NULL; i++)
+        if (!sPeers[i].used)
+        {
+            p = &sPeers[i];
+            p->slot = i;
+        }
+    if (p == NULL)
+    {
+        Peer tmp;
+        memset(&tmp, 0, sizeof(tmp));
+        tmp.sock = s;
+        tmp.used = true;
+        Refuse(&tmp, "the game is full (%u players)", TANDEM_MAX_PLAYERS);
+        return;
+    }
+    memset(p->name, 0, NAME_LEN);
+    p->sock = s;
+    p->used = true;
+    p->hello = false;
+    p->connecting = false;
+    p->inLen = 0;
+    p->lastHeard = p->lastPing = SDL_GetTicks();
+    p->pingNo = 0;
+    Log("a friend is connecting (player %u's place)", p->slot + 1);
+}
+
+/* ── joining ──────────────────────────────────────────────────────────── */
+
+static void SplitAddress(char *host, size_t hostSize, unsigned *port)
+{
+    const char *colon = strrchr(sJoinAddr, ':');
+    size_t n = colon != NULL ? (size_t)(colon - sJoinAddr) : strlen(sJoinAddr);
+
+    *port = TANDEM_DEFAULT_PORT;
+    if (colon != NULL && atoi(colon + 1) > 0 && atoi(colon + 1) < 65536)
+        *port = (unsigned)atoi(colon + 1);
+    if (n >= hostSize)
+        n = hostSize - 1;
+    memcpy(host, sJoinAddr, n);
+    host[n] = '\0';
+}
+
+static void StartJoin(void)
+{
+    Peer *p = &sPeers[0];
+    char host[128], portText[8];
+    unsigned port;
+    struct addrinfo hints, *res = NULL;
+    TSocket s;
+
+    SplitAddress(host, sizeof(host), &port);
+    snprintf(portText, sizeof(portText), "%u", port);
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    if (getaddrinfo(host, portText, &hints, &res) != 0 || res == NULL)
+    {
+        Log("can't find the host's address \"%s\"", host);
+        SetStatus("Tandem: can't find %s - trying again", host);
+        return;
+    }
+    s = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    if (s == TSOCK_BAD)
+    {
+        freeaddrinfo(res);
+        return;
+    }
+    SetNonBlocking(s);
+    if (connect(s, res->ai_addr, (int)res->ai_addrlen) != 0 && !TSockWouldBlock())
+    {
+        freeaddrinfo(res);
+        TCloseSocket(s);
+        SetStatus("Tandem: can't reach %s:%u - trying again", host, port);
+        return;
+    }
+    freeaddrinfo(res);
+    memset(p, 0, sizeof(*p));
+    p->sock = s;
+    p->used = true;
+    p->connecting = true;
+    p->slot = 0;
+    p->connectStart = p->lastHeard = p->lastPing = SDL_GetTicks();
+    Log("connecting to %s:%u ...", host, port);
+    SetStatus("Tandem: connecting to %s:%u", host, port);
+}
+
+/* the connect finished (or failed): say hello */
+static void FinishJoin(Peer *p)
+{
+    int err = 0;
+    socklen_t el = sizeof(err);
+    uint8_t hello[2 + BUILD_LEN + NAME_LEN];
+
+    getsockopt(p->sock, SOL_SOCKET, SO_ERROR, (char *)&err, &el);
+    if (err != 0)
+    {
+        TCloseSocket(p->sock);
+        p->used = false;
+        Log("couldn't connect (is the host's game running and the port open?)");
+        SetStatus("Tandem: couldn't connect to %s - trying again", sJoinAddr);
+        return;
+    }
+    p->connecting = false;
+    PutU16(hello, PROTOCOL);
+    PutText(hello + 2, TANDEM_BUILD, BUILD_LEN);
+    PutText(hello + 2 + BUILD_LEN, sName, NAME_LEN);
+    Send(p, MSG_HELLO, hello, sizeof(hello));
+}
+
+/* ── the thread ───────────────────────────────────────────────────────── */
+
+static int TandemThread(void *unused)
+{
+    uint32_t nextTry = 0;
+
+    (void)unused;
+    if (sMode == MODE_HOST)
+    {
+        if (!OpenListen())
+        {
+            Log("can't host on port %u (is another program using it?)", sPort);
+            SetStatus("Tandem: can't host on port %u", sPort);
+            return 0;
+        }
+        memcpy(sPeerNames[0], sName, NAME_LEN);
+        sMySlot = 0;
+        Log("hosting on port %u as %s (build %s)", sPort, sName, TANDEM_BUILD);
+        StatusFromPlayers();
+    }
+    while (!SDL_AtomicGet(&sQuit))
+    {
+        fd_set rd, wr;
+        struct timeval tv = { 0, 100000 };
+        TSocket maxS = 0;
+        uint32_t now = SDL_GetTicks();
+        bool any = false;
+
+        if (sMode == MODE_OFF)
+            break;
+        if (sMode == MODE_JOIN && !sPeers[0].used && (int32_t)(now - nextTry) >= 0)
+        {
+            StartJoin();
+            nextTry = now + RETRY_MS;
+        }
+        FD_ZERO(&rd);
+        FD_ZERO(&wr);
+        if (sListen != TSOCK_BAD)
+        {
+            FD_SET(sListen, &rd);
+            maxS = sListen;
+            any = true;
+        }
+        for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
+            if (sPeers[i].used)
+            {
+                if (sPeers[i].connecting)
+                    FD_SET(sPeers[i].sock, &wr);
+                else
+                    FD_SET(sPeers[i].sock, &rd);
+                maxS = sPeers[i].sock > maxS ? sPeers[i].sock : maxS;
+                any = true;
+            }
+        if (!any)
+        {
+            SDL_Delay(100);
+            continue;
+        }
+        if (select((int)maxS + 1, &rd, &wr, NULL, &tv) < 0)
+        {
+            SDL_Delay(50);
+            continue;
+        }
+        if (sListen != TSOCK_BAD && FD_ISSET(sListen, &rd))
+            AcceptFriend();
+        now = SDL_GetTicks();
+        for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
+        {
+            Peer *p = &sPeers[i];
+
+            if (!p->used)
+                continue;
+            if (p->connecting)
+            {
+                if (FD_ISSET(p->sock, &wr))
+                    FinishJoin(p);
+                else if ((int32_t)(now - p->connectStart) > CONNECT_TIMEOUT_MS)
+                {
+                    TCloseSocket(p->sock);
+                    p->used = false;
+                    Log("no answer from %s", sJoinAddr);
+                    SetStatus("Tandem: no answer from %s - trying again", sJoinAddr);
+                }
+                continue;
+            }
+            if (FD_ISSET(p->sock, &rd))
+                ReadPeer(p);
+            if (!p->used)
+                continue;
+            /* (signed: what was just read set lastHeard after `now` was taken) */
+            if ((int32_t)(now - p->lastHeard) > TIMEOUT_MS)
+            {
+                ClosePeer(p, "no word for 15 seconds");
+                continue;
+            }
+            if (p->hello && (int32_t)(now - p->lastPing) >= PING_MS)
+            {
+                uint8_t ping[8];
+                p->lastPing = now;
+                PutU32(ping, ++p->pingNo);
+                PutU32(ping + 4, now);
+                Send(p, MSG_PING, ping, 8);
+            }
+        }
+    }
+    for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
+        if (sPeers[i].used)
+        {
+            Send(&sPeers[i], MSG_BYE, NULL, 0);
+            TCloseSocket(sPeers[i].sock);
+            sPeers[i].used = false;
+        }
+    if (sListen != TSOCK_BAD)
+    {
+        TCloseSocket(sListen);
+        sListen = TSOCK_BAD;
+    }
+    return 0;
+}
+
+void TandemNet_Start(const char *logPath)
+{
+    ReadEnv();
+    if (sMode == MODE_OFF || sThread != NULL)
+        return;
+    snprintf(sLogPath, sizeof(sLogPath), "%s", logPath != NULL ? logPath : "WallysJourney_tandem.log");
+#ifdef _WIN32
+    {
+        WSADATA wsa;
+        if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
+        {
+            Log("Windows networking didn't start");
+            return;
+        }
+    }
+#endif
+    sLock = SDL_CreateMutex();
+    SDL_AtomicSet(&sQuit, 0);
+    memset(sPeers, 0, sizeof(sPeers));
+    memset(sPeerNames, 0, sizeof(sPeerNames));
+    Log("---- Project Tandem (build %s) ----", TANDEM_BUILD);
+    SetStatus(sMode == MODE_HOST ? "Tandem: starting to host" : "Tandem: starting");
+    sThread = SDL_CreateThread(TandemThread, "Tandem", NULL);
+}
+
+void TandemNet_Stop(void)
+{
+    if (sThread == NULL)
+        return;
+    SDL_AtomicSet(&sQuit, 1);
+    SDL_WaitThread(sThread, NULL);
+    sThread = NULL;
+    Log("stopped");
+    if (sLog != NULL)
+    {
+        fclose(sLog);
+        sLog = NULL;
+    }
+#ifdef _WIN32
+    WSACleanup();
+#endif
+}

@@ -58,7 +58,7 @@ ifeq ($(LLVM_MINGW),1)
 # clang has no -mno-align-double; include/gba/types.h keeps u64/s64 4-byte aligned instead.
 SDL_CFLAGS := $(filter-out -mno-align-double,$(SDL_CFLAGS)) -Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types -Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=return-type
 endif
-SDL_LIBS   := -L$(SDL_DIR)/lib -lmingw32 -lSDL2main -lSDL2_image -lSDL2 -lwinmm -limm32 -lversion -lsetupapi -lole32 -loleaut32 -lcomdlg32 -lxinput9_1_0 -mwindows -static-libgcc
+SDL_LIBS   := -L$(SDL_DIR)/lib -lmingw32 -lSDL2main -lSDL2_image -lSDL2 -lwinmm -limm32 -lversion -lsetupapi -lole32 -loleaut32 -lcomdlg32 -lxinput9_1_0 -lws2_32 -mwindows -static-libgcc
 ifeq ($(LLVM_MINGW),1)
 SDL_LIBS   += -lgdi32 -luser32 -lshell32 -luuid -ladvapi32 -lcfgmgr32 -static -Wl,--allow-multiple-definition
 endif
@@ -117,6 +117,17 @@ $(OBJ_DIR)/src/platform/voxel3d/%.o: CPPFLAGS += -iquote src/platform/voxel3d -i
 # ENG-MP3: the MP3 decoder (dr_mp3, public domain/MIT-0) is plain C, so it skips the game's text preprocessor.
 $(OBJ_DIR)/src/platform/mp3_music.o: src/platform/mp3_music.c src/platform/mp3_music.h src/platform/dr_mp3.h
 	$(CC) $(CFLAGS) -c $< -o $@
+
+# Project Tandem (docs/TANDEM_TASKS.md): the network link is plain C too (Winsock's headers and the game's clash), and
+# carries the game's build - the git commit, "-dirty" with uncommitted changes - so friends on different builds are
+# refused. The header is rewritten only when the build changes.
+TANDEM_BUILD_H := $(OBJ_DIR)/gen/tandem_build.h
+$(TANDEM_BUILD_H): FORCE
+	@mkdir -p $(dir $@); b=$$(git rev-parse --short=12 HEAD 2>/dev/null || echo unknown)$$(git diff --quiet HEAD -- src include data 2>/dev/null || echo -dirty); \
+	 printf '#define TANDEM_BUILD "%s"\n' "$$b" > $@.tmp; cmp -s $@.tmp $@ && rm -f $@.tmp || mv $@.tmp $@
+FORCE:
+$(OBJ_DIR)/src/platform/tandem_net.o: src/platform/tandem_net.c src/platform/tandem_net.h $(TANDEM_BUILD_H)
+	$(CC) $(CFLAGS) -I$(OBJ_DIR)/gen -c $< -o $@
 
 # ENG-MP3: song number -> MUS_ name table, regenerated when the song list changes
 src/platform/mp3_song_names.h: include/constants/songs.h tools/pc/gen_mp3_song_names.py

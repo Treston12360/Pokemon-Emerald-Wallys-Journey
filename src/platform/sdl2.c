@@ -22,6 +22,7 @@
 #endif
 
 #include <string.h>
+#include "tandem_net.h"   /* Project Tandem T1 (docs/TANDEM_TASKS.md) */
 #include "global.h"
 #include "battle_setup.h"
 #include "battle_transition.h"
@@ -1816,6 +1817,15 @@ int main(int argc, char **argv)
      * the reading taken before this memset was kept, so the zeroed date stayed for up to 100 ms. Set up first now,
      * with a fresh reading. */
     ResetInternalClock();
+    /* Project Tandem T1 (Brennan's multiplayer, docs/TANDEM_TASKS.md): host or join if the settings ask - its own
+     * thread, never the game's; nothing starts otherwise. Its log beside the settings file. */
+    {
+        char tandemLog[1100];
+        const char *dot = strrchr(sConfigPath, '.');
+        int stem = dot != NULL ? (int)(dot - sConfigPath) : (int)strlen(sConfigPath);
+        SDL_snprintf(tandemLog, sizeof(tandemLog), "%.*s_tandem.log", stem, sConfigPath);
+        TandemNet_Start(tandemLog);
+    }
     mainLoopThread = SDL_CreateThread(DoMain, "AgbMain", NULL);
 
     double accumulator = 0.0;
@@ -1823,6 +1833,20 @@ int main(int argc, char **argv)
     while (isRunning)
     {
         ApplyChangedWindowSettings();
+        /* (Project Tandem: who is connected, in the window's title) */
+        if (TandemNet_Active())
+        {
+            static unsigned sTandemGen;
+            unsigned gen;
+            const char *status = TandemNet_StatusText(&gen);
+            if (gen != sTandemGen)
+            {
+                char title[200];
+                sTandemGen = gen;
+                SDL_snprintf(title, sizeof(title), "Pokemon Wally's Journey - %s", status);
+                SDL_SetWindowTitle(sdlWindow, title);
+            }
+        }
         if (sTestScript != NULL && !sScriptRealtime)
         {
             while (!SDL_AtomicGet(&isFrameAvailable))
@@ -2101,6 +2125,7 @@ int main(int argc, char **argv)
 
     //StoreSaveFile();
     CloseSaveFile();
+    TandemNet_Stop();   /* (Project Tandem: tells friends it is leaving) */
 
 #if defined(NATIVE_LINUX) || defined(_WIN32)
     for (int i = 0; i < sBorderBackgroundCount; i++)
@@ -2193,6 +2218,8 @@ static void ReadConfigFile(void)
             sGammaWanted = value != 0;
         else if (sscanf(line, "antialias=%u", &value) == 1)
             sAntiAlias = value > 8 ? 8 : value;
+        else if (TandemNet_ConfigLine(line))
+            ;   /* (Project Tandem: tandemHost / tandemJoin / tandemName) */
         else if (sscanf(line, "widescreen=%u", &value) == 1)
             WideView_SetEnabled(value != 0);
         else if (strncmp(line, "key", 3) == 0)
@@ -2277,6 +2304,7 @@ static void StoreConfigFile(void)
     fprintf(configFile, "battle3d=%u\n", s3DBattleWanted ? 1 : 0);
     fprintf(configFile, "gammaLight=%u\n", sGammaWanted ? 1 : 0);
     fprintf(configFile, "antialias=%u\n", sAntiAlias);
+    TandemNet_WriteConfig(configFile);
     fprintf(configFile, "fastForwardToggle=%u\n", sPlatformSettings[PLATFORM_SETTING_FF_TOGGLE]);
     fprintf(configFile, "frameRate=%u\n", gPlatformFrameRates[sPlatformSettings[PLATFORM_SETTING_SMOOTH] % FRAME_RATE_COUNT]);
     fprintf(configFile, "filter=%u\n", sPlatformSettings[PLATFORM_SETTING_FILTER]);
