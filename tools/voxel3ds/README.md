@@ -117,6 +117,9 @@ Brennan 2026-11-26 22:09 (Route 118's red boxes 2 and 3, the grass edges by the 
   `set_relief_cell.py relief.bin 34 29,1 0,4,6,6,6,0,4,6,6,6,0,4,6,6,6,0,2,4,4,4,0,0,0,0,0`.
 (Heights in px from each cell's north-west corner, row by row; profile across a lip 6 / 4 / 0 px at a quarter cell
 apart, a corner point by its distance to the grass's corner.)
+The lake, river and mountain north of Route 118 are code, not relief (voxel_world.c VoxelWorld_R118North,
+voxel_mesh_builder.c R118FieldJitter/R118FieldRate); `r118_north_proto.py [OUT.png]` draws their parts as a cell map
+with the same maths, to try a new shape before changing the C (keep its KEYS in step).
 
 ## Jagged Pass relief hand edits (N79, 2026-11-27, session 014PwRDj)
 Brennan 2026-11-26 22:59 (Jagged Pass holes and seams). Layout 292 in `pc_data/voxel/relief.bin`, all made with the

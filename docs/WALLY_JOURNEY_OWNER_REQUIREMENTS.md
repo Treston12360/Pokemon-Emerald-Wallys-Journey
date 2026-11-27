@@ -1786,7 +1786,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     the rock. (6) Route 118's own grass edges (boxes 2/3): relief.bin hand edits, tools/voxel3ds/README.md.
   - **Steps to do it somewhere else:** dump the area (WJPC_DUMP_TERRAIN_ALL / _MVP / _BELT; mvp.bin.origins gives each
     map's origin) and find which map's border draws what there and each map's base; draw the new shape first as a cell
-    map in Python (session tool /tmp/pk/r118n/proto.py - same maths) until it reads right; write a part function like
+    map in Python (tools/voxel3ds/r118_north_proto.py - the same maths, keep in step) until it reads right; write a part function like
     VoxelWorld_R118North for that area with its own keys and hook it into NearestBeltMapUncached; gate the ledge
     jitter/rate and the trees to that area's rock; check the gap test (1920x1080 and 2560x1440, from every map round
     it) and the 52-view region set pixel for pixel; send before/after pictures.
