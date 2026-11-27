@@ -1824,4 +1824,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Round 2 sent ~05:20 (N13b_1..9): Lavaridge's north mountain climbs into Route 112's peak (one mountain; the join's
   rock face lit as the ground), the west pond with trees, Route 116's wall stepping down with trees, rolling hills
   south of Mt. Chimney and Jagged Pass. Still behind WJPC_N13_IDEA=4 (off) until he says yes.
+- 2026-11-27 13:32 Brennan on #13 round 2 (marked picture docs/polish_reports/brennan_2026-11-27_1332_lavaridge_wall_pond.png):
+  1. Lavaridge north: "it doesnt fully make a mountain there is still a long flat upright wall" (red box: the join
+     with Route 112's peak - a tall straight wall still stands along it). To redo.
+  2. "the pond needs to be bigger, see the picture for reference. trees look good" (blue outline: a long pond running
+     down the west slope, roughly 4 cells wide and ~12 rows long, from about the pond's row to the bottom terraces).
+  3. Route 116 option B: "option B is good". 4. Rolling hills: "this is fine".
+  Order: "lets work on lavaridge and the rest of these fixes after we start on the Project Tandem audit/beginning."
+  So: start Project Tandem (T1) now; Lavaridge wall + bigger pond, then switching the #13 ideas on (cleanup, gap
+  tests 1920/2560) come after.
 
