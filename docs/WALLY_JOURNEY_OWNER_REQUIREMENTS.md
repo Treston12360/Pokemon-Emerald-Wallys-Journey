@@ -1732,4 +1732,5 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   trade, player card, battle, team up; a free tool to connect; cloud saves in a synced folder, Google Drive likely;
   the host's clock for everyone. New ask: team up for double battles except story and Gym battles (answered yes in
   the doc, two questions back to him).
-
+- 2026-11-27 03:05 Brennan (Tandem, team-up battles): "only trainers for now"; story battles that stay one-player:
+  Gyms, the rival/neighbor, Team Aqua/Magma, Elite Four, Champion, "any turning point battles or major ones".

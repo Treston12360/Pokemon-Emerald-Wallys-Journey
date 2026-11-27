@@ -101,10 +101,13 @@ Owner decisions also go to `docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md`. No Kanto 
    one-player. A step of its own, after battles between players. Asked him: wild Pokemon too, or trainers only?
    Story battles = rival, Team Aqua/Magma, Elite Four, Champion - any others?
 
+   Brennan 2026-11-27 03:05 (in the doc's thread): "1. only trainers for now 2. those are correct, any turning point
+   battles or major ones. battle against your neighbor may as well." So: team-up double battles against regular
+   trainers only (no wild ones for now); one-player battles: Gyms, the neighbor (the rival), Team Aqua/Magma, the
+   Elite Four, the Champion and any other turning-point or major battle.
+
 ## Open questions for Brennan
 
-- Team-up battles: wild Pokemon too, or trainers only? Which battles count as story battles besides the rival, Team
-  Aqua/Magma, the Elite Four and the Champion?
 - Different story progress: each player sees their own world (proposal 1)?
 - Trades: any check on edited Pokémon coming in?
 
