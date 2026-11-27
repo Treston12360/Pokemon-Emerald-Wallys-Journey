@@ -624,6 +624,7 @@ typedef struct
     unsigned pages;
     uint32_t lastUse;
     uint32_t season; // VoxelWorld_SeasonKey() it was baked for (DLX-17)
+    bool caveSand;   // its pale sand toned for a cave (CaveSandToneFor): a pair drawn above ground too is kept apart
     uint32_t gen;    // bumped at every (re)build: meshes laid on an older one are laid again
     uint32_t layoutGen; // POL-15: the build its slots were last placed anew; growing keeps them (MeshAtlasOk)
     bool grow;          // POL-15: a loaded map uses metatiles it has no slot for: grown (PrepareAtlas)
@@ -713,11 +714,12 @@ static uint32_t SeasonNow(void)
 static VoxelAtlasJob sAtlasJob;
 static uint16_t *sAtlasStaging;
 
+static bool CaveSandToneFor(const VoxelMapInstance *inst);
 static bool AtlasReady(const VoxelMapInstance *inst)
 {
     for (int i = 0; i < MAX_ATLASES; i++)
         if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset
-            && sAtlases[i].season == SeasonNow())
+            && sAtlases[i].season == SeasonNow() && sAtlases[i].caveSand == CaveSandToneFor(inst))
             return true;
     return false;
 }
@@ -730,6 +732,7 @@ static Atlas *sJobSlot;
  * palettes byte for byte pret's pokeemerald), but in 3D it read neon. Its atlas is drawn less saturated and a little
  * darker: each texel 45% of the way to its grey, then 88% bright. WJPC_RUSTURF_NEON=1: as before. */
 extern const struct Tileset gTileset_RusturfTunnel;
+extern const struct Tileset gTileset_General, gTileset_Cave;
 static void CaveToneDown(uint16_t *texels, unsigned count)
 {
     static int sOff = -1;
@@ -750,12 +753,72 @@ static void CaveToneDown(uint16_t *texels, unsigned count)
     }
 }
 static const void *sJobPrimary, *sJobSecondary; // the job's own copies are cleared when it ends
+/*
+ * Brennan 2026-11-26 18:48 ("they all look good continue on the rest" - the caves' stairs; the rest: Shoal Cave's
+ * yellow pools and the bent ladders I had shown him): the pale sand of the caves (the General tile set's palette 5,
+ * colours 11-14: Shoal Cave's low-tide sand, Altering Cave's, the beaches of the Seafloor Cavern and Marine Cave
+ * entrances, a little in Desert Underpass) is drawn pale yellow in 2D, (236, 222, 131); in 3D it came out solid
+ * lemon yellow, (249, 223, 45), and glowing - a pale colour lit as a cave's floor (all in the light), graded twice
+ * and saturated again on screen, its blue all but gone. The cave's brown floor beside it keeps its look ((156, 124,
+ * 80) in 2D, (185, 137, 70) in 3D). In an underground map on the General and Cave tile sets those four colours are
+ * drawn graded once, then CAVE_SAND_GREY of the way to their grey and CAVE_SAND_BRIGHT as bright (WJPC_CAVE_SAND=
+ * "grey,bright": others; WJPC_CAVE_SAND_NEON=1: as before). Tried 0.45/0.88 (Rusturf's), 0.3/0.92, 0.6/0.84,
+ * 0.25/1, 0.35/0.98, 0.2/0.95, 0.2/1, 0.15/1: 0.2/1 gives (233, 221, 132) in the Seafloor Cavern entrance, its 2D
+ * (236, 222, 131). The atlas made so is not used above ground (Mirage Island on Route 130 draws with the same tile
+ * sets, in the sun): its key carries it (Atlas caveSand).
+ */
+#define CAVE_SAND_GREY 0.2f
+#define CAVE_SAND_BRIGHT 1.0f
+static bool CaveSandToneFor(const VoxelMapInstance *inst)
+{
+    static int sOff = -1;
+    if (sOff < 0)
+        sOff = getenv("WJPC_CAVE_SAND_NEON") != NULL;
+    return !sOff && inst != NULL && inst->underground && inst->primaryTileset == (const void *)&gTileset_General
+        && inst->secondaryTileset == (const void *)&gTileset_Cave;
+}
+static void CaveSandTone(uint16_t *texels, unsigned count)
+{
+    const uint16_t *pal = Voxel_ResolvePalettes(&gTileset_General);
+    uint16_t key[4], to[4];
+    float grey = CAVE_SAND_GREY, bright = CAVE_SAND_BRIGHT;
+    const char *e = getenv("WJPC_CAVE_SAND");
+
+    if (pal == NULL)
+        return;
+    if (e != NULL)
+        sscanf(e, "%f,%f", &grey, &bright);
+    for (unsigned i = 0; i < 4; ++i)
+    {
+        uint16_t once = VoxelGrade_RGBA5551((uint16_t)(pal[5 * 16 + 11 + i] & 0x7FFF)), twice = once;
+        float r = (float)((once >> 11) & 31), g = (float)((once >> 6) & 31), b = (float)((once >> 1) & 31);
+        float y = 0.299f * r + 0.587f * g + 0.114f * b;
+        long R = lroundf((r + (y - r) * grey) * bright), G = lroundf((g + (y - g) * grey) * bright);
+        long B = lroundf((b + (y - b) * grey) * bright);
+
+        VoxelGrade_Texels(&twice, 1);   /* (the page's own grade: what the sand is in it) */
+        key[i] = (uint16_t)(twice & ~1u);
+        to[i] = (uint16_t)((R < 0 ? 0 : R > 31 ? 31 : R) << 11 | (G < 0 ? 0 : G > 31 ? 31 : G) << 6
+                           | (B < 0 ? 0 : B > 31 ? 31 : B) << 1);
+    }
+    for (unsigned n = 0; n < count; ++n)
+    {
+        uint16_t t = (uint16_t)(texels[n] & ~1u);
+        for (unsigned i = 0; i < 4; ++i)
+            if (t == key[i])
+            {
+                texels[n] = (uint16_t)(to[i] | (texels[n] & 1u));
+                break;
+            }
+    }
+}
+static bool sJobCaveSand; // the job's atlas: CaveSandToneFor its map
 
 static Atlas *FindAtlas(const VoxelMapInstance *inst)
 {
     for (int i = 0; i < MAX_ATLASES; i++)
         if (sAtlases[i].valid && sAtlases[i].primary == inst->primaryTileset && sAtlases[i].secondary == inst->secondaryTileset
-            && sAtlases[i].season == SeasonNow())
+            && sAtlases[i].season == SeasonNow() && sAtlases[i].caveSand == CaveSandToneFor(inst))
         {
             /*
              * POL-15 (Brennan 2026-11-15, video: from Route 110 into Mauville the whole of Route 110 went blue for
@@ -796,10 +859,11 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
         sJobGrow = true;
         sJobPrimary = inst->primaryTileset;
         sJobSecondary = inst->secondaryTileset;
+        sJobCaveSand = slot->caveSand;
         Voxel3D_Log("[3D] atlas grown for %d:%d (slot %d)", inst->mapGroup, inst->mapNum, (int)(slot - sAtlases));
     }
     if (sJobSlot != NULL && (sJobPrimary != inst->primaryTileset || sJobSecondary != inst->secondaryTileset
-                             || sJobSlot->season != SeasonNow()))
+                             || sJobSlot->season != SeasonNow() || sJobCaveSand != CaveSandToneFor(inst)))
     {
         if (deadline == 0)
         {
@@ -828,6 +892,7 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
             return NULL;
         slot->pages = 0;
         slot->season = SeasonNow();
+        slot->caveSand = sJobCaveSand = CaveSandToneFor(inst);
         slot->grow = false;
         sJobSlot = slot;
         sJobGrow = false;
@@ -856,6 +921,8 @@ static Atlas *PrepareAtlas(const VoxelMapInstance *inst, Uint64 deadline)
         VoxelGrade_Texels(sAtlasStaging, VOXEL_ATLAS_PIXELS);
         if (sJobSecondary == (const void *)&gTileset_RusturfTunnel)
             CaveToneDown(sAtlasStaging, VOXEL_ATLAS_PIXELS);
+        if (slot->caveSand)
+            CaveSandTone(sAtlasStaging, VOXEL_ATLAS_PIXELS);
         // (grown: into the page's own texture, the meshes drawn from it see the same slots)
         slot->tex[sAtlasJob.page] = UploadTiled(sJobGrow ? slot->tex[sAtlasJob.page] : 0, sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
         slot->spareStale[sAtlasJob.page][0] = slot->spareStale[sAtlasJob.page][1] = ~0u; // (its other textures: out of date)
@@ -1000,6 +1067,8 @@ static void AnimateAtlasTiles(const VoxelMapInstance *inst)
                     {
                         memcpy(sAtlasStaging, a->raw[p], VOXEL_ATLAS_PIXELS * sizeof(uint16_t));
                         VoxelGrade_Texels(sAtlasStaging, VOXEL_ATLAS_PIXELS);
+                        if (a->caveSand)
+                            CaveSandTone(sAtlasStaging, VOXEL_ATLAS_PIXELS);
                         UploadTiled(a->tex[p], sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H);
                     }
                     else
@@ -1015,6 +1084,8 @@ static void AnimateAtlasTiles(const VoxelMapInstance *inst)
                             {
                                 memcpy(sAtlasStaging + r * chunk, a->raw[p] + r * chunk, chunk * sizeof(uint16_t));
                                 VoxelGrade_Texels(sAtlasStaging + r * chunk, chunk);
+                                if (a->caveSand)
+                                    CaveSandTone(sAtlasStaging + r * chunk, chunk);
                             }
                         if (sOneTexture)
                             UploadTiledRows(a->tex[p], sAtlasStaging, VOXEL_ATLAS_W, VOXEL_ATLAS_H, rows);

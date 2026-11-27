@@ -1460,3 +1460,14 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   shades, no cast shadow) and lit as the ground (shade + 4, the shader's vFlat - as a cave's faces): the same brown
   rock as round them (EverGrandeNook; WJPC_EVER_GRANDE_NOOK_LIT=1: as before). Checked first: not the people's cast
   shadows (WJPC_3D_NOSHADOW A/B: the same).
+- 2026-11-25 07:40 (pictures sent of every other cave's stairs, unchanged) and 2026-11-26 18:48 Brennan: "they all
+  look good continue on the rest" (the rest: two things I had pointed out in those pictures - Shoal Cave's bright
+  yellow pools, and the caves' ladders still the old bent ones).
+  - N70: the caves' pale sand. In 2D it is pale yellow ((236, 222, 131), the General tile set's palette 5 colours
+    11-14); in 3D it was solid lemon yellow (249, 223, 45) and glowing - Shoal Cave's low-tide sand, Altering Cave,
+    the beaches of the Seafloor Cavern and Marine Cave entrances (Desert Underpass has a little). A pale colour lit as
+    a cave's floor, graded twice and saturated again on screen. In an underground map on the General + Cave tile
+    sets those four colours are drawn graded once, 20% toward their grey (voxel_gl.c CaveSandTone: (233, 221, 132)
+    now). Kept apart from Mirage Island (the same tile sets above ground, in the sun): the atlas's key.
+    WJPC_CAVE_SAND_NEON=1: as before. Checked: Victory Road and Route 109 pixel for pixel the same as before; the sand
+    stays toned while the water beside it animates.
