@@ -1608,3 +1608,8 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   at 1920x1080 and 2560x1440 - one 3-6 pixel crack far up the top of Jagged Pass's entrance view (the peak of a stair's
   side wall, cells 7,24-25, a crack the flat tree behind it used to hide; its twin on the stair to the right was there
   before too).
+- 2026-11-26 22:54 Brennan: "provide me a zip file after the next fix." Sent at 23:00: zip
+  `WallysJourney-Polish-2026-11-26.zip` (whole folder; exe and pc_data/voxel at 9efd72bb, N77). Its exe checked
+  unzipped: starts, Mt Chimney and Jagged Pass drawn with the new trees. Last zip before it: 2026-11-23 audit.
+  Next: Route 118 (22:09 red boxes), then #13 natural mountains (told him the plan: every spot, the low ground in front
+  of each map kept).
