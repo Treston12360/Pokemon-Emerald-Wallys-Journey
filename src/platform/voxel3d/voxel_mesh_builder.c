@@ -7602,6 +7602,55 @@ static int WoodFloorTile(int x, int y)
     return sGrass ? BeltTreeGround(x, y) : VoxelWorld_BorderMetatile(x, y);
 }
 
+/* Brennan 2026-11-26 19:29 (#26 of the 11-23 audit, "work on this": thin lanes of snow between the tree rows of the
+ * woods in winter - north-east of Verdanturf, north of Route 103): the floor under a wood is the wood's own drawing
+ * (above), and that drawing is the 2D tree - a round crown with the ground between the trees round it (the General's
+ * palette 2, colours 12-15: teal in the drawing, snow in the winter palette, pale yellow in autumn). Between the 3D
+ * trees that ground showed: in winter a white lane along every row of trees. The floor shows only the crown now: a
+ * large tree's quarter (1D4/1D5/1DC/1DD) its eighth of the crown's middle (its 8x8 toward the tree's centre, all
+ * leaves) laid over the cell - the four quarters of a tree together the crown's middle - and the small trees' canopy
+ * (0C6/0C7) without its outer column each side (the only ground in it: single dots). Other drawings as they are.
+ * WJPC_WOOD_FLOOR_WHOLE=1: the whole drawing, as before. */
+static void WoodFloorCrownUV(int mt, float *u0, float *v0, float *u1, float *v1)
+{
+    static int sWhole = -1;
+    float iu, iv, um, vm;
+    int part;
+
+    if (sWhole < 0)
+        sWhole = getenv("WJPC_WOOD_FLOOR_WHOLE") != NULL;
+    if (sWhole)
+        return;
+    switch (mt)
+    {
+    case 0x1D4: part = 0; break;
+    case 0x1D5: part = 1; break;
+    case 0x1DC: part = 2; break;
+    case 0x1DD: part = 3; break;
+    case 0x0C6: case 0x0C7:
+        *u0 += 1.0f / (float)VOXEL_ATLAS_W;
+        *u1 -= 1.0f / (float)VOXEL_ATLAS_W;
+        return;
+    default:
+        return;
+    }
+    /* (the slot's own margin at its edges, VoxelAtlas_SlotUV, kept at the middle line too: its 16 texels less the
+     * rect's size, halved) */
+    iu = (16.0f / (float)VOXEL_ATLAS_W - (*u1 - *u0)) * 0.5f;
+    iv = (16.0f / (float)VOXEL_ATLAS_H - (*v0 - *v1)) * 0.5f;
+    um = (*u0 + *u1) * 0.5f;
+    vm = (*v0 + *v1) * 0.5f;
+    /* (the tree's north-west quarter, part 0: its south-east 8x8. u grows east; v falls going south) */
+    if ((part & 1) == 0)
+        *u0 = um + iu;
+    else
+        *u1 = um - iu;
+    if ((part >> 1) == 0)
+        *v0 = vm - iv;
+    else
+        *v1 = vm + iv;
+}
+
 static void EmitFieldCell(VoxelBuilder *b, int x, int y)
 {
     FieldPt c[4];
@@ -7657,6 +7706,8 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     if (!MetatileUV(b, top, &tu0, &tv0, &tu1, &tv1)
      && !(BeltIsTree(x, y) && MetatileUV(b, top = BeltTreeGround(x, y), &tu0, &tv0, &tu1, &tv1)))
         return; /* (a wood's drawing not in this atlas: its grass, which is) */
+    if (BeltIsTree(x, y))
+        WoodFloorCrownUV(top, &tu0, &tv0, &tu1, &tv1); /* (#26: only the crowns, no ground between them) */
     /* Brennan 2026-11-21 23:06 (21q, Route 117's north-east corner: the small flat patch of rock at the foot of the
      * terraces, "Make it grass"): a ledge of the field lying flat and flush with the ground of a map beside it (the
      * field there at the map's edge height, no step) is that ground going on - it takes the map edge cell's drawing
@@ -8346,7 +8397,10 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                  && x - ring->originX >= 37 && x - ring->originX <= 40
                  && ring->originY - y >= 15 && ring->originY - y <= 23
                  && MetatileUV(builder, canopy, &u0, &v0, &u1, &v1))
+                {
+                    WoodFloorCrownUV(canopy, &u0, &v0, &u1, &v1); /* (#26: only the crowns) */
                     VoxelMesh_Top(builder, (float)x, (float)y, -0.25f, 0.0f, u0, v0, u1, v1, VOXEL_FACE_SHADE(0.55f));
+                }
             }
             if (FieldOn() && !BeltIsTree(x, y))
             {
@@ -8417,9 +8471,21 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                         gapGround = ga != NULL ? VoxelTree_OwnWoodGround(ga->secondaryTileset, VoxelWorld_BorderMetatile(x, y),
                                                                          VoxelMesh_WoodScatter(x, y)) : -1;
                     }
-                    if (ok && ((gapGround >= 0 && MetatileUV(builder, gapGround, &u0f, &v0f, &u1f, &v1f))
-                            || MetatileUV(builder, WoodFloorTile(x, y), &u0f, &v0f, &u1f, &v1f)
-                            || MetatileUV(builder, BeltTreeGround(x, y), &u0f, &v0f, &u1f, &v1f)))
+                    bool haveFloor = false;
+                    if (ok)
+                    {
+                        if (gapGround >= 0 && MetatileUV(builder, gapGround, &u0f, &v0f, &u1f, &v1f))
+                            haveFloor = true;
+                        else if (MetatileUV(builder, WoodFloorTile(x, y), &u0f, &v0f, &u1f, &v1f))
+                        {
+                            haveFloor = true;
+                            /* (#26: only the crowns, no ground between them) */
+                            WoodFloorCrownUV(WoodFloorTile(x, y), &u0f, &v0f, &u1f, &v1f);
+                        }
+                        else if (MetatileUV(builder, BeltTreeGround(x, y), &u0f, &v0f, &u1f, &v1f))
+                            haveFloor = true;
+                    }
+                    if (haveFloor)
                     {
                         VoxelVertex v[4];
                         for (int k = 0; k < 4; ++k)
@@ -8497,7 +8563,26 @@ void VoxelMesh_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                           && BeltIsTree(x, y + 1);
                 if (sNoFloor < 0)
                     sNoFloor = getenv("WJPC_BELT_WOOD_NO_FLOOR") != NULL;
-                if (!drawn && inner && !sNoFloor && MetatileUV(builder, BeltTreeGround(x, y), &u0, &v0, &u1, &v1))
+                /* Brennan 2026-11-26 19:29 (#26: "thin lanes of snow between the tree rows" - north of Route 103 this
+                 * floor, laid in the grass: snow in winter): laid in the wood's crowns as the floor under the other
+                 * woods (WoodFloorTile, WoodFloorCrownUV), its grass only where that drawing is not in the atlas.
+                 * WJPC_WOOD_INNER_GRASS=1: the grass, as before. */
+                static int sInnerGrass = -1;
+                bool innerFloor = false;
+                if (sInnerGrass < 0)
+                    sInnerGrass = getenv("WJPC_WOOD_INNER_GRASS") != NULL;
+                if (!drawn && inner && !sNoFloor)
+                {
+                    const int fm = WoodFloorTile(x, y);
+                    if (!sInnerGrass && MetatileUV(builder, fm, &u0, &v0, &u1, &v1))
+                    {
+                        WoodFloorCrownUV(fm, &u0, &v0, &u1, &v1);
+                        innerFloor = true;
+                    }
+                    else
+                        innerFloor = MetatileUV(builder, BeltTreeGround(x, y), &u0, &v0, &u1, &v1);
+                }
+                if (innerFloor)
                     VoxelMesh_Top(builder, wx, wz, lift, 0.0f, u0, v0, u1, v1, VOXEL_FACE_SHADE(0.55f));
                 else if (!drawn && (besideMap
                                || !BeltIsTree(x - 1, y) || !BeltIsTree(x + 1, y) || !BeltIsTree(x, y - 1)

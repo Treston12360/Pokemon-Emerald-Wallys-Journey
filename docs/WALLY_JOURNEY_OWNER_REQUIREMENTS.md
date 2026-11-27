@@ -1491,4 +1491,17 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   notches Routes 106/127/133: "if they are a big problem fix them if they are barely noticeable close it and move on".
   (7) #27 flicker: "close this out". (8) Fortree ninja boys' reveal: "check this one out to be sure". "continue on
   these things i will ask for a zip file in a bit".
+- N72 (#26, Brennan 19:29 "work on this"): the lanes of snow between the rows of trees in winter. Found in every
+  wood of the large round trees (Routes 101-104, 116, 121, Littleroot, Oldale, Petalburg, Rustboro; north-east of
+  Verdanturf is Route 116's wood): the floor under the 3D trees was the 2D tree's drawing - a crown with the ground
+  between the trees round it (General palette 2, colours 12-15: snow in the winter palette, pale yellow in autumn,
+  light green in summer) - or, where that floor was not laid (north of Route 103), the grass (snow in winter). Between
+  the 3D trees that ground showed: a white lane along every row in winter, yellow in autumn. The floor under a wood
+  is only the crown now (voxel_mesh_builder.c WoodFloorCrownUV): a large tree's quarter 1D4/1D5/1DC/1DD shows its 8x8
+  toward the tree's centre (all leaves), the small trees' canopy 0C6/0C7 without its outer column each side (its only
+  ground: single snow dots); the inner wood floor that was grass is the wood's drawing too. Every season. Switches:
+  WJPC_WOOD_FLOOR_WHOLE=1 (the whole drawing), WJPC_WOOD_INNER_GRASS=1 (that floor in the grass). Checked: 12 winter
+  views, every changed pixel in a wood (the woods' edge by Route 103's lake: the snow strip under the first crowns is
+  leaves now); spring, summer and autumn the same way; gap test 1920x1080 and 2560x1440 the same as before.
+  Pictures: snow_lanes_route103_full.png, snow_lanes_verdanturf_full.png, snow_lanes_closeups_3x.png.
 
