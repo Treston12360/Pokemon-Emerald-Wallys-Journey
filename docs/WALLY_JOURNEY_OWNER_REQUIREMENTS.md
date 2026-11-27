@@ -1635,3 +1635,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   grass and cave entrances "cleanly on the terrain with consistent lighting". Order told to him: trees (3, 4's trunk)
   first, then seams, then the plant and the stairs' ends, then stairs as 3D steps (first ones shown for his OK); then
   Route 118, #13 last.
+- 2026-11-26 23:15 Brennan: multiplayer and cloud saves, an idea (ChatGPT's audit prompt he pasted: one player hosts
+  from their PC, friends join by private invitation, players see each other walking the Hoenn overworld in real time,
+  player cards, battles and trades between players, progress in a central cloud save, later a launcher that updates
+  the game; ChatGPT's rules: audit first, no engine rewrite, no 3D/renderer regressions, single-player kept; first
+  milestone two players walking the same map). "please give me your opinion before making any changes" - given
+  (reuse the game's own link code, switched off on PC; walking together first; cloud saves and accounts last;
+  shared-engine change needs Treston's OK). 23:25: "i received an email from PokeMMO and Pokemon Nexus and Treston
+  saying it is okay, i have their full blessing" (Treston's OK as Brennan reports it) - asked to research how PokeMMO
+  and Pokemon Nexus did it, "to see if there is anything to learn". Nothing implemented; the Jagged Pass list
+  (22:59) is paused mid-way, uncommitted.
