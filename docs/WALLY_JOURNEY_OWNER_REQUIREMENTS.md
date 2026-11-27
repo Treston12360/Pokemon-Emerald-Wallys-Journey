@@ -1613,3 +1613,25 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   unzipped: starts, Mt Chimney and Jagged Pass drawn with the new trees. Last zip before it: 2026-11-23 audit.
   Next: Route 118 (22:09 red boxes), then #13 natural mountains (told him the plan: every spot, the low ground in front
   of each map kept).
+- 2026-11-26 22:59 Brennan (picture docs/polish_reports/brennan_2026-11-26_2259_jagged_pass.png - he wrote "Route
+  113", the picture is the after half of picture 5 sent with N77, Jagged Pass north, warp 24 13 12 19; told him so,
+  doing it as Jagged Pass; asked him to say if Route 113 itself has them too). His list:
+  1. "Make All Stairs True 3D Angled Meshes (Not Flat Upright Strips)": the yellow-striped stairs "look like flat,
+     straight upright vertical walls/billboards pasted onto the cliff face" - "a true 3D sloped mesh with distinct
+     horizontal treads and vertical risers angled naturally between the lower and upper ground tiers".
+  2. Cliff holes/seams: upper-left pocket ("dark, untextured hole/void where the cliff corner and ground meet behind
+     the ash-covered tree"); upper-middle ledge ("dark, thin horizontal gap/tear ... along the top seam of the cliff
+     ridge"); middle-right mound and cobblestones ("dark gap/tear along the upper-right edge"); far-right cliff edge
+     ("triangular hole/missing face"); the tall grass's top-left corner and the top of the narrow dirt ridge between
+     the two grass patches ("dark gaps/missing faces at the top of the ridge"); bottom-right slope corner ("jagged
+     diagonal tear/misaligned cliff slope").
+  3. "Over-Bright / Glowing Ash Trees & Cave Entrances (Upper Row)": the upper ash trees have "an overexposed, glowing
+     white halo/bloom"; "the upper-right cave entrance has a jagged white/red texture seam above the arch" - match
+     "the natural lighting of the trees further down".
+  4. Bottom-left: "a green grass/plant sprite is clipped halfway into the cliff wall"; bottom-center green tree: "the
+     bottom of the green tree trunk is partially buried/clipped inside a raised circular rock/dirt mound"; the
+     middle-right staircase "transitions cleanly into the dirt path without floating or clipping".
+  Expected: "angled 3D stepped meshes", cliff corners and seams "completely sealed with zero black void gaps", trees,
+  grass and cave entrances "cleanly on the terrain with consistent lighting". Order told to him: trees (3, 4's trunk)
+  first, then seams, then the plant and the stairs' ends, then stairs as 3D steps (first ones shown for his OK); then
+  Route 118, #13 last.
