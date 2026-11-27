@@ -8,12 +8,15 @@ since 2026-11-26; these in its new right half):
                     tiles in Lavaridge's palette 11 - recoloured by palette index, General 2 -> Lavaridge 11
   (160, 0)   32x32  a large tree's ground on the pink volcanic rock (Lavaridge's green 2D6-2E5 and ash trees): the
                     General large tree's ground (32, 0) with its grass as the rock (Lavaridge 0x271's drawing) and its
-                    shadow in the shadow colours the 2D art draws under these trees (palette 11 colours 3 and 4)
+                    shadow in the rock's own shades (palette 10 colours 11, 12, and a darker 125,80,68), graded as the
+                    General card's over its grass - Brennan 2026-11-26 22:59: the 2D art's purple shadow (palette 11
+                    colours 3, 4) read as a pit round the trunk and as cave mouths under the upper trees
   (192, 0)   32x32  the same for the ash-covered tree, its roots and trunk in the ash trunk's dark red-browns
   (128, 48)  16x32  the ash-covered small tree's crown (Mt. Chimney's 2CC/2CD, the General small tree's tiles in palette
                     11): the General small crown card (32, 32) recoloured, 2 -> 11
   (144, 48)  16x16  its trunk's ground: the General small trunk (48, 32), grass -> the rock (Lavaridge 2CC's lower layer),
-                    its shadow's dark middle -> palette 11 colour 4, its outer ring -> colour 3 (as the 2D shadow)
+                    its shadow in the rock's shades (outer ring palette 10 colour 11, middle colour 12)
+The ash crowns' two lightest colours are 0.84 / 0.88 as bright as the 2D tiles' (22:59: "glowing white halo/bloom").
 
 The green Lavaridge trees' crown is the General large tree's own card (the same tiles and palette 2, but for their
 outermost columns). Renderer: voxel_tree.c (VoxelTree_Part, LargeArtOf, EmitSmallCell; LAV_* / TRUNK_ASH).
@@ -86,9 +89,16 @@ def main():
         for (x0, y0, w, h) in ((128, 0, 96, 36), (128, 48, 32, 32)):
             assert all(get(x, y) is None for y in range(y0, y0 + h) for x in range(x0, x0 + w)), 'slots not free'
 
+    # Brennan 2026-11-26 22:59 ("overexposed, glowing white halo/bloom" on the upper ash trees): the two lightest ash
+    # colours a little darker, under the bloom's glare in the sun (the 2D tiles keep theirs)
+    dim = {1: 0.84, 2: 0.88}
+
     def recolour(c):
         i = by_g2.get(c)
-        return lav11[i] if i is not None and i in (1, 2, 3, 4, 6, 8) else c
+        if i is None or i not in (1, 2, 3, 4, 6, 8):
+            return c
+        k = dim.get(i, 1.0)
+        return tuple(int(v * k) for v in lav11[i])
 
     # ash crowns: the General cards recoloured by palette index
     for (sx, sy, dx, dy, w, h) in ((0, 0, 128, 0, 32, 36), (32, 32, 128, 48, 16, 32)):
@@ -99,7 +109,11 @@ def main():
 
     rock = metatile_pixels(0x271, (0, 1))           # the plain pink rock
     under = metatile_pixels(0x2CC, (0,))             # the small ash tree's rock, its lower layer
-    shadow_mid, shadow_edge = lav11[4], lav11[3]
+    # The shadow in the rock's own shades, graded as the General card's is over its grass (ring 83%, shadow 62% and
+    # 38% of the grass): Brennan 22:59 - the 2D art's purple shadow (palette 11 colours 3, 4), all of it seen under a
+    # standing crown, read as a pit round the trunk ("partially buried/clipped inside a raised circular rock/dirt
+    # mound") and as cave mouths under the upper trees ("rock tunnel/cave arches")
+    shadow_edge, shadow_mid, shadow_dark = lav10[11], lav10[12], (125, 80, 68)
     grass = {q5(g2[i]) for i in (12, 13, 15)} | {(64, 184, 136)}
     ring = {q5(g2[14]), (48, 144, 104)}
 
@@ -114,8 +128,10 @@ def main():
         i = by_g2.get(c)
         if i == 3 and small:
             return shadow_edge   # (the small trunk's square is all shadow: its outer ring the lighter shadow, as 2D)
-        if i in (3, 4):
+        if i == 3:
             return shadow_mid
+        if i == 4:
+            return shadow_mid if small else shadow_dark
         return c  # the roots and trunk, as drawn
 
     for y in range(32):

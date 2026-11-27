@@ -94,10 +94,28 @@ static int LavaridgeLargePart(const void *secondaryTileset, int metatileId, bool
     case 0x2C1: case 0x2C3: case 0x2CF: part = 1; a = true; break;
     case 0x2C8: case 0x2CA: part = 2; a = true; break;
     case 0x2C9: case 0x2CB: part = 3; a = true; break;
+    /* (Brennan 22:59, Jagged Pass: the lower row of an ash tree with the next tree's crown right under it - 2B6/2B7 -
+     * and with a neighbour's fringe beside it - 2BE - were laid flat, half trees in the wood) */
+    case 0x2B6: part = 2; a = true; break;
+    case 0x2B7: case 0x2BE: part = 3; a = true; break;
     }
     if (ash != NULL)
         *ash = a;
     return part;
+}
+
+/* Brennan 2026-11-26 22:59 (Jagged Pass): a Lavaridge tree's upper row drawn over the cliff behind its trunk (2CE/2CF
+ * ash, 2E4/2E5 green) is that cliff in 3D - the ground pass draws it (its drawing less the crown,
+ * VoxelTree_FringeVariant), not the tree's ground card: the card on the cliff's step stood a wall of rock and shadow
+ * behind the trunk, hiding the crown's lower half. WJPC_LAVARIDGE_CLIFF_CARD=1: the card, as before. */
+static bool LavaridgeCliffCrown(const void *secondaryTileset, int metatileId)
+{
+    static int sCard = -1;
+
+    if (sCard < 0)
+        sCard = getenv("WJPC_LAVARIDGE_CLIFF_CARD") != NULL;
+    return !sCard && secondaryTileset == &gTileset_Lavaridge && LavaridgeTreesOn()
+        && (metatileId == 0x2CE || metatileId == 0x2CF || metatileId == 0x2E4 || metatileId == 0x2E5);
 }
 
 static int SmallTrunkGround(const void *secondaryTileset, int metatileId)
@@ -220,7 +238,10 @@ bool VoxelTree_LaysGround(const void *secondaryTileset, int metatileId)
 {
     int ground;
 
-    /* in the shallows the ground pass lays the animated water itself */
+    /* in the shallows the ground pass lays the animated water itself; a Lavaridge crown's row over the cliff, the
+     * cliff (LavaridgeCliffCrown) */
+    if (LavaridgeCliffCrown(secondaryTileset, metatileId))
+        return false;
     return !(metatileId >= SECONDARY_ID && OwnLargePart(secondaryTileset, metatileId, &ground) >= 0
              && ground == OWN_SHALLOWS);
 }
@@ -352,10 +373,12 @@ int VoxelTree_GroundMetatile(const void *secondaryTileset, int metatileId)
         /* the crown's top over the path (the General's 00E-00F on it) */
         if (secondaryTileset == &gTileset_Fortree && (metatileId == 0x24B || metatileId == 0x24C))
             return 0x261;
-        /* Lavaridge (LavaridgeTreesOn): a small ash tree's crown top (2C4) and a large tree's top fringe (2DE-2DF) over
-         * the pink rock - the plain rock 271 (2C5-2C7, 2DC-2DD, the same over other rock, have no plain tile and stay) */
+        /* Lavaridge (LavaridgeTreesOn): a small ash tree's crown top (2C4) and a large tree's top fringe (2DE-2DF green,
+         * 2D0-2D1 ash) over the pink rock - the plain rock 271 (2C5-2C7, 2D2-2D5, 2DC-2DD, the same over the cliff, have
+         * no plain tile: VoxelTree_FringeVariant) */
         if (secondaryTileset == &gTileset_Lavaridge && LavaridgeTreesOn()
-         && (metatileId == 0x2C4 || metatileId == 0x2DE || metatileId == 0x2DF))
+         && (metatileId == 0x2C4 || metatileId == 0x2DE || metatileId == 0x2DF || metatileId == 0x2D0
+             || metatileId == 0x2D1))
             return 0x271;
         return metatileId;
     }
@@ -563,6 +586,8 @@ static const LargeArt *LargeArtOf(const void *secondaryTileset, int metatileId)
 /* One row of a large crown: the card that stands over the cell (x, y) as
  * the half of row `row`, column `col`, of a tree whose trunk row is
  * y - row + 1. */
+static VOXEL_TLS bool sCrownCliff;   /* (VoxelTree_EmitInstance: a Lavaridge tree against its cliff) */
+
 static void EmitCrownCard(VoxelBuilder *builder, const LargeArt *art, int x, int y, int col, int row,
                           bool steep)
 {
@@ -581,9 +606,12 @@ static void EmitCrownCard(VoxelBuilder *builder, const LargeArt *art, int x, int
     /* Against rock or higher ground behind the trunk, a tileset's own
      * tree stands up steeper as the small one does (EmitSmallCell): leant
      * back, its upper row ran into the rock. */
-    const float rise = 0.766044f * length, run = (steep ? 0.4f : 0.642788f) * length;
+    /* (a Lavaridge tree whose crown the 2D art draws over the cliff behind it - its upper row is that cliff,
+     * LavaridgeCliffCrown: the crown's top at the trunk row's back edge, its foot 0.825 into the trunk row, as the
+     * small tree's against rock - leant back it stood through the cliff, only its top over it) */
+    const float rise = 0.766044f * length, run = (sCrownCliff ? 0.36f : steep ? 0.4f : 0.642788f) * length;
     const float baseHeight = -0.10f;
-    float baseZ = wz - row + 1.0f + art->foot;
+    float baseZ = wz - row + 1.0f + (sCrownCliff ? 0.825f : art->foot);
     float top = 1.0f - row * 0.5f, bottom = top - 0.5f;
 
     /* A crown card: lit as the rounded crown it stands for. */
@@ -595,6 +623,13 @@ static void EmitCrownCard(VoxelBuilder *builder, const LargeArt *art, int x, int
         &(VoxelVertex){wx,        baseHeight + bottom * rise, baseZ - bottom * run, u0, v1, 1.0f});
     builder->rounded = false;
 }
+
+/* Brennan 2026-11-26 22:59 (Jagged Pass: the ash trees' crowns stood in two pieces, the upper half a level over the
+ * lower): a Lavaridge tree's upper row often lies on the cliff's edge over its trunk (2CE/2CF, 2E4/2E5), a level up -
+ * its half of the crown drawn at its trunk row's level and way south instead, so the two halves meet. Set by
+ * VoxelTree_EmitInstance for the one cell. WJPC_LAVARIDGE_CROWN_OWN_LEVEL=1: each row at its own, as before. */
+static VOXEL_TLS bool sCrownAtSet;
+static VOXEL_TLS float sCrownLift, sCrownShift;
 
 static void EmitCell(VoxelBuilder *builder, const VoxelMapInstance *inst, const void *secondaryTileset,
                      int x, int y, int part, int metatileId, bool rock)
@@ -618,10 +653,23 @@ static void EmitCell(VoxelBuilder *builder, const VoxelMapInstance *inst, const 
         InsetGroundUV(&u0, &v0, &u1, &v1);
         VoxelMesh_Top(builder, (float)x, (float)y, 0.02f, 0.0f, u0, v0, u1, v1, 1.0f);
     }
-    else
+    else if (!LavaridgeCliffCrown(secondaryTileset, metatileId))
         EmitGround(builder, inst, x, y, u0, v0, u1, v1);
-    EmitCrownCard(builder, art, x, y, col, row,
-                  rock && metatileId >= SECONDARY_ID && OwnLargePart(secondaryTileset, metatileId, NULL) >= 0);
+    {
+        /* (a Lavaridge tree's upper row at its trunk row's level: sCrownAt, VoxelTree_EmitInstance) */
+        float lift = builder->lift, shift = builder->shift;
+
+        if (sCrownAtSet)
+        {
+            builder->lift = sCrownLift;
+            builder->shift = sCrownShift;
+        }
+        EmitCrownCard(builder, art, x, y, col, row,
+                      rock && metatileId >= SECONDARY_ID && (OwnLargePart(secondaryTileset, metatileId, NULL) >= 0
+                                                             || LavaridgeLargePart(secondaryTileset, metatileId, NULL) >= 0));
+        builder->lift = lift;
+        builder->shift = shift;
+    }
 }
 
 /* A tree part at a cell anywhere: this map's, the next map's (its own
@@ -638,6 +686,25 @@ int VoxelTree_PartAt(int x, int y)
     }
     return VoxelWorld_UsesTreeSprites(at) ? VoxelTree_Part(at->secondaryTileset, VoxelWorld_GetMetatileId(x, y))
                                           : -1;
+}
+
+int VoxelTree_FringeVariant(const VoxelMapInstance *inst, int metatileId)
+{
+    static int sDrawn = -1;
+    int v;
+
+    if (sDrawn < 0)
+        sDrawn = getenv("WJPC_LAVARIDGE_FRINGE_DRAWN") != NULL;
+    if (sDrawn || inst == NULL || inst->secondaryTileset != &gTileset_Lavaridge || !LavaridgeTreesOn())
+        return metatileId;
+    switch (metatileId)
+    {
+    case 0x2C5: case 0x2C6: case 0x2C7: case 0x2D2: case 0x2D3: case 0x2D4: case 0x2D5: case 0x2DC: case 0x2DD:
+    case 0x2CE: case 0x2CF: case 0x2E4: case 0x2E5:
+        v = VoxelBuildings_LowerOnlyVariant((unsigned)metatileId);
+        return v >= 0 ? v : metatileId;
+    }
+    return metatileId;
 }
 
 bool VoxelTree_LavaridgeAt(int x, int y)
@@ -941,9 +1008,41 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
                     if (other >= inst->originX && other < inst->originX + inst->width)
                         rock = rock || AgainstRock(inst, other, y, lift);
                 }
+                /* (a Lavaridge tree's two rows draw their own halves of the crown, EmitCell: both rows stand as its
+                 * trunk row does - steep in one row only, its crown came apart in two) */
+                if (part >= 0 && part <= 3 && LavaridgeLargePart(inst->secondaryTileset, metatileId, NULL) >= 0)
+                {
+                    int ty = part < 2 ? y + 1 : y, tx = (part & 1) ? x - 1 : x;
+                    bool found = false, steep = false;
+
+                    for (int c = 0; c < 2; ++c)
+                        if (tx + c >= inst->originX && tx + c < inst->originX + inst->width
+                         && ty < inst->originY + inst->height
+                         && VoxelTree_Part(inst->secondaryTileset, VoxelWorld_GetMetatileId(tx + c, ty)) == 2 + c)
+                        {
+                            found = true;
+                            steep = steep || AgainstRock(inst, tx + c, ty, VoxelRelief_CellLift(inst, tx + c, ty));
+                        }
+                    if (found)
+                        rock = steep;
+                    /* (against its cliff: the tree's upper row is the cliff the crown is drawn over) */
+                    sCrownCliff = found && ty - 1 >= inst->originY
+                               && LavaridgeCliffCrown(inst->secondaryTileset, VoxelWorld_GetMetatileId(tx, ty - 1))
+                               && LavaridgeCliffCrown(inst->secondaryTileset, VoxelWorld_GetMetatileId(tx + 1, ty - 1));
+                    /* (the upper row's half of the crown at the trunk row's level, EmitCell) */
+                    if (part < 2 && getenv("WJPC_LAVARIDGE_CROWN_OWN_LEVEL") == NULL && ty < inst->originY + inst->height
+                     && VoxelTree_Part(inst->secondaryTileset, VoxelWorld_GetMetatileId(x, ty)) == part + 2)
+                    {
+                        sCrownAtSet = true;
+                        sCrownLift = VoxelRelief_CellLift(inst, x, ty);
+                        sCrownShift = VoxelRelief_CellShift(inst, x, ty);
+                    }
+                }
                 builder->lift = lift;
                 builder->shift = VoxelRelief_CellShift(inst, x, y);
                 EmitCell(builder, inst, inst->secondaryTileset, x, y, part, metatileId, rock);
+                sCrownAtSet = false;
+                sCrownCliff = false;
                 /* At the tree's own lift, so both rows meet. */
                 EmitMissingRow(builder, inst, inst->secondaryTileset, x, y, part, metatileId, rock);
                 builder->lift = 0.0f;

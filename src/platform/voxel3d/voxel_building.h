@@ -128,6 +128,9 @@ const uint16_t *VoxelBuildings_Footprint(const VoxelMapInstance *inst, int x, in
  * out. False past the last.
  */
 bool VoxelBuildings_Variant(unsigned i, unsigned *layout, unsigned *metatile, unsigned *quarters);
+/* the atlas id of the variant made here of a Lavaridge cliff tile less its upper layer (the tip of a tree's crown), or
+ * -1 (voxel_building.c kLowerOnly) */
+int VoxelBuildings_LowerOnlyVariant(unsigned metatile);
 /*
  * How VoxelBuildings_CellAt tells whether ground variant (layout, metatile)
  * is drawn from `inst`'s own tilesets, as the atlas composes it

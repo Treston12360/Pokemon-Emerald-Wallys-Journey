@@ -1313,14 +1313,41 @@ void VoxelBuildings_SetVariantFits(bool (*fits)(const VoxelMapInstance *inst, un
     sVariantFits = fits;
 }
 
+/* Brennan 2026-11-26 22:59 (Jagged Pass: "a jagged white/red texture seam above the arch"): ground variants made here,
+ * after the file's - a metatile less its whole upper layer. The Lavaridge tile set's cliff tiles that carry the tip of
+ * a tree's crown (drawn over the cliff in 2D) showed it flat on the cliff behind the 3D tree; this is the cliff alone
+ * (voxel_tree.c VoxelTree_FringeVariant). Layout 292 (Jagged Pass) only names the tile sets: the variant is good for any
+ * map drawn with the General and Lavaridge tile sets (Mt. Chimney's). */
+static const uint16_t kLowerOnly[] = { 0x2C5, 0x2C6, 0x2C7, 0x2D2, 0x2D3, 0x2D4, 0x2D5, 0x2DC, 0x2DD,
+                                      0x2CE, 0x2CF, 0x2E4, 0x2E5 };  /* (and the crown rows over the cliff) */
+#define LOWER_ONLY_LAYOUT 292u
+
 bool VoxelBuildings_Variant(unsigned i, unsigned *layout, unsigned *metatile, unsigned *quarters)
 {
     if (i >= sVariantCount)
-        return false;
+    {
+        /* (only once the file is read, so they keep their ids) */
+        i -= sVariantCount;
+        if (sVariants == NULL || i >= sizeof(kLowerOnly) / sizeof(kLowerOnly[0])
+         || sVariantCount + i >= VOXEL_VARIANTS)
+            return false;
+        *layout = LOWER_ONLY_LAYOUT;
+        *metatile = kLowerOnly[i];
+        *quarters = 0xF;
+        return true;
+    }
     *layout = U16(sVariants + 6u * i);
     *metatile = U16(sVariants + 6u * i + 2);
     *quarters = sVariants[6u * i + 4];
     return true;
+}
+
+int VoxelBuildings_LowerOnlyVariant(unsigned metatile)
+{
+    for (unsigned k = 0; sVariants != NULL && k < sizeof(kLowerOnly) / sizeof(kLowerOnly[0]); ++k)
+        if (kLowerOnly[k] == metatile && sVariantCount + k < VOXEL_VARIANTS)
+            return (int)(VOXEL_METATILE_REAL + sVariantCount + k);
+    return -1;
 }
 
 const uint16_t *VoxelBuildings_Footprint(const VoxelMapInstance *inst, int x, int y)

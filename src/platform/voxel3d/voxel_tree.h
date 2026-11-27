@@ -20,6 +20,10 @@
 int VoxelTree_Part(const void *secondaryTileset, int metatileId);
 /* The same at a world cell: this map's, the next map's or the border's. */
 int VoxelTree_PartAt(int x, int y);
+/* Brennan 2026-11-26 22:59: a Lavaridge cliff tile with the tip of a tree's crown drawn over it (2C5-2C7, 2D2-2D5,
+ * 2DC-2DD) - the cliff alone (an atlas variant, VoxelBuildings_LowerOnlyVariant); any other id as it is.
+ * WJPC_LAVARIDGE_FRINGE_DRAWN=1: as drawn. */
+int VoxelTree_FringeVariant(const VoxelMapInstance *inst, int metatileId);
 /* the map cell at (x, y) is one of the Lavaridge tile set's trees (Mt. Chimney's, Jagged Pass's) */
 bool VoxelTree_LavaridgeAt(int x, int y);
 bool VoxelTree_OwnLoneLedge(int x, int y); /* a belt tree at (x, y) is the map's own lone tree, two cells wide */

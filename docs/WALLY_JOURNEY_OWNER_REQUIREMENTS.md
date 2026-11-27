@@ -1649,3 +1649,17 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   game." Picked **Project Tandem** (from Project Link / Union / Tandem / Wireless). Order: "Whole Jagged Pass list
   first" (trees, cliff seams, the clipped plant, 3D stairs), then Tandem's T0 audit. Set up: `docs/TANDEM_TASKS.md`
   (brief, code facts, research, proposals not yet decided, tasks, open questions), AGENTS.md section, docs/TASKS.md row.
+- 2026-11-27 N78 (Jagged Pass 22:59 list, part 1 - the trees): the ash crowns' two lightest colours darker (no glare in
+  the sun); the large trees' ground shadow in the rock's own shades (no purple ring - the "mound" round the green tree's
+  trunk and the "cave arches" under the upper trees); the ash tree rows the 2D art draws over the next tree (2B6/2B7,
+  2BE) are 3D tree parts; 2D0/2D1 (ash crown tips over plain rock) the plain rock; the cliff tiles with a crown's tip
+  over them (2C5-2C7, 2D2-2D5, 2DC-2DD) and the crown rows over the cliff (2CE/2CF, 2E4/2E5) drawn as the cliff alone
+  (code-made atlas variants, voxel_building.c kLowerOnly; the ground pass draws the crown rows over the cliff,
+  voxel_tree.c LavaridgeCliffCrown) - the "jagged white/red texture seam above the arch"; a tree's two rows at its trunk
+  row's level, both steep or both not (its crown had come apart in two); a tree whose crown the 2D art draws over the
+  cliff behind it stands up in front of that cliff (its top at the trunk row's back edge). Switches:
+  WJPC_LAVARIDGE_FRINGE_DRAWN, WJPC_LAVARIDGE_CLIFF_CARD, WJPC_LAVARIDGE_CROWN_OWN_LEVEL (each: as before). Checked:
+  the 52-view region set pixel for pixel the same; gap test Mt Chimney / Jagged Pass / Lavaridge / Route 112 at
+  1920x1080 and 2560x1440 the same as N77, 14 more Jagged Pass / Mt Chimney views - only the known stair-peak cracks
+  and Mt Chimney's south-east corner sliver (both there before). Next: the cliff holes and seams (the upper-left pocket
+  is relief.bin: cells 0-4 x 8-9 and 0,7 of layout 292 lie at 2 levels, walled in by 5-6 - the shelf should be at 5).
