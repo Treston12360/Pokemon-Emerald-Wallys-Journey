@@ -6929,14 +6929,105 @@ static float FieldNoiseAt(float x, float y, int seed)
  * is wrong": those moved the whole slope up to 2.5 levels in long waves.) WJPC_R118_NORTH_FLAT=1: none.
  */
 #define R118_JITTER 0.9f
+static bool BeltIsTree(int x, int y);
+static bool BorderWaterLevel(int x, int y, float *level, float *shift);
+
+/*
+ * Brennan 2026-11-27 03:57 (#13 ideas, "show me pictures of your idea for those places and i will say yes or no";
+ * Lavaridge: "the mountain that shows in the north still looks very blocky and to the left is waves of mountain that
+ * is not natural forming" - "try also applying the route 118 fix to the lavaridge problem"): with WJPC_N13_IDEA=1 the
+ * Route 118 north treatment - uneven ledges (R118FieldJitter, R118FieldRate) - on the mountains round Lavaridge, Mt.
+ * Chimney and Jagged Pass as well: their belt within NATURAL_REACH cells of the map, fading out over the next
+ * NATURAL_FADE; never in front of (south of) the map - the low ground the camera looks over stays as it is - fading
+ * back in over NATURAL_FRONT_SIDE cells past its sides. 0..1 (0 everywhere with the switch off).
+ */
+enum { NATURAL_REACH = 22, NATURAL_FADE = 8, NATURAL_FRONT_SIDE = 6 };
+static float NaturalZoneAxis(int vx, int vy, bool *beside);
+static float NaturalZone(int vx, int vy)
+{
+    return NaturalZoneAxis(vx, vy, NULL);
+}
+
+/* (and *beside: TRUE where the nearest of those maps is beside the point - west or east of it, the slope climbing
+ * across - rather than north or south, the slope climbing up the rows) */
+static float NaturalZoneAxis(int vx, int vy, bool *beside)
+{
+    float best = 0.0f, bestD = 1e9f;
+
+    if (!VoxelWorld_N13Idea())
+        return 0.0f;
+    for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+    {
+        const VoxelMapInstance *m = VoxelWorld_Instance(i);
+        int ox, oy, ex, ey;
+        float dx, dy, d, z;
+
+        /* (Lavaridge 13, Mt. Chimney 136, Jagged Pass 292) */
+        if (m == NULL || m->layout == NULL || m->indoor
+         || (m->layoutId != 13 && m->layoutId != 136 && m->layoutId != 292))
+            continue;
+        ox = m->originX;
+        oy = m->originY;
+        ex = ox + m->width;
+        ey = oy + m->height;
+        dx = (float)(vx < ox ? ox - vx : vx > ex ? vx - ex : 0);
+        dy = (float)(vy < oy ? oy - vy : vy > ey ? vy - ey : 0);
+        d = sqrtf(dx * dx + dy * dy);
+        if (d <= 0.0f)
+            continue;   /* (on or in the map) */
+        z = d <= (float)NATURAL_REACH ? 1.0f : d >= (float)(NATURAL_REACH + NATURAL_FADE) ? 0.0f
+          : 1.0f - (d - (float)NATURAL_REACH) / (float)NATURAL_FADE;
+        if (vy > ey - 1)
+        {
+            /* in front of it: none in its columns, back in over NATURAL_FRONT_SIDE cells past its sides; starting
+             * over the two rows round its south edge */
+            float fy = (float)(vy - (ey - 1)) / 2.0f, fx = 1.0f - dx / (float)NATURAL_FRONT_SIDE;
+
+            fy = fy > 1.0f ? 1.0f : fy;
+            fx = fx < 0.0f ? 0.0f : fx;
+            z *= 1.0f - fy * fx;
+        }
+        best = z > best ? z : best;
+        if (beside != NULL && d < bestD)
+        {
+            bestD = d;
+            *beside = dx > dy;
+        }
+    }
+    return best;
+}
+
+/* a cell the uneven ledges may lie on: belt land, no map, no water, no trees - north of Route 118 its rock alone
+ * (r118Only: only that, as N82 had it) */
+static bool NaturalRockCell(int x, int y, bool r118Only)
+{
+    float wl, ws;
+    int part;
+
+    if (VoxelWorld_GetInstanceAt(x, y) != NULL)
+        return false;
+    part = VoxelWorld_R118North(x, y, NULL, NULL);
+    if (part != VOXEL_R118N_NONE)
+        return part == VOXEL_R118N_ROCK;
+    if (r118Only)
+        return false;
+    return BorderAt(x, y) && !BeltIsTree(x, y) && !BorderWaterLevel(x, y, &wl, &ws);
+}
+
 static float R118FieldJitter(int vx, int vy)
 {
     static int sOff = -1;
     int lx, ly, nearest = 3;
+    bool r118;
+    float zone;
 
     if (sOff < 0)
         sOff = getenv("WJPC_R118_NORTH_FLAT") != NULL;
-    if (sOff || VoxelWorld_R118North(vx, vy, &lx, &ly) == VOXEL_R118N_NONE)
+    if (sOff)
+        return 0.0f;
+    r118 = VoxelWorld_R118North(vx, vy, &lx, &ly) != VOXEL_R118N_NONE;
+    zone = r118 ? 1.0f : NaturalZone(vx, vy);
+    if (zone <= 0.0f)
         return 0.0f;
     /* (the point's distance, in cells, to the nearest cell round it that is not the rock) */
     for (int dy = -3; dy <= 2; ++dy)
@@ -6945,8 +7036,7 @@ static float R118FieldJitter(int vx, int vy)
             int d = dx < 0 ? -dx - 1 : dx, e = dy < 0 ? -dy - 1 : dy;
 
             d = d > e ? d : e;
-            if (d < nearest && (VoxelWorld_GetInstanceAt(vx + dx, vy + dy) != NULL
-                                || VoxelWorld_R118North(vx + dx, vy + dy, NULL, NULL) != VOXEL_R118N_ROCK))
+            if (d < nearest && !NaturalRockCell(vx + dx, vy + dy, r118))
                 nearest = d;
         }
     if (nearest == 0)
@@ -6954,13 +7044,53 @@ static float R118FieldJitter(int vx, int vy)
     /* (one smooth octave, a value every 6 cells across and 4.5 up the slope: it changes the height less than the
      * slope climbs, so the ledges step in and out without pits or lone spikes - a second, finer octave left
      * one-cell pits and spikes all over, 2026-11-27) */
-    return R118_JITTER * (float)nearest / 3.0f * FieldNoiseAt((float)vx / 6.0f, (float)vy / 4.5f, 7);
+    /* (idea 4: the 2D map's way - each ledge's edge straight for a few cells, then a jog: the height moves by a
+     * value held over a block of 4-7 cells along the slope and 3 rows up it, the blocks' ends staggered row band by
+     * row band, so the jogs never line up. North of Route 118 past the river, up Route 111's east side, too: there
+     * the smooth wobble drew long wavy lines - the "waves" Brennan does not want - blended in over rows 52-64) */
+    float stripW = 0.0f;
+    if (r118 && VoxelWorld_N13Variant() == 4)
+    {
+        stripW = ((float)-ly - 52.0f) / 12.0f;
+        stripW = stripW < 0.0f ? 0.0f : stripW > 1.0f ? 1.0f : stripW;
+    }
+    if ((!r118 || stripW > 0.0f) && VoxelWorld_N13Variant() == 4)
+    {
+        /* (the blocks lie along the ledges: along the rows north or south of the map, along the columns beside it -
+         * across them, the jogs stood as slivers of wall down the slope west of Lavaridge; up Route 111's east side
+         * the ledges run north-south) */
+        bool beside = r118;
+        if (!r118)
+            NaturalZoneAxis(vx, vy, &beside);
+        int along = beside ? vy : vx, across = beside ? vx : vy;
+        int band = (int)floorf((float)across / 3.0f);
+        uint32_t hb = (uint32_t)band * 0x9E3779B1u ^ (beside ? 0x68E31DA4u : 0u);
+        int shift = (int)((hb >> 7) % 7u), len = 4 + (int)((hb >> 13) % 4u);
+        int blk = (int)floorf((float)(along + shift) / (float)len);
+        uint32_t h = (uint32_t)blk * 0x85EBCA77u ^ (uint32_t)band * 0xC2B2AE3Du;
+
+        h ^= h >> 15;
+        h *= 0x2C1B3C6Du;
+        h ^= h >> 12;
+        {
+            float jog = zone * (float)nearest / 3.0f * (0.75f * ((float)(h & 1023u) / 511.5f - 1.0f)
+                                                       + 0.25f * FieldNoiseAt((float)vx / 6.0f, (float)vy / 4.5f, 7));
+            if (!r118)
+                return jog;
+            return jog * stripW + (1.0f - stripW) * R118_JITTER * (float)nearest / 3.0f
+                 * FieldNoiseAt((float)vx / 6.0f, (float)vy / 4.5f, 7);
+        }
+    }
+    return zone * (!r118 && VoxelWorld_N13Variant() == 2 ? 0.7f : R118_JITTER) * (float)nearest / 3.0f
+         * FieldNoiseAt((float)vx / 6.0f, (float)vy / 4.5f, 7);
 }
 
 /* Brennan 2026-11-26 22:09 (Route 118 north, "varying ledge shapes"): the land there climbs a level every 1.1 to 2.9
  * cells (BELT_FIELD_RATE elsewhere: 2) - a value that drifts every 7 cells or so, so stretches of the slope are steep
  * (narrow ledges, near-cliffs) and others gentle (wide shelves), the ledges fanning in and out between. Back to 2 by
- * the river's north end (VoxelWorld_R118North). WJPC_R118_NORTH_FLAT=1: 2 everywhere. */
+ * the river's north end (VoxelWorld_R118North). WJPC_R118_NORTH_FLAT=1: 2 everywhere. (WJPC_N13_IDEA: by the
+ * strip's end, and round Lavaridge, Mt. Chimney and Jagged Pass by NaturalZone; a drawn belt's peak climbs at its own
+ * rate times the same factor.) */
 static float R118FieldRate(int vx, int vy)
 {
     static int sOff = -1;
@@ -6969,10 +7099,23 @@ static float R118FieldRate(int vx, int vy)
 
     if (sOff < 0)
         sOff = getenv("WJPC_R118_NORTH_FLAT") != NULL;
-    if (sOff || VoxelWorld_R118North(vx, vy, &lx, &ly) == VOXEL_R118N_NONE)
+    if (sOff)
         return (float)BELT_FIELD_RATE;
-    fade = 1.0f - ((float)-ly - 48.0f) / 16.0f;
-    fade = fade > 1.0f ? 1.0f : fade < 0.0f ? 0.0f : fade;
+    if (VoxelWorld_R118North(vx, vy, &lx, &ly) != VOXEL_R118N_NONE)
+        fade = VoxelWorld_R118NorthRateFade(ly);
+    else
+    {
+        fade = NaturalZone(vx, vy);
+        /* (idea 2: spurs and gullies down the slope - the rate varies mostly along it, every ~9 cells across;
+         * idea 3: no varied rate, big shapes instead - BeltFieldUncached) */
+        if (fade > 0.0f && VoxelWorld_N13Variant() == 2)
+            return (float)BELT_FIELD_RATE + fade * 1.1f * (0.8f * FieldNoiseAt((float)vx / 9.0f, (float)vy / 16.0f, 19)
+                                                           + 0.3f * FieldNoiseAt((float)vx / 4.0f, (float)vy / 6.0f, 23));
+        if (VoxelWorld_N13Variant() == 3)
+            fade = 0.0f;
+    }
+    if (fade <= 0.0f)
+        return (float)BELT_FIELD_RATE;
     return (float)BELT_FIELD_RATE + fade * 0.9f * FieldNoiseAt((float)vx / 7.0f, (float)vy / 7.0f, 19);
 }
 
@@ -7168,6 +7311,8 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
     float capOther = 1e9f;
     float drawnPeak = -1e9f, lumpAdd = 0.0f;
     const float r118j = R118FieldJitter(vx, vy), r118rate = R118FieldRate(vx, vy);
+    const float rateK = r118rate / (float)BELT_FIELD_RATE;   /* (1 but where the ledges are uneven) */
+    const float natZone = VoxelWorld_R118North(vx, vy, NULL, NULL) == VOXEL_R118N_NONE ? NaturalZone(vx, vy) : 0.0f;
     float r118jUse = r118j;
     bool exact = false;
 
@@ -7290,7 +7435,7 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
          * rock tiled a level a tile) makes up the rest. WJPC_FIELD_NO_CAP=1: off. */
         {
             float cap = e + d / (VoxelRelief_Belt(m) != 0 && vy < oy && vx >= ox - 6 && vx <= ox + m->width + 6
-                                 && getenv("WJPC_PEAK_RATE2") == NULL ? (float)BELT_PEAK_RATE : r118rate);
+                                 && getenv("WJPC_PEAK_RATE2") == NULL ? (float)BELT_PEAK_RATE * rateK : r118rate);
             if (VoxelRelief_Belt(m) != 0)
                 capMin = cap < capMin ? cap : capMin;
             else
@@ -7326,8 +7471,12 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
         {
             /* (north of the map, a level every BELT_PEAK_RATE cells: drawn as far south as it is high, a level every 2
              * left one-row shelves - a grid of short walls - where Route 112's peak beside it has deeper ones) */
-            float rate = vy < oy && vx >= ox - 6 && vx <= ox + m->width + 6 && getenv("WJPC_PEAK_RATE2") == NULL
-                       ? (float)BELT_PEAK_RATE : (float)BELT_FIELD_RATE;
+            float rate = (vy < oy && vx >= ox - 6 && vx <= ox + m->width + 6 && getenv("WJPC_PEAK_RATE2") == NULL
+                       ? (float)BELT_PEAK_RATE : (float)BELT_FIELD_RATE) * rateK;
+            /* (WJPC_N13_IDEA 4: beside the map too the peak climbs a level every BELT_PEAK_RATE cells - at 2, with
+             * the ledges' jogs, the west of Lavaridge broke up into slivers - eased in with the zone) */
+            if (VoxelWorld_N13Variant() == 4 && natZone > 0.0f && !(vy < oy && vx >= ox - 6 && vx <= ox + m->width + 6))
+                rate = ((float)BELT_FIELD_RATE + ((float)BELT_PEAK_RATE - (float)BELT_FIELD_RATE) * natZone) * rateK;
             float r = d / rate, pk = e + (r < (float)BELT_FIELD_PEAK ? r : (float)BELT_FIELD_PEAK);
             /* Audit batch 2 (Route 113 / Fallarbor: one flat wall of rock 15 levels tall north of the maps; Route
              * 111's east side): the peak held its full height at ANY distance, so Route 111's (6 + 14 = 20) stood
@@ -7416,6 +7565,35 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
          * with it, as the lumps above) */
         *height += r118jUse;
         capMin += r118jUse;
+        /* (WJPC_N13_IDEA, round Lavaridge, Mt. Chimney and Jagged Pass - NaturalZone: idea 3, big rounded shapes -
+         * peaks and saddles, +-4 levels every ~15 cells - coming in from 2 to 10 cells out; idea 2, the ledges in
+         * pairs - a two-level cliff and a shelf twice as deep - from 2.5 cells out) */
+        if (natZone > 0.0f && VoxelWorld_N13Variant() == 3)
+        {
+            float f = (dmin - 2.0f) / 8.0f, p;
+
+            f = f < 0.0f ? 0.0f : f > 1.0f ? 1.0f : f;
+            p = natZone * f * 4.0f * (0.75f * FieldNoiseAt((float)vx / 16.0f, (float)vy / 13.0f, 3)
+                                      + 0.35f * FieldNoiseAt((float)vx / 7.0f, (float)vy / 6.0f, 5));
+            *height += p;
+            capMin += p;
+        }
+        if (natZone > 0.0f && VoxelWorld_N13Variant() == 2)
+        {
+            float baseL = floorf(nearE + 1e-4f), up = *height - baseL;
+
+            if (up > 0.0f)
+            {
+                const float g = 2.0f;
+                float k = floorf(up / g), fr = up - k * g, st, f = dmin / 2.5f;
+
+                st = (fr - (g - 0.6f)) / 0.6f;
+                st = k * g + g * (st < 0.0f ? 0.0f : st > 1.0f ? 1.0f : st);
+                f = (f > 1.0f ? 1.0f : f) * natZone;
+                *height = baseL + up + (st - up) * f;
+                capMin += 0.6f * f;
+            }
+        }
         /* POL-46 (Brennan 22:39, Lavaridge's south: "Make the Top of the Bottom Mountain Flush & Level Across the
          * Whole Width"; a blue triangle under the red-roofed houses): in front of a map (south of it) the land
          * never dips under the map's edge - the blend with farther, lower maps took it to 5.9 under an edge of 6.0,
@@ -8392,6 +8570,16 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
     if (!wood && getenv("WJPC_R118_NORTH_BARE") == NULL
      && VoxelWorld_R118North(x, y, NULL, NULL) == VOXEL_R118N_ROCK)
         wood = TreeScatter(x, y) < (WoodHash(x >> 2, y / 3) % 3u == 0u ? 60u : 14u);
+    /* (WJPC_N13_IDEA 4: on the mountain north of Lavaridge as many as north of Route 118 - "apply the route 118 fix";
+     * the far-west terraces stay bare, Brennan 2026-11-18 23:31) */
+    if (!wood && VoxelWorld_N13Variant() == 4 && NaturalZone(x, y) > 0.5f)
+        for (unsigned i = 0; i < VoxelWorld_InstanceCount() && !wood; ++i)
+        {
+            const VoxelMapInstance *m = VoxelWorld_Instance(i);
+            if (m != NULL && m->layout != NULL && !m->indoor && m->layoutId == 13 && y < m->originY
+             && x >= m->originX - 2 && x < m->originX + m->width + 8)
+                wood = TreeScatter(x, y) < (WoodHash(x >> 2, y / 3) % 3u == 0u ? 60u : 14u);
+        }
     /* Brennan 2026-11-23 06:28 (Route 114's west plateau: "Scatter some trees") - VoxelMesh_PlateauTree */
     bool plateau = !wood && VoxelMesh_PlateauTree(x, y);
     wood = wood || plateau;

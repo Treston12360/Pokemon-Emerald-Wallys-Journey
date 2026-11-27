@@ -116,6 +116,12 @@ int VoxelWorld_ChimneySouthTree(int worldX, int worldY);
  * north-west corner (localY < 0 in the belt). */
 enum { VOXEL_R118N_NONE = -1, VOXEL_R118N_ROCK, VOXEL_R118N_WATER, VOXEL_R118N_BANK, VOXEL_R118N_WOODS };
 int VoxelWorld_R118North(int worldX, int worldY, int *localX, int *localY);
+/* how much of the uneven ledges' varied climb (voxel_mesh_builder.c R118FieldRate) holds `localY` rows from Route
+ * 118's edge (VoxelWorld_R118North's localY): 1 near, fading to 0 where the area ends */
+float VoxelWorld_R118NorthRateFade(int localY);
+/* Brennan 2026-11-27 03:57 (#13 ideas, for his yes/no): WJPC_N13_IDEA=1 */
+bool VoxelWorld_N13Idea(void);
+int VoxelWorld_N13Variant(void);
 /* The cell's collision bits (0: walkable). */
 unsigned VoxelWorld_GetCollision(int worldX, int worldY);
 unsigned VoxelWorld_GetMetatileBehavior(int worldX, int worldY);

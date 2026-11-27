@@ -1992,6 +1992,48 @@ bool VoxelWorld_BeltOld(void)
 #define R118N_WIDTH 40          /* Route 111's east edge to Route 119's west edge */
 #define R118N_ROWS 64
 #define R118N_RIVER_END 48.0f
+/* Brennan 2026-11-27 03:57 (#13, "show me pictures of your idea for those places and i will say yes or no"): with
+ * WJPC_N13_IDEA=1 the area runs on up the whole strip between Route 111 and Route 119 (R118N_STRIP_ROWS, Route 111's
+ * east side - his #13 "long straight ridges"): past the river the line between the rock and the woods keeps wandering,
+ * the trees along it, the rock's ledges uneven with trees on them, drifting back to the straight line only over the
+ * strip's last R118N_STRIP_FADE rows. Off (the default until he says yes): as N82. */
+#define R118N_STRIP_ROWS 140
+#define R118N_STRIP_FADE 16.0f
+
+bool VoxelWorld_N13Idea(void)
+{
+    return VoxelWorld_N13Variant() != 0;
+}
+
+/* which of the ideas (test aid while they are drawn for him): WJPC_N13_IDEA=1, 2, 3 ... (anything else set: 1) */
+int VoxelWorld_N13Variant(void)
+{
+    static int sVar = -1;
+
+    if (sVar < 0)
+    {
+        const char *e = getenv("WJPC_N13_IDEA");
+        sVar = e == NULL ? 0 : atoi(e) > 0 ? atoi(e) : 1;
+    }
+    return sVar;
+}
+
+/* how many rows north of Route 118's edge the area reaches */
+static int R118NRows(void)
+{
+    return VoxelWorld_N13Idea() ? R118N_STRIP_ROWS : R118N_ROWS;
+}
+
+float VoxelWorld_R118NorthRateFade(int localY)
+{
+    float v = (float)-localY;
+
+    if (VoxelWorld_N13Idea())
+        return v <= (float)R118N_STRIP_ROWS - R118N_STRIP_FADE ? 1.0f
+             : v >= (float)R118N_STRIP_ROWS ? 0.0f : ((float)R118N_STRIP_ROWS - v) / R118N_STRIP_FADE;
+    v = 1.0f - (v - R118N_RIVER_END) / 16.0f;
+    return v > 1.0f ? 1.0f : v < 0.0f ? 0.0f : v;
+}
 
 static float R118NHash(int i, uint32_t seed)
 {
@@ -2044,7 +2086,7 @@ static bool R118NorthMaps(const VoxelMapInstance **m111, const VoxelMapInstance 
         sOk = s111 != NULL && s118 != NULL && s119 != NULL
            && s111->originX + s111->width == s118->originX && s111->originY + s111->height == s118->originY
            && s119->originX == s118->originX + R118N_WIDTH && s119->originY + s119->height == s118->originY
-           && s111->height >= R118N_ROWS && s119->height >= R118N_ROWS;
+           && s111->height >= R118NRows() && s119->height >= R118NRows();
         sGen = CellMemoOff() ? 0 : sCellGen;
     }
     *m111 = s111;
@@ -2109,7 +2151,7 @@ int VoxelWorld_R118North(int worldX, int worldY, int *localX, int *localY)
         *localX = lx;
     if (localY != NULL)
         *localY = ly;
-    if (lx < 0 || lx >= R118N_WIDTH || ly >= 0 || ly < -R118N_ROWS)
+    if (lx < 0 || lx >= R118N_WIDTH || ly >= 0 || ly < -R118NRows())
         return VOXEL_R118N_NONE;
     u = (float)lx + 0.5f;
     v = (float)-ly - 0.5f;
@@ -2132,7 +2174,9 @@ int VoxelWorld_R118North(int worldX, int worldY, int *localX, int *localY)
         return VOXEL_R118N_ROCK;
     }
     {
-        float t = R118NSmooth(R118N_RIVER_END, (float)R118N_ROWS, v);
+        /* (WJPC_N13_IDEA: on up the strip, back to the straight line only over its last rows) */
+        float t = VoxelWorld_N13Idea() ? R118NSmooth((float)R118N_STRIP_ROWS - R118N_STRIP_FADE, (float)R118N_STRIP_ROWS, v)
+                                       : R118NSmooth(R118N_RIVER_END, (float)R118N_ROWS, v);
         float cut = 20.25f - 0.25f * t + (1.0f - t) * 1.5f * R118NNoise(v / 4.0f, 59u);
 
         if (u >= cut)
