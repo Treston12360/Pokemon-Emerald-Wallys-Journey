@@ -1485,3 +1485,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   background mountains (his "keep open"), #23 Route 103 south slit (not found - needs his picture), tiny dark notches
   at cliff feet on Routes 106/127/133 (11-20, never touched). Watching: #27 flicker (him); the Fortree ninja boys'
   reveal never watched in a test (battles off). Last zip he has: 2026-11-23 audit.
+- 2026-11-26 19:29 Brennan's answers (his words): (1) N70 sand / N71 ladders "they look good". (2) the 8 Shoal Cave
+  flights ending in rock: "leave like original" (closed). (3) #26 Verdanturf snow lanes: "work on this". (4) #13
+  background mountains: "work on this very last". (5) #23 Route 103 south slit: "close this out". (6) cliff-foot
+  notches Routes 106/127/133: "if they are a big problem fix them if they are barely noticeable close it and move on".
+  (7) #27 flicker: "close this out". (8) Fortree ninja boys' reveal: "check this one out to be sure". "continue on
+  these things i will ask for a zip file in a bit".
+
