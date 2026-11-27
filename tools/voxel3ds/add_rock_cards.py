@@ -23,13 +23,15 @@ from add_tree_cards import tex, pack  # noqa: E402
 CARDS = [('LAYOUT_RUSTURF_TUNNEL', 0x203, 64, True), ('LAYOUT_RUSTURF_TUNNEL', 0x204, 80, True),
          ('LAYOUT_RUSTURF_TUNNEL', 0x205, 96, True), ('LAYOUT_RUSTURF_TUNNEL', 0x206, 112, True)]
 # Brennan 2026-11-22 (C7): the four rocks by Fallarbor's Contest Hall (Fallarbor 0x223, a mossy boulder on the soil),
-# card at (0, 32), not toned. Written with --only-new (the Rusturf cards already there).
-CARDS_ROW = {('LAYOUT_FALLARBOR_TOWN', 0x223): 32}
-CARDS += [('LAYOUT_FALLARBOR_TOWN', 0x223, 0, False)]
-# C9: Meteor Falls' floor rocks 0x20E at (16, 32), 0x20F at (0, 48) (0x21F, the same rocks on the darker floor, uses
+# card at (16, 48), not toned. Written with --only-new (the Rusturf cards already there).
+# (2026-11-26: it was at (0, 32), and 0x20E below at (16, 32) - rows 32-35 there are the bottom of the large tree's
+# crown card, which must stay clear: the rocks' tops showed under every large crown where the ground dips. Moved.)
+CARDS_ROW = {('LAYOUT_FALLARBOR_TOWN', 0x223): 48}
+CARDS += [('LAYOUT_FALLARBOR_TOWN', 0x223, 16, False)]
+# C9: Meteor Falls' floor rocks 0x20E at (64, 48), 0x20F at (0, 48) (0x21F, the same rocks on the darker floor, uses
 # 0x20F's card)
-CARDS_ROW.update({('LAYOUT_METEOR_FALLS_1F_1R', 0x20E): 32, ('LAYOUT_METEOR_FALLS_1F_1R', 0x20F): 48})
-CARDS += [('LAYOUT_METEOR_FALLS_1F_1R', 0x20E, 16, False), ('LAYOUT_METEOR_FALLS_1F_1R', 0x20F, 0, False)]
+CARDS_ROW.update({('LAYOUT_METEOR_FALLS_1F_1R', 0x20E): 48, ('LAYOUT_METEOR_FALLS_1F_1R', 0x20F): 48})
+CARDS += [('LAYOUT_METEOR_FALLS_1F_1R', 0x20E, 64, False), ('LAYOUT_METEOR_FALLS_1F_1R', 0x20F, 0, False)]
 
 
 def slot_free(d, x0, y0):

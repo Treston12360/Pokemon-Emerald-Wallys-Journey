@@ -1504,4 +1504,31 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   views, every changed pixel in a wood (the woods' edge by Route 103's lake: the snow strip under the first crowns is
   leaves now); spring, summer and autumn the same way; gap test 1920x1080 and 2560x1440 the same as before.
   Pictures: snow_lanes_route103_full.png, snow_lanes_verdanturf_full.png, snow_lanes_closeups_3x.png.
+- Cliff-foot notches, Routes 106/127/133 (Brennan 19:29: "if they are a big problem fix them if they are barely
+  noticeable close it"): looked again at 1920x1080, midday, his widest zoom (warps 0 21 44 11, 0 42 43 36, 0 48 37 16,
+  build N72). Route 106: a soft dark shadow in one inner corner of the cliff west of Granite Cave's entrance; Routes
+  127 and 133: only the thin dark line where rock meets the sea, a few pixels. Barely noticeable - closed, nothing
+  changed.
+- 2026-11-26 20:07 Brennan (N72's Route 103 picture, 3 red boxes): "fix what is in the red boxes, and make the sign a 3D
+  model. looks to be 2D trees still laying on the ground on the north east side of the picture." -> N73:
+  - Box 1 (north-east woods, white and brown flecks along a diagonal): the large tree's crown card reads 36 rows of the
+    trees texture (kLargeTree rows 0-35; the last rows clear, sunk into the ground), and on 11-22 two rock-mound cards
+    were put at (0,32) and (16,32) - their tops in rows 33-35, under every large crown. Seen where the wood's floor
+    dips below its trees (the step between two levels of the woods north of Route 103). The two cards moved to free
+    slots (16,48) and (64,48) (pc_data/voxel/trees.rgba5551, voxel_tree.c, tools/voxel3ds/add_rock_cards.py). Fallarbor's
+    and Meteor Falls' rocks pixel for pixel the same. Left: the step itself (a darker diagonal where the woods climb a
+    level) - part of #13's levels.
+  - Box 2 (the woods' edge by the lake): only the edge row of a large tree had its flat ground square there - the lower
+    half of its shadow and its trunk: half circles with trunks lying in front of the crowns. Laid for the whole tree
+    (first try) its ground showed white between the trees in winter (Route 121): not kept. Now a belt large tree has
+    no square beside a map or a field (only by the sea, where it closes a seam); the crowns stand on the edge's own
+    ground (voxel_tree.c; WJPC_BELT_EDGE_SQUARES=1: as before). Small trees keep their trunks' squares. Also gone with
+    it: the thin white seams along the woods' edges at Littleroot and Route 104.
+  - Box 3 (Route 103's sign): the General's route sign (0x003, every route sign) was one solid board the whole cell high
+    (the drawing extruded 2 px) - a flat box on the ground. Its board (rows 0-11) stands on two legs (its dark sides,
+    columns 0-1 and 14-15, rows 12-15), open between them, the shadow the same shape (voxel_sign.c SignRows;
+    WJPC_SIGN_BOX=1: as before). Asked Brennan if that is the 3D sign he means.
+  - Checked: 12 winter views (changes only at woods' edges, the flecks, signs); gap test 52 views (north/south edges of
+    Petalburg, Rustboro, Littleroot, Oldale, Routes 101-104, 116, 121 + the 12) at 1920x1080 and 2560x1440: the same but
+    for a few pixels at the edge of the far-corner sky in two Route 103 views and Oldale's horizon (2-12 px).
 

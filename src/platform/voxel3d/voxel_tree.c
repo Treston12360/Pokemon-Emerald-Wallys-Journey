@@ -911,16 +911,21 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
             }
             /* Brennan 2026-11-22 13:38 (C7: "the four small rocks ... immediately to the left of the Fallarbor Contest
              * Hall are still flat 2D ground tiles - convert them to 3D rock models"): Fallarbor's boulder (0x223) a rock
-             * mound as Rusturf's (his pick D), its card at (0,32). WJPC_FLAT_FLOOR_ROCKS=1: flat. */
+             * mound as Rusturf's (his pick D), its card at (16,48) (was (0,32): see below). WJPC_FLAT_FLOOR_ROCKS=1: flat. */
             /* Brennan 2026-11-22 13:38 (C9, Meteor Falls: "the small floor rocks ... still flat 2D textures"): rock
-             * mounds as Rusturf's, cards (16,32) 0x20E and (0,48) 0x20F / 0x21F. WJPC_FLAT_FLOOR_ROCKS=1: flat. */
+             * mounds as Rusturf's, cards (64,48) 0x20E (was (16,32)) and (0,48) 0x20F / 0x21F. WJPC_FLAT_FLOOR_ROCKS=1: flat.
+             * Brennan 2026-11-26 20:07 (Route 103's north woods, red box: "2D trees still laying on the ground" - white
+             * and brown flecks along a diagonal): the large tree's crown card reads 36 rows of the trees texture
+             * (kLargeTree, rows 0-35, the last ones meant to be clear, sunk into the ground), and the cards at (0,32)
+             * and (16,32) put the tops of two rocks in its rows 33-35 - under every large crown, seen where the
+             * wood's floor dips below a tree (a slope between two levels). Those two cards moved to free slots. */
             else if (inst->secondaryTileset == &gTileset_MeteorFalls
                   && (metatileId == 0x20E || metatileId == 0x20F || metatileId == 0x21F)
                   && getenv("WJPC_FLAT_FLOOR_ROCKS") == NULL)
             {
                 builder->lift = VoxelRelief_CellLift(inst, x, y);
                 builder->shift = VoxelRelief_CellShift(inst, x, y);
-                EmitRockMound(builder, x, y, metatileId == 0x20E ? 16u : 0u, metatileId == 0x20E ? 32u : 48u);
+                EmitRockMound(builder, x, y, metatileId == 0x20E ? 64u : 0u, 48u);
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
             }
@@ -929,7 +934,7 @@ void VoxelTree_EmitInstance(VoxelBuilder *builder, const VoxelMapInstance *inst,
             {
                 builder->lift = VoxelRelief_CellLift(inst, x, y);
                 builder->shift = VoxelRelief_CellShift(inst, x, y);
-                EmitRockMound(builder, x, y, 0u, 32u);
+                EmitRockMound(builder, x, y, 16u, 48u);
                 builder->lift = 0.0f;
                 builder->shift = 0.0f;
             }
@@ -1161,12 +1166,25 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                     sBeltNoGround = !sSquares && !ledge && ring != NULL && VoxelRelief_Belt(ring) == 0;
                     /* (at the wood's edge - the sea, a field, a map beside it - the square stays: it closed the seam
                      * there, a line of sky through the water without it) */
+                    /* Brennan 2026-11-26 20:07 (Route 103's woods by the lake, red box: "2D trees still laying on
+                     * the ground"): at a wood's edge only the edge row's cells had their squares - the lower half of
+                     * each tree's shadow and its trunk, drawn flat: a row of half circles with trunks lying in front
+                     * of the crowns. (Laid for the whole tree, the squares' ground showed between the trees, white
+                     * in winter - Route 121.) A large tree's square stays only by the sea, where it closes the seam;
+                     * beside a map or a field the edge's own ground (voxel_mesh_builder.c) is under the crowns. Small
+                     * trees keep their trunks' squares. WJPC_BELT_EDGE_SQUARES=1: at every edge, as before. */
+                    static int sEdgeSquares = -1;
+                    if (sEdgeSquares < 0)
+                        sEdgeSquares = getenv("WJPC_BELT_EDGE_SQUARES") != NULL;
                     for (int k = 0; k < 4 && sBeltNoGround; k++)
                     {
                         int nx = x + (k == 0) - (k == 1), ny = y + (k == 2) - (k == 3);
                         const VoxelMapInstance *na = VoxelWorld_GetInstanceAt(nx, ny) == NULL ? VoxelWorld_BorderArtMap(nx, ny) : NULL;
-                        sBeltNoGround = na != NULL && VoxelWorld_UsesTreeSprites(na)
-                                     && VoxelTree_Part(na->secondaryTileset, VoxelWorld_BorderMetatile(nx, ny)) >= 0;
+                        if (sEdgeSquares || part < 0 || part > 3) /* (a small tree: its trunk's square, as before) */
+                            sBeltNoGround = na != NULL && VoxelWorld_UsesTreeSprites(na)
+                                         && VoxelTree_Part(na->secondaryTileset, VoxelWorld_BorderMetatile(nx, ny)) >= 0;
+                        else
+                            sBeltNoGround = !VoxelMesh_BeltWater(nx, ny);
                     }
                 }
                 if (plateauOwn)
