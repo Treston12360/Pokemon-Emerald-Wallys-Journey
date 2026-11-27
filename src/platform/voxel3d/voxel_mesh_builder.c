@@ -2672,6 +2672,7 @@ static bool WaterFaceOld(void)
     return sOld != 0;
 }
 
+static bool LavaridgeJoinLit(const VoxelMapInstance *inst, int x, int y);
 static void EdgeOverBelt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y, int d, int nx, int ny)
 {
     static int sOpen = -1;
@@ -2868,7 +2869,19 @@ static void EmitSeamSkirt(VoxelBuilder *b, const VoxelMapInstance *inst, int x, 
             continue;
         other = VoxelWorld_GetInstanceAt(nx, ny);
         if (other == NULL && !inst->indoor)
+        {
+            /* (Lavaridge's join: Route 112's west edge's wall lit as the ground - LavaridgeJoinLit) */
+            const bool joinLit = d == 2 && LavaridgeJoinLit(inst, x, y), keepLit = b->lighting;
+            const unsigned first = b->count;
+            if (joinLit)
+                b->lighting = false;
             EdgeOverBelt(b, inst, x, y, d, nx, ny);
+            b->lighting = keepLit;
+            if (joinLit)
+                for (unsigned k = first; k < b->count; ++k)
+                    if (b->vertices[k].shade < 3.0f)
+                        b->vertices[k].shade += 4.0f;
+        }
         if (other == NULL && !inst->indoor && d != 1)
         {
             /*
@@ -4113,6 +4126,27 @@ static bool EverGrandeNook(const VoxelMapInstance *inst, int x, int y)
     return ly >= 54 && ly <= 75 && ((lx >= 9 && lx <= 16) || (lx >= 25 && lx <= 31));
 }
 
+/*
+ * Brennan 2026-11-27 04:40 / 04:48 (Lavaridge's north mountain joined to Route 112's peak, LavaridgeJoinFloor): with
+ * the land west of Route 112 now as high as its west edge, the sun (from the west) reaches that edge's last sliver
+ * of rock face only past the land beside it - every row's step of it lay in shadow, a dark band from top to bottom
+ * along the join. Route 112's west column is lit as the ground there (shade + 4, the shader's vFlat), as the Ever
+ * Grande nook is. (WJPC_N13_IDEA=4 for now.)
+ */
+static const VoxelMapInstance *PlacedLayout(int layoutId);
+static bool LavaridgeJoinLit(const VoxelMapInstance *inst, int x, int y)
+{
+    const VoxelMapInstance *lav;
+    int lx, ly;
+
+    if (VoxelWorld_N13Variant() != 4 || inst == NULL || inst->layoutId != 28 /* LAYOUT_ROUTE112 */
+     || (lav = PlacedLayout(13)) == NULL || inst->originX != lav->originX + lav->width || inst->originY + 40 != lav->originY)
+        return false;
+    lx = x - inst->originX;
+    ly = y - inst->originY;
+    return lx <= 1 && ly >= 5 && ly <= 40;
+}
+
 static void EmitEverGrandePatch(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y)
 {
     static int sOff = -1;
@@ -5089,7 +5123,7 @@ void VoxelMesh_EmitGroundRow(VoxelBuilder *builder, const VoxelMapInstance *inst
                 }
                 art = BirthTreeGround(inst, x, sign ? y + 1 : y, art);
                 art = LadderGround(inst, x, sign ? y + 1 : y, art);
-                const bool keepLit = builder->lighting, nook = EverGrandeNook(inst, x, y);
+                const bool keepLit = builder->lighting, nook = EverGrandeNook(inst, x, y) || LavaridgeJoinLit(inst, x, y);
                 const unsigned nookFirst = builder->count;
                 if (nook)
                     builder->lighting = false;
@@ -7014,6 +7048,244 @@ static bool NaturalRockCell(int x, int y, bool r118Only)
     return BorderAt(x, y) && !BeltIsTree(x, y) && !BorderWaterLevel(x, y, &wl, &ws);
 }
 
+/* the placed map of a layout (NULL if none) */
+static const VoxelMapInstance *PlacedLayout(int layoutId)
+{
+    for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+    {
+        const VoxelMapInstance *m = VoxelWorld_Instance(i);
+        if (m != NULL && m->layout != NULL && !m->indoor && m->layoutId == layoutId)
+            return m;
+    }
+    return NULL;
+}
+
+static bool EdgePointHeight(const VoxelMapInstance *m, int px, int py, float *h, float *s);
+
+/*
+ * Brennan 2026-11-27 04:40 / 04:48 (Lavaridge north, red box: "needs to flow seemlessly into the mountain to its
+ * right ... if you zoom out the mountain is cut off. the left side of the mountain needs to step up to the top of the
+ * mountain as if it were one full mountain till its peak"; his sketch: a slope climbing from the left all the way up
+ * to the peak on the right): Route 112's mountain (its west edge 15-18 levels over its base, rows 7-20) stood as a
+ * tall wall over the land west of it, which the caps from Lavaridge's and Route 113's low edges held down. West of
+ * Route 112, from Route 113's south edge to Lavaridge's north edge, the land now stands at least at Route 112's
+ * edge height in the same row, less a level every LAV_JOIN_RATE cells west of it: the peak's flank steps down
+ * westward and its ledges wrap round it - one mountain. Route 112's own rows north of the peak are low (its path to
+ * Route 113), so north of the peak the land stays low, as Route 112's own does. Only with Lavaridge and Route 112
+ * placed as Hoenn places them (Route 112's row 40 Lavaridge's row 0). (WJPC_N13_IDEA=4 for now.)
+ */
+#define LAV_JOIN_RATE 4.0f
+#define LAV_JOIN_REACH 44
+static bool LavaridgeJoinFloor(int vx, int vy, float *floorOut)
+{
+    const VoxelMapInstance *lav, *r112;
+    float e, es;
+
+    if (VoxelWorld_N13Variant() != 4 || (lav = PlacedLayout(13)) == NULL || (r112 = PlacedLayout(28)) == NULL
+     || r112->originX != lav->originX + lav->width || r112->originY + 40 != lav->originY)
+        return false;
+    if (vx >= r112->originX || vx < r112->originX - LAV_JOIN_REACH || vy < r112->originY || vy > lav->originY)
+        return false;
+    if (!EdgePointHeight(r112, r112->originX, vy, &e, &es))
+        return false;
+    /* (level with the edge for the first cell west of it - a quarter level down there left the terraced cell beside
+     * Route 112 a whole level under its edge, a dark strip of its west wall along the join) */
+    {
+        float out = (float)(r112->originX - vx) - 1.0f;
+        *floorOut = e - (out > 0.0f ? out : 0.0f) / LAV_JOIN_RATE;
+    }
+    return true;
+}
+
+/* how much of the ledges' jogs the join takes: none beside Route 112's edge, all three cells out */
+static float LavaridgeJoinJog(int vx)
+{
+    const VoxelMapInstance *r112 = PlacedLayout(28);
+    float f;
+
+    if (r112 == NULL)
+        return 1.0f;
+    f = ((float)(r112->originX - vx) - 1.0f) / 3.0f;
+    return f < 0.0f ? 0.0f : f > 1.0f ? 1.0f : f;
+}
+
+/*
+ * Brennan 2026-11-27 04:40 (Lavaridge west, circled: "add more trees over here to make it more natural formating. west
+ * side try adding a little pond with trees scattered around it, this may help tie the mountain together"): a small
+ * pond on the mountain west of Lavaridge, LAV_POND_DX cells west of its west edge and LAV_POND_DY rows down from its
+ * north edge: water (the General's, as Hoenn's ponds) in an uneven oval about 5 x 4 cells, a flat rim of ground round
+ * it, the slope blending back in over the next cells; trees scattered round it (VoxelMesh_LedgeTree). Its level is
+ * the land's at its middle. (WJPC_N13_IDEA=4 for now.)
+ */
+#define LAV_POND_DX 8
+#define LAV_POND_DY 5
+#define LAV_POND_RX 2.6f
+#define LAV_POND_RY 2.0f
+static bool LavaridgePondAt(float px, float py, float *rOut, float *level);
+static VOXEL_TLS int sNoPond;
+static void BeltFieldUncached(int vx, int vy, float *height, float *south);
+
+/* the pond's middle (world cells), FALSE without it */
+static bool LavaridgePondCentre(float *cx, float *cy)
+{
+    const VoxelMapInstance *lav;
+
+    if (VoxelWorld_N13Variant() != 4 || (lav = PlacedLayout(13)) == NULL)
+        return false;
+    *cx = (float)(lav->originX - LAV_POND_DX) + 0.5f;
+    *cy = (float)(lav->originY + LAV_POND_DY) + 0.5f;
+    return true;
+}
+
+/* how far point (px, py) is from the pond's middle, in units of its (uneven) shore - under 1 is water - and the
+ * pond's level (world) */
+static bool LavaridgePondAt(float px, float py, float *rOut, float *level)
+{
+    static VOXEL_TLS unsigned sGen;
+    static VOXEL_TLS float sLevel;
+    float cx, cy, dx, dy, a, wob;
+
+    if (!LavaridgePondCentre(&cx, &cy))
+        return false;
+    dx = (px - cx) / LAV_POND_RX;
+    dy = (py - cy) / LAV_POND_RY;
+    if (fabsf(dx) > 4.0f || fabsf(dy) > 4.0f)
+        return false;
+    a = atan2f(dy, dx);
+    /* (uneven: the shore wanders by a fifth of the radius round it) */
+    wob = 1.0f + 0.12f * sinf(2.0f * a + 0.7f) + 0.08f * sinf(3.0f * a + 2.1f);
+    *rOut = sqrtf(dx * dx + dy * dy) / wob;
+    if (sGen == 0 || sGen != VoxelWorld_CellGen())
+    {
+        float h, s;
+        sNoPond = 1;
+        BeltFieldUncached((int)floorf(cx), (int)floorf(cy), &h, &s);
+        sNoPond = 0;
+        sLevel = floorf(h + 0.5f);
+        sGen = VoxelWorld_CellGen();
+    }
+    *level = sLevel;
+    return true;
+}
+
+/* TRUE for a cell of the pond's water (its level, world) */
+static bool LavaridgePondWater(int x, int y, float *level)
+{
+    float r;
+    return LavaridgePondAt((float)x + 0.5f, (float)y + 0.5f, &r, level) && r < 1.0f;
+}
+
+/*
+ * Brennan 2026-11-27 04:51 (Route 116, its red rock behind the woods - the far edge of the land in front of Lavaridge,
+ * where the world puts Lavaridge north of Route 116: "B lets try this and see what it looks like" - B: "give the cliff
+ * the same uneven ledges and scattered trees as the other spots, so it doesn't read as one straight wall"): in front of
+ * a map whose belt is its drawing (Lavaridge) the land stands at its edge's height (nearDrawnSouth) right up to the
+ * line where another map's land is the nearer - one straight wall down to that map's woods. Over the last
+ * FAR_EDGE_BAND cells before that line (the line wandering by a few cells) it steps down to the land beyond, jogged as
+ * the other spots (JogValue), trees scattered on its ledges (VoxelMesh_LedgeTree). 0 well inside, 1 at the line.
+ * (WJPC_N13_IDEA=4 for now.)
+ */
+#define FAR_EDGE_BAND 10.0f
+static float FarEdgeBand(int vx, int vy)
+{
+    float dDrawn = 1e9f, dOther = 1e9f, gap, t;
+    bool southOfDrawn = false;
+
+    if (VoxelWorld_N13Variant() != 4)
+        return 0.0f;
+    for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+    {
+        const VoxelMapInstance *m = VoxelWorld_Instance(i);
+        int ox, oy;
+        float qx, qy, d;
+
+        if (m == NULL || m->layout == NULL || m->indoor)
+            continue;
+        ox = m->originX;
+        oy = m->originY;
+        qx = vx < ox ? (float)ox : vx > ox + m->width ? (float)(ox + m->width) : (float)vx;
+        qy = vy < oy ? (float)oy : vy > oy + m->height ? (float)(oy + m->height) : (float)vy;
+        d = sqrtf(((float)vx - qx) * ((float)vx - qx) + ((float)vy - qy) * ((float)vy - qy));
+        if (VoxelRelief_Belt(m) != 0)
+        {
+            if (d < dDrawn)
+            {
+                dDrawn = d;
+                southOfDrawn = vy >= oy + m->height;
+            }
+        }
+        else
+            dOther = d < dOther ? d : dOther;
+    }
+    if (!southOfDrawn || dOther >= 1e8f || dDrawn >= dOther + 3.0f)
+        return 0.0f;
+    gap = (dOther - dDrawn) + 2.5f * FieldNoiseAt((float)vx / 7.0f, (float)vy / 7.0f, 41);
+    if (gap >= FAR_EDGE_BAND)
+        return 0.0f;
+    t = 1.0f - (gap > 0.0f ? gap : 0.0f) / FAR_EDGE_BAND;
+    return t * t * (3.0f - 2.0f * t);
+}
+
+/*
+ * Brennan 2026-11-27 04:47 (#13, the flat red plains in front of Mt. Chimney and Jagged Pass: "yes dont keep them
+ * flat"): low rolling hills there - up to FRONT_HILLS levels, rounded mounds about ten cells across - starting
+ * FRONT_HILLS_FROM rows south of the map's edge (the rows the camera looks over when the player stands at it stay
+ * flat) and full by FRONT_HILLS_FULL rows; fading out over six cells past the map's sides. (WJPC_N13_IDEA=4 for now.)
+ */
+enum { FRONT_HILLS_FROM = 3, FRONT_HILLS_FULL = 8 };
+#define FRONT_HILLS 3.0f
+static float FrontHills(int vx, int vy)
+{
+    float best = 0.0f;
+
+    if (VoxelWorld_N13Variant() != 4)
+        return 0.0f;
+    for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
+    {
+        const VoxelMapInstance *m = VoxelWorld_Instance(i);
+        int ox, ex, ey;
+        float fy, fx, n;
+
+        if (m == NULL || m->layout == NULL || m->indoor || (m->layoutId != 136 && m->layoutId != 292))
+            continue;
+        ox = m->originX;
+        ex = ox + m->width;
+        ey = m->originY + m->height;
+        if (vy <= ey + FRONT_HILLS_FROM)
+            continue;
+        fy = (float)(vy - ey - FRONT_HILLS_FROM) / (float)(FRONT_HILLS_FULL - FRONT_HILLS_FROM);
+        fy = fy > 1.0f ? 1.0f : fy;
+        fx = vx < ox ? 1.0f - (float)(ox - vx) / 6.0f : vx > ex ? 1.0f - (float)(vx - ex) / 6.0f : 1.0f;
+        if (fx <= 0.0f)
+            continue;
+        n = 0.65f * FieldNoiseAt((float)vx / 9.0f, (float)vy / 7.0f, 31) + 0.35f * FieldNoiseAt((float)vx / 4.5f, (float)vy / 3.5f, 37);
+        n = (n + 0.35f) / 1.2f;
+        n = n < 0.0f ? 0.0f : n;
+        n = n * n * (3.0f - 2.0f * n);   /* (rounded tops, soft feet) */
+        n *= FRONT_HILLS * fy * fx;
+        best = n > best ? n : best;
+    }
+    return best;
+}
+
+/* the 2D maps' way of drawing a ledge's edge (WJPC_N13_IDEA 4, R118FieldJitter): straight for a few cells, then a
+ * jog - a value held over a block 4-7 cells along the ledges (`beside`: they run north-south) and 3 across, the blocks'
+ * ends staggered; -0.75..0.75 levels, a little smooth wobble on top */
+static float JogValue(int vx, int vy, bool beside)
+{
+    int along = beside ? vy : vx, across = beside ? vx : vy;
+    int band = (int)floorf((float)across / 3.0f);
+    uint32_t hb = (uint32_t)band * 0x9E3779B1u ^ (beside ? 0x68E31DA4u : 0u);
+    int shift = (int)((hb >> 7) % 7u), len = 4 + (int)((hb >> 13) % 4u);
+    int blk = (int)floorf((float)(along + shift) / (float)len);
+    uint32_t h = (uint32_t)blk * 0x85EBCA77u ^ (uint32_t)band * 0xC2B2AE3Du;
+
+    h ^= h >> 15;
+    h *= 0x2C1B3C6Du;
+    h ^= h >> 12;
+    return 0.75f * ((float)(h & 1023u) / 511.5f - 1.0f) + 0.25f * FieldNoiseAt((float)vx / 6.0f, (float)vy / 4.5f, 7);
+}
+
 static float R118FieldJitter(int vx, int vy)
 {
     static int sOff = -1;
@@ -7601,7 +7873,17 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
         if (nearSouth && *height < nearE && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
             *height = nearE;
         if (nearDrawnSouth && getenv("WJPC_FIELD_SOUTH_DIP") == NULL)
-            *height = nearE;
+        {
+            /* (Brennan 2026-11-27 04:51, Route 116 "B": near where another map's land takes over, stepping down to it,
+             * jogged - FarEdgeBand) */
+            float band = FarEdgeBand(vx, vy);
+            /* (toward the edges' blend without the climb - the land the woods beyond stand on) */
+            *height = nearE + (sumE / sumW - nearE) * band;
+            if (band > 0.0f)
+                *height += band * JogValue(vx, vy, false);
+        }
+        /* (Brennan 2026-11-27 04:47: rolling hills in front of Mt. Chimney and Jagged Pass - FrontHills) */
+        *height += FrontHills(vx, vy);
         if (*height > capMin)
             *height = capMin;
         /* POL-46 (Brennan 2026-11-18 19:18: "Step the mountain down on BOTH sides toward the water"): within
@@ -7632,6 +7914,28 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
                 }
             if (*height > best)
                 *height = best;
+        }
+        /* (Brennan 2026-11-27 04:40/04:48: Lavaridge's north mountain steps up into Route 112's peak -
+         * LavaridgeJoinFloor; its ledges jogged as the rest of the zone) */
+        {
+            float jf;
+            if (LavaridgeJoinFloor(vx, vy, &jf))
+            {
+                jf += r118jUse * LavaridgeJoinJog(vx);
+                if (*height < jf)
+                    *height = jf;
+            }
+        }
+        /* (and the pond west of Lavaridge, its water and rim flat, the slope blending back in round it -
+         * LavaridgePondAt) */
+        if (!sNoPond)
+        {
+            float pr, pl;
+            if (LavaridgePondAt((float)vx, (float)vy, &pr, &pl) && pr < 2.6f)
+            {
+                float w = pr < 1.6f ? 1.0f : 1.0f - (pr - 1.6f) / 1.0f;
+                *height = *height + (pl - *height) * w;
+            }
         }
         /* the way south only where the belt meets a map (to meet its edge exactly), gone over BELT_FIELD_SOUTH cells:
          * a mountain drawn as far south as it is high stood rows away from where it is, over the belt's sea and
@@ -8206,6 +8510,52 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
     b->lift = 0.0f;
     b->shift = 0.0f;
     b->stretchAdd = 0.0f;
+    /* (Brennan 2026-11-27 04:40: the pond west of Lavaridge - LavaridgePondWater: a flat sheet of the General's water
+     * at its level, drawn as far south as it is high as the land round it) */
+    /* (its shore in quarter cells, round as the 2D maps' ponds' shores are drawn - whole cells made it a rectangle:
+     * a cell all water is only water, one partly water keeps its ground and the water lies a hair over it) */
+    {
+        float pl, pr, pu0, pv0, pu1, pv1;
+        if (LavaridgePondAt((float)x + 0.5f, (float)y + 0.5f, &pr, &pl) && pr < 1.7f
+         && MetatileUV(b, 0x170, &pu0, &pv0, &pu1, &pv1))
+        {
+            bool wet[16], all = true, any = false;
+            for (int q = 0; q < 16; ++q)
+            {
+                float r2, l2;
+                wet[q] = LavaridgePondAt((float)x + ((float)(q & 3) + 0.5f) / 4.0f, (float)y + ((float)(q >> 2) + 0.5f) / 4.0f,
+                                         &r2, &l2) && r2 < 1.0f;
+                all = all && wet[q];
+                any = any || wet[q];
+            }
+            for (int q = 0; q < 16 && any; ++q)
+            {
+                VoxelVertex v[4];
+                if (!wet[q])
+                    continue;
+                for (int k = 0; k < 4; ++k)
+                {
+                    float fx = (float)((q & 3) + (k & 1)) / 4.0f, fy = (float)((q >> 2) + (k >> 1)) / 4.0f;
+                    v[k].x = (float)x + fx;
+                    v[k].y = pl + (all ? 0.0f : 0.02f);
+                    v[k].z = (float)y + fy + pl;
+                    v[k].u = pu0 + (pu1 - pu0) * fx;
+                    v[k].v = pv0 + (pv1 - pv0) * fy;
+                    v[k].shade = SHADE_TOP;
+                }
+                VoxelBuilder_Tri(b, &v[0], &v[3], &v[1]);
+                VoxelBuilder_Tri(b, &v[0], &v[2], &v[3]);
+            }
+            if (all)
+            {
+                b->base = keepBase;
+                b->lift = keepLift;
+                b->shift = keepShift;
+                b->stretchAdd = keepStretch;
+                return;
+            }
+        }
+    }
     /* Brennan 2026-11-22 13:37 (B2, Verdanturf's west woods: "grey/snow-covered cliff blocks are jutting straight
      * through the middle of the 3D trees"): under a wood climbing a slope the field's ledges stood as blocks of grass
      * between the crowns. Under a cell of the woods the field is laid as one
@@ -8579,7 +8929,26 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
             if (m != NULL && m->layout != NULL && !m->indoor && m->layoutId == 13 && y < m->originY
              && x >= m->originX - 2 && x < m->originX + m->width + 8)
                 wood = TreeScatter(x, y) < (WoodHash(x >> 2, y / 3) % 3u == 0u ? 60u : 14u);
+            /* (Brennan 2026-11-27 04:40, the west side: "add more trees over here" - the far-west terraces were left
+             * bare on 2026-11-18 23:31; this supersedes it - a little thicker than the north, half the patches) */
+            else if (m != NULL && m->layout != NULL && !m->indoor && m->layoutId == 13 && x < m->originX
+                  && y >= m->originY - 2 && y < m->originY + m->height + 2)
+                wood = TreeScatter(x, y) < (WoodHash(x >> 2, y / 3) % 2u == 0u ? 55u : 15u);
         }
+    /* (Route 116 "B": on the ledges where the land in front of Lavaridge steps down - FarEdgeBand) */
+    if (!wood && VoxelWorld_N13Variant() == 4 && FarEdgeBand(x, y) > 0.25f)
+        wood = TreeScatter(x, y) < (WoodHash(x >> 2, y / 3) % 2u == 0u ? 50u : 14u);
+    /* (and round the pond west of Lavaridge, on its rim: "a little pond with trees scattered around it") */
+    {
+        float pr, pl;
+        if (!wood && LavaridgePondAt((float)x + 0.5f, (float)y + 0.5f, &pr, &pl) && pr >= 1.45f && pr < 2.6f)
+            wood = TreeScatter(x, y) < 45u;
+        /* (none in the water or so near it that a crown stood over it: a tree is a cell and a half tall) */
+        if (wood && LavaridgePondAt((float)x + 0.5f, (float)y + 0.5f, &pr, &pl) && pr < 1.45f)
+            return false;
+        if (wood && LavaridgePondAt((float)x + 0.5f, (float)y + 1.5f, &pr, &pl) && pr < 1.0f)
+            return false;
+    }
     /* Brennan 2026-11-23 06:28 (Route 114's west plateau: "Scatter some trees") - VoxelMesh_PlateauTree */
     bool plateau = !wood && VoxelMesh_PlateauTree(x, y);
     wood = wood || plateau;

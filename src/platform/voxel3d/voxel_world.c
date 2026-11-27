@@ -1662,6 +1662,10 @@ static void MarkEdgeFills(const VoxelMapInstance *inst, uint8_t *used)
     for (unsigned i = 0; VoxelRelief_EdgeFills((unsigned)inst->layoutId, i, &metatile); ++i)
         if (metatile >= 0 && metatile < NUM_METATILES_TOTAL)
             used[metatile] = 2;
+    /* (Brennan 2026-11-27 04:40: the pond on the mountain west of Lavaridge - the General's water, which no map on
+     * Lavaridge's tile sets uses; voxel_mesh_builder.c LavaridgePondWater) */
+    if (inst->layoutId == LAYOUT_LAVARIDGE_TOWN && VoxelWorld_N13Idea())
+        used[0x170] = 2;
 }
 
 /* The cut records' grounds and walls, in the window MarkUsedMetatiles reads
