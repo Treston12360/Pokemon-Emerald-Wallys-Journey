@@ -1,4 +1,5 @@
 #include "global.h"
+#include "tandem_overworld.h"   /* (Project Tandem) */
 #include "wj_outfit.h"
 #include "battle_transition.h"
 #include "overworld.h"
@@ -1941,6 +1942,7 @@ u8 UpdateSpritePaletteWithTime(u8 paletteNum)
 
 static void OverworldBasic(void)
 {
+    TandemOverworld_Update();   /* (Project Tandem T2: friends on my map; nothing unless connected) */
     ScriptContext_RunScript();
     RunTasks();
     AnimateSprites();

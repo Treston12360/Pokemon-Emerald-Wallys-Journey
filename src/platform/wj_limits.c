@@ -1,5 +1,6 @@
 // PC only: the GBA limits on people (object events), sprites and sprite colours, raised.
 #include "global.h"
+#include "tandem_overworld.h"   /* (Project Tandem) */
 #include "event_object_movement.h"
 #include "constants/event_objects.h"
 
@@ -20,6 +21,14 @@ u32 WJPC_PickObjectEventSlot(u32 firstFree, u16 localId)
 
     if (firstFree >= OBJECT_EVENTS_COUNT)
         return firstFree;
+    /* (Project Tandem: a friend's ghost only in the spare slots - never saved) */
+    if (localId >= TANDEM_GHOST_LOCALID(0) && localId <= TANDEM_GHOST_LOCALID(2))
+    {
+        for (i = SAVED_OBJECT_EVENTS_COUNT; i < OBJECT_EVENTS_COUNT; i++)
+            if (!gObjectEvents[i].active)
+                return i;
+        return OBJECT_EVENTS_COUNT;
+    }
     if (localId == OBJ_EVENT_ID_PLAYER || localId == OBJ_EVENT_ID_FOLLOWER || localId == OBJ_EVENT_ID_NPC_FOLLOWER)
         return firstFree < SAVED_OBJECT_EVENTS_COUNT ? firstFree : OBJECT_EVENTS_COUNT;
     if (firstFree < SAVED_OBJECT_EVENTS_COUNT - RESERVED_FOR_FOLLOWERS)

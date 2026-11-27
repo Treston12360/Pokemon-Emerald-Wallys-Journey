@@ -1,4 +1,5 @@
 #include "global.h"
+#include "tandem_overworld.h"   /* (Project Tandem) */
 #include "wj_outfit.h"
 #include "wally_journey.h"
 #include "tilesets.h"
@@ -6568,6 +6569,10 @@ u32 GetObjectObjectCollidesWith(struct ObjectEvent *objectEvent, s16 x, s16 y, b
 
     if (objectEvent->localId == OBJ_EVENT_ID_FOLLOWER)
         return OBJECT_EVENTS_COUNT; // follower cannot collide with other objects, but they can collide with it
+    // Project Tandem (Brennan 2026-11-27: friends walk through each other): a friend's ghost blocks nobody and is
+    // blocked by nobody
+    if (TandemOverworld_IsGhost(objectEvent))
+        return OBJECT_EVENTS_COUNT;
 
     if (addCoords)
     {
@@ -6580,6 +6585,7 @@ u32 GetObjectObjectCollidesWith(struct ObjectEvent *objectEvent, s16 x, s16 y, b
         curObject = &gObjectEvents[i];
         if (curObject->active && (curObject->movementType != MOVEMENT_TYPE_FOLLOW_PLAYER || objectEvent != &gObjectEvents[gPlayerAvatar.objectEventId]) && curObject != objectEvent
          && !FollowerNPC_IsCollisionExempt(curObject, objectEvent)
+         && !TandemOverworld_IsGhost(curObject)
          )
         {
             // check for collision if curObject is active, not the object in question, and not exempt from collisions

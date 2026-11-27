@@ -1,8 +1,9 @@
-# Project Tandem - how to connect (step 1: connecting only)
+# Project Tandem - how to connect (steps 1-2: connecting, seeing each other)
 
-Right now connecting only checks the games can talk: you see who is connected in the window's title, and
-`WallysJourney_tandem.log` (next to the game) lists who joined, the hello messages and the delay. You don't see each
-other in the game yet - that is the next step.
+You see who is connected in the window's title, and `WallysJourney_tandem.log` (next to the game) lists who joined,
+the hello messages and the delay. When a friend is on the same map as you, they show up as a person walking around
+(walking, running, biking or surfing as they do); you walk through each other. They disappear when they leave the
+map or the game. Changing maps together, trading, battles and the rest are later steps.
 
 Everyone needs the **same game zip** (the game refuses a different build and says so in the log).
 

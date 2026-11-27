@@ -38,4 +38,25 @@ bool TandemNet_Active(void);
 /* a short line for the window title ("" when not active); changes - compare *gen with the last one seen */
 const char *TandemNet_StatusText(unsigned *gen);
 
+/* T2: where a player is (src/tandem_overworld.c fills and reads these; nothing here knows what they mean) */
+typedef struct
+{
+    unsigned char valid;        /* 0: not in the overworld (or not known yet) */
+    unsigned char mapGroup, mapNum;
+    short x, y;                 /* the player's tile, as the game keeps it (map coordinates + 7) */
+    unsigned char facing;       /* DIR_* */
+    unsigned char speed;        /* 0 walking, 1 running / Acro Bike, 2 Mach Bike, 3 surfing */
+    unsigned short gfx;         /* the player's graphics id (outfit, bike, surfing) */
+    unsigned char elevation;
+} TandemState;
+
+/* my place, every overworld frame (the network sends it when it changes) */
+void TandemNet_SetMyState(const TandemState *state);
+/* my player number (0 = the host) */
+unsigned TandemNet_MySlot(void);
+/* TRUE while player `slot` is connected (not me) */
+bool TandemNet_SlotConnected(unsigned slot);
+/* the oldest place of player `slot` not yet taken, in the order they were sent; FALSE when none is waiting */
+bool TandemNet_PopState(unsigned slot, TandemState *out);
+
 #endif
