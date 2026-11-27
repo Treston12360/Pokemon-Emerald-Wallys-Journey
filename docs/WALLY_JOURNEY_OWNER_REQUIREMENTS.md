@@ -1663,3 +1663,20 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   1920x1080 and 2560x1440 the same as N77, 14 more Jagged Pass / Mt Chimney views - only the known stair-peak cracks
   and Mt Chimney's south-east corner sliver (both there before). Next: the cliff holes and seams (the upper-left pocket
   is relief.bin: cells 0-4 x 8-9 and 0,7 of layout 292 lie at 2 levels, walled in by 5-6 - the shelf should be at 5).
+- 2026-11-27 N79 (Jagged Pass 22:59 list, part 2 - holes, seams, the plant): relief.bin layout 292 (every command in
+  tools/voxel3ds/README.md "Jagged Pass relief hand edits"; rebuilt from N78's file byte for byte): the upper-left
+  pocket raised to the ground round it (its two ash trees now stand on it); the ridge ends by the tall grass laid as
+  hips (no open triangle under the plateau's edge; 7,23's east edge kept no higher than the grass beside it); the mound
+  beside the cobbles meets the ground round it (its hips with the peak's ground run on under them); the far-right
+  triangle (29,16 one slope plane meeting the cell south of it); the bottom-right tear (22,28's rock rose from 0 px,
+  under the ground at 8 px - a fold and a light sliver); 56 ledge faces were the General's grey cliff 0x07C (the
+  blue-grey band under every red ledge) - now the map's own red cliff 0x274. Still dark, as every short ledge face in
+  the game: a face upright to the south takes no sun (asked Brennan if he wants these lighter). The clipped plant: a
+  General small tree the belt puts on its ledges (here at -1,30, at the foot of Jagged Pass's west slope) stood half
+  sunk behind the slope - no ledge tree now where the map cell beside it climbs more than a quarter level over its
+  foot (voxel_mesh_builder.c VoxelMesh_LedgeTree; WJPC_LEDGE_TREE_BY_SLOPE=1: as before; every map). Gap test (14
+  Jagged Pass / Mt Chimney views, 1920x1080 and 2560x1440): all 0 but Mt Chimney's known south-east corner sliver
+  (3/4 px); the stair-peak pixels at 24_13_15_40 gone. Without the safety floor (what it hides): 24_13_14_34 126 -> 4
+  px, 15_40 159 -> 41 (a wedge under 22,27's wall, inside a dark band as before), 21_25 101 -> 0, 3_15 41 -> 1, the
+  rest 0. Pictures: docs/polish_reports/2026-11-27_N79_jagged_pass_seams.png. Next: the stairs as 3D steps (first ones
+  shown for his OK), the stairs' ends.

@@ -8319,6 +8319,33 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
     if (hi != lo)
         return false;   /* a wall crosses it or its neighbours: no tree on or over a cliff face */
     ring = VoxelWorld_BeltRing(x, y);
+    /* Brennan 2026-11-26 22:59 (Jagged Pass, bottom left: "plant clipped into the cliff"): a ledge tree beside a map
+     * whose ground climbs from the tree's foot - (-1,30) at the foot of Jagged Pass's west slope - stood half sunk
+     * behind the slope's rise. No ledge tree where the map cell beside it (east or west, the same row) climbs more than
+     * a quarter level over the tree's foot within the half of that cell nearest the tree. Beside flat ground (the
+     * woods on to the south) they stay. WJPC_LEDGE_TREE_BY_SLOPE=1: as before. */
+    {
+        static int sBySlope = -1;
+        if (sBySlope < 0)
+            sBySlope = getenv("WJPC_LEDGE_TREE_BY_SLOPE") != NULL;
+        for (int side = 0; side < 2 && !sBySlope; ++side)
+        {
+            int cx = side == 0 ? x - 1 : x + (wide ? 2 : 1);
+
+            if (VoxelWorld_GetInstanceAt(cx, y) == NULL)
+                continue;
+            for (int i = 0; i <= 2; ++i)
+                for (int j = 0; j <= 4; ++j)
+                {
+                    /* (the edge nearest the tree first: west of it the cell's east half, east of it its west half) */
+                    float px = side == 0 ? cx + 1.0f - 0.001f - i * 0.25f : cx + i * 0.25f;
+                    float pz = y + fminf(j * 0.25f, 0.999f);
+
+                    if (VoxelRelief_LiftAt(px, pz) > lo + 0.25f)
+                        return false;
+                }
+        }
+    }
     *level = lo - (ring != NULL ? VoxelRelief_Base(ring) : 0.0f);
     *shift = sh - (ring != NULL ? VoxelRelief_Base(ring) : 0.0f);
     return true;

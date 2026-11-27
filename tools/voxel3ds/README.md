@@ -103,3 +103,25 @@ VOXEL_TREE_TEXTURE_DIM; the game reads it at that size). The generator writes 12
 it first - `grow_trees_texture.py IN_128 OUT_256` (old pixels keep their x, y) - and put the Polish cards back.
 Checked 2026-11-26: the 128x128 file before N77, grown, plus add_lavaridge_tree_cards.py = the committed file, byte for
 byte. Easiest: keep the file from git.
+
+## Jagged Pass relief hand edits (N79, 2026-11-27, session 014PwRDj)
+Brennan 2026-11-26 22:59 (Jagged Pass holes and seams). Layout 292 in `pc_data/voxel/relief.bin`, all made with the
+tools here - **whoever regenerates relief.bin must make them again** (or keep layout 292 from git: `splice_relief.py`):
+- the upper-left pocket: `patch_relief_cells.py relief.bin 292 80 0,7 0,8 1,8 2,8 3,8 4,8 0,9 1,9 2,9 3,9 4,9`
+  (the pit's cells raised to the ground round them, 80 px);
+- the ridge ends by the tall grass (hips): `set_relief_cell.py relief.bin 292 12,23 32,32,32,32,32,28,28,28,28,32,24,24,24,28,32,20,20,24,28,32,16,20,24,28,32`,
+  `... 13,23 32,32,32,32,32,32,28,28,28,28,32,28,24,24,24,32,28,24,20,20,32,28,24,20,16`, `... 7,23
+  32,32,32,28,24,32,28,28,28,24,32,28,24,24,24,32,28,24,20,20,32,28,24,20,16` (its east edge no higher than 8,23 beside
+  it, 24 px: it stood over it, open to the east), then `drop_relief_cuts.py relief.bin 292 12,23 13,23 7,23` (their cut
+  records drew the old faces);
+- the mound beside the cobbles: `set_relief_cell.py ... 15,16 56,56,56,60,64,54,54,56,60,64,52,52,56,60,64,50,52,56,60,64,48,52,56,60,64`,
+  `... 17,16 64,60,56,56,56,64,60,56,54,54,64,60,56,52,52,64,60,56,52,50,64,60,56,52,48`, then
+  `drop_relief_cuts.py relief.bin 292 15,16 17,16`, then the ground run on under them as under the peak (16,16):
+  `set_relief_cut.py relief.bin 292 15,16 none 56 0x271 none 0` and the same for `17,16` (a slit at their north
+  edges otherwise);
+- the ledges' faces: `set_relief_cut_wall.py relief.bin 292 0x07C 0x274` (56 records: the General's grey cliff -> the
+  map's own red cliff);
+- the far-right triangle: `set_relief_cell.py ... 29,16 32,28,24,20,16,28,24,20,16,12,24,20,16,12,8,20,16,12,8,4,16,12,8,4,0`
+  (one slope plane meeting 29,17's edge);
+- the bottom-right tear: `set_relief_cell.py ... 22,28` with `8,10,12,14,16` on each of its 5 rows (the rock rises from
+  the ground at 8 px, as 22,29 does).
