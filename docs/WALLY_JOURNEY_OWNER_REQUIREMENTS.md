@@ -1800,4 +1800,13 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     362 -> 0 px). A lake shaped like the old triangle still read as a wedge: round its top. Far background in test
     pictures needs ~400 frames after a warp before pixel comparisons (150 left it half built).
   - **Switches:** WJPC_R118_NORTH_OLD=1, WJPC_R118_NORTH_FLAT=1, WJPC_R118_NORTH_BARE=1, WJPC_R118_NORTH_BANK_GAPS=1.
+- 2026-11-27 03:57 Brennan (#13): "show me pictures of your idea for those places and i will say yes or no to the
+  idea. try also applying the route 118 fix to the lavaridge problem as the mountain that shows in the north still
+  looks very blocky and to the left is waves of mountain that is not natural forming." Sent ~04:30 (N13_1..9: now on
+  top, idea below): Lavaridge north and west - ledges broken up with jogs and outcrops as the 2D maps draw cliffs,
+  clumps of trees on the north (Route 118's amount), the west's long curved "waves" replaced by jogged ledges; Route
+  111's east side - Route 118's look carried north up the whole side (jogged ledges, trees, the rock/woods line
+  wandering); Mt. Chimney and Jagged Pass - their side ridges jogged, the flat plain in front of each kept flat (the
+  camera looks over it). Route 116's red rock not touched (hardly seen behind the woods). Code behind
+  WJPC_N13_IDEA=4 (off: game unchanged). Waiting on his yes/no per place.
 
