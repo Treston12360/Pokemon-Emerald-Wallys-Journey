@@ -1550,4 +1550,18 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - Checked: gap test, 52 views (as N73) at 1920x1080 and 2560x1440: the sky at Route 103's far corners is gone
     (nn_18_20_3 3125 -> 0 px, ss_18_20_18 7108 -> 0, Route 102 1063 -> 0 at 1920; 5776/12810/1912 -> 0 at 2560), the
     rest the same (one view 1 px).
+- 2026-11-26 21:24 Brennan (N74's lake close-up, red box on the front row of trees over the lake): "the front row of
+  trees right above the water is missing its tree trunks and the snowy ground base underneath them ... the green tree
+  canopies look sliced off / floating"; "Every tree along the edge of the lake should visibly show its wooden trunk
+  planted firmly into snow-covered ground, matching the exact look and height of the other trees on Route 103." ->
+  N75: a large tree of the background wood whose trunk row stands right north of a map's water cell lays all four of
+  its ground squares - trunk and round shadow on the snow round it - as a tree inside a map does; north of Route 103
+  also in front of a non-tree cell no more than a level high (the low rock east of the lake). voxel_tree.c
+  VoxelTree_EmitBorder; WJPC_BELT_FRONT_BARE=1: as N74. Tried wider and not kept: in front of any non-tree map cell
+  (Route 116's north: the squares lay flat at each tree's level on the slope - tilted panels with gaps; Route 121: a
+  lone square in the wood); beside a map's west/east edge (a thin white line along Littleroot's east woods); behind
+  Route 103's mountain (trunks hidden, only snow specks between the crowns).
+  Checked: Route 103 three views (only the front row over the lake and the low rock changed; behind the mountain
+  unchanged); 12 winter views elsewhere unchanged; gap test 52 views at 1920x1080 and 2560x1440 identical to N74.
+  Pictures: lake_trees_full.png, lake_trees_closeups_3x.png, lake_trees_vs_map_trees.png.
 

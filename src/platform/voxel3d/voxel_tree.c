@@ -1186,6 +1186,41 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                         else
                             sBeltNoGround = !VoxelMesh_BeltWater(nx, ny);
                     }
+                    /* Brennan 2026-11-26 21:24 (Route 103's lake, the front row of trees over the water: "missing its
+                     * tree trunks and the snowy ground base underneath them ... the green tree canopies look sliced off
+                     * / floating"; "Every tree along the edge of the lake should visibly show its wooden trunk planted
+                     * firmly into snow-covered ground, matching the exact look and height of the other trees on Route
+                     * 103"): a large tree of the wood's front row over a map's water - its trunk row right north of
+                     * a map's water cell (the lake) - lays all four of its squares, its whole trunk and shadow on the
+                     * ground round it, as a tree inside a map does; north of Route 103 (its woods one flat forest, N74)
+                     * in front of any of its cells that is not a tree and no more than a level high (the low rock east
+                     * of the lake; behind the mountain further east the trunks are hidden and only the snow round them
+                     * showed between the crowns, in specks) too. Tried wider, not
+                     * kept: in front of any map cell that is not a tree, the squares lay flat at each tree's level
+                     * where the wood climbs (Route 116's north: tilted panels with gaps between them) and stood alone
+                     * in the wood (Route 121); beside a map's west or east edge, a thin white line (Littleroot).
+                     * WJPC_BELT_FRONT_BARE=1: none, as N74. */
+                    static int sFrontBare = -1;
+                    if (sFrontBare < 0)
+                        sFrontBare = getenv("WJPC_BELT_FRONT_BARE") != NULL;
+                    if (sBeltNoGround && !sFrontBare && !sEdgeSquares && !sCellwise && !ownWood && part >= 0
+                     && part <= 3)
+                        for (int c = 0; c < 2 && sBeltNoGround; c++)
+                        {
+                            const int nx = ox + c, ny = oy + 2; /* (south of the trunk row) */
+                            const VoxelMapInstance *front = VoxelWorld_GetInstanceAt(nx, ny);
+                            bool low = true; /* (the ground in front no more than a level high: the trunk not hidden) */
+                            if (front != NULL && front->layoutId == 19 /* LAYOUT_ROUTE103 */)
+                            {
+                                const int16_t *g = VoxelRelief_Cell(front, nx, ny);
+                                for (int q = 0; g != NULL && q < VOXEL_RELIEF_SIDE * VOXEL_RELIEF_SIDE; q++)
+                                    low = low && g[q] <= 16;
+                            }
+                            if (front != NULL && VoxelTree_PartAt(nx, ny) < 0
+                             && (VoxelMesh_Classify(nx, ny) == VOXEL_SHAPE_WATER
+                                 || (front->layoutId == 19 /* LAYOUT_ROUTE103 */ && low)))
+                                sBeltNoGround = false;
+                        }
                 }
                 if (plateauOwn)
                     sBeltNoGround = true;
