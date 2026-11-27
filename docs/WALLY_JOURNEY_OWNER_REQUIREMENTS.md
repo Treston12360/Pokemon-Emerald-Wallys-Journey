@@ -1700,3 +1700,19 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   dirt path") come with it. Switches: WJPC_JAGGED_STAIRS_UPRIGHT=1 (flat, as before), WJPC_JAGGED_STAIRS_RECESS=1 (cut
   back as Victory Road's). Gap test (14 Jagged Pass / Mt Chimney views, 1920x1080 and 2560x1440): as N80. First ones
   shown to Brennan for his OK before any other map's stairs. Pictures: docs/polish_reports/2026-11-27_N81_jagged_pass_stairs.png.
+- 2026-11-27 02:19 Brennan (on the N81 pictures): "yes i like them and only on jagged pass for now, but keep note on
+  how they look and work. continue to route 118." So: Jagged Pass's 3D stairs approved; no other map's stairs change
+  until he asks. The note he asked for:
+  - **How they look:** every drawn plank of a flight is one real step - its top is the tread, its front the riser,
+    8 px each - so a one-row, one-level flight is two steps. The flight stands out from the rock face over the ground
+    in front (never cut back into the rock above); the steps' sides are closed with the rock beside them; lit as the
+    rest of Jagged Pass (its floor's light, N80), so treads and fronts keep the drawing's yellow and blue.
+  - **How they work:** the player walks up the treads (the flight's heights and depths are the steps'); the floor
+    rows in front (up to two, 8 px each) are drawn shorter to make room, so a player standing in front stands past
+    the bottom step, not in it.
+  - **Where:** voxel3d_pc.c Port_LayoutSecondaryStair (which metatiles are stairs: Jagged Pass 0x217, 0x2AF),
+    voxel_relief.c StairFlights (laid as Victory Road 1F's, never recessed for layout 292), voxel_mesh_builder.c
+    EmitFlightSides (sides by the ground beside, no floor plate). To give another map's flights this look: add its
+    stair metatiles to Port_LayoutSecondaryStair and its layout id to the Victory Road 1F / Jagged Pass branch in
+    StairFlights and to sideByZ in EmitFlightSides; check the gap test and the player in front of / on / at the top of
+    a flight. Switches: WJPC_JAGGED_STAIRS_UPRIGHT=1 (flat), WJPC_JAGGED_STAIRS_RECESS=1 (cut back).
