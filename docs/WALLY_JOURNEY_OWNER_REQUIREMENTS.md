@@ -1716,3 +1716,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     stair metatiles to Port_LayoutSecondaryStair and its layout id to the Victory Road 1F / Jagged Pass branch in
     StairFlights and to sideByZ in EmitFlightSides; check the gap test and the player in front of / on / at the top of
     a flight. Switches: WJPC_JAGGED_STAIRS_UPRIGHT=1 (flat), WJPC_JAGGED_STAIRS_RECESS=1 (cut back).
+- 2026-11-27 02:19 Brennan: "what is the audit about for project tandem what is it?" (answered in chat: a read-only
+  study of the code for the 10 areas, ending in a plan for his review). 02:26: "Run the audit now to get that complete
+  then work route 118 after that. so i can overlook the audit while you work on the last fixes." Done: T0,
+  `docs/TANDEM_AUDIT.md` (and his doc https://claude.ai/artifact/BHzoa527o1EWzCgtTNyVGN for comments). Findings: no
+  engine rewrite needed; friends as "ghost" characters (spare object slots, the game's own walking) for walking
+  together; trades/battles/cards through Emerald's link screens over a "virtual cable" (the cable layer, not the
+  wireless one), tested early; no renderer change. 7 questions for him before T1. Branch `tandem` made from `polish`.

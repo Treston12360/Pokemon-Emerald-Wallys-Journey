@@ -61,8 +61,10 @@ Owner decisions also go to `docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md`. No Kanto 
 5. Friends on the neighbouring maps the 3D view shows are drawn too (world coordinates, not map ids).
 6. Friends drawn as characters the game's collision and scripts ignore; the 3D renderer draws them as it draws any
    character (no renderer change).
-7. Trades and battles: first try the game's own link code over the network (the wireless path), with an early trade
-   test; plan B, the game's own messages (Emerald Rogue's way). Battles: the host's game decides, both show it.
+7. Trades and battles: first try the game's own link code over the network, with an early trade test; plan B, the
+   game's own messages (Emerald Rogue's way). Battles: Emerald's link battles run the same battle on both games, each
+   side's choices passed over the link (TANDEM_AUDIT.md section 4). (T0, 2026-11-27: the
+   CABLE layer, not the wireless one - one 8-number exchange per frame against a whole radio library; TANDEM_AUDIT.md section 8.)
 8. Connections: direct (LAN, direct IP, or a private network such as Tailscale for testing), then a relay fallback.
 9. Saves: back up and sync the existing save file first; accounts only if really needed.
 10. Keep it private and invite-only (no public servers).
@@ -71,7 +73,7 @@ Owner decisions also go to `docs/WALLY_JOURNEY_OWNER_REQUIREMENTS.md`. No Kanto 
 
 | Status | Task | Notes |
 |---|---|---|
-| [ ] | **T0** Architecture audit (read-only) + implementation plan for Brennan's review | ChatGPT's 10 audit points: build/entry point; movement, coordinates, collision, animation; map loading/transitions/ids; battle architecture; party/inventory/save structures; save/load; rendering and how to keep networking out of it; existing link code; host/relay networking; cloud saves. Exact files and functions per phase. After Polish's Jagged Pass list. |
+| [x] | **T0** Architecture audit (read-only) + implementation plan for Brennan's review - **done 2026-11-27: `docs/TANDEM_AUDIT.md`** (and Brennan's doc https://claude.ai/artifact/BHzoa527o1EWzCgtTNyVGN, for his comments); waiting for his answers to its 7 questions before T1 | ChatGPT's 10 audit points: build/entry point; movement, coordinates, collision, animation; map loading/transitions/ids; battle architecture; party/inventory/save structures; save/load; rendering and how to keep networking out of it; existing link code; host/relay networking; cloud saves. Exact files and functions per phase. After Polish's Jagged Pass list. |
 | [ ] | **T1** Milestone 1: two players walking on the same map, seeing each other in real time | 2D and 3D; neighbouring maps |
 | [ ] | T2 Same-build check, host clock | |
 | [ ] | T3 A trade through the game's own link code over the network | the lag test |
