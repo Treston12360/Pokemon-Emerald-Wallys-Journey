@@ -104,6 +104,20 @@ it first - `grow_trees_texture.py IN_128 OUT_256` (old pixels keep their x, y) -
 Checked 2026-11-26: the 128x128 file before N77, grown, plus add_lavaridge_tree_cards.py = the committed file, byte for
 byte. Easiest: keep the file from git.
 
+## Route 118 relief hand edits (N82, 2026-11-27, session 014PwRDj)
+Brennan 2026-11-26 22:09 (Route 118's red boxes 2 and 3, the grass edges by the shore trees) and 2026-11-27 02:54
+("A: Round the corners so the brown edge curves the way the 2D map draws it"). Layout 34 in `pc_data/voxel/relief.bin`
+- **whoever regenerates relief.bin must make them again** (or keep layout 34 from git: `splice_relief.py`):
+- box 2, the jog's outer corner: `set_relief_cell.py relief.bin 34 20,2 6,6,6,4,0,6,6,6,4,0,6,6,6,4,0,4,4,4,2,0,0,0,0,0,0`;
+- box 2, the inner corner (the strip had stood on to x 20 under the brown band there - a dark crack across it):
+  `set_relief_cell.py relief.bin 34 19,2 0,0,0,0,0,0,6,6,6,6,0,6,6,6,6,0,6,6,4,4,0,6,6,4,0`;
+- box 2, the strip's end sloping down round its corner (it ended in a 6 px wall at y 4):
+  `set_relief_cell.py relief.bin 34 19,3 6,6,6,4,0,6,6,6,4,0,6,6,6,4,0,4,4,4,2,0,0,0,0,0,0`;
+- box 3, the same at its strip's end (a 4-6 px wall at y 2):
+  `set_relief_cell.py relief.bin 34 29,1 0,4,6,6,6,0,4,6,6,6,0,4,6,6,6,0,2,4,4,4,0,0,0,0,0`.
+(Heights in px from each cell's north-west corner, row by row; profile across a lip 6 / 4 / 0 px at a quarter cell
+apart, a corner point by its distance to the grass's corner.)
+
 ## Jagged Pass relief hand edits (N79, 2026-11-27, session 014PwRDj)
 Brennan 2026-11-26 22:59 (Jagged Pass holes and seams). Layout 292 in `pc_data/voxel/relief.bin`, all made with the
 tools here - **whoever regenerates relief.bin must make them again** (or keep layout 292 from git: `splice_relief.py`):
