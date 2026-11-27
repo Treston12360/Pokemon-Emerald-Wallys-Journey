@@ -57,7 +57,48 @@ static bool FortreeWood(int metatileId)
 /* Where a small trunk's ground is packed: the General one's at 48,32,
  * Dewford's at 80,0, and the trunks a secondary tileset draws on its own
  * ground (3: the General's own grass). -1 for any other metatile. */
-enum { TRUNK_JUNGLE, TRUNK_GRASS_ROAD, TRUNK_VOLCAN, TRUNK_GENERAL, TRUNK_ACCESS };
+enum { TRUNK_JUNGLE, TRUNK_GRASS_ROAD, TRUNK_VOLCAN, TRUNK_GENERAL, TRUNK_ACCESS, TRUNK_ASH };
+
+/* Brennan 2026-11-26 22:09 ("mt chimney all trees look to be 2D needs to be 3D"; Jagged Pass: "trees on the rocks in
+ * red box are not 3D models"): the Lavaridge tile set's trees were laid flat as tiles. Its small ash-covered tree
+ * (Mt. Chimney) is the General small tree's tiles in its palette 11 - 2CC its trunk, 2CD a trunk with the next crown's
+ * top over it (the General's 0C6), 2C4-2C7 the crown's top over the rock (ground); its large trees, green (Jagged
+ * Pass's ledges, Lavaridge) and ash-covered, are the General large tree's tiles but for their outer columns - upper
+ * row 2D8/2D9, 2DA/2DB, 2E4/2E5 (green), 2C0/2C1, 2C2/2C3, 2CE/2CF (ash); lower row 2E2/2E3, 2E0/2E1, 2D6/2D7 (green),
+ * 2C8/2C9, 2CA/2CB (ash); 2DE/2DF the crown's top fringe over the rock (ground). Cards: the ash crowns recoloured from
+ * the General's, a ground on the pink rock (tools/voxel3ds/add_lavaridge_tree_cards.py). WJPC_LAVARIDGE_TREES_FLAT=1:
+ * flat, as before. */
+static bool LavaridgeTreesOn(void)
+{
+    static int sOn = -1;
+    if (sOn < 0)
+        sOn = getenv("WJPC_LAVARIDGE_TREES_FLAT") == NULL;
+    return sOn != 0;
+}
+
+/* a Lavaridge large tree's part (0-3), its kind in *ash; -1 for any other metatile */
+static int LavaridgeLargePart(const void *secondaryTileset, int metatileId, bool *ash)
+{
+    bool a = false;
+    int part = -1;
+
+    if (secondaryTileset != &gTileset_Lavaridge || !LavaridgeTreesOn())
+        return -1;
+    switch (metatileId)
+    {
+    case 0x2D8: case 0x2DA: case 0x2E4: part = 0; break;
+    case 0x2D9: case 0x2DB: case 0x2E5: part = 1; break;
+    case 0x2E2: case 0x2E0: case 0x2D6: part = 2; break;
+    case 0x2E3: case 0x2E1: case 0x2D7: part = 3; break;
+    case 0x2C0: case 0x2C2: case 0x2CE: part = 0; a = true; break;
+    case 0x2C1: case 0x2C3: case 0x2CF: part = 1; a = true; break;
+    case 0x2C8: case 0x2CA: part = 2; a = true; break;
+    case 0x2C9: case 0x2CB: part = 3; a = true; break;
+    }
+    if (ash != NULL)
+        *ash = a;
+    return part;
+}
 
 static int SmallTrunkGround(const void *secondaryTileset, int metatileId)
 {
@@ -85,6 +126,9 @@ static int SmallTrunkGround(const void *secondaryTileset, int metatileId)
     if (secondaryTileset == &gTileset_Lavaridge
      && (metatileId == 0x218 || metatileId == 0x21A || metatileId == 0x3B8 || metatileId == 0x203))
         return 2; /* tree_small_trunk_volcan.png at 64,32 */
+    /* the ash-covered small tree's trunk (LavaridgeTreesOn) */
+    if (secondaryTileset == &gTileset_Lavaridge && (metatileId == 0x2CC || metatileId == 0x2CD) && LavaridgeTreesOn())
+        return TRUNK_ASH;
     return -1;
 }
 
@@ -187,6 +231,9 @@ int VoxelTree_Part(const void *secondaryTileset, int metatileId)
     {
         int part = OwnLargePart(secondaryTileset, metatileId, NULL);
 
+        if (part >= 0)
+            return part;
+        part = LavaridgeLargePart(secondaryTileset, metatileId, NULL);
         if (part >= 0)
             return part;
         /* Dewford's small tree: the trunk on the sand (23A), and inside the
@@ -305,6 +352,11 @@ int VoxelTree_GroundMetatile(const void *secondaryTileset, int metatileId)
         /* the crown's top over the path (the General's 00E-00F on it) */
         if (secondaryTileset == &gTileset_Fortree && (metatileId == 0x24B || metatileId == 0x24C))
             return 0x261;
+        /* Lavaridge (LavaridgeTreesOn): a small ash tree's crown top (2C4) and a large tree's top fringe (2DE-2DF) over
+         * the pink rock - the plain rock 271 (2C5-2C7, 2DC-2DD, the same over other rock, have no plain tile and stay) */
+        if (secondaryTileset == &gTileset_Lavaridge && LavaridgeTreesOn()
+         && (metatileId == 0x2C4 || metatileId == 0x2DE || metatileId == 0x2DF))
+            return 0x271;
         return metatileId;
     }
     switch (metatileId)
@@ -418,12 +470,14 @@ static void EmitSmallCell(VoxelBuilder *builder, const VoxelMapInstance *inst, i
 {
     static const uint8_t kTrunks[][2] = {
         [TRUNK_JUNGLE] = { 48, 48 }, [TRUNK_GRASS_ROAD] = { 80, 16 }, [TRUNK_VOLCAN] = { 64, 32 },
-        [TRUNK_GENERAL] = { 48, 32 }, [TRUNK_ACCESS] = { 112, 32 },
+        [TRUNK_GENERAL] = { 48, 32 }, [TRUNK_ACCESS] = { 112, 32 }, [TRUNK_ASH] = { 144, 48 },
     };
     bool grass = part == VOXEL_TREE_GRASS;
     int ground = grass ? -1 : SmallTrunkGround(secondaryTileset, metatileId);
     bool dewford = !grass && metatileId >= SECONDARY_ID && ground < 0;
     int cx = grass ? 80 : dewford ? 64 : 32, cy = dewford ? 0 : 32;
+    if (ground == TRUNK_ASH) /* (the ash-covered small tree's own crown, 128,48) */
+        cx = 128, cy = 48;
     int tx = ground >= 0 ? kTrunks[ground][0] : cx + 16, ty = ground >= 0 ? kTrunks[ground][1] : cy;
     float wx = (float)x, wz = (float)y;
     /* Against a mountain's face (its rock right behind the crown's cell,
@@ -483,12 +537,21 @@ static const LargeArt kOwnTrees[] = {
     [OWN_ASH] = { 96, 64, 16, 32, 80, 1.00f, false },      /* tree_north_base_ash.png at 32,96 */
 };
 
+/* Lavaridge's large trees (LavaridgeLargePart): the General's crown (green) or its ash copy at 128,0, on the pink
+ * rock's ground at 160,0 (the ash tree's at 192,0: its roots in the ash trunk's red-browns)
+ * (tools/voxel3ds/add_lavaridge_tree_cards.py) */
+static const LargeArt kLavaridgeTree = { 0, 0, 18, 160, 0, 0.35f, false };
+static const LargeArt kLavaridgeAshTree = { 128, 0, 18, 192, 0, 0.35f, false };
+
 static const LargeArt *LargeArtOf(const void *secondaryTileset, int metatileId)
 {
     int ground;
+    bool ash;
 
     if (metatileId >= SECONDARY_ID && OwnLargePart(secondaryTileset, metatileId, &ground) >= 0)
         return &kOwnTrees[ground];
+    if (metatileId >= SECONDARY_ID && LavaridgeLargePart(secondaryTileset, metatileId, &ash) >= 0)
+        return ash ? &kLavaridgeAshTree : &kLavaridgeTree;
     switch (metatileId)
     {
     case 0x01E: case 0x01F: case 0x026: case 0x027: return &kBaseTree;
@@ -575,6 +638,17 @@ int VoxelTree_PartAt(int x, int y)
     }
     return VoxelWorld_UsesTreeSprites(at) ? VoxelTree_Part(at->secondaryTileset, VoxelWorld_GetMetatileId(x, y))
                                           : -1;
+}
+
+bool VoxelTree_LavaridgeAt(int x, int y)
+{
+    const VoxelMapInstance *at = VoxelWorld_GetInstanceAt(x, y);
+    int mt;
+
+    if (at == NULL || at->secondaryTileset != &gTileset_Lavaridge || !LavaridgeTreesOn())
+        return false;
+    mt = VoxelWorld_GetMetatileId(x, y);
+    return mt == 0x2CC || mt == 0x2CD || LavaridgeLargePart(at->secondaryTileset, mt, NULL) >= 0;
 }
 
 /*
@@ -1020,6 +1094,9 @@ void VoxelTree_EmitBorder(VoxelBuilder *builder, int x0, int y0, int x1, int y1)
                 /* POL-46: a small tree on a ledge near a wood (the General's 0C7) */
                 part = plateauOwn ? 2 : VOXEL_TREE_SMALL;
                 metatileId = plateauOwn ? 0x20E : 0x0C7;
+                /* (south of Mt. Chimney its own ash tree, Lavaridge 2CD: VoxelWorld_ChimneySouthTree) */
+                if (!plateauOwn && art->secondaryTileset == &gTileset_Lavaridge && VoxelWorld_ChimneySouthTree(x, y) >= 0)
+                    metatileId = 0x2CD;
             }
             /* Brennan 2026-11-20 16:22 (Route 121's north woods: "many overlapping trees ... they should be
              * standalone trees making up a forrest"; the coast: "2 random tops of trees that need to be removed"):

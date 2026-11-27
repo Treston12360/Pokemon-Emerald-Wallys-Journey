@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """POL-7 (Brennan 2026-11-16: flowers, flowerbeds and short grass "same as tall grass"): two cards in the free
-bottom row of voxel/trees.rgba5551 (128x128 RGBA5551, PICA 8x8 Morton tiles; rows 112-127 were empty):
+bottom row of voxel/trees.rgba5551 (128x128 RGBA5551 then - 256x256 since 2026-11-26, grow_trees_texture.py -
+PICA 8x8 Morton tiles; rows 112-127 were empty):
 
   (0, 112)  16x16  the General tileset's flowers (metatile 0x004) - its drawing less every pixel of the plain
                    grass's three colours (metatile 0x001: base 73C5A4, specks 41B483 / A4D5C5)
@@ -20,7 +21,7 @@ import os, struct, sys
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, '3ds_port', 'scripts'))
 
-def tex(x, y, w=128):
+def tex(x, y, w=256):  # (trees.rgba5551 is 256x256 since 2026-11-26; was 128)
     m = (x & 1) | ((y & 1) << 1) | ((x & 2) << 1) | ((y & 2) << 2) | ((x & 4) << 2) | ((y & 4) << 3)
     return ((y // 8) * (w // 8) + x // 8) * 64 + m
 

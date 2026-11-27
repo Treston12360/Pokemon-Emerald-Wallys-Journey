@@ -106,6 +106,10 @@ const VoxelMapInstance *VoxelWorld_Instance(unsigned index);
 const VoxelMapInstance *VoxelWorld_GetInstanceAt(int worldX, int worldY);
 
 int VoxelWorld_GetMetatileId(int worldX, int worldY);
+/* TRUE in the land south of Mt. Chimney that carries its scattered ash trees (voxel_world.c ChimneySouthTree) */
+bool VoxelWorld_ChimneySouth(int worldX, int worldY);
+/* the ash tree standing on that land at the cell (Lavaridge 2CD), or -1 */
+int VoxelWorld_ChimneySouthTree(int worldX, int worldY);
 /* The cell's collision bits (0: walkable). */
 unsigned VoxelWorld_GetCollision(int worldX, int worldY);
 unsigned VoxelWorld_GetMetatileBehavior(int worldX, int worldY);

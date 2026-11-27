@@ -4,7 +4,7 @@
 
 #include "voxel_mesh_builder.h"
 
-#define VOXEL_TREE_TEXTURE_DIM 128u
+#define VOXEL_TREE_TEXTURE_DIM 256u /* (2026-11-26: was 128, full; the old cards keep their pixels) */
 #define VOXEL_TREE_TEXTURE_PATH "romfs:/voxel/trees.rgba5551"
 
 /* A small tree is one cell: its trunk, with the whole crown standing on it. */
@@ -20,6 +20,8 @@
 int VoxelTree_Part(const void *secondaryTileset, int metatileId);
 /* The same at a world cell: this map's, the next map's or the border's. */
 int VoxelTree_PartAt(int x, int y);
+/* the map cell at (x, y) is one of the Lavaridge tile set's trees (Mt. Chimney's, Jagged Pass's) */
+bool VoxelTree_LavaridgeAt(int x, int y);
 bool VoxelTree_OwnLoneLedge(int x, int y); /* a belt tree at (x, y) is the map's own lone tree, two cells wide */
 /* Remove the old canopy from the cell above a tree, leaving its ground. */
 int VoxelTree_GroundMetatile(const void *secondaryTileset, int metatileId);

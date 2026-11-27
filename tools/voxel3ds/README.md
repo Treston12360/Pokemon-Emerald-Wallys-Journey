@@ -94,3 +94,12 @@ layout 293's cells, sets its belt to 32 px and its drawn flag). **Re-run it afte
 against a fresh clone): VOXEL_DRAWN_OK / VOXEL_SPREAD_OK (Route 122, 2026-11-20), VOXEL_DRAWN_EXTRA (tried for Fiery
 Path; not used in the end), and the sea stack without its corner tile (voxel_props.py, B7 Route 104 slivers - needed by
 whoever regenerates buildings.bin). Apply with `patch -p0` in 3ds_port/scripts.
+
+## trees.rgba5551 (Polish cards; 256x256 since 2026-11-26)
+`pc_data/voxel/trees.rgba5551` (in git) carries cards Polish added after the generator's output: add_tree_cards.py,
+add_rock_cards.py, add_seaweed_cards.py, add_mauville_flower_card.py and add_lavaridge_tree_cards.py (each one's
+docstring says where its cards go). Since N77 (2026-11-26) the texture is **256x256** (voxel_tree.h
+VOXEL_TREE_TEXTURE_DIM; the game reads it at that size). The generator writes 128x128: whoever regenerates it must grow
+it first - `grow_trees_texture.py IN_128 OUT_256` (old pixels keep their x, y) - and put the Polish cards back.
+Checked 2026-11-26: the 128x128 file before N77, grown, plus add_lavaridge_tree_cards.py = the committed file, byte for
+byte. Easiest: keep the file from git.

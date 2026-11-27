@@ -1579,4 +1579,32 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   DisguiseStateIsTree; WJPC_DISGUISE_REVEAL_CARD=1: the cloth's card, as before). The "!" as before. Checked on Route
   119's Hideo with battles on: tree, "!", tree through the reveal, boy, his intro text. Pictures:
   ninja_reveal_full.png, ninja_reveal_after_frames.png.
+- 2026-11-26 #13 background mountains: pictures sent (mountains_1..6: Route 111 east's straight ridges; Mt Chimney,
+  Jagged Pass and Lavaridge south's flat plains with straight side ridges; Route 116's red rock; Route 118 for
+  comparison). Asked which spots and how: Brennan picked "Natural mountains" ("Rise from the map's edge into rounded
+  ridges and peaks of different heights, like Route 118's, then fade into the distance"); which spots - no answer
+  (taken: all of them, keeping the low ground in front of (south of) each map, which the camera looks over).
+- 2026-11-26 22:09 Brennan (marked mountains_2, _3, _6): "mt chimney all trees look to be 2D needs to be 3D, scatter
+  some trees in the south section of the mountain that flows with the rest of the trees." "jagged pass, trees on the
+  rocks in red box are not 3D models." "route 118 fix what is in red boxes" - the mountain across the river: "straight,
+  uniform, bare cliff tiers stacked like rigid stairs with no foliage"; where mountain, river and the upper-right forest
+  meet, "a sharp, unnatural triangle wedge with straight, rigid edges". Wanted: "organic, irregular mountain contours -
+  staggering ridge lines, varying ledge shapes, and curving the base"; "scattered trees across the mountain's ledges,
+  slopes, and tiers (matching the surrounding forest's pixel-art tree assets)"; "Curve and soften the shoreline and
+  forest edge so the water, mountain base, and tree line flow naturally into one another"; "Let trees wrap organically
+  around the base of the mountain and along curved riverbanks". Red boxes: the notch where the mountain's top meets
+  the forest and the water; two green-topped ledges beside the shore's trees (right of the mound, and far right).
+  (This supersedes 11-18's "do not change Route 118's look".)
 
+- 2026-11-26 N77 (Mt Chimney / Jagged Pass trees, 22:09): the Lavaridge tile set's trees stand in 3D (voxel_tree.c
+  LavaridgeLargePart, TRUNK_ASH; cards from tools/voxel3ds/add_lavaridge_tree_cards.py - the tree texture is now
+  256x256, VOXEL_TREE_TEXTURE_DIM). Mt. Chimney's small ash trees: the General small tree's shape in its ash colours;
+  Jagged Pass's green trees on the rocks and its ash large trees: the General large tree's shape on the pink rock.
+  South of Mt. Chimney (VoxelWorld_ChimneySouthTree): its ash trees go on past the map's edge, thick along it and
+  thinning out over the next dozen rows to a few scattered ones, fading out past its sides (WJPC_CHIMNEY_SOUTH_BARE=1:
+  none). The belt beside Mt. Chimney and Jagged Pass keeps its look (no General green trees came up there: the new 3D
+  trees do not count as a wood for VoxelMesh_LedgeTree). WJPC_LAVARIDGE_TREES_FLAT=1: the old flat trees. Checked:
+  the 52-view region set pixel for pixel the same as before; Mt Chimney / Jagged Pass / Lavaridge / Route 112 gap test
+  at 1920x1080 and 2560x1440 - one 3-6 pixel crack far up the top of Jagged Pass's entrance view (the peak of a stair's
+  side wall, cells 7,24-25, a crack the flat tree behind it used to hide; its twin on the stair to the right was there
+  before too).

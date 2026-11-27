@@ -2197,6 +2197,71 @@ int VoxelWorld_BorderMetatile(int worldX, int worldY)
         CellMemoPut(e, worldX, worldY, BorderMetatileUncached(worldX, worldY), NULL);
     return e->value;
 }
+/* Brennan 2026-11-26 22:09 (Mt. Chimney: "scatter some trees in the south section of the mountain that flows with the
+ * rest of the trees"): the land south of Mt. Chimney (its border, the pink rock 271) carries its small ash-covered
+ * trees (Lavaridge 2CD, voxel_tree.c TRUNK_ASH): as thick as the map's own wood along its edge, thinning out over the
+ * next dozen rows to a few scattered trees, and fading out past its sides. A hash of the cell decides (the same trees
+ * every time). WJPC_CHIMNEY_SOUTH_BARE=1: none, as before. */
+#define MT_CHIMNEY_LAYOUT 136
+static bool ChimneySouthCell(int worldX, int worldY, int *lx, int *ly)
+{
+    static int sBare = -1;
+    const VoxelMapInstance *m = NULL;
+
+    if (sBare < 0)
+        sBare = getenv("WJPC_CHIMNEY_SOUTH_BARE") != NULL;
+    if (sBare)
+        return false;
+    for (unsigned i = 0; i < sInstanceCount && m == NULL; ++i)
+        if (sInstances[i].layoutId == MT_CHIMNEY_LAYOUT && !sInstances[i].indoor && sInstances[i].layout != NULL)
+            m = &sInstances[i];
+    if (m == NULL)
+        return false;
+    *lx = worldX - m->originX;
+    *ly = worldY - (m->originY + m->height);
+    return *ly >= 0 && *ly <= 28 && *lx >= -8 && *lx < m->width + 8;
+}
+
+/* TRUE in the land south of Mt. Chimney that carries its scattered trees (no other trees placed there: the ledge
+ * trees of the General's, voxel_mesh_builder.c VoxelMesh_LedgeTree) */
+bool VoxelWorld_ChimneySouth(int worldX, int worldY)
+{
+    int lx, ly;
+    return ChimneySouthCell(worldX, worldY, &lx, &ly);
+}
+
+static int ChimneySouthTree(int worldX, int worldY);
+/* the ash tree there (Lavaridge 2CD) or -1: a tree standing on the land as it is (VoxelMesh_LedgeTree places it on the
+ * field's shelf, voxel_tree.c draws it), the land itself unchanged - laid as a wood of the belt, its floor and its
+ * walls opened slivers of sky down the slopes south of the map */
+int VoxelWorld_ChimneySouthTree(int worldX, int worldY)
+{
+    if (VoxelWorld_GetInstanceAt(worldX, worldY) != NULL)
+        return -1;
+    return ChimneySouthTree(worldX, worldY);
+}
+
+static int ChimneySouthTree(int worldX, int worldY)
+{
+    int lx, ly, side, w = 40;
+    unsigned h;
+    float p;
+
+    if (!ChimneySouthCell(worldX, worldY, &lx, &ly))
+        return -1;
+    for (unsigned i = 0; i < sInstanceCount; ++i)
+        if (sInstances[i].layoutId == MT_CHIMNEY_LAYOUT)
+            w = sInstances[i].width;
+    side = lx < 0 ? -lx : lx >= w ? lx - w + 1 : 0;
+    /* (thick along the map's own wood, then scattered: "scatter some trees") */
+    p = ly == 0 ? 0.7f : ly == 1 ? 0.55f : ly < 8 ? 0.55f - (float)(ly - 1) * 0.065f : 0.08f;
+    p *= 1.0f - (float)side / 9.0f;
+    h = (unsigned)worldX * 73856093u ^ (unsigned)worldY * 19349663u;
+    h = (h ^ (h >> 13)) * 1274126177u;
+    h ^= h >> 16;
+    return (float)(h & 0xFFFF) / 65536.0f < p ? 0x2CD : -1;
+}
+
 static int BorderMetatileUncached(int worldX, int worldY)
 {
     static const int kDir[4][2] = { {0, -1}, {1, 0}, {-1, 0}, {0, 1} };
