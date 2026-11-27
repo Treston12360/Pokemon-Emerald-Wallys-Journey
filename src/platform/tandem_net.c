@@ -57,7 +57,7 @@ typedef int TSocket;
 static void PutU16(uint8_t *p, unsigned v);
 static unsigned GetU16(const uint8_t *p);
 
-#define PROTOCOL 2   /* (2: STATE) */
+#define PROTOCOL 3   /* (2: STATE; 3: the following Pokemon in STATE) */
 #define BUILD_LEN 40
 #define NAME_LEN 16
 #define TEXT_LEN 96
@@ -68,7 +68,7 @@ static unsigned GetU16(const uint8_t *p);
 #define BUF_SIZE 4096
 
 enum { MSG_HELLO = 1, MSG_WELCOME, MSG_REFUSE, MSG_PEER, MSG_TEXT, MSG_PING, MSG_PONG, MSG_BYE, MSG_STATE };
-#define STATE_LEN 13
+#define STATE_LEN 20
 #define STATE_QUEUE 32
 #define STATE_RESEND_MS 1000
 enum { MODE_OFF, MODE_HOST, MODE_JOIN };
@@ -379,6 +379,10 @@ static void EncodeState(uint8_t *p, unsigned slot, const TandemState *st)
     PutU16(p + 9, st->gfx);
     p[11] = st->elevation;
     p[12] = st->valid;
+    PutU16(p + 13, st->followerGfx);
+    PutU16(p + 15, (uint16_t)st->followerX);
+    PutU16(p + 17, (uint16_t)st->followerY);
+    p[19] = st->followerFacing;
 }
 
 static void DecodeState(const uint8_t *p, TandemState *st)
@@ -393,6 +397,10 @@ static void DecodeState(const uint8_t *p, TandemState *st)
     st->gfx = (unsigned short)GetU16(p + 9);
     st->elevation = p[11];
     st->valid = p[12];
+    st->followerGfx = (unsigned short)GetU16(p + 13);
+    st->followerX = (short)GetU16(p + 15);
+    st->followerY = (short)GetU16(p + 17);
+    st->followerFacing = p[19];
 }
 
 /* ── sockets ──────────────────────────────────────────────────────────── */

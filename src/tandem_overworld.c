@@ -18,6 +18,7 @@
 #include "tandem_overworld.h"
 #include "constants/event_object_movement.h"
 #include "constants/event_objects.h"
+#include "constants/trainer_types.h"
 #include "platform/tandem_net.h"
 
 /* steps waiting to be walked, per friend; more than this behind and the ghost jumps to the latest */
@@ -34,14 +35,54 @@ extern char *getenv(const char *name);   /* (stdlib.h clashes with the game's ma
 #define GHOST_LOG(...) do { static int sDbg = -1; if (sDbg < 0) sDbg = getenv("WJPC_TANDEM_DEBUG") != NULL; \
                             if (sDbg) fprintf(stderr, "[TandemGhost] " __VA_ARGS__); } while (0)
 
-static struct ObjectEvent *FindGhost(unsigned slot)
+/* a ghost made from a template with every field set (SpawnSpecialObjectEventParameterized leaves the script, flag and
+ * the rest of its template as whatever was on the stack, and a stray flag or script can stop the spawn) */
+static u8 SpawnGhost(u16 gfx, u8 localId, s16 x, s16 y, u8 elevation)
+{
+    struct ObjectEventTemplate template;
+
+    memset(&template, 0, sizeof(template));
+    template.localId = localId;
+    template.graphicsId = gfx;
+    template.kind = OBJ_KIND_NORMAL;
+    template.x = x - MAP_OFFSET;
+    template.y = y - MAP_OFFSET;
+    template.elevation = elevation;
+    template.movementType = MOVEMENT_TYPE_NONE;
+    template.trainerType = TRAINER_TYPE_NONE;
+    return SpawnSpecialObjectEvent(&template);
+}
+
+static struct ObjectEvent *FindLocalId(u8 localId)
 {
     u32 i;
 
     for (i = SAVED_OBJECT_EVENTS_COUNT; i < OBJECT_EVENTS_COUNT; i++)
-        if (gObjectEvents[i].active && gObjectEvents[i].localId == TANDEM_GHOST_LOCALID(slot))
+        if (gObjectEvents[i].active && gObjectEvents[i].localId == localId)
             return &gObjectEvents[i];
     return NULL;
+}
+
+static struct ObjectEvent *FindGhost(unsigned slot)
+{
+    return FindLocalId(TANDEM_GHOST_LOCALID(slot));
+}
+
+/* the friend's following Pokemon */
+static struct ObjectEvent *FindPet(unsigned slot)
+{
+    return FindLocalId(TANDEM_FOLLOWER_LOCALID(slot));
+}
+
+static void RemovePet(unsigned slot)
+{
+    struct ObjectEvent *pet = FindPet(slot);
+
+    if (pet != NULL)
+    {
+        GHOST_LOG("friend %u: Pokemon removed\n", slot);
+        RemoveObjectEvent(pet);
+    }
 }
 
 static void RemoveGhost(unsigned slot)
@@ -53,6 +94,7 @@ static void RemoveGhost(unsigned slot)
         GHOST_LOG("friend %u: removed\n", slot);
         RemoveObjectEvent(ghost);
     }
+    RemovePet(slot);
     sPendingLen[slot] = 0;
 }
 
@@ -84,6 +126,17 @@ static void SendMyPlace(void)
         me.speed = MySpeed();
         me.gfx = player->graphicsId;
         me.elevation = player->currentElevation;
+        {
+            struct ObjectEvent *pet = GetFollowerObject();
+
+            if (pet != NULL && pet->active && !pet->invisible)
+            {
+                me.followerGfx = pet->graphicsId;
+                me.followerX = pet->currentCoords.x;
+                me.followerY = pet->currentCoords.y;
+                me.followerFacing = pet->facingDirection;
+            }
+        }
     }
     TandemNet_SetMyState(&me);
 }
@@ -93,26 +146,26 @@ static bool8 OnMyMap(const TandemState *st)
     return st->valid && st->mapGroup == gSaveBlock1Ptr->location.mapGroup && st->mapNum == gSaveBlock1Ptr->location.mapNum;
 }
 
-/* the next step of a ghost toward `to` (a tile it is at or next to; else it jumps there) */
-static void StepGhost(struct ObjectEvent *ghost, const TandemState *to)
+/* the next step of a ghost (a friend or their Pokemon) toward x, y (a tile it is at or next to; else it jumps there) */
+static void StepGhost(struct ObjectEvent *ghost, s16 x, s16 y, u8 facing, u8 speed, u8 elevation)
 {
-    s16 dx = to->x - ghost->currentCoords.x, dy = to->y - ghost->currentCoords.y;
+    s16 dx = x - ghost->currentCoords.x, dy = y - ghost->currentCoords.y;
     u32 dir;
     u8 action;
 
-    ghost->currentElevation = ghost->previousElevation = to->elevation;
-    GHOST_LOG("step %d,%d -> %d,%d facing %u speed %u\n", ghost->currentCoords.x, ghost->currentCoords.y, to->x, to->y,
-              to->facing, to->speed);
+    ghost->currentElevation = ghost->previousElevation = elevation;
+    GHOST_LOG("step %d,%d -> %d,%d facing %u speed %u\n", ghost->currentCoords.x, ghost->currentCoords.y, x, y,
+              facing, speed);
     if (dx == 0 && dy == 0)
     {
-        if (to->facing >= DIR_SOUTH && to->facing <= DIR_EAST && ghost->facingDirection != to->facing)
-            ObjectEventSetHeldMovement(ghost, GetFaceDirectionMovementAction(to->facing));
+        if (facing >= DIR_SOUTH && facing <= DIR_EAST && ghost->facingDirection != facing)
+            ObjectEventSetHeldMovement(ghost, GetFaceDirectionMovementAction(facing));
         return;
     }
     dir = dx > 0 ? DIR_EAST : dx < 0 ? DIR_WEST : dy > 0 ? DIR_SOUTH : DIR_NORTH;
     if ((dx == 0 || dy == 0) && (dx * dx + dy * dy) == 1)
     {
-        switch (to->speed)
+        switch (speed)
         {
         case 1:  action = GetPlayerRunMovementAction(dir); break;
         case 2:  action = GetWalkFasterMovementAction(dir); break;
@@ -128,8 +181,50 @@ static void StepGhost(struct ObjectEvent *ghost, const TandemState *to)
         ObjectEventSetHeldMovement(ghost, GetJump2MovementAction(dir));
         return;
     }
-    MoveObjectEventToMapCoords(ghost, to->x, to->y);
-    ObjectEventTurn(ghost, to->facing >= DIR_SOUTH && to->facing <= DIR_EAST ? to->facing : DIR_SOUTH);
+    MoveObjectEventToMapCoords(ghost, x, y);
+    ObjectEventTurn(ghost, facing >= DIR_SOUTH && facing <= DIR_EAST ? facing : DIR_SOUTH);
+}
+
+/* the friend's Pokemon: drawn while they have one showing, stepped with them */
+static void UpdatePet(unsigned slot, const TandemState *to, bool8 snap)
+{
+    struct ObjectEvent *pet = FindPet(slot);
+    u8 facing = to->followerFacing >= DIR_SOUTH && to->followerFacing <= DIR_EAST ? to->followerFacing : DIR_SOUTH;
+
+    if (pet != NULL && (to->followerGfx == 0 || pet->graphicsId != to->followerGfx))
+    {
+        RemovePet(slot);
+        pet = NULL;
+    }
+    if (to->followerGfx == 0)
+        return;
+    if (pet == NULL)
+    {
+        u8 id = SpawnGhost(to->followerGfx, TANDEM_FOLLOWER_LOCALID(slot), to->followerX, to->followerY, to->elevation);
+        if (id >= OBJECT_EVENTS_COUNT)
+        {
+            GHOST_LOG("friend %u: Pokemon NOT drawn (gfx %u at %d,%d)\n", slot, to->followerGfx, to->followerX, to->followerY);
+            return;
+        }
+        GHOST_LOG("friend %u: Pokemon drawn at %d,%d in slot %u (gfx %u)\n", slot, to->followerX, to->followerY, id, to->followerGfx);
+        ObjectEventTurn(&gObjectEvents[id], facing);
+        return;
+    }
+    if (ObjectEventIsMovementOverridden(pet) && !ObjectEventClearHeldMovementIfFinished(pet))
+    {
+        /* (still on its last step: it keeps up with its trainer by going straight there) */
+        if (!snap && pet->currentCoords.x == to->followerX && pet->currentCoords.y == to->followerY)
+            return;
+        ObjectEventClearHeldMovement(pet);
+        snap = TRUE;
+    }
+    if (snap)
+    {
+        MoveObjectEventToMapCoords(pet, to->followerX, to->followerY);
+        ObjectEventTurn(pet, facing);
+        return;
+    }
+    StepGhost(pet, to->followerX, to->followerY, facing, to->speed, to->elevation);
 }
 
 static u16 GhostGfx(u16 gfx)
@@ -154,7 +249,8 @@ static void UpdateFriend(unsigned slot)
     while (TandemNet_PopState(slot, &st))
     {
         bool8 moved = sLatest[slot].x != st.x || sLatest[slot].y != st.y || sLatest[slot].mapNum != st.mapNum
-                   || sLatest[slot].mapGroup != st.mapGroup;
+                   || sLatest[slot].mapGroup != st.mapGroup
+                   || sLatest[slot].followerX != st.followerX || sLatest[slot].followerY != st.followerY;
         sLatest[slot] = st;
         if (!OnMyMap(&st))
             continue;
@@ -178,14 +274,16 @@ static void UpdateFriend(unsigned slot)
     ghost = FindGhost(slot);
     if (ghost == NULL)
     {
-        u8 id = SpawnSpecialObjectEventParameterized(GhostGfx(sLatest[slot].gfx), MOVEMENT_TYPE_NONE, TANDEM_GHOST_LOCALID(slot),
-                                                     sLatest[slot].x, sLatest[slot].y, sLatest[slot].elevation);
+        u8 id = SpawnGhost(GhostGfx(sLatest[slot].gfx), TANDEM_GHOST_LOCALID(slot), sLatest[slot].x, sLatest[slot].y,
+                           sLatest[slot].elevation);
         if (id >= OBJECT_EVENTS_COUNT)
             return;
         ghost = &gObjectEvents[id];
         GHOST_LOG("friend %u: drawn at %d,%d in slot %u (gfx %u)\n", slot, sLatest[slot].x, sLatest[slot].y, id, sLatest[slot].gfx);
         ObjectEventTurn(ghost, sLatest[slot].facing >= DIR_SOUTH && sLatest[slot].facing <= DIR_EAST ? sLatest[slot].facing : DIR_SOUTH);
         sPendingLen[slot] = 0;
+        RemovePet(slot);
+        UpdatePet(slot, &sLatest[slot], TRUE);
         return;
     }
     {
@@ -194,10 +292,6 @@ static void UpdateFriend(unsigned slot)
             GHOST_LOG("friend %u: at %d,%d active %d invisible %d offscreen %d sprite %u spr.invisible %d gfx %u\n", slot,
                       ghost->currentCoords.x, ghost->currentCoords.y, ghost->active, ghost->invisible, ghost->offScreen,
                       ghost->spriteId, gSprites[ghost->spriteId].invisible, ghost->graphicsId);
-        GHOST_LOG("   sprite inUse %d data0 %d (ghost slot %d) pos %d,%d+%d,%d coordOff %d oam.priority %d\n",
-                  gSprites[ghost->spriteId].inUse, gSprites[ghost->spriteId].data[0], (int)(ghost - gObjectEvents),
-                  gSprites[ghost->spriteId].x, gSprites[ghost->spriteId].y, gSprites[ghost->spriteId].x2,
-                  gSprites[ghost->spriteId].y2, gSprites[ghost->spriteId].coordOffsetEnabled, gSprites[ghost->spriteId].oam.priority);
     }
     if (ghost->graphicsId != GhostGfx(sLatest[slot].gfx) && !ObjectEventIsMovementOverridden(ghost))
         ObjectEventSetGraphicsId(ghost, GhostGfx(sLatest[slot].gfx));
@@ -207,8 +301,12 @@ static void UpdateFriend(unsigned slot)
         ObjectEventClearHeldMovement(ghost);
         MoveObjectEventToMapCoords(ghost, sLatest[slot].x, sLatest[slot].y);
         sPendingLen[slot] = 0;
+        UpdatePet(slot, &sLatest[slot], TRUE);
         return;
     }
+    /* (their Pokemon came out or went away - a Poke Ball, surfing - with no step) */
+    if ((FindPet(slot) == NULL) != (sLatest[slot].followerGfx == 0) && sPendingLen[slot] == 0)
+        UpdatePet(slot, &sLatest[slot], TRUE);
     if (ObjectEventIsMovementOverridden(ghost) && !ObjectEventClearHeldMovementIfFinished(ghost))
         return;   /* (still walking the last step) */
     if (sPendingLen[slot] > 0)
@@ -216,7 +314,8 @@ static void UpdateFriend(unsigned slot)
         st = sPending[slot][0];
         memmove(&sPending[slot][0], &sPending[slot][1], sizeof(TandemState) * (GHOST_QUEUE - 1));
         sPendingLen[slot]--;
-        StepGhost(ghost, &st);
+        StepGhost(ghost, st.x, st.y, st.facing, st.speed, st.elevation);
+        UpdatePet(slot, &st, FALSE);
     }
 }
 
@@ -246,5 +345,5 @@ void TandemOverworld_Update(void)
 
 bool8 TandemOverworld_IsGhost(const struct ObjectEvent *objectEvent)
 {
-    return objectEvent->localId >= TANDEM_GHOST_LOCALID(0) && objectEvent->localId <= TANDEM_GHOST_LOCALID(TANDEM_MAX_PLAYERS - 1);
+    return TANDEM_IS_GHOST_LOCALID(objectEvent->localId);
 }

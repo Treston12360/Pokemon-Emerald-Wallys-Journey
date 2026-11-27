@@ -48,6 +48,11 @@ typedef struct
     unsigned char speed;        /* 0 walking, 1 running / Acro Bike, 2 Mach Bike, 3 surfing */
     unsigned short gfx;         /* the player's graphics id (outfit, bike, surfing) */
     unsigned char elevation;
+    /* the Pokemon following the player (Brennan 2026-11-27 15:05: "we do want the pokemon to follow on everyones
+     * screen"): its graphics id, 0 when none is shown; its tile and facing */
+    unsigned short followerGfx;
+    short followerX, followerY;
+    unsigned char followerFacing;
 } TandemState;
 
 /* my place, every overworld frame (the network sends it when it changes) */

@@ -21,8 +21,8 @@ u32 WJPC_PickObjectEventSlot(u32 firstFree, u16 localId)
 
     if (firstFree >= OBJECT_EVENTS_COUNT)
         return firstFree;
-    /* (Project Tandem: a friend's ghost only in the spare slots - never saved) */
-    if (localId >= TANDEM_GHOST_LOCALID(0) && localId <= TANDEM_GHOST_LOCALID(2))
+    /* (Project Tandem: a friend's ghost, and their Pokemon, only in the spare slots - never saved) */
+    if (TANDEM_IS_GHOST_LOCALID(localId))
     {
         for (i = SAVED_OBJECT_EVENTS_COUNT; i < OBJECT_EVENTS_COUNT; i++)
             if (!gObjectEvents[i].active)

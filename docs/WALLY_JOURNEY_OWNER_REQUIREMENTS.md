@@ -1837,3 +1837,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   no Tandem code, #13 ideas off). Tandem: each player sees their own world at different story points: "yes"; trades:
   "trust your friends" (no check on edited Pokemon). T1 (connecting) done on branch `tandem` - docs/TANDEM_TASKS.md.
 
+- 2026-11-27 13:48 Brennan: "continue to step 2". T2 done (friends drawn on the same map, walk through each other) -
+  docs/TANDEM_TASKS.md. 15:05 Brennan, asked whether a friend's following Pokemon should show on everyone's screen:
+  "yes we do want the pokemon to follow on everyones screen." Done: the place message carries the follower (graphics,
+  tile, facing); each friend's Pokemon is drawn and walked behind them (local ids 232-234, spare slots).
