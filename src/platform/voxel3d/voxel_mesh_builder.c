@@ -1694,21 +1694,42 @@ static void EmitBirthTrees(VoxelBuilder *b, const VoxelMapInstance *inst, int x,
  * the rails in the drawing's rail colour, the rungs in its rungs'). Its models are not drawn (voxel_building.c
  * VoxelBuildings_SkipModel). WJPC_VR_LADDERS_OLD=1: the models, as N64.
  */
+/*
+ * (and Victory Road 1F/B1F's: 2026-11-24 22:09 "continue"; then every cave's - Brennan 2026-11-26 18:48 "they all look
+ * good continue on the rest": the ladders still bent in Shoal Cave (stairs room, lower room, the icy one in the ice
+ * room), Artisan Cave B1F and Cave of Origin - every map on the Cave tile set. A ladder is two cells, its top on the
+ * cliff face (0x20F; icy 0x377; Cave of Origin's 0x340) and its foot on the floor below (0x216, 0x217; 0x37F; 0x341),
+ * all drawn alike, their colours at the same places. WJPC_CAVE_LADDERS_VR_ONLY=1: Victory Road's only, as N66)
+ */
+extern const struct Tileset gTileset_Cave;
 static bool CaveLaddersOn(const VoxelMapInstance *inst)
 {
-    static int sOld = -1;
+    static int sOld = -1, sVrOnly = -1;
 
     if (sOld < 0)
         sOld = getenv("WJPC_VR_LADDERS_OLD") != NULL;
-    /* (and Victory Road 1F/B1F's: 2026-11-24 22:09 "continue") */
-    return !sOld && inst != NULL && (inst->layoutId == 163 || inst->layoutId == 285 || inst->layoutId == 286);
+    if (sVrOnly < 0)
+        sVrOnly = getenv("WJPC_CAVE_LADDERS_VR_ONLY") != NULL;
+    if (sOld || inst == NULL)
+        return false;
+    if (sVrOnly)
+        return inst->layoutId == 163 || inst->layoutId == 285 || inst->layoutId == 286;
+    return inst->secondaryTileset == (const void *)&gTileset_Cave;
+}
+
+static bool CaveLadderTop(int m)
+{
+    return m == 0x20F || m == 0x377 || m == 0x340;
 }
 
 bool VoxelMesh_CaveLadderCell(const VoxelMapInstance *inst, int x, int y)
 {
-    int m = VoxelWorld_GetMetatileId(x, y);
+    int m;
 
-    return CaveLaddersOn(inst) && (m == 0x20F || m == 0x216 || m == 0x217);
+    if (!CaveLaddersOn(inst))
+        return false;   /* (first: every map's models ask, voxel_building.c SkipModel) */
+    m = VoxelWorld_GetMetatileId(x, y);
+    return CaveLadderTop(m) || m == 0x216 || m == 0x217 || m == 0x37F || m == 0x341;
 }
 
 /* (Victory Road B1F, 2026-11-24: between the 3D ladder's rungs the cells' own drawing showed - the flat ladder painted
@@ -1780,23 +1801,28 @@ static void EmitCaveLadder(VoxelBuilder *b, const VoxelMapInstance *inst, int x,
     const int16_t *face, *top, *floor, *faceDepth;
     float u0, v0, u1, v1, hf, ht, zFace, zFoot, zTop, hTop;
     bool lighting = b->lighting;
+    int m = VoxelWorld_GetMetatileId(x, y);
 
-    if (!CaveLaddersOn(inst) || VoxelWorld_GetMetatileId(x, y) != 0x20F
-     || (face = VoxelRelief_Cell(inst, x, y)) == NULL || (faceDepth = VoxelRelief_Depth(inst, x, y)) == NULL
-     || !MetatileUV(b, 0x20F, &u0, &v0, &u1, &v1))
+    if (!CaveLaddersOn(inst) || !CaveLadderTop(m) || !MetatileUV(b, m, &u0, &v0, &u1, &v1))
         return;
+    /* (a cell with no relief stands at the floor, 0: its model is not drawn either way - the ladder must be) */
+    face = VoxelRelief_Cell(inst, x, y);
+    faceDepth = VoxelRelief_Depth(inst, x, y);
     top = VoxelRelief_Cell(inst, x, y - 1);
     floor = VoxelRelief_Cell(inst, x, y + 1);
-    ht = (top != NULL ? top[12] : face[2]) / 16.0f;
-    hf = (floor != NULL ? floor[12] : face[22]) / 16.0f;
+    ht = (top != NULL ? top[12] : face != NULL ? face[2] : 0) / 16.0f;
+    hf = (floor != NULL ? floor[12] : face != NULL ? face[22] : 0) / 16.0f;
+    if (ht - hf < 0.5f)
+        ht = hf + 1.0f;   /* (no ledge above it in the relief: a ladder a tile tall, as drawn) */
     /* the face: where the cell's south edge stands (its foot), straight up from there */
-    zFace = (float)y + 1.0f + faceDepth[22] / 16.0f;
+    zFace = (float)y + 1.0f + (faceDepth != NULL ? faceDepth[22] : face != NULL ? face[22] : 0) / 16.0f;
     zFoot = zFace + 6.0f / 16.0f;
     zTop = zFace + 2.0f / 16.0f;
     hTop = ht + 2.0f / 16.0f;
     b->lighting = false;
     {
-        /* the drawing's rail (205,172,123) at (4, 8), its rungs' (255,230,156) at (7, 8) */
+        /* the drawing's rail (205,172,123) at (4, 8), its rungs' (255,230,156) at (7, 8) - the icy and Cave of Origin
+         * ladders' theirs at the same places */
         float ur = u0 + (u1 - u0) * 4.5f / 16.0f, vr = v0 + (v1 - v0) * 8.5f / 16.0f;
         float ug = u0 + (u1 - u0) * 7.5f / 16.0f, vg = v0 + (v1 - v0) * 8.5f / 16.0f;
         /* (its sides and undersides the drawing's outline (82,41,49) at (3, 8): the rails and rungs edged as drawn) */

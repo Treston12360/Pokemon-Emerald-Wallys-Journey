@@ -1471,3 +1471,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
     now). Kept apart from Mirage Island (the same tile sets above ground, in the sun): the atlas's key.
     WJPC_CAVE_SAND_NEON=1: as before. Checked: Victory Road and Route 109 pixel for pixel the same as before; the sand
     stays toned while the water beside it animates.
+  - N71: every cave's ladders are straight (as Victory Road's, N65/N66): Shoal Cave's stairs room (2), lower room and
+    ice room (the icy one), Artisan Cave B1F, Cave of Origin B1F (and its unused B4F) - every map on the Cave tile
+    set. A ladder's top on the face (0x20F; icy 0x377; Cave of Origin 0x340) and its foot (0x216/0x217; 0x37F; 0x341):
+    two straight rails, five rungs, in that ladder's own colours; the bent models and the painted ladder are not
+    drawn (voxel_mesh_builder.c CaveLaddersOn, voxel_building.c SkipModel). WJPC_CAVE_LADDERS_VR_ONLY=1: Victory
+    Road's only, as before. Gap test, the six ladders' views at 1920x1080 and 2560x1440: the same as before; Victory
+    Road B2F and Slateport pixel for pixel the same.
