@@ -1645,3 +1645,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   saying it is okay, i have their full blessing" (Treston's OK as Brennan reports it) - asked to research how PokeMMO
   and Pokemon Nexus did it, "to see if there is anything to learn". Nothing implemented; the Jagged Pass list
   (22:59) is paused mid-way, uncommitted.
+- 2026-11-26 23:36 Brennan: "lets give this project a name so we can work on the multiplayer implementation for our
+  game." Picked **Project Tandem** (from Project Link / Union / Tandem / Wireless). Order: "Whole Jagged Pass list
+  first" (trees, cliff seams, the clipped plant, 3D stairs), then Tandem's T0 audit. Set up: `docs/TANDEM_TASKS.md`
+  (brief, code facts, research, proposals not yet decided, tasks, open questions), AGENTS.md section, docs/TASKS.md row.

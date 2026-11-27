@@ -21,6 +21,15 @@ If you are asked to **"continue Project ARIA"** (or anything about Kanto, Varnel
 and tick tasks off in `docs/KANTO_TASKS.md` in the same push as the work. Story and every owner decision are in
 `docs/KANTO_PROJECT_ARIA.md`.
 
+## Project Tandem (online multiplayer) — Brennan, 2026-11-26
+If you are asked to work on **Project Tandem** (multiplayer: friends hosting and joining, seeing each other in the
+overworld, player cards, battles and trades between players, cloud saves, an updating launcher): read
+`docs/TANDEM_TASKS.md` first - plan, Brennan's decisions, rules, task list. Treston OK'd the project (Brennan,
+2026-11-26). Branch `tandem` (from `polish`). Rules: audit and plan before code; no engine rewrite; never regress the
+3D renderer, lighting, camera or map geometry; single-player stays exactly as it is; old GBA saves still import; it
+must work in Kanto maps too. It touches shared engine code (overworld, saves, battles, link code): claim files in
+`docs/WORK_CLAIMS.md` before editing, as for any shared file. Brennan works on it: no Kanto story in its docs.
+
 ## No story spoilers in chat (owner rule, 2026-11-13)
 One of the people working on this game does not want Project ARIA's story spoiled. In anything you write or
 show to the person you are working for — replies, summaries, pictures, file captions — say nothing of the
