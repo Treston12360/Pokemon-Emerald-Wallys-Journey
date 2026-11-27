@@ -1809,4 +1809,19 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   wandering); Mt. Chimney and Jagged Pass - their side ridges jogged, the flat plain in front of each kept flat (the
   camera looks over it). Route 116's red rock not touched (hardly seen behind the woods). Code behind
   WJPC_N13_IDEA=4 (off: game unchanged). Waiting on his yes/no per place.
+- 2026-11-27 04:40 Brennan on the #13 ideas (his marked pictures: docs/polish_reports/brennan_2026-11-27_0440_*):
+  1. Lavaridge north: "needs to flow seemlessly into the mountain to its right ... if you zoom out the mountain is cut
+     off. the left side of the mountain needs to step up to the top of the mountain as if it were one full mountain
+     till its peak" (04:48, sketch brennan_2026-11-27_0448_lavaridge_full_mountain_idea.png: "use this for an idea of
+     making it a full mountain to its peak").
+  2. Lavaridge west (circled): "add more trees over here to make it more natural formating. west side try adding a
+     little pond with trees scattered around it, this may help tie the mountain together." (Supersedes 2026-11-18
+     23:31 "do NOT put trees on the far-west curved terraces".)
+  3. Lavaridge south: "this is fine". 4. Route 111 east: "yes i like this idea". 5. Mt. Chimney / Jagged Pass sides:
+     "yes i like the idea"; 04:47 their plains in front: "yes dont keep them flat" (rolling hills).
+  6. Route 116: "show me a picture of route 116" -> sent; 04:51 "B lets try this and see what it looks like" (B: the
+     straight red wall behind its woods given uneven ledges and scattered trees).
+  Round 2 sent ~05:20 (N13b_1..9): Lavaridge's north mountain climbs into Route 112's peak (one mountain; the join's
+  rock face lit as the ground), the west pond with trees, Route 116's wall stepping down with trees, rolling hills
+  south of Mt. Chimney and Jagged Pass. Still behind WJPC_N13_IDEA=4 (off) until he says yes.
 
