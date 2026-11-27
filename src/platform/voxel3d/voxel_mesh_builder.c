@@ -6906,6 +6906,76 @@ static float FieldLumps(int vx, int vy)
     return 1.7f * FieldLumpOctave(vx, vy, 6) + 0.8f * FieldLumpOctave(vx + 101, vy + 57, 3);
 }
 
+/* value noise at a point in lattice units (FieldLumpAt's values), -1..1 */
+static float FieldNoiseAt(float x, float y, int seed)
+{
+    float fx = floorf(x), fy = floorf(y), tx = x - fx, ty = y - fy;
+    int gx = (int)fx + seed * 101, gy = (int)fy + seed * 57;
+    float a = FieldLumpAt(gx, gy), b = FieldLumpAt(gx + 1, gy), c = FieldLumpAt(gx, gy + 1), d = FieldLumpAt(gx + 1, gy + 1);
+
+    tx = tx * tx * (3.0f - 2.0f * tx);
+    ty = ty * ty * (3.0f - 2.0f * ty);
+    return (a + (b - a) * tx) + ((c + (d - c) * tx) - (a + (b - a) * tx)) * ty;
+}
+
+/*
+ * Brennan 2026-11-26 22:09 (Route 118 north: the mountain "straight, uniform, bare cliff tiers stacked like rigid
+ * stairs"; wanted "organic, irregular mountain contours - staggering ridge lines, varying ledge shapes"): on the rock
+ * north of Route 118 (VoxelWorld_R118North) the field's height moves up or down by up to R118_JITTER levels, a value
+ * that drifts every six cells or so - so each ledge's edge steps in and out along its length, ledges come one to
+ * four cells deep, and now and then two meet in a taller cliff (R118FieldRate varies their spacing too). Not near
+ * anything that is not that rock (the maps' edges, the river, the trees): gone within 3 cells of it, so the land
+ * still meets those exactly. (Not the smooth lumps Brennan turned down at Lavaridge, 2026-11-19 "this wavy warping
+ * is wrong": those moved the whole slope up to 2.5 levels in long waves.) WJPC_R118_NORTH_FLAT=1: none.
+ */
+#define R118_JITTER 0.9f
+static float R118FieldJitter(int vx, int vy)
+{
+    static int sOff = -1;
+    int lx, ly, nearest = 3;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_R118_NORTH_FLAT") != NULL;
+    if (sOff || VoxelWorld_R118North(vx, vy, &lx, &ly) == VOXEL_R118N_NONE)
+        return 0.0f;
+    /* (the point's distance, in cells, to the nearest cell round it that is not the rock) */
+    for (int dy = -3; dy <= 2; ++dy)
+        for (int dx = -3; dx <= 2; ++dx)
+        {
+            int d = dx < 0 ? -dx - 1 : dx, e = dy < 0 ? -dy - 1 : dy;
+
+            d = d > e ? d : e;
+            if (d < nearest && (VoxelWorld_GetInstanceAt(vx + dx, vy + dy) != NULL
+                                || VoxelWorld_R118North(vx + dx, vy + dy, NULL, NULL) != VOXEL_R118N_ROCK))
+                nearest = d;
+        }
+    if (nearest == 0)
+        return 0.0f;
+    /* (one smooth octave, a value every 6 cells across and 4.5 up the slope: it changes the height less than the
+     * slope climbs, so the ledges step in and out without pits or lone spikes - a second, finer octave left
+     * one-cell pits and spikes all over, 2026-11-27) */
+    return R118_JITTER * (float)nearest / 3.0f * FieldNoiseAt((float)vx / 6.0f, (float)vy / 4.5f, 7);
+}
+
+/* Brennan 2026-11-26 22:09 (Route 118 north, "varying ledge shapes"): the land there climbs a level every 1.1 to 2.9
+ * cells (BELT_FIELD_RATE elsewhere: 2) - a value that drifts every 7 cells or so, so stretches of the slope are steep
+ * (narrow ledges, near-cliffs) and others gentle (wide shelves), the ledges fanning in and out between. Back to 2 by
+ * the river's north end (VoxelWorld_R118North). WJPC_R118_NORTH_FLAT=1: 2 everywhere. */
+static float R118FieldRate(int vx, int vy)
+{
+    static int sOff = -1;
+    int lx, ly;
+    float fade;
+
+    if (sOff < 0)
+        sOff = getenv("WJPC_R118_NORTH_FLAT") != NULL;
+    if (sOff || VoxelWorld_R118North(vx, vy, &lx, &ly) == VOXEL_R118N_NONE)
+        return (float)BELT_FIELD_RATE;
+    fade = 1.0f - ((float)-ly - 48.0f) / 16.0f;
+    fade = fade > 1.0f ? 1.0f : fade < 0.0f ? 0.0f : fade;
+    return (float)BELT_FIELD_RATE + fade * 0.9f * FieldNoiseAt((float)vx / 7.0f, (float)vy / 7.0f, 19);
+}
+
 static bool BorderWaterLevel(int x, int y, float *level, float *shift);
 /* TRUE when a grid corner touches a wood cell of the belt and no belt water lies within 12 cells (see BeltField) */
 static bool FieldCornerWood(int vx, int vy)
@@ -7097,6 +7167,8 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
     bool nearSouth = false, nearDrawnSouth = false, nearDrawn = false;
     float capOther = 1e9f;
     float drawnPeak = -1e9f, lumpAdd = 0.0f;
+    const float r118j = R118FieldJitter(vx, vy), r118rate = R118FieldRate(vx, vy);
+    float r118jUse = r118j;
     bool exact = false;
 
     for (unsigned i = 0; i < VoxelWorld_InstanceCount(); ++i)
@@ -7218,7 +7290,7 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
          * rock tiled a level a tile) makes up the rest. WJPC_FIELD_NO_CAP=1: off. */
         {
             float cap = e + d / (VoxelRelief_Belt(m) != 0 && vy < oy && vx >= ox - 6 && vx <= ox + m->width + 6
-                                 && getenv("WJPC_PEAK_RATE2") == NULL ? (float)BELT_PEAK_RATE : (float)BELT_FIELD_RATE);
+                                 && getenv("WJPC_PEAK_RATE2") == NULL ? (float)BELT_PEAK_RATE : r118rate);
             if (VoxelRelief_Belt(m) != 0)
                 capMin = cap < capMin ? cap : capMin;
             else
@@ -7314,7 +7386,7 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
         return;
     }
     {
-        float r = dmin / (float)BELT_FIELD_RATE, rise = sumRise / sumW;
+        float r = dmin / r118rate, rise = sumRise / sumW;
         /* Audit batch 1 (Brennan 2026-11-19: the woods round Littleroot, Oldale, Routes 101/102/104 climbing as tall
          * walls of crowns - "Keep woods flat"): a corner of a wood of the belt does not climb; the rock beside it
          * still does. Route 118's wooded hill by its river (Brennan's "Wooded hill", locked in) keeps climbing: a wood
@@ -7326,6 +7398,10 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
          * climbed Route 111's) */
         if (woodFlat && !nearDrawn && getenv("WJPC_PEAK_NO_REACH") == NULL)
             drawnPeak = -1e9f;
+        /* (Brennan 2026-11-26 22:09, R118FieldJitter: where the climb is done - the mountain's flat top - the land
+         * only rises with it, outcrops, never pits) */
+        if (r118j < 0.0f && r >= rise)
+            r118jUse = 0.0f;
         r = r < rise ? r : rise;
         *height = sumE / sumW + r * (sumBack / sumW);
         if (*height < drawnPeak)
@@ -7336,6 +7412,10 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
         /* (and the drawn map's own cap with it: the peak there IS that cap - edge + d/2, rings of identical steps -
          * so the lumps were clipped flat again) */
         capMin += lumpAdd;
+        /* (Brennan 2026-11-26 22:09: the rock north of Route 118, its ledges uneven - R118FieldJitter; the caps
+         * with it, as the lumps above) */
+        *height += r118jUse;
+        capMin += r118jUse;
         /* POL-46 (Brennan 22:39, Lavaridge's south: "Make the Top of the Bottom Mountain Flush & Level Across the
          * Whole Width"; a blue triangle under the red-roofed houses): in front of a map (south of it) the land
          * never dips under the map's edge - the blend with farther, lower maps took it to 5.9 under an edge of 6.0,
@@ -7367,7 +7447,9 @@ static void BeltFieldUncached(int vx, int vy, float *height, float *south)
                         float qy = (float)vy < (float)cy ? (float)cy : (float)vy > (float)cy + 1.0f ? (float)cy + 1.0f : (float)vy;
                         dd = sqrtf(((float)vx - qx) * ((float)vx - qx) + ((float)vy - qy) * ((float)vy - qy));
                     }
-                    cap = BeltBase(cx, cy) + wl + dd / (float)BELT_FIELD_RATE;
+                    cap = BeltBase(cx, cy) + wl + dd / r118rate;
+                    /* (north of Route 118 the ledges down to the river uneven too, none under the water's level) */
+                    cap += r118jUse * (dd < 3.0f ? dd / 3.0f : 1.0f);
                     best = cap < best ? cap : best;
                 }
             if (*height > best)
@@ -7957,7 +8039,10 @@ static void EmitFieldCell(VoxelBuilder *b, int x, int y)
         float lo = c[0].h, hi = c[0].h;
         for (int k = 1; k < 4; ++k)
             lo = c[k].h < lo ? c[k].h : lo, hi = c[k].h > hi ? c[k].h : hi;
-        if (!sLedges && BeltIsTree(x, y))
+        /* (not the trees along the river's west bank north of Route 118, VoxelWorld_R118North: a band beside the
+         * rock's ledges - laid smooth, its edge left slits of sky along every ledge of the rock beside it, which is
+         * stepped; it is stepped as the rock is, its trees on the ledges) */
+        if (!sLedges && BeltIsTree(x, y) && VoxelWorld_R118North(x, y, NULL, NULL) != VOXEL_R118N_BANK)
         {
             VoxelVertex v[4];
             for (int k = 0; k < 4; ++k)
@@ -8152,6 +8237,13 @@ bool VoxelMesh_TreeOverDrop(int x, int y)
 
     if (!FieldOn() || BeltTreeOwn(x, y) || getenv("WJPC_TREES_ON_DROPS") != NULL)
         return false;
+    /* Brennan 2026-11-26 22:09 (Route 118 north: "Let trees wrap organically around the base of the mountain and along
+     * curved riverbanks"): the trees along the river's west bank (VoxelWorld_R118North) stand on the slope down to
+     * the water - a band one to three cells wide, nearly every cell of it across a ledge; with none there the band
+     * was bare tree-floor slopes with a tree here and there. Each stands on its lowest corner (VoxelMesh_BorderLevel),
+     * its crown over the step, as deep in a wood (below). WJPC_R118_NORTH_BANK_GAPS=1: none on drops. */
+    if (getenv("WJPC_R118_NORTH_BANK_GAPS") == NULL && VoxelWorld_R118North(x, y, NULL, NULL) == VOXEL_R118N_BANK)
+        return false;
     for (int k = 0; k < 4; ++k)
     {
         float fh, fs;
@@ -8293,6 +8385,13 @@ bool VoxelMesh_LedgeTree(int x, int y, float *level, float *shift)
             && fh >= VoxelRelief_Base(r) + (float)VoxelRelief_Belt(r) + 2.0f
             && (TreeScatter(x, y) < 12u || getenv("WJPC_PEAK_TREES_ALL") != NULL);
     }
+    /* Brennan 2026-11-26 22:09 (Route 118 north: "scattered trees across the mountain's ledges, slopes, and tiers
+     * (matching the surrounding forest's pixel-art tree assets)"): on the rock there (VoxelWorld_R118North) single
+     * trees and loose clumps - 4x3-cell patches, one in three of them wooded - on the flat of its ledges (the checks
+     * below), the General's small tree as in the woods round it. WJPC_R118_NORTH_BARE=1: none. */
+    if (!wood && getenv("WJPC_R118_NORTH_BARE") == NULL
+     && VoxelWorld_R118North(x, y, NULL, NULL) == VOXEL_R118N_ROCK)
+        wood = TreeScatter(x, y) < (WoodHash(x >> 2, y / 3) % 3u == 0u ? 60u : 14u);
     /* Brennan 2026-11-23 06:28 (Route 114's west plateau: "Scatter some trees") - VoxelMesh_PlateauTree */
     bool plateau = !wood && VoxelMesh_PlateauTree(x, y);
     wood = wood || plateau;

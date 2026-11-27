@@ -110,6 +110,12 @@ int VoxelWorld_GetMetatileId(int worldX, int worldY);
 bool VoxelWorld_ChimneySouth(int worldX, int worldY);
 /* the ash tree standing on that land at the cell (Lavaridge 2CD), or -1 */
 int VoxelWorld_ChimneySouthTree(int worldX, int worldY);
+/* Brennan 2026-11-26 22:09 (Route 118 north, voxel_world.c): the belt between Routes 111, 118 and 119 - which part
+ * of it a cell is (the rock, the river, the trees along its west bank, the woods east of it), VOXEL_R118N_NONE
+ * outside it or when those maps are not placed round it; *localX, *localY (if wanted): the cell from Route 118's
+ * north-west corner (localY < 0 in the belt). */
+enum { VOXEL_R118N_NONE = -1, VOXEL_R118N_ROCK, VOXEL_R118N_WATER, VOXEL_R118N_BANK, VOXEL_R118N_WOODS };
+int VoxelWorld_R118North(int worldX, int worldY, int *localX, int *localY);
 /* The cell's collision bits (0: walkable). */
 unsigned VoxelWorld_GetCollision(int worldX, int worldY);
 unsigned VoxelWorld_GetMetatileBehavior(int worldX, int worldY);

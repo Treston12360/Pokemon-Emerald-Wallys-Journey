@@ -1972,6 +1972,192 @@ bool VoxelWorld_BeltOld(void)
     return sOld;
 }
 
+/*
+ * Brennan 2026-11-26 22:09 (Route 118, "route 118 fix what is in red boxes" - the mountain across the river:
+ * "straight, uniform, bare cliff tiers stacked like rigid stairs"; where mountain, river and the upper-right forest
+ * meet "a sharp, unnatural triangle wedge with straight, rigid edges"; "Curve and soften the shoreline and forest
+ * edge so the water, mountain base, and tree line flow naturally into one another"; "Let trees wrap organically
+ * around the base of the mountain and along curved riverbanks"): the belt north of Route 118, between Route 111's
+ * east edge and Route 119's west edge, was each map's border by the nearest map - Route 111's rock, Route 118's
+ * sea, Route 119's woods - cut along straight 45-degree lines: the sea a triangle pointing north between the rock
+ * and the woods. Now the water is a lake where the triangle was (along the map's edge as before: behind the rock
+ * mound and the map's trees), its shores curved and uneven and its top rounded, narrowing into a river that winds away
+ * north and ends R118N_RIVER_END rows out; a band of trees (1-3 cells, Route 119's woods) along its west shore at the
+ * mountain's foot, and a row or two north of the map's own trees; the rock (Route 111's) west of that, the woods
+ * east of the water. Past the river's end the cut between rock and woods drifts back to the straight line it was by
+ * R118N_ROWS rows out. Each part is that map's border, as before (its level, its art); the ledges and trees on the
+ * rock: voxel_mesh_builder.c (R118FieldJitter, R118FieldRate, VoxelMesh_LedgeTree, VoxelMesh_TreeOverDrop). Only
+ * where all three maps are placed as Hoenn places them. WJPC_R118_NORTH_OLD=1: as before.
+ */
+#define R118N_WIDTH 40          /* Route 111's east edge to Route 119's west edge */
+#define R118N_ROWS 64
+#define R118N_RIVER_END 48.0f
+
+static float R118NHash(int i, uint32_t seed)
+{
+    uint32_t h = (uint32_t)i * 374761393u + seed * 668265263u;
+
+    h = (h ^ (h >> 13)) * 1274126177u;
+    return (float)((h ^ (h >> 16)) & 0xFFFFu) / 65535.0f * 2.0f - 1.0f;
+}
+
+/* smooth value noise along one axis, -1..1, a new value every unit */
+static float R118NNoise(float t, uint32_t seed)
+{
+    float fl = floorf(t), f = t - fl, a = R118NHash((int)fl, seed), b = R118NHash((int)fl + 1, seed);
+
+    f = f * f * (3.0f - 2.0f * f);
+    return a + (b - a) * f;
+}
+
+static float R118NSmooth(float a, float b, float t)
+{
+    t = (t - a) / (b - a);
+    t = t < 0.0f ? 0.0f : t > 1.0f ? 1.0f : t;
+    return t * t * (3.0f - 2.0f * t);
+}
+
+/* the three maps, when placed round the belt as Hoenn places them (kept per thread until the maps change) */
+static bool R118NorthMaps(const VoxelMapInstance **m111, const VoxelMapInstance **m118, const VoxelMapInstance **m119)
+{
+    static VOXEL_TLS unsigned sGen = 0;
+    static VOXEL_TLS bool sOk;
+    static VOXEL_TLS const VoxelMapInstance *s111, *s118, *s119;
+
+    if (sGen == 0 || sGen != sCellGen)
+    {
+        s111 = s118 = s119 = NULL;
+        for (unsigned i = 0; i < sInstanceCount; ++i)
+        {
+            const VoxelMapInstance *m = &sInstances[i];
+
+            if (m->layout == NULL || m->indoor)
+                continue;
+            /* (Route 111 is laid out again once Mirage Tower has fallen: the same land round it) */
+            if (m->layoutId == LAYOUT_ROUTE111 || m->layoutId == LAYOUT_ROUTE111_NO_MIRAGE_TOWER)
+                s111 = m;
+            else if (m->layoutId == LAYOUT_ROUTE118)
+                s118 = m;
+            else if (m->layoutId == LAYOUT_ROUTE119)
+                s119 = m;
+        }
+        sOk = s111 != NULL && s118 != NULL && s119 != NULL
+           && s111->originX + s111->width == s118->originX && s111->originY + s111->height == s118->originY
+           && s119->originX == s118->originX + R118N_WIDTH && s119->originY + s119->height == s118->originY
+           && s111->height >= R118N_ROWS && s119->height >= R118N_ROWS;
+        sGen = CellMemoOff() ? 0 : sCellGen;
+    }
+    *m111 = s111;
+    *m118 = s118;
+    *m119 = s119;
+    return sOk;
+}
+
+/* the river's banks v rows north of Route 118's edge (cells from Route 118's west edge), FALSE past its end: a lake
+ * where the triangle was (behind the rock mound and the map's trees as before, x 6-36 along the map's edge), its
+ * top rounded, curving in to the river; the river winding north, narrowing to its end */
+static bool R118NBanks(float v, float *left, float *right)
+{
+    static const float kKeys[][3] = {
+        {  0.0f,  5.5f, 36.5f }, {  3.0f,  5.7f, 36.3f }, {  6.0f,  6.6f, 35.4f }, {  9.0f,  8.3f, 33.7f },
+        { 11.0f, 10.1f, 31.9f }, { 13.0f, 12.9f, 29.1f }, { 14.5f, 16.0f, 26.0f }, { 16.5f, 19.0f, 25.0f },
+        { 22.0f, 19.5f, 25.0f }, { 27.0f, 21.0f, 25.5f }, { 33.0f, 18.5f, 23.0f }, { 39.0f, 17.0f, 21.5f },
+        { 44.0f, 18.5f, 22.0f }, { R118N_RIVER_END, 20.0f, 20.5f },
+    };
+    const unsigned n = sizeof(kKeys) / sizeof(kKeys[0]);
+    float fade;
+
+    if (v < 0.0f || v >= R118N_RIVER_END)
+        return false;
+    for (unsigned k = 0; k + 1 < n; ++k)
+        if (v <= kKeys[k + 1][0])
+        {
+            float t = (v - kKeys[k][0]) / (kKeys[k + 1][0] - kKeys[k][0]);
+
+            *left = kKeys[k][1] + (kKeys[k + 1][1] - kKeys[k][1]) * t;
+            *right = kKeys[k][2] + (kKeys[k + 1][2] - kKeys[k][2]) * t;
+            break;
+        }
+    /* (uneven: each bank wanders a cell or so - not along the map's edge, where the lake meets the map's own
+     * shore as it did) */
+    fade = R118NSmooth(2.0f, 6.0f, v);
+    *left -= fade * 1.6f * R118NNoise(v / 3.5f, 11u);
+    *right += fade * 1.6f * R118NNoise(v / 3.5f, 23u);
+    return true;
+}
+
+/* the trees along the west bank, cells wide (1-3) */
+static float R118NBand(float v)
+{
+    return 1.6f + 1.1f * R118NNoise(v / 2.8f, 37u);
+}
+
+int VoxelWorld_R118North(int worldX, int worldY, int *localX, int *localY)
+{
+    static int sOld = -1;
+    const VoxelMapInstance *m111, *m118, *m119;
+    float u, v, l, r;
+    int lx, ly;
+
+    if (sOld < 0)
+        sOld = getenv("WJPC_R118_NORTH_OLD") != NULL;
+    if (sOld || !R118NorthMaps(&m111, &m118, &m119))
+        return VOXEL_R118N_NONE;
+    lx = worldX - m118->originX;
+    ly = worldY - m118->originY;
+    if (localX != NULL)
+        *localX = lx;
+    if (localY != NULL)
+        *localY = ly;
+    if (lx < 0 || lx >= R118N_WIDTH || ly >= 0 || ly < -R118N_ROWS)
+        return VOXEL_R118N_NONE;
+    u = (float)lx + 0.5f;
+    v = (float)-ly - 0.5f;
+    if (R118NBanks(v, &l, &r))
+    {
+        if (u > l && u < r)
+            return VOXEL_R118N_WATER;
+        if (u >= r)
+            return VOXEL_R118N_WOODS;
+        if (u > l - R118NBand(v))
+            return VOXEL_R118N_BANK;
+        /* (a row or two of trees north of the map's own wood along its edge, before the rock) */
+        if (v < 1.5f + 1.2f * (R118NNoise((float)lx / 2.5f, 53u) + 1.0f))
+        {
+            int mt = VoxelWorld_GetMetatileId(m118->originX + lx, m118->originY);
+
+            if (mt >= 0 && VoxelTree_Part(m118->secondaryTileset, mt) >= 0)
+                return VOXEL_R118N_BANK;
+        }
+        return VOXEL_R118N_ROCK;
+    }
+    {
+        float t = R118NSmooth(R118N_RIVER_END, (float)R118N_ROWS, v);
+        float cut = 20.25f - 0.25f * t + (1.0f - t) * 1.5f * R118NNoise(v / 4.0f, 59u);
+
+        if (u >= cut)
+            return VOXEL_R118N_WOODS;
+        if (u >= cut - R118NBand(v) * (1.0f - t))
+            return VOXEL_R118N_BANK;
+        return VOXEL_R118N_ROCK;
+    }
+}
+
+/* whether a map's border may be drawn from here (NearestBeltMapUncached's rule for `art`) */
+static bool BeltArtOk(const VoxelMapInstance *m)
+{
+    if (((const struct MapLayout *)m->layout)->border == NULL)
+        return false;
+    if (m->primaryTileset != sInstances[0].primaryTileset || m->secondaryTileset != sInstances[0].secondaryTileset)
+    {
+        if (VoxelWorld_BeltOld())
+            return false;
+        if (!(m->primaryTileset == sInstances[0].primaryTileset && BorderIsPrimaryOnly(m)) && !BeltPairDrawn(m))
+            return false;
+    }
+    return true;
+}
+
 static const VoxelMapInstance *NearestBeltMapUncached(int worldX, int worldY, bool art);
 static const VoxelMapInstance *NearestBeltMap(int worldX, int worldY, bool art)
 {
@@ -1989,6 +2175,21 @@ static const VoxelMapInstance *NearestBeltMapUncached(int worldX, int worldY, bo
     const VoxelMapInstance *best = NULL;
     int bestD = 0x7FFFFFFF;
 
+    /* (Brennan 2026-11-26 22:09: north of Route 118 the river's parts, VoxelWorld_R118North) */
+    if (!VoxelWorld_BeltOld())
+    {
+        int part = VoxelWorld_R118North(worldX, worldY, NULL, NULL);
+
+        if (part != VOXEL_R118N_NONE)
+        {
+            const VoxelMapInstance *m111, *m118, *m119, *own;
+
+            R118NorthMaps(&m111, &m118, &m119);
+            own = part == VOXEL_R118N_ROCK ? m111 : part == VOXEL_R118N_WATER ? m118 : m119;
+            if (!art || BeltArtOk(own))
+                return own;
+        }
+    }
     for (unsigned i = 0; i < sInstanceCount; ++i)
     {
         const VoxelMapInstance *m = &sInstances[i];
@@ -1996,18 +2197,8 @@ static const VoxelMapInstance *NearestBeltMapUncached(int worldX, int worldY, bo
 
         if (m->layout == NULL || m->indoor)
             continue;
-        if (art)
-        {
-            if (((const struct MapLayout *)m->layout)->border == NULL)
-                continue;
-            if (m->primaryTileset != sInstances[0].primaryTileset || m->secondaryTileset != sInstances[0].secondaryTileset)
-            {
-                if (VoxelWorld_BeltOld())
-                    continue;
-                if (!(m->primaryTileset == sInstances[0].primaryTileset && BorderIsPrimaryOnly(m)) && !BeltPairDrawn(m))
-                    continue;
-            }
-        }
+        if (art && !BeltArtOk(m))
+            continue;
         dx = worldX < m->originX ? m->originX - worldX : worldX >= m->originX + m->width ? worldX - (m->originX + m->width - 1) : 0;
         dy = worldY < m->originY ? m->originY - worldY : worldY >= m->originY + m->height ? worldY - (m->originY + m->height - 1) : 0;
         /* POL-30 (Brennan 2026-11-15: "trees and the mountain meshing together" north-west of Route 111): by
