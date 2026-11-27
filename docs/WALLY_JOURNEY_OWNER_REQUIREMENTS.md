@@ -1527,8 +1527,27 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   - Box 3 (Route 103's sign): the General's route sign (0x003, every route sign) was one solid board the whole cell high
     (the drawing extruded 2 px) - a flat box on the ground. Its board (rows 0-11) stands on two legs (its dark sides,
     columns 0-1 and 14-15, rows 12-15), open between them, the shadow the same shape (voxel_sign.c SignRows;
-    WJPC_SIGN_BOX=1: as before). Asked Brennan if that is the 3D sign he means.
+    WJPC_SIGN_BOX=1: as before). Asked Brennan if that is the 3D sign he means. -> 20:55 "keep the signs original":
+    reverted in N74 (voxel_sign.c as before N73).
   - Checked: 12 winter views (changes only at woods' edges, the flecks, signs); gap test 52 views (north/south edges of
     Petalburg, Rustboro, Littleroot, Oldale, Routes 101-104, 116, 121 + the 12) at 1920x1080 and 2560x1440: the same but
     for a few pixels at the edge of the far-corner sky in two Route 103 views and Oldale's horizon (2-12 px).
+- 2026-11-26 20:55 / 21:03 Brennan (N73's Route 103 picture, red box top right): "keep the signs original"; "the forest
+  behind should be only trees it should not be how it is right now being smoothed out" - the trees there "blurred,
+  smeared, and smoothed out instead of rendering as crisp, distinct ... trees like the rest of the forest"; "The
+  background behind the map boundary should consist only of uniform, sharp tree tiles". -> N74:
+  - Signs: N73's legs reverted; every sign as before N73.
+  - Route 103's north woods: Route 103's north edge is rock from x 37 east (its mountain, lifted 1-2.3 levels), and the
+    woods north of it took their level from that edge (VoxelMesh_BorderLevel: the mean of the edge over +-4 cells) -
+    rows of trees on a slope, with a step of rock faces (EmitBorderSteps) where they met the flat woods over the lake:
+    the smeared diagonal. The woods north of Route 103 are one flat forest at the map's base now, as over the lake
+    (voxel_mesh_builder.c VoxelMesh_BorderLevel; WJPC_ROUTE103_WOODS_HILL=1: as before). Only there: tried as a rule
+    for every wood behind a rock edge first (a test build) - it opened a white strip in Route 121's woods and left a
+    bare rock wall behind Route 116's woods, not kept.
+  - Also gone with the slope: the rock faces it stood along Route 103's north edge (a brown "peak" over the lake's
+    north-east corner was the wall up to the higher woods, not the map's rock - the map's own cells are unchanged:
+    the terrain dumps of every loaded map are byte for byte the same but Route 103's edge walls).
+  - Checked: gap test, 52 views (as N73) at 1920x1080 and 2560x1440: the sky at Route 103's far corners is gone
+    (nn_18_20_3 3125 -> 0 px, ss_18_20_18 7108 -> 0, Route 102 1063 -> 0 at 1920; 5776/12810/1912 -> 0 at 2560), the
+    rest the same (one view 1 px).
 

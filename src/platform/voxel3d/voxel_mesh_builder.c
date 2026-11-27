@@ -5848,6 +5848,21 @@ bool VoxelMesh_BorderLevel(int x, int y, float *level, float *shift)
         return false;
     if (VoxelMesh_Classify(ex, ey) == VOXEL_SHAPE_WATER)
         return false;
+    /* Brennan 2026-11-26 20:55 / 21:03 (Route 103's north woods, red box: "the forest behind should be only trees it
+     * should not be how it is right now being smoothed out"; "blurred, smeared, and smoothed out instead of rendering
+     * as crisp, distinct ... trees like the rest of the forest"): Route 103's north edge is rock from x 37 east (its
+     * mountain), and the woods north of it climbed with that edge - rows of trees on a slope, a step where they met
+     * the flat woods over the lake. The woods north of Route 103 are one flat forest, as over the lake. Only there:
+     * as a rule for every wood behind a rock edge it opened a white strip in Route 121's woods and left a bare rock
+     * wall behind Route 116's.
+     * WJPC_ROUTE103_WOODS_HILL=1: as before. */
+    {
+        static int sHill = -1;
+        if (sHill < 0)
+            sHill = getenv("WJPC_ROUTE103_WOODS_HILL") != NULL;
+        if (!sHill && ring->layoutId == 19 /* LAYOUT_ROUTE103 */ && y < ring->originY && BeltIsTree(x, y))
+            return false;
+    }
     *level = VoxelRelief_CellLift(ring, ex, ey);
     *shift = VoxelRelief_CellShift(ring, ex, ey);
     BeltMountain(ring, x, y, ex, ey, level, shift);

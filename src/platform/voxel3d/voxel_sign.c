@@ -102,26 +102,6 @@ static bool HasHead(const SignRecord *r)
     return false;
 }
 
-/* Brennan 2026-11-26 20:07 (Route 103's route sign, red box: "make the sign a 3D model"): the General's route sign
- * (0x003) is drawn as a framed board over a grey foot between its two dark sides, the whole cell; stood up as one
- * board the cell's height it read as a flat box on the ground. Its board (rows 0-11 of the drawing) stands on two
- * legs - its dark sides, columns 0-1 and 14-15, rows 12-15 - open between them: a sign on two posts. Every route sign
- * of the General tile set. WJPC_SIGN_BOX=1: the whole drawing, as before. */
-extern const struct Tileset gTileset_General;
-static void SignRows(const VoxelMapInstance *inst, int x, int y, const uint16_t in[16], uint16_t out[16])
-{
-    static int sBox = -1;
-
-    memcpy(out, in, 16 * sizeof(uint16_t));
-    if (sBox < 0)
-        sBox = getenv("WJPC_SIGN_BOX") != NULL;
-    if (sBox || inst == NULL || inst->primaryTileset != (const void *)&gTileset_General
-     || VoxelWorld_GetMetatileId(x, y) != 0x003)
-        return;
-    for (int r = 12; r < 16; ++r)
-        out[r] &= (uint16_t)0xC003u;
-}
-
 bool VoxelSign_IsLantern(const uint16_t head[16])
 {
     unsigned top = head[0], middle = head[4], width = 0;
@@ -572,16 +552,11 @@ static bool EmitCell(VoxelBuilder *b, const VoxelMapInstance *inst, int x, int y
     /* A lamp: its lantern, drawn in the cell north, stands on the post. */
     if (HasHead(r) && VoxelMesh_TileUV(b, x, y - 1, &mask.headU0, &mask.headV0, &u1, &v1))
         mask.headRows = 16;
+    memcpy(mask.opaque, mask.headRows ? r->head : r->rows, sizeof(r->rows));
+    if (mask.headRows)
     {
-        uint16_t rows[16];
-
-        SignRows(inst, x, y, r->rows, rows);
-        memcpy(mask.opaque, mask.headRows ? r->head : rows, sizeof(rows));
-        if (mask.headRows)
-        {
-            memcpy(mask.opaque + 16, rows, sizeof(rows));
-            mask.height = 32;
-        }
+        memcpy(mask.opaque + 16, r->rows, sizeof(r->rows));
+        mask.height = 32;
     }
     {
         float gu0, gv0, gu1, gv1;
@@ -677,21 +652,16 @@ static bool ShadowOf(const VoxelMapInstance *inst, int x, int y, SignShadow *s)
         return false;
     head = HasHead(r);
     memset(s, 0, sizeof(*s));
+    if (head)
     {
-        uint16_t rows[16];
-
-        SignRows(inst, x, y, r->rows, rows);
-        if (head)
-        {
-            memcpy(s->rows, r->head, sizeof(r->head));
-            memcpy(s->rows + 16, rows, sizeof(rows));
-            s->count = 32;
-        }
-        else
-        {
-            memcpy(s->rows, rows, sizeof(rows));
-            s->count = 16;
-        }
+        memcpy(s->rows, r->head, sizeof(r->head));
+        memcpy(s->rows + 16, r->rows, sizeof(r->rows));
+        s->count = 32;
+    }
+    else
+    {
+        memcpy(s->rows, r->rows, sizeof(r->rows));
+        s->count = 16;
     }
     s->high = s->count;
     for (unsigned i = 0; i < s->count; ++i)
