@@ -14,6 +14,8 @@ rm -rf "$D" "$OUT/$NAME.zip"; mkdir -p "$D"
 cp WallysJourney.exe "$D/"; i686-w64-mingw32-strip "$D/WallysJourney.exe"
 # Project Tandem: the server program, when it is built (docs/TANDEM_HOWTO.md)
 if [ -f WallysJourneyServer.exe ]; then cp WallysJourneyServer.exe "$D/"; i686-w64-mingw32-strip "$D/WallysJourneyServer.exe"; fi
+# ... and for a Linux cloud computer, with its setup script (docs/TANDEM_HOWTO.md "A free cloud computer")
+if [ -f WallysJourneyServer-linux ]; then mkdir -p "$D/cloud-server"; cp WallysJourneyServer-linux tools/tandem/cloud/setup-server.sh "$D/cloud-server/"; strip "$D/cloud-server/WallysJourneyServer-linux" 2>/dev/null || true; fi
 # (the LLVM_MINGW=1 build links SDL2 into the exe: no DLLs to copy then; the gcc build needs them next to it)
 DLLS=""
 if [ -f "$DEPS/SDL2.dll" ]; then cp "$DEPS/SDL2.dll" "$DEPS/SDL2_image.dll" "$D/"; DLLS="SDL2.dll SDL2_image.dll"; fi
