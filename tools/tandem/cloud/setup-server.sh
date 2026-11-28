@@ -2,15 +2,28 @@
 # Project Tandem: run the Wally's Journey server on an Ubuntu cloud computer (made for Oracle Cloud's free
 # VM.Standard.E2.1.Micro; docs/TANDEM_HOWTO.md "A free cloud computer").
 #
-# Put WallysJourneyServer-linux next to this script, then:   sudo bash setup-server.sh
-# Run it again after uploading a newer WallysJourneyServer-linux (each new game version needs the matching server):
-# it swaps the file and restarts the server. Players, keys and the invite code are kept.
+# Upload the whole cloud-server folder (this script, WallysJourneyServer-linux, src/), then in it:
+#     sudo bash setup-server.sh
+# Run it again after uploading a newer folder (each new game version needs the matching server): it swaps the server
+# and restarts it. Players, keys and the invite code are kept.
+# WallysJourneyServer-linux is for x86-64 computers (Oracle's VM.Standard.E2.1.Micro). On any other kind - Oracle's free
+# ARM computer, VM.Standard.A1.Flex (Brennan 2026-11-27 18:53) - the server is built here from src/ (the same build of
+# the game, its build id in src/tandem_build.h), with this computer's own compiler.
 set -e
 DIR=/opt/wallys-server
 PORT=${PORT:-27015}
 cd "$(dirname "$0")"
-if [ ! -f WallysJourneyServer-linux ]; then echo "Put WallysJourneyServer-linux next to this script first."; exit 1; fi
 if [ "$(id -u)" != 0 ]; then echo "Run it with sudo:  sudo bash setup-server.sh"; exit 1; fi
+if [ "$(uname -m)" != x86_64 ]; then
+    if [ ! -f src/server/tandem_server.c ]; then echo "The src folder is missing: upload the whole cloud-server folder."; exit 1; fi
+    echo "This computer is $(uname -m): building the server for it (about a minute)..."
+    if ! command -v gcc >/dev/null; then
+        apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq gcc libc6-dev >/dev/null
+    fi
+    gcc -O2 -pthread -Isrc/server/linux_sdl -Isrc src/server/tandem_server.c src/tandem_net.c -o WallysJourneyServer-linux
+    echo "Built."
+fi
+if [ ! -f WallysJourneyServer-linux ]; then echo "WallysJourneyServer-linux is missing: upload the whole cloud-server folder."; exit 1; fi
 
 # a user of its own (not root), and its folder: the server, its settings, its players, its log
 id wallys >/dev/null 2>&1 || useradd --system --home "$DIR" --shell /usr/sbin/nologin wallys

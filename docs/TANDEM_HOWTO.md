@@ -55,28 +55,31 @@ SERVER-ADDRESS:
     your PC is off; no router changes. See below.
 
 ### A free cloud computer (Oracle Cloud)
-Files (from the game zip): `WallysJourneyServer-linux` (the server for Linux) and `setup-server.sh`
-(`tools/tandem/cloud/`). Build: `make -f Makefile.pc WIN=1 tandem-linux-server` after the game (same build id).
+Files (from the game zip): the `cloud-server` folder - `WallysJourneyServer-linux` (the server for x86-64 Linux),
+`setup-server.sh` (`tools/tandem/cloud/`) and `src/` (the server's source with this build's id, for ARM computers). Build: `make -f Makefile.pc WIN=1 tandem-linux-server` after the game (same build id).
 1. **Account:** oracle.com/cloud/free - email, phone, and a credit/debit card for identity (not charged unless the
    account is upgraded; no prepaid or virtual cards). Pick the **home region** nearest you: it can't be changed, and
    the free computers are only made there.
 2. **The computer:** Compute > Instances > Create instance. Image: Canonical Ubuntu (24.04). Shape:
-   **VM.Standard.E2.1.Micro** (marked "Always Free-eligible"). Networking: the defaults (a new network, a public
+   **VM.Standard.A1.Flex** at **1 OCPU, 6 GB** (marked "Always Free-eligible"; the free monthly amount covers one
+   that size all month - don't raise it), or VM.Standard.E2.1.Micro (under "Specialty and previous generation", where
+   offered; Brennan's region had none). "Out of capacity" (common for A1): another availability domain, or later. Networking: the defaults (a new network, a public
    IPv4 address). SSH keys: "Generate a key pair for me" - **download the private key** and keep it. Create, and note
    the **Public IP address** on the instance's page.
 3. **Oracle's firewall:** on the instance's page, the subnet > its Security List > Add Ingress Rules: source
    `0.0.0.0/0`, IP protocol TCP, destination port `27015`.
 4. **Put the server on it** (Windows PowerShell, in the folder with the files and the key):
    ```
-   scp -i KEYFILE WallysJourneyServer-linux setup-server.sh ubuntu@PUBLIC-IP:~
+   scp -r -i KEYFILE cloud-server ubuntu@PUBLIC-IP:~
    ssh -i KEYFILE ubuntu@PUBLIC-IP
+   cd cloud-server
    sudo bash setup-server.sh
    ```
-   It installs the server, opens port 27015 in the computer's own firewall (Oracle's Ubuntu lets in only SSH), starts
+   On an ARM computer (A1) it first builds the server there (about a minute). It installs the server, opens port 27015 in the computer's own firewall (Oracle's Ubuntu lets in only SSH), starts
    it now and at every restart, and prints the invite code and the address to give friends.
 5. **Everyone** (you too): `tandemJoin=PUBLIC-IP:27015`, `tandemInvite=CODE` (once), `tandemName=...`.
-- **A new game version** needs the matching server: upload the new `WallysJourneyServer-linux` (step 4's `scp`) and
-  run `sudo bash setup-server.sh` again (keys, players and the code are kept). (Until the server updates itself: S3.)
+- **A new game version** needs the matching server: upload the new `cloud-server` folder (step 4's `scp`) and
+  run `sudo bash setup-server.sh` in it again (keys, players and the code are kept). (Until the server updates itself: S3.)
 - Who is playing: `sudo journalctl -u wallys-server -f` on the cloud computer.
 - **Idle computers:** Oracle may stop a free computer that looks idle for 7 days (low CPU and network use - this
   server uses little of either). Start it again on the instance's page; an upgraded (pay-as-you-go) account isn't

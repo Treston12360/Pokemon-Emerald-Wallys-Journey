@@ -1860,3 +1860,6 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   this. 2. yes ask them which one to use" (a save played offline on two PCs: the game asks the player which to keep).
   Done on our side: the Linux server and its setup script; his steps (account, computer, port, upload) in
   docs/TANDEM_HOWTO.md.
+- 2026-11-27 18:51-18:53 Brennan (Oracle shapes): E5.Flex is not free (told him); his region shows nothing under
+  "Specialty and previous generation", so VM.Standard.A1.Flex (Always Free-eligible) at 1 OCPU / 6 GB - yes. The
+  setup script now builds the server on ARM computers from the packaged source.
