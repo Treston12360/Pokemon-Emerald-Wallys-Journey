@@ -1881,3 +1881,6 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Team Up - "Ask each time" (when a regular trainer spots one of you, the other is asked "Join the battle?"; one-player
   if they say no); team-up rewards - "Exp. for both, rest for one" (both get Exp.; only the one the trainer spotted
   gets the prize money and the trainer marked as beaten).
+- 2026-11-27 23:3x Brennan (Team Up, T6b): the Team Up choice in the friend menu - "Partner up first" (Team Up on a
+  friend makes you partners; only your partner gets "Join the battle?", and only when near you; Team Up again to
+  stop); how near - "On your screen" (same map or the one just across the border, close enough to see each other).
