@@ -1846,6 +1846,9 @@ int main(int argc, char **argv)
                 SDL_snprintf(title, sizeof(title), "Pokemon Wally's Journey - %s", status);
                 SDL_SetWindowTitle(sdlWindow, title);
             }
+            /* (the server gave this PC its key: kept in the settings, the invite code dropped) */
+            if (TandemNet_TakeConfigChanged())
+                StoreConfigFile();
         }
         if (sTestScript != NULL && !sScriptRealtime)
         {

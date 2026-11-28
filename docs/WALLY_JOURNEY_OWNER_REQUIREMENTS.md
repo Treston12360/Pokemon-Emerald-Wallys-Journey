@@ -1848,3 +1848,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Cancel (Trade, Battle, Team Up say "not ready yet" until steps 5-6); Player Card shows the friend's card with their
   badges (where the link card had the profile phrase) and their outfit. Found and fixed: friends were drawn in YOUR
   outfit; now everyone shows in their own outfit and colours on every screen.
+- 2026-11-27 18:20 Brennan: "See if there's a way to where I can click a .exe and launch the server, if the server is
+  offline people can still play offline singleplayer and when they reconnect the server syncs with their saves and
+  stuff when it updates, that way I can just host the server via my pc for now without having to setup tailscale for
+  everyone". 18:23 answers: saves - back up saves, the same save on any PC, push game updates (all three); a password:
+  "initial invite code, no password required after"; order: server first. How friends reach it: he asked whether a
+  free MongoDB account would work - answered no (a database, not a way in; 100 operations/s on the free tier, the game
+  would carry its password); options left: port forwarding, playit.gg Premium, Tailscale, a free cloud computer -
+  his choice pending. S1 done: WallysJourneyServer.exe (docs/TANDEM_HOWTO.md).

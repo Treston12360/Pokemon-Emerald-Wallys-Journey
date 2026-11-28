@@ -132,6 +132,19 @@ FORCE:
 $(OBJ_DIR)/src/platform/tandem_net.o: src/platform/tandem_net.c src/platform/tandem_net.h $(TANDEM_BUILD_H)
 	$(CC) $(CFLAGS) -I$(OBJ_DIR)/gen -c $< -o $@
 
+# Project Tandem: the server program (Brennan 2026-11-27: "click a .exe and launch the server") - the same network
+# code with no game, in a console window (src/platform/server/tandem_server.c). Built with the game; same build id.
+ifeq ($(WIN),1)
+SERVER      := WallysJourneyServer.exe
+SERVER_LIBS := $(filter-out -mwindows -lSDL2main -lSDL2_image,$(SDL_LIBS)) -mconsole
+all: $(SERVER)
+$(OBJ_DIR)/server/tandem_server.o: src/platform/server/tandem_server.c src/platform/tandem_net.h
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+$(SERVER): $(OBJ_DIR)/server/tandem_server.o $(OBJ_DIR)/src/platform/tandem_net.o
+	$(CC) -m32 $^ $(SERVER_LIBS) -o $@
+endif
+
 # ENG-MP3: song number -> MUS_ name table, regenerated when the song list changes
 src/platform/mp3_song_names.h: include/constants/songs.h tools/pc/gen_mp3_song_names.py
 	python3 tools/pc/gen_mp3_song_names.py $@

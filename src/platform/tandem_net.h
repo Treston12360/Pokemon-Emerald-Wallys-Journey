@@ -38,6 +38,13 @@ bool TandemNet_Active(void);
 /* a short line for the window title ("" when not active); changes - compare *gen with the last one seen */
 const char *TandemNet_StatusText(unsigned *gen);
 
+/* the settings changed (the server gave this PC its key): write the settings file again; TRUE once per change */
+bool TandemNet_TakeConfigChanged(void);
+/* the server program (src/platform/server/tandem_server.c): hosts with no player of its own, lets new players in with
+ * the invite code (each gets a key, kept in accountsPath, so the code is needed only once) */
+bool TandemNet_StartServer(unsigned port, const char *invite, const char *serverName, const char *accountsPath,
+                           const char *logPath);
+
 /* T2: where a player is (src/tandem_overworld.c fills and reads these; nothing here knows what they mean) */
 typedef struct
 {

@@ -57,9 +57,12 @@ typedef int TSocket;
 static void PutU16(uint8_t *p, unsigned v);
 static unsigned GetU16(const uint8_t *p);
 
-#define PROTOCOL 5   /* (2: STATE; 3: the following Pokemon in STATE; 4: CARD; 5: the outfit in STATE) */
+#define PROTOCOL 6   /* (2: STATE; 3: the following Pokemon in STATE; 4: CARD; 5: the outfit in STATE; 6: invite codes) */
 #define BUILD_LEN 40
 #define NAME_LEN 16
+#define INVITE_LEN 16
+#define KEY_LEN 40
+#define MAX_ACCOUNTS 64
 #define TEXT_LEN 96
 #define PING_MS 2000
 #define TIMEOUT_MS 15000
@@ -72,7 +75,9 @@ enum { MSG_HELLO = 1, MSG_WELCOME, MSG_REFUSE, MSG_PEER, MSG_TEXT, MSG_PING, MSG
 #define STATE_QUEUE 32
 #define STATE_RESEND_MS 1000
 #define CARD_RESEND_MS 5000   /* (T4: each player's card, again every few seconds - a friend who joins later gets it too) */
-enum { MODE_OFF, MODE_HOST, MODE_JOIN };
+/* host: a game that hosts and plays (player 1); server: the server program (WallysJourneyServer.exe), all friends;
+ * join: a game that joins either */
+enum { MODE_OFF, MODE_HOST, MODE_JOIN, MODE_SERVER };
 
 typedef struct
 {
@@ -80,6 +85,7 @@ typedef struct
     bool used, hello, connecting;
     unsigned slot;
     char name[NAME_LEN];
+    char key[KEY_LEN];   /* (server: the player's key, once they are in) */
     uint8_t in[BUF_SIZE];
     unsigned inLen;
     uint32_t lastHeard, lastPing, pingNo, connectStart;
@@ -89,6 +95,16 @@ static int sMode = MODE_OFF;
 static unsigned sPort = TANDEM_DEFAULT_PORT;
 static char sJoinAddr[128];
 static char sName[NAME_LEN] = "Player";
+/* joining: the invite code (first time) and the key the server gave this PC then (every time after) */
+static char sInvite[INVITE_LEN];
+static char sKey[KEY_LEN];
+static bool sConfigChanged;   /* (the key came: the settings file is written again) */
+/* server: its invite code, and the players it knows (key, name), kept in sAccountsPath */
+static char sServerInvite[INVITE_LEN];
+static struct { char key[KEY_LEN]; char name[NAME_LEN]; } sAccounts[MAX_ACCOUNTS];
+static unsigned sAccountCount;
+static char sAccountsPath[1100];
+static bool sEcho;   /* (server: the log also to its window) */
 static char sLogPath[1100];
 static FILE *sLog;
 
@@ -135,6 +151,25 @@ static void CopyName(char *dst, const char *src)
     dst[n] = '\0';
 }
 
+/* an invite code or key: letters and digits only */
+static void CopyCode(char *dst, const char *src, unsigned size)
+{
+    unsigned n = 0;
+
+    for (; *src != '\0' && n < size - 1; src++)
+        if ((*src >= '0' && *src <= '9') || (*src >= 'A' && *src <= 'Z') || (*src >= 'a' && *src <= 'z'))
+            dst[n++] = *src;
+    dst[n] = '\0';
+}
+
+static bool SameCode(const char *a, const char *b)
+{
+    for (; *a != '\0' && *b != '\0'; a++, b++)
+        if ((*a | 0x20) != (*b | 0x20))
+            return false;
+    return *a == *b;
+}
+
 static void SetJoin(const char *value)
 {
     unsigned n = 0;
@@ -166,6 +201,16 @@ bool TandemNet_ConfigLine(const char *line)
         SetJoin(line + 11);
         return true;
     }
+    if (strncmp(line, "tandemInvite=", 13) == 0)
+    {
+        CopyCode(sInvite, line + 13, INVITE_LEN);
+        return true;
+    }
+    if (strncmp(line, "tandemKey=", 10) == 0)
+    {
+        CopyCode(sKey, line + 10, KEY_LEN);
+        return true;
+    }
     if (strncmp(line, "tandemName=", 11) == 0)
     {
         char name[NAME_LEN];
@@ -185,6 +230,23 @@ void TandemNet_WriteConfig(FILE *configFile)
         fprintf(configFile, "tandemJoin=%s\n", sJoinAddr);
     if (strcmp(sName, "Player") != 0)
         fprintf(configFile, "tandemName=%s\n", sName);
+    if (sKey[0] != '\0')
+        fprintf(configFile, "tandemKey=%s\n", sKey);
+    else if (sInvite[0] != '\0')
+        fprintf(configFile, "tandemInvite=%s\n", sInvite);
+}
+
+bool TandemNet_TakeConfigChanged(void)
+{
+    bool changed;
+
+    if (sLock == NULL)
+        return false;
+    SDL_LockMutex(sLock);
+    changed = sConfigChanged;
+    sConfigChanged = false;
+    SDL_UnlockMutex(sLock);
+    return changed;
 }
 
 /* (tests: the same as environment variables, which win over the file) */
@@ -206,6 +268,10 @@ static void ReadEnv(void)
     }
     if ((e = getenv("WJPC_TANDEM_JOIN")) != NULL)
         SetJoin(e);
+    if ((e = getenv("WJPC_TANDEM_INVITE")) != NULL)
+        CopyCode(sInvite, e, INVITE_LEN);
+    if ((e = getenv("WJPC_TANDEM_KEY")) != NULL)
+        CopyCode(sKey, e, KEY_LEN);
 }
 
 /* ── log and status ───────────────────────────────────────────────────── */
@@ -227,7 +293,13 @@ static void Log(const char *fmt, ...)
         fprintf(sLog, "%02d:%02d:%02d %s\n", t ? t->tm_hour : 0, t ? t->tm_min : 0, t ? t->tm_sec : 0, text);
         fflush(sLog);
     }
-    fprintf(stderr, "[Tandem] %s\n", text);
+    if (sEcho)
+    {
+        printf("%02d:%02d:%02d %s\n", t ? t->tm_hour : 0, t ? t->tm_min : 0, t ? t->tm_sec : 0, text);
+        fflush(stdout);
+    }
+    else
+        fprintf(stderr, "[Tandem] %s\n", text);
 }
 
 static void SetStatus(const char *fmt, ...)
@@ -281,6 +353,18 @@ static unsigned CountPlayers(void)
     return n;
 }
 
+/* the one everyone connects to - a hosting game or the server program - passes everything on */
+static bool IsHub(void)
+{
+    return sMode == MODE_HOST || sMode == MODE_SERVER;
+}
+
+/* the first friend's place: after the hosting player, or the first (the server plays no one) */
+static unsigned FirstFriendSlot(void)
+{
+    return sMode == MODE_SERVER ? 0 : 1;
+}
+
 static void StatusFromPlayers(void)
 {
     char names[3 * NAME_LEN + 8] = "";
@@ -293,7 +377,9 @@ static void StatusFromPlayers(void)
                 strcat(names, ", ");
             strcat(names, sPeerNames[i]);
         }
-    if (sMode == MODE_HOST && n <= 1)
+    if (sMode == MODE_SERVER)
+        SetStatus("server on port %u - %u of %u playing%s%s", sPort, n, TANDEM_MAX_PLAYERS, n ? ": " : "", names);
+    else if (sMode == MODE_HOST && n <= 1)
         SetStatus("Tandem: hosting on port %u, waiting for friends", sPort);
     else if (sMode == MODE_HOST)
         SetStatus("Tandem: hosting on port %u - %u of %u (%s)", sPort, n, TANDEM_MAX_PLAYERS, names);
@@ -539,8 +625,8 @@ static void SendPeerNews(unsigned slot, bool joined)
     payload[0] = (uint8_t)slot;
     payload[1] = joined ? 1 : 0;
     PutText(payload + 2, sPeerNames[slot], NAME_LEN);
-    for (unsigned i = 1; i < TANDEM_MAX_PLAYERS; i++)
-        if (sPeers[i].used && sPeers[i].hello)
+    for (unsigned i = FirstFriendSlot(); i < TANDEM_MAX_PLAYERS; i++)
+        if (i != slot && sPeers[i].used && sPeers[i].hello)
             Send(&sPeers[i], MSG_PEER, payload, sizeof(payload));
 }
 
@@ -554,7 +640,7 @@ static void ClosePeer(Peer *p, const char *why)
         Log("connection closed (%s)", why);
     TCloseSocket(p->sock);
     p->used = false;
-    if (sMode == MODE_HOST && p->hello)
+    if (IsHub() && p->hello)
     {
         unsigned slot = p->slot;
         p->hello = false;
@@ -573,6 +659,78 @@ static void ClosePeer(Peer *p, const char *why)
         SetStatus("Tandem: not connected (%s) - trying again", why);
     }
     p->hello = false;
+}
+
+/* ── the server's players (invite codes and keys) ─────────────────────── */
+
+static void LoadAccounts(void)
+{
+    FILE *f = sAccountsPath[0] ? fopen(sAccountsPath, "r") : NULL;
+    char line[256];
+
+    sAccountCount = 0;
+    if (f == NULL)
+        return;
+    while (fgets(line, sizeof(line), f) != NULL && sAccountCount < MAX_ACCOUNTS)
+    {
+        char *space = strchr(line, ' ');
+        if (line[0] == '#' || space == NULL)
+            continue;
+        *space = '\0';
+        CopyCode(sAccounts[sAccountCount].key, line, KEY_LEN);
+        CopyName(sAccounts[sAccountCount].name, space + 1);
+        if (sAccounts[sAccountCount].key[0] != '\0')
+            sAccountCount++;
+    }
+    fclose(f);
+}
+
+static int FindAccount(const char *key)
+{
+    if (key[0] == '\0')
+        return -1;
+    for (unsigned i = 0; i < sAccountCount; i++)
+        if (strcmp(sAccounts[i].key, key) == 0)
+            return (int)i;
+    return -1;
+}
+
+/* a new player let in by the invite code: a key of their own, kept for next time */
+static bool NewAccount(const char *name, char *key)
+{
+    static uint64_t x;
+    static const char hex[] = "0123456789abcdef";
+    FILE *f;
+
+    if (sAccountCount >= MAX_ACCOUNTS)
+        return false;
+    x ^= SDL_GetPerformanceCounter() ^ ((uint64_t)time(NULL) << 20) ^ (uintptr_t)&x ^ ((uint64_t)SDL_GetTicks() << 40);
+    for (unsigned i = 0; i < 32; i++)
+    {
+        x ^= x << 13;
+        x ^= x >> 7;
+        x ^= x << 17;
+        key[i] = hex[(x >> 29) & 15];
+    }
+    key[32] = '\0';
+    memcpy(sAccounts[sAccountCount].key, key, KEY_LEN);
+    memcpy(sAccounts[sAccountCount].name, name, NAME_LEN);
+    sAccountCount++;
+    f = fopen(sAccountsPath, "a");
+    if (f != NULL)
+    {
+        fprintf(f, "%s %s\n", key, name);
+        fclose(f);
+    }
+    return true;
+}
+
+static bool KeyInUse(const char *key)
+{
+    for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
+        if (sPeers[i].used && sPeers[i].hello && strcmp(sPeers[i].key, key) == 0)
+            return true;
+    return false;
 }
 
 /* ── messages ─────────────────────────────────────────────────────────── */
@@ -601,7 +759,10 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
     switch (type)
     {
     case MSG_HELLO:
-        if (sMode != MODE_HOST || p->hello || len < 2 + BUILD_LEN + NAME_LEN)
+    {
+        char invite[INVITE_LEN], key[KEY_LEN], newKey[KEY_LEN] = "";
+
+        if (!IsHub() || p->hello || len < 2 + BUILD_LEN + NAME_LEN)
             break;
         GetText(build, d + 2, BUILD_LEN);
         GetText(name, d + 2 + BUILD_LEN, NAME_LEN);
@@ -617,15 +778,56 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
         }
         if (name[0] == '\0')
             strcpy(name, "Player");
+        /* (the server: a player it knows by their key, or a new one with the invite code; the key goes back to them) */
+        invite[0] = key[0] = '\0';
+        if (len >= 2 + BUILD_LEN + NAME_LEN + INVITE_LEN + KEY_LEN)
+        {
+            GetText(text, d + 2 + BUILD_LEN + NAME_LEN, INVITE_LEN);
+            CopyCode(invite, text, INVITE_LEN);
+            GetText(text, d + 2 + BUILD_LEN + NAME_LEN + INVITE_LEN, KEY_LEN);
+            CopyCode(key, text, KEY_LEN);
+        }
+        if (sMode == MODE_SERVER)
+        {
+            if (FindAccount(key) < 0)
+            {
+                if (invite[0] == '\0')
+                {
+                    Refuse(p, "this server needs an invite code the first time - ask the host for it");
+                    return;
+                }
+                if (!SameCode(invite, sServerInvite))
+                {
+                    Refuse(p, "wrong invite code - ask the host for it");
+                    return;
+                }
+                if (!NewAccount(name, newKey))
+                {
+                    Refuse(p, "the server has no room for new players");
+                    return;
+                }
+                memcpy(key, newKey, KEY_LEN);
+                Log("%s used the invite code - remembered as a player of this server", name);
+            }
+            else if (KeyInUse(key))
+            {
+                Refuse(p, "you're already connected from another PC");
+                return;
+            }
+            memcpy(p->key, key, KEY_LEN);
+        }
         p->hello = true;
         memcpy(p->name, name, NAME_LEN);
         memcpy(sPeerNames[p->slot], name, NAME_LEN);
         {
-            uint8_t w[2 + BUILD_LEN + NAME_LEN];
+            /* slot, players, build, host's name, the hosting player's slot (0xFF: a server, no player), a new key */
+            uint8_t w[2 + BUILD_LEN + NAME_LEN + 1 + KEY_LEN];
             w[0] = (uint8_t)p->slot;
             w[1] = TANDEM_MAX_PLAYERS;
             PutText(w + 2, TANDEM_BUILD, BUILD_LEN);
             PutText(w + 2 + BUILD_LEN, sName, NAME_LEN);
+            w[2 + BUILD_LEN + NAME_LEN] = sMode == MODE_SERVER ? 0xFF : 0;
+            PutText(w + 3 + BUILD_LEN + NAME_LEN, newKey, KEY_LEN);
             Send(p, MSG_WELCOME, w, sizeof(w));
         }
         /* everyone already here, to the newcomer; the newcomer, to everyone */
@@ -642,9 +844,10 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
         SetConnected(p->slot, true);
         sMySentAt = 0;   /* (my place to the newcomer at once) */
         Log("%s joined (player %u of %u, same build %s)", name, p->slot + 1, TANDEM_MAX_PLAYERS, TANDEM_BUILD);
-        SendText(p, "hello from %s, the host", sName);
+        SendText(p, sMode == MODE_SERVER ? "welcome to %s" : "hello from %s, the host", sName);
         StatusFromPlayers();
         break;
+    }
     case MSG_WELCOME:
         if (sMode != MODE_JOIN || p->hello || len < 2 + BUILD_LEN + NAME_LEN)
             break;
@@ -659,11 +862,36 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
         p->hello = true;
         sMySlot = d[0] < TANDEM_MAX_PLAYERS ? d[0] : 1;
         memcpy(p->name, name, NAME_LEN);
-        memcpy(sPeerNames[0], name, NAME_LEN);
         memcpy(sPeerNames[sMySlot], sName, NAME_LEN);
-        SetConnected(0, true);
-        sMySentAt = 0;
-        Log("joined %s's game as player %u of %u (same build %s)", name, sMySlot + 1, d[1], TANDEM_BUILD);
+        sMySentAt = sMyCardSentAt = 0;
+        if (len >= 3 + BUILD_LEN + NAME_LEN + KEY_LEN)
+        {
+            char key[KEY_LEN];
+            unsigned hostSlot = d[2 + BUILD_LEN + NAME_LEN];
+
+            /* (a hosting game plays too, as that player; a server plays no one) */
+            if (hostSlot < TANDEM_MAX_PLAYERS && hostSlot != sMySlot)
+            {
+                memcpy(sPeerNames[hostSlot], name, NAME_LEN);
+                SetConnected(hostSlot, true);
+            }
+            GetText(text, d + 3 + BUILD_LEN + NAME_LEN, KEY_LEN);
+            CopyCode(key, text, KEY_LEN);
+            if (key[0] != '\0')
+            {
+                /* (let in by the invite code: this PC keeps the key; the code isn't needed again) */
+                SDL_LockMutex(sLock);
+                memcpy(sKey, key, KEY_LEN);
+                sInvite[0] = '\0';
+                sConfigChanged = true;
+                SDL_UnlockMutex(sLock);
+                Log("the server let us in with the invite code and gave this PC its key - no code needed from now on");
+            }
+            if (hostSlot == 0xFF)
+                Log("joined the server %s as player %u of %u (same build %s)", name, sMySlot + 1, d[1], TANDEM_BUILD);
+            else
+                Log("joined %s's game as player %u of %u (same build %s)", name, sMySlot + 1, d[1], TANDEM_BUILD);
+        }
         SendText(p, "hello from %s", sName);
         StatusFromPlayers();
         break;
@@ -676,8 +904,10 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
         }
         TCloseSocket(p->sock);
         p->used = false;
-        /* (a different build or version: no retrying, it would be refused again; a full game: try again later) */
-        if (len < TEXT_LEN || strncmp((const char *)d, "the game is full", 16) != 0)
+        /* (a different build or version, an invite code: no retrying, it would be refused again; a full game, or
+         * still connected from another PC: try again later) */
+        if (len < TEXT_LEN || (strncmp((const char *)d, "the game is full", 16) != 0
+                            && strncmp((const char *)d, "you're already connected", 24) != 0))
             sMode = MODE_OFF;
         break;
     case MSG_PEER:
@@ -726,7 +956,7 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
         if (len >= STATE_LEN && p->hello)
         {
             TandemState st;
-            unsigned slot = sMode == MODE_HOST ? p->slot : d[0];
+            unsigned slot = IsHub() ? p->slot : d[0];
 
             if (slot >= TANDEM_MAX_PLAYERS || slot == sMySlot)
                 break;
@@ -735,12 +965,12 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
             QueueState(slot, &st);
             SDL_UnlockMutex(sLock);
             /* (the host passes it on to the other friends, stamped with whose it is) */
-            if (sMode == MODE_HOST)
+            if (IsHub())
             {
                 uint8_t fwd[STATE_LEN];
                 memcpy(fwd, d, STATE_LEN);
                 fwd[0] = (uint8_t)slot;
-                for (unsigned i = 1; i < TANDEM_MAX_PLAYERS; i++)
+                for (unsigned i = FirstFriendSlot(); i < TANDEM_MAX_PLAYERS; i++)
                     if (&sPeers[i] != p && sPeers[i].used && sPeers[i].hello)
                         Send(&sPeers[i], MSG_STATE, fwd, STATE_LEN);
             }
@@ -749,7 +979,7 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
     case MSG_CARD:
         if (len >= 1 && len - 1 <= TANDEM_CARD_MAX && p->hello)
         {
-            unsigned slot = sMode == MODE_HOST ? p->slot : d[0];
+            unsigned slot = IsHub() ? p->slot : d[0];
 
             if (slot >= TANDEM_MAX_PLAYERS || slot == sMySlot)
                 break;
@@ -757,12 +987,12 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
             memcpy(sCards[slot], d + 1, len - 1);
             sCardLen[slot] = len - 1;
             SDL_UnlockMutex(sLock);
-            if (sMode == MODE_HOST)
+            if (IsHub())
             {
                 uint8_t fwd[1 + TANDEM_CARD_MAX];
                 memcpy(fwd, d, len);
                 fwd[0] = (uint8_t)slot;
-                for (unsigned i = 1; i < TANDEM_MAX_PLAYERS; i++)
+                for (unsigned i = FirstFriendSlot(); i < TANDEM_MAX_PLAYERS; i++)
                     if (&sPeers[i] != p && sPeers[i].used && sPeers[i].hello)
                         Send(&sPeers[i], MSG_CARD, fwd, len);
             }
@@ -856,7 +1086,7 @@ static void AcceptFriend(void)
     if (s == TSOCK_BAD)
         return;
     SetNonBlocking(s);
-    for (unsigned i = 1; i < TANDEM_MAX_PLAYERS && p == NULL; i++)
+    for (unsigned i = FirstFriendSlot(); i < TANDEM_MAX_PLAYERS && p == NULL; i++)
         if (!sPeers[i].used)
         {
             p = &sPeers[i];
@@ -872,6 +1102,7 @@ static void AcceptFriend(void)
         return;
     }
     memset(p->name, 0, NAME_LEN);
+    memset(p->key, 0, KEY_LEN);
     p->sock = s;
     p->used = true;
     p->hello = false;
@@ -947,7 +1178,7 @@ static void FinishJoin(Peer *p)
 {
     int err = 0;
     socklen_t el = sizeof(err);
-    uint8_t hello[2 + BUILD_LEN + NAME_LEN];
+    uint8_t hello[2 + BUILD_LEN + NAME_LEN + INVITE_LEN + KEY_LEN];
 
     getsockopt(p->sock, SOL_SOCKET, SO_ERROR, (char *)&err, &el);
     if (err != 0)
@@ -962,6 +1193,10 @@ static void FinishJoin(Peer *p)
     PutU16(hello, PROTOCOL);
     PutText(hello + 2, TANDEM_BUILD, BUILD_LEN);
     PutText(hello + 2 + BUILD_LEN, sName, NAME_LEN);
+    SDL_LockMutex(sLock);
+    PutText(hello + 2 + BUILD_LEN + NAME_LEN, sInvite, INVITE_LEN);
+    PutText(hello + 2 + BUILD_LEN + NAME_LEN + INVITE_LEN, sKey, KEY_LEN);
+    SDL_UnlockMutex(sLock);
     Send(p, MSG_HELLO, hello, sizeof(hello));
 }
 
@@ -983,6 +1218,20 @@ static int TandemThread(void *unused)
         memcpy(sPeerNames[0], sName, NAME_LEN);
         sMySlot = 0;
         Log("hosting on port %u as %s (build %s)", sPort, sName, TANDEM_BUILD);
+        StatusFromPlayers();
+    }
+    else if (sMode == MODE_SERVER)
+    {
+        if (!OpenListen())
+        {
+            Log("can't start the server on port %u (is another program - or another server - using it?)", sPort);
+            SetStatus("can't start on port %u", sPort);
+            return 0;
+        }
+        sMySlot = TANDEM_MAX_PLAYERS;   /* (no player of its own) */
+        LoadAccounts();
+        Log("server running on port %u (build %s), %u player%s known", sPort, TANDEM_BUILD, sAccountCount,
+            sAccountCount == 1 ? "" : "s");
         StatusFromPlayers();
     }
     while (!SDL_AtomicGet(&sQuit))
@@ -1041,7 +1290,7 @@ static int TandemThread(void *unused)
             send = sMyDirty || sMySentAt == 0 || (int32_t)(now - sMySentAt) >= STATE_RESEND_MS;
             sMyDirty = false;
             SDL_UnlockMutex(sLock);
-            if (send && CountPlayers() > 1)
+            if (send && CountPlayers() > 1 && sMode != MODE_SERVER)
             {
                 uint8_t msg[STATE_LEN];
                 EncodeState(msg, sMySlot, &mine);
@@ -1148,6 +1397,19 @@ void TandemNet_Start(const char *logPath)
     Log("---- Project Tandem (build %s) ----", TANDEM_BUILD);
     SetStatus(sMode == MODE_HOST ? "Tandem: starting to host" : "Tandem: starting");
     sThread = SDL_CreateThread(TandemThread, "Tandem", NULL);
+}
+
+bool TandemNet_StartServer(unsigned port, const char *invite, const char *serverName, const char *accountsPath,
+                           const char *logPath)
+{
+    sMode = MODE_SERVER;
+    sPort = port;
+    sEcho = true;
+    CopyCode(sServerInvite, invite, INVITE_LEN);
+    CopyName(sName, serverName);
+    snprintf(sAccountsPath, sizeof(sAccountsPath), "%s", accountsPath);
+    TandemNet_Start(logPath);
+    return sThread != NULL;
 }
 
 void TandemNet_Stop(void)
