@@ -1,4 +1,4 @@
-# Project Tandem - how to connect (steps 1-6 and the server: connecting, seeing each other, across maps, player cards, trading, battles, team up)
+# Project Tandem - how to connect (steps 1-6 and the server: connecting, seeing each other, across maps, player cards, trading, battles, team up, saves on the server)
 
 You see who is connected in the window's title, and `WallysJourney_tandem.log` (next to the game) lists who joined,
 the hello messages and the delay. When a friend is on the same map as you, or on the map just across a border
@@ -81,6 +81,28 @@ SERVER-ADDRESS:
     address (100.x.x.x).
   - **A free cloud computer** runs the server instead of your PC (Brennan 2026-11-27: Oracle Cloud) - up even when
     your PC is off; no router changes. See below.
+
+### Your save on the server (step S2)
+A game that joins **the server** keeps your save there too: a backup, and the same save on any PC. Nothing to set up.
+(A game that hosts, or joins a friend's hosting game, doesn't do this - only the server keeps saves.)
+- **Every time you save in the game**, the save goes to the server a few seconds later. The server keeps every
+  save it replaces too, by date (`WallysJourneyServer_saves`, next to the server - on the cloud computer
+  `/opt/wallys-server/WallysJourneyServer_saves`). Nothing there is ever deleted.
+- **When the game starts** it checks with the server first (a few seconds, "checking your save on the server" in the
+  window's title):
+  - the same save on both: play;
+  - only this PC's changed (played without the server): it's sent;
+  - only the server's changed (played on another PC), or this PC has no save: the server's is taken - this PC's is
+    kept next to it as `WallysJourney.sav.before-server-DATE`;
+  - **both changed** (played on two PCs without the server): a window asks **which save to play** (name, play time
+    and when each was saved). The other is kept (on this PC by date, or on the server by date).
+- **The server was off when the game started:** this PC's save is played; when the server comes back the game
+  checks again. If the server's save changed in the meantime the game doesn't send over it - the window's title says
+  to restart the game to choose.
+- **Your save on another PC:** that PC needs your key - copy the `tandemKey=` line from `WallysJourney.cfg` on your
+  first PC into `WallysJourney.cfg` on the other one (with `tandemJoin=` and `tandemName=`), then start the game:
+  it takes the server's save. (With the invite code instead, the server takes that PC for a new player.)
+- `WallysJourney.sav.tandemsync` (next to the save) is which save this PC and the server last agreed on - leave it.
 
 ### A free cloud computer (Oracle Cloud)
 Step-by-step, with every choice on Oracle's pages: **docs/TANDEM_ORACLE_SETUP.md** (give Brennan that list when he
