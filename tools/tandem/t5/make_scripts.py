@@ -158,3 +158,30 @@ write('teamrematch_B', ["wait 60", "warp 0 17 32 15", "waitfor free 20000", "sta
     "waitfor nolink 60000", "wait 600", "winshot f/s07_back.png"]
     + [x.format("s1") for x in tu_after]
     + ["state rematch 318", "state exp 0", "wait 400000", "quit"])
+
+# T6b, the connection breaks: as teamup_A/B up to the first turn; then B's game quits. A: "The connection to your friend
+# was lost." > A > back where it stood, free to walk; Rick not beaten (state.log 0), the lead's HP as the battle left it.
+tb_start_a = ["wait 60", "warp 0 17 25 14", "waitfor free 20000", "state trainer 615 0", "state hp 0", "wait 900",
+    "press LEFT 3", "wait 30", "press A 3", "wait 150", "press DOWN 3", "wait 20", "press DOWN 3", "wait 20", "press DOWN 3",
+    "wait 20", "press A 3", "wait 1290", "press A 3", "wait 90", "press A 3", "wait 90", "waitfor free 3000", "wait 60",
+    "press DOWN 3", "wait 30", "press A 3", "wait 240", "press A 3", "wait 120", "press A 3", "wait 90",
+    "waitfor link 30000", "waitfor action 30000", "wait 60", "winshot f/b07_battle.png"]
+write('teambreak_A', tb_start_a + ["waitfor nolink 30000", "wait 300", "winshot f/b08_lost.png", "wait 600",
+    "winshot f/b09_error.png", "press A 3", "waitfor free 6000", "wait 120", "winshot f/b10_back.png",
+    "press LEFT 20", "wait 60", "winshot f/b11_walked.png", "press RIGHT 20", "wait 60", "winshot f/b12_walked_right.png", "press UP 20", "wait 60", "winshot f/b13_walked_up.png", "state trainer 615", "state hp 0", "wait 60", "quit"])
+write('teambreak_B', ["wait 60", "warp 0 17 24 14", "waitfor free 20000",
+    "waitfor locked 30000", "wait 150", "press A 3", "wait 90", "press A 3", "wait 90", "press A 3", "wait 240",
+    "press A 3", "wait 90", "press A 3", "wait 90", "waitfor free 3000",
+    "waitfor locked 30000", "wait 150", "press A 3", "wait 90", "press A 3", "waitfor link 30000", "waitfor action 30000",
+    "wait 120", "quit"])
+
+# T6b, an evolution after a team-up: as teamup_A/B, but A's lead is its 3rd Pokemon (Morgrem, evolves at 42) set one
+# Exp. point short of Lv. 42 - after the battle: grew to Lv. 42, then the evolution scene (A only: B would stop it).
+te_a = [x for x in open(out + '/teamup_A.txt').read().strip().split('\n')][len(fb):]
+te_a = [("partyswap 0 2\npartylevel 0 41\nstate setmove 0 129" if x == "state setmove 0 129" else x) for x in te_a
+        if x != "partylevel 0 52"]
+te_a = "\n".join(te_a).replace("f/t", "f/e").split("\n")
+te_a = [x for x in te_a if not x.startswith("quit")] + sum([["press A 3", "wait 150", "winshot f/e3%02d.png" % k] for k in range(16)], []) + [
+    "state party 0", "state level 0", "wait 60", "quit"]
+write('teamevo_A', te_a)
+write('teamevo_B', open(out + '/teamup_B.txt').read().strip().split('\n')[len(fb):])

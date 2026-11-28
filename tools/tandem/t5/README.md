@@ -6,7 +6,9 @@ the `voxel` 3D data, Wine in `/opt/wine-dl`) - change them to yours.
 
 - `make_scripts.py FASTBOOT.txt DIR` - writes the scripts: `trade_A/B` (a full trade, again, both cancel, both walk),
   `edge_A/B` (No; stop waiting; the friend quits in the trade screen), `battle_A/B` (T6a), `teamup_A/B` (T6b: partners,
-  then a team-up against Bug Catcher Rick on Route 102, the Exp. after it - run with run_t6.sh).
+  then a team-up against Bug Catcher Rick on Route 102, the Exp. after it), `teamlose_A/B` (a lost team-up: both pay),
+  `teamrematch_A/B` (a team-up rematch), `teambreak_A/B` (B quits mid team-up), `teamevo_A/B` (an evolution after it)
+  - all with run_t6.sh.
 - `run_t5.sh` - A hosts, B joins: `SA=DIR/trade_A.txt SB=DIR/trade_B.txt W3D=0|1 TO=seconds ./run_t5.sh`.
   Pictures in `/tmp/tt/A/f`, `/tmp/tt/B/f`; `WJPC_TANDEM_DEBUG=1` puts the link's log in `out.log`.
 - `run_t6.sh` - as run_t5.sh, but battles aren't drawn every frame (WJPC_TEST_WINDOW_NOBATTLE): for `battle_A/B`
