@@ -157,6 +157,26 @@ bool8 ScrCmd_specialvar(struct ScriptContext *ctx)
     Script_CheckEffectInstrumentedSpecial(index);
 
     *ptr = gSpecials[index]();
+#ifdef PORTABLE
+    // PC port: an 8-bit special (bool8 / u8 / s8) called through this u16 pointer has only its low 8 bits set on x86 -
+    // the rest of the register is left over, so TRUE could read 0x2301 (ShouldTryRematchBattle: Match Call rematches
+    // by talking never started). Keep the low 8 bits, as the GBA did (build/.../gen/special_widths.c,
+    // tools/pc/gen_special_widths.py).
+    {
+        extern const void *const gPcNarrowSpecials[];
+        extern const unsigned int gPcNarrowSpecialsCount;
+        extern const void *const gPcSignedNarrowSpecials[];
+        const void *f = (const void *)gSpecials[index];
+        u32 i;
+
+        for (i = 0; i < gPcNarrowSpecialsCount; i++)
+            if (gPcNarrowSpecials[i] == f)
+                *ptr &= 0xFF;
+        for (i = 0; gPcSignedNarrowSpecials[i] != NULL; i++)
+            if (gPcSignedNarrowSpecials[i] == f)
+                *ptr = (u16)(s16)(s8)*ptr;
+    }
+#endif
     return FALSE;
 }
 

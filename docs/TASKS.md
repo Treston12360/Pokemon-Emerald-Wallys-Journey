@@ -52,6 +52,8 @@ How to use:
 |---|---|---|---|
 | [ ] | **Project Tandem** planned (named 2026-11-26): friend-hosted multiplayer - see `docs/TANDEM_TASKS.md`. First T0, a read-only audit and plan for review (after Polish's Jagged Pass list); first milestone two players walking the same map | 2026-11-26 | Nothing changed yet. Will touch shared engine code (overworld, saves, battles, link code) on branch `tandem` - claims in `WORK_CLAIMS.md` first |
 
+| [x] | **PC-SPECIALVAR (found by Tandem, 2026-11-28): `specialvar` read garbage from 8-bit specials on PC** - `scrcmd.c` ScrCmd_specialvar calls every special through a u16 pointer; a bool8/u8/s8 special sets only AL on x86, the rest of EAX is left over (seen: ShouldTryRematchBattle gave 0x..01 - Match Call rematches by talking never started; 101 specials return 8 bits). Now `#ifdef PORTABLE` it keeps the low 8 bits (sign-extends s8) for the specials listed in `build/.../gen/special_widths.c`, made every build by `tools/pc/gen_special_widths.py` from `data/specials.inc` + the sources (Makefile.pc SPECIAL_WIDTHS rule). | 2026-11-28 tandem | **Both projects - don't revert.** Every `specialvar` of an 8-bit special now gives the GBA's value (scripts that only worked by luck may now take their "true" branch, as on the GBA). New specials need nothing: the list is rebuilt from the source each build (a special declared `bool8 Name(void)` on one line in a .c file). |
+
 ## Whole-game engine tasks (either project — claim in `docs/WORK_CLAIMS.md` first; they touch shared code)
 
 | Status | Task | Date / commit | Affects / don't revert |

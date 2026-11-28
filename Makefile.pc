@@ -94,7 +94,12 @@ LINUX_DATA_OBJS := $(patsubst data/%.s,build/pc-linux32/data/%.o,$(DATA_SRCS))
 EFFECT_C := $(OBJ_DIR)/gen/effect_funcs.c
 EFFECT_O := $(OBJ_DIR)/gen/effect_funcs.o
 
-OBJS := $(C_OBJS) $(DATA_OBJS) $(MID_OBJS) $(EFFECT_O)
+# PC port: the specials that return 8 bits (scrcmd.c ScrCmd_specialvar keeps only those bits on x86) - remade from
+# data/specials.inc and the sources every build (tools/pc/gen_special_widths.py)
+SPECIAL_WIDTHS_C := $(OBJ_DIR)/gen/special_widths.c
+SPECIAL_WIDTHS_O := $(OBJ_DIR)/gen/special_widths.o
+
+OBJS := $(C_OBJS) $(DATA_OBJS) $(MID_OBJS) $(EFFECT_O) $(SPECIAL_WIDTHS_O)
 ifeq ($(WIN),1)
 OBJS += $(OBJ_DIR)/icon.o
 # 32-bit Windows C symbols carry a leading underscore; give asm data objects the same.
@@ -197,6 +202,12 @@ $(EFFECT_C): $(LINUX_DATA_OBJS) tools/pc/effect_funcs.sh
 	tools/pc/effect_funcs.sh $@ $(LINUX_DATA_OBJS)
 
 $(EFFECT_O): $(EFFECT_C)
+	$(CC) -m32 -O2 -c $< -o $@
+
+$(SPECIAL_WIDTHS_C): FORCE tools/pc/gen_special_widths.py
+	@mkdir -p $(dir $@); python3 tools/pc/gen_special_widths.py $@.tmp; cmp -s $@.tmp $@ && rm -f $@.tmp || mv $@.tmp $@
+
+$(SPECIAL_WIDTHS_O): $(SPECIAL_WIDTHS_C)
 	$(CC) -m32 -O2 -c $< -o $@
 
 $(OBJ_DIR)/icon.o: resources/pokemon_emerald.rc resources/pokemon_emerald.ico
