@@ -107,3 +107,27 @@ write('teamup_B', ["wait 60", "warp 0 17 24 14", "waitfor free 20000", "state se
     "waitfor nolink 60000", "wait 600", "winshot f/u07_back.png"]
     + [x.format("u1") for x in tu_after_b]
     + ["state level 0", "state exp 0", "state trainer 615", "wait 400000", "quit"])
+
+# T6b, a loss: as teamup_A/B, but everyone's Pokemon but the lead have 0 HP and both leads use Memento (the user faints)
+# - the trainer wins; both pay as for a normal loss ("You gave ... to the winner") and black out.
+# state.log: money before and after (both less), Rick's flag (0 on both).
+tl_turns = ["press A 3", "wait 120", "press A 3", "wait 120", "press A 3", "wait 400"] * 6
+tl_start_a = ["wait 60", "warp 0 17 25 14", "waitfor free 20000", "state trainer 615 0", "state setmove 0 262"] + \
+    ["state hp %d 0" % i for i in range(1, 6)] + ["state money 0", "wait 900",
+    "press LEFT 3", "wait 30", "press A 3", "wait 150", "press DOWN 3", "wait 20", "press DOWN 3", "wait 20", "press DOWN 3",
+    "wait 20", "press A 3", "wait 1290", "press A 3", "wait 90", "press A 3", "wait 90", "waitfor free 3000", "wait 60",
+    "press DOWN 3", "wait 30", "press A 3", "wait 240", "press A 3", "wait 120", "press A 3", "wait 90",
+    "waitfor link 30000", "waitfor action 30000", "wait 60"]
+write('teamlose_A', tl_start_a + tl_turns + sum([["wait 60", "winshot f/l2%02d.png" % k] for k in range(12)], []) + [
+    "waitfor nolink 60000", "wait 900", "winshot f/l08_back.png"]
+    + [x.format("l1") for x in tu_after]
+    + ["state money 0", "state trainer 615", "state hp 0", "wait 60", "quit"])
+write('teamlose_B', ["wait 60", "warp 0 17 24 14", "waitfor free 20000", "state setmove 0 262", "state trainer 615 0"]
+    + ["state hp %d 0" % i for i in range(1, 6)] + ["state money 0",
+    "waitfor locked 30000", "wait 150", "press A 3", "wait 90", "press A 3", "wait 90", "press A 3", "wait 240",
+    "press A 3", "wait 90", "press A 3", "wait 90", "waitfor free 3000",
+    "waitfor locked 30000", "wait 150", "press A 3", "wait 90", "press A 3", "waitfor link 30000", "waitfor action 30000",
+    "wait 30"] + tl_turns + sum([["wait 60", "winshot f/m2%02d.png" % k] for k in range(12)], []) + [
+    "waitfor nolink 60000", "wait 900", "winshot f/m08_back.png"]
+    + [x.format("m1") for x in tu_after]
+    + ["state money 0", "state trainer 615", "state hp 0", "wait 400000", "quit"])

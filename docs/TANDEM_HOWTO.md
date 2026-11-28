@@ -19,8 +19,8 @@ alone, as always. Gym trainers, Gym Leaders, the rival, Team Aqua and Magma, the
 battles always stay one-player. In a team-up there is no Bag and no running (as in any link battle / trainer battle).
 Winning: the trainer is beaten and the prize money paid only for the one who was spotted (the partner sees "NAME got
 ...for winning!"); back on the map, each of you gets your own Pokemon's Exp. Points (by your own game's rules: level
-cap, EXP ALL, Exp. Share, Lucky Egg...), new moves (the four-move question) and evolutions. Losing: both go back to the
-Pokemon Center. Your Pokemon keep what happened in the battle (no healing). If the connection breaks during it: "A
+cap, EXP ALL, Exp. Share, Lucky Egg...), new moves (the four-move question) and evolutions. Losing: both pay as for a normal
+loss ("You gave ... to the winner") and go back to the Pokemon Center. Your Pokemon keep what happened in the battle (no healing). If the connection breaks during it: "A
 Button: Continue" - you carry on where you stood, and the trainer battle didn't count.
 
 **Battles:** Battle asks "Which kind of battle?" - Single or Double (a Double needs two Pokemon that can battle, Eggs

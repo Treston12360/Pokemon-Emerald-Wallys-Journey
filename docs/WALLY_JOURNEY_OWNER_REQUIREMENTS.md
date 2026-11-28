@@ -1891,3 +1891,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   give none in battle, and in-battle Exp. would need `battle_script_commands.c`, Project ARIA's EXP claim); (2) a lost
   team-up sends both to the Pokemon Center with no money taken; (3) no Bag in a team-up (link battles have none);
   (4) Match Call / VS Seeker rematches stay one-player for now.
+- 2026-11-28 02:05 Brennan (T6b answers): (1) Exp. after the battle - "after battle is okay for now"; (2) a lost
+  team-up - "should cost money like a normal loss yes" (each player pays as for a normal loss: badges x highest level,
+  "You gave N to the winner"); (3) items - "yes items if possible" (the Bag in team-up battles); (4) rematches staying
+  one-player - "thats fine for now", asked how hard it would be to make more battles team-up.

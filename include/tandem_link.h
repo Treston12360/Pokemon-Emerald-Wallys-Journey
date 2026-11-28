@@ -50,6 +50,8 @@ void TandemLink_BeginTeamUpBattle(void);
  * (CB2_InitEndLinkBattle, before the trainer battle's end or the partner's): the results kept, the link session over */
 void TandemLink_TeamUpBattleFrame(void);
 void TandemLink_TeamUpBattleOver(void);
+/* battle_message.c: what a lost team-up costs me (as a normal loss) - the partner's game shows its own */
+u32 TandemLink_TeamUpLossMoney(void);
 /* specials: partners (Team Up on a friend) */
 void Tandem_PartnerState(void);
 void Tandem_SetPartner(void);

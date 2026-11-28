@@ -6489,9 +6489,13 @@ BattleScript_TandemTeamUpWon::
 	waitmessage B_WAIT_TIME_LONG
 	end
 
-@ both teams are out: both black out after (no money taken: Brennan to decide)
+@ both teams are out: both pay as for a normal loss (Brennan 2026-11-28: "should cost money like a normal loss") - the
+@ master's money here, the partner's game shows and pays its own (battle_message.c, tandem_link.c) - and black out after
 BattleScript_TandemTeamUpLost::
 	printstring STRINGID_PLAYERWHITEOUT
+	waitmessage B_WAIT_TIME_LONG
+	getmoneyreward
+	printstring STRINGID_PLAYERWHITEOUT2_TRAINER
 	waitmessage B_WAIT_TIME_LONG
 	printstring STRINGID_PLAYERWHITEOUT3
 	waitmessage B_WAIT_TIME_LONG

@@ -4,6 +4,7 @@
 #include "battle_ai_record.h"
 #include "battle_controllers.h"
 #include "battle_message.h"
+#include "tandem_link.h"
 #include "battle_setup.h"
 #include "battle_special.h"
 #include "battle_z_move.h"
@@ -2815,6 +2816,13 @@ void BufferStringBattle(enum StringID stringID, enum BattlerId battler)
         break;
     case STRINGID_TRAINERSLIDE:
         stringPtr = gBattleStruct->trainerSlideMsg;
+        break;
+    case STRINGID_PLAYERWHITEOUT2_TRAINER:
+        // Project Tandem T6b: a lost team-up - the partner's game says what it pays (as a normal loss), not the
+        // spotted player's sum (tandem_link.c)
+        if ((gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP) && !(gBattleTypeFlags & BATTLE_TYPE_IS_MASTER))
+            PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff1, 5, TandemLink_TeamUpLossMoney());
+        stringPtr = gBattleStringsTable[stringID];
         break;
     case STRINGID_PLAYERGOTMONEY:
         // Project Tandem T6b: a team-up's money is the spotted player's (the link master's) - the partner's game says

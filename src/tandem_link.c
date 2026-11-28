@@ -66,6 +66,7 @@
 #include "constants/script_commands.h"
 #include "field_weather.h"
 #include "m4a.h"
+#include "money.h"
 
 /* what one friend sends another (TandemNet_SendTo's kind) */
 enum
@@ -142,6 +143,7 @@ static u8 sMyBattler;                   /* my battler in it (0 on the spotted ga
 static u8 sFaced[PARTY_SIZE];           /* each of the trainer's Pokemon: the bits of my party slots that faced it */
 static u8 sOppSeen;                     /* the trainer's Pokemon that were out */
 static struct { u16 species; u8 level; bool8 fainted; } sOpp[PARTY_SIZE];   /* the trainer's, as the battle ended */
+static s32 sLossMoney = -1;             /* a lost team-up: what I pay, as a normal loss (worked out once) */
 extern const u8 Tandem_EventScript_PartnerEnded[];   /* data/scripts/tandem.inc */
 static void StartTeamUpAsPartner(void);
 static const u8 sText_ABoosted[] = _(" a boosted");
@@ -982,6 +984,7 @@ static void ResetTeamUpRecords(void)
     memset(sFaced, 0, sizeof(sFaced));
     memset(sOpp, 0, sizeof(sOpp));
     sOppSeen = 0;
+    sLossMoney = -1;
     sMyBattler = MAX_BATTLERS_COUNT;
     sTeamUpResults = FALSE;
     sTeamUpBroke = FALSE;
@@ -1126,10 +1129,50 @@ void TandemLink_TeamUpBattleOver(void)
             CalculateMonStats(&gParties[B_TRAINER_PLAYER][i]);
     sTeamUpOutcome = gBattleOutcome;
     sTeamUpResults = gBattleOutcome == B_OUTCOME_WON;
+    if ((gBattleOutcome == B_OUTCOME_LOST || gBattleOutcome == B_OUTCOME_DREW) && sLink.myId != 0)
+    {
+        u32 money = TandemLink_TeamUpLossMoney();   /* (the partner's game; the master paid in battle) */
+        RemoveMoney(&gSaveBlock1Ptr->money, money);
+        LINK_LOG("team-up lost: paid %u\n", money);
+    }
     LINK_LOG("team-up over: outcome %u, faced %02x %02x %02x %02x %02x %02x\n", gBattleOutcome,
              sFaced[0], sFaced[1], sFaced[2], sFaced[3], sFaced[4], sFaced[5]);
     gBattleTypeFlags &= ~(BATTLE_TYPE_TANDEM_TEAMUP | BATTLE_TYPE_LINK | BATTLE_TYPE_LINK_IN_BATTLE | BATTLE_TYPE_MULTI);
     TandemLink_EndSession();
+}
+
+/* a lost team-up costs money as a normal loss does (Brennan 2026-11-28 02:05: "should cost money like a normal loss"):
+ * battle_script_commands.c Cmd_getmoneyreward's own sum (B_WHITEOUT_MONEY Gen 4+: by badges, times the party's highest
+ * level), no more than I have. The spotted game (the link master) pays it there, in battle; the partner's game works
+ * out its own here - battle_message.c shows it, TandemLink_TeamUpBattleOver takes it. */
+u32 TandemLink_TeamUpLossMoney(void)
+{
+    static const u16 sWhiteOutBadgeMoney[9] = { 8, 16, 24, 36, 48, 64, 80, 100, 120 };   /* (battle_script_commands.c) */
+    u32 i, level = 1, badges = 0, money;
+
+    if (sLossMoney >= 0)
+        return sLossMoney;
+    if (B_WHITEOUT_MONEY <= GEN_3)
+    {
+        money = GetMoney(&gSaveBlock1Ptr->money) / 2;
+    }
+    else
+    {
+        for (i = 0; i < PARTY_SIZE; i++)
+        {
+            u16 species = GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES_OR_EGG);
+            if (species != SPECIES_NONE && species != SPECIES_EGG && GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_LEVEL) > level)
+                level = GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_LEVEL);
+        }
+        for (i = 0; i < ARRAY_COUNT(gBadgeFlags); i++)
+            if (FlagGet(gBadgeFlags[i]))
+                badges++;
+        money = sWhiteOutBadgeMoney[min(badges, ARRAY_COUNT(sWhiteOutBadgeMoney) - 1)] * level;
+    }
+    if (!IsEnoughMoney(&gSaveBlock1Ptr->money, money))
+        money = GetMoney(&gSaveBlock1Ptr->money);
+    sLossMoney = money;
+    return money;
 }
 
 /* after a trainer battle (the spotted game) or after joining one (the partner's): VAR_RESULT 1 a won team-up (its Exp.

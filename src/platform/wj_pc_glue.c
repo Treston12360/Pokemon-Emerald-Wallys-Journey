@@ -165,6 +165,12 @@ int WJPC_TestState(const char *what, int id, int set, int value)
             return -1;
         return GetMonData(&gParties[B_TRAINER_PLAYER][id], MON_DATA_SPECIES);
     }
+    if (!strcmp(what, "money"))
+    {
+        // "state money 0": the player's money (test aid, Project Tandem T6b: a lost team-up costs it)
+        extern u32 GetMoney(u32 *moneyPtr);
+        return GetMoney(&gSaveBlock1Ptr->money);
+    }
     if (!strcmp(what, "level") || !strcmp(what, "exp") || !strcmp(what, "move"))
     {
         // "state level SLOT" / "state exp SLOT": that party Pokemon's level or Exp. points; "state move N": party
