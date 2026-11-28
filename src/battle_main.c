@@ -82,6 +82,7 @@
 #include "constants/trainers.h"
 #include "constants/weather.h"
 #include "cable_club.h"
+#include "tandem_link.h"
 
 extern const struct BgTemplate gBattleBgTemplates[];
 extern const struct WindowTemplate *const gBattleWindowTemplates[];
@@ -492,7 +493,9 @@ void CB2_InitBattle(void)
 
     if (gBattleTypeFlags & BATTLE_TYPE_MULTI && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
     {
-        if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
+        // Project Tandem T6b: a team-up has no party showcase (whole teams); the link opens with the battle
+        // (SetUpBattleVarsAndBirchZigzagoon), as a link battle between two friends does
+        if (gBattleTypeFlags & (BATTLE_TYPE_RECORDED | BATTLE_TYPE_TANDEM_TEAMUP))
         {
             CB2_InitBattleInternal();
         }
@@ -589,7 +592,7 @@ static void CB2_InitBattleInternal(void)
     SetUpBattleVarsAndBirchZigzagoon();
 
     if (gBattleTypeFlags & BATTLE_TYPE_MULTI
-     && (TESTING || gBattleTypeFlags & (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_INGAME_PARTNER)))
+     && (TESTING || gBattleTypeFlags & (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_INGAME_PARTNER | BATTLE_TYPE_TANDEM_TEAMUP)))
         SetMainCallback2(CB2_HandleStartMultiPartnerBattle);
     else if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
         SetMainCallback2(CB2_HandleStartMultiBattle);
@@ -761,7 +764,7 @@ static void SetAllPlayersBerryData(void)
 
         if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
         {
-            if (gBattleTypeFlags & BATTLE_TYPE_BATTLE_TOWER)
+            if (gBattleTypeFlags & (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_TANDEM_TEAMUP))   // (Project Tandem T6b: two players)
                 numPlayers = 2;
             else
                 numPlayers = 4;
@@ -1069,6 +1072,8 @@ static void CB2_HandleStartBattle(void)
     }
 }
 
+static EWRAM_DATA u8 sTandemPartyPart = 0;   // Project Tandem T6b: which two of a team-up's party are sent next
+
 static void CB2_HandleStartMultiPartnerBattle(void)
 {
     u8 playerMultiplayerId;
@@ -1108,12 +1113,22 @@ static void CB2_HandleStartMultiPartnerBattle(void)
                 gLinkPlayers[1].id = 2;
                 gLinkPlayers[2].id = 1;
                 gLinkPlayers[3].id = 3;
+                if (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP)
+                {
+                    // Project Tandem T6b: one route trainer on the other side
+                    StringCopy(gLinkPlayers[2].name, GetTrainerNameFromId(TRAINER_BATTLE_PARAM.opponentA));
+                    StringCopy(gLinkPlayers[3].name, gLinkPlayers[2].name);
+                    gLinkPlayers[2].language = gLinkPlayers[3].language = GAME_LANGUAGE;
+                }
+                else
+                {
                 GetFrontierTrainerName(gLinkPlayers[2].name, TRAINER_BATTLE_PARAM.opponentA);
                 GetFrontierTrainerName(gLinkPlayers[3].name, TRAINER_BATTLE_PARAM.opponentB);
                 GetBattleTowerTrainerLanguage(&language, TRAINER_BATTLE_PARAM.opponentA);
                 gLinkPlayers[2].language = language;
                 GetBattleTowerTrainerLanguage(&language, TRAINER_BATTLE_PARAM.opponentB);
                 gLinkPlayers[3].language = language;
+                }
 
                 if (IsLinkTaskFinished())
                 {
@@ -1146,12 +1161,16 @@ static void CB2_HandleStartMultiPartnerBattle(void)
             ResetBlockReceivedFlags();
             FindLinkBattleMaster(2, playerMultiplayerId);
             SetAllPlayersBerryData();
+            sTandemPartyPart = 0;
+            if (!(gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP))   // (Project Tandem T6b: no VS screen)
+            {
             taskId = CreateTask(InitLinkBattleVsScreen, 0);
             gTasks[taskId].data[1] = 0x10E;
             gTasks[taskId].data[2] = 0x5A;
             gTasks[taskId].data[5] = 0;
             gTasks[taskId].data[3] = 0x145;
             gTasks[taskId].data[4] = 0x145;
+            }
             gBattleCommunication[MULTIUSE_STATE]++;
         }
         break;
@@ -1159,8 +1178,8 @@ static void CB2_HandleStartMultiPartnerBattle(void)
         // Link battle, send/receive party Pokémon in groups
         if (IsLinkTaskFinished())
         {
-            // Send Pokémon 1-2
-            SendBlock(BitmaskAllOtherLinkPlayers(), gParties[B_TRAINER_PLAYER], sizeof(struct Pokemon) * 2);
+            // Send Pokémon 1-2 (Project Tandem T6b, a team-up: 1-2, 3-4, 5-6 - whole teams)
+            SendBlock(BitmaskAllOtherLinkPlayers(), &gParties[B_TRAINER_PLAYER][sTandemPartyPart * 2], sizeof(struct Pokemon) * 2);
             gBattleCommunication[MULTIUSE_STATE]++;
         }
         break;
@@ -1169,9 +1188,14 @@ static void CB2_HandleStartMultiPartnerBattle(void)
         {
             // Recv partner's Pokémon 1-2, put each player's mons in their own party
             ResetBlockReceivedFlags();
-            memcpy(gParties[B_TRAINER_PLAYER], gBlockRecvBuffer[playerMultiplayerId], sizeof(struct Pokemon) * 2);
-            memcpy(gParties[B_TRAINER_PARTNER], gBlockRecvBuffer[partnerMultiplayerId], sizeof(struct Pokemon) * 2);
-            gBattleCommunication[MULTIUSE_STATE]++;
+            memcpy(&gParties[B_TRAINER_PLAYER][sTandemPartyPart * 2], gBlockRecvBuffer[playerMultiplayerId], sizeof(struct Pokemon) * 2);
+            memcpy(&gParties[B_TRAINER_PARTNER][sTandemPartyPart * 2], gBlockRecvBuffer[partnerMultiplayerId], sizeof(struct Pokemon) * 2);
+            if (!(gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP))
+                gBattleCommunication[MULTIUSE_STATE]++;
+            else if (++sTandemPartyPart < PARTY_SIZE / 2)
+                gBattleCommunication[MULTIUSE_STATE] = 3;
+            else
+                gBattleCommunication[MULTIUSE_STATE] = 7;
         }
         break;
     case 5:
@@ -1938,7 +1962,17 @@ void CB2_InitEndLinkBattle(void)
     SetVBlankCallback(NULL);
     gBattleTypeFlags &= ~BATTLE_TYPE_LINK_IN_BATTLE;
 
-    if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+    if (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP)
+    {
+        // Project Tandem T6b: no link results screen - the trainer battle's own end (battle_setup.c), or the
+        // partner's (tandem_link.c)
+        TandemLink_TeamUpBattleOver();
+        SetMainCallback2(gMain.savedCallback);
+        FreeBattleResources();
+        FreeBattleSpritesData();
+        FreeMonSpritesGfx();
+    }
+    else if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
     {
         SetMainCallback2(gMain.savedCallback);
         FreeBattleResources();
@@ -2783,6 +2817,8 @@ static void BattleMainCB1(void)
     gBattleMainFunc();
     for (enum BattlerId battler = 0; battler < gBattlersCount; battler++)
         gBattlerControllerFuncs[battler](battler);
+    if (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP)
+        TandemLink_TeamUpBattleFrame();   // (Project Tandem T6b: on both games, who faced which of the trainer's)
 }
 
 static void ClearSetBScriptingStruct(void)
@@ -4190,7 +4226,8 @@ static void HandleTurnActionSelectionState(void)
                     return;
                 }
                 else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER
-                      && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+                      && (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+                          || (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP))   // (Project Tandem T6b: a route trainer's)
                       && gBattleResources->bufferB[battler][1] == B_ACTION_RUN)
                 {
                     BattleScriptExecute(BattleScript_PrintCantRunFromTrainer);
@@ -5245,7 +5282,17 @@ static void HandleEndTurn_BattleWon(void)
     }
     gCurrentActionFuncId = 0;
 
-    if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+    if (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP)
+    {
+        // Project Tandem T6b: the route trainer's defeat, then the money - only the spotted player's (this game, the
+        // link master): BattleScript_TandemTeamUpWon
+        BattleStopLowHpSound();
+        gBattleOutcome &= ~B_OUTCOME_LINK_BATTLE_RAN;
+        gSpecialVar_Result = gBattleOutcome;
+        gBattlerAttacker = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+        gBattlescriptCurrInstr = BattleScript_TandemTeamUpWon;
+    }
+    else if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
     {
         gSpecialVar_Result = gBattleOutcome;
         gBattleTextBuff1[0] = gBattleOutcome;
@@ -5308,7 +5355,14 @@ static void HandleEndTurn_BattleLost(void)
     }
     gCurrentActionFuncId = 0;
 
-    if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+    if (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP)
+    {
+        // Project Tandem T6b: both teams are out - both black out after (battle_setup.c, tandem_link.c)
+        gBattleOutcome &= ~B_OUTCOME_LINK_BATTLE_RAN;
+        gBattlerAttacker = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+        gBattlescriptCurrInstr = BattleScript_TandemTeamUpLost;
+    }
+    else if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
     {
         if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
         {

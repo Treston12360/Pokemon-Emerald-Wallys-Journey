@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Project Tandem T5 test scripts (WJPC_SCRIPT) for two games, A (asks) and B (answers).
 
-python3 make_scripts.py FASTBOOT.txt OUTDIR   ->  trade_A/B.txt, edge_A/B.txt, battle_A/B.txt
+python3 make_scripts.py FASTBOOT.txt OUTDIR   ->  trade_A/B.txt, edge_A/B.txt, battle_A/B.txt, teamup_A/B.txt
 FASTBOOT.txt: the button presses from the title screen into the saved game (Continue).
 A stands at Littleroot 10,9 facing B at 11,9 (a spot the town's walkers don't reach). "waitfor" keeps the two
 games in step (sdl2.c test aid): locked = a question came up, free = back in the overworld, link = the trade
@@ -73,3 +73,37 @@ write('battle_B', ["wait 60", "warp 0 9 11 9", "waitfor free 20000", "state hp 0
     "waitfor link 20000", "waitfor action 20000", "wait 120", "press A 3", "wait 120", "press A 3",
     "wait 1500", "press A 3", "wait 120", "press A 3",
     "waitfor free 20000", "wait 120", "state hp 0", "winshot f/d12_field.png", "wait 400000", "quit"])
+
+# T6b: Team Up - on Route 102, A at 25,14 above Bug Catcher Rick (25,15; his "beaten" flag cleared), B at 24,14. A faces B,
+# Team Up > B yes (partners); A talks to Rick, B gets "join the battle?" > yes: the team-up battle; A sets both foes to
+# 1 HP, both leads use Swift (both foes, never misses: the targets shown, A) - won in one turn; then each game's Exp. lines (A presses
+# through them). state.log: levels and Exp. before and after, Rick's flag (1 on A only). Run with run_t6.sh.
+tu_after = sum([["press A 3", "wait 100", "winshot f/%s%02d.png" % ("{}", k)] for k in range(16)], [])
+tu_after_b = [x.replace("press A", "press B") for x in tu_after]   # (B: B Button - "no" to the four-move question)
+write('teamup_A', ["wait 60", "warp 0 17 25 14", "waitfor free 20000", "state trainer 615 0", "state setmove 0 129",
+    "partylevel 0 52",
+    "state level 0", "state exp 0", "state level 1", "state exp 1", "wait 900", "winshot f/t00_together.png",
+    "press LEFT 3", "wait 30", "press A 3", "wait 150", "winshot f/t01_menu.png",
+    "press DOWN 3", "wait 20", "press DOWN 3", "wait 20", "press DOWN 3", "wait 20", "winshot f/t02_on_teamup.png",
+    "press A 3", "wait 90", "winshot f/t03_asking.png", "wait 1200", "winshot f/t04_partners.png",
+    "press A 3", "wait 90", "press A 3", "wait 90", "waitfor free 3000", "wait 60",
+    "press DOWN 3", "wait 30", "press A 3", "wait 240", "winshot f/t05_rick_intro.png", "press A 3", "wait 120",
+    "press A 3", "wait 90",
+    "winshot f/t06_calling.png", "waitfor link 30000", "waitfor action 30000", "battlerhp 1 1", "battlerhp 3 1",
+    "wait 60", "winshot f/t07_battle.png", "press A 3", "wait 120", "press A 3", "wait 120", "winshot f/t07b_targets.png",
+    "press A 3"] + sum([["wait 60", "winshot f/t2%02d.png" % k] for k in range(30)], []) + [
+    "waitfor nolink 60000", "wait 600", "winshot f/t08_back.png"]
+    + [x.format("t1") for x in tu_after]
+    + ["state level 0", "state exp 0", "state level 1", "state exp 1", "state trainer 615", "wait 60", "quit"])
+write('teamup_B', ["wait 60", "warp 0 17 24 14", "waitfor free 20000", "state setmove 0 129", "partylevel 0 52",
+    "state trainer 615 0",
+    "state level 0", "state exp 0", "state trainer 615",
+    "waitfor locked 30000", "wait 150", "winshot f/u01_teamup_q.png", "press A 3", "wait 90", "press A 3", "wait 90",
+    "winshot f/u02_teamup_yesno.png", "press A 3", "wait 240", "winshot f/u03_partners.png", "press A 3", "wait 90",
+    "press A 3", "wait 90", "waitfor free 3000",
+    "waitfor locked 30000", "wait 150", "winshot f/u04_join_q.png", "press A 3", "wait 90", "winshot f/u05_join_yesno.png",
+    "press A 3", "waitfor link 30000", "waitfor action 30000", "wait 30", "winshot f/u06_battle.png",
+    "press A 3", "wait 120", "press A 3", "wait 120", "press A 3"] + sum([["wait 60", "winshot f/u2%02d.png" % k] for k in range(30)], []) + [
+    "waitfor nolink 60000", "wait 600", "winshot f/u07_back.png"]
+    + [x.format("u1") for x in tu_after_b]
+    + ["state level 0", "state exp 0", "state trainer 615", "wait 400000", "quit"])

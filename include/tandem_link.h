@@ -8,7 +8,9 @@
 #define TANDEM_ACTIVITY_TRADE   0
 #define TANDEM_ACTIVITY_SINGLE  1
 #define TANDEM_ACTIVITY_DOUBLE  2
-#define TANDEM_ACTIVITY_COUNT   3
+#define TANDEM_ACTIVITY_TEAMUP  3   /* T6b: "will you team up?" (partners) */
+#define TANDEM_ACTIVITY_JOIN    4   /* T6b: "NAME was spotted by a trainer - join the battle?" */
+#define TANDEM_ACTIVITY_COUNT   5
 
 /* a link with a friend is set up (from asking to trade until back in the overworld) */
 bool8 TandemLink_InSession(void);
@@ -38,5 +40,31 @@ void Tandem_WaitGo(void);
 void Tandem_Start(void);
 void Tandem_BufferAsker(void);
 void Tandem_CanBattle(void);
+
+/* T6b: Team Up */
+/* battle_setup.c BattleSetup_StartTrainerBattle: my partner said "join" - this trainer battle is a team-up; it begins
+ * the link (this game the master) */
+bool8 TandemLink_TeamUpPending(void);
+void TandemLink_BeginTeamUpBattle(void);
+/* battle_main.c: every frame of a team-up (on both games): who faced which of the trainer's Pokemon; and at its end
+ * (CB2_InitEndLinkBattle, before the trainer battle's end or the partner's): the results kept, the link session over */
+void TandemLink_TeamUpBattleFrame(void);
+void TandemLink_TeamUpBattleOver(void);
+/* specials: partners (Team Up on a friend) */
+void Tandem_PartnerState(void);
+void Tandem_SetPartner(void);
+void Tandem_StopPartner(void);
+/* specials: before a trainer battle (data/scripts/trainer_battle.inc) - ask my partner to join; after it - what happened */
+void Tandem_TeamUpCheck(void);
+void Tandem_TeamUpAsk(void);
+void Tandem_TeamUpGo(void);
+void Tandem_TeamUpAfter(void);
+/* specials: Exp. after a won team-up, on each game with its own rules (data/scripts/tandem.inc) */
+void Tandem_TeamUpExpStart(void);
+void Tandem_TeamUpExpNext(void);
+void Tandem_TeamUpForgetMove(void);
+void Tandem_TeamUpForgotMove(void);
+void Tandem_TeamUpSkipMove(void);
+void Tandem_TeamUpEvolve(void);
 
 #endif

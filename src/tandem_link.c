@@ -46,6 +46,26 @@
 #include "constants/songs.h"
 #include "constants/field_weather.h"
 #include "platform/tandem_net.h"
+#include "battle_pyramid.h"
+#include "battle_util.h"
+#include "caps.h"
+#include "data.h"
+#include "evolution_scene.h"
+#include "follower_npc.h"
+#include "party_menu.h"
+#include "pokedex.h"
+#include "pokemon_summary_screen.h"
+#include "string_util.h"
+#include "strings.h"
+#include "trainer_hill.h"
+#include "ui_stat_editor.h"
+#include "wally_journey.h"
+#include "constants/event_objects.h"
+#include "constants/items.h"
+#include "constants/hold_effects.h"
+#include "constants/script_commands.h"
+#include "field_weather.h"
+#include "m4a.h"
 
 /* what one friend sends another (TandemNet_SendTo's kind) */
 enum
@@ -58,6 +78,7 @@ enum
     P2P_GO,       /* the asker got the yes: both open the trade screen */
     P2P_NOGO,     /* a yes that came too late */
     P2P_CANT,           /* a yes, but not enough Pokemon that can battle (a Double Battle needs two) */
+    P2P_PARTNER_END,    /* T6b: we aren't partners any more (Team Up again, or another partner) */
     P2P_LINK_OPEN = 16, /* my game opened its link: [my open count] */
     P2P_LINK_CLOSE,     /* ... closed it: [my open count] */
     P2P_LINK_CMD,       /* the other game's command, to the master: [my open count][the one I know of yours][8 numbers] */
@@ -65,6 +86,7 @@ enum
 };
 
 #define ASK_TIMEOUT (30 * 60)   /* frames waiting for a yes or no */
+#define JOIN_TIMEOUT (15 * 60)  /* ... for "join the battle?" (the trainer is waiting) */
 #define GO_TIMEOUT  (15 * 60)   /* frames waiting for the asker to start */
 #define LINK_QUEUE  1200        /* commands or records waiting (20 s of them) */
 #define OPEN_TIMEOUT (20 * 60)  /* frames open without the friend's game opening its own: a communication error */
@@ -102,6 +124,27 @@ static s8 sWaitingFor = -1;             /* the friend I asked, while I wait */
 static s8 sAskedBy = -1;                /* a friend asking me */
 static bool8 sAskShown;                 /* ... and the question is on my screen */
 static u16 sAskBusyTimer;
+
+/* T6b: Team Up */
+static s8 sPartner = -1;                /* my partner (Team Up on a friend; Brennan 23:3x "Partner up first") */
+static bool8 sPartnerEndNotice;         /* my partner stopped: told when I'm free */
+static u8 sNoticeName[PLAYER_NAME_LENGTH + 1];
+static struct                           /* the trainer of a "join the battle?" (both games) */
+{
+    u16 trainerId;
+    u8 mapGroup, mapNum, localId;
+} sJoin;
+static bool8 sTeamUpPending;            /* the spotted game: my partner said yes - the next trainer battle is a team-up */
+static bool8 sTeamUpBroke;              /* the connection broke during one */
+static bool8 sTeamUpResults;            /* a team-up ended: its results wait for the Exp. (Tandem_TeamUpExpStart) */
+static u8 sTeamUpOutcome;
+static u8 sMyBattler;                   /* my battler in it (0 on the spotted game, 2 on the partner's) */
+static u8 sFaced[PARTY_SIZE];           /* each of the trainer's Pokemon: the bits of my party slots that faced it */
+static u8 sOppSeen;                     /* the trainer's Pokemon that were out */
+static struct { u16 species; u8 level; bool8 fainted; } sOpp[PARTY_SIZE];   /* the trainer's, as the battle ended */
+extern const u8 Tandem_EventScript_PartnerEnded[];   /* data/scripts/tandem.inc */
+static void StartTeamUpAsPartner(void);
+static const u8 sText_ABoosted[] = _(" a boosted");
 
 extern const u8 Tandem_EventScript_Asked[];   /* data/scripts/tandem.inc */
 
@@ -143,10 +186,19 @@ static void Pump(void)
         switch (kind)
         {
         case P2P_ASK:
-            if (sAskedBy < 0 && sWaitingFor < 0 && !sLink.active)
+            if (sAskedBy < 0 && sWaitingFor < 0 && !sLink.active
+             && !(len >= 1 && buf[0] == TANDEM_ACTIVITY_JOIN && (len < 6 || sPartner != (s8)from)))
             {
                 sAskedBy = from;
                 sAskActivity = len >= 1 && buf[0] < TANDEM_ACTIVITY_COUNT ? buf[0] : TANDEM_ACTIVITY_TRADE;
+                if (sAskActivity == TANDEM_ACTIVITY_JOIN)
+                {
+                    /* (T6b: [activity][trainer id][map group][map number][the trainer's local id]) */
+                    sJoin.trainerId = Get16(buf + 1);
+                    sJoin.mapGroup = buf[3];
+                    sJoin.mapNum = buf[4];
+                    sJoin.localId = buf[5];
+                }
                 sAskShown = FALSE;
                 sAskBusyTimer = 0;
                 sAnswer[from] = 0;
@@ -166,6 +218,14 @@ static void Pump(void)
             if (sAskedBy == (s8)from && !sAskShown)
                 sAskedBy = -1;
             sAnswer[from] = kind;
+            break;
+        case P2P_PARTNER_END:
+            if (sPartner == (s8)from)
+            {
+                sPartner = -1;
+                sPartnerEndNotice = TRUE;
+                TandemOverworld_GetFriendName(from, sNoticeName);
+            }
             break;
         case P2P_NO:
         case P2P_CANT:
@@ -432,11 +492,21 @@ void TandemLink_LeaveAfterError(void)
 {
     bool8 reload = sTradeUnsaved;
     bool8 battle = sLink.activity != TANDEM_ACTIVITY_TRADE;
+    bool8 teamUp = sLink.activity == TANDEM_ACTIVITY_JOIN;
 
     LINK_LOG("leaving after the error (%s)\n", reload ? "back to the last save" : "back to the overworld");
     sTradeUnsaved = FALSE;
     TandemLink_EndSession();
-    if (battle)
+    if (teamUp)
+    {
+        /* (T6b: a team-up cut short - a real battle, the Pokemon stay as they are; the trainer isn't beaten - the
+         * script after it ends there: Tandem_TeamUpAfter) */
+        sTeamUpBroke = TRUE;
+        sTeamUpResults = FALSE;
+        gBattleTypeFlags = 0;
+        gMain.inBattle = FALSE;
+    }
+    else if (battle)
     {
         /* (a battle cut short: the Pokemon and bag as they were before it, as after a finished one) */
         LoadPlayerParty();
@@ -465,13 +535,13 @@ bool8 TandemLink_FirstPlayers(void)
     return TRUE;
 }
 
-static void BeginSession(u8 peer)
+static void BeginSession(u8 peer, u8 myId)
 {
     memset(&sLink, 0, sizeof(sLink));
     sTradeUnsaved = FALSE;
     sLink.active = TRUE;
     sLink.peer = peer;
-    sLink.myId = TandemNet_MySlot() < peer ? 0 : 1;
+    sLink.myId = myId;
     /* (each player's link id, sent with their details: link battles put each player's battlers by it -
      * battle_controllers.c; the Cable Club sets it from the seat taken) */
     SetLocalLinkPlayerId(sLink.myId);
@@ -499,7 +569,8 @@ static bool8 CanBattle(u8 activity)
     for (i = 0; i < PARTY_SIZE; i++)
     {
         u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG);
-        if (species != SPECIES_NONE && species != SPECIES_EGG)
+        if (species != SPECIES_NONE && species != SPECIES_EGG
+         && (activity != TANDEM_ACTIVITY_JOIN || GetMonData(&gPlayerParty[i], MON_DATA_HP) != 0))
             n++;
     }
     return n >= (activity == TANDEM_ACTIVITY_DOUBLE ? 2 : 1);
@@ -542,7 +613,8 @@ static void Task_WaitAnswer(u8 taskId)
         result = 0;
     else if (sAnswer[slot] == P2P_CANT)
         result = 4;
-    else if (sAnswer[slot] == P2P_BUSY || !TandemNet_SlotConnected(slot) || ++tTimer > ASK_TIMEOUT)
+    else if (sAnswer[slot] == P2P_BUSY || !TandemNet_SlotConnected(slot)
+          || ++tTimer > (sSessionActivity == TANDEM_ACTIVITY_JOIN ? JOIN_TIMEOUT : ASK_TIMEOUT))
         result = 2;
     else if (JOY_NEW(B_BUTTON))
         result = 3;
@@ -572,6 +644,15 @@ bool8 TandemLink_PlayerFree(void)
  * seconds - in a menu, a battle, a cutscene - and they are told so */
 void TandemLink_OverworldUpdate(void)
 {
+    if (sPartner >= 0 && !TandemNet_SlotConnected(sPartner))
+        sPartner = -1;   /* (T6b: my partner left the game - partners no more) */
+    if (sPartnerEndNotice && sAskedBy < 0 && TandemLink_PlayerFree())
+    {
+        sPartnerEndNotice = FALSE;
+        StringCopy(gStringVar1, sNoticeName);
+        ScriptContext_SetupScript(Tandem_EventScript_PartnerEnded);
+        return;
+    }
     if (sAskedBy < 0 || sAskShown)
         return;
     if (!TandemNet_SlotConnected(sAskedBy))
@@ -597,6 +678,13 @@ void Tandem_BufferAsker(void)
 {
     Tandem_BufferFriendName();
     gSpecialVar_0x8005 = sAskActivity;
+    if (sAskActivity == TANDEM_ACTIVITY_JOIN && sJoin.trainerId < TRAINERS_COUNT)
+    {
+        /* (T6b: "NAME was spotted by CLASS TRAINER!") */
+        StringCopy(gStringVar2, GetTrainerClassNameFromId(sJoin.trainerId));
+        StringAppend(gStringVar2, gText_Space);
+        StringAppend(gStringVar2, GetTrainerNameFromId(sJoin.trainerId));
+    }
 }
 
 /* the question's answer (VAR_RESULT, from the yes/no box) to the asker; VAR_RESULT 2 if they stopped waiting, 3 if
@@ -716,7 +804,12 @@ static void Task_StartBattle(u8 taskId)
 /* both said yes: the link with this friend, then the trade screen or the battle */
 void Tandem_Start(void)
 {
-    BeginSession(TandemOverworld_TalkSlot());
+    if (sSessionActivity == TANDEM_ACTIVITY_JOIN)
+    {
+        StartTeamUpAsPartner();   /* (T6b: my partner's trainer, against both of us) */
+        return;
+    }
+    BeginSession(TandemOverworld_TalkSlot(), TandemNet_MySlot() < TandemOverworld_TalkSlot() ? 0 : 1);
     sLink.activity = sSessionActivity;
     SetWirelessCommType0();
     gSavedLinkPlayerCount = 2;
@@ -732,4 +825,653 @@ void Tandem_Start(void)
     HealPlayerParty();
     LoadPlayerBag();
     CreateTask(Task_StartBattle, 80);
+}
+
+/* ── T6b: Team Up ─────────────────────────────────────────────────────── */
+/*
+ * Brennan 2026-11-27: Team Up - "Ask each time" (when a regular trainer spots one of you, the other is asked "Join the
+ * battle?"), only a partner ("Partner up first": Team Up on a friend partners you, again stops) and only when "On your
+ * screen"; rewards - "Exp. for both, rest for one" (money and the trainer marked beaten only for the one spotted).
+ * The battle: the Battle Tower's link multi (two players, battle_main.c) against the route trainer, the spotted
+ * player's game the link master (it makes the trainer's party, as any trainer battle, and runs its AI).
+ */
+
+/* partners: the friend talked to (VAR_RESULT TRUE if they are mine) */
+void Tandem_PartnerState(void)
+{
+    gSpecialVar_Result = sPartner >= 0 && sPartner == (s8)TandemOverworld_TalkSlot();
+}
+
+/* both said yes to "team up": partners - one at a time (an old partner is told) */
+void Tandem_SetPartner(void)
+{
+    u8 slot = TandemOverworld_TalkSlot();
+
+    if (sPartner >= 0 && sPartner != (s8)slot)
+        SendSimple(sPartner, P2P_PARTNER_END);
+    sPartner = slot;
+    LINK_LOG("partner now %u\n", slot);
+}
+
+void Tandem_StopPartner(void)
+{
+    if (sPartner >= 0)
+        SendSimple(sPartner, P2P_PARTNER_END);
+    sPartner = -1;
+}
+
+/* a regular trainer (Brennan 03:05: one-player - Gyms, the rival/neighbor, Team Aqua/Magma, the Elite Four, the
+ * Champion, "any turning point battles or major ones"); TRAINER_BATTLE_PARAM as the trainerbattle command set it */
+static bool8 InGymMap(void)
+{
+    static const u16 sGyms[] =
+    {
+        MAP_RUSTBORO_CITY_GYM, MAP_DEWFORD_TOWN_GYM, MAP_MAUVILLE_CITY_GYM, MAP_LAVARIDGE_TOWN_GYM_1F,
+        MAP_LAVARIDGE_TOWN_GYM_B1F, MAP_PETALBURG_CITY_GYM, MAP_FORTREE_CITY_GYM, MAP_MOSSDEEP_CITY_GYM,
+        MAP_SOOTOPOLIS_CITY_GYM_1F, MAP_SOOTOPOLIS_CITY_GYM_B1F,
+        MAP_PEWTER_CITY_GYM, MAP_CERULEAN_CITY_GYM, MAP_VERMILION_CITY_GYM, MAP_CELADON_CITY_GYM,
+        MAP_FUCHSIA_CITY_GYM, MAP_SAFFRON_CITY_GYM, MAP_CINNABAR_ISLAND_GYM, MAP_VIRIDIAN_CITY_GYM,
+    };
+    u16 here = gSaveBlock1Ptr->location.mapNum | (gSaveBlock1Ptr->location.mapGroup << 8);
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sGyms); i++)
+        if (sGyms[i] == here)
+            return TRUE;
+    return FALSE;
+}
+
+static bool8 IsTeamUpTrainer(void)
+{
+    u16 id = TRAINER_BATTLE_PARAM.opponentA;
+
+    if (id == TRAINER_NONE || id >= TRAINERS_COUNT)
+        return FALSE;   /* (the Secret Base's, the Frontier's, a link's) */
+    if (TRAINER_BATTLE_PARAM.opponentB != 0 || gNoOfApproachingTrainers > 1)
+        return FALSE;   /* (two trainers at once) */
+    if (TRAINER_BATTLE_PARAM.introTextA == NULL || TRAINER_BATTLE_PARAM.earlyRival)
+        return FALSE;   /* (a story battle: no intro line) */
+    if (InTrainerHillChallenge() || CurrentBattlePyramidLocation() != PYRAMID_LOCATION_NONE
+     || FollowerNPCIsBattlePartner() || InGymMap())
+        return FALSE;
+    switch (GetTrainerClassFromId(id))
+    {
+    case TRAINER_CLASS_LEADER:
+    case TRAINER_CLASS_ELITE_FOUR:
+    case TRAINER_CLASS_CHAMPION:
+    case TRAINER_CLASS_RIVAL:
+    case TRAINER_CLASS_PKMN_TRAINER_1:
+    case TRAINER_CLASS_PKMN_TRAINER_2:
+    case TRAINER_CLASS_RS_PROTAG:
+    case TRAINER_CLASS_TEAM_AQUA:
+    case TRAINER_CLASS_AQUA_ADMIN:
+    case TRAINER_CLASS_AQUA_LEADER:
+    case TRAINER_CLASS_TEAM_MAGMA:
+    case TRAINER_CLASS_MAGMA_ADMIN:
+    case TRAINER_CLASS_MAGMA_LEADER:
+    case TRAINER_CLASS_INTERVIEWER:
+    case TRAINER_CLASS_WINSTRATE:
+    case TRAINER_CLASS_SALON_MAIDEN:
+    case TRAINER_CLASS_DOME_ACE:
+    case TRAINER_CLASS_PALACE_MAVEN:
+    case TRAINER_CLASS_ARENA_TYCOON:
+    case TRAINER_CLASS_FACTORY_HEAD:
+    case TRAINER_CLASS_PIKE_QUEEN:
+    case TRAINER_CLASS_PYRAMID_KING:
+    case TRAINER_CLASS_LEADER_FRLG:
+    case TRAINER_CLASS_ELITE_FOUR_FRLG:
+    case TRAINER_CLASS_CHAMPION_FRLG:
+    case TRAINER_CLASS_RIVAL_EARLY_FRLG:
+    case TRAINER_CLASS_RIVAL_LATE_FRLG:
+    case TRAINER_CLASS_BOSS_FRLG:
+    case TRAINER_CLASS_TEAM_ROCKET_FRLG:
+    case TRAINER_CLASS_PKMN_PROF_FRLG:
+    case TRAINER_CLASS_PLAYER_FRLG:
+        return FALSE;
+    default:
+        return TRUE;
+    }
+}
+
+/* before a trainer battle (data/scripts/trainer_battle.inc): VAR_RESULT TRUE if my partner can be asked to join - on
+ * my screen, a regular trainer, nobody asking anyone */
+void Tandem_TeamUpCheck(void)
+{
+    sTeamUpPending = FALSE;
+    sTeamUpBroke = FALSE;
+    sTeamUpResults = FALSE;
+    gSpecialVar_Result = sPartner >= 0 && TandemNet_SlotConnected(sPartner) && !sLink.active
+                      && sAskedBy < 0 && sWaitingFor < 0
+                      && TandemOverworld_FriendOnScreen(sPartner) && IsTeamUpTrainer();
+    if (gSpecialVar_Result)
+        LINK_LOG("team-up possible: trainer %u\n", TRAINER_BATTLE_PARAM.opponentA);
+}
+
+/* ask my partner (STR_VAR_1: their name); the answer as Tandem_WaitAnswer gives it */
+void Tandem_TeamUpAsk(void)
+{
+    u8 b[6];
+
+    TandemOverworld_SetTalkSlot(sPartner);
+    TandemOverworld_GetFriendName(sPartner, gStringVar1);
+    sAnswer[sPartner] = 0;
+    sWaitingFor = sPartner;
+    sSessionActivity = TANDEM_ACTIVITY_JOIN;
+    b[0] = TANDEM_ACTIVITY_JOIN;
+    Put16(b + 1, TRAINER_BATTLE_PARAM.opponentA);
+    b[3] = gSaveBlock1Ptr->location.mapGroup;
+    b[4] = gSaveBlock1Ptr->location.mapNum;
+    /* (the trainer's local id: trainerbattle_single leaves it to the one talked to or spotting - gSpecialVar_LastTalked) */
+    b[5] = TRAINER_BATTLE_PARAM.objEventLocalIdA != LOCALID_NONE ? TRAINER_BATTLE_PARAM.objEventLocalIdA : gSpecialVar_LastTalked;
+    TandemNet_SendTo(sPartner, P2P_ASK, b, sizeof(b));
+}
+
+/* they said yes (and were sent the go): the coming trainer battle is a team-up (battle_setup.c) */
+void Tandem_TeamUpGo(void)
+{
+    sTeamUpPending = TRUE;
+}
+
+bool8 TandemLink_TeamUpPending(void)
+{
+    return sTeamUpPending;
+}
+
+static void ResetTeamUpRecords(void)
+{
+    memset(sFaced, 0, sizeof(sFaced));
+    memset(sOpp, 0, sizeof(sOpp));
+    sOppSeen = 0;
+    sMyBattler = MAX_BATTLERS_COUNT;
+    sTeamUpResults = FALSE;
+    sTeamUpBroke = FALSE;
+}
+
+static void SetUpTeamUpLink(u8 myId)
+{
+    BeginSession(sPartner, myId);
+    sLink.activity = TANDEM_ACTIVITY_JOIN;
+    SetWirelessCommType0();
+    gSavedLinkPlayerCount = 2;
+    gLinkType = LINKTYPE_BATTLE;
+    ResetTeamUpRecords();
+}
+
+/* the spotted game (battle_setup.c BattleSetup_StartTrainerBattle): the link with my partner, this game the master */
+void TandemLink_BeginTeamUpBattle(void)
+{
+    sTeamUpPending = FALSE;
+    SetUpTeamUpLink(0);
+    LINK_LOG("team-up: my trainer %u, partner %d\n", TRAINER_BATTLE_PARAM.opponentA, sPartner);
+}
+
+/* the partner's game: the trainer that spotted my partner - its id, and its lines from its own script in the map it
+ * stands in (my copy of the game has the same maps; its script run up to its trainerbattle, as trainer_see.c does) */
+static void SetJoinTrainer(void)
+{
+    const struct MapHeader *map = Overworld_GetMapHeaderByGroupAndId(sJoin.mapGroup, sJoin.mapNum);
+    u32 i;
+
+    InitTrainerBattleParameter();
+    if (map != NULL && map->events != NULL)
+    {
+        for (i = 0; i < map->events->objectEventCount; i++)
+        {
+            const struct ObjectEventTemplate *t = &map->events->objectEvents[i];
+            struct ScriptContext ctx;
+
+            if (t->localId != sJoin.localId || t->script == NULL)
+                continue;
+            if (RunScriptImmediatelyUntilEffect(SCREFF_V1 | SCREFF_SAVE | SCREFF_HARDWARE | SCREFF_TRAINERBATTLE, t->script, &ctx)
+             && *ctx.scriptPtr == SCR_OP_TRAINERBATTLE)
+                memcpy(gTrainerBattleParameter.data, ctx.scriptPtr + TRAINERBATTLE_OPCODE_OFFSET, sizeof(TrainerBattleParameter));
+            break;
+        }
+    }
+    TRAINER_BATTLE_PARAM.opponentA = sJoin.trainerId;
+    TRAINER_BATTLE_PARAM.opponentB = 0;
+    TRAINER_BATTLE_PARAM.objEventLocalIdA = LOCALID_NONE;   /* (not one of my map's people) */
+    TRAINER_BATTLE_PARAM.objEventLocalIdB = LOCALID_NONE;
+    gNoOfApproachingTrainers = 0;
+    LINK_LOG("joining: trainer %u, its lines %s\n", sJoin.trainerId, TRAINER_BATTLE_PARAM.defeatTextA ? "found" : "not found");
+}
+
+/* the partner's game after the battle: as a trainer battle ends (battle_setup.c CB2_EndTrainerBattle) - a loss: back to
+ * the Pokemon Center; else back where I stood, the script going on (the Exp.: Tandem_TeamUpAfter) */
+static void CB2_TeamUpPartnerEnd(void)
+{
+    if (gBattleOutcome == B_OUTCOME_LOST || gBattleOutcome == B_OUTCOME_DREW || gBattleOutcome == B_OUTCOME_FORFEITED)
+    {
+        SetMainCallback2(CB2_WhiteOut);
+    }
+    else
+    {
+        BattleSetup_DowngradeBadPoison();
+        SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
+    }
+}
+
+static void StartTeamUpAsPartner(void)
+{
+    sPartner = TandemOverworld_TalkSlot();   /* (the one who asked: my partner) */
+    SetUpTeamUpLink(1);
+    SetJoinTrainer();
+    BattleSetup_StartTandemTeamUpBattle(CB2_TeamUpPartnerEnd);
+}
+
+/* every battle frame, on both games: which of my Pokemon faced which of the trainer's (both out and standing) - the
+ * game's own rule for who gets Exp. (battle_util.c UpdateSentPokesToOpponentValue) */
+void TandemLink_TeamUpBattleFrame(void)
+{
+    u32 o, b;
+    u8 mine;
+    bool8 mineUp;
+
+    {
+        /* (test aid, WJPC_TANDEM_DEBUG: where the battle is, once a second) */
+        static u32 sLast;
+        if (gMain.vblankCounter2 - sLast >= 60)
+        {
+            sLast = gMain.vblankCounter2;
+            LINK_LOG("battle: main %p exec %08x intro %u ctrl %p %p %p %p cmd %u %u %u %u\n", (void *)gBattleMainFunc,
+                     (unsigned)gBattleControllerExecFlags, gBattleStruct->eventState.battleIntro,
+                     (void *)gBattlerControllerFuncs[0], (void *)gBattlerControllerFuncs[1],
+                     (void *)gBattlerControllerFuncs[2], (void *)gBattlerControllerFuncs[3],
+                     gBattleResources->bufferA[0][0], gBattleResources->bufferA[1][0],
+                     gBattleResources->bufferA[2][0], gBattleResources->bufferA[3][0]);
+        }
+    }
+    if (sMyBattler >= MAX_BATTLERS_COUNT)
+    {
+        for (b = 0; b < gBattlersCount; b++)
+            if (gBattlerBattleController[b] == BATTLE_CONTROLLER_PLAYER)
+                sMyBattler = b;
+        if (sMyBattler >= MAX_BATTLERS_COUNT)
+            return;
+    }
+    mine = gBattlerPartyIndexes[sMyBattler];
+    mineUp = mine < PARTY_SIZE && IsValidForBattle(&gParties[B_TRAINER_PLAYER][mine]);
+    for (o = B_BATTLER_1; o < gBattlersCount; o += 2)
+    {
+        u8 theirs = gBattlerPartyIndexes[o];
+
+        if (theirs >= PARTY_SIZE || !IsValidForBattle(&gParties[B_TRAINER_OPPONENT_A][theirs]))
+            continue;
+        sOppSeen |= 1 << theirs;
+        if (mineUp)
+            sFaced[theirs] |= 1 << mine;
+    }
+}
+
+/* battle_main.c CB2_InitEndLinkBattle, both games, the link closed: the results kept for the Exp.; the game's own
+ * end-of-battle care for my party (battle_main.c HandleEndTurn_FinishBattle - on the master only, if at all: forms
+ * back, stats worked out again); the trainer's Pokemon seen in my Pokedex; the session over */
+void TandemLink_TeamUpBattleOver(void)
+{
+    u32 i;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gParties[B_TRAINER_OPPONENT_A][i];
+
+        sOpp[i].species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
+        sOpp[i].level = GetMonData(mon, MON_DATA_LEVEL);
+        sOpp[i].fainted = sOpp[i].species != SPECIES_NONE && sOpp[i].species != SPECIES_EGG
+                       && GetMonData(mon, MON_DATA_HP) == 0;
+        if ((sOppSeen & (1 << i)) || sOpp[i].fainted)
+            HandleSetPokedexFlagFromMon(mon, FLAG_SET_SEEN);
+    }
+    for (i = 0; i < PARTY_SIZE; i++)
+        if (!TryRevertPartyMonFormChange(i))
+            CalculateMonStats(&gParties[B_TRAINER_PLAYER][i]);
+    sTeamUpOutcome = gBattleOutcome;
+    sTeamUpResults = gBattleOutcome == B_OUTCOME_WON;
+    LINK_LOG("team-up over: outcome %u, faced %02x %02x %02x %02x %02x %02x\n", gBattleOutcome,
+             sFaced[0], sFaced[1], sFaced[2], sFaced[3], sFaced[4], sFaced[5]);
+    gBattleTypeFlags &= ~(BATTLE_TYPE_TANDEM_TEAMUP | BATTLE_TYPE_LINK | BATTLE_TYPE_LINK_IN_BATTLE | BATTLE_TYPE_MULTI);
+    TandemLink_EndSession();
+}
+
+/* after a trainer battle (the spotted game) or after joining one (the partner's): VAR_RESULT 1 a won team-up (its Exp.
+ * to give), 2 a team-up cut short (the script ends: the trainer isn't beaten), else 0 */
+void Tandem_TeamUpAfter(void)
+{
+    if (sTeamUpBroke)
+    {
+        sTeamUpBroke = FALSE;
+        gSpecialVar_Result = 2;
+    }
+    else
+    {
+        gSpecialVar_Result = sTeamUpResults ? 1 : 0;
+    }
+}
+
+/* ── T6b: Exp. for both ───────────────────────────────────────────────── */
+/*
+ * A link battle gives no Exp. (battle_script_commands.c BattleTypeAllowsExp - and that file's EXP is Project ARIA's
+ * claim), so after a won team-up each game gives its own Pokemon theirs, back in the overworld: the same sums as the
+ * battle's own (Cmd_getexp: participants, Exp. Share, EXP ALL, the level cap, Lucky Egg and the rest) with this game's
+ * own rules, the trainer's fainted Pokemon one by one, as in battle; then the battle's own messages, new moves (the
+ * four-move question; the summary screen, as the Move Deleter opens it) and evolutions.
+ */
+extern void ApplyExperienceMultipliers(s32 *expAmount, u8 expGetterMonId, u8 faintedBattler);   /* battle_script_commands.c */
+
+static enum HoldEffect TeamUpHoldEffect(struct Pokemon *mon)
+{
+    return GetItemHoldEffect(GetMonData(mon, MON_DATA_HELD_ITEM));
+}
+
+enum
+{
+    EXP_STATE_GAINS,      /* "NAME gained N Exp. Points!", one a Pokemon that faced the trainer's */
+    EXP_STATE_REST,       /* "The rest of your team ..." */
+    EXP_STATE_LEVELS,     /* "NAME grew to Lv. N!" */
+    EXP_STATE_MOVES,      /* new moves, level by level */
+    EXP_STATE_DONE,
+};
+
+static struct
+{
+    u8 state;
+    u8 mon;
+    u32 gain[PARTY_SIZE];
+    u8 startLevel[PARTY_SIZE];
+    u8 ownLine;           /* bits: Pokemon whose gain gets its own line (they faced the trainer's, or hold an Exp. Share) */
+    u8 leveled;           /* bits: Pokemon that grew (evolutions after) */
+    bool8 boosted[PARTY_SIZE];
+    u8 restText;          /* 1: EXP ALL's line, 2: the Exp. Share's */
+    u8 learnLevel;
+    bool8 firstMove;
+    u16 move;
+    u8 evoNext;
+} sExp;
+
+/* the Exp. one of the trainer's Pokemon gives my party, given at once (the battle does it as each one faints) */
+static void GiveExpFor(u32 o)
+{
+    struct Pokemon *party = gParties[B_TRAINER_PLAYER];
+    u32 i, sentInBits = sFaced[o], viaSentIn = 0, viaExpShare = 0, eligible = 0;
+    u32 calculatedExp, expValue, expShareValue;
+    bool32 expAll = WallyJourney_IsExpAllMode();
+    u8 savedLevel = gBattleMons[B_BATTLER_1].level;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        enum HoldEffect holdEffect;
+
+        if (!IsValidForBattle(&party[i]))
+            continue;
+        eligible++;
+        if (sentInBits & (1 << i))
+            viaSentIn++;
+        holdEffect = TeamUpHoldEffect(&party[i]);
+        if (holdEffect == HOLD_EFFECT_EXP_SHARE || IsGen6ExpShareEnabled())
+            viaExpShare++;
+    }
+
+    calculatedExp = gSpeciesInfo[sOpp[o].species].expYield * sOpp[o].level;
+    if (GetConfig(B_SCALED_EXP) >= GEN_5 && GetConfig(B_SCALED_EXP) != GEN_6)
+        calculatedExp /= 5;
+    else
+        calculatedExp /= 7;
+    if (GetConfig(B_TRAINER_EXP_MULTIPLIER) <= GEN_7)
+        calculatedExp = (calculatedExp * 150) / 100;
+
+    if (expAll)
+    {
+        u32 pool = GetConfig(B_SPLIT_EXP) < GEN_6 ? calculatedExp : calculatedExp * viaSentIn + calculatedExp / 2;
+        expValue = SAFE_DIV(pool, eligible);
+        if (expValue == 0)
+            expValue = 1;
+        expShareValue = expValue;
+    }
+    else if (GetConfig(B_SPLIT_EXP) < GEN_6)
+    {
+        if (viaExpShare)
+        {
+            expValue = SAFE_DIV(calculatedExp / 2, viaSentIn);
+            expShareValue = SAFE_DIV(calculatedExp / 2, viaExpShare);
+            if (expShareValue == 0)
+                expShareValue = 1;
+        }
+        else
+        {
+            expValue = SAFE_DIV(calculatedExp, viaSentIn);
+            expShareValue = 0;
+        }
+        if (expValue == 0)
+            expValue = 1;
+    }
+    else
+    {
+        expValue = calculatedExp;
+        expShareValue = calculatedExp / 2;
+        if (expShareValue == 0)
+            expShareValue = 1;
+    }
+
+    /* (ApplyExperienceMultipliers reads the fainted one's level from its battler) */
+    gBattleMons[B_BATTLER_1].level = sOpp[o].level;
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &party[i];
+        bool32 wasSentOut = (sentInBits & (1 << i)) != 0;
+        enum HoldEffect holdEffect;
+        u32 level, exp;
+        s32 reward;
+
+        if (!IsValidForBattle(mon))
+            continue;
+        holdEffect = TeamUpHoldEffect(mon);
+        if (!expAll && holdEffect != HOLD_EFFECT_EXP_SHARE && !wasSentOut && !IsGen6ExpShareEnabled())
+            continue;
+        level = GetMonData(mon, MON_DATA_LEVEL);
+        if (level >= MAX_LEVEL)
+            continue;
+        reward = (wasSentOut || expAll) ? GetSoftLevelCapExpValue(level, expValue) : 0;
+        if (!expAll && (holdEffect == HOLD_EFFECT_EXP_SHARE || IsGen6ExpShareEnabled())
+         && (B_SPLIT_EXP < GEN_6 || reward == 0))
+            reward += GetSoftLevelCapExpValue(level, expShareValue);
+        ApplyExperienceMultipliers(&reward, i, B_BATTLER_1);
+        exp = GetMonData(mon, MON_DATA_EXP);
+        if (B_EXP_CAP_TYPE == EXP_CAP_HARD && reward != 0)
+        {
+            enum GrowthRate growthRate = gSpeciesInfo[GetMonData(mon, MON_DATA_SPECIES)].growthRate;
+            u32 levelCap = GetCurrentLevelCap();
+
+            if (level >= levelCap)
+                reward = 0;
+            else if (gExperienceTables[growthRate][levelCap] < exp + reward)
+                reward = gExperienceTables[growthRate][levelCap] - exp;
+        }
+        if (reward <= 0)
+            continue;
+        if (wasSentOut || (!expAll && holdEffect == HOLD_EFFECT_EXP_SHARE))
+            sExp.ownLine |= 1 << i;
+        else
+            sExp.restText = expAll ? 1 : 2;
+        if (IsTradedMon(mon))
+            sExp.boosted[i] = TRUE;
+        sExp.gain[i] += reward;
+        exp += reward;
+        SetMonData(mon, MON_DATA_EXP, &exp);
+        CalculateMonStats(mon);
+        if (GetMonData(mon, MON_DATA_LEVEL) > level)
+        {
+            sExp.leveled |= 1 << i;
+            AdjustFriendship(mon, FRIENDSHIP_EVENT_GROW_LEVEL);
+        }
+    }
+    gBattleMons[B_BATTLER_1].level = savedLevel;
+}
+
+/* after a won team-up: my Pokemon's Exp. given; VAR_RESULT TRUE if there is anything to say */
+void Tandem_TeamUpExpStart(void)
+{
+    u32 i;
+
+    memset(&sExp, 0, sizeof(sExp));
+    gSpecialVar_Result = FALSE;
+    if (!sTeamUpResults)
+        return;
+    sTeamUpResults = FALSE;
+    for (i = 0; i < PARTY_SIZE; i++)
+        sExp.startLevel[i] = GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_LEVEL);
+    for (i = 0; i < PARTY_SIZE; i++)
+        if (sOpp[i].fainted)
+            GiveExpFor(i);
+    for (i = 0; i < PARTY_SIZE; i++)
+        if (sExp.gain[i] != 0)
+            gSpecialVar_Result = TRUE;
+    LINK_LOG("team-up Exp.: %u %u %u %u %u %u\n", sExp.gain[0], sExp.gain[1], sExp.gain[2], sExp.gain[3],
+             sExp.gain[4], sExp.gain[5]);
+}
+
+static void BufferMonAndMove(void)
+{
+    GetMonNickname(&gParties[B_TRAINER_PLAYER][sExp.mon], gStringVar1);
+    StringCopy(gStringVar2, GetMoveName(sExp.move));
+}
+
+/* the next thing to say - VAR_RESULT: 0 done (evolutions next), 1 "NAME gained N Exp. Points!" (STR_VAR_3: " a
+ * boosted" or nothing), 2 / 3 "the rest of your team..." (EXP ALL / Exp. Share), 4 "NAME grew to Lv. N!", 5 the same
+ * with Stat Points, 6 "NAME learned MOVE!", 7 NAME wants to learn MOVE (four moves already) */
+void Tandem_TeamUpExpNext(void)
+{
+    struct Pokemon *party = gParties[B_TRAINER_PLAYER];
+
+    for (;;)
+    {
+        switch (sExp.state)
+        {
+        case EXP_STATE_GAINS:
+            for (; sExp.mon < PARTY_SIZE; sExp.mon++)
+            {
+                if (!(sExp.ownLine & (1 << sExp.mon)) || sExp.gain[sExp.mon] == 0)
+                    continue;
+                GetMonNickname(&party[sExp.mon], gStringVar1);
+                ConvertIntToDecimalStringN(gStringVar2, sExp.gain[sExp.mon], STR_CONV_MODE_LEFT_ALIGN, 7);
+                StringCopy(gStringVar3, sExp.boosted[sExp.mon] ? sText_ABoosted : gText_EmptyString2);
+                sExp.mon++;
+                gSpecialVar_Result = 1;
+                return;
+            }
+            sExp.state = EXP_STATE_REST;
+            break;
+        case EXP_STATE_REST:
+            sExp.state = EXP_STATE_LEVELS;
+            sExp.mon = 0;
+            if (sExp.restText != 0)
+            {
+                gSpecialVar_Result = sExp.restText == 1 ? 2 : 3;
+                return;
+            }
+            break;
+        case EXP_STATE_LEVELS:
+            for (; sExp.mon < PARTY_SIZE; sExp.mon++)
+            {
+                u8 level = GetMonData(&party[sExp.mon], MON_DATA_LEVEL);
+
+                if (level <= sExp.startLevel[sExp.mon])
+                    continue;
+                GetMonNickname(&party[sExp.mon], gStringVar1);
+                ConvertIntToDecimalStringN(gStringVar2, level, STR_CONV_MODE_LEFT_ALIGN, 3);
+                sExp.learnLevel = sExp.startLevel[sExp.mon] + 1;
+                sExp.firstMove = TRUE;
+                sExp.state = EXP_STATE_MOVES;
+                gSpecialVar_Result = StatEditor_LevelUpGivesPoints(sExp.startLevel[sExp.mon], level) ? 5 : 4;
+                return;
+            }
+            sExp.state = EXP_STATE_DONE;
+            break;
+        case EXP_STATE_MOVES:
+        {
+            struct Pokemon *mon = &party[sExp.mon];
+            u8 level = GetMonData(mon, MON_DATA_LEVEL);
+
+            while (sExp.learnLevel <= level)
+            {
+                enum Move move = MonTryLearningNewMoveAtLevel(mon, sExp.firstMove, sExp.learnLevel);
+
+                sExp.firstMove = FALSE;
+                while (move == MON_ALREADY_KNOWS_MOVE)
+                    move = MonTryLearningNewMoveAtLevel(mon, FALSE, sExp.learnLevel);
+                if (move == MOVE_NONE)
+                {
+                    sExp.learnLevel++;
+                    sExp.firstMove = TRUE;
+                    continue;
+                }
+                sExp.move = move == MON_HAS_MAX_MOVES ? gMoveToLearn : move;
+                BufferMonAndMove();
+                gSpecialVar_Result = move == MON_HAS_MAX_MOVES ? 7 : 6;
+                return;
+            }
+            sExp.mon++;
+            sExp.state = EXP_STATE_LEVELS;
+            break;
+        }
+        default:
+            gSpecialVar_Result = 0;
+            return;
+        }
+    }
+}
+
+/* "forget a move?" yes: the summary screen picks the move (as the Move Deleter opens it, back to the script after) */
+void Tandem_TeamUpForgetMove(void)
+{
+    ShowSelectMovePokemonSummaryScreen(gParties[B_TRAINER_PLAYER], sExp.mon, CB2_ReturnToField, sExp.move);
+    gFieldCallback = FieldCB_ContinueScriptHandleMusic;
+}
+
+/* ... and what was picked: VAR_RESULT TRUE if a move was forgotten for the new one (STR_VAR_3: the old one) */
+void Tandem_TeamUpForgotMove(void)
+{
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][sExp.mon];
+    u8 slot = GetMoveSlotToReplace();
+
+    BufferMonAndMove();
+    gSpecialVar_Result = FALSE;
+    if (slot < MAX_MON_MOVES)
+    {
+        StringCopy(gStringVar3, GetMoveName(GetMonData(mon, MON_DATA_MOVE1 + slot)));
+        RemoveMonPPBonus(mon, slot);
+        SetMonMoveSlot(mon, sExp.move, slot);
+        gSpecialVar_Result = TRUE;
+    }
+}
+
+/* "did not learn": nothing to do - the next one (Tandem_TeamUpExpNext) */
+void Tandem_TeamUpSkipMove(void)
+{
+    BufferMonAndMove();
+}
+
+/* the evolutions after it (battle_main.c TryEvolvePokemon's level-up check): VAR_RESULT TRUE when one starts (the
+ * script waits; back in the overworld it goes on) */
+void Tandem_TeamUpEvolve(void)
+{
+    gSpecialVar_Result = FALSE;
+    for (; sExp.evoNext < PARTY_SIZE; sExp.evoNext++)
+    {
+        u32 i = sExp.evoNext;
+        struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][i];
+        bool32 canStopEvo = TRUE;
+        enum Species species;
+
+        if (!(sExp.leveled & (1 << i)))
+            continue;
+        species = GetEvolutionTargetSpecies(mon, EVO_MODE_BATTLE_ONLY, sExp.leveled, NULL, &canStopEvo, CHECK_EVO);
+        if (species == SPECIES_NONE)
+            continue;
+        GetEvolutionTargetSpecies(mon, EVO_MODE_BATTLE_ONLY, sExp.leveled, NULL, &canStopEvo, DO_EVO);
+        sExp.evoNext++;
+        gCB2_AfterEvolution = CB2_ReturnToField;
+        gFieldCallback = FieldCB_ContinueScriptHandleMusic;
+        BeginEvolutionScene(mon, species, canStopEvo, i);
+        gSpecialVar_Result = TRUE;
+        return;
+    }
 }

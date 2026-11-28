@@ -37,5 +37,9 @@ void Tandem_BufferFriendName(void);
 u8 TandemOverworld_TalkSlot(void);
 void TandemOverworld_SetTalkSlot(u8 slot);
 void Tandem_ShowFriendCard(void);
+/* T6b: a friend's name ("your friend" until their card comes); TRUE if they are on my screen (my map or the one across
+ * the border, inside the area people are drawn in round me) */
+void TandemOverworld_GetFriendName(u8 slot, u8 *dst);
+bool8 TandemOverworld_FriendOnScreen(u8 slot);
 
 #endif

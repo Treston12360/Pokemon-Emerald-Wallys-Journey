@@ -6469,3 +6469,32 @@ BattleScript_BelchFails::
 	printstring STRINGID_BELCHCANTSELECT
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
+
+@ Project Tandem T6b (src/tandem_link.c): two friends' Team Up against a route trainer (BATTLE_TYPE_TANDEM_TEAMUP) - the
+@ trainer's defeat as in a local trainer battle (BattleScript_LocalTrainerBattleWon), the music on both games (emitted),
+@ the money only on the link master's game: the spotted player's (getmoneyreward runs here, on the master); the partner's
+@ game says "NAME got" (battle_message.c). Then the link ends; each game goes on (battle_main.c CB2_InitEndLinkBattle).
+BattleScript_TandemTeamUpWon::
+	playtrainerdefeatedmusic
+	printstring STRINGID_PLAYERDEFEATEDTRAINER1
+	waitmessage B_WAIT_TIME_LONG
+	trainerslidein BS_OPPONENT1
+	waitstate
+	printstring STRINGID_TRAINER1LOSETEXT
+	waitmessage B_WAIT_TIME_LONG
+	getmoneyreward
+	printstring STRINGID_PLAYERGOTMONEY
+	waitmessage B_WAIT_TIME_LONG
+	endlinkbattle
+	waitmessage B_WAIT_TIME_LONG
+	end
+
+@ both teams are out: both black out after (no money taken: Brennan to decide)
+BattleScript_TandemTeamUpLost::
+	printstring STRINGID_PLAYERWHITEOUT
+	waitmessage B_WAIT_TIME_LONG
+	printstring STRINGID_PLAYERWHITEOUT3
+	waitmessage B_WAIT_TIME_LONG
+	endlinkbattle
+	waitmessage B_WAIT_TIME_LONG
+	end

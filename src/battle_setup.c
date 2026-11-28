@@ -62,6 +62,7 @@
 #include "constants/trainers.h"
 #include "constants/trainer_hill.h"
 #include "constants/weather.h"
+#include "tandem_link.h"
 
 enum TransitionType
 {
@@ -1619,6 +1620,15 @@ void BattleSetup_StartTrainerBattle(void)
         gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
     }
 
+    // Project Tandem T6b: my partner said "join the battle" (data/scripts/tandem.inc) - the trainer against both of us,
+    // this game the link master (it makes the trainer's party below and runs its AI, and the battle ends here as any
+    // trainer battle does: CB2_EndTrainerBattle - the flag and the money are mine only)
+    if (TandemLink_TeamUpPending())
+    {
+        gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_LINK | BATTLE_TYPE_MULTI | BATTLE_TYPE_DOUBLE | BATTLE_TYPE_TANDEM_TEAMUP;
+        TandemLink_BeginTeamUpBattle();
+    }
+
     sNoOfPossibleTrainerRetScripts = gNoOfApproachingTrainers;
     gNoOfApproachingTrainers = 0;
     sShouldCheckTrainerBScript = FALSE;
@@ -1631,6 +1641,25 @@ void BattleSetup_StartTrainerBattle(void)
         DoTrainerBattle();
 
     ScriptContext_Stop();
+}
+
+// Project Tandem T6b: the partner's side of a team-up - the spotted friend's trainer (TRAINER_BATTLE_PARAM set by
+// tandem_link.c), its party made here only for the screen's transition: the spotted player's game sends the real one
+// (battle_main.c CB2_HandleStartMultiPartnerBattle). `endCallback`: back to the overworld (tandem_link.c).
+void BattleSetup_StartTandemTeamUpBattle(void (*endCallback)(void))
+{
+    gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_LINK | BATTLE_TYPE_MULTI | BATTLE_TYPE_DOUBLE | BATTLE_TYPE_TANDEM_TEAMUP;
+    gMain.savedCallback = endCallback;
+    CreateNPCTrainerParty(&gParties[B_TRAINER_OPPONENT_A][0], TRAINER_BATTLE_PARAM.opponentA);
+    CreateBattleStartTask(GetTrainerBattleTransition(), 0);
+    IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
+    IncrementGameStat(GAME_STAT_TRAINER_BATTLES);
+}
+
+// Project Tandem T6b: the partner's game after a won team-up, as after any trainer battle (CB2_EndTrainerBattle)
+void BattleSetup_DowngradeBadPoison(void)
+{
+    DowngradeBadPoison();
 }
 
 static void CB2_EndDebugBattle(void)

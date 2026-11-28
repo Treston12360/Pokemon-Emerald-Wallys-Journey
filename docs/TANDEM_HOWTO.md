@@ -1,4 +1,4 @@
-# Project Tandem - how to connect (steps 1-6 and the server: connecting, seeing each other, across maps, player cards, trading, battles)
+# Project Tandem - how to connect (steps 1-6 and the server: connecting, seeing each other, across maps, player cards, trading, battles, team up)
 
 You see who is connected in the window's title, and `WallysJourney_tandem.log` (next to the game) lists who joined,
 the hello messages and the delay. When a friend is on the same map as you, or on the map just across a border
@@ -7,7 +7,21 @@ with their following Pokemon; you walk through each other. They disappear when t
 somewhere you can't see, and come back when they come out. Everyone shows in their own outfit.
 
 Face a friend and press A for the menu: Trade, Player Card, Battle, Team Up. Player Card shows their card (their outfit,
-money, Pokedex, time, badges). Team Up is a later step.
+money, Pokedex, time, badges).
+
+**Team Up:** Team Up on a friend asks them ("NAME wants to team up!"); yes: you are partners (one partner at a time).
+Team Up on your partner again: "Stop teaming up?" (they are told). From then on, when a regular trainer spots you or you
+talk to one, and your partner is on your screen (the same map or the one across the border, close enough to see each
+other), your partner gets "NAME was spotted by Bug Catcher Rick! Join the battle?" while you see "Calling NAME to
+join... (B Button: battle alone)". Yes: a double battle - you and your partner against that trainer, each with your
+whole team, each choosing for your own Pokemon. No, busy (in a menu or a battle) or no answer in 15 seconds: you battle
+alone, as always. Gym trainers, Gym Leaders, the rival, Team Aqua and Magma, the Elite Four, the Champion and other story
+battles always stay one-player. In a team-up there is no Bag and no running (as in any link battle / trainer battle).
+Winning: the trainer is beaten and the prize money paid only for the one who was spotted (the partner sees "NAME got
+...for winning!"); back on the map, each of you gets your own Pokemon's Exp. Points (by your own game's rules: level
+cap, EXP ALL, Exp. Share, Lucky Egg...), new moves (the four-move question) and evolutions. Losing: both go back to the
+Pokemon Center. Your Pokemon keep what happened in the battle (no healing). If the connection breaks during it: "A
+Button: Continue" - you carry on where you stood, and the trainer battle didn't count.
 
 **Battles:** Battle asks "Which kind of battle?" - Single or Double (a Double needs two Pokemon that can battle, Eggs
 don't count) - then asks the friend ("NAME wants a Single Battle. Will you battle?"). Yes: the game's own link battle

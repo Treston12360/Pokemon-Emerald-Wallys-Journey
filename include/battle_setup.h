@@ -112,6 +112,8 @@ void SetTrainerFlag(u16 trainerId);
 void WallyJourney_ResetExtraTrainerFlags(void);
 void ClearTrainerFlag(u16 trainerId);
 void BattleSetup_StartTrainerBattle(void);
+void BattleSetup_StartTandemTeamUpBattle(void (*endCallback)(void));   // Project Tandem T6b
+void BattleSetup_DowngradeBadPoison(void);   // Project Tandem T6b
 void BattleSetup_StartRematchBattle(void);
 void ShowTrainerIntroSpeech(void);
 const u8 *BattleSetup_GetScriptAddrAfterBattle(void);

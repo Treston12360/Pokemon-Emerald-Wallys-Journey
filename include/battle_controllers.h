@@ -436,6 +436,7 @@ void RecordedPartnerBufferExecCompleted(enum BattlerId battler);
 void SetControllerToOpponent(enum BattlerId battler);
 void OpponentBufferExecCompleted(enum BattlerId battler);
 void OpponentHandleTrainerSlide(enum BattlerId battler);
+void OpponentHandleIntroTrainerBallThrow_Tandem(enum BattlerId battler);   // Project Tandem T6b
 
 // player partner controller
 void Controller_PlayerPartnerShowIntroHealthbox(enum BattlerId battler); // Also used by the link partner.

@@ -561,6 +561,29 @@ void Tandem_BufferFriendName(void)
     }
 }
 
+/* T6b: a friend's name (from their card), or "your friend" if it hasn't come */
+void TandemOverworld_GetFriendName(u8 slot, u8 *dst)
+{
+    struct TrainerCard card;
+
+    if (slot < TANDEM_MAX_PLAYERS && TandemNet_GetCard(slot, &card, sizeof(card)) == sizeof(card))
+        StringCopy_PlayerName(dst, card.playerName);
+    else
+        StringCopy(dst, sText_YourFriend);
+}
+
+/* T6b: the friend is "on my screen" (Brennan 2026-11-27: same map or the one across the border, close enough to see
+ * each other): where they last were, placed on my map (FriendMapShift), inside the area the game draws people in round
+ * me (InPeopleView - the PC's wide and 3D views) */
+bool8 TandemOverworld_FriendOnScreen(u8 slot)
+{
+    TandemState here;
+
+    if (slot >= TANDEM_MAX_PLAYERS || !TandemNet_SlotConnected(slot) || !PlaceOnMyMap(&sLatest[slot], &here))
+        return FALSE;
+    return InPeopleView(here.x, here.y);
+}
+
 /* the game's link card screen (ShowTrainerCardInLink, as the Cable Club shows a partner's), from the card kept above */
 void Tandem_ShowFriendCard(void)
 {

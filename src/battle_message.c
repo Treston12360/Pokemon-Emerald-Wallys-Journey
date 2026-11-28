@@ -120,6 +120,7 @@ static const u8 sText_JustALittleMorePkmn[] = _("Just a little more! Hang in the
 static const u8 sText_YourFoesWeakGetEmPkmn[] = _("Your opponent's weak! Get 'em, {B_BUFF1}!");
 static const u8 sText_LinkPartnerSentOutPkmn1GoPkmn[] = _("{B_LINK_PARTNER_NAME} sent out {B_LINK_PLAYER_MON1_NAME}! Go, {B_LINK_PLAYER_MON2_NAME}!");
 static const u8 sText_LinkPartnerSentOutPkmn2GoPkmn[] = _("{B_LINK_PARTNER_NAME} sent out {B_LINK_PLAYER_MON2_NAME}! Go, {B_LINK_PLAYER_MON1_NAME}!");
+static const u8 sText_TandemPartnerGotMoney[] = _("{B_LINK_PARTNER_NAME} got ¥{B_BUFF1} for winning!\p");   // Project Tandem T6b
 static const u8 sText_LinkPartnerSentOutPkmn1[] = _("{B_LINK_PARTNER_NAME} sent out {B_BUFF1}!");
 static const u8 sText_LinkPartnerSentOutPkmn2[] = _("{B_LINK_PARTNER_NAME} sent out {B_BUFF1}!");
 static const u8 sText_LinkPartnerWithdrewPkmn1[] = _("{B_LINK_PARTNER_NAME} withdrew {B_LINK_PLAYER_MON1_NAME}!");
@@ -2463,7 +2464,11 @@ void BufferStringBattle(enum StringID stringID, enum BattlerId battler)
     case STRINGID_INTROMSG: // first battle msg
         if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
         {
-            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+            if (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP)
+            {
+                stringPtr = sText_Trainer1WantsToBattle;   // (Project Tandem T6b: one route trainer)
+            }
+            else if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
             {
                 if (gBattleTypeFlags & BATTLE_TYPE_TOWER_LINK_MULTI)
                 {
@@ -2810,6 +2815,14 @@ void BufferStringBattle(enum StringID stringID, enum BattlerId battler)
         break;
     case STRINGID_TRAINERSLIDE:
         stringPtr = gBattleStruct->trainerSlideMsg;
+        break;
+    case STRINGID_PLAYERGOTMONEY:
+        // Project Tandem T6b: a team-up's money is the spotted player's (the link master's) - the partner's game says
+        // whose
+        if ((gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP) && !(gBattleTypeFlags & BATTLE_TYPE_IS_MASTER))
+            stringPtr = sText_TandemPartnerGotMoney;
+        else
+            stringPtr = gBattleStringsTable[stringID];
         break;
     default: // load a string from the table
         if (stringID >= STRINGID_COUNT)

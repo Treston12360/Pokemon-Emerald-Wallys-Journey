@@ -1884,3 +1884,10 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
 - 2026-11-27 23:3x Brennan (Team Up, T6b): the Team Up choice in the friend menu - "Partner up first" (Team Up on a
   friend makes you partners; only your partner gets "Join the battle?", and only when near you; Team Up again to
   stop); how near - "On your screen" (same map or the one just across the border, close enough to see each other).
+- 2026-11-28 T6b built (Claude, from the answers above; NOT yet confirmed by Brennan - asked him): Team Up asks the
+  friend first ("NAME wants to team up!"; one partner at a time; the other is told when it stops). "Join the battle?"
+  comes when a regular trainer spots you OR you talk to one (both start the same trainer battle). Each player uses
+  their whole team. Open points asked of Brennan: (1) the Exp. is given after the battle, back on the map (link battles
+  give none in battle, and in-battle Exp. would need `battle_script_commands.c`, Project ARIA's EXP claim); (2) a lost
+  team-up sends both to the Pokemon Center with no money taken; (3) no Bag in a team-up (link battles have none);
+  (4) Match Call / VS Seeker rematches stay one-player for now.

@@ -91,6 +91,10 @@ bool32 BattlerIsRecorded(enum BattlerId battlerId)
 
 bool32 BattlerIsLink(enum BattlerId battlerId)
 {
+    // Project Tandem T6b: in a team-up the other side is a route trainer (its lines, not a link player's), though the
+    // partner's game drives it as a link opponent
+    if (gBattlerBattleController[battlerId] == BATTLE_CONTROLLER_LINK_OPPONENT && (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP))
+        return FALSE;
     return (gBattlerBattleController[battlerId] == BATTLE_CONTROLLER_LINK_PARTNER
          || gBattlerBattleController[battlerId] == BATTLE_CONTROLLER_LINK_OPPONENT);
 }
@@ -220,7 +224,7 @@ static void InitBtlControllersInternal(void)
     else
         gBattlersCount = MAX_BATTLERS_COUNT;
 
-    if ((gBattleTypeFlags & BATTLE_TYPE_BATTLE_TOWER)
+    if ((gBattleTypeFlags & (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_TANDEM_TEAMUP))   // (Project Tandem T6b: as the Tower's link multi)
         || !isMulti
         || (TESTING && isMulti)
         || (!isLink && !isRecorded)
@@ -683,7 +687,7 @@ static void Task_HandleSendLinkBuffersData(u8 taskId)
         }
         else
         {
-            if (gBattleTypeFlags & BATTLE_TYPE_BATTLE_TOWER)
+            if (gBattleTypeFlags & (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_TANDEM_TEAMUP))   // (Project Tandem T6b: two players)
                 numPlayers = 2;
             else
                 numPlayers = (gBattleTypeFlags & BATTLE_TYPE_MULTI) ? 4 : 2;
@@ -3334,7 +3338,7 @@ enum BattleTrainer GetBattlerTrainer(enum BattlerId battler)
         case BATTLE_CONTROLLER_LINK_OPPONENT:
         case BATTLE_CONTROLLER_RECORDED_OPPONENT:
         case BATTLE_CONTROLLER_OPPONENT:
-            if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
+            if (gBattleTypeFlags & BATTLE_TYPE_MULTI && !(gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP))   // (T6b: one trainer)
                 return (battler & BIT_FLANK) ? B_TRAINER_OPPONENT_B : B_TRAINER_OPPONENT_A;
             return B_TRAINER_OPPONENT_A;
         default:
@@ -3355,7 +3359,9 @@ bool32 BattleSideHasTwoTrainers(enum BattleSide side)
     if (side == B_SIDE_PLAYER)
         return gBattleTypeFlags & BATTLE_TYPE_MULTI;
     else
-        return ((gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS && TRAINER_BATTLE_PARAM.opponentB != 0xFFFF) || (gBattleTypeFlags & BATTLE_TYPE_LINK && gBattleTypeFlags & BATTLE_TYPE_MULTI));
+        return ((gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS && TRAINER_BATTLE_PARAM.opponentB != 0xFFFF)
+             || (gBattleTypeFlags & BATTLE_TYPE_LINK && gBattleTypeFlags & BATTLE_TYPE_MULTI
+                 && !(gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP)));   // (Project Tandem T6b: one route trainer)
 }
 
 bool32 BattlersShareParty(enum BattlerId battler1, enum BattlerId battler2)

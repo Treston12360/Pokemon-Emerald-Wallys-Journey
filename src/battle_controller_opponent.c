@@ -580,6 +580,13 @@ static void OpponentHandleIntroTrainerBallThrow(enum BattlerId battler)
     BtlController_HandleIntroTrainerBallThrow(battler, 0, NULL, 0, Intro_TryShinyAnimShowHealthbox);
 }
 
+// Project Tandem T6b: the partner's game sends out the route trainer's two Pokemon as this game does (2-vs-1: one
+// trainer, both battlers) - battle_controller_link_opponent.c
+void OpponentHandleIntroTrainerBallThrow_Tandem(enum BattlerId battler)
+{
+    OpponentHandleIntroTrainerBallThrow(battler);
+}
+
 static void OpponentHandleDrawPartyStatusSummary(enum BattlerId battler)
 {
     BtlController_HandleDrawPartyStatusSummary(battler, B_SIDE_OPPONENT, TRUE);

@@ -279,7 +279,13 @@ static void LinkOpponentHandleDrawTrainerPic(enum BattlerId battler)
     enum TrainerPicID trainerPicId;
     enum BattlerPosition position = GetBattlerPosition(battler);
 
-    if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
+    if (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP)
+    {
+        // Project Tandem T6b: the route trainer, in the middle (one trainer, as battle_controller_opponent.c draws it)
+        xPos = 176;
+        trainerPicId = GetTrainerPicFromId(TRAINER_BATTLE_PARAM.opponentA);
+    }
+    else if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
     {
         if ((position & BIT_FLANK) != 0) // second mon
             xPos = 152;
@@ -353,7 +359,9 @@ static void LinkOpponentHandleTrainerSlide(enum BattlerId battler)
 {
     enum TrainerPicID trainerPicId;
 
-    if (GetBattlerPosition(battler) == B_POSITION_OPPONENT_LEFT)
+    if (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP)
+        trainerPicId = GetTrainerPicFromId(TRAINER_BATTLE_PARAM.opponentA);   // (Project Tandem T6b: the route trainer)
+    else if (GetBattlerPosition(battler) == B_POSITION_OPPONENT_LEFT)
         trainerPicId = GetFrontierTrainerFrontSpriteId(TRAINER_BATTLE_PARAM.opponentA);
     else
         trainerPicId = GetFrontierTrainerFrontSpriteId(TRAINER_BATTLE_PARAM.opponentB);
@@ -369,6 +377,12 @@ static void LinkOpponentHandleTrainerSlideBack(enum BattlerId battler)
 
 static void LinkOpponentHandleIntroTrainerBallThrow(enum BattlerId battler)
 {
+    // Project Tandem T6b: the route trainer sends out both its Pokemon at once (2-vs-1), as on the spotted player's game
+    if (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP)
+    {
+        OpponentHandleIntroTrainerBallThrow_Tandem(battler);
+        return;
+    }
     BtlController_HandleIntroTrainerBallThrow(battler, 0, NULL, 0, Intro_TryShinyAnimShowHealthbox);
 }
 

@@ -10086,6 +10086,14 @@ bool32 AreMultiPartiesFullTeams(void)
 #else
     enum DifficultyLevel difficulty = GetCurrentDifficultyLevel();
 
+    // Project Tandem T6b: each friend battles with their whole team in a team-up (only while it runs: the flag is
+    // cleared when it ends, so the multi_* macros' early call below never sees an old one)
+    if (gMain.inBattle && (gBattleTypeFlags & BATTLE_TYPE_TANDEM_TEAMUP))
+    {
+        gSpecialVar_Result = TRUE;
+        return TRUE;
+    }
+
     if (B_MULTI_HALF_TEAMS)
     {
         gSpecialVar_Result = FALSE;

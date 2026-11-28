@@ -674,3 +674,16 @@ gSpecials::
 	def_special Tandem_Start
 	def_special Tandem_BufferAsker
 	def_special Tandem_CanBattle
+	def_special Tandem_PartnerState
+	def_special Tandem_SetPartner
+	def_special Tandem_StopPartner
+	def_special Tandem_TeamUpCheck
+	def_special Tandem_TeamUpAsk
+	def_special Tandem_TeamUpGo
+	def_special Tandem_TeamUpAfter
+	def_special Tandem_TeamUpExpStart
+	def_special Tandem_TeamUpExpNext
+	def_special Tandem_TeamUpForgetMove
+	def_special Tandem_TeamUpForgotMove
+	def_special Tandem_TeamUpSkipMove
+	def_special Tandem_TeamUpEvolve

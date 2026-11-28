@@ -177,7 +177,9 @@ EventSnippet_GotoPostBattleScript::
 	return
 
 EventSnippet_DoTrainerBattle::
+	call Tandem_EventScript_BeforeTrainerBattle  @ Project Tandem T6b: my partner may join (data/scripts/tandem.inc)
 	dotrainerbattle
+	call Tandem_EventScript_AfterTrainerBattle   @ ... the Exp. after a team-up
 	return
 
 EventSnippet_DoRematchTrainerBattle::

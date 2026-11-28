@@ -165,6 +165,16 @@ int WJPC_TestState(const char *what, int id, int set, int value)
             return -1;
         return GetMonData(&gParties[B_TRAINER_PLAYER][id], MON_DATA_SPECIES);
     }
+    if (!strcmp(what, "level") || !strcmp(what, "exp") || !strcmp(what, "move"))
+    {
+        // "state level SLOT" / "state exp SLOT": that party Pokemon's level or Exp. points; "state move N": party
+        // Pokemon N/4's move N%4 (test aid, Project Tandem T6b: the Exp. after a team-up)
+        if (!strcmp(what, "move"))
+            return (id >= 0 && id < PARTY_SIZE * MAX_MON_MOVES) ? (int)GetMonData(&gParties[B_TRAINER_PLAYER][id / MAX_MON_MOVES], MON_DATA_MOVE1 + id % MAX_MON_MOVES) : -1;
+        if (id < 0 || id >= PARTY_SIZE)
+            return -1;
+        return GetMonData(&gParties[B_TRAINER_PLAYER][id], !strcmp(what, "level") ? MON_DATA_LEVEL : MON_DATA_EXP);
+    }
     if (!strcmp(what, "setmove"))
     {
         // "state setmove SLOT MOVE": the first party Pokemon's move in that slot (test aid, POL-25).
