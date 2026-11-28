@@ -30,24 +30,34 @@ function Say([string]$text)
     Add-Content -Path $log -Value $line
 }
 
+# (keys pressed or pasted earlier - a pasted text's last Enter - mustn't answer "Press Enter to close")
+function Wait-Enter([string]$prompt)
+{
+    try { $Host.UI.RawUI.FlushInputBuffer() } catch { }
+    Read-Host $prompt | Out-Null
+}
+
 function Stop-Here([string]$text)
 {
     Say $text
-    Read-Host 'Press Enter to close'
+    Wait-Enter 'Press Enter to close'
     exit 1
 }
 
-# runs oci; gives back what it printed as one piece of text, and whether it worked
-function Oci([string[]]$OciArgs)
+# Oracle's program itself (not a PowerShell function of the same name - 2026-11-27: one called itself)
+$ociExe = Get-Command oci -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+
+# runs Oracle's oci; gives back what it printed as one piece of text, and whether it worked
+function Invoke-Oci([string[]]$OciArgs)
 {
-    $out = & oci @OciArgs 2>&1 | ForEach-Object { "$_" }
+    $out = & $ociExe.Source @OciArgs 2>&1 | ForEach-Object { "$_" }
     return @{ Ok = ($LASTEXITCODE -eq 0); Text = ($out -join "`n") }
 }
 
 # runs oci and reads its answer (JSON); $null if it didn't work
-function OciData([string[]]$OciArgs)
+function Get-OciData([string[]]$OciArgs)
 {
-    $r = Oci $OciArgs
+    $r = Invoke-Oci $OciArgs
     if (-not $r.Ok) { return $null }
     $start = $r.Text.IndexOf('{')
     if ($start -lt 0) { return @() }
@@ -57,7 +67,7 @@ function OciData([string[]]$OciArgs)
 Say '---- Wally''s Journey: asking Oracle for the free server computer ----'
 
 # 1. Oracle's tool installed and signed in
-if (-not (Get-Command oci -ErrorAction SilentlyContinue))
+if ($ociExe -eq $null)
 {
     Stop-Here 'Oracle''s tool "oci" isn''t installed yet (or this window was open before it was): see step A of "Let a script keep trying".'
 }
@@ -100,7 +110,7 @@ if (-not (Test-Path $config))
     Copy-Item -Path $pem.FullName -Destination $keyCopy -Force
     $lines = @($lines | Where-Object { $_ -notmatch '^key_file\s*=' }) + "key_file=$keyCopy"
     Set-Content -Path $config -Value $lines -Encoding Ascii
-    Say "Saved $config (key: $keyCopy, copied from $($pem.Name))."
+    Say "Saved $config (key: $keyCopy)."
 }
 $m = Select-String -Path $config -Pattern '^\s*tenancy\s*=\s*(\S+)' | Select-Object -First 1
 if ($m -eq $null)
@@ -109,19 +119,19 @@ if ($m -eq $null)
 }
 $tenancy = $m.Matches[0].Groups[1].Value
 
-$r = Oci @('iam', 'availability-domain', 'list', '--compartment-id', $tenancy)
+$r = Invoke-Oci @('iam', 'availability-domain', 'list', '--compartment-id', $tenancy)
 if (-not $r.Ok)
 {
     Say 'Oracle didn''t accept the sign-in in the config file. What it said:'
     Stop-Here $r.Text
 }
-$ads = @((OciData @('iam', 'availability-domain', 'list', '--compartment-id', $tenancy)) | ForEach-Object { $_.name })
+$ads = @((Get-OciData @('iam', 'availability-domain', 'list', '--compartment-id', $tenancy)) | ForEach-Object { $_.name })
 Say ('Signed in. Availability domains: ' + ($ads -join ', '))
 
 # 2. Not one already (this never makes a second)
 function Find-Computer
 {
-    $list = OciData @('compute', 'instance', 'list', '--compartment-id', $tenancy, '--all')
+    $list = Get-OciData @('compute', 'instance', 'list', '--compartment-id', $tenancy, '--all')
     return @($list | Where-Object { $_.'display-name' -eq $name -and $_.'lifecycle-state' -notin @('TERMINATED', 'TERMINATING') }) | Select-Object -First 1
 }
 
@@ -131,7 +141,7 @@ function Report-Computer($inst)
     $ip = ''
     for ($i = 0; $i -lt 30 -and $ip -eq ''; $i++)
     {
-        $vnics = OciData @('compute', 'instance', 'list-vnics', '--instance-id', $inst.id)
+        $vnics = Get-OciData @('compute', 'instance', 'list-vnics', '--instance-id', $inst.id)
         if ($vnics -ne $null -and @($vnics).Count -gt 0 -and $vnics[0].'public-ip') { $ip = $vnics[0].'public-ip' }
         else { Start-Sleep -Seconds 20 }
     }
@@ -151,7 +161,7 @@ function Report-Computer($inst)
         [System.Windows.MessageBox]::Show("Oracle gave you the free server computer!`n`nPublic IP: $ip`n`n(Also in oracle-computer.txt.)", 'Wally''s Journey') | Out-Null
     }
     catch { }
-    Read-Host 'Press Enter to close'
+    Wait-Enter 'Press Enter to close'
     exit 0
 }
 
@@ -159,7 +169,7 @@ $have = Find-Computer
 if ($have -ne $null) { Report-Computer $have }
 
 # 3. What to ask for: the network's public subnet, Ubuntu 24.04 for ARM, the SSH key
-$subnets = @(OciData @('network', 'subnet', 'list', '--compartment-id', $tenancy, '--all'))
+$subnets = @(Get-OciData @('network', 'subnet', 'list', '--compartment-id', $tenancy, '--all'))
 $subnet = $subnets | Where-Object { $_.'display-name' -like 'public subnet*Wallys Journey*' } | Select-Object -First 1
 if ($subnet -eq $null)
 {
@@ -169,7 +179,7 @@ if ($subnet -eq $null)
 }
 Say ('Subnet: ' + $subnet.'display-name')
 
-$images = @(OciData @('compute', 'image', 'list', '--compartment-id', $tenancy, '--operating-system', 'Canonical Ubuntu',
+$images = @(Get-OciData @('compute', 'image', 'list', '--compartment-id', $tenancy, '--operating-system', 'Canonical Ubuntu',
                       '--operating-system-version', '24.04', '--shape', $shape, '--all'))
 $image = $images | Where-Object { $_.'display-name' -notlike '*Minimal*' } |
          Sort-Object -Property 'time-created' -Descending | Select-Object -First 1
@@ -198,7 +208,7 @@ while ($true)
     foreach ($ad in $ads)
     {
         $try++
-        $r = Oci @('compute', 'instance', 'launch', '--availability-domain', $ad, '--compartment-id', $tenancy,
+        $r = Invoke-Oci @('compute', 'instance', 'launch', '--availability-domain', $ad, '--compartment-id', $tenancy,
                    '--shape', $shape, '--shape-config', "file://$shapeFile", '--image-id', $image.id,
                    '--subnet-id', $subnet.id, '--assign-public-ip', 'true', '--display-name', $name,
                    '--ssh-authorized-keys-file', "$keyFile.pub")
