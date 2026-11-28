@@ -1856,3 +1856,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   free MongoDB account would work - answered no (a database, not a way in; 100 operations/s on the free tier, the game
   would carry its password); options left: port forwarding, playit.gg Premium, Tailscale, a free cloud computer -
   his choice pending. S1 done: WallysJourneyServer.exe (docs/TANDEM_HOWTO.md).
+- 2026-11-27 18:39 Brennan: "1. lets try the oracle cloud, tell me how this works and what i need to do to accomplish
+  this. 2. yes ask them which one to use" (a save played offline on two PCs: the game asks the player which to keep).
+  Done on our side: the Linux server and its setup script; his steps (account, computer, port, upload) in
+  docs/TANDEM_HOWTO.md.

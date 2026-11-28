@@ -144,6 +144,12 @@ $(OBJ_DIR)/server/tandem_server.o: src/platform/server/tandem_server.c src/platf
 $(SERVER): $(OBJ_DIR)/server/tandem_server.o $(OBJ_DIR)/src/platform/tandem_net.o
 	$(CC) -m32 $^ $(SERVER_LIBS) -o $@
 endif
+# ... and for a Linux cloud computer (x86-64, e.g. Oracle Cloud's free VM.Standard.E2.1.Micro): one static file, built
+# with this PC's own gcc, same build id as the game (make -f Makefile.pc WIN=1 tandem-linux-server, after the game)
+.PHONY: tandem-linux-server
+tandem-linux-server: WallysJourneyServer-linux
+WallysJourneyServer-linux: src/platform/server/tandem_server.c src/platform/tandem_net.c src/platform/tandem_net.h src/platform/server/linux_sdl/SDL.h $(TANDEM_BUILD_H)
+	gcc -O2 -static -pthread -Isrc/platform/server/linux_sdl -I$(OBJ_DIR)/gen src/platform/server/tandem_server.c src/platform/tandem_net.c -o $@
 
 # ENG-MP3: song number -> MUS_ name table, regenerated when the song list changes
 src/platform/mp3_song_names.h: include/constants/songs.h tools/pc/gen_mp3_song_names.py
