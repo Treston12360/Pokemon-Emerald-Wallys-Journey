@@ -17,6 +17,13 @@
  *   BYE     either way: closing on purpose
  *   STATE   either way: u8 slot, u8 map group, u8 map number, s16 x, s16 y, u8 facing, u8 speed, u16 graphics,
  *           u8 elevation, u8 valid - a player's place (T2); the host passes each friend's on to the others
+ * S2, saves on the server (only the server program and a game that joins it; numbers little-endian):
+ *   SAVE_STATE  server -> player, when they come in: u8 has, u64 hash, u32 size, s64 saved at (seconds since 1970)
+ *   SAVE_GET    player -> server: send me my save
+ *   SAVE_BEGIN  either way: u64 hash, u32 size, s64 saved at, u64 base (player -> server: the save it replaces;
+ *               server -> player: 0) - then SAVE_PART u32 offset + up to SAVE_PART_LEN bytes, in order, then
+ *               SAVE_END u64 hash (a SAVE_END with no SAVE_BEGIN: the server has none)
+ *   SAVE_STORED server -> player: u8 stored (0: refused - its save isn't the one the player thought), u64 hash
  * A connection that sends nothing for TIMEOUT_MS (pings go every PING_MS) is closed.
  */
 #include "tandem_net.h"
@@ -30,6 +37,7 @@
 #include <SDL.h>
 
 #ifdef _WIN32
+#include <direct.h>   /* (_mkdir: S2's saves folder) */
 #include <winsock2.h>
 #include <ws2tcpip.h>
 typedef SOCKET TSocket;
@@ -45,6 +53,7 @@ typedef SOCKET TSocket;
 #include <netinet/tcp.h>
 #include <sys/select.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <unistd.h>
 typedef int TSocket;
 #define TSOCK_BAD (-1)
@@ -57,8 +66,8 @@ typedef int TSocket;
 static void PutU16(uint8_t *p, unsigned v);
 static unsigned GetU16(const uint8_t *p);
 
-#define PROTOCOL 7   /* (2: STATE; 3: the following Pokemon in STATE; 4: CARD; 5: the outfit in STATE; 6: invite codes;
-                        * 7: P2P - one player to another, for trades and battles) */
+#define PROTOCOL 8   /* (2: STATE; 3: the following Pokemon in STATE; 4: CARD; 5: the outfit in STATE; 6: invite codes;
+                        * 7: P2P - one player to another, for trades and battles; 8: SAVE_* - saves on the server) */
 #define BUILD_LEN 40
 #define NAME_LEN 16
 #define INVITE_LEN 16
@@ -71,7 +80,10 @@ static unsigned GetU16(const uint8_t *p);
 #define RETRY_MS 5000
 #define BUF_SIZE 4096
 
-enum { MSG_HELLO = 1, MSG_WELCOME, MSG_REFUSE, MSG_PEER, MSG_TEXT, MSG_PING, MSG_PONG, MSG_BYE, MSG_STATE, MSG_CARD, MSG_P2P };
+enum { MSG_HELLO = 1, MSG_WELCOME, MSG_REFUSE, MSG_PEER, MSG_TEXT, MSG_PING, MSG_PONG, MSG_BYE, MSG_STATE, MSG_CARD, MSG_P2P,
+       MSG_SAVE_STATE, MSG_SAVE_GET, MSG_SAVE_BEGIN, MSG_SAVE_PART, MSG_SAVE_END, MSG_SAVE_STORED };
+#define SAVE_PART_LEN 240
+#define SAVE_PARTS_PER_TURN 16   /* (4 KB each turn of the loop, a turn every millisecond while a save is moving) */
 #define STATE_LEN 24
 #define STATE_QUEUE 32
 #define STATE_RESEND_MS 1000
@@ -90,6 +102,13 @@ typedef struct
     uint8_t in[BUF_SIZE];
     unsigned inLen;
     uint32_t lastHeard, lastPing, pingNo, connectStart;
+    /* S2: a save on its way out (a few parts each turn of the loop) and one coming in */
+    uint8_t *outSave;
+    unsigned outSize, outAt;
+    uint8_t *inSave;
+    unsigned inSize, inGot;
+    uint64_t inHash, inBase;
+    int64_t inTime;
 } Peer;
 
 static int sMode = MODE_OFF;
@@ -142,6 +161,22 @@ static unsigned sCardLen[TANDEM_MAX_PLAYERS];
 typedef struct { uint8_t from, to, kind, len; uint8_t data[TANDEM_P2P_MAX]; } P2PMsg;
 static P2PMsg sP2PIn[P2P_QUEUE], sP2POut[P2P_QUEUE];
 static unsigned sP2PInHead, sP2PInLen, sP2POutHead, sP2POutLen;
+
+/* S2: saves on the server (under sLock). A joining game: what it knows of the server's save, a fetch, a send waiting
+ * to go. The server: the folder it keeps them in. */
+static TandemServerSave sSrvSave;
+static unsigned sSrvConnection;
+static int sGetState;            /* 0 none, 1 asked for (to send), 2 asked, 3 here, -1 failed */
+static uint8_t *sGetData;
+static unsigned sGetSize;
+static uint8_t *sPutData;        /* waiting to go */
+static unsigned sPutSize;
+static int64_t sPutTime;
+static uint64_t sPutBase;
+static bool sPutGoing;           /* (sent, waiting for SAVE_STORED) */
+static int sPutResult;           /* 0 none, 1 stored, -1 refused or failed */
+static uint64_t sPutHash, sPutStoredHash;
+static char sSavesDir[1100];
 
 /* ── settings ─────────────────────────────────────────────────────────── */
 
@@ -284,16 +319,16 @@ static void ReadEnv(void)
 
 /* ── log and status ───────────────────────────────────────────────────── */
 
-static void Log(const char *fmt, ...)
-{
-    char text[512];
-    va_list ap;
-    time_t now = time(NULL);
-    struct tm *t = localtime(&now);
+static SDL_mutex *sLogLock;   /* (S2: the main thread writes to the log too - tandem_save.c) */
 
-    va_start(ap, fmt);
-    vsnprintf(text, sizeof(text), fmt, ap);
-    va_end(ap);
+static void LogText(const char *text)
+{
+    time_t now = time(NULL);
+    struct tm *t;
+
+    if (sLogLock != NULL)
+        SDL_LockMutex(sLogLock);
+    t = localtime(&now);
     if (sLog == NULL && sLogPath[0] != '\0')
         sLog = fopen(sLogPath, "a");
     if (sLog != NULL)
@@ -308,6 +343,37 @@ static void Log(const char *fmt, ...)
     }
     else
         fprintf(stderr, "[Tandem] %s\n", text);
+    if (sLogLock != NULL)
+        SDL_UnlockMutex(sLogLock);
+}
+
+static void Log(const char *fmt, ...)
+{
+    char text[512];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsnprintf(text, sizeof(text), fmt, ap);
+    va_end(ap);
+    LogText(text);
+}
+
+void TandemNet_Log(const char *fmt, ...)
+{
+    char text[512];
+    va_list ap;
+
+    if (sThread == NULL)
+        return;
+    va_start(ap, fmt);
+    vsnprintf(text, sizeof(text), fmt, ap);
+    va_end(ap);
+    LogText(text);
+}
+
+bool TandemNet_IsJoining(void)
+{
+    return sThread != NULL && sMode == MODE_JOIN;
 }
 
 static void SetStatus(const char *fmt, ...)
@@ -654,6 +720,7 @@ static void GetText(char *dst, const uint8_t *p, unsigned len)
 }
 
 static void ClosePeer(Peer *p, const char *why);
+static void EndTransfers(Peer *p);
 
 /* send a whole message (small: the socket's buffer takes it at once; if not, the connection is too far behind) */
 static bool Send(Peer *p, unsigned type, const uint8_t *payload, unsigned len)
@@ -720,6 +787,7 @@ static void ClosePeer(Peer *p, const char *why)
         Log("connection closed (%s)", why);
     TCloseSocket(p->sock);
     p->used = false;
+    EndTransfers(p);
     if (IsHub() && p->hello)
     {
         unsigned slot = p->slot;
@@ -813,6 +881,458 @@ static bool KeyInUse(const char *key)
     return false;
 }
 
+/* ── S2: saves on the server ─────────────────────────────────────────── */
+
+static void PutU64(uint8_t *p, uint64_t v) { PutU32(p, (uint32_t)v); PutU32(p + 4, (uint32_t)(v >> 32)); }
+static uint64_t GetU64(const uint8_t *p) { return GetU32(p) | ((uint64_t)GetU32(p + 4) << 32); }
+
+unsigned long long TandemNet_Hash(const void *data, unsigned size)
+{
+    const uint8_t *b = data;
+    uint64_t h = 0xcbf29ce484222325ull;
+
+    for (unsigned i = 0; i < size; i++)
+    {
+        h ^= b[i];
+        h *= 0x100000001b3ull;
+    }
+    return h;
+}
+
+void TandemNet_GetServerSave(TandemServerSave *out)
+{
+    if (sLock == NULL)
+    {
+        memset(out, 0, sizeof(*out));
+        return;
+    }
+    SDL_LockMutex(sLock);
+    *out = sSrvSave;
+    SDL_UnlockMutex(sLock);
+}
+
+bool TandemNet_SaveGet(void)
+{
+    if (sLock == NULL)
+        return false;
+    SDL_LockMutex(sLock);
+    free(sGetData);
+    sGetData = NULL;
+    sGetSize = 0;
+    sGetState = 1;
+    SDL_UnlockMutex(sLock);
+    return true;
+}
+
+int TandemNet_SaveGetResult(unsigned char **data, unsigned *size)
+{
+    int r;
+
+    if (sLock == NULL)
+        return -1;
+    SDL_LockMutex(sLock);
+    r = sGetState == 3 ? 1 : sGetState < 0 ? -1 : 0;
+    if (r == 1)
+    {
+        *data = sGetData;
+        *size = sGetSize;
+        sGetData = NULL;
+        sGetState = 0;
+    }
+    else if (r < 0)
+        sGetState = 0;
+    SDL_UnlockMutex(sLock);
+    return r;
+}
+
+bool TandemNet_SavePut(const void *data, unsigned size, long long savedAt, unsigned long long base)
+{
+    uint8_t *copy;
+
+    if (sLock == NULL || size == 0 || size > TANDEM_SAVE_MAX || (copy = malloc(size)) == NULL)
+        return false;
+    memcpy(copy, data, size);
+    SDL_LockMutex(sLock);
+    free(sPutData);
+    sPutData = copy;
+    sPutSize = size;
+    sPutTime = savedAt;
+    sPutBase = base;
+    sPutHash = TandemNet_Hash(copy, size);
+    sPutResult = 0;
+    SDL_UnlockMutex(sLock);
+    return true;
+}
+
+int TandemNet_SavePutResult(unsigned long long *hash)
+{
+    int r;
+
+    if (sLock == NULL)
+        return 0;
+    SDL_LockMutex(sLock);
+    r = sPutResult;
+    if (r != 0)
+    {
+        *hash = sPutStoredHash;
+        sPutResult = 0;
+    }
+    SDL_UnlockMutex(sLock);
+    return r;
+}
+
+void TandemNet_SetServerSaves(const char *dir)
+{
+    snprintf(sSavesDir, sizeof(sSavesDir), "%s", dir);
+}
+
+/* a peer's transfers end (it left, or the connection broke); a joining game: what it waited for failed */
+static void EndTransfers(Peer *p)
+{
+    free(p->outSave);
+    free(p->inSave);
+    p->outSave = p->inSave = NULL;
+    if (sMode == MODE_JOIN && sLock != NULL)
+    {
+        SDL_LockMutex(sLock);
+        memset(&sSrvSave, 0, sizeof(sSrvSave));
+        if (sGetState > 0)
+            sGetState = -1;
+        if (sPutGoing || sPutData != NULL)   /* (gone or not yet gone: tandem_save.c decides again when it's back) */
+        {
+            free(sPutData);
+            sPutData = NULL;
+            sPutGoing = false;
+            sPutResult = -1;
+            sPutStoredHash = 0;
+        }
+        SDL_UnlockMutex(sLock);
+    }
+}
+
+/* start sending a save to a peer (it is taken: freed when sent) */
+static void StartSaveOut(Peer *p, uint8_t *data, unsigned size, uint64_t hash, int64_t savedAt, uint64_t base)
+{
+    uint8_t b[28];
+
+    free(p->outSave);
+    p->outSave = data;
+    p->outSize = size;
+    p->outAt = 0;
+    PutU64(b, hash);
+    PutU32(b + 8, size);
+    PutU64(b + 12, (uint64_t)savedAt);
+    PutU64(b + 20, base);
+    Send(p, MSG_SAVE_BEGIN, b, sizeof(b));
+}
+
+/* a few more parts of what goes out; the end when all went. TRUE while there is more. */
+static bool SendSaveParts(Peer *p)
+{
+    for (unsigned n = 0; n < SAVE_PARTS_PER_TURN && p->used && p->outSave != NULL; n++)
+    {
+        uint8_t b[4 + SAVE_PART_LEN];
+        unsigned len = p->outSize - p->outAt;
+
+        if (len == 0)
+        {
+            uint8_t e[8];
+            PutU64(e, TandemNet_Hash(p->outSave, p->outSize));
+            free(p->outSave);
+            p->outSave = NULL;
+            Send(p, MSG_SAVE_END, e, sizeof(e));
+            return false;
+        }
+        if (len > SAVE_PART_LEN)
+            len = SAVE_PART_LEN;
+        PutU32(b, p->outAt);
+        memcpy(b + 4, p->outSave + p->outAt, len);
+        if (!Send(p, MSG_SAVE_PART, b, 4 + len))
+            return false;
+        p->outAt += len;
+    }
+    return p->used && p->outSave != NULL;
+}
+
+/* the server's files for a player: KEY.sav, KEY.info ("hash size savedAt name"), and every one it replaced as
+ * KEY.YYYYMMDD-HHMMSS.sav (never deleted) */
+static void SavePath(char *out, size_t size, const char *key, const char *ending)
+{
+    snprintf(out, size, "%s/%s%s", sSavesDir[0] ? sSavesDir : ".", key, ending);
+}
+
+static bool ReadServerInfo(const char *key, uint64_t *hash, unsigned *size, int64_t *savedAt)
+{
+    char path[1200], line[256];
+    FILE *f;
+    bool ok = false;
+
+    SavePath(path, sizeof(path), key, ".info");
+    if ((f = fopen(path, "r")) == NULL)
+        return false;
+    if (fgets(line, sizeof(line), f) != NULL)
+    {
+        char *end;
+        *hash = strtoull(line, &end, 16);
+        *size = (unsigned)strtoul(end, &end, 10);
+        *savedAt = strtoll(end, &end, 10);
+        ok = *size > 0;
+    }
+    fclose(f);
+    return ok;
+}
+
+static void SendSaveState(Peer *p)
+{
+    uint8_t b[21];
+    uint64_t hash = 0;
+    unsigned size = 0;
+    int64_t savedAt = 0;
+
+    memset(b, 0, sizeof(b));
+    if (ReadServerInfo(p->key, &hash, &size, &savedAt))
+    {
+        b[0] = 1;
+        PutU64(b + 1, hash);
+        PutU32(b + 9, size);
+        PutU64(b + 13, (uint64_t)savedAt);
+    }
+    Send(p, MSG_SAVE_STATE, b, sizeof(b));
+}
+
+/* the server: a player asked for their save */
+static void ServerSendSave(Peer *p)
+{
+    char path[1200];
+    uint64_t hash = 0;
+    unsigned size = 0;
+    int64_t savedAt = 0;
+    uint8_t *data = NULL;
+    FILE *f;
+
+    SavePath(path, sizeof(path), p->key, ".sav");
+    if (ReadServerInfo(p->key, &hash, &size, &savedAt) && size <= TANDEM_SAVE_MAX && (f = fopen(path, "rb")) != NULL)
+    {
+        if ((data = malloc(size)) != NULL && (fread(data, 1, size, f) != size || TandemNet_Hash(data, size) != hash))
+        {
+            free(data);
+            data = NULL;
+        }
+        fclose(f);
+    }
+    if (data == NULL)
+    {
+        uint8_t e[8] = { 0 };
+        Log("%s asked for their save - there is none%s", p->name, size ? " (its file doesn't match its info)" : "");
+        Send(p, MSG_SAVE_END, e, sizeof(e));
+        return;
+    }
+    Log("sending %s their save (%u bytes)", p->name, size);
+    StartSaveOut(p, data, size, hash, savedAt, 0);
+}
+
+/* the server: a whole save came; keep it (the one it replaces kept too, by date) */
+static void ServerStoreSave(Peer *p)
+{
+    char path[1200], tmp[1200], old[1200], stamp[32];
+    uint64_t curHash = 0;
+    unsigned curSize = 0;
+    int64_t curTime = 0;
+    bool has = ReadServerInfo(p->key, &curHash, &curSize, &curTime), ok = false;
+    uint8_t r[9];
+    FILE *f;
+    time_t now = time(NULL);
+
+    /* (only over the save the player's game knew of: a save sent from another PC in between isn't lost) */
+    if (has && p->inBase != curHash)
+        Log("%s's save not stored: the server's changed since their game last saw it", p->name);
+    else
+    {
+        if (sSavesDir[0] != '\0')   /* (the folder, the first time) */
+#ifdef _WIN32
+            _mkdir(sSavesDir);
+#else
+            mkdir(sSavesDir, 0755);
+#endif
+        SavePath(tmp, sizeof(tmp), p->key, ".sav.part");
+        SavePath(path, sizeof(path), p->key, ".sav");
+        if ((f = fopen(tmp, "wb")) != NULL)
+        {
+            ok = fwrite(p->inSave, 1, p->inSize, f) == p->inSize;
+            ok = fclose(f) == 0 && ok;
+        }
+        if (ok && has)
+        {
+            struct tm *t = localtime(&now);
+            strftime(stamp, sizeof(stamp), ".%Y%m%d-%H%M%S.sav", t);
+            SavePath(old, sizeof(old), p->key, stamp);
+            ok = rename(path, old) == 0;
+        }
+        if (ok)
+            ok = rename(tmp, path) == 0;
+        if (ok)
+        {
+            SavePath(path, sizeof(path), p->key, ".info");
+            if ((f = fopen(path, "w")) != NULL)
+            {
+                fprintf(f, "%016llx %u %lld %s\n", (unsigned long long)p->inHash, p->inSize, (long long)p->inTime, p->name);
+                ok = fclose(f) == 0;
+            }
+            else
+                ok = false;
+        }
+        Log(ok ? "stored %s's save (%u bytes)%s" : "couldn't store %s's save (%u bytes)%s - is the disk full?", p->name,
+            p->inSize, has ? ", the one before kept by date" : "");
+    }
+    r[0] = ok ? 1 : 0;
+    PutU64(r + 1, p->inHash);
+    Send(p, MSG_SAVE_STORED, r, sizeof(r));
+}
+
+/* SAVE_* messages, either side */
+static void HandleSaveMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len)
+{
+    bool server = sMode == MODE_SERVER, joiner = sMode == MODE_JOIN;
+
+    if (!p->hello || (!server && !joiner) || (server && p->key[0] == '\0'))
+        return;
+    switch (type)
+    {
+    case MSG_SAVE_STATE:
+        if (joiner && len >= 21)
+        {
+            SDL_LockMutex(sLock);
+            sSrvSave.kind = 2;
+            sSrvSave.has = d[0];
+            sSrvSave.hash = GetU64(d + 1);
+            sSrvSave.size = GetU32(d + 9);
+            sSrvSave.savedAt = (long long)GetU64(d + 13);
+            sSrvSave.connection = ++sSrvConnection;
+            SDL_UnlockMutex(sLock);
+            Log(d[0] ? "the server has my save (%u bytes)" : "the server has no save of mine yet", GetU32(d + 9));
+        }
+        break;
+    case MSG_SAVE_GET:
+        if (server && p->outSave == NULL)
+            ServerSendSave(p);
+        break;
+    case MSG_SAVE_BEGIN:
+        if (len >= 28 && GetU32(d + 8) > 0 && GetU32(d + 8) <= TANDEM_SAVE_MAX)
+        {
+            free(p->inSave);
+            p->inSize = GetU32(d + 8);
+            p->inGot = 0;
+            p->inHash = GetU64(d);
+            p->inTime = (int64_t)GetU64(d + 12);
+            p->inBase = GetU64(d + 20);
+            p->inSave = malloc(p->inSize);
+        }
+        break;
+    case MSG_SAVE_PART:
+        if (p->inSave != NULL && len >= 4 && GetU32(d) == p->inGot && p->inGot + (len - 4) <= p->inSize)
+        {
+            memcpy(p->inSave + p->inGot, d + 4, len - 4);
+            p->inGot += len - 4;
+        }
+        break;
+    case MSG_SAVE_END:
+    {
+        bool whole = p->inSave != NULL && len >= 8 && p->inGot == p->inSize
+                  && TandemNet_Hash(p->inSave, p->inSize) == p->inHash && GetU64(d) == p->inHash;
+
+        if (server)
+        {
+            if (whole)
+                ServerStoreSave(p);
+            else
+                Log("%s's save came broken - not stored", p->name);
+            free(p->inSave);
+            p->inSave = NULL;
+            break;
+        }
+        SDL_LockMutex(sLock);
+        if (sGetState == 2)
+        {
+            if (whole)
+            {
+                sGetData = p->inSave;
+                sGetSize = p->inSize;
+                p->inSave = NULL;
+                sGetState = 3;
+            }
+            else
+                sGetState = -1;
+        }
+        SDL_UnlockMutex(sLock);
+        Log(whole ? "got my save from the server (%u bytes)" : "didn't get my save from the server (none there, or it came broken)",
+            p->inSize);
+        free(p->inSave);
+        p->inSave = NULL;
+        break;
+    }
+    case MSG_SAVE_STORED:
+        if (joiner && len >= 9)
+        {
+            SDL_LockMutex(sLock);
+            sPutGoing = false;
+            sPutResult = d[0] ? 1 : -1;
+            sPutStoredHash = GetU64(d + 1);
+            if (d[0])
+            {
+                sSrvSave.has = 1;
+                sSrvSave.hash = sPutStoredHash;
+            }
+            SDL_UnlockMutex(sLock);
+            Log(d[0] ? "the server stored my save" : "the server didn't store my save (its own changed, or its disk)");
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+/* a joining game, each turn of the loop: ask for my save, or start sending it */
+static void SaveRequests(Peer *p)
+{
+    bool get = false;
+    uint8_t *put = NULL;
+    unsigned putSize = 0;
+    int64_t putTime = 0;
+    uint64_t putBase = 0, putHash = 0;
+
+    if (sMode != MODE_JOIN || !p->used || !p->hello)
+        return;
+    SDL_LockMutex(sLock);
+    if (sSrvSave.kind == 2)
+    {
+        if (sGetState == 1)
+        {
+            sGetState = 2;
+            get = true;
+        }
+        if (sPutData != NULL && !sPutGoing && p->outSave == NULL)
+        {
+            put = sPutData;
+            putSize = sPutSize;
+            putTime = sPutTime;
+            putBase = sPutBase;
+            putHash = sPutHash;
+            sPutData = NULL;
+            sPutGoing = true;
+        }
+    }
+    else if (sSrvSave.kind == 1 && sGetState == 1)
+        sGetState = -1;   /* (a friend's game keeps no saves) */
+    SDL_UnlockMutex(sLock);
+    if (get)
+        Send(p, MSG_SAVE_GET, NULL, 0);
+    if (put != NULL)
+    {
+        Log("sending my save to the server (%u bytes)", putSize);
+        StartSaveOut(p, put, putSize, putHash, putTime, putBase);
+    }
+}
+
 /* ── messages ─────────────────────────────────────────────────────────── */
 
 static void Refuse(Peer *p, const char *fmt, ...)
@@ -836,6 +1356,11 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
     char build[BUILD_LEN], name[NAME_LEN], text[TEXT_LEN];
 
     p->lastHeard = SDL_GetTicks();
+    if (type >= MSG_SAVE_STATE && type <= MSG_SAVE_STORED)
+    {
+        HandleSaveMessage(p, type, d, len);
+        return;
+    }
     switch (type)
     {
     case MSG_HELLO:
@@ -925,6 +1450,8 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
         sMySentAt = 0;   /* (my place to the newcomer at once) */
         Log("%s joined (player %u of %u, same build %s)", name, p->slot + 1, TANDEM_MAX_PLAYERS, TANDEM_BUILD);
         SendText(p, sMode == MODE_SERVER ? "welcome to %s" : "hello from %s, the host", sName);
+        if (sMode == MODE_SERVER)
+            SendSaveState(p);   /* (S2: whether it has their save, and which) */
         StatusFromPlayers();
         break;
     }
@@ -966,6 +1493,13 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
                 sConfigChanged = true;
                 SDL_UnlockMutex(sLock);
                 Log("the server let us in with the invite code and gave this PC its key - no code needed from now on");
+            }
+            if (hostSlot != 0xFF)
+            {
+                SDL_LockMutex(sLock);
+                sSrvSave.kind = 1;   /* (S2: a friend's game - no saves there) */
+                sSrvSave.connection = ++sSrvConnection;
+                SDL_UnlockMutex(sLock);
             }
             if (hostSlot == 0xFF)
                 Log("joined the server %s as player %u of %u (same build %s)", name, sMySlot + 1, d[1], TANDEM_BUILD);
@@ -1112,7 +1646,30 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
     }
 }
 
-/* take every whole message out of what has come in */
+/* take every whole message out of what has come in; FALSE if the peer went */
+static bool TakeMessages(Peer *p)
+{
+    while (p->used && p->inLen >= 2)
+    {
+        unsigned len = GetU16(p->in);
+        if (len == 0 || len > 1024)
+        {
+            ClosePeer(p, "a message that made no sense");
+            return false;
+        }
+        if (p->inLen < 2 + len)
+            break;
+        HandleMessage(p, p->in[2], p->in + 3, len - 1);
+        if (!p->used)
+            return false;
+        memmove(p->in, p->in + 2 + len, p->inLen - 2 - len);
+        p->inLen -= 2 + len;
+    }
+    return p->used;
+}
+
+/* read what has come in, handling each whole message as it comes (S2: a save comes as hundreds of messages - more
+ * than the buffer holds at once; before, a full buffer closed the connection) */
 static void ReadPeer(Peer *p)
 {
     bool ended = false;   /* (the other side closed: what came before still counts - its goodbye) */
@@ -1139,22 +1696,8 @@ static void ReadPeer(Peer *p)
             break;
         }
         p->inLen += (unsigned)n;
-    }
-    while (p->used && p->inLen >= 2)
-    {
-        unsigned len = GetU16(p->in);
-        if (len == 0 || len > 1024)
-        {
-            ClosePeer(p, "a message that made no sense");
+        if (!TakeMessages(p))
             return;
-        }
-        if (p->inLen < 2 + len)
-            break;
-        HandleMessage(p, p->in[2], p->in + 3, len - 1);
-        if (!p->used)
-            return;
-        memmove(p->in, p->in + 2 + len, p->inLen - 2 - len);
-        p->inLen -= 2 + len;
     }
     if (ended && p->used)
         ClosePeer(p, "the other side closed the connection");
@@ -1352,6 +1895,19 @@ static int TandemThread(void *unused)
         uint32_t now = SDL_GetTicks();
         bool any = false;
 
+        /* (S2: a save moving, or one asked for: a turn every millisecond until it's done) */
+        SaveRequests(&sPeers[0]);
+        for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
+            if (sPeers[i].used && sPeers[i].outSave != NULL && SendSaveParts(&sPeers[i]))
+                tv.tv_usec = 1000;
+        if (sMode == MODE_JOIN && sLock != NULL)
+        {
+            SDL_LockMutex(sLock);
+            if (sGetState == 1 || (sPutData != NULL && !sPutGoing))
+                tv.tv_usec = 1000;
+            SDL_UnlockMutex(sLock);
+        }
+
         if (sMode == MODE_OFF)
             break;
         if (sMode == MODE_JOIN && !sPeers[0].used && (int32_t)(now - nextTry) >= 0)
@@ -1522,6 +2078,7 @@ void TandemNet_Start(const char *logPath)
     }
 #endif
     sLock = SDL_CreateMutex();
+    sLogLock = SDL_CreateMutex();
     SDL_AtomicSet(&sQuit, 0);
     memset(sPeers, 0, sizeof(sPeers));
     memset(sPeerNames, 0, sizeof(sPeerNames));

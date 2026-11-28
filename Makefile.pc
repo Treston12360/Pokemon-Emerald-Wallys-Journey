@@ -136,6 +136,9 @@ $(TANDEM_BUILD_H): FORCE
 FORCE:
 $(OBJ_DIR)/src/platform/tandem_net.o: src/platform/tandem_net.c src/platform/tandem_net.h $(TANDEM_BUILD_H)
 	$(CC) $(CFLAGS) -I$(OBJ_DIR)/gen -c $< -o $@
+# (S2, saves on the server: plain C as well - it reads the save file as bytes)
+$(OBJ_DIR)/src/platform/tandem_save.o: src/platform/tandem_save.c src/platform/tandem_save.h src/platform/tandem_net.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Project Tandem: the server program (Brennan 2026-11-27: "click a .exe and launch the server") - the same network
 # code with no game, in a console window (src/platform/server/tandem_server.c). Built with the game; same build id.

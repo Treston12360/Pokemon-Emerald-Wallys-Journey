@@ -89,4 +89,36 @@ bool TandemNet_SendTo(unsigned slot, unsigned kind, const void *data, unsigned l
 /* the oldest message that came for me: who from, its kind, its bytes (at most `max`); its length, or -1 when none */
 int TandemNet_PopP2P(unsigned *fromSlot, unsigned *kind, void *data, unsigned max);
 
+/* S2: saves on the server (src/platform/tandem_save.c decides what to do; this only moves the bytes). Only a game that
+ * joins the server program has them - a friend's hosting game keeps no saves. The whole save file is sent, in parts. */
+#define TANDEM_SAVE_MAX (8u * 1024 * 1024)
+typedef struct
+{
+    int kind;                    /* 0: not connected (yet); 1: joined a friend's game (no saves there); 2: the server */
+    int has;                     /* (server) it has a save of mine */
+    unsigned long long hash;     /* its hash (TandemNet_Hash), size and when it was saved (seconds since 1970) */
+    unsigned size;
+    long long savedAt;
+    unsigned connection;         /* goes up with every new connection to the server */
+} TandemServerSave;
+/* the server's save, as far as this game knows */
+void TandemNet_GetServerSave(TandemServerSave *out);
+/* the 64-bit hash both sides use (FNV-1a) */
+unsigned long long TandemNet_Hash(const void *data, unsigned size);
+/* fetch my save from the server; then TandemNet_SaveGetResult: 0 still coming, 1 here (*data: malloc'd, free it),
+ * -1 failed (none there, or the connection broke) */
+bool TandemNet_SaveGet(void);
+int TandemNet_SaveGetResult(unsigned char **data, unsigned *size);
+/* send my save to the server (copied); `base`: the hash of the save this game knows the server has (0: none) - the
+ * server refuses it if its own save is a different one by then. Then TandemNet_SavePutResult: 0 still going (or none),
+ * 1 stored (*hash: which), -1 refused or failed */
+bool TandemNet_SavePut(const void *data, unsigned size, long long savedAt, unsigned long long base);
+int TandemNet_SavePutResult(unsigned long long *hash);
+/* the server program: where it keeps everyone's saves (a folder; made if missing) */
+void TandemNet_SetServerSaves(const char *dir);
+/* TRUE when this game joins (a server or a friend's game) */
+bool TandemNet_IsJoining(void);
+/* a line in Tandem's log (WallysJourney_tandem.log) */
+void TandemNet_Log(const char *fmt, ...);
+
 #endif

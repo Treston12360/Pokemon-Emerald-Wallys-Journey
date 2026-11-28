@@ -159,6 +159,11 @@ int main(int argc, char **argv)
     printf("==============================================================\n\n");
     fflush(stdout);
 
+    printf("  Players' saves are kept in the folder WallysJourneyServer_saves\n");
+    printf("  (each one they replace too, by date - back that folder up).\n\n");
+    fflush(stdout);
+    /* (S2, Brennan 18:23: "both" - a backup of every save, and the same save on any PC) */
+    TandemNet_SetServerSaves("WallysJourneyServer_saves");
     if (!TandemNet_StartServer(sPort, sInvite, sName, "WallysJourneyServer_players.txt", "WallysJourneyServer.log"))
     {
         printf("The server couldn't start. Press Enter to close.\n");

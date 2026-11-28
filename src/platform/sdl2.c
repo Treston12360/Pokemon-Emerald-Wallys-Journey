@@ -23,6 +23,7 @@
 
 #include <string.h>
 #include "tandem_net.h"   /* Project Tandem T1 (docs/TANDEM_TASKS.md) */
+#include "tandem_save.h"  /* Project Tandem S2: saves on the server */
 #include "global.h"
 #include "battle_setup.h"
 #include "battle_transition.h"
@@ -1863,6 +1864,11 @@ int main(int argc, char **argv)
         SDL_snprintf(tandemLog, sizeof(tandemLog), "%.*s_tandem.log", stem, sConfigPath);
         TandemNet_Start(tandemLog);
     }
+    /* Project Tandem S2 (saves on the server; src/platform/tandem_save.h): joining the server program, the save on
+     * this PC and the one on the server are compared before the game reads it - the server's may be taken (this PC's
+     * kept beside it). Nothing happens otherwise. */
+    if (TandemSave_BootCheck(sSavePath, sdlWindow, CloseSaveFile))
+        ReadSaveFile(sSavePath);
     mainLoopThread = SDL_CreateThread(DoMain, "AgbMain", NULL);
 
     double accumulator = 0.0;
@@ -1873,14 +1879,20 @@ int main(int argc, char **argv)
         /* (Project Tandem: who is connected, in the window's title) */
         if (TandemNet_Active())
         {
-            static unsigned sTandemGen;
-            unsigned gen;
+            static unsigned sTandemGen, sSaveNoteGen;
+            unsigned gen, noteGen;
             const char *status = TandemNet_StatusText(&gen);
-            if (gen != sTandemGen)
+            const char *note;
+
+            TandemSave_Update();   /* (S2: this PC's save to the server after each save in the game) */
+            note = TandemSave_Note(&noteGen);
+            if (gen != sTandemGen || noteGen != sSaveNoteGen)
             {
-                char title[200];
+                char title[400];
                 sTandemGen = gen;
-                SDL_snprintf(title, sizeof(title), "Pokemon Wally's Journey - %s", status);
+                sSaveNoteGen = noteGen;
+                /* (a note about the save - it needs the player - shows instead of who is connected) */
+                SDL_snprintf(title, sizeof(title), "Pokemon Wally's Journey - %s", note[0] ? note : status);
                 SDL_SetWindowTitle(sdlWindow, title);
             }
             /* (the server gave this PC its key: kept in the settings, the invite code dropped) */
@@ -2185,6 +2197,7 @@ int main(int argc, char **argv)
     }
 
     //StoreSaveFile();
+    TandemSave_Quit();   /* (Project Tandem S2: a save made just before closing still goes to the server) */
     CloseSaveFile();
     TandemNet_Stop();   /* (Project Tandem: tells friends it is leaving) */
 
@@ -2424,6 +2437,7 @@ static void FlushSaveIfDirty(void)
     {
         gWjFlashDirty = FALSE;
         StoreSaveFile();
+        TandemSave_Touched();   /* (Project Tandem S2: sent to the server once the save settles) */
     }
 }
 
@@ -2447,6 +2461,7 @@ void Platform_WriteExtraSave(const void *src, u32 size)
     fwrite(&size, 1, 4, sSaveFile);
     fwrite(src, 1, size, sSaveFile);
     fflush(sSaveFile);
+    TandemSave_Touched();
 }
 
 void Platform_StoreSaveFile(void)
@@ -2611,6 +2626,7 @@ static void CloseSaveFile()
     if (sSaveFile != NULL)
     {
         fclose(sSaveFile);
+        sSaveFile = NULL;   /* (Project Tandem S2 closes it at start, before the server's save replaces the file) */
     }
 }
 

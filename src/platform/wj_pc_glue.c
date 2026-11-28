@@ -190,8 +190,12 @@ int WJPC_TestState(const char *what, int id, int set, int value)
     }
     if (!strcmp(what, "money"))
     {
-        // "state money 0": the player's money (test aid, Project Tandem T6b: a lost team-up costs it)
+        // "state money 0 [VALUE]": the player's money, set first if VALUE is given (test aid, Project Tandem T6b: a
+        // lost team-up costs it; S2: tells saves apart)
         extern u32 GetMoney(u32 *moneyPtr);
+        extern void SetMoney(u32 *moneyPtr, u32 newValue);
+        if (set)
+            SetMoney(&gSaveBlock1Ptr->money, value);
         return GetMoney(&gSaveBlock1Ptr->money);
     }
     if (!strcmp(what, "level") || !strcmp(what, "exp") || !strcmp(what, "move"))
