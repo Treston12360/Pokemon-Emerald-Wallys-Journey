@@ -55,6 +55,9 @@ SERVER-ADDRESS:
     your PC is off; no router changes. See below.
 
 ### A free cloud computer (Oracle Cloud)
+Step-by-step, with every choice on Oracle's pages: **docs/TANDEM_ORACLE_SETUP.md** (give Brennan that list when he
+asks how to set up Oracle).
+
 Files (from the game zip): the `cloud-server` folder - `WallysJourneyServer-linux` (the server for x86-64 Linux),
 `setup-server.sh` (`tools/tandem/cloud/`) and `src/` (the server's source with this build's id, for ARM computers). Build: `make -f Makefile.pc WIN=1 tandem-linux-server` after the game (same build id).
 1. **Account:** oracle.com/cloud/free - email, phone, and a credit/debit card for identity (not charged unless the

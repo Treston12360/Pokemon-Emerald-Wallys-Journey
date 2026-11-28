@@ -1863,3 +1863,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
 - 2026-11-27 18:51-18:53 Brennan (Oracle shapes): E5.Flex is not free (told him); his region shows nothing under
   "Specialty and previous generation", so VM.Standard.A1.Flex (Always Free-eligible) at 1 OCPU / 6 GB - yes. The
   setup script now builds the server on ARM computers from the packaged source.
+- 2026-11-27 19:11-19:15 Oracle: "Out of capacity" for VM.Standard.A1.Flex in AD 1, 2 and 3 (Chicago); no other
+  Always Free shape offered. Left for later (retry, or Pay As You Go). 19:17 Brennan: "keep all the info about setting
+  up oracle in a list or steps and when i ask about how to set up oracle again provide me that list" - kept in
+  docs/TANDEM_ORACLE_SETUP.md (and in memory).
