@@ -203,12 +203,15 @@ Set-Content -Path $shapeFile -Value '{"ocpus": 1, "memoryInGBs": 6}' -Encoding A
 # 4. Keep asking: one availability domain a try, a minute apart
 Say "Asking every $WaitSeconds seconds, one availability domain at a time. Leave this window open (and the PC awake)."
 $try = 0
+$slowDown = 120   # (seconds to wait when Oracle asks to slow down: 2 minutes, longer each time it asks again)
 while ($true)
 {
     foreach ($ad in $ads)
     {
         $try++
-        $r = Invoke-Oci @('compute', 'instance', 'launch', '--availability-domain', $ad, '--compartment-id', $tenancy,
+        # (--no-retry: one question a try. Without it Oracle's tool asks up to 7 more times by itself, waiting longer
+        # each time - Brennan 2026-11-27 20:46: tries came 2 minutes apart, and Oracle asked to slow down after 3)
+        $r = Invoke-Oci @('compute', 'instance', 'launch', '--no-retry', '--availability-domain', $ad, '--compartment-id', $tenancy,
                    '--shape', $shape, '--shape-config', "file://$shapeFile", '--image-id', $image.id,
                    '--subnet-id', $subnet.id, '--assign-public-ip', 'true', '--display-name', $name,
                    '--ssh-authorized-keys-file', "$keyFile.pub")
@@ -221,11 +224,13 @@ while ($true)
         if ($r.Text -match 'capacity')
         {
             Say "Try $try ($ad): no room yet."
+            $slowDown = 120
         }
         elseif ($r.Text -match 'TooManyRequests|429')
         {
-            Say "Try $try ($ad): Oracle asked to slow down - waiting 5 minutes."
-            Start-Sleep -Seconds 300
+            Say ("Try $try ($ad): Oracle asked to slow down - waiting " + [int]($slowDown / 60) + " minutes.")
+            Start-Sleep -Seconds $slowDown
+            $slowDown = [Math]::Min($slowDown * 2, 600)
         }
         elseif ($r.Text -match 'LimitExceeded')
         {

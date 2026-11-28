@@ -63,7 +63,8 @@ would need your Oracle key). Steps 1-3 must be done first. Files: `tools/tandem/
   Tokens and keys (or API keys) > Add API key > **Generate API key pair** > **Download private key** > **Add**; copy the
   **Configuration file preview** text, paste it into the window (right-click), press Enter on an empty line. (It takes
   the newest .pem in Downloads and keeps it, with the text, in `C:\Users\YOU\.oci`.)
-- **D. Leave the window open and the PC awake.** It asks once a minute, one availability domain at a time - the same
+- **D. Leave the window open and the PC awake.** It asks every 30 seconds (one question each: `--no-retry`), one availability domain at a time; if Oracle
+  says to slow down it waits 2 minutes (longer if it keeps saying so) - the same
   computer as step 4 (A1.Flex 1 OCPU / 6 GB, Ubuntu 24.04, the public subnet, a public IP). It only ever asks for the
   Always Free shape, and stops if a "Wallys Journey" computer already exists, so it can't make a second one or one that
   costs money. Every try is written in `oracle-keep-trying.log` next to it.
