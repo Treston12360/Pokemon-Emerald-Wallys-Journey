@@ -1875,3 +1875,9 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
 - 2026-11-27 20:18-20:46 Brennan asked for a script that keeps trying to make the Oracle computer for him:
   tools/tandem/cloud/oracle-keep-trying.bat/.ps1 (runs on his PC; docs/TANDEM_ORACLE_SETUP.md). 20:36: every 30 seconds.
   20:46: Oracle asked to slow down after 3 tries - each try was ~7 requests (the CLI's own retries); now --no-retry.
+- 2026-11-27 21:17 Brennan: "continue to step 6". 21:20 answers (Tandem battles): Battle on a friend - "Choose each
+  time" (the one asking picks Single or Double; the friend sees which before saying yes); health - "Full, then put
+  back" (everyone battles at full health; afterwards the Pokemon are exactly as before - no free healing anywhere);
+  Team Up - "Ask each time" (when a regular trainer spots one of you, the other is asked "Join the battle?"; one-player
+  if they say no); team-up rewards - "Exp. for both, rest for one" (both get Exp.; only the one the trainer spotted
+  gets the prize money and the trainer marked as beaten).

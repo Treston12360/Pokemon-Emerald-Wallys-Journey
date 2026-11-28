@@ -112,6 +112,12 @@ bool32 WJPC_TestAutoReel(void)
     return getenv("WJPC_TEST_AUTO_REEL") != NULL;
 }
 
+// Test aid (sdl2.c WJPC_TEST_WINDOW_NOBATTLE): in a battle.
+bool32 WJPC_TestInBattle(void)
+{
+    return gMain.inBattle;
+}
+
 // Test aid (sdl2.c "state"): game state read or written from a test script.
 int WJPC_TestState(const char *what, int id, int set, int value)
 {
@@ -139,6 +145,19 @@ int WJPC_TestState(const char *what, int id, int set, int value)
     }
     if (!strcmp(what, "save"))
         return TrySavingData(SAVE_NORMAL);
+    if (!strcmp(what, "hp"))
+    {
+        // "state hp SLOT [VALUE]": that party Pokemon's HP, set first if VALUE is given (test aid, Project Tandem T6:
+        // battles with a friend put the party back as it was)
+        if (id < 0 || id >= PARTY_SIZE)
+            return -1;
+        if (set)
+        {
+            u16 hp = value;
+            SetMonData(&gParties[B_TRAINER_PLAYER][id], MON_DATA_HP, &hp);
+        }
+        return GetMonData(&gParties[B_TRAINER_PLAYER][id], MON_DATA_HP);
+    }
     if (!strcmp(what, "party"))
     {
         // "state party SLOT": that party Pokemon's species, 0 if none (test aid, Project Tandem T5: after a trade)

@@ -560,8 +560,12 @@ void SpriteCB_BWBattleUI_HPBar(struct Sprite *sprite)
     enum BattlerId battler = sprite->hBar_Data6;
     enum BattleCoordTypes coords = GetBattlerCoordsIndex(battler);
 
-    sprite->x = sBWBattleUI_HealthbarCoords[coords][battler][0] + 16;
-    sprite->y = sBWBattleUI_HealthbarCoords[coords][battler][1] + 4;
+    // (by the battler's place on screen, as the healthbox itself (BattleUI_GetHealthboxCoords): the same as the battler
+    // number except for the second player of a link battle, whose own Pokemon is battler 1 at the bottom - Project
+    // Tandem T6, 2026-11-27: there each HP bar showed in the other's box)
+    enum BattlerPosition position = GetBattlerPosition(battler);
+    sprite->x = sBWBattleUI_HealthbarCoords[coords][position][0] + 16;
+    sprite->y = sBWBattleUI_HealthbarCoords[coords][position][1] + 4;
 
     sprite->x2 = gSprites[healthboxSpriteId].x2;
     sprite->y2 = gSprites[healthboxSpriteId].y2;

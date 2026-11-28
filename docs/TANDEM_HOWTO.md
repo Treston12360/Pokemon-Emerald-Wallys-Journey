@@ -1,4 +1,4 @@
-# Project Tandem - how to connect (steps 1-5 and the server: connecting, seeing each other, across maps, player cards, trading)
+# Project Tandem - how to connect (steps 1-6 and the server: connecting, seeing each other, across maps, player cards, trading, battles)
 
 You see who is connected in the window's title, and `WallysJourney_tandem.log` (next to the game) lists who joined,
 the hello messages and the delay. When a friend is on the same map as you, or on the map just across a border
@@ -7,7 +7,13 @@ with their following Pokemon; you walk through each other. They disappear when t
 somewhere you can't see, and come back when they come out. Everyone shows in their own outfit.
 
 Face a friend and press A for the menu: Trade, Player Card, Battle, Team Up. Player Card shows their card (their outfit,
-money, Pokedex, time, badges). Battles and teaming up are a later step.
+money, Pokedex, time, badges). Team Up is a later step.
+
+**Battles:** Battle asks "Which kind of battle?" - Single or Double (a Double needs two Pokemon that can battle, Eggs
+don't count) - then asks the friend ("NAME wants a Single Battle. Will you battle?"). Yes: the game's own link battle
+(the Cable Club's). Everyone battles at full health, and afterwards your Pokemon are put back exactly as they were
+(no free healing). Running = giving up the match (the friend wins). The game saves after the battle, where you stand.
+If the connection breaks during it, "A Button: Continue" puts you back where you stood, with your Pokemon as before.
 
 **Trading:** Trade asks the friend ("Asking NAME to trade... B Button: stop waiting"); they get "NAME wants to trade.
 Will you trade?" as soon as they are free in the overworld (in a menu, a battle or a cutscene for more than a few

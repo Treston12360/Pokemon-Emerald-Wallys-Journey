@@ -252,6 +252,22 @@ static enum Item GetNextBall(enum Item ballId)
     return ballId;
 }
 
+#ifdef PORTABLE
+static void HandleInputChooseAction(enum BattlerId battler);
+// (test aid, Project Tandem T6, sdl2.c "waitfor action": a battle waits for this player to choose FIGHT / BAG /
+// POKEMON / RUN)
+bool32 WJPC_TestChoosingAction(void)
+{
+    u32 i;
+    if (!gMain.inBattle)
+        return FALSE;
+    for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+        if (gBattlerControllerFuncs[i] == HandleInputChooseAction)
+            return TRUE;
+    return FALSE;
+}
+#endif
+
 static void HandleInputChooseAction(enum BattlerId battler)
 {
     enum Item itemId = gBattleResources->bufferA[battler][2] | (gBattleResources->bufferA[battler][3] << 8);

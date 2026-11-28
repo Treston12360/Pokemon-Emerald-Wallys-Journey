@@ -1,4 +1,5 @@
 #include "global.h"
+#include "tandem_link.h"   /* (Project Tandem) */
 #include "config/save.h"
 #include "battle_pike.h"
 #include "battle_pyramid.h"
@@ -1375,7 +1376,9 @@ static void Task_SaveAfterLinkBattle(u8 taskId)
             }
             break;
         case 1:
-            SetContinueGameWarpStatusToDynamicWarp();
+            // (Project Tandem: a battle with a friend happens where the player stands - the save continues there)
+            if (!TandemLink_InSession())
+                SetContinueGameWarpStatusToDynamicWarp();
             WriteSaveBlock2();
             *state = 2;
             break;

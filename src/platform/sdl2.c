@@ -413,7 +413,8 @@ static u16 sTestKeys;
 static int sTestHold;
 // "waitfor WHAT MAX" (test aid, Project Tandem T5 - two games linked keep in step): frames left, and what for
 static int sTestWaitFor, sTestWaitForMax;
-enum { WAITFOR_NONE, WAITFOR_LOCKED, WAITFOR_FREE, WAITFOR_LINK, WAITFOR_NOLINK };
+enum { WAITFOR_NONE, WAITFOR_LOCKED, WAITFOR_FREE, WAITFOR_LINK, WAITFOR_NOLINK, WAITFOR_ACTION };
+extern bool32 WJPC_TestChoosingAction(void);
 static u32 sTestFrame;
 static u16 *sTestLastGbaImage;
 static bool sTestLockRng;
@@ -483,6 +484,7 @@ static bool TestStep(void)
         case WAITFOR_FREE: met = TandemLink_PlayerFree(); break;
         case WAITFOR_LINK: met = gReceivedRemoteLinkPlayers != 0; break;
         case WAITFOR_NOLINK: met = gReceivedRemoteLinkPlayers == 0; break;
+        case WAITFOR_ACTION: met = WJPC_TestChoosingAction(); break;
         }
         if (!met && --sTestWaitForMax > 0)
         {
@@ -507,11 +509,12 @@ static bool TestStep(void)
         }
         if (!strcmp(cmd, "waitfor"))
         {
-            // waitfor locked|free|link|nolink MAX (test aid): until a script holds the player (a question came up) /
-            // the player is free in the overworld / the game's link has the friend (the trade screen is coming) /
-            // it hasn't - at most MAX frames
+            // waitfor locked|free|link|nolink|action MAX (test aid): until a script holds the player (a question came
+            // up) / the player is free in the overworld / the game's link has the friend (the trade screen is coming) /
+            // it hasn't / a battle waits for the player's FIGHT-BAG-POKEMON-RUN choice - at most MAX frames
             sTestWaitFor = !strcmp(arg1, "locked") ? WAITFOR_LOCKED : !strcmp(arg1, "free") ? WAITFOR_FREE
-                         : !strcmp(arg1, "link") ? WAITFOR_LINK : !strcmp(arg1, "nolink") ? WAITFOR_NOLINK : WAITFOR_NONE;
+                         : !strcmp(arg1, "link") ? WAITFOR_LINK : !strcmp(arg1, "nolink") ? WAITFOR_NOLINK
+                         : !strcmp(arg1, "action") ? WAITFOR_ACTION : WAITFOR_NONE;
             sTestWaitForMax = n > 0 ? n : 3600;
             return true;
         }
@@ -1911,7 +1914,13 @@ int main(int argc, char **argv)
                     sPaceLast = SDL_GetPerformanceCounter();
                 }
             }
-            if (sTestWinShot[0] != '\0' || getenv("WJPC_TEST_WINDOW"))
+            /* (test aid WJPC_TEST_WINDOW_NOBATTLE=1 with WJPC_TEST_WINDOW: not every battle frame - drawing a
+             * battle under the test machine's software OpenGL takes seconds a frame; "winshot" still draws one) */
+            static int sNoBattleDraw = -1;
+            extern bool32 WJPC_TestInBattle(void);
+            if (sNoBattleDraw < 0)
+                sNoBattleDraw = getenv("WJPC_TEST_WINDOW_NOBATTLE") != NULL;
+            if (sTestWinShot[0] != '\0' || (getenv("WJPC_TEST_WINDOW") && !(sNoBattleDraw && WJPC_TestInBattle())))
             {
                 // Test aid: draw exactly like a normal frame (zoom, UI layer, screen options),
                 // and with "winshot FILE" save the whole window.

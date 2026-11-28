@@ -10,9 +10,12 @@
  * (trade.c fills the next part of a party a few frames before the master asks for it). The game's own trade code
  * (the trade screen, the party swap, the save after a trade) then runs unchanged.
  *
- * Asking: A on a friend > Trade (data/scripts/tandem.inc) asks them; they get "NAME wants to trade" and say yes or
- * no; then both open the trade screen. Back to the overworld where they stood when it closes (overworld.c).
+ * Asking: A on a friend > Trade or Battle (data/scripts/tandem.inc) asks them; they get "NAME wants to trade" (or "a
+ * Single Battle" / "a Double Battle") and say yes or no; then both open the trade screen, or start the Cable Club's
+ * link battle. Back to the overworld where they stood when it ends (overworld.c).
  * Brennan 2026-11-27: "Trade or battle anywhere by facing a friend"; "trust your friends" (no checks on Pokemon).
+ * T6 (21:20): the asker picks Single or Double; everyone battles at full health and gets their Pokemon back exactly
+ * as they were afterwards.
  */
 #include "global.h"
 #include "event_data.h"
@@ -27,6 +30,17 @@
 #include "sound.h"
 #include "task.h"
 #include "trade.h"
+#include "battle.h"
+#include "battle_main.h"
+#include "battle_setup.h"
+#include "battle_controllers.h"
+#include "cable_club.h"
+#include "load_save.h"
+#include "pokemon.h"
+#include "script_pokemon_util.h"
+#include "constants/battle.h"
+#include "constants/cable_club.h"
+#include "constants/trainers.h"
 #include "tandem_link.h"
 #include "tandem_overworld.h"
 #include "constants/songs.h"
@@ -36,13 +50,14 @@
 /* what one friend sends another (TandemNet_SendTo's kind) */
 enum
 {
-    P2P_TRADE_ASK = 1,  /* "will you trade?" */
-    P2P_TRADE_YES,
-    P2P_TRADE_NO,
-    P2P_TRADE_BUSY,     /* in a menu, a battle, a script: can't be asked now */
-    P2P_TRADE_CANCEL,   /* the asker stopped waiting */
-    P2P_TRADE_GO,       /* the asker got the yes: both open the trade screen */
-    P2P_TRADE_NOGO,     /* a yes that came too late */
+    P2P_ASK = 1,  /* "will you trade?" */
+    P2P_YES,
+    P2P_NO,
+    P2P_BUSY,     /* in a menu, a battle, a script: can't be asked now */
+    P2P_CANCEL,   /* the asker stopped waiting */
+    P2P_GO,       /* the asker got the yes: both open the trade screen */
+    P2P_NOGO,     /* a yes that came too late */
+    P2P_CANT,           /* a yes, but not enough Pokemon that can battle (a Double Battle needs two) */
     P2P_LINK_OPEN = 16, /* my game opened its link: [my open count] */
     P2P_LINK_CLOSE,     /* ... closed it: [my open count] */
     P2P_LINK_CMD,       /* the other game's command, to the master: [my open count][the one I know of yours][8 numbers] */
@@ -73,19 +88,22 @@ static struct
     u16 usedPeerGen;            /* the friend's opening my last connection used (one connection per opening) */
     u16 openWait;               /* frames open and not connected */
     bool8 playersSaved;         /* the friend's details from the first connection are kept (link.c) */
+    u8 activity;                /* TANDEM_ACTIVITY_*: a trade, or a battle */
     bool8 overflow;             /* too much waiting: the friend's game or mine is stuck */
     /* the master: its own commands and the other game's, waiting to be paired; the other: records waiting */
     u16 mineHead, mineLen, theirsHead, theirsLen;
     u16 mine[LINK_QUEUE][CMD_LENGTH], theirs[LINK_QUEUE][2 * CMD_LENGTH];
 } sLink;
 
+static u8 sAskActivity;                 /* what a friend asking me wants (TANDEM_ACTIVITY_*) */
+static u8 sSessionActivity;             /* what the link being set up is for */
 static u8 sAnswer[TANDEM_MAX_PLAYERS];   /* each friend's last answer (P2P kind), 0 none */
 static s8 sWaitingFor = -1;             /* the friend I asked, while I wait */
 static s8 sAskedBy = -1;                /* a friend asking me */
 static bool8 sAskShown;                 /* ... and the question is on my screen */
 static u16 sAskBusyTimer;
 
-extern const u8 Tandem_EventScript_TradeAsked[];   /* data/scripts/tandem.inc */
+extern const u8 Tandem_EventScript_Asked[];   /* data/scripts/tandem.inc */
 
 /* (test aid: WJPC_TANDEM_DEBUG=1 - the link's openings, connections and asking, to the game's error output) */
 #include <stdio.h>
@@ -124,34 +142,36 @@ static void Pump(void)
             LINK_LOG("from %u: kind %u (%d bytes)\n", from, kind, len);
         switch (kind)
         {
-        case P2P_TRADE_ASK:
+        case P2P_ASK:
             if (sAskedBy < 0 && sWaitingFor < 0 && !sLink.active)
             {
                 sAskedBy = from;
+                sAskActivity = len >= 1 && buf[0] < TANDEM_ACTIVITY_COUNT ? buf[0] : TANDEM_ACTIVITY_TRADE;
                 sAskShown = FALSE;
                 sAskBusyTimer = 0;
                 sAnswer[from] = 0;
             }
             else
-                SendSimple(from, P2P_TRADE_BUSY);
+                SendSimple(from, P2P_BUSY);
             break;
-        case P2P_TRADE_YES:
+        case P2P_YES:
             if (sWaitingFor != (s8)from)
             {
-                SendSimple(from, P2P_TRADE_NOGO);   /* (I stopped waiting) */
+                SendSimple(from, P2P_NOGO);   /* (I stopped waiting) */
                 break;
             }
             sAnswer[from] = kind;
             break;
-        case P2P_TRADE_CANCEL:
+        case P2P_CANCEL:
             if (sAskedBy == (s8)from && !sAskShown)
                 sAskedBy = -1;
             sAnswer[from] = kind;
             break;
-        case P2P_TRADE_NO:
-        case P2P_TRADE_BUSY:
-        case P2P_TRADE_GO:
-        case P2P_TRADE_NOGO:
+        case P2P_NO:
+        case P2P_CANT:
+        case P2P_BUSY:
+        case P2P_GO:
+        case P2P_NOGO:
             sAnswer[from] = kind;
             break;
         case P2P_LINK_OPEN:
@@ -347,7 +367,8 @@ static void LinkFrame(void)
         if (gMain.vblankCounter2 - sLast >= 60)
         {
             sLast = gMain.vblankCounter2;
-            LINK_LOG("waiting: mine %u theirs %u\n", sLink.mineLen, sLink.theirsLen);
+            LINK_LOG("waiting: mine %u theirs %u cb1 %p cb2 %p status %08x\n", sLink.mineLen, sLink.theirsLen,
+                     (void *)gMain.callback1, (void *)gMain.callback2, (unsigned)gLinkStatus);
         }
     }
     if (gone || sLink.overflow)
@@ -366,8 +387,19 @@ bool8 HandleLinkConnection(void)
     Pump();
     if (!sLink.active)
         return FALSE;
-    LinkFrame();
-    LinkMain2(&gMain.heldKeys);
+    {
+        /* (test aid: a frame that took long, and how long the link's part took) */
+        static unsigned sLastMs;
+        unsigned t0 = TandemNet_WallMs(), t1;
+        if (sLastMs != 0 && t0 - sLastMs > 200)
+            LINK_LOG("slow frame: %u ms since the last (cb2 %p)\n", t0 - sLastMs, (void *)gMain.callback2);
+        LinkFrame();
+        LinkMain2(&gMain.heldKeys);
+        t1 = TandemNet_WallMs();
+        if (t1 - t0 > 50)
+            LINK_LOG("slow link part: %u ms\n", t1 - t0);
+        sLastMs = t1;
+    }
     if ((gLinkStatus & LINK_STAT_RECEIVED_NOTHING) && IsSendingKeysOverCable() == TRUE)
         return TRUE;
     return FALSE;
@@ -399,10 +431,19 @@ void TandemLink_SetTradeUnsaved(bool8 unsaved)
 void TandemLink_LeaveAfterError(void)
 {
     bool8 reload = sTradeUnsaved;
+    bool8 battle = sLink.activity != TANDEM_ACTIVITY_TRADE;
 
     LINK_LOG("leaving after the error (%s)\n", reload ? "back to the last save" : "back to the overworld");
     sTradeUnsaved = FALSE;
     TandemLink_EndSession();
+    if (battle)
+    {
+        /* (a battle cut short: the Pokemon and bag as they were before it, as after a finished one) */
+        LoadPlayerParty();
+        SavePlayerBag();
+        gBattleTypeFlags = 0;
+        gMain.inBattle = FALSE;
+    }
     if (reload)
     {
         gMain.state = 0;
@@ -431,6 +472,9 @@ static void BeginSession(u8 peer)
     sLink.active = TRUE;
     sLink.peer = peer;
     sLink.myId = TandemNet_MySlot() < peer ? 0 : 1;
+    /* (each player's link id, sent with their details: link battles put each player's battlers by it -
+     * battle_controllers.c; the Cable Club sets it from the seat taken) */
+    SetLocalLinkPlayerId(sLink.myId);
     LINK_LOG("session with %u, my id %u\n", peer, sLink.myId);
 }
 
@@ -447,49 +491,74 @@ void TandemLink_EndSession(void)
 
 /* ── asking to trade ──────────────────────────────────────────────────── */
 
-/* (the friend in front of me, or the one who asked me) */
-void Tandem_AskTrade(void)
+/* enough Pokemon (not Eggs) for that battle: one, or two for a Double Battle (everyone is healed for it) */
+static bool8 CanBattle(u8 activity)
+{
+    u32 i, n = 0;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG);
+        if (species != SPECIES_NONE && species != SPECIES_EGG)
+            n++;
+    }
+    return n >= (activity == TANDEM_ACTIVITY_DOUBLE ? 2 : 1);
+}
+
+/* VAR_0x8005: the battle chosen (TANDEM_ACTIVITY_*); VAR_RESULT: TRUE if my Pokemon are enough for it */
+void Tandem_CanBattle(void)
+{
+    gSpecialVar_Result = CanBattle(gSpecialVar_0x8005);
+}
+
+/* (the friend in front of me, or the one who asked me) - VAR_0x8005: what for (TANDEM_ACTIVITY_*) */
+void Tandem_Ask(void)
 {
     u8 slot = TandemOverworld_TalkSlot();
+    u8 activity = gSpecialVar_0x8005 < TANDEM_ACTIVITY_COUNT ? gSpecialVar_0x8005 : TANDEM_ACTIVITY_TRADE;
 
     sAnswer[slot] = 0;
     sWaitingFor = slot;
-    SendSimple(slot, P2P_TRADE_ASK);
+    sSessionActivity = activity;
+    TandemNet_SendTo(slot, P2P_ASK, &activity, 1);
 }
 
 #define tTimer data[0]
 
-/* VAR_RESULT: 1 yes (they open the trade screen too), 0 no, 2 busy or no answer, 3 I stopped waiting (B) */
-static void Task_WaitTradeAnswer(u8 taskId)
+/* VAR_RESULT: 1 yes (they start too), 0 no, 2 busy or no answer, 3 I stopped waiting (B), 4 they haven't the
+ * Pokemon for it */
+static void Task_WaitAnswer(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
     u8 slot = TandemOverworld_TalkSlot();
     u16 result = 0xFFFF;
 
-    if (sAnswer[slot] == P2P_TRADE_YES)
+    if (sAnswer[slot] == P2P_YES)
     {
-        SendSimple(slot, P2P_TRADE_GO);
+        SendSimple(slot, P2P_GO);
         result = 1;
     }
-    else if (sAnswer[slot] == P2P_TRADE_NO)
+    else if (sAnswer[slot] == P2P_NO)
         result = 0;
-    else if (sAnswer[slot] == P2P_TRADE_BUSY || !TandemNet_SlotConnected(slot) || ++tTimer > ASK_TIMEOUT)
+    else if (sAnswer[slot] == P2P_CANT)
+        result = 4;
+    else if (sAnswer[slot] == P2P_BUSY || !TandemNet_SlotConnected(slot) || ++tTimer > ASK_TIMEOUT)
         result = 2;
     else if (JOY_NEW(B_BUTTON))
         result = 3;
     if (result == 0xFFFF)
         return;
-    if (result >= 2)
-        SendSimple(slot, P2P_TRADE_CANCEL);
+    if (result == 2 || result == 3)
+        SendSimple(slot, P2P_CANCEL);
     sWaitingFor = -1;
     gSpecialVar_Result = result;
     ScriptContext_Enable();
     DestroyTask(taskId);
 }
 
-void Tandem_WaitTradeAnswer(void)
+void Tandem_WaitAnswer(void)
 {
-    CreateTask(Task_WaitTradeAnswer, 80);
+    CreateTask(Task_WaitAnswer, 80);
 }
 
 /* free in the overworld: no script, no menu, standing still */
@@ -499,7 +568,7 @@ bool8 TandemLink_PlayerFree(void)
         && gPlayerAvatar.tileTransitionState == T_NOT_MOVING && gMain.callback2 == CB2_Overworld;
 }
 
-/* a friend asked: once I'm free in the overworld, the question (Tandem_EventScript_TradeAsked); busy for a few
+/* a friend asked: once I'm free in the overworld, the question (Tandem_EventScript_Asked); busy for a few
  * seconds - in a menu, a battle, a cutscene - and they are told so */
 void TandemLink_OverworldUpdate(void)
 {
@@ -514,31 +583,41 @@ void TandemLink_OverworldUpdate(void)
     {
         sAskShown = TRUE;
         TandemOverworld_SetTalkSlot(sAskedBy);
-        ScriptContext_SetupScript(Tandem_EventScript_TradeAsked);
+        ScriptContext_SetupScript(Tandem_EventScript_Asked);
     }
     else if (++sAskBusyTimer > 3 * 60)
     {
-        SendSimple(sAskedBy, P2P_TRADE_BUSY);
+        SendSimple(sAskedBy, P2P_BUSY);
         sAskedBy = -1;
     }
 }
 
+/* the asker's name (STR_VAR_1) and what they want (VAR_0x8005: TANDEM_ACTIVITY_*) */
 void Tandem_BufferAsker(void)
 {
     Tandem_BufferFriendName();
+    gSpecialVar_0x8005 = sAskActivity;
 }
 
-/* the question's answer (VAR_RESULT, from the yes/no box) to the asker; VAR_RESULT 2 if they stopped waiting */
-void Tandem_AnswerTrade(void)
+/* the question's answer (VAR_RESULT, from the yes/no box) to the asker; VAR_RESULT 2 if they stopped waiting, 3 if
+ * it was yes to a battle my Pokemon aren't enough for */
+void Tandem_Answer(void)
 {
     u8 slot = TandemOverworld_TalkSlot();
 
     /* (2: they gave up while the question was up) */
-    if (sAnswer[slot] == P2P_TRADE_CANCEL || !TandemNet_SlotConnected(slot))
+    if (sAnswer[slot] == P2P_CANCEL || !TandemNet_SlotConnected(slot))
         gSpecialVar_Result = 2;
     sAnswer[slot] = 0;
-    if (gSpecialVar_Result != 2)
-        SendSimple(slot, gSpecialVar_Result == 1 ? P2P_TRADE_YES : P2P_TRADE_NO);
+    if (gSpecialVar_Result == 1 && !CanBattle(sAskActivity))
+    {
+        SendSimple(slot, P2P_CANT);
+        gSpecialVar_Result = 3;
+    }
+    else if (gSpecialVar_Result != 2)
+        SendSimple(slot, gSpecialVar_Result == 1 ? P2P_YES : P2P_NO);
+    if (gSpecialVar_Result == 1)
+        sSessionActivity = sAskActivity;
     if (gSpecialVar_Result != 1)   /* (1: yes, as the yes/no box gives it) */
     {
         sAskedBy = -1;
@@ -547,15 +626,15 @@ void Tandem_AnswerTrade(void)
 }
 
 /* VAR_RESULT: TRUE when the asker starts too */
-static void Task_WaitTradeGo(u8 taskId)
+static void Task_WaitGo(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
     u8 slot = TandemOverworld_TalkSlot();
     bool8 done = FALSE, go = FALSE;
 
-    if (sAnswer[slot] == P2P_TRADE_GO)
+    if (sAnswer[slot] == P2P_GO)
         done = go = TRUE;
-    else if (sAnswer[slot] == P2P_TRADE_NOGO || sAnswer[slot] == P2P_TRADE_CANCEL
+    else if (sAnswer[slot] == P2P_NOGO || sAnswer[slot] == P2P_CANCEL
           || !TandemNet_SlotConnected(slot) || ++tTimer > GO_TIMEOUT)
         done = TRUE;
     if (!done)
@@ -567,9 +646,9 @@ static void Task_WaitTradeGo(u8 taskId)
     DestroyTask(taskId);
 }
 
-void Tandem_WaitTradeGo(void)
+void Tandem_WaitGo(void)
 {
-    CreateTask(Task_WaitTradeGo, 80);
+    CreateTask(Task_WaitGo, 80);
 }
 
 #undef tTimer
@@ -600,10 +679,57 @@ static void Task_StartTrade(u8 taskId)
 }
 #undef tState
 
-void Tandem_StartTrade(void)
+/* a battle: as the Cable Club's seat starts one (cable_club.c Task_StartWiredCableClubBattle), the battle opening the
+ * link itself (battle_controllers.c HandleLinkBattleSetup) */
+#define tState data[0]
+static void Task_StartBattle(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+
+    switch (tState)
+    {
+    case 0:
+        FadeScreen(FADE_TO_BLACK, 0);
+        tState++;
+        break;
+    case 1:
+        if (!gPaletteFade.active)
+        {
+            gLinkType = LINKTYPE_BATTLE;
+            /* (the Cable Club picks the music by the first player's trainer id, which it has from the room's link;
+             * not here yet - the same for both) */
+            PlayMapChosenOrBattleBGM(MUS_VS_TRAINER);
+            gBattleTypeFlags = BATTLE_TYPE_LINK | BATTLE_TYPE_TRAINER;
+            if (sSessionActivity == TANDEM_ACTIVITY_DOUBLE)
+                gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
+            CleanupOverworldWindowsAndTilemaps();
+            TRAINER_BATTLE_PARAM.opponentA = TRAINER_LINK_OPPONENT;
+            SetMainCallback2(CB2_InitBattle);
+            gMain.savedCallback = CB2_ReturnFromCableClubBattle;
+            DestroyTask(taskId);
+        }
+        break;
+    }
+}
+#undef tState
+
+/* both said yes: the link with this friend, then the trade screen or the battle */
+void Tandem_Start(void)
 {
     BeginSession(TandemOverworld_TalkSlot());
+    sLink.activity = sSessionActivity;
     SetWirelessCommType0();
     gSavedLinkPlayerCount = 2;
-    CreateTask(Task_StartTrade, 80);
+    if (sSessionActivity == TANDEM_ACTIVITY_TRADE)
+    {
+        CreateTask(Task_StartTrade, 80);
+        return;
+    }
+    /* (Brennan 21:20: "Full, then put back" - the party as it is kept aside (the Cable Club keeps it the same way,
+     * load_save.c), everyone healed for the battle; CB2_ReturnFromCableClubBattle puts it back) */
+    gSpecialVar_0x8004 = sSessionActivity == TANDEM_ACTIVITY_DOUBLE ? USING_DOUBLE_BATTLE : USING_SINGLE_BATTLE;
+    SavePlayerParty();
+    HealPlayerParty();
+    LoadPlayerBag();
+    CreateTask(Task_StartBattle, 80);
 }

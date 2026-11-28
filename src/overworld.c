@@ -2188,8 +2188,11 @@ void CB2_ReturnToFieldFromMultiplayer(void)
     // Project Tandem (T5): a trade with a friend ends where they stood - back to the overworld as it was, the script
     // that asked them going on (data/scripts/tandem.inc), not a Cable Club room's link mode
     // (the trade screen cleared callback1: the overworld's own again, or the player can't move)
+    // (a battle leaves the link open - the Cable Club's room stays linked; here it ends with the battle)
     if (TandemLink_InSession())
     {
+        if (Link_PCIsOpen())
+            CloseLink();
         TandemLink_EndSession();
         SetMainCallback1(CB1_Overworld);
         CB2_ReturnToFieldContinueScriptPlayMapMusic();

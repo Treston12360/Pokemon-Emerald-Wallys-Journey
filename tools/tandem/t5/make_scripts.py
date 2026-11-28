@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Project Tandem T5 test scripts (WJPC_SCRIPT) for two games, A (asks) and B (answers).
 
-python3 make_scripts.py FASTBOOT.txt OUTDIR   ->  trade_A/B.txt, edge_A/B.txt, leave_A/B.txt
+python3 make_scripts.py FASTBOOT.txt OUTDIR   ->  trade_A/B.txt, edge_A/B.txt, battle_A/B.txt
 FASTBOOT.txt: the button presses from the title screen into the saved game (Continue).
 A stands at Littleroot 10,9 facing B at 11,9 (a spot the town's walkers don't reach). "waitfor" keeps the two
 games in step (sdl2.c test aid): locked = a question came up, free = back in the overworld, link = the trade
@@ -57,3 +57,19 @@ write('edge_B', ["wait 60", "warp 0 9 11 9", "waitfor free 20000",
     "wait 250", "press A 3", "wait 90", "winshot f/f04_gave_up.png", "press A 3", "wait 60", "waitfor free 3000",
     "waitfor locked 30000", "wait 150", "press A 3", "waitfor link 20000", "wait 300", "winshot f/f05_trade_screen.png",
     "wait 120", "quit"])
+
+# T6a: a Single Battle - A's first Pokemon set to 50 HP before; turn 1 A uses its 2nd move, B its 1st; A then runs
+# (gives up); after it, "state hp" in state.log must read as before (50, and the friend's as it was). Fixed waits:
+# run with run_t6.sh (WJPC_TEST_WINDOW_NOBATTLE, so battle frames aren't drawn - seconds each on the test machine)
+write('battle_A', ["wait 60", "warp 0 9 10 9", "waitfor free 20000", "state hp 0 50", "state hp 0", "state hp 1", "wait 900",
+    "press RIGHT 3", "wait 30", "press A 3", "wait 150", "press DOWN 3", "wait 20", "press DOWN 3", "wait 20",
+    "press A 3", "wait 90", "press A 3", "wait 90",
+    "waitfor link 20000", "waitfor action 20000", "wait 120", "press A 3", "wait 120", "press RIGHT 3", "wait 60",
+    "press A 3", "wait 1500"]
+    + ["press RIGHT 3", "wait 30", "press DOWN 3", "wait 30", "press A 3", "wait 600"] * 3
+    + ["waitfor free 20000", "wait 120", "state hp 0", "state hp 1", "winshot f/c12_field.png", "wait 60", "quit"])
+write('battle_B', ["wait 60", "warp 0 9 11 9", "waitfor free 20000", "state hp 0",
+    "waitfor locked 30000", "wait 150", "press A 3", "wait 60",
+    "waitfor link 20000", "waitfor action 20000", "wait 120", "press A 3", "wait 120", "press A 3",
+    "wait 1500", "press A 3", "wait 120", "press A 3",
+    "waitfor free 20000", "wait 120", "state hp 0", "winshot f/d12_field.png", "wait 400000", "quit"])
