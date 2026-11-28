@@ -25,6 +25,7 @@
 #include "field_weather.h"
 #include "wj_outfit.h"
 #include "tandem_overworld.h"
+#include "tandem_link.h"
 #include "constants/event_object_movement.h"
 #include "constants/event_objects.h"
 #include "constants/flags.h"
@@ -536,6 +537,16 @@ const u8 *TandemOverworld_GhostScript(const struct ObjectEvent *objectEvent)
     return Tandem_EventScript_Friend;
 }
 
+u8 TandemOverworld_TalkSlot(void)
+{
+    return sTalkSlot;
+}
+
+void TandemOverworld_SetTalkSlot(u8 slot)
+{
+    sTalkSlot = slot;
+}
+
 void Tandem_BufferFriendName(void)
 {
     if (TandemNet_GetCard(sTalkSlot, &sTalkCard, sizeof(sTalkCard)) == sizeof(sTalkCard))
@@ -621,6 +632,7 @@ void TandemOverworld_Update(void)
         return;
     SendMyPlace();
     SendMyCard();
+    TandemLink_OverworldUpdate();   /* (T5: a friend asking to trade) */
     for (slot = 0; slot < TANDEM_MAX_PLAYERS; slot++)
     {
         if (slot == TandemNet_MySlot())

@@ -8,7 +8,7 @@
 #define STUB_FUNC_QUIET(func) func {}
 #define STUB_FUNC_QUIET_BLOCK(func, block) func { block }
 
-STUB_FUNC_QUIET_BLOCK(bool8 HandleLinkConnection(), return 0;)
+// HandleLinkConnection: src/tandem_link.c (Project Tandem - the link cable over the network; nothing without it)
 STUB_FUNC_QUIET(void Task_InitUnionRoom())
 STUB_FUNC(int MultiBoot(struct MultiBootParam *mp))
 STUB_FUNC(void RegisterRamReset(u32 resetFlags))

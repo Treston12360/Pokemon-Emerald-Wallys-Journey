@@ -50,6 +50,8 @@
 #include "constants/event_objects.h"
 #include "script.h"
 #include "pokemon_storage_system.h"
+#include "tandem_link.h"   /* (Project Tandem T5: no fast forward while linked with a friend) */
+#include "link.h"
 
 extern void (*const gIntrTable[])(void);
 
@@ -409,6 +411,9 @@ static unsigned int sTestFfSpeed; // test script "ff N": fast forward without a 
 static unsigned int sTestFfRealtime; // the same with WJPC_SCRIPT_REALTIME: the real loop's fast forward at N
 static u16 sTestKeys;
 static int sTestHold;
+// "waitfor WHAT MAX" (test aid, Project Tandem T5 - two games linked keep in step): frames left, and what for
+static int sTestWaitFor, sTestWaitForMax;
+enum { WAITFOR_NONE, WAITFOR_LOCKED, WAITFOR_FREE, WAITFOR_LINK, WAITFOR_NOLINK };
 static u32 sTestFrame;
 static u16 *sTestLastGbaImage;
 static bool sTestLockRng;
@@ -469,6 +474,25 @@ static bool TestStep(void)
         sTestHold--;
         return true;
     }
+    if (sTestWaitFor != WAITFOR_NONE)
+    {
+        bool met = false;
+        switch (sTestWaitFor)
+        {
+        case WAITFOR_LOCKED: met = ArePlayerFieldControlsLocked(); break;
+        case WAITFOR_FREE: met = TandemLink_PlayerFree(); break;
+        case WAITFOR_LINK: met = gReceivedRemoteLinkPlayers != 0; break;
+        case WAITFOR_NOLINK: met = gReceivedRemoteLinkPlayers == 0; break;
+        }
+        if (!met && --sTestWaitForMax > 0)
+        {
+            sTestKeys = 0;
+            return true;
+        }
+        printf("waitfor %s at frame %u\n", met ? "met" : "timed out", sTestFrame);
+        fflush(stdout);
+        sTestWaitFor = WAITFOR_NONE;
+    }
     sTestKeys = 0;
     while (fgets(line, sizeof(line), sTestScript))
     {
@@ -479,6 +503,16 @@ static bool TestStep(void)
         if (!strcmp(cmd, "wait"))
         {
             sTestHold = atoi(arg1) - 1;
+            return true;
+        }
+        if (!strcmp(cmd, "waitfor"))
+        {
+            // waitfor locked|free|link|nolink MAX (test aid): until a script holds the player (a question came up) /
+            // the player is free in the overworld / the game's link has the friend (the trade screen is coming) /
+            // it hasn't - at most MAX frames
+            sTestWaitFor = !strcmp(arg1, "locked") ? WAITFOR_LOCKED : !strcmp(arg1, "free") ? WAITFOR_FREE
+                         : !strcmp(arg1, "link") ? WAITFOR_LINK : !strcmp(arg1, "nolink") ? WAITFOR_NOLINK : WAITFOR_NONE;
+            sTestWaitForMax = n > 0 ? n : 3600;
             return true;
         }
         if (!strcmp(cmd, "press"))
@@ -1862,6 +1896,21 @@ int main(int argc, char **argv)
                 gRngValue.c = sTestLockValue[2]; gRngValue.ctr = sTestLockValue[3];
             }
             keyboardKeys = sTestKeys;
+            /* (test aid WJPC_TEST_PACE=1: at most 60 game frames a second, as in real play - for two games linked
+             * together, Project Tandem T5; the test loop otherwise runs as fast as the PC can) */
+            {
+                static int sPace = -1;
+                static Uint64 sPaceLast;
+                if (sPace < 0)
+                    sPace = getenv("WJPC_TEST_PACE") != NULL;
+                if (sPace)
+                {
+                    Uint64 period = SDL_GetPerformanceFrequency() / 60;
+                    while (sPaceLast != 0 && SDL_GetPerformanceCounter() - sPaceLast < period)
+                        SDL_Delay(1);
+                    sPaceLast = SDL_GetPerformanceCounter();
+                }
+            }
             if (sTestWinShot[0] != '\0' || getenv("WJPC_TEST_WINDOW"))
             {
                 // Test aid: draw exactly like a normal frame (zoom, UI layer, screen options),
@@ -3133,6 +3182,13 @@ static void ApplyFastForward(void)
     {
         on = true;
         scale = (double)sTestFfRealtime;
+    }
+    /* Project Tandem T5: linked with a friend (a trade), both games run at the same speed - the game's link code
+     * counts frames, and a game running 4x would leave the friend's far behind */
+    if (TandemLink_InSession())
+    {
+        on = false;
+        scale = 1.0;
     }
 
     if (on != speedUp || scale != timeScale)

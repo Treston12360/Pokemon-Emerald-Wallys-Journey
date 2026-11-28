@@ -139,6 +139,13 @@ int WJPC_TestState(const char *what, int id, int set, int value)
     }
     if (!strcmp(what, "save"))
         return TrySavingData(SAVE_NORMAL);
+    if (!strcmp(what, "party"))
+    {
+        // "state party SLOT": that party Pokemon's species, 0 if none (test aid, Project Tandem T5: after a trade)
+        if (id < 0 || id >= PARTY_SIZE)
+            return -1;
+        return GetMonData(&gParties[B_TRAINER_PLAYER][id], MON_DATA_SPECIES);
+    }
     if (!strcmp(what, "setmove"))
     {
         // "state setmove SLOT MOVE": the first party Pokemon's move in that slot (test aid, POL-25).

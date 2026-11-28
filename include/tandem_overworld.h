@@ -33,6 +33,9 @@ bool8 TandemOverworld_ViewingFriendCard(void);
 bool8 TandemOverworld_FriendCardOutfit(void);
 /* specials (data/specials.inc): gStringVar1 = the friend's name, VAR_0x8004 = whether their card has come; their card */
 void Tandem_BufferFriendName(void);
+/* the friend talked to (or who asked me to trade) */
+u8 TandemOverworld_TalkSlot(void);
+void TandemOverworld_SetTalkSlot(u8 slot);
 void Tandem_ShowFriendCard(void);
 
 #endif

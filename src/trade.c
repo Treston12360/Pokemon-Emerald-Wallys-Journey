@@ -1,4 +1,5 @@
 #include "global.h"
+#include "tandem_link.h"   /* (Project Tandem) */
 #include "malloc.h"
 #include "battle_anim.h"
 #include "battle_interface.h"
@@ -4651,6 +4652,7 @@ static void CB2_UpdateLinkTrade(void)
         DestroySprite(&gSprites[sTradeAnim->monSpriteIds[TRADE_PLAYER]]);
         FreeSpriteOamMatrix(&gSprites[sTradeAnim->monSpriteIds[TRADE_PARTNER]]);
         TradeMons(gSelectedTradeMonPositions[TRADE_PLAYER], gSelectedTradeMonPositions[TRADE_PARTNER] % PARTY_SIZE);
+        TandemLink_SetTradeUnsaved(TRUE);   // (Project Tandem: a broken connection before the save goes back to it)
         if (!IsWirelessTrade())
         {
             sTradeAnim->linkData[0] = LINKCMD_READY_FINISH_TRADE;
@@ -4731,7 +4733,10 @@ static void CB2_SaveAndEndTrade(void)
         if (gWirelessCommType)
             MysteryGift_TryIncrementStat(CARD_STAT_NUM_TRADES, gLinkPlayers[GetMultiplayerId() ^ 1].trainerId);
 
-        SetContinueGameWarpStatusToDynamicWarp();
+        // (Project Tandem: a trade with a friend happens where the player stands - the save continues there, not at a
+        // Cable Club's way out)
+        if (!TandemLink_InSession())
+            SetContinueGameWarpStatusToDynamicWarp();
         LinkFullSave_Init();
         gMain.state++;
         sTradeAnim->timer = 0;
@@ -4783,6 +4788,7 @@ static void CB2_SaveAndEndTrade(void)
         if (_IsLinkTaskFinished())
         {
             LinkFullSave_SetLastSectorSignature();
+            TandemLink_SetTradeUnsaved(FALSE);   // (Project Tandem: saved)
             gMain.state = 5;
         }
         break;

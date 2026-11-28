@@ -1867,3 +1867,11 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   Always Free shape offered. Left for later (retry, or Pay As You Go). 19:17 Brennan: "keep all the info about setting
   up oracle in a list or steps and when i ask about how to set up oracle again provide me that list" - kept in
   docs/TANDEM_ORACLE_SETUP.md (and in memory).
+- 2026-11-27 19:20 Brennan: "continue step 5". T5 done: trading through the game's own trade screen (the Cable Club's),
+  anywhere, by facing a friend > Trade; the friend says yes or no; both come back where they stood; both pick Cancel
+  to leave (as at the Cable Club); the game saves after each trade where the player stands. If the connection breaks:
+  "The connection to your friend was lost" and A carries on (from the last save only if it broke mid-swap). Friends'
+  Pokemon are trusted (13:39) - no extra checks beyond the game's own trade rules.
+- 2026-11-27 20:18-20:46 Brennan asked for a script that keeps trying to make the Oracle computer for him:
+  tools/tandem/cloud/oracle-keep-trying.bat/.ps1 (runs on his PC; docs/TANDEM_ORACLE_SETUP.md). 20:36: every 30 seconds.
+  20:46: Oracle asked to slow down after 3 tries - each try was ~7 requests (the CLI's own retries); now --no-retry.

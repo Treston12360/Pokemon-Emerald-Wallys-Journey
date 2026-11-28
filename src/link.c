@@ -1,4 +1,7 @@
 #include "global.h"
+#ifdef PORTABLE
+#include "tandem_link.h"   /* (Project Tandem) */
+#endif
 #include "m4a.h"
 #include "malloc.h"
 #include "reload_save.h"
@@ -392,6 +395,14 @@ void CloseLink(void)
     sLinkOpen = FALSE;
     DisableSerial();
 }
+
+#ifdef PORTABLE
+// Project Tandem (src/tandem_link.c): whether the game has the link open - the PC's network "cable" starts then
+bool8 Link_PCIsOpen(void)
+{
+    return sLinkOpen;
+}
+#endif
 
 static void TestBlockTransfer(u8 nothing, u8 is, u8 used)
 {
@@ -1267,6 +1278,13 @@ bool8 DoesLinkPlayerCountMatchSaved(void)
     int i;
     u32 count = 0;
 
+#ifdef PORTABLE
+    // Project Tandem: no Cable Club desk took the players' details first - the friend's first connection does (each
+    // connection after it, after each trade, is checked against it as the desk's would be)
+    if (TandemLink_FirstPlayers())
+        SaveLinkPlayers(GetLinkPlayerCount_2());
+#endif
+
     for (i = 0; i < gSavedLinkPlayerCount; i++)
     {
         if (gLinkPlayers[i].trainerId == sSavedLinkPlayers[i].trainerId)
@@ -1624,6 +1642,21 @@ static void CB2_PrintErrorMessage(void)
     switch (gMain.state)
     {
     case  00:
+#ifdef PORTABLE
+        // Project Tandem: the friend's connection, not a cable
+        if (TandemLink_InSession())
+        {
+            LoadBgTiles(0, sCommErrorBg_Gfx, 0x20, 0);
+            FillWindowPixelBuffer(WIN_LINK_ERROR_MID, PIXEL_FILL(0));
+            FillWindowPixelBuffer(WIN_LINK_ERROR_BOTTOM, PIXEL_FILL(0));
+            AddTextPrinterParameterized3(WIN_LINK_ERROR_MID, FONT_SHORT_COPY_1, 2, 0, sTextColors, 0, gText_TandemLinkLost);
+            PutWindowTilemap(WIN_LINK_ERROR_MID);
+            PutWindowTilemap(WIN_LINK_ERROR_BOTTOM);
+            CopyWindowToVram(WIN_LINK_ERROR_MID, COPYWIN_NONE);
+            CopyWindowToVram(WIN_LINK_ERROR_BOTTOM, COPYWIN_FULL);
+            break;
+        }
+#endif
         // Below is only true for the RFU, so the other error
         // type is inferred to be from a wired connection
         if (sLinkErrorBuffer.disconnected)
@@ -1646,6 +1679,12 @@ static void CB2_PrintErrorMessage(void)
         PlaySE(SE_BOO);
         break;
     case 130:
+#ifdef PORTABLE
+        // Project Tandem: a link with a friend broke - A carries on (TandemLink_LeaveAfterError)
+        if (TandemLink_InSession())
+            AddTextPrinterParameterized3(WIN_LINK_ERROR_BOTTOM, FONT_SHORT_COPY_1, 2, 20, sTextColors, 0, gText_TandemABtnContinue);
+        else
+#endif
         if (gWirelessCommType == 2)
             AddTextPrinterParameterized3(WIN_LINK_ERROR_TOP, FONT_SHORT_COPY_1, 2, 20, sTextColors, 0, gText_ABtnTitleScreen);
         else if (gWirelessCommType == 1)
@@ -1654,6 +1693,17 @@ static void CB2_PrintErrorMessage(void)
     }
     if (gMain.state == 160)
     {
+#ifdef PORTABLE
+        if (TandemLink_InSession())
+        {
+            if (JOY_NEW(A_BUTTON))
+            {
+                PlaySE(SE_PIN);
+                TandemLink_LeaveAfterError();
+            }
+        }
+        else
+#endif
         if (gWirelessCommType == 1)
         {
             if (JOY_NEW(A_BUTTON))

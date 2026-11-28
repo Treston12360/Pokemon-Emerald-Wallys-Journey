@@ -1,11 +1,11 @@
 # a minimal Tandem client for tests: python3 test_client.py PORT BUILD NAME [seconds] [invite] [key]
-# (protocol 6: the hello carries an invite code and a key - WallysJourneyServer.exe asks for one of them)
+# (protocol 7 - 6: the hello carries an invite code and a key, WallysJourneyServer.exe asks for one of them; 7: P2P messages)
 import socket, struct, sys, time
 port, build, name = int(sys.argv[1]), sys.argv[2], sys.argv[3]
 secs = float(sys.argv[4]) if len(sys.argv) > 4 else 4
 invite = sys.argv[5] if len(sys.argv) > 5 else ''
 key = sys.argv[6] if len(sys.argv) > 6 else ''
-PROTOCOL = 6
+PROTOCOL = 7
 s = socket.create_connection(('127.0.0.1', port), timeout=5)
 def send(t, p): s.sendall(struct.pack('<HB', len(p) + 1, t) + p)
 send(1, struct.pack('<H', PROTOCOL) + build.encode().ljust(40, b'\0')[:40] + name.encode().ljust(16, b'\0')[:16]

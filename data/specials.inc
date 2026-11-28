@@ -667,3 +667,9 @@ gSpecials::
 	@ Project Tandem (src/tandem_overworld.c): a friend's menu and card
 	def_special Tandem_BufferFriendName
 	def_special Tandem_ShowFriendCard
+	def_special Tandem_AskTrade
+	def_special Tandem_WaitTradeAnswer
+	def_special Tandem_AnswerTrade
+	def_special Tandem_WaitTradeGo
+	def_special Tandem_StartTrade
+	def_special Tandem_BufferAsker

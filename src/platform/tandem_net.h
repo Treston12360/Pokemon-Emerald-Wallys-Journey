@@ -68,6 +68,8 @@ typedef struct
 void TandemNet_SetMyState(const TandemState *state);
 /* my player number (0 = the host) */
 unsigned TandemNet_MySlot(void);
+/* (test aid: the wall clock in milliseconds) */
+unsigned TandemNet_WallMs(void);
 /* TRUE while player `slot` is connected (not me) */
 bool TandemNet_SlotConnected(unsigned slot);
 /* the oldest place of player `slot` not yet taken, in the order they were sent; FALSE when none is waiting */
@@ -79,5 +81,12 @@ bool TandemNet_PopState(unsigned slot, TandemState *out);
 void TandemNet_SetMyCard(const void *card, unsigned len);
 /* friend `slot`'s card into `out` (at most `max` bytes); its length, 0 when none has come yet */
 unsigned TandemNet_GetCard(unsigned slot, void *out, unsigned max);
+
+/* T5: a message to one player (trades, battles), passed on by the server or host; `kind` and the bytes mean what
+ * src/tandem_link.c says. Sent soon (this module's thread); FALSE if the queue is full. */
+#define TANDEM_P2P_MAX 48
+bool TandemNet_SendTo(unsigned slot, unsigned kind, const void *data, unsigned len);
+/* the oldest message that came for me: who from, its kind, its bytes (at most `max`); its length, or -1 when none */
+int TandemNet_PopP2P(unsigned *fromSlot, unsigned *kind, void *data, unsigned max);
 
 #endif

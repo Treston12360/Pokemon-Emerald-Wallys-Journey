@@ -57,7 +57,8 @@ typedef int TSocket;
 static void PutU16(uint8_t *p, unsigned v);
 static unsigned GetU16(const uint8_t *p);
 
-#define PROTOCOL 6   /* (2: STATE; 3: the following Pokemon in STATE; 4: CARD; 5: the outfit in STATE; 6: invite codes) */
+#define PROTOCOL 7   /* (2: STATE; 3: the following Pokemon in STATE; 4: CARD; 5: the outfit in STATE; 6: invite codes;
+                        * 7: P2P - one player to another, for trades and battles) */
 #define BUILD_LEN 40
 #define NAME_LEN 16
 #define INVITE_LEN 16
@@ -70,7 +71,7 @@ static unsigned GetU16(const uint8_t *p);
 #define RETRY_MS 5000
 #define BUF_SIZE 4096
 
-enum { MSG_HELLO = 1, MSG_WELCOME, MSG_REFUSE, MSG_PEER, MSG_TEXT, MSG_PING, MSG_PONG, MSG_BYE, MSG_STATE, MSG_CARD };
+enum { MSG_HELLO = 1, MSG_WELCOME, MSG_REFUSE, MSG_PEER, MSG_TEXT, MSG_PING, MSG_PONG, MSG_BYE, MSG_STATE, MSG_CARD, MSG_P2P };
 #define STATE_LEN 24
 #define STATE_QUEUE 32
 #define STATE_RESEND_MS 1000
@@ -134,6 +135,13 @@ static bool sMyCardDirty;
 static uint32_t sMyCardSentAt;
 static uint8_t sCards[TANDEM_MAX_PLAYERS][TANDEM_CARD_MAX];
 static unsigned sCardLen[TANDEM_MAX_PLAYERS];
+
+/* T5: messages from one player to another (under sLock) - [from][to][kind][bytes]: what came, and what waits to go
+ * (the game thread queues, this thread sends) */
+#define P2P_QUEUE 4096
+typedef struct { uint8_t from, to, kind, len; uint8_t data[TANDEM_P2P_MAX]; } P2PMsg;
+static P2PMsg sP2PIn[P2P_QUEUE], sP2POut[P2P_QUEUE];
+static unsigned sP2PInHead, sP2PInLen, sP2POutHead, sP2POutLen;
 
 /* ── settings ─────────────────────────────────────────────────────────── */
 
@@ -430,6 +438,78 @@ unsigned TandemNet_GetCard(unsigned slot, void *out, unsigned max)
     }
     SDL_UnlockMutex(sLock);
     return len;
+}
+
+static bool P2PPush(P2PMsg *q, unsigned *head, unsigned *len, const P2PMsg *m)
+{
+    if (*len >= P2P_QUEUE)
+        return false;
+    q[(*head + *len) % P2P_QUEUE] = *m;
+    (*len)++;
+    return true;
+}
+
+static bool P2PPop(P2PMsg *q, unsigned *head, unsigned *len, P2PMsg *m)
+{
+    if (*len == 0)
+        return false;
+    *m = q[*head];
+    *head = (*head + 1) % P2P_QUEUE;
+    (*len)--;
+    return true;
+}
+
+bool TandemNet_SendTo(unsigned slot, unsigned kind, const void *data, unsigned len)
+{
+    P2PMsg m;
+    bool ok;
+
+    if (sLock == NULL || slot >= TANDEM_MAX_PLAYERS || len > TANDEM_P2P_MAX)
+        return false;
+    m.from = (uint8_t)sMySlot;
+    m.to = (uint8_t)slot;
+    m.kind = (uint8_t)kind;
+    m.len = (uint8_t)len;
+    if (len > 0)
+        memcpy(m.data, data, len);
+    SDL_LockMutex(sLock);
+    ok = P2PPush(sP2POut, &sP2POutHead, &sP2POutLen, &m);
+    SDL_UnlockMutex(sLock);
+    return ok;
+}
+
+int TandemNet_PopP2P(unsigned *fromSlot, unsigned *kind, void *data, unsigned max)
+{
+    P2PMsg m;
+    bool got;
+
+    if (sLock == NULL)
+        return -1;
+    SDL_LockMutex(sLock);
+    got = P2PPop(sP2PIn, &sP2PInHead, &sP2PInLen, &m);
+    SDL_UnlockMutex(sLock);
+    if (!got)
+        return -1;
+    *fromSlot = m.from;
+    *kind = m.kind;
+    if (m.len > max)
+        m.len = (uint8_t)max;
+    memcpy(data, m.data, m.len);
+    return m.len;
+}
+
+/* (test aid: milliseconds of the clock on the wall, the same in every game on one PC) */
+unsigned TandemNet_WallMs(void)
+{
+#ifdef _WIN32
+    FILETIME ft;
+    GetSystemTimeAsFileTime(&ft);
+    return (unsigned)((((uint64_t)ft.dwHighDateTime << 32) | ft.dwLowDateTime) / 10000);
+#else
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    return (unsigned)((uint64_t)ts.tv_sec * 1000 + ts.tv_nsec / 1000000);
+#endif
 }
 
 unsigned TandemNet_MySlot(void)
@@ -998,6 +1078,35 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
             }
         }
         break;
+    case MSG_P2P:
+        if (len >= 3 && len - 3 <= TANDEM_P2P_MAX && p->hello)
+        {
+            P2PMsg m;
+
+            m.from = IsHub() ? (uint8_t)p->slot : d[0];   /* (a hub knows who it came from) */
+            m.to = d[1];
+            m.kind = d[2];
+            m.len = (uint8_t)(len - 3);
+            memcpy(m.data, d + 3, m.len);
+            if (m.to >= TANDEM_MAX_PLAYERS || m.from >= TANDEM_MAX_PLAYERS)
+                break;
+            if (m.to == sMySlot)
+            {
+                SDL_LockMutex(sLock);
+                P2PPush(sP2PIn, &sP2PInHead, &sP2PInLen, &m);
+                SDL_UnlockMutex(sLock);
+            }
+            else if (IsHub() && sPeers[m.to].used && sPeers[m.to].hello)
+            {
+                uint8_t fwd[3 + TANDEM_P2P_MAX];
+                fwd[0] = m.from;
+                fwd[1] = m.to;
+                fwd[2] = m.kind;
+                memcpy(fwd + 3, m.data, m.len);
+                Send(&sPeers[m.to], MSG_P2P, fwd, 3 + m.len);
+            }
+        }
+        break;
     default:
         break;
     }
@@ -1238,7 +1347,7 @@ static int TandemThread(void *unused)
     {
         fd_set rd, wr;
         /* (a hundredth of a second while anyone is connected: a step is a quarter of a second) */
-        struct timeval tv = { 0, CountPlayers() > 1 ? 10000 : 100000 };
+        struct timeval tv = { 0, CountPlayers() > 1 ? 4000 : 100000 };   /* (4 ms: a trade's link sends every frame) */
         TSocket maxS = 0;
         uint32_t now = SDL_GetTicks();
         bool any = false;
@@ -1319,6 +1428,28 @@ static int TandemThread(void *unused)
                         Send(&sPeers[i], MSG_CARD, msg, 1 + cardLen);
                 sMyCardSentAt = now ? now : 1;
             }
+        }
+        /* (messages for one player: to the hub, which passes them on - or, from the hub, straight to them) */
+        for (;;)
+        {
+            P2PMsg m;
+            bool got;
+            Peer *to;
+            uint8_t msg[3 + TANDEM_P2P_MAX];
+
+            SDL_LockMutex(sLock);
+            got = P2PPop(sP2POut, &sP2POutHead, &sP2POutLen, &m);
+            SDL_UnlockMutex(sLock);
+            if (!got)
+                break;
+            to = IsHub() ? &sPeers[m.to] : &sPeers[0];
+            if (!to->used || !to->hello)
+                continue;
+            msg[0] = m.from;
+            msg[1] = m.to;
+            msg[2] = m.kind;
+            memcpy(msg + 3, m.data, m.len);
+            Send(to, MSG_P2P, msg, 3 + m.len);
         }
         for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
         {

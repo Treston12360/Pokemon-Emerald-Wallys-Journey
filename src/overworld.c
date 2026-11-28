@@ -1,5 +1,6 @@
 #include "global.h"
 #include "tandem_overworld.h"   /* (Project Tandem) */
+#include "tandem_link.h"
 #include "wj_outfit.h"
 #include "battle_transition.h"
 #include "overworld.h"
@@ -2184,6 +2185,16 @@ static void CB2_ReturnToFieldLink(void)
 
 void CB2_ReturnToFieldFromMultiplayer(void)
 {
+    // Project Tandem (T5): a trade with a friend ends where they stood - back to the overworld as it was, the script
+    // that asked them going on (data/scripts/tandem.inc), not a Cable Club room's link mode
+    // (the trade screen cleared callback1: the overworld's own again, or the player can't move)
+    if (TandemLink_InSession())
+    {
+        TandemLink_EndSession();
+        SetMainCallback1(CB1_Overworld);
+        CB2_ReturnToFieldContinueScriptPlayMapMusic();
+        return;
+    }
     FieldClearVBlankHBlankCallbacks();
     StopMapMusic();
     SetMainCallback1(CB1_OverworldLink);
