@@ -183,7 +183,9 @@ EventSnippet_DoTrainerBattle::
 	return
 
 EventSnippet_DoRematchTrainerBattle::
+	call Tandem_EventScript_BeforeTrainerBattle  @ Project Tandem T6b: rematches too (Brennan 2026-11-28 02:40)
 	special BattleSetup_StartRematchBattle
+	call Tandem_EventScript_AfterTrainerBattle
 	return
 
 EventSnippet_EndTrainerBattle::

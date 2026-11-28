@@ -165,6 +165,29 @@ int WJPC_TestState(const char *what, int id, int set, int value)
             return -1;
         return GetMonData(&gParties[B_TRAINER_PLAYER][id], MON_DATA_SPECIES);
     }
+    if (!strcmp(what, "rematch"))
+    {
+        // "state rematch TRAINER [0/1]": that first-battle trainer's rematch is ready (Match Call; test aid, Project
+        // Tandem T6b: team-up rematches)
+        extern s32 FirstBattleTrainerIdToRematchTableId(const struct RematchTrainer *table, u16 trainerId);
+        s32 t = FirstBattleTrainerIdToRematchTableId(gRematchTable, id);
+        if (t < 0)
+            return -1;
+        if (set)
+            gSaveBlock1Ptr->trainerRematches[t] = value;
+        {
+            extern bool8 ShouldTryRematchBattleForTrainerId(u16 trainerId);
+            FILE *f = fopen("state.log", "a");
+            if (f != NULL)
+            {
+                extern bool8 ShouldTryRematchBattle(void);
+                fprintf(f, "  (rematch table %d, should try %d; battle param opponent %u: %d)\n", (int)t,
+                        ShouldTryRematchBattleForTrainerId(id), TRAINER_BATTLE_PARAM.opponentA, ShouldTryRematchBattle());
+                fclose(f);
+            }
+        }
+        return gSaveBlock1Ptr->trainerRematches[t];
+    }
     if (!strcmp(what, "money"))
     {
         // "state money 0": the player's money (test aid, Project Tandem T6b: a lost team-up costs it)

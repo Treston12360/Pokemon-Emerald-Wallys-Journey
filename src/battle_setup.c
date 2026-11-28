@@ -1805,6 +1805,13 @@ void BattleSetup_StartRematchBattle(void)
     if (GetTrainerBattleType(TRAINER_BATTLE_PARAM.opponentA) == TRAINER_BATTLE_TYPE_DOUBLES)
         gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
     
+    // Project Tandem T6b: a rematch can be a team-up too (Brennan 2026-11-28 02:40: "just for rematches") - as in
+    // BattleSetup_StartTrainerBattle; the rematch's own end (CB2_EndRematchBattle) is this game's only
+    if (TandemLink_TeamUpPending())
+    {
+        gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_LINK | BATTLE_TYPE_MULTI | BATTLE_TYPE_DOUBLE | BATTLE_TYPE_TANDEM_TEAMUP;
+        TandemLink_BeginTeamUpBattle();
+    }
     gMain.savedCallback = CB2_EndRematchBattle;
     DoTrainerBattle();
     ScriptContext_Stop();

@@ -1895,3 +1895,8 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
   team-up - "should cost money like a normal loss yes" (each player pays as for a normal loss: badges x highest level,
   "You gave N to the winner"); (3) items - "yes items if possible" (the Bag in team-up battles); (4) rematches staying
   one-player - "thats fine for now", asked how hard it would be to make more battles team-up.
+- 2026-11-28 03:26 Brennan: items - "can these problems be fixed where they work correctly?" (yes - it needs the item
+  code in Project ARIA's battle_script_commands.c: request written in WORK_CLAIMS.md); more team-up battles - "just for
+  rematches not for the one player battles" (Gyms, rival, Aqua/Magma, Elite Four, Champion, story stay one-player).
+  03:27: "continue on project tandem and work on all things and steps and leave the questions until i message you
+  saying i am awake."

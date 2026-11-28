@@ -131,3 +131,30 @@ write('teamlose_B', ["wait 60", "warp 0 17 24 14", "waitfor free 20000", "state 
     "waitfor nolink 60000", "wait 900", "winshot f/m08_back.png"]
     + [x.format("m1") for x in tu_after]
     + ["state money 0", "state trainer 615", "state hp 0", "wait 400000", "quit"])
+
+# T6b, a rematch (Brennan 2026-11-28 02:40: team-up rematches): Youngster Calvin (Route 102, 33,14, rematch made ready
+# with "state rematch"); A at 33,15 below him, B at 32,15. As teamup_A/B otherwise (Swift, both foes at 1 HP).
+# state.log: Calvin's rematch flag (A: back to 0 after a won rematch; B: untouched), Exp.
+tr_a = ["wait 60", "warp 0 17 33 15", "waitfor free 20000", "state trainer 318 1", "state rematch 318 1",
+    "state setmove 0 129", "state exp 0", "wait 900",
+    "press LEFT 3", "wait 30", "press A 3", "wait 150", "press DOWN 3", "wait 20", "press DOWN 3", "wait 20", "press DOWN 3",
+    "wait 20", "press A 3", "wait 1290", "press A 3", "wait 90", "press A 3", "wait 90", "waitfor free 3000", "wait 60",
+    "press UP 3", "wait 30", "press A 3", "wait 240", "winshot f/r05_calvin.png", "press A 3", "wait 120", "press A 3",
+    "wait 120", "winshot f/r06_calling.png", "press A 3", "wait 120",
+    "waitfor link 30000", "waitfor action 30000", "battlerhp 1 1", "battlerhp 3 1", "wait 60", "winshot f/r07_battle.png",
+    "press A 3", "wait 120", "press A 3", "wait 120", "press A 3", "wait 120", "press A 3", "wait 120", "press A 3"] + \
+    sum([["wait 60", "winshot f/r2%02d.png" % k] for k in range(30)], []) + [
+    "waitfor nolink 60000", "wait 600", "winshot f/r08_back.png"]
+write('teamrematch_A', tr_a + [x.format("r1") for x in tu_after]
+    + ["state rematch 318", "state exp 0", "state trainer 318", "wait 60", "quit"])
+write('teamrematch_B', ["wait 60", "warp 0 17 32 15", "waitfor free 20000", "state setmove 0 129", "state exp 0",
+    "state rematch 318",
+    "waitfor locked 30000", "wait 150", "press A 3", "wait 90", "press A 3", "wait 90", "press A 3", "wait 240",
+    "press A 3", "wait 90", "press A 3", "wait 90", "waitfor free 3000",
+    "waitfor locked 30000", "wait 150", "winshot f/s04_join_q.png", "press A 3", "wait 90", "press A 3",
+    "waitfor link 30000", "waitfor action 30000", "wait 30", "press A 3", "wait 120", "press A 3", "wait 120", "press A 3",
+    "wait 120", "press A 3", "wait 120", "press A 3"]
+    + sum([["wait 60", "winshot f/s2%02d.png" % k] for k in range(30)], []) + [
+    "waitfor nolink 60000", "wait 600", "winshot f/s07_back.png"]
+    + [x.format("s1") for x in tu_after]
+    + ["state rematch 318", "state exp 0", "wait 400000", "quit"])
