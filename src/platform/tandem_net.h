@@ -53,6 +53,8 @@ typedef struct
     unsigned short followerGfx;
     short followerX, followerY;
     unsigned char followerFacing;
+    /* T4: the player's outfit (Wally's Journey outfits): its number, 0xFF when none; skin tone and two colours */
+    unsigned char outfit, outfitSkin, outfitColour1, outfitColour2;
 } TandemState;
 
 /* my place, every overworld frame (the network sends it when it changes) */
@@ -63,5 +65,12 @@ unsigned TandemNet_MySlot(void);
 bool TandemNet_SlotConnected(unsigned slot);
 /* the oldest place of player `slot` not yet taken, in the order they were sent; FALSE when none is waiting */
 bool TandemNet_PopState(unsigned slot, TandemState *out);
+
+/* T4: player cards - opaque bytes to this module (src/tandem_overworld.c makes and reads them; the same build on
+ * every PC, so the same layout). Mine is sent when it changes and every few seconds; a friend's latest is kept. */
+#define TANDEM_CARD_MAX 200
+void TandemNet_SetMyCard(const void *card, unsigned len);
+/* friend `slot`'s card into `out` (at most `max` bytes); its length, 0 when none has come yet */
+unsigned TandemNet_GetCard(unsigned slot, void *out, unsigned max);
 
 #endif

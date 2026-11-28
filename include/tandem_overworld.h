@@ -18,4 +18,21 @@ void TandemOverworld_Update(void);
 /* TRUE for a friend's ghost: blocks nobody, nobody blocks it, kept out of the saved slots */
 bool8 TandemOverworld_IsGhost(const struct ObjectEvent *objectEvent);
 
+/* T4: A on a ghost (field_control_avatar.c) - a friend's menu (data/scripts/tandem.inc), or NULL for their Pokemon */
+const u8 *TandemOverworld_GhostScript(const struct ObjectEvent *objectEvent);
+/* T4: TRUE while a friend's card is shown (trainer_card.c): `badgeCount` filled with their badges, not mine */
+bool8 TandemOverworld_FriendCardBadges(u8 *badgeCount);
+/* T4: friends in their own outfits - their sprites have their own graphics ids (never the Brendan / May ids my
+ * outfit replaces) and palettes (OBJ_EVENT_PAL_TAG_TANDEM_FRIEND + slot) */
+extern u16 gTandemFriendOwPal[3][16];
+bool8 TandemOverworld_IsGhostGfx(u16 graphicsId);
+/* a friend's sprite: their outfit's, or NULL with *graphicsId set to their plain sprite */
+const struct ObjectEventGraphicsInfo *TandemOverworld_GhostGfxInfo(u16 *graphicsId);
+/* TRUE while a friend's card is shown; and whether it shows their outfit (TRAINER_PIC_WJ_PLAYER, theirs for now) */
+bool8 TandemOverworld_ViewingFriendCard(void);
+bool8 TandemOverworld_FriendCardOutfit(void);
+/* specials (data/specials.inc): gStringVar1 = the friend's name, VAR_0x8004 = whether their card has come; their card */
+void Tandem_BufferFriendName(void);
+void Tandem_ShowFriendCard(void);
+
 #endif

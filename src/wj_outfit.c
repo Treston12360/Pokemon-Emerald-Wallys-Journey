@@ -131,13 +131,18 @@ u32 WJ_OutfitId(void)
     return gSaveBlock3Ptr->wjOutfit;
 }
 
-static void GetLayerColours(u16 *out)
+// (Project Tandem: also a friend's outfit, from its colour choices rather than the save's)
+static void LayerColoursFrom(u32 skin, u32 c1, u32 c2, u16 *out)
 {
-    u32 skin = gSaveBlock3Ptr->wjOutfitSkin, c1 = gSaveBlock3Ptr->wjOutfitColour[0], c2 = gSaveBlock3Ptr->wjOutfitColour[1];
     out[LAYER_NONE] = 0xFFFF;
     out[LAYER_SKIN] = (skin && skin < ARRAY_COUNT(sSkinTones)) ? RGB(sSkinTones[skin].r, sSkinTones[skin].g, sSkinTones[skin].b) : 0xFFFF;
     out[LAYER_PRIMARY] = (c1 && c1 < ARRAY_COUNT(sColours)) ? RGB(sColours[c1].r, sColours[c1].g, sColours[c1].b) : 0xFFFF;
     out[LAYER_SECONDARY] = (c2 && c2 < ARRAY_COUNT(sColours)) ? RGB(sColours[c2].r, sColours[c2].g, sColours[c2].b) : 0xFFFF;
+}
+
+static void GetLayerColours(u16 *out)
+{
+    LayerColoursFrom(gSaveBlock3Ptr->wjOutfitSkin, gSaveBlock3Ptr->wjOutfitColour[0], gSaveBlock3Ptr->wjOutfitColour[1], out);
 }
 
 static u32 Grey(u16 c)
@@ -188,6 +193,40 @@ void WJ_OutfitRefresh(void)
         ApplyLayers(info->backPal, info->backLayers, colours, gWJPlayerBackPal);
     memcpy(gWJPlayerFrontPicBuf, &gWJOutfitFrontPics[gSaveBlock3Ptr->wjOutfit], sizeof(struct TrainerFrontPicInfo));
     memcpy(gWJPlayerBackPicBuf, &gWJOutfitBackPics[gSaveBlock3Ptr->wjOutfit], sizeof(struct TrainerBackPicInfo));
+}
+
+// Project Tandem (src/tandem_overworld.c): my outfit, to send to friends; FALSE when I wear none.
+bool32 WJ_OutfitMine(u8 *outfit, u8 *skin, u8 *colour1, u8 *colour2)
+{
+    if (!WJ_OutfitActive())
+        return FALSE;
+    *outfit = gSaveBlock3Ptr->wjOutfit;
+    *skin = gSaveBlock3Ptr->wjOutfitSkin;
+    *colour1 = gSaveBlock3Ptr->wjOutfitColour[0];
+    *colour2 = gSaveBlock3Ptr->wjOutfitColour[1];
+    return TRUE;
+}
+
+// Project Tandem: a friend's outfit in the overworld - its colours (as WJ_OutfitRefresh makes mine).
+void WJ_OutfitOwPaletteFor(u32 outfit, u32 skin, u32 colour1, u32 colour2, u16 *out)
+{
+    u16 colours[4];
+    if (outfit >= WJ_OUTFIT_COUNT)
+        return;
+    LayerColoursFrom(skin, colour1, colour2, colours);
+    ApplyLayers(sWJOutfits[outfit].owPal, sWJOutfits[outfit].owLayers, colours, out);
+}
+
+// Project Tandem: a friend's card - their outfit's picture and colours in place of mine (TRAINER_PIC_WJ_PLAYER), until
+// WJ_OutfitRefresh puts mine back.
+void WJ_OutfitShowFriendFront(u32 outfit, u32 skin, u32 colour1, u32 colour2)
+{
+    u16 colours[4];
+    if (outfit >= WJ_OUTFIT_COUNT)
+        return;
+    LayerColoursFrom(skin, colour1, colour2, colours);
+    ApplyLayers(sWJOutfits[outfit].frontPal, sWJOutfits[outfit].frontLayers, colours, gWJPlayerFrontPal);
+    memcpy(gWJPlayerFrontPicBuf, &gWJOutfitFrontPics[outfit], sizeof(struct TrainerFrontPicInfo));
 }
 
 void WJ_OutfitOnNewGame(void)

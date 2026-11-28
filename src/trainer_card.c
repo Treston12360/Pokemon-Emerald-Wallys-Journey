@@ -1,4 +1,5 @@
 #include "global.h"
+#include "tandem_overworld.h"   /* (Project Tandem) */
 #include "wj_outfit.h"
 #include "scanline_effect.h"
 #include "palette.h"
@@ -880,6 +881,9 @@ static void SetDataFromTrainerCard(void)
     if (sData->trainerCard.battleTowerWins || sData->trainerCard.battleTowerStraightWins)
         sData->hasBattleTowerWins++;
 
+    // Project Tandem (T4): a friend's card shows their badges (sent with it), not the ones in my save
+    if (sData->isLink && TandemOverworld_FriendCardBadges(sData->badgeCount))
+        return;
     // Project ARIA: in Kanto your own card is the Kanto (FireRed) card and shows the Kanto badges.
     u16 firstBadge = (!sData->isLink && IN_KANTO_MAP) ? FLAG_KANTO_BADGE01_GET : FLAG_BADGE01_GET;
     for (i = 0, badgeFlag = firstBadge; badgeFlag < firstBadge + NUM_BADGES; badgeFlag++, i++)
@@ -1195,7 +1199,8 @@ static void PrintProfilePhraseOnCard(void)
     static const u8 yOffsetsLine1[] = {113, 104};
     static const u8 yOffsetsLine2[] = {129, 120};
 
-    if (sData->isLink)
+    // (Project Tandem: a friend's card has their badges on that line instead, as your own card does)
+    if (sData->isLink && !TandemOverworld_ViewingFriendCard())
     {
         AddTextPrinterParameterized3(WIN_CARD_TEXT, FONT_NORMAL, 8, yOffsetsLine1[sData->isHoenn], sTrainerCardTextColors, TEXT_SKIP_DRAW, sData->easyChatProfile[0]);
         AddTextPrinterParameterized3(WIN_CARD_TEXT, FONT_NORMAL, GetStringWidth(FONT_NORMAL, sData->easyChatProfile[0], 0) + 14, yOffsetsLine1[sData->isHoenn], sTrainerCardTextColors, TEXT_SKIP_DRAW, sData->easyChatProfile[1]);
@@ -1605,7 +1610,7 @@ static void DrawStarsAndBadgesOnCard(void)
     u8 palNum = 3;
 
     FillBgTilemapBufferRect(3, 143, 15, yOffsets[sData->isHoenn], sData->trainerCard.stars, 1, 4);
-    if (!sData->isLink)
+    if (!sData->isLink || TandemOverworld_ViewingFriendCard())   // (Project Tandem: a friend's card shows their badges)
     {
         x = 4;
         y = IS_FRLG ? 16 : 15;
@@ -2001,7 +2006,8 @@ static void CreateTrainerCardTrainerPic(void)
         // Wally's Journey: your own card shows your outfit.
         // Project ARIA: your own Kanto card (shown in Kanto) still shows you, not Red/Leaf.
         bool32 ownCard = !sData->isLink;
-        CreateTrainerCardTrainerPicSprite((ownCard && WJ_OutfitActive()) ? TRAINER_PIC_WJ_PLAYER
+        // Project Tandem: a friend's card shows their outfit (TandemOverworld_FriendCardOutfit puts it in for now)
+        CreateTrainerCardTrainerPicSprite(((ownCard && WJ_OutfitActive()) || TandemOverworld_FriendCardOutfit()) ? TRAINER_PIC_WJ_PLAYER
                                           : FacilityClassToPicIndex(sTrainerPicFacilityClass[ownCard ? CARD_TYPE_EMERALD : sData->cardType][sData->trainerCard.gender]),
                     TRUE,
                     sTrainerPicOffset[sData->isHoenn][sData->trainerCard.gender][0],

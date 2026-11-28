@@ -57,7 +57,7 @@ typedef int TSocket;
 static void PutU16(uint8_t *p, unsigned v);
 static unsigned GetU16(const uint8_t *p);
 
-#define PROTOCOL 3   /* (2: STATE; 3: the following Pokemon in STATE) */
+#define PROTOCOL 5   /* (2: STATE; 3: the following Pokemon in STATE; 4: CARD; 5: the outfit in STATE) */
 #define BUILD_LEN 40
 #define NAME_LEN 16
 #define TEXT_LEN 96
@@ -67,10 +67,11 @@ static unsigned GetU16(const uint8_t *p);
 #define RETRY_MS 5000
 #define BUF_SIZE 4096
 
-enum { MSG_HELLO = 1, MSG_WELCOME, MSG_REFUSE, MSG_PEER, MSG_TEXT, MSG_PING, MSG_PONG, MSG_BYE, MSG_STATE };
-#define STATE_LEN 20
+enum { MSG_HELLO = 1, MSG_WELCOME, MSG_REFUSE, MSG_PEER, MSG_TEXT, MSG_PING, MSG_PONG, MSG_BYE, MSG_STATE, MSG_CARD };
+#define STATE_LEN 24
 #define STATE_QUEUE 32
 #define STATE_RESEND_MS 1000
+#define CARD_RESEND_MS 5000   /* (T4: each player's card, again every few seconds - a friend who joins later gets it too) */
 enum { MODE_OFF, MODE_HOST, MODE_JOIN };
 
 typedef struct
@@ -109,6 +110,14 @@ static uint32_t sMySentAt;
 static TandemState sQueue[TANDEM_MAX_PLAYERS][STATE_QUEUE];
 static unsigned sQHead[TANDEM_MAX_PLAYERS], sQLen[TANDEM_MAX_PLAYERS];
 static bool sConnected[TANDEM_MAX_PLAYERS];   /* (by slot, not me; read by the game thread) */
+
+/* T4: player cards (under sLock): mine, to send; each friend's latest, by slot (length 0: none yet) */
+static uint8_t sMyCard[TANDEM_CARD_MAX];
+static unsigned sMyCardLen;
+static bool sMyCardDirty;
+static uint32_t sMyCardSentAt;
+static uint8_t sCards[TANDEM_MAX_PLAYERS][TANDEM_CARD_MAX];
+static unsigned sCardLen[TANDEM_MAX_PLAYERS];
 
 /* ── settings ─────────────────────────────────────────────────────────── */
 
@@ -307,6 +316,36 @@ void TandemNet_SetMyState(const TandemState *state)
     SDL_UnlockMutex(sLock);
 }
 
+void TandemNet_SetMyCard(const void *card, unsigned len)
+{
+    if (sLock == NULL || len > TANDEM_CARD_MAX)
+        return;
+    SDL_LockMutex(sLock);
+    if (len != sMyCardLen || memcmp(card, sMyCard, len) != 0)
+    {
+        memcpy(sMyCard, card, len);
+        sMyCardLen = len;
+        sMyCardDirty = true;
+    }
+    SDL_UnlockMutex(sLock);
+}
+
+unsigned TandemNet_GetCard(unsigned slot, void *out, unsigned max)
+{
+    unsigned len = 0;
+
+    if (sLock == NULL || slot >= TANDEM_MAX_PLAYERS)
+        return 0;
+    SDL_LockMutex(sLock);
+    if (sCardLen[slot] <= max)
+    {
+        len = sCardLen[slot];
+        memcpy(out, sCards[slot], len);
+    }
+    SDL_UnlockMutex(sLock);
+    return len;
+}
+
 unsigned TandemNet_MySlot(void)
 {
     return sMySlot;
@@ -363,7 +402,7 @@ static void SetConnected(unsigned slot, bool on)
     SDL_LockMutex(sLock);
     sConnected[slot] = on;
     if (!on)
-        sQLen[slot] = 0;
+        sQLen[slot] = sCardLen[slot] = 0;
     SDL_UnlockMutex(sLock);
 }
 
@@ -383,6 +422,10 @@ static void EncodeState(uint8_t *p, unsigned slot, const TandemState *st)
     PutU16(p + 15, (uint16_t)st->followerX);
     PutU16(p + 17, (uint16_t)st->followerY);
     p[19] = st->followerFacing;
+    p[20] = st->outfit;
+    p[21] = st->outfitSkin;
+    p[22] = st->outfitColour1;
+    p[23] = st->outfitColour2;
 }
 
 static void DecodeState(const uint8_t *p, TandemState *st)
@@ -401,6 +444,10 @@ static void DecodeState(const uint8_t *p, TandemState *st)
     st->followerX = (short)GetU16(p + 15);
     st->followerY = (short)GetU16(p + 17);
     st->followerFacing = p[19];
+    st->outfit = p[20];
+    st->outfitSkin = p[21];
+    st->outfitColour1 = p[22];
+    st->outfitColour2 = p[23];
 }
 
 /* ── sockets ──────────────────────────────────────────────────────────── */
@@ -699,6 +746,28 @@ static void HandleMessage(Peer *p, unsigned type, const uint8_t *d, unsigned len
             }
         }
         break;
+    case MSG_CARD:
+        if (len >= 1 && len - 1 <= TANDEM_CARD_MAX && p->hello)
+        {
+            unsigned slot = sMode == MODE_HOST ? p->slot : d[0];
+
+            if (slot >= TANDEM_MAX_PLAYERS || slot == sMySlot)
+                break;
+            SDL_LockMutex(sLock);
+            memcpy(sCards[slot], d + 1, len - 1);
+            sCardLen[slot] = len - 1;
+            SDL_UnlockMutex(sLock);
+            if (sMode == MODE_HOST)
+            {
+                uint8_t fwd[1 + TANDEM_CARD_MAX];
+                memcpy(fwd, d, len);
+                fwd[0] = (uint8_t)slot;
+                for (unsigned i = 1; i < TANDEM_MAX_PLAYERS; i++)
+                    if (&sPeers[i] != p && sPeers[i].used && sPeers[i].hello)
+                        Send(&sPeers[i], MSG_CARD, fwd, len);
+            }
+        }
+        break;
     default:
         break;
     }
@@ -980,6 +1049,26 @@ static int TandemThread(void *unused)
                     if (sPeers[i].used && sPeers[i].hello)
                         Send(&sPeers[i], MSG_STATE, msg, STATE_LEN);
                 sMySentAt = now ? now : 1;
+            }
+        }
+        /* (my card, when it changed, and every few seconds anyway) */
+        {
+            uint8_t msg[1 + TANDEM_CARD_MAX];
+            unsigned cardLen;
+            bool send;
+            SDL_LockMutex(sLock);
+            cardLen = sMyCardLen;
+            memcpy(msg + 1, sMyCard, cardLen);
+            send = cardLen > 0 && (sMyCardDirty || sMyCardSentAt == 0 || (int32_t)(now - sMyCardSentAt) >= CARD_RESEND_MS);
+            sMyCardDirty = false;
+            SDL_UnlockMutex(sLock);
+            if (send && CountPlayers() > 1)
+            {
+                msg[0] = (uint8_t)sMySlot;
+                for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)
+                    if (sPeers[i].used && sPeers[i].hello)
+                        Send(&sPeers[i], MSG_CARD, msg, 1 + cardLen);
+                sMyCardSentAt = now ? now : 1;
             }
         }
         for (unsigned i = 0; i < TANDEM_MAX_PLAYERS; i++)

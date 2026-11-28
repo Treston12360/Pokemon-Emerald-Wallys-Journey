@@ -664,3 +664,6 @@ gSpecials::
 	def_special WallyJourney_WallySurfEnd
 	def_special StartGacha
 	def_special IsInKantoMap
+	@ Project Tandem (src/tandem_overworld.c): a friend's menu and card
+	def_special Tandem_BufferFriendName
+	def_special Tandem_ShowFriendCard

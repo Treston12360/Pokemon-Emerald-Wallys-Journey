@@ -1746,3 +1746,4 @@ EventScript_PalletTown_PlayersHouse_2F_TurnOnPC::
 	.include "data/scripts/apricorn_tree.inc"
 	.include "data/scripts/wild_encounter.inc"
 	.include "data/scripts/wally_journey.inc"
+	.include "data/scripts/tandem.inc"   @ Project Tandem: a friend's menu

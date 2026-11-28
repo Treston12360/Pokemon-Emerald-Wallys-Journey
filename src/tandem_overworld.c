@@ -15,11 +15,21 @@
 #include "field_player_avatar.h"
 #include "fieldmap.h"
 #include "overworld.h"
+#include "event_data.h"
+#include "link.h"
+#include "script.h"
 #include "sprite.h"
+#include "string_util.h"
+#include "trainer_card.h"
+#include "palette.h"
+#include "field_weather.h"
+#include "wj_outfit.h"
 #include "tandem_overworld.h"
 #include "constants/event_object_movement.h"
 #include "constants/event_objects.h"
+#include "constants/flags.h"
 #include "constants/trainer_types.h"
+#include "constants/wj_outfits.h"
 #include "platform/tandem_net.h"
 
 /* steps waiting to be walked, per friend; more than this behind and the ghost jumps to the latest */
@@ -127,6 +137,8 @@ static void SendMyPlace(void)
         me.speed = MySpeed();
         me.gfx = player->graphicsId;
         me.elevation = player->currentElevation;
+        if (!WJ_OutfitMine(&me.outfit, &me.outfitSkin, &me.outfitColour1, &me.outfitColour2))
+            me.outfit = 0xFF;
         {
             struct ObjectEvent *pet = GetFollowerObject();
 
@@ -289,6 +301,85 @@ static void UpdatePet(unsigned slot, const TandemState *to, bool8 snap)
     StepGhost(pet, to->followerX, to->followerY, facing, to->speed, to->elevation);
 }
 
+/* ── T4: friends in their own outfits ────────────────────────────────── */
+
+/* A friend's sprite has a graphics id of its own (never Brendan's or May's, which the game draws in MY outfit when I
+ * wear one): one per player and per player sprite - the 8 sprites of each outfit, as Brendan's and as May's */
+#define GHOST_GFX_BASE 0xE00
+#define GHOST_GFX_PER_FRIEND 16
+STATIC_ASSERT(GHOST_GFX_BASE > OBJ_EVENT_GFX_VAR_F && GHOST_GFX_BASE + TANDEM_MAX_PLAYERS * GHOST_GFX_PER_FRIEND <= OBJ_EVENT_MON_FEMALE,
+              TandemGhostGfxFree);
+STATIC_ASSERT(TANDEM_MAX_PLAYERS == 3, TandemFriendPalettes);
+static const u16 sPlayerGfx[GHOST_GFX_PER_FRIEND] =
+{
+    /* (in the outfits' order: WJ_OUTFIT_GFX_NORMAL ... WJ_OUTFIT_GFX_DECORATING) */
+    OBJ_EVENT_GFX_BRENDAN_NORMAL, OBJ_EVENT_GFX_BRENDAN_MACH_BIKE, OBJ_EVENT_GFX_BRENDAN_ACRO_BIKE, OBJ_EVENT_GFX_BRENDAN_SURFING,
+    OBJ_EVENT_GFX_BRENDAN_FIELD_MOVE, OBJ_EVENT_GFX_BRENDAN_FISHING, OBJ_EVENT_GFX_BRENDAN_WATERING, OBJ_EVENT_GFX_BRENDAN_DECORATING,
+    OBJ_EVENT_GFX_MAY_NORMAL, OBJ_EVENT_GFX_MAY_MACH_BIKE, OBJ_EVENT_GFX_MAY_ACRO_BIKE, OBJ_EVENT_GFX_MAY_SURFING,
+    OBJ_EVENT_GFX_MAY_FIELD_MOVE, OBJ_EVENT_GFX_MAY_FISHING, OBJ_EVENT_GFX_MAY_WATERING, OBJ_EVENT_GFX_MAY_DECORATING,
+};
+
+u16 gTandemFriendOwPal[TANDEM_MAX_PLAYERS][16];
+static struct ObjectEventGraphicsInfo sFriendOutfitInfo[TANDEM_MAX_PLAYERS];
+static u8 sFriendLook[TANDEM_MAX_PLAYERS][4];   /* the outfit their palette was made for (0xFF: none) */
+
+/* their graphics id on my screen */
+static u16 FriendGfxId(unsigned slot, u16 gfx)
+{
+    u32 k;
+
+    for (k = 0; k < GHOST_GFX_PER_FRIEND; k++)
+        if (sPlayerGfx[k] == gfx)
+            return GHOST_GFX_BASE + slot * GHOST_GFX_PER_FRIEND + k;
+    return gfx;   /* (not a player sprite: as it is) */
+}
+
+bool8 TandemOverworld_IsGhostGfx(u16 graphicsId)
+{
+    return graphicsId >= GHOST_GFX_BASE && graphicsId < GHOST_GFX_BASE + TANDEM_MAX_PLAYERS * GHOST_GFX_PER_FRIEND;
+}
+
+const struct ObjectEventGraphicsInfo *TandemOverworld_GhostGfxInfo(u16 *graphicsId)
+{
+    u32 slot = (*graphicsId - GHOST_GFX_BASE) / GHOST_GFX_PER_FRIEND, k = (*graphicsId - GHOST_GFX_BASE) % GHOST_GFX_PER_FRIEND;
+    const struct ObjectEventGraphicsInfo *outfit;
+
+    *graphicsId = sPlayerGfx[k];
+    if (sFriendLook[slot][0] >= WJ_OUTFIT_COUNT)
+        return NULL;
+    outfit = WJ_GetOutfitGfxInfo(sFriendLook[slot][0], k % WJ_OUTFIT_GFX_COUNT);
+    if (outfit == NULL)
+        return NULL;
+    /* (their outfit's sprite in their own colours) */
+    sFriendOutfitInfo[slot] = *outfit;
+    sFriendOutfitInfo[slot].paletteTag = OBJ_EVENT_PAL_TAG_TANDEM_FRIEND + slot;
+    return &sFriendOutfitInfo[slot];
+}
+
+/* their outfit changed (or first seen): their colours, and the sprite redrawn with them */
+static void UpdateFriendLook(unsigned slot, const TandemState *st, struct ObjectEvent *ghost)
+{
+    u8 look[4] = {st->outfit < WJ_OUTFIT_COUNT ? st->outfit : 0xFF, st->outfitSkin, st->outfitColour1, st->outfitColour2};
+    u8 paletteNum;
+
+    if (memcmp(look, sFriendLook[slot], sizeof(look)) == 0)
+        return;
+    if (ghost != NULL && ObjectEventIsMovementOverridden(ghost))
+        return;   /* (after this step) */
+    memcpy(sFriendLook[slot], look, sizeof(look));
+    if (look[0] < WJ_OUTFIT_COUNT)
+        WJ_OutfitOwPaletteFor(look[0], look[1], look[2], look[3], gTandemFriendOwPal[slot]);
+    paletteNum = IndexOfSpritePaletteTag(OBJ_EVENT_PAL_TAG_TANDEM_FRIEND + slot);
+    if (paletteNum != 0xFF)
+    {
+        LoadPalette(gTandemFriendOwPal[slot], OBJ_PLTT_ID(paletteNum), PLTT_SIZE_4BPP);
+        UpdateSpritePaletteWithWeather(paletteNum, FALSE);
+    }
+    if (ghost != NULL)
+        ObjectEventSetGraphicsId(ghost, ghost->graphicsId);
+    GHOST_LOG("friend %u: outfit %u (skin %u, colours %u %u)\n", slot, look[0], look[1], look[2], look[3]);
+}
+
 static u16 GhostGfx(u16 gfx)
 {
     /* (test aid: WJPC_TANDEM_GHOST_GFX=N draws friends as graphics N) */
@@ -353,7 +444,8 @@ static void UpdateFriend(unsigned slot)
             RemovePet(slot);
             return;
         }
-        id = SpawnGhost(GhostGfx(here.gfx), TANDEM_GHOST_LOCALID(slot), here.x, here.y, here.elevation);
+        UpdateFriendLook(slot, &here, NULL);
+        id = SpawnGhost(FriendGfxId(slot, GhostGfx(here.gfx)), TANDEM_GHOST_LOCALID(slot), here.x, here.y, here.elevation);
         if (id >= OBJECT_EVENTS_COUNT)
             return;
         ghost = &gObjectEvents[id];
@@ -371,8 +463,9 @@ static void UpdateFriend(unsigned slot)
                       ghost->currentCoords.x, ghost->currentCoords.y, ghost->active, ghost->invisible, ghost->offScreen,
                       ghost->spriteId, gSprites[ghost->spriteId].invisible, ghost->graphicsId);
     }
-    if (ghost->graphicsId != GhostGfx(here.gfx) && !ObjectEventIsMovementOverridden(ghost))
-        ObjectEventSetGraphicsId(ghost, GhostGfx(here.gfx));
+    UpdateFriendLook(slot, &here, ghost);
+    if (ghost->graphicsId != FriendGfxId(slot, GhostGfx(here.gfx)) && !ObjectEventIsMovementOverridden(ghost))
+        ObjectEventSetGraphicsId(ghost, FriendGfxId(slot, GhostGfx(here.gfx)));
     /* (far behind: straight to the latest place) */
     if (sPendingLen[slot] > GHOST_CATCH_UP)
     {
@@ -400,13 +493,134 @@ static void UpdateFriend(unsigned slot)
     }
 }
 
+/* ── T4: player cards, and the menu on a friend ──────────────────────── */
+
+extern const u8 Tandem_EventScript_Friend[];   /* data/scripts/tandem.inc */
+static const u8 sText_YourFriend[] = _("your friend");
+
+STATIC_ASSERT(sizeof(struct TrainerCard) <= TANDEM_CARD_MAX, TandemCardFits);
+
+static u8 sTalkSlot;                    /* the friend last talked to */
+static struct TrainerCard sTalkCard;    /* their card, as it was then */
+static bool8 sViewingCard;              /* their card is on screen (cleared back in the overworld) */
+static bool8 sCardOutfit;               /* ... with their outfit's picture in place of mine (put back then) */
+
+/* my card (the one the game sends in a link), with my Hoenn badges in its spare byte - the card screen reads the
+ * badges from the save, which on a friend's card would be mine */
+static void SendMyCard(void)
+{
+    static u32 sTimer;
+    struct TrainerCard card;
+    u32 i;
+
+    if (sTimer++ % 300 != 0)   /* (every 5 seconds: the play time, money and the rest change) */
+        return;
+    memset(&card, 0, sizeof(card));
+    TrainerCard_GenerateCardForLinkPlayer(&card);
+    card.unused = 0;
+    for (i = 0; i < NUM_BADGES; i++)
+        if (FlagGet(FLAG_BADGE01_GET + i))
+            card.unused |= 1 << i;
+    TandemNet_SetMyCard(&card, sizeof(card));
+}
+
+const u8 *TandemOverworld_GhostScript(const struct ObjectEvent *objectEvent)
+{
+    u8 localId = objectEvent->localId;
+
+    GHOST_LOG("A pressed on ghost local id %u\n", localId);
+
+    if (localId < TANDEM_GHOST_LOCALID(0) || localId > TANDEM_GHOST_LOCALID(TANDEM_MAX_PLAYERS - 1))
+        return NULL;   /* (their Pokemon: nothing to say) */
+    sTalkSlot = localId - TANDEM_GHOST_LOCALID(0);
+    return Tandem_EventScript_Friend;
+}
+
+void Tandem_BufferFriendName(void)
+{
+    if (TandemNet_GetCard(sTalkSlot, &sTalkCard, sizeof(sTalkCard)) == sizeof(sTalkCard))
+    {
+        StringCopy_PlayerName(gStringVar1, sTalkCard.playerName);
+        gSpecialVar_0x8004 = TRUE;
+    }
+    else
+    {
+        StringCopy(gStringVar1, sText_YourFriend);
+        gSpecialVar_0x8004 = FALSE;
+    }
+}
+
+/* the game's link card screen (ShowTrainerCardInLink, as the Cable Club shows a partner's), from the card kept above */
+void Tandem_ShowFriendCard(void)
+{
+    gTrainerCards[sTalkSlot] = sTalkCard;
+    gLinkPlayers[sTalkSlot].language = GAME_LANGUAGE;
+    sViewingCard = TRUE;
+    if (sLatest[sTalkSlot].outfit < WJ_OUTFIT_COUNT)
+    {
+        WJ_OutfitShowFriendFront(sLatest[sTalkSlot].outfit, sLatest[sTalkSlot].outfitSkin, sLatest[sTalkSlot].outfitColour1,
+                                 sLatest[sTalkSlot].outfitColour2);
+        sCardOutfit = TRUE;
+    }
+    ShowTrainerCardInLink(sTalkSlot, CB2_ReturnToFieldContinueScriptPlayMapMusic);
+}
+
+bool8 TandemOverworld_ViewingFriendCard(void)
+{
+    return sViewingCard;
+}
+
+bool8 TandemOverworld_FriendCardOutfit(void)
+{
+    return sViewingCard && sCardOutfit;
+}
+
+bool8 TandemOverworld_FriendCardBadges(u8 *badgeCount)
+{
+    u32 i;
+
+    if (!sViewingCard)
+        return FALSE;
+    for (i = 0; i < NUM_BADGES; i++)
+        badgeCount[i] = (sTalkCard.unused >> i) & 1;
+    return TRUE;
+}
+
 void TandemOverworld_Update(void)
 {
     unsigned slot;
 
+    {
+        /* (test aid: WJPC_TANDEM_TEST_OUTFIT=outfit,skin,colour1,colour2 puts that outfit on, as the Outfit Case would) */
+        static bool8 sTestOutfitDone;
+        if (!sTestOutfitDone)
+        {
+            extern int sscanf(const char *, const char *, ...);
+            const char *e = getenv("WJPC_TANDEM_TEST_OUTFIT");
+            int o, sk, c1, c2;
+            sTestOutfitDone = TRUE;
+            if (e != NULL && sscanf(e, "%d,%d,%d,%d", &o, &sk, &c1, &c2) == 4 && o >= 0 && o < WJ_OUTFIT_COUNT)
+            {
+                gSaveBlock3Ptr->wjOutfitMagic = 0xA8;   /* (WJ_OUTFIT_MAGIC, wj_outfit.c) */
+                gSaveBlock3Ptr->wjOutfit = o;
+                gSaveBlock3Ptr->wjOutfitSkin = sk;
+                gSaveBlock3Ptr->wjOutfitColour[0] = c1;
+                gSaveBlock3Ptr->wjOutfitColour[1] = c2;
+                WJ_OutfitRefresh();
+                ObjectEventSetGraphicsId(&gObjectEvents[gPlayerAvatar.objectEventId], gObjectEvents[gPlayerAvatar.objectEventId].graphicsId);
+            }
+        }
+    }
+    sViewingCard = FALSE;   /* (back in the overworld: no friend's card on screen) */
+    if (sCardOutfit)
+    {
+        sCardOutfit = FALSE;
+        WJ_OutfitRefresh();   /* (my outfit's picture back) */
+    }
     if (!TandemNet_Active())
         return;
     SendMyPlace();
+    SendMyCard();
     for (slot = 0; slot < TANDEM_MAX_PLAYERS; slot++)
     {
         if (slot == TandemNet_MySlot())
@@ -417,6 +631,7 @@ void TandemOverworld_Update(void)
             {
                 RemoveGhost(slot);
                 memset(&sLatest[slot], 0, sizeof(sLatest[slot]));
+                memset(sFriendLook[slot], 0, sizeof(sFriendLook[slot]));
             }
             continue;
         }

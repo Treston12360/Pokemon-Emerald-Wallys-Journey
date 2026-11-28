@@ -1,4 +1,5 @@
 #include "global.h"
+#include "tandem_overworld.h"   /* (Project Tandem) */
 #include "wally_journey.h"
 #include "battle_setup.h"
 #include "bike.h"
@@ -405,6 +406,10 @@ static const u8 *GetInteractedObjectEventScript(struct MapPosition *position, u8
 
     gSelectedObjectEvent = objectEventId;
     gSpecialVar_LastTalked = gObjectEvents[objectEventId].localId;
+
+    // Project Tandem (T4): a friend - their menu (trade, player card, battle, team up); their Pokemon - nothing
+    if (TandemOverworld_IsGhost(&gObjectEvents[objectEventId]))
+        return TandemOverworld_GhostScript(&gObjectEvents[objectEventId]);
 
     if (PlayerHasFollowerNPC() && objectEventId == GetFollowerNPCObjectId())
         script = GetFollowerNPCScriptPointer();

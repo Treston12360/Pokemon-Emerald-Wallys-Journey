@@ -23,5 +23,9 @@ void WJ_OutfitOnLoad(void);
 const struct ObjectEventGraphicsInfo *WJ_OutfitGraphicsInfo(u16 graphicsId);
 const struct ObjectEventGraphicsInfo *WJ_GetOutfitGfxInfo(u32 outfit, u32 slot);
 void WJ_OutfitMenu(void);
+// Project Tandem: friends' outfits (src/tandem_overworld.c)
+bool32 WJ_OutfitMine(u8 *outfit, u8 *skin, u8 *colour1, u8 *colour2);
+void WJ_OutfitOwPaletteFor(u32 outfit, u32 skin, u32 colour1, u32 colour2, u16 *out);
+void WJ_OutfitShowFriendFront(u32 outfit, u32 skin, u32 colour1, u32 colour2);
 
 #endif // GUARD_WJ_OUTFIT_H

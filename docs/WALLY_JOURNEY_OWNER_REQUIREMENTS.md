@@ -1844,3 +1844,7 @@ Questions are in docs/OVERNIGHT_2026-11-20.md. His words:
 - 2026-11-27 15:34 Brennan: "continue to step 3". T3 done: friends seen across a map border (the next route or town),
   kept on screen when either player crosses, gone through doors / warps and back when they come out; checked in both
   regions. The build id in the Tandem same-build check was stuck on the first build (Makefile FORCE not phony) - fixed.
+- 2026-11-27 17:34 Brennan: "Continue to step 4". T4 done: A on a friend opens Trade / Player Card / Battle / Team Up /
+  Cancel (Trade, Battle, Team Up say "not ready yet" until steps 5-6); Player Card shows the friend's card with their
+  badges (where the link card had the profile phrase) and their outfit. Found and fixed: friends were drawn in YOUR
+  outfit; now everyone shows in their own outfit and colours on every screen.

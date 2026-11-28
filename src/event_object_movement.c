@@ -516,6 +516,9 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc4Reflection,        OBJ_EVENT_PAL_TAG_NPC_4_REFLECTION},
     {gObjectEventPal_Brendan,               OBJ_EVENT_PAL_TAG_BRENDAN},
     {gWJPlayerOwPal,                        OBJ_EVENT_PAL_TAG_WJ_PLAYER}, // Wally's Journey: player outfit
+    {gTandemFriendOwPal[0],                 OBJ_EVENT_PAL_TAG_TANDEM_FRIEND + 0}, // Project Tandem: friends' outfits
+    {gTandemFriendOwPal[1],                 OBJ_EVENT_PAL_TAG_TANDEM_FRIEND + 1},
+    {gTandemFriendOwPal[2],                 OBJ_EVENT_PAL_TAG_TANDEM_FRIEND + 2},
     {gObjectEventPal_BrendanReflection,     OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION},
     {gObjectEventPal_BridgeReflection,      OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION},
     {gObjectEventPal_PlayerUnderwater,      OBJ_EVENT_PAL_TAG_PLAYER_UNDERWATER},
@@ -3232,6 +3235,15 @@ const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u16 graphicsId)
 
     if (graphicsId & OBJ_EVENT_MON)
         return SpeciesToGraphicsInfo(graphicsId & OBJ_EVENT_MON_SPECIES_MASK, graphicsId & OBJ_EVENT_MON_SHINY, graphicsId & OBJ_EVENT_MON_FEMALE);
+
+    // Project Tandem: a friend's own look - their outfit, or plain Brendan/May - never my outfit
+    if (TandemOverworld_IsGhostGfx(graphicsId))
+    {
+        const struct ObjectEventGraphicsInfo *friendInfo = TandemOverworld_GhostGfxInfo(&graphicsId);
+        if (friendInfo != NULL)
+            return friendInfo;
+        return gObjectEventGraphicsInfoPointers[graphicsId];
+    }
 
     if (graphicsId >= NUM_OBJ_EVENT_GFX)
         graphicsId = OBJ_EVENT_GFX_NINJA_BOY;

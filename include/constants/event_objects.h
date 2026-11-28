@@ -617,6 +617,7 @@ enum
 #define OBJ_EVENT_PAL_TAG_WJ_PLAYER               0x11F0 // Wally's Journey: player outfit (RAM palette)
 #define OBJ_EVENT_PAL_TAG_VARNELL                 0x11F1 // Project ARIA: Varnell's own palette
 #define OBJ_EVENT_PAL_TAG_JANINE                  0x11F3 // Project ARIA: Janine's own palette
+#define OBJ_EVENT_PAL_TAG_TANDEM_FRIEND           0x11F4 // Project Tandem: friends' outfits (RAM palettes), 0x11F4-0x11F6
 #define OBJ_EVENT_PAL_TAG_ARIA_TEAR               0x11F2 // Project ARIA: tears
 #define OBJ_EVENT_PAL_TAG_WHITE                   (OBJ_EVENT_PAL_TAG_NONE - 1)
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF

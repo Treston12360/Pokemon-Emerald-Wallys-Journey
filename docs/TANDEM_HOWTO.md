@@ -1,10 +1,13 @@
-# Project Tandem - how to connect (steps 1-3: connecting, seeing each other, across maps)
+# Project Tandem - how to connect (steps 1-4: connecting, seeing each other, across maps, player cards)
 
 You see who is connected in the window's title, and `WallysJourney_tandem.log` (next to the game) lists who joined,
 the hello messages and the delay. When a friend is on the same map as you, or on the map just across a border
 (the next route or town), they show up as a person walking around (walking, running, biking or surfing as they do),
 with their following Pokemon; you walk through each other. They disappear when they go through a door or fly
-somewhere you can't see, and come back when they come out. Trading, battles and the rest are later steps.
+somewhere you can't see, and come back when they come out. Everyone shows in their own outfit.
+
+Face a friend and press A for the menu: Trade, Player Card, Battle, Team Up. Player Card shows their card (their outfit,
+money, Pokedex, time, badges). Trade, battles and teaming up are later steps.
 
 Everyone needs the **same game zip** (the game refuses a different build and says so in the log).
 
