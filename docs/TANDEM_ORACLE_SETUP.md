@@ -46,10 +46,31 @@ Menu > Compute > Instances > **Create instance**
 8. **Review:** A1.Flex 1 OCPU / 6 GB, the AD, public IPv4 yes, key downloaded > **Create**.
 9. Wait for **Running**; note the **Public IP address** on the instance's page.
 
-If every AD says **"Out of capacity"** (it did on 2026-11-27): try again later (different times of day), or upgrade
-to **Pay As You Go** (Billing & Cost Management > Upgrade; free things stay free, anything beyond them is charged -
+If every AD says **"Out of capacity"** (it did on 2026-11-27): let a script keep trying (below), try again later
+yourself (different times of day), or upgrade to **Pay As You Go** (Billing & Cost Management > Upgrade; free things stay free, anything beyond them is charged -
 set a **$1 budget alert** under Billing > Budgets first). Pay As You Go also stops Oracle shutting the computer down
 as "idle".
+
+### Let a script keep trying (instead of step 4 by hand)
+Brennan 2026-11-27 20:18: "is there a possible way for you to setup a script so that you can continue trying to create
+the instance for oracle, so that i dont have too?" It runs on your own PC (Claude's computer can't reach Oracle, and it
+would need your Oracle key). Steps 1-3 must be done first. Files: `tools/tandem/cloud/oracle-keep-trying.bat` and
+`oracle-keep-trying.ps1`.
+- **A. Oracle's tool, once:** github.com/oracle/oci-cli/releases > the newest release > Assets > the file ending
+  `Windows-Server-Installer.msi` > run it, keep the defaults.
+- **B. Put both files in a folder** you keep (e.g. Documents\oracle) and double-click **oracle-keep-trying.bat**.
+- **C. The first time** it asks for an Oracle key: on the Oracle website, profile picture (top right) > My profile >
+  Tokens and keys (or API keys) > Add API key > **Generate API key pair** > **Download private key** > **Add**; copy the
+  **Configuration file preview** text, paste it into the window (right-click), press Enter on an empty line. (It takes
+  the newest .pem in Downloads and keeps it, with the text, in `C:\Users\YOU\.oci`.)
+- **D. Leave the window open and the PC awake.** It asks once a minute, one availability domain at a time - the same
+  computer as step 4 (A1.Flex 1 OCPU / 6 GB, Ubuntu 24.04, the public subnet, a public IP). It only ever asks for the
+  Always Free shape, and stops if a "Wallys Journey" computer already exists, so it can't make a second one or one that
+  costs money. Every try is written in `oracle-keep-trying.log` next to it.
+- **E. When it gets one:** it beeps, shows a box with the Public IP, and writes `oracle-computer.txt`. It also made the
+  SSH key **`wallys-key`** in that folder - that is KEYFILE in step 5 (keep it; it's the only way in).
+- If it stops with an answer it doesn't know, send Claude the last lines of the window (or the log).
+- Not tried on a Windows PC yet when it was written (2026-11-27): the first run may need a fix.
 
 ## 5. Put the server on it
 Windows PowerShell, in the folder holding `cloud-server` and the key file (KEYFILE = the key's file name,
