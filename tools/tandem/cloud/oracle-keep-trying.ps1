@@ -204,6 +204,7 @@ Set-Content -Path $shapeFile -Value '{"ocpus": 1, "memoryInGBs": 6}' -Encoding A
 Say "Asking every $WaitSeconds seconds, one availability domain at a time. Leave this window open (and the PC awake)."
 $try = 0
 $slowDown = 120   # (seconds to wait when Oracle asks to slow down: 2 minutes, longer each time it asks again)
+$hiccups = 0      # (answers in a row that were neither "no room" nor a real refusal: a timeout, Oracle busy...)
 while ($true)
 {
     foreach ($ad in $ads)
@@ -225,6 +226,7 @@ while ($true)
         {
             Say "Try $try ($ad): no room yet."
             $slowDown = 120
+            $hiccups = 0
         }
         elseif ($r.Text -match 'TooManyRequests|429')
         {
@@ -232,15 +234,33 @@ while ($true)
             Start-Sleep -Seconds $slowDown
             $slowDown = [Math]::Min($slowDown * 2, 600)
         }
-        elseif ($r.Text -match 'LimitExceeded')
+        elseif ($r.Text -match 'LimitExceeded|QuotaExceeded')
         {
             Say "Try $try ($ad): Oracle says the free limit is used up. What it said:"
             Stop-Here $r.Text
         }
+        elseif ($r.Text -match 'NotAuthenticated|NotAuthorized|InvalidParameter|CannotParseRequest|MissingParameter')
+        {
+            Say "Try $try ($ad): Oracle refused the request. What it said:"
+            Stop-Here $r.Text
+        }
         else
         {
-            Say "Try $try ($ad): an answer this script doesn't know. What Oracle said:"
-            Stop-Here $r.Text
+            # (2026-11-27 23:20, try 283: "The request timed out. The request may have reached the service and the
+            # operation may have completed. Verify the resource state before retrying." - a hiccup on the way, not a
+            # refusal: look again in a moment whether the computer was made after all, then go on trying)
+            $hiccups++
+            $first = ($r.Text -split "`n" | Where-Object { $_ -match '"message"' } | Select-Object -First 1)
+            if (-not $first) { $first = ($r.Text -split "`n" | Select-Object -First 1) }
+            Say ("Try $try ($ad): no clear answer from Oracle this time - trying again. (" + $first.Trim() + ")")
+            if ($hiccups -ge 10)
+            {
+                Say 'Ten unclear answers in a row - something else is wrong. The last thing Oracle said:'
+                Stop-Here $r.Text
+            }
+            Start-Sleep -Seconds 30
+            $have = Find-Computer
+            if ($have -ne $null) { Report-Computer $have }
         }
         Start-Sleep -Seconds $WaitSeconds
     }
